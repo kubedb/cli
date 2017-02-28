@@ -15,21 +15,21 @@ backup(){
   cd $path
   rm -rf $path/*
 
-  elasticdump --input http://$1:9200/$3 --output $3.mapping.json --type mapping
+  elasticdump --quiet --input http://$1:9200/$3 --output $3.mapping.json --type mapping
   retval=$?
   if [ "$retval" -ne 0 ]; then
     echo "Fail to dump mapping for $3"
     exit 1
   fi
 
-  elasticdump --input http://$1:9200/$3 --output $3.analyzer.json --type analyzer
+  elasticdump --quiet --input http://$1:9200/$3 --output $3.analyzer.json --type analyzer
   retval=$?
   if [ "$retval" -ne 0 ]; then
     echo "Fail to dump analyzer for $3"
     exit 1
   fi
 
-  elasticdump --input http://$1:9200/$3 --output $3.json --type data
+  elasticdump --quiet --input http://$1:9200/$3 --output $3.json --type data
   retval=$?
   if [ "$retval" -ne 0 ]; then
     echo "Fail to dump data for $3"
@@ -46,14 +46,14 @@ restore(){
   path=/var/dump-restore/$2/$3
   cd $path
 
-  elasticdump --input $3.analyzer.json --output http://$1:9200/$3 --type analyzer
+  elasticdump --quiet --input $3.analyzer.json --output http://$1:9200/$3 --type analyzer
   retval=$?
   if [ "$retval" -ne 0 ]; then
     echo "Fail to restore analyzer for $3"
     exit 1
   fi
 
-  elasticdump --input $3.mapping.json --output http://$1:9200/$3 --type mapping
+  elasticdump --quiet --input $3.mapping.json --output http://$1:9200/$3 --type mapping
   retval=$?
   if [ "$retval" -ne 0 ]; then
     echo "Fail to restore mapping for $3"
@@ -61,7 +61,7 @@ restore(){
   fi
 
 
-  elasticdump --input $3.json --output http://$1:9200/$3 --type data
+  elasticdump --quiet --input $3.json --output http://$1:9200/$3 --type data
   retval=$?
   if [ "$retval" -ne 0 ]; then
     echo "Fail to restore data for $3"
@@ -109,11 +109,13 @@ pull() {
   # 3 - database
   # 4 - snap-name
 
-  path=/var/dump-restore/$4
-  rm -rf $path/*
+  path=/var/dump-restore
+  mkdir -p $path
+  cd $path
+  rm -rf *
 
   if [ "$1" = 'gce' ]; then
-      gsutil -m cp -r gs://$2/$3/$4 $path
+      gsutil -m cp -r gs://$2/$3/$4 .
       retval=$?
       if [ "$retval" -ne 0 ]; then
           exit 1

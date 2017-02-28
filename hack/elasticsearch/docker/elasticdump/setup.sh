@@ -11,6 +11,6 @@ source "$REPO_ROOT/hack/libbuild/common/lib.sh"
 source "$REPO_ROOT/hack/libbuild/common/public_image.sh"
 
 IMG=elasticdump
-TAG=2.1.2
+TAG=2.4.2
 
 binary_repo $@

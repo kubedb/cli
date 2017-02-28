@@ -12,7 +12,7 @@ RUN set -x \
   && npm install npm -g \
   && npm install -g n \
   && n stable \
-  && npm install elasticdump -g \
+  && npm install elasticdump@2.4.2 -g \
   && ln -s /usr/bin/nodejs /usr/bin/node \
   && pip install --upgrade pip \
   && pip install elasticsearch
