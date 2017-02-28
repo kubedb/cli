@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgpool2
+  labels:
+    app: pgpool2
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: http
+    name: http
+  - port: 5432
+    protocol: TCP
+    targetPort: db
+    name: db
+  type: LoadBalancer
+  selector:
+    app: pgpool2

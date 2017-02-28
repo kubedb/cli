@@ -1,0 +1,4 @@
+MYSQL_ROOT_PASSWORD=change_secret
+MYSQL_USER=cub
+MYSQL_PASSWORD=change_again
+MYSQL_DATABASE=mydb

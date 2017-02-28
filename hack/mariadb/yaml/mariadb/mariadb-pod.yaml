@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mariadb
+  labels:
+    name: mariadb
+    app: mariadb
+spec:
+  containers:
+  - name: mariadb
+    image:
+

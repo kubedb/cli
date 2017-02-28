@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: pgpool2
+  labels:
+    app: pgpool2
+spec:
+  replicas: 1
+  selector:
+    app: pgpool2
+  template:
+    metadata:
+      labels:
+        app: pgpool2
+    spec:
+      containers:
+      - name: pgpool2
+        image: appscode/pgpool2:3.5.3
+        imagePullPolicy: Always
+        env: # those variables are not secret as it's just initial state of DB
+        - name: "PCP_USER"
+          value: "pcp_user"
+        - name: "PCP_PASSWORD"
+          value: "pcp_pass"
+        - name: "BACKENDS"
+          value: "0:pg-basic:5432:::"
+        ports:
+        - name: http
+          containerPort: 80
+        - name: db
+          containerPort: 5432

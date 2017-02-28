@@ -1,0 +1,18 @@
+#!/bin/bash
+exec 1> >(logger -s -p daemon.info -t ${PWD##*/})
+exec 2> >(logger -s -p daemon.error -t ${PWD##*/})
+source /etc/envvars
+
+echo "Starting Elasticsearch..."
+
+export CLUSTER_NAME=${CLUSTER_NAME}
+export KUBE_NAMESPACE=${KUBE_NAMESPACE:-default}
+export NODE_MASTER=${NODE_MASTER:-true}
+export NODE_DATA=${NODE_DATA:-true}
+export HTTP_PORT=${HTTP_PORT:-9200}
+export TRANSPORT_PORT=${TRANSPORT_PORT:-9300}
+/elasticsearch_discovery ${CLUSTER_NAME} ${KUBE_NAMESPACE}>> /elasticsearch/config/elasticsearch.yml
+
+chown -R es:es /elasticsearch
+chown -R es:es /var/pv
+exec gosu es /elasticsearch/bin/elasticsearch
