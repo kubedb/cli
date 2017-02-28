@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    name: mongodb
+spec:
+  ports:
+    - name: port1
+      port: 27017
+      protocol: TCP
+    - name: port2
+      port: 28017
+      protocol: TCP
+  selector:
+    name: mongodb

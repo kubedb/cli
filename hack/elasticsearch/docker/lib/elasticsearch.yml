@@ -1,0 +1,10 @@
+cluster.name: ${CLUSTER_NAME}
+node.master: ${NODE_MASTER}
+node.data: ${NODE_DATA}
+transport.host: 0.0.0.0
+transport.tcp.port: ${TRANSPORT_PORT}
+http.host: 0.0.0.0
+http.port: ${HTTP_PORT}
+discovery.zen.ping.multicast.enabled: false
+path.repo: ["/mount/snapshots"]
+path.data: /var/pv

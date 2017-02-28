@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: pgadmin
+  labels:
+    app: pgadmin
+spec:
+  replicas: 1
+  selector:
+    app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+      - name: pgadmin
+        image: appscode/pgadmin:4-1.0_beta3
+        args: ['cub', 'change_secret']
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 5050

@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: redis-server
+  labels:
+    name: redis-server
+    app: redis-server
+spec:
+  volumes:
+  - name: redis-server
+  containers:
+  - name: redis-server
+    image: docker.appscode.com/redis-server:3.0.7
+    ports:
+    - name: redis-server
+      containerPort: 6379
+    volumeMounts:
+    - name: redis-server
+      mountPath: "/data/db"
