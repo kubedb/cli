@@ -1,0 +1,6 @@
+package: github.com/appscode/container-datastore
+import:
+- package: github.com/appscode/go
+- package: github.com/appscode/log
+- package: k8s.io/kubernetes
+  version: ~1.5.0
