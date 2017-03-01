@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: pg-basic
+  labels:
+    app: pg-basic
+spec:
+  replicas: 1
+  selector:
+    app: pg-basic
+  template:
+    metadata:
+      labels:
+        app: pg-basic
+    spec:
+      containers:
+        - name: postgres
+          image: appscode/postgres:9.5-db
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+              name: db
+              protocol: TCP
+          args:
+            - basic
+          volumeMounts:
+            - mountPath: /var/db
+              name: pg-basic-data
+      volumes:
+        - name: pg-basic-data
+          emptyDir: {}
