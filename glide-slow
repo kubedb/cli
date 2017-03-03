@@ -5,7 +5,7 @@
 # - ???
 # - Profit
 
-pushd $GOPATH/src/github.com/appscode/kubedb
+pushd $GOPATH/src/github.com/k8sdb/kubedb
 
 glide up -v
 glide vc --only-code --no-tests
