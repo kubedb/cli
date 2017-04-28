@@ -46,6 +46,15 @@ libbuild.BIN_MATRIX = {
         'distro': {
             'linux': ['amd64']
         }
+    },
+    "kubedb": {
+        'type': 'go',
+        'release': True,
+        'go_version': True,
+        'use_cgo': False,
+        'distro': {
+            'linux': ['amd64']
+        }
     }
 }
 libbuild.BUCKET_MATRIX = {
