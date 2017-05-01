@@ -56,5 +56,5 @@ type PostgresList struct {
 	unversioned.TypeMeta `json:",inline"`
 	unversioned.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Postgres TPR objects
-	Items []*Postgres `json:"items,omitempty"`
+	Items []Postgres `json:"items,omitempty"`
 }

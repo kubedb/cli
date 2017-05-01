@@ -5,8 +5,15 @@ import (
 	"strings"
 
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/kubedb/pkg/kube"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
+	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+)
+
+const (
+	ShortResourceTypeElastic          = "es"
+	ShortResourceTypePostgres         = "pg"
+	ShortResourceTypeDatabaseSnapshot = "dbs"
+	ShortResourceTypeDeletedDatabase  = "ddb"
 )
 
 func CheckSupportedResources(args []string) error {
@@ -16,12 +23,16 @@ func CheckSupportedResources(args []string) error {
 			switch strings.ToLower(r) {
 			case strings.ToLower(tapi.ResourceKindElastic):
 			case strings.ToLower(tapi.ResourceTypeElastic):
+			case strings.ToLower(ShortResourceTypeElastic):
 			case strings.ToLower(tapi.ResourceKindPostgres):
 			case strings.ToLower(tapi.ResourceTypePostgres):
+			case strings.ToLower(ShortResourceTypePostgres):
 			case strings.ToLower(tapi.ResourceKindDatabaseSnapshot):
 			case strings.ToLower(tapi.ResourceTypeDatabaseSnapshot):
+			case strings.ToLower(ShortResourceTypeDatabaseSnapshot):
 			case strings.ToLower(tapi.ResourceKindDeletedDatabase):
 			case strings.ToLower(tapi.ResourceTypeDeletedDatabase):
+			case strings.ToLower(ShortResourceTypeDeletedDatabase):
 				continue
 			case "all":
 				continue
@@ -33,7 +44,28 @@ func CheckSupportedResources(args []string) error {
 	return nil
 }
 
-func GetAllSupportedResources(client *kube.Client) (string, error) {
+func ReplaceAliases(args string) string {
+	resources := strings.Split(args, ",")
+	typeList := make([]string, 0)
+	for _, r := range resources {
+		switch strings.ToLower(r) {
+		case strings.ToLower(ShortResourceTypeElastic):
+			typeList = append(typeList, tapi.ResourceTypeElastic)
+		case strings.ToLower(ShortResourceTypePostgres):
+			typeList = append(typeList, tapi.ResourceTypePostgres)
+		case strings.ToLower(ShortResourceTypeDatabaseSnapshot):
+			typeList = append(typeList, tapi.ResourceTypeDatabaseSnapshot)
+		case strings.ToLower(ShortResourceTypeDeletedDatabase):
+			typeList = append(typeList, tapi.ResourceTypeDeletedDatabase)
+		default:
+			typeList = append(typeList, r)
+		}
+	}
+
+	return strings.Join(typeList, ",")
+}
+
+func GetAllSupportedResources(f cmdutil.Factory) (string, error) {
 
 	resources := map[string]string{
 		tapi.ResourceNameElastic:          tapi.ResourceTypeElastic,
@@ -42,7 +74,7 @@ func GetAllSupportedResources(client *kube.Client) (string, error) {
 		tapi.ResourceNameDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
 	}
 
-	clientset, err := client.ClientSet()
+	clientset, err := f.ClientSet()
 	if err != nil {
 		return "", err
 	}
@@ -63,8 +95,10 @@ func GetAllSupportedResources(client *kube.Client) (string, error) {
 }
 
 var ShortForms = map[string]string{
-	"es": tapi.ResourceTypeElastic,
-	"pg": tapi.ResourceTypePostgres,
+	ShortResourceTypeElastic:          tapi.ResourceTypeElastic,
+	ShortResourceTypePostgres:         tapi.ResourceTypePostgres,
+	ShortResourceTypeDatabaseSnapshot: tapi.ResourceTypeDatabaseSnapshot,
+	ShortResourceTypeDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
 }
 
 func ResourceShortFormFor(resource string) (string, bool) {

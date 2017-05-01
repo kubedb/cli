@@ -2,20 +2,70 @@
 
 ## Example
 
-##### Get Help
+##### Get help
+```bash
+$ kubedb --help
+
+kubedb controls k8sdb ThirdPartyResource objects.
+
+Find more information at https://github.com/k8sdb/kubedb.
+
+Basic Commands (Intermediate):
+  get         Display one or many resources
+
+Other Commands:
+  help        Help about any command
+
+Use "kubedb <command> --help" for more information about a given command.
+```
+
+
+##### Help for get command
+
 ```bash
 $ kubedb get --help
 
-Usage:
-  kubedb get [flags]
+Display one or many resources.
 
-Flags:
-      --all-namespaces        If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even if specified with --namespace.
-      --kube-context string   name of the kubeconfig context to use
-  -o, --output string         Output format. One of: json|yaml|wide|name.
-  -a, --show-all              When printing, show all resources (default hide terminated pods.)
-      --show-kind             If present, list the resource type for the requested object(s).
-      --show-labels           When printing, show all labels as the last column (default hide labels column)
+Valid resource types include:
+
+  * all
+  * elastic
+  * postgres
+  * databasesnapshot
+  * deleteddatabase
+
+Examples:
+  # List all elastic in ps output format.
+  kubedb get elastics
+
+  # List all elastic in ps output format with more information (such as version).
+  kubedb get elastics -o wide
+
+  # List a single postgres with specified NAME in ps output format.
+  kubedb get postgres database
+
+  # List a single databasesnapshot in JSON output format.
+  kubedb get -o json databasesnapshot snapshot-xyz
+
+  # List all postgreses and elastics together in ps output format.
+  kubedb get postgreses,elastics
+
+  # List one or more resources by their type and names.
+  kubedb get elastic/es-db postgres/pg-db
+
+Options:
+      --all-namespaces=false: If present, list the requested object(s) across all namespaces. Namespace in current
+context is ignored even if specified with --namespace.
+  -o, --output='': Output format. One of: json|yaml|wide|name.
+  -a, --show-all=false: When printing, show all resources (default hide terminated pods.)
+      --show-kind=false: If present, list the resource type for the requested object(s).
+      --show-labels=false: When printing, show all labels as the last column (default hide labels column)
+
+Usage:
+  kubedb get [options]
+
+Use "kubedb get options" for a list of global command-line options (applies to all commands).
 ```
 
 
@@ -38,6 +88,12 @@ es/elasticsearch-demo-1   Running   4h
 
 NAME               STATUS    AGE
 pg/postgres-demo   Running   1h
+
+NAME               STATUS      AGE
+dbs/snapshot-xyz   Succeeded   27m
+
+NAME                     STATUS    AGE
+ddb/e2e-elastic-v4xgwz   Deleted   9m
 ```
 
 ##### Get Postgres with labels

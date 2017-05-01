@@ -54,5 +54,5 @@ type ElasticList struct {
 	unversioned.TypeMeta `json:",inline"`
 	unversioned.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Elastic TPR objects
-	Items []*Elastic `json:"items,omitempty"`
+	Items []Elastic `json:"items,omitempty"`
 }

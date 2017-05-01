@@ -9,6 +9,8 @@ import (
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
+// ref: k8s.io/kubernetes/pkg/kubectl/resource_printer.go
+
 func NewPrinter(cmd *cobra.Command) (kubectl.ResourcePrinter, error) {
 	humanReadablePrinter := NewHumanReadablePrinter(PrintOptions{
 		WithNamespace: cmdutil.GetFlagBool(cmd, "all-namespaces"),

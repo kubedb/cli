@@ -18,12 +18,15 @@ import (
 	"k8s.io/kubernetes/pkg/runtime"
 )
 
+// ref: k8s.io/kubernetes/pkg/kubectl/resource_printer.go
+
 const (
 	tabwriterMinWidth = 10
 	tabwriterWidth    = 4
 	tabwriterPadding  = 3
 	tabwriterPadChar  = ' '
 	tabwriterFlags    = 0
+	statusUnknown     = "Unknown"
 )
 
 type handlerEntry struct {
@@ -78,6 +81,10 @@ func (h *HumanReadablePrinter) addDefaultHandlers() {
 	h.Handler(h.printElastic)
 	h.Handler(h.printPostgresList)
 	h.Handler(h.printPostgres)
+	h.Handler(h.printDatabaseSnapshotList)
+	h.Handler(h.printDatabaseSnapshot)
+	h.Handler(h.printDeletedDatabaseList)
+	h.Handler(h.printDeletedDatabase)
 }
 
 func (h *HumanReadablePrinter) Handler(printFunc interface{}) error {
@@ -144,7 +151,11 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, item.Status.DatabaseStatus); err != nil {
+	status := item.Status.DatabaseStatus
+	if status == "" {
+		status = statusUnknown
+	}
+	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, status); err != nil {
 		return err
 	}
 
@@ -163,9 +174,9 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 	return err
 }
 
-func (h *HumanReadablePrinter) printElasticList(podList *tapi.ElasticList, w io.Writer, options PrintOptions) error {
-	for _, pod := range podList.Items {
-		if err := h.printElastic(pod, w, options); err != nil {
+func (h *HumanReadablePrinter) printElasticList(itemList *tapi.ElasticList, w io.Writer, options PrintOptions) error {
+	for _, item := range itemList.Items {
+		if err := h.printElastic(&item, w, options); err != nil {
 			return err
 		}
 	}
@@ -183,7 +194,11 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, item.Status.DatabaseStatus); err != nil {
+	status := item.Status.DatabaseStatus
+	if status == "" {
+		status = statusUnknown
+	}
+	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, status); err != nil {
 		return err
 	}
 
@@ -202,9 +217,89 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 	return err
 }
 
-func (h *HumanReadablePrinter) printPostgresList(podList *tapi.PostgresList, w io.Writer, options PrintOptions) error {
-	for _, pod := range podList.Items {
-		if err := h.printPostgres(pod, w, options); err != nil {
+func (h *HumanReadablePrinter) printPostgresList(itemList *tapi.PostgresList, w io.Writer, options PrintOptions) error {
+	for _, item := range itemList.Items {
+		if err := h.printPostgres(&item, w, options); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (h *HumanReadablePrinter) printDatabaseSnapshot(item *tapi.DatabaseSnapshot, w io.Writer, options PrintOptions) error {
+	name := formatResourceName(options.Kind, item.Name, options.WithKind)
+
+	namespace := item.Namespace
+
+	if options.WithNamespace {
+		if _, err := fmt.Fprintf(w, "%s\t", namespace); err != nil {
+			return err
+		}
+	}
+
+	status := string(item.Status.Status)
+	if status == "" {
+		status = statusUnknown
+	}
+	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, status); err != nil {
+		return err
+	}
+
+	if options.Wide {
+		if _, err := fmt.Fprintf(w, "%s\t", item.Spec.BucketName); err != nil {
+			return err
+		}
+	}
+
+	if _, err := fmt.Fprintf(w, "%s", translateTimestamp(item.CreationTimestamp)); err != nil {
+		return err
+	}
+
+	_, err := fmt.Fprint(w, appendAllLabels(options.ShowLabels, item.Labels))
+
+	return err
+}
+
+func (h *HumanReadablePrinter) printDatabaseSnapshotList(itemList *tapi.DatabaseSnapshotList, w io.Writer, options PrintOptions) error {
+	for _, item := range itemList.Items {
+		if err := h.printDatabaseSnapshot(&item, w, options); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (h *HumanReadablePrinter) printDeletedDatabase(item *tapi.DeletedDatabase, w io.Writer, options PrintOptions) error {
+	name := formatResourceName(options.Kind, item.Name, options.WithKind)
+
+	namespace := item.Namespace
+
+	if options.WithNamespace {
+		if _, err := fmt.Fprintf(w, "%s\t", namespace); err != nil {
+			return err
+		}
+	}
+
+	phase := string(item.Status.Phase)
+	if phase == "" {
+		phase = statusUnknown
+	}
+	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, phase); err != nil {
+		return err
+	}
+
+	if _, err := fmt.Fprintf(w, "%s", translateTimestamp(item.CreationTimestamp)); err != nil {
+		return err
+	}
+
+	_, err := fmt.Fprint(w, appendAllLabels(options.ShowLabels, item.Labels))
+
+	return err
+}
+
+func (h *HumanReadablePrinter) printDeletedDatabaseList(itemList *tapi.DeletedDatabaseList, w io.Writer, options PrintOptions) error {
+	for _, item := range itemList.Items {
+		if err := h.printDeletedDatabase(&item, w, options); err != nil {
 			return err
 		}
 	}
@@ -225,6 +320,19 @@ func decode(kind string, data []byte) (runtime.Object, error) {
 			return nil, err
 		}
 		return postgres, nil
+
+	case tapi.ResourceKindDatabaseSnapshot:
+		var dbSnapshot *tapi.DatabaseSnapshot
+		if err := yaml.Unmarshal(data, &dbSnapshot); err != nil {
+			return nil, err
+		}
+		return dbSnapshot, nil
+	case tapi.ResourceKindDeletedDatabase:
+		var deletedDb *tapi.DeletedDatabase
+		if err := yaml.Unmarshal(data, &deletedDb); err != nil {
+			return nil, err
+		}
+		return deletedDb, nil
 	}
 
 	return nil, fmt.Errorf(`Invalid kind: "%v"`, kind)
@@ -346,6 +454,9 @@ func formatWideHeaders(wide bool, t reflect.Type) []string {
 		}
 		if t.String() == "*api.Postgres" || t.String() == "*api.PostgresList" {
 			return []string{"VERSION"}
+		}
+		if t.String() == "*api.DatabaseSnapshot" || t.String() == "*api.DatabaseSnapshotList" {
+			return []string{"BUCKET"}
 		}
 	}
 	return nil

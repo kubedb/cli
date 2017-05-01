@@ -11,30 +11,54 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/pkg/api/meta"
 	"k8s.io/kubernetes/pkg/kubectl"
+	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 	"k8s.io/kubernetes/pkg/runtime"
 	utilerrors "k8s.io/kubernetes/pkg/util/errors"
 )
 
-type GetOptions struct {
-	resource.FilenameOptions
+// ref: k8s.io/kubernetes/pkg/kubectl/cmd/get.go
 
-	IgnoreNotFound bool
-	Raw            string
-}
+var (
+	get_long = templates.LongDesc(`
+		Display one or many resources.
+
+		` + valid_resources)
+
+	get_example = templates.Examples(`
+		# List all elastic in ps output format.
+		kubedb get elastics
+
+		# List all elastic in ps output format with more information (such as version).
+		kubedb get elastics -o wide
+
+		# List a single postgres with specified NAME in ps output format.
+		kubedb get postgres database
+
+		# List a single databasesnapshot in JSON output format.
+		kubedb get -o json databasesnapshot snapshot-xyz
+
+		# List all postgreses and elastics together in ps output format.
+		kubedb get postgreses,elastics
+
+		# List one or more resources by their type and names.
+		kubedb get elastic/es-db postgres/pg-db`)
+)
 
 func NewCmdGet(out io.Writer, errOut io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "get",
+		Use:     "get",
+		Short:   "Display one or many resources",
+		Long:    get_long,
+		Example: get_example,
 		Run: func(cmd *cobra.Command, args []string) {
-			client := kube.GetKubeCmd(cmd)
 			cmdutil.CheckErr(util.CheckSupportedResources(args))
-			cmdutil.CheckErr(RunGet(client, out, errOut, cmd, args))
+			f := kube.NewKubeFactory(cmd)
+			cmdutil.CheckErr(RunGet(f, out, errOut, cmd, args))
 		},
 	}
 
-	util.AddContextFlag(cmd)
 	util.AddGetFlags(cmd)
 	return cmd
 }
@@ -50,15 +74,15 @@ const (
     `
 )
 
-func RunGet(client *kube.Client, out, errOut io.Writer, cmd *cobra.Command, args []string) error {
+func RunGet(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args []string) error {
 
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 
-	mapper, typer, err := client.UnstructuredObject()
+	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
 	}
-	cmdNamespace, _, err := client.DefaultNamespace()
+	cmdNamespace, _, err := f.DefaultNamespace()
 	if err != nil {
 		return err
 	}
@@ -70,12 +94,13 @@ func RunGet(client *kube.Client, out, errOut io.Writer, cmd *cobra.Command, args
 	}
 
 	var printAll bool = false
-	resourceList := args[0]
+	resourceList := util.ReplaceAliases(args[0])
+	args[0] = resourceList
 	resources := strings.Split(resourceList, ",")
 	for _, a := range resources {
 		if a == "all" {
 			printAll = true
-			supported, err := util.GetAllSupportedResources(client)
+			supported, err := util.GetAllSupportedResources(f)
 			if err != nil {
 				return err
 			}
@@ -97,7 +122,7 @@ func RunGet(client *kube.Client, out, errOut io.Writer, cmd *cobra.Command, args
 	r := resource.NewBuilder(
 		mapper,
 		typer,
-		resource.ClientMapperFunc(client.UnstructuredClientForMapping),
+		resource.ClientMapperFunc(f.UnstructuredClientForMapping),
 		runtime.UnstructuredJSONScheme,
 	).NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		ResourceTypeOrNameArgs(true, args...).
