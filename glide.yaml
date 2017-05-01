@@ -5,6 +5,6 @@ import:
 - package: k8s.io/kubernetes
   version: ~1.5.0
 - package: github.com/spf13/cobra
-  version: 9c28e4bbd74e5c3ed7aacbc552b2cab7cfdfe744
+  version: master
 - package: github.com/spf13/pflag
-  version: c7e63cf4530bcd3ba943729cee0efeff2ebea63f
+  version: master
