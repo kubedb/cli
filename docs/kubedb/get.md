@@ -127,9 +127,6 @@ metadata:
     k8sdb.com/type: elastic
   name: elasticsearch-demo
   namespace: default
-  resourceVersion: "2056"
-  selfLink: /apis/k8sdb.com/v1beta1/namespaces/default/elastics/elasticsearch-demo
-  uid: 88819884-2b04-11e7-b948-080027d28b41
 spec:
   replicas: 1
   serviceAccountName: governing-elasticsearch
