@@ -4,3 +4,7 @@ import:
 - package: github.com/appscode/log
 - package: k8s.io/kubernetes
   version: ~1.5.0
+- package: github.com/spf13/cobra
+  version: master
+- package: github.com/spf13/pflag
+  version: master
