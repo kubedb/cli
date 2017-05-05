@@ -48,15 +48,15 @@ type DeletedDatabasePhase string
 
 const (
 	// used for Databases that are deleted
-	PhaseDatabaseDeleted DeletedDatabasePhase = "Deleted"
+	DeletedDatabasePhaseDeleted DeletedDatabasePhase = "Deleted"
 	// used for Databases that are currently deleting
-	PhaseDatabaseDeleting DeletedDatabasePhase = "Deleting"
+	DeletedDatabasePhaseDeleting DeletedDatabasePhase = "Deleting"
 	// used for Databases that are wiped out
-	PhaseDatabaseWipedOut DeletedDatabasePhase = "WipedOut"
+	DeletedDatabasePhaseWipedOut DeletedDatabasePhase = "WipedOut"
 	// used for Databases that are currently wiping out
-	PhaseDatabaseWipingOut DeletedDatabasePhase = "WipingOut"
+	DeletedDatabasePhaseWipingOut DeletedDatabasePhase = "WipingOut"
 	// used for Databases that are currently recovering
-	PhaseDatabaseRecovering DeletedDatabasePhase = "Recovering"
+	DeletedDatabasePhaseRecovering DeletedDatabasePhase = "Recovering"
 )
 
 type DeletedDatabaseStatus struct {

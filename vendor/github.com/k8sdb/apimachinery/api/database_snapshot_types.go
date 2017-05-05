@@ -25,21 +25,21 @@ type DatabaseSnapshotSpec struct {
 	SnapshotSpec `json:",inline,omitempty"`
 }
 
-type SnapshotStatus string
+type SnapshotPhase string
 
 const (
 	// used for DatabaseSnapshots that are currently running
-	StatusSnapshotRunning SnapshotStatus = "Running"
+	SnapshotPhaseRunning SnapshotPhase = "Running"
 	// used for DatabaseSnapshots that are Succeeded
-	StatusSnapshotSuccessed SnapshotStatus = "Succeeded"
+	SnapshotPhaseSuccessed SnapshotPhase = "Succeeded"
 	// used for DatabaseSnapshots that are Failed
-	StatusSnapshotFailed SnapshotStatus = "Failed"
+	SnapshotPhaseFailed SnapshotPhase = "Failed"
 )
 
 type DatabaseSnapshotStatus struct {
 	StartTime      *unversioned.Time `json:"startTime,omitempty"`
 	CompletionTime *unversioned.Time `json:"completionTime,omitempty"`
-	Status         SnapshotStatus    `json:"status,omitempty"`
+	Phase          SnapshotPhase     `json:"phase,omitempty"`
 	Reason         string            `json:"reason,omitempty"`
 }
 

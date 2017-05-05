@@ -1,5 +1,5 @@
 hash: 1dc8e0c249854a534d4eb2b0b3eaa7938938e2945bc67c868345e0538d2b2a09
-updated: 2017-05-01T17:01:41.45054674+06:00
+updated: 2017-05-05T11:56:19.301828818+06:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 16dae34745b8c485f42293ad6d16ea7d6c129564
+  version: fbfd196f17c81a31482577c232884ac38ae6da34
   subpackages:
   - version
 - name: github.com/appscode/log
@@ -154,7 +154,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 956764c9fb337e0d3be869bff2024d84cf99129e
+  version: a6762c09f7654e3f00355177e879b83239b08290
   subpackages:
   - api
   - api/install
@@ -182,9 +182,9 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 51fe59aca108dc5680109e7b2051cbdcfa5a253c
 - name: github.com/spf13/cobra
-  version: 7b1b6e8dc027253d45fc029bc269d1c019f83a34
+  version: 8f0203be891287870100e4af46262cdf4a4261d1
 - name: github.com/spf13/pflag
-  version: f1d95a35e132e8a1868023a08932b14f0b8b8fcb
+  version: 75859d1ee5f135362c9534f7db667e0150d9f577
 - name: github.com/ugorji/go
   version: f1f1a805ed361a0e078bb537e4ea78cd37dcf065
   subpackages:

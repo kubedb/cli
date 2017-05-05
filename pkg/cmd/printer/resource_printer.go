@@ -151,7 +151,7 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 		}
 	}
 
-	status := item.Status.DatabaseStatus
+	status := item.Status.Phase
 	if status == "" {
 		status = statusUnknown
 	}
@@ -194,7 +194,7 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 		}
 	}
 
-	status := item.Status.DatabaseStatus
+	status := item.Status.Phase
 	if status == "" {
 		status = statusUnknown
 	}
@@ -237,7 +237,7 @@ func (h *HumanReadablePrinter) printDatabaseSnapshot(item *tapi.DatabaseSnapshot
 		}
 	}
 
-	status := string(item.Status.Status)
+	status := string(item.Status.Phase)
 	if status == "" {
 		status = statusUnknown
 	}

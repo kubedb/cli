@@ -108,30 +108,32 @@ postgres-demo   Running   1h        k8sdb.com/type=postgres
 ```bash
 $ kubedb get elastic -o wide
 
-NAME                   STATUS    VERSION      AGE
-elasticsearch-demo     Running   2.3.1-v2.3   6h
-elasticsearch-demo-1   Running   2.3.1-v2.3   5h
+NAME                   STATUS    VERSION   AGE
+elasticsearch-demo     Running   canary    6h
+elasticsearch-demo-1   Running   canary    5h
 ```
 
 ##### Get YAML
 ```bash
-$ kubedb get elastic elasticsearch-demo -o yaml
+$ kubedb get pg postgres-demo -o yaml
 
 apiVersion: k8sdb.com/v1beta1
-kind: Elastic
+kind: Postgres
 metadata:
   annotations:
-    elastic.k8sdb.com/version: 2.3.1-v2.3
-  creationTimestamp: 2017-04-27T04:46:52Z
+    postgres.k8sdb.com/version: canary-db
+  creationTimestamp: 2017-05-05T07:04:06Z
   labels:
-    k8sdb.com/type: elastic
-  name: elasticsearch-demo
+    k8sdb.com/type: postgres
+  name: postgres-demo
   namespace: default
 spec:
+  databaseSecret:
+    secretName: postgres-demo-admin-auth
   replicas: 1
-  serviceAccountName: governing-elasticsearch
-  version: 2.3.1-v2.3
+  serviceAccountName: governing-postgres
+  version: canary-db
 status:
-  DatabaseStatus: Running
-  creationTime: 2017-04-27T04:46:52Z
+  creationTime: 2017-05-05T07:04:06Z
+  phase: Running
 ```

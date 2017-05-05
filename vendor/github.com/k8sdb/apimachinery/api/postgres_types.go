@@ -47,9 +47,9 @@ type PostgresSpec struct {
 }
 
 type PostgresStatus struct {
-	CreationTime   *unversioned.Time `json:"creationTime,omitempty"`
-	DatabaseStatus `json:",inline,omitempty"`
-	Reason         string `json:"reason,omitempty"`
+	CreationTime *unversioned.Time `json:"creationTime,omitempty"`
+	Phase        DatabasePhase     `json:"phase,omitempty"`
+	Reason       string            `json:"reason,omitempty"`
 }
 
 type PostgresList struct {
