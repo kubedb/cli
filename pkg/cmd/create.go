@@ -23,10 +23,10 @@ var (
 
 	create_example = templates.Examples(`
 		# Create a elastic using the data in elastic.json.
-		kubectl create -f ./elastic.json
+		kubedb create -f ./elastic.json
 
 		# Create a elastic based on the JSON passed into stdin.
-		cat elastic.json | kubectl create -f -`)
+		cat elastic.json | kubedb create -f -`)
 )
 
 func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
@@ -87,7 +87,7 @@ func RunCreate(f cmdutil.Factory, out io.Writer, options *resource.FilenameOptio
 		}
 
 		kind := info.GetObjectKind().GroupVersionKind().Kind
-		if _, err := util.GetSupportedResourceKind(kind); err != nil {
+		if err := util.CheckSupportedResource(kind); err != nil {
 			return err
 		}
 
