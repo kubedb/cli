@@ -156,8 +156,12 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 	}
 
 	showKind := cmdutil.GetFlagBool(cmd, "show-kind")
-	if cmdutil.MustPrintWithKinds(objs, infos, nil, printAll) {
+	if printAll {
 		showKind = true
+	} else {
+		if cmdutil.MustPrintWithKinds(objs, infos, nil, printAll) {
+			showKind = true
+		}
 	}
 
 	var lastMapping *meta.RESTMapping
