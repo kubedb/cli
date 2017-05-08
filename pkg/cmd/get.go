@@ -53,9 +53,8 @@ func NewCmdGet(out io.Writer, errOut io.Writer) *cobra.Command {
 		Long:    get_long,
 		Example: get_example,
 		Run: func(cmd *cobra.Command, args []string) {
-			cmdutil.CheckErr(util.CheckSupportedResources(args))
 			f := kube.NewKubeFactory(cmd)
-			cmdutil.CheckErr(RunGet(f, out, errOut, cmd, args))
+			cmdutil.CheckErr(RunGet(f, cmd, out, errOut, args))
 		},
 	}
 
@@ -74,7 +73,7 @@ const (
     `
 )
 
-func RunGet(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args []string) error {
+func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
 
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 
@@ -94,22 +93,26 @@ func RunGet(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args [
 	}
 
 	var printAll bool = false
-	resourceList := util.ReplaceAliases(args[0])
-	args[0] = resourceList
-	resources := strings.Split(resourceList, ",")
-	for _, a := range resources {
-		if a == "all" {
+	resources := strings.Split(args[0], ",")
+	for i, r := range resources {
+		if r == "all" {
 			printAll = true
-			supported, err := util.GetAllSupportedResources(f)
+		} else {
+			kind, err := util.GetSupportedResourceKind(r)
 			if err != nil {
 				return err
 			}
-			newArgs := make([]string, 0)
-			newArgs = append(newArgs, supported)
-			args = append(newArgs, args[1:]...)
-			break
+			resources[i] = kind
 		}
 	}
+
+	if printAll {
+		if resources, err = util.GetAllSupportedResources(f); err != nil {
+			return err
+		}
+	}
+
+	args[0] = strings.Join(resources, ",")
 
 	argsHasNames, err := resource.HasNames(args)
 	if err != nil {
@@ -119,12 +122,10 @@ func RunGet(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args [
 		cmd.Flag("show-all").Value.Set("true")
 	}
 
-	r := resource.NewBuilder(
-		mapper,
-		typer,
-		resource.ClientMapperFunc(f.UnstructuredClientForMapping),
-		runtime.UnstructuredJSONScheme,
-	).NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
+	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+		NamespaceParam(cmdNamespace).
+		DefaultNamespace().
+		AllNamespaces(allNamespaces).
 		ResourceTypeOrNameArgs(true, args...).
 		ContinueOnError().
 		Latest().

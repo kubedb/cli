@@ -87,7 +87,7 @@ func RunCreate(f cmdutil.Factory, out io.Writer, options *resource.FilenameOptio
 		}
 
 		kind := info.GetObjectKind().GroupVersionKind().Kind
-		if err := util.CheckSupportedResource(kind); err != nil {
+		if _, err := util.GetSupportedResourceKind(kind); err != nil {
 			return err
 		}
 
