@@ -32,14 +32,14 @@ Use "kubedb create options" for a list of global command-line options (applies t
 ```bash
 $ kubedb create -f ./elastic.json
 
-es "elasticsearch-demo" created
+elastic "elasticsearch-demo" created
 ```
 
 ##### Create from stdin
 ```bash
 $ cat ./elastic.json | kubedb create -f -
 
-es "elasticsearch-demo" created
+elastic "elasticsearch-demo" created
 ```
 
 ##### Create from folder
