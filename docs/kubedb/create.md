@@ -44,7 +44,7 @@ es "elasticsearch-demo" created
 
 ##### Create from folder
 ```bash
-$ kubedb create -f resources
+$ kubedb create -f resources -R
 
 es "elasticsearch-demo" created
 pg "postgres-demo" created
