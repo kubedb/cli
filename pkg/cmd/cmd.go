@@ -22,6 +22,12 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 
 	groups := templates.CommandGroups{
 		{
+			Message: "Basic Commands (Beginner):",
+			Commands: []*cobra.Command{
+				NewCmdCreate(out, err),
+			},
+		},
+		{
 			Message: "Basic Commands (Intermediate):",
 			Commands: []*cobra.Command{
 				NewCmdGet(out, err),

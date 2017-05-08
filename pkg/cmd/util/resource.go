@@ -44,6 +44,19 @@ func CheckSupportedResources(args []string) error {
 	return nil
 }
 
+func CheckSupportedResource(kind string) error {
+	switch kind {
+	case tapi.ResourceKindElastic:
+	case tapi.ResourceKindPostgres:
+	case tapi.ResourceKindDatabaseSnapshot:
+	case tapi.ResourceKindDeletedDatabase:
+		return nil
+	default:
+		return fmt.Errorf(`kubedb doesn't support a resource type "%v"`, kind)
+	}
+	return nil
+}
+
 func ReplaceAliases(args string) string {
 	resources := strings.Split(args, ",")
 	typeList := make([]string, 0)
