@@ -13,6 +13,8 @@ import (
 	"k8s.io/kubernetes/pkg/runtime"
 )
 
+// ref: k8s.io/kubernetes/pkg/kubectl/cmd/create.go
+
 var (
 	create_long = templates.LongDesc(`
 		Create a resource by filename or stdin.
