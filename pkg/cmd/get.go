@@ -98,11 +98,13 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		if r == "all" {
 			printAll = true
 		} else {
-			kind, err := util.GetSupportedResourceKind(r)
+			items := strings.Split(r, "/")
+			kind, err := util.GetSupportedResourceKind(items[0])
 			if err != nil {
 				return err
 			}
-			resources[i] = kind
+			items[0] = kind
+			resources[i] = strings.Join(items, "/")
 		}
 	}
 
