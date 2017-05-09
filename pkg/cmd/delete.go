@@ -88,7 +88,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		FilenameParam(enforceNamespace, options).
 		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
 		SelectAllParam(deleteAll).
-		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
+		ResourceTypeOrNameArgs(true, args...).RequireObject(true).
 		Flatten().
 		Do()
 	err = r.Err()
@@ -122,7 +122,9 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 	found := 0
 	for _, info := range infoList {
 		found++
-		return deleteResource(info, out, shortOutput, mapper)
+		if err := deleteResource(info, out, shortOutput, mapper); err != nil {
+			return err
+		}
 	}
 
 	if found == 0 {

@@ -35,24 +35,20 @@ Usage:
 Use "kubedb delete options" for a list of global command-line options (applies to all commands).
 ```
 
-##### Delete All
+##### Delete
 ```bash
-$ kubedb delete elastic --all
+$ kubedb delete pg/postgres-demo
 
-NAME                      STATUS    AGE
-es/elasticsearch-demo     Running   5h
-es/elasticsearch-demo-1   Running   4h
-
-NAME               STATUS    AGE
-pg/postgres-demo   Running   1h
-
-NAME               STATUS      AGE
-dbs/snapshot-xyz   Succeeded   27m
-
-NAME                     STATUS    AGE
-ddb/e2e-elastic-v4xgwz   Deleted   9m
+postgres "postgres-demo" deleted
 ```
 
+##### Delete All
+```bash
+$ kubedb delete deleteddatabase --all
+
+deleteddatabase "elasticsearch-demo" deleted
+deleteddatabase "postgres-demo" deleted
+```
 
 ##### Delete from file
 ```bash
