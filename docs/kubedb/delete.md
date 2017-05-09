@@ -5,9 +5,10 @@
 ##### Help for delete command
 
 ```bash
-$ kubedb delete --hemp
-Error: unknown flag: --hemp
+Delete resources by filenames, stdin, resources and names, or by resources and label selector. JSON and YAML formats are
+accepted.
 
+Note that the delete command does NOT do resource version checks
 
 Examples:
   # Delete a elastic using the type and name specified in elastic.json.
