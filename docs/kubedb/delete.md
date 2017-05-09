@@ -1,0 +1,69 @@
+# kubedb delete
+
+## Example
+
+##### Help for delete command
+
+```bash
+$ kubedb delete --hemp
+Error: unknown flag: --hemp
+
+
+Examples:
+  # Delete a elastic using the type and name specified in elastic.json.
+  kubedb delete -f ./elastic.json
+
+  # Delete a postgres based on the type and name in the JSON passed into stdin.
+  cat postgres.json | kubedb delete -f -
+
+  # Delete elastic with label elastic.k8sdb.com/name=elasticsearch-demo.
+  kubedb delete elastic -l elastic.k8sdb.com/name=elasticsearch-demo
+
+  # Delete all deleteddatabase
+  kubedb delete deleteddatabase --all
+
+Options:
+      --all=false: [-all] to select all the specified resources.
+  -f, --filename=[]: Filename to use to create the resource
+  -o, --output='': Output mode. Use "-o name" for shorter output (resource/name).
+  -R, --recursive=false: Process the directory used in -f, --filename recursively.
+  -l, --selector='': Selector (label query) to filter on.
+
+Usage:
+  kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [options]
+
+Use "kubedb delete options" for a list of global command-line options (applies to all commands).
+```
+
+##### Delete All
+```bash
+$ kubedb delete elastic --all
+
+NAME                      STATUS    AGE
+es/elasticsearch-demo     Running   5h
+es/elasticsearch-demo-1   Running   4h
+
+NAME               STATUS    AGE
+pg/postgres-demo   Running   1h
+
+NAME               STATUS      AGE
+dbs/snapshot-xyz   Succeeded   27m
+
+NAME                     STATUS    AGE
+ddb/e2e-elastic-v4xgwz   Deleted   9m
+```
+
+
+##### Delete from file
+```bash
+$ kubedb delete -f ./elastic.json
+
+elastic "elasticsearch-demo" deleted
+```
+
+##### Delete from stdin
+```bash
+$ cat ./elastic.json | kubedb delete -f -
+
+elastic "elasticsearch-demo" deleted
+```
