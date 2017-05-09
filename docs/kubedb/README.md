@@ -12,6 +12,7 @@ Basic Commands (Beginner):
 
 Basic Commands (Intermediate):
   get         Display one or many resources
+  delete      Delete resources by filenames, stdin, resources and names, or by resources and label selector
 
 Other Commands:
   help        Help about any command
