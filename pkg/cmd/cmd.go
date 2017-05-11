@@ -34,6 +34,12 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdDelete(out, err),
 			},
 		},
+		{
+			Message: "Troubleshooting and Debugging Commands:",
+			Commands: []*cobra.Command{
+				NewCmdDescribe(out, err),
+			},
+		},
 	}
 
 	groups.Add(cmds)

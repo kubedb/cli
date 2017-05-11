@@ -9,10 +9,10 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/ghodss/yaml"
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
+	"github.com/k8sdb/kubedb/pkg/cmd/decoder"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	"k8s.io/kubernetes/pkg/labels"
 	"k8s.io/kubernetes/pkg/runtime"
@@ -59,7 +59,7 @@ func NewHumanReadablePrinter(options PrintOptions) *HumanReadablePrinter {
 	return printer
 }
 
-func shortHumanDuration(d time.Duration) string {
+func ShortHumanDuration(d time.Duration) string {
 	if seconds := int(d.Seconds()); seconds < -1 {
 		return fmt.Sprintf("<invalid>")
 	} else if seconds < 0 {
@@ -165,7 +165,7 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", translateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -208,7 +208,7 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", translateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -251,7 +251,7 @@ func (h *HumanReadablePrinter) printDatabaseSnapshot(item *tapi.DatabaseSnapshot
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", translateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -288,7 +288,7 @@ func (h *HumanReadablePrinter) printDeletedDatabase(item *tapi.DeletedDatabase, 
 		return err
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", translateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -306,38 +306,6 @@ func (h *HumanReadablePrinter) printDeletedDatabaseList(itemList *tapi.DeletedDa
 	return nil
 }
 
-func decode(kind string, data []byte) (runtime.Object, error) {
-	switch kind {
-	case tapi.ResourceKindElastic:
-		var elastic *tapi.Elastic
-		if err := yaml.Unmarshal(data, &elastic); err != nil {
-			return nil, err
-		}
-		return elastic, nil
-	case tapi.ResourceKindPostgres:
-		var postgres *tapi.Postgres
-		if err := yaml.Unmarshal(data, &postgres); err != nil {
-			return nil, err
-		}
-		return postgres, nil
-
-	case tapi.ResourceKindDatabaseSnapshot:
-		var dbSnapshot *tapi.DatabaseSnapshot
-		if err := yaml.Unmarshal(data, &dbSnapshot); err != nil {
-			return nil, err
-		}
-		return dbSnapshot, nil
-	case tapi.ResourceKindDeletedDatabase:
-		var deletedDb *tapi.DeletedDatabase
-		if err := yaml.Unmarshal(data, &deletedDb); err != nil {
-			return nil, err
-		}
-		return deletedDb, nil
-	}
-
-	return nil, fmt.Errorf(`Invalid kind: "%v"`, kind)
-}
-
 func (h *HumanReadablePrinter) PrintObj(obj runtime.Object, output io.Writer) error {
 	w, found := output.(*tabwriter.Writer)
 	if !found {
@@ -350,7 +318,7 @@ func (h *HumanReadablePrinter) PrintObj(obj runtime.Object, output io.Writer) er
 	switch obj.(type) {
 	case *runtime.UnstructuredList, *runtime.Unstructured, *runtime.Unknown:
 		if objBytes, err := runtime.Encode(clientset.ExtendedCodec, obj); err == nil {
-			if decodedObj, err := decode(kind, objBytes); err == nil {
+			if decodedObj, err := decoder.Decode(kind, objBytes); err == nil {
 				obj = decodedObj
 			}
 		}
@@ -428,11 +396,11 @@ func appendAllLabels(showLabels bool, itemLabels map[string]string) string {
 	return buffer.String()
 }
 
-func translateTimestamp(timestamp unversioned.Time) string {
+func TranslateTimestamp(timestamp unversioned.Time) string {
 	if timestamp.IsZero() {
 		return "<unknown>"
 	}
-	return shortHumanDuration(time.Now().Sub(timestamp.Time))
+	return ShortHumanDuration(time.Now().Sub(timestamp.Time))
 }
 
 func GetNewTabWriter(output io.Writer) *tabwriter.Writer {
