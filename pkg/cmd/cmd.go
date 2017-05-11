@@ -31,6 +31,13 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			Message: "Basic Commands (Intermediate):",
 			Commands: []*cobra.Command{
 				NewCmdGet(out, err),
+				NewCmdDelete(out, err),
+			},
+		},
+		{
+			Message: "Troubleshooting and Debugging Commands:",
+			Commands: []*cobra.Command{
+				NewCmdDescribe(out, err),
 			},
 		},
 	}
