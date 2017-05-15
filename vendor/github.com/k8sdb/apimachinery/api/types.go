@@ -33,9 +33,6 @@ type BackupScheduleSpec struct {
 type SnapshotSpec struct {
 	// Snapshot storage secret
 	StorageSecret *api.SecretVolumeSource `json:"storageSecret,omitempty"`
-	// Database authentication secret
-	// +optional
-	DatabaseSecret *api.SecretVolumeSource `json:"databaseSecret,omitempty"`
 	// Cloud bucket name
 	BucketName string `json:"bucketName,omitempty"`
 }
