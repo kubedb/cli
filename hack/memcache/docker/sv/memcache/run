@@ -1,7 +1,0 @@
-#!/bin/bash
-exec 1> >(logger -s -p daemon.info -t ${PWD##*/})
-exec 2> >(logger -s -p daemon.error -t ${PWD##*/})
-source /etc/envvars
-
-echo "Starting memcached ..."
-exec gosu memcache /usr/local/bin/memcached -m 64 -p 11211 -l 0.0.0.0
