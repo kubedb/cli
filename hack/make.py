@@ -44,10 +44,16 @@ libbuild.BIN_MATRIX = {
         'go_version': True,
         'use_cgo': False,
         'distro': {
-            'linux': ['amd64']
+            'darwin': ['386', 'amd64'],
+            'linux': ['arm', '386', 'amd64'],
+            'windows': ['386', 'amd64']
         }
     }
 }
+if libbuild.ENV not in ['prod']:
+    libbuild.BIN_MATRIX['kubedb']['distro'] = {
+        'linux': ['amd64']
+    }
 libbuild.BUCKET_MATRIX = {
     'prod': 'gs://appscode-cdn',
     'dev': 'gs://appscode-dev'
