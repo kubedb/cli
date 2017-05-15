@@ -38,15 +38,6 @@ from os.path import expandvars
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/k8sdb/kubedb'
 BUILD_METADATA = libbuild.metadata(libbuild.REPO_ROOT)
 libbuild.BIN_MATRIX = {
-    'elasticsearch_discovery': {
-        'type': 'go',
-        'release': True,
-        'go_version': True,
-        'use_cgo': False,
-        'distro': {
-            'linux': ['amd64']
-        }
-    },
     "kubedb": {
         'type': 'go',
         'release': True,
