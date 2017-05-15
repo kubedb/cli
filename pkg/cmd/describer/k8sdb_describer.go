@@ -189,9 +189,6 @@ func (d *humanReadableDescriber) describeDatabaseSnapshot(item *tapi.DatabaseSna
 		}
 
 		d.describeSecret(item.Namespace, item.Spec.StorageSecret.SecretName, "Storage", out)
-		if item.Spec.DatabaseSecret != nil {
-			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
-		}
 
 		if events != nil {
 			describeEvents(events, out)

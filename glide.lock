@@ -1,5 +1,5 @@
 hash: 1dc8e0c249854a534d4eb2b0b3eaa7938938e2945bc67c868345e0538d2b2a09
-updated: 2017-05-09T17:00:56.428531378+06:00
+updated: 2017-05-15T16:41:19.202546613+06:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -8,12 +8,8 @@ imports:
   - internal
 - name: github.com/appscode/go
   version: 496a78e678c2a161788f53f94bdb0ab9c812231f
-  subpackages:
-  - version
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
-  subpackages:
-  - golog
 - name: github.com/Azure/go-ansiterm
   version: 70b2c90b260171e829f1ebd7c17f600c11858dbe
   subpackages:
@@ -154,7 +150,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: a6762c09f7654e3f00355177e879b83239b08290
+  version: ef5b784adf00b4b23027ed0aa872849a20c658c2
   subpackages:
   - api
   - api/install
@@ -182,9 +178,9 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 51fe59aca108dc5680109e7b2051cbdcfa5a253c
 - name: github.com/spf13/cobra
-  version: 8f0203be891287870100e4af46262cdf4a4261d1
+  version: 4cdb38c072b86bf795d2c81de50784d9fdd6eb77
 - name: github.com/spf13/pflag
-  version: 75859d1ee5f135362c9534f7db667e0150d9f577
+  version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/ugorji/go
   version: f1f1a805ed361a0e078bb537e4ea78cd37dcf065
   subpackages:
