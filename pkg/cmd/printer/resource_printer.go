@@ -81,8 +81,8 @@ func (h *HumanReadablePrinter) addDefaultHandlers() {
 	h.Handler(h.printElastic)
 	h.Handler(h.printPostgresList)
 	h.Handler(h.printPostgres)
-	h.Handler(h.printDatabaseSnapshotList)
-	h.Handler(h.printDatabaseSnapshot)
+	h.Handler(h.printSnapshotList)
+	h.Handler(h.printSnapshot)
 	h.Handler(h.printDeletedDatabaseList)
 	h.Handler(h.printDeletedDatabase)
 }
@@ -226,7 +226,7 @@ func (h *HumanReadablePrinter) printPostgresList(itemList *tapi.PostgresList, w 
 	return nil
 }
 
-func (h *HumanReadablePrinter) printDatabaseSnapshot(item *tapi.DatabaseSnapshot, w io.Writer, options PrintOptions) error {
+func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, options PrintOptions) error {
 	name := formatResourceName(options.Kind, item.Name, options.WithKind)
 
 	namespace := item.Namespace
@@ -260,9 +260,9 @@ func (h *HumanReadablePrinter) printDatabaseSnapshot(item *tapi.DatabaseSnapshot
 	return err
 }
 
-func (h *HumanReadablePrinter) printDatabaseSnapshotList(itemList *tapi.DatabaseSnapshotList, w io.Writer, options PrintOptions) error {
+func (h *HumanReadablePrinter) printSnapshotList(itemList *tapi.SnapshotList, w io.Writer, options PrintOptions) error {
 	for _, item := range itemList.Items {
-		if err := h.printDatabaseSnapshot(&item, w, options); err != nil {
+		if err := h.printSnapshot(&item, w, options); err != nil {
 			return err
 		}
 	}
@@ -423,7 +423,7 @@ func formatWideHeaders(wide bool, t reflect.Type) []string {
 		if t.String() == "*api.Postgres" || t.String() == "*api.PostgresList" {
 			return []string{"VERSION"}
 		}
-		if t.String() == "*api.DatabaseSnapshot" || t.String() == "*api.DatabaseSnapshotList" {
+		if t.String() == "*api.Snapshot" || t.String() == "*api.SnapshotList" {
 			return []string{"BUCKET"}
 		}
 	}

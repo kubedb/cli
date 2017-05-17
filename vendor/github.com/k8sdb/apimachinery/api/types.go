@@ -26,11 +26,11 @@ type SnapshotSourceSpec struct {
 }
 
 type BackupScheduleSpec struct {
-	CronExpression string `json:"cronExpression,omitempty"`
-	SnapshotSpec   `json:",inline,omitempty"`
+	CronExpression      string `json:"cronExpression,omitempty"`
+	SnapshotStorageSpec `json:",inline,omitempty"`
 }
 
-type SnapshotSpec struct {
+type SnapshotStorageSpec struct {
 	// Snapshot storage secret
 	StorageSecret *api.SecretVolumeSource `json:"storageSecret,omitempty"`
 	// Cloud bucket name

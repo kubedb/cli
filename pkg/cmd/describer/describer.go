@@ -45,7 +45,7 @@ func newHumanReadableDescriber(f cmdutil.Factory) *humanReadableDescriber {
 func (h *humanReadableDescriber) addDefaultHandlers() {
 	h.Handler(h.describeElastic)
 	h.Handler(h.describePostgres)
-	h.Handler(h.describeDatabaseSnapshot)
+	h.Handler(h.describeSnapshot)
 	h.Handler(h.describeDeletedDatabase)
 }
 

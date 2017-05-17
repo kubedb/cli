@@ -19,10 +19,10 @@ func GetSupportedResourceKind(resource string) (string, error) {
 	case strings.ToLower(tapi.ResourceTypePostgres):
 	case strings.ToLower(tapi.ResourceCodePostgres):
 		return tapi.ResourceKindPostgres, nil
-	case strings.ToLower(tapi.ResourceKindDatabaseSnapshot):
-	case strings.ToLower(tapi.ResourceTypeDatabaseSnapshot):
-	case strings.ToLower(tapi.ResourceCodeDatabaseSnapshot):
-		return tapi.ResourceKindDatabaseSnapshot, nil
+	case strings.ToLower(tapi.ResourceKindSnapshot):
+	case strings.ToLower(tapi.ResourceTypeSnapshot):
+	case strings.ToLower(tapi.ResourceCodeSnapshot):
+		return tapi.ResourceKindSnapshot, nil
 	case strings.ToLower(tapi.ResourceKindDeletedDatabase):
 	case strings.ToLower(tapi.ResourceTypeDeletedDatabase):
 	case strings.ToLower(tapi.ResourceCodeDeletedDatabase):
@@ -37,7 +37,7 @@ func CheckSupportedResource(kind string) error {
 	switch kind {
 	case tapi.ResourceKindElastic:
 	case tapi.ResourceKindPostgres:
-	case tapi.ResourceKindDatabaseSnapshot:
+	case tapi.ResourceKindSnapshot:
 	case tapi.ResourceKindDeletedDatabase:
 		return nil
 	default:
@@ -51,7 +51,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 	resources := map[string]string{
 		tapi.ResourceNameElastic:          tapi.ResourceTypeElastic,
 		tapi.ResourceNamePostgres:         tapi.ResourceTypePostgres,
-		tapi.ResourceNameDatabaseSnapshot: tapi.ResourceTypeDatabaseSnapshot,
+		tapi.ResourceNameSnapshot: tapi.ResourceTypeSnapshot,
 		tapi.ResourceNameDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
 	}
 
@@ -78,7 +78,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 var ShortForms = map[string]string{
 	tapi.ResourceCodeElastic:          tapi.ResourceTypeElastic,
 	tapi.ResourceCodePostgres:         tapi.ResourceTypePostgres,
-	tapi.ResourceCodeDatabaseSnapshot: tapi.ResourceTypeDatabaseSnapshot,
+	tapi.ResourceCodeSnapshot: tapi.ResourceTypeSnapshot,
 	tapi.ResourceCodeDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
 }
 

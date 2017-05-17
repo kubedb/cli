@@ -14,7 +14,7 @@ Valid resource types include:
   * all
   * elastic
   * postgres
-  * databasesnapshot
+  * snapshot
   * deleteddatabase
 
 Examples:
@@ -27,8 +27,8 @@ Examples:
   # List a single postgres with specified NAME in ps output format.
   kubedb get postgres database
 
-  # List a single databasesnapshot in JSON output format.
-  kubedb get -o json databasesnapshot snapshot-xyz
+  # List a single snapshot in JSON output format.
+  kubedb get -o json snapshot snapshot-xyz
 
   # List all postgreses and elastics together in ps output format.
   kubedb get postgreses,elastics

@@ -13,7 +13,7 @@ description of a given resource or group of resources.Valid resource types inclu
   * all
   * elastic
   * postgres
-  * databasesnapshot
+  * snapshot
   * deleteddatabase
 
 Examples:
