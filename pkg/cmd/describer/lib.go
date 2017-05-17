@@ -6,6 +6,9 @@ import (
 	"io"
 	"sort"
 	"text/tabwriter"
+	"time"
+
+	"k8s.io/kubernetes/pkg/api/unversioned"
 )
 
 func tabbedString(f func(io.Writer) error) (string, error) {
@@ -51,4 +54,12 @@ func printLabelsMultilineWithIndent(out io.Writer, initialIndent, title, innerIn
 		fmt.Fprintf(out, "%s=%s\n", key, labels[key])
 		i++
 	}
+}
+
+func timeToString(t *unversioned.Time) string {
+	if t == nil {
+		return ""
+	}
+
+	return t.Format(time.RFC1123Z)
 }

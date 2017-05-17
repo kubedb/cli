@@ -72,7 +72,7 @@ NAME               STATUS    AGE
 pg/postgres-demo   Running   1h
 
 NAME               STATUS      AGE
-dbs/snapshot-xyz   Succeeded   27m
+snp/snapshot-xyz   Succeeded   27m
 
 NAME                     STATUS    AGE
 ddb/e2e-elastic-v4xgwz   Deleted   9m
