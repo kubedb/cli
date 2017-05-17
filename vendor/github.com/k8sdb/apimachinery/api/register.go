@@ -30,9 +30,9 @@ var (
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
-		// DatabaseSnapshot
-		&DatabaseSnapshot{},
-		&DatabaseSnapshotList{},
+		// Snapshot
+		&Snapshot{},
+		&SnapshotList{},
 		// DeletedDatabase
 		&DeletedDatabase{},
 		&DeletedDatabaseList{},
@@ -48,8 +48,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	return nil
 }
 
-func (obj *DatabaseSnapshot) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
-func (obj *DatabaseSnapshotList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
+func (obj *Snapshot) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
+func (obj *SnapshotList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
 
 func (obj *DeletedDatabase) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
 func (obj *DeletedDatabaseList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }

@@ -23,12 +23,12 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 		}
 		return postgres, nil
 
-	case tapi.ResourceKindDatabaseSnapshot:
-		var dbSnapshot *tapi.DatabaseSnapshot
-		if err := yaml.Unmarshal(data, &dbSnapshot); err != nil {
+	case tapi.ResourceKindSnapshot:
+		var snapshot *tapi.Snapshot
+		if err := yaml.Unmarshal(data, &snapshot); err != nil {
 			return nil, err
 		}
-		return dbSnapshot, nil
+		return snapshot, nil
 	case tapi.ResourceKindDeletedDatabase:
 		var deletedDb *tapi.DeletedDatabase
 		if err := yaml.Unmarshal(data, &deletedDb); err != nil {

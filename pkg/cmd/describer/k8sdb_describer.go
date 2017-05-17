@@ -23,7 +23,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		return "", err
 	}
 
-	snapshots, err := d.extensionsClient.DatabaseSnapshots(item.Namespace).List(
+	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
@@ -89,7 +89,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		return "", err
 	}
 
-	snapshots, err := d.extensionsClient.DatabaseSnapshots(item.Namespace).List(
+	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
@@ -151,7 +151,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeDatabaseSnapshot(item *tapi.DatabaseSnapshot, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describerSettings *kubectl.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -263,7 +263,7 @@ func describeStorage(storage *tapi.StorageSpec, out io.Writer) {
 	fmt.Fprintf(out, "  Access Modes:\t%s\n", accessModes)
 }
 
-func listSnapshots(snapshotList *tapi.DatabaseSnapshotList, out io.Writer) {
+func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
 	fmt.Fprint(out, "\n")
 
 	if len(snapshotList.Items) == 0 {
