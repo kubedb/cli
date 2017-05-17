@@ -9,30 +9,23 @@ import (
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
-const (
-	ShortResourceTypeElastic          = "es"
-	ShortResourceTypePostgres         = "pg"
-	ShortResourceTypeDatabaseSnapshot = "dbs"
-	ShortResourceTypeDeletedDatabase  = "ddb"
-)
-
 func GetSupportedResourceKind(resource string) (string, error) {
 	switch strings.ToLower(resource) {
 	case strings.ToLower(tapi.ResourceKindElastic):
 	case strings.ToLower(tapi.ResourceTypeElastic):
-	case strings.ToLower(ShortResourceTypeElastic):
+	case strings.ToLower(tapi.ResourceCodeElastic):
 		return tapi.ResourceKindElastic, nil
 	case strings.ToLower(tapi.ResourceKindPostgres):
 	case strings.ToLower(tapi.ResourceTypePostgres):
-	case strings.ToLower(ShortResourceTypePostgres):
+	case strings.ToLower(tapi.ResourceCodePostgres):
 		return tapi.ResourceKindPostgres, nil
 	case strings.ToLower(tapi.ResourceKindDatabaseSnapshot):
 	case strings.ToLower(tapi.ResourceTypeDatabaseSnapshot):
-	case strings.ToLower(ShortResourceTypeDatabaseSnapshot):
+	case strings.ToLower(tapi.ResourceCodeDatabaseSnapshot):
 		return tapi.ResourceKindDatabaseSnapshot, nil
 	case strings.ToLower(tapi.ResourceKindDeletedDatabase):
 	case strings.ToLower(tapi.ResourceTypeDeletedDatabase):
-	case strings.ToLower(ShortResourceTypeDeletedDatabase):
+	case strings.ToLower(tapi.ResourceCodeDeletedDatabase):
 		return tapi.ResourceKindDeletedDatabase, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
@@ -83,10 +76,10 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 }
 
 var ShortForms = map[string]string{
-	ShortResourceTypeElastic:          tapi.ResourceTypeElastic,
-	ShortResourceTypePostgres:         tapi.ResourceTypePostgres,
-	ShortResourceTypeDatabaseSnapshot: tapi.ResourceTypeDatabaseSnapshot,
-	ShortResourceTypeDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
+	tapi.ResourceCodeElastic:          tapi.ResourceTypeElastic,
+	tapi.ResourceCodePostgres:         tapi.ResourceTypePostgres,
+	tapi.ResourceCodeDatabaseSnapshot: tapi.ResourceTypeDatabaseSnapshot,
+	tapi.ResourceCodeDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
 }
 
 func ResourceShortFormFor(resource string) (string, bool) {

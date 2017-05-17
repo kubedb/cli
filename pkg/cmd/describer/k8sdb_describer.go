@@ -13,9 +13,8 @@ import (
 )
 
 const (
-	DatabaseNamePrefix = "k8sdb"
-	LabelDatabaseType  = "k8sdb.com/type"
-	LabelDatabaseName  = "k8sdb.com/name"
+	LabelDatabaseKind = "k8sdb.com/kind"
+	LabelDatabaseName = "k8sdb.com/name"
 )
 
 func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *kubectl.DescriberSettings) (string, error) {
@@ -28,7 +27,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					LabelDatabaseType: tapi.ResourceNameElastic,
+					LabelDatabaseKind: tapi.ResourceKindElastic,
 					LabelDatabaseName: item.Name,
 				},
 			),
@@ -69,7 +68,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", DatabaseNamePrefix, item.Name)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodeElastic)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -94,7 +93,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					LabelDatabaseType: tapi.ResourceNamePostgres,
+					LabelDatabaseKind: tapi.ResourceKindPostgres,
 					LabelDatabaseName: item.Name,
 				},
 			),
@@ -128,18 +127,19 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
 		}
-		fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
 		if item.Annotations != nil {
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", DatabaseNamePrefix, item.Name)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodePostgres)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
-		d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+		if item.Spec.DatabaseSecret != nil {
+			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+		}
 
 		listSnapshots(snapshots, out)
 
@@ -280,8 +280,8 @@ func listSnapshots(snapshotList *tapi.DatabaseSnapshotList, out io.Writer) {
 		fmt.Fprintf(w, "  %s\t%s\t%s\t%s\t%s\n",
 			e.Name,
 			e.Spec.BucketName,
-			e.Status.StartTime.Time.Format(time.RFC1123Z),
-			e.Status.CompletionTime.Time.Format(time.RFC1123Z),
+			timeToString(e.Status.StartTime),
+			timeToString(e.Status.CompletionTime),
 			e.Status.Phase,
 		)
 	}

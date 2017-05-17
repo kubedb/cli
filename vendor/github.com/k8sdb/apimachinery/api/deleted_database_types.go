@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	ResourceCodeDeletedDatabase = "ddb"
 	ResourceKindDeletedDatabase = "DeletedDatabase"
 	ResourceNameDeletedDatabase = "deleted-database"
 	ResourceTypeDeletedDatabase = "deleteddatabases"
