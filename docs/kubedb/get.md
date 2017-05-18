@@ -71,8 +71,8 @@ es/elasticsearch-demo-1   Running   4h
 NAME               STATUS    AGE
 pg/postgres-demo   Running   1h
 
-NAME               STATUS      AGE
-snp/snapshot-xyz   Succeeded   27m
+NAME                STATUS      AGE
+snap/snapshot-xyz   Succeeded   27m
 
 NAME                     STATUS    AGE
 ddb/e2e-elastic-v4xgwz   Deleted   9m
