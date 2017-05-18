@@ -32,17 +32,14 @@ var (
 		cat postgres.json | kubedb delete -f -
 
 		# Delete elastic with label elastic.k8sdb.com/name=elasticsearch-demo.
-		kubedb delete elastic -l elastic.k8sdb.com/name=elasticsearch-demo
-
-		# Delete all deleteddatabase
-		kubedb delete deleteddatabase --all`)
+		kubedb delete elastic -l elastic.k8sdb.com/name=elasticsearch-demo`)
 )
 
 func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 	options := &resource.FilenameOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)])",
+		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label)])",
 		Short:   "Delete resources by filenames, stdin, resources and names, or by resources and label selector",
 		Long:    delete_long,
 		Example: delete_example,
@@ -62,7 +59,6 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 	if err != nil {
 		return err
 	}
-	deleteAll := cmdutil.GetFlagBool(cmd, "all")
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
@@ -87,7 +83,6 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
 		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
-		SelectAllParam(deleteAll).
 		ResourceTypeOrNameArgs(true, args...).RequireObject(true).
 		Flatten().
 		Do()

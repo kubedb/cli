@@ -21,7 +21,6 @@ func AddCreateFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
 
 func AddDeleteFlags(cmd *cobra.Command) {
 	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on.")
-	cmd.Flags().Bool("all", false, "[-all] to select all the specified resources.")
 	cmd.Flags().StringP("output", "o", "", "Output mode. Use \"-o name\" for shorter output (resource/name).")
 }
 

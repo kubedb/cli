@@ -20,18 +20,14 @@ Examples:
   # Delete elastic with label elastic.k8sdb.com/name=elasticsearch-demo.
   kubedb delete elastic -l elastic.k8sdb.com/name=elasticsearch-demo
 
-  # Delete all deleteddatabase
-  kubedb delete deleteddatabase --all
-
 Options:
-      --all=false: [-all] to select all the specified resources.
   -f, --filename=[]: Filename to use to create the resource
   -o, --output='': Output mode. Use "-o name" for shorter output (resource/name).
   -R, --recursive=false: Process the directory used in -f, --filename recursively.
   -l, --selector='': Selector (label query) to filter on.
 
 Usage:
-  kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [options]
+  kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [options]
 
 Use "kubedb delete options" for a list of global command-line options (applies to all commands).
 ```
@@ -41,14 +37,6 @@ Use "kubedb delete options" for a list of global command-line options (applies t
 $ kubedb delete pg/postgres-demo
 
 postgres "postgres-demo" deleted
-```
-
-##### Delete All
-```bash
-$ kubedb delete deleteddatabase --all
-
-deleteddatabase "elasticsearch-demo" deleted
-deleteddatabase "postgres-demo" deleted
 ```
 
 ##### Delete from file
