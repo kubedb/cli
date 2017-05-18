@@ -3,7 +3,6 @@ package describer
 import (
 	"fmt"
 	"io"
-	"time"
 
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
@@ -53,7 +52,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 	return tabbedString(func(out io.Writer) error {
 		fmt.Fprintf(out, "Name:\t%s\n", item.Name)
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
-		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", item.CreationTimestamp.Time.Format(time.RFC1123Z))
+		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels:", item.Labels)
 		}
@@ -119,7 +118,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 	return tabbedString(func(out io.Writer) error {
 		fmt.Fprintf(out, "Name:\t%s\n", item.Name)
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
-		fmt.Fprintf(out, "StartTimestamp:\t%s\n", item.CreationTimestamp.Time.Format(time.RFC1123Z))
+		fmt.Fprintf(out, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels:", item.Labels)
 		}
@@ -173,9 +172,9 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 	return tabbedString(func(out io.Writer) error {
 		fmt.Fprintf(out, "Name:\t%s\n", item.Name)
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
-		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", item.CreationTimestamp.Format(time.RFC1123Z))
+		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Status.CompletionTime != nil {
-			fmt.Fprintf(out, "CompletionTimestamp:\t%s\n", item.Status.CompletionTime.Format(time.RFC1123Z))
+			fmt.Fprintf(out, "CompletionTimestamp:\t%s\n", timeToString(item.Status.CompletionTime))
 		}
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels:", item.Labels)
@@ -220,12 +219,12 @@ func (d *humanReadableDescriber) describeDeletedDatabase(item *tapi.DeletedDatab
 	return tabbedString(func(out io.Writer) error {
 		fmt.Fprintf(out, "Name:\t%s\n", item.Name)
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
-		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", item.CreationTimestamp.Format(time.RFC1123Z))
+		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Status.DeletionTime != nil {
-			fmt.Fprintf(out, "DeletionTimestamp:\t%s\n", item.Status.DeletionTime.Format(time.RFC1123Z))
+			fmt.Fprintf(out, "DeletionTimestamp:\t%s\n", timeToString(item.Status.DeletionTime))
 		}
 		if item.Status.WipeOutTime != nil {
-			fmt.Fprintf(out, "WipeOutTimestamp:\t%s\n", item.Status.WipeOutTime.Format(time.RFC1123Z))
+			fmt.Fprintf(out, "WipeOutTimestamp:\t%s\n", timeToString(item.Status.WipeOutTime))
 		}
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels:", item.Labels)

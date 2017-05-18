@@ -6,7 +6,6 @@ import (
 	"io"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/k8sdb/kubedb/pkg/cmd/printer"
 	"github.com/k8sdb/kubedb/pkg/cmd/util"
@@ -43,7 +42,7 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 	fmt.Fprint(out, "StatefulSet:\t\n")
 	fmt.Fprintf(out, "  Name:\t%s\n", ps.Name)
 	fmt.Fprintf(out, "  Replicas:\t%d current / %d desired\n", ps.Status.Replicas, ps.Spec.Replicas)
-	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", ps.CreationTimestamp.Time.Format(time.RFC1123Z))
+	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", timeToString(&ps.CreationTimestamp))
 	fmt.Fprintf(out, "  Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
