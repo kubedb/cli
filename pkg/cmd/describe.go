@@ -31,7 +31,7 @@ var (
 		kubedb describe pg/postgres-demo
 
 		# Describe all dormantDatabases
-		kubedb describe ddb`)
+		kubedb describe drmn`)
 )
 
 func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {

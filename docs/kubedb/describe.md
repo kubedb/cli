@@ -24,7 +24,7 @@ Examples:
   kubedb describe pg/postgres-demo
 
   # Describe all dormantDatabases
-  kubedb describe ddb
+  kubedb describe drmn
 
 Options:
       --all-namespaces=false: If present, list the requested object(s) across all namespaces.
