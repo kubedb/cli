@@ -163,6 +163,7 @@ func CreateTwoWayMergePatch(original, modified []byte, dataStruct interface{}, f
 
 	patchMap, err := diffMaps(originalMap, modifiedMap, t, false, false)
 	if err != nil {
+		fmt.Println("----")
 		return nil, err
 	}
 
@@ -224,14 +225,17 @@ func diffMaps(original, modified map[string]interface{}, t reflect.Type, ignoreC
 		// Types are the same, so compare values
 		switch originalValueTyped := originalValue.(type) {
 		case map[string]interface{}:
+			fmt.Println(" -- ", key)
 			modifiedValueTyped := modifiedValue.(map[string]interface{})
 			fieldType, _, _, err := forkedjson.LookupPatchMetadata(t, key)
 			if err != nil {
+				fmt.Println("--01")
 				return nil, err
 			}
 
 			patchValue, err := diffMaps(originalValueTyped, modifiedValueTyped, fieldType, ignoreChangesAndAdditions, ignoreDeletions)
 			if err != nil {
+				fmt.Println("--02")
 				return nil, err
 			}
 
@@ -244,12 +248,14 @@ func diffMaps(original, modified map[string]interface{}, t reflect.Type, ignoreC
 			modifiedValueTyped := modifiedValue.([]interface{})
 			fieldType, fieldPatchStrategy, fieldPatchMergeKey, err := forkedjson.LookupPatchMetadata(t, key)
 			if err != nil {
+				fmt.Println("--03")
 				return nil, err
 			}
 
 			if fieldPatchStrategy == mergeDirective {
 				patchValue, err := diffLists(originalValueTyped, modifiedValueTyped, fieldType.Elem(), fieldPatchMergeKey, ignoreChangesAndAdditions, ignoreDeletions)
 				if err != nil {
+					fmt.Println("--04")
 					return nil, err
 				}
 
