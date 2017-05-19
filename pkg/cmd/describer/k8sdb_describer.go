@@ -197,7 +197,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeDeletedDatabase(item *tapi.DeletedDatabase, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatabase, describerSettings *kubectl.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err

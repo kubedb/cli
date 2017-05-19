@@ -15,7 +15,7 @@ Valid resource types include:
   * elastic
   * postgres
   * snapshot
-  * deleteddatabase
+  * dormantDatabase
 
 Examples:
   # List all elastic in ps output format.

@@ -14,7 +14,7 @@ description of a given resource or group of resources.Valid resource types inclu
   * elastic
   * postgres
   * snapshot
-  * deleteddatabase
+  * dormantDatabase
 
 Examples:
   # Describe a elastic
@@ -23,7 +23,7 @@ Examples:
   # Describe a postgres
   kubedb describe pg/postgres-demo
 
-  # Describe all deleteddatabases
+  # Describe all dormantDatabases
   kubedb describe ddb
 
 Options:

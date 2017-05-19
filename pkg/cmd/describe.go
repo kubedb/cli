@@ -30,7 +30,7 @@ var (
 		# Describe a postgres
 		kubedb describe pg/postgres-demo
 
-		# Describe all deleteddatabases
+		# Describe all dormantDatabases
 		kubedb describe ddb`)
 )
 

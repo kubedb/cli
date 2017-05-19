@@ -23,10 +23,10 @@ func GetSupportedResourceKind(resource string) (string, error) {
 	case strings.ToLower(tapi.ResourceTypeSnapshot):
 	case strings.ToLower(tapi.ResourceCodeSnapshot):
 		return tapi.ResourceKindSnapshot, nil
-	case strings.ToLower(tapi.ResourceKindDeletedDatabase):
-	case strings.ToLower(tapi.ResourceTypeDeletedDatabase):
-	case strings.ToLower(tapi.ResourceCodeDeletedDatabase):
-		return tapi.ResourceKindDeletedDatabase, nil
+	case strings.ToLower(tapi.ResourceKindDormantDatabase):
+	case strings.ToLower(tapi.ResourceTypeDormantDatabase):
+	case strings.ToLower(tapi.ResourceCodeDormantDatabase):
+		return tapi.ResourceKindDormantDatabase, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -38,7 +38,7 @@ func CheckSupportedResource(kind string) error {
 	case tapi.ResourceKindElastic:
 	case tapi.ResourceKindPostgres:
 	case tapi.ResourceKindSnapshot:
-	case tapi.ResourceKindDeletedDatabase:
+	case tapi.ResourceKindDormantDatabase:
 		return nil
 	default:
 		return fmt.Errorf(`kubedb doesn't support a resource type "%v"`, kind)
@@ -52,7 +52,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 		tapi.ResourceNameElastic:          tapi.ResourceTypeElastic,
 		tapi.ResourceNamePostgres:         tapi.ResourceTypePostgres,
 		tapi.ResourceNameSnapshot: tapi.ResourceTypeSnapshot,
-		tapi.ResourceNameDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
+		tapi.ResourceNameDormantDatabase:  tapi.ResourceTypeDormantDatabase,
 	}
 
 	clientset, err := f.ClientSet()
@@ -79,7 +79,7 @@ var ShortForms = map[string]string{
 	tapi.ResourceCodeElastic:          tapi.ResourceTypeElastic,
 	tapi.ResourceCodePostgres:         tapi.ResourceTypePostgres,
 	tapi.ResourceCodeSnapshot: tapi.ResourceTypeSnapshot,
-	tapi.ResourceCodeDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
+	tapi.ResourceCodeDormantDatabase:  tapi.ResourceTypeDormantDatabase,
 }
 
 func ResourceShortFormFor(resource string) (string, bool) {

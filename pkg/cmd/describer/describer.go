@@ -46,7 +46,7 @@ func (h *humanReadableDescriber) addDefaultHandlers() {
 	h.Handler(h.describeElastic)
 	h.Handler(h.describePostgres)
 	h.Handler(h.describeSnapshot)
-	h.Handler(h.describeDeletedDatabase)
+	h.Handler(h.describeDormantDatabase)
 }
 
 func (h *humanReadableDescriber) Handler(describeFunc interface{}) error {
