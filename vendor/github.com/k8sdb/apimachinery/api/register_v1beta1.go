@@ -21,9 +21,9 @@ func v1addKnownTypes(scheme *runtime.Scheme) error {
 		// Snapshot
 		&Snapshot{},
 		&SnapshotList{},
-		// DeletedDatabase
-		&DeletedDatabase{},
-		&DeletedDatabaseList{},
+		// DormantDatabase
+		&DormantDatabase{},
+		&DormantDatabaseList{},
 		// k8sdb Elastic
 		&Elastic{},
 		&ElasticList{},

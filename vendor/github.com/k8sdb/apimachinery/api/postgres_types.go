@@ -36,10 +36,10 @@ type PostgresSpec struct {
 	// BackupSchedule spec to specify how database backup will be taken
 	// +optional
 	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
-	// If DoNotDelete is true, controller will prevent to delete this Postgres object.
+	// If DoNotPause is true, controller will prevent to delete this Postgres object.
 	// Controller will create same Postgres object and ignore other process.
 	// +optional
-	DoNotDelete bool `json:"doNotDelete,omitempty"`
+	DoNotPause bool `json:"doNotPause,omitempty"`
 }
 
 type PostgresStatus struct {
