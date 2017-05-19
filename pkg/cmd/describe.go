@@ -30,8 +30,8 @@ var (
 		# Describe a postgres
 		kubedb describe pg/postgres-demo
 
-		# Describe all deleteddatabases
-		kubedb describe ddb`)
+		# Describe all dormantDatabases
+		kubedb describe drmn`)
 )
 
 func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {

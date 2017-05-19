@@ -197,7 +197,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeDeletedDatabase(item *tapi.DeletedDatabase, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatabase, describerSettings *kubectl.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -220,8 +220,8 @@ func (d *humanReadableDescriber) describeDeletedDatabase(item *tapi.DeletedDatab
 		fmt.Fprintf(out, "Name:\t%s\n", item.Name)
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
 		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Status.DeletionTime != nil {
-			fmt.Fprintf(out, "DeletionTimestamp:\t%s\n", timeToString(item.Status.DeletionTime))
+		if item.Status.PausingTime != nil {
+			fmt.Fprintf(out, "PausedTimestamp:\t%s\n", timeToString(item.Status.PausingTime))
 		}
 		if item.Status.WipeOutTime != nil {
 			fmt.Fprintf(out, "WipeOutTimestamp:\t%s\n", timeToString(item.Status.WipeOutTime))

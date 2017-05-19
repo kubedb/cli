@@ -33,9 +33,9 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		// Snapshot
 		&Snapshot{},
 		&SnapshotList{},
-		// DeletedDatabase
-		&DeletedDatabase{},
-		&DeletedDatabaseList{},
+		// DormantDatabase
+		&DormantDatabase{},
+		&DormantDatabaseList{},
 		// k8sdb Elastic
 		&Elastic{},
 		&ElasticList{},
@@ -51,8 +51,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 func (obj *Snapshot) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
 func (obj *SnapshotList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
 
-func (obj *DeletedDatabase) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
-func (obj *DeletedDatabaseList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
+func (obj *DormantDatabase) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
+func (obj *DormantDatabaseList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
 
 func (obj *Elastic) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
 func (obj *ElasticList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }

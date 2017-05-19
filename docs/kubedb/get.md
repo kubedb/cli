@@ -15,7 +15,7 @@ Valid resource types include:
   * elastic
   * postgres
   * snapshot
-  * deleteddatabase
+  * dormantDatabase
 
 Examples:
   # List all elastic in ps output format.
@@ -75,7 +75,7 @@ NAME                STATUS      AGE
 snap/snapshot-xyz   Succeeded   27m
 
 NAME                     STATUS    AGE
-ddb/e2e-elastic-v4xgwz   Deleted   9m
+drmn/e2e-elastic-v4xgwz   Deleted   9m
 ```
 
 ##### Get Postgres with labels
