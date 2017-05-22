@@ -12,7 +12,8 @@ Basic Commands (Beginner):
 
 Basic Commands (Intermediate):
   get         Display one or many resources
-  delete      Delete resources by filenames, stdin, resources and names, or by resources and label selector
+  edit        Edit a resource on the server
+  delete      Delete resources by file names, stdin, resources and names, or by resources and label selector
 
 Troubleshooting and Debugging Commands:
   describe    Show details of a specific resource or group of resources

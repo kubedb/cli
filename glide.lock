@@ -1,8 +1,8 @@
 hash: 3bdc093bab543738c2fe4fba8cbc716c75d52206086eca445e718503a0d5a96e
-updated: 2017-05-22T10:36:11.662187096+06:00
+updated: 2017-05-22T17:19:59.222862382+06:00
 imports:
 - name: cloud.google.com/go
-  version: 3b1ae45394a234c385be014e9a488f2bb6eef821
+  version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
   subpackages:
   - compute/metadata
   - internal
@@ -176,7 +176,7 @@ imports:
 - name: github.com/shurcooL/sanitized_anchor_name
   version: 10ef21a441db47d8b13ebcc5fd2310f636973c77
 - name: github.com/Sirupsen/logrus
-  version: 51fe59aca108dc5680109e7b2051cbdcfa5a253c
+  version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
   version: ca57f0f5dba473a8a58765d16d7e811fb8027add
 - name: github.com/spf13/pflag
@@ -358,6 +358,7 @@ imports:
   - pkg/kubectl
   - pkg/kubectl/cmd/templates
   - pkg/kubectl/cmd/util
+  - pkg/kubectl/cmd/util/editor
   - pkg/kubectl/resource
   - pkg/kubelet/qos
   - pkg/kubelet/types

@@ -28,6 +28,12 @@ func AddDescribeFlags(cmd *cobra.Command) {
 	cmd.Flags().Bool("all-namespaces", false, "If present, list the requested object(s) across all namespaces.")
 }
 
+func AddEditFlags(cmd *cobra.Command) {
+	cmd.Flags().Bool("all", false, "[-all] to select all the specified resources.")
+	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on.")
+	cmd.Flags().StringP("output", "o", "yaml", "Output format. One of: yaml|json.")
+}
+
 func AddFilenameOptionFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
 	cmd.Flags().StringSliceVarP(&options.Filenames, "filename", "f", options.Filenames, "Filename to use to create the resource")
 	cmd.Flags().BoolVarP(&options.Recursive, "recursive", "R", options.Recursive, "Process the directory used in -f, --filename recursively.")

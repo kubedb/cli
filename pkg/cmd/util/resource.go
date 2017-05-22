@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/kubedb/pkg/cmd/decoder"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/kubernetes/pkg/util/strategicpatch"
 )
 
 func GetSupportedResourceKind(resource string) (string, error) {
@@ -93,4 +97,79 @@ func ResourceShortFormFor(resource string) (string, bool) {
 		}
 	}
 	return alias, exists
+}
+
+func GetObjectData(obj runtime.Object) ([]byte, error) {
+	return yaml.Marshal(obj)
+}
+
+func GetStructuredObject(obj runtime.Object) (runtime.Object, error) {
+	kind := obj.GetObjectKind().GroupVersionKind().Kind
+	data, err := GetObjectData(obj)
+	if err != nil {
+		return obj, err
+	}
+	return decoder.Decode(kind, data)
+}
+
+func checkChainKeyUnchanged(key string, mapData map[string]interface{}) bool {
+	keys := strings.Split(key, ".")
+	val, ok := mapData[keys[0]]
+	if !ok || len(keys) == 1 {
+		return !ok
+	}
+
+	newKey := strings.Join(keys[1:], ".")
+	return checkChainKeyUnchanged(newKey, val.(map[string]interface{}))
+}
+
+func RequireChainKeyUnchanged(key string) strategicpatch.PreconditionFunc {
+	return func(patch interface{}) bool {
+		patchMap, ok := patch.(map[string]interface{})
+		if !ok {
+			fmt.Println("Invalid data")
+			return true
+		}
+		check := checkChainKeyUnchanged(key, patchMap)
+		if !check {
+			fmt.Println(key, "was changed")
+		}
+		return check
+	}
+}
+
+func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
+	preconditions := []strategicpatch.PreconditionFunc{
+		strategicpatch.RequireKeyUnchanged("apiVersion"),
+		strategicpatch.RequireKeyUnchanged("kind"),
+		strategicpatch.RequireMetadataKeyUnchanged("name"),
+		strategicpatch.RequireMetadataKeyUnchanged("namespace"),
+		strategicpatch.RequireKeyUnchanged("status"),
+	}
+
+	switch kind {
+	case tapi.ResourceKindElastic:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.version"),
+			RequireChainKeyUnchanged("spec.storage"),
+			RequireChainKeyUnchanged("spec.nodeSelector"),
+			RequireChainKeyUnchanged("spec.init"),
+		)
+	case tapi.ResourceKindPostgres:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.version"),
+			RequireChainKeyUnchanged("spec.storage"),
+			RequireChainKeyUnchanged("spec.databaseSecret"),
+			RequireChainKeyUnchanged("spec.nodeSelector"),
+			RequireChainKeyUnchanged("spec.init"),
+		)
+	case tapi.ResourceKindDormantDatabase:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.origin"),
+		)
+	}
+	return preconditions
 }
