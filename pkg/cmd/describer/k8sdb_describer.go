@@ -235,7 +235,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
 		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Status.PausingTime != nil {
-			fmt.Fprintf(out, "PausingTimestamp:\t%s\n", timeToString(item.Status.PausingTime))
+			fmt.Fprintf(out, "PausedTimestamp:\t%s\n", timeToString(item.Status.PausingTime))
 		}
 		if item.Status.WipeOutTime != nil {
 			fmt.Fprintf(out, "WipeOutTimestamp:\t%s\n", timeToString(item.Status.WipeOutTime))
