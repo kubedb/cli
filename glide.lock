@@ -1,5 +1,5 @@
 hash: 3bdc093bab543738c2fe4fba8cbc716c75d52206086eca445e718503a0d5a96e
-updated: 2017-05-19T16:34:07.717344307-07:00
+updated: 2017-05-22T13:24:22.477752897+06:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -150,7 +150,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 99bbed5a8a7ffe55827012086456931a6b7978fb
+  version: fccfbc01d9e54ee54725899c8b7e1d9d7d02044c
   subpackages:
   - api
   - api/install
@@ -178,7 +178,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 51fe59aca108dc5680109e7b2051cbdcfa5a253c
 - name: github.com/spf13/cobra
-  version: ca5710c94eabe15aa1f74490b8e5976dc652e8c6
+  version: ca57f0f5dba473a8a58765d16d7e811fb8027add
 - name: github.com/spf13/pflag
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/ugorji/go
@@ -252,7 +252,7 @@ imports:
 - name: gopkg.in/yaml.v2
   version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/kubernetes
-  version: 8eb75a5810cba92ccad845ca360cf924f2385881
+  version: f07eea23494be1e7c11a8e2cf51bd96d1ec9fdf1
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install
@@ -358,6 +358,7 @@ imports:
   - pkg/kubectl
   - pkg/kubectl/cmd/templates
   - pkg/kubectl/cmd/util
+  - pkg/kubectl/cmd/util/editor
   - pkg/kubectl/resource
   - pkg/kubelet/qos
   - pkg/kubelet/types

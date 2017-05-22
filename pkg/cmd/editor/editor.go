@@ -3,35 +3,33 @@ package editor
 import (
 	"os"
 
-	//"github.com/appscode/go-term"
-	"os/exec"
+	"k8s.io/kubernetes/pkg/kubectl/cmd/util/editor"
 )
 
+const defaultEditor = "vi"
 
-func GetEditor() string {
-	//preferred
-	var editor string
-	editor = os.Getenv("EDITOR")
-	if len(editor) != 0 {
-		editor = os.ExpandEnv(editor)
-		return editor
+func NewDefaultEditor() editor.Editor {
+	var editorName string
+	editorName = os.Getenv("EDITOR")
+	if len(editorName) != 0 {
+		editorName = os.ExpandEnv(editorName)
+		return editor.Editor{
+			Args:  []string{editorName},
+			Shell: false,
+		}
 	}
 
-	editor = os.Getenv("KUBEDB_EDITOR")
-	if len(editor) != 0 {
-		editor = os.ExpandEnv(editor)
-		return editor
+	editorName = os.Getenv("KUBEDB_EDITOR")
+	if len(editorName) != 0 {
+		editorName = os.ExpandEnv(editorName)
+		return editor.Editor{
+			Args:  []string{editorName},
+			Shell: false,
+		}
 	}
 
-	//errMessage := "Unable to launch an interactive text editor. Set the EDITOR or KUBEDB_EDITOR environment variable to an appropriate editor."
-	//term.Fatalln(errMessage)
-	return ""
-}
-
-func OpenEditor(editorName, tempFilePath string) error {
-	cmd := exec.Command(editorName, tempFilePath)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	return editor.Editor{
+		Args:  []string{defaultEditor},
+		Shell: false,
+	}
 }

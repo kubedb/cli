@@ -4,29 +4,30 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
+	"reflect"
 	"strings"
 
-	acio "github.com/appscode/go/io"
+	"github.com/golang/glog"
 	"github.com/k8sdb/apimachinery/client/clientset"
-	"github.com/k8sdb/kubedb/pkg/cmd/decoder"
+	"github.com/k8sdb/kubedb/pkg/cmd/editor"
 	"github.com/k8sdb/kubedb/pkg/cmd/encoder"
 	"github.com/k8sdb/kubedb/pkg/cmd/printer"
 	"github.com/k8sdb/kubedb/pkg/cmd/util"
 	"github.com/k8sdb/kubedb/pkg/kube"
 	"github.com/spf13/cobra"
 	kapi "k8s.io/kubernetes/pkg/api"
+	"k8s.io/kubernetes/pkg/api/errors"
+	"k8s.io/kubernetes/pkg/api/meta"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/util/editor"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 	"k8s.io/kubernetes/pkg/runtime"
-	utilerrors "k8s.io/kubernetes/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/util/strategicpatch"
 	"k8s.io/kubernetes/pkg/util/yaml"
-	"os"
-	"path/filepath"
 )
 
 var (
@@ -62,18 +63,12 @@ func NewCmdEdit(out, errOut io.Writer) *cobra.Command {
 	return cmd
 }
 
-func RunEdit(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string) error {
+func RunEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args []string) error {
+	return runEdit(f, out, errOut, cmd, args)
+}
+
+func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args []string) error {
 	o, err := printer.NewEditPrinter(cmd)
-	if err != nil {
-		return err
-	}
-
-	cmdNamespace, _, err := f.DefaultNamespace()
-	if err != nil {
-		return err
-	}
-
-	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
 	}
@@ -90,199 +85,223 @@ func RunEdit(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args 
 	}
 	args[0] = strings.Join(resources, ",")
 
-	r := resource.NewBuilder(
-		mapper,
-		typer,
-		resource.ClientMapperFunc(f.UnstructuredClientForMapping),
-		runtime.UnstructuredJSONScheme).
-		ResourceTypeOrNameArgs(true, args...).
-		Latest().
-		NamespaceParam(cmdNamespace).
-		DefaultNamespace().
-		ContinueOnError().
-		Flatten().
-		Do()
-
-	infos, err := r.Infos()
+	mapper, resourceMapper, r, _, err := getMapperAndResult(f, args)
 	if err != nil {
 		return err
 	}
 
-	rPrinter := &kubectl.YAMLPrinter{}
+	normalEditInfos, err := r.Infos()
 	if err != nil {
 		return err
 	}
 
 	var (
-		edit = editor.NewDefaultEditor(f.EditorEnvs())
+		edit = editor.NewDefaultEditor()
 	)
 
 	restClonfig, _ := f.ClientConfig()
 	extClient := clientset.NewExtensionsForConfigOrDie(restClonfig)
 
-	editFn := func(info *resource.Info) error {
-
+	editFn := func(info *resource.Info, err error) error {
 		var (
-			results = editResults{}
-			//originalByte = []byte{}
-			edited = []byte{}
-			//file     string
+			results  = editResults{}
+			original = []byte{}
+			edited   = []byte{}
+			file     string
 		)
 
 		containsError := false
-		original, err := util.GetStructuredObject(info.Object)
-		if err != nil {
-			return err
-		}
+		infos := normalEditInfos
 		for {
+			originalObj := infos[0].Object
+			objToEdit := originalObj
 
 			buf := &bytes.Buffer{}
 			var w io.Writer = buf
-			var editedData, path string
 
-			results.header.writeTo(w)
+			if o.AddHeader {
+				results.header.writeTo(w)
+			}
 
 			if !containsError {
-				if err := rPrinter.PrintObj(original, w); err != nil {
-					return preservedFile(err, results.file, cmdErr)
+				if err := o.Printer.PrintObj(objToEdit, w); err != nil {
+					return preservedFile(err, results.file, errOut)
 				}
-				/*var ok bool
-				if ok, path = editor.WriteTempFile(info, buf); !ok {
-					return errors.New("Fail to write temp file")
-				}*/
-
+				original = buf.Bytes()
+			} else {
+				buf.Write(manualStrip(edited))
 			}
 
-			/*if err := editor.OpenEditor(editorName, path); err != nil {
-				return fmt.Errorf("Editor %s not working. Change editor by setting EDITOR environment variable", editorName)
-			}*/
-
+			// launch the editor
 			editedDiff := edited
-			edited, file, err := edit.LaunchTempFile(fmt.Sprintf("%s-edit-", filepath.Base(os.Args[0])), o.Ext, buf)
+			edited, file, err = edit.LaunchTempFile(fmt.Sprintf("%s-edit-", filepath.Base(os.Args[0])), o.Ext, buf)
 			if err != nil {
-				return preservedFile(err, results.file, cmdErr)
+				return preservedFile(err, results.file, errOut)
 			}
-
-			if editMode == NormalEditMode || containsError {
+			if containsError {
 				if bytes.Equal(stripComments(editedDiff), stripComments(edited)) {
-					// Ugly hack right here. We will hit this either (1) when we try to
-					// save the same changes we tried to save in the previous iteration
-					// which means our changes are invalid or (2) when we exit the second
-					// time. The second case is more usual so we can probably live with it.
-					// TODO: A less hacky fix would be welcome :)
 					return preservedFile(fmt.Errorf("%s", "Edit cancelled, no valid changes were saved."), file, errOut)
 				}
 			}
 
-			if editedData, err = acio.ReadFile(path); err != nil {
-				return err
+			// cleanup any file from the previous pass
+			if len(results.file) > 0 {
+				os.Remove(results.file)
 			}
-
-			editedRuntimeObject, err := decoder.Decode(info.GetObjectKind().GroupVersionKind().Kind, []byte(editedData))
-			if err != nil {
-				return err
-			}
-
-			originalSerialization, err := runtime.Encode(clientset.ExtendedCodec, original)
-			if err != nil {
-				return err
-			}
-
-			editedSerialization, err := encoder.Encode(editedRuntimeObject)
-			if err != nil {
-				return err
-			}
-
-			originalJS, err := yaml.ToJSON(originalSerialization)
-			if err != nil {
-				return err
-			}
-			editedJS, err := yaml.ToJSON(editedSerialization)
-			if err != nil {
-				return err
-			}
-
-			fmt.Println("--+ ", string(originalJS))
-			fmt.Println()
-			fmt.Println("--+ ", string(editedJS))
+			glog.V(4).Infof("User edited:\n%s", string(edited))
 
 			// Compare content without comments
-			if bytes.Equal(stripComments(originalJS), stripComments(editedJS)) {
-				os.Remove(path)
-				fmt.Fprintln(cmdErr, "Edit cancelled, no changes made.")
+			if bytes.Equal(stripComments(original), stripComments(edited)) {
+				os.Remove(file)
+				fmt.Fprintln(errOut, "Edit cancelled, no changes made.")
 				return nil
 			}
 
-			preconditions := []strategicpatch.PreconditionFunc{
-				strategicpatch.RequireKeyUnchanged("apiVersion"),
-				strategicpatch.RequireKeyUnchanged("kind"),
-				strategicpatch.RequireMetadataKeyUnchanged("name"),
+			results = editResults{
+				file: file,
 			}
 
-			patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, original, preconditions...)
+			// parse the edited file
+			updates, err := resourceMapper.InfoForData(stripComments(edited), "edited-file")
 			if err != nil {
-				if strategicpatch.IsPreconditionFailed(err) {
-					return fmt.Errorf("%s", "At least one of apiVersion, kind and name was changed")
-				}
-				return err
-			}
-
-			h := resource.NewHelper(extClient.RESTClient(), info.Mapping)
-
-			patched, err := extClient.RESTClient().Patch(kapi.MergePatchType).
-				NamespaceIfScoped(info.Namespace, h.NamespaceScoped).
-				Resource(h.Resource).
-				Name(info.Name).
-				Body(patch).
-				Do().
-				Get()
-
-			if err != nil {
+				// syntax error
+				containsError = true
+				results.header.reasons = append(results.header.reasons, editReason{head: fmt.Sprintf("The edited file had a syntax error: %v", err)})
 				continue
 			}
 
-			info.Refresh(patched, true)
-			cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
+			containsError = false
+
+			err = visitToPatch(extClient, originalObj, updates, mapper, resourceMapper, out, errOut, unversioned.GroupVersion{}, &results, file)
+			if err != nil {
+				return preservedFile(err, results.file, errOut)
+			}
+
+			if results.notfound > 0 {
+				fmt.Fprintf(errOut, "The edits you made on deleted resources have been saved to %q\n", file)
+				return cmdutil.ErrExit
+			}
+
+			if len(results.edit) == 0 {
+				if results.notfound == 0 {
+					os.Remove(file)
+				} else {
+					fmt.Fprintf(out, "The edits you made on deleted resources have been saved to %q\n", file)
+				}
+				return nil
+			}
+
+			if len(results.header.reasons) > 0 {
+				containsError = true
+			}
+		}
+	}
+
+	return editFn(nil, nil)
+}
+
+func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Object, updates *resource.Info, mapper meta.RESTMapper, resourceMapper *resource.Mapper, out, errOut io.Writer, defaultVersion unversioned.GroupVersion, results *editResults, file string) error {
+	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
+	err := patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
+
+		currOriginalObj, err := util.GetStructuredObject(originalObj)
+		if err != nil {
+			return err
+		}
+
+		originalSerialization, err := runtime.Encode(clientset.ExtendedCodec, currOriginalObj)
+		if err != nil {
+			return err
+		}
+
+		editedSerialization, err := encoder.Encode(info.Object)
+		if err != nil {
+			return err
+		}
+
+		editedSerialization = stripComments(editedSerialization)
+
+		originalJS, err := yaml.ToJSON(originalSerialization)
+		if err != nil {
+			return err
+		}
+		editedJS, err := yaml.ToJSON(editedSerialization)
+		if err != nil {
+			return err
+		}
+
+		if reflect.DeepEqual(originalJS, editedJS) {
+			// no edit, so just skip it.
+			cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "skipped")
 			return nil
 		}
-		return nil
-	}
 
-	allErrs := []error{}
+		preconditions := util.GetPreconditionFunc(currOriginalObj.GetObjectKind().GroupVersionKind().Kind)
 
-	for _, info := range infos {
-		err := editFn(info)
+		fmt.Println()
+		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
 		if err != nil {
-			allErrs = append(allErrs, err)
+			if err := IsPreconditionFailed(err); err {
+				return err
+			}
+			return err
 		}
-	}
 
-	return utilerrors.NewAggregate(allErrs)
+		results.version = defaultVersion
+		h := resource.NewHelper(extClient.RESTClient(), info.Mapping)
+		patched, err := extClient.RESTClient().Patch(kapi.MergePatchType).
+			NamespaceIfScoped(info.Namespace, h.NamespaceScoped).
+			Resource(h.Resource).
+			Name(info.Name).
+			Body(patch).
+			Do().
+			Get()
+
+		if err != nil {
+			fmt.Fprintln(out, results.addError(err, info))
+			return nil
+		}
+
+		info.Refresh(patched, true)
+		cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
+		return nil
+	})
+	return err
 }
 
-func stripComments(file []byte) []byte {
-	stripped := file
-	stripped, err := yaml.ToJSON(stripped)
+func getMapperAndResult(f cmdutil.Factory, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
+	cmdNamespace, _, err := f.DefaultNamespace()
 	if err != nil {
-		stripped = manualStrip(file)
+		return nil, nil, nil, "", err
 	}
-	return stripped
-}
+	var mapper meta.RESTMapper
+	var typer runtime.ObjectTyper
+	mapper, typer, err = f.UnstructuredObject()
+	if err != nil {
+		return nil, nil, nil, "", err
+	}
 
-// manualStrip is used for dropping comments from a YAML file
-func manualStrip(file []byte) []byte {
-	stripped := []byte{}
-	lines := bytes.Split(file, []byte("\n"))
-	for i, line := range lines {
-		if bytes.HasPrefix(bytes.TrimSpace(line), []byte("#")) {
-			continue
-		}
-		stripped = append(stripped, line...)
-		if i < len(lines)-1 {
-			stripped = append(stripped, '\n')
-		}
+	resourceMapper := &resource.Mapper{
+		ObjectTyper:  typer,
+		RESTMapper:   mapper,
+		ClientMapper: resource.ClientMapperFunc(f.UnstructuredClientForMapping),
+		Decoder:      runtime.UnstructuredJSONScheme,
 	}
-	return stripped
+
+	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+		ResourceTypeOrNameArgs(true, args...).
+		Latest()
+
+	r := b.NamespaceParam(cmdNamespace).DefaultNamespace().
+		ContinueOnError().
+		Flatten().
+		Do()
+
+	err = r.Err()
+	if err != nil {
+		return nil, nil, nil, "", err
+	}
+	return mapper, resourceMapper, r, cmdNamespace, err
 }
 
 type editReason struct {
@@ -290,20 +309,8 @@ type editReason struct {
 	other []string
 }
 
-// editHeader includes a list of reasons the edit must be retried
 type editHeader struct {
 	reasons []editReason
-}
-
-// editResults capture the result of an update
-type editResults struct {
-	header    editHeader
-	retryable int
-	notfound  int
-	edit      []*resource.Info
-	file      string
-
-	version unversioned.GroupVersion
 }
 
 // writeTo outputs the current header information into a stream
@@ -327,6 +334,50 @@ func (h *editHeader) writeTo(w io.Writer) error {
 	return nil
 }
 
+func (h *editHeader) flush() {
+	h.reasons = []editReason{}
+}
+
+type editPrinterOptions struct {
+	printer   kubectl.ResourcePrinter
+	ext       string
+	addHeader bool
+}
+
+// editResults capture the result of an update
+type editResults struct {
+	header   editHeader
+	notfound int
+	edit     []*resource.Info
+	file     string
+
+	version unversioned.GroupVersion
+}
+
+func (r *editResults) addError(err error, info *resource.Info) string {
+	switch {
+	case errors.IsInvalid(err):
+		r.edit = append(r.edit, info)
+		reason := editReason{
+			head: fmt.Sprintf("%s %q was not valid", info.Mapping.Resource, info.Name),
+		}
+		if err, ok := err.(errors.APIStatus); ok {
+			if details := err.Status().Details; details != nil {
+				for _, cause := range details.Causes {
+					reason.other = append(reason.other, fmt.Sprintf("%s: %s", cause.Field, cause.Message))
+				}
+			}
+		}
+		r.header.reasons = append(r.header.reasons, reason)
+		return fmt.Sprintf("error: %s %q is invalid", info.Mapping.Resource, info.Name)
+	case errors.IsNotFound(err):
+		r.notfound++
+		return fmt.Sprintf("error: %s %q could not be found on the server", info.Mapping.Resource, info.Name)
+	default:
+		return fmt.Sprintf("error: %s %q could not be patched: %v", info.Mapping.Resource, info.Name, err)
+	}
+}
+
 func preservedFile(err error, path string, out io.Writer) error {
 	if len(path) > 0 {
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
@@ -334,4 +385,39 @@ func preservedFile(err error, path string, out io.Writer) error {
 		}
 	}
 	return err
+}
+
+func stripComments(file []byte) []byte {
+	stripped := file
+	stripped, err := yaml.ToJSON(stripped)
+	if err != nil {
+		stripped = manualStrip(file)
+	}
+	return stripped
+}
+
+func manualStrip(file []byte) []byte {
+	stripped := []byte{}
+	lines := bytes.Split(file, []byte("\n"))
+	for i, line := range lines {
+		if bytes.HasPrefix(bytes.TrimSpace(line), []byte("#")) {
+			continue
+		}
+		stripped = append(stripped, line...)
+		if i < len(lines)-1 {
+			stripped = append(stripped, '\n')
+		}
+	}
+	return stripped
+}
+
+func IsPreconditionFailed(err error) error {
+	if strategicpatch.IsPreconditionFailed(err) {
+		return fmt.Errorf("%s", `At least one of the following was changed:
+	apiVersion
+	kind
+	name
+Or any unchangeable data was modified`)
+	}
+	return nil
 }

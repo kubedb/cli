@@ -10,6 +10,7 @@ import (
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/kubernetes/pkg/util/strategicpatch"
 )
 
 func GetSupportedResourceKind(resource string) (string, error) {
@@ -109,4 +110,52 @@ func GetStructuredObject(obj runtime.Object) (runtime.Object, error) {
 		return obj, err
 	}
 	return decoder.Decode(kind, data)
+}
+
+func checkChainKeyUnchanged(key string, mapData map[string]interface{}) bool {
+	keys := strings.Split(key, ".")
+	val, ok := mapData[keys[0]]
+	if !ok || len(keys) == 1 {
+		return false
+	}
+
+	newKey := strings.Join(keys[1:], ".")
+	return checkChainKeyUnchanged(newKey, val.(map[string]interface{}))
+}
+
+func RequireChainKeyUnchanged(key string) strategicpatch.PreconditionFunc {
+	return func(patch interface{}) bool {
+		patchMap, ok := patch.(map[string]interface{})
+		if !ok {
+			fmt.Println("Invalid data")
+			return true
+		}
+		check := checkChainKeyUnchanged(key, patchMap)
+		if !check {
+			fmt.Println(key, "was changed")
+		}
+		return check
+	}
+}
+
+func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
+	preconditions := []strategicpatch.PreconditionFunc{
+		strategicpatch.RequireKeyUnchanged("apiVersion"),
+		strategicpatch.RequireKeyUnchanged("kind"),
+		strategicpatch.RequireMetadataKeyUnchanged("name"),
+		strategicpatch.RequireMetadataKeyUnchanged("namespace"),
+		strategicpatch.RequireKeyUnchanged("status"),
+	}
+
+	switch kind {
+	case tapi.ResourceKindElastic:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.version"),
+		)
+	case tapi.ResourceKindPostgres:
+	case tapi.ResourceKindSnapshot:
+	case tapi.ResourceKindDormantDatabase:
+	}
+	return preconditions
 }
