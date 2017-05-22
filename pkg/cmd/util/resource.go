@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/kubedb/pkg/cmd/decoder"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/runtime"
 )
 
 func GetSupportedResourceKind(resource string) (string, error) {
@@ -93,4 +96,17 @@ func ResourceShortFormFor(resource string) (string, bool) {
 		}
 	}
 	return alias, exists
+}
+
+func GetObjectData(obj runtime.Object) ([]byte, error) {
+	return yaml.Marshal(obj)
+}
+
+func GetStructuredObject(obj runtime.Object) (runtime.Object, error) {
+	kind := obj.GetObjectKind().GroupVersionKind().Kind
+	data, err := GetObjectData(obj)
+	if err != nil {
+		return obj, err
+	}
+	return decoder.Decode(kind, data)
 }

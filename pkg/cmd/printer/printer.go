@@ -39,3 +39,29 @@ func NewPrinter(cmd *cobra.Command) (kubectl.ResourcePrinter, error) {
 		return nil, fmt.Errorf("output format %q not recognized", format)
 	}
 }
+
+type editPrinterOptions struct {
+	Printer   kubectl.ResourcePrinter
+	Ext       string
+	AddHeader bool
+}
+
+func NewEditPrinter(cmd *cobra.Command) (*editPrinterOptions, error) {
+	switch format := cmdutil.GetFlagString(cmd, "output"); format {
+	case "json":
+		return &editPrinterOptions{
+			Printer:   &kubectl.JSONPrinter{},
+			Ext:       ".json",
+			AddHeader: false,
+		}, nil
+	// If flag -o is not specified, use yaml as default
+	case "yaml", "":
+		return &editPrinterOptions{
+			Printer:   &kubectl.YAMLPrinter{},
+			Ext:       ".yaml",
+			AddHeader: true,
+		}, nil
+	default:
+		return nil, cmdutil.UsageError(cmd, "The flag 'output' must be one of yaml|json")
+	}
+}

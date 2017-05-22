@@ -1,5 +1,6 @@
 package editor
 
+/*
 import (
 	"bytes"
 	"fmt"
@@ -17,3 +18,4 @@ func WriteTempFile(info *resource.Info, buf *bytes.Buffer) (bool, string) {
 
 	return true, path
 }
+*/
