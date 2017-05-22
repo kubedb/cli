@@ -23,7 +23,7 @@ Options:
   -R, --recursive=false: Process the directory used in -f, --filename recursively.
 
 Usage:
-  kubedb create [options]
+  kubedb create [flags] [options]
 
 Use "kubedb create options" for a list of global command-line options (applies to all commands).
 ```

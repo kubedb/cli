@@ -14,7 +14,7 @@ description of a given resource or group of resources.Valid resource types inclu
   * elastic
   * postgres
   * snapshot
-  * deleteddatabase
+  * dormantdatabase
 
 Examples:
   # Describe a elastic
@@ -23,15 +23,15 @@ Examples:
   # Describe a postgres
   kubedb describe pg/postgres-demo
 
-  # Describe all deleteddatabases
-  kubedb describe ddb
+  # Describe all dormantdatabases
+  kubedb describe drmn
 
 Options:
       --all-namespaces=false: If present, list the requested object(s) across all namespaces.
       --show-events=true: If true, display events related to the described object.
 
 Usage:
-  kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [options]
+  kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [flags] [options]
 
 Use "kubedb describe options" for a list of global command-line options (applies to all commands).
 ```

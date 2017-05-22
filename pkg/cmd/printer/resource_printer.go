@@ -83,8 +83,8 @@ func (h *HumanReadablePrinter) addDefaultHandlers() {
 	h.Handler(h.printPostgres)
 	h.Handler(h.printSnapshotList)
 	h.Handler(h.printSnapshot)
-	h.Handler(h.printDeletedDatabaseList)
-	h.Handler(h.printDeletedDatabase)
+	h.Handler(h.printDormantDatabaseList)
+	h.Handler(h.printDormantDatabase)
 }
 
 func (h *HumanReadablePrinter) Handler(printFunc interface{}) error {
@@ -269,7 +269,7 @@ func (h *HumanReadablePrinter) printSnapshotList(itemList *tapi.SnapshotList, w 
 	return nil
 }
 
-func (h *HumanReadablePrinter) printDeletedDatabase(item *tapi.DeletedDatabase, w io.Writer, options PrintOptions) error {
+func (h *HumanReadablePrinter) printDormantDatabase(item *tapi.DormantDatabase, w io.Writer, options PrintOptions) error {
 	name := formatResourceName(options.Kind, item.Name, options.WithKind)
 
 	namespace := item.Namespace
@@ -297,9 +297,9 @@ func (h *HumanReadablePrinter) printDeletedDatabase(item *tapi.DeletedDatabase, 
 	return err
 }
 
-func (h *HumanReadablePrinter) printDeletedDatabaseList(itemList *tapi.DeletedDatabaseList, w io.Writer, options PrintOptions) error {
+func (h *HumanReadablePrinter) printDormantDatabaseList(itemList *tapi.DormantDatabaseList, w io.Writer, options PrintOptions) error {
 	for _, item := range itemList.Items {
-		if err := h.printDeletedDatabase(&item, w, options); err != nil {
+		if err := h.printDormantDatabase(&item, w, options); err != nil {
 			return err
 		}
 	}
