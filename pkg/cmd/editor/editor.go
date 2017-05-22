@@ -6,7 +6,7 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/cmd/util/editor"
 )
 
-const defaultEditor = "vi"
+const defaultEditor = "nano"
 
 func NewDefaultEditor() editor.Editor {
 	var editorName string

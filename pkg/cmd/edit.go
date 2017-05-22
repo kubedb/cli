@@ -37,8 +37,7 @@ var (
 
 		The edit command allows you to directly edit any API resource you can retrieve via the
 		command line tools. It will open the editor defined by your KUBEDB_EDITOR, or EDITOR
-		environment variables, or fall back to 'vi' for Linux.
-		You can edit multiple objects, although changes are applied one at a time.`)
+		environment variables, or fall back to 'nano'`)
 
 	editExample = templates.Examples(`
 		# Edit the elastic named 'elasticsearch-demo':
@@ -295,7 +294,8 @@ func getMapperAndResult(f cmdutil.Factory, args []string) (meta.RESTMapper, *res
 	}
 
 	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
-		ResourceTypeOrNameArgs(true, args...).
+		ResourceTypeOrNameArgs(false, args...).
+		RequireObject(true).
 		Latest()
 
 	r := b.NamespaceParam(cmdNamespace).DefaultNamespace().
