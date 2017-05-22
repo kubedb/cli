@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/k8sdb/kubedb/pkg/cmd/describer"
 	"github.com/k8sdb/kubedb/pkg/cmd/util"
@@ -14,7 +15,6 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 	"k8s.io/kubernetes/pkg/runtime"
 	utilerrors "k8s.io/kubernetes/pkg/util/errors"
-	"strings"
 )
 
 var (
