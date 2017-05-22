@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
+	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/kubedb/pkg/cmd/editor"
 	"github.com/k8sdb/kubedb/pkg/cmd/encoder"
@@ -80,6 +81,11 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 		if err != nil {
 			return err
 		}
+
+		if kind == tapi.ResourceKindSnapshot {
+			return fmt.Errorf(`resource type "%v" doesn't support edit operation`, items[0])
+		}
+
 		items[0] = kind
 		resources[i] = strings.Join(items, "/")
 	}
@@ -241,8 +247,8 @@ func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Ob
 		fmt.Println()
 		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
 		if err != nil {
-			if err := IsPreconditionFailed(err); err {
-				return err
+			if strategicpatch.IsPreconditionFailed(err) {
+				return preconditionFailedError()
 			}
 			return err
 		}
@@ -411,13 +417,12 @@ func manualStrip(file []byte) []byte {
 	return stripped
 }
 
-func IsPreconditionFailed(err error) error {
-	if strategicpatch.IsPreconditionFailed(err) {
-		return fmt.Errorf("%s", `At least one of the following was changed:
+func preconditionFailedError() error {
+	return fmt.Errorf("%s", `At least one of the following was changed:
 	apiVersion
 	kind
 	name
+	namespace
+	status
 Or any unchangeable data was modified`)
-	}
-	return nil
 }

@@ -116,7 +116,7 @@ func checkChainKeyUnchanged(key string, mapData map[string]interface{}) bool {
 	keys := strings.Split(key, ".")
 	val, ok := mapData[keys[0]]
 	if !ok || len(keys) == 1 {
-		return false
+		return !ok
 	}
 
 	newKey := strings.Join(keys[1:], ".")
@@ -152,10 +152,24 @@ func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
 		preconditions = append(
 			preconditions,
 			RequireChainKeyUnchanged("spec.version"),
+			RequireChainKeyUnchanged("spec.storage"),
+			RequireChainKeyUnchanged("spec.nodeSelector"),
+			RequireChainKeyUnchanged("spec.init"),
 		)
 	case tapi.ResourceKindPostgres:
-	case tapi.ResourceKindSnapshot:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.version"),
+			RequireChainKeyUnchanged("spec.storage"),
+			RequireChainKeyUnchanged("spec.databaseSecret"),
+			RequireChainKeyUnchanged("spec.nodeSelector"),
+			RequireChainKeyUnchanged("spec.init"),
+		)
 	case tapi.ResourceKindDormantDatabase:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.origin"),
+		)
 	}
 	return preconditions
 }

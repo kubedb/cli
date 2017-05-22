@@ -166,10 +166,6 @@ func CreateTwoWayMergePatch(original, modified []byte, dataStruct interface{}, f
 		return nil, err
 	}
 
-	for key, val := range patchMap {
-		fmt.Println("-- ", key, val)
-	}
-
 	// Apply the preconditions to the patch, and return an error if any of them fail.
 	for _, fn := range fns {
 		if !fn(patchMap) {

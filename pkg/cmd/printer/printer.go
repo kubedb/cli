@@ -52,7 +52,7 @@ func NewEditPrinter(cmd *cobra.Command) (*editPrinterOptions, error) {
 		return &editPrinterOptions{
 			Printer:   &kubectl.JSONPrinter{},
 			Ext:       ".json",
-			AddHeader: false,
+			AddHeader: true,
 		}, nil
 	// If flag -o is not specified, use yaml as default
 	case "yaml", "":
