@@ -29,6 +29,8 @@ func AddDescribeFlags(cmd *cobra.Command) {
 }
 
 func AddEditFlags(cmd *cobra.Command) {
+	cmd.Flags().Bool("all", false, "[-all] to select all the specified resources.")
+	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on.")
 	cmd.Flags().StringP("output", "o", "yaml", "Output format. One of: yaml|json.")
 }
 

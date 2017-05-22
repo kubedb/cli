@@ -10,8 +10,7 @@ $ kubedb edit --help
 Edit a resource from the default editor.
 
 The edit command allows you to directly edit any API resource you can retrieve via the command line tools. It will open
-the editor defined by your KUBEDB _EDITOR, or EDITOR environment variables, or fall back to 'vi' for Linux. You can edit
-multiple objects, although changes are applied one at a time.
+the editor defined by your KUBEDB _EDITOR, or EDITOR environment variables, or fall back to 'nano'
 
 Examples:
   # Edit the elastic named 'elasticsearch-demo':
@@ -21,7 +20,9 @@ Examples:
   KUBEDB_EDITOR="nano" kubedb edit es/elasticsearch-demo
 
 Options:
+      --all=false: [-all] to select all the specified resources.
   -o, --output='yaml': Output format. One of: yaml|json.
+  -l, --selector='': Selector (label query) to filter on.
 
 Usage:
   kubedb edit (RESOURCE/NAME) [flags] [options]

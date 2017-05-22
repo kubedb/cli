@@ -90,7 +90,7 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 	}
 	args[0] = strings.Join(resources, ",")
 
-	mapper, resourceMapper, r, _, err := getMapperAndResult(f, args)
+	mapper, resourceMapper, r, _, err := getMapperAndResult(f, cmd, args)
 	if err != nil {
 		return err
 	}
@@ -274,7 +274,7 @@ func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Ob
 	return err
 }
 
-func getMapperAndResult(f cmdutil.Factory, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
+func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
 	cmdNamespace, _, err := f.DefaultNamespace()
 	if err != nil {
 		return nil, nil, nil, "", err
@@ -294,6 +294,8 @@ func getMapperAndResult(f cmdutil.Factory, args []string) (meta.RESTMapper, *res
 	}
 
 	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
+		SelectAllParam(cmdutil.GetFlagBool(cmd, "all")).
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()
