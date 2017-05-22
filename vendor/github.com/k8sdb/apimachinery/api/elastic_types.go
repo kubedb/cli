@@ -36,10 +36,10 @@ type ElasticSpec struct {
 	// BackupSchedule spec to specify how database backup will be taken
 	// +optional
 	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
-	// If DoNotDelete is true, controller will prevent to delete this Elastic object.
+	// If DoNotPause is true, controller will prevent to delete this Elastic object.
 	// Controller will create same Elastic object and ignore other process.
 	// +optional
-	DoNotDelete bool `json:"doNotDelete,omitempty"`
+	DoNotPause bool `json:"doNotPause,omitempty"`
 }
 
 type ElasticStatus struct {

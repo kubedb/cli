@@ -29,8 +29,8 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 			return nil, err
 		}
 		return snapshot, nil
-	case tapi.ResourceKindDeletedDatabase:
-		var deletedDb *tapi.DeletedDatabase
+	case tapi.ResourceKindDormantDatabase:
+		var deletedDb *tapi.DormantDatabase
 		if err := yaml.Unmarshal(data, &deletedDb); err != nil {
 			return nil, err
 		}

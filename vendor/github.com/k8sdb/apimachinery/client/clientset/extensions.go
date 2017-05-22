@@ -15,7 +15,7 @@ const (
 type ExtensionInterface interface {
 	RESTClient() rest.Interface
 	SnapshotNamespacer
-	DeletedDatabaseNamespacer
+	DormantDatabaseNamespacer
 	ElasticNamespacer
 	PostgresNamespacer
 }
@@ -33,8 +33,8 @@ func (a *ExtensionsClient) Snapshots(namespace string) SnapshotInterface {
 	return newSnapshot(a, namespace)
 }
 
-func (a *ExtensionsClient) DeletedDatabases(namespace string) DeletedDatabaseInterface {
-	return newDeletedDatabase(a, namespace)
+func (a *ExtensionsClient) DormantDatabases(namespace string) DormantDatabaseInterface {
+	return newDormantDatabase(a, namespace)
 }
 
 func (a *ExtensionsClient) Elastics(namespace string) ElasticInterface {
