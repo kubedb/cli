@@ -15,7 +15,7 @@ Valid resource types include:
   * elastic
   * postgres
   * snapshot
-  * dormantDatabase
+  * dormantdatabase
 
 Examples:
   # List all elastic in ps output format.
@@ -45,7 +45,7 @@ context is ignored even if specified with --namespace.
       --show-labels=false: When printing, show all labels as the last column (default hide labels column)
 
 Usage:
-  kubedb get [options]
+  kubedb get [flags] [options]
 
 Use "kubedb get options" for a list of global command-line options (applies to all commands).
 ```
@@ -74,8 +74,8 @@ pg/postgres-demo   Running   1h
 NAME                STATUS      AGE
 snap/snapshot-xyz   Succeeded   27m
 
-NAME                     STATUS    AGE
-drmn/e2e-elastic-v4xgwz   Deleted   9m
+NAME                      STATUS    AGE
+drmn/e2e-elastic-v4xgwz   Paused    9m
 ```
 
 ##### Get Postgres with labels
