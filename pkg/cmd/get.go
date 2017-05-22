@@ -69,7 +69,7 @@ const (
     * elastic
     * postgres
     * snapshot
-    * dormantDatabase
+    * dormantdatabase
     `
 )
 

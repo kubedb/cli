@@ -27,7 +27,7 @@ Options:
   -l, --selector='': Selector (label query) to filter on.
 
 Usage:
-  kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [options]
+  kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags] [options]
 
 Use "kubedb delete options" for a list of global command-line options (applies to all commands).
 ```

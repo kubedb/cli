@@ -40,7 +40,7 @@ func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label)])",
-		Short:   "Delete resources by file names, stdin, resources and names, or by resources and label selector",
+		Short:   "Delete resources by filenames, stdin, resources and names, or by resources and label selector",
 		Long:    delete_long,
 		Example: delete_example,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -83,7 +83,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
 		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
-		ResourceTypeOrNameArgs(true, args...).RequireObject(true).
+		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
 		Flatten().
 		Do()
 	err = r.Err()

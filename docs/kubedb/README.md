@@ -20,5 +20,8 @@ Troubleshooting and Debugging Commands:
 Other Commands:
   help        Help about any command
 
-Use "kubedb <command> --help" for more information about a given command..
+Usage:
+  kubedb [flags] [options]
+
+Use "kubedb <command> --help" for more information about a given command.
 ```
