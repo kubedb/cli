@@ -83,7 +83,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
 		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
-		ResourceTypeOrNameArgs(true, args...).RequireObject(true).
+		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
 		Flatten().
 		Do()
 	err = r.Err()

@@ -203,6 +203,20 @@ func (d *humanReadableDescriber) describeDeletedDatabase(item *tapi.DeletedDatab
 		return "", err
 	}
 
+	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
+		kapi.ListOptions{
+			LabelSelector: labels.SelectorFromSet(
+				map[string]string{
+					LabelDatabaseKind: item.Labels[LabelDatabaseKind],
+					LabelDatabaseName: item.Name,
+				},
+			),
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
 		if ref, err := kapi.GetReference(item); err != nil {
@@ -238,6 +252,10 @@ func (d *humanReadableDescriber) describeDeletedDatabase(item *tapi.DeletedDatab
 		}
 
 		describeOrigin(item.Spec.Origin, out)
+
+		if item.Status.Phase != tapi.DeletedDatabasePhaseWipedOut {
+			listSnapshots(snapshots, out)
+		}
 
 		if events != nil {
 			describeEvents(events, out)

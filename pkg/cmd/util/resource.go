@@ -49,10 +49,10 @@ func CheckSupportedResource(kind string) error {
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	resources := map[string]string{
-		tapi.ResourceNameElastic:          tapi.ResourceTypeElastic,
-		tapi.ResourceNamePostgres:         tapi.ResourceTypePostgres,
-		tapi.ResourceNameSnapshot: tapi.ResourceTypeSnapshot,
-		tapi.ResourceNameDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
+		tapi.ResourceNameElastic:         tapi.ResourceTypeElastic,
+		tapi.ResourceNamePostgres:        tapi.ResourceTypePostgres,
+		tapi.ResourceNameSnapshot:        tapi.ResourceTypeSnapshot,
+		tapi.ResourceNameDeletedDatabase: tapi.ResourceTypeDeletedDatabase,
 	}
 
 	clientset, err := f.ClientSet()
@@ -76,10 +76,10 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 }
 
 var ShortForms = map[string]string{
-	tapi.ResourceCodeElastic:          tapi.ResourceTypeElastic,
-	tapi.ResourceCodePostgres:         tapi.ResourceTypePostgres,
-	tapi.ResourceCodeSnapshot: tapi.ResourceTypeSnapshot,
-	tapi.ResourceCodeDeletedDatabase:  tapi.ResourceTypeDeletedDatabase,
+	tapi.ResourceCodeElastic:         tapi.ResourceTypeElastic,
+	tapi.ResourceCodePostgres:        tapi.ResourceTypePostgres,
+	tapi.ResourceCodeSnapshot:        tapi.ResourceTypeSnapshot,
+	tapi.ResourceCodeDeletedDatabase: tapi.ResourceTypeDeletedDatabase,
 }
 
 func ResourceShortFormFor(resource string) (string, bool) {
