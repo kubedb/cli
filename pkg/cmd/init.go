@@ -22,11 +22,11 @@ var (
 		Create or upgrade unified operator for k8sdb databases.`)
 
 	init_example = templates.Examples(`
-		# Create operator with version 0.1.0.
-		kubedb init --version=0.1.0
+		# Create operator with version canary.
+		kubedb init --version=canary
 
 		# Upgrade operator to use another version.
-		kubedb init --version=0.2.0 --upgrade`)
+		kubedb init --version=canary --upgrade`)
 )
 
 func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
