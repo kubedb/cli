@@ -26,3 +26,17 @@ Usage:
 
 Use "kubedb init options" for a list of global command-line options (applies to all commands).
 ```
+
+##### Create
+```bash
+$ kubedb init --version=canary
+
+Successfully created operator deployment.
+```
+
+##### Upgrade
+```bash
+$ kubedb init --version=canary --upgrade
+
+Successfully upgraded operator deployment.
+```
