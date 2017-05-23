@@ -9,11 +9,12 @@ Find more information at https://github.com/k8sdb/kubedb.
 
 Basic Commands (Beginner):
   create      Create a resource by filename or stdin
+  init        Create or upgrade unified operator
 
 Basic Commands (Intermediate):
   get         Display one or many resources
   edit        Edit a resource on the server
-  delete      Delete resources by file names, stdin, resources and names, or by resources and label selector
+  delete      Delete resources by filenames, stdin, resources and names, or by resources and label selector
 
 Troubleshooting and Debugging Commands:
   describe    Show details of a specific resource or group of resources
