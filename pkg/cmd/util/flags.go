@@ -2,6 +2,7 @@ package util
 
 import (
 	"github.com/spf13/cobra"
+	kapi "k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 )
 
@@ -32,6 +33,12 @@ func AddEditFlags(cmd *cobra.Command) {
 	cmd.Flags().Bool("all", false, "[-all] to select all the specified resources.")
 	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on.")
 	cmd.Flags().StringP("output", "o", "yaml", "Output format. One of: yaml|json.")
+}
+
+func AddInitFlags(cmd *cobra.Command) {
+	cmd.Flags().StringP("namespace", "n", kapi.NamespaceDefault, "Namespace name. Operator will be deployed in this namespace.")
+	cmd.Flags().String("version", "", "Operator version")
+	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }
 
 func AddFilenameOptionFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
