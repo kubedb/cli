@@ -82,17 +82,17 @@ def version():
 
 
 def fmt():
-    libbuild.ungroup_go_imports('cmd', 'pkg')
-    die(call('goimports -w cmd pkg'))
-    call('gofmt -s -w cmd pkg')
+    libbuild.ungroup_go_imports('*.go', 'pkg')
+    die(call('goimports -w *.go pkg'))
+    call('gofmt -s -w *.go pkg')
 
 
 def vet():
-    call('go vet cmd pkg')
+    call('go vet *.go pkg')
 
 
 def lint():
-    call('golint cmd pkg')
+    call('golint *.go pkg')
 
 
 def gen():
@@ -105,9 +105,9 @@ def build_cmd(name):
         if 'distro' in cfg:
             for goos, archs in cfg['distro'].items():
                 for goarch in archs:
-                    libbuild.go_build(name, goos, goarch, main='cmd/{}/*.go'.format(name))
+                    libbuild.go_build(name, goos, goarch, main='*.go')
         else:
-            libbuild.go_build(name, libbuild.GOHOSTOS, libbuild.GOHOSTARCH, main='cmd/{}/*.go'.format(name))
+            libbuild.go_build(name, libbuild.GOHOSTOS, libbuild.GOHOSTARCH, main='*.go')
 
 
 def build_cmds():
@@ -151,13 +151,13 @@ def update_registry():
 
 
 def install():
-    die(call('GO15VENDOREXPERIMENT=1 go install ./cmd/...'))
+    die(call('GO15VENDOREXPERIMENT=1 go install .'))
 
 
 def default():
     gen()
     fmt()
-    die(call('GO15VENDOREXPERIMENT=1 go install ./cmd/...'))
+    die(call('GO15VENDOREXPERIMENT=1 go install .'))
 
 
 if __name__ == "__main__":

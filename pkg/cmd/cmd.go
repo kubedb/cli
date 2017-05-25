@@ -9,7 +9,6 @@ import (
 
 // NewKubedbCommand creates the `kubedb` command and its nested children.
 func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
-
 	cmds := &cobra.Command{
 		Use:   "kubedb",
 		Short: "Controls kubedb objects",
