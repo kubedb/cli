@@ -12,9 +12,9 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 
 	cmds := &cobra.Command{
 		Use:   "kubedb",
-		Short: "kubedb controls k8sdb objects",
+		Short: "Controls kubedb objects",
 		Long: templates.LongDesc(`
-      kubedb controls k8sdb ThirdPartyResource objects.
+      kubedb CLI controls kubedb ThirdPartyResource objects.
 
       Find more information at https://github.com/k8sdb/kubedb.`),
 		Run: runHelp,

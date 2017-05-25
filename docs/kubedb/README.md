@@ -3,7 +3,7 @@
 ```bash
 $  kubedb --help
 
-kubedb controls k8sdb ThirdPartyResource objects.
+kubedb CLI controls kubedb ThirdPartyResource objects.
 
 Find more information at https://github.com/k8sdb/kubedb.
 

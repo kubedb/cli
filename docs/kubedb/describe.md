@@ -42,14 +42,14 @@ Use "kubedb describe options" for a list of global command-line options (applies
 Name:		postgres-demo
 Namespace:	default
 StartTimestamp:	Thu, 11 May 2017 15:10:50 +0600
-Labels::	k8sdb.com/type=postgres
+Labels::	kubedb.com/type=postgres
 Status:		Running
 Replicas:	1  total
-Annotations:	postgres.k8sdb.com/version=canary-db
+Annotations:	postgres.kubedb.com/version=canary-db
 No volumes.
 
 StatefulSet:
-  Name:			k8sdb-postgres-demo
+  Name:			kubedb-postgres-demo
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Thu, 11 May 2017 15:10:50 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed

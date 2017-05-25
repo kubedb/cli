@@ -40,6 +40,9 @@ type ElasticSpec struct {
 	// Controller will create same Elastic object and ignore other process.
 	// +optional
 	DoNotPause bool `json:"doNotPause,omitempty"`
+	// Monitor is used monitor database instance
+	// +optional
+	Monitor *MonitorSpec `json:"monitor,omitempty"`
 }
 
 type ElasticStatus struct {

@@ -7,7 +7,7 @@ import (
 )
 
 // GroupName is the group name use in this package
-const GroupName = "k8sdb.com"
+const GroupName = "kubedb.com"
 
 // SchemeGroupVersion is group version used to register these objects
 var SchemeGroupVersion = schema.GroupVersion{Group: GroupName, Version: runtime.APIVersionInternal}
@@ -36,10 +36,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		// DormantDatabase
 		&DormantDatabase{},
 		&DormantDatabaseList{},
-		// k8sdb Elastic
+		// kubedb Elastic
 		&Elastic{},
 		&ElasticList{},
-		// k8sdb Postgres
+		// kubedb Postgres
 		&Postgres{},
 		&PostgresList{},
 

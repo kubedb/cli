@@ -31,8 +31,8 @@ var (
 		# Delete a postgres based on the type and name in the JSON passed into stdin.
 		cat postgres.json | kubedb delete -f -
 
-		# Delete elastic with label elastic.k8sdb.com/name=elasticsearch-demo.
-		kubedb delete elastic -l elastic.k8sdb.com/name=elasticsearch-demo`)
+		# Delete elastic with label elastic.kubedb.com/name=elasticsearch-demo.
+		kubedb delete elastic -l elastic.kubedb.com/name=elasticsearch-demo`)
 )
 
 func NewCmdDelete(out, errOut io.Writer) *cobra.Command {

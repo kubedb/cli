@@ -83,7 +83,7 @@ drmn/e2e-elastic-v4xgwz   Paused    9m
 $ kubedb get postgres --show-labels
 
 NAME            STATUS    AGE       LABELS
-postgres-demo   Running   1h        k8sdb.com/type=postgres
+postgres-demo   Running   1h        kubedb.com/type=postgres
 ```
 
 ##### Get Elastic with wide
@@ -99,14 +99,14 @@ elasticsearch-demo-1   Running   canary    5h
 ```bash
 $ kubedb get pg postgres-demo -o yaml
 
-apiVersion: k8sdb.com/v1beta1
+apiVersion: kubedb.com/v1beta1
 kind: Postgres
 metadata:
   annotations:
-    postgres.k8sdb.com/version: canary-db
+    postgres.kubedb.com/version: canary-db
   creationTimestamp: 2017-05-05T07:04:06Z
   labels:
-    k8sdb.com/type: postgres
+    kubedb.com/type: postgres
   name: postgres-demo
   namespace: default
 spec:

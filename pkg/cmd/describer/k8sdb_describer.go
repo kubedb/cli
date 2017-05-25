@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	LabelDatabaseKind = "k8sdb.com/kind"
-	LabelDatabaseName = "k8sdb.com/name"
+	LabelDatabaseKind = "kubedb.com/kind"
+	LabelDatabaseName = "kubedb.com/name"
 )
 
 func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *kubectl.DescriberSettings) (string, error) {

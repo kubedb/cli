@@ -19,7 +19,7 @@ import (
 
 var (
 	init_long = templates.LongDesc(`
-		Create or upgrade unified operator for k8sdb databases.`)
+		Create or upgrade unified operator for kubedb databases.`)
 
 	init_example = templates.Examples(`
 		# Create operator with version canary.
@@ -46,8 +46,8 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 }
 
 const (
-	operatorName      = "k8sdb-operator"
-	operatorImage     = "k8sdb/operator"
+	operatorName      = "kubedb-operator"
+	operatorImage     = "kubedb/operator"
 	operatorContainer = "operator"
 )
 

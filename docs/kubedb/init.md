@@ -7,7 +7,7 @@
 ```bash
 $ kubedb init --help
 
-Create or upgrade unified operator for k8sdb databases.
+Create or upgrade unified operator for kubedb databases.
 
 Examples:
   # Create operator with version canary.
@@ -19,7 +19,7 @@ Examples:
 Options:
   -n, --namespace='default': Namespace name. Operator will be deployed in this namespace.
       --upgrade=false: If present, Upgrade operator to use provided version
-      --version='': Operator version
+      --version='canary': Operator version
 
 Usage:
   kubedb init [flags] [options]

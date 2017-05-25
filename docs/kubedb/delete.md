@@ -5,6 +5,8 @@
 ##### Help for delete command
 
 ```bash
+$ kubedb delete --help
+
 Delete resources by filenames, stdin, resources and names, or by resources and label selector. JSON and YAML formats are
 accepted.
 
@@ -17,8 +19,8 @@ Examples:
   # Delete a postgres based on the type and name in the JSON passed into stdin.
   cat postgres.json | kubedb delete -f -
 
-  # Delete elastic with label elastic.k8sdb.com/name=elasticsearch-demo.
-  kubedb delete elastic -l elastic.k8sdb.com/name=elasticsearch-demo
+  # Delete elastic with label elastic.kubedb.com/name=elasticsearch-demo.
+  kubedb delete elastic -l elastic.kubedb.com/name=elasticsearch-demo
 
 Options:
   -f, --filename=[]: Filename to use to create the resource
