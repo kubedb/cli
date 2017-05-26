@@ -15,21 +15,21 @@ import (
 
 func GetSupportedResource(resource string) (string, error) {
 	switch strings.ToLower(resource) {
-	case strings.ToLower(tapi.ResourceKindElastic):
-	case strings.ToLower(tapi.ResourceTypeElastic):
-	case strings.ToLower(tapi.ResourceCodeElastic):
+	case strings.ToLower(tapi.ResourceKindElastic),
+		strings.ToLower(tapi.ResourceTypeElastic),
+		strings.ToLower(tapi.ResourceCodeElastic):
 		return tapi.ResourceKindElastic + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
-	case strings.ToLower(tapi.ResourceKindPostgres):
-	case strings.ToLower(tapi.ResourceTypePostgres):
-	case strings.ToLower(tapi.ResourceCodePostgres):
+	case strings.ToLower(tapi.ResourceKindPostgres),
+		strings.ToLower(tapi.ResourceTypePostgres),
+		strings.ToLower(tapi.ResourceCodePostgres):
 		return tapi.ResourceKindPostgres + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
-	case strings.ToLower(tapi.ResourceKindSnapshot):
-	case strings.ToLower(tapi.ResourceTypeSnapshot):
-	case strings.ToLower(tapi.ResourceCodeSnapshot):
+	case strings.ToLower(tapi.ResourceKindSnapshot),
+		strings.ToLower(tapi.ResourceTypeSnapshot),
+		strings.ToLower(tapi.ResourceCodeSnapshot):
 		return tapi.ResourceKindSnapshot + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
-	case strings.ToLower(tapi.ResourceKindDormantDatabase):
-	case strings.ToLower(tapi.ResourceTypeDormantDatabase):
-	case strings.ToLower(tapi.ResourceCodeDormantDatabase):
+	case strings.ToLower(tapi.ResourceKindDormantDatabase),
+		strings.ToLower(tapi.ResourceTypeDormantDatabase),
+		strings.ToLower(tapi.ResourceCodeDormantDatabase):
 		return tapi.ResourceKindDormantDatabase + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
@@ -40,8 +40,11 @@ func GetSupportedResource(resource string) (string, error) {
 func CheckSupportedResource(kind string) error {
 	switch kind {
 	case tapi.ResourceKindElastic:
+		fallthrough
 	case tapi.ResourceKindPostgres:
+		fallthrough
 	case tapi.ResourceKindSnapshot:
+		fallthrough
 	case tapi.ResourceKindDormantDatabase:
 		return nil
 	default:
