@@ -44,7 +44,7 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 				return
 			}
 			f := kube.NewKubeFactory(cmd)
-			cmdutil.CheckErr(RunCreate(f, out, options))
+			cmdutil.CheckErr(RunCreate(f, cmd, out, options))
 		},
 	}
 
@@ -52,12 +52,8 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 	return cmd
 }
 
-func RunCreate(f cmdutil.Factory, out io.Writer, options *resource.FilenameOptions) error {
-	cmdNamespace, enforceNamespace, err := f.DefaultNamespace()
-	if err != nil {
-		return err
-	}
-
+func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *resource.FilenameOptions) error {
+	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err

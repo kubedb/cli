@@ -23,7 +23,8 @@ Examples:
   kubedb delete elastic -l elastic.kubedb.com/name=elasticsearch-demo
 
 Options:
-  -f, --filename=[]: Filename to use to create the resource
+  -f, --filename=[]: Filename to use to delete the resource
+  -n, --namespace='default': Delete object(s) from this namespace.
   -o, --output='': Output mode. Use "-o name" for shorter output (resource/name).
   -R, --recursive=false: Process the directory used in -f, --filename recursively.
   -l, --selector='': Selector (label query) to filter on.

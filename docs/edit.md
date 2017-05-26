@@ -20,9 +20,8 @@ Examples:
   KUBEDB_EDITOR="nano" kubedb edit es/elasticsearch-demo
 
 Options:
-      --all=false: [-all] to select all the specified resources.
+  -n, --namespace='default': Edit object(s) in this namespace.
   -o, --output='yaml': Output format. One of: yaml|json.
-  -l, --selector='': Selector (label query) to filter on.
 
 Usage:
   kubedb edit (RESOURCE/NAME) [flags] [options]
