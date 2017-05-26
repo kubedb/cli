@@ -81,7 +81,7 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 	resources := strings.Split(args[0], ",")
 	for i, r := range resources {
 		items := strings.Split(r, "/")
-		kind, err := util.GetSupportedResourceKind(items[0])
+		kind, err := util.GetSupportedResource(items[0])
 		if err != nil {
 			return err
 		}

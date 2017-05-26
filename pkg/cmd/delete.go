@@ -68,7 +68,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		resources := strings.Split(args[0], ",")
 		for i, r := range resources {
 			items := strings.Split(r, "/")
-			kind, err := util.GetSupportedResourceKind(items[0])
+			kind, err := util.GetSupportedResource(items[0])
 			if err != nil {
 				return err
 			}
