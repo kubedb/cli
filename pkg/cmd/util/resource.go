@@ -39,18 +39,14 @@ func GetSupportedResource(resource string) (string, error) {
 
 func CheckSupportedResource(kind string) error {
 	switch kind {
-	case tapi.ResourceKindElastic:
-		fallthrough
-	case tapi.ResourceKindPostgres:
-		fallthrough
-	case tapi.ResourceKindSnapshot:
-		fallthrough
-	case tapi.ResourceKindDormantDatabase:
+	case tapi.ResourceKindElastic,
+		tapi.ResourceKindPostgres,
+		tapi.ResourceKindSnapshot,
+		tapi.ResourceKindDormantDatabase:
 		return nil
 	default:
 		return fmt.Errorf(`kubedb doesn't support a resource type "%v"`, kind)
 	}
-	return nil
 }
 
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
