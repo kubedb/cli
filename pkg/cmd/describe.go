@@ -79,7 +79,7 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 			printAll = true
 		} else {
 			items := strings.Split(r, "/")
-			kind, err := util.GetSupportedResourceKind(items[0])
+			kind, err := util.GetSupportedResource(items[0])
 			if err != nil {
 				return err
 			}

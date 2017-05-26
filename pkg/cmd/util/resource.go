@@ -13,24 +13,24 @@ import (
 	"k8s.io/kubernetes/pkg/util/strategicpatch"
 )
 
-func GetSupportedResourceKind(resource string) (string, error) {
+func GetSupportedResource(resource string) (string, error) {
 	switch strings.ToLower(resource) {
 	case strings.ToLower(tapi.ResourceKindElastic):
 	case strings.ToLower(tapi.ResourceTypeElastic):
 	case strings.ToLower(tapi.ResourceCodeElastic):
-		return tapi.ResourceKindElastic, nil
+		return tapi.ResourceKindElastic + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindPostgres):
 	case strings.ToLower(tapi.ResourceTypePostgres):
 	case strings.ToLower(tapi.ResourceCodePostgres):
-		return tapi.ResourceKindPostgres, nil
+		return tapi.ResourceKindPostgres + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot):
 	case strings.ToLower(tapi.ResourceTypeSnapshot):
 	case strings.ToLower(tapi.ResourceCodeSnapshot):
-		return tapi.ResourceKindSnapshot, nil
+		return tapi.ResourceKindSnapshot + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase):
 	case strings.ToLower(tapi.ResourceTypeDormantDatabase):
 	case strings.ToLower(tapi.ResourceCodeDormantDatabase):
-		return tapi.ResourceKindDormantDatabase, nil
+		return tapi.ResourceKindDormantDatabase + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -53,10 +53,10 @@ func CheckSupportedResource(kind string) error {
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	resources := map[string]string{
-		tapi.ResourceNameElastic:         tapi.ResourceTypeElastic,
-		tapi.ResourceNamePostgres:        tapi.ResourceTypePostgres,
-		tapi.ResourceNameSnapshot:        tapi.ResourceTypeSnapshot,
-		tapi.ResourceNameDormantDatabase: tapi.ResourceTypeDormantDatabase,
+		tapi.ResourceNameElastic:         tapi.ResourceKindElastic + "." + tapi.V1beta1SchemeGroupVersion.Group,
+		tapi.ResourceNamePostgres:        tapi.ResourceKindPostgres + "." + tapi.V1beta1SchemeGroupVersion.Group,
+		tapi.ResourceNameSnapshot:        tapi.ResourceKindSnapshot + "." + tapi.V1beta1SchemeGroupVersion.Group,
+		tapi.ResourceNameDormantDatabase: tapi.ResourceKindDormantDatabase + "." + tapi.V1beta1SchemeGroupVersion.Group,
 	}
 
 	clientset, err := f.ClientSet()
