@@ -37,9 +37,11 @@ Examples:
   kubedb get elastic/es-db postgres/pg-db
 
 Options:
-      --all-namespaces=false: If present, list the requested object(s) across all namespaces. Namespace in current
-context is ignored even if specified with --namespace.
+      --all-namespaces=false: If present, list the requested object(s) across all namespaces. Namespace specified with
+--namespace will be ignored.
+  -n, --namespace='default': List the requested object(s) from this namespace.
   -o, --output='': Output format. One of: json|yaml|wide|name.
+  -l, --selector='': Selector (label query) to filter on, supports '=', '==', and '!='.
   -a, --show-all=false: When printing, show all resources (default hide terminated pods.)
       --show-kind=false: If present, list the resource type for the requested object(s).
       --show-labels=false: When printing, show all labels as the last column (default hide labels column)

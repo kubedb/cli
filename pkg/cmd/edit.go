@@ -280,13 +280,10 @@ func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Ob
 }
 
 func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
-	cmdNamespace, _, err := f.DefaultNamespace()
-	if err != nil {
-		return nil, nil, nil, "", err
-	}
+	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	var mapper meta.RESTMapper
 	var typer runtime.ObjectTyper
-	mapper, typer, err = f.UnstructuredObject()
+	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return nil, nil, nil, "", err
 	}
@@ -299,13 +296,12 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 	}
 
 	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
-		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
-		SelectAllParam(cmdutil.GetFlagBool(cmd, "all")).
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()
 
 	r := b.NamespaceParam(cmdNamespace).DefaultNamespace().
+		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
 		ContinueOnError().
 		Flatten().
 		Do()

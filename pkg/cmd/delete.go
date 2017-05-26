@@ -49,16 +49,13 @@ func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 		},
 	}
 
-	util.AddFilenameOptionFlags(cmd, options)
-	util.AddDeleteFlags(cmd)
+	util.AddDeleteFlags(cmd, options)
 	return cmd
 }
 
 func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []string, options *resource.FilenameOptions) error {
-	cmdNamespace, enforceNamespace, err := f.DefaultNamespace()
-	if err != nil {
-		return err
-	}
+	selector := cmdutil.GetFlagString(cmd, "selector")
+	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
@@ -82,7 +79,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
-		SelectorParam(cmdutil.GetFlagString(cmd, "selector")).
+		SelectorParam(selector).
 		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
 		Flatten().
 		Do()

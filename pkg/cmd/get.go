@@ -74,14 +74,11 @@ const (
 )
 
 func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
-
+	selector := cmdutil.GetFlagString(cmd, "selector")
+	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 
 	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return err
-	}
-	cmdNamespace, _, err := f.DefaultNamespace()
 	if err != nil {
 		return err
 	}
@@ -125,9 +122,9 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 	}
 
 	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
-		NamespaceParam(cmdNamespace).
-		DefaultNamespace().
-		AllNamespaces(allNamespaces).
+		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
+		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
+		SelectorParam(selector).
 		ResourceTypeOrNameArgs(true, args...).
 		ContinueOnError().
 		Latest().

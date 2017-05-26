@@ -20,6 +20,7 @@ Examples:
 
 Options:
   -f, --filename=[]: Filename to use to create the resource
+  -n, --namespace='default': Create object(s) in this namespace.
   -R, --recursive=false: Process the directory used in -f, --filename recursively.
 
 Usage:

@@ -54,11 +54,9 @@ func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
 }
 
 func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string, describerSettings *kubectl.DescriberSettings) error {
+	selector := cmdutil.GetFlagString(cmd, "selector")
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
-	cmdNamespace, enforceNamespace, err := f.DefaultNamespace()
-	if err != nil {
-		return err
-	}
+	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	if allNamespaces {
 		enforceNamespace = false
 	}
@@ -98,6 +96,7 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
+		SelectorParam(selector).
 		ResourceTypeOrNameArgs(true, args...).
 		Flatten().
 		Do()

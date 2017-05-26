@@ -166,11 +166,11 @@ func createOperatorDeployment(client *internalclientset.Clientset, namespace, ve
 							Image: fmt.Sprintf("%v:%v", operatorImage, version),
 							Args: []string{
 								"run",
-								"--v=4",
+								"--v=3",
 							},
 							Env: []kapi.EnvVar{
 								{
-									Name: "KUBEDB_OPERATOR_NAMESPACE",
+									Name: "OPERATOR_NAMESPACE",
 									ValueFrom: &kapi.EnvVarSource{
 										FieldRef: &kapi.ObjectFieldSelector{
 											APIVersion: "v1",

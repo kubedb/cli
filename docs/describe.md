@@ -27,7 +27,10 @@ Examples:
   kubedb describe drmn
 
 Options:
-      --all-namespaces=false: If present, list the requested object(s) across all namespaces.
+      --all-namespaces=false: If present, describe the requested object(s) across all namespaces. Namespace specified
+with --namespace will be ignored.
+  -n, --namespace='default': Describe object(s) from this namespace.
+  -l, --selector='': Selector (label query) to filter on, supports '=', '==', and '!='.
       --show-events=true: If true, display events related to the described object.
 
 Usage:
