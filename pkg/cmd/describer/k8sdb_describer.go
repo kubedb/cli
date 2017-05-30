@@ -72,6 +72,10 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
 
+		if item.Spec.Monitor != nil {
+			describeMonitor(item.Spec.Monitor, out)
+		}
+
 		listSnapshots(snapshots, out)
 
 		if events != nil {
@@ -138,6 +142,10 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		d.describeService(item.Namespace, item.Name, out)
 		if item.Spec.DatabaseSecret != nil {
 			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+		}
+
+		if item.Spec.Monitor != nil {
+			describeMonitor(item.Spec.Monitor, out)
 		}
 
 		listSnapshots(snapshots, out)
@@ -278,6 +286,24 @@ func describeStorage(storage *tapi.StorageSpec, out io.Writer) {
 	fmt.Fprintf(out, "  StorageClass:\t%s\n", storage.Class)
 	fmt.Fprintf(out, "  Capacity:\t%s\n", capacity)
 	fmt.Fprintf(out, "  Access Modes:\t%s\n", accessModes)
+}
+
+func describeMonitor(monitor *tapi.MonitorSpec, out io.Writer) {
+	if monitor == nil {
+		return
+	}
+
+	fmt.Fprint(out, "\n")
+	fmt.Fprint(out, "Monitoring System:\n")
+	if monitor.Prometheus != nil {
+		prom := monitor.Prometheus
+		fmt.Fprint(out, "  Prometheus:\n")
+		fmt.Fprintf(out, "    Namespace:\t%s\n", prom.Namespace)
+		if prom.Labels != nil {
+			printLabelsMultiline(out, "    Labels:", prom.Labels)
+		}
+		fmt.Fprintf(out, "    Interval:\t%s\n", prom.Interval)
+	}
 }
 
 func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
