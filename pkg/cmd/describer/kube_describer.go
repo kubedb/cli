@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/k8sdb/kubedb/pkg/cmd/printer"
-	"github.com/k8sdb/kubedb/pkg/cmd/util"
+	"github.com/k8sdb/cli/pkg/cmd/printer"
+	"github.com/k8sdb/cli/pkg/cmd/util"
 	kapi "k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"

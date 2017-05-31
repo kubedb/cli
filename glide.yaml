@@ -1,4 +1,4 @@
-package: github.com/k8sdb/kubedb
+package: github.com/k8sdb/cli
 import:
 - package: github.com/appscode/go
 - package: github.com/appscode/log

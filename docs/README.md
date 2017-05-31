@@ -5,7 +5,7 @@ $  kubedb --help
 
 kubedb CLI controls kubedb ThirdPartyResource objects.
 
-Find more information at https://github.com/k8sdb/kubedb.
+Find more information at https://github.com/k8sdb/cli.
 
 Basic Commands (Beginner):
   create      Create a resource by filename or stdin

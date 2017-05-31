@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/k8sdb/apimachinery/pkg/docker"
-	"github.com/k8sdb/kubedb/pkg/cmd/util"
-	"github.com/k8sdb/kubedb/pkg/kube"
+	"github.com/k8sdb/cli/pkg/cmd/util"
+	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
 	kapi "k8s.io/kubernetes/pkg/api"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"

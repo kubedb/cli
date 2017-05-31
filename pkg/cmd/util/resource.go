@@ -6,7 +6,7 @@ import (
 
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/kubedb/pkg/cmd/decoder"
+	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/runtime"

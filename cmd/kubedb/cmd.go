@@ -5,7 +5,7 @@ import (
 
 	v "github.com/appscode/go/version"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
-	cmd "github.com/k8sdb/kubedb/pkg/cmd"
+	cmd "github.com/k8sdb/cli/pkg/cmd"
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 )
@@ -19,7 +19,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		Long: templates.LongDesc(`
       kubedb CLI controls kubedb ThirdPartyResource objects.
 
-      Find more information at https://github.com/k8sdb/kubedb.`),
+      Find more information at https://github.com/k8sdb/cli.`),
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if enableAnalytics {
 				analytics.Enable()

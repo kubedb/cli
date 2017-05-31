@@ -12,7 +12,7 @@ import (
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
-	"github.com/k8sdb/kubedb/pkg/cmd/decoder"
+	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	"k8s.io/kubernetes/pkg/labels"
 	"k8s.io/kubernetes/pkg/runtime"
