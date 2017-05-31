@@ -15,6 +15,7 @@ import (
 	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/util/intstr"
 )
 
 var (
@@ -46,9 +47,11 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 }
 
 const (
-	operatorName      = "kubedb-operator"
-	operatorImage     = "kubedb/operator"
-	operatorContainer = "operator"
+	operatorName       = "kubedb-operator"
+	operatorImage      = "kubedb/operator"
+	operatorContainer  = "operator"
+	operatorPortName   = "web"
+	operatorPortNumber = 8080
 )
 
 func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error {
@@ -111,26 +114,30 @@ func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error
 
 		fmt.Fprintln(out, "Successfully upgraded operator deployment.")
 	} else {
-		var err error
-		if _, err = getOperatorDeployment(client, namespace); err == nil {
-			fmt.Fprintln(errOut, "Operator already exists.")
-			return nil
-		} else {
-			if !k8serr.IsNotFound(err) {
-				return err
-			}
-		}
-
 		if err := util.CheckDockerImageVersion(operatorImage, version); err != nil {
 			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, operatorImage, version))
 			return nil
 		}
 
 		if err := createOperatorDeployment(client, namespace, version); err != nil {
-			return err
+			if k8serr.IsAlreadyExists(err) {
+				fmt.Fprintln(errOut, "Operator deployment already exists.")
+			} else {
+				return err
+			}
+		} else {
+			fmt.Fprintln(out, "Successfully created operator deployment.")
 		}
 
-		fmt.Fprintln(out, "Successfully created operator deployment.")
+		if err := createOperatorService(client, namespace); err != nil {
+			if k8serr.IsAlreadyExists(err) {
+				fmt.Fprintln(errOut, "Operator service already exists.")
+			} else {
+				return err
+			}
+		} else {
+			fmt.Fprintln(out, "Successfully created operator service.")
+		}
 	}
 
 	return nil
@@ -140,11 +147,11 @@ func getOperatorDeployment(client *internalclientset.Clientset, namespace string
 	return client.ExtensionsClient.Deployments(namespace).Get(operatorName)
 }
 
-func createOperatorDeployment(client *internalclientset.Clientset, namespace, version string) error {
-	label := map[string]string{
-		"run": operatorName,
-	}
+var operatorLabel = map[string]string{
+	"app": operatorName,
+}
 
+func createOperatorDeployment(client *internalclientset.Clientset, namespace, version string) error {
 	deployment := &kext.Deployment{
 		ObjectMeta: kapi.ObjectMeta{
 			Name:      operatorName,
@@ -152,12 +159,12 @@ func createOperatorDeployment(client *internalclientset.Clientset, namespace, ve
 		},
 		Spec: kext.DeploymentSpec{
 			Selector: &unversioned.LabelSelector{
-				MatchLabels: label,
+				MatchLabels: operatorLabel,
 			},
 			Replicas: 1,
 			Template: kapi.PodTemplateSpec{
 				ObjectMeta: kapi.ObjectMeta{
-					Labels: label,
+					Labels: operatorLabel,
 				},
 				Spec: kapi.PodSpec{
 					Containers: []kapi.Container{
@@ -166,6 +173,7 @@ func createOperatorDeployment(client *internalclientset.Clientset, namespace, ve
 							Image: fmt.Sprintf("%v:%v", operatorImage, version),
 							Args: []string{
 								"run",
+								fmt.Sprintf("--address=:%v", operatorPortNumber),
 								"--v=3",
 							},
 							Env: []kapi.EnvVar{
@@ -179,6 +187,13 @@ func createOperatorDeployment(client *internalclientset.Clientset, namespace, ve
 									},
 								},
 							},
+							Ports: []kapi.ContainerPort{
+								{
+									Name:          operatorPortName,
+									Protocol:      kapi.ProtocolTCP,
+									ContainerPort: operatorPortNumber,
+								},
+							},
 						},
 					},
 				},
@@ -187,6 +202,30 @@ func createOperatorDeployment(client *internalclientset.Clientset, namespace, ve
 	}
 
 	_, err := client.ExtensionsClient.Deployments(namespace).Create(deployment)
+	return err
+}
+
+func createOperatorService(client *internalclientset.Clientset, namespace string) error {
+	svc := &kapi.Service{
+		ObjectMeta: kapi.ObjectMeta{
+			Name:      operatorName,
+			Namespace: namespace,
+		},
+		Spec: kapi.ServiceSpec{
+			Type: kapi.ServiceTypeClusterIP,
+			Ports: []kapi.ServicePort{
+				{
+					Name:       operatorPortName,
+					Port:       operatorPortNumber,
+					Protocol:   kapi.ProtocolTCP,
+					TargetPort: intstr.FromString(operatorPortName),
+				},
+			},
+			Selector: operatorLabel,
+		},
+	}
+
+	_, err := client.Core().Services(namespace).Create(svc)
 	return err
 }
 
