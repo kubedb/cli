@@ -1,5 +1,5 @@
 hash: d890a6cda2a1e065d0d31a37e8af973bd9ee45572b4e06464c8418e5d5fdc090
-updated: 2017-05-31T06:45:54.07071395-07:00
+updated: 2017-05-31T15:53:20.42829822-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,8 +7,9 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 04abd631dc552c01c9448db0763611932590cbc4
+  version: 5eabd32a8a0fe824b5e12c37dc53a0afea8507c9
   subpackages:
+  - encoding/json/types
   - version
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
@@ -146,12 +147,13 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 876cbe2166fbf793d72996e0e4d4f96e5e257fc7
+  version: 8c85cd38db3cb92b63cc6b4e1ae84573af9a0026
   subpackages:
   - api
   - api/install
   - client/clientset
   - pkg/analytics
+  - pkg/docker
 - name: github.com/mailru/easyjson
   version: d5b7844b561a7bc640052f1b935f7b800330d7e0
   subpackages:

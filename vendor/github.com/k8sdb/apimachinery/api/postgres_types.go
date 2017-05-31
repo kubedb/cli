@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/appscode/go/encoding/json/types"
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 )
@@ -22,7 +23,7 @@ type Postgres struct {
 
 type PostgresSpec struct {
 	// Version of Postgres to be deployed.
-	Version string `json:"version,omitempty"`
+	Version types.StrYo `json:"version,omitempty"`
 	// Storage spec to specify how storage shall be used.
 	Storage *StorageSpec `json:"storage,omitempty"`
 	// Database authentication secret

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/appscode/go/encoding/json/types"
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 )
@@ -22,7 +23,7 @@ type Elastic struct {
 
 type ElasticSpec struct {
 	// Version of Elasticsearch to be deployed.
-	Version string `json:"version,omitempty"`
+	Version types.StrYo `json:"version,omitempty"`
 	// Number of instances to deploy for a Elasticsearch database.
 	Replicas int32 `json:"replicas,omitempty"`
 	// Storage spec to specify how storage shall be used.
