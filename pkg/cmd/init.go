@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/k8sdb/apimachinery/pkg/docker"
 	"github.com/k8sdb/kubedb/pkg/cmd/util"
 	"github.com/k8sdb/kubedb/pkg/kube"
 	"github.com/spf13/cobra"
@@ -24,10 +25,10 @@ var (
 
 	init_example = templates.Examples(`
 		# Create operator with version canary.
-		kubedb init --version=canary
+		kubedb init --version=0.1.0
 
 		# Upgrade operator to use another version.
-		kubedb init --version=canary --upgrade`)
+		kubedb init --version=0.1.0 --upgrade`)
 )
 
 func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
@@ -48,7 +49,6 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 
 const (
 	operatorName       = "kubedb-operator"
-	operatorImage      = "kubedb/operator"
 	operatorContainer  = "operator"
 	operatorPortName   = "web"
 	operatorPortNumber = 8080
@@ -91,7 +91,7 @@ func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error
 		image := items[0]
 		tag := items[1]
 
-		if image != operatorImage {
+		if image != docker.ImageOperator {
 			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image mismatch. Can't upgrade to version "%v"`, version))
 			return nil
 		}
@@ -101,12 +101,12 @@ func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error
 			return nil
 		}
 
-		if err := util.CheckDockerImageVersion(operatorImage, version); err != nil {
-			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, operatorImage, version))
+		if err := util.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
+			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, docker.ImageOperator, version))
 			return nil
 		}
 
-		deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", operatorImage, version)
+		deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", docker.ImageOperator, version)
 
 		if err := updateOperatorDeployment(client, deployment); err != nil {
 			return err
@@ -114,8 +114,8 @@ func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error
 
 		fmt.Fprintln(out, "Successfully upgraded operator deployment.")
 	} else {
-		if err := util.CheckDockerImageVersion(operatorImage, version); err != nil {
-			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, operatorImage, version))
+		if err := util.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
+			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, docker.ImageOperator, version))
 			return nil
 		}
 
@@ -170,7 +170,7 @@ func createOperatorDeployment(client *internalclientset.Clientset, namespace, ve
 					Containers: []kapi.Container{
 						{
 							Name:  operatorContainer,
-							Image: fmt.Sprintf("%v:%v", operatorImage, version),
+							Image: fmt.Sprintf("%v:%v", docker.ImageOperator, version),
 							Args: []string{
 								"run",
 								fmt.Sprintf("--address=:%v", operatorPortNumber),

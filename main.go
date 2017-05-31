@@ -1,6 +1,6 @@
 package main
 
-import 	"os"
+import "os"
 
 func main() {
 	cmd := NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr)

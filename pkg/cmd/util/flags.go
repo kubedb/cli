@@ -44,7 +44,7 @@ func AddEditFlags(cmd *cobra.Command) {
 
 func AddInitFlags(cmd *cobra.Command) {
 	cmd.Flags().StringP("namespace", "n", kapi.NamespaceDefault, "Namespace name. Operator will be deployed in this namespace.")
-	cmd.Flags().String("version", "canary", "Operator version")
+	cmd.Flags().String("version", "0.1.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }
 
