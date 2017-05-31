@@ -19,14 +19,13 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
       kubedb CLI controls kubedb ThirdPartyResource objects.
 
       Find more information at https://github.com/k8sdb/kubedb.`),
-		Run: runHelp,
-
-		PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if enableAnalytics {
 				analytics.Enable()
 			}
 			analytics.SendEvent("kubedb/cli", cmd.CommandPath(), Version)
 		},
+		Run: runHelp,
 	}
 
 	groups := templates.CommandGroups{
