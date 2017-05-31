@@ -1,5 +1,5 @@
 hash: 3bdc093bab543738c2fe4fba8cbc716c75d52206086eca445e718503a0d5a96e
-updated: 2017-05-28T15:06:40.773601234-07:00
+updated: 2017-05-31T06:35:37.869617336-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -8,6 +8,8 @@ imports:
   - internal
 - name: github.com/appscode/go
   version: 04abd631dc552c01c9448db0763611932590cbc4
+  subpackages:
+  - version
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
 - name: github.com/Azure/go-ansiterm
@@ -139,14 +141,17 @@ imports:
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jonboulle/clockwork
   version: 72f9bd7c4e0c2a40055ab3d0f09654f730cce982
+- name: github.com/jpillora/go-ogle-analytics
+  version: 14b04e0594ef6a9fd943363b135656f0ec8c9d0e
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 02b95ae0c68592352ecb8da9f53424495b5330a7
+  version: 876cbe2166fbf793d72996e0e4d4f96e5e257fc7
   subpackages:
   - api
   - api/install
   - client/clientset
+  - pkg/analytics
 - name: github.com/mailru/easyjson
   version: d5b7844b561a7bc640052f1b935f7b800330d7e0
   subpackages:
@@ -170,7 +175,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: e606913c4ee45fec232e67e70105fb6c866b95d9
+  version: 8d4ce3549a0bf0e3569df3aae7423b7743cd05a9
 - name: github.com/spf13/pflag
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/ugorji/go

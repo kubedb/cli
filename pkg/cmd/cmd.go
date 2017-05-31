@@ -3,12 +3,15 @@ package cmd
 import (
 	"io"
 
+	v "github.com/appscode/go/version"
+	"github.com/k8sdb/apimachinery/pkg/analytics"
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 )
 
 // NewKubedbCommand creates the `kubedb` command and its nested children.
 func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
+	var enableAnalytics bool
 	cmds := &cobra.Command{
 		Use:   "kubedb",
 		Short: "Controls kubedb objects",
@@ -16,6 +19,12 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
       kubedb CLI controls kubedb ThirdPartyResource objects.
 
       Find more information at https://github.com/k8sdb/kubedb.`),
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			if enableAnalytics {
+				analytics.Enable()
+			}
+			analytics.SendEvent("kubedb/cli", cmd.CommandPath(), Version)
+		},
 		Run: runHelp,
 	}
 
@@ -39,6 +48,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
 				NewCmdDescribe(out, err),
+				v.NewCmdVersion(),
 			},
 		},
 	}
@@ -47,6 +57,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	templates.ActsAsRootCommand(cmds, nil, groups...)
 
 	cmds.PersistentFlags().String("kube-context", "", "name of the kubeconfig context to use")
+	cmds.PersistentFlags().BoolVar(&enableAnalytics, "analytics", true, "Send events to Google Analytics")
 	return cmds
 }
 
