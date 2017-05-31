@@ -148,7 +148,7 @@ func getOperatorDeployment(client *internalclientset.Clientset, namespace string
 }
 
 var operatorLabel = map[string]string{
-	"run": operatorName,
+	"app": operatorName,
 }
 
 func createOperatorDeployment(client *internalclientset.Clientset, namespace, version string) error {
