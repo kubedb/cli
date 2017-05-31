@@ -1,13 +1,9 @@
 package main
 
-import (
-	"os"
-
-	"github.com/k8sdb/kubedb/pkg/cmd"
-)
+import 	"os"
 
 func main() {
-	cmd := cmd.NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr)
+	cmd := NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr)
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}

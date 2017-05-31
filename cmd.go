@@ -1,10 +1,11 @@
-package cmd
+package main
 
 import (
 	"io"
 
 	v "github.com/appscode/go/version"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
+	cmd "github.com/k8sdb/kubedb/pkg/cmd"
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 )
@@ -32,22 +33,22 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		{
 			Message: "Basic Commands (Beginner):",
 			Commands: []*cobra.Command{
-				NewCmdCreate(out, err),
-				NewCmdInit(out, err),
+				cmd.NewCmdCreate(out, err),
+				cmd.NewCmdInit(out, err),
 			},
 		},
 		{
 			Message: "Basic Commands (Intermediate):",
 			Commands: []*cobra.Command{
-				NewCmdGet(out, err),
-				NewCmdEdit(out, err),
-				NewCmdDelete(out, err),
+				cmd.NewCmdGet(out, err),
+				cmd.NewCmdEdit(out, err),
+				cmd.NewCmdDelete(out, err),
 			},
 		},
 		{
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
-				NewCmdDescribe(out, err),
+				cmd.NewCmdDescribe(out, err),
 				v.NewCmdVersion(),
 			},
 		},
