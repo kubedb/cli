@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -19,7 +20,7 @@ import (
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
 	kapi "k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/errors"
+	k8serr "k8s.io/kubernetes/pkg/api/errors"
 	"k8s.io/kubernetes/pkg/api/meta"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	"k8s.io/kubernetes/pkg/kubectl"
@@ -246,15 +247,28 @@ func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Ob
 			return nil
 		}
 
-		preconditions := util.GetPreconditionFunc(currOriginalObj.GetObjectKind().GroupVersionKind().Kind)
-
-		fmt.Println()
+		kind := currOriginalObj.GetObjectKind().GroupVersionKind().Kind
+		preconditions := util.GetPreconditionFunc(kind)
 		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
 		if err != nil {
 			if strategicpatch.IsPreconditionFailed(err) {
 				return preconditionFailedError()
 			}
 			return err
+		}
+
+		resourceExists, err := util.CheckResourceExists(extClient, kind, info.Name, info.Namespace)
+		if err != nil {
+			return err
+		}
+		if resourceExists {
+			err := util.CheckConditionalPrecondition(patch, util.GetConditionalPreconditionFunc(kind)...)
+			if err != nil {
+				if util.IsPreconditionFailed(err) {
+					return errors.New("Invalid update. StatefulSet already exists.")
+				}
+				return err
+			}
 		}
 
 		results.version = defaultVersion
@@ -365,12 +379,12 @@ type editResults struct {
 
 func (r *editResults) addError(err error, info *resource.Info) string {
 	switch {
-	case errors.IsInvalid(err):
+	case k8serr.IsInvalid(err):
 		r.edit = append(r.edit, info)
 		reason := editReason{
 			head: fmt.Sprintf("%s %q was not valid", info.Mapping.Resource, info.Name),
 		}
-		if err, ok := err.(errors.APIStatus); ok {
+		if err, ok := err.(k8serr.APIStatus); ok {
 			if details := err.Status().Details; details != nil {
 				for _, cause := range details.Causes {
 					reason.other = append(reason.other, fmt.Sprintf("%s: %s", cause.Field, cause.Message))
@@ -379,7 +393,7 @@ func (r *editResults) addError(err error, info *resource.Info) string {
 		}
 		r.header.reasons = append(r.header.reasons, reason)
 		return fmt.Sprintf("error: %s %q is invalid", info.Mapping.Resource, info.Name)
-	case errors.IsNotFound(err):
+	case k8serr.IsNotFound(err):
 		r.notfound++
 		return fmt.Sprintf("error: %s %q could not be found on the server", info.Mapping.Resource, info.Name)
 	default:
@@ -426,6 +440,5 @@ func preconditionFailedError() error {
 	kind
 	name
 	namespace
-	status
-Or any unchangeable data was modified`)
+	status`)
 }

@@ -6,10 +6,12 @@ import (
 
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/kubernetes/pkg/util/json"
 	"k8s.io/kubernetes/pkg/util/strategicpatch"
 )
 
@@ -150,6 +152,27 @@ func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
 	case tapi.ResourceKindElastic:
 		preconditions = append(
 			preconditions,
+		)
+	case tapi.ResourceKindPostgres:
+		preconditions = append(
+			preconditions,
+		)
+	case tapi.ResourceKindDormantDatabase:
+		preconditions = append(
+			preconditions,
+			RequireChainKeyUnchanged("spec.origin"),
+		)
+	}
+	return preconditions
+}
+
+func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
+	preconditions := []strategicpatch.PreconditionFunc{}
+
+	switch kind {
+	case tapi.ResourceKindElastic:
+		preconditions = append(
+			preconditions,
 			RequireChainKeyUnchanged("spec.version"),
 			RequireChainKeyUnchanged("spec.storage"),
 			RequireChainKeyUnchanged("spec.nodeSelector"),
@@ -164,11 +187,56 @@ func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
 			RequireChainKeyUnchanged("spec.nodeSelector"),
 			RequireChainKeyUnchanged("spec.init"),
 		)
-	case tapi.ResourceKindDormantDatabase:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.origin"),
-		)
 	}
 	return preconditions
+}
+
+func CheckResourceExists(extClient clientset.ExtensionInterface, kind, name, namespace string) (bool, error) {
+	var err error
+	switch kind {
+	case tapi.ResourceKindElastic:
+		_, err = extClient.Elastics(namespace).Get(name)
+	case tapi.ResourceKindPostgres:
+		_, err = extClient.Postgreses(namespace).Get(name)
+	}
+
+	if err != nil {
+		if k8serr.IsNotFound(err) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
+}
+
+func IsPreconditionFailed(err error) bool {
+	_, ok := err.(errPreconditionFailed)
+	return ok
+}
+
+type errPreconditionFailed struct {
+	message string
+}
+
+func newErrPreconditionFailed(target map[string]interface{}) errPreconditionFailed {
+	s := fmt.Sprintf("precondition failed for: %v", target)
+	return errPreconditionFailed{s}
+}
+
+func (err errPreconditionFailed) Error() string {
+	return err.message
+}
+
+func CheckConditionalPrecondition(patchData []byte, fns ...strategicpatch.PreconditionFunc) error {
+	patch := make(map[string]interface{})
+	if err := json.Unmarshal(patchData, &patch); err != nil {
+		return err
+	}
+	for _, fn := range fns {
+		if !fn(patch) {
+			return newErrPreconditionFailed(patch)
+		}
+	}
+	return nil
 }
