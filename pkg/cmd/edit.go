@@ -180,7 +180,7 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 
 			containsError = false
 
-			err = visitToPatch(f, originalObj, updates, mapper, resourceMapper, out, errOut, unversioned.GroupVersion{}, &results, file)
+			err = visitToPatch(f, originalObj, updates, mapper, resourceMapper, out, unversioned.GroupVersion{}, &results)
 			if err != nil {
 				return preservedFile(err, results.file, errOut)
 			}
@@ -208,7 +208,16 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 	return editFn(nil, nil)
 }
 
-func visitToPatch(f cmdutil.Factory, originalObj runtime.Object, updates *resource.Info, mapper meta.RESTMapper, resourceMapper *resource.Mapper, out, errOut io.Writer, defaultVersion unversioned.GroupVersion, results *editResults, file string) error {
+func visitToPatch(
+	f cmdutil.Factory,
+	originalObj runtime.Object,
+	updates *resource.Info,
+	mapper meta.RESTMapper,
+	resourceMapper *resource.Mapper,
+	out io.Writer,
+	defaultVersion unversioned.GroupVersion,
+	results *editResults,
+) error {
 	client, err := f.ClientSet()
 	if err != nil {
 		return err
