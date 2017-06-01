@@ -284,7 +284,7 @@ func visitToPatch(
 			err := util.CheckConditionalPrecondition(patch, conditionalPreconditions...)
 			if err != nil {
 				if util.IsPreconditionFailed(err) {
-					return errors.New("Invalid update. StatefulSet already exists.")
+					return conditionalPreconditionFailedError(kind)
 				}
 				return err
 			}
@@ -454,10 +454,17 @@ func manualStrip(file []byte) []byte {
 }
 
 func preconditionFailedError() error {
-	return fmt.Errorf("%s", `At least one of the following was changed:
+	return errors.New(`At least one of the following was changed:
 	apiVersion
 	kind
 	name
 	namespace
 	status`)
+}
+
+func conditionalPreconditionFailedError(kind string) error {
+	str := util.PreconditionSpecField[kind]
+	strList := strings.Join(str, "\n\t")
+	return fmt.Errorf(`At least one of the following was changed:
+	%v`, strList)
 }

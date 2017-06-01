@@ -131,11 +131,7 @@ func RequireChainKeyUnchanged(key string) strategicpatch.PreconditionFunc {
 			fmt.Println("Invalid data")
 			return true
 		}
-		check := checkChainKeyUnchanged(key, patchMap)
-		if !check {
-			fmt.Println(key, "was changed")
-		}
-		return check
+		return checkChainKeyUnchanged(key, patchMap)
 	}
 }
 
@@ -147,47 +143,39 @@ func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
 		strategicpatch.RequireMetadataKeyUnchanged("namespace"),
 		strategicpatch.RequireKeyUnchanged("status"),
 	}
-
-	switch kind {
-	case tapi.ResourceKindElastic:
-		preconditions = append(
-			preconditions,
-		)
-	case tapi.ResourceKindPostgres:
-		preconditions = append(
-			preconditions,
-		)
-	case tapi.ResourceKindDormantDatabase:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.origin"),
-		)
-	}
 	return preconditions
+}
+
+var PreconditionSpecField = map[string][]string{
+	tapi.ResourceKindElastic: {
+		"spec.version",
+		"spec.storage",
+		"spec.nodeSelector",
+		"spec.init",
+	},
+	tapi.ResourceKindPostgres: {
+		"spec.version",
+		"spec.storage",
+		"spec.databaseSecret",
+		"spec.nodeSelector",
+		"spec.init",
+	},
+	tapi.ResourceKindDormantDatabase: {
+		"spec.origin",
+	},
 }
 
 func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
 	preconditions := []strategicpatch.PreconditionFunc{}
 
-	switch kind {
-	case tapi.ResourceKindElastic:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.version"),
-			RequireChainKeyUnchanged("spec.storage"),
-			RequireChainKeyUnchanged("spec.nodeSelector"),
-			RequireChainKeyUnchanged("spec.init"),
-		)
-	case tapi.ResourceKindPostgres:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.version"),
-			RequireChainKeyUnchanged("spec.storage"),
-			RequireChainKeyUnchanged("spec.databaseSecret"),
-			RequireChainKeyUnchanged("spec.nodeSelector"),
-			RequireChainKeyUnchanged("spec.init"),
-		)
+	if fields, found := PreconditionSpecField[kind]; found {
+		for _, field := range fields {
+			preconditions = append(preconditions,
+				RequireChainKeyUnchanged(field),
+			)
+		}
 	}
+
 	return preconditions
 }
 
