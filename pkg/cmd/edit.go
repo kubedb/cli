@@ -110,9 +110,6 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 		edit = editor.NewDefaultEditor()
 	)
 
-	restClonfig, _ := f.ClientConfig()
-	extClient := clientset.NewExtensionsForConfigOrDie(restClonfig)
-
 	editFn := func(info *resource.Info, err error) error {
 		var (
 			results  = editResults{}
@@ -183,7 +180,7 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 
 			containsError = false
 
-			err = visitToPatch(extClient, originalObj, updates, mapper, resourceMapper, out, errOut, unversioned.GroupVersion{}, &results, file)
+			err = visitToPatch(f, originalObj, updates, mapper, resourceMapper, out, errOut, unversioned.GroupVersion{}, &results, file)
 			if err != nil {
 				return preservedFile(err, results.file, errOut)
 			}
@@ -211,9 +208,21 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 	return editFn(nil, nil)
 }
 
-func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Object, updates *resource.Info, mapper meta.RESTMapper, resourceMapper *resource.Mapper, out, errOut io.Writer, defaultVersion unversioned.GroupVersion, results *editResults, file string) error {
+func visitToPatch(f cmdutil.Factory, originalObj runtime.Object, updates *resource.Info, mapper meta.RESTMapper, resourceMapper *resource.Mapper, out, errOut io.Writer, defaultVersion unversioned.GroupVersion, results *editResults, file string) error {
+	client, err := f.ClientSet()
+	if err != nil {
+		return err
+	}
+
+	restClonfig, err := f.ClientConfig()
+	if err != nil {
+		return err
+	}
+
+	extClient := clientset.NewExtensionsForConfigOrDie(restClonfig)
+
 	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
-	err := patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
+	err = patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
 
 		currOriginalObj, err := util.GetStructuredObject(originalObj)
 		if err != nil {
@@ -257,7 +266,7 @@ func visitToPatch(extClient clientset.ExtensionInterface, originalObj runtime.Ob
 			return err
 		}
 
-		resourceExists, err := util.CheckResourceExists(extClient, kind, info.Name, info.Namespace)
+		resourceExists, err := util.CheckResourceExists(client, kind, info.Name, info.Namespace)
 		if err != nil {
 			return err
 		}

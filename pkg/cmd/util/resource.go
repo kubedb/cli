@@ -6,9 +6,9 @@ import (
 
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
+	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/runtime"
 	"k8s.io/kubernetes/pkg/util/json"
@@ -191,13 +191,15 @@ func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFu
 	return preconditions
 }
 
-func CheckResourceExists(extClient clientset.ExtensionInterface, kind, name, namespace string) (bool, error) {
+func CheckResourceExists(client *internalclientset.Clientset, kind, name, namespace string) (bool, error) {
 	var err error
 	switch kind {
 	case tapi.ResourceKindElastic:
-		_, err = extClient.Elastics(namespace).Get(name)
+		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElastic)
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName)
 	case tapi.ResourceKindPostgres:
-		_, err = extClient.Postgreses(namespace).Get(name)
+		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName)
 	}
 
 	if err != nil {
