@@ -280,7 +280,8 @@ func visitToPatch(
 			return err
 		}
 		if resourceExists {
-			err := util.CheckConditionalPrecondition(patch, util.GetConditionalPreconditionFunc(kind)...)
+			conditionalPreconditions := util.GetConditionalPreconditionFunc(kind)
+			err := util.CheckConditionalPrecondition(patch, conditionalPreconditions...)
 			if err != nil {
 				if util.IsPreconditionFailed(err) {
 					return errors.New("Invalid update. StatefulSet already exists.")
