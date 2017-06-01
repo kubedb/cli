@@ -8,8 +8,10 @@ import (
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	k8serr "k8s.io/kubernetes/pkg/api/errors"
+	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/kubernetes/pkg/util/json"
 	"k8s.io/kubernetes/pkg/util/strategicpatch"
 )
 
@@ -129,11 +131,7 @@ func RequireChainKeyUnchanged(key string) strategicpatch.PreconditionFunc {
 			fmt.Println("Invalid data")
 			return true
 		}
-		check := checkChainKeyUnchanged(key, patchMap)
-		if !check {
-			fmt.Println(key, "was changed")
-		}
-		return check
+		return checkChainKeyUnchanged(key, patchMap)
 	}
 }
 
@@ -145,30 +143,90 @@ func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
 		strategicpatch.RequireMetadataKeyUnchanged("namespace"),
 		strategicpatch.RequireKeyUnchanged("status"),
 	}
+	return preconditions
+}
 
+var PreconditionSpecField = map[string][]string{
+	tapi.ResourceKindElastic: {
+		"spec.version",
+		"spec.storage",
+		"spec.nodeSelector",
+		"spec.init",
+	},
+	tapi.ResourceKindPostgres: {
+		"spec.version",
+		"spec.storage",
+		"spec.databaseSecret",
+		"spec.nodeSelector",
+		"spec.init",
+	},
+	tapi.ResourceKindDormantDatabase: {
+		"spec.origin",
+	},
+}
+
+func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
+	preconditions := []strategicpatch.PreconditionFunc{}
+
+	if fields, found := PreconditionSpecField[kind]; found {
+		for _, field := range fields {
+			preconditions = append(preconditions,
+				RequireChainKeyUnchanged(field),
+			)
+		}
+	}
+
+	return preconditions
+}
+
+func CheckResourceExists(client *internalclientset.Clientset, kind, name, namespace string) (bool, error) {
+	var err error
 	switch kind {
 	case tapi.ResourceKindElastic:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.version"),
-			RequireChainKeyUnchanged("spec.storage"),
-			RequireChainKeyUnchanged("spec.nodeSelector"),
-			RequireChainKeyUnchanged("spec.init"),
-		)
+		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElastic)
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName)
 	case tapi.ResourceKindPostgres:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.version"),
-			RequireChainKeyUnchanged("spec.storage"),
-			RequireChainKeyUnchanged("spec.databaseSecret"),
-			RequireChainKeyUnchanged("spec.nodeSelector"),
-			RequireChainKeyUnchanged("spec.init"),
-		)
-	case tapi.ResourceKindDormantDatabase:
-		preconditions = append(
-			preconditions,
-			RequireChainKeyUnchanged("spec.origin"),
-		)
+		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName)
 	}
-	return preconditions
+
+	if err != nil {
+		if k8serr.IsNotFound(err) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
+}
+
+func IsPreconditionFailed(err error) bool {
+	_, ok := err.(errPreconditionFailed)
+	return ok
+}
+
+type errPreconditionFailed struct {
+	message string
+}
+
+func newErrPreconditionFailed(target map[string]interface{}) errPreconditionFailed {
+	s := fmt.Sprintf("precondition failed for: %v", target)
+	return errPreconditionFailed{s}
+}
+
+func (err errPreconditionFailed) Error() string {
+	return err.message
+}
+
+func CheckConditionalPrecondition(patchData []byte, fns ...strategicpatch.PreconditionFunc) error {
+	patch := make(map[string]interface{})
+	if err := json.Unmarshal(patchData, &patch); err != nil {
+		return err
+	}
+	for _, fn := range fns {
+		if !fn(patch) {
+			return newErrPreconditionFailed(patch)
+		}
+	}
+	return nil
 }
