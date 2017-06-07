@@ -26,7 +26,9 @@ type SnapshotImpl struct {
 	ns string
 }
 
-func newSnapshot(c *ExtensionsClient, namespace string) *SnapshotImpl {
+var _ SnapshotInterface = &SnapshotImpl{}
+
+func newSnapshot(c *ExtensionClient, namespace string) *SnapshotImpl {
 	return &SnapshotImpl{c.restClient, namespace}
 }
 

@@ -20,36 +20,36 @@ type ExtensionInterface interface {
 	PostgresNamespacer
 }
 
-// ExtensionsClient is used to interact with experimental Kubernetes features.
+// ExtensionClient is used to interact with KubeDB features.
 // Features of Extensions group are not supported and may be changed or removed in
 // incompatible ways at any time.
-type ExtensionsClient struct {
+type ExtensionClient struct {
 	restClient rest.Interface
 }
 
-var _ ExtensionInterface = &ExtensionsClient{}
+var _ ExtensionInterface = &ExtensionClient{}
 
-func (a *ExtensionsClient) Snapshots(namespace string) SnapshotInterface {
+func (a *ExtensionClient) Snapshots(namespace string) SnapshotInterface {
 	return newSnapshot(a, namespace)
 }
 
-func (a *ExtensionsClient) DormantDatabases(namespace string) DormantDatabaseInterface {
+func (a *ExtensionClient) DormantDatabases(namespace string) DormantDatabaseInterface {
 	return newDormantDatabase(a, namespace)
 }
 
-func (a *ExtensionsClient) Elastics(namespace string) ElasticInterface {
+func (a *ExtensionClient) Elastics(namespace string) ElasticInterface {
 	return newElastic(a, namespace)
 }
 
-func (a *ExtensionsClient) Postgreses(namespace string) PostgresInterface {
+func (a *ExtensionClient) Postgreses(namespace string) PostgresInterface {
 	return newPostgres(a, namespace)
 }
 
-// NewAppsCodeExtensions creates a new ExtensionsClient for the given config. This client
+// NewForConfig creates a new ExtensionClient for the given config. This client
 // provides access to experimental Kubernetes features.
 // Features of Extensions group are not supported and may be changed or removed in
 // incompatible ways at any time.
-func NewExtensionsForConfig(c *rest.Config) (*ExtensionsClient, error) {
+func NewForConfig(c *rest.Config) (*ExtensionClient, error) {
 	config := *c
 	if err := setExtensionsDefaults(&config); err != nil {
 		return nil, err
@@ -58,24 +58,24 @@ func NewExtensionsForConfig(c *rest.Config) (*ExtensionsClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &ExtensionsClient{client}, nil
+	return &ExtensionClient{client}, nil
 }
 
-// NewAppsCodeExtensionsOrDie creates a new ExtensionsClient for the given config and
+// NewForConfigOrDie creates a new ExtensionClient for the given config and
 // panics if there is an error in the config.
 // Features of Extensions group are not supported and may be changed or removed in
 // incompatible ways at any time.
-func NewExtensionsForConfigOrDie(c *rest.Config) *ExtensionsClient {
-	client, err := NewExtensionsForConfig(c)
+func NewForConfigOrDie(c *rest.Config) *ExtensionClient {
+	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
 	}
 	return client
 }
 
-// New creates a new ExtensionsV1beta1Client for the given RESTClient.
-func NewExtensions(c rest.Interface) *ExtensionsClient {
-	return &ExtensionsClient{c}
+// New creates a new New for the given RESTClient.
+func New(c rest.Interface) *ExtensionClient {
+	return &ExtensionClient{c}
 }
 
 func setExtensionsDefaults(config *rest.Config) error {
@@ -108,7 +108,7 @@ func setExtensionsDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *ExtensionsClient) RESTClient() rest.Interface {
+func (c *ExtensionClient) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

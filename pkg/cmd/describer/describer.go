@@ -35,7 +35,7 @@ func newHumanReadableDescriber(f cmdutil.Factory) *humanReadableDescriber {
 	restClonfig, _ := f.ClientConfig()
 	describer := &humanReadableDescriber{
 		Factory:          f,
-		extensionsClient: clientset.NewExtensionsForConfigOrDie(restClonfig),
+		extensionsClient: clientset.NewForConfigOrDie(restClonfig),
 		handlerMap:       make(map[reflect.Type]*handlerEntry),
 	}
 	describer.addDefaultHandlers()

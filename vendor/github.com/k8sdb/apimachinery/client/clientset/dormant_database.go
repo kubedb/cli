@@ -26,7 +26,9 @@ type DormantDatabaseImpl struct {
 	ns string
 }
 
-func newDormantDatabase(c *ExtensionsClient, namespace string) *DormantDatabaseImpl {
+var _ DormantDatabaseInterface = &DormantDatabaseImpl{}
+
+func newDormantDatabase(c *ExtensionClient, namespace string) *DormantDatabaseImpl {
 	return &DormantDatabaseImpl{c.restClient, namespace}
 }
 

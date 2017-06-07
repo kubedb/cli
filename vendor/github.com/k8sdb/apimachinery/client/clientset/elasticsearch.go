@@ -26,7 +26,9 @@ type ElasticImpl struct {
 	ns string
 }
 
-func newElastic(c *ExtensionsClient, namespace string) *ElasticImpl {
+var _ ElasticInterface = &ElasticImpl{}
+
+func newElastic(c *ExtensionClient, namespace string) *ElasticImpl {
 	return &ElasticImpl{c.restClient, namespace}
 }
 
