@@ -228,7 +228,7 @@ func visitToPatch(
 		return err
 	}
 
-	extClient := clientset.NewExtensionsForConfigOrDie(restClonfig)
+	extClient := clientset.NewForConfigOrDie(restClonfig)
 
 	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
 	err = patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
