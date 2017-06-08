@@ -1,6 +1,6 @@
 ### Schedule Backup
 
-**T**o schedule backup, wee need to add following BackupScheduleSpec in `spec`
+**T**o schedule backup, we need to add following BackupScheduleSpec in `spec`
 
 ```yaml
 spec:

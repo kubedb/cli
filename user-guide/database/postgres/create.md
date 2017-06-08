@@ -88,3 +88,12 @@ How to initialize database? See [here](../../database/initialize-database.md).
 **W**e can also schedule automatic backup by providing BackupSchedule information in `spec.backupSchedule`.
 
 How to add information in Postgres `spec` to schedule automatic backup? See [here](../../database/schedule-backup.md).
+
+
+#### Monitor Database
+
+**W**e can also monitor our postgres database.
+To enable monitoring, we need to set MonitorSpec in Postgres `spec`.
+
+How to set monitoring? See [here](../../database/monitor-database.md).
+

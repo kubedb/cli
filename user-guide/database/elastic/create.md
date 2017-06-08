@@ -68,3 +68,11 @@ How to initialize database using SnapshotSource? See [here](../../database/initi
 **W**e can also schedule automatic backup by providing BackupSchedule information in `spec.backupSchedule`.
 
 How to add information in Elastic `spec` to schedule automatic backup? See [here](../../database/schedule-backup.md).
+
+
+#### Monitor Database
+
+**W**e can also monitor our elasticsearch database.
+To enable monitoring, we need to set MonitorSpec in Elastic `spec`.
+
+How to set monitoring? See [here](../../database/monitor-database.md).
