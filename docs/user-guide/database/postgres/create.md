@@ -65,7 +65,7 @@ This database do not have any PersistentVolume behind StatefulSet.
 
 **W**e can create a Postgres database that will use PersistentVolumeClaim in StatefulSet.
 
-How to add storage information in Postgres `spec`? See [here](../../database/support-storage.md).
+How to add storage information in Postgres `spec`? See [here](../support-storage.md).
 
 Following command will list `pvc` for this database.
 
@@ -80,14 +80,14 @@ data-postgres-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10G
 
 **W**hen we are creating a new Postgres, we can also initialize this database with existing data.
 
-How to initialize database? See [here](../../database/initialize-database.md).
+How to initialize database? See [here](../initialize-database.md).
 
 
 #### Schedule Backup
 
 **W**e can also schedule automatic backup by providing BackupSchedule information in `spec.backupSchedule`.
 
-How to add information in Postgres `spec` to schedule automatic backup? See [here](../../database/schedule-backup.md).
+How to add information in Postgres `spec` to schedule automatic backup? See [here](../schedule-backup.md).
 
 
 #### Monitor Database
@@ -95,5 +95,5 @@ How to add information in Postgres `spec` to schedule automatic backup? See [her
 **W**e can also monitor our postgres database.
 To enable monitoring, we need to set MonitorSpec in Postgres `spec`.
 
-How to set monitoring? See [here](../../database/monitor-database.md).
+How to set monitoring? See [here](../monitor-database.md).
 

@@ -43,7 +43,7 @@ This database do not have any PersistentVolume behind StatefulSet.
 
 **W**e can create a Elastic database that will use PersistentVolumeClaim in StatefulSet.
 
-How to add storage information in Elastic `spec`? See [here](../../database/support-storage.md).
+How to add storage information in Elastic `spec`? See [here](../support-storage.md).
 
 Following command will list `pvc` for this database.
 
@@ -60,14 +60,14 @@ data-elasticsearch-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba 
 
 > **Note:** Elastic database supports only SnapshotSource to initialize.
 
-How to initialize database using SnapshotSource? See [here](../../database/initialize-database.md#snapshotsource).
+How to initialize database using SnapshotSource? See [here](../initialize-database.md#snapshotsource).
 
 
 #### Schedule Backup
 
 **W**e can also schedule automatic backup by providing BackupSchedule information in `spec.backupSchedule`.
 
-How to add information in Elastic `spec` to schedule automatic backup? See [here](../../database/schedule-backup.md).
+How to add information in Elastic `spec` to schedule automatic backup? See [here](../schedule-backup.md).
 
 
 #### Monitor Database
@@ -75,4 +75,4 @@ How to add information in Elastic `spec` to schedule automatic backup? See [here
 **W**e can also monitor our elasticsearch database.
 To enable monitoring, we need to set MonitorSpec in Elastic `spec`.
 
-How to set monitoring? See [here](../../database/monitor-database.md).
+How to set monitoring? See [here](../monitor-database.md).
