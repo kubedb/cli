@@ -35,6 +35,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			Commands: []*cobra.Command{
 				cmd.NewCmdCreate(out, err),
 				cmd.NewCmdInit(out, err),
+				cmd.NewCmdAutoComplete(out, err),
 			},
 		},
 		{
