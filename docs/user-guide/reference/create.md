@@ -1,20 +1,16 @@
-# kubedb create
-
-## Example
-
-##### Help for create command
+### kubedb create
 
 ```bash
 $ kubedb create --help
 
-Create a resource by filename or stdin.
+Create a resource by filename or stdin. 
 
 JSON and YAML formats are accepted.
 
 Examples:
   # Create a elastic using the data in elastic.json.
   kubedb create -f ./elastic.json
-
+  
   # Create a elastic based on the JSON passed into stdin.
   cat elastic.json | kubedb create -f -
 
@@ -29,24 +25,8 @@ Usage:
 Use "kubedb create options" for a list of global command-line options (applies to all commands).
 ```
 
-##### Create from file
-```bash
-$ kubedb create -f ./elastic.json
+We can say in which namespace we want to create this object providing `--namespace` flag.
 
-elastic "elasticsearch-demo" created
-```
+We can also provide `--recursive` flag to process the directory used in `-f`, `--filename` recursively.
 
-##### Create from stdin
-```bash
-$ cat ./elastic.json | kubedb create -f -
-
-elastic "elasticsearch-demo" created
-```
-
-##### Create from folder
-```bash
-$ kubedb create -f resources -R
-
-es "elasticsearch-demo" created
-pg "postgres-demo" created
-```
+`kubedb create` command also supports input from _stdin_ with `-f -`

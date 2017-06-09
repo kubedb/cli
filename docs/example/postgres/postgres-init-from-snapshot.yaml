@@ -1,0 +1,9 @@
+apiVersion: kubedb.com/v1beta1
+kind: Postgres
+metadata:
+  name: postgres-db
+spec:
+  version: 9.5
+  init:
+    snapshotSource:
+      name: "snapshot-xyz"

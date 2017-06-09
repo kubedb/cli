@@ -1,8 +1,4 @@
-# kubedb get
-
-## Example
-
-##### Help for get command
+### kubedb get
 
 ```bash
 $ kubedb get --help
@@ -52,72 +48,16 @@ Usage:
 Use "kubedb get options" for a list of global command-line options (applies to all commands).
 ```
 
+To list requested object(s) across all namespaces, use `--all-namespaces=true`
 
-##### Get Elastic
-```bash
-$ kubedb get elastic
+Flag `--selector` can be used to filter against labels.
 
-NAME                      STATUS    AGE
-es/elasticsearch-demo     Running   5h
-es/elasticsearch-demo-1   Running   4h
-```
+For output format, we can pass `--output` flag.
+* `--output=yaml` to print requested objects in YAML format
+* `--output=json` to print requested objects in JSON format
+* `--output=wide` to print requested objects with additional information
+* `--output=name` to print requested objects' name only
 
-##### Get All
-```bash
-$ kubedb get all
+We can also print objects by specifying names after resource type.
 
-NAME                      STATUS    AGE
-es/elasticsearch-demo     Running   5h
-es/elasticsearch-demo-1   Running   4h
-
-NAME               STATUS    AGE
-pg/postgres-demo   Running   1h
-
-NAME                STATUS      AGE
-snap/snapshot-xyz   Succeeded   27m
-
-NAME                      STATUS    AGE
-drmn/e2e-elastic-v4xgwz   Paused    9m
-```
-
-##### Get Postgres with labels
-```bash
-$ kubedb get postgres --show-labels
-
-NAME            STATUS    AGE       LABELS
-postgres-demo   Running   1h        kubedb.com/type=postgres
-```
-
-##### Get Elastic with wide
-```bash
-$ kubedb get elastic -o wide
-
-NAME                   STATUS    VERSION   AGE
-elasticsearch-demo     Running   canary    6h
-elasticsearch-demo-1   Running   canary    5h
-```
-
-##### Get YAML
-```bash
-$ kubedb get pg postgres-demo -o yaml
-
-apiVersion: kubedb.com/v1beta1
-kind: Postgres
-metadata:
-  annotations:
-    postgres.kubedb.com/version: canary-db
-  creationTimestamp: 2017-05-05T07:04:06Z
-  labels:
-    kubedb.com/type: postgres
-  name: postgres-demo
-  namespace: default
-spec:
-  databaseSecret:
-    secretName: postgres-demo-admin-auth
-  replicas: 1
-  serviceAccountName: governing-postgres
-  version: canary-db
-status:
-  creationTime: 2017-05-05T07:04:06Z
-  phase: Running
-```
+See examples in `kubedb get --help`

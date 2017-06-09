@@ -1,0 +1,11 @@
+apiVersion: kubedb.com/v1beta1
+kind: Postgres
+metadata:
+  name: postgres-db
+spec:
+  version: 9.5
+  init:
+    scriptSource:
+      scriptPath: "kubernetes-gitRepo/run.sh"
+      gitRepo:
+        repository: "https://github.com/appscode/kubernetes-gitRepo.git"

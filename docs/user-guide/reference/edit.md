@@ -1,8 +1,4 @@
-# kubedb edit
-
-## Example
-
-##### Help for edit command
+### kubedb edit
 
 ```bash
 $ kubedb edit --help
@@ -28,3 +24,5 @@ Usage:
 
 Use "kubedb edit options" for a list of global command-line options (applies to all commands).
 ```
+
+We can edit object either in YAML or JSON format managed by flag `--output`.

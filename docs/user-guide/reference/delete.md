@@ -1,8 +1,4 @@
-# kubedb delete
-
-## Example
-
-##### Help for delete command
+### kubedb delete
 
 ```bash
 $ kubedb delete --help
@@ -35,23 +31,15 @@ Usage:
 Use "kubedb delete options" for a list of global command-line options (applies to all commands).
 ```
 
-##### Delete
-```bash
-$ kubedb delete pg/postgres-demo
+We can provide namespace using `--namespace` flag.
 
-postgres "postgres-demo" deleted
-```
+We can use same file to delete an object using which we have created this object.
 
-##### Delete from file
-```bash
-$ kubedb delete -f ./elastic.json
+We can also provide `--recursive` flag to process the directory used in `-f`, `--filename` recursively.
 
-elastic "elasticsearch-demo" deleted
-```
+`kubedb delete` command also supports input from _stdin_ with `-f -`
 
-##### Delete from stdin
-```bash
-$ cat ./elastic.json | kubedb delete -f -
+Flag `--selector` can be used to filter against labels to delete objects.
 
-elastic "elasticsearch-demo" deleted
-```
+See examples in `kubedb delete --help`
+
