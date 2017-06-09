@@ -1,0 +1,14 @@
+apiVersion: kubedb.com/v1beta1
+kind: Elastic
+metadata:
+  name: elasticsearch-db
+spec:
+  version: 2.3.1
+  replicas: 1
+  storage:
+    class: "gp2"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "10Gi"

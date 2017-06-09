@@ -1,0 +1,13 @@
+apiVersion: kubedb.com/v1beta1
+kind: Postgres
+metadata:
+  name: postgres-db
+spec:
+  version: 9.5
+  storage:
+    class: "gp2"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "10Gi"

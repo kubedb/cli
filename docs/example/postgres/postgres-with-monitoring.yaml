@@ -1,0 +1,12 @@
+apiVersion: kubedb.com/v1beta1
+kind: Postgres
+metadata:
+  name: postgres-db
+spec:
+  version: 9.5
+  monitor:
+    prometheus:
+      namespace: default
+      labels:
+        app: kubedb-exporter
+      interval: 10s
