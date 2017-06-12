@@ -1,5 +1,5 @@
 hash: 0f0f5baf84aa5dcbf29cc225d624c51e123d26fb25d4187e44bd44d19b0439b7
-updated: 2017-06-07T11:53:53.151117931-07:00
+updated: 2017-06-11T20:05:50.111093788-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -10,6 +10,7 @@ imports:
   version: 5eabd32a8a0fe824b5e12c37dc53a0afea8507c9
   subpackages:
   - encoding/json/types
+  - runtime
   - version
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
@@ -35,6 +36,10 @@ imports:
   - health
   - httputil
   - timeutil
+- name: github.com/cpuguy83/go-md2man
+  version: a65d4d2de4d5f7c74868dfa9b202a3c8be315aaa
+  subpackages:
+  - md2man
 - name: github.com/davecgh/go-spew
   version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
   subpackages:
@@ -99,7 +104,7 @@ imports:
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/ghodss/yaml
-  version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
+  version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
 - name: github.com/go-openapi/jsonpointer
   version: 46af16f9f7b149af66e5d1bd010e3574dc06de98
 - name: github.com/go-openapi/jsonreference
@@ -177,7 +182,9 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: 99ff9334bda26384b5ef4a4aaa4d444d29bdde73
+  version: d7cfb134748502f60bc1797cd26fcc3e4eb4b927
+  subpackages:
+  - doc
 - name: github.com/spf13/pflag
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/ugorji/go

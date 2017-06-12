@@ -1,17 +1,17 @@
-package main
+package cmd
 
 import (
 	"io"
 
 	v "github.com/appscode/go/version"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
-	cmd "github.com/k8sdb/cli/pkg/cmd"
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
+	_ "github.com/spf13/cobra/doc"
 )
 
 // NewKubedbCommand creates the `kubedb` command and its nested children.
-func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
+func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.Command {
 	var enableAnalytics bool
 	cmds := &cobra.Command{
 		Use:   "kubedb",
@@ -24,7 +24,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			if enableAnalytics {
 				analytics.Enable()
 			}
-			analytics.SendEvent("kubedb/cli", cmd.CommandPath(), Version)
+			analytics.SendEvent("kubedb/cli", cmd.CommandPath(), version)
 		},
 		Run: runHelp,
 	}
@@ -33,22 +33,22 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		{
 			Message: "Basic Commands (Beginner):",
 			Commands: []*cobra.Command{
-				cmd.NewCmdCreate(out, err),
-				cmd.NewCmdInit(out, err),
+				NewCmdCreate(out, err),
+				NewCmdInit(out, err),
 			},
 		},
 		{
 			Message: "Basic Commands (Intermediate):",
 			Commands: []*cobra.Command{
-				cmd.NewCmdGet(out, err),
-				cmd.NewCmdEdit(out, err),
-				cmd.NewCmdDelete(out, err),
+				NewCmdGet(out, err),
+				NewCmdEdit(out, err),
+				NewCmdDelete(out, err),
 			},
 		},
 		{
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
-				cmd.NewCmdDescribe(out, err),
+				NewCmdDescribe(out, err),
 				v.NewCmdVersion(),
 			},
 		},
