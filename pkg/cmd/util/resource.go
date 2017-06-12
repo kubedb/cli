@@ -39,6 +39,30 @@ func GetSupportedResource(resource string) (string, error) {
 	return resource, nil
 }
 
+func GetResourceType(resource string) (string, error) {
+	switch strings.ToLower(resource) {
+	case strings.ToLower(tapi.ResourceKindElastic),
+		strings.ToLower(tapi.ResourceTypeElastic),
+		strings.ToLower(tapi.ResourceCodeElastic):
+		return tapi.ResourceTypeElastic, nil
+	case strings.ToLower(tapi.ResourceKindPostgres),
+		strings.ToLower(tapi.ResourceTypePostgres),
+		strings.ToLower(tapi.ResourceCodePostgres):
+		return tapi.ResourceTypePostgres, nil
+	case strings.ToLower(tapi.ResourceKindSnapshot),
+		strings.ToLower(tapi.ResourceTypeSnapshot),
+		strings.ToLower(tapi.ResourceCodeSnapshot):
+		return tapi.ResourceTypeSnapshot, nil
+	case strings.ToLower(tapi.ResourceKindDormantDatabase),
+		strings.ToLower(tapi.ResourceTypeDormantDatabase),
+		strings.ToLower(tapi.ResourceCodeDormantDatabase):
+		return tapi.ResourceTypeDormantDatabase, nil
+	default:
+		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
+	}
+	return resource, nil
+}
+
 func CheckSupportedResource(kind string) error {
 	switch kind {
 	case tapi.ResourceKindElastic,
@@ -88,10 +112,15 @@ var ShortForms = map[string]string{
 }
 
 func ResourceShortFormFor(resource string) (string, bool) {
+	resourceType, err := GetResourceType(resource)
+	if err != nil {
+		return "", false
+	}
+
 	var alias string
 	exists := false
 	for k, val := range ShortForms {
-		if val == resource {
+		if val == resourceType {
 			alias = k
 			exists = true
 			break

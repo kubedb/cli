@@ -6,14 +6,10 @@ import (
 
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
+	amc "github.com/k8sdb/apimachinery/pkg/controller"
 	kapi "k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/labels"
-)
-
-const (
-	LabelDatabaseKind = "kubedb.com/kind"
-	LabelDatabaseName = "kubedb.com/name"
 )
 
 func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *kubectl.DescriberSettings) (string, error) {
@@ -26,8 +22,8 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					LabelDatabaseKind: tapi.ResourceKindElastic,
-					LabelDatabaseName: item.Name,
+					amc.LabelDatabaseKind: tapi.ResourceKindElastic,
+					amc.LabelDatabaseName: item.Name,
 				},
 			),
 		},
@@ -96,8 +92,8 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					LabelDatabaseKind: tapi.ResourceKindPostgres,
-					LabelDatabaseName: item.Name,
+					amc.LabelDatabaseKind: tapi.ResourceKindPostgres,
+					amc.LabelDatabaseName: item.Name,
 				},
 			),
 		},
@@ -215,8 +211,8 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 		kapi.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					LabelDatabaseKind: item.Labels[LabelDatabaseKind],
-					LabelDatabaseName: item.Name,
+					amc.LabelDatabaseKind: item.Labels[amc.LabelDatabaseKind],
+					amc.LabelDatabaseName: item.Name,
 				},
 			),
 		},

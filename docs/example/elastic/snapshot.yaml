@@ -1,0 +1,11 @@
+apiVersion: kubedb.com/v1beta1
+kind: Snapshot
+metadata:
+  name: snapshot-xyz
+  labels:
+    kubedb.com/kind: Elastic
+spec:
+  databaseName: elasticsearch-db
+  bucketName: "bucket-for-snapshot"
+  storageSecret:
+    secretName: "secret-for-bucket"
