@@ -265,7 +265,7 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 		database = fmt.Sprintf(`%v`, item.Spec.DatabaseName)
 	}
 
-	if _, err := fmt.Fprintf(w, "%s\t%s\t%s\t", name, database, status); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, database); err != nil {
 		return err
 	}
 
@@ -275,7 +275,7 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t%s", status, TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 

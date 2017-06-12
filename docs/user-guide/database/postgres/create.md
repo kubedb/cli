@@ -55,8 +55,8 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 ```bash
 $ kubedb get postgres postgres-db -o wide
 
-NAME          STATUS    VERSION   AGE
-postgres-db   Running   9.5       6m
+NAME          VERSION   STATUS    AGE
+postgres-db   9.5       Running   34m
 ```
 
 This database do not have any PersistentVolume behind StatefulSet.

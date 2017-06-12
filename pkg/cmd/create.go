@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"io"
 
+	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
@@ -85,6 +87,10 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		kind := info.GetObjectKind().GroupVersionKind().Kind
 		if err := util.CheckSupportedResource(kind); err != nil {
 			return err
+		}
+
+		if kind == tapi.ResourceKindDormantDatabase {
+			return fmt.Errorf(`resource type "%v" doesn't support edit operation`, kind)
 		}
 
 		infoList = append(infoList, info)
