@@ -121,6 +121,6 @@ We can see its status.
 ```bash
 $ kubedb get snap snapshot-xyz -o wide
 
-NAME           STATUS      BUCKET                AGE
-snapshot-xyz   Succeeded   bucket-for-snapshot   5m
+NAME           DATABASE              BUCKET    STATUS      AGE
+snapshot-xyz   es/elasticsearch-db   restic    Succeeded   24m
 ```

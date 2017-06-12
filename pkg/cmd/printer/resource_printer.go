@@ -12,7 +12,9 @@ import (
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
+	amc "github.com/k8sdb/apimachinery/pkg/controller"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
+	"github.com/k8sdb/cli/pkg/cmd/util"
 	"k8s.io/kubernetes/pkg/api/unversioned"
 	"k8s.io/kubernetes/pkg/labels"
 	"k8s.io/kubernetes/pkg/runtime"
@@ -121,22 +123,37 @@ func (h *HumanReadablePrinter) validatePrintHandlerFunc(printFunc reflect.Value)
 }
 
 func getColumns(options PrintOptions, t reflect.Type) []string {
+
 	columns := make([]string, 0)
 
 	if options.WithNamespace {
 		columns = append(columns, "NAMESPACE")
 	}
 
-	columns = append(columns, "NAME", "STATUS")
+	columns = append(columns, "NAME")
 
-	columns = append(columns, formatWideHeaders(options.Wide, t)...)
+	switch t.String() {
+	case "*api.Elastic", "*api.ElasticList":
+		if options.Wide {
+			columns = append(columns, "VERSION")
+		}
+	case "*api.Postgres", "*api.PostgresList":
+		if options.Wide {
+			columns = append(columns, "VERSION")
+		}
+	case "*api.Snapshot", "*api.SnapshotList":
+		columns = append(columns, "DATABASE")
+		if options.Wide {
+			columns = append(columns, "BUCKET")
+		}
 
+	}
+
+	columns = append(columns, "STATUS")
 	columns = append(columns, "AGE")
-
 	if options.ShowLabels {
 		columns = append(columns, "LABELS")
 	}
-
 	return columns
 }
 
@@ -155,7 +172,7 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 	if status == "" {
 		status = statusUnknown
 	}
-	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, status); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t", name); err != nil {
 		return err
 	}
 
@@ -165,7 +182,7 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t%s", status, TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -198,7 +215,7 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 	if status == "" {
 		status = statusUnknown
 	}
-	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, status); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t", name); err != nil {
 		return err
 	}
 
@@ -208,7 +225,7 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t%s", status, TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -241,7 +258,14 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 	if status == "" {
 		status = statusUnknown
 	}
-	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, status); err != nil {
+
+	short, found := util.ResourceShortFormFor(item.Labels[amc.LabelDatabaseKind])
+	database := fmt.Sprintf(`%v/%v`, short, item.Spec.DatabaseName)
+	if !found {
+		database = fmt.Sprintf(`%v`, item.Spec.DatabaseName)
+	}
+
+	if _, err := fmt.Fprintf(w, "%s\t%s\t", name, database); err != nil {
 		return err
 	}
 
@@ -251,7 +275,7 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 		}
 	}
 
-	if _, err := fmt.Fprintf(w, "%s", TranslateTimestamp(item.CreationTimestamp)); err != nil {
+	if _, err := fmt.Fprintf(w, "%s\t%s", status, TranslateTimestamp(item.CreationTimestamp)); err != nil {
 		return err
 	}
 
@@ -412,20 +436,4 @@ func GetNewTabWriter(output io.Writer) *tabwriter.Writer {
 		tabwriterPadChar,
 		tabwriterFlags,
 	)
-}
-
-// headers for -o wide
-func formatWideHeaders(wide bool, t reflect.Type) []string {
-	if wide {
-		if t.String() == "*api.Elastic" || t.String() == "*api.ElasticList" {
-			return []string{"VERSION"}
-		}
-		if t.String() == "*api.Postgres" || t.String() == "*api.PostgresList" {
-			return []string{"VERSION"}
-		}
-		if t.String() == "*api.Snapshot" || t.String() == "*api.SnapshotList" {
-			return []string{"BUCKET"}
-		}
-	}
-	return nil
 }

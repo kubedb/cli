@@ -33,8 +33,8 @@ For this object, following kubernetes objects will be created in same namespace:
 ```bash
 $ kubedb get elastic elasticsearch-db -o wide
 
-NAME               STATUS    VERSION   AGE
-elasticsearch-db   Running   2.3.1     6m
+NAME               VERSION   STATUS    AGE
+elasticsearch-db   2.3.1     Running   37m
 ```
 
 This database do not have any PersistentVolume behind StatefulSet.
