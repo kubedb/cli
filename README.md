@@ -10,7 +10,8 @@ Following command will install the latest version of the library from master.
 go get github.com/k8sdb/cli/...
 ```
 
-## Usage
+## Using KubeDB
+Want to learn how to use KubeDB? Please start [here](docs/user-guide/tutorial.md).
 
 `kubedb` CLI is used to manipulate kubedb ThirdPartyResource objects.
 
@@ -23,5 +24,12 @@ We will go through each of the commands and will see how these commands interact
 * [kubedb edit](docs/user-guide/task/edit.md) to edit supported object(s).
 * [kubedb delete](docs/user-guide/task/delete.md) to delete supported object(s).
 
+## Contribution guidelines
+Want to help improve KubeDB? Please start [here](https://github.com/k8sdb/cli/tree/master/docs/contribution).
 
-See step-by-step [tutorial](docs/user-guide/tutorial.md)
+## Support
+If you have any questions, you can reach out to us.
+* [Slack](https://slack.appscode.com)
+* [Forum](https://discuss.appscode.com)
+* [Twitter](https://twitter.com/AppsCodeHQ)
+* [Website](https://appscode.com)
