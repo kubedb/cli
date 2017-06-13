@@ -1,5 +1,5 @@
-hash: 0f0f5baf84aa5dcbf29cc225d624c51e123d26fb25d4187e44bd44d19b0439b7
-updated: 2017-06-12T11:39:33.95626059+06:00
+hash: 2fe17d54989aecedf1d1edd70c86de1676b37b0fc742bd4e5a651719df72e1a9
+updated: 2017-06-13T14:33:44.820137287-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -43,6 +43,9 @@ imports:
   - private/waiter
   - service/s3
   - service/sts
+- name: github.com/Azure/azure-sdk-for-go
+  version: 0984e0641ae43b89283223034574d6465be93bf4
+  vcs: git
 - name: github.com/Azure/go-ansiterm
   version: 70b2c90b260171e829f1ebd7c17f600c11858dbe
   subpackages:
@@ -66,7 +69,7 @@ imports:
   - httputil
   - timeutil
 - name: github.com/cpuguy83/go-md2man
-  version: 23709d0847197db6021a51fdb193e66e9222d4e7
+  version: a65d4d2de4d5f7c74868dfa9b202a3c8be315aaa
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -167,7 +170,9 @@ imports:
 - name: github.com/gorilla/mux
   version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
 - name: github.com/graymeta/stow
-  version: 69972e9bb1d771f3641b5f9df6a9435178c49de3
+  version: d4b253dd4995360ae103b6460bbadeaa7fb3cdb4
+  repo: https://github.com/appscode/stow.git
+  vcs: git
   subpackages:
   - google
   - s3
@@ -190,7 +195,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 401cafad3f98c6ef2cbd44785d3bcdde7eedc061
+  version: aea7f4da55c4e8982331952809a54e01bdca43e6
   subpackages:
   - api
   - api/install
@@ -226,7 +231,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: d7cfb134748502f60bc1797cd26fcc3e4eb4b927
+  version: b4dbd37a01839e0653eec12aa4bbb2a2ce7b2a37
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -286,12 +291,8 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: a69f0f19d246419bb931b0ac8f4f8d3f3e6d4feb
+  version: 324744a33f1f37e63dd1695cfb3ec9a3e4a1cb05
   subpackages:
-  - cloudmonitoring/v2beta2
-  - compute/v1
-  - container/v1
-  - dns/v1
   - gensupport
   - googleapi
   - googleapi/internal/uritemplates
@@ -315,7 +316,7 @@ imports:
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 - name: k8s.io/kubernetes
-  version: f07eea23494be1e7c11a8e2cf51bd96d1ec9fdf1
+  version: 8eb75a5810cba92ccad845ca360cf924f2385881
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install

@@ -35,25 +35,28 @@ func (c *container) Item(id string) (stow.Item, error) {
 	return c.getItem(id)
 }
 
-// Items sends a request to retrieve a list of items that are prepended with
-// the prefix argument. The 'cursor' variable facilitates pagination.
-func (c *container) Items(prefix, cursor string, count int) ([]stow.Item, string, error) {
+func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]string, []stow.Item, string, error) {
 	itemLimit := int64(count)
 
 	params := &s3.ListObjectsInput{
-		Bucket:  aws.String(c.Name()),
-		Marker:  &cursor,
-		MaxKeys: &itemLimit,
-		Prefix:  &prefix,
+		Bucket:    aws.String(c.Name()),
+		Delimiter: aws.String(delimiter),
+		Marker:    &cursor,
+		MaxKeys:   &itemLimit,
+		Prefix:    &prefix,
 	}
 
 	response, err := c.client.ListObjects(params)
 	if err != nil {
-		return nil, "", errors.Wrap(err, "Items, listing objects")
+		return nil, nil, "", errors.Wrap(err, "Items, listing objects")
+	}
+
+	prefixes := make([]string, len(response.CommonPrefixes))
+	for i, prefix := range response.CommonPrefixes {
+		prefixes[i] = *prefix.Prefix
 	}
 
 	containerItems := make([]stow.Item, len(response.Contents)) // Allocate space for the Item slice.
-
 	for i, object := range response.Contents {
 		etag := cleanEtag(*object.ETag) // Copy etag value and remove the strings.
 		object.ETag = &etag             // Assign the value to the object field representing the item.
@@ -81,7 +84,14 @@ func (c *container) Items(prefix, cursor string, count int) ([]stow.Item, string
 		marker = containerItems[len(containerItems)-1].Name()
 	}
 
-	return containerItems, marker, nil
+	return prefixes, containerItems, marker, nil
+}
+
+// Items sends a request to retrieve a list of items that are prepended with
+// the prefix argument. The 'cursor' variable facilitates pagination.
+func (c *container) Items(prefix, cursor string, count int) ([]stow.Item, string, error) {
+	_, items, cursor, err := c.Browse(prefix, "", cursor, count)
+	return items, cursor, err
 }
 
 func (c *container) RemoveItem(id string) error {

@@ -82,6 +82,22 @@ type Container interface {
 	Name() string
 	// Item gets an item by its ID.
 	Item(id string) (Item, error)
+	// Browse gets a page of prefixes and items with the specified
+	// prefix and delimiter for this Container.
+	// The specified cursor is a pointer to the start of
+	// the items to get. It it obtained from a previous
+	// call to this method, or should be CursorStart for the
+	// first page.
+	// delimiter returns results in a directory-like fashion.
+	// Results will contain only items whose names, aside from the
+	// prefix, do not contain delimiter. Items whose names,
+	// aside from the prefix, contain delimiter will have their name,
+	// truncated after the delimiter, returned in prefixes.
+	// Duplicate prefixes are omitted. Optional.
+	// count is the number of items to return per page.
+	// The returned cursor can be checked with IsCursorEnd to
+	// decide if there are any more items or not.
+	Browse(prefix, delimiter, cursor string, count int) ([]string, []Item, string, error)
 	// Items gets a page of items with the specified
 	// prefix for this Container.
 	// The specified cursor is a pointer to the start of
@@ -91,6 +107,7 @@ type Container interface {
 	// count is the number of items to return per page.
 	// The returned cursor can be checked with IsCursorEnd to
 	// decide if there are any more items or not.
+	// Items is a shortcut for Browse where delimeter is not set.
 	Items(prefix, cursor string, count int) ([]Item, string, error)
 	// RemoveItem removes the Item with the specified ID.
 	RemoveItem(id string) error
@@ -117,6 +134,10 @@ type Item interface {
 	// Open opens the Item for reading.
 	// Calling code must close the io.ReadCloser.
 	Open() (io.ReadCloser, error)
+	// Partial returns a reader that yields the contents of an Item at the
+	// given offset. If length is nonzero, only a portion of the Item is
+	// returned. Calling code must close the io.ReadCloser.
+	Partial(length, offset int64) (io.ReadCloser, error)
 	// ETag is a string that is different when the Item is
 	// different, and the same when the item is the same.
 	// Usually this is the last modified datetime.

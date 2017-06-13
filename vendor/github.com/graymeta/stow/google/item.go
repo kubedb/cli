@@ -1,10 +1,10 @@
 package google
 
 import (
+	"errors"
+	"fmt"
 	"io"
 	"net/url"
-
-	//	"strings"
 	"time"
 
 	storage "google.golang.org/api/storage/v1"
@@ -46,6 +46,30 @@ func (i *Item) URL() *url.URL {
 // Open returns an io.ReadCloser to the object. Useful for downloading/streaming the object.
 func (i *Item) Open() (io.ReadCloser, error) {
 	res, err := i.client.Objects.Get(i.container.name, i.name).Download()
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Body, nil
+}
+
+func (i *Item) Partial(length, offset int64) (io.ReadCloser, error) {
+	if offset < 0 {
+		return nil, errors.New("offset is negative")
+	}
+	if length < 0 {
+		return nil, fmt.Errorf("invalid length %d", length)
+	}
+	var r string
+	if length > 0 {
+		r = fmt.Sprintf("bytes=%d-%d", offset, offset+length)
+	} else {
+		r = fmt.Sprintf("bytes=%d-", offset)
+	}
+	req := i.client.Objects.Get(i.container.name, i.name)
+	// https://cloud.google.com/storage/docs/json_api/v1/parameters#range
+	req.Header().Set("Range", r)
+	res, err := req.Download()
 	if err != nil {
 		return nil, err
 	}

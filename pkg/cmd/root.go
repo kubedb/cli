@@ -6,8 +6,8 @@ import (
 	v "github.com/appscode/go/version"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
 	"github.com/spf13/cobra"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	_ "github.com/spf13/cobra/doc"
+	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 )
 
 // NewKubedbCommand creates the `kubedb` command and its nested children.

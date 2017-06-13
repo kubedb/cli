@@ -9,4 +9,15 @@ import:
 - package: github.com/spf13/pflag
   version: master
 - package: github.com/k8sdb/apimachinery
+  version: release-0.1
+- package: github.com/graymeta/stow
+  repo: https://github.com/appscode/stow.git
   version: master
+  vcs: git
+- package: google.golang.org/api/storage/v1
+  version: master
+- package: cloud.google.com/go
+  version: v0.2.0
+- package: github.com/Azure/azure-sdk-for-go
+  vcs: git
+  version: v7.0.1-beta
