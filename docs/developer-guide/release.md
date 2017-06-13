@@ -118,7 +118,7 @@ operator (master) $ git push origin master
 - Create a matching `release-*` branch
 - Apply a matching `X.Y.Z` tag
 - Push to origin `release-*` branch
-- Build and release docker image for pg operator.
+- Build and upload cli binaries to Github.
 
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
@@ -133,14 +133,9 @@ cli (release-0.1) $ git merge master
 cli (release-0.1) $ git tag -fa 0.1.0
 cli (release-0.1) $ git push origin release-0.1 --tags
 cli (release-0.1) $ rm -rf dist
-cli (release-0.1) $ ./hack/make.py build; env APPSCODE_ENV=prod ./hack/make.py push; ./hack/make.py push
+cli (release-0.1) $ env APPSCODE_ENV=prod ./hack/make.py build
 
 cli (release-0.1) $ git checkout master
 cli (master) $ git commit -a -m 'Start 0.2 development cycle'
 cli (master) $ git push origin master
 ```
-
-
-
-
-
