@@ -1,4 +1,4 @@
-apiVersion: kubedb.com/v1beta1
+apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   name: snapshot-xyz

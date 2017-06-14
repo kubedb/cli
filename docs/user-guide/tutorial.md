@@ -78,7 +78,7 @@ $ kubedb delete <pg|es> database-demo
 For deleting this Postgres object, operator will create a DormantDatabase object `database-demo`.
 
 ```yaml
-apiVersion: kubedb.com/v1beta1
+apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   labels:

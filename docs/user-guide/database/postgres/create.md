@@ -3,7 +3,7 @@
 **L**ets create a simple postgres database using following yaml.
 
 ```yaml
-apiVersion: kubedb.com/v1beta1
+apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
   name: postgres-db
