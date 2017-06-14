@@ -80,7 +80,7 @@ func (c *SnapshotController) Run() {
 func (c *SnapshotController) ensureThirdPartyResource() {
 	log.Infoln("Ensuring Snapshot ThirdPartyResource")
 
-	resourceName := tapi.ResourceNameSnapshot + "." + tapi.V1beta1SchemeGroupVersion.Group
+	resourceName := tapi.ResourceNameSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group
 	var err error
 	if _, err = c.client.Extensions().ThirdPartyResources().Get(resourceName); err == nil {
 		return
@@ -100,7 +100,7 @@ func (c *SnapshotController) ensureThirdPartyResource() {
 		Description: "Snapshot of kubedb databases",
 		Versions: []extensions.APIVersion{
 			{
-				Name: tapi.V1beta1SchemeGroupVersion.Version,
+				Name: tapi.V1alpha1SchemeGroupVersion.Version,
 			},
 		},
 	}

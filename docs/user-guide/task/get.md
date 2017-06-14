@@ -17,7 +17,7 @@ To get YAML of an object, we can provide `--output=yaml` flag
 ```bash
 $ kubedb get postgres postgres-demo --output=yaml
 
-apiVersion: kubedb.com/v1beta1
+apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
   name: postgres-demo

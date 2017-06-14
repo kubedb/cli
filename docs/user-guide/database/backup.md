@@ -5,7 +5,7 @@ We need to create a Snapshot object to initiate backup process.
 Here is a template of Snapshot object
 
 ```yaml
-apiVersion: kubedb.com/v1beta1
+apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   name: "snapshot-xyz"

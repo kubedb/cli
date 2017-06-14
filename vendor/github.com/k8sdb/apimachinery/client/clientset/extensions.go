@@ -79,13 +79,13 @@ func New(c rest.Interface) *ExtensionClient {
 }
 
 func setExtensionsDefaults(config *rest.Config) error {
-	gv, err := schema.ParseGroupVersion("kubedb.com/v1beta1")
+	gv, err := schema.ParseGroupVersion("kubedb.com/v1alpha1")
 	if err != nil {
 		return err
 	}
-	// if kubedb.com/v1beta1 is not enabled, return an error
+	// if kubedb.com/v1alpha1 is not enabled, return an error
 	if !registered.IsEnabledVersion(gv) {
-		return fmt.Errorf("kubedb.com/v1beta1 is not enabled")
+		return fmt.Errorf("kubedb.com/v1alpha1 is not enabled")
 	}
 	config.APIPath = defaultAPIPath
 	if config.UserAgent == "" {

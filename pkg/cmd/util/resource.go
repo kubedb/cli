@@ -20,19 +20,19 @@ func GetSupportedResource(resource string) (string, error) {
 	case strings.ToLower(tapi.ResourceKindElastic),
 		strings.ToLower(tapi.ResourceTypeElastic),
 		strings.ToLower(tapi.ResourceCodeElastic):
-		return tapi.ResourceKindElastic + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
+		return tapi.ResourceKindElastic + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
 		strings.ToLower(tapi.ResourceTypePostgres),
 		strings.ToLower(tapi.ResourceCodePostgres):
-		return tapi.ResourceKindPostgres + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
+		return tapi.ResourceKindPostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot),
 		strings.ToLower(tapi.ResourceTypeSnapshot),
 		strings.ToLower(tapi.ResourceCodeSnapshot):
-		return tapi.ResourceKindSnapshot + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
+		return tapi.ResourceKindSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase),
 		strings.ToLower(tapi.ResourceTypeDormantDatabase),
 		strings.ToLower(tapi.ResourceCodeDormantDatabase):
-		return tapi.ResourceKindDormantDatabase + "." + tapi.V1beta1SchemeGroupVersion.Group, nil
+		return tapi.ResourceKindDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -78,10 +78,10 @@ func CheckSupportedResource(kind string) error {
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	resources := map[string]string{
-		tapi.ResourceNameElastic:         tapi.ResourceKindElastic + "." + tapi.V1beta1SchemeGroupVersion.Group,
-		tapi.ResourceNamePostgres:        tapi.ResourceKindPostgres + "." + tapi.V1beta1SchemeGroupVersion.Group,
-		tapi.ResourceNameSnapshot:        tapi.ResourceKindSnapshot + "." + tapi.V1beta1SchemeGroupVersion.Group,
-		tapi.ResourceNameDormantDatabase: tapi.ResourceKindDormantDatabase + "." + tapi.V1beta1SchemeGroupVersion.Group,
+		tapi.ResourceNameElastic:         tapi.ResourceKindElastic + "." + tapi.V1alpha1SchemeGroupVersion.Group,
+		tapi.ResourceNamePostgres:        tapi.ResourceKindPostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group,
+		tapi.ResourceNameSnapshot:        tapi.ResourceKindSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group,
+		tapi.ResourceNameDormantDatabase: tapi.ResourceKindDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group,
 	}
 
 	clientset, err := f.ClientSet()
@@ -91,7 +91,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	availableResources := make([]string, 0)
 	for key, val := range resources {
-		_, err := clientset.ThirdPartyResources().Get(key + "." + tapi.V1beta1SchemeGroupVersion.Group)
+		_, err := clientset.ThirdPartyResources().Get(key + "." + tapi.V1alpha1SchemeGroupVersion.Group)
 		if err != nil {
 			if k8serr.IsNotFound(err) {
 				continue
