@@ -76,7 +76,7 @@ func (c *DormantDbController) Run() {
 func (c *DormantDbController) ensureThirdPartyResource() {
 	log.Infoln("Ensuring DormantDatabase ThirdPartyResource")
 
-	resourceName := tapi.ResourceNameDormantDatabase + "." + tapi.V1beta1SchemeGroupVersion.Group
+	resourceName := tapi.ResourceNameDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group
 	var err error
 	if _, err = c.client.Extensions().ThirdPartyResources().Get(resourceName); err == nil {
 		return
@@ -96,7 +96,7 @@ func (c *DormantDbController) ensureThirdPartyResource() {
 		Description: "Kubedb dormant databases",
 		Versions: []extensions.APIVersion{
 			{
-				Name: tapi.V1beta1SchemeGroupVersion.Version,
+				Name: tapi.V1alpha1SchemeGroupVersion.Version,
 			},
 		},
 	}

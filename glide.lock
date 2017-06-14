@@ -1,5 +1,5 @@
 hash: 2fe17d54989aecedf1d1edd70c86de1676b37b0fc742bd4e5a651719df72e1a9
-updated: 2017-06-13T14:33:44.820137287-07:00
+updated: 2017-06-13T18:46:28.474762014-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -46,6 +46,8 @@ imports:
 - name: github.com/Azure/azure-sdk-for-go
   version: 0984e0641ae43b89283223034574d6465be93bf4
   vcs: git
+  subpackages:
+  - storage
 - name: github.com/Azure/go-ansiterm
   version: 70b2c90b260171e829f1ebd7c17f600c11858dbe
   subpackages:
@@ -174,6 +176,7 @@ imports:
   repo: https://github.com/appscode/stow.git
   vcs: git
   subpackages:
+  - azure
   - google
   - s3
 - name: github.com/heroku/docker-registry-client
@@ -195,7 +198,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: aea7f4da55c4e8982331952809a54e01bdca43e6
+  version: ef84724d13c8a82bc3d9edb25415e95f06fe3c0e
   subpackages:
   - api
   - api/install

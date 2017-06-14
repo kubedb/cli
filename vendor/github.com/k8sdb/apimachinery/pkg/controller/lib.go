@@ -9,6 +9,7 @@ import (
 	"github.com/appscode/log"
 	"github.com/ghodss/yaml"
 	"github.com/graymeta/stow"
+	_ "github.com/graymeta/stow/azure"
 	_ "github.com/graymeta/stow/google"
 	_ "github.com/graymeta/stow/s3"
 	tapi "github.com/k8sdb/apimachinery/api"
