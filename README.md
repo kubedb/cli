@@ -24,6 +24,19 @@ We will go through each of the commands and will see how these commands interact
 * [kubedb edit](docs/user-guide/task/edit.md) to edit supported object(s).
 * [kubedb delete](docs/user-guide/task/delete.md) to delete supported object(s).
 
+## Versioning Policy
+There are 2 parts to versioning policy:
+ - Operator & cli version: KubeDB follows semver versioning policy. Until 1.0 release is done, there might be breaking changes between point releases of the operator. Please always check the release notes for upgrade instructions.
+ - TPR version: kubedb.com/v1alpha1 is considered in alpha. This means breaking changes to the YAML format might happen among different releases of the operator.
+
+---
+
+**The kubedb operator & cli collects anonymous usage statistics to help us learning
+how the software is being used and how we can improve it. To disable stats collection,
+run the operator with the flag** `--analytics=false`.
+
+---
+
 ## Contribution guidelines
 Want to help improve KubeDB? Please start [here](https://github.com/k8sdb/cli/tree/master/docs/contribution).
 
