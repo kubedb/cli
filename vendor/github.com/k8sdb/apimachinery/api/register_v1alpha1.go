@@ -29,8 +29,6 @@ func v1addKnownTypes(scheme *runtime.Scheme) error {
 		// kubedb Postgres
 		&Postgres{},
 		&PostgresList{},
-
-		&metav1.ListOptions{},
 	)
 	metav1.AddToGroupVersion(scheme, V1alpha1SchemeGroupVersion)
 	return nil
