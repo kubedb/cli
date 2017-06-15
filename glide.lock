@@ -1,5 +1,5 @@
 hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-15T00:06:28.707475068-07:00
+updated: 2017-06-15T00:50:29.154156895-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -582,7 +582,6 @@ imports:
   - pkg/util/exec
   - pkg/util/hash
   - pkg/util/interrupt
-  - pkg/util/json
   - pkg/util/labels
   - pkg/util/net/sets
   - pkg/util/node

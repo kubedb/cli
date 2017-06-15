@@ -9,12 +9,12 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
-	"k8s.io/kubernetes/pkg/runtime"
-	"k8s.io/kubernetes/pkg/kubectl"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
-	utilerrors "k8s.io/kubernetes/pkg/util/errors"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
 var (
@@ -35,7 +35,7 @@ var (
 )
 
 func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
-	describerSettings := &kubectl.DescriberSettings{}
+	describerSettings := &printers.DescriberSettings{}
 
 	cmd := &cobra.Command{
 		Use:     "describe (TYPE [NAME_PREFIX] | TYPE/NAME)",
@@ -53,7 +53,7 @@ func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
 	return cmd
 }
 
-func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string, describerSettings *kubectl.DescriberSettings) error {
+func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string, describerSettings *printers.DescriberSettings) error {
 	selector := cmdutil.GetFlagString(cmd, "selector")
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
@@ -92,7 +92,7 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 	}
 	args[0] = strings.Join(resources, ",")
 
-	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).

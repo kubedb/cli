@@ -9,7 +9,7 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
-	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -65,7 +65,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		mapper,
 		typer,
 		resource.ClientMapperFunc(f.UnstructuredClientForMapping),
-		runtime.UnstructuredJSONScheme).
+		unstructured.UnstructuredJSONScheme).
 		Schema(util.Validator()).
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().
@@ -84,7 +84,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 			return err
 		}
 
-		kind := info.GetObjectKind().GroupVersionKind().Kind
+		kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 		if err := util.CheckSupportedResource(kind); err != nil {
 			return err
 		}

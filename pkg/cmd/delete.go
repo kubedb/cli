@@ -8,8 +8,8 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
-	"k8s.io/kubernetes/pkg/runtime"
-	"k8s.io/kubernetes/pkg/api/meta"
+	"k8s.io/apimachinery/pkg/api/meta"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -75,7 +75,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		args[0] = strings.Join(resources, ",")
 	}
 
-	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
@@ -98,7 +98,7 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 		if err != nil {
 			return err
 		}
-		kind := info.GetObjectKind().GroupVersionKind().Kind
+		kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 		if err := util.CheckSupportedResource(kind); err != nil {
 			return err
 		}

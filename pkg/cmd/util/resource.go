@@ -10,10 +10,10 @@ import (
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/apimachinery/pkg/util/json"
+	"k8s.io/apimachinery/pkg/util/mergepatch"
+	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/util/json"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
 )
 
 func GetSupportedResource(resource string) (string, error) {
@@ -92,7 +92,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	availableResources := make([]string, 0)
 	for key, val := range resources {
-		_, err := clientset.ThirdPartyResources().Get(key + "." + tapi.V1alpha1SchemeGroupVersion.Group)
+		_, err := clientset.Extensions().ThirdPartyResources().Get(key+"."+tapi.V1alpha1SchemeGroupVersion.Group, metav1.GetOptions{})
 		if err != nil {
 			if kerr.IsNotFound(err) {
 				continue
@@ -154,7 +154,7 @@ func checkChainKeyUnchanged(key string, mapData map[string]interface{}) bool {
 	return checkChainKeyUnchanged(newKey, val.(map[string]interface{}))
 }
 
-func RequireChainKeyUnchanged(key string) strategicpatch.PreconditionFunc {
+func RequireChainKeyUnchanged(key string) mergepatch.PreconditionFunc {
 	return func(patch interface{}) bool {
 		patchMap, ok := patch.(map[string]interface{})
 		if !ok {
@@ -165,13 +165,13 @@ func RequireChainKeyUnchanged(key string) strategicpatch.PreconditionFunc {
 	}
 }
 
-func GetPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
-	preconditions := []strategicpatch.PreconditionFunc{
-		strategicpatch.RequireKeyUnchanged("apiVersion"),
-		strategicpatch.RequireKeyUnchanged("kind"),
-		strategicpatch.RequireMetadataKeyUnchanged("name"),
-		strategicpatch.RequireMetadataKeyUnchanged("namespace"),
-		strategicpatch.RequireKeyUnchanged("status"),
+func GetPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
+	preconditions := []mergepatch.PreconditionFunc{
+		mergepatch.RequireKeyUnchanged("apiVersion"),
+		mergepatch.RequireKeyUnchanged("kind"),
+		mergepatch.RequireMetadataKeyUnchanged("name"),
+		mergepatch.RequireMetadataKeyUnchanged("namespace"),
+		mergepatch.RequireKeyUnchanged("status"),
 	}
 	return preconditions
 }
@@ -195,8 +195,8 @@ var PreconditionSpecField = map[string][]string{
 	},
 }
 
-func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFunc {
-	preconditions := []strategicpatch.PreconditionFunc{}
+func GetConditionalPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
+	preconditions := []mergepatch.PreconditionFunc{}
 
 	if fields, found := PreconditionSpecField[kind]; found {
 		for _, field := range fields {
@@ -209,15 +209,15 @@ func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFu
 	return preconditions
 }
 
-func CheckResourceExists(client *clientset.Clientset, kind, name, namespace string) (bool, error) {
+func CheckResourceExists(client internalclientset.Interface, kind, name, namespace string) (bool, error) {
 	var err error
 	switch kind {
 	case tapi.ResourceKindElastic:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElastic)
-		_, err = client.AppsV1beta1().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	case tapi.ResourceKindPostgres:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
-		_, err = client.AppsV1beta1().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	}
 
 	if err != nil {
@@ -248,7 +248,7 @@ func (err errPreconditionFailed) Error() string {
 	return err.message
 }
 
-func CheckConditionalPrecondition(patchData []byte, fns ...strategicpatch.PreconditionFunc) error {
+func CheckConditionalPrecondition(patchData []byte, fns ...mergepatch.PreconditionFunc) error {
 	patch := make(map[string]interface{})
 	if err := json.Unmarshal(patchData, &patch); err != nil {
 		return err

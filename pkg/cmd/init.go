@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/appscode/go/types"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
@@ -12,7 +13,7 @@ import (
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
 	extensions "k8s.io/client-go/pkg/apis/extensions/v1beta1"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
@@ -38,8 +39,7 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 		Long:    init_long,
 		Example: init_example,
 		Run: func(cmd *cobra.Command, args []string) {
-			f := kube.NewKubeFactory(cmd)
-			cmdutil.CheckErr(RunInit(f, cmd, out, errOut))
+			cmdutil.CheckErr(RunInit(cmd, out, errOut))
 		},
 	}
 
@@ -47,13 +47,12 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 	return cmd
 }
 
-func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error {
+func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	upgrade := cmdutil.GetFlagBool(cmd, "upgrade")
 	namespace := cmdutil.GetFlagString(cmd, "namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
 
-	f.RESTClient()
-	client, err := f.ClientSet()
+	client, err := kube.NewKubeClient(cmd)
 	if err != nil {
 		return err
 	}
@@ -136,17 +135,17 @@ func RunInit(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer) error
 	return nil
 }
 
-func getOperatorDeployment(client *clientset.Clientset, namespace string) (*extensions.Deployment, error) {
-	return client.ExtensionsClient.Deployments(namespace).Get(docker.OperatorName)
+func getOperatorDeployment(client kubernetes.Interface, namespace string) (*extensions.Deployment, error) {
+	return client.ExtensionsV1beta1().Deployments(namespace).Get(docker.OperatorName, metav1.GetOptions{})
 }
 
 var operatorLabel = map[string]string{
 	"app": docker.OperatorName,
 }
 
-func createOperatorDeployment(client *clientset.Clientset, namespace, version string) error {
+func createOperatorDeployment(client kubernetes.Interface, namespace, version string) error {
 	deployment := &extensions.Deployment{
-		ObjectMeta: apiv1.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
 		},
@@ -154,9 +153,9 @@ func createOperatorDeployment(client *clientset.Clientset, namespace, version st
 			Selector: &metav1.LabelSelector{
 				MatchLabels: operatorLabel,
 			},
-			Replicas: 1,
+			Replicas: types.Int32P(1),
 			Template: apiv1.PodTemplateSpec{
-				ObjectMeta: apiv1.ObjectMeta{
+				ObjectMeta: metav1.ObjectMeta{
 					Labels: operatorLabel,
 				},
 				Spec: apiv1.PodSpec{
@@ -194,13 +193,13 @@ func createOperatorDeployment(client *clientset.Clientset, namespace, version st
 		},
 	}
 
-	_, err := client.ExtensionsClient.Deployments(namespace).Create(deployment)
+	_, err := client.ExtensionsV1beta1().Deployments(namespace).Create(deployment)
 	return err
 }
 
-func createOperatorService(client *clientset.Clientset, namespace string) error {
+func createOperatorService(client kubernetes.Interface, namespace string) error {
 	svc := &apiv1.Service{
-		ObjectMeta: apiv1.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
 		},
@@ -218,11 +217,11 @@ func createOperatorService(client *clientset.Clientset, namespace string) error 
 		},
 	}
 
-	_, err := client.Core().Services(namespace).Create(svc)
+	_, err := client.CoreV1().Services(namespace).Create(svc)
 	return err
 }
 
-func updateOperatorDeployment(client *clientset.Clientset, deployment *extensions.Deployment) error {
-	_, err := client.ExtensionsClient.Deployments(deployment.Namespace).Update(deployment)
+func updateOperatorDeployment(client kubernetes.Interface, deployment *extensions.Deployment) error {
+	_, err := client.ExtensionsV1beta1().Deployments(deployment.Namespace).Update(deployment)
 	return err
 }

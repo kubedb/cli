@@ -20,16 +20,18 @@ import (
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
-	"k8s.io/kubernetes/pkg/api/meta"
-	"k8s.io/kubernetes/pkg/kubectl"
+	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/mergepatch"
+	"k8s.io/apimachinery/pkg/util/strategicpatch"
+	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
-	"k8s.io/kubernetes/pkg/util/yaml"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
 var (
@@ -269,7 +271,7 @@ func visitToPatch(
 		preconditions := util.GetPreconditionFunc(kind)
 		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
 		if err != nil {
-			if strategicpatch.IsPreconditionFailed(err) {
+			if mergepatch.IsPreconditionFailed(err) {
 				return preconditionFailedError()
 			}
 			return err
@@ -292,7 +294,7 @@ func visitToPatch(
 
 		results.version = defaultVersion
 		h := resource.NewHelper(extClient.RESTClient(), info.Mapping)
-		patched, err := extClient.RESTClient().Patch(apiv1.MergePatchType).
+		patched, err := extClient.RESTClient().Patch(types.MergePatchType).
 			NamespaceIfScoped(info.Namespace, h.NamespaceScoped).
 			Resource(h.Resource).
 			Name(info.Name).
@@ -325,10 +327,10 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 		ObjectTyper:  typer,
 		RESTMapper:   mapper,
 		ClientMapper: resource.ClientMapperFunc(f.UnstructuredClientForMapping),
-		Decoder:      runtime.UnstructuredJSONScheme,
+		Decoder:      unstructured.UnstructuredJSONScheme,
 	}
 
-	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()
@@ -381,7 +383,7 @@ func (h *editHeader) flush() {
 }
 
 type editPrinterOptions struct {
-	printer   kubectl.ResourcePrinter
+	printer   printers.ResourcePrinter
 	ext       string
 	addHeader bool
 }

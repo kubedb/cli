@@ -7,38 +7,41 @@ import (
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/client-go/pkg/api"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
-	"k8s.io/kubernetes/pkg/kubectl"
+	kapi "k8s.io/kubernetes/pkg/api"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
-func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
-		apiv1.ListOptions{
+		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
 					amc.LabelDatabaseKind: tapi.ResourceKindElastic,
 					amc.LabelDatabaseName: item.Name,
 				},
-			),
+			).String(),
 		},
 	)
 	if err != nil {
 		return "", err
 	}
 
-	var events *apiv1.EventList
+	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
-			events, err = clientSet.Core().Events(item.Namespace).Search(ref)
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
 			}
@@ -82,33 +85,33 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 	})
 }
 
-func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
-		apiv1.ListOptions{
+		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
 					amc.LabelDatabaseKind: tapi.ResourceKindPostgres,
 					amc.LabelDatabaseName: item.Name,
 				},
-			),
+			).String(),
 		},
 	)
 	if err != nil {
 		return "", err
 	}
 
-	var events *apiv1.EventList
+	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
-			events, err = clientSet.Core().Events(item.Namespace).Search(ref)
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
 			}
@@ -154,19 +157,19 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
-	var events *apiv1.EventList
+	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
-			events, err = clientSet.Core().Events(item.Namespace).Search(ref)
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
 			}
@@ -201,33 +204,33 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatabase, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatabase, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
-		apiv1.ListOptions{
+		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
 					amc.LabelDatabaseKind: item.Labels[amc.LabelDatabaseKind],
 					amc.LabelDatabaseName: item.Name,
 				},
-			),
+			).String(),
 		},
 	)
 	if err != nil {
 		return "", err
 	}
 
-	var events *apiv1.EventList
+	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
-			events, err = clientSet.Core().Events(item.Namespace).Search(ref)
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
 			}
@@ -311,7 +314,7 @@ func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
 	}
 
 	fmt.Fprint(out, "Snapshots:\n")
-	w := kubectl.GetNewTabWriter(out)
+	w := printers.GetNewTabWriter(out)
 
 	fmt.Fprint(w, "  Name\tBucket\tStartTime\tCompletionTime\tPhase\n")
 	fmt.Fprint(w, "  ----\t------\t---------\t--------------\t-----\n")

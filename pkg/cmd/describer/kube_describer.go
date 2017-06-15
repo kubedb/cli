@@ -11,9 +11,9 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
+	kapi "k8s.io/kubernetes/pkg/api"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
-	"k8s.io/kubernetes/pkg/kubectl"
+	printers "k8s.io/kubernetes/pkg/printers"
 )
 
 func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out io.Writer) {
@@ -22,7 +22,7 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 		return
 	}
 
-	ps, err := clientSet.Apps().StatefulSets(namespace).Get(name)
+	ps, err := clientSet.Apps().StatefulSets(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return
 	}
@@ -47,20 +47,20 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 }
 
 func getPodStatusForController(c coreclient.PodInterface, selector labels.Selector) (running, waiting, succeeded, failed int, err error) {
-	options := apiv1.ListOptions{LabelSelector: selector}
+	options := metav1.ListOptions{LabelSelector: selector.String()}
 	rcPods, err := c.List(options)
 	if err != nil {
 		return
 	}
 	for _, pod := range rcPods.Items {
 		switch pod.Status.Phase {
-		case apiv1.PodRunning:
+		case kapi.PodRunning:
 			running++
-		case apiv1.PodPending:
+		case kapi.PodPending:
 			waiting++
-		case apiv1.PodSucceeded:
+		case kapi.PodSucceeded:
 			succeeded++
-		case apiv1.PodFailed:
+		case kapi.PodFailed:
 			failed++
 		}
 	}
@@ -75,7 +75,7 @@ func (d *humanReadableDescriber) describeService(namespace, name string, out io.
 
 	c := clientSet.Core().Services(namespace)
 
-	service, err := c.Get(name)
+	service, err := c.Get(name, metav1.GetOptions{})
 	if err != nil {
 		return
 	}
@@ -110,7 +110,7 @@ func (d *humanReadableDescriber) describeService(namespace, name string, out io.
 	}
 }
 
-func buildIngressString(ingress []apiv1.LoadBalancerIngress) string {
+func buildIngressString(ingress []kapi.LoadBalancerIngress) string {
 	var buffer bytes.Buffer
 
 	for i := range ingress {
@@ -134,7 +134,7 @@ func (d *humanReadableDescriber) describeSecret(namespace, name string, prefix s
 
 	c := clientSet.Core().Secrets(namespace)
 
-	secret, err := c.Get(name)
+	secret, err := c.Get(name, metav1.GetOptions{})
 	if err != nil {
 		return
 	}
@@ -154,7 +154,7 @@ func (d *humanReadableDescriber) describeSecret(namespace, name string, prefix s
 	}
 }
 
-func describeEvents(el *apiv1.EventList, out io.Writer) {
+func describeEvents(el *kapi.EventList, out io.Writer) {
 	fmt.Fprint(out, "\n")
 	if len(el.Items) == 0 {
 		fmt.Fprint(out, "No events.\n")
@@ -164,7 +164,7 @@ func describeEvents(el *apiv1.EventList, out io.Writer) {
 	sort.Sort(util.SortableEvents(el.Items))
 
 	fmt.Fprint(out, "Events:\n")
-	w := kubectl.GetNewTabWriter(out)
+	w := printers.GetNewTabWriter(out)
 
 	fmt.Fprint(w, "  FirstSeen\tLastSeen\tCount\tFrom\tType\tReason\tMessage\n")
 	fmt.Fprint(w, "  ---------\t--------\t-----\t----\t--------\t------\t-------\n")
