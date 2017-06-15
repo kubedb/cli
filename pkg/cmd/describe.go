@@ -9,7 +9,7 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
-	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/kubernetes/pkg/runtime"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"

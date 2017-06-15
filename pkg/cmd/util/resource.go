@@ -13,7 +13,7 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/util/json"
-	"k8s.io/kubernetes/pkg/util/strategicpatch"
+	"k8s.io/apimachinery/pkg/util/strategicpatch"
 )
 
 func GetSupportedResource(resource string) (string, error) {
