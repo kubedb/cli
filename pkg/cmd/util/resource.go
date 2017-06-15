@@ -3,14 +3,13 @@ package util
 import (
 	"fmt"
 	"strings"
-
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
-	k8serr "k8s.io/kubernetes/pkg/api/errors"
-	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
+kerr "k8s.io/apimachinery/pkg/api/errors"
+clientset "k8s.io/client-go/kubernetes"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/runtime"
+"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kubernetes/pkg/util/json"
 	"k8s.io/kubernetes/pkg/util/strategicpatch"
 )
@@ -93,7 +92,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 	for key, val := range resources {
 		_, err := clientset.ThirdPartyResources().Get(key + "." + tapi.V1alpha1SchemeGroupVersion.Group)
 		if err != nil {
-			if k8serr.IsNotFound(err) {
+			if kerr.IsNotFound(err) {
 				continue
 			}
 			return nil, err
@@ -208,7 +207,7 @@ func GetConditionalPreconditionFunc(kind string) []strategicpatch.PreconditionFu
 	return preconditions
 }
 
-func CheckResourceExists(client *internalclientset.Clientset, kind, name, namespace string) (bool, error) {
+func CheckResourceExists(client *clientset.Clientset, kind, name, namespace string) (bool, error) {
 	var err error
 	switch kind {
 	case tapi.ResourceKindElastic:
@@ -220,7 +219,7 @@ func CheckResourceExists(client *internalclientset.Clientset, kind, name, namesp
 	}
 
 	if err != nil {
-		if k8serr.IsNotFound(err) {
+		if kerr.IsNotFound(err) {
 			return false, nil
 		}
 		return false, err

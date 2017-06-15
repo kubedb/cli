@@ -2,9 +2,8 @@ package printer
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
-	kapi "k8s.io/kubernetes/pkg/api"
+apiv1 "k8s.io/client-go/pkg/api/v1"
 	"k8s.io/kubernetes/pkg/kubectl"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
@@ -28,8 +27,8 @@ func NewPrinter(cmd *cobra.Command) (kubectl.ResourcePrinter, error) {
 		return &kubectl.YAMLPrinter{}, nil
 	case "name":
 		return &kubectl.NamePrinter{
-			Typer:   kapi.Scheme,
-			Decoder: kapi.Codecs.UniversalDecoder(),
+			Typer:   apiv1.Scheme,
+			Decoder: apiv1.Codecs.UniversalDecoder(),
 		}, nil
 	case "wide":
 		fallthrough

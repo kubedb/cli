@@ -4,8 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-
-	"k8s.io/kubernetes/pkg/runtime"
+"k8s.io/apimachinery/pkg/runtime"
 )
 
 func Encode(obj runtime.Object) ([]byte, error) {

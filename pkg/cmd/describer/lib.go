@@ -7,8 +7,7 @@ import (
 	"sort"
 	"text/tabwriter"
 	"time"
-
-	"k8s.io/kubernetes/pkg/api/unversioned"
+metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func tabbedString(f func(io.Writer) error) (string, error) {
@@ -56,7 +55,7 @@ func printLabelsMultilineWithIndent(out io.Writer, initialIndent, title, innerIn
 	}
 }
 
-func timeToString(t *unversioned.Time) string {
+func timeToString(t *metav1.Time) string {
 	if t == nil {
 		return ""
 	}

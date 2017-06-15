@@ -2,7 +2,6 @@ package editor
 
 import (
 	"os"
-
 	"k8s.io/kubernetes/pkg/kubectl/cmd/util/editor"
 )
 

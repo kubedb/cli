@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
-
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
@@ -19,15 +18,15 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
-	kapi "k8s.io/kubernetes/pkg/api"
-	k8serr "k8s.io/kubernetes/pkg/api/errors"
+apiv1 "k8s.io/client-go/pkg/api/v1"
+kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/kubernetes/pkg/api/meta"
-	"k8s.io/kubernetes/pkg/api/unversioned"
+metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
-	"k8s.io/kubernetes/pkg/runtime"
+"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kubernetes/pkg/util/strategicpatch"
 	"k8s.io/kubernetes/pkg/util/yaml"
 )
@@ -180,7 +179,7 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 
 			containsError = false
 
-			err = visitToPatch(f, originalObj, updates, mapper, resourceMapper, out, unversioned.GroupVersion{}, &results)
+			err = visitToPatch(f, originalObj, updates, mapper, resourceMapper, out, metav1.GroupVersion{}, &results)
 			if err != nil {
 				return preservedFile(err, results.file, errOut)
 			}
@@ -215,7 +214,7 @@ func visitToPatch(
 	mapper meta.RESTMapper,
 	resourceMapper *resource.Mapper,
 	out io.Writer,
-	defaultVersion unversioned.GroupVersion,
+	defaultVersion metav1.GroupVersion,
 	results *editResults,
 ) error {
 	client, err := f.ClientSet()
@@ -292,7 +291,7 @@ func visitToPatch(
 
 		results.version = defaultVersion
 		h := resource.NewHelper(extClient.RESTClient(), info.Mapping)
-		patched, err := extClient.RESTClient().Patch(kapi.MergePatchType).
+		patched, err := extClient.RESTClient().Patch(apiv1.MergePatchType).
 			NamespaceIfScoped(info.Namespace, h.NamespaceScoped).
 			Resource(h.Resource).
 			Name(info.Name).
@@ -393,17 +392,17 @@ type editResults struct {
 	edit     []*resource.Info
 	file     string
 
-	version unversioned.GroupVersion
+	version metav1.GroupVersion
 }
 
 func (r *editResults) addError(err error, info *resource.Info) string {
 	switch {
-	case k8serr.IsInvalid(err):
+	case kerr.IsInvalid(err):
 		r.edit = append(r.edit, info)
 		reason := editReason{
 			head: fmt.Sprintf("%s %q was not valid", info.Mapping.Resource, info.Name),
 		}
-		if err, ok := err.(k8serr.APIStatus); ok {
+		if err, ok := err.(kerr.APIStatus); ok {
 			if details := err.Status().Details; details != nil {
 				for _, cause := range details.Causes {
 					reason.other = append(reason.other, fmt.Sprintf("%s: %s", cause.Field, cause.Message))
@@ -412,7 +411,7 @@ func (r *editResults) addError(err error, info *resource.Info) string {
 		}
 		r.header.reasons = append(r.header.reasons, reason)
 		return fmt.Sprintf("error: %s %q is invalid", info.Mapping.Resource, info.Name)
-	case k8serr.IsNotFound(err):
+	case kerr.IsNotFound(err):
 		r.notfound++
 		return fmt.Sprintf("error: %s %q could not be found on the server", info.Mapping.Resource, info.Name)
 	default:

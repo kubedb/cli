@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"io"
-
 	v "github.com/appscode/go/version"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
 	"github.com/spf13/cobra"

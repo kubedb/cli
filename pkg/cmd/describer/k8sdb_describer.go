@@ -3,13 +3,12 @@ package describer
 import (
 	"fmt"
 	"io"
-
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
-	kapi "k8s.io/kubernetes/pkg/api"
+apiv1 "k8s.io/client-go/pkg/api/v1"
 	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/labels"
+"k8s.io/apimachinery/pkg/labels"
 )
 
 func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *kubectl.DescriberSettings) (string, error) {
@@ -19,7 +18,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 	}
 
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
-		kapi.ListOptions{
+		apiv1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
 					amc.LabelDatabaseKind: tapi.ResourceKindElastic,
@@ -32,9 +31,9 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		return "", err
 	}
 
-	var events *kapi.EventList
+	var events *apiv1.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
@@ -89,7 +88,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 	}
 
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
-		kapi.ListOptions{
+		apiv1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
 					amc.LabelDatabaseKind: tapi.ResourceKindPostgres,
@@ -102,9 +101,9 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		return "", err
 	}
 
-	var events *kapi.EventList
+	var events *apiv1.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
@@ -160,9 +159,9 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 		return "", err
 	}
 
-	var events *kapi.EventList
+	var events *apiv1.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
@@ -208,7 +207,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 	}
 
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
-		kapi.ListOptions{
+		apiv1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
 					amc.LabelDatabaseKind: item.Labels[amc.LabelDatabaseKind],
@@ -221,9 +220,9 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 		return "", err
 	}
 
-	var events *kapi.EventList
+	var events *apiv1.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(item); err != nil {
+		if ref, err := apiv1.GetReference(item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
 			ref.Kind = ""
@@ -275,8 +274,8 @@ func describeStorage(storage *tapi.StorageSpec, out io.Writer) {
 		return
 	}
 
-	accessModes := kapi.GetAccessModesAsString(storage.AccessModes)
-	val, _ := storage.Resources.Requests[kapi.ResourceStorage]
+	accessModes := apiv1.GetAccessModesAsString(storage.AccessModes)
+	val, _ := storage.Resources.Requests[apiv1.ResourceStorage]
 	capacity := val.String()
 	fmt.Fprint(out, "Volume:\n")
 	fmt.Fprintf(out, "  StorageClass:\t%s\n", storage.Class)

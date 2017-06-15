@@ -6,14 +6,13 @@ import (
 	"io"
 	"sort"
 	"strings"
-
 	"github.com/k8sdb/cli/pkg/cmd/printer"
 	"github.com/k8sdb/cli/pkg/cmd/util"
-	kapi "k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/unversioned"
+apiv1 "k8s.io/client-go/pkg/api/v1"
+metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
 	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/labels"
+"k8s.io/apimachinery/pkg/labels"
 )
 
 func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out io.Writer) {
@@ -28,7 +27,7 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 	}
 	pc := clientSet.Core().Pods(namespace)
 
-	selector, err := unversioned.LabelSelectorAsSelector(ps.Spec.Selector)
+	selector, err := metav1.LabelSelectorAsSelector(ps.Spec.Selector)
 	if err != nil {
 		return
 	}
@@ -47,20 +46,20 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 }
 
 func getPodStatusForController(c coreclient.PodInterface, selector labels.Selector) (running, waiting, succeeded, failed int, err error) {
-	options := kapi.ListOptions{LabelSelector: selector}
+	options := apiv1.ListOptions{LabelSelector: selector}
 	rcPods, err := c.List(options)
 	if err != nil {
 		return
 	}
 	for _, pod := range rcPods.Items {
 		switch pod.Status.Phase {
-		case kapi.PodRunning:
+		case apiv1.PodRunning:
 			running++
-		case kapi.PodPending:
+		case apiv1.PodPending:
 			waiting++
-		case kapi.PodSucceeded:
+		case apiv1.PodSucceeded:
 			succeeded++
-		case kapi.PodFailed:
+		case apiv1.PodFailed:
 			failed++
 		}
 	}
@@ -110,7 +109,7 @@ func (d *humanReadableDescriber) describeService(namespace, name string, out io.
 	}
 }
 
-func buildIngressString(ingress []kapi.LoadBalancerIngress) string {
+func buildIngressString(ingress []apiv1.LoadBalancerIngress) string {
 	var buffer bytes.Buffer
 
 	for i := range ingress {
@@ -154,7 +153,7 @@ func (d *humanReadableDescriber) describeSecret(namespace, name string, prefix s
 	}
 }
 
-func describeEvents(el *kapi.EventList, out io.Writer) {
+func describeEvents(el *apiv1.EventList, out io.Writer) {
 	fmt.Fprint(out, "\n")
 	if len(el.Items) == 0 {
 		fmt.Fprint(out, "No events.\n")
