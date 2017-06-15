@@ -8,6 +8,7 @@ import (
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientset "k8s.io/client-go/kubernetes"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -213,10 +214,10 @@ func CheckResourceExists(client *clientset.Clientset, kind, name, namespace stri
 	switch kind {
 	case tapi.ResourceKindElastic:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElastic)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName)
+		_, err = client.AppsV1beta1().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	case tapi.ResourceKindPostgres:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName)
+		_, err = client.AppsV1beta1().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	}
 
 	if err != nil {
