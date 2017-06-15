@@ -1,8 +1,7 @@
 package api
 
 import (
-	"k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/unversioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -13,10 +12,10 @@ const (
 )
 
 type Snapshot struct {
-	unversioned.TypeMeta `json:",inline,omitempty"`
-	api.ObjectMeta       `json:"metadata,omitempty"`
-	Spec                 SnapshotSpec   `json:"spec,omitempty"`
-	Status               SnapshotStatus `json:"status,omitempty"`
+	metav1.TypeMeta   `json:",inline,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              SnapshotSpec   `json:"spec,omitempty"`
+	Status            SnapshotStatus `json:"status,omitempty"`
 }
 
 type SnapshotSpec struct {
@@ -38,15 +37,15 @@ const (
 )
 
 type SnapshotStatus struct {
-	StartTime      *unversioned.Time `json:"startTime,omitempty"`
-	CompletionTime *unversioned.Time `json:"completionTime,omitempty"`
-	Phase          SnapshotPhase     `json:"phase,omitempty"`
-	Reason         string            `json:"reason,omitempty"`
+	StartTime      *metav1.Time  `json:"startTime,omitempty"`
+	CompletionTime *metav1.Time  `json:"completionTime,omitempty"`
+	Phase          SnapshotPhase `json:"phase,omitempty"`
+	Reason         string        `json:"reason,omitempty"`
 }
 
 type SnapshotList struct {
-	unversioned.TypeMeta `json:",inline"`
-	unversioned.ListMeta `json:"metadata,omitempty"`
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Snapshot TPR objects
 	Items []Snapshot `json:"items,omitempty"`
 }

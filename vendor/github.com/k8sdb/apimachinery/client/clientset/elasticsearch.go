@@ -2,9 +2,9 @@ package clientset
 
 import (
 	aci "github.com/k8sdb/apimachinery/api"
-	"k8s.io/kubernetes/pkg/api"
-	rest "k8s.io/kubernetes/pkg/client/restclient"
-	"k8s.io/kubernetes/pkg/watch"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/rest"
 )
 
 type ElasticNamespacer interface {
@@ -12,12 +12,12 @@ type ElasticNamespacer interface {
 }
 
 type ElasticInterface interface {
-	List(opts api.ListOptions) (*aci.ElasticList, error)
+	List(opts metav1.ListOptions) (*aci.ElasticList, error)
 	Get(name string) (*aci.Elastic, error)
 	Create(elastic *aci.Elastic) (*aci.Elastic, error)
 	Update(elastic *aci.Elastic) (*aci.Elastic, error)
 	Delete(name string) error
-	Watch(opts api.ListOptions) (watch.Interface, error)
+	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	UpdateStatus(elastic *aci.Elastic) (*aci.Elastic, error)
 }
 
@@ -32,7 +32,7 @@ func newElastic(c *ExtensionClient, namespace string) *ElasticImpl {
 	return &ElasticImpl{c.restClient, namespace}
 }
 
-func (c *ElasticImpl) List(opts api.ListOptions) (result *aci.ElasticList, err error) {
+func (c *ElasticImpl) List(opts metav1.ListOptions) (result *aci.ElasticList, err error) {
 	result = &aci.ElasticList{}
 	err = c.r.Get().
 		Namespace(c.ns).
@@ -86,7 +86,7 @@ func (c *ElasticImpl) Delete(name string) (err error) {
 		Error()
 }
 
-func (c *ElasticImpl) Watch(opts api.ListOptions) (watch.Interface, error) {
+func (c *ElasticImpl) Watch(opts metav1.ListOptions) (watch.Interface, error) {
 	return c.r.Get().
 		Prefix("watch").
 		Namespace(c.ns).

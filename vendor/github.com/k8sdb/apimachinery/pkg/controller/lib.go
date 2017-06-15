@@ -14,13 +14,14 @@ import (
 	_ "github.com/graymeta/stow/s3"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/eventer"
-	kapi "k8s.io/kubernetes/pkg/api"
-	k8serr "k8s.io/kubernetes/pkg/api/errors"
-	kapps "k8s.io/kubernetes/pkg/apis/apps"
-	kbatch "k8s.io/kubernetes/pkg/apis/batch"
-	"k8s.io/kubernetes/pkg/client/record"
-	"k8s.io/kubernetes/pkg/labels"
-	"k8s.io/kubernetes/pkg/runtime"
+	kerr "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
+	apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
+	batch "k8s.io/client-go/pkg/apis/batch/v1"
+	"k8s.io/client-go/tools/record"
 )
 
 func (c *Controller) ValidateStorageSpec(spec *tapi.StorageSpec) (*tapi.StorageSpec, error) {
@@ -32,21 +33,21 @@ func (c *Controller) ValidateStorageSpec(spec *tapi.StorageSpec) (*tapi.StorageS
 		return nil, fmt.Errorf(`Object 'Class' is missing in '%v'`, *spec)
 	}
 
-	if _, err := c.Client.Storage().StorageClasses().Get(spec.Class); err != nil {
-		if k8serr.IsNotFound(err) {
+	if _, err := c.Client.StorageV1().StorageClasses().Get(spec.Class, metav1.GetOptions{}); err != nil {
+		if kerr.IsNotFound(err) {
 			return nil, fmt.Errorf(`Spec.Storage.Class "%v" not found`, spec.Class)
 		}
 		return nil, err
 	}
 
 	if len(spec.AccessModes) == 0 {
-		spec.AccessModes = []kapi.PersistentVolumeAccessMode{
-			kapi.ReadWriteOnce,
+		spec.AccessModes = []apiv1.PersistentVolumeAccessMode{
+			apiv1.ReadWriteOnce,
 		}
-		log.Infof(`Using "%v" as AccessModes in "%v"`, kapi.ReadWriteOnce, *spec)
+		log.Infof(`Using "%v" as AccessModes in "%v"`, apiv1.ReadWriteOnce, *spec)
 	}
 
-	if val, found := spec.Resources.Requests[kapi.ResourceStorage]; found {
+	if val, found := spec.Resources.Requests[apiv1.ResourceStorage]; found {
 		if val.Value() <= 0 {
 			return nil, errors.New("Invalid ResourceStorage request")
 		}
@@ -96,7 +97,7 @@ const (
 )
 
 func (c *Controller) CheckBucketAccess(snapshotSpec tapi.SnapshotStorageSpec, namespace string) error {
-	secret, err := c.Client.Core().Secrets(namespace).Get(snapshotSpec.StorageSecret.SecretName)
+	secret, err := c.Client.CoreV1().Secrets(namespace).Get(snapshotSpec.StorageSecret.SecretName, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
@@ -137,18 +138,18 @@ func (c *Controller) CheckBucketAccess(snapshotSpec tapi.SnapshotStorageSpec, na
 	return nil
 }
 
-func (c *Controller) CheckStatefulSetPodStatus(statefulSet *kapps.StatefulSet, checkDuration time.Duration) error {
+func (c *Controller) CheckStatefulSetPodStatus(statefulSet *apps.StatefulSet, checkDuration time.Duration) error {
 	podName := fmt.Sprintf("%v-%v", statefulSet.Name, 0)
 
 	podReady := false
 	then := time.Now()
 	now := time.Now()
 	for now.Sub(then) < checkDuration {
-		pod, err := c.Client.Core().Pods(statefulSet.Namespace).Get(podName)
+		pod, err := c.Client.CoreV1().Pods(statefulSet.Namespace).Get(podName, metav1.GetOptions{})
 		if err != nil {
-			if k8serr.IsNotFound(err) {
-				_, err := c.Client.Apps().StatefulSets(statefulSet.Namespace).Get(statefulSet.Name)
-				if k8serr.IsNotFound(err) {
+			if kerr.IsNotFound(err) {
+				_, err := c.Client.AppsV1beta1().StatefulSets(statefulSet.Namespace).Get(statefulSet.Name, metav1.GetOptions{})
+				if kerr.IsNotFound(err) {
 					break
 				}
 
@@ -162,7 +163,7 @@ func (c *Controller) CheckStatefulSetPodStatus(statefulSet *kapps.StatefulSet, c
 		log.Debugf("Pod Phase: %v", pod.Status.Phase)
 
 		// If job is success
-		if pod.Status.Phase == kapi.PodRunning {
+		if pod.Status.Phase == apiv1.PodRunning {
 			podReady = true
 			break
 		}
@@ -177,9 +178,9 @@ func (c *Controller) CheckStatefulSetPodStatus(statefulSet *kapps.StatefulSet, c
 }
 
 func (c *Controller) DeletePersistentVolumeClaims(namespace string, selector labels.Selector) error {
-	pvcList, err := c.Client.Core().PersistentVolumeClaims(namespace).List(
-		kapi.ListOptions{
-			LabelSelector: selector,
+	pvcList, err := c.Client.CoreV1().PersistentVolumeClaims(namespace).List(
+		metav1.ListOptions{
+			LabelSelector: selector.String(),
 		},
 	)
 	if err != nil {
@@ -187,7 +188,7 @@ func (c *Controller) DeletePersistentVolumeClaims(namespace string, selector lab
 	}
 
 	for _, pvc := range pvcList.Items {
-		if err := c.Client.Core().PersistentVolumeClaims(pvc.Namespace).Delete(pvc.Name, nil); err != nil {
+		if err := c.Client.CoreV1().PersistentVolumeClaims(pvc.Namespace).Delete(pvc.Name, nil); err != nil {
 			return err
 		}
 	}
@@ -195,7 +196,7 @@ func (c *Controller) DeletePersistentVolumeClaims(namespace string, selector lab
 }
 
 func (c *Controller) DeleteSnapshotData(snapshot *tapi.Snapshot) error {
-	secret, err := c.Client.Core().Secrets(snapshot.Namespace).Get(snapshot.Spec.StorageSecret.SecretName)
+	secret, err := c.Client.CoreV1().Secrets(snapshot.Namespace).Get(snapshot.Spec.StorageSecret.SecretName, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
@@ -247,8 +248,8 @@ func (c *Controller) DeleteSnapshotData(snapshot *tapi.Snapshot) error {
 
 func (c *Controller) DeleteSnapshots(namespace string, selector labels.Selector) error {
 	snapshotList, err := c.ExtClient.Snapshots(namespace).List(
-		kapi.ListOptions{
-			LabelSelector: selector,
+		metav1.ListOptions{
+			LabelSelector: selector.String(),
 		},
 	)
 	if err != nil {
@@ -264,7 +265,7 @@ func (c *Controller) DeleteSnapshots(namespace string, selector labels.Selector)
 }
 
 func (c *Controller) CheckDatabaseRestoreJob(
-	job *kbatch.Job,
+	job *batch.Job,
 	runtimeObj runtime.Object,
 	recorder record.EventRecorder,
 	checkDuration time.Duration,
@@ -276,16 +277,16 @@ func (c *Controller) CheckDatabaseRestoreJob(
 	now := time.Now()
 	for now.Sub(then) < checkDuration {
 		log.Debugln("Checking for Job ", job.Name)
-		job, err = c.Client.Batch().Jobs(job.Namespace).Get(job.Name)
+		job, err = c.Client.BatchV1().Jobs(job.Namespace).Get(job.Name, metav1.GetOptions{})
 		if err != nil {
-			if k8serr.IsNotFound(err) {
+			if kerr.IsNotFound(err) {
 				time.Sleep(sleepDuration)
 				now = time.Now()
 				continue
 			}
 			recorder.Eventf(
 				runtimeObj,
-				kapi.EventTypeWarning,
+				apiv1.EventTypeWarning,
 				eventer.EventReasonFailedToList,
 				"Failed to get Job. Reason: %v",
 				err,
@@ -311,15 +312,15 @@ func (c *Controller) CheckDatabaseRestoreJob(
 		return false
 	}
 
-	podList, err := c.Client.Core().Pods(job.Namespace).List(
-		kapi.ListOptions{
-			LabelSelector: labels.SelectorFromSet(job.Spec.Selector.MatchLabels),
+	podList, err := c.Client.CoreV1().Pods(job.Namespace).List(
+		metav1.ListOptions{
+			LabelSelector: labels.SelectorFromSet(job.Spec.Selector.MatchLabels).String(),
 		},
 	)
 	if err != nil {
 		recorder.Eventf(
 			runtimeObj,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToList,
 			"Failed to list Pods. Reason: %v",
 			err,
@@ -332,7 +333,7 @@ func (c *Controller) CheckDatabaseRestoreJob(
 		if err := c.Client.Core().Pods(pod.Namespace).Delete(pod.Name, nil); err != nil {
 			recorder.Eventf(
 				runtimeObj,
-				kapi.EventTypeWarning,
+				apiv1.EventTypeWarning,
 				eventer.EventReasonFailedToDelete,
 				"Failed to delete Pod. Reason: %v",
 				err,
@@ -344,11 +345,11 @@ func (c *Controller) CheckDatabaseRestoreJob(
 	for _, volume := range job.Spec.Template.Spec.Volumes {
 		claim := volume.PersistentVolumeClaim
 		if claim != nil {
-			err := c.Client.Core().PersistentVolumeClaims(job.Namespace).Delete(claim.ClaimName, nil)
+			err := c.Client.CoreV1().PersistentVolumeClaims(job.Namespace).Delete(claim.ClaimName, nil)
 			if err != nil {
 				recorder.Eventf(
 					runtimeObj,
-					kapi.EventTypeWarning,
+					apiv1.EventTypeWarning,
 					eventer.EventReasonFailedToDelete,
 					"Failed to delete PersistentVolumeClaim. Reason: %v",
 					err,
@@ -358,10 +359,10 @@ func (c *Controller) CheckDatabaseRestoreJob(
 		}
 	}
 
-	if err := c.Client.Batch().Jobs(job.Namespace).Delete(job.Name, nil); err != nil {
+	if err := c.Client.BatchV1().Jobs(job.Namespace).Delete(job.Name, nil); err != nil {
 		recorder.Eventf(
 			runtimeObj,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToDelete,
 			"Failed to delete Job. Reason: %v",
 			err,
@@ -373,9 +374,9 @@ func (c *Controller) CheckDatabaseRestoreJob(
 }
 
 func (c *Controller) checkGoverningService(name, namespace string) (bool, error) {
-	_, err := c.Client.Core().Services(namespace).Get(name)
+	_, err := c.Client.CoreV1().Services(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
-		if k8serr.IsNotFound(err) {
+		if kerr.IsNotFound(err) {
 			return false, nil
 		} else {
 			return false, err
@@ -395,23 +396,23 @@ func (c *Controller) CreateGoverningService(name, namespace string) error {
 		return nil
 	}
 
-	service := &kapi.Service{
-		ObjectMeta: kapi.ObjectMeta{
+	service := &apiv1.Service{
+		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
-		Spec: kapi.ServiceSpec{
-			Type:      kapi.ServiceTypeClusterIP,
-			ClusterIP: kapi.ClusterIPNone,
+		Spec: apiv1.ServiceSpec{
+			Type:      apiv1.ServiceTypeClusterIP,
+			ClusterIP: apiv1.ClusterIPNone,
 		},
 	}
-	_, err = c.Client.Core().Services(namespace).Create(service)
+	_, err = c.Client.CoreV1().Services(namespace).Create(service)
 	return err
 }
 
 func (c *Controller) DeleteService(name, namespace string) error {
-	service, err := c.Client.Core().Services(namespace).Get(name)
+	service, err := c.Client.CoreV1().Services(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
-		if k8serr.IsNotFound(err) {
+		if kerr.IsNotFound(err) {
 			return nil
 		} else {
 			return err
@@ -422,13 +423,13 @@ func (c *Controller) DeleteService(name, namespace string) error {
 		return nil
 	}
 
-	return c.Client.Core().Services(namespace).Delete(name, nil)
+	return c.Client.CoreV1().Services(namespace).Delete(name, nil)
 }
 
 func (c *Controller) DeleteStatefulSet(name, namespace string) error {
-	statefulSet, err := c.Client.Apps().StatefulSets(namespace).Get(name)
+	statefulSet, err := c.Client.AppsV1beta1().StatefulSets(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
-		if k8serr.IsNotFound(err) {
+		if kerr.IsNotFound(err) {
 			return nil
 		} else {
 			return err
@@ -436,19 +437,18 @@ func (c *Controller) DeleteStatefulSet(name, namespace string) error {
 	}
 
 	// Update StatefulSet
-	statefulSet.Spec.Replicas = 0
-	if _, err := c.Client.Apps().StatefulSets(statefulSet.Namespace).Update(statefulSet); err != nil {
+	replicas := int32(0)
+	statefulSet.Spec.Replicas = &replicas
+	if _, err := c.Client.AppsV1beta1().StatefulSets(statefulSet.Namespace).Update(statefulSet); err != nil {
 		return err
 	}
-
-	labelSelector := labels.SelectorFromSet(statefulSet.Spec.Selector.MatchLabels)
 
 	var checkSuccess bool = false
 	then := time.Now()
 	now := time.Now()
 	for now.Sub(then) < time.Minute*10 {
-		podList, err := c.Client.Core().Pods(kapi.NamespaceAll).List(kapi.ListOptions{
-			LabelSelector: labelSelector,
+		podList, err := c.Client.CoreV1().Pods(metav1.NamespaceAll).List(metav1.ListOptions{
+			LabelSelector: labels.Set(statefulSet.Spec.Selector.MatchLabels).AsSelector().String(),
 		})
 		if err != nil {
 			return err
@@ -467,17 +467,17 @@ func (c *Controller) DeleteStatefulSet(name, namespace string) error {
 	}
 
 	// Delete StatefulSet
-	return c.Client.Apps().StatefulSets(statefulSet.Namespace).Delete(statefulSet.Name, nil)
+	return c.Client.AppsV1beta1().StatefulSets(statefulSet.Namespace).Delete(statefulSet.Name, nil)
 }
 
 func (c *Controller) DeleteSecret(name, namespace string) error {
-	if _, err := c.Client.Core().Secrets(namespace).Get(name); err != nil {
-		if k8serr.IsNotFound(err) {
+	if _, err := c.Client.CoreV1().Secrets(namespace).Get(name, metav1.GetOptions{}); err != nil {
+		if kerr.IsNotFound(err) {
 			return nil
 		} else {
 			return err
 		}
 	}
 
-	return c.Client.Core().Secrets(namespace).Delete(name, nil)
+	return c.Client.CoreV1().Secrets(namespace).Delete(name, nil)
 }

@@ -2,8 +2,7 @@ package api
 
 import (
 	"github.com/appscode/go/encoding/json/types"
-	"k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/unversioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -15,10 +14,10 @@ const (
 
 // Elastic defines a Elasticsearch database.
 type Elastic struct {
-	unversioned.TypeMeta `json:",inline,omitempty"`
-	api.ObjectMeta       `json:"metadata,omitempty"`
-	Spec                 ElasticSpec   `json:"spec,omitempty"`
-	Status               ElasticStatus `json:"status,omitempty"`
+	metav1.TypeMeta   `json:",inline,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              ElasticSpec   `json:"spec,omitempty"`
+	Status            ElasticStatus `json:"status,omitempty"`
 }
 
 type ElasticSpec struct {
@@ -47,14 +46,14 @@ type ElasticSpec struct {
 }
 
 type ElasticStatus struct {
-	CreationTime *unversioned.Time `json:"creationTime,omitempty"`
-	Phase        DatabasePhase     `json:"phase,omitempty"`
-	Reason       string            `json:"reason,omitempty"`
+	CreationTime *metav1.Time  `json:"creationTime,omitempty"`
+	Phase        DatabasePhase `json:"phase,omitempty"`
+	Reason       string        `json:"reason,omitempty"`
 }
 
 type ElasticList struct {
-	unversioned.TypeMeta `json:",inline"`
-	unversioned.ListMeta `json:"metadata,omitempty"`
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Elastic TPR objects
 	Items []Elastic `json:"items,omitempty"`
 }

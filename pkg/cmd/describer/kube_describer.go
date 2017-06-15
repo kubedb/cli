@@ -6,13 +6,14 @@ import (
 	"io"
 	"sort"
 	"strings"
+
 	"github.com/k8sdb/cli/pkg/cmd/printer"
 	"github.com/k8sdb/cli/pkg/cmd/util"
-apiv1 "k8s.io/client-go/pkg/api/v1"
-metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
 	"k8s.io/kubernetes/pkg/kubectl"
-"k8s.io/apimachinery/pkg/labels"
 )
 
 func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out io.Writer) {

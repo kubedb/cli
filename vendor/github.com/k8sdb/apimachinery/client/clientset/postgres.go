@@ -2,9 +2,9 @@ package clientset
 
 import (
 	aci "github.com/k8sdb/apimachinery/api"
-	"k8s.io/kubernetes/pkg/api"
-	rest "k8s.io/kubernetes/pkg/client/restclient"
-	"k8s.io/kubernetes/pkg/watch"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/rest"
 )
 
 type PostgresNamespacer interface {
@@ -12,12 +12,12 @@ type PostgresNamespacer interface {
 }
 
 type PostgresInterface interface {
-	List(opts api.ListOptions) (*aci.PostgresList, error)
+	List(opts metav1.ListOptions) (*aci.PostgresList, error)
 	Get(name string) (*aci.Postgres, error)
 	Create(postgres *aci.Postgres) (*aci.Postgres, error)
 	Update(postgres *aci.Postgres) (*aci.Postgres, error)
 	Delete(name string) error
-	Watch(opts api.ListOptions) (watch.Interface, error)
+	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	UpdateStatus(postgres *aci.Postgres) (*aci.Postgres, error)
 }
 
@@ -32,7 +32,7 @@ func newPostgres(c *ExtensionClient, namespace string) *PostgresImpl {
 	return &PostgresImpl{c.restClient, namespace}
 }
 
-func (c *PostgresImpl) List(opts api.ListOptions) (result *aci.PostgresList, err error) {
+func (c *PostgresImpl) List(opts metav1.ListOptions) (result *aci.PostgresList, err error) {
 	result = &aci.PostgresList{}
 	err = c.r.Get().
 		Namespace(c.ns).
@@ -86,7 +86,7 @@ func (c *PostgresImpl) Delete(name string) (err error) {
 		Error()
 }
 
-func (c *PostgresImpl) Watch(opts api.ListOptions) (watch.Interface, error) {
+func (c *PostgresImpl) Watch(opts metav1.ListOptions) (watch.Interface, error) {
 	return c.r.Get().
 		Prefix("watch").
 		Namespace(c.ns).

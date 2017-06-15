@@ -8,15 +8,16 @@ import (
 	"strings"
 	"text/tabwriter"
 	"time"
+
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	"github.com/k8sdb/cli/pkg/cmd/util"
-metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-"k8s.io/apimachinery/pkg/labels"
-"k8s.io/apimachinery/pkg/runtime"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // ref: k8s.io/kubernetes/pkg/kubectl/resource_printer.go

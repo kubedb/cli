@@ -1,7 +1,7 @@
 package util
 
 import (
-apiv1 "k8s.io/client-go/pkg/api/v1"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 // ref: k8s.io/kubernetes/pkg/api/events/sorted_event_list.go

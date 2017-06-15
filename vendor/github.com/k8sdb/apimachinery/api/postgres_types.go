@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/appscode/go/encoding/json/types"
-	"k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/unversioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 const (
@@ -15,10 +15,10 @@ const (
 
 // Postgres defines a Postgres database.
 type Postgres struct {
-	unversioned.TypeMeta `json:",inline,omitempty"`
-	api.ObjectMeta       `json:"metadata,omitempty"`
-	Spec                 PostgresSpec   `json:"spec,omitempty"`
-	Status               PostgresStatus `json:"status,omitempty"`
+	metav1.TypeMeta   `json:",inline,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PostgresSpec   `json:"spec,omitempty"`
+	Status            PostgresStatus `json:"status,omitempty"`
 }
 
 type PostgresSpec struct {
@@ -27,7 +27,7 @@ type PostgresSpec struct {
 	// Storage spec to specify how storage shall be used.
 	Storage *StorageSpec `json:"storage,omitempty"`
 	// Database authentication secret
-	DatabaseSecret *api.SecretVolumeSource `json:"databaseSecret,omitempty"`
+	DatabaseSecret *apiv1.SecretVolumeSource `json:"databaseSecret,omitempty"`
 	// NodeSelector is a selector which must be true for the pod to fit on a node
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
@@ -47,14 +47,14 @@ type PostgresSpec struct {
 }
 
 type PostgresStatus struct {
-	CreationTime *unversioned.Time `json:"creationTime,omitempty"`
-	Phase        DatabasePhase     `json:"phase,omitempty"`
-	Reason       string            `json:"reason,omitempty"`
+	CreationTime *metav1.Time  `json:"creationTime,omitempty"`
+	Phase        DatabasePhase `json:"phase,omitempty"`
+	Reason       string        `json:"reason,omitempty"`
 }
 
 type PostgresList struct {
-	unversioned.TypeMeta `json:",inline"`
-	unversioned.ListMeta `json:"metadata,omitempty"`
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Postgres TPR objects
 	Items []Postgres `json:"items,omitempty"`
 }

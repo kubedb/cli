@@ -2,8 +2,9 @@ package printer
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
-apiv1 "k8s.io/client-go/pkg/api/v1"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 	"k8s.io/kubernetes/pkg/kubectl"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )

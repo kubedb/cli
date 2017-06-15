@@ -10,22 +10,22 @@ import (
 	tcs "github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
 	"github.com/k8sdb/apimachinery/pkg/eventer"
-	kapi "k8s.io/kubernetes/pkg/api"
-	k8serr "k8s.io/kubernetes/pkg/api/errors"
-	"k8s.io/kubernetes/pkg/api/unversioned"
-	kbatch "k8s.io/kubernetes/pkg/apis/batch"
-	"k8s.io/kubernetes/pkg/apis/extensions"
-	"k8s.io/kubernetes/pkg/client/cache"
-	clientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
-	"k8s.io/kubernetes/pkg/client/record"
-	"k8s.io/kubernetes/pkg/labels"
-	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
+	clientset "k8s.io/client-go/kubernetes"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
+	batch "k8s.io/client-go/pkg/apis/batch/v1"
+	extensions "k8s.io/client-go/pkg/apis/extensions/v1beta1"
+	"k8s.io/client-go/tools/cache"
+	"k8s.io/client-go/tools/record"
 )
 
 type Snapshotter interface {
 	ValidateSnapshot(*tapi.Snapshot) error
 	GetDatabase(*tapi.Snapshot) (runtime.Object, error)
-	GetSnapshotter(*tapi.Snapshot) (*kbatch.Job, error)
+	GetSnapshotter(*tapi.Snapshot) (*batch.Job, error)
 	WipeOutSnapshot(*tapi.Snapshot) error
 }
 
@@ -82,19 +82,19 @@ func (c *SnapshotController) ensureThirdPartyResource() {
 
 	resourceName := tapi.ResourceNameSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group
 	var err error
-	if _, err = c.client.Extensions().ThirdPartyResources().Get(resourceName); err == nil {
+	if _, err = c.client.ExtensionsV1beta1().ThirdPartyResources().Get(resourceName, metav1.GetOptions{}); err == nil {
 		return
 	}
-	if !k8serr.IsNotFound(err) {
+	if !errors.IsNotFound(err) {
 		log.Fatalln(err)
 	}
 
 	thirdPartyResource := &extensions.ThirdPartyResource{
-		TypeMeta: unversioned.TypeMeta{
+		TypeMeta: metav1.TypeMeta{
 			APIVersion: "extensions/v1beta1",
 			Kind:       "ThirdPartyResource",
 		},
-		ObjectMeta: kapi.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name: resourceName,
 		},
 		Description: "Snapshot of kubedb databases",
@@ -104,7 +104,7 @@ func (c *SnapshotController) ensureThirdPartyResource() {
 			},
 		},
 	}
-	if _, err := c.client.Extensions().ThirdPartyResources().Create(thirdPartyResource); err != nil {
+	if _, err := c.client.ExtensionsV1beta1().ThirdPartyResources().Create(thirdPartyResource); err != nil {
 		log.Fatalln(err)
 	}
 }
@@ -149,12 +149,12 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 		return err
 	}
 
-	t := unversioned.Now()
+	t := metav1.Now()
 	snapshot.Status.StartTime = &t
 	if _, err = c.extClient.Snapshots(snapshot.Namespace).Update(snapshot); err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToUpdate,
 			`Fail to update Elastic: "%v". Reason: %v`,
 			snapshot.Name,
@@ -165,13 +165,13 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 
 	// Validate DatabaseSnapshot spec
 	if err := c.snapshoter.ValidateSnapshot(snapshot); err != nil {
-		c.eventRecorder.Event(snapshot, kapi.EventTypeWarning, eventer.EventReasonInvalid, err.Error())
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonInvalid, err.Error())
 		return err
 	}
 
 	runtimeObj, err := c.snapshoter.GetDatabase(snapshot)
 	if err != nil {
-		c.eventRecorder.Event(snapshot, kapi.EventTypeWarning, eventer.EventReasonFailedToGet, err.Error())
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonFailedToGet, err.Error())
 		return err
 	}
 
@@ -185,7 +185,7 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 	if _, err = c.extClient.Snapshots(snapshot.Namespace).Update(snapshot); err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToUpdate,
 			"Failed to update Snapshot. Reason: %v",
 			err,
@@ -193,21 +193,21 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 		log.Errorln(err)
 	}
 
-	c.eventRecorder.Event(runtimeObj, kapi.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
-	c.eventRecorder.Event(snapshot, kapi.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
+	c.eventRecorder.Event(runtimeObj, apiv1.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
+	c.eventRecorder.Event(snapshot, apiv1.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
 
 	job, err := c.snapshoter.GetSnapshotter(snapshot)
 	if err != nil {
 		message := fmt.Sprintf("Failed to take snapshot. Reason: %v", err)
-		c.eventRecorder.Event(runtimeObj, kapi.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
-		c.eventRecorder.Event(snapshot, kapi.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		c.eventRecorder.Event(runtimeObj, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
 		return err
 	}
 
 	if _, err := c.client.Batch().Jobs(snapshot.Namespace).Create(job); err != nil {
 		message := fmt.Sprintf("Failed to take snapshot. Reason: %v", err)
-		c.eventRecorder.Event(runtimeObj, kapi.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
-		c.eventRecorder.Event(snapshot, kapi.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		c.eventRecorder.Event(runtimeObj, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
 		return err
 	}
 
@@ -223,10 +223,10 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 func (c *SnapshotController) delete(snapshot *tapi.Snapshot) error {
 	runtimeObj, err := c.snapshoter.GetDatabase(snapshot)
 	if err != nil {
-		if !k8serr.IsNotFound(err) {
+		if !errors.IsNotFound(err) {
 			c.eventRecorder.Event(
 				snapshot,
-				kapi.EventTypeWarning,
+				apiv1.EventTypeWarning,
 				eventer.EventReasonFailedToGet,
 				err.Error(),
 			)
@@ -237,7 +237,7 @@ func (c *SnapshotController) delete(snapshot *tapi.Snapshot) error {
 	if runtimeObj != nil {
 		c.eventRecorder.Eventf(
 			runtimeObj,
-			kapi.EventTypeNormal,
+			apiv1.EventTypeNormal,
 			eventer.EventReasonWipingOut,
 			"Wiping out Snapshot: %v",
 			snapshot.Name,
@@ -248,7 +248,7 @@ func (c *SnapshotController) delete(snapshot *tapi.Snapshot) error {
 		if runtimeObj != nil {
 			c.eventRecorder.Eventf(
 				runtimeObj,
-				kapi.EventTypeWarning,
+				apiv1.EventTypeWarning,
 				eventer.EventReasonFailedToWipeOut,
 				"Failed to  wipeOut. Reason: %v",
 				err,
@@ -260,7 +260,7 @@ func (c *SnapshotController) delete(snapshot *tapi.Snapshot) error {
 	if runtimeObj != nil {
 		c.eventRecorder.Eventf(
 			runtimeObj,
-			kapi.EventTypeNormal,
+			apiv1.EventTypeNormal,
 			eventer.EventReasonSuccessfulWipeOut,
 			"Successfully wiped out Snapshot: %v",
 			snapshot.Name,
@@ -272,22 +272,22 @@ func (c *SnapshotController) delete(snapshot *tapi.Snapshot) error {
 func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName string, checkDuration time.Duration) error {
 
 	var jobSuccess bool = false
-	var job *kbatch.Job
+	var job *batch.Job
 	var err error
 	then := time.Now()
 	now := time.Now()
 	for now.Sub(then) < checkDuration {
 		log.Debugln("Checking for Job ", jobName)
-		job, err = c.client.Batch().Jobs(snapshot.Namespace).Get(jobName)
+		job, err = c.client.BatchV1().Jobs(snapshot.Namespace).Get(jobName, metav1.GetOptions{})
 		if err != nil {
-			if k8serr.IsNotFound(err) {
+			if errors.IsNotFound(err) {
 				time.Sleep(sleepDuration)
 				now = time.Now()
 				continue
 			}
 			c.eventRecorder.Eventf(
 				snapshot,
-				kapi.EventTypeWarning,
+				apiv1.EventTypeWarning,
 				eventer.EventReasonFailedToList,
 				"Failed to get Job. Reason: %v",
 				err,
@@ -312,15 +312,15 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 		return err
 	}
 
-	podList, err := c.client.Core().Pods(job.Namespace).List(
-		kapi.ListOptions{
-			LabelSelector: labels.SelectorFromSet(job.Spec.Selector.MatchLabels),
+	podList, err := c.client.CoreV1().Pods(job.Namespace).List(
+		metav1.ListOptions{
+			LabelSelector: labels.Set(job.Spec.Selector.MatchLabels).AsSelector().String(),
 		},
 	)
 	if err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToList,
 			"Failed to list Pods. Reason: %v",
 			err,
@@ -329,10 +329,10 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 	}
 
 	for _, pod := range podList.Items {
-		if err := c.client.Core().Pods(pod.Namespace).Delete(pod.Name, nil); err != nil {
+		if err := c.client.CoreV1().Pods(pod.Namespace).Delete(pod.Name, nil); err != nil {
 			c.eventRecorder.Eventf(
 				snapshot,
-				kapi.EventTypeWarning,
+				apiv1.EventTypeWarning,
 				eventer.EventReasonFailedToDelete,
 				"Failed to delete Pod. Reason: %v",
 				err,
@@ -344,11 +344,11 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 	for _, volume := range job.Spec.Template.Spec.Volumes {
 		claim := volume.PersistentVolumeClaim
 		if claim != nil {
-			err := c.client.Core().PersistentVolumeClaims(job.Namespace).Delete(claim.ClaimName, nil)
+			err := c.client.CoreV1().PersistentVolumeClaims(job.Namespace).Delete(claim.ClaimName, nil)
 			if err != nil {
 				c.eventRecorder.Eventf(
 					snapshot,
-					kapi.EventTypeWarning,
+					apiv1.EventTypeWarning,
 					eventer.EventReasonFailedToDelete,
 					"Failed to delete PersistentVolumeClaim. Reason: %v",
 					err,
@@ -358,10 +358,10 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 		}
 	}
 
-	if err := c.client.Batch().Jobs(job.Namespace).Delete(job.Name, nil); err != nil {
+	if err := c.client.BatchV1().Jobs(job.Namespace).Delete(job.Name, nil); err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToDelete,
 			"Failed to delete Job. Reason: %v",
 			err,
@@ -375,23 +375,23 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 
 	runtimeObj, err := c.snapshoter.GetDatabase(snapshot)
 	if err != nil {
-		c.eventRecorder.Event(snapshot, kapi.EventTypeWarning, eventer.EventReasonFailedToGet, err.Error())
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonFailedToGet, err.Error())
 		return err
 	}
 
-	t := unversioned.Now()
+	t := metav1.Now()
 	snapshot.Status.CompletionTime = &t
 	if jobSuccess {
 		snapshot.Status.Phase = tapi.SnapshotPhaseSuccessed
 		c.eventRecorder.Event(
 			runtimeObj,
-			kapi.EventTypeNormal,
+			apiv1.EventTypeNormal,
 			eventer.EventReasonSuccessfulSnapshot,
 			"Successfully completed snapshot",
 		)
 		c.eventRecorder.Event(
 			snapshot,
-			kapi.EventTypeNormal,
+			apiv1.EventTypeNormal,
 			eventer.EventReasonSuccessfulSnapshot,
 			"Successfully completed snapshot",
 		)
@@ -399,13 +399,13 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 		snapshot.Status.Phase = tapi.SnapshotPhaseFailed
 		c.eventRecorder.Event(
 			runtimeObj,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonSnapshotFailed,
 			"Failed to complete snapshot",
 		)
 		c.eventRecorder.Event(
 			snapshot,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonSnapshotFailed,
 			"Failed to complete snapshot",
 		)
@@ -415,7 +415,7 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 	if _, err := c.extClient.Snapshots(snapshot.Namespace).Update(snapshot); err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToUpdate,
 			"Failed to update Snapshot. Reason: %v",
 			err,

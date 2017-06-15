@@ -2,6 +2,7 @@ package util
 
 import (
 	"net/http"
+
 	docker "github.com/heroku/docker-registry-client/registry"
 )
 

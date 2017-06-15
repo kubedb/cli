@@ -3,12 +3,13 @@ package describer
 import (
 	"fmt"
 	"io"
+
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
-apiv1 "k8s.io/client-go/pkg/api/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 	"k8s.io/kubernetes/pkg/kubectl"
-"k8s.io/apimachinery/pkg/labels"
 )
 
 func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *kubectl.DescriberSettings) (string, error) {
