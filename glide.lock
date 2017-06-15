@@ -1,5 +1,5 @@
 hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-15T00:50:29.154156895-07:00
+updated: 2017-06-15T01:42:46.864451753-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -11,6 +11,7 @@ imports:
   subpackages:
   - encoding/json/types
   - runtime
+  - types
   - version
   - wait
 - name: github.com/appscode/log
@@ -471,7 +472,6 @@ imports:
   - pkg/api/annotations
   - pkg/api/events
   - pkg/api/install
-  - pkg/api/meta
   - pkg/api/pod
   - pkg/api/service
   - pkg/api/util
@@ -574,11 +574,9 @@ imports:
   - pkg/master/ports
   - pkg/printers
   - pkg/printers/internalversion
-  - pkg/runtime
   - pkg/security/apparmor
   - pkg/serviceaccount
   - pkg/util
-  - pkg/util/errors
   - pkg/util/exec
   - pkg/util/hash
   - pkg/util/interrupt
@@ -588,7 +586,6 @@ imports:
   - pkg/util/parsers
   - pkg/util/slice
   - pkg/util/term
-  - pkg/util/yaml
   - pkg/version
 - name: vbom.ml/util
   version: db5cfe13f5cc80a4990d98e2e1b0707a4d1a5394
