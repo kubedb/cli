@@ -12,18 +12,19 @@ import (
 	"github.com/k8sdb/apimachinery/pkg/eventer"
 	cmap "github.com/orcaman/concurrent-map"
 	"gopkg.in/robfig/cron.v2"
-	kapi "k8s.io/kubernetes/pkg/api"
-	k8serr "k8s.io/kubernetes/pkg/api/errors"
-	clientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
-	"k8s.io/kubernetes/pkg/client/record"
-	"k8s.io/kubernetes/pkg/labels"
-	"k8s.io/kubernetes/pkg/runtime"
+	kerr "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
+	clientset "k8s.io/client-go/kubernetes"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
+	"k8s.io/client-go/tools/record"
 )
 
 type CronControllerInterface interface {
 	StartCron()
-	ScheduleBackup(runtime.Object, kapi.ObjectMeta, *tapi.BackupScheduleSpec) error
-	StopBackupScheduling(kapi.ObjectMeta)
+	ScheduleBackup(runtime.Object, metav1.ObjectMeta, *tapi.BackupScheduleSpec) error
+	StopBackupScheduling(metav1.ObjectMeta)
 	StopCron()
 }
 
@@ -63,7 +64,7 @@ func (c *cronController) ScheduleBackup(
 	// Runtime Object to push event
 	runtimeObj runtime.Object,
 	// ObjectMeta of Database TPR object
-	om kapi.ObjectMeta,
+	om metav1.ObjectMeta,
 	// BackupScheduleSpec
 	spec *tapi.BackupScheduleSpec,
 ) error {
@@ -98,7 +99,7 @@ func (c *cronController) ScheduleBackup(
 	return nil
 }
 
-func (c *cronController) StopBackupScheduling(om kapi.ObjectMeta) {
+func (c *cronController) StopBackupScheduling(om metav1.ObjectMeta) {
 	// cronEntry name
 	cronEntryName := fmt.Sprintf("%v@%v", om.Name, om.Namespace)
 
@@ -114,7 +115,7 @@ func (c *cronController) StopCron() {
 type snapshotInvoker struct {
 	extClient     tcs.ExtensionInterface
 	runtimeObject runtime.Object
-	om            kapi.ObjectMeta
+	om            metav1.ObjectMeta
 	spec          *tapi.BackupScheduleSpec
 	eventRecorder record.EventRecorder
 }
@@ -133,7 +134,7 @@ func (s *snapshotInvoker) validateScheduler(checkDuration time.Duration) error {
 	for now.Sub(then) < checkDuration {
 		snapshot, err := s.extClient.Snapshots(s.om.Namespace).Get(snapshotName)
 		if err != nil {
-			if k8serr.IsNotFound(err) {
+			if kerr.IsNotFound(err) {
 				time.Sleep(sleepDuration)
 				now = time.Now()
 				continue
@@ -171,13 +172,13 @@ func (s *snapshotInvoker) createScheduledSnapshot() {
 		LabelSnapshotStatus: string(tapi.SnapshotPhaseRunning),
 	}
 
-	snapshotList, err := s.extClient.Snapshots(s.om.Namespace).List(kapi.ListOptions{
-		LabelSelector: labels.SelectorFromSet(labels.Set(labelMap)),
+	snapshotList, err := s.extClient.Snapshots(s.om.Namespace).List(metav1.ListOptions{
+		LabelSelector: labels.Set(labelMap).AsSelector().String(),
 	})
 	if err != nil {
 		s.eventRecorder.Eventf(
 			s.runtimeObject,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToList,
 			"Failed to list Snapshots. Reason: %v",
 			err,
@@ -189,7 +190,7 @@ func (s *snapshotInvoker) createScheduledSnapshot() {
 	if len(snapshotList.Items) > 0 {
 		s.eventRecorder.Event(
 			s.runtimeObject,
-			kapi.EventTypeNormal,
+			apiv1.EventTypeNormal,
 			eventer.EventReasonIgnoredSnapshot,
 			"Skipping scheduled Backup. One is still active.",
 		)
@@ -218,7 +219,7 @@ func (s *snapshotInvoker) createSnapshot(snapshotName string) error {
 	}
 
 	snapshot := &tapi.Snapshot{
-		ObjectMeta: kapi.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name:      snapshotName,
 			Namespace: s.om.Namespace,
 			Labels:    labelMap,
@@ -232,7 +233,7 @@ func (s *snapshotInvoker) createSnapshot(snapshotName string) error {
 	if _, err := s.extClient.Snapshots(snapshot.Namespace).Create(snapshot); err != nil {
 		s.eventRecorder.Eventf(
 			s.runtimeObject,
-			kapi.EventTypeWarning,
+			apiv1.EventTypeWarning,
 			eventer.EventReasonFailedToCreate,
 			"Failed to create Snapshot. Reason: %v",
 			err,

@@ -1,8 +1,7 @@
 package api
 
 import (
-	"k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/unversioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -13,10 +12,10 @@ const (
 )
 
 type DormantDatabase struct {
-	unversioned.TypeMeta `json:",inline,omitempty"`
-	api.ObjectMeta       `json:"metadata,omitempty"`
-	Spec                 DormantDatabaseSpec   `json:"spec,omitempty"`
-	Status               DormantDatabaseStatus `json:"status,omitempty"`
+	metav1.TypeMeta   `json:",inline,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              DormantDatabaseSpec   `json:"spec,omitempty"`
+	Status            DormantDatabaseStatus `json:"status,omitempty"`
 }
 
 type DormantDatabaseSpec struct {
@@ -31,7 +30,7 @@ type DormantDatabaseSpec struct {
 }
 
 type Origin struct {
-	api.ObjectMeta `json:"metadata,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// Origin Spec to store original database Spec
 	Spec OriginSpec `json:"spec,omitempty"`
 }
@@ -61,16 +60,16 @@ const (
 )
 
 type DormantDatabaseStatus struct {
-	CreationTime *unversioned.Time    `json:"creationTime,omitempty"`
-	PausingTime  *unversioned.Time    `json:"pausingTime,omitempty"`
-	WipeOutTime  *unversioned.Time    `json:"wipeOutTime,omitempty"`
+	CreationTime *metav1.Time         `json:"creationTime,omitempty"`
+	PausingTime  *metav1.Time         `json:"pausingTime,omitempty"`
+	WipeOutTime  *metav1.Time         `json:"wipeOutTime,omitempty"`
 	Phase        DormantDatabasePhase `json:"phase,omitempty"`
 	Reason       string               `json:"reason,omitempty"`
 }
 
 type DormantDatabaseList struct {
-	unversioned.TypeMeta `json:",inline"`
-	unversioned.ListMeta `json:"metadata,omitempty"`
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of DormantDatabase TPR objects
 	Items []DormantDatabase `json:"items,omitempty"`
 }

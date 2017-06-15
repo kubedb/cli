@@ -1,12 +1,12 @@
 package util
 
 import (
-	"k8s.io/kubernetes/pkg/api"
+	kapi "k8s.io/kubernetes/pkg/api"
 )
 
 // ref: k8s.io/kubernetes/pkg/api/events/sorted_event_list.go
 
-type SortableEvents []api.Event
+type SortableEvents []kapi.Event
 
 func (list SortableEvents) Len() int {
 	return len(list)

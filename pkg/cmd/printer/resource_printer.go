@@ -15,9 +15,10 @@ import (
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
 	"github.com/k8sdb/cli/pkg/cmd/util"
-	"k8s.io/kubernetes/pkg/api/unversioned"
-	"k8s.io/kubernetes/pkg/labels"
-	"k8s.io/kubernetes/pkg/runtime"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // ref: k8s.io/kubernetes/pkg/kubectl/resource_printer.go
@@ -340,7 +341,7 @@ func (h *HumanReadablePrinter) PrintObj(obj runtime.Object, output io.Writer) er
 	kind := obj.GetObjectKind().GroupVersionKind().Kind
 
 	switch obj.(type) {
-	case *runtime.UnstructuredList, *runtime.Unstructured, *runtime.Unknown:
+	case *unstructured.UnstructuredList, *unstructured.Unstructured, *runtime.Unknown:
 		if objBytes, err := runtime.Encode(clientset.ExtendedCodec, obj); err == nil {
 			if decodedObj, err := decoder.Decode(kind, objBytes); err == nil {
 				obj = decodedObj
@@ -420,7 +421,7 @@ func appendAllLabels(showLabels bool, itemLabels map[string]string) string {
 	return buffer.String()
 }
 
-func TranslateTimestamp(timestamp unversioned.Time) string {
+func TranslateTimestamp(timestamp metav1.Time) string {
 	if timestamp.IsZero() {
 		return "<unknown>"
 	}

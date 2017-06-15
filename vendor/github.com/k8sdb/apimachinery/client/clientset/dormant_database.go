@@ -2,9 +2,9 @@ package clientset
 
 import (
 	aci "github.com/k8sdb/apimachinery/api"
-	"k8s.io/kubernetes/pkg/api"
-	rest "k8s.io/kubernetes/pkg/client/restclient"
-	"k8s.io/kubernetes/pkg/watch"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/rest"
 )
 
 type DormantDatabaseNamespacer interface {
@@ -12,12 +12,12 @@ type DormantDatabaseNamespacer interface {
 }
 
 type DormantDatabaseInterface interface {
-	List(opts api.ListOptions) (*aci.DormantDatabaseList, error)
+	List(opts metav1.ListOptions) (*aci.DormantDatabaseList, error)
 	Get(name string) (*aci.DormantDatabase, error)
 	Create(drmn *aci.DormantDatabase) (*aci.DormantDatabase, error)
 	Update(drmn *aci.DormantDatabase) (*aci.DormantDatabase, error)
 	Delete(name string) error
-	Watch(opts api.ListOptions) (watch.Interface, error)
+	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	UpdateStatus(drmn *aci.DormantDatabase) (*aci.DormantDatabase, error)
 }
 
@@ -32,7 +32,7 @@ func newDormantDatabase(c *ExtensionClient, namespace string) *DormantDatabaseIm
 	return &DormantDatabaseImpl{c.restClient, namespace}
 }
 
-func (c *DormantDatabaseImpl) List(opts api.ListOptions) (result *aci.DormantDatabaseList, err error) {
+func (c *DormantDatabaseImpl) List(opts metav1.ListOptions) (result *aci.DormantDatabaseList, err error) {
 	result = &aci.DormantDatabaseList{}
 	err = c.r.Get().
 		Namespace(c.ns).
@@ -86,7 +86,7 @@ func (c *DormantDatabaseImpl) Delete(name string) (err error) {
 		Error()
 }
 
-func (c *DormantDatabaseImpl) Watch(opts api.ListOptions) (watch.Interface, error) {
+func (c *DormantDatabaseImpl) Watch(opts metav1.ListOptions) (watch.Interface, error) {
 	return c.r.Get().
 		Prefix("watch").
 		Namespace(c.ns).

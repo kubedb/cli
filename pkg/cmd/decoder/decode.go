@@ -5,7 +5,7 @@ import (
 
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
-	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 func Decode(kind string, data []byte) (runtime.Object, error) {

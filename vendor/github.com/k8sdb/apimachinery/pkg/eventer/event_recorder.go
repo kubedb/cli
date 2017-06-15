@@ -2,9 +2,10 @@ package eventer
 
 import (
 	"github.com/appscode/log"
-	kapi "k8s.io/kubernetes/pkg/api"
-	clientset "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
-	"k8s.io/kubernetes/pkg/client/record"
+	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/pkg/api"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
+	"k8s.io/client-go/tools/record"
 )
 
 const (
@@ -48,12 +49,12 @@ func NewEventRecorder(client clientset.Interface, component string) record.Event
 	// Event Broadcaster
 	broadcaster := record.NewBroadcaster()
 	broadcaster.StartEventWatcher(
-		func(event *kapi.Event) {
+		func(event *apiv1.Event) {
 			if _, err := client.Core().Events(event.Namespace).Create(event); err != nil {
 				log.Errorln(err)
 			}
 		},
 	)
 
-	return broadcaster.NewRecorder(kapi.EventSource{Component: component})
+	return broadcaster.NewRecorder(api.Scheme, apiv1.EventSource{Component: component})
 }

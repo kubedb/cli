@@ -2,9 +2,9 @@ package clientset
 
 import (
 	aci "github.com/k8sdb/apimachinery/api"
-	"k8s.io/kubernetes/pkg/api"
-	rest "k8s.io/kubernetes/pkg/client/restclient"
-	"k8s.io/kubernetes/pkg/watch"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/rest"
 )
 
 type SnapshotNamespacer interface {
@@ -12,12 +12,12 @@ type SnapshotNamespacer interface {
 }
 
 type SnapshotInterface interface {
-	List(opts api.ListOptions) (*aci.SnapshotList, error)
+	List(opts metav1.ListOptions) (*aci.SnapshotList, error)
 	Get(name string) (*aci.Snapshot, error)
 	Create(snapshot *aci.Snapshot) (*aci.Snapshot, error)
 	Update(snapshot *aci.Snapshot) (*aci.Snapshot, error)
 	Delete(name string) error
-	Watch(opts api.ListOptions) (watch.Interface, error)
+	Watch(opts metav1.ListOptions) (watch.Interface, error)
 	UpdateStatus(snapshot *aci.Snapshot) (*aci.Snapshot, error)
 }
 
@@ -32,7 +32,7 @@ func newSnapshot(c *ExtensionClient, namespace string) *SnapshotImpl {
 	return &SnapshotImpl{c.restClient, namespace}
 }
 
-func (c *SnapshotImpl) List(opts api.ListOptions) (result *aci.SnapshotList, err error) {
+func (c *SnapshotImpl) List(opts metav1.ListOptions) (result *aci.SnapshotList, err error) {
 	result = &aci.SnapshotList{}
 	err = c.r.Get().
 		Namespace(c.ns).
@@ -86,7 +86,7 @@ func (c *SnapshotImpl) Delete(name string) (err error) {
 		Error()
 }
 
-func (c *SnapshotImpl) Watch(opts api.ListOptions) (watch.Interface, error) {
+func (c *SnapshotImpl) Watch(opts metav1.ListOptions) (watch.Interface, error) {
 	return c.r.Get().
 		Prefix("watch").
 		Namespace(c.ns).

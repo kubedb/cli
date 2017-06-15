@@ -7,13 +7,14 @@ import (
 	"github.com/golang/glog"
 	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/cli/pkg/cmd/decoder"
-	"k8s.io/kubernetes/pkg/kubectl"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/runtime"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
 type Describer interface {
-	Describe(object runtime.Object, describerSettings *kubectl.DescriberSettings) (output string, err error)
+	Describe(object runtime.Object, describerSettings *printers.DescriberSettings) (output string, err error)
 }
 
 func NewDescriber(f cmdutil.Factory) Describer {
@@ -74,19 +75,19 @@ func (h *humanReadableDescriber) validateDescribeHandlerFunc(describeFunc reflec
 			"Must accept 2 parameters and return 2 value.")
 	}
 
-	if funcType.In(1) != reflect.TypeOf((*kubectl.DescriberSettings)(nil)) ||
+	if funcType.In(1) != reflect.TypeOf((*printers.DescriberSettings)(nil)) ||
 		funcType.Out(0) != reflect.TypeOf((string)("")) ||
 		funcType.Out(1) != reflect.TypeOf((*error)(nil)).Elem() {
 		return fmt.Errorf("invalid describe handler. The expected signature is: "+
-			"func handler(item %v, describerSettings *kubectl.DescriberSettings) (string, error)", funcType.In(0))
+			"func handler(item %v, describerSettings *printers.DescriberSettings) (string, error)", funcType.In(0))
 	}
 	return nil
 }
 
-func (h *humanReadableDescriber) Describe(obj runtime.Object, describerSettings *kubectl.DescriberSettings) (string, error) {
+func (h *humanReadableDescriber) Describe(obj runtime.Object, describerSettings *printers.DescriberSettings) (string, error) {
 	kind := obj.GetObjectKind().GroupVersionKind().Kind
 	switch obj.(type) {
-	case *runtime.UnstructuredList, *runtime.Unstructured, *runtime.Unknown:
+	case *unstructured.UnstructuredList, *unstructured.Unstructured, *runtime.Unknown:
 		if objBytes, err := runtime.Encode(clientset.ExtendedCodec, obj); err == nil {
 
 			if decodedObj, err := decoder.Decode(kind, objBytes); err == nil {

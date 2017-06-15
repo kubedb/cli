@@ -9,11 +9,11 @@ import (
 
 	"github.com/k8sdb/cli/pkg/cmd/printer"
 	"github.com/k8sdb/cli/pkg/cmd/util"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	kapi "k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/unversioned"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
-	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/labels"
+	printers "k8s.io/kubernetes/pkg/printers"
 )
 
 func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out io.Writer) {
@@ -22,13 +22,13 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 		return
 	}
 
-	ps, err := clientSet.Apps().StatefulSets(namespace).Get(name)
+	ps, err := clientSet.Apps().StatefulSets(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return
 	}
 	pc := clientSet.Core().Pods(namespace)
 
-	selector, err := unversioned.LabelSelectorAsSelector(ps.Spec.Selector)
+	selector, err := metav1.LabelSelectorAsSelector(ps.Spec.Selector)
 	if err != nil {
 		return
 	}
@@ -47,7 +47,7 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 }
 
 func getPodStatusForController(c coreclient.PodInterface, selector labels.Selector) (running, waiting, succeeded, failed int, err error) {
-	options := kapi.ListOptions{LabelSelector: selector}
+	options := metav1.ListOptions{LabelSelector: selector.String()}
 	rcPods, err := c.List(options)
 	if err != nil {
 		return
@@ -75,7 +75,7 @@ func (d *humanReadableDescriber) describeService(namespace, name string, out io.
 
 	c := clientSet.Core().Services(namespace)
 
-	service, err := c.Get(name)
+	service, err := c.Get(name, metav1.GetOptions{})
 	if err != nil {
 		return
 	}
@@ -134,7 +134,7 @@ func (d *humanReadableDescriber) describeSecret(namespace, name string, prefix s
 
 	c := clientSet.Core().Secrets(namespace)
 
-	secret, err := c.Get(name)
+	secret, err := c.Get(name, metav1.GetOptions{})
 	if err != nil {
 		return
 	}
@@ -164,7 +164,7 @@ func describeEvents(el *kapi.EventList, out io.Writer) {
 	sort.Sort(util.SortableEvents(el.Items))
 
 	fmt.Fprint(out, "Events:\n")
-	w := kubectl.GetNewTabWriter(out)
+	w := printers.GetNewTabWriter(out)
 
 	fmt.Fprint(w, "  FirstSeen\tLastSeen\tCount\tFrom\tType\tReason\tMessage\n")
 	fmt.Fprint(w, "  ---------\t--------\t-----\t----\t--------\t------\t-------\n")

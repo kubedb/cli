@@ -9,13 +9,14 @@ import (
 	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/spf13/cobra"
-	"k8s.io/kubernetes/pkg/api/meta"
-	"k8s.io/kubernetes/pkg/kubectl"
+	"k8s.io/apimachinery/pkg/api/meta"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
+	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
-	"k8s.io/kubernetes/pkg/runtime"
-	utilerrors "k8s.io/kubernetes/pkg/util/errors"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/get.go
@@ -121,7 +122,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		cmd.Flag("show-all").Value.Set("true")
 	}
 
-	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), runtime.UnstructuredJSONScheme).
+	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
 		SelectorParam(selector).
@@ -158,14 +159,14 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 	if printAll {
 		showKind = true
 	} else {
-		if cmdutil.MustPrintWithKinds(objs, infos, nil, printAll) {
+		if cmdutil.MustPrintWithKinds(objs, infos, nil) {
 			showKind = true
 		}
 	}
 
 	var lastMapping *meta.RESTMapping
 
-	w := kubectl.GetNewTabWriter(out)
+	w := printers.GetNewTabWriter(out)
 	for ix := range objs {
 		var mapping *meta.RESTMapping
 		var original runtime.Object
