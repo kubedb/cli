@@ -37,10 +37,10 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
+		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = ""
+			ref.Kind = tapi.ResourceKindElastic
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
@@ -107,10 +107,10 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
+		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = ""
+			ref.Kind = tapi.ResourceKindPostgres
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
@@ -165,10 +165,10 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
+		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = ""
+			ref.Kind = tapi.ResourceKindSnapshot
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
@@ -226,10 +226,10 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := apiv1.GetReference(api.Scheme, item); err != nil {
+		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = ""
+			ref.Kind = tapi.ResourceKindDormantDatabase
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
