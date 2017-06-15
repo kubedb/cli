@@ -1,4 +1,4 @@
-package cmd
+package pkg
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 
 	"github.com/appscode/go/types"
 	"github.com/k8sdb/apimachinery/pkg/docker"
-	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
+	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

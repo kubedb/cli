@@ -6,7 +6,7 @@ import (
 
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/cli/pkg/cmd/decoder"
+	"github.com/k8sdb/cli/pkg/decoder"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"

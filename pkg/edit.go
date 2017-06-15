@@ -1,4 +1,4 @@
-package cmd
+package pkg
 
 import (
 	"bytes"
@@ -13,11 +13,11 @@ import (
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
-	"github.com/k8sdb/cli/pkg/cmd/editor"
-	"github.com/k8sdb/cli/pkg/cmd/encoder"
-	"github.com/k8sdb/cli/pkg/cmd/printer"
-	"github.com/k8sdb/cli/pkg/cmd/util"
+	"github.com/k8sdb/cli/pkg/editor"
+	"github.com/k8sdb/cli/pkg/encoder"
 	"github.com/k8sdb/cli/pkg/kube"
+	"github.com/k8sdb/cli/pkg/printer"
+	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"

@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/k8sdb/apimachinery/client/clientset"
-	"github.com/k8sdb/cli/pkg/cmd/decoder"
+	"github.com/k8sdb/cli/pkg/decoder"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"

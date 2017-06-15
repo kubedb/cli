@@ -1,4 +1,4 @@
-package cmd
+package pkg
 
 import (
 	"errors"
@@ -6,8 +6,8 @@ import (
 	"io"
 
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/cli/pkg/cmd/util"
 	"github.com/k8sdb/cli/pkg/kube"
+	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"

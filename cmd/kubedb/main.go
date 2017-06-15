@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"github.com/k8sdb/cli/pkg/cmd"
+	"github.com/k8sdb/cli/pkg"
 )
 
 func main() {
-	c := cmd.NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr, Version)
+	c := pkg.NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr, Version)
 	if err := c.Execute(); err != nil {
 		os.Exit(1)
 	}
