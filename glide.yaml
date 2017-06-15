@@ -8,6 +8,8 @@ import:
   version: master
 - package: github.com/k8sdb/apimachinery
   version: master
+- package: k8s.io/kubernetes
+  version: ~1.5.0
 - package: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
 - package: k8s.io/client-go

@@ -1,5 +1,5 @@
-hash: 92955e9a86b259e93ae457b17947aaab5798f31c26697280c0c214e596b399c8
-updated: 2017-06-14T18:56:33.852469615-07:00
+hash: f950eaf217f552a97c509fdf802041f4109d5b0be351196a3540979ce4faed91
+updated: 2017-06-14T23:38:38.923017207-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -136,7 +136,7 @@ imports:
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/ghodss/yaml
-  version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
+  version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
 - name: github.com/go-ini/ini
   version: 2e44421e256d82ebbf3d4d4fcabe8930b905eff3
 - name: github.com/go-openapi/jsonpointer
@@ -301,7 +301,7 @@ imports:
 - name: gopkg.in/robfig/cron.v2
   version: be2e0b0deed5a68ffee390b4583a13aff8321535
 - name: gopkg.in/yaml.v2
-  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:
