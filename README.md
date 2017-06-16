@@ -31,9 +31,7 @@ There are 2 parts to versioning policy:
 
 ---
 
-**The kubedb operator & cli collects anonymous usage statistics to help us learning
-how the software is being used and how we can improve it. To disable stats collection,
-run the operator with the flag** `--analytics=false`.
+**The kubedb operator & cli collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--analytics=false`.
 
 ---
 
