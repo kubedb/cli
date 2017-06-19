@@ -1,5 +1,5 @@
 hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-16T16:01:39.458996845+06:00
+updated: 2017-06-19T12:17:46.43795184+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -10,6 +10,7 @@ imports:
   version: 5eabd32a8a0fe824b5e12c37dc53a0afea8507c9
   subpackages:
   - encoding/json/types
+  - net/httpclient
   - runtime
   - types
   - version
@@ -53,6 +54,8 @@ imports:
   version: 70b2c90b260171e829f1ebd7c17f600c11858dbe
   subpackages:
   - winterm
+- name: github.com/cenkalti/backoff
+  version: 32cd0c5b3aef12c76ed64aaf678f6c79736be7dc
 - name: github.com/coreos/go-oidc
   version: be73733bb8cc830d0205609b95d125215f8e9c70
   subpackages:
@@ -150,6 +153,12 @@ imports:
   version: 6aced65f8501fe1217321abf0749d354824ba2ff
 - name: github.com/go-openapi/swag
   version: 1d0bd113de87027671077d3c71eb3ac5d7dbba72
+- name: github.com/go-xorm/builder
+  version: db75972580de4a7c6c20fff5b16a924c3de3fa12
+- name: github.com/go-xorm/core
+  version: 87aca223378aab7a4bf31ef53f20fde4997ad793
+- name: github.com/go-xorm/xorm
+  version: 3ad0b428ae702d7d3f880c90a7f6d89805fcd2f7
 - name: github.com/gogo/protobuf
   version: e18d7aa8f8c624c915db340349aad4c49b10d173
   subpackages:
@@ -162,9 +171,13 @@ imports:
   subpackages:
   - lru
 - name: github.com/golang/protobuf
-  version: 8616e8ee5e20a1704615e6c8d7afcdac06087a67
+  version: 8ee79997227bf9b34611aee7946ae64735e6fd93
   subpackages:
   - proto
+- name: github.com/google/go-querystring
+  version: 547ef5ac979778feb2f760cdb5f4eae1a2207b86
+  subpackages:
+  - query
 - name: github.com/google/gofuzz
   version: 44d81051d367757e1c7c6a5a86423ece9afcf63c
 - name: github.com/gorilla/context
@@ -207,6 +220,14 @@ imports:
   - pkg/controller
   - pkg/docker
   - pkg/eventer
+- name: github.com/k8sdb/postgres
+  version: 89772951bb1052fc32902b7b0d747ab57007e85b
+  subpackages:
+  - pkg/audit/summary/lib
+- name: github.com/lib/pq
+  version: 50761b0867bd1d9d069276790bcd4a3bccf2324a
+  subpackages:
+  - oid
 - name: github.com/mailru/easyjson
   version: d5b7844b561a7bc640052f1b935f7b800330d7e0
   subpackages:
@@ -364,7 +385,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 2e70bac0745c7f8e506f7f3e432d040c55d5718a
+  version: c401da6a614d66fe5bf7e411c9936f8c2b5348ec
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
@@ -467,7 +488,7 @@ imports:
   - util/integer
   - util/jsonpath
 - name: k8s.io/kubernetes
-  version: b90e25a03b263752154c68fc3c09ef9921cf1dae
+  version: 7c3906a4eccd5a7cad245de0bd65337927a60bef
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install

@@ -61,4 +61,12 @@ func AddAuditReportFlags(cmd *cobra.Command) {
 	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Export summary report of the requested object from this namespace.")
 	cmd.Flags().StringP("operator-namespace", "", "kube-system", "Name of namespace where operator is running")
 	cmd.Flags().StringP("index", "", "", "Export summary report for this only.")
+	cmd.Flags().StringP("output", "", "", "directory to print JSON output")
+}
+
+func AddAuditCompareFlags(cmd *cobra.Command) {
+	cmd.Flags().StringP("original", "", "", "Summary report file of original database")
+	cmd.Flags().StringP("duplicate", "", "", "Summary report file of duplicate database")
+	cmd.Flags().StringP("index", "", "", "Comapre summary report only for this.")
+	cmd.Flags().StringP("output", "", "", "directory to print JSON output")
 }

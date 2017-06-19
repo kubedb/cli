@@ -50,6 +50,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 			Commands: []*cobra.Command{
 				NewCmdDescribe(out, err),
 				NewCmdAuditReport(out, err),
+				NewCmdAuditCompare(out, err),
 				v.NewCmdVersion(),
 			},
 		},

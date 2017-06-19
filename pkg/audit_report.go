@@ -1,16 +1,23 @@
 package pkg
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/appscode/go/net/httpclient"
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/apimachinery/client/clientset"
+	"github.com/k8sdb/apimachinery/pkg/docker"
+	pgaudit "github.com/k8sdb/cli/pkg/audit/postgres"
+	"github.com/k8sdb/cli/pkg/audit/type"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
@@ -35,22 +42,15 @@ func NewCmdAuditReport(out io.Writer, cmdErr io.Writer) *cobra.Command {
 	return cmd
 }
 
-type auditReport struct {
-	DbName string
-}
-
 const (
 	valid_resources_for_report = `Valid resource types include:
 
-    * elastic
-    * postgres
+    * elastics
+    * postgreses
     `
 )
 
 func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
-	namespace, _ := util.GetNamespace(cmd)
-	_ = namespace
-
 	if len(args) == 0 {
 		fmt.Fprint(errOut, "You must specify the type of resource to get. ", valid_resources_for_report)
 		usageString := "Required resource not specified."
@@ -80,23 +80,37 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		}
 		kubedbName = args[1]
 	}
-	_ = kubedbName
+
+	namespace, _ := util.GetNamespace(cmd)
+	
+	config, err := f.ClientConfig()
+	if err != nil {
+		return err
+	}
+	extClient := clientset.NewForConfigOrDie(config)
+	
+	var objectMeta metav1.ObjectMeta
+	var typeMeta metav1.TypeMeta
 
 	switch kubedbType {
 	case tapi.ResourceTypeSnapshot, tapi.ResourceTypeDormantDatabase:
 		return fmt.Errorf(`resource type "%v" doesn't support audit operation`, items[0])
+	case tapi.ResourceTypePostgres:
+		postgres, err := extClient.Postgreses(namespace).Get(kubedbName)
+		if err != nil {
+			return err
+		}
+		objectMeta = postgres.ObjectMeta
+		typeMeta = postgres.TypeMeta
 	}
 
-	dbname := cmdutil.GetFlagString(cmd, "index")
-	_ = dbname
-
-	clientset, err := f.ClientSet()
+	goClient, err := f.ClientSet()
 	if err != nil {
 		return err
 	}
 
 	operatorNamespace := cmdutil.GetFlagString(cmd, "operator-namespace")
-	operatorPodList, err := clientset.Core().Pods(operatorNamespace).List(
+	operatorPodList, err := goClient.Core().Pods(operatorNamespace).List(
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				operatorLabel,
@@ -115,23 +129,53 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	if err != nil {
 		return err
 	}
-
-	config, err := f.ClientConfig()
-	if err != nil {
-		return err
-	}
-
-	tunnel := NewTunnel(restClient, config, operatorNamespace, operatorPodList.Items[0].Name, 8443)
+	
+	tunnel := newTunnel(restClient, config, operatorNamespace, operatorPodList.Items[0].Name, docker.OperatorPortNumber)
 	if err := tunnel.forwardPort(); err != nil {
 		return err
 	}
 
-	fmt.Println(tunnel.Local)
-	time.Sleep(time.Hour)
+	proxyClient := httpclient.Default().WithBaseURL(fmt.Sprintf("http://127.0.0.1:%d", tunnel.Local))
+	summaryReportURL := fmt.Sprintf("/kubedb.com/v1alpha1/namespaces/%v/%v/%v/summary_report", namespace, kubedbType, kubedbName)
+
+	index := cmdutil.GetFlagString(cmd, "index")
+	if index != "" {
+		summaryReportURL = fmt.Sprintf("%v?index=%v", summaryReportURL, index)
+	}
+	req, err := proxyClient.NewRequest("GET", summaryReportURL, nil)
+	if err != nil {
+		return err
+	}
+
+	var summary *types.Summary
+	switch kubedbType {
+	case tapi.ResourceTypePostgres:
+		summary, err = pgaudit.GetReport(proxyClient, req)
+		if err != nil {
+			return err
+		}
+	}
+	summary.TypeMeta = typeMeta
+	summary.ObjectMeta = objectMeta
+
+	outputDirectory := cmdutil.GetFlagString(cmd, "output")
+	fileName := fmt.Sprintf("report-%v.json", time.Now().UTC().Format("20060102-150405"))
+	path := filepath.Join(outputDirectory, fileName)
+
+	summaryData, err := json.MarshalIndent(summary, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	if err := util.WriteJson(path, summaryData); err != nil {
+		return err
+	}
+
+	fmt.Println(fmt.Sprintf(`Summary report for "%v/%v" has been stored to '%v'`, kubedbType, kubedbName, path))
 	return nil
 }
 
-type Tunnel struct {
+type tunnel struct {
 	Local     int
 	Remote    int
 	Namespace string
@@ -143,8 +187,8 @@ type Tunnel struct {
 	client    rest.Interface
 }
 
-func NewTunnel(client rest.Interface, config *rest.Config, namespace, podName string, remote int) *Tunnel {
-	return &Tunnel{
+func newTunnel(client rest.Interface, config *rest.Config, namespace, podName string, remote int) *tunnel {
+	return &tunnel{
 		config:    config,
 		client:    client,
 		Namespace: namespace,
@@ -156,15 +200,13 @@ func NewTunnel(client rest.Interface, config *rest.Config, namespace, podName st
 	}
 }
 
-func (t *Tunnel) forwardPort() error {
+func (t *tunnel) forwardPort() error {
 
 	u := t.client.Post().
 		Resource("pods").
 		Namespace(t.Namespace).
 		Name(t.PodName).
 		SubResource("portforward").URL()
-
-	fmt.Println(u)
 
 	dialer, err := remotecommand.NewExecutor(t.config, "GET", u)
 	if err != nil {
