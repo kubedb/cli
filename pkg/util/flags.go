@@ -43,7 +43,7 @@ func AddEditFlags(cmd *cobra.Command) {
 }
 
 func AddInitFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Namespace name. Operator will be deployed in this namespace.")
+	cmd.Flags().StringP("namespace", "n", "kube-system", "Namespace name. Operator will be deployed in this namespace.")
 	cmd.Flags().String("version", "0.1.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }
