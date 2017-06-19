@@ -43,7 +43,7 @@ func AddEditFlags(cmd *cobra.Command) {
 }
 
 func AddInitFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("operator-namespace", "", apiv1.NamespaceDefault, "Namespace name. Operator will be deployed in this namespace.")
+	cmd.Flags().StringP("operator-namespace", "", "kube-system", "Name of namespace where operator will be deployed.")
 	cmd.Flags().String("version", "0.1.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }
@@ -59,6 +59,6 @@ func GetNamespace(cmd *cobra.Command) (string, bool) {
 
 func AddAuditReportFlags(cmd *cobra.Command) {
 	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Export summary report of the requested object from this namespace.")
-	cmd.Flags().StringP("operator-namespace", "", apiv1.NamespaceDefault, "Use operator to export report from this namespace.")
+	cmd.Flags().StringP("operator-namespace", "", "kube-system", "Name of namespace where operator is running")
 	cmd.Flags().StringP("index", "", "", "Export summary report for this only.")
 }
