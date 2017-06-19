@@ -49,7 +49,7 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 
 func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	upgrade := cmdutil.GetFlagBool(cmd, "upgrade")
-	namespace := cmdutil.GetFlagString(cmd, "namespace")
+	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
 
 	client, err := kube.NewKubeClient(cmd)

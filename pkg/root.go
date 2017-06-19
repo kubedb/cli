@@ -49,6 +49,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
 				NewCmdDescribe(out, err),
+				NewCmdAuditReport(out, err),
 				v.NewCmdVersion(),
 			},
 		},

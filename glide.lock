@@ -1,5 +1,5 @@
 hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-15T16:25:12.563496221+06:00
+updated: 2017-06-16T16:01:39.458996845+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -125,6 +125,10 @@ imports:
   version: e30f1e79f3cd72542f2026ceec18d3bd67ab859c
 - name: github.com/docker/libtrust
   version: aabc10ec26b754e797f9028f4589c5b7bd90dc20
+- name: github.com/docker/spdystream
+  version: 449fdfce4d962303d702fec724ef0ad181c92528
+  subpackages:
+  - spdy
 - name: github.com/emicklei/go-restful
   version: 09691a3b6378b740595c1002f40c34dd5f218a22
   subpackages:
@@ -252,6 +256,7 @@ imports:
   - http2/hpack
   - idna
   - lex/httplex
+  - websocket
 - name: golang.org/x/oauth2
   version: 3c3a985cb79f52a3190fbc056984415ca6763d01
   subpackages:
@@ -338,6 +343,8 @@ imports:
   - pkg/util/diff
   - pkg/util/errors
   - pkg/util/framer
+  - pkg/util/httpstream
+  - pkg/util/httpstream/spdy
   - pkg/util/intstr
   - pkg/util/json
   - pkg/util/mergepatch
@@ -354,16 +361,19 @@ imports:
   - pkg/version
   - pkg/watch
   - third_party/forked/golang/json
+  - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 136648159b691fe2b7568c1bf679cb52bc89937f
+  version: 2e70bac0745c7f8e506f7f3e432d040c55d5718a
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
   - pkg/authentication/user
   - pkg/features
+  - pkg/server/httplog
   - pkg/util/feature
   - pkg/util/flag
+  - pkg/util/wsstream
 - name: k8s.io/client-go
   version: 3627aeb7d4f6ade38f995d2c923e459146493c7e
   subpackages:
@@ -447,6 +457,7 @@ imports:
   - tools/clientcmd/api/latest
   - tools/clientcmd/api/v1
   - tools/metrics
+  - tools/portforward
   - tools/record
   - transport
   - util/cert
@@ -559,6 +570,7 @@ imports:
   - pkg/client/listers/extensions/v1beta1
   - pkg/client/retry
   - pkg/client/unversioned
+  - pkg/client/unversioned/remotecommand
   - pkg/controller
   - pkg/controller/deployment/util
   - pkg/credentialprovider
@@ -570,6 +582,7 @@ imports:
   - pkg/kubectl/cmd/util/editor
   - pkg/kubectl/resource
   - pkg/kubelet/qos
+  - pkg/kubelet/server/remotecommand
   - pkg/kubelet/types
   - pkg/master/ports
   - pkg/printers

@@ -43,7 +43,7 @@ func AddEditFlags(cmd *cobra.Command) {
 }
 
 func AddInitFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Namespace name. Operator will be deployed in this namespace.")
+	cmd.Flags().StringP("operator-namespace", "", apiv1.NamespaceDefault, "Namespace name. Operator will be deployed in this namespace.")
 	cmd.Flags().String("version", "0.1.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }
@@ -55,4 +55,10 @@ func AddFilenameOptionFlags(cmd *cobra.Command, options *resource.FilenameOption
 
 func GetNamespace(cmd *cobra.Command) (string, bool) {
 	return cmdutil.GetFlagString(cmd, "namespace"), cmd.Flags().Changed("namespace")
+}
+
+func AddAuditReportFlags(cmd *cobra.Command) {
+	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Export summary report of the requested object from this namespace.")
+	cmd.Flags().StringP("operator-namespace", "", apiv1.NamespaceDefault, "Use operator to export report from this namespace.")
+	cmd.Flags().StringP("index", "", "", "Export summary report for this only.")
 }
