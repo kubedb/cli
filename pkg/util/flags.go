@@ -65,8 +65,7 @@ func AddAuditReportFlags(cmd *cobra.Command) {
 }
 
 func AddAuditCompareFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("original", "", "", "Summary report file of original database")
-	cmd.Flags().StringP("duplicate", "", "", "Summary report file of duplicate database")
 	cmd.Flags().StringP("index", "", "", "Comapre summary report only for this.")
 	cmd.Flags().StringP("output", "", "", "directory to print JSON output")
+	cmd.Flags().Bool("show", false, "If present, comparison result will be printed.")
 }

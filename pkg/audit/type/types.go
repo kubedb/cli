@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/k8sdb/postgres/pkg/audit/summary/lib"
+	pgaudit "github.com/k8sdb/postgres/pkg/audit/type"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -13,7 +13,7 @@ type Summary struct {
 }
 
 type SummaryReport struct {
-	Postgres map[string]*lib.DBInfo `json:"postgres,omitempty"`
+	Postgres map[string]*pgaudit.DBInfo `json:"postgres,omitempty"`
 }
 
 type SummaryStatus struct {

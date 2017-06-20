@@ -52,7 +52,7 @@ const (
 
 func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
 	if len(args) == 0 {
-		fmt.Fprint(errOut, "You must specify the type of resource to get. ", valid_resources_for_report)
+		fmt.Fprint(errOut, "You must specify the type of resource. ", valid_resources_for_report)
 		usageString := "Required resource not specified."
 		return cmdutil.UsageError(cmd, usageString)
 	}

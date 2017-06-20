@@ -1,5 +1,5 @@
-hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-19T12:17:46.43795184+06:00
+hash: d39eb3b05b173a3cd40d921b10fd006fab17c4017cdfbe02f25c470ef68a4b27
+updated: 2017-06-20T12:49:05.513071702+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -171,7 +171,7 @@ imports:
   subpackages:
   - lru
 - name: github.com/golang/protobuf
-  version: 8ee79997227bf9b34611aee7946ae64735e6fd93
+  version: 8616e8ee5e20a1704615e6c8d7afcdac06087a67
   subpackages:
   - proto
 - name: github.com/google/go-querystring
@@ -211,7 +211,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: bcd2da9ca0416e20b6305129a6eb6cfb808b69a3
+  version: d62217f181ffdc68c48a8dbbc0fef9422c23eb4f
   subpackages:
   - api
   - api/install
@@ -221,9 +221,11 @@ imports:
   - pkg/docker
   - pkg/eventer
 - name: github.com/k8sdb/postgres
-  version: 89772951bb1052fc32902b7b0d747ab57007e85b
+  version: 01a3e5dea2aca40c2ff195c383ba1145d636ebf5
   subpackages:
-  - pkg/audit/summary/lib
+  - pkg/audit/compare
+  - pkg/audit/summary
+  - pkg/audit/type
 - name: github.com/lib/pq
   version: 50761b0867bd1d9d069276790bcd4a3bccf2324a
   subpackages:
@@ -255,7 +257,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: b4dbd37a01839e0653eec12aa4bbb2a2ce7b2a37
+  version: 99b5d838ca16c25cc4944e323684f8415e8b10ba
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -385,7 +387,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: c401da6a614d66fe5bf7e411c9936f8c2b5348ec
+  version: 76d76a83b37ee95e585ef852922d174e1027962d
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
