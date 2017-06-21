@@ -1,18 +1,18 @@
 package pkg
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"path/filepath"
-	"strings"
 	"time"
 
-	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/audit/type"
 	"github.com/k8sdb/cli/pkg/util"
-	pgaudit "github.com/k8sdb/postgres/pkg/audit/compare"
 	"github.com/spf13/cobra"
+	diff "github.com/yudai/gojsondiff"
+	"github.com/yudai/gojsondiff/formatter"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
@@ -52,35 +52,44 @@ func compareReport(cmd *cobra.Command, out, errOut io.Writer, args []string) err
 		return errors.New("Unable to compare these two summary. Kind mismatch")
 	}
 
-	diff := make([]string, 0)
-
-	switch reportData1.Kind {
-	case tapi.ResourceKindPostgres:
-		index := cmdutil.GetFlagString(cmd, "index")
-		diff = pgaudit.CompareSummaryReport(
-			reportData1.SummaryReport.Postgres,
-			reportData2.SummaryReport.Postgres,
-			index,
-		)
+	reportData1Byte, err := json.Marshal(reportData1)
+	if err != nil {
+		return err
 	}
 
-	result := make([]string, 0)
-	if len(diff) == 0 {
-		result = append(result, "No change\n")
-	} else {
-		result = append(result, fmt.Sprintf("Total mismatch: %d\n", len(diff)))
-		result = append(result, addFileNames(reportFile1, reportFile2))
-		result = append(result, fmt.Sprintf("Diff:"))
-		result = append(result, diff...)
-		result = append(result, "")
+	reportData2Byte, err := json.Marshal(reportData2)
+	if err != nil {
+		return err
+	}
+
+	// Then, compare them
+	differ := diff.New()
+	d, err := differ.Compare(reportData1Byte, reportData2Byte)
+	if err != nil {
+		return err
+	}
+
+	var aJson map[string]interface{}
+	if err := json.Unmarshal(reportData1Byte, &aJson); err != nil {
+		return err
+	}
+
+	config := formatter.AsciiFormatterConfig{
+		ShowArrayIndex: true,
+		Coloring:       false,
+	}
+
+	format := formatter.NewAsciiFormatter(aJson, config)
+	diffString, err := format.Format(d)
+	if err != nil {
+		return err
 	}
 
 	outputDirectory := cmdutil.GetFlagString(cmd, "output")
 	fileName := fmt.Sprintf("result-%v.txt", time.Now().UTC().Format("20060102-150405"))
 	path := filepath.Join(outputDirectory, fileName)
 
-	resultLines := strings.Join(result, "\n")
-	if err := util.WriteJson(path, []byte(resultLines)); err != nil {
+	if err := util.WriteJson(path, []byte(diffString)); err != nil {
 		return err
 	}
 
@@ -88,13 +97,18 @@ func compareReport(cmd *cobra.Command, out, errOut io.Writer, args []string) err
 
 	show := cmdutil.GetFlagBool(cmd, "show")
 	if show {
+		config := formatter.AsciiFormatterConfig{
+			ShowArrayIndex: true,
+			Coloring:       true,
+		}
+		format := formatter.NewAsciiFormatter(aJson, config)
+		diffString, err := format.Format(d)
+		if err != nil {
+			return err
+		}
 		fmt.Println()
-		fmt.Println(resultLines)
+		fmt.Println(string(diffString))
 	}
 
 	return nil
-}
-
-func addFileNames(reportFile1, reportFile2 string) string {
-	return fmt.Sprintf("%v --> %v\n", reportFile1, reportFile2)
 }

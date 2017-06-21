@@ -1,6 +1,0 @@
-Total mismatch: 1
-
-report-20170620-050327.json --> report-20170620-052757.json
-
-Diff:
-+++--- postgres.data.products.total_row: 3 --> 2

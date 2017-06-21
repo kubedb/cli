@@ -17,6 +17,7 @@ import (
 	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	pgaudit "github.com/k8sdb/cli/pkg/audit/postgres"
+	esaudit "github.com/k8sdb/cli/pkg/audit/elastic"
 	"github.com/k8sdb/cli/pkg/audit/type"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
@@ -102,7 +103,17 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		}
 		objectMeta = postgres.ObjectMeta
 		typeMeta = postgres.TypeMeta
+	case tapi.ResourceTypeElastic:
+		elastic, err := extClient.Elastics(namespace).Get(kubedbName)
+		if err != nil {
+			return err
+		}
+		objectMeta = elastic.ObjectMeta
+		typeMeta = elastic.TypeMeta
 	}
+	objectMeta.ResourceVersion = ""
+	objectMeta.SelfLink = ""
+	objectMeta.UID = ""
 
 	goClient, err := f.ClientSet()
 	if err != nil {
@@ -154,6 +165,12 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		if err != nil {
 			return err
 		}
+	case tapi.ResourceTypeElastic:
+		summary, err = esaudit.GetReport(proxyClient, req)
+		if err != nil {
+			return err
+		}
+
 	}
 	summary.TypeMeta = typeMeta
 	summary.ObjectMeta = objectMeta
