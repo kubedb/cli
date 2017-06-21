@@ -49,7 +49,7 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 
 func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	upgrade := cmdutil.GetFlagBool(cmd, "upgrade")
-	namespace := cmdutil.GetFlagString(cmd, "namespace")
+	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
 
 	client, err := kube.NewKubeClient(cmd)
@@ -63,7 +63,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 			if kerr.IsNotFound(err) {
 				message := fmt.Sprintf("Operator deployment \"%v\" not found.\n\n"+
 					"Create operator using following commnad:\n"+
-					"kubedb init --version=%v --namespace=%v", docker.OperatorName, version, namespace)
+					"kubedb init --version=%v --operator-namespace=%v", docker.OperatorName, version, namespace)
 
 				fmt.Fprintln(errOut, message)
 				return nil

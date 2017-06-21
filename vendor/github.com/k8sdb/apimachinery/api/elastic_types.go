@@ -57,3 +57,10 @@ type ElasticList struct {
 	// Items is a list of Elastic TPR objects
 	Items []Elastic `json:"items,omitempty"`
 }
+
+// Following structure is used for audit summary report
+type ElasticSummary struct {
+	IdCount map[string]int64 `json:"idCount"`
+	Mapping interface{}      `json:"mapping"`
+	Setting interface{}      `json:"setting"`
+}
