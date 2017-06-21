@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net"
+	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -26,10 +27,10 @@ import (
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
-func NewCmdAuditReport(out io.Writer, cmdErr io.Writer) *cobra.Command {
+func NewCmdSummarize(out io.Writer, cmdErr io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "audit_report",
-		Short: "Export audit report",
+		Use:   "summarize",
+		Short: "Export summary report",
 		Run: func(cmd *cobra.Command, args []string) {
 			f := kube.NewKubeFactory(cmd)
 			cmdutil.CheckErr(exportReport(f, cmd, out, cmdErr, args))
@@ -40,7 +41,7 @@ func NewCmdAuditReport(out io.Writer, cmdErr io.Writer) *cobra.Command {
 }
 
 const (
-	valid_resources_for_report = `Valid resource types include:
+	validResourcesForReport = `Valid resource types include:
 
     * elastics
     * postgreses
@@ -49,7 +50,7 @@ const (
 
 func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
 	if len(args) == 0 {
-		fmt.Fprint(errOut, "You must specify the type of resource. ", valid_resources_for_report)
+		fmt.Fprint(errOut, "You must specify the type of resource. ", validResourcesForReport)
 		usageString := "Required resource not specified."
 		return cmdutil.UsageError(cmd, usageString)
 	}
@@ -67,18 +68,18 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 
 	switch kubedbType {
 	case tapi.ResourceTypeSnapshot, tapi.ResourceTypeDormantDatabase:
-		return fmt.Errorf(`resource type "%v" doesn't support audit operation`, items[0])
+		return fmt.Errorf(`Failed to summarize resource type "%v"`, items[0])
 	}
 
 	var kubedbName string
 	if len(items) > 1 {
 		if len(items) > 2 {
-			return errors.New("audit doesn't support multiple resource")
+			return errors.New("Only one database can be summarized at a time.")
 		}
 		kubedbName = items[1]
 	} else {
 		if len(args) > 2 {
-			return errors.New("audit doesn't support multiple resource")
+			return errors.New("Only one database can be summarized at a time.")
 		}
 		kubedbName = args[1]
 	}
@@ -122,13 +123,13 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	}
 
 	proxyClient := httpclient.Default().WithBaseURL(fmt.Sprintf("http://127.0.0.1:%d", tunnel.Local))
-	summaryReportURL := fmt.Sprintf("/kubedb.com/v1alpha1/namespaces/%v/%v/%v/summary_report", namespace, kubedbType, kubedbName)
+	summaryReportURL, _ := url.Parse(fmt.Sprintf("/kubedb.com/v1alpha1/namespaces/%v/%v/%v/report", namespace, kubedbType, kubedbName))
 
 	index := cmdutil.GetFlagString(cmd, "index")
 	if index != "" {
-		summaryReportURL = fmt.Sprintf("%v?index=%v", summaryReportURL, index)
+		summaryReportURL.Query().Set("index", index)
 	}
-	req, err := proxyClient.NewRequest("GET", summaryReportURL, nil)
+	req, err := proxyClient.NewRequest("GET", summaryReportURL.String(), nil)
 	if err != nil {
 		return err
 	}
@@ -151,7 +152,7 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		return err
 	}
 
-	fmt.Println(fmt.Sprintf(`Summary report for "%v/%v" has been stored to '%v'`, kubedbType, kubedbName, path))
+	fmt.Println(fmt.Sprintf(`Summary report for "%v/%v" has been stored in '%v'`, kubedbType, kubedbName, path))
 	return nil
 }
 
@@ -181,7 +182,6 @@ func newTunnel(client rest.Interface, config *rest.Config, namespace, podName st
 }
 
 func (t *tunnel) forwardPort() error {
-
 	u := t.client.Post().
 		Resource("pods").
 		Namespace(t.Namespace).

@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"path/filepath"
@@ -16,19 +15,19 @@ import (
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
-func NewCmdAuditCompare(out io.Writer, cmdErr io.Writer) *cobra.Command {
+func NewCmdCompare(out io.Writer, cmdErr io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "audit_compare",
-		Short: "Compare audit report",
+		Use:   "compare",
+		Short: "Compare summary reports",
 		Run: func(cmd *cobra.Command, args []string) {
-			cmdutil.CheckErr(compareReport(cmd, out, cmdErr, args))
+			cmdutil.CheckErr(compareReports(cmd, out, cmdErr, args))
 		},
 	}
-	util.AddAuditCompareFlags(cmd)
+	util.AddCompareFlags(cmd)
 	return cmd
 }
 
-func compareReport(cmd *cobra.Command, out, errOut io.Writer, args []string) error {
+func compareReports(cmd *cobra.Command, out, errOut io.Writer, args []string) error {
 	if len(args) != 2 {
 		fmt.Fprint(errOut, "You must provide two summary report to compare.")
 		usageString := "Summary reports not provided."
@@ -38,39 +37,39 @@ func compareReport(cmd *cobra.Command, out, errOut io.Writer, args []string) err
 	reportFile1 := args[0]
 	reportFile2 := args[1]
 
-	var reportData1 *tapi.Report
-	if err := util.ReadFileAs(reportFile1, &reportData1); err != nil {
+	var report1 *tapi.Report
+	if err := util.ReadFileAs(reportFile1, &report1); err != nil {
 		return err
 	}
 
-	var reportData2 *tapi.Report
-	if err := util.ReadFileAs(reportFile2, &reportData2); err != nil {
+	var report2 *tapi.Report
+	if err := util.ReadFileAs(reportFile2, &report2); err != nil {
 		return err
 	}
 
-	if reportData1.Kind != reportData2.Kind {
-		return errors.New("Unable to compare these two summary. Kind mismatch")
+	if report1.Kind != report2.Kind {
+		return fmt.Errorf("Summary reports are not for same type database. (%s, %s)", report1.Kind, report2.Kind)
 	}
 
-	reportData1Byte, err := json.Marshal(reportData1)
+	report1Bytes, err := json.Marshal(report1)
 	if err != nil {
 		return err
 	}
 
-	reportData2Byte, err := json.Marshal(reportData2)
+	report2Bytes, err := json.Marshal(report2)
 	if err != nil {
 		return err
 	}
 
 	// Then, compare them
 	differ := diff.New()
-	d, err := differ.Compare(reportData1Byte, reportData2Byte)
+	d, err := differ.Compare(report1Bytes, report2Bytes)
 	if err != nil {
 		return err
 	}
 
 	var aJson map[string]interface{}
-	if err := json.Unmarshal(reportData1Byte, &aJson); err != nil {
+	if err := json.Unmarshal(report1Bytes, &aJson); err != nil {
 		return err
 	}
 
@@ -93,7 +92,7 @@ func compareReport(cmd *cobra.Command, out, errOut io.Writer, args []string) err
 		return err
 	}
 
-	fmt.Println(fmt.Sprintf(`Compare result has been stored to '%v'`, path))
+	fmt.Println(fmt.Sprintf(`Comparison result has been stored in '%v'.`, path))
 
 	show := cmdutil.GetFlagBool(cmd, "show")
 	if show {
