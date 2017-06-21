@@ -1,5 +1,5 @@
-hash: d39eb3b05b173a3cd40d921b10fd006fab17c4017cdfbe02f25c470ef68a4b27
-updated: 2017-06-21T15:09:32.024563894+06:00
+hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
+updated: 2017-06-21T17:07:52.681215073+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -214,8 +214,6 @@ imports:
   - pkg/controller
   - pkg/docker
   - pkg/eventer
-- name: github.com/k8sdb/postgres
-  version: 9d9211c808c61ee58e3a80480233e48b214fec1a
 - name: github.com/mailru/easyjson
   version: d5b7844b561a7bc640052f1b935f7b800330d7e0
   subpackages:
