@@ -14,11 +14,7 @@ import (
 
 	"github.com/appscode/go/net/httpclient"
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/apimachinery/pkg/docker"
-	pgaudit "github.com/k8sdb/cli/pkg/audit/postgres"
-	esaudit "github.com/k8sdb/cli/pkg/audit/elastic"
-	"github.com/k8sdb/cli/pkg/audit/type"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
@@ -69,6 +65,11 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		return err
 	}
 
+	switch kubedbType {
+	case tapi.ResourceTypeSnapshot, tapi.ResourceTypeDormantDatabase:
+		return fmt.Errorf(`resource type "%v" doesn't support audit operation`, items[0])
+	}
+
 	var kubedbName string
 	if len(items) > 1 {
 		if len(items) > 2 {
@@ -83,37 +84,6 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	}
 
 	namespace, _ := util.GetNamespace(cmd)
-	
-	config, err := f.ClientConfig()
-	if err != nil {
-		return err
-	}
-	extClient := clientset.NewForConfigOrDie(config)
-	
-	var objectMeta metav1.ObjectMeta
-	var typeMeta metav1.TypeMeta
-
-	switch kubedbType {
-	case tapi.ResourceTypeSnapshot, tapi.ResourceTypeDormantDatabase:
-		return fmt.Errorf(`resource type "%v" doesn't support audit operation`, items[0])
-	case tapi.ResourceTypePostgres:
-		postgres, err := extClient.Postgreses(namespace).Get(kubedbName)
-		if err != nil {
-			return err
-		}
-		objectMeta = postgres.ObjectMeta
-		typeMeta = postgres.TypeMeta
-	case tapi.ResourceTypeElastic:
-		elastic, err := extClient.Elastics(namespace).Get(kubedbName)
-		if err != nil {
-			return err
-		}
-		objectMeta = elastic.ObjectMeta
-		typeMeta = elastic.TypeMeta
-	}
-	objectMeta.ResourceVersion = ""
-	objectMeta.SelfLink = ""
-	objectMeta.UID = ""
 
 	goClient, err := f.ClientSet()
 	if err != nil {
@@ -140,7 +110,12 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	if err != nil {
 		return err
 	}
-	
+
+	config, err := f.ClientConfig()
+	if err != nil {
+		return err
+	}
+
 	tunnel := newTunnel(restClient, config, operatorNamespace, operatorPodList.Items[0].Name, docker.OperatorPortNumber)
 	if err := tunnel.forwardPort(); err != nil {
 		return err
@@ -158,33 +133,21 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		return err
 	}
 
-	var summary *types.Summary
-	switch kubedbType {
-	case tapi.ResourceTypePostgres:
-		summary, err = pgaudit.GetReport(proxyClient, req)
-		if err != nil {
-			return err
-		}
-	case tapi.ResourceTypeElastic:
-		summary, err = esaudit.GetReport(proxyClient, req)
-		if err != nil {
-			return err
-		}
-
+	var report *tapi.Report
+	if _, err := proxyClient.Do(req, &report); err != nil {
+		return err
 	}
-	summary.TypeMeta = typeMeta
-	summary.ObjectMeta = objectMeta
 
 	outputDirectory := cmdutil.GetFlagString(cmd, "output")
 	fileName := fmt.Sprintf("report-%v.json", time.Now().UTC().Format("20060102-150405"))
 	path := filepath.Join(outputDirectory, fileName)
 
-	summaryData, err := json.MarshalIndent(summary, "", "  ")
+	reportDataByte, err := json.MarshalIndent(report, "", "  ")
 	if err != nil {
 		return err
 	}
 
-	if err := util.WriteJson(path, summaryData); err != nil {
+	if err := util.WriteJson(path, reportDataByte); err != nil {
 		return err
 	}
 

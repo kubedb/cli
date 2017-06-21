@@ -1,5 +1,5 @@
 hash: d39eb3b05b173a3cd40d921b10fd006fab17c4017cdfbe02f25c470ef68a4b27
-updated: 2017-06-20T12:49:05.513071702+06:00
+updated: 2017-06-21T15:09:32.024563894+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -153,12 +153,6 @@ imports:
   version: 6aced65f8501fe1217321abf0749d354824ba2ff
 - name: github.com/go-openapi/swag
   version: 1d0bd113de87027671077d3c71eb3ac5d7dbba72
-- name: github.com/go-xorm/builder
-  version: db75972580de4a7c6c20fff5b16a924c3de3fa12
-- name: github.com/go-xorm/core
-  version: 87aca223378aab7a4bf31ef53f20fde4997ad793
-- name: github.com/go-xorm/xorm
-  version: 3ad0b428ae702d7d3f880c90a7f6d89805fcd2f7
 - name: github.com/gogo/protobuf
   version: e18d7aa8f8c624c915db340349aad4c49b10d173
   subpackages:
@@ -211,7 +205,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: d62217f181ffdc68c48a8dbbc0fef9422c23eb4f
+  version: f385707cc1399e68c82b74548dfe20fc082068b6
   subpackages:
   - api
   - api/install
@@ -221,15 +215,7 @@ imports:
   - pkg/docker
   - pkg/eventer
 - name: github.com/k8sdb/postgres
-  version: 01a3e5dea2aca40c2ff195c383ba1145d636ebf5
-  subpackages:
-  - pkg/audit/compare
-  - pkg/audit/summary
-  - pkg/audit/type
-- name: github.com/lib/pq
-  version: 50761b0867bd1d9d069276790bcd4a3bccf2324a
-  subpackages:
-  - oid
+  version: 9d9211c808c61ee58e3a80480233e48b214fec1a
 - name: github.com/mailru/easyjson
   version: d5b7844b561a7bc640052f1b935f7b800330d7e0
   subpackages:
@@ -252,6 +238,11 @@ imports:
   version: 5bd2802263f21d8788851d5305584c82a5c75d7e
 - name: github.com/russross/blackfriday
   version: 300106c228d52c8941d4b3de6054a6062a86dda3
+- name: github.com/sergi/go-diff
+  version: 24e2351369ec4949b2ed0dc5c477afdd4c4034e8
+  repo: https://github.com/sergi/go-diff
+  subpackages:
+  - diffmatchpatch
 - name: github.com/shurcooL/sanitized_anchor_name
   version: 10ef21a441db47d8b13ebcc5fd2310f636973c77
 - name: github.com/Sirupsen/logrus
@@ -266,6 +257,13 @@ imports:
   version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
   subpackages:
   - codec
+- name: github.com/yudai/gojsondiff
+  version: 9209d1532c51cabe0439993586a71c207b09a0ac
+  subpackages:
+  - formatter
+- name: github.com/yudai/golcs
+  version: d1c525dea8ce39ea9a783d33cf08932305373f2c
+  repo: https://github.com/yudai/golcs
 - name: golang.org/x/crypto
   version: d172538b2cfce0c13cee31e647d0367aa8cd2486
   subpackages:
@@ -288,7 +286,8 @@ imports:
   - jws
   - jwt
 - name: golang.org/x/sys
-  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
+  repo: https://go.googlesource.com/sys
   subpackages:
   - unix
 - name: golang.org/x/text
@@ -387,7 +386,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 76d76a83b37ee95e585ef852922d174e1027962d
+  version: 9ae8a89e835edc63f714d0aadaa2101e74d1498d
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount

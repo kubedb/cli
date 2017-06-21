@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/k8sdb/cli/pkg/audit/type"
+	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	diff "github.com/yudai/gojsondiff"
@@ -38,12 +38,12 @@ func compareReport(cmd *cobra.Command, out, errOut io.Writer, args []string) err
 	reportFile1 := args[0]
 	reportFile2 := args[1]
 
-	var reportData1 *types.Summary
+	var reportData1 *tapi.Report
 	if err := util.ReadFileAs(reportFile1, &reportData1); err != nil {
 		return err
 	}
 
-	var reportData2 *types.Summary
+	var reportData2 *tapi.Report
 	if err := util.ReadFileAs(reportFile2, &reportData2); err != nil {
 		return err
 	}
