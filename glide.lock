@@ -1,5 +1,5 @@
 hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-21T17:07:52.681215073+06:00
+updated: 2017-06-21T04:59:21.938533664-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -71,7 +71,7 @@ imports:
   - httputil
   - timeutil
 - name: github.com/cpuguy83/go-md2man
-  version: 23709d0847197db6021a51fdb193e66e9222d4e7
+  version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -237,8 +237,7 @@ imports:
 - name: github.com/russross/blackfriday
   version: 300106c228d52c8941d4b3de6054a6062a86dda3
 - name: github.com/sergi/go-diff
-  version: 24e2351369ec4949b2ed0dc5c477afdd4c4034e8
-  repo: https://github.com/sergi/go-diff
+  version: feef008d51ad2b3778f85d387ccf91735543008d
   subpackages:
   - diffmatchpatch
 - name: github.com/shurcooL/sanitized_anchor_name
@@ -260,8 +259,7 @@ imports:
   subpackages:
   - formatter
 - name: github.com/yudai/golcs
-  version: d1c525dea8ce39ea9a783d33cf08932305373f2c
-  repo: https://github.com/yudai/golcs
+  version: ecda9a501e8220fae3b4b600c3db4b0ba22cfc68
 - name: golang.org/x/crypto
   version: d172538b2cfce0c13cee31e647d0367aa8cd2486
   subpackages:
@@ -284,8 +282,7 @@ imports:
   - jws
   - jwt
 - name: golang.org/x/sys
-  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
-  repo: https://go.googlesource.com/sys
+  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
   subpackages:
   - unix
 - name: golang.org/x/text
@@ -384,7 +381,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 9ae8a89e835edc63f714d0aadaa2101e74d1498d
+  version: 2308857ad3b8b18abf74ff734853973eda9da94d
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
@@ -487,7 +484,7 @@ imports:
   - util/integer
   - util/jsonpath
 - name: k8s.io/kubernetes
-  version: 7c3906a4eccd5a7cad245de0bd65337927a60bef
+  version: 7fa1c1756d8bc963f1a389f4a6937dc71f08ada2
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install
