@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net"
+	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -122,13 +123,13 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	}
 
 	proxyClient := httpclient.Default().WithBaseURL(fmt.Sprintf("http://127.0.0.1:%d", tunnel.Local))
-	summaryReportURL := fmt.Sprintf("/kubedb.com/v1alpha1/namespaces/%v/%v/%v/report", namespace, kubedbType, kubedbName)
+	summaryReportURL, _ := url.Parse(fmt.Sprintf("/kubedb.com/v1alpha1/namespaces/%v/%v/%v/report", namespace, kubedbType, kubedbName))
 
 	index := cmdutil.GetFlagString(cmd, "index")
 	if index != "" {
-		summaryReportURL = fmt.Sprintf("%s?index=%v", summaryReportURL, index)
+		summaryReportURL.Query().Set("index", index)
 	}
-	req, err := proxyClient.NewRequest("GET", summaryReportURL, nil)
+	req, err := proxyClient.NewRequest("GET", summaryReportURL.String(), nil)
 	if err != nil {
 		return err
 	}
