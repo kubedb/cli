@@ -1,5 +1,5 @@
-hash: 912d02825c6ba05f478cd9f14576a38f53c6b6d858124d43b8e9ec0afb1bacf9
-updated: 2017-06-21T04:59:21.938533664-07:00
+hash: 652954e0bb28b512e685b5ac175eeb067bde6d595732b7cda5a6e36b710ddb49
+updated: 2017-06-22T04:33:18.468913628-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -205,7 +205,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: f385707cc1399e68c82b74548dfe20fc082068b6
+  version: cb0202a7a4d5fe92f58ca5c44b710171d8dd58e2
   subpackages:
   - api
   - api/install
@@ -245,7 +245,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: 99b5d838ca16c25cc4944e323684f8415e8b10ba
+  version: 31694f19adeeaeb0a0e5fe95441b390d757753d2
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -259,7 +259,8 @@ imports:
   subpackages:
   - formatter
 - name: github.com/yudai/golcs
-  version: ecda9a501e8220fae3b4b600c3db4b0ba22cfc68
+  version: d1c525dea8ce39ea9a783d33cf08932305373f2c
+  repo: https://github.com/yudai/golcs
 - name: golang.org/x/crypto
   version: d172538b2cfce0c13cee31e647d0367aa8cd2486
   subpackages:
@@ -282,7 +283,8 @@ imports:
   - jws
   - jwt
 - name: golang.org/x/sys
-  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
+  repo: https://go.googlesource.com/sys
   subpackages:
   - unix
 - name: golang.org/x/text
