@@ -7,7 +7,7 @@
 We can deploy this operator using `kubedb` CLI.
 
 ```bash
-$ kubedb init --namespace='default' --version='0.1.0'
+$ kubedb init
 
 Successfully created operator deployment.
 Successfully created operator service.

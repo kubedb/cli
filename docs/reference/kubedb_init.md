@@ -24,10 +24,10 @@ kubedb init [flags]
 ### Options
 
 ```
-  -h, --help               help for init
-  -n, --namespace string   Namespace name. Operator will be deployed in this namespace. (default "default")
-      --upgrade            If present, Upgrade operator to use provided version
-      --version string     Operator version (default "0.1.0")
+  -h, --help                        help for init
+      --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
+      --upgrade                     If present, Upgrade operator to use provided version
+      --version string              Operator version (default "0.1.0")
 ```
 
 ### Options inherited from parent commands
