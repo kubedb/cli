@@ -102,7 +102,7 @@ operator (release-0.1) $ git merge master
 operator (release-0.1) $ git tag -fa 0.1.0
 operator (release-0.1) $ git push origin release-0.1 --tags
 operator (release-0.1) $ rm -rf dist
-operator (release-0.1) $ ./hack/docker/operator/setup.sh; env APPSCODE_ENV=prod ./hack/docker/operator/setup.sh release
+operator (release-0.1) $ ./hack/docker/setup.sh; env APPSCODE_ENV=prod ./hack/docker/setup.sh release
 
 operator (release-0.1) $ git checkout master
 operator (master) $ git commit -a -m 'Start 0.2 development cycle'
