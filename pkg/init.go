@@ -22,14 +22,14 @@ import (
 
 var (
 	init_long = templates.LongDesc(`
-		Create or upgrade unified operator for kubedb databases.`)
+		Install or upgrade unified operator for kubedb databases.`)
 
 	init_example = templates.Examples(`
-		# Create operator with version canary.
-		kubedb init --version=0.1.0
+		# Install latest released operator.
+		kubedb init
 
 		# Upgrade operator to use another version.
-		kubedb init --version=0.1.0 --upgrade`)
+		kubedb init --version=0.2.0 --upgrade`)
 )
 
 func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {

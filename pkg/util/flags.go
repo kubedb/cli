@@ -44,7 +44,7 @@ func AddEditFlags(cmd *cobra.Command) {
 
 func AddInitFlags(cmd *cobra.Command) {
 	cmd.Flags().String("operator-namespace", "kube-system", "Name of namespace where operator will be deployed.")
-	cmd.Flags().String("version", "0.1.0", "Operator version")
+	cmd.Flags().String("version", "0.2.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }
 

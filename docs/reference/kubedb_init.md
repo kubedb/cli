@@ -5,7 +5,7 @@ Create or upgrade unified operator
 ### Synopsis
 
 
-Create or upgrade unified operator for kubedb databases.
+Install or upgrade unified operator for kubedb databases.
 
 ```
 kubedb init [flags]
@@ -14,11 +14,11 @@ kubedb init [flags]
 ### Examples
 
 ```
-  # Create operator with version canary.
-  kubedb init --version=0.1.0
+  # Install latest released operator.
+  kubedb init
   
   # Upgrade operator to use another version.
-  kubedb init --version=0.1.0 --upgrade
+  kubedb init --version=0.2.0 --upgrade
 ```
 
 ### Options
@@ -27,7 +27,7 @@ kubedb init [flags]
   -h, --help                        help for init
       --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
       --upgrade                     If present, Upgrade operator to use provided version
-      --version string              Operator version (default "0.1.0")
+      --version string              Operator version (default "0.2.0")
 ```
 
 ### Options inherited from parent commands
