@@ -6,6 +6,7 @@ spec:
   version: 2.3.1
   replicas: 1
   monitor:
+    agent: coreos-prometheus-operator
     prometheus:
       namespace: default
       labels:

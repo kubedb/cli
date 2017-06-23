@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"time"
@@ -14,6 +13,7 @@ import (
 	_ "github.com/graymeta/stow/s3"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/eventer"
+	"github.com/k8sdb/apimachinery/pkg/validator"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -23,120 +23,6 @@ import (
 	batch "k8s.io/client-go/pkg/apis/batch/v1"
 	"k8s.io/client-go/tools/record"
 )
-
-func (c *Controller) ValidateStorageSpec(spec *tapi.StorageSpec) (*tapi.StorageSpec, error) {
-	if spec == nil {
-		return nil, nil
-	}
-
-	if spec.Class == "" {
-		return nil, fmt.Errorf(`Object 'Class' is missing in '%v'`, *spec)
-	}
-
-	if _, err := c.Client.StorageV1().StorageClasses().Get(spec.Class, metav1.GetOptions{}); err != nil {
-		if kerr.IsNotFound(err) {
-			return nil, fmt.Errorf(`Spec.Storage.Class "%v" not found`, spec.Class)
-		}
-		return nil, err
-	}
-
-	if len(spec.AccessModes) == 0 {
-		spec.AccessModes = []apiv1.PersistentVolumeAccessMode{
-			apiv1.ReadWriteOnce,
-		}
-		log.Infof(`Using "%v" as AccessModes in "%v"`, apiv1.ReadWriteOnce, *spec)
-	}
-
-	if val, found := spec.Resources.Requests[apiv1.ResourceStorage]; found {
-		if val.Value() <= 0 {
-			return nil, errors.New("Invalid ResourceStorage request")
-		}
-	} else {
-		return nil, errors.New("Missing ResourceStorage request")
-	}
-
-	return spec, nil
-}
-
-func (c *Controller) ValidateBackupSchedule(spec *tapi.BackupScheduleSpec) error {
-	if spec == nil {
-		return nil
-	}
-	// CronExpression can't be empty
-	if spec.CronExpression == "" {
-		return errors.New("Invalid cron expression")
-	}
-
-	return c.ValidateSnapshotSpec(spec.SnapshotStorageSpec)
-}
-
-func (c *Controller) ValidateSnapshotSpec(spec tapi.SnapshotStorageSpec) error {
-	// BucketName can't be empty
-	bucketName := spec.BucketName
-	if bucketName == "" {
-		return fmt.Errorf(`Object 'BucketName' is missing in '%v'`, spec)
-	}
-
-	// Need to provide Storage credential secret
-	storageSecret := spec.StorageSecret
-	if storageSecret == nil {
-		return fmt.Errorf(`Object 'StorageSecret' is missing in '%v'`, spec)
-	}
-
-	// Credential SecretName  can't be empty
-	storageSecretName := storageSecret.SecretName
-	if storageSecretName == "" {
-		return fmt.Errorf(`Object 'SecretName' is missing in '%v'`, *spec.StorageSecret)
-	}
-	return nil
-}
-
-const (
-	keyProvider = "provider"
-	keyConfig   = "config"
-)
-
-func (c *Controller) CheckBucketAccess(snapshotSpec tapi.SnapshotStorageSpec, namespace string) error {
-	secret, err := c.Client.CoreV1().Secrets(namespace).Get(snapshotSpec.StorageSecret.SecretName, metav1.GetOptions{})
-	if err != nil {
-		return err
-	}
-
-	provider := secret.Data[keyProvider]
-	if provider == nil {
-		return errors.New("Missing provider key")
-	}
-	configData := secret.Data[keyConfig]
-	if configData == nil {
-		return errors.New("Missing config key")
-	}
-
-	var config stow.ConfigMap
-	if err := yaml.Unmarshal(configData, &config); err != nil {
-		return err
-	}
-
-	loc, err := stow.Dial(string(provider), config)
-	if err != nil {
-		return err
-	}
-
-	container, err := loc.Container(snapshotSpec.BucketName)
-	if err != nil {
-		return err
-	}
-
-	r := bytes.NewReader([]byte("CheckBucketAccess"))
-	item, err := container.Put(".kubedb", r, r.Size(), nil)
-	if err != nil {
-		return err
-	}
-
-	if err := container.RemoveItem(item.ID()); err != nil {
-		return err
-	}
-	return nil
-}
 
 func (c *Controller) CheckStatefulSetPodStatus(statefulSet *apps.StatefulSet, checkDuration time.Duration) error {
 	podName := fmt.Sprintf("%v-%v", statefulSet.Name, 0)
@@ -201,11 +87,11 @@ func (c *Controller) DeleteSnapshotData(snapshot *tapi.Snapshot) error {
 		return err
 	}
 
-	provider := secret.Data[keyProvider]
+	provider := secret.Data[validator.KeyProvider]
 	if provider == nil {
 		return errors.New("Missing provider key")
 	}
-	configData := secret.Data[keyConfig]
+	configData := secret.Data[validator.KeyConfig]
 	if configData == nil {
 		return errors.New("Missing config key")
 	}

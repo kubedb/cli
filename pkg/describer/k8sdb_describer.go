@@ -53,7 +53,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
 		fmt.Fprintf(out, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Labels != nil {
-			printLabelsMultiline(out, "Labels:", item.Labels)
+			printLabelsMultiline(out, "Labels", item.Labels)
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -123,7 +123,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
 		fmt.Fprintf(out, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
 		if item.Labels != nil {
-			printLabelsMultiline(out, "Labels:", item.Labels)
+			printLabelsMultiline(out, "Labels", item.Labels)
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -184,7 +184,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 			fmt.Fprintf(out, "CompletionTimestamp:\t%s\n", timeToString(item.Status.CompletionTime))
 		}
 		if item.Labels != nil {
-			printLabelsMultiline(out, "Labels:", item.Labels)
+			printLabelsMultiline(out, "Labels", item.Labels)
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -248,7 +248,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 			fmt.Fprintf(out, "WipeOutTimestamp:\t%s\n", timeToString(item.Status.WipeOutTime))
 		}
 		if item.Labels != nil {
-			printLabelsMultiline(out, "Labels:", item.Labels)
+			printLabelsMultiline(out, "Labels", item.Labels)
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -294,12 +294,13 @@ func describeMonitor(monitor *tapi.MonitorSpec, out io.Writer) {
 
 	fmt.Fprint(out, "\n")
 	fmt.Fprint(out, "Monitoring System:\n")
+	fmt.Fprintf(out, "  Agent:\t%s\n", monitor.Agent)
 	if monitor.Prometheus != nil {
 		prom := monitor.Prometheus
 		fmt.Fprint(out, "  Prometheus:\n")
 		fmt.Fprintf(out, "    Namespace:\t%s\n", prom.Namespace)
 		if prom.Labels != nil {
-			printLabelsMultiline(out, "    Labels:", prom.Labels)
+			printLabelsMultiline(out, "    Labels", prom.Labels)
 		}
 		fmt.Fprintf(out, "    Interval:\t%s\n", prom.Interval)
 	}
@@ -336,7 +337,7 @@ func describeOrigin(origin tapi.Origin, out io.Writer) {
 	fmt.Fprintf(out, "  Name:\t%s\n", origin.Name)
 	fmt.Fprintf(out, "  Namespace:\t%s\n", origin.Namespace)
 	if origin.Labels != nil {
-		printLabelsMultiline(out, "  Labels:", origin.Labels)
+		printLabelsMultiline(out, "  Labels", origin.Labels)
 	}
 	if origin.Annotations != nil {
 		printLabelsMultiline(out, "  Annotations", origin.Annotations)
