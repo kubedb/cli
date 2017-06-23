@@ -1,6 +1,8 @@
 package docker
 
 import (
+	"net/http"
+
 	docker "github.com/heroku/docker-registry-client/registry"
 )
 
@@ -9,11 +11,14 @@ const (
 )
 
 func CheckDockerImageVersion(repository, reference string) error {
-	hub, err := docker.New(registryUrl, "", "")
-	if err != nil {
-		return err
+	registry := &docker.Registry{
+		URL: registryUrl,
+		Client: &http.Client{
+			Transport: docker.WrapTransport(http.DefaultTransport, registryUrl, "", ""),
+		},
+		Logf: docker.Quiet,
 	}
 
-	_, err = hub.Manifest(repository, reference)
+	_, err := registry.Manifest(repository, reference)
 	return err
 }

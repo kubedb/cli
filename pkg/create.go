@@ -8,6 +8,7 @@ import (
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
+	"github.com/k8sdb/cli/pkg/validator"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
@@ -90,7 +91,12 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		}
 
 		if kind == tapi.ResourceKindDormantDatabase {
-			return fmt.Errorf(`resource type "%v" doesn't support edit operation`, kind)
+			return fmt.Errorf(`resource type "%v" doesn't support create operation`, kind)
+		}
+
+		fmt.Println(fmt.Sprintf(`validating "%v"`, info.Source))
+		if err := validator.Validate(f, info); err != nil {
+			return cmdutil.AddSourceToErr("validating", info.Source, err)
 		}
 
 		infoList = append(infoList, info)

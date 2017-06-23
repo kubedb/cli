@@ -93,7 +93,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 			return nil
 		}
 
-		if err := util.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
+		if err := docker.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
 			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, docker.ImageOperator, version))
 			return nil
 		}
@@ -106,7 +106,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 
 		fmt.Fprintln(out, "Successfully upgraded operator deployment.")
 	} else {
-		if err := util.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
+		if err := docker.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
 			fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, docker.ImageOperator, version))
 			return nil
 		}

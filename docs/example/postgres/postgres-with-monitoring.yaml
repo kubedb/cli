@@ -5,6 +5,7 @@ metadata:
 spec:
   version: 9.5
   monitor:
+    agent: coreos-prometheus-operator
     prometheus:
       namespace: default
       labels:
