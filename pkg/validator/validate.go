@@ -25,7 +25,6 @@ func Validate(client clientset.Interface, info *resource.Info) error {
 			return err
 		}
 		return esv.ValidateElastic(client, elastic)
-
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres
 		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
