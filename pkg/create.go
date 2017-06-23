@@ -11,6 +11,7 @@ import (
 	"github.com/k8sdb/cli/pkg/validator"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -79,6 +80,15 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		return err
 	}
 
+	config, err := f.ClientConfig()
+	if err != nil {
+		return err
+	}
+	client, err := clientset.NewForConfig(config)
+	if err != nil {
+		return err
+	}
+
 	infoList := make([]*resource.Info, 0)
 	err = r.Visit(func(info *resource.Info, err error) error {
 		if err != nil {
@@ -95,7 +105,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		}
 
 		fmt.Println(fmt.Sprintf(`validating "%v"`, info.Source))
-		if err := validator.Validate(f, info); err != nil {
+		if err := validator.Validate(client, info); err != nil {
 			return cmdutil.AddSourceToErr("validating", info.Source, err)
 		}
 

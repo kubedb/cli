@@ -8,21 +8,10 @@ import (
 	esv "github.com/k8sdb/elasticsearch/pkg/validator"
 	pgv "github.com/k8sdb/postgres/pkg/validator"
 	clientset "k8s.io/client-go/kubernetes"
-	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 )
 
-func Validate(f cmdutil.Factory, info *resource.Info) error {
-	config, err := f.ClientConfig()
-	if err != nil {
-		return err
-	}
-
-	client, err := clientset.NewForConfig(config)
-	if err != nil {
-		return err
-	}
-
+func Validate(client clientset.Interface, info *resource.Info) error {
 	objByte, err := encoder.Encode(info.Object)
 	if err != nil {
 		return err
