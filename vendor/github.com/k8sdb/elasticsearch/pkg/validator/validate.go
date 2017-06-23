@@ -39,15 +39,10 @@ func ValidateElastic(client clientset.Interface, elastic *tapi.Elastic) error {
 
 	monitorSpec := elastic.Spec.Monitor
 	if monitorSpec != nil {
-		if monitorSpec.Agent == "" {
-			return fmt.Errorf(`Object 'Agent' is missing in '%v'`, monitorSpec)
+		if err := amv.ValidateMonitorSpec(monitorSpec); err != nil {
+			return err
 		}
-		if monitorSpec.Prometheus != nil {
-			if monitorSpec.Agent != tapi.AgentCoreosPrometheus {
-				return fmt.Errorf(`Invalid 'Agent' in '%v'`, monitorSpec)
-			}
-		}
-	}
 
+	}
 	return nil
 }

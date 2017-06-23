@@ -2,6 +2,7 @@ package validator
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -126,6 +127,24 @@ func CheckBucketAccess(client clientset.Interface, snapshotSpec tapi.SnapshotSto
 	if err := container.RemoveItem(item.ID()); err != nil {
 		return err
 	}
+	return nil
+}
+
+func ValidateMonitorSpec(monitorSpec *tapi.MonitorSpec) error {
+	specData, err := json.Marshal(monitorSpec)
+	if err != nil {
+		return err
+	}
+
+	if monitorSpec.Agent == "" {
+		return fmt.Errorf(`Object 'Agent' is missing in '%v'`, string(specData))
+	}
+	if monitorSpec.Prometheus != nil {
+		if monitorSpec.Agent != tapi.AgentCoreosPrometheus {
+			return fmt.Errorf(`Invalid 'Agent' in '%v'`, string(specData))
+		}
+	}
+
 	return nil
 }
 
