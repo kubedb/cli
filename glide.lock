@@ -1,5 +1,5 @@
 hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
-updated: 2017-06-23T16:53:17.76497112+06:00
+updated: 2017-06-23T07:44:00.374256843-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 5eabd32a8a0fe824b5e12c37dc53a0afea8507c9
+  version: ecda61fa4e8943020e9948723e49c4ae544f7a3a
   subpackages:
   - encoding/json/types
   - net/httpclient
@@ -71,7 +71,7 @@ imports:
   - httputil
   - timeutil
 - name: github.com/cpuguy83/go-md2man
-  version: 23709d0847197db6021a51fdb193e66e9222d4e7
+  version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -254,7 +254,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: 31694f19adeeaeb0a0e5fe95441b390d757753d2
+  version: e458bb7ab84aae1bb4b4d36eccf9332f0d659e38
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -338,7 +338,7 @@ imports:
 - name: gopkg.in/robfig/cron.v2
   version: be2e0b0deed5a68ffee390b4583a13aff8321535
 - name: gopkg.in/yaml.v2
-  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:
@@ -392,7 +392,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: ab57ed5a72c3b67058f665d660e23bae18339fc2
+  version: 2308857ad3b8b18abf74ff734853973eda9da94d
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
@@ -495,7 +495,7 @@ imports:
   - util/integer
   - util/jsonpath
 - name: k8s.io/kubernetes
-  version: 7c3906a4eccd5a7cad245de0bd65337927a60bef
+  version: 7fa1c1756d8bc963f1a389f4a6937dc71f08ada2
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install
