@@ -112,7 +112,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 			return nil
 		}
 
-		if err := createOperatorDeployment(client, namespace, version, serviceAccount); err != nil {
+		if err := createOperatorDeployment(client, namespace, serviceAccount, version); err != nil {
 			if kerr.IsAlreadyExists(err) {
 				fmt.Fprintln(errOut, "Operator deployment already exists.")
 			} else {
@@ -144,7 +144,7 @@ var operatorLabel = map[string]string{
 	"app": docker.OperatorName,
 }
 
-func createOperatorDeployment(client kubernetes.Interface, namespace, version, serviceAccount string) error {
+func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAccount, version string) error {
 	deployment := &extensions.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
