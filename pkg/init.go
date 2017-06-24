@@ -50,6 +50,7 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	upgrade := cmdutil.GetFlagBool(cmd, "upgrade")
 	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
+	serviceAccount := cmdutil.GetFlagString(cmd, "operator-service-account")
 	version := cmdutil.GetFlagString(cmd, "version")
 
 	client, err := kube.NewKubeClient(cmd)
@@ -111,7 +112,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 			return nil
 		}
 
-		if err := createOperatorDeployment(client, namespace, version); err != nil {
+		if err := createOperatorDeployment(client, namespace, serviceAccount, version); err != nil {
 			if kerr.IsAlreadyExists(err) {
 				fmt.Fprintln(errOut, "Operator deployment already exists.")
 			} else {
@@ -143,7 +144,7 @@ var operatorLabel = map[string]string{
 	"app": docker.OperatorName,
 }
 
-func createOperatorDeployment(client kubernetes.Interface, namespace, version string) error {
+func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAccount, version string) error {
 	deployment := &extensions.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
@@ -188,6 +189,7 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, version st
 							},
 						},
 					},
+					ServiceAccountName: serviceAccount,
 				},
 			},
 		},
