@@ -1,6 +1,6 @@
 ### Monitor Database
 
-We now support only Promethues to minitor database.
+We now support only Promethues to monitor database.
 
 **T**o set monitoring by Promethues, we need to set following in `spec.monitor.prometheus`
 
