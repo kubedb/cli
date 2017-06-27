@@ -29,6 +29,6 @@ kubedb summarize [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Controls kubedb objects
+* [kubedb](kubedb.md)	 - KubeDB by AppsCode - Kubernetes ready production-grade Databases
 
 

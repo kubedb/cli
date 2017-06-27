@@ -1,13 +1,11 @@
 ## kubedb
 
-Controls kubedb objects
+KubeDB by AppsCode - Kubernetes ready production-grade Databases
 
 ### Synopsis
 
 
-kubedb CLI controls kubedb ThirdPartyResource objects. 
-
-Find more information at https://github.com/k8sdb/cli.
+Command line interface for KubeDB. Find more information at https://github.com/k8sdb/cli.
 
 ```
 kubedb [flags]
