@@ -25,6 +25,6 @@ kubedb version [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - KubeDB by AppsCode - Kubernetes ready production-grade Databases
+* [kubedb](kubedb.md)	 - Command line interface for KubeDB
 
 

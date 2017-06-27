@@ -15,9 +15,10 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 	var enableAnalytics bool
 	cmds := &cobra.Command{
 		Use:   "kubedb",
-		Short: "KubeDB by AppsCode - Kubernetes ready production-grade Databases",
+		Short: "Command line interface for KubeDB",
 		Long: templates.LongDesc(`
-      Command line interface for KubeDB.
+      KubeDB by AppsCode - Kubernetes ready production-grade Databases
+
       Find more information at https://github.com/k8sdb/cli.`),
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if enableAnalytics {
