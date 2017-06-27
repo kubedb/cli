@@ -44,7 +44,7 @@ func AddEditFlags(cmd *cobra.Command) {
 
 func AddInitFlags(cmd *cobra.Command) {
 	cmd.Flags().String("operator-namespace", "kube-system", "Name of namespace where operator will be deployed.")
-	cmd.Flags().String("operator-service-account", "default", "Service account name used to run operator")
+	cmd.Flags().Bool("rbac", false, "If true, configures RBAC roles for operator")
 	cmd.Flags().String("version", "0.2.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 }

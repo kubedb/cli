@@ -50,8 +50,12 @@ func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	upgrade := cmdutil.GetFlagBool(cmd, "upgrade")
 	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
-	serviceAccount := cmdutil.GetFlagString(cmd, "operator-service-account")
 	version := cmdutil.GetFlagString(cmd, "version")
+	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
+	serviceAccount := "default"
+	if configureRBAC {
+		serviceAccount = "kubedb-operator"
+	}
 
 	client, err := kube.NewKubeClient(cmd)
 	if err != nil {
