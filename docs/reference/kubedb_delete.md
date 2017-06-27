@@ -45,6 +45,6 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Controls kubedb objects
+* [kubedb](kubedb.md)	 - Command line interface for KubeDB
 
 

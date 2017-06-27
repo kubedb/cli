@@ -40,6 +40,6 @@ kubedb create [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Controls kubedb objects
+* [kubedb](kubedb.md)	 - Command line interface for KubeDB
 
 
