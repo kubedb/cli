@@ -179,6 +179,15 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAcc
 										},
 									},
 								},
+								{
+									Name: "OPERATOR_SERVICE_ACCOUNT",
+									ValueFrom: &apiv1.EnvVarSource{
+										FieldRef: &apiv1.ObjectFieldSelector{
+											APIVersion: "v1",
+											FieldPath:  "spec.serviceAccountName",
+										},
+									},
+								},
 							},
 							Ports: []apiv1.ContainerPort{
 								{
