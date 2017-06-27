@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"io"
 	"strings"
-
+	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/appscode/go/types"
+	batch "k8s.io/client-go/pkg/apis/batch/v1"
+
+	apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
@@ -175,7 +178,56 @@ func rbacstuff(client kubernetes.Interface, namespace, serviceAccount, version s
 			Name: docker.OperatorName,
 		},
 		Rules: []rbac.PolicyRule{
-			{},
+			{
+				APIGroups: []string{extensions.GroupName},
+				Resources: []string{"thirdpartyresources"},
+				Verbs:     []string{"get", "create"},
+			},
+			{
+				APIGroups: []string{tapi.GroupName},
+				Resources: []string{rbac.ResourceAll},
+				Verbs:     []string{rbac.VerbAll},
+			},
+			{
+				APIGroups: []string{extensions.GroupName},
+				Resources: []string{"deployments"},
+				Verbs:     []string{"create", "get", "update"},
+			},
+			{
+				APIGroups: []string{apps.GroupName},
+				Resources: []string{"deployments"},
+				Verbs:     []string{"create", "get", "update"},
+			},
+			{
+				APIGroups: []string{apps.GroupName},
+				Resources: []string{"statefulsets"},
+				Verbs:     []string{rbac.VerbAll},
+			},
+			{
+				APIGroups: []string{apiv1.GroupName},
+				Resources: []string{"secrets", "services"},
+				Verbs:     []string{rbac.VerbAll},
+			},
+			{
+				APIGroups: []string{batch.GroupName},
+				Resources: []string{"jobs"},
+				Verbs:     []string{"create", "delete"},
+			},
+			{
+				APIGroups: []string{apiv1.GroupName},
+				Resources: []string{"events"},
+				Verbs:     []string{"create"},
+			},
+			{
+				APIGroups: []string{apiv1.GroupName},
+				Resources: []string{"pods"},
+				Verbs:     []string{"get", "list", "delete"},
+			},
+			{
+				APIGroups: []string{"monitoring.coreos.com"},
+				Resources: []string{"servicemonitors"},
+				Verbs:     []string{"get", "create", "update"},
+			},
 		},
 	}
 	client.RbacV1beta1().ClusterRoles().Create(&role)
