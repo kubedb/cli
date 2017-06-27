@@ -16,6 +16,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
 	extensions "k8s.io/client-go/pkg/apis/extensions/v1beta1"
+	rbac "k8s.io/client-go/pkg/apis/rbac/v1beta1"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
@@ -52,9 +53,9 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
 	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
-	serviceAccount := "default"
+	serviceAccount := apiv1.NamespaceDefault
 	if configureRBAC {
-		serviceAccount = "kubedb-operator"
+		serviceAccount = docker.OperatorName
 	}
 
 	client, err := kube.NewKubeClient(cmd)
@@ -146,6 +147,48 @@ func getOperatorDeployment(client kubernetes.Interface, namespace string) (*exte
 
 var operatorLabel = map[string]string{
 	"app": docker.OperatorName,
+}
+
+func rbacstuff(client kubernetes.Interface, namespace, serviceAccount, version string) error {
+	roleBinding := rbac.ClusterRoleBinding{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      docker.OperatorName,
+			Namespace: namespace,
+		},
+		RoleRef: rbac.RoleRef{
+			APIGroup: rbac.GroupName,
+			Kind:     "ClusterRole",
+			Name:     docker.OperatorName,
+		},
+		Subjects: []rbac.Subject{
+			{
+				Kind:      rbac.ServiceAccountKind,
+				Name:      docker.OperatorName,
+				Namespace: namespace,
+			},
+		},
+	}
+	client.RbacV1beta1().ClusterRoleBindings().Create(&roleBinding)
+
+	role := rbac.ClusterRole{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: docker.OperatorName,
+		},
+		Rules: []rbac.PolicyRule{
+			{},
+		},
+	}
+	client.RbacV1beta1().ClusterRoles().Create(&role)
+
+	sa := apiv1.ServiceAccount{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      docker.OperatorName,
+			Namespace: namespace,
+		},
+	}
+	client.CoreV1().ServiceAccounts(namespace).Create(&sa)
+
+	return nil
 }
 
 func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAccount, version string) error {

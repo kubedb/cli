@@ -1,5 +1,5 @@
 hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
-updated: 2017-06-23T07:44:00.374256843-07:00
+updated: 2017-06-27T09:11:07.077647695-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -216,11 +216,11 @@ imports:
   - pkg/eventer
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 245f2a5be3a42e9e5c912fcf40801263ac061685
+  version: 848a01d08ed3511f0259c5489d913a7bb80f4a6a
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: 83efb69b3cb6f1dc2118354e336375a314b6eab7
+  version: 4f3b6881e32f658e4dc23dbe589f1d587354fab1
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -254,7 +254,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: e458bb7ab84aae1bb4b4d36eccf9332f0d659e38
+  version: 4d647c8944eb42504a714e57e97f244ed6344722
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -264,7 +264,7 @@ imports:
   subpackages:
   - codec
 - name: github.com/yudai/gojsondiff
-  version: 9209d1532c51cabe0439993586a71c207b09a0ac
+  version: 081cda2ee95045a2c26da52c2ba80860838549de
   subpackages:
   - formatter
 - name: github.com/yudai/golcs
@@ -338,7 +338,7 @@ imports:
 - name: gopkg.in/robfig/cron.v2
   version: be2e0b0deed5a68ffee390b4583a13aff8321535
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:
