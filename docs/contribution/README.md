@@ -1,5 +1,4 @@
 # Contributing guidelines
-Want to hack on KubeDB?
 
 ## Developer Guide
 We have a [Developer's Guide](../developer-guide/README.md) that outlines everything you need to know from setting up your
