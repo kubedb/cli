@@ -21,31 +21,41 @@ KubeDB codebase is across various repositories under github.com/k8sdb organizati
 | https://github.com/k8sdb/apimachinery | Contains api types, clientset and KubeDB framework interfaces.                                          |
 | https://github.com/k8sdb/db           | This repository contains operator for `db`, eg, https://github.com/k8sdb/postgres                       |
 | https://github.com/k8sdb/db_exporter  | This repository contains Prometheus exporter for `db`, eg, https://github.com/k8sdb/postgres_exporter . |
-| https://github.com/k8sdb/operator     | This repository contains the combined operator for all databased supported by KubeDB.                   |
+| https://github.com/k8sdb/operator     | This repository contains the combined operator for all databases supported by KubeDB.                   |
 | https://github.com/k8sdb/cli          | This repository contains CLI for KubeDB.                                                                |
 
+For each of these repositories, you can get source code and build code using the following steps:
 
+#### Download Source
 
-
-
-## Build Binary
 ```sh
-# Install/Update dependency (needs glide)
-$ glide slow
-
-# Build
-$ ./hack/make.py build
+$ go get github.com/k8sdb/operator
+$ cd $(go env GOPATH)/src/github.com/k8sdb/operator
 ```
 
-## Build Docker
+#### Install Dev tools
+To install various dev tools for Stash, run the following command:
+```sh
+$ ./hack/builddeps.sh
+```
+
+#### Build Binary
+```
+$ ./hack/make.py
+```
+
+#### Dependency management
+For KubeDB original repositories, we use [Glide](https://github.com/Masterminds/glide) to manage dependencies. Dependencies are already checked in the `vendor` folder. If you want to update/add dependencies, run:
+```sh
+$ glide slow
+```
+
+#### Build Docker images
+For unified operator or db specific operators, we support building Docker images. To build and push your custom Docker image, follow the steps below. To release a new version of KubeDB, please follow the [release guide](/docs/developer-guide/release.md).
+
 ```sh
 # Build Docker image
-$ ./hack/docker/operator/setup.sh
-```
-
-#### Push Docker Image
-```sh
-# This will push docker image to other repositories
+$ ./hack/docker/operator/setup.sh; ./hack/docker/operator/setup.sh push
 
 # Add docker tag for your repository
 $ docker tag kubedb/operator:<tag> <image>:<tag>
@@ -56,4 +66,10 @@ $ docker push <image>:<tag>
 # Example:
 $ docker tag kubedb/operator:default aerokite/operator:default
 $ docker push aerokite/operator:default
+```
+
+#### Generate CLI Reference Docs
+```sh
+$ cd ~/go/src/github.com/k8sdb/cli
+$ ./hack/gendocs/make.sh 
 ```
