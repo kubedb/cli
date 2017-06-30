@@ -16,13 +16,13 @@ development environment, please follow [these instructions](https://golang.org/d
 #### Code Organization
 KubeDB codebase is across various repositories under github.com/k8sdb organization. There are 5 categories of git repositories:
 
-| Repository                             | Description                                                                                             |
-|----------------------------------------|---------------------------------------------------------------------------------------------------------|
-| https://github.com/k8sdb/apimachinery  | Contains api types, clientset and KubeDB framework interfaces.                                          |
-| https://github.com/k8sdb/\<db\>          | This repository contains operator for <db>, eg, https://github.com/k8sdb/postgres                       |
-| https://github.com/k8sdb/\<db\>_exporter | This repository contains Prometheus exporter for <db>, eg, https://github.com/k8sdb/postgres_exporter . |
-| https://github.com/k8sdb/operator      | This repository contains the combined operator for all databased supported by KubeDB.                   |
-| https://github.com/k8sdb/cli           | This repository contains CLI for KubeDB.                                                                |
+| Repository                            | Description                                                                                             |
+|---------------------------------------|---------------------------------------------------------------------------------------------------------|
+| https://github.com/k8sdb/apimachinery | Contains api types, clientset and KubeDB framework interfaces.                                          |
+| https://github.com/k8sdb/db           | This repository contains operator for `db`, eg, https://github.com/k8sdb/postgres                       |
+| https://github.com/k8sdb/db_exporter  | This repository contains Prometheus exporter for `db`, eg, https://github.com/k8sdb/postgres_exporter . |
+| https://github.com/k8sdb/operator     | This repository contains the combined operator for all databased supported by KubeDB.                   |
+| https://github.com/k8sdb/cli          | This repository contains CLI for KubeDB.                                                                |
 
 
 
