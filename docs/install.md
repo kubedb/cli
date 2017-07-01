@@ -60,9 +60,4 @@ $ kubedb init --version='0.2.0' --upgrade
 
 Successfully upgraded operator deployment.
 ```
-
-##### Click [here](../reference/init.md) to get command details.
-
-
-
-
+To learn about various options of `init` command, please visit [here](/docs/reference/kubedb_init.md).
