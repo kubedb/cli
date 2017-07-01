@@ -99,7 +99,15 @@ Example:
     ```
 
 ## Microsoft Azure Storage
-KubeDB support microsoft
+KubeDB can store database snapshots in Microsoft Azure Storage. To configure this, the following secret keys are needed:
+
+| Key                     | Description                                                |
+|-------------------------|------------------------------------------------------------|
+| `provider`       | `Required`. Password used to encrypt snapshots by `restic` |
+| `config`    | `Required`. Azure Storage account name                     |
+| `AZURE_ACCOUNT_KEY`     | `Required`. Azure Storage account key                      |
+
+
 
 * `provider: azure`
 * `config:`
