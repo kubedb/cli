@@ -67,7 +67,7 @@ type: Opaque
 
 Example:
 
-**Google Cloud**
+## Google Cloud Storage (GCS)
 
 * `provider: google`
 * `config:`
@@ -88,7 +88,7 @@ Example:
     project_id: "project_id"
     ```
 
-**Amazon S3**
+## Amazon S3
 
 * `provider: s3`
 * `config:`
@@ -98,7 +98,8 @@ Example:
     secret_key: "secret_key"
     ```
 
-**Azure**
+## Microsoft Azure Storage
+KubeDB support microsoft
 
 * `provider: azure`
 * `config:`
