@@ -1,10 +1,10 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Get TPR objects
+# Kubedb get
 
 Following command will list all Postgres objects in `default` namespace.
 
-```bash
+```sh
 $ kubedb get postgres
 
 NAME            STATUS    AGE
@@ -16,7 +16,7 @@ postgres-qa     Running   2h
 
 To get YAML of an object, we can provide `--output=yaml` flag
 
-```bash
+```yaml
 $ kubedb get postgres postgres-demo --output=yaml
 
 apiVersion: kubedb.com/v1alpha1
@@ -35,13 +35,13 @@ status:
 
 To get JSON of an object, we can provide `--output=json` flag
 
-```bash
+```sh
 $ kubedb get postgres postgres-demo --output=json
 ```
 
 To list all objects of all supported TPR, we can use following command
 
-```bash
+```sh
 $ kubedb get all -o wide
 
 NAME                    VERSION   STATUS    AGE
@@ -65,7 +65,7 @@ We can print labels with objects
 
 Following command will list all Snapshots with their corresponding labels.
 
-```bash
+```sh
 $ kubedb get snap --show-labels
 
 NAME                            DATABASE                STATUS      AGE       LABELS
@@ -76,7 +76,7 @@ snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        ku
 
 We can also filter list using `--selector` flag.
 
-```bash
+```sh
 $ kubedb get snap --selector='kubedb.com/kind=Postgres' --show-labels
 
 NAME                            DATABASE           STATUS      AGE       LABELS
@@ -85,7 +85,7 @@ snapshot-20170505-1147          pg/postgres-demo   Succeeded   2h        kubedb.
 ```
 
 To print only object name, we can use this command
-```bash
+```sh
 $ kubedb get all -o name
 
 elastic/elasticsearch-demo
