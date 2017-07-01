@@ -1,8 +1,8 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# kubedb get
+# List Databases
 
-To list all Postgres objects in `default` namespace, run the following command:
+`kubedb get` command allows users to list or find any KubeDB object. To list all Postgres objects in `default` namespace, run the following command:
 
 ```sh
 $ kubedb get postgres
