@@ -1,21 +1,15 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Edit TPR object
+# kubedb edit
 
-The edit command allows us to directly edit any TPR object we can retrieve via this CLI.
-It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `nano`.
+`edit` command allows users to directly edit any KubeDB object. It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `nano`.
 
-
-Lets edit our existing running Postgres database to set Scheduled Backup.
-
-### kubedb edit
-
-Following command will open Postgres `postgres-demo` in editor.
+Lets edit an existing running Postgres database to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
 
 ```bash
 $ kubedb edit pg postgres-demo
 
-# Add following in Spec to schedule backup
+# Add following under Spec to configure periodic backups
 #  backupSchedule:
 #    cronExpression: "@every 6h"
 #    bucketName: "bucket-name"
@@ -25,6 +19,7 @@ $ kubedb edit pg postgres-demo
 postgres "postgres-demo" edited
 ```
 
+## Edit restrictions
 `kubedb edit` will allow us to edit only supported fields.
 
 Following fields are restricted to be modified for all supported TPR objects using `kbuedb edit`
@@ -53,4 +48,4 @@ Elastic:
 
 For DormantDatabase, **spec**._origin_ can't be edited using `kbuedb edit`
 
-##### Click [here](../reference/edit.md) to get command details.
+To learn about various options of `get` command, please visit [here](/docs/reference/kubedb_edit.md).
