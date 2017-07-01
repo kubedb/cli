@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 # Unified operator
 
 # Tutorial
