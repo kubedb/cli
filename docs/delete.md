@@ -1,45 +1,32 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Delete TPR object
+# Delete Database
 
-we can delete supported TPR objects using this CLI.
+`kubedb delete` command will delete an object in `default` namespace by default unless namespace is provided. The following command will delete a Postgres `postgres-dev` in default namespace
 
-Lets delete a Postgres database.
-
-### kubedb delete
-
-`kubedb delete` command will delete an object in `default` namespace by default unless namespace is provided.
-
-Following command will delete a Postgres `postgres-dev` in default namespace
-
-```bash
+```sh
 $ kubedb delete postgres postgres-dev
 
 postgres "postgres-dev" deleted
 ```
 
-We can use `postgres.yaml` file to delete objects.
+You can also use YAML files to delete objects. The following command will delete a postgres using the type and name specified in `postgres.yaml`.
 
-```bash
+```sh
 $ kubedb delete -f postgres.yaml
 
 postgres "postgres-dev" deleted
 ```
 
-This will delete a postgres using the type and name specified in postgres.yaml
-
 `kubedb delete` command also takes input from `stdin`.
 
-```bash
+```sh
 cat postgres.yaml | kubedb delete -f -
 ```
 
-Also we can also filter using `--selector` flag.
-
-```bash
+To delete database with matching labels, use `--selector` flag. The following command will delete postgres with label `postgres.kubedb.com/name=postgres-demo`.
+```sh
 $ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 ```
 
-This will delete postgres with label postgres.kubedb.com/name=postgres-demo.
-
-##### Click [here](../reference/delete.md) to get command details.
+To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
