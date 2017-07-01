@@ -16,18 +16,18 @@ $ kubectl get pods --all-namespaces -l app=kubedb
 
 3. To keep a copy of your existing KubeDB objects, run:
 ```sh
-kubectl get postgres.kubedb.appscode.com --all-namespaces -o yaml > postgres.yaml
-kubectl get elastic.kubedb.appscode.com --all-namespaces -o yaml > elastic.yaml
-kubectl get snapshot.kubedb.appscode.com --all-namespaces -o yaml > snapshot.yaml
-kubectl get dormant-database.kubedb.appscode.com --all-namespaces -o yaml > data.yaml
+kubectl get postgres.kubedb.com --all-namespaces -o yaml > postgres.yaml
+kubectl get elastic.kubedb.com --all-namespaces -o yaml > elastic.yaml
+kubectl get snapshot.kubedb.com --all-namespaces -o yaml > snapshot.yaml
+kubectl get dormant-database.kubedb.com --all-namespaces -o yaml > data.yaml
 ```
 
 4. To delete existing KubeDB objects from all namespaces, run the following command in each namespace one by one.
 ```
-kubectl delete postgres.kubedb.appscode.com --all --cascade=false
-kubectl delete elastic.kubedb.appscode.com --all --cascade=false
-kubectl delete snapshot.kubedb.appscode.com --all --cascade=false
-kubectl delete dormant-database.kubedb.appscode.com --all --cascade=false
+kubectl delete postgres.kubedb.com --all --cascade=false
+kubectl delete elastic.kubedb.com --all --cascade=false
+kubectl delete snapshot.kubedb.com --all --cascade=false
+kubectl delete dormant-database.kubedb.com --all --cascade=false
 ```
 
 5. Delete the old TPR-registration.
