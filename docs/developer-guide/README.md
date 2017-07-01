@@ -34,7 +34,7 @@ $ cd $(go env GOPATH)/src/github.com/k8sdb/operator
 ```
 
 #### Install Dev tools
-To install various dev tools for Stash, run the following command:
+To install various dev tools for KubeDB, run the following command:
 ```sh
 $ ./hack/builddeps.sh
 ```

@@ -1,30 +1,36 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Uninstall Stash
-Please follow the steps below to uninsall Stash:
+# Uninstall KubeDB
+Please follow the steps below to uninstall KubeDB:
 
-1. Delete the deployment and service used for Stash operator.
+1. Delete the deployment and service used for KubeDB operator.
 ```sh
-$ kubectl delete deployment -l app=stash -n <operator-namespace>
-$ kubectl delete service -l app=stash -n <operator-namespace>
+$ kubectl delete deployment -l app=kubedb -n <operator-namespace>
+$ kubectl delete service -l app=kubedb -n <operator-namespace>
 ```
 
-2. Now, wait several seconds for Stash to stop running. To confirm that Stash operator pod(s) have stopped running, run:
+2. Now, wait several seconds for KubeDB to stop running. To confirm that KubeDB operator pod(s) have stopped running, run:
 ```sh
-$ kubectl get pods --all-namespaces -l app=stash
+$ kubectl get pods --all-namespaces -l app=kubedb
 ```
 
-3. To keep a copy of your existing `Restic` objects, run:
+3. To keep a copy of your existing KubeDB objects, run:
 ```sh
-kubectl get restic.stash.appscode.com --all-namespaces -o yaml > data.yaml
+kubectl get postgres.kubedb.appscode.com --all-namespaces -o yaml > postgres.yaml
+kubectl get elastic.kubedb.appscode.com --all-namespaces -o yaml > elastic.yaml
+kubectl get snapshot.kubedb.appscode.com --all-namespaces -o yaml > snapshot.yaml
+kubectl get dormant-database.kubedb.appscode.com --all-namespaces -o yaml > data.yaml
 ```
 
-4. To delete existing `Restic` objects from all namespaces, run the following command in each namespace one by one.
+4. To delete existing KubeDB objects from all namespaces, run the following command in each namespace one by one.
 ```
-kubectl delete restic.stash.appscode.com --all --cascade=false
+kubectl delete postgres.kubedb.appscode.com --all --cascade=false
+kubectl delete elastic.kubedb.appscode.com --all --cascade=false
+kubectl delete snapshot.kubedb.appscode.com --all --cascade=false
+kubectl delete dormant-database.kubedb.appscode.com --all --cascade=false
 ```
 
 5. Delete the old TPR-registration.
 ```sh
-kubectl delete thirdpartyresource restic.stash.appscode.com
+kubectl delete thirdpartyresource -l app=kubedb
 ```
