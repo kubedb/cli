@@ -1,6 +1,6 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Take Backup
+# Backup Database
 
 We need to create a Snapshot object to initiate backup process. 
 
