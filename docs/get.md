@@ -82,7 +82,7 @@ postgres-demo-20170605-073557   pg/postgres-demo   Succeeded   14m       kubedb.
 snapshot-20170505-1147          pg/postgres-demo   Succeeded   2h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 ```
 
-To print only object name, you can use this command
+To print only object name, run the following command:
 ```sh
 $ kubedb get all -o name
 
