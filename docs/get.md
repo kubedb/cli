@@ -1,6 +1,6 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# `kubedb get`
+# kubedb get
 
 Following command will list all Postgres objects in `default` namespace.
 
