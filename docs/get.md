@@ -98,4 +98,4 @@ snapshot/snapshot-20170505-1147
 snapshot/snapshot-xyz
 ```
 
-##### Click [here](../reference/get.md) to get command details.
+To learn about various options of `get` command, please visit [here](/docs/reference/kubedb_get.md).
