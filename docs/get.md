@@ -2,7 +2,7 @@
 
 # kubedb get
 
-Following command will list all Postgres objects in `default` namespace.
+To list all Postgres objects in `default` namespace, run the following command:
 
 ```sh
 $ kubedb get postgres
@@ -14,7 +14,7 @@ postgres-prod   Running   30m
 postgres-qa     Running   2h
 ```
 
-To get YAML of an object, we can provide `--output=yaml` flag
+To get YAML of an object, use `--output=yaml` flag.
 
 ```yaml
 $ kubedb get postgres postgres-demo --output=yaml
@@ -33,13 +33,13 @@ status:
   phase: Running
 ```
 
-To get JSON of an object, we can provide `--output=json` flag
+To get JSON of an object, use `--output=json` flag.
 
 ```sh
 $ kubedb get postgres postgres-demo --output=json
 ```
 
-To list all objects of all supported TPR, we can use following command
+To list all KubeDB objects, use following command:
 
 ```sh
 $ kubedb get all -o wide
@@ -61,9 +61,7 @@ snap/snapshot-xyz                    es/elasticsearch-demo   bucket-name   Succe
 
 Flag `--output=wide` is used to print additional information.
 
-We can print labels with objects
-
-Following command will list all Snapshots with their corresponding labels.
+You can print labels with objects. The following command will list all Snapshots with their corresponding labels.
 
 ```sh
 $ kubedb get snap --show-labels
@@ -74,7 +72,7 @@ snapshot-20170505-1147          pg/postgres-demo        Succeeded   1h        ku
 snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        kubedb.com/kind=Elastic,kubedb.com/name=elasticsearch-demo
 ```
 
-We can also filter list using `--selector` flag.
+You can also filter list using `--selector` flag.
 
 ```sh
 $ kubedb get snap --selector='kubedb.com/kind=Postgres' --show-labels
@@ -84,7 +82,7 @@ postgres-demo-20170605-073557   pg/postgres-demo   Succeeded   14m       kubedb.
 snapshot-20170505-1147          pg/postgres-demo   Succeeded   2h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 ```
 
-To print only object name, we can use this command
+To print only object name, you can use this command
 ```sh
 $ kubedb get all -o name
 
