@@ -23,26 +23,26 @@ postgres "postgres-demo" edited
 Various fields of a KubeDb object can't be edited using `edit` command. The following fields are restricted from updates for all KubeDB objects:
 * _apiVersion_
 * _kind_
-* _.metadata.name_
-* _.metadata.namespace_
+* _metadata.name_
+* _metadata.namespace_
 * _status_
 
 
 If StatefulSet exists for a database, following fields can't be modified as well.
 
 Postgres:
-* _.spec.version_
-* _.spec.storage_
-* _.spec.databaseSecret_
-* _.spec.nodeSelector_
-* _.spec.init_
+* _spec.version_
+* _spec.storage_
+* _spec.databaseSecret_
+* _spec.nodeSelector_
+* _spec.init_
 
 Elastic:
-* _.spec.version_
-* _.spec.storage_
-* _.spec.nodeSelector_
-* _.spec.init_
+* _spec.version_
+* _spec.storage_
+* _spec.nodeSelector_
+* _spec.init_
 
-For DormantDatabase, _.spec.origin_ can't be edited using `kbuedb edit`
+For DormantDatabase, _spec.origin_ can't be edited using `kbuedb edit`
 
 To learn about various options of `edit` command, please visit [here](/docs/reference/kubedb_edit.md).
