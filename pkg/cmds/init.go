@@ -141,7 +141,7 @@ func getOperatorDeployment(client kubernetes.Interface, namespace string) (*exte
 }
 
 var operatorLabel = map[string]string{
-	"app": docker.OperatorName,
+	"app": "kubedb",
 }
 
 func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAccount, version string) error {
@@ -149,11 +149,9 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAcc
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
+			Labels: operatorLabel,
 		},
 		Spec: extensions.DeploymentSpec{
-			Selector: &metav1.LabelSelector{
-				MatchLabels: operatorLabel,
-			},
 			Replicas: types.Int32P(1),
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
@@ -213,6 +211,7 @@ func createOperatorService(client kubernetes.Interface, namespace string) error 
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
+			Labels: operatorLabel,
 		},
 		Spec: apiv1.ServiceSpec{
 			Type: apiv1.ServiceTypeClusterIP,
