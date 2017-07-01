@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 # Describe database
 
 Lets describe a Postgres database `postgres-demo`.

@@ -1,5 +1,32 @@
 # Unified operator
 
+# Tutorial
+
+### Initialize unified operator
+
+**F**irst of all, we need an unified [operator](https://github.com/k8sdb/operator) to handle supported TPR.
+
+We can deploy this operator using `kubedb` CLI.
+
+```bash
+$ kubedb init
+
+Successfully created operator deployment.
+Successfully created operator service.
+```
+
+This will deploy a controller that can handle our TPR objects.
+
+For more, see [init](operation/init.md) operation.
+
+When operator is ready, we can create database.
+
+
+
+-----------------
+
+
+
 First of all, we need an unified [operator](https://github.com/k8sdb/operator) to handle supported TPR.
 
 We can deploy this operator using `kubedb` CLI.

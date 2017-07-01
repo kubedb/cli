@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 # Get TPR objects
 
 Following command will list all Postgres objects in `default` namespace.

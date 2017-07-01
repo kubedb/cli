@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 ### Monitor Database
 
 We now support only Promethues to monitor database.

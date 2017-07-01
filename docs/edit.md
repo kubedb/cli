@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 # Edit TPR object
 
 The edit command allows us to directly edit any TPR object we can retrieve via this CLI.

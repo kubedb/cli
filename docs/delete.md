@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 # Delete TPR object
 
 we can delete supported TPR objects using this CLI.

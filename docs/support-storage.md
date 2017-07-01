@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 ### Add Storage
 
 **T**o add PersistentVolume support, we need to add following StorageSpec in `spec`
