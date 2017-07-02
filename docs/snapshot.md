@@ -188,14 +188,14 @@ snapshot "local-snapshot" created
 
 ```yaml
 $ kubectl get snapshot local-snapshot -o yaml
-apiVersion: stash.appscode.com/v1alpha1
+apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T12:14:48Z
   name: local-snapshot
   namespace: default
   resourceVersion: "2000"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/local-snapshot
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/local-snapshot
   uid: 617e3487-5bfb-11e7-bb52-08002711f4aa
 spec:
   selector:
@@ -270,14 +270,14 @@ snapshot "s3-snapshot" created
 ```yaml
 $ kubectl get snapshot s3-snapshot -o yaml
 
-apiVersion: stash.appscode.com/v1alpha1
+apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T12:58:10Z
   name: s3-snapshot
   namespace: default
   resourceVersion: "4889"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/s3-snapshot
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/s3-snapshot
   uid: 7036ba69-5c01-11e7-bb52-08002711f4aa
 spec:
   selector:
@@ -351,14 +351,14 @@ snapshot "gcs-snapshot" created
 ```yaml
 $ kubectl get snapshot gcs-snapshot -o yaml
 
-apiVersion: stash.appscode.com/v1alpha1
+apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T13:11:43Z
   name: gcs-snapshot
   namespace: default
   resourceVersion: "5781"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/gcs-snapshot
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/gcs-snapshot
   uid: 54b1bad3-5c03-11e7-bb52-08002711f4aa
 spec:
   selector:
@@ -431,14 +431,14 @@ snapshot "azure-snapshot" created
 ```yaml
 $ kubectl get snapshot azure-snapshot -o yaml
 
-apiVersion: stash.appscode.com/v1alpha1
+apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T13:31:14Z
   name: azure-snapshot
   namespace: default
   resourceVersion: "7070"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/azure-snapshot
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/azure-snapshot
   uid: 0e8eb89b-5c06-11e7-bb52-08002711f4aa
 spec:
   selector:
