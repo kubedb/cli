@@ -9,7 +9,7 @@ Running production quality database in Kubernetes can be tricky to say the least
  - Keep track of deleted databases, cleanup prior snapshots with a single command.
  - Use cli to manage databases like kubectl for Kubernetes.
  
-KubeDB is developed at AppsCode Inc. to run their SAAS platform on Kubernetes. Currently we include a complete implementations for Postgres and ElasticSearch database based on K8sdb framework.
+Currently we include a complete implementation for Postgres and ElasticSearch database based on KubeDB framework.
 
 ## Supported Versions
 Kubernetes 1.5+
