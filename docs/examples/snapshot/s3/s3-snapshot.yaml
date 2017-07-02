@@ -10,4 +10,4 @@ spec:
   s3:
     endpoint: 's3.amazonaws.com'
     region: us-east-1
-    bucket: stash-qa
+    bucket: kubedb-qa

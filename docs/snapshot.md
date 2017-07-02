@@ -21,7 +21,7 @@ spec:
   s3:
     endpoint: 's3.amazonaws.com'
     region: us-east-1
-    bucket: stash-qa
+    bucket: kubedb-qa
 
 ```
 
@@ -67,7 +67,7 @@ spec:
 
 
 ### AWS S3
-Stash supports AWS S3 service or [Minio](https://minio.io/) servers as backend. To configure this backend, following secret keys are needed:
+KubeDB supports AWS S3 service or [Minio](https://minio.io/) servers as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                     | Description                                                |
 |-------------------------|------------------------------------------------------------|
@@ -136,12 +136,12 @@ spec:
   s3:
     endpoint: 's3.amazonaws.com'
     region: us-east-1
-    bucket: stash-qa
+    bucket: kubedb-qa
 ```
 
 
 ### Google Cloud Storage (GCS)
-Stash supports Google Cloud Storage(GCS) as backend. To configure this backend, following secret keys are needed:
+KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                               | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -213,7 +213,7 @@ spec:
 
 
 ### Microsoft Azure Storage
-Stash supports Microsoft Azure Storage as backend. To configure this backend, following secret keys are needed:
+KubeDB supports Microsoft Azure Storage as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                     | Description                                                |
 |-------------------------|------------------------------------------------------------|
@@ -253,7 +253,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 |--------------------------|---------------------------------------------------------------------------------|
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
-| `azure.container`        | `Required`. Name of Storage container                                           |
+| `spec.azure.container`   | `Required`. Name of Storage container                                           |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/azure/azure-snapshot.yaml
