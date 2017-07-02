@@ -1,0 +1,24 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: gcs-restic
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: gcs-restic
+  fileGroups:
+  - path: /source/data
+    retentionPolicy:
+      keepLast: 5
+      prune: true
+  backend:
+    gcs:
+      location: /repo
+      bucket: stash-qa
+      prefix: demo
+    repositorySecretName: gcs-secret
+  schedule: '@every 1m'
+  volumeMounts:
+  - mountPath: /source/data
+    name: source-data

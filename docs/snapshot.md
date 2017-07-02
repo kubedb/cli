@@ -182,7 +182,7 @@ Now, you can create a Restic tpr using this secret. Following parameters are ava
 | `local.volume` | `Required`. Any Kubernetes volume                                                           |
 
 ```sh
-$ kubectl create -f ./docs/examples/backends/local/local-restic.yaml 
+$ kubectl create -f ./docs/examples/snapshot/local/local-restic.yaml 
 restic "local-restic" created
 ```
 
@@ -264,7 +264,7 @@ Now, you can create a Restic tpr using this secret. Following parameters are ava
 | `s3.prefix`   | `Optional`. Path prefix into bucket where repository will be created.           |
 
 ```sh
-$ kubectl create -f ./docs/examples/backends/s3/s3-restic.yaml 
+$ kubectl create -f ./docs/examples/snapshot/s3/s3-restic.yaml 
 restic "s3-restic" created
 ```
 
@@ -346,7 +346,7 @@ Now, you can create a Restic tpr using this secret. Following parameters are ava
 | `gcs.prefix`   | `Optional`. Path prefix into bucket where repository will be created.           |
 
 ```sh
-$ kubectl create -f ./docs/examples/backends/gcs/gcs-restic.yaml 
+$ kubectl create -f ./docs/examples/snapshot/gcs/gcs-restic.yaml 
 restic "gcs-restic" created
 ```
 
@@ -427,7 +427,7 @@ Now, you can create a Restic tpr using this secret. Following parameters are ava
 | `azure.prefix`    | `Optional`. Path prefix into bucket where repository will be created.       |
 
 ```sh
-$ kubectl create -f ./docs/examples/backends/azure/azure-restic.yaml 
+$ kubectl create -f ./docs/examples/snapshot/azure/azure-restic.yaml 
 restic "azure-restic" created
 ```
 

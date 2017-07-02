@@ -1,0 +1,23 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: azure-restic
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: azure-restic
+  fileGroups:
+  - path: /source/data
+    retentionPolicy:
+      keepLast: 5
+      prune: true
+  backend:
+    azure:
+      container: stashqa
+      prefix: demo
+    repositorySecretName: azure-secret
+  schedule: '@every 1m'
+  volumeMounts:
+  - mountPath: /source/data
+    name: source-data
