@@ -197,26 +197,16 @@ metadata:
   resourceVersion: "2000"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/local-snapshot
   uid: 617e3487-5bfb-11e7-bb52-08002711f4aa
+  labels:
+    kubedb.com/kind: Postgres
 spec:
-  selector:
-    matchLabels:
-      app: local-snapshot
-  fileGroups:
-  - path: /source/data
-    retentionPolicy:
-      keepLast: 5
-      prune: true
-  backend:
-    local:
-      path: /repo
-      volume:
-        emptyDir: {}
-        name: repo
-    repositorySecretName: local-secret
-  schedule: '@every 1m'
-  volumeMounts:
-  - mountPath: /source/data
-    name: source-data
+  databaseName: postgres-db
+  storageSecretName: "secret-for-bucket"
+  local:
+    path: /repo
+    volume:
+      emptyDir: {}
+      name: repo
 ```
 
 
@@ -260,6 +250,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | Parameter     | Description                                                                     |
 |---------------|---------------------------------------------------------------------------------|
 | `s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`. If your bucket is in a different location, S3 server (s3.amazonaws.com) will redirect snapshot to the correct endpoint. For an S3-compatible server that is not Amazon (like Minio), or is only available via HTTP, you can specify the endpoint like this: `http://server:port`. |
+| `s3.region`   | `Required`. Name of AWS region                                                  |
 | `s3.bucket`   | `Required`. Name of Bucket                                                      |
 
 ```sh
@@ -279,25 +270,15 @@ metadata:
   resourceVersion: "4889"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/s3-snapshot
   uid: 7036ba69-5c01-11e7-bb52-08002711f4aa
+  labels:
+    kubedb.com/kind: Postgres
 spec:
-  selector:
-    matchLabels:
-      app: s3-snapshot
-  fileGroups:
-  - path: /source/data
-    retentionPolicy:
-      keepLast: 5
-      prune: true
-  backend:
-    s3:
-      endpoint: 's3.amazonaws.com'
-      bucket: stash-qa
-      prefix: demo
-    repositorySecretName: s3-secret
-  schedule: '@every 1m'
-  volumeMounts:
-  - mountPath: /source/data
-    name: source-data
+  databaseName: postgres-db
+  storageSecretName: "secret-for-bucket"
+  s3:
+    endpoint: 's3.amazonaws.com'
+    region: us-east-1
+    bucket: stash-qa
 ```
 
 
@@ -360,25 +341,14 @@ metadata:
   resourceVersion: "5781"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/gcs-snapshot
   uid: 54b1bad3-5c03-11e7-bb52-08002711f4aa
+  labels:
+    kubedb.com/kind: Postgres
 spec:
-  selector:
-    matchLabels:
-      app: gcs-snapshot
-  fileGroups:
-  - path: /source/data
-    retentionPolicy:
-      keepLast: 5
-      prune: true
-  backend:
-    gcs:
-      location: /repo
-      bucket: stash-qa
-      prefix: demo
-    repositorySecretName: gcs-secret
-  schedule: '@every 1m'
-  volumeMounts:
-  - mountPath: /source/data
-    name: source-data
+  databaseName: postgres-db
+  storageSecretName: "secret-for-bucket"
+  gcs:
+    location: /repo
+    bucket: bucket-for-snapshot
 ```
 
 
@@ -440,24 +410,13 @@ metadata:
   resourceVersion: "7070"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/azure-snapshot
   uid: 0e8eb89b-5c06-11e7-bb52-08002711f4aa
+  labels:
+    kubedb.com/kind: Postgres
 spec:
-  selector:
-    matchLabels:
-      app: azure-snapshot
-  fileGroups:
-  - path: /source/data
-    retentionPolicy:
-      keepLast: 5
-      prune: true
-  backend:
-    azure:
-      container: stashqa
-      prefix: demo
-    repositorySecretName: azure-secret
-  schedule: '@every 1m'
-  volumeMounts:
-  - mountPath: /source/data
-    name: source-data
+  databaseName: postgres-db
+  storageSecretName: "secret-for-bucket"
+  azure:
+    container: bucket-for-snapshot
 ```
 
 
