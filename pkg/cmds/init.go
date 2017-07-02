@@ -149,7 +149,7 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAcc
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
-			Labels: operatorLabel,
+			Labels:    operatorLabel,
 		},
 		Spec: extensions.DeploymentSpec{
 			Replicas: types.Int32P(1),
@@ -211,7 +211,7 @@ func createOperatorService(client kubernetes.Interface, namespace string) error 
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
-			Labels: operatorLabel,
+			Labels:    operatorLabel,
 		},
 		Spec: apiv1.ServiceSpec{
 			Type: apiv1.ServiceTypeClusterIP,

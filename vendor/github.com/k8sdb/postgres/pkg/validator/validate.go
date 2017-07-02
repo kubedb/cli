@@ -5,6 +5,7 @@ import (
 
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
@@ -20,10 +21,9 @@ func ValidatePostgres(client clientset.Interface, postgres *tapi.Postgres) error
 		return fmt.Errorf(`Image %v:%v not found`, docker.ImagePostgres, version)
 	}
 
-	storage := postgres.Spec.Storage
-	if storage != nil {
+	if postgres.Spec.Storage != nil {
 		var err error
-		if _, err = amv.ValidateStorageSpec(client, storage); err != nil {
+		if _, err = amv.ValidateStorageSpec(client, postgres.Spec.Storage); err != nil {
 			return err
 		}
 	}
@@ -41,7 +41,7 @@ func ValidatePostgres(client clientset.Interface, postgres *tapi.Postgres) error
 			return err
 		}
 
-		if err := amv.CheckBucketAccess(client, backupScheduleSpec.SnapshotStorageSpec, postgres.Namespace); err != nil {
+		if err := storage.CheckBucketAccess(client, backupScheduleSpec.SnapshotStorageSpec, postgres.Namespace); err != nil {
 			return err
 		}
 	}

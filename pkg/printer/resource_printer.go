@@ -11,6 +11,7 @@ import (
 
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	"github.com/k8sdb/apimachinery/client/clientset"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
 	"github.com/k8sdb/cli/pkg/decoder"
@@ -271,7 +272,11 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 	}
 
 	if options.Wide {
-		if _, err := fmt.Fprintf(w, "%s\t", item.Spec.BucketName); err != nil {
+		bucket, err := storage.GetContainer(item.Spec.SnapshotStorageSpec)
+		if err != nil {
+			return err
+		}
+		if _, err := fmt.Fprintf(w, "%s\t", bucket); err != nil {
 			return err
 		}
 	}

@@ -32,11 +32,57 @@ type BackupScheduleSpec struct {
 	SnapshotStorageSpec `json:",inline,omitempty"`
 }
 
+const (
+	AWS_ACCESS_KEY_ID     = "AWS_ACCESS_KEY_ID"
+	AWS_SECRET_ACCESS_KEY = "AWS_SECRET_ACCESS_KEY"
+
+	GOOGLE_PROJECT_ID               = "GOOGLE_PROJECT_ID"
+	GOOGLE_SERVICE_ACCOUNT_JSON_KEY = "GOOGLE_SERVICE_ACCOUNT_JSON_KEY"
+
+	AZURE_ACCOUNT_NAME = "AZURE_ACCOUNT_NAME"
+	AZURE_ACCOUNT_KEY  = "AZURE_ACCOUNT_KEY"
+
+	// For keystone v2 authentication (some variables are optional)
+	OS_AUTH_URL    = "OS_AUTH_URL"
+	OS_USERNAME    = "OS_USERNAME"
+	OS_PASSWORD    = "OS_PASSWORD"
+	OS_TENANT_NAME = "OS_TENANT_NAME"
+	//OS_TENANT_ID   = "OS_TENANT_ID"
+	//OS_REGION_NAME = "OS_REGION_NAME"
+)
+
 type SnapshotStorageSpec struct {
-	// Snapshot storage secret
-	StorageSecret *apiv1.SecretVolumeSource `json:"storageSecret,omitempty"`
-	// Cloud bucket name
-	BucketName string `json:"bucketName,omitempty"`
+	StorageSecretName string `json:"storageSecretName,omitempty"`
+
+	Local *LocalSpec `json:"local"`
+	S3    *S3Spec    `json:"s3,omitempty"`
+	GCS   *GCSSpec   `json:"gcs,omitempty"`
+	Azure *AzureSpec `json:"azure,omitempty"`
+	Swift *SwiftSpec `json:"swift,omitempty"`
+}
+
+type LocalSpec struct {
+	Volume apiv1.Volume `json:"volume,omitempty"`
+	Path   string       `json:"path,omitempty"`
+}
+
+type S3Spec struct {
+	Endpoint string `json:"endpoint,omitempty"`
+	Region   string `json:"region,omitempty"`
+	Bucket   string `json:"bucket,omiempty"`
+}
+
+type GCSSpec struct {
+	Location string `json:"location,omitempty"`
+	Bucket   string `json:"bucket,omiempty"`
+}
+
+type AzureSpec struct {
+	Container string `json:"container,omitempty"`
+}
+
+type SwiftSpec struct {
+	Container string `json:"container,omitempty"`
 }
 
 type MonitorSpec struct {

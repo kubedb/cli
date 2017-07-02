@@ -10,9 +10,9 @@ import (
 	tcs "github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/apimachinery/pkg/analytics"
 	"github.com/k8sdb/apimachinery/pkg/eventer"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientset "k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
@@ -96,8 +96,11 @@ func (c *SnapshotController) ensureThirdPartyResource() {
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name: resourceName,
+			Labels: map[string]string{
+				"app": "kubedb",
+			},
 		},
-		Description: "Snapshot of kubedb databases",
+		Description: "Snapshot of KubeDB databases",
 		Versions: []extensions.APIVersion{
 			{
 				Name: tapi.V1alpha1SchemeGroupVersion.Version,
@@ -196,6 +199,21 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 	c.eventRecorder.Event(runtimeObj, apiv1.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
 	c.eventRecorder.Event(snapshot, apiv1.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
 
+	secret, err := storage.NewOSMSecret(c.client, snapshot, snapshot.Namespace)
+	if err != nil {
+		message := fmt.Sprintf("Failed to generate osm secret. Reason: %v", err)
+		c.eventRecorder.Event(runtimeObj, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		return err
+	}
+	_, err = c.client.CoreV1().Secrets(secret.Namespace).Create(secret)
+	if err != nil {
+		message := fmt.Sprintf("Failed to create osm secret. Reason: %v", err)
+		c.eventRecorder.Event(runtimeObj, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
+		return err
+	}
+
 	job, err := c.snapshoter.GetSnapshotter(snapshot)
 	if err != nil {
 		message := fmt.Sprintf("Failed to take snapshot. Reason: %v", err)
@@ -203,8 +221,7 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
 		return err
 	}
-
-	if _, err := c.client.Batch().Jobs(snapshot.Namespace).Create(job); err != nil {
+	if _, err := c.client.BatchV1().Jobs(snapshot.Namespace).Create(job); err != nil {
 		message := fmt.Sprintf("Failed to take snapshot. Reason: %v", err)
 		c.eventRecorder.Event(runtimeObj, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
 		c.eventRecorder.Event(snapshot, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
@@ -312,33 +329,34 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 		return err
 	}
 
-	podList, err := c.client.CoreV1().Pods(job.Namespace).List(
-		metav1.ListOptions{
-			LabelSelector: labels.Set(job.Spec.Selector.MatchLabels).AsSelector().String(),
-		},
-	)
+	r, err := metav1.LabelSelectorAsSelector(job.Spec.Selector)
+	if err != nil {
+		return err
+	}
+	err = c.client.CoreV1().Pods(job.Namespace).DeleteCollection(&metav1.DeleteOptions{}, metav1.ListOptions{
+		LabelSelector: r.String(),
+	})
 	if err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
 			apiv1.EventTypeWarning,
-			eventer.EventReasonFailedToList,
-			"Failed to list Pods. Reason: %v",
+			eventer.EventReasonFailedToDelete,
+			"Failed to delete Pods. Reason: %v",
 			err,
 		)
-		return err
+		log.Errorln(err)
 	}
 
-	for _, pod := range podList.Items {
-		if err := c.client.CoreV1().Pods(pod.Namespace).Delete(pod.Name, nil); err != nil {
-			c.eventRecorder.Eventf(
-				snapshot,
-				apiv1.EventTypeWarning,
-				eventer.EventReasonFailedToDelete,
-				"Failed to delete Pod. Reason: %v",
-				err,
-			)
-			log.Errorln(err)
-		}
+	err = c.client.CoreV1().Secrets(snapshot.Namespace).Delete(snapshot.Name, &metav1.DeleteOptions{})
+	if err != nil {
+		c.eventRecorder.Eventf(
+			snapshot,
+			apiv1.EventTypeWarning,
+			eventer.EventReasonFailedToDelete,
+			"Failed to delete Secret. Reason: %v",
+			err,
+		)
+		log.Errorln(err)
 	}
 
 	for _, volume := range job.Spec.Template.Spec.Volumes {
