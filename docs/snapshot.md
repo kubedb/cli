@@ -103,7 +103,7 @@ KubeDB can store database snapshots in Microsoft Azure Storage. To configure thi
 
 | Key                     | Description                                                |
 |-------------------------|------------------------------------------------------------|
-| `provider`       | `Required`. Password used to encrypt snapshots by `restic` |
+| `provider`       | `Required`. Password used to encrypt snapshots by `snapshot` |
 | `config`    | `Required`. Azure Storage account name                     |
 | `AZURE_ACCOUNT_KEY`     | `Required`. Azure Storage account key                      |
 
@@ -133,7 +133,7 @@ We can see its status.
 $ kubedb get snap snapshot-xyz -o wide
 
 NAME           DATABASE              BUCKET    STATUS      AGE
-snapshot-xyz   es/elasticsearch-db   restic    Succeeded   24m
+snapshot-xyz   es/elasticsearch-db   snapshot    Succeeded   24m
 ```
 
 
@@ -149,7 +149,7 @@ snapshot-xyz   es/elasticsearch-db   restic    Succeeded   24m
 
 | Key               | Description                                                |
 |-------------------|------------------------------------------------------------|
-| `RESTIC_PASSWORD` | `Required`. Password used to encrypt snapshots by `restic` |
+| `RESTIC_PASSWORD` | `Required`. Password used to encrypt snapshots by `snapshot` |
 
 ```sh
 $ echo -n 'changeit' > RESTIC_PASSWORD
@@ -174,7 +174,7 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Restic tpr using this secret. Following parameters are availble for `Local` backend.
+Now, you can create a Snapshot tpr using this secret. Following parameters are availble for `Local` backend.
 
 | Parameter      | Description                                                                                 |
 |----------------|---------------------------------------------------------------------------------------------|
@@ -182,25 +182,25 @@ Now, you can create a Restic tpr using this secret. Following parameters are ava
 | `local.volume` | `Required`. Any Kubernetes volume                                                           |
 
 ```sh
-$ kubectl create -f ./docs/examples/snapshot/local/local-restic.yaml 
-restic "local-restic" created
+$ kubectl create -f ./docs/examples/snapshot/local/local-snapshot.yaml
+snapshot "local-snapshot" created
 ```
 
 ```yaml
-$ kubectl get restic local-restic -o yaml
+$ kubectl get snapshot local-snapshot -o yaml
 apiVersion: stash.appscode.com/v1alpha1
-kind: Restic
+kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T12:14:48Z
-  name: local-restic
+  name: local-snapshot
   namespace: default
   resourceVersion: "2000"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/restics/local-restic
+  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/local-snapshot
   uid: 617e3487-5bfb-11e7-bb52-08002711f4aa
 spec:
   selector:
     matchLabels:
-      app: local-restic
+      app: local-snapshot
   fileGroups:
   - path: /source/data
     retentionPolicy:
@@ -255,35 +255,34 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Restic tpr using this secret. Following parameters are availble for `S3` backend.
+Now, you can create a Snapshot tpr using this secret. Following parameters are availble for `S3` backend.
 
 | Parameter     | Description                                                                     |
 |---------------|---------------------------------------------------------------------------------|
-| `s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`. If your bucket is in a different location, S3 server (s3.amazonaws.com) will redirect restic to the correct endpoint. For an S3-compatible server that is not Amazon (like Minio), or is only available via HTTP, you can specify the endpoint like this: `http://server:port`. |
+| `s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`. If your bucket is in a different location, S3 server (s3.amazonaws.com) will redirect snapshot to the correct endpoint. For an S3-compatible server that is not Amazon (like Minio), or is only available via HTTP, you can specify the endpoint like this: `http://server:port`. |
 | `s3.bucket`   | `Required`. Name of Bucket                                                      |
-| `s3.prefix`   | `Optional`. Path prefix into bucket where repository will be created.           |
 
 ```sh
-$ kubectl create -f ./docs/examples/snapshot/s3/s3-restic.yaml 
-restic "s3-restic" created
+$ kubectl create -f ./docs/examples/snapshot/s3/s3-snapshot.yaml
+snapshot "s3-snapshot" created
 ```
 
 ```yaml
-$ kubectl get restic s3-restic -o yaml
+$ kubectl get snapshot s3-snapshot -o yaml
 
 apiVersion: stash.appscode.com/v1alpha1
-kind: Restic
+kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T12:58:10Z
-  name: s3-restic
+  name: s3-snapshot
   namespace: default
   resourceVersion: "4889"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/restics/s3-restic
+  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/s3-snapshot
   uid: 7036ba69-5c01-11e7-bb52-08002711f4aa
 spec:
   selector:
     matchLabels:
-      app: s3-restic
+      app: s3-snapshot
   fileGroups:
   - path: /source/data
     retentionPolicy:
@@ -337,35 +336,34 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Restic tpr using this secret. Following parameters are availble for `gcs` backend.
+Now, you can create a Snapshot tpr using this secret. Following parameters are availble for `gcs` backend.
 
 | Parameter      | Description                                                                     |
 |----------------|---------------------------------------------------------------------------------|
 | `gcs.location` | `Required`. Name of Google Cloud region.                                        |
 | `gcs.bucket`   | `Required`. Name of Bucket                                                      |
-| `gcs.prefix`   | `Optional`. Path prefix into bucket where repository will be created.           |
 
 ```sh
-$ kubectl create -f ./docs/examples/snapshot/gcs/gcs-restic.yaml 
-restic "gcs-restic" created
+$ kubectl create -f ./docs/examples/snapshot/gcs/gcs-snapshot.yaml
+snapshot "gcs-snapshot" created
 ```
 
 ```yaml
-$ kubectl get restic gcs-restic -o yaml
+$ kubectl get snapshot gcs-snapshot -o yaml
 
 apiVersion: stash.appscode.com/v1alpha1
-kind: Restic
+kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T13:11:43Z
-  name: gcs-restic
+  name: gcs-snapshot
   namespace: default
   resourceVersion: "5781"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/restics/gcs-restic
+  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/gcs-snapshot
   uid: 54b1bad3-5c03-11e7-bb52-08002711f4aa
 spec:
   selector:
     matchLabels:
-      app: gcs-restic
+      app: gcs-snapshot
   fileGroups:
   - path: /source/data
     retentionPolicy:
@@ -419,34 +417,33 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Restic tpr using this secret. Following parameters are availble for `Azure` backend.
+Now, you can create a Snapshot tpr using this secret. Following parameters are availble for `Azure` backend.
 
 | Parameter     | Description                                                                     |
 |---------------|---------------------------------------------------------------------------------|
 | `azure.container` | `Required`. Name of Storage container                                       |
-| `azure.prefix`    | `Optional`. Path prefix into bucket where repository will be created.       |
 
 ```sh
-$ kubectl create -f ./docs/examples/snapshot/azure/azure-restic.yaml 
-restic "azure-restic" created
+$ kubectl create -f ./docs/examples/snapshot/azure/azure-snapshot.yaml
+snapshot "azure-snapshot" created
 ```
 
 ```yaml
-$ kubectl get restic azure-restic -o yaml
+$ kubectl get snapshot azure-snapshot -o yaml
 
 apiVersion: stash.appscode.com/v1alpha1
-kind: Restic
+kind: Snapshot
 metadata:
   creationTimestamp: 2017-06-28T13:31:14Z
-  name: azure-restic
+  name: azure-snapshot
   namespace: default
   resourceVersion: "7070"
-  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/restics/azure-restic
+  selfLink: /apis/stash.appscode.com/v1alpha1/namespaces/default/snapshots/azure-snapshot
   uid: 0e8eb89b-5c06-11e7-bb52-08002711f4aa
 spec:
   selector:
     matchLabels:
-      app: azure-restic
+      app: azure-snapshot
   fileGroups:
   - path: /source/data
     retentionPolicy:
