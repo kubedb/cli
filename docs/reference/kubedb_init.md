@@ -1,11 +1,11 @@
 ## kubedb init
 
-Create or upgrade unified operator
+Create or upgrade KubeDB operator
 
 ### Synopsis
 
 
-Install or upgrade unified operator for kubedb databases.
+Install or upgrade KubeDB operator.
 
 ```
 kubedb init [flags]

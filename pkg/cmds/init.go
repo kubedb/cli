@@ -22,7 +22,7 @@ import (
 
 var (
 	init_long = templates.LongDesc(`
-		Install or upgrade unified operator for kubedb databases.`)
+		Install or upgrade KubeDB operator.`)
 
 	init_example = templates.Examples(`
 		# Install latest released operator.
@@ -35,7 +35,7 @@ var (
 func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "init",
-		Short:   "Create or upgrade unified operator",
+		Short:   "Create or upgrade KubeDB operator",
 		Long:    init_long,
 		Example: init_example,
 		Run: func(cmd *cobra.Command, args []string) {

@@ -1,8 +1,10 @@
-# Get TPR objects
+> New to KubeDB? Please start [here](/docs/tutorial.md).
 
-Following command will list all Postgres objects in `default` namespace.
+# List Databases
 
-```bash
+`kubedb get` command allows users to list or find any KubeDB object. To list all Postgres objects in `default` namespace, run the following command:
+
+```sh
 $ kubedb get postgres
 
 NAME            STATUS    AGE
@@ -12,9 +14,9 @@ postgres-prod   Running   30m
 postgres-qa     Running   2h
 ```
 
-To get YAML of an object, we can provide `--output=yaml` flag
+To get YAML of an object, use `--output=yaml` flag.
 
-```bash
+```yaml
 $ kubedb get postgres postgres-demo --output=yaml
 
 apiVersion: kubedb.com/v1alpha1
@@ -31,15 +33,15 @@ status:
   phase: Running
 ```
 
-To get JSON of an object, we can provide `--output=json` flag
+To get JSON of an object, use `--output=json` flag.
 
-```bash
+```sh
 $ kubedb get postgres postgres-demo --output=json
 ```
 
-To list all objects of all supported TPR, we can use following command
+To list all KubeDB objects, use following command:
 
-```bash
+```sh
 $ kubedb get all -o wide
 
 NAME                    VERSION   STATUS    AGE
@@ -59,11 +61,9 @@ snap/snapshot-xyz                    es/elasticsearch-demo   bucket-name   Succe
 
 Flag `--output=wide` is used to print additional information.
 
-We can print labels with objects
+You can print labels with objects. The following command will list all Snapshots with their corresponding labels.
 
-Following command will list all Snapshots with their corresponding labels.
-
-```bash
+```sh
 $ kubedb get snap --show-labels
 
 NAME                            DATABASE                STATUS      AGE       LABELS
@@ -72,9 +72,9 @@ snapshot-20170505-1147          pg/postgres-demo        Succeeded   1h        ku
 snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        kubedb.com/kind=Elastic,kubedb.com/name=elasticsearch-demo
 ```
 
-We can also filter list using `--selector` flag.
+You can also filter list using `--selector` flag.
 
-```bash
+```sh
 $ kubedb get snap --selector='kubedb.com/kind=Postgres' --show-labels
 
 NAME                            DATABASE           STATUS      AGE       LABELS
@@ -82,8 +82,8 @@ postgres-demo-20170605-073557   pg/postgres-demo   Succeeded   14m       kubedb.
 snapshot-20170505-1147          pg/postgres-demo   Succeeded   2h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 ```
 
-To print only object name, we can use this command
-```bash
+To print only object name, run the following command:
+```sh
 $ kubedb get all -o name
 
 elastic/elasticsearch-demo
@@ -96,4 +96,4 @@ snapshot/snapshot-20170505-1147
 snapshot/snapshot-xyz
 ```
 
-##### Click [here](../reference/get.md) to get command details.
+To learn about various options of `get` command, please visit [here](/docs/reference/kubedb_get.md).

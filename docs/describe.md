@@ -1,12 +1,10 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 # Describe database
 
-Lets describe a Postgres database `postgres-demo`.
+`kubedb describe` command allows users to describe any KubeDB object. The following command will describe Postgres database `postgres-demo` with relevant information.
 
-### kubedb describe
-
-Following command will describe Postgres database object `postgres-demo` with relevant information.
-
-```bash
+```sh
 $ kubedb describe pg postgres-demo
 
 Name:		postgres-demo
@@ -50,7 +48,8 @@ Events:
   29m         29m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
 ```
 
-The `kubedb describe` command provides following basic information of TPR object.
+`kubedb describe` command provides following basic information about a database.
+
 * StatefulSet
 * Storage (Persistent Volume)
 * Service
@@ -61,30 +60,24 @@ The `kubedb describe` command provides following basic information of TPR object
 This command also shows events unless `--show-events=false`
 
 To describe all Postgres objects in `default` namespace, use following command
-```bash
+```sh
 $ kubedb describe pg
 ```
 
-If we want to describe all Postgres objects from every namespace, we need to provide flag `--all-namespaces`.
-
-```bash
+To describe all Postgres objects from every namespace, provide `--all-namespaces` flag.
+```sh
 $ kubedb describe pg --all-namespaces
 ```
 
-And to describe all objects of all resource type from every namespace, use following
-
-```bash
+To describe all KubeDB objects from every namespace, use the following command:
+```sh
 $ kubedb describe all --all-namespaces
 ```
 
-This `all` represents all supported TPR.
-
-We can also describe some selected objects
+You can also describe KubeDb objects with matching labels. The following command will describe all Elastic & Postgres objects with specified labels from every namespace.
 
 ```bash
 $ kubedb describe pg,es --all-namespaces --selector='group=dev'
 ```
 
-This command will describe all Elastic & Postgres object with specified labels from every namespace.
-
-##### Click [here](../reference/describe.md) to get command details.
+To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).

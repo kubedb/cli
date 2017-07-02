@@ -1,0 +1,11 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-xyz
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: postgres-db
+  storageSecretName: "secret-for-bucket"
+  azure:
+    container: bucket-for-snapshot
