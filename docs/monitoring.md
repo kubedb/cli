@@ -26,11 +26,11 @@ spec:
       interval: 10s
 ```
 
-|  Keys                               |  Value |  Description                                                                                                                    |
-|-------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------|
-| `spec.monitor.agent`                | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator`                     |
+|  Keys                               |  Value |  Description                                                                                                |
+|-------------------------------------|--------|-------------------------------------------------------------------------------------------------------------|
+| `spec.monitor.agent`                | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator` |
 | `spec.monitor.prometheus.namespace` | string | `Required`. Indicates namespace where service monitors are created. This must be the same namespace of the Prometheus instance. |
-| `spec.monitor.prometheus.labels`    | map    | `Required`. Indicates labels applied to service monitor.                                                                        |
-| `spec.monitor.prometheus.interval`  | string | `Optional`. Indicates the scrape interval for database exporter endpoint                                                          |
+| `spec.monitor.prometheus.labels`    | map    | `Required`. Indicates labels applied to service monitor.                                                    |
+| `spec.monitor.prometheus.interval`  | string | `Optional`. Indicates the scrape interval for database exporter endpoint (eg, '10s')                        |
 
 __Known Limitations:__ If the databse password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/k8sdb/operator/issues/63).
