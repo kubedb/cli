@@ -61,31 +61,9 @@ func (l *location) Containers(prefix, cursor string, count int) ([]stow.Containe
 
 	// Iterate through the slice of pointers to buckets
 	for _, bucket := range bucketList.Buckets {
-		// Retrieve region information.
-		bucketLocParams := &s3.GetBucketLocationInput{
-			Bucket: aws.String(*bucket.Name),
-		}
-
-		// Buckets with region 'US Standard' return nothing.
-		bucketLocResponse, err := l.client.GetBucketLocation(bucketLocParams)
-		if err != nil {
-			return nil, "", errors.Wrap(err, "Containers, getting the bucket location")
-		}
-
 		clientRegion, _ := l.config.Config("region")
-		containerRegion := bucketLocResponse.LocationConstraint
 
-		// If containerRegion (* string) is nil, the region is US Standard, which is "us-east-1"
-		// by default.
-		if containerRegion == nil {
-			usStandardRegion := "us-east-1"
-			containerRegion = &usStandardRegion
-		}
-
-		// Add buckets with 'US Standard' region. The containerRegion, a pointer, will return nil.
-		// Also add buckets that have the same region as the client, otherwise continue on.
-		// The second condition ensures that the bucket contains the given prefix.
-		if *containerRegion != clientRegion || !strings.HasPrefix(*bucket.Name, prefix) {
+		if !strings.HasPrefix(*bucket.Name, prefix) {
 			continue
 		}
 

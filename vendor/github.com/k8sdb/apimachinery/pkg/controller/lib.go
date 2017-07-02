@@ -6,14 +6,13 @@ import (
 	"time"
 
 	"github.com/appscode/log"
-	"github.com/ghodss/yaml"
 	"github.com/graymeta/stow"
 	_ "github.com/graymeta/stow/azure"
 	_ "github.com/graymeta/stow/google"
 	_ "github.com/graymeta/stow/s3"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/eventer"
-	"github.com/k8sdb/apimachinery/pkg/validator"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -82,31 +81,20 @@ func (c *Controller) DeletePersistentVolumeClaims(namespace string, selector lab
 }
 
 func (c *Controller) DeleteSnapshotData(snapshot *tapi.Snapshot) error {
-	secret, err := c.Client.CoreV1().Secrets(snapshot.Namespace).Get(snapshot.Spec.StorageSecret.SecretName, metav1.GetOptions{})
+	cfg, err := storage.NewOSMContext(c.Client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace)
 	if err != nil {
 		return err
 	}
 
-	provider := secret.Data[validator.KeyProvider]
-	if provider == nil {
-		return errors.New("Missing provider key")
-	}
-	configData := secret.Data[validator.KeyConfig]
-	if configData == nil {
-		return errors.New("Missing config key")
-	}
-
-	var config stow.ConfigMap
-	if err := yaml.Unmarshal(configData, &config); err != nil {
-		return err
-	}
-
-	loc, err := stow.Dial(string(provider), config)
+	loc, err := stow.Dial(cfg.Provider, cfg.Config)
 	if err != nil {
 		return err
 	}
-
-	container, err := loc.Container(snapshot.Spec.BucketName)
+	bucket, err := storage.GetContainer(snapshot.Spec.SnapshotStorageSpec)
+	if err != nil {
+		return err
+	}
+	container, err := loc.Container(bucket)
 	if err != nil {
 		return err
 	}
@@ -198,11 +186,13 @@ func (c *Controller) CheckDatabaseRestoreJob(
 		return false
 	}
 
-	podList, err := c.Client.CoreV1().Pods(job.Namespace).List(
-		metav1.ListOptions{
-			LabelSelector: labels.SelectorFromSet(job.Spec.Selector.MatchLabels).String(),
-		},
-	)
+	r, err := metav1.LabelSelectorAsSelector(job.Spec.Selector)
+	if err != nil {
+		return false
+	}
+	err = c.Client.CoreV1().Pods(job.Namespace).DeleteCollection(&metav1.DeleteOptions{}, metav1.ListOptions{
+		LabelSelector: r.String(),
+	})
 	if err != nil {
 		recorder.Eventf(
 			runtimeObj,
@@ -215,17 +205,9 @@ func (c *Controller) CheckDatabaseRestoreJob(
 		return jobSuccess
 	}
 
-	for _, pod := range podList.Items {
-		if err := c.Client.Core().Pods(pod.Namespace).Delete(pod.Name, nil); err != nil {
-			recorder.Eventf(
-				runtimeObj,
-				apiv1.EventTypeWarning,
-				eventer.EventReasonFailedToDelete,
-				"Failed to delete Pod. Reason: %v",
-				err,
-			)
-			log.Errorln(err)
-		}
+	err = c.Client.CoreV1().Secrets(job.Namespace).Delete(job.Name, &metav1.DeleteOptions{})
+	if err != nil {
+		return false
 	}
 
 	for _, volume := range job.Spec.Template.Spec.Volumes {

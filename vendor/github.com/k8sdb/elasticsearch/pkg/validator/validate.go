@@ -5,6 +5,7 @@ import (
 
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	clientset "k8s.io/client-go/kubernetes"
 )
@@ -18,10 +19,9 @@ func ValidateElastic(client clientset.Interface, elastic *tapi.Elastic) error {
 		return fmt.Errorf(`Image %v:%v not found`, docker.ImageElasticsearch, elastic.Spec.Version)
 	}
 
-	storage := elastic.Spec.Storage
-	if storage != nil {
+	if elastic.Spec.Storage != nil {
 		var err error
-		if _, err = amv.ValidateStorageSpec(client, storage); err != nil {
+		if _, err = amv.ValidateStorageSpec(client, elastic.Spec.Storage); err != nil {
 			return err
 		}
 	}
@@ -32,7 +32,7 @@ func ValidateElastic(client clientset.Interface, elastic *tapi.Elastic) error {
 			return err
 		}
 
-		if err := amv.CheckBucketAccess(client, backupScheduleSpec.SnapshotStorageSpec, elastic.Namespace); err != nil {
+		if err := storage.CheckBucketAccess(client, backupScheduleSpec.SnapshotStorageSpec, elastic.Namespace); err != nil {
 			return err
 		}
 	}
