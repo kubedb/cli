@@ -2,7 +2,7 @@
 
 # Backup Database
 
-We need to create a Snapshot object to initiate backup process. 
+We need to create a Snapshot object to initiate backup process.
 
 Here is a template of Snapshot object
 
@@ -387,7 +387,7 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Snapshot tpr using this secret. Following parameters are availble for `Azure` backend.
+Now, you can create a Snapshot tpr using this secret. Following parameters are available for `Azure` backend.
 
 | Parameter     | Description                                                                     |
 |---------------|---------------------------------------------------------------------------------|
