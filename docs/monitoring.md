@@ -1,18 +1,24 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-### Monitor Database
+# Monitoring KubeDB
 
-We now support only Promethues to monitor database.
+KubeDB has native support for monitoring via Prometheus.
 
-**T**o set monitoring by Promethues, we need to set following in `spec.monitor.prometheus`
+## Monitoring KubeDB Operator
+KubeDB operator exposes Prometheus native monitoring data via `/metrics` endpoint on `:56790` port. You can setup a [CoreOS Prometheus ServiceMonitor](https://github.com/coreos/prometheus-operator) using `kubedb-operator` service. To change the port, use `--address` flag on KubeDB operator.
 
-* `namespace:` Namespace (ServiceMonitor will be created in this namespace)
-* `labels:` Operator will detect ServiceMonitor using this labels.
-* `interval:` Interval at which metrics should be scraped
+## Monitoring Databases
+KubeDB operator can create [service monitors](https://coreos.com/operators/prometheus/docs/latest/user-guides/running-exporters.html#create-a-matching-servicemonitor) for database pods.
+If enabled, a __side-car exporter pod__ is run with database pods to expose Prometheus ready metrics via the following endpoints on port `:56790`:
+
+- `/kubedb.com/v1beta1/namespaces/:ns/(postgreses|elastics)/:name/metrics`: Scrape this endpoint to monitor database.
+
+First deploy Prometheus operator so that Prometheus TPR groups are registered. Then, to monitor KubeDB databases by Prometheus, set following fields in `spec.monitor.prometheus`:
 
 ```yaml
 spec:
   monitor:
+    agent: coreos-prometheus-operator
     prometheus:
       namespace: default
       labels:
@@ -20,5 +26,11 @@ spec:
       interval: 10s
 ```
 
-**A**s we have used monitoring information in our database yaml,
-Prometheus will start collecting matrices fot this database from exporter.
+|  Keys                               |  Value |  Description                                                                                                                    |
+|-------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------|
+| `spec.monitor.agent`                | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator`                     |
+| `spec.monitor.prometheus.namespace` | string | `Required`. Indicates namespace where service monitors are created. This must be the same namespace of the Prometheus instance. |
+| `spec.monitor.prometheus.labels`    | map    | `Required`. Indicates labels applied to service monitor.                                                                        |
+| `spec.monitor.prometheus.interval`  | string | `Optional`. Indicates the scrape interval for database exporter endpoint                                                          |
+
+__Known Limitations:__ If the databse password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/k8sdb/operator/issues/63).
