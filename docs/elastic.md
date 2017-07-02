@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
 ### Create Elastic
 
 **L**ets create a simple elasticsearch database using following yaml.

@@ -1,3 +1,99 @@
+> New to KubeDB? Please start [here](/docs/tutorial.md).
+
+
+
+# Create Database
+
+we can create a database supported by **kubedb** using this CLI.
+
+Lets create a Postgres database.
+
+### kubedb create
+
+`kubedb create` command will create an object in `default` namespace by default unless namespace is specified by input.
+
+Following command will create a Postgres TPR as specified in `postgres.yaml`.
+
+```bash
+$ kubedb create -f postgres.yaml
+
+postgres "postgres-demo" created
+```
+
+We can provide namespace as a flag `--namespace`.
+
+```bash
+$ kubedb create -f postgres.yaml --namespace=kube-system
+
+postgres "postgres-demo" created
+```
+
+> Provided namespace should match with namespace specified in input file.
+
+If input file do not specify namespace, object will be created in `default` namespace if not provided.
+
+
+`kubedb create` command also considers `stdin` as input.
+
+```bash
+cat postgres.yaml | kubedb create -f -
+```
+
+
+
+
+
+# Create Database
+
+we can create a database supported by **kubedb** using this CLI.
+
+Lets create a Postgres database.
+
+### kubedb create
+
+`kubedb create` command will create an object in `default` namespace by default unless namespace is specified by input.
+
+Following command will create a Postgres TPR as specified in `postgres.yaml`.
+
+```bash
+$ kubedb create -f postgres.yaml
+
+postgres "postgres-demo" created
+```
+
+We can provide namespace as a flag `--namespace`.
+
+```bash
+$ kubedb create -f postgres.yaml --namespace=kube-system
+
+postgres "postgres-demo" created
+```
+
+> Provided namespace should match with namespace specified in input file.
+
+If input file do not specify namespace, object will be created in `default` namespace if not provided.
+
+
+`kubedb create` command also considers `stdin` as input.
+
+```bash
+cat postgres.yaml | kubedb create -f -
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Create Postgres
 
 **L**ets create a simple postgres database using following yaml.
@@ -65,63 +161,6 @@ This database do not have any PersistentVolume behind StatefulSet.
 
 **W**e can create a Postgres database that will use PersistentVolumeClaim in StatefulSet.
 
-How to add storage information in Postgres `spec`? See [here](../support-storage.md).
-
-Following command will list `pvc` for this database.
-
-```bash
-$ kubectl get pvc --selector='kubedb.com/kind=Postgres,kubedb.com/name=postgres-db'
-
-NAME                    STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
-data-postgres-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
-```
-
-
-
-
-
-
-
-
-
-# Create Database
-
-we can create a database supported by **kubedb** using this CLI.
-
-Lets create a Postgres database.
-
-### kubedb create
-
-`kubedb create` command will create an object in `default` namespace by default unless namespace is specified by input.
-
-Following command will create a Postgres TPR as specified in `postgres.yaml`.
-
-```bash
-$ kubedb create -f postgres.yaml
-
-postgres "postgres-demo" created
-```
-
-We can provide namespace as a flag `--namespace`.
-
-```bash
-$ kubedb create -f postgres.yaml --namespace=kube-system
-
-postgres "postgres-demo" created
-```
-
-> Provided namespace should match with namespace specified in input file.
-
-If input file do not specify namespace, object will be created in `default` namespace if not provided.
-
-
-`kubedb create` command also considers `stdin` as input.
-
-```bash
-cat postgres.yaml | kubedb create -f -
-```
-
-### Add Storage
 
 **T**o add PersistentVolume support, we need to add following StorageSpec in `spec`
 
@@ -142,6 +181,29 @@ Here we must have to add following storage information in `spec.storage`:
 * `resources:` ResourceRequirements for PersistentVolumeClaimSpec
 
 **A**s we have used storage information in our database yaml, StatefulSet will be created with PersistentVolumeClaim.
+
+
+
+
+Following command will list `pvc` for this database.
+
+```bash
+$ kubectl get pvc --selector='kubedb.com/kind=Postgres,kubedb.com/name=postgres-db'
+
+NAME                    STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
+data-postgres-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
+```
+
+
+
+
+
+
+
+
+
+
+### Add Storage
 
 
 ##### Click [here](../reference/create.md) to get command details.
