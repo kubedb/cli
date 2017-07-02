@@ -6,7 +6,8 @@
 A `Snapshot` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for database snapshots in a Kubernetes native way. You only need to describe the desired backup operations in a Snapshot object, and the KubeDB operator will launch a Job to perform backup operation.
 
 ## Snapshot Spec
-As with all other Kubernetes objects, a Snapshot needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Snapshot object.
+As with all other Kubernetes objects, a Snapshot needs `apiVersion`, `kind`, and `metadata` fields. The metadata field must contain a label with `kubedb.com/kind` key.
+The valid values for this label are `Postgres` or `Elastic`. It also needs a `.spec` section. Below is an example Snapshot object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -282,127 +283,29 @@ spec:
 ```
 
 
+## Taking one-off Backup
+To initiate backup process, first create a Snapshot object. A valid Snapshot object must contain the following fields:
 
+ - metadata.name
+ - metadata.namespace
+ - metadata.labels[kubedb.com/kind]
+ - spec.databaseName
+ - spec.storageSecretName
+ - spec.local | spec.s3 | spec.gcs | spec.azure | spec.swift
 
+Before starting backup process, KubeDB operator will validate storage secret by creating an empty file in specified bucket using this secret.
 
+Using `kubedb`, create a Snapshot object from `snapshot.yaml`.
 
-
-
-
-
-
-We need to create a Snapshot object to initiate backup process.
-
-This will create a Snapshot object in `default` namespace.
-
-**L**et me describe this YAML in details.
-
-While taking backup of any database, we must provide three information.
-
-1. Database name (`databaseName:` in spec)
-2. Database kind (`kubedb.com/kind:` in labels)
-
-```yaml
-metadata:
-  labels:
-    kubedb.com/kind: <Postgres|Elastic>
-spec:
-  databaseName: "database-demo"
-```
-
-3. Storage information
-    * Bucket name
-    * Secret to access bucket
-
-```yaml
-spec:
-  bucketName: "bucket-for-snapshot"
-  storageSecret:
-    secretName: "secret-for-bucket"
-```
-
-Storage secret example:
-
-```yaml
-apiVersion: v1
-data:
-  config: anNvbjogfAog-------dF9pZDogdGlnZXJ3b3Jrcy1rdWJlCg==
-  provider: Z29vZ2xl
-kind: Secret
-metadata:
-  name: secret-for-bucket
-type: Opaque
-```
-
-**T**his storage secret must have two key:
-1. Provider (`provider:`)
-2. Config (`config: `)
-
-Example:
-
-## Google Cloud Storage (GCS)
-
-* `provider: google`
-* `config:`
-    ```yaml
-    json: |
-        {
-          "type": "service_account",
-          "project_id": "project_id",
-          "private_key_id": "private_key_id",
-          "private_key": "private_key",
-          "client_email": "client_email",
-          "client_id": "client_id",
-          "auth_uri": "auth_uri",
-          "token_uri": "token_uri",
-          "auth_provider_x509_cert_url": "auth_provider_x509_cert_url",
-          "client_x509_cert_url": "client_x509_cert_url"
-        }
-    project_id: "project_id"
-    ```
-
-## Amazon S3
-
-* `provider: s3`
-* `config:`
-    ```yaml
-    access_key_id: "access_key_id"
-    region: "region"
-    secret_key: "secret_key"
-    ```
-
-## Microsoft Azure Storage
-KubeDB can store database snapshots in Microsoft Azure Storage. To configure this, the following secret keys are needed:
-
-| Key                     | Description                                                |
-|-------------------------|------------------------------------------------------------|
-| `provider`       | `Required`. Password used to encrypt snapshots by `snapshot` |
-| `config`    | `Required`. Azure Storage account name                     |
-| `AZURE_ACCOUNT_KEY`     | `Required`. Azure Storage account key                      |
-
-
-
-* `provider: azure`
-* `config:`
-    ```yaml
-    account: "account_id"
-    key: "key_value"
-    ```
-
-Before starting backup process, controller will validate storage secret by creating an empty file
-in specified bucket using this secret.
-
-**L**ets create a Snapshot object using `snapshot.yaml`.
-
-```bash
-$ kubedb create -f snapshot.yaml
+```sh
+$ kubedb create -f ./docs/examples/elastic/snapshot.yaml
 
 snapshot "snapshot-xyz" created
 ```
 
-We can see its status.
+Use `kubedb get` to check snap0shot status.
 
-```bash
+```sh
 $ kubedb get snap snapshot-xyz -o wide
 
 NAME           DATABASE              BUCKET    STATUS      AGE
@@ -410,30 +313,20 @@ snapshot-xyz   es/elasticsearch-db   snapshot    Succeeded   24m
 ```
 
 
-
-
-
-
-
-
-## Schedule Backup
-
-**T**o schedule backup, we need to add following BackupScheduleSpec in `spec`
+## Schedule Backups
+Scheduled backups are supported for all types of databases. To schedule backups, add the following `BackupScheduleSpec` in `spec` of a database tpr. All snapshot storage backends are supported for scheduled backup.
 
 ```yaml
 spec:
   backupSchedule:
     cronExpression: "@every 6h"
-    bucketName: "bucket-for-snapshot"
-    storageSecret:
-      secretName: "secret-for-bucket"
+    storageSecretName: "secret-for-bucket"
+    s3:
+      endpoint: 's3.amazonaws.com'
+      region: us-east-1
+      bucket: kubedb-qa
 ```
 
-> **Note:** storage can also be used here
+`spec.backupSchedule.schedule` is a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26) that indicates how often backups are taken.
 
-When database TPR object is running,
-operator immediately takes a backup to validate this information.
-
-And after successful backup, operator will set a scheduler to take backup `every 6h`.
-
-See backup process in [details](backup.md).
+When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a Snapshot object. This triggers operator to create a Job to take backup.
