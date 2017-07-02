@@ -1,5 +1,15 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
+# Elastics
+
+## What is Elastic
+A `Elastic` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for [Elastic](https://github.com/Elastic/Elastic) in a Kubernetes native way. You only need to describe the desired backup operations in a Elastic object, and the Stash operator will reconfigure the matching workloads to the desired state for you.
+
+## Elastic Spec
+As with all other Kubernetes objects, a Elastic needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Elastic object.
+
+
+
 ### Create Elastic
 
 **L**ets create a simple elasticsearch database using following yaml.

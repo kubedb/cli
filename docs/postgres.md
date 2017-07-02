@@ -1,6 +1,12 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
+# Postgreses
 
+## What is Postgres
+A `Postgres` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for [Postgres](https://github.com/Postgres/Postgres) in a Kubernetes native way. You only need to describe the desired backup operations in a Postgres object, and the Stash operator will reconfigure the matching workloads to the desired state for you.
+
+## Postgres Spec
+As with all other Kubernetes objects, a Postgres needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Restic object.
 
 
 
