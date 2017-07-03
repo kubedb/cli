@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/appscode/go/types"
-	//tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
@@ -16,7 +16,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
-	//apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
+	apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
 	batch "k8s.io/client-go/pkg/apis/batch/v1"
 	extensions "k8s.io/client-go/pkg/apis/extensions/v1beta1"
 	rbac "k8s.io/client-go/pkg/apis/rbac/v1beta1"
@@ -167,12 +167,12 @@ func rbacStuff(client kubernetes.Interface, namespace, serviceAccount string) er
 				Resources: []string{"thirdpartyresources"},
 				Verbs:     []string{"get", "create"},
 			},
-			/*{
+			{
 				APIGroups: []string{tapi.GroupName},
 				Resources: []string{rbac.ResourceAll},
 				Verbs:     []string{"get", "list", "watch", "create", "update", "delete"},
-			},*/
-			/*{
+			},
+			{
 				APIGroups: []string{apps.GroupName},
 				Resources: []string{"statefulsets"},
 				Verbs:     []string{"get", "create", "update", "delete"},
@@ -181,7 +181,7 @@ func rbacStuff(client kubernetes.Interface, namespace, serviceAccount string) er
 				APIGroups: []string{apiv1.GroupName},
 				Resources: []string{"services", "secrets"},
 				Verbs:     []string{"get", "create", "delete"},
-			},*/
+			},
 			{
 				APIGroups: []string{batch.GroupName},
 				Resources: []string{"jobs"},
