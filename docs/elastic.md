@@ -16,17 +16,10 @@ metadata:
 spec:
   version: 2.3.1
   replicas: 1
-  storage:
-    class: "gp2"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: "10Gi"
 ```
 
 ```sh
-kubedb create -f  ./docs/examples/elastic/elastic-with-storage.yaml
+$ kubedb create -f  ./docs/examples/elastic/elastic-with-storage.yaml
 
 elastic "elasticsearch-db" created
 ```
@@ -47,7 +40,7 @@ elasticsearch-db   2.3.1     Running   37m
 This database does not have any PersistentVolume behind StatefulSet pods.
 
 
-### Use PersistentVolume
+### Using PersistentVolume
 To use PersistentVolume, add the `spec.storage` section when creating Elastic object.
 
 ```yaml
@@ -82,7 +75,7 @@ data-elasticsearch-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba 
 ```
 
 
-### Initialize Database
+### Database Initialization
 Elasticsearch databases can be created from a previously takes Snapshot. To initialize from prior snapshot, set the `spec.init.snapshotSource` section when creating an Elastic object.
 
 In this case, SnapshotSource must have following information:
