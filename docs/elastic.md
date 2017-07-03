@@ -25,25 +25,19 @@ spec:
         storage: "10Gi"
 ```
 
-Save this yaml as `elasticsearch-db.yaml` and create Elastic object.
-
 ```sh
 kubedb create -f  ./docs/examples/elastic/elastic-with-storage.yaml
 
 elastic "elasticsearch-db" created
 ```
 
-**O**ur deployed unified operator will detect this object and will create workloads.
-
-For this object, following kubernetes objects will be created in same namespace:
+Once the Elastic object is created, KubeDB operator will detect it and create the following Kubernetes objects in the same namespace:
 * StatefulSet (name: **elasticsearch-db**-es)
 * Service (name: **elasticsearch-db**)
 * GoverningService (If not available) (name: **kubedb**)
 
-
-**N**ow lets see whether our database is ready or not.
-
-```bash
+To confirm the new Elasticsearch is ready, run the following command:
+```sh
 $ kubedb get elastic elasticsearch-db -o wide
 
 NAME               VERSION   STATUS    AGE
