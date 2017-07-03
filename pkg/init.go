@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"io"
 	"strings"
-	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/appscode/go/types"
-	batch "k8s.io/client-go/pkg/apis/batch/v1"
 
-	apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
+	"github.com/appscode/go/types"
+	//tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
@@ -18,6 +16,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
+	//apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
+	batch "k8s.io/client-go/pkg/apis/batch/v1"
 	extensions "k8s.io/client-go/pkg/apis/extensions/v1beta1"
 	rbac "k8s.io/client-go/pkg/apis/rbac/v1beta1"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
@@ -56,10 +56,6 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
 	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
-	serviceAccount := apiv1.NamespaceDefault
-	if configureRBAC {
-		serviceAccount = docker.OperatorName
-	}
 
 	client, err := kube.NewKubeClient(cmd)
 	if err != nil {
@@ -120,6 +116,14 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 			return nil
 		}
 
+		serviceAccount := apiv1.NamespaceDefault
+		if configureRBAC {
+			serviceAccount = docker.OperatorName
+			if err := rbacStuff(client, namespace, serviceAccount); err != nil {
+				return err
+			}
+		}
+
 		if err := createOperatorDeployment(client, namespace, serviceAccount, version); err != nil {
 			if kerr.IsAlreadyExists(err) {
 				fmt.Fprintln(errOut, "Operator deployment already exists.")
@@ -152,28 +156,8 @@ var operatorLabel = map[string]string{
 	"app": docker.OperatorName,
 }
 
-func rbacstuff(client kubernetes.Interface, namespace, serviceAccount, version string) error {
-	roleBinding := rbac.ClusterRoleBinding{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      docker.OperatorName,
-			Namespace: namespace,
-		},
-		RoleRef: rbac.RoleRef{
-			APIGroup: rbac.GroupName,
-			Kind:     "ClusterRole",
-			Name:     docker.OperatorName,
-		},
-		Subjects: []rbac.Subject{
-			{
-				Kind:      rbac.ServiceAccountKind,
-				Name:      docker.OperatorName,
-				Namespace: namespace,
-			},
-		},
-	}
-	client.RbacV1beta1().ClusterRoleBindings().Create(&roleBinding)
-
-	role := rbac.ClusterRole{
+func rbacStuff(client kubernetes.Interface, namespace, serviceAccount string) error {
+	role := &rbac.ClusterRole{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: docker.OperatorName,
 		},
@@ -183,35 +167,25 @@ func rbacstuff(client kubernetes.Interface, namespace, serviceAccount, version s
 				Resources: []string{"thirdpartyresources"},
 				Verbs:     []string{"get", "create"},
 			},
-			{
+			/*{
 				APIGroups: []string{tapi.GroupName},
 				Resources: []string{rbac.ResourceAll},
-				Verbs:     []string{rbac.VerbAll},
-			},
-			{
-				APIGroups: []string{extensions.GroupName},
-				Resources: []string{"deployments"},
-				Verbs:     []string{"create", "get", "update"},
-			},
-			{
-				APIGroups: []string{apps.GroupName},
-				Resources: []string{"deployments"},
-				Verbs:     []string{"create", "get", "update"},
-			},
-			{
+				Verbs:     []string{"get", "list", "watch", "create", "update", "delete"},
+			},*/
+			/*{
 				APIGroups: []string{apps.GroupName},
 				Resources: []string{"statefulsets"},
-				Verbs:     []string{rbac.VerbAll},
+				Verbs:     []string{"get", "create", "update", "delete"},
 			},
 			{
 				APIGroups: []string{apiv1.GroupName},
-				Resources: []string{"secrets", "services"},
-				Verbs:     []string{rbac.VerbAll},
-			},
+				Resources: []string{"services", "secrets"},
+				Verbs:     []string{"get", "create", "delete"},
+			},*/
 			{
 				APIGroups: []string{batch.GroupName},
 				Resources: []string{"jobs"},
-				Verbs:     []string{"create", "delete"},
+				Verbs:     []string{"get", "create", "delete"},
 			},
 			{
 				APIGroups: []string{apiv1.GroupName},
@@ -230,15 +204,41 @@ func rbacstuff(client kubernetes.Interface, namespace, serviceAccount, version s
 			},
 		},
 	}
-	client.RbacV1beta1().ClusterRoles().Create(&role)
+	if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
+		return err
+	}
 
-	sa := apiv1.ServiceAccount{
+	sa := &apiv1.ServiceAccount{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      serviceAccount,
+			Namespace: namespace,
+		},
+	}
+	if _, err := client.CoreV1().ServiceAccounts(namespace).Create(sa); err != nil {
+		return err
+	}
+
+	roleBinding := &rbac.ClusterRoleBinding{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
 		},
+		RoleRef: rbac.RoleRef{
+			APIGroup: rbac.GroupName,
+			Kind:     "ClusterRole",
+			Name:     docker.OperatorName,
+		},
+		Subjects: []rbac.Subject{
+			{
+				Kind:      rbac.ServiceAccountKind,
+				Name:      serviceAccount,
+				Namespace: namespace,
+			},
+		},
 	}
-	client.CoreV1().ServiceAccounts(namespace).Create(&sa)
+	if _, err := client.RbacV1beta1().ClusterRoleBindings().Create(roleBinding); err != nil {
+		return err
+	}
 
 	return nil
 }
