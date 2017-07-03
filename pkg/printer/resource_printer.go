@@ -272,11 +272,7 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 	}
 
 	if options.Wide {
-		bucket, err := storage.GetContainer(item.Spec.SnapshotStorageSpec)
-		if err != nil {
-			return err
-		}
-		if _, err := fmt.Fprintf(w, "%s\t", bucket); err != nil {
+		if _, err := fmt.Fprintf(w, "%s\t", storage.GetLocation(item.Spec.SnapshotStorageSpec)); err != nil {
 			return err
 		}
 	}

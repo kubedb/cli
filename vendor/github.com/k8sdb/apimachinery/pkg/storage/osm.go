@@ -165,3 +165,18 @@ func GetContainer(spec tapi.SnapshotStorageSpec) (string, error) {
 	}
 	return "", errors.New("No storage provider is configured.")
 }
+
+func GetLocation(spec tapi.SnapshotStorageSpec) string {
+	if spec.S3 != nil {
+		return "s3://" + spec.S3.Bucket
+	} else if spec.GCS != nil {
+		return "gs://" + spec.GCS.Bucket
+	} else if spec.Azure != nil {
+		return "azure://" + spec.Azure.Container
+	} else if spec.Local != nil {
+		return "local://kubedb"
+	} else if spec.Swift != nil {
+		return "swift://" + spec.Swift.Container
+	}
+	return "Unknown"
+}
