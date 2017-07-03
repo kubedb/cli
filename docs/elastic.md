@@ -44,16 +44,11 @@ NAME               VERSION   STATUS    AGE
 elasticsearch-db   2.3.1     Running   37m
 ```
 
-
-This database do not have any PersistentVolume behind StatefulSet.
-
-### Add storage support
+This database does not have any PersistentVolume behind StatefulSet pods.
 
 
-**W**e can create a Elastic database that will use PersistentVolumeClaim in StatefulSet.
-
-
-**T**o add PersistentVolume support, we need to add following StorageSpec in `spec`
+### Use PersistentVolume
+To use PersistentVolume, add the `spec.storage` section when creating Elastic object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -77,9 +72,7 @@ Here we must have to add following storage information in `spec.storage`:
 * `class:` StorageClass (`kubectl get storageclasses`)
 * `resources:` ResourceRequirements for PersistentVolumeClaimSpec
 
-**A**s we have used storage information in our database yaml, StatefulSet will be created with PersistentVolumeClaim.
-
-Following command will list `pvc` for this database.
+As `spec.storage` fields are set, StatefulSet will be created with dynamically provisioned PersistentVolumeClaim. Following command will list PVCs for this database.
 
 ```bash
 $ kubectl get pvc --selector='kubedb.com/kind=Elastic,kubedb.com/name=elasticsearch-db'
@@ -89,66 +82,24 @@ data-elasticsearch-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba 
 ```
 
 
-
-
 ### Initialize Database
-
-We now support initialization from two sources.
-
-2. SnapshotSource
-
-We can use one of them to initialize out database.
-
-#### SnapshotSource
-
-**D**atabase can also be initialized with Snapshot data.
+Elasticsearch databases can be created from a previously takes Snapshot. To initialize from prior snapshot, set the `spec.init.snapshotSource` section when creating an Elastic object.
 
 In this case, SnapshotSource must have following information:
 1. `namespace:` Namespace of Snapshot object
 2. `name:` Name of the Snapshot
 
-If SnapshotSource is provided to initialize database,
-a job will do that initialization when database is running.
-
-##### Example
-
 ```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elastic
+metadata:
+  name: elasticsearch-db
 spec:
+  version: 2.3.1
+  replicas: 1
   init:
     snapshotSource:
       name: "snapshot-xyz"
 ```
 
-Database will be initialized from backup data of Snapshot `snapshot-xyz` in `default` namespace.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#### Schedule Backup
-
-**W**e can also schedule automatic backup by providing BackupSchedule information in `spec.backupSchedule`.
-
-How to add information in Elastic `spec` to schedule automatic backup? See [here](../schedule-backup.md).
-
-
-#### Monitor Database
-
-**W**e can also monitor our elasticsearch database.
-To enable monitoring, we need to set MonitorSpec in Elastic `spec`.
-
-How to set monitoring? See [here](../monitor-database.md).
+In the above example, Elasticsearch database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here,  KubeDB operator will launch a Job to initialize Elasticsearch once StatefulSet pods are running.
