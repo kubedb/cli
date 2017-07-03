@@ -2,116 +2,26 @@
 
 # Create Database
 
-we can create a database supported by **kubedb** using this CLI.
+`kubedb create` creates a database tpr in `default` namespace by default. Following command will create a Postgres TPR as specified in `postgres.yaml`.
 
-Lets create a Postgres database.
-
-### kubedb create
-
-`kubedb create` command will create an object in `default` namespace by default unless namespace is specified by input.
-
-Following command will create a Postgres TPR as specified in `postgres.yaml`.
-
-```bash
-$ kubedb create -f postgres.yaml
+```sh
+$ kubedb create -f ./docs/examples/postgres/postgres.yaml
 
 postgres "postgres-demo" created
 ```
 
-We can provide namespace as a flag `--namespace`.
+You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
-```bash
+```sh
 $ kubedb create -f postgres.yaml --namespace=kube-system
 
 postgres "postgres-demo" created
 ```
 
-> Provided namespace should match with namespace specified in input file.
-
-If input file do not specify namespace, object will be created in `default` namespace if not provided.
-
-
 `kubedb create` command also considers `stdin` as input.
 
-```bash
+```sh
 cat postgres.yaml | kubedb create -f -
 ```
 
-### Add Storage
-
-**T**o add PersistentVolume support, we need to add following StorageSpec in `spec`
-
-```yaml
-spec:
-  storage:
-    class: "gp2"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: "10Gi"
-```
-
-Here we must have to add following storage information in `spec.storage`:
-
-* `class:` StorageClass (`kubectl get storageclasses`)
-* `resources:` ResourceRequirements for PersistentVolumeClaimSpec
-
-**A**s we have used storage information in our database yaml, StatefulSet will be created with PersistentVolumeClaim.
-
-
-##### Click [here](../reference/create.md) to get command details.
-
-### Initialize Database
-
-We now support initialization from two sources.
-
-1. ScriptSource
-2. SnapshotSource
-
-We can use one of them to initialize out database.
-
-#### ScriptSource
-
-**W**hen providing ScriptSource to initialize,
-a script is run while starting up database.
-
-ScriptSource must have following information:
-1. `scriptPath:` ScriptPath (The script you want to run)
-2. [VolumeSource](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) (Where your script and other data will be stored)
-
-##### Example to use GitRepo
-
-```yaml
-spec:
-  init:
-    scriptSource:
-      scriptPath: "kubernetes-gitRepo/run.sh"
-      gitRepo:
-        repository: "https://github.com/appscode/kubernetes-gitRepo.git"
-```
-When database is starting up, script `run.sh` will be executed.
-
-> **Note:** all path used in script should be relative
-
-#### SnapshotSource
-
-**D**atabase can also be initialized with Snapshot data.
-
-In this case, SnapshotSource must have following information:
-1. `namespace:` Namespace of Snapshot object
-2. `name:` Name of the Snapshot
-
-If SnapshotSource is provided to initialize database,
-a job will do that initialization when database is running.
-
-##### Example
-
-```yaml
-spec:
-  init:
-    snapshotSource:
-      name: "snapshot-xyz"
-```
-
-Database will be initialized from backup data of Snapshot `snapshot-xyz` in `default` namespace.
+To learn about various options of `create` command, please visit [here](/docs/reference/kubedb_create.md).
