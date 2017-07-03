@@ -24,8 +24,8 @@ const (
 	SecretMountPath = "/etc/osm"
 )
 
-func NewOSMSecret(client clientset.Interface, snapshot *tapi.Snapshot, namespace string) (*apiv1.Secret, error) {
-	osmCtx, err := NewOSMContext(client, snapshot.Spec.SnapshotStorageSpec, namespace)
+func NewOSMSecret(client clientset.Interface, snapshot *tapi.Snapshot) (*apiv1.Secret, error) {
+	osmCtx, err := NewOSMContext(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace)
 	if err != nil {
 		return nil, err
 	}

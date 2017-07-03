@@ -199,7 +199,7 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 	c.eventRecorder.Event(runtimeObj, apiv1.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
 	c.eventRecorder.Event(snapshot, apiv1.EventTypeNormal, eventer.EventReasonStarting, "Backup running")
 
-	secret, err := storage.NewOSMSecret(c.client, snapshot, snapshot.Namespace)
+	secret, err := storage.NewOSMSecret(c.client, snapshot)
 	if err != nil {
 		message := fmt.Sprintf("Failed to generate osm secret. Reason: %v", err)
 		c.eventRecorder.Event(runtimeObj, apiv1.EventTypeWarning, eventer.EventReasonSnapshotFailed, message)
