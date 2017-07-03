@@ -6,7 +6,6 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: "secret-for-bucket"
   local:
     path: /repo
     volume:
