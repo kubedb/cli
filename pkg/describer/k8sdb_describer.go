@@ -7,6 +7,7 @@ import (
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/pkg/api"
@@ -194,7 +195,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
-		d.describeSecret(item.Namespace, item.Spec.StorageSecret.SecretName, "Storage", out)
+		d.describeSecret(item.Namespace, item.Spec.StorageSecretName, "Storage", out)
 
 		if events != nil {
 			describeEvents(events, out)
@@ -320,9 +321,10 @@ func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
 	fmt.Fprint(w, "  Name\tBucket\tStartTime\tCompletionTime\tPhase\n")
 	fmt.Fprint(w, "  ----\t------\t---------\t--------------\t-----\n")
 	for _, e := range snapshotList.Items {
+		bucket, _ := storage.GetContainer(e.Spec.SnapshotStorageSpec)
 		fmt.Fprintf(w, "  %s\t%s\t%s\t%s\t%s\n",
 			e.Name,
-			e.Spec.BucketName,
+			bucket,
 			timeToString(e.Status.StartTime),
 			timeToString(e.Status.CompletionTime),
 			e.Status.Phase,

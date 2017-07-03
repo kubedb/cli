@@ -1,5 +1,5 @@
 hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
-updated: 2017-07-01T23:59:55.669924103-07:00
+updated: 2017-07-03T05:20:17.189330885-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -212,7 +212,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: dafcb708d411376904e18f0695da399b84d04e8a
+  version: efde88c2289140f68c40ddfd6b8e78163d809fd6
   subpackages:
   - api
   - api/install
@@ -224,11 +224,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 0679c135940150fd45d5ef1175f6ed6f57caf9df
+  version: b64d052ac41fc6809f0fef149e2048f3689505d2
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: 14e19957798004240c49923d6a97e9dcd24ae6ac
+  version: 4841218507229e78f157da353df29f07f1bab42e
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -348,7 +348,7 @@ imports:
 - name: gopkg.in/robfig/cron.v2
   version: be2e0b0deed5a68ffee390b4583a13aff8321535
 - name: gopkg.in/yaml.v2
-  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:
