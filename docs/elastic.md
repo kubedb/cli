@@ -44,9 +44,10 @@ NAME               VERSION   STATUS    AGE
 elasticsearch-db   2.3.1     Running   37m
 ```
 
+
 This database do not have any PersistentVolume behind StatefulSet.
 
-#### Add storage support
+### Add storage support
 
 
 **W**e can create a Elastic database that will use PersistentVolumeClaim in StatefulSet.
