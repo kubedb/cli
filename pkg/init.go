@@ -198,12 +198,18 @@ func rbacStuff(client kubernetes.Interface, namespace, serviceAccount string) er
 				Verbs:     []string{"get", "list", "delete"},
 			},
 			{
+				APIGroups: []string{apiv1.GroupName},
+				Resources: []string{"persistentvolumeclaims"},
+				Verbs:     []string{"list", "delete"},
+			},
+			{
 				APIGroups: []string{"monitoring.coreos.com"},
 				Resources: []string{"servicemonitors"},
 				Verbs:     []string{"get", "create", "update"},
 			},
 		},
 	}
+
 	if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
 		return err
 	}
