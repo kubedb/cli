@@ -18,7 +18,7 @@ metadata:
     kubedb.com/kind: Postgres|Elastic
 spec:
   databaseName: postgres-db
-  storageSecretName: "secret-for-bucket"
+  storageSecretName: s3-secret
   s3:
     endpoint: 's3.amazonaws.com'
     region: us-east-1
@@ -58,7 +58,6 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: "secret-for-bucket"
   local:
     path: /repo
     volume:
@@ -133,7 +132,7 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: "secret-for-bucket"
+  storageSecretName: s3-secret
   s3:
     endpoint: 's3.amazonaws.com'
     region: us-east-1
@@ -206,7 +205,7 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: "secret-for-bucket"
+  storageSecretName: gcs-secret
   gcs:
     location: /repo
     bucket: bucket-for-snapshot
@@ -277,8 +276,106 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: "secret-for-bucket"
+  storageSecretName: azure-secret
   azure:
+    container: bucket-for-snapshot
+```
+
+### OpenStack Swift
+KubeDB supports OpenStack Swift as snapshot storage backend. To configure this backend, following secret keys are needed:
+
+| Key                      | Description                                                |
+|--------------------------|------------------------------------------------------------|
+| `ST_AUTH`                | For keystone v1 authentication                             |
+| `ST_USER`                | For keystone v1 authentication                             |
+| `ST_KEY`                 | For keystone v1 authentication                             |
+| `OS_AUTH_URL`            | For keystone v2 authentication                             |
+| `OS_REGION_NAME`         | For keystone v2 authentication                             |
+| `OS_USERNAME`            | For keystone v2 authentication                             |
+| `OS_PASSWORD`            | For keystone v2 authentication                             |
+| `OS_TENANT_ID`           | For keystone v2 authentication                             |
+| `OS_TENANT_NAME`         | For keystone v2 authentication                             |
+| `OS_AUTH_URL`            | For keystone v3 authentication                             |
+| `OS_REGION_NAME`         | For keystone v3 authentication                             |
+| `OS_USERNAME`            | For keystone v3 authentication                             |
+| `OS_PASSWORD`            | For keystone v3 authentication                             |
+| `OS_USER_DOMAIN_NAME`    | For keystone v3 authentication                             |
+| `OS_PROJECT_NAME`        | For keystone v3 authentication                             |
+| `OS_PROJECT_DOMAIN_NAME` | For keystone v3 authentication                             |
+| `OS_STORAGE_URL`         | For authentication based on tokens                         |
+| `OS_AUTH_TOKEN`          | For authentication based on tokens                         |
+
+
+```sh
+$ echo -n '<your-auth-url>' > OS_AUTH_URL
+$ echo -n '<your-tenant-id>' > OS_TENANT_ID
+$ echo -n '<your-tenant-name>' > OS_TENANT_NAME
+$ echo -n '<your-username>' > OS_USERNAME
+$ echo -n '<your-password>' > OS_PASSWORD
+$ echo -n '<your-region>' > OS_REGION_NAME
+$ kubectl create secret generic swift-secret \
+    --from-file=./OS_AUTH_URL \
+    --from-file=./OS_TENANT_ID \
+    --from-file=./OS_TENANT_NAME \
+    --from-file=./OS_USERNAME \
+    --from-file=./OS_PASSWORD \
+    --from-file=./OS_REGION_NAME
+secret "swift-secret" created
+```
+
+```yaml
+$ kubectl get secret azure-secret -o yaml
+
+apiVersion: v1
+data:
+  OS_AUTH_URL: PHlvdXItYXV0aC11cmw+
+  OS_PASSWORD: PHlvdXItcGFzc3dvcmQ+
+  OS_REGION_NAME: PHlvdXItcmVnaW9uPg==
+  OS_TENANT_ID: PHlvdXItdGVuYW50LWlkPg==
+  OS_TENANT_NAME: PHlvdXItdGVuYW50LW5hbWU+
+  OS_USERNAME: PHlvdXItdXNlcm5hbWU+
+kind: Secret
+metadata:
+  creationTimestamp: 2017-07-03T19:17:39Z
+  name: swift-secret
+  namespace: default
+  resourceVersion: "36381"
+  selfLink: /api/v1/namespaces/default/secrets/swift-secret
+  uid: 47b4bcab-6024-11e7-879a-080027726d6b
+type: Opaque
+```
+
+Now, you can create a Snapshot tpr using this secret. Following parameters are available for `Swift` backend.
+
+| Parameter                | Description                                                                     |
+|--------------------------|---------------------------------------------------------------------------------|
+| `spec.databaseName`      | `Required`. Name of database                                                    |
+| `spec.storageSecretName` | `Required`. Name of storage secret                                              |
+| `spec.swift.container`   | `Required`. Name of Storage container                                           |
+
+```sh
+$ kubectl create -f ./docs/examples/snapshot/swift/swift-snapshot.yaml
+snapshot "swift-snapshot" created
+```
+
+```yaml
+$ kubectl get snapshot swift-snapshot -o yaml
+
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  creationTimestamp: 2017-06-28T13:31:14Z
+  name: swift-snapshot
+  namespace: default
+  resourceVersion: "7070"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/swift-snapshot
+  uid: 0e8eb89b-5c06-11e7-bb52-08002711f4aa
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: postgres-db
+  storageSecretName: swift-secret
+  swift:
     container: bucket-for-snapshot
 ```
 

@@ -6,8 +6,6 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: s3-secret
-  s3:
-    endpoint: 's3.amazonaws.com'
-    region: us-east-1
-    bucket: kubedb-qa
+  storageSecretName: swift-secret
+  swift:
+    container: bucket-for-snapshot
