@@ -3,16 +3,10 @@
 # Elastics
 
 ## What is Elastic
-A `Elastic` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for [Elastic](https://github.com/Elastic/Elastic) in a Kubernetes native way. You only need to describe the desired backup operations in a Elastic object, and the Stash operator will reconfigure the matching workloads to the desired state for you.
+A `Elastic` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for [Elasticsearch](https://www.elastic.co/products/elasticsearch) in a Kubernetes native way. You only need to describe the desired database configuration in a Elastic object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
 ## Elastic Spec
 As with all other Kubernetes objects, a Elastic needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Elastic object.
-
-
-
-### Create Elastic
-
-**L**ets create a simple elasticsearch database using following yaml.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -22,12 +16,19 @@ metadata:
 spec:
   version: 2.3.1
   replicas: 1
+  storage:
+    class: "gp2"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "10Gi"
 ```
 
 Save this yaml as `elasticsearch-db.yaml` and create Elastic object.
 
-```bash
-$ cat elasticsearch-db.yaml | kubedb create -f -
+```sh
+kubedb create -f  ./docs/examples/elastic/elastic-with-storage.yaml
 
 elastic "elasticsearch-db" created
 ```
@@ -60,7 +61,13 @@ This database do not have any PersistentVolume behind StatefulSet.
 **T**o add PersistentVolume support, we need to add following StorageSpec in `spec`
 
 ```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elastic
+metadata:
+  name: elasticsearch-db
 spec:
+  version: 2.3.1
+  replicas: 1
   storage:
     class: "gp2"
     accessModes:
