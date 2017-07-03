@@ -113,10 +113,39 @@ func NewOSMContext(client clientset.Interface, spec tapi.SnapshotStorageSpec, na
 		return nc, nil
 	} else if spec.Swift != nil {
 		nc.Provider = swift.Kind
-		nc.Config[swift.ConfigKey] = string(secret.Data[tapi.OS_PASSWORD])
-		nc.Config[swift.ConfigTenantAuthURL] = string(secret.Data[tapi.OS_AUTH_URL])
-		nc.Config[swift.ConfigTenantName] = string(secret.Data[tapi.OS_TENANT_NAME])
-		nc.Config[swift.ConfigUsername] = string(secret.Data[tapi.OS_USERNAME])
+		// https://github.com/restic/restic/blob/master/src/restic/backend/swift/config.go
+		for _, val := range []struct {
+			stowKey   string
+			secretKey string
+		}{
+			// v2/v3 specific
+			{swift.ConfigUsername, tapi.OS_USERNAME},
+			{swift.ConfigKey, tapi.OS_PASSWORD},
+			{swift.ConfigRegion, tapi.OS_REGION_NAME},
+			{swift.ConfigTenantAuthURL, tapi.OS_AUTH_URL},
+
+			// v3 specific
+			{swift.ConfigDomain, tapi.OS_USER_DOMAIN_NAME},
+			{swift.ConfigTenantName, tapi.OS_PROJECT_NAME},
+			{swift.ConfigTenantDomain, tapi.OS_PROJECT_DOMAIN_NAME},
+
+			// v2 specific
+			{swift.ConfigTenantId, tapi.OS_TENANT_ID},
+			{swift.ConfigTenantName, tapi.OS_TENANT_NAME},
+
+			// v1 specific
+			{swift.ConfigTenantAuthURL, tapi.ST_AUTH},
+			{swift.ConfigUsername, tapi.ST_USER},
+			{swift.ConfigKey, tapi.ST_KEY},
+
+			// Manual authentication
+			{swift.ConfigStorageURL, tapi.OS_STORAGE_URL},
+			{swift.ConfigAuthToken, tapi.OS_AUTH_TOKEN},
+		} {
+			if _, exists := nc.Config.Config(val.stowKey); !exists {
+				nc.Config[val.stowKey] = string(secret.Data[val.secretKey])
+			}
+		}
 		return nc, nil
 	}
 	return nil, errors.New("No storage provider is configured.")

@@ -50,7 +50,7 @@ func (c *container) Item(id string) (stow.Item, error) {
 	return item, nil
 }
 
-func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]string, []stow.Item, string, error) {
+func (c *container) Browse(prefix, delimiter, cursor string, count int) (*stow.ItemPage, error) {
 	params := az.ListBlobsParameters{
 		Prefix:     prefix,
 		Delimiter:  delimiter,
@@ -61,7 +61,7 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 	}
 	listblobs, err := c.client.ListBlobs(c.id, params)
 	if err != nil {
-		return nil, nil, "", err
+		return nil, err
 	}
 
 	prefixes := make([]string, len(listblobs.BlobPrefixes))
@@ -82,12 +82,15 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 			properties: blob.Properties,
 		}
 	}
-	return prefixes, items, listblobs.NextMarker, nil
+	return &stow.ItemPage{Prefixes: prefixes, Items: items, Cursor: listblobs.NextMarker}, nil
 }
 
 func (c *container) Items(prefix, cursor string, count int) ([]stow.Item, string, error) {
-	_, items, cursor, err := c.Browse(prefix, "", cursor, count)
-	return items, cursor, err
+	page, err := c.Browse(prefix, "", cursor, count)
+	if err != nil {
+		return nil, "", err
+	}
+	return page.Items, cursor, err
 }
 
 func (c *container) Put(name string, r io.Reader, size int64, metadata map[string]interface{}) (stow.Item, error) {

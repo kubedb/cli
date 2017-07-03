@@ -1,7 +1,6 @@
 package azure
 
 import (
-	"fmt"
 	"io"
 	"net/url"
 	"sync"
@@ -46,23 +45,6 @@ func (i *item) Size() (int64, error) {
 
 func (i *item) Open() (io.ReadCloser, error) {
 	return i.client.GetBlob(i.container.id, i.id)
-}
-
-func (i *item) Partial(length, offset int64) (io.ReadCloser, error) {
-	// https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/get-blob
-	if offset < 0 {
-		return nil, errors.New("offset is negative")
-	}
-	if length < 0 {
-		return nil, fmt.Errorf("invalid length %d", length)
-	}
-	var r string
-	if length > 0 {
-		r = fmt.Sprintf("%d-%d", offset, offset+length)
-	} else {
-		r = fmt.Sprintf("%d-", offset)
-	}
-	return i.client.GetBlobRange(i.container.id, i.id, r, nil)
 }
 
 func (i *item) ETag() (string, error) {

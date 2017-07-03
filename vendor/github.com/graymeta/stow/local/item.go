@@ -1,8 +1,6 @@
 package local
 
 import (
-	"errors"
-	"fmt"
 	"io"
 	"net/url"
 	"os"
@@ -70,48 +68,6 @@ func (i *item) ETag() (string, error) {
 // Open opens the file for reading.
 func (i *item) Open() (io.ReadCloser, error) {
 	return os.Open(i.path)
-}
-
-// LimitedReadCloser wraps io.LimitedReader and exposes the Close() method.
-type LimitedReadCloser struct {
-	io.ReadCloser
-	io.Reader
-}
-
-// Read reads data from the limited reader.
-func (l *LimitedReadCloser) Read(p []byte) (int, error) {
-	return l.Reader.Read(p)
-}
-
-// LimitReadCloser returns a new reader wraps r in an io.LimitReader, but also
-// exposes the Close() method.
-func LimitReadCloser(r io.ReadCloser, n int64) *LimitedReadCloser {
-	return &LimitedReadCloser{ReadCloser: r, Reader: io.LimitReader(r, n)}
-}
-
-func (i *item) Partial(length, offset int64) (io.ReadCloser, error) {
-	if offset < 0 {
-		return nil, errors.New("offset is negative")
-	}
-	if length < 0 {
-		return nil, fmt.Errorf("invalid length %d", length)
-	}
-
-	f, err := os.Open(i.path)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = f.Seek(offset, 0)
-	if err != nil {
-		f.Close()
-		return nil, err
-	}
-	if length > 0 {
-		return LimitReadCloser(f, int64(length)), nil
-	}
-
-	return f, nil
 }
 
 func (i *item) LastMod() (time.Time, error) {

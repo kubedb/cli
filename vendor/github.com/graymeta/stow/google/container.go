@@ -70,7 +70,7 @@ func (c *Container) Item(id string) (stow.Item, error) {
 	return i, nil
 }
 
-func (c *Container) Browse(prefix string, delimiter string, cursor string, count int) ([]string, []stow.Item, string, error) {
+func (c *Container) Browse(prefix string, delimiter string, cursor string, count int) (*stow.ItemPage, error) {
 	// List all objects in a bucket using pagination
 	call := c.client.Objects.List(c.name).Delimiter(delimiter).MaxResults(int64(count))
 
@@ -84,7 +84,7 @@ func (c *Container) Browse(prefix string, delimiter string, cursor string, count
 
 	res, err := call.Do()
 	if err != nil {
-		return nil, nil, "", err
+		return nil, err
 	}
 
 	prefixes := make([]string, len(res.Prefixes))
@@ -96,17 +96,17 @@ func (c *Container) Browse(prefix string, delimiter string, cursor string, count
 	for i, o := range res.Items {
 		t, err := time.Parse(time.RFC3339, o.Updated)
 		if err != nil {
-			return nil, nil, "", err
+			return nil, err
 		}
 
 		u, err := prepUrl(o.MediaLink)
 		if err != nil {
-			return nil, nil, "", err
+			return nil, err
 		}
 
 		mdParsed, err := parseMetadata(o.Metadata)
 		if err != nil {
-			return nil, nil, "", err
+			return nil, err
 		}
 
 		containerItems[i] = &Item{
@@ -123,14 +123,17 @@ func (c *Container) Browse(prefix string, delimiter string, cursor string, count
 		}
 	}
 
-	return prefixes, containerItems, res.NextPageToken, nil
+	return &stow.ItemPage{Prefixes: prefixes, Items: containerItems, Cursor: res.NextPageToken}, nil
 }
 
 // Items retrieves a list of items that are prepended with
 // the prefix argument. The 'cursor' variable facilitates pagination.
 func (c *Container) Items(prefix, cursor string, count int) ([]stow.Item, string, error) {
-	_, items, cursor, err := c.Browse(prefix, "", cursor, count)
-	return items, cursor, err
+	page, err := c.Browse(prefix, "", cursor, count)
+	if err != nil {
+		return nil, "", err
+	}
+	return page.Items, cursor, err
 }
 
 func (c *Container) RemoveItem(id string) error {

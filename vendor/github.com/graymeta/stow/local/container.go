@@ -78,7 +78,7 @@ func (c *container) Put(name string, r io.Reader, size int64, metadata map[strin
 	return item, nil
 }
 
-func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]string, []stow.Item, string, error) {
+func (c *container) Browse(prefix, delimiter, cursor string, count int) (*stow.ItemPage, error) {
 	var files []os.FileInfo
 	var err error
 	r, sz := utf8.DecodeRuneInString(delimiter)
@@ -86,15 +86,15 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 		if sz == 0 {
 			files, err = flatdirs(c.path)
 		} else {
-			return nil, nil, "", fmt.Errorf("Bad delimiter %v", delimiter)
+			return nil, fmt.Errorf("Bad delimiter %v", delimiter)
 		}
 	} else if sz == len(delimiter) && r == os.PathSeparator {
 		files, err = ioutil.ReadDir(c.path)
 	} else {
-		return nil, nil, "", errors.New("Unknown delimeter " + delimiter)
+		return nil, errors.New("Unknown delimeter " + delimiter)
 	}
 	if err != nil {
-		return nil, nil, "", err
+		return nil, err
 	}
 	if cursor != stow.CursorStart {
 		// seek to the cursor
@@ -107,7 +107,7 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 			}
 		}
 		if !ok {
-			return nil, nil, "", stow.ErrBadCursor
+			return nil, stow.ErrBadCursor
 		}
 	}
 	if len(files) > count {
@@ -124,7 +124,7 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 		}
 		path, err := filepath.Abs(filepath.Join(c.path, f.Name()))
 		if err != nil {
-			return nil, nil, "", err
+			return nil, err
 		}
 		prefixes = append(prefixes, path)
 	}
@@ -136,7 +136,7 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 		}
 		path, err := filepath.Abs(filepath.Join(c.path, f.Name()))
 		if err != nil {
-			return nil, nil, "", err
+			return nil, err
 		}
 		if !strings.HasPrefix(f.Name(), prefix) {
 			continue
@@ -146,12 +146,15 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 		}
 		items = append(items, item)
 	}
-	return prefixes, items, cursor, nil
+	return &stow.ItemPage{Prefixes: prefixes, Items: items, Cursor: cursor}, nil
 }
 
 func (c *container) Items(prefix, cursor string, count int) ([]stow.Item, string, error) {
-	_, items, cursor, err := c.Browse(prefix, "", cursor, count)
-	return items, cursor, err
+	page, err := c.Browse(prefix, "", cursor, count)
+	if err != nil {
+		return nil, "", err
+	}
+	return page.Items, cursor, err
 }
 
 func (c *container) Item(id string) (stow.Item, error) {

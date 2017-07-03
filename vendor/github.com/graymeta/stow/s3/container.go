@@ -35,7 +35,7 @@ func (c *container) Item(id string) (stow.Item, error) {
 	return c.getItem(id)
 }
 
-func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]string, []stow.Item, string, error) {
+func (c *container) Browse(prefix, delimiter, cursor string, count int) (*stow.ItemPage, error) {
 	itemLimit := int64(count)
 
 	params := &s3.ListObjectsInput{
@@ -48,7 +48,7 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 
 	response, err := c.client.ListObjects(params)
 	if err != nil {
-		return nil, nil, "", errors.Wrap(err, "Items, listing objects")
+		return nil, errors.Wrap(err, "Items, listing objects")
 	}
 
 	prefixes := make([]string, len(response.CommonPrefixes))
@@ -84,14 +84,17 @@ func (c *container) Browse(prefix, delimiter, cursor string, count int) ([]strin
 		marker = containerItems[len(containerItems)-1].Name()
 	}
 
-	return prefixes, containerItems, marker, nil
+	return &stow.ItemPage{Prefixes: prefixes, Items: containerItems, Cursor: marker}, nil
 }
 
 // Items sends a request to retrieve a list of items that are prepended with
 // the prefix argument. The 'cursor' variable facilitates pagination.
 func (c *container) Items(prefix, cursor string, count int) ([]stow.Item, string, error) {
-	_, items, cursor, err := c.Browse(prefix, "", cursor, count)
-	return items, cursor, err
+	page, err := c.Browse(prefix, "", cursor, count)
+	if err != nil {
+		return nil, "", err
+	}
+	return page.Items, cursor, err
 }
 
 func (c *container) RemoveItem(id string) error {
