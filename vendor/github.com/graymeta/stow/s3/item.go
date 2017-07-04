@@ -1,7 +1,6 @@
 package s3
 
 import (
-	"fmt"
 	"io"
 	"net/url"
 	"strings"
@@ -76,34 +75,6 @@ func (i *item) Open() (io.ReadCloser, error) {
 	params := &s3.GetObjectInput{
 		Bucket: aws.String(i.container.Name()),
 		Key:    aws.String(i.ID()),
-	}
-
-	response, err := i.client.GetObject(params)
-	if err != nil {
-		return nil, errors.Wrap(err, "Open, getting the object")
-	}
-	return response.Body, nil
-}
-
-func (i *item) Partial(length, offset int64) (io.ReadCloser, error) {
-	// http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html
-	if offset < 0 {
-		return nil, errors.New("offset is negative")
-	}
-	if length < 0 {
-		return nil, fmt.Errorf("invalid length %d", length)
-	}
-
-	var r string
-	if length > 0 {
-		r = fmt.Sprintf("bytes=%d-%d", offset, offset+length)
-	} else {
-		r = fmt.Sprintf("bytes=%d-", offset)
-	}
-	params := &s3.GetObjectInput{
-		Bucket: aws.String(i.container.Name()),
-		Key:    aws.String(i.ID()),
-		Range:  aws.String(r),
 	}
 
 	response, err := i.client.GetObject(params)

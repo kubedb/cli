@@ -13,6 +13,7 @@ import (
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/client/clientset"
 	amc "github.com/k8sdb/apimachinery/pkg/controller"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	"github.com/k8sdb/cli/pkg/decoder"
 	"github.com/k8sdb/cli/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -271,7 +272,7 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 	}
 
 	if options.Wide {
-		if _, err := fmt.Fprintf(w, "%s\t", item.Spec.BucketName); err != nil {
+		if _, err := fmt.Fprintf(w, "%s\t", storage.GetLocation(item.Spec.SnapshotStorageSpec)); err != nil {
 			return err
 		}
 	}

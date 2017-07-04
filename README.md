@@ -1,46 +1,39 @@
-# kubedb
+# KubeDB
+Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB by AppsCode is a framework for writing operators for any database that support the following operational requirements:
 
-## Installing
+ - Create a database declaratively using TPR
+ - Take one-off backups or period backups to various cloud stores, eg,, S3, GCS, etc.
+ - Restore from backup or clone any database.
+ - Native integration with Prometheus for monitoring via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
+ - Apply deletion lock to avoid accidental deletion of database.
+ - Keep track of deleted databases, cleanup prior snapshots with a single command.
+ - Use cli to manage databases like kubectl for Kubernetes.
+ 
+Currently we include a complete implementation for Postgres and ElasticSearch database based on KubeDB framework.
 
-Lets install `kubedb` CLI using `go get` from source code.
+## Supported Versions
+Kubernetes 1.5+
 
-Following command will install the latest version of the library from master.
-
-```bash
-go get github.com/k8sdb/cli/...
-```
+## Installation
+To install KubeDB, please follow the guide [here](/docs/install.md).
 
 ## Using KubeDB
-Want to learn how to use KubeDB? Please start [here](docs/user-guide/tutorial.md).
-
-`kubedb` CLI is used to manipulate kubedb ThirdPartyResource objects.
-
-We will go through each of the commands and will see how these commands interact with TPR objects for kubedb databases.
-
-* [kubedb init](docs/user-guide/task/init.md) to deploy unified operator.
-* [kubedb create](docs/user-guide/task/create.md) to create a database object.
-* [kubedb describe](docs/user-guide/task/describe.md) to describe a supported object.
-* [kubedb get](docs/user-guide/task/get.md) to get/list supported object(s).
-* [kubedb edit](docs/user-guide/task/edit.md) to edit supported object(s).
-* [kubedb delete](docs/user-guide/task/delete.md) to delete supported object(s).
-
-## Versioning Policy
-There are 2 parts to versioning policy:
- - Operator & cli version: KubeDB follows semver versioning policy. Until 1.0 release is done, there might be breaking changes between point releases of the operator. Please always check the release notes for upgrade instructions.
- - TPR version: `kubedb.com/v1alpha1` is considered in alpha. This means breaking changes to the YAML format might happen among different releases of the operator.
-
----
-
-**The kubedb operator & cli collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--analytics=false`.
-
----
+Want to learn how to use KubeDB? Please start [here](/docs/tutorial.md).
 
 ## Contribution guidelines
-Want to help improve KubeDB? Please start [here](https://github.com/k8sdb/cli/tree/master/docs/contribution).
+Want to help improve KubeDB? Please start [here](/CONTRIBUTING.md).
+
+## Project Status
+Wondering what features are coming next? Please visit [here](/ROADMAP.md).
+
+---
+
+**The KubeDB operator collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--analytics=false`.
+
+---
 
 ## Support
 If you have any questions, you can reach out to us.
 * [Slack](https://slack.appscode.com)
-* [Forum](https://discuss.appscode.com)
 * [Twitter](https://twitter.com/AppsCodeHQ)
 * [Website](https://appscode.com)

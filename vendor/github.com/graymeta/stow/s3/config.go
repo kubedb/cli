@@ -17,6 +17,9 @@ import (
 const Kind = "s3"
 
 const (
+	// ConfigAuthType is an optional argument that defines whether to use an IAM role or access key based auth
+	ConfigAuthType = "auth_type"
+
 	// ConfigAccessKeyID is one key of a pair of AWS credentials.
 	ConfigAccessKeyID = "access_key_id"
 
@@ -33,24 +36,35 @@ const (
 	// ConfigEndpoint is optional config value for changing s3 endpoint
 	// used for e.g. minio.io
 	ConfigEndpoint = "endpoint"
+
+	// ConfigDisableSSL is optional config value for disabling SSL support on custom endpoints
+	// Its default value is "false", to disable SSL set it to "true".
+	ConfigDisableSSL = "disable_ssl"
 )
 
 func init() {
 
 	makefn := func(config stow.Config) (stow.Location, error) {
-		_, ok := config.Config(ConfigAccessKeyID)
-		if !ok {
-			return nil, errors.New("missing Access Key ID")
+
+		authType, ok := config.Config(ConfigAuthType)
+		if !ok || authType == "" {
+			authType = "accesskey"
 		}
 
-		_, ok = config.Config(ConfigSecretKey)
-		if !ok {
-			return nil, errors.New("missing Secret Key")
+		if !(authType == "accesskey" || authType == "iam") {
+			return nil, errors.New("invalid auth_type")
 		}
 
-		_, ok = config.Config(ConfigRegion)
-		if !ok {
-			return nil, errors.New("missing Region")
+		if authType == "accesskey" {
+			_, ok := config.Config(ConfigAccessKeyID)
+			if !ok {
+				return nil, errors.New("missing Access Key ID")
+			}
+
+			_, ok = config.Config(ConfigSecretKey)
+			if !ok {
+				return nil, errors.New("missing Secret Key")
+			}
 		}
 
 		// Create a new client (s3 session)
@@ -77,35 +91,42 @@ func init() {
 
 // Attempts to create a session based on the information given.
 func newS3Client(config stow.Config) (*s3.S3, error) {
+	authType, _ := config.Config(ConfigAuthType)
 	accessKeyID, _ := config.Config(ConfigAccessKeyID)
 	secretKey, _ := config.Config(ConfigSecretKey)
 	//	token, _ := config.Config(ConfigToken)
-	region, _ := config.Config(ConfigRegion)
 
-	var awsConfig *aws.Config
+	if authType == "" {
+		authType = "accesskey"
+	}
+
+	awsConfig := aws.NewConfig().
+		WithHTTPClient(http.DefaultClient).
+		WithMaxRetries(aws.UseServiceDefaultRetries).
+		WithLogger(aws.NewDefaultLogger()).
+		WithLogLevel(aws.LogOff).
+		WithSleepDelay(time.Sleep)
+
+	region, ok := config.Config(ConfigRegion)
+	if ok {
+		awsConfig.WithRegion(region)
+	} else {
+		awsConfig.WithRegion("us-east-1")
+	}
+
+	if authType == "accesskey" {
+		awsConfig.WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, ""))
+	}
 
 	endpoint, ok := config.Config(ConfigEndpoint)
-	if !ok {
-		awsConfig = aws.NewConfig().
-			WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")).
-			WithRegion(region).
-			WithHTTPClient(http.DefaultClient).
-			WithMaxRetries(aws.UseServiceDefaultRetries).
-			WithLogger(aws.NewDefaultLogger()).
-			WithLogLevel(aws.LogOff).
-			WithSleepDelay(time.Sleep)
-	} else {
-		awsConfig = aws.NewConfig().
-			WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")).
-			WithEndpoint(endpoint).
-			WithRegion(region).
-			WithHTTPClient(http.DefaultClient).
-			WithMaxRetries(aws.UseServiceDefaultRetries).
-			WithLogger(aws.NewDefaultLogger()).
-			WithLogLevel(aws.LogOff).
-			WithSleepDelay(time.Sleep).
-			WithDisableSSL(true).
+	if ok {
+		awsConfig.WithEndpoint(endpoint).
 			WithS3ForcePathStyle(true)
+	}
+
+	disableSSL, ok := config.Config(ConfigDisableSSL)
+	if ok && disableSSL == "true" {
+		awsConfig.WithDisableSSL(true)
 	}
 
 	sess := session.New(awsConfig)

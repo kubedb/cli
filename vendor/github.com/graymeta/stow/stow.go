@@ -97,7 +97,7 @@ type Container interface {
 	// count is the number of items to return per page.
 	// The returned cursor can be checked with IsCursorEnd to
 	// decide if there are any more items or not.
-	Browse(prefix, delimiter, cursor string, count int) ([]string, []Item, string, error)
+	Browse(prefix, delimiter, cursor string, count int) (*ItemPage, error)
 	// Items gets a page of items with the specified
 	// prefix for this Container.
 	// The specified cursor is a pointer to the start of
@@ -134,10 +134,6 @@ type Item interface {
 	// Open opens the Item for reading.
 	// Calling code must close the io.ReadCloser.
 	Open() (io.ReadCloser, error)
-	// Partial returns a reader that yields the contents of an Item at the
-	// given offset. If length is nonzero, only a portion of the Item is
-	// returned. Calling code must close the io.ReadCloser.
-	Partial(length, offset int64) (io.ReadCloser, error)
 	// ETag is a string that is different when the Item is
 	// different, and the same when the item is the same.
 	// Usually this is the last modified datetime.
@@ -147,6 +143,12 @@ type Item interface {
 	// Metadata gets a map of key/values that belong
 	// to this Item.
 	Metadata() (map[string]interface{}, error)
+}
+
+type ItemPage struct {
+	Prefixes []string
+	Items    []Item
+	Cursor   string
 }
 
 // Config represents key/value configuration.

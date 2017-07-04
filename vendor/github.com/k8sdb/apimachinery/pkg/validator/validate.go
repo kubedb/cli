@@ -1,15 +1,13 @@
 package validator
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 
 	"github.com/appscode/log"
-	"github.com/ghodss/yaml"
-	"github.com/graymeta/stow"
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/apimachinery/pkg/storage"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
@@ -64,68 +62,13 @@ func ValidateBackupSchedule(spec *tapi.BackupScheduleSpec) error {
 
 func ValidateSnapshotSpec(spec tapi.SnapshotStorageSpec) error {
 	// BucketName can't be empty
-	bucketName := spec.BucketName
-	if bucketName == "" {
-		return fmt.Errorf(`Object 'BucketName' is missing in '%v'`, spec)
+	if spec.S3 == nil && spec.GCS == nil && spec.Azure == nil && spec.Swift == nil && spec.Local == nil {
+		return errors.New("No storage provider is configured.")
 	}
 
 	// Need to provide Storage credential secret
-	storageSecret := spec.StorageSecret
-	if storageSecret == nil {
-		return fmt.Errorf(`Object 'StorageSecret' is missing in '%v'`, spec)
-	}
-
-	// Credential SecretName  can't be empty
-	storageSecretName := storageSecret.SecretName
-	if storageSecretName == "" {
-		return fmt.Errorf(`Object 'SecretName' is missing in '%v'`, *spec.StorageSecret)
-	}
-	return nil
-}
-
-const (
-	KeyProvider = "provider"
-	KeyConfig   = "config"
-)
-
-func CheckBucketAccess(client clientset.Interface, snapshotSpec tapi.SnapshotStorageSpec, namespace string) error {
-	secret, err := client.CoreV1().Secrets(namespace).Get(snapshotSpec.StorageSecret.SecretName, metav1.GetOptions{})
-	if err != nil {
-		return err
-	}
-
-	provider := secret.Data[KeyProvider]
-	if provider == nil {
-		return errors.New("Missing provider key")
-	}
-	configData := secret.Data[KeyConfig]
-	if configData == nil {
-		return errors.New("Missing config key")
-	}
-
-	var config stow.ConfigMap
-	if err := yaml.Unmarshal(configData, &config); err != nil {
-		return err
-	}
-
-	loc, err := stow.Dial(string(provider), config)
-	if err != nil {
-		return err
-	}
-
-	container, err := loc.Container(snapshotSpec.BucketName)
-	if err != nil {
-		return err
-	}
-
-	r := bytes.NewReader([]byte("CheckBucketAccess"))
-	item, err := container.Put(".kubedb", r, r.Size(), nil)
-	if err != nil {
-		return err
-	}
-
-	if err := container.RemoveItem(item.ID()); err != nil {
-		return err
+	if spec.StorageSecretName == "" {
+		return fmt.Errorf(`Object 'SecretName' is missing in '%v'`, spec.StorageSecretName)
 	}
 	return nil
 }
@@ -154,7 +97,7 @@ func ValidateSnapshot(client clientset.Interface, snapshot *tapi.Snapshot) error
 		return err
 	}
 
-	if err := CheckBucketAccess(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace); err != nil {
+	if err := storage.CheckBucketAccess(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace); err != nil {
 		return err
 	}
 	return nil

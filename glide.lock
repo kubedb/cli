@@ -1,5 +1,5 @@
 hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
-updated: 2017-06-27T09:11:07.077647695-07:00
+updated: 2017-07-04T11:53:45.533670921+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,9 +7,10 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: ecda61fa4e8943020e9948723e49c4ae544f7a3a
+  version: 9fde097ebcef0add8325c8fbee63ae01e7da530e
   subpackages:
   - encoding/json/types
+  - encoding/yaml
   - net/httpclient
   - runtime
   - types
@@ -17,6 +18,10 @@ imports:
   - wait
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
+- name: github.com/appscode/osm
+  version: c5e36f4aa99900641c2b592fc41d80556fa7f195
+  subpackages:
+  - pkg/context
 - name: github.com/aws/aws-sdk-go
   version: 63ce630574a5ec05ecd8e8de5cea16332a5a684d
   subpackages:
@@ -71,7 +76,7 @@ imports:
   - httputil
   - timeutil
 - name: github.com/cpuguy83/go-md2man
-  version: 71acacd42f85e5e82f70a55327789582a5200a90
+  version: 23709d0847197db6021a51fdb193e66e9222d4e7
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -179,13 +184,15 @@ imports:
 - name: github.com/gorilla/mux
   version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
 - name: github.com/graymeta/stow
-  version: d4b253dd4995360ae103b6460bbadeaa7fb3cdb4
+  version: 9457960a7989724e98ca759ed456e0e05ca69601
   repo: https://github.com/appscode/stow.git
   vcs: git
   subpackages:
   - azure
   - google
+  - local
   - s3
+  - swift
 - name: github.com/heroku/docker-registry-client
   version: 95467b6cacee2a06f112a3cf7e47a70fad6000cf
   subpackages:
@@ -205,7 +212,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: a8c23aeb10b7b1ff19c61272c10eec668abc2dbb
+  version: cfbc99b5853355232cb2c6528aa9add2a28eeb4c
   subpackages:
   - api
   - api/install
@@ -214,13 +221,14 @@ imports:
   - pkg/controller
   - pkg/docker
   - pkg/eventer
+  - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 848a01d08ed3511f0259c5489d913a7bb80f4a6a
+  version: 20f613b1ed7153e60352099b75434ea86152c706
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: 4f3b6881e32f658e4dc23dbe589f1d587354fab1
+  version: e912a28c494089aff29b4bc4444fe9b1af4ff2e9
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -233,6 +241,8 @@ imports:
   version: 1d91351acdc1cb2f2c995864674b754134b86ca7
 - name: github.com/mitchellh/go-wordwrap
   version: ad45545899c7b13c020ea92b2072220eefad42b8
+- name: github.com/ncw/swift
+  version: 9e6fdb8957a022d5780a78b58d6181c3580bb01f
 - name: github.com/orcaman/concurrent-map
   version: 2ae17bc4c860c83513ee50feb9746f3e50d7515d
 - name: github.com/pborman/uuid
@@ -254,7 +264,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: 4d647c8944eb42504a714e57e97f244ed6344722
+  version: 8c6fa02d2225de0f9bdcb7ca912556f68d172d8c
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -315,7 +325,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 1ba364a3bb616587dfd46d5009edefdfd7896ed9
+  version: e6586c9293b9d514c7f5d5076731ec977cff1be6
   subpackages:
   - gensupport
   - googleapi
@@ -392,7 +402,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 2308857ad3b8b18abf74ff734853973eda9da94d
+  version: 3c5a3c8a9a4bac7e943cc4ffb8532e8ac0c08f7f
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
@@ -495,7 +505,7 @@ imports:
   - util/integer
   - util/jsonpath
 - name: k8s.io/kubernetes
-  version: 7fa1c1756d8bc963f1a389f4a6937dc71f08ada2
+  version: 7c3906a4eccd5a7cad245de0bd65337927a60bef
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install
