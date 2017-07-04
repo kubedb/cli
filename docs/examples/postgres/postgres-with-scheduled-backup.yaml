@@ -6,6 +6,6 @@ spec:
   version: 9.5
   backupSchedule:
     cronExpression: "@every 6h"
-    bucketName: "bucket-for-snapshot"
-    storageSecret:
-      secretName: "secret-for-bucket"
+    storageSecretName: "secret-for-bucket"
+    gcs:
+      bucket: "bucket-for-snapshot"

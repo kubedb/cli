@@ -6,6 +6,6 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  bucketName: "bucket-for-snapshot"
-  storageSecret:
-    secretName: "secret-for-bucket"
+  storageSecretName: "google-cred"
+  gcs:
+    bucket: "restik"

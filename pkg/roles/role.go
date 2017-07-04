@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/pkg/docker"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -22,9 +21,14 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"get", "create"},
 	},
 	{
-		APIGroups: []string{tapi.GroupName},
-		Resources: []string{rbac.ResourceAll},
-		Verbs:     []string{"get", "list", "watch", "create", "update", "delete"},
+		APIGroups: []string{rbac.GroupName},
+		Resources: []string{"clusterroles", "clusterrolebindings"},
+		Verbs:     []string{"get", "create", "update"},
+	},
+	{
+		APIGroups: []string{apiv1.GroupName},
+		Resources: []string{"serviceaccounts"},
+		Verbs:     []string{"get", "create"},
 	},
 	{
 		APIGroups: []string{apps.GroupName},
@@ -43,11 +47,6 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 	{
 		APIGroups: []string{apiv1.GroupName},
-		Resources: []string{"events"},
-		Verbs:     []string{"create"},
-	},
-	{
-		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"pods"},
 		Verbs:     []string{"get", "list", "delete"},
 	},
@@ -55,6 +54,16 @@ var policyRuleOperator = []rbac.PolicyRule{
 		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
 		Verbs:     []string{"list", "delete"},
+	},
+	{
+		APIGroups: []string{apiv1.GroupName},
+		Resources: []string{"events"},
+		Verbs:     []string{"create"},
+	},
+	{
+		APIGroups: []string{tapi.GroupName},
+		Resources: []string{rbac.ResourceAll},
+		Verbs:     []string{"get", "list", "watch", "create", "update", "delete"},
 	},
 	{
 		APIGroups: []string{"monitoring.coreos.com"},
@@ -76,9 +85,7 @@ var policyRuleChild = []rbac.PolicyRule{
 	},
 }
 
-func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
-	name := docker.OperatorName
-
+func EnsureRBACStuff(client kubernetes.Interface, namespace, name string) error {
 	// Ensure ClusterRoles for operator
 	clusterRoleOperator, err := client.RbacV1beta1().ClusterRoles().Get(name, metav1.GetOptions{})
 	if err != nil {
