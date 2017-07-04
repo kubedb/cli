@@ -44,6 +44,8 @@ type PostgresSpec struct {
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *MonitorSpec `json:"monitor,omitempty"`
+	// Compute Resources required by the sidecar container.
+	Resources apiv1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 type PostgresStatus struct {
