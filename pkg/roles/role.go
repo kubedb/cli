@@ -1,8 +1,11 @@
 package roles
 
 import (
+	"fmt"
+
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
+	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
@@ -60,101 +63,126 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 }
 
+var policyRuleChild = []rbac.PolicyRule{
+	{
+		APIGroups: []string{tapi.GroupName},
+		Resources: []string{tapi.ResourceTypePostgres, tapi.ResourceTypeElastic},
+		Verbs:     []string{"get"},
+	},
+	{
+		APIGroups: []string{apiv1.GroupName},
+		Resources: []string{"secrets"},
+		Verbs:     []string{"get"},
+	},
+}
+
 func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
-	operatorName := docker.OperatorName
+	name := docker.OperatorName
 
-	if _, err := client.RbacV1beta1().ClusterRoles().Create(operatorName, metav1.GetOptions{}); err != nil {
-		return err
+	// Ensure ClusterRoles for operator
+	clusterRoleOperator, err := client.RbacV1beta1().ClusterRoles().Get(name, metav1.GetOptions{})
+	if err != nil {
+		if !kerr.IsNotFound(err) {
+			return err
+		}
+		// Create new one
+		role := &rbac.ClusterRole{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: name,
+			},
+			Rules: policyRuleOperator,
+		}
+		if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
+			return err
+		}
+	} else {
+		// Update existing one
+		clusterRoleOperator.Rules = policyRuleOperator
+		if _, err := client.RbacV1beta1().ClusterRoles().Update(clusterRoleOperator); err != nil {
+			return err
+		}
 	}
 
-
-	role := &rbac.ClusterRole{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: docker.OperatorName,
-		},
-		Rules: []rbac.PolicyRule{
-			{
-				APIGroups: []string{extensions.GroupName},
-				Resources: []string{"thirdpartyresources"},
-				Verbs:     []string{"get", "create"},
+	// Ensure ClusterRoles for database statefulsets
+	childRoleName := fmt.Sprintf("%v-child", name)
+	clusterRoleChild, err := client.RbacV1beta1().ClusterRoles().Get(childRoleName, metav1.GetOptions{})
+	if err != nil {
+		if !kerr.IsNotFound(err) {
+			return err
+		}
+		// Create new one
+		role := &rbac.ClusterRole{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: childRoleName,
 			},
-			{
-				APIGroups: []string{tapi.GroupName},
-				Resources: []string{rbac.ResourceAll},
-				Verbs:     []string{"get", "list", "watch", "create", "update", "delete"},
-			},
-			{
-				APIGroups: []string{apps.GroupName},
-				Resources: []string{"statefulsets"},
-				Verbs:     []string{"get", "create", "update", "delete"},
-			},
-			{
-				APIGroups: []string{apiv1.GroupName},
-				Resources: []string{"services", "secrets"},
-				Verbs:     []string{"get", "create", "delete"},
-			},
-			{
-				APIGroups: []string{batch.GroupName},
-				Resources: []string{"jobs"},
-				Verbs:     []string{"get", "create", "delete"},
-			},
-			{
-				APIGroups: []string{apiv1.GroupName},
-				Resources: []string{"events"},
-				Verbs:     []string{"create"},
-			},
-			{
-				APIGroups: []string{apiv1.GroupName},
-				Resources: []string{"pods"},
-				Verbs:     []string{"get", "list", "delete"},
-			},
-			{
-				APIGroups: []string{apiv1.GroupName},
-				Resources: []string{"persistentvolumeclaims"},
-				Verbs:     []string{"list", "delete"},
-			},
-			{
-				APIGroups: []string{"monitoring.coreos.com"},
-				Resources: []string{"servicemonitors"},
-				Verbs:     []string{"get", "create", "update"},
-			},
-		},
+			Rules: policyRuleChild,
+		}
+		if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
+			return err
+		}
+	} else {
+		// Update existing one
+		clusterRoleChild.Rules = policyRuleChild
+		if _, err := client.RbacV1beta1().ClusterRoles().Update(clusterRoleChild); err != nil {
+			return err
+		}
 	}
 
-	if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
-		return err
-	}
-
-	sa := &apiv1.ServiceAccount{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      serviceAccount,
-			Namespace: namespace,
-		},
-	}
-	if _, err := client.CoreV1().ServiceAccounts(namespace).Create(sa); err != nil {
-		return err
-	}
-
-	roleBinding := &rbac.ClusterRoleBinding{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      docker.OperatorName,
-			Namespace: namespace,
-		},
-		RoleRef: rbac.RoleRef{
-			APIGroup: rbac.GroupName,
-			Kind:     "ClusterRole",
-			Name:     docker.OperatorName,
-		},
-		Subjects: []rbac.Subject{
-			{
-				Kind:      rbac.ServiceAccountKind,
-				Name:      serviceAccount,
+	// Ensure ServiceAccounts
+	if _, err := client.CoreV1().ServiceAccounts(namespace).Get(name, metav1.GetOptions{}); err != nil {
+		if !kerr.IsNotFound(err) {
+			return err
+		}
+		sa := &apiv1.ServiceAccount{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      name,
 				Namespace: namespace,
 			},
+		}
+		if _, err := client.CoreV1().ServiceAccounts(namespace).Create(sa); err != nil {
+			return err
+		}
+	}
+
+	var roleBindingRef = rbac.RoleRef{
+		APIGroup: rbac.GroupName,
+		Kind:     "ClusterRole",
+		Name:     name,
+	}
+	var roleBindingSubjects = []rbac.Subject{
+		{
+			Kind:      rbac.ServiceAccountKind,
+			Name:      name,
+			Namespace: namespace,
 		},
 	}
-	if _, err := client.RbacV1beta1().ClusterRoleBindings().Create(roleBinding); err != nil {
-		return err
+
+	// Ensure ClusterRoleBindings
+	roleBinding, err := client.RbacV1beta1().ClusterRoleBindings().Get(name, metav1.GetOptions{})
+	if err != nil {
+		if !kerr.IsNotFound(err) {
+			return err
+		}
+
+		roleBinding := &rbac.ClusterRoleBinding{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      name,
+				Namespace: namespace,
+			},
+			RoleRef:  roleBindingRef,
+			Subjects: roleBindingSubjects,
+		}
+
+		if _, err := client.RbacV1beta1().ClusterRoleBindings().Create(roleBinding); err != nil {
+			return err
+		}
+
+	} else {
+		roleBinding.RoleRef = roleBindingRef
+		roleBinding.Subjects = roleBindingSubjects
+		if _, err := client.RbacV1beta1().ClusterRoleBindings().Update(roleBinding); err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/appscode/go/types"
-	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	"github.com/k8sdb/cli/pkg/kube"
+	"github.com/k8sdb/cli/pkg/roles"
 	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
@@ -16,10 +16,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
-	apps "k8s.io/client-go/pkg/apis/apps/v1beta1"
-	batch "k8s.io/client-go/pkg/apis/batch/v1"
 	extensions "k8s.io/client-go/pkg/apis/extensions/v1beta1"
-	rbac "k8s.io/client-go/pkg/apis/rbac/v1beta1"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
@@ -105,6 +102,15 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 
 		deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", docker.ImageOperator, version)
 
+		serviceAccount := apiv1.NamespaceDefault
+		if configureRBAC {
+			serviceAccount = docker.OperatorName
+			if err := roles.EnsureRBACStuff(client, namespace); err != nil {
+				return err
+			}
+		}
+		deployment.Spec.Template.Spec.ServiceAccountName = serviceAccount
+
 		if err := updateOperatorDeployment(client, deployment); err != nil {
 			return err
 		}
@@ -119,7 +125,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 		serviceAccount := apiv1.NamespaceDefault
 		if configureRBAC {
 			serviceAccount = docker.OperatorName
-			if err := rbacStuff(client, namespace, serviceAccount); err != nil {
+			if err := roles.EnsureRBACStuff(client, namespace); err != nil {
 				return err
 			}
 		}
@@ -155,7 +161,6 @@ func getOperatorDeployment(client kubernetes.Interface, namespace string) (*exte
 var operatorLabel = map[string]string{
 	"app": "kubedb",
 }
-
 
 func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAccount, version string) error {
 	deployment := &extensions.Deployment{
