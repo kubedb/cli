@@ -8,4 +8,4 @@ spec:
   databaseName: postgres-db
   storageSecretName: "google-cred"
   gcs:
-    bucket: "restik"
+    bucket: "restic"
