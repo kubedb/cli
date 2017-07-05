@@ -102,26 +102,21 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 
 		deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", docker.ImageOperator, version)
 
-		serviceAccount := apiv1.NamespaceDefault
 		if configureRBAC {
-			serviceAccount = docker.OperatorName
-			if err := roles.EnsureRBACStuff(client, namespace, serviceAccount); err != nil {
+			if err := roles.EnsureRBACStuff(client, namespace); err != nil {
 				return err
 			}
+			deployment.Spec.Template.Spec.ServiceAccountName = roles.ServiceAccountName
+		} else {
+			deployment.Spec.Template.Spec.ServiceAccountName = ""
 		}
 
-		clusterRole := serviceAccount
-		if clusterRole != "default" {
-			clusterRole = fmt.Sprintf("%v-child", serviceAccount)
-		}
 		deployment.Spec.Template.Spec.Containers[0].Args = []string{
 			"run",
 			fmt.Sprintf("--address=:%v", docker.OperatorPortNumber),
-			fmt.Sprintf("--cluster-role=%v", clusterRole),
+			fmt.Sprintf("--rbac=%v", configureRBAC),
 			"--v=3",
 		}
-
-		deployment.Spec.Template.Spec.ServiceAccountName = serviceAccount
 
 		if err := updateOperatorDeployment(client, deployment); err != nil {
 			return err
@@ -134,15 +129,13 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 			return nil
 		}
 
-		serviceAccount := apiv1.NamespaceDefault
 		if configureRBAC {
-			serviceAccount = docker.OperatorName
-			if err := roles.EnsureRBACStuff(client, namespace, serviceAccount); err != nil {
+			if err := roles.EnsureRBACStuff(client, namespace); err != nil {
 				return err
 			}
 		}
 
-		if err := createOperatorDeployment(client, namespace, serviceAccount, version); err != nil {
+		if err := createOperatorDeployment(client, namespace, version, configureRBAC); err != nil {
 			if kerr.IsAlreadyExists(err) {
 				fmt.Fprintln(errOut, "Operator deployment already exists.")
 			} else {
@@ -174,12 +167,7 @@ var operatorLabel = map[string]string{
 	"app": "kubedb",
 }
 
-func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAccount, version string) error {
-	clusterRole := serviceAccount
-	if clusterRole != "default" {
-		clusterRole = fmt.Sprintf("%v-child", serviceAccount)
-	}
-
+func createOperatorDeployment(client kubernetes.Interface, namespace, version string, configureRBAC bool) error {
 	deployment := &extensions.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
@@ -200,7 +188,7 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAcc
 							Args: []string{
 								"run",
 								fmt.Sprintf("--address=:%v", docker.OperatorPortNumber),
-								fmt.Sprintf("--cluster-role=%v", clusterRole),
+								fmt.Sprintf("--rbac=%v", configureRBAC),
 								"--v=3",
 							},
 							Env: []apiv1.EnvVar{
@@ -210,15 +198,6 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAcc
 										FieldRef: &apiv1.ObjectFieldSelector{
 											APIVersion: "v1",
 											FieldPath:  "metadata.namespace",
-										},
-									},
-								},
-								{
-									Name: "OPERATOR_SERVICE_ACCOUNT",
-									ValueFrom: &apiv1.EnvVarSource{
-										FieldRef: &apiv1.ObjectFieldSelector{
-											APIVersion: "v1",
-											FieldPath:  "spec.serviceAccountName",
 										},
 									},
 								},
@@ -232,10 +211,13 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, serviceAcc
 							},
 						},
 					},
-					ServiceAccountName: serviceAccount,
 				},
 			},
 		},
+	}
+
+	if configureRBAC {
+		deployment.Spec.Template.Spec.ServiceAccountName = roles.ServiceAccountName
 	}
 
 	_, err := client.ExtensionsV1beta1().Deployments(namespace).Create(deployment)

@@ -1,9 +1,8 @@
 package roles
 
 import (
-	"fmt"
-
 	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/apimachinery/pkg/docker"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -14,6 +13,8 @@ import (
 	rbac "k8s.io/client-go/pkg/apis/rbac/v1beta1"
 )
 
+const ServiceAccountName = docker.OperatorName
+
 var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{extensions.GroupName},
@@ -22,13 +23,18 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 	{
 		APIGroups: []string{rbac.GroupName},
-		Resources: []string{"clusterroles", "clusterrolebindings"},
-		Verbs:     []string{"get", "create", "update"},
+		Resources: []string{"roles"},
+		Verbs:     []string{"get", "create", "delete"},
+	},
+	{
+		APIGroups: []string{rbac.GroupName},
+		Resources: []string{"rolebindings"},
+		Verbs:     []string{"create", "delete"},
 	},
 	{
 		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"serviceaccounts"},
-		Verbs:     []string{"get", "create"},
+		Verbs:     []string{"create", "delete"},
 	},
 	{
 		APIGroups: []string{apps.GroupName},
@@ -48,7 +54,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"pods"},
-		Verbs:     []string{"get", "list", "delete"},
+		Verbs:     []string{"get", "list", "delete", "deletecollection"},
 	},
 	{
 		APIGroups: []string{apiv1.GroupName},
@@ -72,20 +78,8 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 }
 
-var policyRuleChild = []rbac.PolicyRule{
-	{
-		APIGroups: []string{tapi.GroupName},
-		Resources: []string{tapi.ResourceTypePostgres, tapi.ResourceTypeElastic},
-		Verbs:     []string{"get"},
-	},
-	{
-		APIGroups: []string{apiv1.GroupName},
-		Resources: []string{"secrets"},
-		Verbs:     []string{"get"},
-	},
-}
-
-func EnsureRBACStuff(client kubernetes.Interface, namespace, name string) error {
+func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
+	name := ServiceAccountName
 	// Ensure ClusterRoles for operator
 	clusterRoleOperator, err := client.RbacV1beta1().ClusterRoles().Get(name, metav1.GetOptions{})
 	if err != nil {
@@ -106,31 +100,6 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace, name string) error 
 		// Update existing one
 		clusterRoleOperator.Rules = policyRuleOperator
 		if _, err := client.RbacV1beta1().ClusterRoles().Update(clusterRoleOperator); err != nil {
-			return err
-		}
-	}
-
-	// Ensure ClusterRoles for database statefulsets
-	childRoleName := fmt.Sprintf("%v-child", name)
-	clusterRoleChild, err := client.RbacV1beta1().ClusterRoles().Get(childRoleName, metav1.GetOptions{})
-	if err != nil {
-		if !kerr.IsNotFound(err) {
-			return err
-		}
-		// Create new one
-		role := &rbac.ClusterRole{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: childRoleName,
-			},
-			Rules: policyRuleChild,
-		}
-		if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
-			return err
-		}
-	} else {
-		// Update existing one
-		clusterRoleChild.Rules = policyRuleChild
-		if _, err := client.RbacV1beta1().ClusterRoles().Update(clusterRoleChild); err != nil {
 			return err
 		}
 	}
