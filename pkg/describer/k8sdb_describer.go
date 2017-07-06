@@ -6,8 +6,6 @@ import (
 
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/api"
-	amc "github.com/k8sdb/apimachinery/pkg/controller"
-	"github.com/k8sdb/apimachinery/pkg/storage"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/pkg/api"
@@ -26,8 +24,8 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					amc.LabelDatabaseKind: tapi.ResourceKindElastic,
-					amc.LabelDatabaseName: item.Name,
+					tapi.LabelDatabaseKind: tapi.ResourceKindElastic,
+					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
 		},
@@ -96,8 +94,8 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					amc.LabelDatabaseKind: tapi.ResourceKindPostgres,
-					amc.LabelDatabaseName: item.Name,
+					tapi.LabelDatabaseKind: tapi.ResourceKindPostgres,
+					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
 		},
@@ -215,8 +213,8 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					amc.LabelDatabaseKind: item.Labels[amc.LabelDatabaseKind],
-					amc.LabelDatabaseName: item.Name,
+					tapi.LabelDatabaseKind: item.Labels[tapi.LabelDatabaseKind],
+					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
 		},
@@ -321,9 +319,13 @@ func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
 	fmt.Fprint(w, "  Name\tBucket\tStartTime\tCompletionTime\tPhase\n")
 	fmt.Fprint(w, "  ----\t------\t---------\t--------------\t-----\n")
 	for _, e := range snapshotList.Items {
+		location, err := e.Spec.SnapshotStorageSpec.Location()
+		if err != nil {
+			location = "<invalid>"
+		}
 		fmt.Fprintf(w, "  %s\t%s\t%s\t%s\t%s\n",
 			e.Name,
-			storage.GetLocation(e.Spec.SnapshotStorageSpec),
+			location,
 			timeToString(e.Status.StartTime),
 			timeToString(e.Status.CompletionTime),
 			e.Status.Phase,

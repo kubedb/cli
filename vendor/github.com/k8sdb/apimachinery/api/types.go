@@ -30,6 +30,8 @@ type SnapshotSourceSpec struct {
 type BackupScheduleSpec struct {
 	CronExpression      string `json:"cronExpression,omitempty"`
 	SnapshotStorageSpec `json:",inline,omitempty"`
+	// Compute Resources required by the sidecar container.
+	Resources apiv1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 const (
@@ -84,21 +86,24 @@ type LocalSpec struct {
 
 type S3Spec struct {
 	Endpoint string `json:"endpoint,omitempty"`
-	Region   string `json:"region,omitempty"`
 	Bucket   string `json:"bucket,omiempty"`
+	Prefix   string `json:"prefix,omitempty"`
 }
 
 type GCSSpec struct {
 	Location string `json:"location,omitempty"`
 	Bucket   string `json:"bucket,omiempty"`
+	Prefix   string `json:"prefix,omitempty"`
 }
 
 type AzureSpec struct {
 	Container string `json:"container,omitempty"`
+	Prefix    string `json:"prefix,omitempty"`
 }
 
 type SwiftSpec struct {
 	Container string `json:"container,omitempty"`
+	Prefix    string `json:"prefix,omitempty"`
 }
 
 type MonitorSpec struct {

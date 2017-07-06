@@ -44,11 +44,6 @@ type SnapshotController struct {
 	syncPeriod time.Duration
 }
 
-const (
-	LabelJobType        = "job.kubedb.com/type"
-	LabelSnapshotStatus = "snapshot.kubedb.com/status"
-)
-
 // NewSnapshotController creates a new SnapshotController
 func NewSnapshotController(
 	client clientset.Interface,
@@ -182,8 +177,8 @@ func (c *SnapshotController) create(snapshot *tapi.Snapshot) error {
 		return err
 	}
 
-	snapshot.Labels[LabelDatabaseName] = snapshot.Spec.DatabaseName
-	snapshot.Labels[LabelSnapshotStatus] = string(tapi.SnapshotPhaseRunning)
+	snapshot.Labels[tapi.LabelDatabaseName] = snapshot.Spec.DatabaseName
+	snapshot.Labels[tapi.LabelSnapshotStatus] = string(tapi.SnapshotPhaseRunning)
 	snapshot.Status.Phase = tapi.SnapshotPhaseRunning
 	if _, err = c.extClient.Snapshots(snapshot.Namespace).Update(snapshot); err != nil {
 		c.eventRecorder.Eventf(
@@ -429,7 +424,7 @@ func (c *SnapshotController) checkSnapshotJob(snapshot *tapi.Snapshot, jobName s
 		)
 	}
 
-	delete(snapshot.Labels, LabelSnapshotStatus)
+	delete(snapshot.Labels, tapi.LabelSnapshotStatus)
 	if _, err := c.extClient.Snapshots(snapshot.Namespace).Update(snapshot); err != nil {
 		c.eventRecorder.Eventf(
 			snapshot,
