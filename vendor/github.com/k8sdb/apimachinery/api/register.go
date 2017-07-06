@@ -45,14 +45,14 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	return nil
 }
 
-func (obj *Snapshot) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
+func (s *Snapshot) GetObjectKind() schema.ObjectKind       { return &s.TypeMeta }
 func (obj *SnapshotList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
 
-func (obj *DormantDatabase) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
+func (d *DormantDatabase) GetObjectKind() schema.ObjectKind       { return &d.TypeMeta }
 func (obj *DormantDatabaseList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
 
-func (obj *Elastic) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
+func (e *Elastic) GetObjectKind() schema.ObjectKind       { return &e.TypeMeta }
 func (obj *ElasticList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
 
-func (obj *Postgres) GetObjectKind() schema.ObjectKind     { return &obj.TypeMeta }
+func (p *Postgres) GetObjectKind() schema.ObjectKind       { return &p.TypeMeta }
 func (obj *PostgresList) GetObjectKind() schema.ObjectKind { return &obj.TypeMeta }
