@@ -109,7 +109,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.s3.endpoint`       | `Required`. For S3, use `s3.amazonaws.com`. If your bucket is in a different location, S3 server (s3.amazonaws.com) will redirect snapshot to the correct endpoint. For an S3-compatible server that is not Amazon (like Minio), or is only available via HTTP, you can specify the endpoint like this: `http://server:port`. |
 | `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
-| `spec.s3.prefix`         | `Optional`. Path prefix in Bucket                                               |
+| `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store                |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/s3/s3-snapshot.yaml
@@ -182,7 +182,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.gcs.bucket`        | `Required`. Name of Bucket                                                      |
-| `spec.gcs.prefix`        | `Optional`. Path prefix in Bucket                                               |
+| `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot will be stored               |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/gcs/gcs-snapshot.yaml
@@ -252,7 +252,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.azure.container`   | `Required`. Name of Storage container                                           |
-| `spec.azure.prefix`      | `Optional`. Path prefix in container                                            |
+| `spec.azure.prefix`      | `Optional`. Path prefix into container where snapshot will be stored            |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/azure/azure-snapshot.yaml
@@ -351,7 +351,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.swift.container`   | `Required`. Name of Storage container                                           |
-| `spec.swift.prefix`      | `Optional`. Path prefix in container                                            |
+| `spec.swift.prefix`      | `Optional`. Path prefix into container where snapshot will be stored            |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/swift/swift-snapshot.yaml
