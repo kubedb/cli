@@ -47,6 +47,11 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
+		APIGroups: []string{apiv1.GroupName},
+		Resources: []string{"endpoints"},
+		Verbs:     []string{"get",},
+	},
+	{
 		APIGroups: []string{batch.GroupName},
 		Resources: []string{"jobs"},
 		Verbs:     []string{"get", "create", "delete"},
