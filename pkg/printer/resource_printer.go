@@ -270,11 +270,11 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 	}
 
 	if options.Wide {
-		container, err := item.Spec.SnapshotStorageSpec.Location()
+		loc, err := item.Spec.SnapshotStorageSpec.Location()
 		if err != nil {
-			container = statusUnknown
+			loc = statusUnknown
 		}
-		if _, err := fmt.Fprintf(w, "%s\t", container); err != nil {
+		if _, err := fmt.Fprintf(w, "%s\t", loc); err != nil {
 			return err
 		}
 	}

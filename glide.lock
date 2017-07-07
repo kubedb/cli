@@ -1,5 +1,5 @@
 hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
-updated: 2017-07-07T10:37:48.142224896+06:00
+updated: 2017-07-07T12:14:25.253279508+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -15,7 +15,6 @@ imports:
   - runtime
   - types
   - version
-  - wait
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
 - name: github.com/appscode/osm
@@ -218,9 +217,7 @@ imports:
   - api/install
   - client/clientset
   - pkg/analytics
-  - pkg/controller
   - pkg/docker
-  - pkg/eventer
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
@@ -243,8 +240,6 @@ imports:
   version: ad45545899c7b13c020ea92b2072220eefad42b8
 - name: github.com/ncw/swift
   version: 9e6fdb8957a022d5780a78b58d6181c3580bb01f
-- name: github.com/orcaman/concurrent-map
-  version: 2ae17bc4c860c83513ee50feb9746f3e50d7515d
 - name: github.com/pborman/uuid
   version: ca53cad383cad2479bbba7f7a1a05797ec1386e4
 - name: github.com/pkg/errors
@@ -345,8 +340,6 @@ imports:
   - urlfetch
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
-- name: gopkg.in/robfig/cron.v2
-  version: be2e0b0deed5a68ffee390b4583a13aff8321535
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 - name: k8s.io/apimachinery

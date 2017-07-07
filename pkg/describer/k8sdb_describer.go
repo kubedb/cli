@@ -321,13 +321,13 @@ func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
 	fmt.Fprint(w, "  Name\tBucket\tStartTime\tCompletionTime\tPhase\n")
 	fmt.Fprint(w, "  ----\t------\t---------\t--------------\t-----\n")
 	for _, e := range snapshotList.Items {
-		container, err := e.Spec.SnapshotStorageSpec.Location()
+		location, err := e.Spec.SnapshotStorageSpec.Location()
 		if err != nil {
-			container = statusUnknown
+			location = "<invalid>"
 		}
 		fmt.Fprintf(w, "  %s\t%s\t%s\t%s\t%s\n",
 			e.Name,
-			container,
+			location,
 			timeToString(e.Status.StartTime),
 			timeToString(e.Status.CompletionTime),
 			e.Status.Phase,
