@@ -74,7 +74,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{tapi.GroupName},
 		Resources: []string{rbac.ResourceAll},
-		Verbs:     []string{"get", "list", "watch", "create", "update", "delete"},
+		Verbs:     []string{rbac.VerbAll},
 	},
 	{
 		APIGroups: []string{"monitoring.coreos.com"},
