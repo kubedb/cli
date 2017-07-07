@@ -53,10 +53,10 @@ pg/postgres-dev    9.5       Running   3h
 pg/postgres-prod   9.5       Running   3h
 pg/postgres-qa     9.5       Running   3h
 
-NAME                                 DATABASE                BUCKET        STATUS      AGE
-snap/postgres-demo-20170605-073557   pg/postgres-demo        bucket-name   Succeeded   9m
-snap/snapshot-20170505-1147          pg/postgres-demo        bucket-name   Succeeded   1h
-snap/snapshot-xyz                    es/elasticsearch-demo   bucket-name   Succeeded   5m
+NAME                                 DATABASE                BUCKET             STATUS      AGE
+snap/postgres-demo-20170605-073557   pg/postgres-demo        gs:bucket-name     Succeeded   9m
+snap/snapshot-20170505-1147          pg/postgres-demo        gs:bucket-name     Succeeded   1h
+snap/snapshot-xyz                    es/elasticsearch-demo   local:/directory   Succeeded   5m
 ```
 
 Flag `--output=wide` is used to print additional information.

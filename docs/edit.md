@@ -12,9 +12,9 @@ $ kubedb edit pg postgres-demo
 # Add following under Spec to configure periodic backups
 #  backupSchedule:
 #    cronExpression: "@every 6h"
-#    bucketName: "bucket-name"
-#    storageSecret:
-#      secretName: "secret-name"
+#    storageSecretName: "secret-name"
+#   gcs:
+#      bucket: "bucket-name"
 
 postgres "postgres-demo" edited
 ```
@@ -43,6 +43,6 @@ Elastic:
 * _spec.nodeSelector_
 * _spec.init_
 
-For DormantDatabase, _spec.origin_ can't be edited using `kbuedb edit`
+For DormantDatabase, _spec.origin_ can't be edited using `kubedb edit`
 
 To learn about various options of `edit` command, please visit [here](/docs/reference/kubedb_edit.md).

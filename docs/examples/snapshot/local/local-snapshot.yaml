@@ -1,13 +1,12 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  name: snapshot-xyz
+  name: local-snapshot
   labels:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
   local:
     path: /repo
-    volume:
+    volumeSource:
       emptyDir: {}
-      name: repo

@@ -7,6 +7,6 @@ metadata:
 spec:
   databaseName: postgres-db
   local:
-    path: "/test"
+    path: /repo
     volumeSource:
       emptyDir: {}

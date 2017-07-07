@@ -7,6 +7,6 @@ metadata:
 spec:
   databaseName: elasticsearch-db
   local:
-    path: "/test"
+    path: /repo
     volumeSource:
       emptyDir: {}

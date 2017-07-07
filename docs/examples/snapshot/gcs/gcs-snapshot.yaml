@@ -8,5 +8,4 @@ spec:
   databaseName: postgres-db
   storageSecretName: gcs-secret
   gcs:
-    location: /repo
     bucket: bucket-for-snapshot

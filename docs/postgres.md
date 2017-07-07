@@ -93,8 +93,8 @@ As `spec.storage` fields are set, StatefulSet will be created with dynamically p
 ```sh
 $ kubectl get pvc --selector='kubedb.com/kind=Postgres,kubedb.com/name=postgres-db'
 
-NAME                    STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
-data-postgres-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
+NAME                 STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
+data-postgres-db-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
 ```
 
 
