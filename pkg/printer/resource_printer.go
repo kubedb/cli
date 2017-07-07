@@ -272,7 +272,7 @@ func (h *HumanReadablePrinter) printSnapshot(item *tapi.Snapshot, w io.Writer, o
 	if options.Wide {
 		loc, err := item.Spec.SnapshotStorageSpec.Location()
 		if err != nil {
-			return err
+			loc = statusUnknown
 		}
 		if _, err := fmt.Fprintf(w, "%s\t", loc); err != nil {
 			return err

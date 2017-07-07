@@ -70,13 +70,14 @@ As `spec.storage` fields are set, StatefulSet will be created with dynamically p
 ```bash
 $ kubectl get pvc --selector='kubedb.com/kind=Elastic,kubedb.com/name=elasticsearch-db'
 
-NAME                         STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
-data-elasticsearch-db-pg-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
+NAME                      STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
+data-elasticsearch-db-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
 ```
 
 
 ### Database Initialization
-Elasticsearch databases can be created from a previously takes Snapshot. To initialize from prior snapshot, set the `spec.init.snapshotSource` section when creating an Elastic object.
+Elasticsearch databases can be created from a previously takes Snapshot.
+To initialize from prior snapshot, set the `spec.init.snapshotSource` section when creating an Elastic object.
 
 In this case, SnapshotSource must have following information:
 1. `namespace:` Namespace of Snapshot object
@@ -95,4 +96,5 @@ spec:
       name: "snapshot-xyz"
 ```
 
-In the above example, Elasticsearch database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here,  KubeDB operator will launch a Job to initialize Elasticsearch once StatefulSet pods are running.
+In the above example, Elasticsearch database will be initialized from Snapshot `snapshot-xyz` in `default`
+namespace. Here,  KubeDB operator will launch a Job to initialize Elasticsearch once StatefulSet pods are running.

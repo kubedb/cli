@@ -72,7 +72,7 @@ const (
 type SnapshotStorageSpec struct {
 	StorageSecretName string `json:"storageSecretName,omitempty"`
 
-	Local *LocalSpec `json:"local"`
+	Local *LocalSpec `json:"local,omitempty"`
 	S3    *S3Spec    `json:"s3,omitempty"`
 	GCS   *GCSSpec   `json:"gcs,omitempty"`
 	Azure *AzureSpec `json:"azure,omitempty"`
@@ -80,8 +80,8 @@ type SnapshotStorageSpec struct {
 }
 
 type LocalSpec struct {
-	Volume apiv1.Volume `json:"volume,omitempty"`
-	Path   string       `json:"path,omitempty"`
+	VolumeSource apiv1.VolumeSource `json:"volumeSource,omitempty"`
+	Path         string             `json:"path,omitempty"`
 }
 
 type S3Spec struct {

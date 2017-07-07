@@ -3,10 +3,12 @@
 # Snapshots
 
 ## What is Snapshot
-A `Snapshot` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for database snapshots in a Kubernetes native way. You only need to describe the desired backup operations in a Snapshot object, and the KubeDB operator will launch a Job to perform backup operation.
+A `Snapshot` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for database snapshots in a Kubernetes native way. 
+You only need to describe the desired backup operations in a Snapshot object, and the KubeDB operator will launch a Job to perform backup operation.
 
 ## Snapshot Spec
-As with all other Kubernetes objects, a Snapshot needs `apiVersion`, `kind`, and `metadata` fields. The metadata field must contain a label with `kubedb.com/kind` key.
+As with all other Kubernetes objects, a Snapshot needs `apiVersion`, `kind`, and `metadata` fields.
+The metadata field must contain a label with `kubedb.com/kind` key.
 The valid values for this label are `Postgres` or `Elastic`. It also needs a `.spec` section. Below is an example Snapshot object.
 
 ```yaml
@@ -17,7 +19,7 @@ metadata:
   labels:
     kubedb.com/kind: Postgres|Elastic
 spec:
-  databaseName: postgres-db
+  databaseName: database-name
   storageSecretName: s3-secret
   s3:
     endpoint: 's3.amazonaws.com'
@@ -32,11 +34,11 @@ The `.spec` section supports the following different cloud providers to store sn
 `Local` backend refers to a local path inside snapshot job container. Any Kubernetes supported [persistent volume](https://kubernetes.io/docs/concepts/storage/volumes/) can be used here. Some examples are: `emptyDir` for testing, NFS, Ceph, GlusterFS, etc.
 To configure this backend, no secret is needed. Following parameters are available for `Local` backend.
 
-| Parameter           | Description                                                                             |
-|---------------------|-----------------------------------------------------------------------------------------|
-| `spec.databaseName` | `Required`. Name of database                                                            |
-| `spec.local.path`   | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
-| `spec.local.volume` | `Required`. Any Kubernetes volume                                                       |
+| Parameter                 | Description                                                                             |
+|---------------------------|-----------------------------------------------------------------------------------------|
+| `spec.databaseName`       | `Required`. Name of database                                                            |
+| `spec.local.path`         | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
+| `spec.local.volumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/local/local-snapshot.yaml
@@ -60,11 +62,9 @@ spec:
   databaseName: postgres-db
   local:
     path: /repo
-    volume:
+    volumeSource:
       emptyDir: {}
-      name: repo
 ```
-
 
 ### AWS S3
 KubeDB supports AWS S3 service or [Minio](https://minio.io/) servers as snapshot storage backend. To configure this backend, following secret keys are needed:
@@ -108,8 +108,8 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.s3.endpoint`       | `Required`. For S3, use `s3.amazonaws.com`. If your bucket is in a different location, S3 server (s3.amazonaws.com) will redirect snapshot to the correct endpoint. For an S3-compatible server that is not Amazon (like Minio), or is only available via HTTP, you can specify the endpoint like this: `http://server:port`. |
-| `spec.s3.region`         | `Required`. Name of AWS region                                                  |
 | `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
+| `spec.s3.prefix`         | `Optional`. Path prefix in Bucket                                               |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/s3/s3-snapshot.yaml
@@ -181,8 +181,8 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 |--------------------------|---------------------------------------------------------------------------------|
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
-| `spec.gcs.location`      | `Required`. Name of Google Cloud region.                                        |
 | `spec.gcs.bucket`        | `Required`. Name of Bucket                                                      |
+| `spec.gcs.prefix`        | `Optional`. Path prefix in Bucket                                               |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/gcs/gcs-snapshot.yaml
@@ -207,10 +207,8 @@ spec:
   databaseName: postgres-db
   storageSecretName: gcs-secret
   gcs:
-    location: /repo
     bucket: bucket-for-snapshot
 ```
-
 
 ### Microsoft Azure Storage
 KubeDB supports Microsoft Azure Storage as snapshot storage backend. To configure this backend, following secret keys are needed:
@@ -254,6 +252,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.azure.container`   | `Required`. Name of Storage container                                           |
+| `spec.azure.prefix`      | `Optional`. Path prefix in container                                            |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/azure/azure-snapshot.yaml
@@ -352,6 +351,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.databaseName`      | `Required`. Name of database                                                    |
 | `spec.storageSecretName` | `Required`. Name of storage secret                                              |
 | `spec.swift.container`   | `Required`. Name of Storage container                                           |
+| `spec.swift.prefix`      | `Optional`. Path prefix in container                                            |
 
 ```sh
 $ kubectl create -f ./docs/examples/snapshot/swift/swift-snapshot.yaml
@@ -405,13 +405,14 @@ Use `kubedb get` to check snap0shot status.
 ```sh
 $ kubedb get snap snapshot-xyz -o wide
 
-NAME           DATABASE              BUCKET    STATUS      AGE
-snapshot-xyz   es/elasticsearch-db   snapshot    Succeeded   24m
+NAME           DATABASE              BUCKET         STATUS      AGE
+snapshot-xyz   es/elasticsearch-db   s3:snapshot    Succeeded   24m
 ```
 
 
 ## Schedule Backups
-Scheduled backups are supported for all types of databases. To schedule backups, add the following `BackupScheduleSpec` in `spec` of a database tpr. All snapshot storage backends are supported for scheduled backup.
+Scheduled backups are supported for all types of databases. To schedule backups, add the following `BackupScheduleSpec` in `spec` of a database tpr.
+All snapshot storage backends are supported for scheduled backup.
 
 ```yaml
 spec:
@@ -420,7 +421,6 @@ spec:
     storageSecretName: "secret-for-bucket"
     s3:
       endpoint: 's3.amazonaws.com'
-      region: us-east-1
       bucket: kubedb-qa
 ```
 

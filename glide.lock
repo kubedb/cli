@@ -1,5 +1,5 @@
 hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
-updated: 2017-07-05T22:25:51.546855959-07:00
+updated: 2017-07-07T12:14:25.253279508+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -15,7 +15,6 @@ imports:
   - runtime
   - types
   - version
-  - wait
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
 - name: github.com/appscode/osm
@@ -76,7 +75,7 @@ imports:
   - httputil
   - timeutil
 - name: github.com/cpuguy83/go-md2man
-  version: 71acacd42f85e5e82f70a55327789582a5200a90
+  version: 23709d0847197db6021a51fdb193e66e9222d4e7
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -212,23 +211,21 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 2c5b02dc26b3858700248bdc5a955d27d29390a7
+  version: 5917fc8d1a327a444b7aeb0174a52b4dda9d33db
   subpackages:
   - api
   - api/install
   - client/clientset
   - pkg/analytics
-  - pkg/controller
   - pkg/docker
-  - pkg/eventer
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: a27fcd5c3adfb8d0d9c6e30964252f12b20daf5c
+  version: 5b70c117b44ceea3e8dc6bb8b7d929f0642f0e61
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: 9597d0a7fd1027cd1d06b5dbafeb311596c380ab
+  version: e35afe4991856b68a00b33a91cb22f2769cf6fcc
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -243,8 +240,6 @@ imports:
   version: ad45545899c7b13c020ea92b2072220eefad42b8
 - name: github.com/ncw/swift
   version: 9e6fdb8957a022d5780a78b58d6181c3580bb01f
-- name: github.com/orcaman/concurrent-map
-  version: 2ae17bc4c860c83513ee50feb9746f3e50d7515d
 - name: github.com/pborman/uuid
   version: ca53cad383cad2479bbba7f7a1a05797ec1386e4
 - name: github.com/pkg/errors
@@ -345,10 +340,8 @@ imports:
   - urlfetch
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
-- name: gopkg.in/robfig/cron.v2
-  version: be2e0b0deed5a68ffee390b4583a13aff8321535
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:
@@ -402,7 +395,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 2308857ad3b8b18abf74ff734853973eda9da94d
+  version: 087d1a2efeb6296f04bb0f54e7af9890052aa6d7
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
@@ -505,7 +498,7 @@ imports:
   - util/integer
   - util/jsonpath
 - name: k8s.io/kubernetes
-  version: 095136c3078ccf887b9034b7ce598a0a1faff769
+  version: 313fd317f96265658831a576fafdd6ed85aaf428
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install

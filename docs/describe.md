@@ -14,7 +14,7 @@ Status:		Running
 No volumes.
 
 StatefulSet:
-  Name:			postgres-demo-pg
+  Name:			postgres-demo
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Mon, 05 Jun 2017 10:10:14 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed

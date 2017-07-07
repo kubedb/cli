@@ -77,9 +77,14 @@ func CheckBucketAccess(client clientset.Interface, spec tapi.SnapshotStorageSpec
 }
 
 func NewOSMContext(client clientset.Interface, spec tapi.SnapshotStorageSpec, namespace string) (*otx.Context, error) {
-	secret, err := client.CoreV1().Secrets(namespace).Get(spec.StorageSecretName, metav1.GetOptions{})
-	if err != nil {
-		return nil, err
+	config := make(map[string][]byte)
+
+	if spec.StorageSecretName != "" {
+		secret, err := client.CoreV1().Secrets(namespace).Get(spec.StorageSecretName, metav1.GetOptions{})
+		if err != nil {
+			return nil, err
+		}
+		config = secret.Data
 	}
 
 	nc := &otx.Context{
@@ -89,23 +94,23 @@ func NewOSMContext(client clientset.Interface, spec tapi.SnapshotStorageSpec, na
 
 	if spec.S3 != nil {
 		nc.Provider = s3.Kind
-		nc.Config[s3.ConfigAccessKeyID] = string(secret.Data[tapi.AWS_ACCESS_KEY_ID])
+		nc.Config[s3.ConfigAccessKeyID] = string(config[tapi.AWS_ACCESS_KEY_ID])
 		nc.Config[s3.ConfigEndpoint] = spec.S3.Endpoint
 		nc.Config[s3.ConfigRegion] = "us-east-1" // only used for creating buckets
-		nc.Config[s3.ConfigSecretKey] = string(secret.Data[tapi.AWS_SECRET_ACCESS_KEY])
+		nc.Config[s3.ConfigSecretKey] = string(config[tapi.AWS_SECRET_ACCESS_KEY])
 		if u, err := url.Parse(spec.S3.Endpoint); err == nil {
 			nc.Config[s3.ConfigDisableSSL] = strconv.FormatBool(u.Scheme == "http")
 		}
 		return nc, nil
 	} else if spec.GCS != nil {
 		nc.Provider = gcs.Kind
-		nc.Config[gcs.ConfigProjectId] = string(secret.Data[tapi.GOOGLE_PROJECT_ID])
-		nc.Config[gcs.ConfigJSON] = string(secret.Data[tapi.GOOGLE_SERVICE_ACCOUNT_JSON_KEY])
+		nc.Config[gcs.ConfigProjectId] = string(config[tapi.GOOGLE_PROJECT_ID])
+		nc.Config[gcs.ConfigJSON] = string(config[tapi.GOOGLE_SERVICE_ACCOUNT_JSON_KEY])
 		return nc, nil
 	} else if spec.Azure != nil {
 		nc.Provider = azure.Kind
-		nc.Config[azure.ConfigAccount] = string(secret.Data[tapi.AZURE_ACCOUNT_NAME])
-		nc.Config[azure.ConfigKey] = string(secret.Data[tapi.AZURE_ACCOUNT_KEY])
+		nc.Config[azure.ConfigAccount] = string(config[tapi.AZURE_ACCOUNT_NAME])
+		nc.Config[azure.ConfigKey] = string(config[tapi.AZURE_ACCOUNT_KEY])
 		return nc, nil
 	} else if spec.Local != nil {
 		nc.Provider = local.Kind
@@ -143,7 +148,7 @@ func NewOSMContext(client clientset.Interface, spec tapi.SnapshotStorageSpec, na
 			{swift.ConfigAuthToken, tapi.OS_AUTH_TOKEN},
 		} {
 			if _, exists := nc.Config.Config(val.stowKey); !exists {
-				nc.Config[val.stowKey] = string(secret.Data[val.secretKey])
+				nc.Config[val.stowKey] = string(config[val.secretKey])
 			}
 		}
 		return nc, nil

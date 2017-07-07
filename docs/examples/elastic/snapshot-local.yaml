@@ -6,6 +6,7 @@ metadata:
     kubedb.com/kind: Elastic
 spec:
   databaseName: elasticsearch-db
-  storageSecretName: "secret-for-bucket"
-  gcs:
-    bucket: "bucket-for-snapshot"
+  local:
+    path: /repo
+    volumeSource:
+      emptyDir: {}
