@@ -5,7 +5,6 @@ import (
 
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
-	"github.com/k8sdb/apimachinery/pkg/storage"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	clientset "k8s.io/client-go/kubernetes"
 )
@@ -28,11 +27,7 @@ func ValidateElastic(client clientset.Interface, elastic *tapi.Elastic) error {
 
 	backupScheduleSpec := elastic.Spec.BackupSchedule
 	if backupScheduleSpec != nil {
-		if err := amv.ValidateBackupSchedule(backupScheduleSpec); err != nil {
-			return err
-		}
-
-		if err := storage.CheckBucketAccess(client, backupScheduleSpec.SnapshotStorageSpec, elastic.Namespace); err != nil {
+		if err := amv.ValidateBackupSchedule(client, backupScheduleSpec, elastic.Namespace); err != nil {
 			return err
 		}
 	}

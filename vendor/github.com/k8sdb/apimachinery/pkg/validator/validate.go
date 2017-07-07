@@ -48,7 +48,7 @@ func ValidateStorageSpec(client clientset.Interface, spec *tapi.StorageSpec) (*t
 	return spec, nil
 }
 
-func ValidateBackupSchedule(spec *tapi.BackupScheduleSpec) error {
+func ValidateBackupSchedule(client clientset.Interface, spec *tapi.BackupScheduleSpec, namespace string) error {
 	if spec == nil {
 		return nil
 	}
@@ -57,19 +57,28 @@ func ValidateBackupSchedule(spec *tapi.BackupScheduleSpec) error {
 		return errors.New("Invalid cron expression")
 	}
 
-	return ValidateSnapshotSpec(spec.SnapshotStorageSpec)
+	return ValidateSnapshotSpec(client, spec.SnapshotStorageSpec, namespace)
 }
 
-func ValidateSnapshotSpec(spec tapi.SnapshotStorageSpec) error {
+func ValidateSnapshotSpec(client clientset.Interface, spec tapi.SnapshotStorageSpec, namespace string) error {
 	// BucketName can't be empty
 	if spec.S3 == nil && spec.GCS == nil && spec.Azure == nil && spec.Swift == nil && spec.Local == nil {
 		return errors.New("No storage provider is configured.")
 	}
 
+	if spec.Local != nil {
+		return nil
+	}
+
 	// Need to provide Storage credential secret
 	if spec.StorageSecretName == "" {
-		return fmt.Errorf(`Object 'SecretName' is missing in '%v'`, spec.StorageSecretName)
+		return fmt.Errorf(`Object 'SecretName' is missing in '%v'`, spec)
 	}
+
+	if err := storage.CheckBucketAccess(client, spec, namespace); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -88,17 +97,5 @@ func ValidateMonitorSpec(monitorSpec *tapi.MonitorSpec) error {
 		}
 	}
 
-	return nil
-}
-
-func ValidateSnapshot(client clientset.Interface, snapshot *tapi.Snapshot) error {
-	snapshotSpec := snapshot.Spec.SnapshotStorageSpec
-	if err := ValidateSnapshotSpec(snapshotSpec); err != nil {
-		return err
-	}
-
-	if err := storage.CheckBucketAccess(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace); err != nil {
-		return err
-	}
 	return nil
 }

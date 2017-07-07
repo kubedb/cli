@@ -15,8 +15,5 @@ type Controller struct {
 }
 
 const (
-	DatabaseNamePrefix = "kubedb"
-	LabelDatabaseKind  = "kubedb.com/kind"
-	LabelDatabaseName  = "kubedb.com/name"
-	sleepDuration      = time.Second * 10
+	sleepDuration = time.Second * 10
 )

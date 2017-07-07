@@ -5,7 +5,6 @@ import (
 
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
-	"github.com/k8sdb/apimachinery/pkg/storage"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
@@ -37,11 +36,7 @@ func ValidatePostgres(client clientset.Interface, postgres *tapi.Postgres) error
 
 	backupScheduleSpec := postgres.Spec.BackupSchedule
 	if backupScheduleSpec != nil {
-		if err := amv.ValidateBackupSchedule(backupScheduleSpec); err != nil {
-			return err
-		}
-
-		if err := storage.CheckBucketAccess(client, backupScheduleSpec.SnapshotStorageSpec, postgres.Namespace); err != nil {
+		if err := amv.ValidateBackupSchedule(client, backupScheduleSpec, postgres.Namespace); err != nil {
 			return err
 		}
 	}

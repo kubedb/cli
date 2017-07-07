@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/appscode/go/encoding/json/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 const (
@@ -43,6 +44,8 @@ type ElasticSpec struct {
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *MonitorSpec `json:"monitor,omitempty"`
+	// Compute Resources required by the sidecar container.
+	Resources apiv1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 type ElasticStatus struct {

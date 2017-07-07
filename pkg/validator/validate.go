@@ -36,7 +36,7 @@ func Validate(client clientset.Interface, info *resource.Info) error {
 		if err := yaml.Unmarshal(objByte, &snapshot); err != nil {
 			return err
 		}
-		return amv.ValidateSnapshot(client, snapshot)
+		return amv.ValidateSnapshotSpec(client, snapshot.Spec.SnapshotStorageSpec, info.Namespace)
 	}
 	return nil
 }

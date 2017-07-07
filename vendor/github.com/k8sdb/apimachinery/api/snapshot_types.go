@@ -2,6 +2,7 @@ package api
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 const (
@@ -23,6 +24,8 @@ type SnapshotSpec struct {
 	DatabaseName string `json:"databaseName,omitempty"`
 	// Snapshot Spec
 	SnapshotStorageSpec `json:",inline,omitempty"`
+	// Compute Resources required by the sidecar container.
+	Resources apiv1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 type SnapshotPhase string

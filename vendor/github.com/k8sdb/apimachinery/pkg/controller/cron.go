@@ -167,9 +167,9 @@ func (s *snapshotInvoker) createScheduledSnapshot() {
 	name := s.om.Name
 
 	labelMap := map[string]string{
-		LabelDatabaseKind:   kind,
-		LabelDatabaseName:   name,
-		LabelSnapshotStatus: string(tapi.SnapshotPhaseRunning),
+		tapi.LabelDatabaseKind:   kind,
+		tapi.LabelDatabaseName:   name,
+		tapi.LabelSnapshotStatus: string(tapi.SnapshotPhaseRunning),
 	}
 
 	snapshotList, err := s.extClient.Snapshots(s.om.Namespace).List(metav1.ListOptions{
@@ -200,8 +200,8 @@ func (s *snapshotInvoker) createScheduledSnapshot() {
 
 	// Set label. Elastic controller will detect this using label selector
 	labelMap = map[string]string{
-		LabelDatabaseKind: kind,
-		LabelDatabaseName: name,
+		tapi.LabelDatabaseKind: kind,
+		tapi.LabelDatabaseName: name,
 	}
 
 	now := time.Now().UTC()
@@ -214,8 +214,8 @@ func (s *snapshotInvoker) createScheduledSnapshot() {
 
 func (s *snapshotInvoker) createSnapshot(snapshotName string) error {
 	labelMap := map[string]string{
-		LabelDatabaseKind: s.runtimeObject.GetObjectKind().GroupVersionKind().Kind,
-		LabelDatabaseName: s.om.Name,
+		tapi.LabelDatabaseKind: s.runtimeObject.GetObjectKind().GroupVersionKind().Kind,
+		tapi.LabelDatabaseName: s.om.Name,
 	}
 
 	snapshot := &tapi.Snapshot{
@@ -227,6 +227,7 @@ func (s *snapshotInvoker) createSnapshot(snapshotName string) error {
 		Spec: tapi.SnapshotSpec{
 			DatabaseName:        s.om.Name,
 			SnapshotStorageSpec: s.spec.SnapshotStorageSpec,
+			Resources:           s.spec.Resources,
 		},
 	}
 
