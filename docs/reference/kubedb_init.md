@@ -26,7 +26,7 @@ kubedb init [flags]
 ```
   -h, --help                        help for init
       --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
-      --rbac                        If true, configures RBAC roles for operator
+      --rbac                        If true, uses RBAC with operator and database objects
       --upgrade                     If present, Upgrade operator to use provided version
       --version string              Operator version (default "0.2.0")
 ```
