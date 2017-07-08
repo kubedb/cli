@@ -46,7 +46,7 @@ def die(status):
 
 
 def call(cmd, stdin=None, cwd=libbuild.REPO_ROOT, eoe=True):
-    print(cmd, cwd)
+    print(cwd + ' $ ' + cmd)
     status = subprocess.call([expandvars(cmd)], shell=True, stdin=stdin, cwd=cwd)
     if eoe:
         die(status)
@@ -55,7 +55,7 @@ def call(cmd, stdin=None, cwd=libbuild.REPO_ROOT, eoe=True):
 
 
 def check_output(cmd, stdin=None, cwd=libbuild.REPO_ROOT):
-    print(cmd)
+    print(cwd + ' $ ' + cmd)
     return subprocess.check_output([expandvars(cmd)], shell=True, stdin=stdin, cwd=cwd)
 
 
