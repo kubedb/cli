@@ -64,7 +64,6 @@ def git_branch_exists(branch, cwd=libbuild.REPO_ROOT):
 
 
 def git_checkout(branch, cwd=libbuild.REPO_ROOT):
-    call('git clean -xfd', cwd=cwd)
     call('git fetch --all --prune', cwd=cwd)
     call('git fetch --tags', cwd=cwd)
     if git_branch_exists(branch, cwd):
@@ -117,6 +116,7 @@ class Kitten(object):
         repo = libbuild.GOPATH + '/src/github.com/k8sdb/apimachinery'
         print(repo)
         print('----------------------------------------------------------------------------------------')
+        call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
         call('glide slow', cwd=repo)
         if git_requires_commit(self.tag, cwd=repo):
@@ -133,6 +133,7 @@ class Kitten(object):
         repo = libbuild.GOPATH + '/src/github.com/k8sdb/' + repo_name
         print(repo)
         print('----------------------------------------------------------------------------------------')
+        call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
@@ -162,6 +163,7 @@ class Kitten(object):
         repo = libbuild.GOPATH + '/src/github.com/k8sdb/cli'
         print(repo)
         print('----------------------------------------------------------------------------------------')
+        call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
