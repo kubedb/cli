@@ -9,11 +9,11 @@ import:
 - package: github.com/spf13/pflag
   version: master
 - package: github.com/k8sdb/apimachinery
-  version: master
+  version: release-0.3
 - package: github.com/k8sdb/elasticsearch
-  version: master
+  version: release-0.3
 - package: github.com/k8sdb/postgres
-  version: master
+  version: release-0.3
 - package: k8s.io/kubernetes
   version: ~1.6.0
 - package: k8s.io/apimachinery
@@ -22,8 +22,8 @@ import:
   version: v3.0.0-beta.0
 - package: github.com/graymeta/stow
   repo: https://github.com/appscode/stow.git
-  version: master
   vcs: git
+  version: master
 - package: google.golang.org/api/storage/v1
   version: master
 - package: cloud.google.com/go

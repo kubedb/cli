@@ -91,9 +91,8 @@ type S3Spec struct {
 }
 
 type GCSSpec struct {
-	Location string `json:"location,omitempty"`
-	Bucket   string `json:"bucket,omiempty"`
-	Prefix   string `json:"prefix,omitempty"`
+	Bucket string `json:"bucket,omiempty"`
+	Prefix string `json:"prefix,omitempty"`
 }
 
 type AzureSpec struct {
