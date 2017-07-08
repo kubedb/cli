@@ -49,7 +49,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"endpoints"},
-		Verbs:     []string{"get",},
+		Verbs:     []string{"get"},
 	},
 	{
 		APIGroups: []string{batch.GroupName},
