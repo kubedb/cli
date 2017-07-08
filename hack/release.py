@@ -159,6 +159,36 @@ class Kitten(object):
             call('git commit -a -m "Start {0} dev cycle"'.format(self.next_version), cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
+    def release_operator(self):
+        repo = libbuild.GOPATH + '/src/github.com/k8sdb/operator'
+        print(repo)
+        print('----------------------------------------------------------------------------------------')
+        call('git clean -xfd', cwd=repo)
+        git_checkout('master', cwd=repo)
+        with open(repo + '/glide.yaml', 'r+') as glide_file:
+            glide_config = yaml.load(glide_file)
+            glide_mod(glide_config, self.rel_deps)
+            glide_write(glide_file, glide_config)
+            call('glide slow', cwd=repo)
+            if git_requires_commit(self.tag, cwd=repo):
+                call('./hack/make.py', cwd=repo)
+                call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
+                call('git push origin master', cwd=repo)
+            else:
+                call('git reset HEAD --hard', cwd=repo)
+            git_checkout(self.release_branch, cwd=repo)
+            call('git merge master', cwd=repo)
+            call('git tag -fa {0} -m "Release {0}"'.format(self.tag), cwd=repo)
+            call('git push origin {0} --tags --force'.format(self.release_branch), cwd=repo)
+            call('rm -rf dist', cwd=repo)
+            call('./hack/docker/setup.sh', cwd=repo)
+            call('env APPSCODE_ENV=prod ./hack/docker/setup.sh release', cwd=repo)
+            git_checkout('master', cwd=repo)
+            glide_mod(glide_config, self.master_deps)
+            glide_write(glide_file, glide_config)
+            call('git commit -a -m "Start {0} dev cycle"'.format(self.next_version), cwd=repo, eoe=False)
+            call('git push origin master', cwd=repo)
+
     def release_cli(self):
         repo = libbuild.GOPATH + '/src/github.com/k8sdb/cli'
         print(repo)
@@ -194,6 +224,7 @@ def release(tag=None):
     cat.release_apimachinery()
     cat.release_db('postgres', 'pg')
     cat.release_db('elasticsearch', 'es')
+    cat.release_operator()
     cat.release_cli()
 
 
