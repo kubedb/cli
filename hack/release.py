@@ -80,7 +80,7 @@ def git_checkout(branch, cwd=libbuild.REPO_ROOT):
 
 def git_requires_commit(cwd=libbuild.REPO_ROOT):
     changed_files = check_output('git diff --name-only', cwd=cwd).strip().split('\n')
-    return Counter(changed_files) == Counter(['glide.yaml', 'glide.lock'])
+    return Counter(changed_files) != Counter(['glide.yaml', 'glide.lock'])
 
 
 def glide_mod(glide_config, changes):
