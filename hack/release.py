@@ -63,19 +63,14 @@ def git_branch_exists(branch, cwd=libbuild.REPO_ROOT):
     return call('git show-ref --quiet refs/heads/{0}'.format(branch), eoe=False, cwd=cwd) == 0
 
 
-# def git_checkout(branch, cwd=libbuild.REPO_ROOT):
-#     if git_branch_exists(branch, cwd):
-#         cur_branch = check_output('git rev-parse --abbrev-ref HEAD', cwd=cwd).strip()
-#         call('git checkout {0}'.format(branch), cwd=cwd)
-#         call('git merge {0}'.format(cur_branch), cwd=cwd)
-#     else:
-#         call('git checkout -b {0}'.format(branch), cwd=cwd)
-
 def git_checkout(branch, cwd=libbuild.REPO_ROOT):
     call('git clean -xfd', cwd=cwd)
     call('git fetch --all --prune', cwd=cwd)
     call('git fetch --tags', cwd=cwd)
-    call('git checkout -f -B {0} origin/{0}'.format(branch), cwd=cwd)
+    if git_branch_exists(branch, cwd):
+        call('git checkout {0}'.format(branch), cwd=cwd)
+    else:
+        call('git checkout -b {0}'.format(branch), cwd=cwd)
 
 
 def git_requires_commit(tag, cwd=libbuild.REPO_ROOT):
