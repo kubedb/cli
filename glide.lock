@@ -1,5 +1,5 @@
 hash: c85d07579f7e9fae40a178c69d23536494d4313ed496ba32d9129c0af5a07874
-updated: 2017-07-07T21:33:48.199385877-07:00
+updated: 2017-07-13T23:23:59.997029832-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -211,7 +211,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: 9077c836cdd9913a61b2e9e38b5ab0c081f390f0
+  version: 9e41703f899609de8613909ec6d6d8ca7803fb82
   subpackages:
   - api
   - api/install
@@ -221,11 +221,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: ddbeb7ade94690086282b19f5d8e8e3bb1974b99
+  version: f72d02e583960820535f2df03e333254aeeec12f
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: a970f2ced83cbff936614b53c7ca840e8ed9bcd4
+  version: 3de7454201f58da2e9c15c8a26fb4a432532c0b6
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -259,7 +259,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: 8c6fa02d2225de0f9bdcb7ca912556f68d172d8c
+  version: c46add8a652801b61513ad36c56759f302fbb028
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -320,7 +320,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: bb4e0b1b53539118e8d3a704d31cb69a81a9c140
+  version: e665075b5ff79143ba49c58fab02df9dc122afd5
   subpackages:
   - gensupport
   - googleapi
@@ -341,7 +341,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: 3b4ad1db5b2a649883ff3782f5f9f6fb52be71af
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:

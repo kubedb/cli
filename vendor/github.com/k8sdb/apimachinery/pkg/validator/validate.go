@@ -23,7 +23,7 @@ func ValidateStorageSpec(client clientset.Interface, spec *tapi.StorageSpec) (*t
 		return nil, fmt.Errorf(`Object 'Class' is missing in '%v'`, *spec)
 	}
 
-	if _, err := client.StorageV1().StorageClasses().Get(spec.Class, metav1.GetOptions{}); err != nil {
+	if _, err := client.StorageV1beta1().StorageClasses().Get(spec.Class, metav1.GetOptions{}); err != nil {
 		if kerr.IsNotFound(err) {
 			return nil, fmt.Errorf(`Spec.Storage.Class "%v" not found`, spec.Class)
 		}
