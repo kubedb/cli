@@ -103,8 +103,8 @@ class Kitten(object):
         self.release_branch = 'release-{0}.{1}'.format(self.version['major'], self.version['minor'])
         self.rel_deps = {
             'github.com/k8sdb/apimachinery': self.release_branch,
-            'github.com/k8sdb/postgres': self.release_branch,
-            'github.com/k8sdb/elasticsearch': self.release_branch,
+            'github.com/k8sdb/postgres': self.tag,
+            'github.com/k8sdb/elasticsearch': self.tag,
         }
         self.master_deps = {
             'github.com/k8sdb/apimachinery': 'master',
