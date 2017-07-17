@@ -23,7 +23,7 @@ spec:
     scriptSource:
       scriptPath: "kubernetes-gitRepo/run.sh"
       gitRepo:
-        repository: "https://github.com/appscode/kubernetes-gitRepo.git"
+        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: snap-secret
