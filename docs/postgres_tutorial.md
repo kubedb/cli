@@ -1,3 +1,45 @@
+# Using PostgreSQL
+This tutorial will show you how to use KubeDB to run a PostgreSQL database. At first, you need to have a Kubernetes cluster,
+and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster,
+you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install Stash in your cluster following the steps [here](/docs/install.md).
+
+In this tutorial, we are going to backup the `/source/data` folder of a `busybox` pod into a local backend. First deploy the following `busybox` Deployment in your cluster. Here we are using a git repository as source volume for demonstration purpose.
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: stash-demo
+  name: stash-demo
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: stash-demo
+      name: busybox
+    spec:
+      containers:
+      - command:
+        - sleep
+        - "3600"
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        name: busybox
+        volumeMounts:
+        - mountPath: /source/data
+          name: source-data
+      restartPolicy: Always
+      volumes:
+      - gitRepo:
+          repository: https://github.com/appscode/stash-data.git
+        name: source-data
+```
+
+
+
 # Tutorial
 
 ### Initialize unified operator
