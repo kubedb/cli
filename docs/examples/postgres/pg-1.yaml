@@ -1,7 +1,8 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: postgres-db
+  name: p1
+  namespace: demo
 spec:
   version: 9.5
   storage:
@@ -18,3 +19,8 @@ spec:
       labels:
         app: kubedb
       interval: 10s
+  init:
+    scriptSource:
+      scriptPath: "kubernetes-gitRepo/run.sh"
+      gitRepo:
+        repository: "https://github.com/appscode/kubernetes-gitRepo.git"

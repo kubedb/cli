@@ -58,3 +58,45 @@ spec:
     targetPort: web
   selector:
     prometheus: prometheus
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: pgadmin
+  name: pgadmin
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+      - args:
+        - admin
+        - admin
+        image: appscode/pgadmin:4-1.0
+        imagePullPolicy: Always
+        name: pgadmin
+        ports:
+        - containerPort: 5050
+          name: http
+          protocol: TCP
+---
+kind: Service
+metadata:
+  labels:
+    app: pgadmin
+  name: pgadmin
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: pgadmin
+  type: LoadBalancer
