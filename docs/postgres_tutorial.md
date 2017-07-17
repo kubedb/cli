@@ -32,14 +32,10 @@ Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadm
 
 ## Create a PostgreSQL database
 
-
-
-
-
-
-
-
 ```yaml
+$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
+validating "./docs/examples/tutorial/postgres/demo-1.yaml"
+postgres "p1" created
 
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
@@ -63,10 +59,79 @@ spec:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 ```
 
+```yaml
+$ kubedb get pg -n demo p1
+NAME      STATUS     AGE
+p1        Creating   21s
 
+$ kubedb get pg -n demo p1 -o yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  creationTimestamp: 2017-07-17T22:31:34Z
+  name: p1
+  namespace: demo
+  resourceVersion: "2677"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
+  uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
+spec:
+  databaseSecret:
+    secretName: p1-admin-auth
+  doNotPause: true
+  init:
+    scriptSource:
+      gitRepo:
+        repository: https://github.com/k8sdb/postgres-init-scripts.git
+      scriptPath: postgres-init-scripts/run.sh
+  resources: {}
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    class: standard
+    resources:
+      requests:
+        storage: 50Mi
+  version: "9.5"
+status:
+  creationTime: 2017-07-17T22:31:34Z
+  phase: Running
+```
 
+```sh
+$ kubedb describe pg -n demo p1
+Name:		p1
+Namespace:	demo
+StartTimestamp:	Mon, 17 Jul 2017 15:31:34 -0700
+Status:		Running
+Volume:
+  StorageClass:	standard
+  Capacity:	50Mi
+  Access Modes:	RWO
 
+Service:	
+  Name:		p1
+  Type:		ClusterIP
+  IP:		10.0.0.161
+  Port:		db	5432/TCP
 
+Database Secret:
+  Name:	p1-admin-auth
+  Type:	Opaque
+  Data
+  ====
+  .admin:	35 bytes
+
+No Snapshots.
+
+Events:
+  FirstSeen   LastSeen   Count     From                Type       Reason               Message
+  ---------   --------   -----     ----                --------   ------               -------
+  2m          2m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
+  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+```
 
 
 
