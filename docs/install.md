@@ -7,12 +7,12 @@ KubeDB provides a CLI to work with database objects. Download pre-built binaries
 
 ```sh
 # Linux amd 64-bit
-wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.3.0/kubedb-linux-amd64 \
+wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.3.1/kubedb-linux-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 
 # Mac 64-bit
-wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.3.0/kubedb-darwin-amd64 \
+wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.3.1/kubedb-darwin-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 ```
@@ -56,7 +56,7 @@ To upgrade KubeDB cli, just replace the old cli with the new version.
 `kubedb init` command can be used to upgrade operator. Re-run the `kubedb init` command with `--upgrade flag` to upgrade operator.
 
 ```sh
-$ kubedb init --version='0.3.0' --upgrade
+$ kubedb init --version='0.3.1' --upgrade
 
 Successfully upgraded operator deployment.
 ```
