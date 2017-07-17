@@ -11,3 +11,10 @@ spec:
     resources:
       requests:
         storage: "10Gi"
+  monitor:
+    agent: coreos-prometheus-operator
+    prometheus:
+      namespace: default
+      labels:
+        app: kubedb
+      interval: 10s

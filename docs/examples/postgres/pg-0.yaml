@@ -38,7 +38,7 @@ metadata:
 spec:
   serviceMonitorSelector:
     matchLabels:
-      team: frontend
+      app: kubedb
   version: v1.7.0
   resources:
     requests:
