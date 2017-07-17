@@ -5,6 +5,7 @@ metadata:
   namespace: demo
 spec:
   version: 9.5
+  doNotPause: true
   storage:
     class: "standard"
     accessModes:
@@ -17,4 +18,3 @@ spec:
       scriptPath: "kubernetes-gitRepo/run.sh"
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
-  doNotPause: true

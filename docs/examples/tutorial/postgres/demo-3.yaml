@@ -5,20 +5,14 @@ metadata:
   namespace: demo
 spec:
   version: 9.5
+  doNotPause: true
   storage:
-    class: "gp2"
+    class: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: "10Gi"
-  monitor:
-    agent: coreos-prometheus-operator
-    prometheus:
-      namespace: default
-      labels:
-        app: kubedb
-      interval: 10s
+        storage: 50Mi      
   init:
     scriptSource:
       scriptPath: "kubernetes-gitRepo/run.sh"
