@@ -28,7 +28,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: http://{minikube-ip}:{pgadmin-svc-nodeport}. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
 
 ## Create a PostgreSQL database
 
