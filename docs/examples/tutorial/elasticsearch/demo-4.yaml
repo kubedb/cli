@@ -1,0 +1,31 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p1
+  namespace: demo
+spec:
+  version: 9.5
+  storage:
+    class: "gp2"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "10Gi"
+  monitor:
+    agent: coreos-prometheus-operator
+    prometheus:
+      namespace: default
+      labels:
+        app: kubedb
+      interval: 10s
+  init:
+    scriptSource:
+      scriptPath: "kubernetes-gitRepo/run.sh"
+      gitRepo:
+        repository: "https://github.com/appscode/kubernetes-gitRepo.git"
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: snap-secret
+    gcs:
+      bucket: restic
