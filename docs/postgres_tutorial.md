@@ -39,7 +39,29 @@ Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadm
 
 
 
+```yaml
 
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p1
+  namespace: demo
+spec:
+  version: 9.5
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi      
+  init:
+    scriptSource:
+      scriptPath: "postgres-init-scripts/run.sh"
+      gitRepo:
+        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+```
 
 
 
