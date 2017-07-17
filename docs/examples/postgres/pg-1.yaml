@@ -1,26 +1,8 @@
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+apiVersion: v1
+kind: Namespace
 metadata:
-  name: p1
-  namespace: demo
+  name: demo
 spec:
-  version: 9.5
-  storage:
-    class: "gp2"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: "10Gi"
-  monitor:
-    agent: coreos-prometheus-operator
-    prometheus:
-      namespace: default
-      labels:
-        app: kubedb
-      interval: 10s
-  init:
-    scriptSource:
-      scriptPath: "kubernetes-gitRepo/run.sh"
-      gitRepo:
-        repository: "https://github.com/appscode/kubernetes-gitRepo.git"
+  finalizers:
+  - kubernetes
+---
