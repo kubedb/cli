@@ -133,6 +133,15 @@ Events:
   3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
 ```
 
+```
+
+```
+
+
+```sh
+$ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
+POSTGRES_PASSWORD=Dnoot7K8Igxmw2xK
+```
 
 
 
