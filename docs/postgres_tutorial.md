@@ -1,7 +1,57 @@
 # Using PostgreSQL
-This tutorial will show you how to use KubeDB to run a PostgreSQL database. At first, you need to have a Kubernetes cluster,
-and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster,
-you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install Stash in your cluster following the steps [here](/docs/install.md).
+This tutorial will show you how to use KubeDB to run a PostgreSQL database. 
+
+## Before You Begin
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
+
+TO keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+
+```sh
+$ kubectl create -f ./docs/examples/tutorial/postgres/demo-0.yaml 
+namespace "demo" created
+deployment "pgadmin" created
+service "pgadmin" created
+
+$ kubectl get pods -n demo --watch
+NAME                      READY     STATUS              RESTARTS   AGE
+pgadmin-538449054-s046r   0/1       ContainerCreating   0          13s
+pgadmin-538449054-s046r   1/1       Running   0          1m
+^C⏎                                                                                                                                                             
+
+$ kubectl get service -n demo
+NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+pgadmin   10.0.0.92    <pending>     80:31188/TCP   1m
+
+$ minikube ip
+192.168.99.100
+```
+
+Now, open your browser and go to the following URL: http://{minikube-ip}:{pgadmin-svc-nodeport}. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
+
+## Create a PostgreSQL database
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 In this tutorial, we are going to backup the `/source/data` folder of a `busybox` pod into a local backend. First deploy the following `busybox` Deployment in your cluster. Here we are using a git repository as source volume for demonstration purpose.
 
@@ -37,6 +87,7 @@ spec:
           repository: https://github.com/appscode/stash-data.git
         name: source-data
 ```
+
 
 
 

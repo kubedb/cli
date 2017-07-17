@@ -1,0 +1,20 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p3
+  namespace: demo
+spec:
+  version: 9.5
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi      
+  init:
+    scriptSource:
+      scriptPath: "kubernetes-gitRepo/run.sh"
+      gitRepo:
+        repository: "https://github.com/appscode/kubernetes-gitRepo.git"
+  doNotPause: true
