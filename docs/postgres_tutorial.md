@@ -362,6 +362,7 @@ p1-xyz               pg/p1      Succeeded   51m
 ```
 
 ### Restore from Snapshot
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres tpr. See the example `recovered` tpr below:
 
 ```yaml
 $ cat ./docs/examples/tutorial/postgres/demo-4.yaml
@@ -387,6 +388,11 @@ spec:
 $ kubectl create -f ./docs/examples/tutorial/postgres/demo-4.yaml
 postgres "recovered" created
 ```
+
+Here,
+ - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a Postgres database in the same namespaces as this new `recovered` Postgres tpr.
+
+Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
 
 ```sh
 $ kubedb get pg -n demo

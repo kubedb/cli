@@ -342,6 +342,7 @@ e1-xyz               es/e1      Succeeded   18m
 ```
 
 ### Restore from Snapshot
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch tpr. See the example `recovered` tpr below:
 
 ```yaml
 $ cat ./docs/examples/tutorial/elasticsearch/demo-4.yaml
@@ -368,6 +369,11 @@ $ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-4.yaml
 validating "./docs/examples/tutorial/elasticsearch/demo-4.yaml"
 elasticsearch "recovered" created
 ```
+
+Here,
+ - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a Elasticsearch database in the same namespaces as this new `recovered` Elasticsearch tpr.
+
+Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `e1-xyz` Snapshot.
 
 ```sh
 $ kubedb get es -n demo
