@@ -65,56 +65,11 @@ Here,
 
  - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. If no storage spec is given, an `emptyDir` is used.
+ - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
  - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/k8sdb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
-
-
-
-
-Stash operator watches for `Restic` objects using Kubernetes api. Stash operator will notice that the `busybox` Deployment matches the selector for `stash-demo` Restic object. So, it will add a sidecar container named `stash` to `busybox` Deployment and restart the running `busybox` pods. Since a local backend is used in `stash-demo` Restic, sidecar container will be mounted the corresponding persistent volume.
-
-
-
-```yaml
-$ kubedb get pg -n demo p1
-NAME      STATUS     AGE
-p1        Creating   21s
-
-$ kubedb get pg -n demo p1 -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
-metadata:
-  creationTimestamp: 2017-07-17T22:31:34Z
-  name: p1
-  namespace: demo
-  resourceVersion: "2677"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
-  uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
-spec:
-  databaseSecret:
-    secretName: p1-admin-auth
-  doNotPause: true
-  init:
-    scriptSource:
-      gitRepo:
-        repository: https://github.com/k8sdb/postgres-init-scripts.git
-      scriptPath: postgres-init-scripts/run.sh
-  resources: {}
-  storage:
-    accessModes:
-    - ReadWriteOnce
-    class: standard
-    resources:
-      requests:
-        storage: 50Mi
-  version: "9.5"
-status:
-  creationTime: 2017-07-17T22:31:34Z
-  phase: Running
-```
 
 ```sh
 $ kubedb describe pg -n demo p1
@@ -150,7 +105,64 @@ Events:
   2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
   3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
   3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+
+$ kubectl get statefulset -n demo
+NAME      DESIRED   CURRENT   AGE
+p1        1         1         1m
+
+$ kubectl get pvc -n demo
+NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
+data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
+
+$ kubectl get pv -n demo
+NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
+pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-p1-0   standard                 1m
+
+$ kubectl get service -n demo
+NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+kubedb    None         <none>                       3m
+p1        10.0.0.143   <none>        5432/TCP       3m
+pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
+
+
+
+
+```yaml
+
+$ kubedb get pg -n demo p1 -o yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  creationTimestamp: 2017-07-17T22:31:34Z
+  name: p1
+  namespace: demo
+  resourceVersion: "2677"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
+  uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
+spec:
+  databaseSecret:
+    secretName: p1-admin-auth
+  doNotPause: true
+  init:
+    scriptSource:
+      gitRepo:
+        repository: https://github.com/k8sdb/postgres-init-scripts.git
+      scriptPath: postgres-init-scripts/run.sh
+  resources: {}
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    class: standard
+    resources:
+      requests:
+        storage: 50Mi
+  version: "9.5"
+status:
+  creationTime: 2017-07-17T22:31:34Z
+  phase: Running
+```
+
 
 ```
 
