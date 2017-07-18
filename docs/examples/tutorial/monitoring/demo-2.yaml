@@ -1,0 +1,21 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p1
+  namespace: demo
+spec:
+  version: 9.5
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi      
+  monitor:
+    agent: coreos-prometheus-operator
+    prometheus:
+      namespace: default
+      labels:
+        app: kubedb
+      interval: 10s
