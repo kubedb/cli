@@ -16,7 +16,7 @@ import (
 
 const statusUnknown = "Unknown"
 
-func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -26,7 +26,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: tapi.ResourceKindElastic,
+					tapi.LabelDatabaseKind: tapi.ResourceKindElasticsearch,
 					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
@@ -41,7 +41,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = tapi.ResourceKindElastic
+			ref.Kind = tapi.ResourceKindElasticsearch
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
 			if err != nil {
 				return "", err
@@ -67,7 +67,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elastic, describerSe
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodeElastic)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodeElasticsearch)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
