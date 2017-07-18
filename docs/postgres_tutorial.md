@@ -63,7 +63,7 @@ postgres "p1" created
 Here,
  - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.5 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted.
+ - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
@@ -179,6 +179,8 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 
 ![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
 
+
+## Taking Snapshots
 
 
 
