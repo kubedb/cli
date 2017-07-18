@@ -1,6 +1,8 @@
 package validator
 
 import (
+	"fmt"
+
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/api"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
@@ -37,6 +39,34 @@ func Validate(client clientset.Interface, info *resource.Info) error {
 			return err
 		}
 		return amv.ValidateSnapshotSpec(client, snapshot.Spec.SnapshotStorageSpec, info.Namespace)
+	}
+	return nil
+}
+
+func ValidateDeletion(info *resource.Info) error {
+	objByte, err := encoder.Encode(info.Object)
+	if err != nil {
+		return err
+	}
+
+	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
+	switch kind {
+	case tapi.ResourceKindElastic:
+		var elastic *tapi.Elastic
+		if err := yaml.Unmarshal(objByte, &elastic); err != nil {
+			return err
+		}
+		if elastic.Spec.DoNotPause {
+			return fmt.Errorf(`Elastic "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, elastic.Name)
+		}
+	case tapi.ResourceKindPostgres:
+		var postgres *tapi.Postgres
+		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
+			return err
+		}
+		if postgres.Spec.DoNotPause {
+			return fmt.Errorf(`Postgres "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, postgres.Name)
+		}
 	}
 	return nil
 }

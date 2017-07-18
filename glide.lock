@@ -1,11 +1,13 @@
-hash: c85d07579f7e9fae40a178c69d23536494d4313ed496ba32d9129c0af5a07874
-updated: 2017-07-13T23:23:59.997029832-07:00
+hash: b737760e0f81a2850433fe5b9a0ddc1d6b15d93a1207fe0a607313978062c265
+updated: 2017-07-18T15:16:07.85535985+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
   subpackages:
   - compute/metadata
   - internal
+- name: github.com/appscode/errors
+  version: 748883e321a9f99fe901bd2663c7af3fcae43ea4
 - name: github.com/appscode/go
   version: 9fde097ebcef0add8325c8fbee63ae01e7da530e
   subpackages:
@@ -18,7 +20,7 @@ imports:
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
 - name: github.com/appscode/osm
-  version: c5e36f4aa99900641c2b592fc41d80556fa7f195
+  version: ec38ac9497280b0acb4742d02154ba5f18d8a994
   subpackages:
   - pkg/context
 - name: github.com/aws/aws-sdk-go
@@ -75,7 +77,7 @@ imports:
   - httputil
   - timeutil
 - name: github.com/cpuguy83/go-md2man
-  version: 71acacd42f85e5e82f70a55327789582a5200a90
+  version: 23709d0847197db6021a51fdb193e66e9222d4e7
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -145,6 +147,8 @@ imports:
   version: ba18e35c5c1b36ef6334cad706eb681153d2d379
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
+- name: github.com/facebookgo/stack
+  version: d9d227395bc3d7a635388c75b2e3b3a750e11888
 - name: github.com/ghodss/yaml
   version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
 - name: github.com/go-ini/ini
@@ -221,11 +225,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: f72d02e583960820535f2df03e333254aeeec12f
+  version: 2cd575ca221d5d557d6aefbd9930e6b2e4ba7814
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: 3de7454201f58da2e9c15c8a26fb4a432532c0b6
+  version: 05ed39ba2ae2d0e67b66d144849f649a53f37d84
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -259,7 +263,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: c46add8a652801b61513ad36c56759f302fbb028
+  version: d994347edadc56d6a7f863775fb6887606685ae6
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -341,7 +345,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: 3b4ad1db5b2a649883ff3782f5f9f6fb52be71af
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/apimachinery
   version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
   subpackages:
@@ -395,7 +399,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 2308857ad3b8b18abf74ff734853973eda9da94d
+  version: 7eb7a42b3f4b3aaeccab8fdf89095bb6bea20695
   subpackages:
   - pkg/authentication/authenticator
   - pkg/authentication/serviceaccount
@@ -498,7 +502,7 @@ imports:
   - util/integer
   - util/jsonpath
 - name: k8s.io/kubernetes
-  version: 095136c3078ccf887b9034b7ce598a0a1faff769
+  version: 313fd317f96265658831a576fafdd6ed85aaf428
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install
