@@ -2,7 +2,7 @@
 This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
@@ -28,7 +28,7 @@ service-monitor.monitoring.coreos.com   Prometheus monitoring for a service   v1
 Once the Prometheus operator TPRs are registered, run the following command to create a Prometheus.
 
 ```sh
- $ kubectl create -f ./docs/examples/tutorial/monitoring/demo-1.yaml 
+ $ kubectl create -f ./docs/examples/tutorial/monitoring/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
 
@@ -41,7 +41,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
@@ -137,9 +137,7 @@ Events:
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
-
-
+Since `spec.monitoring` was configured, s ServiceMonitor object is created accordingly. You can verify it running the following commands:
 
 ```yaml
 $ kubectl get servicemonitor -n demo
@@ -174,8 +172,7 @@ spec:
 ```
 
 
-Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
-
+Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
 ![Prometheus Dashboard](/docs/images/tutorial/monitoring/prometheus.gif)
 
