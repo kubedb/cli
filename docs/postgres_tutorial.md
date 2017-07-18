@@ -310,9 +310,12 @@ Events:
   34m         34m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
 ```
 
-Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS buckeet.
+Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
 
 ![snapshot-console](/docs/images/tutorial/postgres/p1-xyz-snapshot.png)
+
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+
 
 
 
