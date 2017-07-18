@@ -1,8 +1,35 @@
 # Using PostgreSQL
-This tutorial will show you how to use KubeDB to run a PostgreSQL database. 
+This tutorial will show you how to use KubeDB to in a RBAC enabled cluster.
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+At first, you need to have a RBAC enabled Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). To create a RBAC enabled cluster using MiniKube, follow the instructions below:
+
+1. If you are currently running a Minukube cluster without RBAC, delete the cluster. This will delete any objects running in the cluster.
+```sh
+$ minikube delete
+```
+
+2. Now, create a RBAC cluster with RBAC enabled.
+```sh
+$ minikube start --extra-config=apiserver.Authorization.Mode=RBAC
+```
+
+3. Once the cluster is up and running, you need to set ServiceAccount for the `kube-dns` addon to successfully run it.
+```sh
+# Wait for kube-dns deployment to be created.
+$  kubectl get deployment -n kube-system --watch
+
+# create kube-dns ServiceAccount
+$ kubectl create serviceaccount kube-dns -n kube-system
+
+# Patch kube-dns Deployment to set service account for pods.
+$ kubectl patch deployment kube-dns -n kube-system -p '{"spec":{"template":{"spec":{"serviceAccountName":"kube-dns"}}}}'
+
+# Wait for kube-dns pods to start running
+$  kubectl get pods -n kube-system --watch
+```
+
+
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
