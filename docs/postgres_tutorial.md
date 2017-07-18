@@ -180,7 +180,9 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
 
 
-## Take Instant Backup
+## Database Snapshots
+
+### Instant Backups
 Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `pg_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
@@ -221,7 +223,7 @@ type: Opaque
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
 
 ```
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml 
+$ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml
 validating "./docs/examples/tutorial/postgres/demo-2.yaml"
 snapshot "p1-xyz" created
 
@@ -317,7 +319,7 @@ Once the snapshot Job is complete, you should see the output of the `pg_dump` co
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
 
 
-## Take Periodic Backups
+### Scheduled Backups
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres tpr to add `spec.backupSchedule` section.
 
 ```yaml
@@ -358,6 +360,30 @@ p1-20170718-030836   pg/p1      Succeeded   1m
 p1-20170718-030956   pg/p1      Running     2s
 p1-xyz               pg/p1      Succeeded   51m
 ```
+
+### Restore from Snapshot
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: recovered
+  namespace: demo
+spec:
+  version: 9.5
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  init:
+    snapshotSource:
+      name: p1-xyz
+```
+
 
 ## Deleting Database
 
