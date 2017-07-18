@@ -1,5 +1,5 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearchs
+kind: Elasticsearch
 metadata:
   name: e1
   namespace: demo
