@@ -143,37 +143,90 @@ pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
 
 ```yaml
-$ kubedb get pg -n demo p1 -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+~/g/s/g/k/cli (d2) $ kubedb create -f ./docs/examples/tutorial/monitoring/demo-2.yaml 
+validating "./docs/examples/tutorial/monitoring/demo-2.yaml"
+postgres "pmon" created
+
+$ kubedb get pg -n demo
+NAME      STATUS     AGE
+pmon      Creating   1m
+
+$ kubedb get pg -n demo
+NAME      STATUS    AGE
+pmon      Running   1m
+
+$ kubedb describe pg -n demo pmon
+Name:		pmon
+Namespace:	demo
+StartTimestamp:	Mon, 17 Jul 2017 23:46:03 -0700
+Status:		Running
+Volume:
+  StorageClass:	standard
+  Capacity:	50Mi
+  Access Modes:	RWO
+
+Service:	
+  Name:		pmon
+  Type:		ClusterIP
+  IP:		10.0.0.216
+  Port:		db	5432/TCP
+  Port:		http	56790/TCP
+
+Database Secret:
+  Name:	pmon-admin-auth
+  Type:	Opaque
+  Data
+  ====
+  .admin:	35 bytes
+
+Monitoring System:
+  Agent:	coreos-prometheus-operator
+  Prometheus:
+    Namespace:	demo
+    Labels:	app=kubedb
+    Interval:	10s
+
+No Snapshots.
+
+Events:
+  FirstSeen   LastSeen   Count     From                Type       Reason               Message
+  ---------   --------   -----     ----                --------   ------               -------
+  13s         13s        1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  15s         15s        1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  15s         15s        1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
+  15s         15s        1         Postgres operator   Normal     SuccessfulCreate     Successfully added monitoring system.
+  1m          1m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  1m          1m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+
+$ kubectl get servicemonitor -n demo
+NAME               KIND
+kubedb-demo-pmon   ServiceMonitor.v1alpha1.monitoring.coreos.com
+
+$ kubectl get servicemonitor -n demo kubedb-demo-pmon -o yaml
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ServiceMonitor
 metadata:
-  creationTimestamp: 2017-07-17T22:31:34Z
-  name: p1
+  creationTimestamp: 2017-07-18T06:47:44Z
+  labels:
+    app: kubedb
+  name: kubedb-demo-pmon
   namespace: demo
-  resourceVersion: "2677"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
-  uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
+  resourceVersion: "644"
+  selfLink: /apis/monitoring.coreos.com/v1alpha1/namespaces/demo/servicemonitors/kubedb-demo-pmon
+  uid: 00fc6ae8-6b85-11e7-aad2-080027036663
 spec:
-  databaseSecret:
-    secretName: p1-admin-auth
-  doNotPause: true
-  init:
-    scriptSource:
-      gitRepo:
-        repository: https://github.com/k8sdb/postgres-init-scripts.git
-      scriptPath: postgres-init-scripts/run.sh
-  resources: {}
-  storage:
-    accessModes:
-    - ReadWriteOnce
-    class: standard
-    resources:
-      requests:
-        storage: 50Mi
-  version: "9.5"
-status:
-  creationTime: 2017-07-17T22:31:34Z
-  phase: Running
+  endpoints:
+  - interval: 10s
+    path: /kubedb.com/v1alpha1/namespaces/demo/postgreses/pmon/metrics
+    port: http
+    targetPort: 0
+  namespaceSelector:
+    matchNames:
+    - demo
+  selector:
+    matchLabels:
+      kubedb.com/kind: Postgres
+      kubedb.com/name: pmon
 ```
 
 
