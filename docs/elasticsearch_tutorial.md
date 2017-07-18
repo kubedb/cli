@@ -414,11 +414,7 @@ Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to tru
 
 ```sh
 $ kubedb delete es e1 -n demo
-elasticsearch "e1" deleted
-
-$ kubedb get es e1 -n demo
-NAME      STATUS    AGE
-e1        Running   9s
+error: Elastic "e1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
 Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.

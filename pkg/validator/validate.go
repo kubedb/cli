@@ -57,7 +57,7 @@ func ValidateDeletion(info *resource.Info) error {
 			return err
 		}
 		if elastic.Spec.DoNotPause {
-			return fmt.Errorf(`Elastic "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, elastic.Name)
+			return fmt.Errorf(`Elasticsearch "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, elastic.Name)
 		}
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres

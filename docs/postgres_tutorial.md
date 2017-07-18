@@ -392,11 +392,7 @@ Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if
 
 ```sh
 $ kubedb delete pg p1 -n demo
-postgres "p1" deleted
-
-$ kubedb get pg p1 -n demo
-NAME      STATUS    AGE
-p1        Running   9s
+error: Postgres "p1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
 Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Postgres tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `p1` PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
