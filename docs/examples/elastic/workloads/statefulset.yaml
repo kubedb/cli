@@ -6,7 +6,7 @@ metadata:
   creationTimestamp: 2017-06-09T05:50:33Z
   generation: 1
   labels:
-    kubedb.com/kind: Elastic
+    kubedb.com/kind: Elasticsearch
   name: elasticsearch-db-es
   namespace: default
   resourceVersion: "20138428"
@@ -16,7 +16,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      kubedb.com/kind: Elastic
+      kubedb.com/kind: Elasticsearch
       kubedb.com/name: elasticsearch-db
   serviceName: kubedb
   template:
@@ -27,7 +27,7 @@ spec:
         pod.beta.kubernetes.io/init-containers: '[{"name":"discover","image":"kubedb/es-operator:0.4.0","args":["discover","--service=elasticsearch-db","--namespace=default"],"env":[{"name":"POD_NAME","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.name"}}}],"resources":{},"volumeMounts":[{"name":"discovery","mountPath":"/tmp/discovery"}],"imagePullPolicy":"IfNotPresent"}]'
       creationTimestamp: null
       labels:
-        kubedb.com/kind: Elastic
+        kubedb.com/kind: Elasticsearch
         kubedb.com/name: elasticsearch-db
     spec:
       containers:

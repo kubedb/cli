@@ -1,5 +1,5 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Elastic
+kind: Elasticsearch
 metadata:
   name: elasticsearch-db
 spec:

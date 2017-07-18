@@ -3,7 +3,7 @@ kind: Snapshot
 metadata:
   name: snapshot-xyz
   labels:
-    kubedb.com/kind: Elastic
+    kubedb.com/kind: Elasticsearch
 spec:
   databaseName: elasticsearch-db
   local:

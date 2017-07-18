@@ -10,7 +10,7 @@ As with all other Kubernetes objects, a Elastic needs `apiVersion`, `kind`, and 
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Elastic
+kind: Elasticsearch
 metadata:
   name: elasticsearch-db
 spec:
@@ -45,7 +45,7 @@ To use PersistentVolume, add the `spec.storage` section when creating Elastic ob
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Elastic
+kind: Elasticsearch
 metadata:
   name: elasticsearch-db
 spec:
@@ -85,7 +85,7 @@ In this case, SnapshotSource must have following information:
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Elastic
+kind: Elasticsearch
 metadata:
   name: elasticsearch-db
 spec:
