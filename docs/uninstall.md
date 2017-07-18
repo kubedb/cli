@@ -7,6 +7,11 @@ Please follow the steps below to uninstall KubeDB:
 ```sh
 $ kubectl delete deployment -l app=kubedb -n <operator-namespace>
 $ kubectl delete service -l app=kubedb -n <operator-namespace>
+
+# Delete RBAC objects, if --rbac flag was used.
+$ kubectl delete serviceaccount -l app=kubedb -n <operator-namespace>
+$ kubectl delete clusterrolebindings -l app=kubedb -n <operator-namespace>
+$ kubectl delete clusterrole -l app=kubedb -n <operator-namespace>
 ```
 
 2. Now, wait several seconds for KubeDB to stop running. To confirm that KubeDB operator pod(s) have stopped running, run:

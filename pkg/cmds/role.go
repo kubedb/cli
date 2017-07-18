@@ -1,4 +1,4 @@
-package roles
+package cmds
 
 import (
 	"fmt"
@@ -97,7 +97,8 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 		// Create new one
 		role := &rbac.ClusterRole{
 			ObjectMeta: metav1.ObjectMeta{
-				Name: name,
+				Name:   name,
+				Labels: operatorLabel,
 			},
 			Rules: policyRuleOperator,
 		}
@@ -123,6 +124,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      name,
 				Namespace: namespace,
+				Labels:    operatorLabel,
 			},
 		}
 		if _, err := client.CoreV1().ServiceAccounts(namespace).Create(sa); err != nil {
@@ -155,6 +157,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      name,
 				Namespace: namespace,
+				Labels:    operatorLabel,
 			},
 			RoleRef:  roleBindingRef,
 			Subjects: roleBindingSubjects,
