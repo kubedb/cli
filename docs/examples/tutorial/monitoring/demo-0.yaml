@@ -20,7 +20,6 @@ spec:
       labels:
         operator: prometheus
     spec:
-      serviceAccountName: prometheus-operator
       containers:
       - name: prometheus-operator
         image: quay.io/coreos/prometheus-operator:v0.10.1

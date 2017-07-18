@@ -14,20 +14,34 @@ namespace "demo" created
 deployment "prometheus-operator" created
 
 $ kubectl get pods -n demo --watch
-NAME                      READY     STATUS              RESTARTS   AGE
-pgadmin-538449054-s046r   0/1       ContainerCreating   0          13s
-pgadmin-538449054-s046r   1/1       Running   0          1m
+NAME                                  READY     STATUS    RESTARTS   AGE
+prometheus-operator-449376836-4pkzn   1/1       Running   0          15s
 ^C⏎                                                                                                                                                             
 
-$ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
-pgadmin   10.0.0.92    <pending>     80:31188/TCP   1m
+$ kubectl get thirdpartyresources 
+NAME                                    DESCRIPTION                           VERSION(S)
+alertmanager.monitoring.coreos.com      Managed Alertmanager cluster          v1alpha1
+prometheus.monitoring.coreos.com        Managed Prometheus server             v1alpha1
+service-monitor.monitoring.coreos.com   Prometheus monitoring for a service   v1alpha1
+```
+
+Once the Prometheus operator TPRs are registered, run the following command to create a Prometheus.
+
+```sh
+ $ kubectl create -f ./docs/examples/tutorial/monitoring/demo-1.yaml 
+prometheus "prometheus" created
+service "prometheus" created
+
+$ kubectl get svc -n demo
+NAME                  CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
+prometheus            10.0.0.247   <pending>     9090:30900/TCP   14s
+prometheus-operated   None         <none>        9090/TCP         14s
 
 $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
