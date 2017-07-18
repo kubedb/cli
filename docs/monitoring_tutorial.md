@@ -142,8 +142,8 @@ pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
 
-```yaml
-~/g/s/g/k/cli (d2) $ kubedb create -f ./docs/examples/tutorial/monitoring/demo-2.yaml 
+```sh
+$ kubedb create -f ./docs/examples/tutorial/monitoring/demo-2.yaml 
 validating "./docs/examples/tutorial/monitoring/demo-2.yaml"
 postgres "pmon" created
 
@@ -197,7 +197,11 @@ Events:
   15s         15s        1         Postgres operator   Normal     SuccessfulCreate     Successfully added monitoring system.
   1m          1m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
   1m          1m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+```
 
+
+
+```yaml
 $ kubectl get servicemonitor -n demo
 NAME               KIND
 kubedb-demo-pmon   ServiceMonitor.v1alpha1.monitoring.coreos.com
