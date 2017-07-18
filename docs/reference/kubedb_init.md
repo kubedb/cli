@@ -18,7 +18,7 @@ kubedb init [flags]
   kubedb init
   
   # Upgrade operator to use another version.
-  kubedb init --version=0.3.1 --upgrade
+  kubedb init --version=0.4.0 --upgrade
 ```
 
 ### Options
@@ -28,7 +28,7 @@ kubedb init [flags]
       --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
       --rbac                        If true, uses RBAC with operator and database objects
       --upgrade                     If present, Upgrade operator to use provided version
-      --version string              Operator version (default "0.3.1")
+      --version string              Operator version (default "0.4.0")
 ```
 
 ### Options inherited from parent commands
