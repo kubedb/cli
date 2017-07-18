@@ -1,0 +1,12 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: p1-xyz
+  namespace: demo
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: p1
+  storageSecretName: snap-secret
+  gcs:
+    bucket: restic

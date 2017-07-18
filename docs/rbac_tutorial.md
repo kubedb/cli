@@ -37,7 +37,7 @@ $ kubedb init --rbac
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
-$ kubectl create -f ./docs/examples/tutorial/postgres/demo-0.yaml
+$ kubectl create -f ./docs/examples/tutorial/rbac/demo-0.yaml
 namespace "demo" created
 deployment "pgadmin" created
 service "pgadmin" created
@@ -83,8 +83,8 @@ spec:
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
-validating "./docs/examples/tutorial/postgres/demo-1.yaml"
+$ kubedb create -f ./docs/examples/tutorial/rbac/demo-1.yaml 
+validating "./docs/examples/tutorial/rbac/demo-1.yaml"
 postgres "p1" created
 ```
 
@@ -205,7 +205,7 @@ $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
+![Using p1 from PGAdmin4](/docs/images/tutorial/rbac/p1-pgadmin.gif)
 
 
 ## Database Snapshots
@@ -251,8 +251,8 @@ type: Opaque
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
 
 ```
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml
-validating "./docs/examples/tutorial/postgres/demo-2.yaml"
+$ kubedb create -f ./docs/examples/tutorial/rbac/demo-2.yaml
+validating "./docs/examples/tutorial/rbac/demo-2.yaml"
 snapshot "p1-xyz" created
 
 $ kubedb get snap -n demo
@@ -342,7 +342,7 @@ Events:
 
 Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
 
-![snapshot-console](/docs/images/tutorial/postgres/p1-xyz-snapshot.png)
+![snapshot-console](/docs/images/tutorial/rbac/p1-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
 

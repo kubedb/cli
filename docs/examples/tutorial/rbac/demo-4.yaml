@@ -1,0 +1,18 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: recovered
+  namespace: demo
+spec:
+  version: 9.5
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  init:
+    snapshotSource:
+      name: p1-xyz
