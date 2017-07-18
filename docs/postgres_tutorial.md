@@ -180,7 +180,7 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
 
 
-## Taking Snapshots
+## Take Instant Backup
 Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `pg_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
@@ -315,6 +315,49 @@ Once the snapshot Job is complete, you should see the output of the `pg_dump` co
 ![snapshot-console](/docs/images/tutorial/postgres/p1-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+
+
+## Take Periodic Backups
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres tpr to add `spec.backupSchedule` section.
+
+```yaml
+$ kubedb edit pg p1 -n demo
+
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p1
+  namespace: demo
+spec:
+  version: 9.5
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi      
+  init:
+    scriptSource:
+      scriptPath: "postgres-init-scripts/run.sh"
+      gitRepo:
+        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: snap-secret
+    gcs:
+      bucket: restic
+```
+
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+```sh
+$ kubedb get snap -n demo
+NAME                 DATABASE   STATUS      AGE
+p1-20170718-030836   pg/p1      Succeeded   1m
+p1-20170718-030956   pg/p1      Running     2s
+p1-xyz               pg/p1      Succeeded   51m
+```
 
 
 
