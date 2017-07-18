@@ -1,12 +1,21 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Snapshot
+kind: Elasticsearchs
 metadata:
-  name: snapshot-xyz
+  name: e1
   namespace: demo
-  labels:
-    kubedb.com/kind: Postgres
 spec:
-  databaseName: p1
-  storageSecretName: snap-secret
-  gcs:
-    bucket: restic
+  version: 2.3.1
+  replicas: 1
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: snap-secret
+    gcs:
+      bucket: restic

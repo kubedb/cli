@@ -1,27 +1,12 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: Snapshot
 metadata:
-  name: p1
+  name: e1-xyz
   namespace: demo
+  labels:
+    kubedb.com/kind: Elasticsearchs
 spec:
-  version: 9.5
-  storage:
-    class: "gp2"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: "10Gi"
-  monitor:
-    agent: coreos-prometheus-operator
-    prometheus:
-      namespace: default
-      labels:
-        app: kubedb
-      interval: 10s
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
-  doNotPause: true
+  databaseName: e1
+  storageSecretName: snap-secret
+  gcs:
+    bucket: restic

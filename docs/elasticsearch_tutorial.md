@@ -1,12 +1,12 @@
-# Using PostgreSQL
-This tutorial will show you how to use KubeDB to run a PostgreSQL database.
+# Using Elasticsearch
+This tutorial will show you how to use KubeDB to run a Elasticsearch database.
 
 ## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
 $ kubectl create -f ./docs/examples/tutorial/elasticsearch/demo-0.yaml
@@ -30,14 +30,14 @@ $ minikube ip
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username `admin` and password `admin`.
 
-## Create a PostgreSQL database
-KubeDB implements a `Elasticsearch` TPR to define the specification of a PostgreSQL database. Below is the `Elasticsearch` object created in this tutorial.
+## Create a Elasticsearch database
+KubeDB implements a `Elasticsearch` TPR to define the specification of a Elasticsearch database. Below is the `Elasticsearch` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: p1
+  name: e1
   namespace: demo
 spec:
   version: 9.5
@@ -57,11 +57,11 @@ spec:
 
 $ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-1.yaml 
 validating "./docs/examples/tutorial/elasticsearch/demo-1.yaml"
-postgres "p1" created
+postgres "e1" created
 ```
 
 Here,
- - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.5 database is going to be created.
+ - `spec.version` is the version of Elasticsearch database. In this tutorial, a Elasticsearch 9.5 database is going to be created.
 
  - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
@@ -72,8 +72,8 @@ Here,
 KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```sh
-$ kubedb describe pg -n demo p1
-Name:		p1
+$ kubedb describe pg -n demo e1
+Name:		e1
 Namespace:	demo
 StartTimestamp:	Mon, 17 Jul 2017 15:31:34 -0700
 Status:		Running
@@ -83,13 +83,13 @@ Volume:
   Access Modes:	RWO
 
 Service:	
-  Name:		p1
+  Name:		e1
   Type:		ClusterIP
   IP:		10.0.0.161
   Port:		db	5432/TCP
 
 Database Secret:
-  Name:	p1-admin-auth
+  Name:	e1-admin-auth
   Type:	Opaque
   Data
   ====
@@ -109,20 +109,20 @@ Events:
 
 $ kubectl get statefulset -n demo
 NAME      DESIRED   CURRENT   AGE
-p1        1         1         1m
+e1        1         1         1m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
+data-e1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-p1-0   standard                 1m
+pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-e1-0   standard                 1m
 
 $ kubectl get service -n demo
 NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
 kubedb    None         <none>                       3m
-p1        10.0.0.143   <none>        5432/TCP       3m
+e1        10.0.0.143   <none>        5432/TCP       3m
 pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
 
@@ -130,19 +130,19 @@ pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
 
 ```yaml
-$ kubedb get pg -n demo p1 -o yaml
+$ kubedb get pg -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
   creationTimestamp: 2017-07-17T22:31:34Z
-  name: p1
+  name: e1
   namespace: demo
   resourceVersion: "2677"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/elasticsearchs/e1
   uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
 spec:
   databaseSecret:
-    secretName: p1-admin-auth
+    secretName: e1-admin-auth
   doNotPause: true
   init:
     scriptSource:
@@ -164,20 +164,20 @@ status:
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
 Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
 
 ```sh
-$ kubectl get pods p1-0 -n demo -o yaml | grep IP
+$ kubectl get pods e1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
 
-$ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
+$ kubectl get secrets -n demo e1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/elasticsearch/p1-pgadmin.gif)
+![Using e1 from PGAdmin4](/docs/images/tutorial/elasticsearch/e1-pgadmin.gif)
 
 
 ## Database Snapshots
@@ -225,29 +225,29 @@ To lean how to configure other storage destinations for Snapshots, please visit 
 ```
 $ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-2.yaml
 validating "./docs/examples/tutorial/elasticsearch/demo-2.yaml"
-snapshot "p1-xyz" created
+snapshot "e1-xyz" created
 
 $ kubedb get snap -n demo
 NAME      DATABASE   STATUS    AGE
-p1-xyz    pg/p1      Running   22s
+e1-xyz    pg/e1      Running   22s
 ```
 
 ```yaml
-$ kubedb get snap -n demo p1-xyz -o yaml
+$ kubedb get snap -n demo e1-xyz -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
   creationTimestamp: 2017-07-18T02:18:00Z
   labels:
     kubedb.com/kind: Elasticsearch
-    kubedb.com/name: p1
-  name: p1-xyz
+    kubedb.com/name: e1
+  name: e1-xyz
   namespace: demo
   resourceVersion: "2973"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/p1-xyz
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/e1-xyz
   uid: 5269701f-6b5f-11e7-b9ca-080027f73ab7
 spec:
-  databaseName: p1
+  databaseName: e1
   gcs:
     bucket: restic
   resources: {}
@@ -272,8 +272,8 @@ Here,
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
 ```sh
-$ kubedb describe pg -n demo p1
-Name:		p1
+$ kubedb describe pg -n demo e1
+Name:		e1
 Namespace:	demo
 StartTimestamp:	Mon, 17 Jul 2017 18:46:24 -0700
 Status:		Running
@@ -283,13 +283,13 @@ Volume:
   Access Modes:	RWO
 
 Service:	
-  Name:		p1
+  Name:		e1
   Type:		ClusterIP
   IP:		10.0.0.143
   Port:		db	5432/TCP
 
 Database Secret:
-  Name:	p1-admin-auth
+  Name:	e1-admin-auth
   Type:	Opaque
   Data
   ====
@@ -298,7 +298,7 @@ Database Secret:
 Snapshots:
   Name     Bucket      StartTime                         CompletionTime                    Phase
   ----     ------      ---------                         --------------                    -----
-  p1-xyz   gs:restic   Mon, 17 Jul 2017 19:18:00 -0700   Mon, 17 Jul 2017 19:19:11 -0700   Succeeded
+  e1-xyz   gs:restic   Mon, 17 Jul 2017 19:18:00 -0700   Mon, 17 Jul 2017 19:19:11 -0700   Succeeded
 
 Events:
   FirstSeen   LastSeen   Count     From                  Type       Reason               Message
@@ -314,7 +314,7 @@ Events:
 
 Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
 
-![snapshot-console](/docs/images/tutorial/elasticsearch/p1-xyz-snapshot.png)
+![snapshot-console](/docs/images/tutorial/elasticsearch/e1-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
 
@@ -323,12 +323,12 @@ From the above image, you can see that the snapshot output is stored in a folder
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch tpr to add `spec.backupSchedule` section.
 
 ```yaml
-$ kubedb edit pg p1 -n demo
+$ kubedb edit pg e1 -n demo
 
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: p1
+  name: e1
   namespace: demo
 spec:
   version: 9.5
@@ -356,9 +356,9 @@ Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snaps
 ```sh
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
-p1-20170718-030836   pg/p1      Succeeded   1m
-p1-20170718-030956   pg/p1      Running     2s
-p1-xyz               pg/p1      Succeeded   51m
+e1-20170718-030836   pg/e1      Succeeded   1m
+e1-20170718-030956   pg/e1      Running     2s
+e1-xyz               pg/e1      Succeeded   51m
 ```
 
 ### Restore from Snapshot
@@ -381,7 +381,7 @@ spec:
         storage: 50Mi
   init:
     snapshotSource:
-      name: p1-xyz
+      name: e1-xyz
 ```
 
 
@@ -391,45 +391,45 @@ spec:
 Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
 ```sh
-$ kubedb delete pg p1 -n demo
-postgres "p1" deleted
+$ kubedb delete pg e1 -n demo
+postgres "e1" deleted
 
-$ kubedb get pg p1 -n demo
+$ kubedb get pg e1 -n demo
 NAME      STATUS    AGE
-p1        Running   9s
+e1        Running   9s
 ```
 
-Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `p1` PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit pg e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
 
 ```yaml
-$ kubedb delete pg -n demo p1
-postgres "p1" deleted
+$ kubedb delete pg -n demo e1
+postgres "e1" deleted
 
-$ kubedb get drmn -n demo p1
+$ kubedb get drmn -n demo e1
 NAME      STATUS    AGE
-p1        Pausing   20s
+e1        Pausing   20s
 
-$ kubedb get drmn -n demo p1
+$ kubedb get drmn -n demo e1
 NAME      STATUS    AGE
-p1        Paused    3m
+e1        Paused    3m
 
-$ kubedb get drmn -n demo p1 -o yaml
+$ kubedb get drmn -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   creationTimestamp: 2017-07-18T03:23:08Z
   labels:
     kubedb.com/kind: Elasticsearch
-  name: p1
+  name: e1
   namespace: demo
   resourceVersion: "8004"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
   uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
 spec:
   origin:
     metadata:
       creationTimestamp: null
-      name: p1
+      name: e1
       namespace: demo
     spec:
       postgres:
@@ -440,7 +440,7 @@ spec:
           resources: {}
           storageSecretName: snap-secret
         databaseSecret:
-          secretName: p1-admin-auth
+          secretName: e1-admin-auth
         init:
           scriptSource:
             gitRepo:
@@ -472,7 +472,7 @@ Here,
 To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
 
 ```yaml
-$ kubedb edit drmn -n demo p1
+$ kubedb edit drmn -n demo e1
 
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
@@ -480,17 +480,17 @@ metadata:
   creationTimestamp: 2017-07-18T03:23:08Z
   labels:
     kubedb.com/kind: Elasticsearch
-  name: p1
+  name: e1
   namespace: demo
   resourceVersion: "8004"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
   uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
 spec:
   resume: true
   origin:
     metadata:
       creationTimestamp: null
-      name: p1
+      name: e1
       namespace: demo
     spec:
       postgres:
@@ -501,7 +501,7 @@ spec:
           resources: {}
           storageSecretName: snap-secret
         databaseSecret:
-          secretName: p1-admin-auth
+          secretName: e1-admin-auth
         init:
           scriptSource:
             gitRepo:
@@ -528,26 +528,26 @@ KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator w
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
-$ kubedb edit drmn -n demo p1
+$ kubedb edit drmn -n demo e1
 # set spec.wipeOut: true
 
-$ kubedb get drmn -n demo p1 -o yaml
+$ kubedb get drmn -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   creationTimestamp: 2017-07-18T03:23:08Z
   labels:
     kubedb.com/kind: Elasticsearch
-  name: p1
+  name: e1
   namespace: demo
   resourceVersion: "15223"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
   uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
 spec:
   origin:
     metadata:
       creationTimestamp: null
-      name: p1
+      name: e1
       namespace: demo
     spec:
       postgres:
@@ -558,7 +558,7 @@ spec:
           resources: {}
           storageSecretName: snap-secret
         databaseSecret:
-          secretName: p1-admin-auth
+          secretName: e1-admin-auth
         init:
           scriptSource:
             gitRepo:
@@ -582,16 +582,16 @@ status:
 
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
-p1        WipedOut   1h
+e1        WipedOut   1h
 ```
 
 
 ### Delete Dormant Database
-You still have a record that there used to be a Elasticsearch database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
+You still have a record that there used to be a Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
 
 ```sh
-$ kubedb delete drmn p1 -n demo
-dormantdatabase "p1" deleted
+$ kubedb delete drmn e1 -n demo
+dormantdatabase "e1" deleted
 ```
 
 ## Cleaning up

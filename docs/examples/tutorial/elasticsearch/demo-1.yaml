@@ -1,8 +1,16 @@
-apiVersion: v1
-kind: Namespace
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearchs
 metadata:
-  name: demo
+  name: e1
+  namespace: demo
 spec:
-  finalizers:
-  - kubernetes
----
+  version: 2.3.1
+  replicas: 1
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
