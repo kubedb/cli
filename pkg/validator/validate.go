@@ -21,8 +21,8 @@ func Validate(client clientset.Interface, info *resource.Info) error {
 
 	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 	switch kind {
-	case tapi.ResourceKindElastic:
-		var elastic *tapi.Elastic
+	case tapi.ResourceKindElasticsearch:
+		var elastic *tapi.Elasticsearch
 		if err := yaml.Unmarshal(objByte, &elastic); err != nil {
 			return err
 		}
@@ -51,8 +51,8 @@ func ValidateDeletion(info *resource.Info) error {
 
 	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 	switch kind {
-	case tapi.ResourceKindElastic:
-		var elastic *tapi.Elastic
+	case tapi.ResourceKindElasticsearch:
+		var elastic *tapi.Elasticsearch
 		if err := yaml.Unmarshal(objByte, &elastic); err != nil {
 			return err
 		}

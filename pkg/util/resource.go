@@ -18,10 +18,10 @@ import (
 
 func GetSupportedResource(resource string) (string, error) {
 	switch strings.ToLower(resource) {
-	case strings.ToLower(tapi.ResourceKindElastic),
-		strings.ToLower(tapi.ResourceTypeElastic),
-		strings.ToLower(tapi.ResourceCodeElastic):
-		return tapi.ResourceKindElastic + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+	case strings.ToLower(tapi.ResourceKindElasticsearch),
+		strings.ToLower(tapi.ResourceTypeElasticsearch),
+		strings.ToLower(tapi.ResourceCodeElasticsearch):
+		return tapi.ResourceKindElasticsearch + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
 		strings.ToLower(tapi.ResourceTypePostgres),
 		strings.ToLower(tapi.ResourceCodePostgres):
@@ -42,10 +42,10 @@ func GetSupportedResource(resource string) (string, error) {
 
 func GetResourceType(resource string) (string, error) {
 	switch strings.ToLower(resource) {
-	case strings.ToLower(tapi.ResourceKindElastic),
-		strings.ToLower(tapi.ResourceTypeElastic),
-		strings.ToLower(tapi.ResourceCodeElastic):
-		return tapi.ResourceTypeElastic, nil
+	case strings.ToLower(tapi.ResourceKindElasticsearch),
+		strings.ToLower(tapi.ResourceTypeElasticsearch),
+		strings.ToLower(tapi.ResourceCodeElasticsearch):
+		return tapi.ResourceTypeElasticsearch, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
 		strings.ToLower(tapi.ResourceTypePostgres),
 		strings.ToLower(tapi.ResourceCodePostgres):
@@ -66,7 +66,7 @@ func GetResourceType(resource string) (string, error) {
 
 func CheckSupportedResource(kind string) error {
 	switch kind {
-	case tapi.ResourceKindElastic,
+	case tapi.ResourceKindElasticsearch,
 		tapi.ResourceKindPostgres,
 		tapi.ResourceKindSnapshot,
 		tapi.ResourceKindDormantDatabase:
@@ -79,7 +79,7 @@ func CheckSupportedResource(kind string) error {
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	resources := map[string]string{
-		tapi.ResourceNameElastic:         tapi.ResourceKindElastic + "." + tapi.V1alpha1SchemeGroupVersion.Group,
+		tapi.ResourceNameElasticsearch:   tapi.ResourceKindElasticsearch + "." + tapi.V1alpha1SchemeGroupVersion.Group,
 		tapi.ResourceNamePostgres:        tapi.ResourceKindPostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group,
 		tapi.ResourceNameSnapshot:        tapi.ResourceKindSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group,
 		tapi.ResourceNameDormantDatabase: tapi.ResourceKindDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group,
@@ -106,7 +106,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 }
 
 var ShortForms = map[string]string{
-	tapi.ResourceCodeElastic:         tapi.ResourceTypeElastic,
+	tapi.ResourceCodeElasticsearch:   tapi.ResourceTypeElasticsearch,
 	tapi.ResourceCodePostgres:        tapi.ResourceTypePostgres,
 	tapi.ResourceCodeSnapshot:        tapi.ResourceTypeSnapshot,
 	tapi.ResourceCodeDormantDatabase: tapi.ResourceTypeDormantDatabase,
@@ -177,7 +177,7 @@ func GetPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
 }
 
 var PreconditionSpecField = map[string][]string{
-	tapi.ResourceKindElastic: {
+	tapi.ResourceKindElasticsearch: {
 		"spec.version",
 		"spec.storage",
 		"spec.nodeSelector",
@@ -212,8 +212,8 @@ func GetConditionalPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
 func CheckResourceExists(client internalclientset.Interface, kind, name, namespace string) (bool, error) {
 	var err error
 	switch kind {
-	case tapi.ResourceKindElastic:
-		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElastic)
+	case tapi.ResourceKindElasticsearch:
+		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElasticsearch)
 		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	case tapi.ResourceKindPostgres:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
