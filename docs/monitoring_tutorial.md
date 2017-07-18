@@ -50,11 +50,10 @@ KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL d
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: p1
+  name: pmon
   namespace: demo
 spec:
   version: 9.5
-  doNotPause: true
   storage:
     class: "standard"
     accessModes:
@@ -62,15 +61,17 @@ spec:
     resources:
       requests:
         storage: 50Mi      
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+  monitor:
+    agent: coreos-prometheus-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
 
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
-validating "./docs/examples/tutorial/postgres/demo-1.yaml"
-postgres "p1" created
+$ kubedb create -f ./docs/examples/tutorial/monitoring/demo-2.yaml 
+validating "./docs/examples/tutorial/monitoring/demo-2.yaml"
+postgres "pmon" created
 ```
 
 Here,
@@ -143,10 +144,6 @@ pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
 
 ```sh
-$ kubedb create -f ./docs/examples/tutorial/monitoring/demo-2.yaml 
-validating "./docs/examples/tutorial/monitoring/demo-2.yaml"
-postgres "pmon" created
-
 $ kubedb get pg -n demo
 NAME      STATUS     AGE
 pmon      Creating   1m
