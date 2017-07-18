@@ -556,7 +556,7 @@ spec:
       name: e1
       namespace: demo
     spec:
-      elastic:
+      elasticsearch:
         backupSchedule:
           cronExpression: '@every 1m'
           gcs:
