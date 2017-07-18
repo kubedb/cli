@@ -106,6 +106,7 @@ Events:
   3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
   3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
 
+
 $ kubectl get statefulset -n demo
 NAME      DESIRED   CURRENT   AGE
 p1        1         1         1m
@@ -126,10 +127,9 @@ pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
 
 
-
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
 
 ```yaml
-
 $ kubedb get pg -n demo p1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
@@ -164,10 +164,7 @@ status:
 ```
 
 
-```
-
-```
-
+Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`. 
 
 ```sh
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
