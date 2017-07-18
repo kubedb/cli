@@ -1,6 +1,9 @@
 package roles
 
 import (
+	"fmt"
+	"io"
+
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
@@ -83,7 +86,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 }
 
-func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
+func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Writer) error {
 	name := ServiceAccountName
 	// Ensure ClusterRoles for operator
 	clusterRoleOperator, err := client.RbacV1beta1().ClusterRoles().Get(name, metav1.GetOptions{})
@@ -101,12 +104,14 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
 		if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
 			return err
 		}
+		fmt.Fprintln(out, "Successfully create cluster role.")
 	} else {
 		// Update existing one
 		clusterRoleOperator.Rules = policyRuleOperator
 		if _, err := client.RbacV1beta1().ClusterRoles().Update(clusterRoleOperator); err != nil {
 			return err
 		}
+		fmt.Fprintln(out, "Successfully updated cluster role.")
 	}
 
 	// Ensure ServiceAccounts
@@ -123,6 +128,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
 		if _, err := client.CoreV1().ServiceAccounts(namespace).Create(sa); err != nil {
 			return err
 		}
+		fmt.Fprintln(out, "Successfully created service account.")
 	}
 
 	var roleBindingRef = rbac.RoleRef{
@@ -157,13 +163,14 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string) error {
 		if _, err := client.RbacV1beta1().ClusterRoleBindings().Create(roleBinding); err != nil {
 			return err
 		}
-
+		fmt.Fprintln(out, "Successfully created cluster role bindings.")
 	} else {
 		roleBinding.RoleRef = roleBindingRef
 		roleBinding.Subjects = roleBindingSubjects
 		if _, err := client.RbacV1beta1().ClusterRoleBindings().Update(roleBinding); err != nil {
 			return err
 		}
+		fmt.Fprintln(out, "Successfully updated cluster role bindings.")
 	}
 
 	return nil
