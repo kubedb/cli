@@ -316,6 +316,7 @@ metadata:
   namespace: demo
 spec:
   version: 2.3.1
+  replicas: 1
   doNotPause: true
   storage:
     class: "standard"
@@ -324,11 +325,6 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: snap-secret
@@ -340,14 +336,15 @@ Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snaps
 ```sh
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
-e1-20170718-030836   es/e1      Succeeded   1m
-e1-20170718-030956   es/e1      Running     2s
-e1-xyz               es/e1      Succeeded   51m
+e1-20170718-223046   es/e1      Succeeded   8m
+e1-20170718-223206   es/e1      Running     7m
+e1-xyz               es/e1      Succeeded   18m
 ```
 
 ### Restore from Snapshot
 
 ```yaml
+$ cat ./docs/examples/tutorial/elasticsearch/demo-4.yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
@@ -366,6 +363,47 @@ spec:
   init:
     snapshotSource:
       name: e1-xyz
+
+$ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-4.yaml
+validating "./docs/examples/tutorial/elasticsearch/demo-4.yaml"
+elasticsearch "recovered" created
+```
+
+```sh
+$ kubedb get es -n demo
+NAME        STATUS    AGE
+e1          Running   1h
+recovered   Running   49s
+
+
+$ kubedb describe es -n demo recovered
+Name:			recovered
+Namespace:		demo
+CreationTimestamp:	Tue, 18 Jul 2017 15:41:45 -0700
+Status:			Running
+Replicas:		0  total
+Volume:
+  StorageClass:	standard
+  Capacity:	50Mi
+  Access Modes:	RWO
+
+Service:	
+  Name:		recovered
+  Type:		ClusterIP
+  IP:		10.0.0.65
+  Port:		db	9200/TCP
+  Port:		cluster	9300/TCP
+
+No Snapshots.
+
+Events:
+  FirstSeen   LastSeen   Count     From                     Type       Reason                 Message
+  ---------   --------   -----     ----                     --------   ------                 -------
+  1m          1m         1         Elasticsearch operator   Normal     SuccessfulInitialize   Successfully completed initialization
+  1m          1m         1         Elasticsearch operator   Normal     SuccessfulCreate       Successfully created Elasticsearch
+  1m          1m         1         Elasticsearch operator   Normal     SuccessfulValidate     Successfully validate Elasticsearch
+  1m          1m         1         Elasticsearch operator   Normal     Creating               Creating Kubernetes objects
+  1m          1m         1         Elasticsearch operator   Normal     Initializing           Initializing from Snapshot: "e1-xyz"
 ```
 
 
