@@ -79,6 +79,11 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Resources: []string{"servicemonitors"},
 		Verbs:     []string{"get", "create", "update"},
 	},
+	{
+		APIGroups: []string{"storage.k8s.io"},
+		Resources: []string{"storageclasses"},
+		Verbs:     []string{"create"},
+	},
 }
 
 func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Writer) error {
