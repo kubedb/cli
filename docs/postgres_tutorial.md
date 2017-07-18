@@ -139,10 +139,15 @@ Events:
 
 
 ```sh
+$ kubectl get pods p1-0 -n demo -o yaml | grep IP
+  hostIP: 192.168.99.100
+  podIP: 172.17.0.6
+
 $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
 POSTGRES_PASSWORD=Dnoot7K8Igxmw2xK
 ```
 
+![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
 
 
 
