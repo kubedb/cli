@@ -364,6 +364,7 @@ p1-xyz               pg/p1      Succeeded   51m
 ### Restore from Snapshot
 
 ```yaml
+$ cat ./docs/examples/tutorial/postgres/demo-4.yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
@@ -382,8 +383,53 @@ spec:
   init:
     snapshotSource:
       name: p1-xyz
+
+$ kubectl create -f ./docs/examples/tutorial/postgres/demo-4.yaml
+postgres "recovered" created
 ```
 
+```sh
+$ kubedb get pg -n demo
+NAME        STATUS    AGE
+p1          Running   10m
+recovered   Running   6m
+
+$ kubedb describe pg -n demo recovered
+Name:		recovered
+Namespace:	demo
+StartTimestamp:	Tue, 18 Jul 2017 16:07:18 -0700
+Status:		Running
+Volume:
+  StorageClass:	standard
+  Capacity:	50Mi
+  Access Modes:	RWO
+
+Service:
+  Name:		recovered
+  Type:		ClusterIP
+  IP:		10.0.0.234
+  Port:		db	5432/TCP
+
+Database Secret:
+  Name:	recovered-admin-auth
+  Type:	Opaque
+  Data
+  ====
+  .admin:	35 bytes
+
+No Snapshots.
+
+Events:
+  FirstSeen   LastSeen   Count     From                Type       Reason               Message
+  ---------   --------   -----     ----                --------   ------               -------
+  3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  3m          3m         1         Postgres operator   Warning    Failed               Failed to complete initialization
+  3m          3m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
+  5m          5m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  5m          5m         1         Postgres operator   Normal     Initializing         Initializing from Snapshot: "p1-xyz"
+  5m          5m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+  5m          5m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+```
 
 ## Deleting Database
 
