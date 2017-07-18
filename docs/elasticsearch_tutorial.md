@@ -414,10 +414,10 @@ Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to tru
 
 ```sh
 $ kubedb delete es e1 -n demo
-error: Elastic "e1" can't be paused. To continue delete, unset spec.doNotPause and retry.
+error: Elasticsearch "e1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
 
 ```yaml
 $ kubedb delete es -n demo e1
@@ -435,14 +435,14 @@ $ kubedb get drmn -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: 2017-07-18T03:23:08Z
+  creationTimestamp: 2017-07-18T22:47:51Z
   labels:
     kubedb.com/kind: Elasticsearch
   name: e1
   namespace: demo
-  resourceVersion: "8004"
+  resourceVersion: "6216"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
-  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
+  uid: 21464b6c-6c0b-11e7-b566-080027691dbf
 spec:
   origin:
     metadata:
@@ -450,20 +450,14 @@ spec:
       name: e1
       namespace: demo
     spec:
-      postgres:
+      elasticsearch:
         backupSchedule:
           cronExpression: '@every 1m'
           gcs:
             bucket: restic
           resources: {}
           storageSecretName: snap-secret
-        databaseSecret:
-          secretName: e1-admin-auth
-        init:
-          scriptSource:
-            gitRepo:
-              repository: https://github.com/k8sdb/postgres-init-scripts.git
-            scriptPath: postgres-init-scripts/run.sh
+        replicas: 1
         resources: {}
         storage:
           accessModes:
@@ -472,10 +466,10 @@ spec:
           resources:
             requests:
               storage: 50Mi
-        version: "2.3.1"
+        version: 2.3.1
 status:
-  creationTime: 2017-07-18T03:23:08Z
-  pausingTime: 2017-07-18T03:23:48Z
+  creationTime: 2017-07-18T22:47:51Z
+  pausingTime: 2017-07-18T22:48:01Z
   phase: Paused
 ```
 
@@ -495,14 +489,14 @@ $ kubedb edit drmn -n demo e1
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: 2017-07-18T03:23:08Z
+  creationTimestamp: 2017-07-18T22:47:51Z
   labels:
     kubedb.com/kind: Elasticsearch
   name: e1
   namespace: demo
-  resourceVersion: "8004"
+  resourceVersion: "6216"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
-  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
+  uid: 21464b6c-6c0b-11e7-b566-080027691dbf
 spec:
   resume: true
   origin:
@@ -511,20 +505,14 @@ spec:
       name: e1
       namespace: demo
     spec:
-      postgres:
+      elasticsearch:
         backupSchedule:
           cronExpression: '@every 1m'
           gcs:
             bucket: restic
           resources: {}
           storageSecretName: snap-secret
-        databaseSecret:
-          secretName: e1-admin-auth
-        init:
-          scriptSource:
-            gitRepo:
-              repository: https://github.com/k8sdb/postgres-init-scripts.git
-            scriptPath: postgres-init-scripts/run.sh
+        replicas: 1
         resources: {}
         storage:
           accessModes:
@@ -533,10 +521,10 @@ spec:
           resources:
             requests:
               storage: 50Mi
-        version: "2.3.1"
+        version: 2.3.1
 status:
-  creationTime: 2017-07-18T03:23:08Z
-  pausingTime: 2017-07-18T03:23:48Z
+  creationTime: 2017-07-18T22:47:51Z
+  pausingTime: 2017-07-18T22:48:01Z
   phase: Paused
 ```
 
@@ -553,14 +541,14 @@ $ kubedb get drmn -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: 2017-07-18T03:23:08Z
+  creationTimestamp: 2017-07-18T22:51:42Z
   labels:
     kubedb.com/kind: Elasticsearch
   name: e1
   namespace: demo
-  resourceVersion: "15223"
+  resourceVersion: "6653"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
-  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
+  uid: aacfbbec-6c0b-11e7-b566-080027691dbf
 spec:
   origin:
     metadata:
@@ -568,20 +556,14 @@ spec:
       name: e1
       namespace: demo
     spec:
-      postgres:
+      elastic:
         backupSchedule:
           cronExpression: '@every 1m'
           gcs:
             bucket: restic
           resources: {}
           storageSecretName: snap-secret
-        databaseSecret:
-          secretName: e1-admin-auth
-        init:
-          scriptSource:
-            gitRepo:
-              repository: https://github.com/k8sdb/postgres-init-scripts.git
-            scriptPath: postgres-init-scripts/run.sh
+        replicas: 1
         resources: {}
         storage:
           accessModes:
@@ -590,17 +572,17 @@ spec:
           resources:
             requests:
               storage: 50Mi
-        version: "2.3.1"
+        version: 2.3.1
   wipeOut: true
 status:
-  creationTime: 2017-07-18T03:23:08Z
-  pausingTime: 2017-07-18T03:23:48Z
+  creationTime: 2017-07-18T22:51:42Z
+  pausingTime: 2017-07-18T22:51:52Z
   phase: WipedOut
-  wipeOutTime: 2017-07-18T05:09:59Z
+  wipeOutTime: 2017-07-18T22:52:37Z
 
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
-e1        WipedOut   1h
+e1        WipedOut   1m
 ```
 
 
