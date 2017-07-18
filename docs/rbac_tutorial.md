@@ -147,7 +147,7 @@ p1        10.0.0.143   <none>        5432/TCP       3m
 pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
 
-Since RBAC is enabled, a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name is also created and used as the service account name for the corresponding StatefulSet.
+Since RBAC is enabled, a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name is also created and used as the service account name for the corresponding StatefulSet. This Role is used by Prometheus exporter sidecar container to connect to the database.
 
 ```yaml
 $ kubectl get role -n demo p1 -o yaml
