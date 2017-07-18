@@ -47,13 +47,11 @@ elasticsearch "e1" created
 ```
 
 Here,
- - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 9.5 database is going to be created.
+ - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 2.3.1 cluster is going to be created.
 
  - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
-
- - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/k8sdb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
 KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
@@ -143,7 +141,7 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  version: "9.5"
+  version: "2.3.1"
 status:
   creationTime: 2017-07-17T22:31:34Z
   phase: Running
@@ -317,7 +315,7 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 9.5
+  version: 2.3.1
   doNotPause: true
   storage:
     class: "standard"
@@ -356,7 +354,7 @@ metadata:
   name: recovered
   namespace: demo
 spec:
-  version: 9.5
+  version: 2.3.1
   doNotPause: true
   storage:
     class: "standard"
@@ -440,7 +438,7 @@ spec:
           resources:
             requests:
               storage: 50Mi
-        version: "9.5"
+        version: "2.3.1"
 status:
   creationTime: 2017-07-18T03:23:08Z
   pausingTime: 2017-07-18T03:23:48Z
@@ -501,7 +499,7 @@ spec:
           resources:
             requests:
               storage: 50Mi
-        version: "9.5"
+        version: "2.3.1"
 status:
   creationTime: 2017-07-18T03:23:08Z
   pausingTime: 2017-07-18T03:23:48Z
@@ -558,7 +556,7 @@ spec:
           resources:
             requests:
               storage: 50Mi
-        version: "9.5"
+        version: "2.3.1"
   wipeOut: true
 status:
   creationTime: 2017-07-18T03:23:08Z
