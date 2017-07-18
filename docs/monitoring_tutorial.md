@@ -1,5 +1,6 @@
 # Using PostgreSQL
-This tutorial will show you how to use KubeDB to run a PostgreSQL database. 
+This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
+ 
 
 ## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
@@ -567,6 +568,7 @@ You still have a record that there used to be a Postgres database `p1` in the fo
 $ kubedb delete drmn p1 -n demo
 dormantdatabase "p1" deleted
 ```
+
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
