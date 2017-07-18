@@ -19,7 +19,7 @@ spec:
 ```
 
 ```sh
-$ kubedb create -f  ./docs/examples/elastic/elastic-with-storage.yaml
+$ kubedb create -f  ./docs/examples/elasticsearch/elastic-with-storage.yaml
 
 elastic "elasticsearch-db" created
 ```
