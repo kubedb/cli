@@ -181,6 +181,10 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 
 
 ## Taking Snapshots
+Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr.
+
+```
+
 
 
 
