@@ -395,7 +395,7 @@ Before starting backup process, KubeDB operator will validate storage secret by 
 Using `kubedb`, create a Snapshot object from `snapshot.yaml`.
 
 ```sh
-$ kubedb create -f ./docs/examples/elastic/snapshot.yaml
+$ kubedb create -f ./docs/examples/elasticsearch/snapshot.yaml
 
 snapshot "snapshot-xyz" created
 ```

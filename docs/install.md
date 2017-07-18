@@ -35,6 +35,18 @@ Successfully created operator deployment.
 Successfully created operator service.
 ```
 
+`KubeDB` operators supports RBAC v1beta1 authorization api for Kubernetes clusters. To use `KubeDB` in an RBAC enabled cluster, run the `kubedb init` command with `--rbac` flag.
+```sh
+$ kubedb init --rbac
+Successfully created cluster role.
+Successfully created service account.
+Successfully created cluster role bindings.
+Successfully created operator deployment.
+Successfully created operator service.
+```
+
+This will create a `kubedb-operator` ClusterRole, ClusterRoleBinding and ServiceAccount to run `KubeDB` operator pods. With RBAC enabled, a separate set of ClusterRole, ClusterRoleBinding and ServiceAccount will be created for each KubeDB database. To learn more, please visit [here](/docs/rbac.md).
+
 ## Verify installation
 To check if KubeDB operator pods have started, run the following command:
 ```sh

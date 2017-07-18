@@ -3,9 +3,10 @@ kind: Snapshot
 metadata:
   name: snapshot-xyz
   labels:
-    kubedb.com/kind: Elastic
+    kubedb.com/kind: Elasticsearch
 spec:
   databaseName: elasticsearch-db
-  storageSecretName: "secret-for-bucket"
-  gcs:
-    bucket: "bucket-for-snapshot"
+  local:
+    path: /repo
+    volumeSource:
+      emptyDir: {}

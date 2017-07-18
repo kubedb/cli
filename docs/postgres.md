@@ -117,9 +117,9 @@ spec:
   version: 9.5
   init:
     scriptSource:
-      scriptPath: "kubernetes-gitRepo/run.sh"
+      scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
-        repository: "https://github.com/appscode/kubernetes-gitRepo.git"
+        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 ```
 
 In the above example, KubeDB operator will launch a Job to execute `run.sh` script once StatefulSet pods are running.

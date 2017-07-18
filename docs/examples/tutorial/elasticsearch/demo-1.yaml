@@ -1,14 +1,16 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Elastic
+kind: Elasticsearch
 metadata:
-  name: elasticsearch-db
+  name: e1
+  namespace: demo
 spec:
   version: 2.3.1
   replicas: 1
+  doNotPause: true
   storage:
-    class: "gp2"
+    class: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: "10Gi"
+        storage: 50Mi

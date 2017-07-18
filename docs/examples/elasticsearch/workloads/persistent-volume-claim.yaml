@@ -8,7 +8,7 @@ metadata:
     volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
   creationTimestamp: 2017-06-09T05:50:33Z
   labels:
-    kubedb.com/kind: Elastic
+    kubedb.com/kind: Elasticsearch
     kubedb.com/name: elasticsearch-db
   name: data-elasticsearch-db-es-0
   namespace: default

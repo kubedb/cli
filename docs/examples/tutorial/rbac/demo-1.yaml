@@ -1,0 +1,15 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p1
+  namespace: demo
+spec:
+  version: 9.5
+  doNotPause: true
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
