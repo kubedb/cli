@@ -171,7 +171,7 @@ PID   USER     TIME   COMMAND
 }
 ```
 
-![Using e1 from esAdmin4](/docs/images/tutorial/elasticsearch/e1-esadmin.gif)
+![Using e1 from esAdmin4](/docs/images/tutorial/elasticsearch/e1.gif)
 
 
 ## Database Snapshots
