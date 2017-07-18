@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: p1
+  name: p3
   namespace: demo
 spec:
   version: 9.5
