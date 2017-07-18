@@ -49,6 +49,8 @@ elasticsearch "e1" created
 Here,
  - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 2.3.1 cluster is going to be created.
 
+ - `spec.replicas` is the number of pods in the Elasticsearch cluster. In this tutorial, a single node Elasticsearch cluster is going to be created.
+
  - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
@@ -56,7 +58,7 @@ Here,
 KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```sh
-$ kubedb describe pg -n demo e1
+$ kubedb describe es -n demo e1
 Name:		e1
 Namespace:	demo
 StartTimestamp:	Mon, 17 Jul 2017 15:31:34 -0700
@@ -107,14 +109,12 @@ $ kubectl get service -n demo
 NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
 kubedb    None         <none>                       3m
 e1        10.0.0.143   <none>        5432/TCP       3m
-pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
-
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
 
 ```yaml
-$ kubedb get pg -n demo e1 -o yaml
+$ kubedb get es -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
@@ -150,7 +150,7 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password.
+Now, you can connect to this database from the esAdmin dasboard using the database pod IP and `postgres` user password.
 
 ```sh
 $ kubectl get pods e1-0 -n demo -o yaml | grep IP
@@ -161,13 +161,13 @@ $ kubectl get secrets -n demo e1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using e1 from PGAdmin4](/docs/images/tutorial/elasticsearch/e1-pgadmin.gif)
+![Using e1 from esAdmin4](/docs/images/tutorial/elasticsearch/e1-esadmin.gif)
 
 
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `pg_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `es_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -179,14 +179,14 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 ```sh
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-$ kubectl create secret generic pg-snap-secret -n demo \
+$ kubectl create secret generic es-snap-secret -n demo \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "pg-snap-secret" created
+secret "es-snap-secret" created
 ```
 
 ```yaml
-$ kubectl get secret pg-snap-secret -o yaml
+$ kubectl get secret es-snap-secret -o yaml
 
 apiVersion: v1
 data:
@@ -195,10 +195,10 @@ data:
 kind: Secret
 metadata:
   creationTimestamp: 2017-07-17T18:06:51Z
-  name: pg-snap-secret
+  name: es-snap-secret
   namespace: demo
   resourceVersion: "5461"
-  selfLink: /api/v1/namespaces/demo/secrets/pg-snap-secret
+  selfLink: /api/v1/namespaces/demo/secrets/es-snap-secret
   uid: a6983b00-5c02-11e7-bb52-08002711f4aa
 type: Opaque
 ```
@@ -213,7 +213,7 @@ snapshot "e1-xyz" created
 
 $ kubedb get snap -n demo
 NAME      DATABASE   STATUS    AGE
-e1-xyz    pg/e1      Running   22s
+e1-xyz    es/e1      Running   22s
 ```
 
 ```yaml
@@ -256,7 +256,7 @@ Here,
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
 ```sh
-$ kubedb describe pg -n demo e1
+$ kubedb describe es -n demo e1
 Name:		e1
 Namespace:	demo
 StartTimestamp:	Mon, 17 Jul 2017 18:46:24 -0700
@@ -296,7 +296,7 @@ Events:
   34m         34m        1         Elasticsearch operator     Normal     SuccessfulValidate   Successfully validate Elasticsearch
 ```
 
-Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
+Once the snapshot Job is complete, you should see the output of the `es_dump` command stored in the GCS bucket.
 
 ![snapshot-console](/docs/images/tutorial/elasticsearch/e1-xyz-snapshot.png)
 
@@ -307,7 +307,7 @@ From the above image, you can see that the snapshot output is stored in a folder
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch tpr to add `spec.backupSchedule` section.
 
 ```yaml
-$ kubedb edit pg e1 -n demo
+$ kubedb edit es e1 -n demo
 
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
@@ -340,9 +340,9 @@ Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snaps
 ```sh
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
-e1-20170718-030836   pg/e1      Succeeded   1m
-e1-20170718-030956   pg/e1      Running     2s
-e1-xyz               pg/e1      Succeeded   51m
+e1-20170718-030836   es/e1      Succeeded   1m
+e1-20170718-030956   es/e1      Running     2s
+e1-xyz               es/e1      Succeeded   51m
 ```
 
 ### Restore from Snapshot
@@ -375,18 +375,18 @@ spec:
 Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
 ```sh
-$ kubedb delete pg e1 -n demo
+$ kubedb delete es e1 -n demo
 elasticsearch "e1" deleted
 
-$ kubedb get pg e1 -n demo
+$ kubedb get es e1 -n demo
 NAME      STATUS    AGE
 e1        Running   9s
 ```
 
-Now, run `kubedb edit pg e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
 
 ```yaml
-$ kubedb delete pg -n demo e1
+$ kubedb delete es -n demo e1
 elasticsearch "e1" deleted
 
 $ kubedb get drmn -n demo e1
