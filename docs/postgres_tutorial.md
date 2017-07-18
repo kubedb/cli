@@ -183,8 +183,122 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ## Taking Snapshots
 Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr.
 
+
+
+KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To configure this backend, following secret keys are needed:
+
+| Key                               | Description                                                |
+|-----------------------------------|------------------------------------------------------------|
+| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
+
+```sh
+$ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
+$ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+$ kubectl create secret generic gcs-secret \
+    --from-file=./GOOGLE_PROJECT_ID \
+    --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+secret "gcs-secret" created
 ```
 
+```yaml
+$ kubectl get secret gcs-secret -o yaml
+
+apiVersion: v1
+data:
+  GOOGLE_PROJECT_ID: PHlvdXItcHJvamVjdC1pZD4=
+  GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
+kind: Secret
+metadata:
+  creationTimestamp: 2017-06-28T13:06:51Z
+  name: gcs-secret
+  namespace: default
+  resourceVersion: "5461"
+  selfLink: /api/v1/namespaces/default/secrets/gcs-secret
+  uid: a6983b00-5c02-11e7-bb52-08002711f4aa
+type: Opaque
+```
+
+
+```
+
+
+$ kubectl create -f ~/Downloads/pg-snap-secret.yaml 
+secret "snap-secret" created
+
+$ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml 
+validating "./docs/examples/tutorial/postgres/demo-2.yaml"
+snapshot "p1-xyz" created
+
+$ kubedb get snap -n demo
+NAME      DATABASE   STATUS    AGE
+p1-xyz    pg/p1      Running   22s
+
+
+$ kubedb get snap -n demo p1-xyz -o yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  creationTimestamp: 2017-07-18T02:18:00Z
+  labels:
+    kubedb.com/kind: Postgres
+    kubedb.com/name: p1
+  name: p1-xyz
+  namespace: demo
+  resourceVersion: "2973"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/p1-xyz
+  uid: 5269701f-6b5f-11e7-b9ca-080027f73ab7
+spec:
+  databaseName: p1
+  gcs:
+    bucket: restic
+  resources: {}
+  storageSecretName: snap-secret
+status:
+  completionTime: 2017-07-18T02:19:11Z
+  phase: Succeeded
+  startTime: 2017-07-18T02:18:00Z
+
+
+$ kubedb describe pg -n demo p1
+Name:		p1
+Namespace:	demo
+StartTimestamp:	Mon, 17 Jul 2017 18:46:24 -0700
+Status:		Running
+Volume:
+  StorageClass:	standard
+  Capacity:	50Mi
+  Access Modes:	RWO
+
+Service:	
+  Name:		p1
+  Type:		ClusterIP
+  IP:		10.0.0.143
+  Port:		db	5432/TCP
+
+Database Secret:
+  Name:	p1-admin-auth
+  Type:	Opaque
+  Data
+  ====
+  .admin:	35 bytes
+
+Snapshots:
+  Name     Bucket      StartTime                         CompletionTime                    Phase
+  ----     ------      ---------                         --------------                    -----
+  p1-xyz   gs:restic   Mon, 17 Jul 2017 19:18:00 -0700   Mon, 17 Jul 2017 19:19:11 -0700   Succeeded
+
+Events:
+  FirstSeen   LastSeen   Count     From                  Type       Reason               Message
+  ---------   --------   -----     ----                  --------   ------               -------
+  1m          1m         1         Snapshot Controller   Normal     SuccessfulSnapshot   Successfully completed snapshot
+  2m          2m         1         Snapshot Controller   Normal     Starting             Backup running
+  33m         33m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
+  33m         33m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created StatefulSet
+  33m         33m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created Postgres
+  34m         34m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
+  34m         34m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
+```
 
 
 
