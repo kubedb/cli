@@ -2,7 +2,7 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   annotations:
-    elastic.kubedb.com/version: 2.3.1
+    elasticsearch.kubedb.com/version: 2.3.1
   creationTimestamp: 2017-06-09T05:50:33Z
   generation: 1
   labels:
