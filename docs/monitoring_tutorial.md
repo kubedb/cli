@@ -6,13 +6,12 @@ At first, you need to have a Kubernetes cluster, and the kubectl command-line to
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
-$ kubectl create -f ./docs/examples/tutorial/postgres/demo-0.yaml 
+$ kubectl create -f ./docs/examples/tutorial/monitoring/demo-0.yaml 
 namespace "demo" created
-deployment "pgadmin" created
-service "pgadmin" created
+deployment "prometheus-operator" created
 
 $ kubectl get pods -n demo --watch
 NAME                      READY     STATUS              RESTARTS   AGE
