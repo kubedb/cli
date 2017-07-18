@@ -104,7 +104,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 		if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
 			return err
 		}
-		fmt.Fprintln(out, "Successfully create cluster role.")
+		fmt.Fprintln(out, "Successfully created cluster role.")
 	} else {
 		// Update existing one
 		clusterRoleOperator.Rules = policyRuleOperator
