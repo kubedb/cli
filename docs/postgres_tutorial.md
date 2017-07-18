@@ -6,7 +6,7 @@ At first, you need to have a Kubernetes cluster, and the kubectl command-line to
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
-TO keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
 $ kubectl create -f ./docs/examples/tutorial/postgres/demo-0.yaml 
@@ -31,12 +31,9 @@ $ minikube ip
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
 
 ## Create a PostgreSQL database
+KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
 
 ```yaml
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
-validating "./docs/examples/tutorial/postgres/demo-1.yaml"
-postgres "p1" created
-
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
@@ -57,8 +54,20 @@ spec:
       scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+
+$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
+validating "./docs/examples/tutorial/postgres/demo-1.yaml"
+postgres "p1" created
 ```
 
+Here,
+ - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.5 database is going to be created.
+
+ - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted.
+
+ - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. If no storage spec is given, an `emptyDir` is used.
+
+ - `spec.`
 ```yaml
 $ kubedb get pg -n demo p1
 NAME      STATUS     AGE
