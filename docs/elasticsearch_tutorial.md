@@ -1,5 +1,5 @@
 # Using Elasticsearch
-This tutorial will show you how to use KubeDB to run a Elasticsearch database.
+This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
 ## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
@@ -11,27 +11,17 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 ```sh
 $ kubectl create -f ./docs/examples/tutorial/elasticsearch/demo-0.yaml
 namespace "demo" created
-deployment "pgadmin" created
-service "pgadmin" created
 
-$ kubectl get pods -n demo --watch
-NAME                      READY     STATUS              RESTARTS   AGE
-pgadmin-538449054-s046r   0/1       ContainerCreating   0          13s
-pgadmin-538449054-s046r   1/1       Running   0          1m
-^C⏎                                                                                                                                                             
-
-$ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
-pgadmin   10.0.0.92    <pending>     80:31188/TCP   1m
-
-$ minikube ip
-192.168.99.100
+$ kubectl get ns
+NAME          STATUS    AGE
+default       Active    3m
+demo          Active    5s
+kube-public   Active    3m
+kube-system   Active    3m
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username `admin` and password `admin`.
-
-## Create a Elasticsearch database
-KubeDB implements a `Elasticsearch` TPR to define the specification of a Elasticsearch database. Below is the `Elasticsearch` object created in this tutorial.
+## Create an Elasticsearch database
+KubeDB implements a `Elasticsearch` TPR to define the specification of an Elasticsearch database. Below is the `Elasticsearch` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -48,20 +38,20 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
+        storage: 50Mi
   init:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 
-$ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-1.yaml 
+$ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-1.yaml
 validating "./docs/examples/tutorial/elasticsearch/demo-1.yaml"
 postgres "e1" created
 ```
 
 Here,
- - `spec.version` is the version of Elasticsearch database. In this tutorial, a Elasticsearch 9.5 database is going to be created.
+ - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 9.5 database is going to be created.
 
  - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
@@ -82,7 +72,7 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-Service:	
+Service:
   Name:		e1
   Type:		ClusterIP
   IP:		10.0.0.161
@@ -166,7 +156,7 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
+Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password.
 
 ```sh
 $ kubectl get pods e1-0 -n demo -o yaml | grep IP
@@ -282,7 +272,7 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-Service:	
+Service:
   Name:		e1
   Type:		ClusterIP
   IP:		10.0.0.143
@@ -339,7 +329,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
+        storage: 50Mi
   init:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"
@@ -587,7 +577,7 @@ e1        WipedOut   1h
 
 
 ### Delete Dormant Database
-You still have a record that there used to be a Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
+You still have a record that there used to be an Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr.
 
 ```sh
 $ kubedb delete drmn e1 -n demo
