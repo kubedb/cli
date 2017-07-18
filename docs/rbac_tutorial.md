@@ -29,9 +29,10 @@ $ kubectl patch deployment kube-dns -n kube-system -p '{"spec":{"template":{"spe
 $  kubectl get pods -n kube-system --watch
 ```
 
-
-
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
+```
+$ kubedb init --rbac
+```
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
