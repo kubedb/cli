@@ -183,9 +183,7 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ## Taking Snapshots
 Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `pg_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
 
-
-
-KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To configure this backend, following secret keys are needed:
+In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
 | Key                               | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -220,12 +218,9 @@ type: Opaque
 ```
 
 
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
+
 ```
-
-
-$ kubectl create -f ~/Downloads/pg-snap-secret.yaml 
-secret "snap-secret" created
-
 $ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml 
 validating "./docs/examples/tutorial/postgres/demo-2.yaml"
 snapshot "p1-xyz" created
