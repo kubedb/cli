@@ -9,11 +9,11 @@ import:
 - package: github.com/spf13/pflag
   version: master
 - package: github.com/k8sdb/apimachinery
-  version: master
+  version: release-0.4
 - package: github.com/k8sdb/elasticsearch
-  version: master
+  version: 0.4.0
 - package: github.com/k8sdb/postgres
-  version: master
+  version: 0.4.0
 - package: k8s.io/kubernetes
   version: ~1.6.0
 - package: k8s.io/apimachinery
