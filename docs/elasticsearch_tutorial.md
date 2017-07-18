@@ -58,57 +58,51 @@ Here,
 KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```sh
-$ kubedb describe es -n demo e1
-Name:		e1
-Namespace:	demo
-StartTimestamp:	Mon, 17 Jul 2017 15:31:34 -0700
-Status:		Running
+$ kubedb describe es e1 -n demo
+Name:			e1
+Namespace:		demo
+CreationTimestamp:	Tue, 18 Jul 2017 14:35:41 -0700
+Status:			Running
+Replicas:		1  total
 Volume:
   StorageClass:	standard
   Capacity:	50Mi
   Access Modes:	RWO
 
-Service:
+Service:	
   Name:		e1
   Type:		ClusterIP
-  IP:		10.0.0.161
-  Port:		db	5432/TCP
-
-Database Secret:
-  Name:	e1-admin-auth
-  Type:	Opaque
-  Data
-  ====
-  .admin:	35 bytes
+  IP:		10.0.0.238
+  Port:		db	9200/TCP
+  Port:		cluster	9300/TCP
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                Type       Reason               Message
-  ---------   --------   -----     ----                --------   ------               -------
-  2m          2m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
-  2m          2m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
-  2m          2m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  3m          3m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
-  3m          3m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
+  FirstSeen   LastSeen   Count     From                     Type       Reason               Message
+  ---------   --------   -----     ----                     --------   ------               -------
+  6m          6m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  6m          6m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
+  8m          8m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  8m          8m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
 
 
 $ kubectl get statefulset -n demo
 NAME      DESIRED   CURRENT   AGE
-e1        1         1         1m
+e1        1         1         8m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-e1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
+data-e1-0   Bound     pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi       RWO           standard       8m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-e1-0   standard                 1m
+pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi       RWO           Delete          Bound     demo/data-e1-0   standard                 8m
 
 $ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
-kubedb    None         <none>                       3m
-e1        10.0.0.143   <none>        5432/TCP       3m
+NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)             AGE
+e1        10.0.0.238   <none>        9200/TCP,9300/TCP   9m
+kubedb    None         <none>                            9m
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
@@ -118,21 +112,15 @@ $ kubedb get es -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  creationTimestamp: 2017-07-17T22:31:34Z
+  creationTimestamp: 2017-07-18T21:35:41Z
   name: e1
   namespace: demo
-  resourceVersion: "2677"
+  resourceVersion: "608"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/elasticsearchs/e1
-  uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
+  uid: 0c174082-6c01-11e7-b566-080027691dbf
 spec:
-  databaseSecret:
-    secretName: e1-admin-auth
   doNotPause: true
-  init:
-    scriptSource:
-      gitRepo:
-        repository: https://github.com/k8sdb/postgres-init-scripts.git
-      scriptPath: postgres-init-scripts/run.sh
+  replicas: 1
   resources: {}
   storage:
     accessModes:
@@ -141,9 +129,9 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  version: "2.3.1"
+  version: 2.3.1
 status:
-  creationTime: 2017-07-17T22:31:34Z
+  creationTime: 2017-07-18T21:35:41Z
   phase: Running
 ```
 
@@ -155,10 +143,32 @@ Now, you can connect to this database from the esAdmin dasboard using the databa
 ```sh
 $ kubectl get pods e1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
-  podIP: 172.17.0.6
+  podIP: 172.17.0.5
 
-$ kubectl get secrets -n demo e1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
-POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
+kubectl get pods -n kube-system -l app=kubedb
+podname=$(kubectl get pods -n kube-system -l app=kubedb -o jsonpath={.items[0].metadata.name})
+kubectl exec -it $podname -n kube-system sh
+
+$ kubectl exec -it $(kubectl get pods -n kube-system -l app=kubedb -o jsonpath={.items[0].metadata.name}) -n kube-system sh
+
+~ $ ps aux
+PID   USER     TIME   COMMAND
+    1 nobody     0:00 /operator run --address=:8080 --rbac=false --v=3
+   18 nobody     0:00 sh
+   26 nobody     0:00 ps aux
+~ $ wget -qO- http://172.17.0.5:9200
+{
+  "name" : "e1-0.demo",
+  "cluster_name" : "e1",
+  "version" : {
+    "number" : "2.3.1",
+    "build_hash" : "bd980929010aef404e7cb0843e61d0665269fc39",
+    "build_timestamp" : "2016-04-04T12:25:05Z",
+    "build_snapshot" : false,
+    "lucene_version" : "5.5.0"
+  },
+  "tagline" : "You Know, for Search"
+}
 ```
 
 ![Using e1 from esAdmin4](/docs/images/tutorial/elasticsearch/e1-esadmin.gif)
