@@ -31,11 +31,11 @@ $ minikube ip
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username `admin` and password `admin`.
 
 ## Create a PostgreSQL database
-KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
+KubeDB implements a `Elasticsearch` TPR to define the specification of a PostgreSQL database. Below is the `Elasticsearch` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: Elasticsearch
 metadata:
   name: p1
   namespace: demo
@@ -69,7 +69,7 @@ Here,
 
  - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/k8sdb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
-KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```sh
 $ kubedb describe pg -n demo p1
@@ -100,11 +100,11 @@ No Snapshots.
 Events:
   FirstSeen   LastSeen   Count     From                Type       Reason               Message
   ---------   --------   -----     ----                --------   ------               -------
-  2m          2m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
-  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+  2m          2m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  2m          2m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
+  2m          2m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  3m          3m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  3m          3m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
 
 
 $ kubectl get statefulset -n demo
@@ -132,7 +132,7 @@ KubeDB operator sets the `status.phase` to `Running` once the database is succes
 ```yaml
 $ kubedb get pg -n demo p1 -o yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: Elasticsearch
 metadata:
   creationTimestamp: 2017-07-17T22:31:34Z
   name: p1
@@ -239,7 +239,7 @@ kind: Snapshot
 metadata:
   creationTimestamp: 2017-07-18T02:18:00Z
   labels:
-    kubedb.com/kind: Postgres
+    kubedb.com/kind: Elasticsearch
     kubedb.com/name: p1
   name: p1-xyz
   namespace: demo
@@ -260,7 +260,7 @@ status:
 
 Here,
 
-- `metadata.labels` should include the type of database `kubedb.com/kind: Postgres` whose snapshot will be taken.
+- `metadata.labels` should include the type of database `kubedb.com/kind: Elasticsearch` whose snapshot will be taken.
 
 - `spec.databaseName` points to the databse whose snapshot is taken.
 
@@ -305,11 +305,11 @@ Events:
   ---------   --------   -----     ----                  --------   ------               -------
   1m          1m         1         Snapshot Controller   Normal     SuccessfulSnapshot   Successfully completed snapshot
   2m          2m         1         Snapshot Controller   Normal     Starting             Backup running
-  33m         33m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
-  33m         33m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created StatefulSet
-  33m         33m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created Postgres
-  34m         34m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
-  34m         34m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
+  33m         33m        1         Elasticsearch operator     Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  33m         33m        1         Elasticsearch operator     Normal     SuccessfulCreate     Successfully created StatefulSet
+  33m         33m        1         Elasticsearch operator     Normal     SuccessfulCreate     Successfully created Elasticsearch
+  34m         34m        1         Elasticsearch operator     Normal     Creating             Creating Kubernetes objects
+  34m         34m        1         Elasticsearch operator     Normal     SuccessfulValidate   Successfully validate Elasticsearch
 ```
 
 Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
@@ -320,13 +320,13 @@ From the above image, you can see that the snapshot output is stored in a folder
 
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres tpr to add `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch tpr to add `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit pg p1 -n demo
 
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: Elasticsearch
 metadata:
   name: p1
   namespace: demo
@@ -365,7 +365,7 @@ p1-xyz               pg/p1      Succeeded   51m
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: Elasticsearch
 metadata:
   name: recovered
   namespace: demo
@@ -388,7 +388,7 @@ spec:
 ## Deleting Database
 
 ### spec.doNotPause
-Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
 ```sh
 $ kubedb delete pg p1 -n demo
@@ -399,7 +399,7 @@ NAME      STATUS    AGE
 p1        Running   9s
 ```
 
-Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Postgres tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `p1` PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `p1` PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
 
 ```yaml
 $ kubedb delete pg -n demo p1
@@ -419,7 +419,7 @@ kind: DormantDatabase
 metadata:
   creationTimestamp: 2017-07-18T03:23:08Z
   labels:
-    kubedb.com/kind: Postgres
+    kubedb.com/kind: Elasticsearch
   name: p1
   namespace: demo
   resourceVersion: "8004"
@@ -462,7 +462,7 @@ status:
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original Postgres tpr.
+ - `spec.origin` is the spec of the original spec of the original Elasticsearch tpr.
 
  - `status.phase` points to the current database state `Paused`.
 
@@ -479,7 +479,7 @@ kind: DormantDatabase
 metadata:
   creationTimestamp: 2017-07-18T03:23:08Z
   labels:
-    kubedb.com/kind: Postgres
+    kubedb.com/kind: Elasticsearch
   name: p1
   namespace: demo
   resourceVersion: "8004"
@@ -522,7 +522,7 @@ status:
   phase: Paused
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Postgres tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Elasticsearch tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ### Wipeout Dormant Database
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
@@ -537,7 +537,7 @@ kind: DormantDatabase
 metadata:
   creationTimestamp: 2017-07-18T03:23:08Z
   labels:
-    kubedb.com/kind: Postgres
+    kubedb.com/kind: Elasticsearch
   name: p1
   namespace: demo
   resourceVersion: "15223"
@@ -587,7 +587,7 @@ p1        WipedOut   1h
 
 
 ### Delete Dormant Database
-You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
+You still have a record that there used to be a Elasticsearch database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
 
 ```sh
 $ kubedb delete drmn p1 -n demo
