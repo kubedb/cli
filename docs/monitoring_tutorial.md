@@ -86,64 +86,6 @@ Here,
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```sh
-$ kubedb describe pg -n demo p1
-Name:		p1
-Namespace:	demo
-StartTimestamp:	Mon, 17 Jul 2017 15:31:34 -0700
-Status:		Running
-Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
-
-Service:	
-  Name:		p1
-  Type:		ClusterIP
-  IP:		10.0.0.161
-  Port:		db	5432/TCP
-
-Database Secret:
-  Name:	p1-admin-auth
-  Type:	Opaque
-  Data
-  ====
-  .admin:	35 bytes
-
-No Snapshots.
-
-Events:
-  FirstSeen   LastSeen   Count     From                Type       Reason               Message
-  ---------   --------   -----     ----                --------   ------               -------
-  2m          2m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
-  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
-
-
-$ kubectl get statefulset -n demo
-NAME      DESIRED   CURRENT   AGE
-p1        1         1         1m
-
-$ kubectl get pvc -n demo
-NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
-
-$ kubectl get pv -n demo
-NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-p1-0   standard                 1m
-
-$ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
-kubedb    None         <none>                       3m
-p1        10.0.0.143   <none>        5432/TCP       3m
-pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
-```
-
-
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
-
-```sh
 $ kubedb get pg -n demo
 NAME      STATUS     AGE
 pmon      Creating   1m
@@ -197,6 +139,9 @@ Events:
 ```
 
 
+Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+
+
 
 ```yaml
 $ kubectl get servicemonitor -n demo
@@ -231,18 +176,8 @@ spec:
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
-
 Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
 
-```sh
-$ kubectl get pods p1-0 -n demo -o yaml | grep IP
-  hostIP: 192.168.99.100
-  podIP: 172.17.0.6
-
-$ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
-POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
-```
 
 ![Prometheus Dashboard](/docs/images/tutorial/monitoring/prometheus.gif)
 
