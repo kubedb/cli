@@ -56,7 +56,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username `admin` and password `admin`.
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
@@ -76,14 +76,9 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+        storage: 50Mi
 
-$ kubedb create -f ./docs/examples/tutorial/rbac/demo-1.yaml 
+$ kubedb create -f ./docs/examples/tutorial/rbac/demo-1.yaml
 validating "./docs/examples/tutorial/rbac/demo-1.yaml"
 postgres "p1" created
 ```

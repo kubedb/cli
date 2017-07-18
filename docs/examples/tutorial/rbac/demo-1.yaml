@@ -12,9 +12,4 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+        storage: 50Mi

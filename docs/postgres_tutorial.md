@@ -1,5 +1,5 @@
 # Using PostgreSQL
-This tutorial will show you how to use KubeDB to run a PostgreSQL database. 
+This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 ## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
@@ -28,7 +28,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188).
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username `admin` and password `admin`.
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
