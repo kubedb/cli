@@ -359,7 +359,81 @@ p1-20170718-030956   pg/p1      Running     2s
 p1-xyz               pg/p1      Succeeded   51m
 ```
 
+## Deleting Database
 
+### spec.doNotPause
+Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+
+```sh
+$ kubedb delete pg p1 -n demo
+postgres "p1" deleted
+
+$ kubedb get pg p1 -n demo
+NAME      STATUS    AGE
+p1        Running   9s
+```
+
+Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Postgres tpr, yKubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `p1` PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+
+```yaml
+$ kubedb delete pg -n demo p1
+postgres "p1" deleted
+
+$ kubedb get drmn -n demo p1
+NAME      STATUS    AGE
+p1        Pausing   20s
+
+$ kubedb get drmn -n demo p1
+NAME      STATUS    AGE
+p1        Paused    3m
+
+$ kubedb get drmn -n demo p1 -o yaml
+apiVersion: kubedb.com/v1alpha1
+kind: DormantDatabase
+metadata:
+  creationTimestamp: 2017-07-18T03:23:08Z
+  labels:
+    kubedb.com/kind: Postgres
+  name: p1
+  namespace: demo
+  resourceVersion: "8004"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
+  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
+spec:
+  origin:
+    metadata:
+      creationTimestamp: null
+      name: p1
+      namespace: demo
+    spec:
+      postgres:
+        backupSchedule:
+          cronExpression: '@every 1m'
+          gcs:
+            bucket: restic
+          resources: {}
+          storageSecretName: snap-secret
+        databaseSecret:
+          secretName: p1-admin-auth
+        init:
+          scriptSource:
+            gitRepo:
+              repository: https://github.com/k8sdb/postgres-init-scripts.git
+            scriptPath: postgres-init-scripts/run.sh
+        resources: {}
+        storage:
+          accessModes:
+          - ReadWriteOnce
+          class: standard
+          resources:
+            requests:
+              storage: 50Mi
+        version: "9.5"
+status:
+  creationTime: 2017-07-18T03:23:08Z
+  pausingTime: 2017-07-18T03:23:48Z
+  phase: Paused
+```
 
 
 In this tutorial, we are going to backup the `/source/data` folder of a `busybox` pod into a local backend. First deploy the following `busybox` Deployment in your cluster. Here we are using a git repository as source volume for demonstration purpose.
