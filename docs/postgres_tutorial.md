@@ -435,6 +435,74 @@ status:
   phase: Paused
 ```
 
+Here,
+ - `spec.origin` is the spec of the original spec of the original Postgres tpr.
+
+ - `status.phase` points to the current database state `Paused`.
+
+
+### Resume Dormant Database
+
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+
+```yaml
+$ kubedb edit drmn -n demo p1
+
+apiVersion: kubedb.com/v1alpha1
+kind: DormantDatabase
+metadata:
+  creationTimestamp: 2017-07-18T03:23:08Z
+  labels:
+    kubedb.com/kind: Postgres
+  name: p1
+  namespace: demo
+  resourceVersion: "8004"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
+  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
+spec:
+  resume: true
+  origin:
+    metadata:
+      creationTimestamp: null
+      name: p1
+      namespace: demo
+    spec:
+      postgres:
+        backupSchedule:
+          cronExpression: '@every 1m'
+          gcs:
+            bucket: restic
+          resources: {}
+          storageSecretName: snap-secret
+        databaseSecret:
+          secretName: p1-admin-auth
+        init:
+          scriptSource:
+            gitRepo:
+              repository: https://github.com/k8sdb/postgres-init-scripts.git
+            scriptPath: postgres-init-scripts/run.sh
+        resources: {}
+        storage:
+          accessModes:
+          - ReadWriteOnce
+          class: standard
+          resources:
+            requests:
+              storage: 50Mi
+        version: "9.5"
+status:
+  creationTime: 2017-07-18T03:23:08Z
+  pausingTime: 2017-07-18T03:23:48Z
+  phase: Paused
+```
+
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Postgres tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+
+### Wipeout Dormant Database
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator in response will delete the PVCs, delete any relevant Snapshot tpr for this database and also delete data store in the Cloud Storage buckets. 
+
+
+
 
 In this tutorial, we are going to backup the `/source/data` folder of a `busybox` pod into a local backend. First deploy the following `busybox` Deployment in your cluster. Here we are using a git repository as source volume for demonstration purpose.
 
