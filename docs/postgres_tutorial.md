@@ -228,8 +228,9 @@ snapshot "p1-xyz" created
 $ kubedb get snap -n demo
 NAME      DATABASE   STATUS    AGE
 p1-xyz    pg/p1      Running   22s
+```
 
-
+```yaml
 $ kubedb get snap -n demo p1-xyz -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
@@ -253,8 +254,22 @@ status:
   completionTime: 2017-07-18T02:19:11Z
   phase: Succeeded
   startTime: 2017-07-18T02:18:00Z
+```
+
+Here,
+
+- `metadata.labels` should include the type of database `kubedb.com/kind: Postgres` whose snapshot will be taken.
+
+- `spec.databaseName` points to the databse whose snapshot is taken.
+
+- `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
+
+- `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 
+You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
+
+```sh
 $ kubedb describe pg -n demo p1
 Name:		p1
 Namespace:	demo
@@ -295,6 +310,9 @@ Events:
   34m         34m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
 ```
 
+Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS buckeet.
+
+![snapshot-console](/docs/images/tutorial/postgres/p1-xyz-snapshot.png)
 
 
 
