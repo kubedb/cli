@@ -499,8 +499,65 @@ status:
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Postgres tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ### Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator in response will delete the PVCs, delete any relevant Snapshot tpr for this database and also delete data store in the Cloud Storage buckets. 
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. 
 
+```yaml
+$ kubedb edit drmn -n demo p1
+# set spec.wipeOut: true
+
+$ kubedb get drmn -n demo p1 -o yaml
+apiVersion: kubedb.com/v1alpha1
+kind: DormantDatabase
+metadata:
+  creationTimestamp: 2017-07-18T03:23:08Z
+  labels:
+    kubedb.com/kind: Postgres
+  name: p1
+  namespace: demo
+  resourceVersion: "15223"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
+  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
+spec:
+  origin:
+    metadata:
+      creationTimestamp: null
+      name: p1
+      namespace: demo
+    spec:
+      postgres:
+        backupSchedule:
+          cronExpression: '@every 1m'
+          gcs:
+            bucket: restic
+          resources: {}
+          storageSecretName: snap-secret
+        databaseSecret:
+          secretName: p1-admin-auth
+        init:
+          scriptSource:
+            gitRepo:
+              repository: https://github.com/k8sdb/postgres-init-scripts.git
+            scriptPath: postgres-init-scripts/run.sh
+        resources: {}
+        storage:
+          accessModes:
+          - ReadWriteOnce
+          class: standard
+          resources:
+            requests:
+              storage: 50Mi
+        version: "9.5"
+  wipeOut: true
+status:
+  creationTime: 2017-07-18T03:23:08Z
+  pausingTime: 2017-07-18T03:23:48Z
+  phase: WipedOut
+  wipeOutTime: 2017-07-18T05:09:59Z
+
+$ kubedb get drmn -n demo
+NAME      STATUS     AGE
+p1        WipedOut   1h
+```
 
 
 
