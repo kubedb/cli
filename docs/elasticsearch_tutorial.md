@@ -30,7 +30,8 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 9.5
+  version: 2.3.1
+  replicas: 1
   doNotPause: true
   storage:
     class: "standard"
@@ -39,15 +40,10 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 
 $ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-1.yaml
 validating "./docs/examples/tutorial/elasticsearch/demo-1.yaml"
-postgres "e1" created
+elasticsearch "e1" created
 ```
 
 Here,
@@ -382,7 +378,7 @@ Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to tru
 
 ```sh
 $ kubedb delete pg e1 -n demo
-postgres "e1" deleted
+elasticsearch "e1" deleted
 
 $ kubedb get pg e1 -n demo
 NAME      STATUS    AGE
@@ -393,7 +389,7 @@ Now, run `kubedb edit pg e1 -n demo` to set `spec.doNotPause` to false or remove
 
 ```yaml
 $ kubedb delete pg -n demo e1
-postgres "e1" deleted
+elasticsearch "e1" deleted
 
 $ kubedb get drmn -n demo e1
 NAME      STATUS    AGE
