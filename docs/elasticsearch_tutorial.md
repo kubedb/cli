@@ -227,15 +227,15 @@ $ kubedb get snap -n demo e1-xyz -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2017-07-18T02:18:00Z
+  creationTimestamp: 2017-07-18T22:21:40Z
   labels:
     kubedb.com/kind: Elasticsearch
     kubedb.com/name: e1
   name: e1-xyz
   namespace: demo
-  resourceVersion: "2973"
+  resourceVersion: "3713"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/e1-xyz
-  uid: 5269701f-6b5f-11e7-b9ca-080027f73ab7
+  uid: 78d99dfe-6c07-11e7-b566-080027691dbf
 spec:
   databaseName: e1
   gcs:
@@ -243,16 +243,16 @@ spec:
   resources: {}
   storageSecretName: snap-secret
 status:
-  completionTime: 2017-07-18T02:19:11Z
+  completionTime: 2017-07-18T22:23:53Z
   phase: Succeeded
-  startTime: 2017-07-18T02:18:00Z
+  startTime: 2017-07-18T22:21:40Z
 ```
 
 Here,
 
 - `metadata.labels` should include the type of database `kubedb.com/kind: Elasticsearch` whose snapshot will be taken.
 
-- `spec.databaseName` points to the databse whose snapshot is taken.
+- `spec.databaseName` points to the database whose snapshot is taken.
 
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
 
@@ -263,46 +263,40 @@ You can also run the `kubedb describe` command to see the recent snapshots taken
 
 ```sh
 $ kubedb describe es -n demo e1
-Name:		e1
-Namespace:	demo
-StartTimestamp:	Mon, 17 Jul 2017 18:46:24 -0700
-Status:		Running
+Name:			e1
+Namespace:		demo
+CreationTimestamp:	Tue, 18 Jul 2017 14:35:41 -0700
+Status:			Running
+Replicas:		1  total
 Volume:
   StorageClass:	standard
   Capacity:	50Mi
   Access Modes:	RWO
 
-Service:
+Service:	
   Name:		e1
   Type:		ClusterIP
-  IP:		10.0.0.143
-  Port:		db	5432/TCP
-
-Database Secret:
-  Name:	e1-admin-auth
-  Type:	Opaque
-  Data
-  ====
-  .admin:	35 bytes
+  IP:		10.0.0.238
+  Port:		db	9200/TCP
+  Port:		cluster	9300/TCP
 
 Snapshots:
   Name     Bucket      StartTime                         CompletionTime                    Phase
   ----     ------      ---------                         --------------                    -----
-  e1-xyz   gs:restic   Mon, 17 Jul 2017 19:18:00 -0700   Mon, 17 Jul 2017 19:19:11 -0700   Succeeded
+  e1-xyz   gs:restic   Tue, 18 Jul 2017 15:21:40 -0700   Tue, 18 Jul 2017 15:23:53 -0700   Succeeded
 
 Events:
-  FirstSeen   LastSeen   Count     From                  Type       Reason               Message
-  ---------   --------   -----     ----                  --------   ------               -------
-  1m          1m         1         Snapshot Controller   Normal     SuccessfulSnapshot   Successfully completed snapshot
-  2m          2m         1         Snapshot Controller   Normal     Starting             Backup running
-  33m         33m        1         Elasticsearch operator     Normal     SuccessfulValidate   Successfully validate Elasticsearch
-  33m         33m        1         Elasticsearch operator     Normal     SuccessfulCreate     Successfully created StatefulSet
-  33m         33m        1         Elasticsearch operator     Normal     SuccessfulCreate     Successfully created Elasticsearch
-  34m         34m        1         Elasticsearch operator     Normal     Creating             Creating Kubernetes objects
-  34m         34m        1         Elasticsearch operator     Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  FirstSeen   LastSeen   Count     From                     Type       Reason               Message
+  ---------   --------   -----     ----                     --------   ------               -------
+  4m          4m         1         Snapshot Controller      Normal     SuccessfulSnapshot   Successfully completed snapshot
+  6m          6m         1         Snapshot Controller      Normal     Starting             Backup running
+  50m         50m        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  50m         50m        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
+  52m         52m        1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  52m         52m        1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
 ```
 
-Once the snapshot Job is complete, you should see the output of the `es_dump` command stored in the GCS bucket.
+Once the snapshot Job is complete, you should see the output of the [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) process stored in the GCS bucket.
 
 ![snapshot-console](/docs/images/tutorial/elasticsearch/e1-xyz-snapshot.png)
 
