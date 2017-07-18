@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: p1
+  name: pmon
   namespace: demo
 spec:
   version: 9.5
@@ -15,7 +15,7 @@ spec:
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
-      namespace: default
+      namespace: demo
       labels:
         app: kubedb
       interval: 10s
