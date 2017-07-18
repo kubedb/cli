@@ -103,7 +103,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 		deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", docker.ImageOperator, version)
 
 		if configureRBAC {
-			if err := roles.EnsureRBACStuff(client, namespace); err != nil {
+			if err := roles.EnsureRBACStuff(client, namespace, out); err != nil {
 				return err
 			}
 			deployment.Spec.Template.Spec.ServiceAccountName = roles.ServiceAccountName
@@ -130,7 +130,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 		}
 
 		if configureRBAC {
-			if err := roles.EnsureRBACStuff(client, namespace); err != nil {
+			if err := roles.EnsureRBACStuff(client, namespace, out); err != nil {
 				return err
 			}
 		}
