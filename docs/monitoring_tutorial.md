@@ -190,7 +190,7 @@ $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
+![Prometheus Dashboard](/docs/images/tutorial/monitoring/prometheus.gif)
 
 
 ## Cleaning up
