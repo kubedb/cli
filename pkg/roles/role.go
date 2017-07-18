@@ -26,18 +26,13 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 	{
 		APIGroups: []string{rbac.GroupName},
-		Resources: []string{"roles"},
-		Verbs:     []string{"get", "create", "delete"},
-	},
-	{
-		APIGroups: []string{rbac.GroupName},
-		Resources: []string{"rolebindings"},
-		Verbs:     []string{"create", "delete"},
+		Resources: []string{"roles", "rolebindings"},
+		Verbs:     []string{"get", "create", "update", "delete"},
 	},
 	{
 		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"serviceaccounts"},
-		Verbs:     []string{"create", "delete"},
+		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
 		APIGroups: []string{apps.GroupName},
@@ -62,7 +57,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{apiv1.GroupName},
 		Resources: []string{"pods"},
-		Verbs:     []string{"get", "list", "delete", "deletecollection"},
+		Verbs:     []string{"get", "create", "list", "delete", "deletecollection"},
 	},
 	{
 		APIGroups: []string{apiv1.GroupName},
