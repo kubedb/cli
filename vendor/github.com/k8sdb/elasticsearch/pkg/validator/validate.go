@@ -9,7 +9,7 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 )
 
-func ValidateElastic(client clientset.Interface, elastic *tapi.Elastic) error {
+func ValidateElastic(client clientset.Interface, elastic *tapi.Elasticsearch) error {
 	if elastic.Spec.Version == "" {
 		return fmt.Errorf(`Object 'Version' is missing in '%v'`, elastic.Spec)
 	}

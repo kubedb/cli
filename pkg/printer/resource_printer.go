@@ -133,7 +133,7 @@ func getColumns(options PrintOptions, t reflect.Type) []string {
 	columns = append(columns, "NAME")
 
 	switch t.String() {
-	case "*api.Elastic", "*api.ElasticList":
+	case "*api.Elasticsearch", "*api.ElasticList":
 		if options.Wide {
 			columns = append(columns, "VERSION")
 		}
@@ -157,7 +157,7 @@ func getColumns(options PrintOptions, t reflect.Type) []string {
 	return columns
 }
 
-func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, options PrintOptions) error {
+func (h *HumanReadablePrinter) printElastic(item *tapi.Elasticsearch, w io.Writer, options PrintOptions) error {
 	name := formatResourceName(options.Kind, item.Name, options.WithKind)
 
 	namespace := item.Namespace
@@ -191,7 +191,7 @@ func (h *HumanReadablePrinter) printElastic(item *tapi.Elastic, w io.Writer, opt
 	return err
 }
 
-func (h *HumanReadablePrinter) printElasticList(itemList *tapi.ElasticList, w io.Writer, options PrintOptions) error {
+func (h *HumanReadablePrinter) printElasticList(itemList *tapi.ElasticsearchList, w io.Writer, options PrintOptions) error {
 	for _, item := range itemList.Items {
 		if err := h.printElastic(&item, w, options); err != nil {
 			return err

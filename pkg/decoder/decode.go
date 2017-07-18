@@ -10,8 +10,8 @@ import (
 
 func Decode(kind string, data []byte) (runtime.Object, error) {
 	switch kind {
-	case tapi.ResourceKindElastic:
-		var elastic *tapi.Elastic
+	case tapi.ResourceKindElasticsearch:
+		var elastic *tapi.Elasticsearch
 		if err := yaml.Unmarshal(data, &elastic); err != nil {
 			return nil, err
 		}

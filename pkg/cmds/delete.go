@@ -7,6 +7,7 @@ import (
 
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
+	"github.com/k8sdb/cli/pkg/validator"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -101,6 +102,10 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 		kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 		if err := util.CheckSupportedResource(kind); err != nil {
 			return err
+		}
+
+		if err := validator.ValidateDeletion(info); err != nil {
+			return cmdutil.AddSourceToErr("validating", info.Source, err)
 		}
 
 		infoList = append(infoList, info)
