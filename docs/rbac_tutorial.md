@@ -92,7 +92,7 @@ Here,
 
  - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/k8sdb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
-KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. Since RBAC is enabled, a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name is also created and used as the service account name for the corresponding StatefulSet.
 
 ```sh
 $ kubedb describe pg -n demo p1
@@ -149,8 +149,72 @@ p1        10.0.0.143   <none>        5432/TCP       3m
 pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
 
+Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+
+```yaml
+$ kubectl get role -n demo p1 -o yaml
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  creationTimestamp: 2017-07-18T20:35:43Z
+  name: p1
+  namespace: demo
+  resourceVersion: "1308"
+  selfLink: /apis/rbac.authorization.k8s.io/v1beta1/namespaces/demo/roles/p1
+  uid: ab72299c-6bf8-11e7-ab55-080027815c31
+rules:
+- apiGroups:
+  - kubedb.com
+  resourceNames:
+  - p1
+  resources:
+  - postgreses
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resourceNames:
+  - p1-admin-auth
+  resources:
+  - secrets
+  verbs:
+  - get
+
+$ kubectl get serviceaccount -n demo p1 -o yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: 2017-07-18T20:35:43Z
+  name: p1
+  namespace: demo
+  resourceVersion: "1317"
+  selfLink: /api/v1/namespaces/demo/serviceaccounts/p1
+  uid: ab73147f-6bf8-11e7-ab55-080027815c31
+secrets:
+- name: p1-token-qxdtf
+
+$ kubectl get rolebindings -n demo p1 -o yaml
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  creationTimestamp: 2017-07-18T20:35:43Z
+  name: p1
+  namespace: demo
+  resourceVersion: "1310"
+  selfLink: /apis/rbac.authorization.k8s.io/v1beta1/namespaces/demo/rolebindings/p1
+  uid: ab7d1eb4-6bf8-11e7-ab55-080027815c31
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: p1
+subjects:
+- kind: ServiceAccount
+  name: p1
+  namespace: demo
+```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+
 
 ```yaml
 $ kubedb get pg -n demo p1 -o yaml
