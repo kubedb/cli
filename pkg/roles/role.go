@@ -82,7 +82,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{"storage.k8s.io"},
 		Resources: []string{"storageclasses"},
-		Verbs:     []string{"create"},
+		Verbs:     []string{"get"},
 	},
 }
 
