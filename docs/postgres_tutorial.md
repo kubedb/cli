@@ -181,7 +181,7 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 
 
 ## Taking Snapshots
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr.
+Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `pg_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 
 
@@ -195,14 +195,14 @@ KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To config
 ```sh
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-$ kubectl create secret generic gcs-secret \
+$ kubectl create secret generic pg-snap-secret -n demo \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "gcs-secret" created
+secret "pg-snap-secret" created
 ```
 
 ```yaml
-$ kubectl get secret gcs-secret -o yaml
+$ kubectl get secret pg-snap-secret -o yaml
 
 apiVersion: v1
 data:
@@ -210,11 +210,11 @@ data:
   GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2017-06-28T13:06:51Z
-  name: gcs-secret
-  namespace: default
+  creationTimestamp: 2017-07-17T18:06:51Z
+  name: pg-snap-secret
+  namespace: demo
   resourceVersion: "5461"
-  selfLink: /api/v1/namespaces/default/secrets/gcs-secret
+  selfLink: /api/v1/namespaces/demo/secrets/pg-snap-secret
   uid: a6983b00-5c02-11e7-bb52-08002711f4aa
 type: Opaque
 ```
