@@ -55,6 +55,43 @@ spec:
       cpu: "500m"
 ```
 
+### spec.version
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+
+### spec.storage
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.databaseSecret
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.nodeSelector
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.init
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.backupSchedule
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.doNotPause
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.monitor
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
+### spec.resources
+`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+
 
 
 ```console
