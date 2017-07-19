@@ -145,7 +145,7 @@ $ kubectl get pods e1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.5
 
-$ kubectl exec -it $(kubectl get pods -n kube-system -l app=kubedb -o jsonpath={.items[0].metadata.name}) -n kube-system sh
+$ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath={.items[0].metadata.name}) -n kube-system sh
 
 ~ $ ps aux
 PID   USER     TIME   COMMAND
