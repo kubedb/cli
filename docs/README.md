@@ -1,7 +1,9 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/k8sdb/cli)](https://goreportcard.com/report/github.com/k8sdb/cli)
+
 # KubeDB
 Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
 
- - Create a database declaratively using TPR
+ - Create a database declaratively using TPR.
  - Take one-off backups or period backups to various cloud stores, eg,, S3, GCS, etc.
  - Restore from backup or clone any database.
  - Native integration with Prometheus for monitoring via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
