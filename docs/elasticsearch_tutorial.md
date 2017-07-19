@@ -167,7 +167,7 @@ PID   USER     TIME   COMMAND
 }
 ```
 
-![Using e1 from esAdmin4](/docs/images/tutorial/elasticsearch/e1.gif)
+![Using e1 from esAdmin4](/docs/images/elasticsearch/e1.gif)
 
 
 ## Database Snapshots
@@ -298,7 +298,7 @@ Events:
 
 Once the snapshot Job is complete, you should see the output of the [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) process stored in the GCS bucket.
 
-![snapshot-console](/docs/images/tutorial/elasticsearch/e1-xyz-snapshot.png)
+![snapshot-console](/docs/images/elasticsearch/e1-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
 

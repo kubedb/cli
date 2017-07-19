@@ -174,7 +174,7 @@ spec:
 
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
-![Prometheus Dashboard](/docs/images/tutorial/monitoring/prometheus.gif)
+![Prometheus Dashboard](/docs/images/monitoring/prometheus.gif)
 
 
 ## Cleaning up

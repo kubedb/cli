@@ -177,7 +177,7 @@ $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
+![Using p1 from PGAdmin4](/docs/images/postgres/p1-pgadmin.gif)
 
 
 ## Database Snapshots
@@ -314,7 +314,7 @@ Events:
 
 Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
 
-![snapshot-console](/docs/images/tutorial/postgres/p1-xyz-snapshot.png)
+![snapshot-console](/docs/images/postgres/p1-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
 
