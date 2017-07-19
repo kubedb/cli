@@ -1,4 +1,4 @@
-# Using PostgreSQL
+# Running PostgreSQL
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 ## Before You Begin

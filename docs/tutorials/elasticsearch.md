@@ -1,4 +1,4 @@
-# Using Elasticsearch
+# Running Elasticsearch
 This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
 ## Before You Begin
