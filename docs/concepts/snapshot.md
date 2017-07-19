@@ -1,6 +1,6 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Snapshots
+# Snapshot
 
 ## What is Snapshot
 A `Snapshot` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for database snapshots in a Kubernetes native way. 
