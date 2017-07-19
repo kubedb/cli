@@ -58,6 +58,7 @@ spec:
 ### spec.version
 `spec.version` is a required field specifying the version of PostgreSQL database. Currently the supported value is `9.5`.
 
+
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
@@ -69,7 +70,6 @@ spec:
 
 To learn how to configure `spec.storage`, please visit the links below:
  - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
- - https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#writing-to-stable-storage
 
 
 ### spec.databaseSecret
@@ -80,14 +80,13 @@ This secret contains a `.admin` key with a ini formatted key-value pairs. Exampl
 POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 ```
 
+
 ### spec.nodeSelector
 `spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
 
 
 ### spec.init
 `spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
-
-
 
 
 ### Database Initialization
