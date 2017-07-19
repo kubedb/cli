@@ -37,7 +37,7 @@ $ kubedb init --rbac
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
-$ kubectl create -f ./docs/examples/tutorial/rbac/demo-0.yaml
+$ kubectl create -f ./docs/examples/rbac/demo-0.yaml
 namespace "demo" created
 deployment "pgadmin" created
 service "pgadmin" created
@@ -78,8 +78,8 @@ spec:
       requests:
         storage: 50Mi
 
-$ kubedb create -f ./docs/examples/tutorial/rbac/demo-1.yaml
-validating "./docs/examples/tutorial/rbac/demo-1.yaml"
+$ kubedb create -f ./docs/examples/rbac/demo-1.yaml
+validating "./docs/examples/rbac/demo-1.yaml"
 postgres "p1" created
 ```
 

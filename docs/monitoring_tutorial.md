@@ -9,7 +9,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
-$ kubectl create -f ./docs/examples/tutorial/monitoring/demo-0.yaml 
+$ kubectl create -f ./docs/examples/monitoring/demo-0.yaml 
 namespace "demo" created
 deployment "prometheus-operator" created
 
@@ -28,7 +28,7 @@ service-monitor.monitoring.coreos.com   Prometheus monitoring for a service   v1
 Once the Prometheus operator TPRs are registered, run the following command to create a Prometheus.
 
 ```sh
- $ kubectl create -f ./docs/examples/tutorial/monitoring/demo-1.yaml
+ $ kubectl create -f ./docs/examples/monitoring/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
 
@@ -69,8 +69,8 @@ spec:
         app: kubedb
       interval: 10s
 
-$ kubedb create -f ./docs/examples/tutorial/monitoring/demo-2.yaml 
-validating "./docs/examples/tutorial/monitoring/demo-2.yaml"
+$ kubedb create -f ./docs/examples/monitoring/demo-2.yaml 
+validating "./docs/examples/monitoring/demo-2.yaml"
 postgres "pmon" created
 ```
 

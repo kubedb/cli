@@ -9,7 +9,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
-$ kubectl create -f ./docs/examples/tutorial/elasticsearch/demo-0.yaml
+$ kubectl create -f ./docs/examples/elasticsearch/demo-0.yaml
 namespace "demo" created
 
 $ kubectl get ns
@@ -41,8 +41,8 @@ spec:
       requests:
         storage: 50Mi
 
-$ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-1.yaml
-validating "./docs/examples/tutorial/elasticsearch/demo-1.yaml"
+$ kubedb create -f ./docs/examples/elasticsearch/demo-1.yaml
+validating "./docs/examples/elasticsearch/demo-1.yaml"
 elasticsearch "e1" created
 ```
 
@@ -213,8 +213,8 @@ type: Opaque
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
 
 ```
-$ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-2.yaml
-validating "./docs/examples/tutorial/elasticsearch/demo-2.yaml"
+$ kubedb create -f ./docs/examples/elasticsearch/demo-2.yaml
+validating "./docs/examples/elasticsearch/demo-2.yaml"
 snapshot "e1-xyz" created
 
 $ kubedb get snap -n demo
@@ -345,7 +345,7 @@ e1-xyz               es/e1      Succeeded   18m
 You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch tpr. See the example `recovered` tpr below:
 
 ```yaml
-$ cat ./docs/examples/tutorial/elasticsearch/demo-4.yaml
+$ cat ./docs/examples/elasticsearch/demo-4.yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
@@ -365,8 +365,8 @@ spec:
     snapshotSource:
       name: e1-xyz
 
-$ kubedb create -f ./docs/examples/tutorial/elasticsearch/demo-4.yaml
-validating "./docs/examples/tutorial/elasticsearch/demo-4.yaml"
+$ kubedb create -f ./docs/examples/elasticsearch/demo-4.yaml
+validating "./docs/examples/elasticsearch/demo-4.yaml"
 elasticsearch "recovered" created
 ```
 

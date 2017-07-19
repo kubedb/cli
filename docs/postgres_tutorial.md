@@ -9,7 +9,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```sh
-$ kubectl create -f ./docs/examples/tutorial/postgres/demo-0.yaml
+$ kubectl create -f ./docs/examples/postgres/demo-0.yaml
 namespace "demo" created
 deployment "pgadmin" created
 service "pgadmin" created
@@ -55,8 +55,8 @@ spec:
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
-validating "./docs/examples/tutorial/postgres/demo-1.yaml"
+$ kubedb create -f ./docs/examples/postgres/demo-1.yaml 
+validating "./docs/examples/postgres/demo-1.yaml"
 postgres "p1" created
 ```
 
@@ -223,8 +223,8 @@ type: Opaque
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
 
 ```
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml
-validating "./docs/examples/tutorial/postgres/demo-2.yaml"
+$ kubedb create -f ./docs/examples/postgres/demo-2.yaml
+validating "./docs/examples/postgres/demo-2.yaml"
 snapshot "p1-xyz" created
 
 $ kubedb get snap -n demo
@@ -365,7 +365,7 @@ p1-xyz               pg/p1      Succeeded   51m
 You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres tpr. See the example `recovered` tpr below:
 
 ```yaml
-$ cat ./docs/examples/tutorial/postgres/demo-4.yaml
+$ cat ./docs/examples/postgres/demo-4.yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
@@ -385,7 +385,7 @@ spec:
     snapshotSource:
       name: p1-xyz
 
-$ kubectl create -f ./docs/examples/tutorial/postgres/demo-4.yaml
+$ kubectl create -f ./docs/examples/postgres/demo-4.yaml
 postgres "recovered" created
 ```
 
