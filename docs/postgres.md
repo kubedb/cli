@@ -33,7 +33,7 @@ spec:
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
   backupSchedule:
-    cronExpression: "@every 1m"
+    cronExpression: "@every 6h"
     storageSecretName: snap-secret
     gcs:
       bucket: restic
