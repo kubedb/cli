@@ -127,7 +127,7 @@ To learn how to monitor Elasticsearch databases, please visit [here](/docs/conce
 
 
 ## Next Steps
-- Learn about the details of Elasticsearch tpr [here](/docs/concepts/elasticsearch.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
