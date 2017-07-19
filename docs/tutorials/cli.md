@@ -265,7 +265,7 @@ For DormantDatabase, _spec.origin_ can't be edited using `kubedb edit`
 
 To learn about various options of `edit` command, please visit [here](/docs/reference/kubedb_edit.md).
 
-#### How to Summarize Databases
+### How to Summarize Databases
 `kubedb summarize` command can be used to generate a JSON formatted summary report for any supported database. The summary contains various stats on database tables and/or indices like, number of rows, the maximum id. This report is intended to be used as a tool to quickly verify whether backup/restore process has worked properly or not. To learn about various options of `summarize` command, please visit [here](/docs/reference/kubedb_summarize.md).
 
 ```console
