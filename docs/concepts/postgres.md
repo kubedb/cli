@@ -93,15 +93,12 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 
 
 ### spec.init
-`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
-
-
-### Database Initialization
-PostgreSQL databases can be initialized in one of two ways:
+`spec.init` is an optional section that can be used to initialize a newly created Postgres database. PostgreSQL databases can be initialized in one of two ways:
 
 #### Initialize via Script
 To initialize a PostgreSQL database using a script (shell script, db migrator, etc.), set the `spec.init.scriptSource` section when creating a Postgres object. ScriptSource must have following information:
-1. `scriptPath:` ScriptPath (The script you want to run)
+
+1. `scriptPath:` ScriptPath (The script you want to run). Note that all path used in script should be relative.
 2. [VolumeSource](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) (Where your script and other data is stored)
 
 Below is an example showing how a shell script from a git repository can be used to initialize a PostgreSQL database.
@@ -122,14 +119,13 @@ spec:
 
 In the above example, KubeDB operator will launch a Job to execute `run.sh` script once StatefulSet pods are running.
 
-> **Note:** all path used in script should be relative
 
 #### Initialize from Snapshots
-To initialize from prior snapshot, set the `spec.init.snapshotSource` section when creating a Postgres object.
+To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating a Postgres object.
 
 In this case, SnapshotSource must have following information:
-1. `namespace:` Namespace of Snapshot object
-2. `name:` Name of the Snapshot
+
+1. `name:` Name of the Snapshot
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -143,20 +139,7 @@ spec:
       name: "snapshot-xyz"
 ```
 
-In the above example, PostgreSQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here,  KubeDB operator will launch a Job to initialize PostgreSQL once StatefulSet pods are running.
-
-
-
-
-
-
-
-
-
-
-
-
-
+In the above example, PostgreSQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize PostgreSQL once StatefulSet pods are running.
 
 ### spec.backupSchedule
 KubeDB supports taking periodic snapshots for Postgres database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly. 
