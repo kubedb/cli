@@ -56,105 +56,32 @@ spec:
 ```
 
 ### spec.version
-`spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.5 database is going to be created.
+`spec.version` is a required field specifying the version of PostgreSQL database. Currently the supported value is `9.5`.
 
 ### spec.storage
-`spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+`spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
+ - `spec.storage.class` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
 
-Class
-A claim can request a particular class by specifying the name of a StorageClass using the attribute storageClassName. Only PVs of the requested class, ones with the same storageClassName as the PVC, can be bound to the PVC.
-PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
+ - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
 
-Access Modes
-Claims use the same conventions as volumes when requesting storage with specific access modes.
-Resources
-Claims, like pods, can request specific quantities of a resource. In this case, the request is for storage. The same resource model applies to both volumes and claims.
+ - `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
 
-
-
-
-https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
-
-https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#writing-to-stable-storage
-
-
-
-
-
-
-To use PersistentVolume, add the `spec.storage` section when creating Postgres object.
-
-```yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
-metadata:
-  name: postgres-db
-spec:
-  version: 9.5
-  storage:
-    class: "gp2"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: "10Gi"
-```
-
-Here we must have to add following storage information in `spec.storage`:
-
-* `class:` StorageClass (`kubectl get storageclasses`)
-* `resources:` ResourceRequirements for PersistentVolumeClaimSpec
-
-As `spec.storage` fields are set, StatefulSet will be created with dynamically provisioned PersistentVolumeClaim. Following command will list PVCs for this database.
-
-```console
-$ kubectl get pvc --selector='kubedb.com/kind=Postgres,kubedb.com/name=postgres-db'
-
-NAME                 STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE
-data-postgres-db-0   Bound     pvc-a1a95954-4a75-11e7-8b69-12f236046fba   10Gi       RWO           2m
-```
-
-
-
+To learn how to configure `spec.storage`, please visit the links below:
+ - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+ - https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#writing-to-stable-storage
 
 
 ### spec.databaseSecret
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user. If not set, KubeDB operator creates a new Secret `{tpr-name}-admin-auth` for storing the password for `postgres` superuser. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-
-Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
-
-Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
-
-```console
-$ kubectl get pods p1-0 -n demo -o yaml | grep IP
-  hostIP: 192.168.99.100
-  podIP: 172.17.0.6
-
-$ kubectl get secrets -n demo p1-admin-auth -o jsonpath='{.data.\.admin}' | base64 -d
-POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
-```
-
-The `.admin` contains a `ini` formatted key/value pairs. 
-
+This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
 ```ini
 POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 ```
 
-
-
-
-
 ### spec.nodeSelector
-
-nodeSelector is the simplest form of constraint. nodeSelector is a field of PodSpec. It specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). The most common usage is one key-value pair
-
-
-https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-
-
-
-
+`spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
 
 
 ### spec.init
