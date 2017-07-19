@@ -98,8 +98,8 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 #### Initialize via Script
 To initialize a PostgreSQL database using a script (shell script, db migrator, etc.), set the `spec.init.scriptSource` section when creating a Postgres object. ScriptSource must have following information:
 
-1. `scriptPath:` ScriptPath (The script you want to run). Note that all path used in script should be relative.
-2. [VolumeSource](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) (Where your script and other data is stored)
+ - `scriptPath:` ScriptPath (The script you want to run). Note that all path used in script should be relative.
+ - [VolumeSource](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) (Where your script and other data is stored)
 
 Below is an example showing how a shell script from a git repository can be used to initialize a PostgreSQL database.
 
@@ -121,11 +121,9 @@ In the above example, KubeDB operator will launch a Job to execute `run.sh` scri
 
 
 #### Initialize from Snapshots
-To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating a Postgres object.
+To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating a Postgres object. In this case, SnapshotSource must have following information:
 
-In this case, SnapshotSource must have following information:
-
-1. `name:` Name of the Snapshot
+ - `name:` Name of the Snapshot
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
