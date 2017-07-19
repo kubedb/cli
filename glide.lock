@@ -1,5 +1,5 @@
-hash: 547e20e8681c2b6f2900c8e0db9bbade8e415b0319663e58b5f5456c49963428
-updated: 2017-07-18T04:48:08.50074987-07:00
+hash: 3f5f7b5e53bf6a9fcbbbd5cbd8c1d2826b833336ca24664708cf7e344240c4b5
+updated: 2017-07-18T19:28:24.950701916-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -211,7 +211,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 77ed1c8a01217656d2080ad51981f6e99adaa177
 - name: github.com/k8sdb/apimachinery
-  version: c861d8cfa945da7b8cee486fd52ec5c6e60bc3f1
+  version: a64d0c4f3de9269c1f941dba497898b3732c2c19
   subpackages:
   - api
   - api/install
@@ -221,11 +221,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 106cf943fc36b0a4cd1b311c87bbec856be0549a
+  version: a73a2826e263192ac8015e139bf3ed405438935f
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: a5c5f3a162910bee24289a7cf71e5e06e6811539
+  version: ca452b15fe2ba3423f7ef8eeca10df2fc3090ff5
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -259,7 +259,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: d994347edadc56d6a7f863775fb6887606685ae6
+  version: 715f41bd7a70b5111f898b71ab484da52ee6266d
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -320,7 +320,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: e665075b5ff79143ba49c58fab02df9dc122afd5
+  version: 295e4bb0ade057ae2cfb9876ab0b54635dbfcea4
   subpackages:
   - gensupport
   - googleapi
