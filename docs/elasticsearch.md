@@ -18,7 +18,7 @@ spec:
   replicas: 1
 ```
 
-```sh
+```console
 $ kubedb create -f  ./docs/examples/elasticsearch/elastic-with-storage.yaml
 
 elastic "elasticsearch-db" created
@@ -30,7 +30,7 @@ Once the Elasticsearch object is created, KubeDB operator will detect it and cre
 * GoverningService (If not available) (name: **kubedb**)
 
 To confirm the new Elasticsearch is ready, run the following command:
-```sh
+```console
 $ kubedb get elastic elasticsearch-db -o wide
 
 NAME               VERSION   STATUS    AGE

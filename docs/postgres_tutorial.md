@@ -8,7 +8,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/postgres/demo-0.yaml
 namespace "demo" created
 deployment "pgadmin" created
@@ -71,7 +71,7 @@ Here,
 
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
-```sh
+```console
 $ kubedb describe pg -n demo p1
 Name:		p1
 Namespace:	demo
@@ -168,7 +168,7 @@ Please note that KubeDB operator has created a new Secret called `p1-admin-auth`
 
 Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
 
-```sh
+```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
@@ -192,7 +192,7 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 | `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
 | `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
 
-```sh
+```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 $ kubectl create secret generic pg-snap-secret -n demo \
@@ -271,7 +271,7 @@ Here,
 
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
-```sh
+```console
 $ kubedb describe pg -n demo p1
 Name:		p1
 Namespace:	demo
@@ -353,7 +353,7 @@ spec:
 ```
 
 Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
-```sh
+```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
 p1-20170718-030836   pg/p1      Succeeded   1m
@@ -394,7 +394,7 @@ Here,
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
 
-```sh
+```console
 $ kubedb get pg -n demo
 NAME        STATUS    AGE
 p1          Running   10m
@@ -441,7 +441,7 @@ Events:
 
 Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
-```sh
+```console
 $ kubedb delete pg p1 -n demo
 error: Postgres "p1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
@@ -636,14 +636,14 @@ p1        WipedOut   1h
 ## Delete Dormant Database
 You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
 
-```sh
+```console
 $ kubedb delete drmn p1 -n demo
 dormantdatabase "p1" deleted
 ```
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
-```sh
+```console
 $ kubectl delete ns demo
 ```
 

@@ -40,7 +40,7 @@ To configure this backend, no secret is needed. Following parameters are availab
 | `spec.local.path`         | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
 | `spec.local.volumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) |
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/snapshot/local/local-snapshot.yaml
 snapshot "local-snapshot" created
 ```
@@ -74,7 +74,7 @@ KubeDB supports AWS S3 service or [Minio](https://minio.io/) servers as snapshot
 | `AWS_ACCESS_KEY_ID`     | `Required`. AWS / Minio access key ID                      |
 | `AWS_SECRET_ACCESS_KEY` | `Required`. AWS / Minio secret access key                  |
 
-```sh
+```console
 $ echo -n '<your-aws-access-key-id-here>' > AWS_ACCESS_KEY_ID
 $ echo -n '<your-aws-secret-access-key-here>' > AWS_SECRET_ACCESS_KEY
 $ kubectl create secret generic s3-secret \
@@ -111,7 +111,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
 | `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store                |
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/snapshot/s3/s3-snapshot.yaml
 snapshot "s3-snapshot" created
 ```
@@ -148,7 +148,7 @@ KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To config
 | `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
 | `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
 
-```sh
+```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 $ kubectl create secret generic gcs-secret \
@@ -184,7 +184,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.gcs.bucket`        | `Required`. Name of Bucket                                                      |
 | `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot will be stored               |
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/snapshot/gcs/gcs-snapshot.yaml
 snapshot "gcs-snapshot" created
 ```
@@ -218,7 +218,7 @@ KubeDB supports Microsoft Azure Storage as snapshot storage backend. To configur
 | `AZURE_ACCOUNT_NAME`    | `Required`. Azure Storage account name                     |
 | `AZURE_ACCOUNT_KEY`     | `Required`. Azure Storage account key                      |
 
-```sh
+```console
 $ echo -n '<your-azure-storage-account-name>' > AZURE_ACCOUNT_NAME
 $ echo -n '<your-azure-storage-account-key>' > AZURE_ACCOUNT_KEY
 $ kubectl create secret generic azure-secret \
@@ -254,7 +254,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.azure.container`   | `Required`. Name of Storage container                                           |
 | `spec.azure.prefix`      | `Optional`. Path prefix into container where snapshot will be stored            |
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/snapshot/azure/azure-snapshot.yaml
 snapshot "azure-snapshot" created
 ```
@@ -305,7 +305,7 @@ KubeDB supports OpenStack Swift as snapshot storage backend. To configure this b
 | `OS_AUTH_TOKEN`          | For authentication based on tokens                         |
 
 
-```sh
+```console
 $ echo -n '<your-auth-url>' > OS_AUTH_URL
 $ echo -n '<your-tenant-id>' > OS_TENANT_ID
 $ echo -n '<your-tenant-name>' > OS_TENANT_NAME
@@ -353,7 +353,7 @@ Now, you can create a Snapshot tpr using this secret. Following parameters are a
 | `spec.swift.container`   | `Required`. Name of Storage container                                           |
 | `spec.swift.prefix`      | `Optional`. Path prefix into container where snapshot will be stored            |
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/snapshot/swift/swift-snapshot.yaml
 snapshot "swift-snapshot" created
 ```
@@ -394,7 +394,7 @@ Before starting backup process, KubeDB operator will validate storage secret by 
 
 Using `kubedb`, create a Snapshot object from `snapshot.yaml`.
 
-```sh
+```console
 $ kubedb create -f ./docs/examples/elasticsearch/snapshot.yaml
 
 snapshot "snapshot-xyz" created
@@ -402,7 +402,7 @@ snapshot "snapshot-xyz" created
 
 Use `kubedb get` to check snap0shot status.
 
-```sh
+```console
 $ kubedb get snap snapshot-xyz -o wide
 
 NAME           DATABASE              BUCKET         STATUS      AGE

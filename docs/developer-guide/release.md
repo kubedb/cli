@@ -1,7 +1,7 @@
 ## apimachinery
 - Make sure `apimachinery` master builds and create a `release-*` branch.
 
-```sh
+```console
 apimachinery (master) $ ./hack/make.py
 Downloading:  https://raw.githubusercontent.com/appscode/libbuild/master/libbuild.py
 Using existing version:  github.appscode.libbuild.libbuild
@@ -29,7 +29,7 @@ apimachinery (release-0.1) $ git merge master
 
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
-```sh
+```console
 postgres (master) $ glide slow
 postgres (master) $ ./hack/make.py
 postgres (master) $ git commit -a -m 'Vendor apimachinery release-0.1'
@@ -60,7 +60,7 @@ postgres (master) $ git push origin master
 
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
-```sh
+```console
 elasticsearch (master) $ glide slow
 elasticsearch (master) $ ./hack/make.py
 elasticsearch (master) $ git commit -a -m 'Vendor apimachinery release-0.1'
@@ -91,7 +91,7 @@ elasticsearch (master) $ git push origin master
 
 - Go back to master branch and change the dependency on `apimachinery` & specific db operator dependency back to master branch.
 
-```sh
+```console
 operator (master) $ glide slow
 operator (master) $ ./hack/make.py
 operator (master) $ git commit -a -m 'Vendor apimachinery & db operator release-0.1'
@@ -122,7 +122,7 @@ operator (master) $ git push origin master
 
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
-```sh
+```console
 cli (master) $ glide slow
 cli (master) $ ./hack/make.py
 cli (master) $ git commit -a -m 'Vendor apimachinery release-0.1'

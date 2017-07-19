@@ -17,7 +17,7 @@ spec:
   version: 9.5
 ```
 
-```sh
+```console
 $ kubedb create -f ./docs/examples/postgres/postgres.yaml
 
 postgres "postgres-db" created
@@ -54,7 +54,7 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 
 To confirm the new PostgreSQL database is ready, run the following command:
 
-```sh
+```console
 $ kubedb get postgres postgres-db -o wide
 
 NAME          VERSION   STATUS    AGE
@@ -90,7 +90,7 @@ Here we must have to add following storage information in `spec.storage`:
 
 As `spec.storage` fields are set, StatefulSet will be created with dynamically provisioned PersistentVolumeClaim. Following command will list PVCs for this database.
 
-```sh
+```console
 $ kubectl get pvc --selector='kubedb.com/kind=Postgres,kubedb.com/name=postgres-db'
 
 NAME                 STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE

@@ -9,7 +9,7 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 `kubedb create` creates a database tpr in `default` namespace by default. Following command will create a Postgres TPR as specified in `postgres.yaml`.
 
-```sh
+```console
 $ kubedb create -f ./docs/examples/postgres/postgres.yaml
 
 postgres "postgres-demo" created
@@ -17,7 +17,7 @@ postgres "postgres-demo" created
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
-```sh
+```console
 $ kubedb create -f postgres.yaml --namespace=kube-system
 
 postgres "postgres-demo" created
@@ -25,7 +25,7 @@ postgres "postgres-demo" created
 
 `kubedb create` command also considers `stdin` as input.
 
-```sh
+```console
 cat postgres.yaml | kubedb create -f -
 ```
 
@@ -35,7 +35,7 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 `kubedb get` command allows users to list or find any KubeDB object. To list all Postgres objects in `default` namespace, run the following command:
 
-```sh
+```console
 $ kubedb get postgres
 
 NAME            STATUS    AGE
@@ -66,13 +66,13 @@ status:
 
 To get JSON of an object, use `--output=json` flag.
 
-```sh
+```console
 $ kubedb get postgres postgres-demo --output=json
 ```
 
 To list all KubeDB objects, use following command:
 
-```sh
+```console
 $ kubedb get all -o wide
 
 NAME                    VERSION   STATUS    AGE
@@ -100,7 +100,7 @@ List command supports short names for each object types. You can use it like `ku
 
 You can print labels with objects. The following command will list all Snapshots with their corresponding labels.
 
-```sh
+```console
 $ kubedb get snap --show-labels
 
 NAME                            DATABASE                STATUS      AGE       LABELS
@@ -111,7 +111,7 @@ snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        ku
 
 You can also filter list using `--selector` flag.
 
-```sh
+```console
 $ kubedb get snap --selector='kubedb.com/kind=Postgres' --show-labels
 
 NAME                            DATABASE           STATUS      AGE       LABELS
@@ -120,7 +120,7 @@ snapshot-20170505-1147          pg/postgres-demo   Succeeded   2h        kubedb.
 ```
 
 To print only object name, run the following command:
-```sh
+```console
 $ kubedb get all -o name
 
 elastic/elasticsearch-demo
@@ -139,7 +139,7 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 `kubedb describe` command allows users to describe any KubeDB object. The following command will describe Postgres database `postgres-demo` with relevant information.
 
-```sh
+```console
 $ kubedb describe pg postgres-demo
 
 Name:		postgres-demo
@@ -195,17 +195,17 @@ Events:
 This command also shows events unless `--show-events=false`
 
 To describe all Postgres objects in `default` namespace, use following command
-```sh
+```console
 $ kubedb describe pg
 ```
 
 To describe all Postgres objects from every namespace, provide `--all-namespaces` flag.
-```sh
+```console
 $ kubedb describe pg --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
-```sh
+```console
 $ kubedb describe all --all-namespaces
 ```
 
@@ -270,7 +270,7 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 
 `kubedb delete` command will delete an object in `default` namespace by default unless namespace is provided. The following command will delete a Postgres `postgres-dev` in default namespace
 
-```sh
+```console
 $ kubedb delete postgres postgres-dev
 
 postgres "postgres-dev" deleted
@@ -278,7 +278,7 @@ postgres "postgres-dev" deleted
 
 You can also use YAML files to delete objects. The following command will delete a postgres using the type and name specified in `postgres.yaml`.
 
-```sh
+```console
 $ kubedb delete -f postgres.yaml
 
 postgres "postgres-dev" deleted
@@ -286,12 +286,12 @@ postgres "postgres-dev" deleted
 
 `kubedb delete` command also takes input from `stdin`.
 
-```sh
+```console
 cat postgres.yaml | kubedb delete -f -
 ```
 
 To delete database with matching labels, use `--selector` flag. The following command will delete postgres with label `postgres.kubedb.com/name=postgres-demo`.
-```sh
+```console
 $ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 ```
 
@@ -300,7 +300,7 @@ To learn about various options of `delete` command, please visit [here](/docs/re
 ## Using Kubectl
 Kubectl has limited support for TPRs in general. You can use Kubectl with KubeDB objects like any other TPRs. Below are some common examples of using Kubectl with KubeDB objects.
 
-```sh
+```console
 # List objects
 $ kubectl get postgres
 $ kubectl get postgres.kubedb.com

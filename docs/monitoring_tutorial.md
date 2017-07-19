@@ -8,7 +8,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/monitoring/demo-0.yaml 
 namespace "demo" created
 deployment "prometheus-operator" created
@@ -27,7 +27,7 @@ service-monitor.monitoring.coreos.com   Prometheus monitoring for a service   v1
 
 Once the Prometheus operator TPRs are registered, run the following command to create a Prometheus.
 
-```sh
+```console
  $ kubectl create -f ./docs/examples/monitoring/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
@@ -83,7 +83,7 @@ Here,
 
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
-```sh
+```console
 $ kubedb get pg -n demo
 NAME      STATUS     AGE
 pmon      Creating   1m
@@ -179,7 +179,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
-```sh
+```console
 $ kubectl delete ns demo
 ```
 

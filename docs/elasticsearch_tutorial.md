@@ -8,7 +8,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-```sh
+```console
 $ kubectl create -f ./docs/examples/elasticsearch/demo-0.yaml
 namespace "demo" created
 
@@ -57,7 +57,7 @@ Here,
 
 KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
-```sh
+```console
 $ kubedb describe es e1 -n demo
 Name:			e1
 Namespace:		demo
@@ -140,7 +140,7 @@ Please note that KubeDB operator has created a new Secret called `e1-admin-auth`
 
 Now, you can connect to this database from the esAdmin dasboard using the database pod IP and `postgres` user password.
 
-```sh
+```console
 $ kubectl get pods e1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.5
@@ -182,7 +182,7 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 | `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
 | `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
 
-```sh
+```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 $ kubectl create secret generic es-snap-secret -n demo \
@@ -261,7 +261,7 @@ Here,
 
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
-```sh
+```console
 $ kubedb describe es -n demo e1
 Name:			e1
 Namespace:		demo
@@ -333,7 +333,7 @@ spec:
 ```
 
 Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
-```sh
+```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
 e1-20170718-223046   es/e1      Succeeded   8m
@@ -375,7 +375,7 @@ Here,
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `e1-xyz` Snapshot.
 
-```sh
+```console
 $ kubedb get es -n demo
 NAME        STATUS    AGE
 e1          Running   1h
@@ -417,7 +417,7 @@ Events:
 
 Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
-```sh
+```console
 $ kubedb delete es e1 -n demo
 error: Elasticsearch "e1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
@@ -594,14 +594,14 @@ e1        WipedOut   1m
 ## Delete Dormant Database
 You still have a record that there used to be an Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr.
 
-```sh
+```console
 $ kubedb delete drmn e1 -n demo
 dormantdatabase "e1" deleted
 ```
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
-```sh
+```console
 $ kubectl delete ns demo
 ```
 
