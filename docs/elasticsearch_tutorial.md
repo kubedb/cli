@@ -93,11 +93,11 @@ e1        1         1         8m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-e1-0   Bound     pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi       RWO           standard       8m
+data-e1-0   Bound     pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi RWO           standard       8m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi       RWO           Delete          Bound     demo/data-e1-0   standard                 8m
+pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi RWO           Delete          Bound     demo/data-e1-0   standard                 8m
 
 $ kubectl get service -n demo
 NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)             AGE

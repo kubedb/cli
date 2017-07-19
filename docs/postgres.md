@@ -12,9 +12,46 @@ As with all other Kubernetes objects, a Postgres needs `apiVersion`, `kind`, and
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: postgres-db
+  name: p1
+  namespace: demo
 spec:
   version: 9.5
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  databaseSecret:
+    secretName: p1-admin-auth
+  nodeSelector:
+    disktype: ssd
+  init:
+    scriptSource:
+      scriptPath: "postgres-init-scripts/run.sh"
+      gitRepo:
+        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: snap-secret
+    gcs:
+      bucket: restic
+  doNotPause: true
+  monitor:
+    agent: coreos-prometheus-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 ```console
