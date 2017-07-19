@@ -151,20 +151,6 @@ KubeDB supports taking periodic snapshots for Postgres database. This is an opti
  - `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
 
 
-## Schedule Backups
-Scheduled backups are supported for all types of databases. To schedule backups, add the following `BackupScheduleSpec` in `spec` of a database tpr.
-All snapshot storage backends are supported for scheduled backup.
-
-```yaml
-spec:
-  backupSchedule:
-    cronExpression: "@every 6h"
-    storageSecretName: "secret-for-bucket"
-    s3:
-      endpoint: 's3.amazonaws.com'
-      bucket: kubedb-qa
-```
-
 ### spec.doNotPause
 `spec.doNotPause` is an optional field that tells KubeDB operator that if this tpr is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Postgres object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
