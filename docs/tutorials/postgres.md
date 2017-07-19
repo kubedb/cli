@@ -173,7 +173,7 @@ $ kubectl get pods p1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
 
-$ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
+$ kubectl get secrets -n demo p1-admin-auth -o jsonpath='{.data.\.admin}' | base64 -d
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
