@@ -121,6 +121,7 @@ class Kitten(object):
         call('glide slow', cwd=repo)
         if git_requires_commit(self.tag, cwd=repo):
             call('./hack/make.py', cwd=repo)
+            call('git add --all', cwd=repo)
             call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
         else:
@@ -142,6 +143,7 @@ class Kitten(object):
             call('glide slow', cwd=repo)
             if git_requires_commit(self.tag, cwd=repo):
                 call('./hack/make.py', cwd=repo)
+                call('git add --all', cwd=repo)
                 call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
                 call('git push origin master', cwd=repo)
             else:
@@ -172,6 +174,7 @@ class Kitten(object):
             call('glide slow', cwd=repo)
             if git_requires_commit(self.tag, cwd=repo):
                 call('./hack/make.py', cwd=repo)
+                call('git add --all', cwd=repo)
                 call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
                 call('git push origin master', cwd=repo)
             else:
@@ -202,6 +205,7 @@ class Kitten(object):
             call('glide slow', cwd=repo)
             if git_requires_commit(self.tag, cwd=repo):
                 call('./hack/make.py', cwd=repo)
+                call('git add --all', cwd=repo)
                 call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
                 call('git push origin master', cwd=repo)
             else:
