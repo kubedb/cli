@@ -135,7 +135,7 @@ snapshot/snapshot-xyz
 
 To learn about various options of `get` command, please visit [here](/docs/reference/kubedb_get.md).
 
-# How to Describe Objects
+### How to Describe Objects
 
 `kubedb describe` command allows users to describe any KubeDB object. The following command will describe Postgres database `postgres-demo` with relevant information.
 
@@ -237,7 +237,7 @@ $ kubedb edit pg postgres-demo
 postgres "postgres-demo" edited
 ```
 
-## Edit restrictions
+#### Edit restrictions
 Various fields of a KubeDb object can't be edited using `edit` command. The following fields are restricted from updates for all KubeDB objects:
 * _apiVersion_
 * _kind_
@@ -314,4 +314,4 @@ $ kubectl delete postgres <name>
 - Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
 - Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
 - Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
-- Want to hack on Stash? Check our [contribution guidelines](/CONTRIBUTING.md).
+- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
