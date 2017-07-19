@@ -2,9 +2,10 @@
 
 This section contains tutorials on how to use KubeDB. Please visit the links below to learn more:
 
-## Using Databases
- - [Using PostgreSQL](/docs/tutorials/postgres.md)
- - [Using Elasticsearch](/docs/tutorials/elasticsearch.md)
+## [Using PostgreSQL](/docs/tutorials/postgres.md)
+This tutorial will show you how to use KubeDB to run a PostgreSQL database.
+
+ - [Using Elasticsearch](/docs/tutorials/elasticsearch.md) : This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
  - [Manage KubeDB objects using CLIs](/docs/tutorials/cli.md)
 
