@@ -45,6 +45,7 @@ To configure this backend, no secret is needed. Following parameters are availab
 | `spec.databaseName`       | `Required`. Name of database                                                            |
 | `spec.local.path`         | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
 | `spec.local.volumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) |
+| `spec.resources`          | `Optional`. Compute resources required by Jobs used to take snapshot or initialize from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
 
 ```console
 $ kubectl create -f ./docs/examples/snapshot/local/local-snapshot.yaml
