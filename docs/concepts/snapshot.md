@@ -1,6 +1,6 @@
-> New to KubeDB? Please start [here](/docs/tutorial.md).
+> New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
-# Snapshots
+# Snapshot
 
 ## What is Snapshot
 A `Snapshot` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for database snapshots in a Kubernetes native way. 
@@ -34,7 +34,7 @@ spec:
       cpu: "500m"
 ```
 
-The `.spec` section supports the following different cloud providers to store snapshot data:
+The `.spec` section supports the following different storage providers for storing snapshot data:
 
 ### Local
 `Local` backend refers to a local path inside snapshot job container. Any Kubernetes supported [persistent volume](https://kubernetes.io/docs/concepts/storage/volumes/) can be used here. Some examples are: `emptyDir` for testing, NFS, Ceph, GlusterFS, etc.
@@ -422,52 +422,3 @@ spec:
       memory: "128Mi"
       cpu: "500m"
 ```
-
-
-## Taking one-off Backup
-To initiate backup process, first create a Snapshot object. A valid Snapshot object must contain the following fields:
-
- - metadata.name
- - metadata.namespace
- - metadata.labels[kubedb.com/kind]
- - spec.databaseName
- - spec.storageSecretName
- - spec.local | spec.s3 | spec.gcs | spec.azure | spec.swift
-
-Before starting backup process, KubeDB operator will validate storage secret by creating an empty file in specified bucket using this secret.
-
-Using `kubedb`, create a Snapshot object from `snapshot.yaml`.
-
-```console
-$ kubedb create -f ./docs/examples/elasticsearch/snapshot.yaml
-
-snapshot "snapshot-xyz" created
-```
-
-Use `kubedb get` to check snap0shot status.
-
-```console
-$ kubedb get snap snapshot-xyz -o wide
-
-NAME           DATABASE              BUCKET         STATUS      AGE
-snapshot-xyz   es/elasticsearch-db   s3:snapshot    Succeeded   24m
-```
-
-
-## Schedule Backups
-Scheduled backups are supported for all types of databases. To schedule backups, add the following `BackupScheduleSpec` in `spec` of a database tpr.
-All snapshot storage backends are supported for scheduled backup.
-
-```yaml
-spec:
-  backupSchedule:
-    cronExpression: "@every 6h"
-    storageSecretName: "secret-for-bucket"
-    s3:
-      endpoint: 's3.amazonaws.com'
-      bucket: kubedb-qa
-```
-
-`spec.backupSchedule.schedule` is a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26) that indicates how often backups are taken.
-
-When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a Snapshot object. This triggers operator to create a Job to take backup.

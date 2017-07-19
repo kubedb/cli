@@ -1,5 +1,5 @@
 # KubeDB
-Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB by AppsCode is a framework for writing operators for any database that support the following operational requirements:
+Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
 
  - Create a database declaratively using TPR
  - Take one-off backups or period backups to various cloud stores, eg,, S3, GCS, etc.
@@ -9,7 +9,7 @@ Running production quality database in Kubernetes can be tricky to say the least
  - Keep track of deleted databases, cleanup prior snapshots with a single command.
  - Use cli to manage databases like kubectl for Kubernetes.
  
-Currently we include a complete implementation for Postgres and ElasticSearch database based on KubeDB framework.
+KubeDB is developed at AppsCode Inc. to run their SAAS platform on Kubernetes. Currently we include a complete implementations for Postgres and ElasticSearch database based on K8sdb framework.
 
 ## Supported Versions
 Kubernetes 1.5+
@@ -18,7 +18,7 @@ Kubernetes 1.5+
 To install KubeDB, please follow the guide [here](/docs/install.md).
 
 ## Using KubeDB
-Want to learn how to use KubeDB? Please start [here](/docs/tutorial.md).
+Want to learn how to use KubeDB? Please start [here](/docs/tutorials/README.md).
 
 ## Contribution guidelines
 Want to help improve KubeDB? Please start [here](/CONTRIBUTING.md).

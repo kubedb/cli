@@ -1,4 +1,4 @@
-> New to KubeDB? Please start [here](/docs/tutorial.md).
+> New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Uninstall KubeDB
 Please follow the steps below to uninstall KubeDB:

@@ -1,6 +1,6 @@
-> New to KubeDB? Please start [here](/docs/tutorial.md).
+> New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
-# Postgreses
+# Postgres
 
 ## What is Postgres
 A `Postgres` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for [PostgreSQL](https://www.postgresql.org/) in a Kubernetes native way. You only need to describe the desired database configuration in a Postgres object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
