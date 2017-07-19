@@ -38,6 +38,13 @@ spec:
     gcs:
       bucket: restic
       prefix: demo
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
   doNotPause: true
   monitor:
     agent: coreos-prometheus-operator
@@ -73,7 +80,7 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user. If not set, KubeDB operator creates a new Secret `{tpr-name}-admin-auth` for storing the password for `postgres` superuser. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user. If not set, KubeDB operator creates a new Secret `{tpr-name}-admin-auth` for storing the password for `postgres` superuser for each Postgres object. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
 This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
 ```ini
@@ -152,9 +159,22 @@ In the above example, PostgreSQL database will be initialized from Snapshot `sna
 
 
 ### spec.backupSchedule
-`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+KubeDB supports taking periodic snapshots for Postgres database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly. 
 
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres tpr to add `spec.backupSchedule` section.
+ - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
+ 
+ - `` 
+
+`spec.backupSchedule.schedule` is a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26) that indicates how often backups are taken.
+
+
+
+| Parameter                 | Description                                                                             |
+|---------------------------|-----------------------------------------------------------------------------------------|
+| `spec.databaseName`       | `Required`. Name of database                                                            |
+| `spec.local.path`         | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
+| `spec.local.volumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) |
+| `spec.resources`          | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
 
 
 ## Schedule Backups
@@ -170,10 +190,6 @@ spec:
       endpoint: 's3.amazonaws.com'
       bucket: kubedb-qa
 ```
-
-`spec.backupSchedule.schedule` is a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26) that indicates how often backups are taken.
-
-When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a Snapshot object. This triggers operator to create a Job to take backup.
 
 
 

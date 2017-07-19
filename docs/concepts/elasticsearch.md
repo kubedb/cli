@@ -37,6 +37,13 @@ spec:
     gcs:
       bucket: restic
       prefix: demo
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m" 
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
