@@ -37,7 +37,6 @@ func GetSupportedResource(resource string) (string, error) {
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
-	return resource, nil
 }
 
 func GetResourceType(resource string) (string, error) {
@@ -61,7 +60,6 @@ func GetResourceType(resource string) (string, error) {
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
-	return resource, nil
 }
 
 func CheckSupportedResource(kind string) error {
