@@ -1,4 +1,4 @@
-> New to KubeDB? Please start [here](/docs/tutorial.md).
+> New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Installation Guide
 
@@ -60,7 +60,7 @@ Now, to confirm TPR groups have been registered by the operator, run the followi
 $ kubectl get thirdpartyresources -l app=kubedb
 ```
 
-Now, you are ready to [create your first database](/docs/tutorial.md) using KubeDB.
+Now, you are ready to [create your first database](/docs/tutorials/README.md) using KubeDB.
 
 ## Upgrade KubeDB
 To upgrade KubeDB cli, just replace the old cli with the new version.

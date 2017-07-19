@@ -18,7 +18,7 @@ Kubernetes 1.5+
 To install KubeDB, please follow the guide [here](/docs/install.md).
 
 ## Using KubeDB
-Want to learn how to use KubeDB? Please start [here](/docs/tutorial.md).
+Want to learn how to use KubeDB? Please start [here](/docs/tutorials/README.md).
 
 ## Contribution guidelines
 Want to help improve KubeDB? Please start [here](/CONTRIBUTING.md).
