@@ -1,5 +1,5 @@
 # Using RBAC with KubeDB
-This tutorial will show you how to use KubeDB in a RBAC enabled cluster.
+This tutorial will show you how to use KubeDB in a [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) enabled cluster.
 
 ## Before You Begin
 At first, you need to have a RBAC enabled Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). To create a RBAC enabled cluster using MiniKube, follow the instructions below:
