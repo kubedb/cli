@@ -34,7 +34,7 @@ spec:
       cpu: "500m"
 ```
 
-The `.spec` section supports the following different cloud providers to store snapshot data:
+The `.spec` section supports the following different storage providers for storing snapshot data:
 
 ### Local
 `Local` backend refers to a local path inside snapshot job container. Any Kubernetes supported [persistent volume](https://kubernetes.io/docs/concepts/storage/volumes/) can be used here. Some examples are: `emptyDir` for testing, NFS, Ceph, GlusterFS, etc.
