@@ -40,7 +40,7 @@ $ ./hack/builddeps.sh
 ```
 
 #### Build Binary
-```
+```console
 $ ./hack/make.py
 ```
 
