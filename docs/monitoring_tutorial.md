@@ -1,4 +1,4 @@
-# Using PostgreSQL
+# Using Prometheus with KubeDB
 This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
 ## Before You Begin

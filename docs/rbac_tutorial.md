@@ -1,4 +1,4 @@
-# Using PostgreSQL
+# Using RBAC with KubeDB
 This tutorial will show you how to use KubeDB to in a RBAC enabled cluster.
 
 ## Before You Begin
