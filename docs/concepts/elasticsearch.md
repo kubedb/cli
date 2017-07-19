@@ -134,3 +134,12 @@ spec:
 
 In the above example, Elasticsearch database will be initialized from Snapshot `snapshot-xyz` in `default`
 namespace. Here,  KubeDB operator will launch a Job to initialize Elasticsearch once StatefulSet pods are running.
+
+
+## Next Steps
+- Learn about the details of Elasticsearch tpr [here](/docs/concepts/elasticsearch.md).
+- See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
+- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
+- Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

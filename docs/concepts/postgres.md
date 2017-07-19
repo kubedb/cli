@@ -248,53 +248,10 @@ To learn how to monitor Postgres databases, please visit [here](/docs/concepts/m
 `spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 
-
-
-```console
-$ kubedb create -f ./docs/examples/postgres/postgres.yaml
-
-postgres "postgres-db" created
-```
-
-Once the Postgres object is created, KubeDB operator will detect it and create the following Kubernetes objects in the same namespace:
-* StatefulSet (name: **postgres-db**-pg)
-* Service (name: **postgres-db**)
-* GoverningService (If not available) (name: **kubedb**)
-* Secret (name: **postgres-db**-admin-auth)
-
-Since secret name is not provided during creating Postgres object, a secret will be created with random password.
-
-```yaml
-$ kubectl get secret postgres-db-admin-auth -o yaml
-apiVersion: v1
-data:
-  .admin: UE9TVEdSRVNfUEFTU1dPUkQ9dlBsVDJQemV3Q2FDM1haUAo=
-kind: Secret
-metadata:
-  labels:
-    kubedb.com/kind: Postgres
-  name: postgres-db-admin-auth
-  namespace: default
-type: Opaque
-```
-
-The `.admin` contains a `ini` formatted key/value pairs. 
-
-```ini
-POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
-```
-> **Note:** default username is **`postgres`**
-
-To confirm the new PostgreSQL database is ready, run the following command:
-
-```console
-$ kubedb get postgres postgres-db -o wide
-
-NAME          VERSION   STATUS    AGE
-postgres-db   9.5       Running   34m
-```
-
-This database does not have any PersistentVolume behind StatefulSet pods.
-
-
-### Using PersistentVolume
+## Next Steps
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
+- See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
+- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
+- Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
