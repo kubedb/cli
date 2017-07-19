@@ -278,7 +278,7 @@ E0719 08:32:47.791193   16159 portforward.go:317] error copying from local conne
 Summary report for "postgreses/p1" has been stored in 'report-20170719-153247.json'
 ```
 
-```json
+```yaml
 $ kubedb compare report-20170719-152824.json report-20170719-153247.json
 Comparison result has been stored in 'result-20170719-153401.txt'.
 
