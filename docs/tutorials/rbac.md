@@ -270,3 +270,10 @@ $ kubectl delete ns demo
 ```
 
 If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/uninstall.md).
+
+
+## Next Steps
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Want to hack on Stash? Check our [contribution guidelines](/CONTRIBUTING.md).

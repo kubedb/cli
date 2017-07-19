@@ -308,3 +308,10 @@ $ kubectl get postgres.kubedb.com
 # Delete objects
 $ kubectl delete postgres <name>
 ```
+
+
+## Next Steps
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Want to hack on Stash? Check our [contribution guidelines](/CONTRIBUTING.md).
