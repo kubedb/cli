@@ -55,6 +55,8 @@ spec:
       cpu: "500m"
 ```
 
+
+
 ```console
 $ kubedb create -f ./docs/examples/postgres/postgres.yaml
 

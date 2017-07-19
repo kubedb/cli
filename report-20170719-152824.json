@@ -1,0 +1,355 @@
+{
+  "kind": "Postgres",
+  "apiVersion": "kubedb.com/v1alpha1",
+  "metadata": {
+    "name": "p1",
+    "namespace": "demo",
+    "creationTimestamp": "2017-07-19T15:11:45Z"
+  },
+  "summary": {
+    "postgres": {
+      "postgres": {
+        "schema": {
+          "data": {
+            "table": {
+              "dashboard": {
+                "totalRow": 0,
+                "maxId": 0,
+                "nextId": 2
+              }
+            }
+          },
+          "information_schema": {
+            "table": {
+              "sql_features": {
+                "totalRow": 671,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "sql_implementation_info": {
+                "totalRow": 12,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "sql_languages": {
+                "totalRow": 4,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "sql_packages": {
+                "totalRow": 10,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "sql_parts": {
+                "totalRow": 9,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "sql_sizing": {
+                "totalRow": 23,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "sql_sizing_profiles": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              }
+            }
+          },
+          "pg_catalog": {
+            "table": {
+              "pg_aggregate": {
+                "totalRow": 138,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_am": {
+                "totalRow": 6,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_amop": {
+                "totalRow": 676,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_amproc": {
+                "totalRow": 536,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_attrdef": {
+                "totalRow": 1,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_attribute": {
+                "totalRow": 2445,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_auth_members": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_authid": {
+                "totalRow": 1,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_cast": {
+                "totalRow": 213,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_class": {
+                "totalRow": 317,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_collation": {
+                "totalRow": 7,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_constraint": {
+                "totalRow": 4,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_conversion": {
+                "totalRow": 132,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_database": {
+                "totalRow": 3,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_db_role_setting": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_default_acl": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_depend": {
+                "totalRow": 7289,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_description": {
+                "totalRow": 3833,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_enum": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_event_trigger": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_extension": {
+                "totalRow": 1,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_foreign_data_wrapper": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_foreign_server": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_foreign_table": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_index": {
+                "totalRow": 123,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_inherits": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_language": {
+                "totalRow": 4,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_largeobject": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_largeobject_metadata": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_namespace": {
+                "totalRow": 7,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_opclass": {
+                "totalRow": 158,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_operator": {
+                "totalRow": 772,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_opfamily": {
+                "totalRow": 111,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_pltemplate": {
+                "totalRow": 8,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_policy": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_proc": {
+                "totalRow": 2821,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_range": {
+                "totalRow": 6,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_replication_origin": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_rewrite": {
+                "totalRow": 114,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_seclabel": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_shdepend": {
+                "totalRow": 1,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_shdescription": {
+                "totalRow": 3,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_shseclabel": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_statistic": {
+                "totalRow": 402,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_tablespace": {
+                "totalRow": 2,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_transform": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_trigger": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_ts_config": {
+                "totalRow": 16,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_ts_config_map": {
+                "totalRow": 304,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_ts_dict": {
+                "totalRow": 16,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_ts_parser": {
+                "totalRow": 1,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_ts_template": {
+                "totalRow": 5,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_type": {
+                "totalRow": 358,
+                "maxId": -1,
+                "nextId": -1
+              },
+              "pg_user_mapping": {
+                "totalRow": 0,
+                "maxId": -1,
+                "nextId": -1
+              }
+            }
+          },
+          "pg_temp_1": {
+            "table": {}
+          },
+          "pg_toast": {
+            "table": {}
+          },
+          "pg_toast_temp_1": {
+            "table": {}
+          },
+          "public": {
+            "table": {}
+          }
+        }
+      }
+    }
+  },
+  "status": {
+    "startTime": "2017-07-19T15:28:24Z",
+    "completionTime": "2017-07-19T15:28:24Z"
+  }
+}
