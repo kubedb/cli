@@ -1,6 +1,6 @@
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# Create Database
+### How to create objectrs
 
 `kubedb create` creates a database tpr in `default` namespace by default. Following command will create a Postgres TPR as specified in `postgres.yaml`.
 
@@ -30,7 +30,7 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 > New to KubeDB? Please start [here](/docs/tutorial.md).
 
-# List Databases
+### List Databases
 
 `kubedb get` command allows users to list or find any KubeDB object. To list all Postgres objects in `default` namespace, run the following command:
 
