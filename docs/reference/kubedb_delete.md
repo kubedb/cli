@@ -22,8 +22,8 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
   # Delete a postgres based on the type and name in the JSON passed into stdin.
   cat postgres.json | kubedb delete -f -
   
-  # Delete elastic with label elastic.kubedb.com/name=elasticsearch-demo.
-  kubedb delete elastic -l elastic.kubedb.com/name=elasticsearch-demo
+  # Delete elastic with label elasticsearch.kubedb.com/name=elasticsearch-demo.
+  kubedb delete elastic -l elasticsearch.kubedb.com/name=elasticsearch-demo
 ```
 
 ### Options

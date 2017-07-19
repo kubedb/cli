@@ -12,12 +12,50 @@ As with all other Kubernetes objects, a Postgres needs `apiVersion`, `kind`, and
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: postgres-db
+  name: p1
+  namespace: demo
 spec:
   version: 9.5
+  storage:
+    class: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  databaseSecret:
+    secretName: p1-admin-auth
+  nodeSelector:
+    disktype: ssd
+  init:
+    scriptSource:
+      scriptPath: "postgres-init-scripts/run.sh"
+      gitRepo:
+        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: snap-secret
+    gcs:
+      bucket: restic
+      prefix: demo
+  doNotPause: true
+  monitor:
+    agent: coreos-prometheus-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
-```sh
+```console
 $ kubedb create -f ./docs/examples/postgres/postgres.yaml
 
 postgres "postgres-db" created
@@ -54,7 +92,7 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 
 To confirm the new PostgreSQL database is ready, run the following command:
 
-```sh
+```console
 $ kubedb get postgres postgres-db -o wide
 
 NAME          VERSION   STATUS    AGE
@@ -90,7 +128,7 @@ Here we must have to add following storage information in `spec.storage`:
 
 As `spec.storage` fields are set, StatefulSet will be created with dynamically provisioned PersistentVolumeClaim. Following command will list PVCs for this database.
 
-```sh
+```console
 $ kubectl get pvc --selector='kubedb.com/kind=Postgres,kubedb.com/name=postgres-db'
 
 NAME                 STATUS    VOLUME                                     CAPACITY   ACCESSMODES   AGE

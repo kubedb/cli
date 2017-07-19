@@ -28,32 +28,32 @@ For each of these repositories, you can get source code and build code using the
 
 #### Download Source
 
-```sh
+```console
 $ go get github.com/k8sdb/operator
 $ cd $(go env GOPATH)/src/github.com/k8sdb/operator
 ```
 
 #### Install Dev tools
 To install various dev tools for KubeDB, run the following command:
-```sh
+```console
 $ ./hack/builddeps.sh
 ```
 
 #### Build Binary
-```
+```console
 $ ./hack/make.py
 ```
 
 #### Dependency management
 For KubeDB original repositories, we use [Glide](https://github.com/Masterminds/glide) to manage dependencies. Dependencies are already checked in the `vendor` folder. If you want to update/add dependencies, run:
-```sh
+```console
 $ glide slow
 ```
 
 #### Build Docker images
 For unified operator or db specific operators, we support building Docker images. To build and push your custom Docker image, follow the steps below. To release a new version of KubeDB, please follow the [release guide](/docs/developer-guide/release.md).
 
-```sh
+```console
 # Build Docker image
 $ ./hack/docker/operator/setup.sh; ./hack/docker/operator/setup.sh push
 
@@ -69,7 +69,7 @@ $ docker push aerokite/operator:default
 ```
 
 #### Generate CLI Reference Docs
-```sh
+```console
 $ cd ~/go/src/github.com/k8sdb/cli
 $ ./hack/gendocs/make.sh 
 ```

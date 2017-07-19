@@ -12,7 +12,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
+        storage: 50Mi
   init:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"

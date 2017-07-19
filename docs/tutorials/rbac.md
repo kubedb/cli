@@ -1,21 +1,21 @@
-# Using PostgreSQL
-This tutorial will show you how to use KubeDB to in a RBAC enabled cluster.
+# Using RBAC with KubeDB
+This tutorial will show you how to use KubeDB in a RBAC enabled cluster.
 
 ## Before You Begin
 At first, you need to have a RBAC enabled Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). To create a RBAC enabled cluster using MiniKube, follow the instructions below:
 
 1. If you are currently running a Minukube cluster without RBAC, delete the cluster. This will delete any objects running in the cluster.
-```sh
+```console
 $ minikube delete
 ```
 
 2. Now, create a RBAC cluster with RBAC enabled.
-```sh
+```console
 $ minikube start --extra-config=apiserver.Authorization.Mode=RBAC
 ```
 
 3. Once the cluster is up and running, you need to set ServiceAccount for the `kube-dns` addon to successfully run it.
-```sh
+```console
 # Wait for kube-dns deployment to be created.
 $  kubectl get deployment -n kube-system --watch
 
@@ -36,8 +36,8 @@ $ kubedb init --rbac
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
-```sh
-$ kubectl create -f ./docs/examples/tutorial/rbac/demo-0.yaml
+```console
+$ kubectl create -f ./docs/examples/rbac/demo-0.yaml
 namespace "demo" created
 deployment "pgadmin" created
 service "pgadmin" created
@@ -78,8 +78,8 @@ spec:
       requests:
         storage: 50Mi
 
-$ kubedb create -f ./docs/examples/tutorial/rbac/demo-1.yaml
-validating "./docs/examples/tutorial/rbac/demo-1.yaml"
+$ kubedb create -f ./docs/examples/rbac/demo-1.yaml
+validating "./docs/examples/rbac/demo-1.yaml"
 postgres "p1" created
 ```
 
@@ -92,7 +92,7 @@ Here,
 
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
-```sh
+```console
 $ kubedb describe pg -n demo p1
 Name:		p1
 Namespace:	demo
@@ -134,11 +134,11 @@ p1        1         1         1m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
+data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi RWO           standard       1m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-p1-0   standard                 1m
+pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi RWO           Delete          Bound     demo/data-p1-0   standard                 1m
 
 $ kubectl get service -n demo
 NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
@@ -253,7 +253,7 @@ Please note that KubeDB operator has created a new Secret called `p1-admin-auth`
 
 Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
 
-```sh
+```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
@@ -262,11 +262,10 @@ $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/rbac/p1-pgadmin.gif)
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
-```sh
+```console
 $ kubectl delete ns demo
 ```
 

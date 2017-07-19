@@ -8,8 +8,8 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
-```sh
-$ kubectl create -f ./docs/examples/tutorial/postgres/demo-0.yaml
+```console
+$ kubectl create -f ./docs/examples/postgres/demo-0.yaml
 namespace "demo" created
 deployment "pgadmin" created
 service "pgadmin" created
@@ -48,15 +48,15 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
+        storage: 50Mi
   init:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-1.yaml 
-validating "./docs/examples/tutorial/postgres/demo-1.yaml"
+$ kubedb create -f ./docs/examples/postgres/demo-1.yaml 
+validating "./docs/examples/postgres/demo-1.yaml"
 postgres "p1" created
 ```
 
@@ -71,7 +71,7 @@ Here,
 
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
-```sh
+```console
 $ kubedb describe pg -n demo p1
 Name:		p1
 Namespace:	demo
@@ -113,11 +113,11 @@ p1        1         1         1m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           standard       1m
+data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi RWO           standard       1m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi       RWO           Delete          Bound     demo/data-p1-0   standard                 1m
+pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi RWO           Delete          Bound     demo/data-p1-0   standard                 1m
 
 $ kubectl get service -n demo
 NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
@@ -168,7 +168,7 @@ Please note that KubeDB operator has created a new Secret called `p1-admin-auth`
 
 Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
 
-```sh
+```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
@@ -177,7 +177,7 @@ $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/postgres/p1-pgadmin.gif)
+![Using p1 from PGAdmin4](/docs/images/postgres/p1-pgadmin.gif)
 
 
 ## Database Snapshots
@@ -192,7 +192,7 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 | `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
 | `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
 
-```sh
+```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 $ kubectl create secret generic pg-snap-secret -n demo \
@@ -223,8 +223,8 @@ type: Opaque
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
 
 ```
-$ kubedb create -f ./docs/examples/tutorial/postgres/demo-2.yaml
-validating "./docs/examples/tutorial/postgres/demo-2.yaml"
+$ kubedb create -f ./docs/examples/postgres/demo-2.yaml
+validating "./docs/examples/postgres/demo-2.yaml"
 snapshot "p1-xyz" created
 
 $ kubedb get snap -n demo
@@ -271,7 +271,7 @@ Here,
 
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
-```sh
+```console
 $ kubedb describe pg -n demo p1
 Name:		p1
 Namespace:	demo
@@ -314,7 +314,7 @@ Events:
 
 Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
 
-![snapshot-console](/docs/images/tutorial/postgres/p1-xyz-snapshot.png)
+![snapshot-console](/docs/images/postgres/p1-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
 
@@ -339,7 +339,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi      
+        storage: 50Mi
   init:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"
@@ -353,7 +353,7 @@ spec:
 ```
 
 Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
-```sh
+```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
 p1-20170718-030836   pg/p1      Succeeded   1m
@@ -365,7 +365,7 @@ p1-xyz               pg/p1      Succeeded   51m
 You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres tpr. See the example `recovered` tpr below:
 
 ```yaml
-$ cat ./docs/examples/tutorial/postgres/demo-4.yaml
+$ cat ./docs/examples/postgres/demo-4.yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
@@ -385,7 +385,7 @@ spec:
     snapshotSource:
       name: p1-xyz
 
-$ kubectl create -f ./docs/examples/tutorial/postgres/demo-4.yaml
+$ kubectl create -f ./docs/examples/postgres/demo-4.yaml
 postgres "recovered" created
 ```
 
@@ -394,7 +394,7 @@ Here,
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
 
-```sh
+```console
 $ kubedb get pg -n demo
 NAME        STATUS    AGE
 p1          Running   10m
@@ -437,12 +437,11 @@ Events:
   5m          5m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
 ```
 
-## Deleting Database
+## Pause Database
 
-### spec.doNotPause
 Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
-```sh
+```console
 $ kubedb delete pg p1 -n demo
 error: Postgres "p1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
@@ -515,7 +514,7 @@ Here,
  - `status.phase` points to the current database state `Paused`.
 
 
-### Resume Dormant Database
+## Resume Dormant Database
 
 To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
 
@@ -572,7 +571,7 @@ status:
 
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Postgres tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
-### Wipeout Dormant Database
+## Wipeout Dormant Database
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
@@ -634,17 +633,17 @@ p1        WipedOut   1h
 ```
 
 
-### Delete Dormant Database
+## Delete Dormant Database
 You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
 
-```sh
+```console
 $ kubedb delete drmn p1 -n demo
 dormantdatabase "p1" deleted
 ```
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
-```sh
+```console
 $ kubectl delete ns demo
 ```
 
