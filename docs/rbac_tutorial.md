@@ -262,7 +262,6 @@ $ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
-![Using p1 from PGAdmin4](/docs/images/tutorial/rbac/p1-pgadmin.gif)
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
