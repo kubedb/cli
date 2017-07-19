@@ -9,3 +9,11 @@ spec:
   storageSecretName: azure-secret
   azure:
     container: bucket-for-snapshot
+    prefix: demo
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
