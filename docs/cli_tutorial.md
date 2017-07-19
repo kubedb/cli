@@ -106,7 +106,7 @@ $ kubedb get snap --show-labels
 NAME                            DATABASE                STATUS      AGE       LABELS
 postgres-demo-20170605-073557   pg/postgres-demo        Succeeded   11m       kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 snapshot-20170505-1147          pg/postgres-demo        Succeeded   1h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
-snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        kubedb.com/kind=Elastic,kubedb.com/name=elasticsearch-demo
+snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo
 ```
 
 You can also filter list using `--selector` flag.
@@ -209,7 +209,7 @@ To describe all KubeDB objects from every namespace, use the following command:
 $ kubedb describe all --all-namespaces
 ```
 
-You can also describe KubeDb objects with matching labels. The following command will describe all Elastic & Postgres objects with specified labels from every namespace.
+You can also describe KubeDb objects with matching labels. The following command will describe all Elasticsearch & Postgres objects with specified labels from every namespace.
 
 ```bash
 $ kubedb describe pg,es --all-namespaces --selector='group=dev'
@@ -255,7 +255,7 @@ Postgres:
 * _spec.nodeSelector_
 * _spec.init_
 
-Elastic:
+Elasticsearch:
 * _spec.version_
 * _spec.storage_
 * _spec.nodeSelector_

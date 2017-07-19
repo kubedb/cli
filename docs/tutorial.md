@@ -82,7 +82,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   labels:
-    kubedb.com/kind: <Postgres|Elastic>
+    kubedb.com/kind: <Postgres|Elasticsearch>
   name: database-demo
 spec:
   origin:

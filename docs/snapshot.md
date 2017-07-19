@@ -9,7 +9,7 @@ You only need to describe the desired backup operations in a Snapshot object, an
 ## Snapshot Spec
 As with all other Kubernetes objects, a Snapshot needs `apiVersion`, `kind`, and `metadata` fields.
 The metadata field must contain a label with `kubedb.com/kind` key.
-The valid values for this label are `Postgres` or `Elastic`. It also needs a `.spec` section. Below is an example Snapshot object.
+The valid values for this label are `Postgres` or `Elasticsearch`. It also needs a `.spec` section. Below is an example Snapshot object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -17,7 +17,7 @@ kind: Snapshot
 metadata:
   name: snapshot-xyz
   labels:
-    kubedb.com/kind: Postgres|Elastic
+    kubedb.com/kind: Postgres|Elasticsearch
 spec:
   databaseName: database-name
   storageSecretName: s3-secret
