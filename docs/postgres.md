@@ -37,6 +37,7 @@ spec:
     storageSecretName: snap-secret
     gcs:
       bucket: restic
+      prefix: demo
   doNotPause: true
   monitor:
     agent: coreos-prometheus-operator
