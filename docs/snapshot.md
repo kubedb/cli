@@ -23,9 +23,15 @@ spec:
   storageSecretName: s3-secret
   s3:
     endpoint: 's3.amazonaws.com'
-    region: us-east-1
     bucket: kubedb-qa
-
+    prefix: demo
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 The `.spec` section supports the following different cloud providers to store snapshot data:
@@ -64,6 +70,13 @@ spec:
     path: /repo
     volumeSource:
       emptyDir: {}
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 ### AWS S3
@@ -135,8 +148,15 @@ spec:
   storageSecretName: s3-secret
   s3:
     endpoint: 's3.amazonaws.com'
-    region: us-east-1
     bucket: kubedb-qa
+    prefix: demo
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 
@@ -208,6 +228,14 @@ spec:
   storageSecretName: gcs-secret
   gcs:
     bucket: bucket-for-snapshot
+    prefix: demo
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 ### Microsoft Azure Storage
@@ -278,6 +306,14 @@ spec:
   storageSecretName: azure-secret
   azure:
     container: bucket-for-snapshot
+    prefix: demo
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 ### OpenStack Swift
@@ -377,6 +413,14 @@ spec:
   storageSecretName: swift-secret
   swift:
     container: bucket-for-snapshot
+    prefix: demo
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 ```
 
 
