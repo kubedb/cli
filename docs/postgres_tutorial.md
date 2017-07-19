@@ -437,9 +437,8 @@ Events:
   5m          5m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
 ```
 
-## Deleting Database
+## Pause Database
 
-### spec.doNotPause
 Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
 
 ```sh
@@ -515,7 +514,7 @@ Here,
  - `status.phase` points to the current database state `Paused`.
 
 
-### Resume Dormant Database
+## Resume Dormant Database
 
 To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
 
@@ -572,7 +571,7 @@ status:
 
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Postgres tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
-### Wipeout Dormant Database
+## Wipeout Dormant Database
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
@@ -634,7 +633,7 @@ p1        WipedOut   1h
 ```
 
 
-### Delete Dormant Database
+## Delete Dormant Database
 You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
 
 ```sh
