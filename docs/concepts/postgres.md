@@ -163,18 +163,9 @@ KubeDB supports taking periodic snapshots for Postgres database. This is an opti
 
  - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
  
- - `` 
+ - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph , etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshots.md).
 
-`spec.backupSchedule.schedule` is a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26) that indicates how often backups are taken.
-
-
-
-| Parameter                 | Description                                                                             |
-|---------------------------|-----------------------------------------------------------------------------------------|
-| `spec.databaseName`       | `Required`. Name of database                                                            |
-| `spec.local.path`         | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
-| `spec.local.volumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) |
-| `spec.resources`          | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
+ - `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
 
 
 ## Schedule Backups
@@ -191,15 +182,8 @@ spec:
       bucket: kubedb-qa
 ```
 
-
-
-
-
-
-
-
 ### spec.doNotPause
-`spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this tpr is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Postgres object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
 
 ### spec.monitor
@@ -207,7 +191,7 @@ To learn how to monitor Postgres databases, please visit [here](/docs/concepts/m
 
 
 ### spec.resources
-`spec.resources` refers to compute resources required by the `stash` sidecar container. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+`spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 
 ## Next Steps
