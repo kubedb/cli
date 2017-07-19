@@ -251,14 +251,14 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the PGAdmin dasboard using the database pod IP and `postgres` user password. 
+Now, you can connect to this database from the PGAdmin dashboard using the database pod IP and `postgres` user password. 
 
 ```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
 
-$ kubectl get secrets -n demo p1-admin-auth -o jsonpath={'.data.\.admin'} | base64 -d
+$ kubectl get secrets -n demo p1-admin-auth -o jsonpath='{.data.\.admin}' | base64 -d
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 

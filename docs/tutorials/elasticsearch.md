@@ -138,14 +138,15 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the esAdmin dasboard using the database pod IP and `postgres` user password.
+Now, you can connect to this Elasticsearch cluster from inside the cluster.
 
 ```console
 $ kubectl get pods e1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.5
 
-$ kubectl exec -it $(kubectl get pods -n kube-system -l app=kubedb -o jsonpath={.items[0].metadata.name}) -n kube-system sh
+# Exec into kubedb operator pod
+$ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath={.items[0].metadata.name}) -n kube-system sh
 
 ~ $ ps aux
 PID   USER     TIME   COMMAND
@@ -173,7 +174,7 @@ PID   USER     TIME   COMMAND
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `es_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and uploads snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
