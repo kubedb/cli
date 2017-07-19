@@ -62,6 +62,26 @@ spec:
 `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
 
+Class
+A claim can request a particular class by specifying the name of a StorageClass using the attribute storageClassName. Only PVs of the requested class, ones with the same storageClassName as the PVC, can be bound to the PVC.
+PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
+
+Access Modes
+Claims use the same conventions as volumes when requesting storage with specific access modes.
+Resources
+Claims, like pods, can request specific quantities of a resource. In this case, the request is for storage. The same resource model applies to both volumes and claims.
+
+
+
+
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+
+https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#writing-to-stable-storage
+
+
+
+
+
 
 To use PersistentVolume, add the `spec.storage` section when creating Postgres object.
 
