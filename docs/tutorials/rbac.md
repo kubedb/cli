@@ -26,7 +26,7 @@ $ kubectl create serviceaccount kube-dns -n kube-system
 $ kubectl patch deployment kube-dns -n kube-system -p '{"spec":{"template":{"spec":{"serviceAccountName":"kube-dns"}}}}'
 
 # Wait for kube-dns pods to start running
-$  kubectl get pods -n kube-system --watch
+$ kubectl get pods -n kube-system --watch
 ```
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
