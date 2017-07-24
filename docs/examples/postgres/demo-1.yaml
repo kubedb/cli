@@ -7,7 +7,7 @@ spec:
   version: 9.5
   doNotPause: true
   storage:
-    class: "standard"
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:

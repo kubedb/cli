@@ -18,7 +18,7 @@ spec:
   version: 2.3.1
   replicas: 1
   storage:
-    class: "standard"
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:

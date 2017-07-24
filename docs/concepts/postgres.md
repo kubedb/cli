@@ -17,7 +17,7 @@ metadata:
 spec:
   version: 9.5
   storage:
-    class: "standard"
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
