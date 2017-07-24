@@ -225,15 +225,15 @@ class Kitten(object):
 
 def release(comp=None, tag=None):
     cat = Kitten(tag)
-    if comp in None:
+    if comp is None:
         cat.release_apimachinery()
         cat.release_db('postgres', 'pg')
         cat.release_db('elasticsearch', 'es')
         cat.release_operator()
         cat.release_cli()
-    elif if comp == 'operator':
+    elif comp == 'operator':
         cat.release_operator()
-    elif if comp == 'cli':
+    elif comp == 'cli':
         cat.release_cli()
 
 
