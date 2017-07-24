@@ -43,7 +43,7 @@ spec:
   version: 9.5
   doNotPause: true
   storage:
-    class: "standard"
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
@@ -153,7 +153,7 @@ spec:
   storage:
     accessModes:
     - ReadWriteOnce
-    class: standard
+    storageClassName: standard
     resources:
       requests:
         storage: 50Mi
@@ -334,7 +334,7 @@ spec:
   version: 9.5
   doNotPause: true
   storage:
-    class: "standard"
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
@@ -375,7 +375,7 @@ spec:
   version: 9.5
   doNotPause: true
   storage:
-    class: "standard"
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
@@ -497,7 +497,7 @@ spec:
         storage:
           accessModes:
           - ReadWriteOnce
-          class: standard
+          storageClassName: standard
           resources:
             requests:
               storage: 50Mi
@@ -558,7 +558,7 @@ spec:
         storage:
           accessModes:
           - ReadWriteOnce
-          class: standard
+          storageClassName: standard
           resources:
             requests:
               storage: 50Mi
@@ -615,7 +615,7 @@ spec:
         storage:
           accessModes:
           - ReadWriteOnce
-          class: standard
+          storageClassName: standard
           resources:
             requests:
               storage: 50Mi
