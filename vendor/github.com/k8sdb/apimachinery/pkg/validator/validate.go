@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/appscode/log"
 	tapi "github.com/k8sdb/apimachinery/api"
 	"github.com/k8sdb/apimachinery/pkg/storage"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
@@ -14,38 +13,29 @@ import (
 	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
-func ValidateStorageSpec(client clientset.Interface, spec *tapi.StorageSpec) (*tapi.StorageSpec, error) {
+func ValidateStorage(client clientset.Interface, spec *apiv1.PersistentVolumeClaimSpec) error {
 	if spec == nil {
-		return nil, nil
+		return nil
 	}
 
-	if spec.Class == "" {
-		return nil, fmt.Errorf(`Object 'Class' is missing in '%v'`, *spec)
-	}
-
-	if _, err := client.StorageV1beta1().StorageClasses().Get(spec.Class, metav1.GetOptions{}); err != nil {
-		if kerr.IsNotFound(err) {
-			return nil, fmt.Errorf(`Spec.Storage.Class "%v" not found`, spec.Class)
+	if spec.StorageClassName != nil {
+		if _, err := client.StorageV1beta1().StorageClasses().Get(*spec.StorageClassName, metav1.GetOptions{}); err != nil {
+			if kerr.IsNotFound(err) {
+				return fmt.Errorf(`Spec.Storage.StorageClassName "%v" not found`, *spec.StorageClassName)
+			}
+			return err
 		}
-		return nil, err
-	}
-
-	if len(spec.AccessModes) == 0 {
-		spec.AccessModes = []apiv1.PersistentVolumeAccessMode{
-			apiv1.ReadWriteOnce,
-		}
-		log.Infof(`Using "%v" as AccessModes in "%v"`, apiv1.ReadWriteOnce, *spec)
 	}
 
 	if val, found := spec.Resources.Requests[apiv1.ResourceStorage]; found {
 		if val.Value() <= 0 {
-			return nil, errors.New("Invalid ResourceStorage request")
+			return errors.New("Invalid ResourceStorage request")
 		}
 	} else {
-		return nil, errors.New("Missing ResourceStorage request")
+		return errors.New("Missing ResourceStorage request")
 	}
 
-	return spec, nil
+	return nil
 }
 
 func ValidateBackupSchedule(client clientset.Interface, spec *tapi.BackupScheduleSpec, namespace string) error {

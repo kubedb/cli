@@ -273,17 +273,19 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 	})
 }
 
-func describeStorage(storage *tapi.StorageSpec, out io.Writer) {
-	if storage == nil {
+func describeStorage(pvcSpec *apiv1.PersistentVolumeClaimSpec, out io.Writer) {
+	if pvcSpec == nil {
 		fmt.Fprint(out, "No volumes.\n")
 		return
 	}
 
-	accessModes := apiv1.GetAccessModesAsString(storage.AccessModes)
-	val, _ := storage.Resources.Requests[apiv1.ResourceStorage]
+	accessModes := apiv1.GetAccessModesAsString(pvcSpec.AccessModes)
+	val, _ := pvcSpec.Resources.Requests[apiv1.ResourceStorage]
 	capacity := val.String()
 	fmt.Fprint(out, "Volume:\n")
-	fmt.Fprintf(out, "  StorageClass:\t%s\n", storage.Class)
+	if pvcSpec.StorageClassName != nil {
+		fmt.Fprintf(out, "  StorageClass:\t%s\n", *pvcSpec.StorageClassName)
+	}
 	fmt.Fprintf(out, "  Capacity:\t%s\n", capacity)
 	fmt.Fprintf(out, "  Access Modes:\t%s\n", accessModes)
 }

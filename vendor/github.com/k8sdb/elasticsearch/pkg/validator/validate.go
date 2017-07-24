@@ -20,7 +20,7 @@ func ValidateElastic(client clientset.Interface, elastic *tapi.Elasticsearch) er
 
 	if elastic.Spec.Storage != nil {
 		var err error
-		if _, err = amv.ValidateStorageSpec(client, elastic.Spec.Storage); err != nil {
+		if err = amv.ValidateStorage(client, elastic.Spec.Storage); err != nil {
 			return err
 		}
 	}

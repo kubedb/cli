@@ -22,7 +22,7 @@ func ValidatePostgres(client clientset.Interface, postgres *tapi.Postgres) error
 
 	if postgres.Spec.Storage != nil {
 		var err error
-		if _, err = amv.ValidateStorageSpec(client, postgres.Spec.Storage); err != nil {
+		if err = amv.ValidateStorage(client, postgres.Spec.Storage); err != nil {
 			return err
 		}
 	}
