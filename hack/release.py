@@ -223,19 +223,26 @@ class Kitten(object):
             call('git push origin master', cwd=repo)
 
 
-def release(tag=None):
+def release(comp=None, tag=None):
     cat = Kitten(tag)
-    cat.release_apimachinery()
-    cat.release_db('postgres', 'pg')
-    cat.release_db('elasticsearch', 'es')
-    cat.release_operator()
-    cat.release_cli()
+    if comp in None:
+        cat.release_apimachinery()
+        cat.release_db('postgres', 'pg')
+        cat.release_db('elasticsearch', 'es')
+        cat.release_operator()
+        cat.release_cli()
+    elif if comp == 'operator':
+        cat.release_operator()
+    elif if comp == 'cli':
+        cat.release_cli()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 2:
+        release(None, *sys.argv[1:])
+    elif len(sys.argv) > 2:
         # http://stackoverflow.com/a/834451
         # http://stackoverflow.com/a/817296
         release(*sys.argv[1:])
     else:
-        print('Usage ./hack/release.py 0.3.0')
+        print('Usage ./hack/release.py [component] 0.3.0')
