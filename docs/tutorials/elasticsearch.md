@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorials/README.md).
+
 # Running Elasticsearch
 This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 

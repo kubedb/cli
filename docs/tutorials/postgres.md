@@ -1,3 +1,5 @@
+> New to KubeDB? Please start [here](/docs/tutorials/README.md).
+
 # Running PostgreSQL
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
@@ -55,7 +57,7 @@ spec:
       gitRepo:
         repository: "https://github.com/k8sdb/postgres-init-scripts.git"
 
-$ kubedb create -f ./docs/examples/postgres/demo-1.yaml 
+$ kubedb create -f ./docs/examples/postgres/demo-1.yaml
 validating "./docs/examples/postgres/demo-1.yaml"
 postgres "p1" created
 ```
