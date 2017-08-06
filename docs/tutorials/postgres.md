@@ -204,7 +204,7 @@ secret "pg-snap-secret" created
 ```
 
 ```yaml
-$ kubectl get secret pg-snap-secret -o yaml
+$ kubectl get secret pg-snap-secret -n demo -o yaml
 
 apiVersion: v1
 data:
