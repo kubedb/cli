@@ -36,4 +36,4 @@ If you fix a bug or developed a new feature, feel free to submit a PR. In either
 Thanks for your contributions!
 
 ## Spread the word
-If you have written blog post or tutorial on Wheel, please share it with us on [Twitter](https://twitter.com/AppsCodeHQ) or [Slack](https://slack.appscode.com).
+If you have written blog post or tutorial on KubeDB, please share it with us on [Twitter](https://twitter.com/AppsCodeHQ) or [Slack](https://slack.appscode.com).
