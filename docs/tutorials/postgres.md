@@ -30,7 +30,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username `admin` and password `admin`.
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
@@ -168,7 +168,7 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the PGAdmin dashboard using the database pod IP and `postgres` user password. 
+Now, you can connect to this database from the PGAdmin dashboard using the database pod IP and `postgres` user password. Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the PGAdmin, use username __`admin`__ and password __`admin`__.
 
 ```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
