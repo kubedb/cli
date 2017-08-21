@@ -62,9 +62,7 @@ func NewHumanReadablePrinter(options PrintOptions) *HumanReadablePrinter {
 }
 
 func ShortHumanDuration(d time.Duration) string {
-	if seconds := int(d.Seconds()); seconds < -1 {
-		return fmt.Sprintf("<invalid>")
-	} else if seconds < 0 {
+	if seconds := int(d.Seconds()); seconds <= 0 {
 		return fmt.Sprintf("0s")
 	} else if seconds < 60 {
 		return fmt.Sprintf("%ds", seconds)
