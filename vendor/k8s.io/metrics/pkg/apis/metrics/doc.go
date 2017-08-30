@@ -18,4 +18,4 @@ limitations under the License.
 
 // +k8s:deepcopy-gen=package,register
 
-package metrics
+package metrics // import "k8s.io/metrics/pkg/apis/metrics"

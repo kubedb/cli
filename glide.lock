@@ -1,5 +1,5 @@
-hash: 10859797bb8dad4a8692f771596c4b876c6bbe2ce50ba1d1712a0352cbae29f2
-updated: 2017-08-30T15:18:40.698463271+06:00
+hash: 21a716941a5229447bb7fa7d6053674f6c9166a5992d6eaedab31af902540d80
+updated: 2017-08-30T03:22:43.282406459-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -74,7 +74,7 @@ imports:
 - name: github.com/cenkalti/backoff
   version: 32cd0c5b3aef12c76ed64aaf678f6c79736be7dc
 - name: github.com/cpuguy83/go-md2man
-  version: 1d903dcb749992f3741d744c0f8376b4bd7eb3e1
+  version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -179,7 +179,7 @@ imports:
   subpackages:
   - proto
 - name: github.com/google/go-querystring
-  version: 547ef5ac979778feb2f760cdb5f4eae1a2207b86
+  version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
   subpackages:
   - query
 - name: github.com/google/gofuzz
@@ -189,7 +189,7 @@ imports:
 - name: github.com/gorilla/mux
   version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
 - name: github.com/graymeta/stow
-  version: 3e5d4f8f1ce7e64da5adec4738010c679536f668
+  version: 6488a0a4895d8a6110189aa4a88681391840a24a
   repo: https://github.com/appscode/stow.git
   vcs: git
   subpackages:
@@ -374,12 +374,6 @@ imports:
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
   version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
-- name: k8s.io/api
-  version: e012d1a19ed30848135c78dca93b6d6a0f82d9e0
-  subpackages:
-  - core/v1
-- name: k8s.io/apiextensions-apiserver
-  version: 5fa44608f6b9b2180a2fd1ecb52e651fd0397794
 - name: k8s.io/apimachinery
   version: 1fd2e63a9a370677308a42f24fd40c86438afddf
   subpackages:
@@ -539,7 +533,7 @@ imports:
   - util/jsonpath
   - util/workqueue
 - name: k8s.io/kubernetes
-  version: d090cd0e2bf432034b42de5d098d999bc99de043
+  version: 793658f2d7ca7f064d2bdf606519f9fe1229c381
   subpackages:
   - cmd/kubeadm/app/apis/kubeadm
   - federation/apis/federation
@@ -712,7 +706,7 @@ imports:
   - plugin/pkg/scheduler/schedulercache
   - plugin/pkg/scheduler/util
 - name: k8s.io/metrics
-  version: 935b1d6f9c67d2e44b344ac6cbc8d9a6f8c0ffbe
+  version: fd2415bb9381a6731027b48a8c6b78f28e13f876
   subpackages:
   - pkg/apis/metrics
   - pkg/apis/metrics/v1alpha1

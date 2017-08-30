@@ -16,6 +16,8 @@ import:
   version: crd
 - package: k8s.io/kubernetes
   version: ~1.7
+- package: k8s.io/metrics
+  version: fd2415bb9381a6731027b48a8c6b78f28e13f876
 - package: k8s.io/apimachinery
   version: 1fd2e63a9a370677308a42f24fd40c86438afddf
 - package: k8s.io/client-go
