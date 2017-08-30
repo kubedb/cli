@@ -23,7 +23,17 @@ const (
 
 	SnapshotKey         = ResourceNameSnapshot + "s.kubedb.com"
 	LabelSnapshotStatus = SnapshotKey + "/status"
+
+	PostgresInitSpec      = PostgresKey + "/init"
+	ElasticsearchInitSpec = ElasticsearchKey + "/init"
 )
+
+type RuntimeObject interface {
+	ResourceCode() string
+	ResourceKind() string
+	ResourceName() string
+	ResourceType() string
+}
 
 func (p Postgres) OffshootName() string {
 	return p.Name
@@ -55,6 +65,22 @@ func (p Postgres) StatefulSetAnnotations() map[string]string {
 	}
 	annotations[PostgresDatabaseVersion] = string(p.Spec.Version)
 	return annotations
+}
+
+func (p Postgres) ResourceCode() string {
+	return ResourceCodePostgres
+}
+
+func (p Postgres) ResourceKind() string {
+	return ResourceKindPostgres
+}
+
+func (p Postgres) ResourceName() string {
+	return ResourceNamePostgres
+}
+
+func (p Postgres) ResourceType() string {
+	return ResourceTypePostgres
 }
 
 func (e Elasticsearch) OffshootName() string {
@@ -89,12 +115,44 @@ func (e Elasticsearch) StatefulSetAnnotations() map[string]string {
 	return annotations
 }
 
-func (s Snapshot) OffshootName() string {
-	return s.Name
+func (p Elasticsearch) ResourceCode() string {
+	return ResourceCodeElasticsearch
+}
+
+func (p Elasticsearch) ResourceKind() string {
+	return ResourceKindElasticsearch
+}
+
+func (p Elasticsearch) ResourceName() string {
+	return ResourceNameElasticsearch
+}
+
+func (p Elasticsearch) ResourceType() string {
+	return ResourceTypeElasticsearch
 }
 
 func (d DormantDatabase) OffshootName() string {
 	return d.Name
+}
+
+func (p DormantDatabase) ResourceCode() string {
+	return ResourceCodeDormantDatabase
+}
+
+func (p DormantDatabase) ResourceKind() string {
+	return ResourceKindDormantDatabase
+}
+
+func (p DormantDatabase) ResourceName() string {
+	return ResourceNameDormantDatabase
+}
+
+func (p DormantDatabase) ResourceType() string {
+	return ResourceTypeDormantDatabase
+}
+
+func (s Snapshot) OffshootName() string {
+	return s.Name
 }
 
 func (s Snapshot) Location() (string, error) {
@@ -111,6 +169,22 @@ func (s Snapshot) Location() (string, error) {
 		return filepath.Join(spec.Swift.Prefix, DatabaseNamePrefix, s.Namespace, s.Spec.DatabaseName), nil
 	}
 	return "", errors.New("No storage provider is configured.")
+}
+
+func (p Snapshot) ResourceCode() string {
+	return ResourceCodeSnapshot
+}
+
+func (p Snapshot) ResourceKind() string {
+	return ResourceKindSnapshot
+}
+
+func (p Snapshot) ResourceName() string {
+	return ResourceNameSnapshot
+}
+
+func (p Snapshot) ResourceType() string {
+	return ResourceTypeSnapshot
 }
 
 func (s SnapshotStorageSpec) Container() (string, error) {

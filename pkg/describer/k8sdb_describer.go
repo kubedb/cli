@@ -11,6 +11,8 @@ import (
 	"k8s.io/client-go/pkg/api"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
 	kapi "k8s.io/kubernetes/pkg/api"
+	"k8s.io/kubernetes/pkg/api/helper"
+	"k8s.io/kubernetes/pkg/api/v1/ref"
 	"k8s.io/kubernetes/pkg/printers"
 )
 
@@ -38,11 +40,12 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
+		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = tapi.ResourceKindElasticsearch
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
+			reference.Kind = tapi.ResourceKindElasticsearch
+
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
 			}
@@ -108,11 +111,11 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
+		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = tapi.ResourceKindPostgres
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
+			reference.Kind = tapi.ResourceKindPostgres
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
 			}
@@ -166,11 +169,11 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
+		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = tapi.ResourceKindSnapshot
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
+			reference.Kind = tapi.ResourceKindSnapshot
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
 			}
@@ -227,11 +230,11 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
+		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			ref.Kind = tapi.ResourceKindDormantDatabase
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
+			reference.Kind = tapi.ResourceKindDormantDatabase
+			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
 			}
@@ -279,7 +282,7 @@ func describeStorage(pvcSpec *apiv1.PersistentVolumeClaimSpec, out io.Writer) {
 		return
 	}
 
-	accessModes := apiv1.GetAccessModesAsString(pvcSpec.AccessModes)
+	accessModes := helper.GetAccessModesAsString(pvcSpec.AccessModes)
 	val, _ := pvcSpec.Resources.Requests[apiv1.ResourceStorage]
 	capacity := val.String()
 	fmt.Fprint(out, "Volume:\n")

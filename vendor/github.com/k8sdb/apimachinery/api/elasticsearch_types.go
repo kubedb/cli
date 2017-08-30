@@ -10,7 +10,7 @@ const (
 	ResourceCodeElasticsearch = "es"
 	ResourceKindElasticsearch = "Elasticsearch"
 	ResourceNameElasticsearch = "elasticsearch"
-	ResourceTypeElasticsearch = "elasticsearchs"
+	ResourceTypeElasticsearch = "elasticsearches"
 )
 
 // Elasticsearch defines a Elasticsearch database.
@@ -57,7 +57,7 @@ type ElasticsearchStatus struct {
 type ElasticsearchList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of Elasticsearch TPR objects
+	// Items is a list of Elasticsearch CRD objects
 	Items []Elasticsearch `json:"items,omitempty"`
 }
 

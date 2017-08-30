@@ -79,6 +79,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 
+	categoryExpander := f.CategoryExpander()
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
@@ -122,7 +123,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		cmd.Flag("show-all").Value.Set("true")
 	}
 
-	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	r := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
 		SelectorParam(selector).
@@ -131,6 +132,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		Latest().
 		Flatten().
 		Do()
+
 	err = r.Err()
 	if err != nil {
 		return err

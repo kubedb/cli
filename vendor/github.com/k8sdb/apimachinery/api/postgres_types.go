@@ -57,7 +57,7 @@ type PostgresStatus struct {
 type PostgresList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of Postgres TPR objects
+	// Items is a list of Postgres CRD objects
 	Items []Postgres `json:"items,omitempty"`
 }
 

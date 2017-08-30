@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	otx "github.com/appscode/osm/pkg/context"
+	otx "github.com/appscode/osm/context"
 	"github.com/ghodss/yaml"
 	"github.com/graymeta/stow"
 	"github.com/graymeta/stow/azure"

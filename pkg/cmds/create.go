@@ -58,6 +58,7 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 
 func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *resource.FilenameOptions) error {
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
+	categoryExpander := f.CategoryExpander()
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
@@ -65,6 +66,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 
 	r := resource.NewBuilder(
 		mapper,
+		categoryExpander,
 		typer,
 		resource.ClientMapperFunc(f.UnstructuredClientForMapping),
 		unstructured.UnstructuredJSONScheme).

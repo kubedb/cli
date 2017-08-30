@@ -318,6 +318,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	var mapper meta.RESTMapper
 	var typer runtime.ObjectTyper
+	categoryExpander := f.CategoryExpander()
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return nil, nil, nil, "", err
@@ -330,7 +331,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 		Decoder:      unstructured.UnstructuredJSONScheme,
 	}
 
-	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	b := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()

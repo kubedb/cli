@@ -9,17 +9,17 @@ import:
 - package: github.com/spf13/pflag
   version: master
 - package: github.com/k8sdb/apimachinery
-  version: master
+  version: crd
 - package: github.com/k8sdb/elasticsearch
-  version: master
+  version: crd
 - package: github.com/k8sdb/postgres
-  version: master
+  version: crd
 - package: k8s.io/kubernetes
-  version: ~1.6.0
+  version: ~1.7
 - package: k8s.io/apimachinery
-  version: 75b8dd260ef0469d96d578705a87cffd0e09dab8
+  version: 1fd2e63a9a370677308a42f24fd40c86438afddf
 - package: k8s.io/client-go
-  version: v3.0.0-beta.0
+  version: v4.0.0
 - package: github.com/graymeta/stow
   repo: https://github.com/appscode/stow.git
   vcs: git
@@ -30,4 +30,4 @@ import:
   version: v0.2.0
 - package: github.com/Azure/azure-sdk-for-go
   vcs: git
-  version: v7.0.1-beta
+  version: v10.2.1-beta

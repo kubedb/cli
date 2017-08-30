@@ -23,7 +23,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/portforward"
-	"k8s.io/kubernetes/pkg/client/unversioned/remotecommand"
+	"k8s.io/client-go/tools/remotecommand"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 

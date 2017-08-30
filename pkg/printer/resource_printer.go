@@ -386,6 +386,10 @@ func (h *HumanReadablePrinter) printHeader(columnNames []string, w io.Writer) er
 	return nil
 }
 
+func (h *HumanReadablePrinter) IsGeneric() bool {
+	return false
+}
+
 func printNewline(w io.Writer) error {
 	if _, err := fmt.Fprintf(w, "\n"); err != nil {
 		return err

@@ -70,6 +70,6 @@ type DormantDatabaseStatus struct {
 type DormantDatabaseList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of DormantDatabase TPR objects
+	// Items is a list of DormantDatabase CRD objects
 	Items []DormantDatabase `json:"items,omitempty"`
 }

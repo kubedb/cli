@@ -65,6 +65,8 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 		return cmdutil.UsageError(cmd, "Required resource not specified.")
 	}
 
+	categoryExpander := f.CategoryExpander()
+
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return err
@@ -92,7 +94,7 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 	}
 	args[0] = strings.Join(resources, ",")
 
-	r := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	r := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
