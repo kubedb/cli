@@ -33,3 +33,5 @@ import:
 - package: github.com/Azure/azure-sdk-for-go
   vcs: git
   version: v10.2.1-beta
+- package: k8s.io/apiextensions-apiserver
+  version: 5fa44608f6b9b2180a2fd1ecb52e651fd0397794

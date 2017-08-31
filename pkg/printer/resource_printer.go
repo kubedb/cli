@@ -61,7 +61,7 @@ func NewHumanReadablePrinter(options PrintOptions) *HumanReadablePrinter {
 	return printer
 }
 
-func ShortHumanDuration(d time.Duration) string {
+func shortHumanDuration(d time.Duration) string {
 	if seconds := int(d.Seconds()); seconds <= 0 {
 		return fmt.Sprintf("0s")
 	} else if seconds < 60 {
@@ -430,7 +430,7 @@ func TranslateTimestamp(timestamp metav1.Time) string {
 	if timestamp.IsZero() {
 		return "<unknown>"
 	}
-	return ShortHumanDuration(time.Now().Sub(timestamp.Time))
+	return shortHumanDuration(time.Now().Sub(timestamp.Time))
 }
 
 func GetNewTabWriter(output io.Writer) *tabwriter.Writer {

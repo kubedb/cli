@@ -1,5 +1,5 @@
-hash: 21a716941a5229447bb7fa7d6053674f6c9166a5992d6eaedab31af902540d80
-updated: 2017-08-30T03:22:43.282406459-07:00
+hash: bc25c3617ebfabb4d721df6e63b7ef15282200aa87157008893db640df5c67c0
+updated: 2017-08-31T11:40:57.08845071+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -74,7 +74,7 @@ imports:
 - name: github.com/cenkalti/backoff
   version: 32cd0c5b3aef12c76ed64aaf678f6c79736be7dc
 - name: github.com/cpuguy83/go-md2man
-  version: 71acacd42f85e5e82f70a55327789582a5200a90
+  version: 1d903dcb749992f3741d744c0f8376b4bd7eb3e1
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -179,7 +179,7 @@ imports:
   subpackages:
   - proto
 - name: github.com/google/go-querystring
-  version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
+  version: 547ef5ac979778feb2f760cdb5f4eae1a2207b86
   subpackages:
   - query
 - name: github.com/google/gofuzz
@@ -189,7 +189,7 @@ imports:
 - name: github.com/gorilla/mux
   version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
 - name: github.com/graymeta/stow
-  version: 6488a0a4895d8a6110189aa4a88681391840a24a
+  version: 3e5d4f8f1ce7e64da5adec4738010c679536f668
   repo: https://github.com/appscode/stow.git
   vcs: git
   subpackages:
@@ -219,7 +219,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/k8sdb/apimachinery
-  version: a63f59b205e1a468fb7f9c15a158a8eb1dd59000
+  version: 51f0257620c1a7076080e46b8e123d9b4a893d65
   subpackages:
   - api
   - api/install
@@ -229,11 +229,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 1dd6a6cfa317f347126b468f330b4c7fb2f0097c
+  version: 6de686fc62499afa0f48eda07ff34781cd27406b
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: aa3afab6a0158b32165c685a76533dc048ae8f9f
+  version: 455886a61bd100f49fb512710e7a4f18862d568e
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -352,7 +352,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 731876f62a065986f71ad71bb35692c3c7b42bcc
+  version: 4c6d21ebe7d908cb32717e14783f80ffee6cdcb0
   subpackages:
   - gensupport
   - googleapi
@@ -374,6 +374,14 @@ imports:
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
   version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+- name: k8s.io/apiextensions-apiserver
+  version: 5fa44608f6b9b2180a2fd1ecb52e651fd0397794
+  subpackages:
+  - pkg/apis/apiextensions
+  - pkg/apis/apiextensions/v1beta1
+  - pkg/client/clientset/clientset
+  - pkg/client/clientset/clientset/scheme
+  - pkg/client/clientset/clientset/typed/apiextensions/v1beta1
 - name: k8s.io/apimachinery
   version: 1fd2e63a9a370677308a42f24fd40c86438afddf
   subpackages:
@@ -533,7 +541,7 @@ imports:
   - util/jsonpath
   - util/workqueue
 - name: k8s.io/kubernetes
-  version: 793658f2d7ca7f064d2bdf606519f9fe1229c381
+  version: d090cd0e2bf432034b42de5d098d999bc99de043
   subpackages:
   - cmd/kubeadm/app/apis/kubeadm
   - federation/apis/federation

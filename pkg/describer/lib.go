@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 	"text/tabwriter"
 	"time"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 func tabbedString(f func(io.Writer) error) (string, error) {
@@ -62,4 +64,38 @@ func timeToString(t *metav1.Time) string {
 	}
 
 	return t.Format(time.RFC1123Z)
+}
+
+func getAccessModesAsString(modes []apiv1.PersistentVolumeAccessMode) string {
+	modes = removeDuplicateAccessModes(modes)
+	modesStr := []string{}
+	if containsAccessMode(modes, apiv1.ReadWriteOnce) {
+		modesStr = append(modesStr, "RWO")
+	}
+	if containsAccessMode(modes, apiv1.ReadOnlyMany) {
+		modesStr = append(modesStr, "ROX")
+	}
+	if containsAccessMode(modes, apiv1.ReadWriteMany) {
+		modesStr = append(modesStr, "RWX")
+	}
+	return strings.Join(modesStr, ",")
+}
+
+func removeDuplicateAccessModes(modes []apiv1.PersistentVolumeAccessMode) []apiv1.PersistentVolumeAccessMode {
+	accessModes := []apiv1.PersistentVolumeAccessMode{}
+	for _, m := range modes {
+		if !containsAccessMode(accessModes, m) {
+			accessModes = append(accessModes, m)
+		}
+	}
+	return accessModes
+}
+
+func containsAccessMode(modes []apiv1.PersistentVolumeAccessMode, mode apiv1.PersistentVolumeAccessMode) bool {
+	for _, m := range modes {
+		if m == mode {
+			return true
+		}
+	}
+	return false
 }

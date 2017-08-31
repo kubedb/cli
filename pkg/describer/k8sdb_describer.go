@@ -11,7 +11,6 @@ import (
 	"k8s.io/client-go/pkg/api"
 	apiv1 "k8s.io/client-go/pkg/api/v1"
 	kapi "k8s.io/kubernetes/pkg/api"
-	"k8s.io/kubernetes/pkg/api/helper"
 	"k8s.io/kubernetes/pkg/api/v1/ref"
 	"k8s.io/kubernetes/pkg/printers"
 )
@@ -28,7 +27,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: tapi.ResourceKindElasticsearch,
+					tapi.LabelDatabaseKind: item.ResourceKind(),
 					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
@@ -43,7 +42,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			reference.Kind = tapi.ResourceKindElasticsearch
+			reference.Kind = item.ResourceKind()
 
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
@@ -70,7 +69,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodeElasticsearch)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -99,7 +98,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: tapi.ResourceKindPostgres,
+					tapi.LabelDatabaseKind: item.ResourceKind(),
 					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
@@ -114,7 +113,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			reference.Kind = tapi.ResourceKindPostgres
+			reference.Kind = item.ResourceKind()
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
@@ -139,7 +138,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodePostgres)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -172,7 +171,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			reference.Kind = tapi.ResourceKindSnapshot
+			reference.Kind = item.ResourceKind()
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
@@ -233,7 +232,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 		if reference, err := ref.GetReference(api.Scheme, item); err != nil {
 			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
 		} else {
-			reference.Kind = tapi.ResourceKindDormantDatabase
+			reference.Kind = item.ResourceKind()
 			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, reference)
 			if err != nil {
 				return "", err
@@ -282,7 +281,7 @@ func describeStorage(pvcSpec *apiv1.PersistentVolumeClaimSpec, out io.Writer) {
 		return
 	}
 
-	accessModes := helper.GetAccessModesAsString(pvcSpec.AccessModes)
+	accessModes := getAccessModesAsString(pvcSpec.AccessModes)
 	val, _ := pvcSpec.Resources.Requests[apiv1.ResourceStorage]
 	capacity := val.String()
 	fmt.Fprint(out, "Volume:\n")

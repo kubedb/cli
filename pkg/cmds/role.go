@@ -21,8 +21,8 @@ const ServiceAccountName = docker.OperatorName
 var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{extensions.GroupName},
-		Resources: []string{"thirdpartyresources"},
-		Verbs:     []string{"get", "create"},
+		Resources: []string{"thirdpartyresources", "customresourcedefinitions"},
+		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
 		APIGroups: []string{rbac.GroupName},
