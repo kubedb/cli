@@ -5,6 +5,9 @@ import (
 	"reflect"
 
 	"github.com/golang/glog"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/k8sdb/apimachinery/client/scheme"
+	tcs "github.com/k8sdb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/decoder"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -27,7 +30,7 @@ type handlerEntry struct {
 
 type humanReadableDescriber struct {
 	cmdutil.Factory
-	extensionsClient clientset.ExtensionInterface
+	extensionsClient tcs.KubedbV1alpha1Interface
 	handlerMap       map[reflect.Type]*handlerEntry
 }
 
@@ -35,7 +38,7 @@ func newHumanReadableDescriber(f cmdutil.Factory) *humanReadableDescriber {
 	restClonfig, _ := f.ClientConfig()
 	describer := &humanReadableDescriber{
 		Factory:          f,
-		extensionsClient: clientset.NewForConfigOrDie(restClonfig),
+		extensionsClient: tcs.NewForConfigOrDie(restClonfig),
 		handlerMap:       make(map[reflect.Type]*handlerEntry),
 	}
 	describer.addDefaultHandlers()
@@ -71,7 +74,7 @@ func (h *humanReadableDescriber) validateDescribeHandlerFunc(describeFunc reflec
 	funcType := describeFunc.Type()
 	if funcType.NumIn() != 2 || funcType.NumOut() != 2 {
 		return fmt.Errorf("invalid describe handler." +
-			"Must accept 2 parameters and return 2 value.")
+			"Must accept 2 parameters and return 2 value")
 	}
 
 	if funcType.In(1) != reflect.TypeOf((*printers.DescriberSettings)(nil)) ||
@@ -85,9 +88,10 @@ func (h *humanReadableDescriber) validateDescribeHandlerFunc(describeFunc reflec
 
 func (h *humanReadableDescriber) Describe(obj runtime.Object, describerSettings *printers.DescriberSettings) (string, error) {
 	kind := obj.GetObjectKind().GroupVersionKind().Kind
+	codec := scheme.Codecs.LegacyCodec(tapi.SchemeGroupVersion)
 	switch obj.(type) {
 	case *unstructured.UnstructuredList, *unstructured.Unstructured, *runtime.Unknown:
-		if objBytes, err := runtime.Encode(clientset.ExtendedCodec, obj); err == nil {
+		if objBytes, err := runtime.Encode(codec, obj); err == nil {
 
 			if decodedObj, err := decoder.Decode(kind, objBytes); err == nil {
 				obj = decodedObj

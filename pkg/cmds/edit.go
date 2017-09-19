@@ -12,6 +12,8 @@ import (
 
 	"github.com/golang/glog"
 	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/k8sdb/apimachinery/client/scheme"
+	tcs "github.com/k8sdb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/editor"
 	"github.com/k8sdb/cli/pkg/encoder"
 	"github.com/k8sdb/cli/pkg/kube"
@@ -27,7 +29,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/mergepatch"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/yaml"
-	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -230,8 +231,8 @@ func visitToPatch(
 		return err
 	}
 
-	extClient := clientset.NewForConfigOrDie(restClonfig)
-
+	extClient := tcs.NewForConfigOrDie(restClonfig)
+	codec := scheme.Codecs.LegacyCodec(tapi.SchemeGroupVersion)
 	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
 	err = patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
 
@@ -240,7 +241,7 @@ func visitToPatch(
 			return err
 		}
 
-		originalSerialization, err := runtime.Encode(clientset.ExtendedCodec, currOriginalObj)
+		originalSerialization, err := runtime.Encode(codec, currOriginalObj)
 		if err != nil {
 			return err
 		}

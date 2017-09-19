@@ -2,13 +2,13 @@ package cmds
 
 import (
 	"io"
+	"strings"
 
 	v "github.com/appscode/go/version"
+	"github.com/jpillora/go-ogle-analytics"
 	"github.com/spf13/cobra"
 	_ "github.com/spf13/cobra/doc"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
-	"github.com/jpillora/go-ogle-analytics"
-	"strings"
 )
 
 const (
