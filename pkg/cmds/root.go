@@ -4,15 +4,20 @@ import (
 	"io"
 
 	v "github.com/appscode/go/version"
-	"github.com/k8sdb/apimachinery/pkg/analytics"
 	"github.com/spf13/cobra"
 	_ "github.com/spf13/cobra/doc"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
+	"github.com/jpillora/go-ogle-analytics"
+	"strings"
+)
+
+const (
+	gaTrackingCode = "UA-62096468-20"
 )
 
 // NewKubedbCommand creates the `kubedb` command and its nested children.
 func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.Command {
-	var enableAnalytics bool
+	enableAnalytics := true
 	cmds := &cobra.Command{
 		Use:   "kubedb",
 		Short: "Command line interface for KubeDB",
@@ -21,10 +26,12 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 
       Find more information at https://github.com/k8sdb/cli.`),
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			if enableAnalytics {
-				analytics.Enable()
+			if enableAnalytics && gaTrackingCode != "" {
+				if client, err := ga.NewClient(gaTrackingCode); err == nil {
+					parts := strings.Split(cmd.CommandPath(), " ")
+					client.Send(ga.NewEvent(parts[0], strings.Join(parts[1:], "/")).Label(version))
+				}
 			}
-			analytics.SendEvent("kubedb/cli", cmd.CommandPath(), version)
 		},
 		Run: runHelp,
 	}
@@ -60,7 +67,8 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 	templates.ActsAsRootCommand(cmds, nil, groups...)
 
 	cmds.PersistentFlags().String("kube-context", "", "name of the kubeconfig context to use")
-	cmds.PersistentFlags().BoolVar(&enableAnalytics, "analytics", true, "Send events to Google Analytics")
+	cmds.PersistentFlags().BoolVar(&enableAnalytics, "analytics", enableAnalytics, "Send analytical events to Google Analytics")
+
 	return cmds
 }
 
