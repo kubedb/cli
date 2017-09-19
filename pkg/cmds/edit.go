@@ -11,8 +11,7 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
-	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/client/clientset"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/editor"
 	"github.com/k8sdb/cli/pkg/encoder"
 	"github.com/k8sdb/cli/pkg/kube"
@@ -28,6 +27,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/mergepatch"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/yaml"
+	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"

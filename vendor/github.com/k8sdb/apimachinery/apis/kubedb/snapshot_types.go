@@ -1,4 +1,4 @@
-package api
+package kubedb
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -11,6 +11,9 @@ const (
 	ResourceNameSnapshot = "snapshot"
 	ResourceTypeSnapshot = "snapshots"
 )
+
+// +genclient=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type Snapshot struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
@@ -45,6 +48,8 @@ type SnapshotStatus struct {
 	Phase          SnapshotPhase `json:"phase,omitempty"`
 	Reason         string        `json:"reason,omitempty"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type SnapshotList struct {
 	metav1.TypeMeta `json:",inline"`

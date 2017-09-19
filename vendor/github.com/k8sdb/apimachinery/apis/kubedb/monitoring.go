@@ -1,4 +1,4 @@
-package api
+package kubedb
 
 const (
 	AgentCoreosPrometheus        = "coreos-prometheus-operator"

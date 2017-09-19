@@ -1,4 +1,4 @@
-package api
+package kubedb
 
 import (
 	"errors"
@@ -15,17 +15,20 @@ const (
 	LabelDatabaseName = GenericKey + "/name"
 	LabelJobType      = GenericKey + "/job-type"
 
-	PostgresKey             = ResourceNamePostgres + "." + GenericKey
+	PostgresKey             = ResourceTypePostgres + "." + GenericKey
 	PostgresDatabaseVersion = PostgresKey + "/version"
 
-	ElasticsearchKey             = ResourceNameElasticsearch + ".kubedb.com"
+	ElasticsearchKey             = ResourceTypeElasticsearch + "." + GenericKey
 	ElasticsearchDatabaseVersion = ElasticsearchKey + "/version"
 
-	SnapshotKey         = ResourceNameSnapshot + "s.kubedb.com"
+	SnapshotKey         = ResourceTypeSnapshot + "." + GenericKey
 	LabelSnapshotStatus = SnapshotKey + "/status"
 
 	PostgresInitSpec      = PostgresKey + "/init"
 	ElasticsearchInitSpec = ElasticsearchKey + "/init"
+
+	PostgresIgnore      = PostgresKey + "/ignore"
+	ElasticsearchIgnore = ElasticsearchKey + "/ignore"
 )
 
 type RuntimeObject interface {

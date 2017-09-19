@@ -1,4 +1,4 @@
-package api
+package kubedb
 
 import (
 	apiv1 "k8s.io/client-go/pkg/api/v1"

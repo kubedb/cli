@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/client/clientset"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	tcs "github.com/k8sdb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/decoder"
 	"github.com/k8sdb/cli/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -343,7 +343,7 @@ func (h *HumanReadablePrinter) PrintObj(obj runtime.Object, output io.Writer) er
 
 	switch obj.(type) {
 	case *unstructured.UnstructuredList, *unstructured.Unstructured, *runtime.Unknown:
-		if objBytes, err := runtime.Encode(clientset.ExtendedCodec, obj); err == nil {
+		if objBytes, err := runtime.Encode(tcs.ExtendedCodec, obj); err == nil {
 			if decodedObj, err := decoder.Decode(kind, objBytes); err == nil {
 				obj = decodedObj
 			}

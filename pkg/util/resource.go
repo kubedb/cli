@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-	tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/decoder"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
@@ -23,22 +23,22 @@ func GetSupportedResource(resource string) (string, error) {
 		strings.ToLower(tapi.ResourceTypeElasticsearch),
 		strings.ToLower(tapi.ResourceCodeElasticsearch),
 		strings.ToLower(tapi.ResourceNameElasticsearch):
-		return tapi.ResourceTypeElasticsearch + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		return tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
 		strings.ToLower(tapi.ResourceTypePostgres),
 		strings.ToLower(tapi.ResourceCodePostgres),
 		strings.ToLower(tapi.ResourceNamePostgres):
-		return tapi.ResourceTypePostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		return tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot),
 		strings.ToLower(tapi.ResourceTypeSnapshot),
 		strings.ToLower(tapi.ResourceCodeSnapshot),
 		strings.ToLower(tapi.ResourceNameSnapshot):
-		return tapi.ResourceTypeSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		return tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase),
 		strings.ToLower(tapi.ResourceTypeDormantDatabase),
 		strings.ToLower(tapi.ResourceCodeDormantDatabase),
 		strings.ToLower(tapi.ResourceNameDormantDatabase):
-		return tapi.ResourceTypeDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		return tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -86,10 +86,10 @@ func CheckSupportedResource(kind string) error {
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	resources := []string{
-		tapi.ResourceTypeElasticsearch + "." + tapi.V1alpha1SchemeGroupVersion.Group,
-		tapi.ResourceTypePostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group,
-		tapi.ResourceTypeSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group,
-		tapi.ResourceTypeDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group,
+		tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group,
 	}
 
 	restConfig, err := f.ClientConfig()

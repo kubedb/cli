@@ -1,4 +1,4 @@
-package api
+package kubedb
 
 import (
 	"github.com/appscode/go/encoding/json/types"
@@ -12,6 +12,9 @@ const (
 	ResourceNamePostgres = "postgres"
 	ResourceTypePostgres = "postgreses"
 )
+
+// +genclient=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // Postgres defines a Postgres database.
 type Postgres struct {
@@ -53,6 +56,8 @@ type PostgresStatus struct {
 	Phase        DatabasePhase `json:"phase,omitempty"`
 	Reason       string        `json:"reason,omitempty"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type PostgresList struct {
 	metav1.TypeMeta `json:",inline"`

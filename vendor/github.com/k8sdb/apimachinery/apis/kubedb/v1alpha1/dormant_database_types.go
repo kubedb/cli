@@ -1,4 +1,4 @@
-package api
+package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -10,6 +10,10 @@ const (
 	ResourceNameDormantDatabase = "dormant-database"
 	ResourceTypeDormantDatabase = "dormantdatabases"
 )
+
+// +genclient=true
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type DormantDatabase struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
@@ -66,6 +70,8 @@ type DormantDatabaseStatus struct {
 	Phase        DormantDatabasePhase `json:"phase,omitempty"`
 	Reason       string               `json:"reason,omitempty"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type DormantDatabaseList struct {
 	metav1.TypeMeta `json:",inline"`

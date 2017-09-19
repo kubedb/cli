@@ -1,5 +1,5 @@
-hash: bc25c3617ebfabb4d721df6e63b7ef15282200aa87157008893db640df5c67c0
-updated: 2017-09-07T16:59:37.097171288+06:00
+hash: 51e797d0e6404e207428bb110da278d98b5b718e253a09af3f3e87c9f93004b7
+updated: 2017-09-19T03:17:34.506266964-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -18,7 +18,7 @@ imports:
 - name: github.com/appscode/log
   version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
 - name: github.com/appscode/osm
-  version: c4eb9d9f2fa11a22cd4b5f358afa5c89245059b4
+  version: e8902e8a7b1ca8c0b7ec38579c08e74ba631a192
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -74,7 +74,7 @@ imports:
 - name: github.com/cenkalti/backoff
   version: 32cd0c5b3aef12c76ed64aaf678f6c79736be7dc
 - name: github.com/cpuguy83/go-md2man
-  version: 1d903dcb749992f3741d744c0f8376b4bd7eb3e1
+  version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -179,7 +179,7 @@ imports:
   subpackages:
   - proto
 - name: github.com/google/go-querystring
-  version: 547ef5ac979778feb2f760cdb5f4eae1a2207b86
+  version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
   subpackages:
   - query
 - name: github.com/google/gofuzz
@@ -219,21 +219,22 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/k8sdb/apimachinery
-  version: ee12145f287ba94e4ea5344bd387e8ca420591ab
+  version: 3bf07e0bd369f73a3e38a2f8bca1b32cc1d8e96b
   subpackages:
-  - api
-  - api/install
-  - client/clientset
+  - apis/kubedb
+  - apis/kubedb/v1alpha1
+  - client/scheme
+  - client/typed/kubedb/v1alpha1
   - pkg/analytics
   - pkg/docker
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: b89b53cf971948a0a762b2a402a1670fbef7daec
+  version: 4254c79ccfcdfaab1bbc90c1f2dab701b198ccc5
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: da2195ec5541cff78759a5fe1d268991b9e74925
+  version: d9f7a3b4a329853eda999ce663b6620ad997446c
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -352,7 +353,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: b1ecfb35ad07443b92ba0cdac16f21787b978d93
+  version: f07af8828cedf46b54a535f7cd5b4d82a7d1cbbb
   subpackages:
   - gensupport
   - googleapi
@@ -541,7 +542,7 @@ imports:
   - util/jsonpath
   - util/workqueue
 - name: k8s.io/kubernetes
-  version: 945cef642eafecc99ec49d2e68efbbb679b3b23f
+  version: 4bc5e7f9a6c25dc4c03d4d656f2cefd21540e28c
   subpackages:
   - cmd/kubeadm/app/apis/kubeadm
   - federation/apis/federation

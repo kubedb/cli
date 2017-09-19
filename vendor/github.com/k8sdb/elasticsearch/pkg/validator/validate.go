@@ -3,7 +3,7 @@ package validator
 import (
 	"fmt"
 
-	tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	clientset "k8s.io/client-go/kubernetes"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ghodss/yaml"
-	tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	"github.com/k8sdb/cli/pkg/encoder"
 	esv "github.com/k8sdb/elasticsearch/pkg/validator"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
 	"github.com/k8sdb/cli/pkg/validator"

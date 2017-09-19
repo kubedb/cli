@@ -5,7 +5,6 @@ import (
 	"reflect"
 
 	"github.com/golang/glog"
-	"github.com/k8sdb/apimachinery/client/clientset"
 	"github.com/k8sdb/cli/pkg/decoder"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"

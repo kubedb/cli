@@ -1,4 +1,4 @@
-package api
+package v1alpha1
 
 import (
 	"github.com/appscode/go/encoding/json/types"
@@ -12,6 +12,10 @@ const (
 	ResourceNameElasticsearch = "elasticsearch"
 	ResourceTypeElasticsearch = "elasticsearchs"
 )
+
+// +genclient=true
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // Elasticsearch defines a Elasticsearch database.
 type Elasticsearch struct {
@@ -53,6 +57,8 @@ type ElasticsearchStatus struct {
 	Phase        DatabasePhase `json:"phase,omitempty"`
 	Reason       string        `json:"reason,omitempty"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type ElasticsearchList struct {
 	metav1.TypeMeta `json:",inline"`
