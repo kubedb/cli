@@ -1,5 +1,5 @@
-hash: 51e797d0e6404e207428bb110da278d98b5b718e253a09af3f3e87c9f93004b7
-updated: 2017-09-20T15:40:00.591862559+06:00
+hash: 16b48ef376c606b51b22e2fe7387b4d8453700f25bdd606f37eaa21c95190f31
+updated: 2017-09-20T16:34:09.155818177+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -351,13 +351,8 @@ imports:
   - unicode/bidi
   - unicode/norm
   - width
-- name: google.golang.org/api
-  version: b6a02105ec5a446209e9d38557f0e1ac30cacf82
-  subpackages:
-  - gensupport
-  - googleapi
-  - googleapi/internal/uritemplates
-  - storage/v1
+- name: google.golang.org/api/storage/v1
+  version: aab106b125917246a672526055e2260b77258755
 - name: google.golang.org/appengine
   version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
   subpackages:
@@ -373,7 +368,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
 - name: k8s.io/apiextensions-apiserver
   version: 5fa44608f6b9b2180a2fd1ecb52e651fd0397794
   subpackages:
