@@ -1,5 +1,5 @@
 hash: 51e797d0e6404e207428bb110da278d98b5b718e253a09af3f3e87c9f93004b7
-updated: 2017-09-19T14:53:09.996986709-07:00
+updated: 2017-09-20T15:40:00.591862559+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -352,7 +352,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: f07af8828cedf46b54a535f7cd5b4d82a7d1cbbb
+  version: b6a02105ec5a446209e9d38557f0e1ac30cacf82
   subpackages:
   - gensupport
   - googleapi
@@ -373,7 +373,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/apiextensions-apiserver
   version: 5fa44608f6b9b2180a2fd1ecb52e651fd0397794
   subpackages:
@@ -541,7 +541,7 @@ imports:
   - util/jsonpath
   - util/workqueue
 - name: k8s.io/kubernetes
-  version: 4bc5e7f9a6c25dc4c03d4d656f2cefd21540e28c
+  version: d3faa3f8f2e85c8089e80a661955626ae24abf80
   subpackages:
   - cmd/kubeadm/app/apis/kubeadm
   - federation/apis/federation
