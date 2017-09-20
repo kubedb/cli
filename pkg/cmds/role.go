@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	tapi "github.com/k8sdb/apimachinery/api"
+	"github.com/k8sdb/apimachinery/apis/kubedb"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,8 +21,8 @@ const ServiceAccountName = docker.OperatorName
 var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{extensions.GroupName},
-		Resources: []string{"thirdpartyresources"},
-		Verbs:     []string{"get", "create"},
+		Resources: []string{"thirdpartyresources", "customresourcedefinitions"},
+		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
 		APIGroups: []string{rbac.GroupName},
@@ -70,7 +70,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"create"},
 	},
 	{
-		APIGroups: []string{tapi.GroupName},
+		APIGroups: []string{kubedb.GroupName},
 		Resources: []string{rbac.ResourceAll},
 		Verbs:     []string{rbac.VerbAll},
 	},

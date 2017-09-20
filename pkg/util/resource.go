@@ -5,8 +5,9 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-	tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/decoder"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -20,20 +21,24 @@ func GetSupportedResource(resource string) (string, error) {
 	switch strings.ToLower(resource) {
 	case strings.ToLower(tapi.ResourceKindElasticsearch),
 		strings.ToLower(tapi.ResourceTypeElasticsearch),
-		strings.ToLower(tapi.ResourceCodeElasticsearch):
-		return tapi.ResourceKindElasticsearch + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceCodeElasticsearch),
+		strings.ToLower(tapi.ResourceNameElasticsearch):
+		return tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
 		strings.ToLower(tapi.ResourceTypePostgres),
-		strings.ToLower(tapi.ResourceCodePostgres):
-		return tapi.ResourceKindPostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceCodePostgres),
+		strings.ToLower(tapi.ResourceNamePostgres):
+		return tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot),
 		strings.ToLower(tapi.ResourceTypeSnapshot),
-		strings.ToLower(tapi.ResourceCodeSnapshot):
-		return tapi.ResourceKindSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceCodeSnapshot),
+		strings.ToLower(tapi.ResourceNameSnapshot):
+		return tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase),
 		strings.ToLower(tapi.ResourceTypeDormantDatabase),
-		strings.ToLower(tapi.ResourceCodeDormantDatabase):
-		return tapi.ResourceKindDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceCodeDormantDatabase),
+		strings.ToLower(tapi.ResourceNameDormantDatabase):
+		return tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -43,19 +48,23 @@ func GetResourceType(resource string) (string, error) {
 	switch strings.ToLower(resource) {
 	case strings.ToLower(tapi.ResourceKindElasticsearch),
 		strings.ToLower(tapi.ResourceTypeElasticsearch),
-		strings.ToLower(tapi.ResourceCodeElasticsearch):
+		strings.ToLower(tapi.ResourceCodeElasticsearch),
+		strings.ToLower(tapi.ResourceNameElasticsearch):
 		return tapi.ResourceTypeElasticsearch, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
 		strings.ToLower(tapi.ResourceTypePostgres),
-		strings.ToLower(tapi.ResourceCodePostgres):
+		strings.ToLower(tapi.ResourceCodePostgres),
+		strings.ToLower(tapi.ResourceNamePostgres):
 		return tapi.ResourceTypePostgres, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot),
 		strings.ToLower(tapi.ResourceTypeSnapshot),
-		strings.ToLower(tapi.ResourceCodeSnapshot):
+		strings.ToLower(tapi.ResourceCodeSnapshot),
+		strings.ToLower(tapi.ResourceNameSnapshot):
 		return tapi.ResourceTypeSnapshot, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase),
 		strings.ToLower(tapi.ResourceTypeDormantDatabase),
-		strings.ToLower(tapi.ResourceCodeDormantDatabase):
+		strings.ToLower(tapi.ResourceCodeDormantDatabase),
+		strings.ToLower(tapi.ResourceNameDormantDatabase):
 		return tapi.ResourceTypeDormantDatabase, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
@@ -76,21 +85,26 @@ func CheckSupportedResource(kind string) error {
 
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
-	resources := map[string]string{
-		tapi.ResourceNameElasticsearch:   tapi.ResourceKindElasticsearch + "." + tapi.V1alpha1SchemeGroupVersion.Group,
-		tapi.ResourceNamePostgres:        tapi.ResourceKindPostgres + "." + tapi.V1alpha1SchemeGroupVersion.Group,
-		tapi.ResourceNameSnapshot:        tapi.ResourceKindSnapshot + "." + tapi.V1alpha1SchemeGroupVersion.Group,
-		tapi.ResourceNameDormantDatabase: tapi.ResourceKindDormantDatabase + "." + tapi.V1alpha1SchemeGroupVersion.Group,
+	resources := []string{
+		tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group,
 	}
 
-	clientset, err := f.ClientSet()
+	restConfig, err := f.ClientConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	clientset, err := apiextensionsclient.NewForConfig(restConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	availableResources := make([]string, 0)
-	for key, val := range resources {
-		_, err := clientset.Extensions().ThirdPartyResources().Get(key+"."+tapi.V1alpha1SchemeGroupVersion.Group, metav1.GetOptions{})
+	for _, val := range resources {
+		_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Get(val, metav1.GetOptions{})
 		if err != nil {
 			if kerr.IsNotFound(err) {
 				continue

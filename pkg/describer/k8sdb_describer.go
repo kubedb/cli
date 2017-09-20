@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/golang/glog"
-	tapi "github.com/k8sdb/apimachinery/api"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/pkg/api"
@@ -26,7 +25,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: tapi.ResourceKindElasticsearch,
+					tapi.LabelDatabaseKind: item.ResourceKind(),
 					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
@@ -38,14 +37,10 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
-			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
-		} else {
-			ref.Kind = tapi.ResourceKindElasticsearch
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
-			if err != nil {
-				return "", err
-			}
+		item.Kind = tapi.ResourceKindElasticsearch
+		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		if err != nil {
+			return "", err
 		}
 	}
 
@@ -67,7 +62,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodeElasticsearch)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -96,7 +91,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: tapi.ResourceKindPostgres,
+					tapi.LabelDatabaseKind: item.ResourceKind(),
 					tapi.LabelDatabaseName: item.Name,
 				},
 			).String(),
@@ -108,14 +103,10 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
-			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
-		} else {
-			ref.Kind = tapi.ResourceKindPostgres
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
-			if err != nil {
-				return "", err
-			}
+		item.Kind = tapi.ResourceKindPostgres
+		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		if err != nil {
+			return "", err
 		}
 	}
 
@@ -136,7 +127,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, tapi.ResourceCodePostgres)
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -166,14 +157,10 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
-			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
-		} else {
-			ref.Kind = tapi.ResourceKindSnapshot
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
-			if err != nil {
-				return "", err
-			}
+		item.Kind = tapi.ResourceKindSnapshot
+		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		if err != nil {
+			return "", err
 		}
 	}
 
@@ -227,14 +214,10 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		if ref, err := kapi.GetReference(api.Scheme, item); err != nil {
-			glog.Errorf("Unable to construct reference to '%#v': %v", item, err)
-		} else {
-			ref.Kind = tapi.ResourceKindDormantDatabase
-			events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, ref)
-			if err != nil {
-				return "", err
-			}
+		item.Kind = tapi.ResourceKindDormantDatabase
+		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		if err != nil {
+			return "", err
 		}
 	}
 
@@ -279,7 +262,7 @@ func describeStorage(pvcSpec *apiv1.PersistentVolumeClaimSpec, out io.Writer) {
 		return
 	}
 
-	accessModes := apiv1.GetAccessModesAsString(pvcSpec.AccessModes)
+	accessModes := getAccessModesAsString(pvcSpec.AccessModes)
 	val, _ := pvcSpec.Resources.Requests[apiv1.ResourceStorage]
 	capacity := val.String()
 	fmt.Fprint(out, "Volume:\n")

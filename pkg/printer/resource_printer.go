@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/golang/glog"
-	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/client/clientset"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/k8sdb/apimachinery/client/scheme"
 	"github.com/k8sdb/cli/pkg/decoder"
 	"github.com/k8sdb/cli/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -61,7 +61,7 @@ func NewHumanReadablePrinter(options PrintOptions) *HumanReadablePrinter {
 	return printer
 }
 
-func ShortHumanDuration(d time.Duration) string {
+func shortHumanDuration(d time.Duration) string {
 	if seconds := int(d.Seconds()); seconds <= 0 {
 		return fmt.Sprintf("0s")
 	} else if seconds < 60 {
@@ -340,10 +340,11 @@ func (h *HumanReadablePrinter) PrintObj(obj runtime.Object, output io.Writer) er
 	}
 
 	kind := obj.GetObjectKind().GroupVersionKind().Kind
+	codec := scheme.Codecs.LegacyCodec(tapi.SchemeGroupVersion)
 
 	switch obj.(type) {
 	case *unstructured.UnstructuredList, *unstructured.Unstructured, *runtime.Unknown:
-		if objBytes, err := runtime.Encode(clientset.ExtendedCodec, obj); err == nil {
+		if objBytes, err := runtime.Encode(codec, obj); err == nil {
 			if decodedObj, err := decoder.Decode(kind, objBytes); err == nil {
 				obj = decodedObj
 			}
@@ -386,6 +387,10 @@ func (h *HumanReadablePrinter) printHeader(columnNames []string, w io.Writer) er
 	return nil
 }
 
+func (h *HumanReadablePrinter) IsGeneric() bool {
+	return false
+}
+
 func printNewline(w io.Writer) error {
 	if _, err := fmt.Fprintf(w, "\n"); err != nil {
 		return err
@@ -426,7 +431,7 @@ func TranslateTimestamp(timestamp metav1.Time) string {
 	if timestamp.IsZero() {
 		return "<unknown>"
 	}
-	return ShortHumanDuration(time.Now().Sub(timestamp.Time))
+	return shortHumanDuration(time.Now().Sub(timestamp.Time))
 }
 
 func GetNewTabWriter(output io.Writer) *tabwriter.Writer {

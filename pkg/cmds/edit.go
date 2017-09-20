@@ -11,8 +11,9 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
-	tapi "github.com/k8sdb/apimachinery/api"
-	"github.com/k8sdb/apimachinery/client/clientset"
+	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/k8sdb/apimachinery/client/scheme"
+	tcs "github.com/k8sdb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/editor"
 	"github.com/k8sdb/cli/pkg/encoder"
 	"github.com/k8sdb/cli/pkg/kube"
@@ -230,8 +231,8 @@ func visitToPatch(
 		return err
 	}
 
-	extClient := clientset.NewForConfigOrDie(restClonfig)
-
+	extClient := tcs.NewForConfigOrDie(restClonfig)
+	codec := scheme.Codecs.LegacyCodec(tapi.SchemeGroupVersion)
 	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
 	err = patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
 
@@ -240,7 +241,7 @@ func visitToPatch(
 			return err
 		}
 
-		originalSerialization, err := runtime.Encode(clientset.ExtendedCodec, currOriginalObj)
+		originalSerialization, err := runtime.Encode(codec, currOriginalObj)
 		if err != nil {
 			return err
 		}
@@ -318,6 +319,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	var mapper meta.RESTMapper
 	var typer runtime.ObjectTyper
+	categoryExpander := f.CategoryExpander()
 	mapper, typer, err := f.UnstructuredObject()
 	if err != nil {
 		return nil, nil, nil, "", err
@@ -330,7 +332,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 		Decoder:      unstructured.UnstructuredJSONScheme,
 	}
 
-	b := resource.NewBuilder(mapper, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	b := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()
