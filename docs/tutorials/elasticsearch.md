@@ -213,7 +213,7 @@ type: Opaque
 ```
 
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/snapshot.md). Now, create the Snapshot tpr.
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
 
 ```
 $ kubedb create -f ./docs/examples/elasticsearch/demo-2.yaml
