@@ -1,5 +1,5 @@
-hash: 16b48ef376c606b51b22e2fe7387b4d8453700f25bdd606f37eaa21c95190f31
-updated: 2017-09-20T16:34:09.155818177+06:00
+hash: 51e797d0e6404e207428bb110da278d98b5b718e253a09af3f3e87c9f93004b7
+updated: 2017-09-22T12:42:00.0872991+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: d1fbd14e5c6e78557c12f6d2c9c282b3c0d0c612
+  version: 40c185ab12c60de0218e5e5c319a032498c21695
   subpackages:
   - encoding/json/types
   - encoding/yaml
@@ -219,7 +219,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/k8sdb/apimachinery
-  version: 0ce956bc35245de2d2ac64a4abd861eeffb9a93f
+  version: e3ac059d5f8df680ec7ef8692d790d2bed2fde63
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -229,11 +229,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: d93793709ef5324525ded932b7fc160753e24334
+  version: 3c23843e9064ee6c57ce94237f3ab59ecb626781
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: 35179cbff0bdd196e2d75497aab300b705686f4c
+  version: 2659a9430b570fb09dbcfadf55968414df6123c5
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -351,8 +351,13 @@ imports:
   - unicode/bidi
   - unicode/norm
   - width
-- name: google.golang.org/api/storage/v1
-  version: aab106b125917246a672526055e2260b77258755
+- name: google.golang.org/api
+  version: 513727a0f0db0404fd7639c243a29e466bed6ca4
+  subpackages:
+  - gensupport
+  - googleapi
+  - googleapi/internal/uritemplates
+  - storage/v1
 - name: google.golang.org/appengine
   version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
   subpackages:

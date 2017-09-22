@@ -130,21 +130,21 @@ func getColumns(options PrintOptions, t reflect.Type) []string {
 
 	columns = append(columns, "NAME")
 
+	// Must be kept in sync with apiversion
 	switch t.String() {
-	case "*api.Elasticsearch", "*api.ElasticList":
+	case "*v1alpha1.Elasticsearch", "*v1alpha1.ElasticList":
 		if options.Wide {
 			columns = append(columns, "VERSION")
 		}
-	case "*api.Postgres", "*api.PostgresList":
+	case "*v1alpha1.Postgres", "*v1alpha1.PostgresList":
 		if options.Wide {
 			columns = append(columns, "VERSION")
 		}
-	case "*api.Snapshot", "*api.SnapshotList":
+	case "*v1alpha1.Snapshot", "*v1alpha1.SnapshotList":
 		columns = append(columns, "DATABASE")
 		if options.Wide {
 			columns = append(columns, "BUCKET")
 		}
-
 	}
 
 	columns = append(columns, "STATUS")
