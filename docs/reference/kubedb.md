@@ -16,7 +16,7 @@ kubedb [flags]
 ### Options
 
 ```
-      --analytics             Send events to Google Analytics (default true)
+      --analytics             Send analytical events to Google Analytics (default true)
   -h, --help                  help for kubedb
       --kube-context string   name of the kubeconfig context to use
 ```

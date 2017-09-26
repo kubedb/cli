@@ -18,7 +18,7 @@ kubedb init [flags]
   kubedb init
   
   # Upgrade operator to use another version.
-  kubedb init --version=0.6.0 --upgrade
+  kubedb init --version=0.7.0 --upgrade
 ```
 
 ### Options
@@ -28,13 +28,13 @@ kubedb init [flags]
       --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
       --rbac                        If true, uses RBAC with operator and database objects
       --upgrade                     If present, Upgrade operator to use provided version
-      --version string              Operator version (default "0.6.0")
+      --version string              Operator version (default "0.7.0")
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --analytics             Send events to Google Analytics (default true)
+      --analytics             Send analytical events to Google Analytics (default true)
       --kube-context string   name of the kubeconfig context to use
 ```
 
