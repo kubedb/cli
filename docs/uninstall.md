@@ -35,7 +35,7 @@ kubectl delete snapshot.kubedb.com --all --cascade=false
 kubectl delete dormant-database.kubedb.com --all --cascade=false
 ```
 
-5. Delete the old TPR-registration.
+5. Delete the old CRD-registration.
 ```console
 kubectl delete thirdpartyresource -l app=kubedb
 ```

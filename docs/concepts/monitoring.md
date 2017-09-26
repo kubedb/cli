@@ -13,7 +13,7 @@ If enabled, a __side-car exporter pod__ is run with database pods to expose Prom
 
 - `/kubedb.com/v1beta1/namespaces/:ns/(postgreses|elastics)/:name/metrics`: Scrape this endpoint to monitor database.
 
-First deploy Prometheus operator so that Prometheus TPR groups are registered. Then, to monitor KubeDB databases by Prometheus, set following fields in `spec.monitor.prometheus`:
+First deploy Prometheus operator so that Prometheus CRD groups are registered. Then, to monitor KubeDB databases by Prometheus, set following fields in `spec.monitor.prometheus`:
 
 ```yaml
 spec:

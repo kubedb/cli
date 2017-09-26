@@ -3,7 +3,7 @@
 # Snapshot
 
 ## What is Snapshot
-A `Snapshot` is a Kubernetes `Third Party Object` (TPR). It provides declarative configuration for database snapshots in a Kubernetes native way.
+A `Snapshot` is a Kubernetes `Third Party Object` (CRD). It provides declarative configuration for database snapshots in a Kubernetes native way.
 You only need to describe the desired backup behavior in a Snapshot object. KubeDB operator will launch a Job to perform backup operation. Once the snapshot process is complete, it uploads the snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 ## Snapshot Spec

@@ -7,7 +7,7 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ### How to Create objects
 
-`kubedb create` creates a database tpr in `default` namespace by default. Following command will create a Postgres TPR as specified in `postgres.yaml`.
+`kubedb create` creates a database tpr in `default` namespace by default. Following command will create a Postgres CRD as specified in `postgres.yaml`.
 
 ```console
 $ kubedb create -f ./docs/examples/postgres/postgres.yaml
@@ -334,7 +334,7 @@ $ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl
-Kubectl has limited support for TPRs in general. You can use Kubectl with KubeDB objects like any other TPRs. Below are some common examples of using Kubectl with KubeDB objects.
+Kubectl has limited support for CRDs in general. You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
 # List objects
