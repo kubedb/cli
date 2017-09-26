@@ -55,9 +55,9 @@ $ kubectl get pods --all-namespaces -l app=kubedb --watch
 
 Once the operator pods are running, you can cancel the above command by typing `Ctrl+C`.
 
-Now, to confirm TPR groups have been registered by the operator, run the following command:
+Now, to confirm CRD groups have been registered by the operator, run the following command:
 ```console
-$ kubectl get thirdpartyresources -l app=kubedb
+$ kubectl get crd -l app=kubedb
 ```
 
 Now, you are ready to [create your first database](/docs/tutorials/README.md) using KubeDB.

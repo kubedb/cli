@@ -20,14 +20,14 @@ NAME                                  READY     STATUS    RESTARTS   AGE
 prometheus-operator-449376836-4pkzn   1/1       Running   0          15s
 ^C⏎                                                                                                                                                             
 
-$ kubectl get thirdpartyresources 
+$ kubectl get crd 
 NAME                                    DESCRIPTION                           VERSION(S)
 alertmanager.monitoring.coreos.com      Managed Alertmanager cluster          v1alpha1
 prometheus.monitoring.coreos.com        Managed Prometheus server             v1alpha1
 service-monitor.monitoring.coreos.com   Prometheus monitoring for a service   v1alpha1
 ```
 
-Once the Prometheus operator TPRs are registered, run the following command to create a Prometheus.
+Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
  $ kubectl create -f ./docs/examples/monitoring/demo-1.yaml
@@ -46,7 +46,7 @@ $ minikube ip
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
 ## Create a PostgreSQL database
-KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
+KubeDB implements a `Postgres` CRD to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1

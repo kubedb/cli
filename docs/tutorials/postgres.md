@@ -33,7 +33,7 @@ $ minikube ip
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
-KubeDB implements a `Postgres` TPR to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
+KubeDB implements a `Postgres` CRD to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
