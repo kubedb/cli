@@ -16,10 +16,10 @@ KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their S
 ## Supported Versions
 Please pick a version of KubeDB that matches your Kubernetes installation.
 
-| KubeDB Version                                           | Docs                                                       | Kubernetes Version |
-|----------------------------------------------------------|------------------------------------------------------------|--------------------|
-| [0.7.0](https://github.com/k8sdb/cli/releases/tag/0.7.0) | [User Guide](https://github.com/k8sdb/cli/tree/0.7.0/docs) | 1.7.x+             |
-| [0.6.0](https://github.com/k8sdb/cli/releases/tag/0.6.0) | [User Guide](https://github.com/k8sdb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
+| KubeDB Version                                                      | Docs                                                       | Kubernetes Version |
+|---------------------------------------------------------------------|------------------------------------------------------------|--------------------|
+| [0.7.0](https://github.com/k8sdb/cli/releases/tag/0.7.0) (uses CRD) | [User Guide](https://github.com/k8sdb/cli/tree/0.7.0/docs) | 1.7.x+             |
+| [0.6.0](https://github.com/k8sdb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/k8sdb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation
 To install KubeDB, please follow the guide [here](/docs/install.md).
