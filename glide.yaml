@@ -11,9 +11,9 @@ import:
 - package: github.com/k8sdb/apimachinery
   version: release-0.7
 - package: github.com/k8sdb/elasticsearch
-  version: 0.7.0
+  version: master
 - package: github.com/k8sdb/postgres
-  version: 0.7.0
+  version: master
 - package: k8s.io/kubernetes
   version: ~1.7
 - package: k8s.io/metrics
