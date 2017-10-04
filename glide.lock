@@ -1,5 +1,5 @@
-hash: ba5b236a5229df0969934136a3a889d5dc3282d7bd3d4824be81b4979ccf036c
-updated: 2017-09-26T06:37:50.008911843-07:00
+hash: a6174915dbdf89b5e816471ee69a15f26e4a8f47280b87a1ee8e9177aebadb5e
+updated: 2017-10-04T04:04:09.082076992-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -219,7 +219,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/k8sdb/apimachinery
-  version: 1ece8bca55eb5055292bd661dc0f2b0505f9055a
+  version: 0e3d121b918e01522c0809be27d642b6d9b986bc
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -229,11 +229,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 80ece724ad240b95aa17e1f9742afa46db31fffe
+  version: 7cdad4658fb6190eefbda2a028afbeab3c1aa381
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: aea5bd852349de3dcd3d6205382fe780deb9d06f
+  version: 092ef007d992ce50152667652a213989bd6b427e
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -292,11 +292,11 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
 - name: github.com/spf13/cobra
-  version: b78744579491c1ceeaaa3b40205e56b0591b93a3
+  version: 0dacccfbaabc71b872087c1719c5380d3e185173
   subpackages:
   - doc
 - name: github.com/spf13/pflag
-  version: 7aff26db30c1be810f9de5038ec5ef96ac41fd7c
+  version: be7121dd7a937a85e1e4b1ddda6a3edce3466110
 - name: github.com/ugorji/go
   version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
   subpackages:
@@ -352,7 +352,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: cec5cc05d57604ba2d2eaaf5381d3248fac4814d
+  version: 406e6cffe51212e465c56554f243c115595e135a
   subpackages:
   - gensupport
   - googleapi
@@ -541,7 +541,7 @@ imports:
   - util/jsonpath
   - util/workqueue
 - name: k8s.io/kubernetes
-  version: 4bc5e7f9a6c25dc4c03d4d656f2cefd21540e28c
+  version: 8e1552342355496b62754e61ad5f802a0f3f1fa7
   subpackages:
   - cmd/kubeadm/app/apis/kubeadm
   - federation/apis/federation
