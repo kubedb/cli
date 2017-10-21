@@ -10,7 +10,7 @@ import (
 	"github.com/k8sdb/cli/pkg/kube"
 	"github.com/k8sdb/cli/pkg/util"
 	"github.com/spf13/cobra"
-	apiv1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	extensions "k8s.io/api/extensions/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -175,12 +175,12 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, version st
 		},
 		Spec: extensions.DeploymentSpec{
 			Replicas: types.Int32P(1),
-			Template: apiv1.PodTemplateSpec{
+			Template: core.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: operatorLabel,
 				},
-				Spec: apiv1.PodSpec{
-					Containers: []apiv1.Container{
+				Spec: core.PodSpec{
+					Containers: []core.Container{
 						{
 							Name:  docker.OperatorContainer,
 							Image: fmt.Sprintf("%v:%v", docker.ImageOperator, version),
@@ -190,21 +190,21 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, version st
 								fmt.Sprintf("--rbac=%v", configureRBAC),
 								"--v=3",
 							},
-							Env: []apiv1.EnvVar{
+							Env: []core.EnvVar{
 								{
 									Name: "OPERATOR_NAMESPACE",
-									ValueFrom: &apiv1.EnvVarSource{
-										FieldRef: &apiv1.ObjectFieldSelector{
+									ValueFrom: &core.EnvVarSource{
+										FieldRef: &core.ObjectFieldSelector{
 											APIVersion: "v1",
 											FieldPath:  "metadata.namespace",
 										},
 									},
 								},
 							},
-							Ports: []apiv1.ContainerPort{
+							Ports: []core.ContainerPort{
 								{
 									Name:          docker.OperatorPortName,
-									Protocol:      apiv1.ProtocolTCP,
+									Protocol:      core.ProtocolTCP,
 									ContainerPort: docker.OperatorPortNumber,
 								},
 							},
@@ -224,19 +224,19 @@ func createOperatorDeployment(client kubernetes.Interface, namespace, version st
 }
 
 func createOperatorService(client kubernetes.Interface, namespace string) error {
-	svc := &apiv1.Service{
+	svc := &core.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      docker.OperatorName,
 			Namespace: namespace,
 			Labels:    operatorLabel,
 		},
-		Spec: apiv1.ServiceSpec{
-			Type: apiv1.ServiceTypeClusterIP,
-			Ports: []apiv1.ServicePort{
+		Spec: core.ServiceSpec{
+			Type: core.ServiceTypeClusterIP,
+			Ports: []core.ServicePort{
 				{
 					Name:       docker.OperatorPortName,
 					Port:       docker.OperatorPortNumber,
-					Protocol:   apiv1.ProtocolTCP,
+					Protocol:   core.ProtocolTCP,
 					TargetPort: intstr.FromString(docker.OperatorPortName),
 				},
 			},

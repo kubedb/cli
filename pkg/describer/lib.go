@@ -9,7 +9,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	apiv1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -66,23 +66,23 @@ func timeToString(t *metav1.Time) string {
 	return t.Format(time.RFC1123Z)
 }
 
-func getAccessModesAsString(modes []apiv1.PersistentVolumeAccessMode) string {
+func getAccessModesAsString(modes []core.PersistentVolumeAccessMode) string {
 	modes = removeDuplicateAccessModes(modes)
 	modesStr := []string{}
-	if containsAccessMode(modes, apiv1.ReadWriteOnce) {
+	if containsAccessMode(modes, core.ReadWriteOnce) {
 		modesStr = append(modesStr, "RWO")
 	}
-	if containsAccessMode(modes, apiv1.ReadOnlyMany) {
+	if containsAccessMode(modes, core.ReadOnlyMany) {
 		modesStr = append(modesStr, "ROX")
 	}
-	if containsAccessMode(modes, apiv1.ReadWriteMany) {
+	if containsAccessMode(modes, core.ReadWriteMany) {
 		modesStr = append(modesStr, "RWX")
 	}
 	return strings.Join(modesStr, ",")
 }
 
-func removeDuplicateAccessModes(modes []apiv1.PersistentVolumeAccessMode) []apiv1.PersistentVolumeAccessMode {
-	accessModes := []apiv1.PersistentVolumeAccessMode{}
+func removeDuplicateAccessModes(modes []core.PersistentVolumeAccessMode) []core.PersistentVolumeAccessMode {
+	accessModes := []core.PersistentVolumeAccessMode{}
 	for _, m := range modes {
 		if !containsAccessMode(accessModes, m) {
 			accessModes = append(accessModes, m)
@@ -91,7 +91,7 @@ func removeDuplicateAccessModes(modes []apiv1.PersistentVolumeAccessMode) []apiv
 	return accessModes
 }
 
-func containsAccessMode(modes []apiv1.PersistentVolumeAccessMode, mode apiv1.PersistentVolumeAccessMode) bool {
+func containsAccessMode(modes []core.PersistentVolumeAccessMode, mode core.PersistentVolumeAccessMode) bool {
 	for _, m := range modes {
 		if m == mode {
 			return true

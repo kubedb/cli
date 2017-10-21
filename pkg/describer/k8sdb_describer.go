@@ -5,7 +5,7 @@ import (
 	"io"
 
 	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
-	apiv1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes/scheme"
@@ -256,14 +256,14 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 	})
 }
 
-func describeStorage(pvcSpec *apiv1.PersistentVolumeClaimSpec, out io.Writer) {
+func describeStorage(pvcSpec *core.PersistentVolumeClaimSpec, out io.Writer) {
 	if pvcSpec == nil {
 		fmt.Fprint(out, "No volumes.\n")
 		return
 	}
 
 	accessModes := getAccessModesAsString(pvcSpec.AccessModes)
-	val, _ := pvcSpec.Resources.Requests[apiv1.ResourceStorage]
+	val, _ := pvcSpec.Resources.Requests[core.ResourceStorage]
 	capacity := val.String()
 	fmt.Fprint(out, "Volume:\n")
 	if pvcSpec.StorageClassName != nil {

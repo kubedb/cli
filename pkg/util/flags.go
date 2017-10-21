@@ -2,13 +2,13 @@ package util
 
 import (
 	"github.com/spf13/cobra"
-	apiv1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 )
 
 func AddGetFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "List the requested object(s) from this namespace.")
+	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "List the requested object(s) from this namespace.")
 	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on, supports '=', '==', and '!='.")
 	cmd.Flags().Bool("all-namespaces", false, "If present, list the requested object(s) across all namespaces. Namespace specified with --namespace will be ignored.")
 	cmd.Flags().Bool("show-kind", false, "If present, list the resource type for the requested object(s).")
@@ -18,13 +18,13 @@ func AddGetFlags(cmd *cobra.Command) {
 }
 
 func AddCreateFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Create object(s) in this namespace.")
+	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "Create object(s) in this namespace.")
 	usage := "create the resource"
 	AddFilenameOptionFlags(cmd, options, usage)
 }
 
 func AddDeleteFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Delete object(s) from this namespace.")
+	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "Delete object(s) from this namespace.")
 	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on.")
 	cmd.Flags().StringP("output", "o", "", "Output mode. Use \"-o name\" for shorter output (resource/name).")
 	usage := "delete the resource"
@@ -32,13 +32,13 @@ func AddDeleteFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
 }
 
 func AddDescribeFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Describe object(s) from this namespace.")
+	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "Describe object(s) from this namespace.")
 	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on, supports '=', '==', and '!='.")
 	cmd.Flags().Bool("all-namespaces", false, "If present, describe the requested object(s) across all namespaces. Namespace specified with --namespace will be ignored.")
 }
 
 func AddEditFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Edit object(s) in this namespace.")
+	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "Edit object(s) in this namespace.")
 	cmd.Flags().StringP("output", "o", "yaml", "Output format. One of: yaml|json.")
 }
 
@@ -59,7 +59,7 @@ func GetNamespace(cmd *cobra.Command) (string, bool) {
 }
 
 func AddAuditReportFlags(cmd *cobra.Command) {
-	cmd.Flags().StringP("namespace", "n", apiv1.NamespaceDefault, "Export summary report of the requested object from this namespace.")
+	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "Export summary report of the requested object from this namespace.")
 	cmd.Flags().String("operator-namespace", "kube-system", "Name of namespace where operator is running")
 	cmd.Flags().String("index", "", "Export summary report for this only.")
 	cmd.Flags().String("output", "", "Directory used to store summary report")

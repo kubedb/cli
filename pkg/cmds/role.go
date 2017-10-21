@@ -8,7 +8,7 @@ import (
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	apps "k8s.io/api/apps/v1beta1"
 	batch "k8s.io/api/batch/v1"
-	apiv1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	extensions "k8s.io/api/extensions/v1beta1"
 	rbac "k8s.io/api/rbac/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
@@ -30,7 +30,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"get", "create", "update", "delete"},
 	},
 	{
-		APIGroups: []string{apiv1.GroupName},
+		APIGroups: []string{core.GroupName},
 		Resources: []string{"serviceaccounts"},
 		Verbs:     []string{"get", "create", "delete"},
 	},
@@ -40,12 +40,12 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"get", "create", "update", "delete"},
 	},
 	{
-		APIGroups: []string{apiv1.GroupName},
+		APIGroups: []string{core.GroupName},
 		Resources: []string{"services", "secrets"},
 		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
-		APIGroups: []string{apiv1.GroupName},
+		APIGroups: []string{core.GroupName},
 		Resources: []string{"endpoints"},
 		Verbs:     []string{"get"},
 	},
@@ -55,17 +55,17 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
-		APIGroups: []string{apiv1.GroupName},
+		APIGroups: []string{core.GroupName},
 		Resources: []string{"pods"},
 		Verbs:     []string{"get", "create", "list", "delete", "deletecollection"},
 	},
 	{
-		APIGroups: []string{apiv1.GroupName},
+		APIGroups: []string{core.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
 		Verbs:     []string{"list", "delete"},
 	},
 	{
-		APIGroups: []string{apiv1.GroupName},
+		APIGroups: []string{core.GroupName},
 		Resources: []string{"events"},
 		Verbs:     []string{"create"},
 	},
@@ -120,7 +120,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 		if !kerr.IsNotFound(err) {
 			return err
 		}
-		sa := &apiv1.ServiceAccount{
+		sa := &core.ServiceAccount{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      name,
 				Namespace: namespace,
