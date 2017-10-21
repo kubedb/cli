@@ -2,8 +2,8 @@ package v1alpha1
 
 import (
 	"github.com/appscode/go/encoding/json/types"
+	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 	ResourceTypePostgres = "postgreses"
 )
 
-// +genclient=true
+// +genclient
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 

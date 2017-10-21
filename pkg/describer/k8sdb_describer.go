@@ -5,10 +5,10 @@ import (
 	"io"
 
 	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/client-go/pkg/api"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
+	"k8s.io/client-go/kubernetes/scheme"
 	kapi "k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/printers"
 )
@@ -38,7 +38,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
 		item.Kind = tapi.ResourceKindElasticsearch
-		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -104,7 +104,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
 		item.Kind = tapi.ResourceKindPostgres
-		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -158,7 +158,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
 		item.Kind = tapi.ResourceKindSnapshot
-		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -215,7 +215,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
 		item.Kind = tapi.ResourceKindDormantDatabase
-		events, err = clientSet.Core().Events(item.Namespace).Search(api.Scheme, item)
+		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}

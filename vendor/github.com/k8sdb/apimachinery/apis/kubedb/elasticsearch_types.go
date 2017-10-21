@@ -2,8 +2,8 @@ package kubedb
 
 import (
 	"github.com/appscode/go/encoding/json/types"
+	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 	ResourceTypeElasticsearch = "elasticsearchs"
 )
 
-// +genclient=true
+// +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // Elasticsearch defines a Elasticsearch database.
@@ -76,6 +76,8 @@ type ElasticsearchList struct {
 	Items []Elasticsearch `json:"items,omitempty"`
 }
 
+// +k8s:deepcopy-gen=false
+// +k8s:gen-deepcopy=false
 // Following structure is used for audit summary report
 type ElasticsearchSummary struct {
 	IdCount map[string]int64 `json:"idCount"`

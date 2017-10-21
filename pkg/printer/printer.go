@@ -5,7 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/client-go/pkg/api"
+	"k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/kubernetes/pkg/api"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/printers"
 )
@@ -29,7 +30,7 @@ func NewPrinter(cmd *cobra.Command) (printers.ResourcePrinter, error) {
 		return &printers.YAMLPrinter{}, nil
 	case "name":
 		return &printers.NamePrinter{
-			Typer:    api.Scheme,
+			Typer:    scheme.Scheme,
 			Decoders: []runtime.Decoder{api.Codecs.UniversalDecoder()},
 			Mapper:   api.Registry.RESTMapper(api.Registry.EnabledVersions()...),
 		}, nil

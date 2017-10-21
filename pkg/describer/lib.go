@@ -9,8 +9,8 @@ import (
 	"text/tabwriter"
 	"time"
 
+	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
 )
 
 func tabbedString(f func(io.Writer) error) (string, error) {
