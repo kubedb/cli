@@ -9,11 +9,11 @@ import (
 	"github.com/k8sdb/cli/pkg/encoder"
 	esv "github.com/k8sdb/elasticsearch/pkg/validator"
 	pgv "github.com/k8sdb/postgres/pkg/validator"
-	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
 )
 
-func Validate(client clientset.Interface, info *resource.Info) error {
+func Validate(client kubernetes.Interface, info *resource.Info) error {
 	objByte, err := encoder.Encode(info.Object)
 	if err != nil {
 		return err
