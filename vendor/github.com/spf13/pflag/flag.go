@@ -202,18 +202,12 @@ func sortFlags(flags map[NormalizedName]*Flag) []*Flag {
 func (f *FlagSet) SetNormalizeFunc(n func(f *FlagSet, name string) NormalizedName) {
 	f.normalizeNameFunc = n
 	f.sortedFormal = f.sortedFormal[:0]
-	for fname, flag := range f.formal {
-		nname := f.normalizeFlagName(flag.Name)
-		if fname == nname {
-			continue
-		}
-		flag.Name = string(nname)
-		delete(f.formal, fname)
-		f.formal[nname] = flag
-		if _, set := f.actual[fname]; set {
-			delete(f.actual, fname)
-			f.actual[nname] = flag
-		}
+	for k, v := range f.orderedFormal {
+		delete(f.formal, NormalizedName(v.Name))
+		nname := f.normalizeFlagName(v.Name)
+		v.Name = string(nname)
+		f.formal[nname] = v
+		f.orderedFormal[k] = v
 	}
 }
 
@@ -446,15 +440,13 @@ func (f *FlagSet) Set(name, value string) error {
 		return fmt.Errorf("invalid argument %q for %q flag: %v", value, flagName, err)
 	}
 
-	if !flag.Changed {
-		if f.actual == nil {
-			f.actual = make(map[NormalizedName]*Flag)
-		}
-		f.actual[normalName] = flag
-		f.orderedActual = append(f.orderedActual, flag)
-
-		flag.Changed = true
+	if f.actual == nil {
+		f.actual = make(map[NormalizedName]*Flag)
 	}
+	f.actual[normalName] = flag
+	f.orderedActual = append(f.orderedActual, flag)
+
+	flag.Changed = true
 
 	if flag.Deprecated != "" {
 		fmt.Fprintf(f.out(), "Flag --%s has been deprecated, %s\n", flag.Name, flag.Deprecated)
@@ -564,10 +556,6 @@ func UnquoteUsage(flag *Flag) (name string, usage string) {
 		name = "int"
 	case "uint64":
 		name = "uint"
-	case "stringSlice":
-		name = "strings"
-	case "intSlice":
-		name = "ints"
 	}
 
 	return
@@ -924,9 +912,6 @@ func (f *FlagSet) parseLongArg(s string, args []string, fn parseFunc) (a []strin
 	}
 
 	err = fn(flag, value)
-	if err != nil {
-		f.failf(err.Error())
-	}
 	return
 }
 
@@ -977,9 +962,6 @@ func (f *FlagSet) parseSingleShortArg(shorthands string, args []string, fn parse
 	}
 
 	err = fn(flag, value)
-	if err != nil {
-		f.failf(err.Error())
-	}
 	return
 }
 

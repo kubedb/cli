@@ -15,16 +15,16 @@ import (
 	"github.com/graymeta/stow/s3"
 	"github.com/graymeta/stow/swift"
 	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	clientset "k8s.io/client-go/kubernetes"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
+	"k8s.io/client-go/kubernetes"
 )
 
 const (
 	SecretMountPath = "/etc/osm"
 )
 
-func NewOSMSecret(client clientset.Interface, snapshot *tapi.Snapshot) (*apiv1.Secret, error) {
+func NewOSMSecret(client kubernetes.Interface, snapshot *tapi.Snapshot) (*core.Secret, error) {
 	osmCtx, err := NewOSMContext(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func NewOSMSecret(client clientset.Interface, snapshot *tapi.Snapshot) (*apiv1.S
 	if err != nil {
 		return nil, err
 	}
-	return &apiv1.Secret{
+	return &core.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      snapshot.Name,
 			Namespace: snapshot.Namespace,
@@ -48,7 +48,7 @@ func NewOSMSecret(client clientset.Interface, snapshot *tapi.Snapshot) (*apiv1.S
 	}, nil
 }
 
-func CheckBucketAccess(client clientset.Interface, spec tapi.SnapshotStorageSpec, namespace string) error {
+func CheckBucketAccess(client kubernetes.Interface, spec tapi.SnapshotStorageSpec, namespace string) error {
 	cfg, err := NewOSMContext(client, spec, namespace)
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func CheckBucketAccess(client clientset.Interface, spec tapi.SnapshotStorageSpec
 	return nil
 }
 
-func NewOSMContext(client clientset.Interface, spec tapi.SnapshotStorageSpec, namespace string) (*otx.Context, error) {
+func NewOSMContext(client kubernetes.Interface, spec tapi.SnapshotStorageSpec, namespace string) (*otx.Context, error) {
 	config := make(map[string][]byte)
 
 	if spec.StorageSecretName != "" {

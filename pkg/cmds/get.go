@@ -88,7 +88,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 	if len(args) == 0 {
 		fmt.Fprint(errOut, "You must specify the type of resource to get. ", valid_resources)
 		usageString := "Required resource not specified."
-		return cmdutil.UsageError(cmd, usageString)
+		return cmdutil.UsageErrorf(cmd, usageString)
 	}
 
 	var printAll bool = false

@@ -79,7 +79,7 @@ func runEdit(f cmdutil.Factory, out, errOut io.Writer, cmd *cobra.Command, args 
 
 	if len(args) == 0 {
 		usageString := "Required resource not specified."
-		return cmdutil.UsageError(cmd, usageString)
+		return cmdutil.UsageErrorf(cmd, usageString)
 	}
 
 	resources := strings.Split(args[0], ",")
