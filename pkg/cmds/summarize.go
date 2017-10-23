@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net"
+	"net/http"
 	"net/url"
 	"path/filepath"
 	"strconv"
@@ -23,7 +24,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/portforward"
-	"k8s.io/client-go/tools/remotecommand"
+	"k8s.io/client-go/transport/spdy"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
@@ -52,7 +53,7 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	if len(args) == 0 {
 		fmt.Fprint(errOut, "You must specify the type of resource. ", validResourcesForReport)
 		usageString := "Required resource not specified."
-		return cmdutil.UsageError(cmd, usageString)
+		return cmdutil.UsageErrorf(cmd, usageString)
 	}
 
 	if len(strings.Split(args[0], ",")) > 1 {
@@ -188,10 +189,11 @@ func (t *tunnel) forwardPort() error {
 		Name(t.PodName).
 		SubResource("portforward").URL()
 
-	dialer, err := remotecommand.NewExecutor(t.config, "GET", u)
+	transport, upgrader, err := spdy.RoundTripperFor(t.config)
 	if err != nil {
 		return err
 	}
+	dialer := spdy.NewDialer(upgrader, &http.Client{Transport: transport}, "POST", u)
 
 	local, err := getAvailablePort()
 	if err != nil {

@@ -65,6 +65,6 @@ func NewEditPrinter(cmd *cobra.Command) (*editPrinterOptions, error) {
 			AddHeader: true,
 		}, nil
 	default:
-		return nil, cmdutil.UsageError(cmd, "The flag 'output' must be one of yaml|json")
+		return nil, cmdutil.UsageErrorf(cmd, "The flag 'output' must be one of yaml|json")
 	}
 }

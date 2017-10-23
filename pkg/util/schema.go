@@ -1,7 +1,7 @@
 package util
 
 import (
-	"k8s.io/kubernetes/pkg/api/validation"
+	"k8s.io/kubernetes/pkg/kubectl/validation"
 )
 
 type ConjunctiveSchema []validation.Schema

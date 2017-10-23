@@ -42,7 +42,7 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 		Long:    create_long,
 		Example: create_example,
 		Run: func(cmd *cobra.Command, args []string) {
-			if cmdutil.IsFilenameEmpty(options.Filenames) {
+			if cmdutil.IsFilenameSliceEmpty(options.Filenames) {
 				defaultRunFunc := cmdutil.DefaultSubCommandRun(errOut)
 				defaultRunFunc(cmd, args)
 				return
