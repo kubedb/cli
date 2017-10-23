@@ -1,19 +1,19 @@
 package: github.com/k8sdb/cli
 import:
 - package: github.com/appscode/go
-- package: github.com/appscode/log
-- package: github.com/spf13/cobra
-  version: master
-- package: github.com/sergi/go-diff
-  version: master
-- package: github.com/spf13/pflag
-  version: master
+- package: github.com/ghodss/yaml
+  version: v1.0.0
+- package: github.com/golang/glog
+- package: github.com/jpillora/go-ogle-analytics
 - package: github.com/k8sdb/apimachinery
   version: master
 - package: github.com/k8sdb/elasticsearch
   version: master
 - package: github.com/k8sdb/postgres
   version: master
+- package: github.com/spf13/cobra
+- package: github.com/yudai/gojsondiff
+  version: 1.0.0
 - package: k8s.io/api
   version: fe29995db37613b9c5b2a647544cf627bfa8d299
 - package: k8s.io/apiextensions-apiserver
@@ -30,10 +30,11 @@ import:
   repo: https://github.com/appscode/stow.git
   vcs: git
   version: master
-- package: google.golang.org/api/storage/v1
-  version: master
-- package: cloud.google.com/go
-  version: v0.2.0
 - package: github.com/Azure/azure-sdk-for-go
-  vcs: git
   version: v10.2.1-beta
+- package: github.com/Azure/go-autorest
+  version: ~8.1.1
+- package: github.com/Azure/go-ansiterm
+  version: 19f72df4d05d31cbe1c56bfc8045c96babff6c7e
+- package: golang.org/x/sys
+  version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce

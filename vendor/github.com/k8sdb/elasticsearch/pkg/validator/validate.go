@@ -6,10 +6,10 @@ import (
 	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
-	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateElastic(client clientset.Interface, elastic *tapi.Elasticsearch) error {
+func ValidateElastic(client kubernetes.Interface, elastic *tapi.Elasticsearch) error {
 	if elastic.Spec.Version == "" {
 		return fmt.Errorf(`Object 'Version' is missing in '%v'`, elastic.Spec)
 	}

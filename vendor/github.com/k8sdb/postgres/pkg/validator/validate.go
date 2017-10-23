@@ -7,10 +7,10 @@ import (
 	"github.com/k8sdb/apimachinery/pkg/docker"
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes"
 )
 
-func ValidatePostgres(client clientset.Interface, postgres *tapi.Postgres) error {
+func ValidatePostgres(client kubernetes.Interface, postgres *tapi.Postgres) error {
 	if postgres.Spec.Version == "" {
 		return fmt.Errorf(`Object 'Version' is missing in '%v'`, postgres.Spec)
 	}
