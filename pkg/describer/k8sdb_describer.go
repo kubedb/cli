@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	mona "github.com/appscode/kutil/tools/monitoring/api"
+	api "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -15,7 +16,7 @@ import (
 
 const statusUnknown = "Unknown"
 
-func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeElastic(item *api.Elasticsearch, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -25,8 +26,8 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: item.ResourceKind(),
-					tapi.LabelDatabaseName: item.Name,
+					api.LabelDatabaseKind: item.ResourceKind(),
+					api.LabelDatabaseName: item.Name,
 				},
 			).String(),
 		},
@@ -37,7 +38,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		item.Kind = tapi.ResourceKindElasticsearch
+		item.Kind = api.ResourceKindElasticsearch
 		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
@@ -81,7 +82,7 @@ func (d *humanReadableDescriber) describeElastic(item *tapi.Elasticsearch, descr
 	})
 }
 
-func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -91,8 +92,8 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: item.ResourceKind(),
-					tapi.LabelDatabaseName: item.Name,
+					api.LabelDatabaseKind: item.ResourceKind(),
+					api.LabelDatabaseName: item.Name,
 				},
 			).String(),
 		},
@@ -103,7 +104,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		item.Kind = tapi.ResourceKindPostgres
+		item.Kind = api.ResourceKindPostgres
 		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
@@ -149,7 +150,7 @@ func (d *humanReadableDescriber) describePostgres(item *tapi.Postgres, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -157,7 +158,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		item.Kind = tapi.ResourceKindSnapshot
+		item.Kind = api.ResourceKindSnapshot
 		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
@@ -192,7 +193,7 @@ func (d *humanReadableDescriber) describeSnapshot(item *tapi.Snapshot, describer
 	})
 }
 
-func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatabase, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeDormantDatabase(item *api.DormantDatabase, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -202,8 +203,8 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 		metav1.ListOptions{
 			LabelSelector: labels.SelectorFromSet(
 				map[string]string{
-					tapi.LabelDatabaseKind: item.Labels[tapi.LabelDatabaseKind],
-					tapi.LabelDatabaseName: item.Name,
+					api.LabelDatabaseKind: item.Labels[api.LabelDatabaseKind],
+					api.LabelDatabaseName: item.Name,
 				},
 			).String(),
 		},
@@ -214,7 +215,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
-		item.Kind = tapi.ResourceKindDormantDatabase
+		item.Kind = api.ResourceKindDormantDatabase
 		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
@@ -244,7 +245,7 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *tapi.DormantDatab
 
 		describeOrigin(item.Spec.Origin, out)
 
-		if item.Status.Phase != tapi.DormantDatabasePhaseWipedOut {
+		if item.Status.Phase != api.DormantDatabasePhaseWipedOut {
 			listSnapshots(snapshots, out)
 		}
 
@@ -273,7 +274,7 @@ func describeStorage(pvcSpec *core.PersistentVolumeClaimSpec, out io.Writer) {
 	fmt.Fprintf(out, "  Access Modes:\t%s\n", accessModes)
 }
 
-func describeMonitor(monitor *tapi.MonitorSpec, out io.Writer) {
+func describeMonitor(monitor *mona.AgentSpec, out io.Writer) {
 	if monitor == nil {
 		return
 	}
@@ -292,7 +293,7 @@ func describeMonitor(monitor *tapi.MonitorSpec, out io.Writer) {
 	}
 }
 
-func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
+func listSnapshots(snapshotList *api.SnapshotList, out io.Writer) {
 	fmt.Fprint(out, "\n")
 
 	if len(snapshotList.Items) == 0 {
@@ -321,7 +322,7 @@ func listSnapshots(snapshotList *tapi.SnapshotList, out io.Writer) {
 	w.Flush()
 }
 
-func describeOrigin(origin tapi.Origin, out io.Writer) {
+func describeOrigin(origin api.Origin, out io.Writer) {
 	fmt.Fprint(out, "\n")
 	fmt.Fprint(out, "Origin:\n")
 	fmt.Fprintf(out, "  Name:\t%s\n", origin.Name)
