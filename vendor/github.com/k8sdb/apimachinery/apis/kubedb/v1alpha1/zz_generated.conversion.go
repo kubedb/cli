@@ -24,15 +24,16 @@ import (
 	unsafe "unsafe"
 
 	types "github.com/appscode/go/encoding/json/types"
+	api "github.com/appscode/kutil/tools/monitoring/api"
 	kubedb "github.com/k8sdb/apimachinery/apis/kubedb"
+	core_v1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	api_v1 "k8s.io/client-go/pkg/api/v1"
 )
 
 func init() {
-	SchemeBuilder.Register(RegisterConversions)
+	localSchemeBuilder.Register(RegisterConversions)
 }
 
 // RegisterConversions adds conversion functions to the given scheme.
@@ -67,8 +68,30 @@ func RegisterConversions(scheme *runtime.Scheme) error {
 		Convert_kubedb_InitSpec_To_v1alpha1_InitSpec,
 		Convert_v1alpha1_LocalSpec_To_kubedb_LocalSpec,
 		Convert_kubedb_LocalSpec_To_v1alpha1_LocalSpec,
-		Convert_v1alpha1_MonitorSpec_To_kubedb_MonitorSpec,
-		Convert_kubedb_MonitorSpec_To_v1alpha1_MonitorSpec,
+		Convert_v1alpha1_Memcached_To_kubedb_Memcached,
+		Convert_kubedb_Memcached_To_v1alpha1_Memcached,
+		Convert_v1alpha1_MemcachedList_To_kubedb_MemcachedList,
+		Convert_kubedb_MemcachedList_To_v1alpha1_MemcachedList,
+		Convert_v1alpha1_MemcachedSpec_To_kubedb_MemcachedSpec,
+		Convert_kubedb_MemcachedSpec_To_v1alpha1_MemcachedSpec,
+		Convert_v1alpha1_MemcachedStatus_To_kubedb_MemcachedStatus,
+		Convert_kubedb_MemcachedStatus_To_v1alpha1_MemcachedStatus,
+		Convert_v1alpha1_MongoDB_To_kubedb_MongoDB,
+		Convert_kubedb_MongoDB_To_v1alpha1_MongoDB,
+		Convert_v1alpha1_MongoDBList_To_kubedb_MongoDBList,
+		Convert_kubedb_MongoDBList_To_v1alpha1_MongoDBList,
+		Convert_v1alpha1_MongoDBSpec_To_kubedb_MongoDBSpec,
+		Convert_kubedb_MongoDBSpec_To_v1alpha1_MongoDBSpec,
+		Convert_v1alpha1_MongoDBStatus_To_kubedb_MongoDBStatus,
+		Convert_kubedb_MongoDBStatus_To_v1alpha1_MongoDBStatus,
+		Convert_v1alpha1_MySQL_To_kubedb_MySQL,
+		Convert_kubedb_MySQL_To_v1alpha1_MySQL,
+		Convert_v1alpha1_MySQLList_To_kubedb_MySQLList,
+		Convert_kubedb_MySQLList_To_v1alpha1_MySQLList,
+		Convert_v1alpha1_MySQLSpec_To_kubedb_MySQLSpec,
+		Convert_kubedb_MySQLSpec_To_v1alpha1_MySQLSpec,
+		Convert_v1alpha1_MySQLStatus_To_kubedb_MySQLStatus,
+		Convert_kubedb_MySQLStatus_To_v1alpha1_MySQLStatus,
 		Convert_v1alpha1_Origin_To_kubedb_Origin,
 		Convert_kubedb_Origin_To_v1alpha1_Origin,
 		Convert_v1alpha1_OriginSpec_To_kubedb_OriginSpec,
@@ -87,8 +110,14 @@ func RegisterConversions(scheme *runtime.Scheme) error {
 		Convert_kubedb_PostgresSummary_To_v1alpha1_PostgresSummary,
 		Convert_v1alpha1_PostgresTableInfo_To_kubedb_PostgresTableInfo,
 		Convert_kubedb_PostgresTableInfo_To_v1alpha1_PostgresTableInfo,
-		Convert_v1alpha1_PrometheusSpec_To_kubedb_PrometheusSpec,
-		Convert_kubedb_PrometheusSpec_To_v1alpha1_PrometheusSpec,
+		Convert_v1alpha1_Redis_To_kubedb_Redis,
+		Convert_kubedb_Redis_To_v1alpha1_Redis,
+		Convert_v1alpha1_RedisList_To_kubedb_RedisList,
+		Convert_kubedb_RedisList_To_v1alpha1_RedisList,
+		Convert_v1alpha1_RedisSpec_To_kubedb_RedisSpec,
+		Convert_kubedb_RedisSpec_To_v1alpha1_RedisSpec,
+		Convert_v1alpha1_RedisStatus_To_kubedb_RedisStatus,
+		Convert_kubedb_RedisStatus_To_v1alpha1_RedisStatus,
 		Convert_v1alpha1_Report_To_kubedb_Report,
 		Convert_kubedb_Report_To_v1alpha1_Report,
 		Convert_v1alpha1_ReportStatus_To_kubedb_ReportStatus,
@@ -333,16 +362,16 @@ func Convert_kubedb_ElasticsearchList_To_v1alpha1_ElasticsearchList(in *kubedb.E
 func autoConvert_v1alpha1_ElasticsearchSpec_To_kubedb_ElasticsearchSpec(in *ElasticsearchSpec, out *kubedb.ElasticsearchSpec, s conversion.Scope) error {
 	out.Version = types.StrYo(in.Version)
 	out.Replicas = in.Replicas
-	out.Storage = (*api_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
 	out.Init = (*kubedb.InitSpec)(unsafe.Pointer(in.Init))
 	out.BackupSchedule = (*kubedb.BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
 	out.DoNotPause = in.DoNotPause
-	out.Monitor = (*kubedb.MonitorSpec)(unsafe.Pointer(in.Monitor))
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.Resources = in.Resources
-	out.Affinity = (*api_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
 	out.SchedulerName = in.SchedulerName
-	out.Tolerations = *(*[]api_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
 	return nil
 }
 
@@ -354,16 +383,16 @@ func Convert_v1alpha1_ElasticsearchSpec_To_kubedb_ElasticsearchSpec(in *Elastics
 func autoConvert_kubedb_ElasticsearchSpec_To_v1alpha1_ElasticsearchSpec(in *kubedb.ElasticsearchSpec, out *ElasticsearchSpec, s conversion.Scope) error {
 	out.Version = types.StrYo(in.Version)
 	out.Replicas = in.Replicas
-	out.Storage = (*api_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
 	out.Init = (*InitSpec)(unsafe.Pointer(in.Init))
 	out.BackupSchedule = (*BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
 	out.DoNotPause = in.DoNotPause
-	out.Monitor = (*MonitorSpec)(unsafe.Pointer(in.Monitor))
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.Resources = in.Resources
-	out.Affinity = (*api_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
 	out.SchedulerName = in.SchedulerName
-	out.Tolerations = *(*[]api_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
 	return nil
 }
 
@@ -498,26 +527,362 @@ func Convert_kubedb_LocalSpec_To_v1alpha1_LocalSpec(in *kubedb.LocalSpec, out *L
 	return autoConvert_kubedb_LocalSpec_To_v1alpha1_LocalSpec(in, out, s)
 }
 
-func autoConvert_v1alpha1_MonitorSpec_To_kubedb_MonitorSpec(in *MonitorSpec, out *kubedb.MonitorSpec, s conversion.Scope) error {
-	out.Agent = in.Agent
-	out.Prometheus = (*kubedb.PrometheusSpec)(unsafe.Pointer(in.Prometheus))
+func autoConvert_v1alpha1_Memcached_To_kubedb_Memcached(in *Memcached, out *kubedb.Memcached, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_v1alpha1_MemcachedSpec_To_kubedb_MemcachedSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_v1alpha1_MemcachedStatus_To_kubedb_MemcachedStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
 	return nil
 }
 
-// Convert_v1alpha1_MonitorSpec_To_kubedb_MonitorSpec is an autogenerated conversion function.
-func Convert_v1alpha1_MonitorSpec_To_kubedb_MonitorSpec(in *MonitorSpec, out *kubedb.MonitorSpec, s conversion.Scope) error {
-	return autoConvert_v1alpha1_MonitorSpec_To_kubedb_MonitorSpec(in, out, s)
+// Convert_v1alpha1_Memcached_To_kubedb_Memcached is an autogenerated conversion function.
+func Convert_v1alpha1_Memcached_To_kubedb_Memcached(in *Memcached, out *kubedb.Memcached, s conversion.Scope) error {
+	return autoConvert_v1alpha1_Memcached_To_kubedb_Memcached(in, out, s)
 }
 
-func autoConvert_kubedb_MonitorSpec_To_v1alpha1_MonitorSpec(in *kubedb.MonitorSpec, out *MonitorSpec, s conversion.Scope) error {
-	out.Agent = in.Agent
-	out.Prometheus = (*PrometheusSpec)(unsafe.Pointer(in.Prometheus))
+func autoConvert_kubedb_Memcached_To_v1alpha1_Memcached(in *kubedb.Memcached, out *Memcached, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_kubedb_MemcachedSpec_To_v1alpha1_MemcachedSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_kubedb_MemcachedStatus_To_v1alpha1_MemcachedStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
 	return nil
 }
 
-// Convert_kubedb_MonitorSpec_To_v1alpha1_MonitorSpec is an autogenerated conversion function.
-func Convert_kubedb_MonitorSpec_To_v1alpha1_MonitorSpec(in *kubedb.MonitorSpec, out *MonitorSpec, s conversion.Scope) error {
-	return autoConvert_kubedb_MonitorSpec_To_v1alpha1_MonitorSpec(in, out, s)
+// Convert_kubedb_Memcached_To_v1alpha1_Memcached is an autogenerated conversion function.
+func Convert_kubedb_Memcached_To_v1alpha1_Memcached(in *kubedb.Memcached, out *Memcached, s conversion.Scope) error {
+	return autoConvert_kubedb_Memcached_To_v1alpha1_Memcached(in, out, s)
+}
+
+func autoConvert_v1alpha1_MemcachedList_To_kubedb_MemcachedList(in *MemcachedList, out *kubedb.MemcachedList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]kubedb.Memcached)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_v1alpha1_MemcachedList_To_kubedb_MemcachedList is an autogenerated conversion function.
+func Convert_v1alpha1_MemcachedList_To_kubedb_MemcachedList(in *MemcachedList, out *kubedb.MemcachedList, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MemcachedList_To_kubedb_MemcachedList(in, out, s)
+}
+
+func autoConvert_kubedb_MemcachedList_To_v1alpha1_MemcachedList(in *kubedb.MemcachedList, out *MemcachedList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]Memcached)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_kubedb_MemcachedList_To_v1alpha1_MemcachedList is an autogenerated conversion function.
+func Convert_kubedb_MemcachedList_To_v1alpha1_MemcachedList(in *kubedb.MemcachedList, out *MemcachedList, s conversion.Scope) error {
+	return autoConvert_kubedb_MemcachedList_To_v1alpha1_MemcachedList(in, out, s)
+}
+
+func autoConvert_v1alpha1_MemcachedSpec_To_kubedb_MemcachedSpec(in *MemcachedSpec, out *kubedb.MemcachedSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_v1alpha1_MemcachedSpec_To_kubedb_MemcachedSpec is an autogenerated conversion function.
+func Convert_v1alpha1_MemcachedSpec_To_kubedb_MemcachedSpec(in *MemcachedSpec, out *kubedb.MemcachedSpec, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MemcachedSpec_To_kubedb_MemcachedSpec(in, out, s)
+}
+
+func autoConvert_kubedb_MemcachedSpec_To_v1alpha1_MemcachedSpec(in *kubedb.MemcachedSpec, out *MemcachedSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_kubedb_MemcachedSpec_To_v1alpha1_MemcachedSpec is an autogenerated conversion function.
+func Convert_kubedb_MemcachedSpec_To_v1alpha1_MemcachedSpec(in *kubedb.MemcachedSpec, out *MemcachedSpec, s conversion.Scope) error {
+	return autoConvert_kubedb_MemcachedSpec_To_v1alpha1_MemcachedSpec(in, out, s)
+}
+
+func autoConvert_v1alpha1_MemcachedStatus_To_kubedb_MemcachedStatus(in *MemcachedStatus, out *kubedb.MemcachedStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = kubedb.DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_v1alpha1_MemcachedStatus_To_kubedb_MemcachedStatus is an autogenerated conversion function.
+func Convert_v1alpha1_MemcachedStatus_To_kubedb_MemcachedStatus(in *MemcachedStatus, out *kubedb.MemcachedStatus, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MemcachedStatus_To_kubedb_MemcachedStatus(in, out, s)
+}
+
+func autoConvert_kubedb_MemcachedStatus_To_v1alpha1_MemcachedStatus(in *kubedb.MemcachedStatus, out *MemcachedStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_kubedb_MemcachedStatus_To_v1alpha1_MemcachedStatus is an autogenerated conversion function.
+func Convert_kubedb_MemcachedStatus_To_v1alpha1_MemcachedStatus(in *kubedb.MemcachedStatus, out *MemcachedStatus, s conversion.Scope) error {
+	return autoConvert_kubedb_MemcachedStatus_To_v1alpha1_MemcachedStatus(in, out, s)
+}
+
+func autoConvert_v1alpha1_MongoDB_To_kubedb_MongoDB(in *MongoDB, out *kubedb.MongoDB, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_v1alpha1_MongoDBSpec_To_kubedb_MongoDBSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_v1alpha1_MongoDBStatus_To_kubedb_MongoDBStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Convert_v1alpha1_MongoDB_To_kubedb_MongoDB is an autogenerated conversion function.
+func Convert_v1alpha1_MongoDB_To_kubedb_MongoDB(in *MongoDB, out *kubedb.MongoDB, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MongoDB_To_kubedb_MongoDB(in, out, s)
+}
+
+func autoConvert_kubedb_MongoDB_To_v1alpha1_MongoDB(in *kubedb.MongoDB, out *MongoDB, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_kubedb_MongoDBSpec_To_v1alpha1_MongoDBSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_kubedb_MongoDBStatus_To_v1alpha1_MongoDBStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Convert_kubedb_MongoDB_To_v1alpha1_MongoDB is an autogenerated conversion function.
+func Convert_kubedb_MongoDB_To_v1alpha1_MongoDB(in *kubedb.MongoDB, out *MongoDB, s conversion.Scope) error {
+	return autoConvert_kubedb_MongoDB_To_v1alpha1_MongoDB(in, out, s)
+}
+
+func autoConvert_v1alpha1_MongoDBList_To_kubedb_MongoDBList(in *MongoDBList, out *kubedb.MongoDBList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]kubedb.MongoDB)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_v1alpha1_MongoDBList_To_kubedb_MongoDBList is an autogenerated conversion function.
+func Convert_v1alpha1_MongoDBList_To_kubedb_MongoDBList(in *MongoDBList, out *kubedb.MongoDBList, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MongoDBList_To_kubedb_MongoDBList(in, out, s)
+}
+
+func autoConvert_kubedb_MongoDBList_To_v1alpha1_MongoDBList(in *kubedb.MongoDBList, out *MongoDBList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]MongoDB)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_kubedb_MongoDBList_To_v1alpha1_MongoDBList is an autogenerated conversion function.
+func Convert_kubedb_MongoDBList_To_v1alpha1_MongoDBList(in *kubedb.MongoDBList, out *MongoDBList, s conversion.Scope) error {
+	return autoConvert_kubedb_MongoDBList_To_v1alpha1_MongoDBList(in, out, s)
+}
+
+func autoConvert_v1alpha1_MongoDBSpec_To_kubedb_MongoDBSpec(in *MongoDBSpec, out *kubedb.MongoDBSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.Init = (*kubedb.InitSpec)(unsafe.Pointer(in.Init))
+	out.BackupSchedule = (*kubedb.BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_v1alpha1_MongoDBSpec_To_kubedb_MongoDBSpec is an autogenerated conversion function.
+func Convert_v1alpha1_MongoDBSpec_To_kubedb_MongoDBSpec(in *MongoDBSpec, out *kubedb.MongoDBSpec, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MongoDBSpec_To_kubedb_MongoDBSpec(in, out, s)
+}
+
+func autoConvert_kubedb_MongoDBSpec_To_v1alpha1_MongoDBSpec(in *kubedb.MongoDBSpec, out *MongoDBSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.Init = (*InitSpec)(unsafe.Pointer(in.Init))
+	out.BackupSchedule = (*BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_kubedb_MongoDBSpec_To_v1alpha1_MongoDBSpec is an autogenerated conversion function.
+func Convert_kubedb_MongoDBSpec_To_v1alpha1_MongoDBSpec(in *kubedb.MongoDBSpec, out *MongoDBSpec, s conversion.Scope) error {
+	return autoConvert_kubedb_MongoDBSpec_To_v1alpha1_MongoDBSpec(in, out, s)
+}
+
+func autoConvert_v1alpha1_MongoDBStatus_To_kubedb_MongoDBStatus(in *MongoDBStatus, out *kubedb.MongoDBStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = kubedb.DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_v1alpha1_MongoDBStatus_To_kubedb_MongoDBStatus is an autogenerated conversion function.
+func Convert_v1alpha1_MongoDBStatus_To_kubedb_MongoDBStatus(in *MongoDBStatus, out *kubedb.MongoDBStatus, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MongoDBStatus_To_kubedb_MongoDBStatus(in, out, s)
+}
+
+func autoConvert_kubedb_MongoDBStatus_To_v1alpha1_MongoDBStatus(in *kubedb.MongoDBStatus, out *MongoDBStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_kubedb_MongoDBStatus_To_v1alpha1_MongoDBStatus is an autogenerated conversion function.
+func Convert_kubedb_MongoDBStatus_To_v1alpha1_MongoDBStatus(in *kubedb.MongoDBStatus, out *MongoDBStatus, s conversion.Scope) error {
+	return autoConvert_kubedb_MongoDBStatus_To_v1alpha1_MongoDBStatus(in, out, s)
+}
+
+func autoConvert_v1alpha1_MySQL_To_kubedb_MySQL(in *MySQL, out *kubedb.MySQL, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_v1alpha1_MySQLSpec_To_kubedb_MySQLSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_v1alpha1_MySQLStatus_To_kubedb_MySQLStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Convert_v1alpha1_MySQL_To_kubedb_MySQL is an autogenerated conversion function.
+func Convert_v1alpha1_MySQL_To_kubedb_MySQL(in *MySQL, out *kubedb.MySQL, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MySQL_To_kubedb_MySQL(in, out, s)
+}
+
+func autoConvert_kubedb_MySQL_To_v1alpha1_MySQL(in *kubedb.MySQL, out *MySQL, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_kubedb_MySQLSpec_To_v1alpha1_MySQLSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_kubedb_MySQLStatus_To_v1alpha1_MySQLStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Convert_kubedb_MySQL_To_v1alpha1_MySQL is an autogenerated conversion function.
+func Convert_kubedb_MySQL_To_v1alpha1_MySQL(in *kubedb.MySQL, out *MySQL, s conversion.Scope) error {
+	return autoConvert_kubedb_MySQL_To_v1alpha1_MySQL(in, out, s)
+}
+
+func autoConvert_v1alpha1_MySQLList_To_kubedb_MySQLList(in *MySQLList, out *kubedb.MySQLList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]kubedb.MySQL)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_v1alpha1_MySQLList_To_kubedb_MySQLList is an autogenerated conversion function.
+func Convert_v1alpha1_MySQLList_To_kubedb_MySQLList(in *MySQLList, out *kubedb.MySQLList, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MySQLList_To_kubedb_MySQLList(in, out, s)
+}
+
+func autoConvert_kubedb_MySQLList_To_v1alpha1_MySQLList(in *kubedb.MySQLList, out *MySQLList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]MySQL)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_kubedb_MySQLList_To_v1alpha1_MySQLList is an autogenerated conversion function.
+func Convert_kubedb_MySQLList_To_v1alpha1_MySQLList(in *kubedb.MySQLList, out *MySQLList, s conversion.Scope) error {
+	return autoConvert_kubedb_MySQLList_To_v1alpha1_MySQLList(in, out, s)
+}
+
+func autoConvert_v1alpha1_MySQLSpec_To_kubedb_MySQLSpec(in *MySQLSpec, out *kubedb.MySQLSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.Init = (*kubedb.InitSpec)(unsafe.Pointer(in.Init))
+	out.BackupSchedule = (*kubedb.BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_v1alpha1_MySQLSpec_To_kubedb_MySQLSpec is an autogenerated conversion function.
+func Convert_v1alpha1_MySQLSpec_To_kubedb_MySQLSpec(in *MySQLSpec, out *kubedb.MySQLSpec, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MySQLSpec_To_kubedb_MySQLSpec(in, out, s)
+}
+
+func autoConvert_kubedb_MySQLSpec_To_v1alpha1_MySQLSpec(in *kubedb.MySQLSpec, out *MySQLSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.Init = (*InitSpec)(unsafe.Pointer(in.Init))
+	out.BackupSchedule = (*BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_kubedb_MySQLSpec_To_v1alpha1_MySQLSpec is an autogenerated conversion function.
+func Convert_kubedb_MySQLSpec_To_v1alpha1_MySQLSpec(in *kubedb.MySQLSpec, out *MySQLSpec, s conversion.Scope) error {
+	return autoConvert_kubedb_MySQLSpec_To_v1alpha1_MySQLSpec(in, out, s)
+}
+
+func autoConvert_v1alpha1_MySQLStatus_To_kubedb_MySQLStatus(in *MySQLStatus, out *kubedb.MySQLStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = kubedb.DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_v1alpha1_MySQLStatus_To_kubedb_MySQLStatus is an autogenerated conversion function.
+func Convert_v1alpha1_MySQLStatus_To_kubedb_MySQLStatus(in *MySQLStatus, out *kubedb.MySQLStatus, s conversion.Scope) error {
+	return autoConvert_v1alpha1_MySQLStatus_To_kubedb_MySQLStatus(in, out, s)
+}
+
+func autoConvert_kubedb_MySQLStatus_To_v1alpha1_MySQLStatus(in *kubedb.MySQLStatus, out *MySQLStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_kubedb_MySQLStatus_To_v1alpha1_MySQLStatus is an autogenerated conversion function.
+func Convert_kubedb_MySQLStatus_To_v1alpha1_MySQLStatus(in *kubedb.MySQLStatus, out *MySQLStatus, s conversion.Scope) error {
+	return autoConvert_kubedb_MySQLStatus_To_v1alpha1_MySQLStatus(in, out, s)
 }
 
 func autoConvert_v1alpha1_Origin_To_kubedb_Origin(in *Origin, out *kubedb.Origin, s conversion.Scope) error {
@@ -549,6 +914,10 @@ func Convert_kubedb_Origin_To_v1alpha1_Origin(in *kubedb.Origin, out *Origin, s 
 func autoConvert_v1alpha1_OriginSpec_To_kubedb_OriginSpec(in *OriginSpec, out *kubedb.OriginSpec, s conversion.Scope) error {
 	out.Elasticsearch = (*kubedb.ElasticsearchSpec)(unsafe.Pointer(in.Elasticsearch))
 	out.Postgres = (*kubedb.PostgresSpec)(unsafe.Pointer(in.Postgres))
+	out.MySQL = (*kubedb.MySQLSpec)(unsafe.Pointer(in.MySQL))
+	out.MongoDB = (*kubedb.MongoDBSpec)(unsafe.Pointer(in.MongoDB))
+	out.Redis = (*kubedb.RedisSpec)(unsafe.Pointer(in.Redis))
+	out.Memcached = (*kubedb.MemcachedSpec)(unsafe.Pointer(in.Memcached))
 	return nil
 }
 
@@ -560,6 +929,10 @@ func Convert_v1alpha1_OriginSpec_To_kubedb_OriginSpec(in *OriginSpec, out *kubed
 func autoConvert_kubedb_OriginSpec_To_v1alpha1_OriginSpec(in *kubedb.OriginSpec, out *OriginSpec, s conversion.Scope) error {
 	out.Elasticsearch = (*ElasticsearchSpec)(unsafe.Pointer(in.Elasticsearch))
 	out.Postgres = (*PostgresSpec)(unsafe.Pointer(in.Postgres))
+	out.MySQL = (*MySQLSpec)(unsafe.Pointer(in.MySQL))
+	out.MongoDB = (*MongoDBSpec)(unsafe.Pointer(in.MongoDB))
+	out.Redis = (*RedisSpec)(unsafe.Pointer(in.Redis))
+	out.Memcached = (*MemcachedSpec)(unsafe.Pointer(in.Memcached))
 	return nil
 }
 
@@ -644,17 +1017,17 @@ func Convert_kubedb_PostgresSchemaInfo_To_v1alpha1_PostgresSchemaInfo(in *kubedb
 
 func autoConvert_v1alpha1_PostgresSpec_To_kubedb_PostgresSpec(in *PostgresSpec, out *kubedb.PostgresSpec, s conversion.Scope) error {
 	out.Version = types.StrYo(in.Version)
-	out.Storage = (*api_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
-	out.DatabaseSecret = (*api_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
 	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
 	out.Init = (*kubedb.InitSpec)(unsafe.Pointer(in.Init))
 	out.BackupSchedule = (*kubedb.BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
 	out.DoNotPause = in.DoNotPause
-	out.Monitor = (*kubedb.MonitorSpec)(unsafe.Pointer(in.Monitor))
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.Resources = in.Resources
-	out.Affinity = (*api_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
 	out.SchedulerName = in.SchedulerName
-	out.Tolerations = *(*[]api_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
 	return nil
 }
 
@@ -665,17 +1038,17 @@ func Convert_v1alpha1_PostgresSpec_To_kubedb_PostgresSpec(in *PostgresSpec, out 
 
 func autoConvert_kubedb_PostgresSpec_To_v1alpha1_PostgresSpec(in *kubedb.PostgresSpec, out *PostgresSpec, s conversion.Scope) error {
 	out.Version = types.StrYo(in.Version)
-	out.Storage = (*api_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
-	out.DatabaseSecret = (*api_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
 	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
 	out.Init = (*InitSpec)(unsafe.Pointer(in.Init))
 	out.BackupSchedule = (*BackupScheduleSpec)(unsafe.Pointer(in.BackupSchedule))
 	out.DoNotPause = in.DoNotPause
-	out.Monitor = (*MonitorSpec)(unsafe.Pointer(in.Monitor))
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.Resources = in.Resources
-	out.Affinity = (*api_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
 	out.SchedulerName = in.SchedulerName
-	out.Tolerations = *(*[]api_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
 	return nil
 }
 
@@ -752,28 +1125,120 @@ func Convert_kubedb_PostgresTableInfo_To_v1alpha1_PostgresTableInfo(in *kubedb.P
 	return autoConvert_kubedb_PostgresTableInfo_To_v1alpha1_PostgresTableInfo(in, out, s)
 }
 
-func autoConvert_v1alpha1_PrometheusSpec_To_kubedb_PrometheusSpec(in *PrometheusSpec, out *kubedb.PrometheusSpec, s conversion.Scope) error {
-	out.Namespace = in.Namespace
-	out.Labels = *(*map[string]string)(unsafe.Pointer(&in.Labels))
-	out.Interval = in.Interval
+func autoConvert_v1alpha1_Redis_To_kubedb_Redis(in *Redis, out *kubedb.Redis, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_v1alpha1_RedisSpec_To_kubedb_RedisSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_v1alpha1_RedisStatus_To_kubedb_RedisStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
 	return nil
 }
 
-// Convert_v1alpha1_PrometheusSpec_To_kubedb_PrometheusSpec is an autogenerated conversion function.
-func Convert_v1alpha1_PrometheusSpec_To_kubedb_PrometheusSpec(in *PrometheusSpec, out *kubedb.PrometheusSpec, s conversion.Scope) error {
-	return autoConvert_v1alpha1_PrometheusSpec_To_kubedb_PrometheusSpec(in, out, s)
+// Convert_v1alpha1_Redis_To_kubedb_Redis is an autogenerated conversion function.
+func Convert_v1alpha1_Redis_To_kubedb_Redis(in *Redis, out *kubedb.Redis, s conversion.Scope) error {
+	return autoConvert_v1alpha1_Redis_To_kubedb_Redis(in, out, s)
 }
 
-func autoConvert_kubedb_PrometheusSpec_To_v1alpha1_PrometheusSpec(in *kubedb.PrometheusSpec, out *PrometheusSpec, s conversion.Scope) error {
-	out.Namespace = in.Namespace
-	out.Labels = *(*map[string]string)(unsafe.Pointer(&in.Labels))
-	out.Interval = in.Interval
+func autoConvert_kubedb_Redis_To_v1alpha1_Redis(in *kubedb.Redis, out *Redis, s conversion.Scope) error {
+	out.ObjectMeta = in.ObjectMeta
+	if err := Convert_kubedb_RedisSpec_To_v1alpha1_RedisSpec(&in.Spec, &out.Spec, s); err != nil {
+		return err
+	}
+	if err := Convert_kubedb_RedisStatus_To_v1alpha1_RedisStatus(&in.Status, &out.Status, s); err != nil {
+		return err
+	}
 	return nil
 }
 
-// Convert_kubedb_PrometheusSpec_To_v1alpha1_PrometheusSpec is an autogenerated conversion function.
-func Convert_kubedb_PrometheusSpec_To_v1alpha1_PrometheusSpec(in *kubedb.PrometheusSpec, out *PrometheusSpec, s conversion.Scope) error {
-	return autoConvert_kubedb_PrometheusSpec_To_v1alpha1_PrometheusSpec(in, out, s)
+// Convert_kubedb_Redis_To_v1alpha1_Redis is an autogenerated conversion function.
+func Convert_kubedb_Redis_To_v1alpha1_Redis(in *kubedb.Redis, out *Redis, s conversion.Scope) error {
+	return autoConvert_kubedb_Redis_To_v1alpha1_Redis(in, out, s)
+}
+
+func autoConvert_v1alpha1_RedisList_To_kubedb_RedisList(in *RedisList, out *kubedb.RedisList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]kubedb.Redis)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_v1alpha1_RedisList_To_kubedb_RedisList is an autogenerated conversion function.
+func Convert_v1alpha1_RedisList_To_kubedb_RedisList(in *RedisList, out *kubedb.RedisList, s conversion.Scope) error {
+	return autoConvert_v1alpha1_RedisList_To_kubedb_RedisList(in, out, s)
+}
+
+func autoConvert_kubedb_RedisList_To_v1alpha1_RedisList(in *kubedb.RedisList, out *RedisList, s conversion.Scope) error {
+	out.ListMeta = in.ListMeta
+	out.Items = *(*[]Redis)(unsafe.Pointer(&in.Items))
+	return nil
+}
+
+// Convert_kubedb_RedisList_To_v1alpha1_RedisList is an autogenerated conversion function.
+func Convert_kubedb_RedisList_To_v1alpha1_RedisList(in *kubedb.RedisList, out *RedisList, s conversion.Scope) error {
+	return autoConvert_kubedb_RedisList_To_v1alpha1_RedisList(in, out, s)
+}
+
+func autoConvert_v1alpha1_RedisSpec_To_kubedb_RedisSpec(in *RedisSpec, out *kubedb.RedisSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_v1alpha1_RedisSpec_To_kubedb_RedisSpec is an autogenerated conversion function.
+func Convert_v1alpha1_RedisSpec_To_kubedb_RedisSpec(in *RedisSpec, out *kubedb.RedisSpec, s conversion.Scope) error {
+	return autoConvert_v1alpha1_RedisSpec_To_kubedb_RedisSpec(in, out, s)
+}
+
+func autoConvert_kubedb_RedisSpec_To_v1alpha1_RedisSpec(in *kubedb.RedisSpec, out *RedisSpec, s conversion.Scope) error {
+	out.Version = types.StrYo(in.Version)
+	out.Replicas = in.Replicas
+	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
+	out.DoNotPause = in.DoNotPause
+	out.Monitor = (*api.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Resources = in.Resources
+	out.Affinity = (*core_v1.Affinity)(unsafe.Pointer(in.Affinity))
+	out.SchedulerName = in.SchedulerName
+	out.Tolerations = *(*[]core_v1.Toleration)(unsafe.Pointer(&in.Tolerations))
+	return nil
+}
+
+// Convert_kubedb_RedisSpec_To_v1alpha1_RedisSpec is an autogenerated conversion function.
+func Convert_kubedb_RedisSpec_To_v1alpha1_RedisSpec(in *kubedb.RedisSpec, out *RedisSpec, s conversion.Scope) error {
+	return autoConvert_kubedb_RedisSpec_To_v1alpha1_RedisSpec(in, out, s)
+}
+
+func autoConvert_v1alpha1_RedisStatus_To_kubedb_RedisStatus(in *RedisStatus, out *kubedb.RedisStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = kubedb.DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_v1alpha1_RedisStatus_To_kubedb_RedisStatus is an autogenerated conversion function.
+func Convert_v1alpha1_RedisStatus_To_kubedb_RedisStatus(in *RedisStatus, out *kubedb.RedisStatus, s conversion.Scope) error {
+	return autoConvert_v1alpha1_RedisStatus_To_kubedb_RedisStatus(in, out, s)
+}
+
+func autoConvert_kubedb_RedisStatus_To_v1alpha1_RedisStatus(in *kubedb.RedisStatus, out *RedisStatus, s conversion.Scope) error {
+	out.CreationTime = (*v1.Time)(unsafe.Pointer(in.CreationTime))
+	out.Phase = DatabasePhase(in.Phase)
+	out.Reason = in.Reason
+	return nil
+}
+
+// Convert_kubedb_RedisStatus_To_v1alpha1_RedisStatus is an autogenerated conversion function.
+func Convert_kubedb_RedisStatus_To_v1alpha1_RedisStatus(in *kubedb.RedisStatus, out *RedisStatus, s conversion.Scope) error {
+	return autoConvert_kubedb_RedisStatus_To_v1alpha1_RedisStatus(in, out, s)
 }
 
 func autoConvert_v1alpha1_Report_To_kubedb_Report(in *Report, out *kubedb.Report, s conversion.Scope) error {

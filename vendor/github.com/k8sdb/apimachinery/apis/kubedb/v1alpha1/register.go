@@ -40,6 +40,14 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ElasticsearchList{},
 		&Postgres{},
 		&PostgresList{},
+		&MySQL{},
+		&MySQLList{},
+		&MongoDB{},
+		&MongoDBList{},
+		&Redis{},
+		&RedisList{},
+		&Memcached{},
+		&MemcachedList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

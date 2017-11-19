@@ -31,7 +31,7 @@ func compareReports(cmd *cobra.Command, out, errOut io.Writer, args []string) er
 	if len(args) != 2 {
 		fmt.Fprint(errOut, "You must provide two summary report to compare.")
 		usageString := "Summary reports not provided."
-		return cmdutil.UsageError(cmd, usageString)
+		return cmdutil.UsageErrorf(cmd, usageString)
 	}
 
 	reportFile1 := args[0]

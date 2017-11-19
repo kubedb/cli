@@ -11,7 +11,7 @@ const (
 	ResourceTypeDormantDatabase = "dormantdatabases"
 )
 
-// +genclient=true
+// +genclient
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
@@ -46,6 +46,18 @@ type OriginSpec struct {
 	// Postgres Spec
 	// +optional
 	Postgres *PostgresSpec `json:"postgres,omitempty"`
+	// MySQL Spec
+	// +optional
+	MySQL *MySQLSpec `json:"mysql,omitempty"`
+	// MongoDB Spec
+	// +optional
+	MongoDB *MongoDBSpec `json:"mongodb,omitempty"`
+	// Redis Spec
+	// +optional
+	Redis *RedisSpec `json:"redis,omitempty"`
+	// Memcached Spec
+	// +optional
+	Memcached *MemcachedSpec `json:"memcached,omitempty"`
 }
 
 type DormantDatabasePhase string

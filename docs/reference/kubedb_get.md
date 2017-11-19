@@ -57,7 +57,7 @@ kubedb get [flags]
 ### Options inherited from parent commands
 
 ```
-      --analytics             Send events to Google Analytics (default true)
+      --analytics             Send analytical events to Google Analytics (default true)
       --kube-context string   name of the kubeconfig context to use
 ```
 

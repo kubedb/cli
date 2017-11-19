@@ -62,7 +62,7 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 	}
 	if len(args) == 0 {
 		fmt.Fprint(cmdErr, "You must specify the type of resource to describe. ", valid_resources)
-		return cmdutil.UsageError(cmd, "Required resource not specified.")
+		return cmdutil.UsageErrorf(cmd, "Required resource not specified.")
 	}
 
 	categoryExpander := f.CategoryExpander()

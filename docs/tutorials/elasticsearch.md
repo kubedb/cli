@@ -23,7 +23,7 @@ kube-system   Active    3m
 ```
 
 ## Create an Elasticsearch database
-KubeDB implements a `Elasticsearch` TPR to define the specification of an Elasticsearch database. Below is the `Elasticsearch` object created in this tutorial.
+KubeDB implements a `Elasticsearch` CRD to define the specification of an Elasticsearch database. Below is the `Elasticsearch` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -148,7 +148,7 @@ $ kubectl get pods e1-0 -n demo -o yaml | grep IP
   podIP: 172.17.0.5
 
 # Exec into kubedb operator pod
-$ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath={.items[0].metadata.name}) -n kube-system sh
+$ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath='{.items[0].metadata.name}') -n kube-system sh
 
 ~ $ ps aux
 PID   USER     TIME   COMMAND

@@ -1,37 +1,40 @@
 package: github.com/k8sdb/cli
 import:
 - package: github.com/appscode/go
-- package: github.com/appscode/log
-- package: github.com/spf13/cobra
-  version: master
-- package: github.com/sergi/go-diff
-  version: master
-- package: github.com/spf13/pflag
-  version: master
+- package: github.com/ghodss/yaml
+  version: v1.0.0
+- package: github.com/golang/glog
+- package: github.com/jpillora/go-ogle-analytics
 - package: github.com/k8sdb/apimachinery
   version: master
 - package: github.com/k8sdb/elasticsearch
   version: master
 - package: github.com/k8sdb/postgres
   version: master
-- package: k8s.io/kubernetes
-  version: ~1.7
-- package: k8s.io/metrics
-  version: fd2415bb9381a6731027b48a8c6b78f28e13f876
+- package: github.com/spf13/cobra
+- package: github.com/yudai/gojsondiff
+  version: 1.0.0
+- package: k8s.io/api
+  version: fe29995db37613b9c5b2a647544cf627bfa8d299
+- package: k8s.io/apiextensions-apiserver
+  version: release-1.8
 - package: k8s.io/apimachinery
-  version: 1fd2e63a9a370677308a42f24fd40c86438afddf
+  version: 019ae5ada31de202164b118aee88ee2d14075c31
 - package: k8s.io/client-go
-  version: v4.0.0
+  version: v5.0.0
+- package: k8s.io/kubernetes
+  version: v1.8.0
+- package: k8s.io/metrics
+  version: release-1.8
 - package: github.com/graymeta/stow
   repo: https://github.com/appscode/stow.git
   vcs: git
   version: master
-- package: google.golang.org/api/storage/v1
-  version: master
-- package: cloud.google.com/go
-  version: v0.2.0
 - package: github.com/Azure/azure-sdk-for-go
-  vcs: git
   version: v10.2.1-beta
-- package: k8s.io/apiextensions-apiserver
-  version: 5fa44608f6b9b2180a2fd1ecb52e651fd0397794
+- package: github.com/Azure/go-autorest
+  version: ~8.1.1
+- package: github.com/Azure/go-ansiterm
+  version: 19f72df4d05d31cbe1c56bfc8045c96babff6c7e
+- package: golang.org/x/sys
+  version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce

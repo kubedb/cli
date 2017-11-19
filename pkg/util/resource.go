@@ -7,7 +7,7 @@ import (
 	"github.com/ghodss/yaml"
 	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/cli/pkg/decoder"
-	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -97,14 +97,14 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 		return nil, err
 	}
 
-	clientset, err := apiextensionsclient.NewForConfig(restConfig)
+	clientset, err := crd_cs.NewForConfig(restConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	availableResources := make([]string, 0)
 	for _, val := range resources {
-		_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Get(val, metav1.GetOptions{})
+		_, err := clientset.CustomResourceDefinitions().Get(val, metav1.GetOptions{})
 		if err != nil {
 			if kerr.IsNotFound(err) {
 				continue

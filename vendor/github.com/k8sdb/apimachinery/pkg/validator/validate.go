@@ -5,15 +5,16 @@ import (
 	"errors"
 	"fmt"
 
-	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	mona "github.com/appscode/kutil/tools/monitoring/api"
+	api "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/k8sdb/apimachinery/pkg/storage"
+	core "k8s.io/api/core/v1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	clientset "k8s.io/client-go/kubernetes"
-	apiv1 "k8s.io/client-go/pkg/api/v1"
+	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateStorage(client clientset.Interface, spec *apiv1.PersistentVolumeClaimSpec) error {
+func ValidateStorage(client kubernetes.Interface, spec *core.PersistentVolumeClaimSpec) error {
 	if spec == nil {
 		return nil
 	}
@@ -27,7 +28,7 @@ func ValidateStorage(client clientset.Interface, spec *apiv1.PersistentVolumeCla
 		}
 	}
 
-	if val, found := spec.Resources.Requests[apiv1.ResourceStorage]; found {
+	if val, found := spec.Resources.Requests[core.ResourceStorage]; found {
 		if val.Value() <= 0 {
 			return errors.New("Invalid ResourceStorage request")
 		}
@@ -38,7 +39,7 @@ func ValidateStorage(client clientset.Interface, spec *apiv1.PersistentVolumeCla
 	return nil
 }
 
-func ValidateBackupSchedule(client clientset.Interface, spec *tapi.BackupScheduleSpec, namespace string) error {
+func ValidateBackupSchedule(client kubernetes.Interface, spec *api.BackupScheduleSpec, namespace string) error {
 	if spec == nil {
 		return nil
 	}
@@ -50,7 +51,7 @@ func ValidateBackupSchedule(client clientset.Interface, spec *tapi.BackupSchedul
 	return ValidateSnapshotSpec(client, spec.SnapshotStorageSpec, namespace)
 }
 
-func ValidateSnapshotSpec(client clientset.Interface, spec tapi.SnapshotStorageSpec, namespace string) error {
+func ValidateSnapshotSpec(client kubernetes.Interface, spec api.SnapshotStorageSpec, namespace string) error {
 	// BucketName can't be empty
 	if spec.S3 == nil && spec.GCS == nil && spec.Azure == nil && spec.Swift == nil && spec.Local == nil {
 		return errors.New("No storage provider is configured.")
@@ -72,7 +73,7 @@ func ValidateSnapshotSpec(client clientset.Interface, spec tapi.SnapshotStorageS
 	return nil
 }
 
-func ValidateMonitorSpec(monitorSpec *tapi.MonitorSpec) error {
+func ValidateMonitorSpec(monitorSpec *mona.AgentSpec) error {
 	specData, err := json.Marshal(monitorSpec)
 	if err != nil {
 		return err
@@ -82,7 +83,7 @@ func ValidateMonitorSpec(monitorSpec *tapi.MonitorSpec) error {
 		return fmt.Errorf(`Object 'Agent' is missing in '%v'`, string(specData))
 	}
 	if monitorSpec.Prometheus != nil {
-		if monitorSpec.Agent != tapi.AgentCoreosPrometheus {
+		if monitorSpec.Agent != api.AgentCoreosPrometheus {
 			return fmt.Errorf(`Invalid 'Agent' in '%v'`, string(specData))
 		}
 	}

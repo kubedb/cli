@@ -7,12 +7,12 @@ KubeDB provides a CLI to work with database objects. Download pre-built binaries
 
 ```console
 # Linux amd 64-bit
-wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.6.0/kubedb-linux-amd64 \
+wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.7.1/kubedb-linux-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 
 # Mac 64-bit
-wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.6.0/kubedb-darwin-amd64 \
+wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.7.1/kubedb-darwin-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 ```
@@ -55,9 +55,9 @@ $ kubectl get pods --all-namespaces -l app=kubedb --watch
 
 Once the operator pods are running, you can cancel the above command by typing `Ctrl+C`.
 
-Now, to confirm TPR groups have been registered by the operator, run the following command:
+Now, to confirm CRD groups have been registered by the operator, run the following command:
 ```console
-$ kubectl get thirdpartyresources -l app=kubedb
+$ kubectl get crd -l app=kubedb
 ```
 
 Now, you are ready to [create your first database](/docs/tutorials/README.md) using KubeDB.
@@ -68,7 +68,7 @@ To upgrade KubeDB cli, just replace the old cli with the new version.
 `kubedb init` command can be used to upgrade operator. Re-run the `kubedb init` command with `--upgrade flag` to upgrade operator.
 
 ```console
-$ kubedb init --version='0.6.0' --upgrade
+$ kubedb init --version='0.7.1' --upgrade
 
 Successfully upgraded operator deployment.
 ```
