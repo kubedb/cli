@@ -1,5 +1,5 @@
 hash: 62b1e47c1618cf6b694b7c158cfa37227b991226fde3077cb18a64888badf6d1
-updated: 2017-11-14T23:47:38.556840369-08:00
+updated: 2017-11-18T20:59:32.651417481-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,10 +7,12 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 6c0d0eba230ad31f74a18b44beee6f865b01bdec
+  version: 1cd97c853ad364376f9c792106deb0bfd197bca0
   subpackages:
+  - context
   - encoding/json/types
   - encoding/yaml
+  - log
   - net/httpclient
   - runtime
   - types
@@ -19,10 +21,8 @@ imports:
   version: c7547d78847930f4b48c4e3b3d6fe1d8b0309bd7
   subpackages:
   - tools/monitoring/api
-- name: github.com/appscode/log
-  version: 68e0e42e42c01371f3950571fc87c2298a51dd8f
 - name: github.com/appscode/osm
-  version: c4eb9d9f2fa11a22cd4b5f358afa5c89245059b4
+  version: 7b0b6f4f329d8d1ed786020d7e7ad865c61f8e7f
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -77,7 +77,7 @@ imports:
 - name: github.com/cenkalti/backoff
   version: 61153c768f31ee5f130071d08fc82b85208528de
 - name: github.com/cpuguy83/go-md2man
-  version: 71acacd42f85e5e82f70a55327789582a5200a90
+  version: 1d903dcb749992f3741d744c0f8376b4bd7eb3e1
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -192,6 +192,8 @@ imports:
   - query
 - name: github.com/google/gofuzz
   version: 44d81051d367757e1c7c6a5a86423ece9afcf63c
+- name: github.com/google/uuid
+  version: 8c31c18f31ede9fc8eae72290a7e7a8064e9b3e3
 - name: github.com/googleapis/gnostic
   version: 0c5108395e2debce0d731cf0287ddf7242066aba
   subpackages:
@@ -250,7 +252,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/k8sdb/apimachinery
-  version: d3caf1b393a21d24bacd0cc65e678848c71a37e3
+  version: 7fab3faf958855d232fffe6c4051715855584ba5
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -260,11 +262,11 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 284c4988b4c4a2973247dc6baf6d9e61fb8e781a
+  version: 18ef43d4d9e57d88d20c691a36627b534379d512
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: ac723db66776ddf4d55e4110536980c6a5ea991e
+  version: a6f0b1c07a4fa975c7c519a9e7c57dc5c6dc2457
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -332,7 +334,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: 2da4a54c5ceefcee7ca5dd0eea1e18a3b6366489
+  version: d6948b782c9f4799ea3cd225f6de4131c29c243a
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -388,14 +390,14 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: a0c31fb0028e0111b942a29b9fc2e9235202c48b
+  version: 790790d1b4a7d6b0d03d3725f980eedf80dc2707
   subpackages:
   - gensupport
   - googleapi
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
+  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
   subpackages:
   - internal
   - internal/app_identity
@@ -409,7 +411,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/api
   version: fe29995db37613b9c5b2a647544cf627bfa8d299
   subpackages:

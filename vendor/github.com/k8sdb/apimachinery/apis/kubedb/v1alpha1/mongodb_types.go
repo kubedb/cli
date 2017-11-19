@@ -8,27 +8,27 @@ import (
 )
 
 const (
-	ResourceCodeMySQL = "ms"
-	ResourceKindMySQL = "MySQL"
-	ResourceNameMySQL = "mysql"
-	ResourceTypeMySQL = "mysqls"
+	ResourceCodeMongoDB = "mg"
+	ResourceKindMongoDB = "MongoDB"
+	ResourceNameMongoDB = "mongodb"
+	ResourceTypeMongoDB = "mongodbs"
 )
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Mysql defines a Mysql database.
-type MySQL struct {
+// MongoDB defines a MongoDB database.
+type MongoDB struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MySQLSpec   `json:"spec,omitempty"`
-	Status            MySQLStatus `json:"status,omitempty"`
+	Spec              MongoDBSpec   `json:"spec,omitempty"`
+	Status            MongoDBStatus `json:"status,omitempty"`
 }
 
-type MySQLSpec struct {
-	// Version of MySQL to be deployed.
+type MongoDBSpec struct {
+	// Version of MongoDB to be deployed.
 	Version types.StrYo `json:"version,omitempty"`
-	// Number of instances to deploy for a MySQL database.
+	// Number of instances to deploy for a MongoDB database.
 	Replicas int32 `json:"replicas,omitempty"`
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
@@ -43,8 +43,8 @@ type MySQLSpec struct {
 	// BackupSchedule spec to specify how database backup will be taken
 	// +optional
 	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
-	// If DoNotPause is true, controller will prevent to delete this Mysql object.
-	// Controller will create same Mysql object and ignore other process.
+	// If DoNotPause is true, controller will prevent to delete this Postgres object.
+	// Controller will create same Postgres object and ignore other process.
 	// +optional
 	DoNotPause bool `json:"doNotPause,omitempty"`
 	// Monitor is used monitor database instance
@@ -64,7 +64,7 @@ type MySQLSpec struct {
 	Tolerations []core.Toleration `json:"tolerations,omitempty" protobuf:"bytes,22,opt,name=tolerations"`
 }
 
-type MySQLStatus struct {
+type MongoDBStatus struct {
 	CreationTime *metav1.Time  `json:"creationTime,omitempty"`
 	Phase        DatabasePhase `json:"phase,omitempty"`
 	Reason       string        `json:"reason,omitempty"`
@@ -72,9 +72,9 @@ type MySQLStatus struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-type MySQLList struct {
+type MongoDBList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of MySQL TPR objects
-	Items []MySQL `json:"items,omitempty"`
+	// Items is a list of MongoDB TPR objects
+	Items []MongoDB `json:"items,omitempty"`
 }

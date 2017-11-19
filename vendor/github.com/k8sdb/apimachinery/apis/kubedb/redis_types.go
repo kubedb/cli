@@ -1,4 +1,4 @@
-package v1alpha1
+package kubedb
 
 import (
 	"github.com/appscode/go/encoding/json/types"
@@ -8,43 +8,35 @@ import (
 )
 
 const (
-	ResourceCodeMySQL = "ms"
-	ResourceKindMySQL = "MySQL"
-	ResourceNameMySQL = "mysql"
-	ResourceTypeMySQL = "mysqls"
+	ResourceCodeRedis = "rd"
+	ResourceKindRedis = "Redis"
+	ResourceNameRedis = "redis"
+	ResourceTypeRedis = "redises"
 )
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Mysql defines a Mysql database.
-type MySQL struct {
+// Redis defines a Redis database.
+type Redis struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MySQLSpec   `json:"spec,omitempty"`
-	Status            MySQLStatus `json:"status,omitempty"`
+	Spec              RedisSpec   `json:"spec,omitempty"`
+	Status            RedisStatus `json:"status,omitempty"`
 }
 
-type MySQLSpec struct {
-	// Version of MySQL to be deployed.
+type RedisSpec struct {
+	// Version of Redis to be deployed.
 	Version types.StrYo `json:"version,omitempty"`
-	// Number of instances to deploy for a MySQL database.
+	// Number of instances to deploy for a Redis database.
 	Replicas int32 `json:"replicas,omitempty"`
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
-	// Database authentication secret
-	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
 	// NodeSelector is a selector which must be true for the pod to fit on a node
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
-	// Init is used to initialize database
-	// +optional
-	Init *InitSpec `json:"init,omitempty"`
-	// BackupSchedule spec to specify how database backup will be taken
-	// +optional
-	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
-	// If DoNotPause is true, controller will prevent to delete this Mysql object.
-	// Controller will create same Mysql object and ignore other process.
+	// If DoNotPause is true, controller will prevent to delete this Postgres object.
+	// Controller will create same Postgres object and ignore other process.
 	// +optional
 	DoNotPause bool `json:"doNotPause,omitempty"`
 	// Monitor is used monitor database instance
@@ -64,7 +56,7 @@ type MySQLSpec struct {
 	Tolerations []core.Toleration `json:"tolerations,omitempty" protobuf:"bytes,22,opt,name=tolerations"`
 }
 
-type MySQLStatus struct {
+type RedisStatus struct {
 	CreationTime *metav1.Time  `json:"creationTime,omitempty"`
 	Phase        DatabasePhase `json:"phase,omitempty"`
 	Reason       string        `json:"reason,omitempty"`
@@ -72,9 +64,9 @@ type MySQLStatus struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-type MySQLList struct {
+type RedisList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of MySQL TPR objects
-	Items []MySQL `json:"items,omitempty"`
+	// Items is a list of Redis TPR objects
+	Items []Redis `json:"items,omitempty"`
 }

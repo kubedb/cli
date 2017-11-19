@@ -22,6 +22,12 @@ func ObjectReferenceFor(obj runtime.Object) *core.ObjectReference {
 		return u.ObjectReference()
 	case *MySQL:
 		return u.ObjectReference()
+	case *MongoDB:
+		return u.ObjectReference()
+	case *Redis:
+		return u.ObjectReference()
+	case *Memcached:
+		return u.ObjectReference()
 	case *Snapshot:
 		return u.ObjectReference()
 	}

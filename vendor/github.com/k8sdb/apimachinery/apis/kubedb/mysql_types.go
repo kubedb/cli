@@ -26,9 +26,9 @@ type MySQL struct {
 }
 
 type MySQLSpec struct {
-	// Version of Xdb to be deployed.
+	// Version of MySQL to be deployed.
 	Version types.StrYo `json:"version,omitempty"`
-	// Number of instances to deploy for a Xdb database.
+	// Number of instances to deploy for a MySQL database.
 	Replicas int32 `json:"replicas,omitempty"`
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
@@ -75,6 +75,6 @@ type MySQLStatus struct {
 type MySQLList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of Xdb TPR objects
-	Items []*MySQL `json:"items,omitempty"`
+	// Items is a list of MySQL TPR objects
+	Items []MySQL `json:"items,omitempty"`
 }

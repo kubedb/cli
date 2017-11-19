@@ -14,7 +14,7 @@ import (
 	"github.com/graymeta/stow/local"
 	"github.com/graymeta/stow/s3"
 	"github.com/graymeta/stow/swift"
-	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	api "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -24,7 +24,7 @@ const (
 	SecretMountPath = "/etc/osm"
 )
 
-func NewOSMSecret(client kubernetes.Interface, snapshot *tapi.Snapshot) (*core.Secret, error) {
+func NewOSMSecret(client kubernetes.Interface, snapshot *api.Snapshot) (*core.Secret, error) {
 	osmCtx, err := NewOSMContext(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace)
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func NewOSMSecret(client kubernetes.Interface, snapshot *tapi.Snapshot) (*core.S
 	}, nil
 }
 
-func CheckBucketAccess(client kubernetes.Interface, spec tapi.SnapshotStorageSpec, namespace string) error {
+func CheckBucketAccess(client kubernetes.Interface, spec api.SnapshotStorageSpec, namespace string) error {
 	cfg, err := NewOSMContext(client, spec, namespace)
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func CheckBucketAccess(client kubernetes.Interface, spec tapi.SnapshotStorageSpe
 	return nil
 }
 
-func NewOSMContext(client kubernetes.Interface, spec tapi.SnapshotStorageSpec, namespace string) (*otx.Context, error) {
+func NewOSMContext(client kubernetes.Interface, spec api.SnapshotStorageSpec, namespace string) (*otx.Context, error) {
 	config := make(map[string][]byte)
 
 	if spec.StorageSecretName != "" {
@@ -94,23 +94,23 @@ func NewOSMContext(client kubernetes.Interface, spec tapi.SnapshotStorageSpec, n
 
 	if spec.S3 != nil {
 		nc.Provider = s3.Kind
-		nc.Config[s3.ConfigAccessKeyID] = string(config[tapi.AWS_ACCESS_KEY_ID])
+		nc.Config[s3.ConfigAccessKeyID] = string(config[api.AWS_ACCESS_KEY_ID])
 		nc.Config[s3.ConfigEndpoint] = spec.S3.Endpoint
 		nc.Config[s3.ConfigRegion] = "us-east-1" // only used for creating buckets
-		nc.Config[s3.ConfigSecretKey] = string(config[tapi.AWS_SECRET_ACCESS_KEY])
+		nc.Config[s3.ConfigSecretKey] = string(config[api.AWS_SECRET_ACCESS_KEY])
 		if u, err := url.Parse(spec.S3.Endpoint); err == nil {
 			nc.Config[s3.ConfigDisableSSL] = strconv.FormatBool(u.Scheme == "http")
 		}
 		return nc, nil
 	} else if spec.GCS != nil {
 		nc.Provider = gcs.Kind
-		nc.Config[gcs.ConfigProjectId] = string(config[tapi.GOOGLE_PROJECT_ID])
-		nc.Config[gcs.ConfigJSON] = string(config[tapi.GOOGLE_SERVICE_ACCOUNT_JSON_KEY])
+		nc.Config[gcs.ConfigProjectId] = string(config[api.GOOGLE_PROJECT_ID])
+		nc.Config[gcs.ConfigJSON] = string(config[api.GOOGLE_SERVICE_ACCOUNT_JSON_KEY])
 		return nc, nil
 	} else if spec.Azure != nil {
 		nc.Provider = azure.Kind
-		nc.Config[azure.ConfigAccount] = string(config[tapi.AZURE_ACCOUNT_NAME])
-		nc.Config[azure.ConfigKey] = string(config[tapi.AZURE_ACCOUNT_KEY])
+		nc.Config[azure.ConfigAccount] = string(config[api.AZURE_ACCOUNT_NAME])
+		nc.Config[azure.ConfigKey] = string(config[api.AZURE_ACCOUNT_KEY])
 		return nc, nil
 	} else if spec.Local != nil {
 		nc.Provider = local.Kind
@@ -124,28 +124,28 @@ func NewOSMContext(client kubernetes.Interface, spec tapi.SnapshotStorageSpec, n
 			secretKey string
 		}{
 			// v2/v3 specific
-			{swift.ConfigUsername, tapi.OS_USERNAME},
-			{swift.ConfigKey, tapi.OS_PASSWORD},
-			{swift.ConfigRegion, tapi.OS_REGION_NAME},
-			{swift.ConfigTenantAuthURL, tapi.OS_AUTH_URL},
+			{swift.ConfigUsername, api.OS_USERNAME},
+			{swift.ConfigKey, api.OS_PASSWORD},
+			{swift.ConfigRegion, api.OS_REGION_NAME},
+			{swift.ConfigTenantAuthURL, api.OS_AUTH_URL},
 
 			// v3 specific
-			{swift.ConfigDomain, tapi.OS_USER_DOMAIN_NAME},
-			{swift.ConfigTenantName, tapi.OS_PROJECT_NAME},
-			{swift.ConfigTenantDomain, tapi.OS_PROJECT_DOMAIN_NAME},
+			{swift.ConfigDomain, api.OS_USER_DOMAIN_NAME},
+			{swift.ConfigTenantName, api.OS_PROJECT_NAME},
+			{swift.ConfigTenantDomain, api.OS_PROJECT_DOMAIN_NAME},
 
 			// v2 specific
-			{swift.ConfigTenantId, tapi.OS_TENANT_ID},
-			{swift.ConfigTenantName, tapi.OS_TENANT_NAME},
+			{swift.ConfigTenantId, api.OS_TENANT_ID},
+			{swift.ConfigTenantName, api.OS_TENANT_NAME},
 
 			// v1 specific
-			{swift.ConfigTenantAuthURL, tapi.ST_AUTH},
-			{swift.ConfigUsername, tapi.ST_USER},
-			{swift.ConfigKey, tapi.ST_KEY},
+			{swift.ConfigTenantAuthURL, api.ST_AUTH},
+			{swift.ConfigUsername, api.ST_USER},
+			{swift.ConfigKey, api.ST_KEY},
 
 			// Manual authentication
-			{swift.ConfigStorageURL, tapi.OS_STORAGE_URL},
-			{swift.ConfigAuthToken, tapi.OS_AUTH_TOKEN},
+			{swift.ConfigStorageURL, api.OS_STORAGE_URL},
+			{swift.ConfigAuthToken, api.OS_AUTH_TOKEN},
 		} {
 			if _, exists := nc.Config.Config(val.stowKey); !exists {
 				nc.Config[val.stowKey] = string(config[val.secretKey])

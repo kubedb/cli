@@ -8,43 +8,33 @@ import (
 )
 
 const (
-	ResourceCodeMySQL = "ms"
-	ResourceKindMySQL = "MySQL"
-	ResourceNameMySQL = "mysql"
-	ResourceTypeMySQL = "mysqls"
+	ResourceCodeMemcached = "mc"
+	ResourceKindMemcached = "Memcached"
+	ResourceNameMemcached = "memcached"
+	ResourceTypeMemcached = "memcacheds"
 )
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Mysql defines a Mysql database.
-type MySQL struct {
+// Memcached defines a Memcached database.
+type Memcached struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MySQLSpec   `json:"spec,omitempty"`
-	Status            MySQLStatus `json:"status,omitempty"`
+	Spec              MemcachedSpec   `json:"spec,omitempty"`
+	Status            MemcachedStatus `json:"status,omitempty"`
 }
 
-type MySQLSpec struct {
-	// Version of MySQL to be deployed.
+type MemcachedSpec struct {
+	// Version of Memcached to be deployed.
 	Version types.StrYo `json:"version,omitempty"`
-	// Number of instances to deploy for a MySQL database.
+	// Number of instances to deploy for a Memcached database.
 	Replicas int32 `json:"replicas,omitempty"`
-	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
-	// Database authentication secret
-	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
 	// NodeSelector is a selector which must be true for the pod to fit on a node
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
-	// Init is used to initialize database
-	// +optional
-	Init *InitSpec `json:"init,omitempty"`
-	// BackupSchedule spec to specify how database backup will be taken
-	// +optional
-	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
-	// If DoNotPause is true, controller will prevent to delete this Mysql object.
-	// Controller will create same Mysql object and ignore other process.
+	// If DoNotPause is true, controller will prevent to delete this Postgres object.
+	// Controller will create same Postgres object and ignore other process.
 	// +optional
 	DoNotPause bool `json:"doNotPause,omitempty"`
 	// Monitor is used monitor database instance
@@ -64,7 +54,7 @@ type MySQLSpec struct {
 	Tolerations []core.Toleration `json:"tolerations,omitempty" protobuf:"bytes,22,opt,name=tolerations"`
 }
 
-type MySQLStatus struct {
+type MemcachedStatus struct {
 	CreationTime *metav1.Time  `json:"creationTime,omitempty"`
 	Phase        DatabasePhase `json:"phase,omitempty"`
 	Reason       string        `json:"reason,omitempty"`
@@ -72,9 +62,9 @@ type MySQLStatus struct {
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-type MySQLList struct {
+type MemcachedList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of MySQL TPR objects
-	Items []MySQL `json:"items,omitempty"`
+	// Items is a list of Memcached TPR objects
+	Items []Memcached `json:"items,omitempty"`
 }

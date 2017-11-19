@@ -1,33 +1,25 @@
 package log
 
 import (
+	gtx "context"
+	"github.com/appscode/go/context"
 	"github.com/golang/glog"
 )
 
-type Context interface {
-	String() string
-}
-
 // Type logger enables logging with context with glog
 type Logger struct {
-	c Context
+	c gtx.Context
 }
 
 // New creates an context logger instance which opens access to logging
 // methods. It accepts interface context to format the values as defined
-func New(c Context) *Logger {
+func New(c gtx.Context) *Logger {
 	if c == nil {
-		c = &defaultContext{}
+		c = gtx.TODO()
 	}
 	return &Logger{
 		c: c,
 	}
-}
-
-type defaultContext struct{}
-
-func (d *defaultContext) String() string {
-	return ""
 }
 
 func (l *Logger) Fatal(args ...interface{}) {
@@ -127,22 +119,22 @@ func (l *Logger) V(level glog.Level) glog.Verbose {
 	return glog.V(logLevelDebug)
 }
 
-func formatArgs(c Context, args *[]interface{}) {
+func formatArgs(c gtx.Context, args *[]interface{}) {
 	if c != nil {
-		if val := c.String(); val != "" {
+		if val := context.ID(c); val != "" {
 			// appending the context to the argument list as first argument.
 			*args = append((*args)[:0], append([]interface{}{val}, (*args)[0:]...)...)
 		}
 	}
 }
 
-func formatString(c Context, format string) string {
+func formatString(c gtx.Context, format string) string {
 	if c == nil {
 		return format
 	}
-	if val := c.String(); val != "" {
+	if val := context.ID(c); val != "" {
 		// if context is not nil, adding context values as formatted by the provider.
-		format = "%s " + format
+		format = "[%s] " + format
 	}
 	return format
 }
