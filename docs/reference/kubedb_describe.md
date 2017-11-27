@@ -1,3 +1,14 @@
+---
+title: Kubedb Describe
+menu:
+  product_kubedb_0.7.1:
+    identifier: kubedb-describe
+    name: Kubedb Describe
+    parent: reference
+product_name: kubedb
+left_menu: product_kubedb_0.7.1
+section_menu_id: reference
+---
 ## kubedb describe
 
 Show details of a specific resource or group of resources
@@ -48,6 +59,6 @@ kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Command line interface for KubeDB
+* [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

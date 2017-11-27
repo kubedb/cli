@@ -1,3 +1,14 @@
+---
+title: Kubedb Init
+menu:
+  product_kubedb_0.7.1:
+    identifier: kubedb-init
+    name: Kubedb Init
+    parent: reference
+product_name: kubedb
+left_menu: product_kubedb_0.7.1
+section_menu_id: reference
+---
 ## kubedb init
 
 Create or upgrade KubeDB operator
@@ -39,6 +50,6 @@ kubedb init [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Command line interface for KubeDB
+* [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

@@ -1,3 +1,14 @@
+---
+title: Kubedb Get
+menu:
+  product_kubedb_0.7.1:
+    identifier: kubedb-get
+    name: Kubedb Get
+    parent: reference
+product_name: kubedb
+left_menu: product_kubedb_0.7.1
+section_menu_id: reference
+---
 ## kubedb get
 
 Display one or many resources
@@ -62,6 +73,6 @@ kubedb get [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Command line interface for KubeDB
+* [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 
