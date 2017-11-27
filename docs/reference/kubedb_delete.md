@@ -1,3 +1,14 @@
+---
+title: Kubedb Delete
+menu:
+  product_kubedb_0.7.1:
+    identifier: kubedb-delete
+    name: Kubedb Delete
+    parent: reference
+product_name: kubedb
+left_menu: product_kubedb_0.7.1
+section_menu_id: reference
+---
 ## kubedb delete
 
 Delete resources by filenames, stdin, resources and names, or by resources and label selector
@@ -29,12 +40,12 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
 ### Options
 
 ```
-  -f, --filename strings   Filename to use to delete the resource
-  -h, --help               help for delete
-  -n, --namespace string   Delete object(s) from this namespace. (default "default")
-  -o, --output string      Output mode. Use "-o name" for shorter output (resource/name).
-  -R, --recursive          Process the directory used in -f, --filename recursively.
-  -l, --selector string    Selector (label query) to filter on.
+  -f, --filename stringSlice   Filename to use to delete the resource
+  -h, --help                   help for delete
+  -n, --namespace string       Delete object(s) from this namespace. (default "default")
+  -o, --output string          Output mode. Use "-o name" for shorter output (resource/name).
+  -R, --recursive              Process the directory used in -f, --filename recursively.
+  -l, --selector string        Selector (label query) to filter on.
 ```
 
 ### Options inherited from parent commands
@@ -45,6 +56,6 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Command line interface for KubeDB
+* [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

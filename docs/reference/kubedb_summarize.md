@@ -1,3 +1,14 @@
+---
+title: Kubedb Summarize
+menu:
+  product_kubedb_0.7.1:
+    identifier: kubedb-summarize
+    name: Kubedb Summarize
+    parent: reference
+product_name: kubedb
+left_menu: product_kubedb_0.7.1
+section_menu_id: reference
+---
 ## kubedb summarize
 
 Export summary report
@@ -29,6 +40,6 @@ kubedb summarize [flags]
 ```
 
 ### SEE ALSO
-* [kubedb](kubedb.md)	 - Command line interface for KubeDB
+* [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 
