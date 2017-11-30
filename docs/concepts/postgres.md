@@ -162,7 +162,7 @@ To learn how to monitor Postgres databases, please visit [here](/docs/concepts/m
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres/README.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
