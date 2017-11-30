@@ -1,12 +1,12 @@
 ---
 title: Kubedb Edit
 menu:
-  product_kubedb_0.7.1:
+  product_kubedb_0.7.2:
     identifier: kubedb-edit
     name: Kubedb Edit
     parent: reference
 product_name: kubedb
-left_menu: product_kubedb_0.7.1
+left_menu: product_kubedb_0.7.2
 section_menu_id: reference
 ---
 ## kubedb edit

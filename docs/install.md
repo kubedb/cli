@@ -1,16 +1,16 @@
 ---
 title: KubeDB Install
 menu:
-  docs_0.7.1:
+  docs_0.7.2:
     identifier: install-kubedb
     name: Install
     parent: getting-started
     weight: 20
-menu_name: docs_0.7.1
+menu_name: docs_0.7.2
 section_menu_id: getting-started
-url: /docs/0.7.1/getting-started/install/
+url: /docs/0.7.2/getting-started/install/
 aliases:
-  - /docs/0.7.1/install/
+  - /docs/0.7.2/install/
 ---
 
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).

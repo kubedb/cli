@@ -1,12 +1,12 @@
 ---
 title: Kubedb Compare
 menu:
-  product_kubedb_0.7.1:
+  product_kubedb_0.7.2:
     identifier: kubedb-compare
     name: Kubedb Compare
     parent: reference
 product_name: kubedb
-left_menu: product_kubedb_0.7.1
+left_menu: product_kubedb_0.7.2
 section_menu_id: reference
 ---
 ## kubedb compare

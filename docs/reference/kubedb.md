@@ -1,17 +1,17 @@
 ---
 title: Kubedb
 menu:
-  product_kubedb_0.7.1:
+  product_kubedb_0.7.2:
     identifier: kubedb
     name: Kubedb
     parent: reference
     weight: 0
 
 product_name: kubedb
-left_menu: product_kubedb_0.7.1
+left_menu: product_kubedb_0.7.2
 section_menu_id: reference
 aliases:
-  - products/kubedb/0.7.1/reference/
+  - products/kubedb/0.7.2/reference/
 
 ---
 ## kubedb
