@@ -1,3 +1,18 @@
+---
+title: KubeDB Uninstall
+menu:
+  docs_0.7.1:
+    identifier: uninstall-kubedb
+    name: Uninstall
+    parent: getting-started
+    weight: 30
+menu_name: docs_0.7.1
+section_menu_id: getting-started
+url: /docs/0.7.1/getting-started/uninstall/
+aliases:
+  - /docs/0.7.1/uninstall/
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Uninstall KubeDB

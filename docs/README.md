@@ -1,3 +1,19 @@
+---
+title: KubeDB Overview
+menu:
+  docs_0.7.1:
+    identifier: kubedb-overview
+    name: Overview
+    parent: getting-started
+    weight: 10
+menu_name: docs_0.7.1
+section_menu_id: getting-started
+url: /docs/0.7.1/getting-started/
+aliases:
+  - /docs/0.7.1/
+  - /docs/0.7.1/README/
+---
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/k8sdb/cli)](https://goreportcard.com/report/github.com/k8sdb/cli)
 
 # KubeDB
