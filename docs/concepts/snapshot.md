@@ -1,3 +1,15 @@
+---
+title: Snapshot
+menu:
+  docs_0.7.2:
+    identifier: snapshot-concepts
+    name: Snapshot
+    parent: concepts
+    weight: 25
+left_menu: docs_0.7.2
+section_menu_id: concepts
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Snapshot

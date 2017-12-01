@@ -1,3 +1,17 @@
+---
+title: Concepts of Elasticsearch
+menu:
+  docs_0.7.2:
+    identifier: elasticsearch-concepts
+    name: Elasticsearch
+    parent: concepts
+    weight: 10
+left_menu: docs_0.7.2
+section_menu_id: concepts
+aliases:
+  - /docs/0.7.2/concepts/
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Elasticsearch
