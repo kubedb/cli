@@ -2,6 +2,7 @@ package v1alpha1
 
 import (
 	"errors"
+	"fmt"
 	"path/filepath"
 
 	core "k8s.io/api/core/v1"
@@ -82,4 +83,8 @@ func (s Snapshot) ObjectReference() *core.ObjectReference {
 		UID:             s.UID,
 		ResourceVersion: s.ResourceVersion,
 	}
+}
+
+func (s Snapshot) OSMSecretName() string {
+	return fmt.Sprintf("osm-%v", s.Name)
 }

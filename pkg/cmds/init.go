@@ -51,6 +51,7 @@ func RunInit(cmd *cobra.Command, out, errOut io.Writer) error {
 	upgrade := cmdutil.GetFlagBool(cmd, "upgrade")
 	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
+	fmt.Println("Version",version)
 	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
 
 	client, err := kube.NewKubeClient(cmd)

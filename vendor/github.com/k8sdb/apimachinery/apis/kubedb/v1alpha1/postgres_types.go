@@ -29,10 +29,18 @@ type Postgres struct {
 type PostgresSpec struct {
 	// Version of Postgres to be deployed.
 	Version types.StrYo `json:"version,omitempty"`
-	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+	// Number of instances to deploy for a Postgres database.
+	Replicas int32 `json:"replicas,omitempty"`
+	// Standby mode
+	Standby StandbyMode `json:"standby,omitempty"`
+	// Streaming mode
+	Streaming StreamingMode `json:"streaming,omitempty"`
+	// Archive for wal files
+	Archiver PostgresArchiverSpec `json:"archiver,omitempty"`
 	// Database authentication secret
 	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
+	// Storage to specify how storage shall be used.
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 	// NodeSelector is a selector which must be true for the pod to fit on a node
 	// +optional
 	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
@@ -61,6 +69,11 @@ type PostgresSpec struct {
 	// If specified, the pod's tolerations.
 	// +optional
 	Tolerations []core.Toleration `json:"tolerations,omitempty" protobuf:"bytes,22,opt,name=tolerations"`
+}
+
+type PostgresArchiverSpec struct {
+	Storage *SnapshotStorageSpec `json:"storage,omitempty"`
+	// wal_keep_segments
 }
 
 type PostgresStatus struct {
@@ -92,3 +105,23 @@ type PostgresSchemaInfo struct {
 type PostgresSummary struct {
 	Schema map[string]*PostgresSchemaInfo `json:"schema"`
 }
+
+type PostgresWALSourceSpec struct {
+	BackupName          string `json:"backupName,omitempty"`
+	PITR                string `json:"pitr,omitempty"`
+	SnapshotStorageSpec `json:",inline,omitempty"`
+}
+
+type StandbyMode string
+
+const (
+	HotStandby  StandbyMode = "hot"
+	WarmStandby StandbyMode = "warm"
+)
+
+type StreamingMode string
+
+const (
+	SynchronousStreaming  StreamingMode = "synchronous"
+	AsynchronousStreaming StreamingMode = "asynchronous"
+)

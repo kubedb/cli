@@ -39,7 +39,7 @@ func NewOSMSecret(client kubernetes.Interface, snapshot *api.Snapshot) (*core.Se
 	}
 	return &core.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      snapshot.Name,
+			Name:      snapshot.OSMSecretName(),
 			Namespace: snapshot.Namespace,
 		},
 		Data: map[string][]byte{

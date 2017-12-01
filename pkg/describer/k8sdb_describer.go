@@ -150,6 +150,74 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 	})
 }
 
+func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSettings *printers.DescriberSettings) (string, error) {
+	clientSet, err := d.ClientSet()
+	if err != nil {
+		return "", err
+	}
+
+	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
+		metav1.ListOptions{
+			LabelSelector: labels.SelectorFromSet(
+				map[string]string{
+					api.LabelDatabaseKind: item.ResourceKind(),
+					api.LabelDatabaseName: item.Name,
+				},
+			).String(),
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	var events *kapi.EventList
+	if describerSettings.ShowEvents {
+		item.Kind = api.ResourceKindMySQL
+		events, err = clientSet.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return tabbedString(func(out io.Writer) error {
+		fmt.Fprintf(out, "Name:\t%s\n", item.Name)
+		fmt.Fprintf(out, "Namespace:\t%s\n", item.Namespace)
+		fmt.Fprintf(out, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		if item.Labels != nil {
+			printLabelsMultiline(out, "Labels", item.Labels)
+		}
+		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
+		if len(item.Status.Reason) > 0 {
+			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
+		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
+
+		describeStorage(item.Spec.Storage, out)
+
+		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
+
+		d.describeStatefulSet(item.Namespace, statefulSetName, out)
+		d.describeService(item.Namespace, item.Name, out)
+		if item.Spec.DatabaseSecret != nil {
+			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+		}
+
+		if item.Spec.Monitor != nil {
+			describeMonitor(item.Spec.Monitor, out)
+		}
+
+		listSnapshots(snapshots, out)
+
+		if events != nil {
+			describeEvents(events, out)
+		}
+
+		return nil
+	})
+}
+
 func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerSettings *printers.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {

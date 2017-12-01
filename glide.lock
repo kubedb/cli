@@ -1,5 +1,5 @@
-hash: 62b1e47c1618cf6b694b7c158cfa37227b991226fde3077cb18a64888badf6d1
-updated: 2017-11-18T20:59:32.651417481-08:00
+hash: c45b03b0010951b516084f140bd4c253a2529b99cf145e24bc6ace5b7c19726a
+updated: 2017-12-01T15:22:35.804787438+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 1cd97c853ad364376f9c792106deb0bfd197bca0
+  version: 85b510edd14fe8d6beb2ad365afd3c5b3afc8c49
   subpackages:
   - context
   - encoding/json/types
@@ -18,11 +18,11 @@ imports:
   - types
   - version
 - name: github.com/appscode/kutil
-  version: c7547d78847930f4b48c4e3b3d6fe1d8b0309bd7
+  version: 34b061c221ca2ce46f8ae1ec03a28cd5ab112742
   subpackages:
   - tools/monitoring/api
 - name: github.com/appscode/osm
-  version: 7b0b6f4f329d8d1ed786020d7e7ad865c61f8e7f
+  version: b3ed1c7835d33f312616b260a949589cf33311ee
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -193,7 +193,7 @@ imports:
 - name: github.com/google/gofuzz
   version: 44d81051d367757e1c7c6a5a86423ece9afcf63c
 - name: github.com/google/uuid
-  version: 8c31c18f31ede9fc8eae72290a7e7a8064e9b3e3
+  version: e367a344cbe8e08149f9951115dc299ebd42b919
 - name: github.com/googleapis/gnostic
   version: 0c5108395e2debce0d731cf0287ddf7242066aba
   subpackages:
@@ -232,9 +232,7 @@ imports:
   subpackages:
   - simplelru
 - name: github.com/heroku/docker-registry-client
-  version: 63418fd485f793ab9a21e44f9a7511bb649cc9af
-  repo: https://github.com/appscode/docker-registry-client.git
-  vcs: git
+  version: fd2fe803496897db70c236ee244f41487ea92ec2
   subpackages:
   - registry
 - name: github.com/howeyc/gopass
@@ -252,7 +250,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/k8sdb/apimachinery
-  version: 7fab3faf958855d232fffe6c4051715855584ba5
+  version: 9b5b81e9e6dc542ac375788fa88234410477a34b
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -262,11 +260,15 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/k8sdb/elasticsearch
-  version: 18ef43d4d9e57d88d20c691a36627b534379d512
+  version: 378c27f9b1e552b1cadd2bfbe704bcdb46a3f0e7
+  subpackages:
+  - pkg/validator
+- name: github.com/k8sdb/mysql
+  version: 2d4d5c445fb2d0a458345ad22e72067215787a35
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres
-  version: a6f0b1c07a4fa975c7c519a9e7c57dc5c6dc2457
+  version: 45137f3723943902a343cf6befb71345aa6d52f6
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -299,16 +301,15 @@ imports:
 - name: github.com/pkg/errors
   version: a22138067af1c4942683050411a841ade67fe1eb
 - name: github.com/prometheus/client_golang
-  version: e7e903064f5e9eb5da98208bae10b475d4db0f8c
+  version: c5b7fccd204277076155f10851dad72b76a49317
   subpackages:
   - prometheus
-  - prometheus/promhttp
 - name: github.com/prometheus/client_model
   version: fa8ad6fec33561be4280a8f0514318c79d7f6cb6
   subpackages:
   - go
 - name: github.com/prometheus/common
-  version: 13ba4ddd0caa9c28ca7b7bffe1dfa9ed8d5ef207
+  version: 3233b24a36715a2fe36d162260457857a56d672d
   subpackages:
   - expfmt
   - internal/bitbucket.org/ww/goautoneg
@@ -334,7 +335,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: d6948b782c9f4799ea3cd225f6de4131c29c243a
+  version: 1be1d2841c773c01bee8289f55f7463b6e2c2539
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -390,14 +391,14 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 790790d1b4a7d6b0d03d3725f980eedf80dc2707
+  version: a0ff90edab763c86aa88f2b1eb4f3301b82f6336
   subpackages:
   - gensupport
   - googleapi
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
+  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
   subpackages:
   - internal
   - internal/app_identity

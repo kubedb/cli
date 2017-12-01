@@ -81,6 +81,8 @@ func (h *HumanReadablePrinter) addDefaultHandlers() {
 	h.Handler(h.printElastic)
 	h.Handler(h.printPostgresList)
 	h.Handler(h.printPostgres)
+	h.Handler(h.printMySQLList)
+	h.Handler(h.printMySQL)
 	h.Handler(h.printSnapshotList)
 	h.Handler(h.printSnapshot)
 	h.Handler(h.printDormantDatabaseList)
@@ -140,6 +142,11 @@ func getColumns(options PrintOptions, t reflect.Type) []string {
 		if options.Wide {
 			columns = append(columns, "VERSION")
 		}
+	case "*v1alpha1.MySQL", "*v1alpha1.MySQLList":
+		if options.Wide {
+			columns = append(columns, "VERSION")
+		}
+
 	case "*v1alpha1.Snapshot", "*v1alpha1.SnapshotList":
 		columns = append(columns, "DATABASE")
 		if options.Wide {
@@ -235,6 +242,49 @@ func (h *HumanReadablePrinter) printPostgres(item *tapi.Postgres, w io.Writer, o
 func (h *HumanReadablePrinter) printPostgresList(itemList *tapi.PostgresList, w io.Writer, options PrintOptions) error {
 	for _, item := range itemList.Items {
 		if err := h.printPostgres(&item, w, options); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (h *HumanReadablePrinter) printMySQL(item *tapi.MySQL, w io.Writer, options PrintOptions) error {
+	name := formatResourceName(options.Kind, item.Name, options.WithKind)
+
+	namespace := item.Namespace
+
+	if options.WithNamespace {
+		if _, err := fmt.Fprintf(w, "%s\t", namespace); err != nil {
+			return err
+		}
+	}
+
+	status := item.Status.Phase
+	if status == "" {
+		status = statusUnknown
+	}
+	if _, err := fmt.Fprintf(w, "%s\t", name); err != nil {
+		return err
+	}
+
+	if options.Wide {
+		if _, err := fmt.Fprintf(w, "%s\t", item.Spec.Version); err != nil {
+			return err
+		}
+	}
+
+	if _, err := fmt.Fprintf(w, "%s\t%s", status, TranslateTimestamp(item.CreationTimestamp)); err != nil {
+		return err
+	}
+
+	_, err := fmt.Fprint(w, appendAllLabels(options.ShowLabels, item.Labels))
+
+	return err
+}
+
+func (h *HumanReadablePrinter) printMySQLList(itemList *tapi.MySQLList, w io.Writer, options PrintOptions) error {
+	for _, item := range itemList.Items {
+		if err := h.printMySQL(&item, w, options); err != nil {
 			return err
 		}
 	}

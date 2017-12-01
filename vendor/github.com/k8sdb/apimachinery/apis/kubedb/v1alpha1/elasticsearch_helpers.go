@@ -73,6 +73,10 @@ func (r Elasticsearch) ServiceName() string {
 	return r.OffshootName()
 }
 
+func (r *Elasticsearch) MasterServiceName() string {
+	return fmt.Sprintf("%v-master", r.ServiceName())
+}
+
 func (r Elasticsearch) ServiceMonitorName() string {
 	return fmt.Sprintf("kubedb-%s-%s", r.Namespace, r.Name)
 }

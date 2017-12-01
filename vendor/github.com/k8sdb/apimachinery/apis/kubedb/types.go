@@ -5,8 +5,9 @@ import (
 )
 
 type InitSpec struct {
-	ScriptSource   *ScriptSourceSpec   `json:"scriptSource,omitempty"`
-	SnapshotSource *SnapshotSourceSpec `json:"snapshotSource,omitempty"`
+	ScriptSource   *ScriptSourceSpec      `json:"scriptSource,omitempty"`
+	SnapshotSource *SnapshotSourceSpec    `json:"snapshotSource,omitempty"`
+	PostgresWAL    *PostgresWALSourceSpec `json:"postgresWAL,omitempty"`
 }
 
 type ScriptSourceSpec struct {

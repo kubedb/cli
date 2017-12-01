@@ -22,7 +22,12 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 			return nil, err
 		}
 		return postgres, nil
-
+	case tapi.ResourceKindMySQL:
+		var mysql *tapi.MySQL
+		if err := yaml.Unmarshal(data, &mysql); err != nil {
+			return nil, err
+		}
+		return mysql, nil
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(data, &snapshot); err != nil {
