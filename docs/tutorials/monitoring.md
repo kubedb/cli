@@ -1,3 +1,15 @@
+---
+title: Monitoring
+menu:
+  docs_0.7.2:
+    identifier: tutorials-monitoring
+    name: Monitoring
+    parent: tutorials
+    weight: 70
+menu_name: docs_0.7.2
+section_menu_id: tutorials
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Using Prometheus with KubeDB

@@ -1,8 +1,8 @@
 ---
-title: Concepts of Postgres
+title: Postgres Concepts
 menu:
   docs_0.7.2:
-    identifier: postgres-concepts
+    identifier: concepts-postgres
     name: Postgres
     parent: concepts
     weight: 20

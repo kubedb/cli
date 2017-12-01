@@ -1,3 +1,15 @@
+---
+title: RBAC
+menu:
+  docs_0.7.2:
+    identifier: tutorials-rbac
+    name: RBAC
+    parent: tutorials
+    weight: 80
+menu_name: docs_0.7.2
+section_menu_id: tutorials
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Using RBAC with KubeDB

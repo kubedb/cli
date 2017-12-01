@@ -1,3 +1,15 @@
+---
+title: CLI | KubeDB
+menu:
+  docs_0.7.2:
+    identifier: tutorials-cli
+    name: CLI
+    parent: tutorials
+    weight: 60
+menu_name: docs_0.7.2
+section_menu_id: tutorials
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Manage KubeDB objects using CLIs

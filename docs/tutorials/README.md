@@ -1,3 +1,18 @@
+---
+title: Tutorials | KubeDB
+menu:
+  docs_0.7.2:
+    identifier: tutorials-overview
+    name: Overview
+    parent: tutorials
+    weight: 50
+menu_name: docs_0.7.2
+section_menu_id: tutorials
+url: /docs/0.7.2/tutorials/
+aliases:
+  - /docs/0.7.2/tutorials/README/
+---
+
 # Tutorials
 
 This section contains tutorials on how to use KubeDB. Please visit the links below to learn more:
