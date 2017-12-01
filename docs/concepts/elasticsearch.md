@@ -6,7 +6,7 @@ menu:
     name: Elasticsearch
     parent: concepts
     weight: 10
-left_menu: docs_0.7.2
+menu_name: docs_0.7.2
 section_menu_id: concepts
 aliases:
   - /docs/0.7.2/concepts/

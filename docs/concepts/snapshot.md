@@ -6,7 +6,7 @@ menu:
     name: Snapshot
     parent: concepts
     weight: 25
-left_menu: docs_0.7.2
+menu_name: docs_0.7.2
 section_menu_id: concepts
 ---
 
