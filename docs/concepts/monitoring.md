@@ -1,12 +1,12 @@
 ---
 title: Monitoring
 menu:
-  docs_0.7.2:
+  docs_0.7.1:
     identifier: monitoring-concepts
     name: Monitoring
     parent: concepts
     weight: 15
-menu_name: docs_0.7.2
+menu_name: docs_0.7.1
 section_menu_id: concepts
 ---
 

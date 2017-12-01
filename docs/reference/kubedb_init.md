@@ -1,12 +1,12 @@
 ---
 title: Kubedb Init
 menu:
-  product_kubedb_0.7.2:
+  product_kubedb_0.7.1:
     identifier: kubedb-init
     name: Kubedb Init
     parent: reference
 product_name: kubedb
-left_menu: product_kubedb_0.7.2
+left_menu: product_kubedb_0.7.1
 section_menu_id: reference
 ---
 ## kubedb init

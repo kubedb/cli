@@ -1,12 +1,12 @@
 ---
 title: Kubedb Version
 menu:
-  product_kubedb_0.7.2:
+  product_kubedb_0.7.1:
     identifier: kubedb-version
     name: Kubedb Version
     parent: reference
 product_name: kubedb
-left_menu: product_kubedb_0.7.2
+left_menu: product_kubedb_0.7.1
 section_menu_id: reference
 ---
 ## kubedb version

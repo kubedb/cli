@@ -1,16 +1,16 @@
 ---
 title: Developer Guide
 menu:
-  docs_0.7.2:
+  docs_0.7.1:
     identifier: developer-guide-readme
     name: Overview
     parent: developer-guide
     weight: 10
-menu_name: docs_0.7.2
+menu_name: docs_0.7.1
 section_menu_id: developer-guide
-url: /docs/0.7.2/developer-guide/
+url: /docs/0.7.1/developer-guide/
 aliases:
-  - /docs/0.7.2/developer-guide/README/
+  - /docs/0.7.1/developer-guide/README/
 ---
 
 ## Development Guide

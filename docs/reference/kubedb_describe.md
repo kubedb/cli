@@ -1,12 +1,12 @@
 ---
 title: Kubedb Describe
 menu:
-  product_kubedb_0.7.2:
+  product_kubedb_0.7.1:
     identifier: kubedb-describe
     name: Kubedb Describe
     parent: reference
 product_name: kubedb
-left_menu: product_kubedb_0.7.2
+left_menu: product_kubedb_0.7.1
 section_menu_id: reference
 ---
 ## kubedb describe
