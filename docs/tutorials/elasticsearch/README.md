@@ -8,8 +8,8 @@ menu:
     weight: 10
 menu_name: docs_0.7.2
 section_menu_id: tutorials
+url: /docs/0.7.2/tutorials/elasticsearch/
 aliases:
-  - /docs/0.7.2/tutorials/elasticsearch/
   - /docs/0.7.2/tutorials/elasticsearch/README/
 ---
 
