@@ -69,7 +69,7 @@ const (
     * all
     * elastic
     * postgres
-	* mysql
+    * mysql
     * mongodb
     * snapshot
     * dormantdatabase
