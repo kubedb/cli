@@ -1,5 +1,5 @@
-hash: 009338271fd6767ff2260a0b2a31f78792e0346588e43b00d66c6e84806141e6
-updated: 2017-12-04T11:34:27.694684009+06:00
+hash: 24fb3930c21a13fb6a30885bc622c54c76ecceee4bada0ffe79ae51b38c6d97e
+updated: 2017-12-04T12:48:07.063452196+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -265,6 +265,10 @@ imports:
   - pkg/validator
 - name: github.com/k8sdb/mongodb
   version: a4a9d663de1fa2df52844d90ab03ea3eb9c9612a
+  subpackages:
+  - pkg/validator
+- name: github.com/k8sdb/mysql
+  version: 2d4d5c445fb2d0a458345ad22e72067215787a35
   subpackages:
   - pkg/validator
 - name: github.com/k8sdb/postgres

@@ -29,6 +29,11 @@ func GetSupportedResource(resource string) (string, error) {
 		strings.ToLower(tapi.ResourceCodePostgres),
 		strings.ToLower(tapi.ResourceNamePostgres):
 		return tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group, nil
+	case strings.ToLower(tapi.ResourceKindMySQL),
+		strings.ToLower(tapi.ResourceTypeMySQL),
+		strings.ToLower(tapi.ResourceCodeMySQL),
+		strings.ToLower(tapi.ResourceNameMySQL):
+		return tapi.ResourceTypeMySQL + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindMongoDB),
 		strings.ToLower(tapi.ResourceTypeMongoDB),
 		strings.ToLower(tapi.ResourceCodeMongoDB),
@@ -61,6 +66,11 @@ func GetResourceType(resource string) (string, error) {
 		strings.ToLower(tapi.ResourceCodePostgres),
 		strings.ToLower(tapi.ResourceNamePostgres):
 		return tapi.ResourceTypePostgres, nil
+	case strings.ToLower(tapi.ResourceKindMySQL),
+		strings.ToLower(tapi.ResourceTypeMySQL),
+		strings.ToLower(tapi.ResourceCodeMySQL),
+		strings.ToLower(tapi.ResourceNameMySQL):
+		return tapi.ResourceTypeMySQL, nil
 	case strings.ToLower(tapi.ResourceKindMongoDB),
 		strings.ToLower(tapi.ResourceTypeMongoDB),
 		strings.ToLower(tapi.ResourceCodeMongoDB),
@@ -85,6 +95,7 @@ func CheckSupportedResource(kind string) error {
 	switch kind {
 	case tapi.ResourceKindElasticsearch,
 		tapi.ResourceKindPostgres,
+		tapi.ResourceKindMySQL,
 		tapi.ResourceKindMongoDB,
 		tapi.ResourceKindSnapshot,
 		tapi.ResourceKindDormantDatabase:
@@ -99,6 +110,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 	resources := []string{
 		tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group,
 		tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourceTypeMySQL + "." + tapi.SchemeGroupVersion.Group,
 		tapi.ResourceTypeMongoDB + "." + tapi.SchemeGroupVersion.Group,
 		tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group,
 		tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group,
@@ -132,6 +144,7 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 var ShortForms = map[string]string{
 	tapi.ResourceCodeElasticsearch:   tapi.ResourceTypeElasticsearch,
 	tapi.ResourceCodePostgres:        tapi.ResourceTypePostgres,
+	tapi.ResourceCodeMySQL:           tapi.ResourceTypeMySQL,
 	tapi.ResourceCodeMongoDB:         tapi.ResourceTypeMongoDB,
 	tapi.ResourceCodeSnapshot:        tapi.ResourceTypeSnapshot,
 	tapi.ResourceCodeDormantDatabase: tapi.ResourceTypeDormantDatabase,
@@ -215,6 +228,13 @@ var PreconditionSpecField = map[string][]string{
 		"spec.nodeSelector",
 		"spec.init",
 	},
+	tapi.ResourceKindMySQL: {
+		"spec.version",
+		"spec.storage",
+		"spec.databaseSecret",
+		"spec.nodeSelector",
+		"spec.init",
+	},
 	tapi.ResourceKindMongoDB: {
 		"spec.version",
 		"spec.storage",
@@ -249,6 +269,9 @@ func CheckResourceExists(client internalclientset.Interface, kind, name, namespa
 		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	case tapi.ResourceKindPostgres:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
+		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+	case tapi.ResourceKindMySQL:
+		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeMySQL)
 		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
 	case tapi.ResourceKindMongoDB:
 		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeMongoDB)
