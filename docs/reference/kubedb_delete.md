@@ -1,12 +1,11 @@
 ---
 title: Kubedb Delete
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-delete
     name: Kubedb Delete
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb delete
@@ -14,7 +13,6 @@ section_menu_id: reference
 Delete resources by filenames, stdin, resources and names, or by resources and label selector
 
 ### Synopsis
-
 
 Delete resources by filenames, stdin, resources and names, or by resources and label selector. JSON and YAML formats are accepted. 
 
@@ -56,6 +54,7 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

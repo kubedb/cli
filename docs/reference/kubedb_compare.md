@@ -1,12 +1,11 @@
 ---
 title: Kubedb Compare
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-compare
     name: Kubedb Compare
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb compare
@@ -14,7 +13,6 @@ section_menu_id: reference
 Compare summary reports
 
 ### Synopsis
-
 
 Compare summary reports
 
@@ -38,6 +36,7 @@ kubedb compare [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

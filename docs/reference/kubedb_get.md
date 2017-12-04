@@ -1,12 +1,11 @@
 ---
 title: Kubedb Get
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-get
     name: Kubedb Get
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb get
@@ -15,7 +14,6 @@ Display one or many resources
 
 ### Synopsis
 
-
 Display one or many resources. 
 
 Valid resource types include: 
@@ -23,6 +21,10 @@ Valid resource types include:
   * all  
   * elastic  
   * postgres  
+  * mysql  
+  * mongodb  
+  * redis  
+  * memcached  
   * snapshot  
   * dormantdatabase
 
@@ -73,6 +75,7 @@ kubedb get [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

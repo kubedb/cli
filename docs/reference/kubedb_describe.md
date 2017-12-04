@@ -1,12 +1,11 @@
 ---
 title: Kubedb Describe
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-describe
     name: Kubedb Describe
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb describe
@@ -15,12 +14,15 @@ Show details of a specific resource or group of resources
 
 ### Synopsis
 
-
 Show details of a specific resource or group of resources. This command joins many API calls together to form a detailed description of a given resource or group of resources.Valid resource types include: 
 
   * all  
   * elastic  
   * postgres  
+  * mysql  
+  * mongodb  
+  * redis  
+  * memcached  
   * snapshot  
   * dormantdatabase
 
@@ -59,6 +61,7 @@ kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

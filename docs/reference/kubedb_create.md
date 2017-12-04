@@ -1,12 +1,11 @@
 ---
 title: Kubedb Create
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-create
     name: Kubedb Create
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb create
@@ -14,7 +13,6 @@ section_menu_id: reference
 Create a resource by filename or stdin
 
 ### Synopsis
-
 
 Create a resource by filename or stdin. 
 
@@ -51,6 +49,7 @@ kubedb create [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 

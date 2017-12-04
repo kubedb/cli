@@ -1,17 +1,16 @@
 ---
 title: Kubedb
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb
     name: Kubedb
     parent: reference
     weight: 0
 
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 aliases:
-  - products/kubedb/0.7.1/reference/
+  - /docs/0.7.1/reference/
 
 ---
 ## kubedb
@@ -19,7 +18,6 @@ aliases:
 Command line interface for KubeDB
 
 ### Synopsis
-
 
 KubeDB by AppsCode - Kubernetes ready production-grade Databases 
 
@@ -38,6 +36,7 @@ kubedb [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb compare](/docs/reference/kubedb_compare.md)	 - Compare summary reports
 * [kubedb create](/docs/reference/kubedb_create.md)	 - Create a resource by filename or stdin
 * [kubedb delete](/docs/reference/kubedb_delete.md)	 - Delete resources by filenames, stdin, resources and names, or by resources and label selector

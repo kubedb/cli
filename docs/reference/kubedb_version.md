@@ -1,12 +1,11 @@
 ---
 title: Kubedb Version
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-version
     name: Kubedb Version
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb version
@@ -14,7 +13,6 @@ section_menu_id: reference
 Prints binary version number.
 
 ### Synopsis
-
 
 Prints binary version number.
 
@@ -36,5 +34,6 @@ kubedb version [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 

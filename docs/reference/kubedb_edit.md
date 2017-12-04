@@ -1,12 +1,11 @@
 ---
 title: Kubedb Edit
 menu:
-  product_kubedb_0.7.1:
+  docs_0.7.1:
     identifier: kubedb-edit
     name: Kubedb Edit
     parent: reference
-product_name: kubedb
-left_menu: product_kubedb_0.7.1
+menu_name: docs_0.7.1
 section_menu_id: reference
 ---
 ## kubedb edit
@@ -14,7 +13,6 @@ section_menu_id: reference
 Edit a resource on the server
 
 ### Synopsis
-
 
 Edit a resource from the default editor. 
 
@@ -50,6 +48,7 @@ kubedb edit (RESOURCE/NAME) [flags]
 ```
 
 ### SEE ALSO
+
 * [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 
