@@ -49,6 +49,7 @@ const (
     * mysqls
     * mongodbs
     * redises
+    * memcacheds
     `
 )
 

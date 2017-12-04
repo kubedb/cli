@@ -1,5 +1,5 @@
-hash: f6216a3ddf968e7163cf0361a4017476a53de85bcd7d52e09f89cf614aa31730
-updated: 2017-12-04T14:37:28.078764702+06:00
+hash: c62900e577b0cace4ec04c14d8c636c2ed62732562a2ed1b790ee52d2387b6d7
+updated: 2017-12-04T18:52:53.450682025+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -263,6 +263,10 @@ imports:
   version: 378c27f9b1e552b1cadd2bfbe704bcdb46a3f0e7
   subpackages:
   - pkg/validator
+- name: github.com/k8sdb/memcached
+  version: c52892815af3ca91f21f5187e69d21bf77749d1a
+  subpackages:
+  - pkg/validator
 - name: github.com/k8sdb/mongodb
   version: a4a9d663de1fa2df52844d90ab03ea3eb9c9612a
   subpackages:
@@ -343,7 +347,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: 86783686cade7a5ea7f5306d461d91841c7a6b3d
+  version: 3a5f27b046057b8b1bc8301159a31635aa68d0d5
   subpackages:
   - doc
 - name: github.com/spf13/pflag

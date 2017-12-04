@@ -40,6 +40,12 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 			return nil, err
 		}
 		return redis, nil
+	case tapi.ResourceKindMemcached:
+		var memcached *tapi.Memcached
+		if err := yaml.Unmarshal(data, &memcached); err != nil {
+			return nil, err
+		}
+		return memcached, nil
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(data, &snapshot); err != nil {

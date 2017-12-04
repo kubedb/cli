@@ -72,6 +72,7 @@ const (
     * mysql
     * mongodb
     * redis
+    * memcached
     * snapshot
     * dormantdatabase
     `
