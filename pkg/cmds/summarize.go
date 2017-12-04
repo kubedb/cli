@@ -47,6 +47,7 @@ const (
     * elastics
     * postgreses
     * mysqls
+    * mongodbs
     `
 )
 

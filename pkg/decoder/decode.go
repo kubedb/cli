@@ -28,6 +28,12 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 			return nil, err
 		}
 		return mysql, nil
+	case tapi.ResourceKindMongoDB:
+		var mongodb *tapi.MongoDB
+		if err := yaml.Unmarshal(data, &mongodb); err != nil {
+			return nil, err
+		}
+		return mongodb, nil
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(data, &snapshot); err != nil {
