@@ -11,6 +11,8 @@ import:
   version: master
 - package: github.com/k8sdb/postgres
   version: master
+- package: github.com/k8sdb/mysql
+  version: master
 - package: github.com/spf13/cobra
 - package: github.com/yudai/gojsondiff
   version: 1.0.0

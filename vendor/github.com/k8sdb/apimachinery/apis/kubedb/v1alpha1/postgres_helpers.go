@@ -88,3 +88,7 @@ func (p Postgres) Scheme() string {
 func (p *Postgres) StatsAccessor() api.StatsAccessor {
 	return p
 }
+
+func (p Postgres) PrimaryName() string {
+	return fmt.Sprintf("%v-primary", p.Name)
+}

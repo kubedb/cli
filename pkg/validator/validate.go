@@ -8,6 +8,7 @@ import (
 	amv "github.com/k8sdb/apimachinery/pkg/validator"
 	"github.com/k8sdb/cli/pkg/encoder"
 	esv "github.com/k8sdb/elasticsearch/pkg/validator"
+	msv "github.com/k8sdb/mysql/pkg/validator"
 	pgv "github.com/k8sdb/postgres/pkg/validator"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -33,6 +34,12 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 			return err
 		}
 		return pgv.ValidatePostgres(client, postgres)
+	case tapi.ResourceKindMySQL:
+		var mysql *tapi.MySQL
+		if err := yaml.Unmarshal(objByte, &mysql); err != nil {
+			return err
+		}
+		return msv.ValidateMySQL(client, mysql)
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(objByte, &snapshot); err != nil {
@@ -66,6 +73,14 @@ func ValidateDeletion(info *resource.Info) error {
 		}
 		if postgres.Spec.DoNotPause {
 			return fmt.Errorf(`Postgres "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, postgres.Name)
+		}
+	case tapi.ResourceKindMySQL:
+		var mysql *tapi.MySQL
+		if err := yaml.Unmarshal(objByte, &mysql); err != nil {
+			return err
+		}
+		if mysql.Spec.DoNotPause {
+			return fmt.Errorf(`MySQL "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, mysql.Name)
 		}
 	}
 	return nil
