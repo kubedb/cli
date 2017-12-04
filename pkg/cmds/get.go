@@ -71,6 +71,7 @@ const (
     * postgres
     * mysql
     * mongodb
+    * redis
     * snapshot
     * dormantdatabase
     `

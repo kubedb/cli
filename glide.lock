@@ -1,5 +1,5 @@
-hash: 24fb3930c21a13fb6a30885bc622c54c76ecceee4bada0ffe79ae51b38c6d97e
-updated: 2017-12-04T13:00:55.781717355+06:00
+hash: f6216a3ddf968e7163cf0361a4017476a53de85bcd7d52e09f89cf614aa31730
+updated: 2017-12-04T14:37:28.078764702+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -273,6 +273,10 @@ imports:
   - pkg/validator
 - name: github.com/k8sdb/postgres
   version: 45137f3723943902a343cf6befb71345aa6d52f6
+  subpackages:
+  - pkg/validator
+- name: github.com/k8sdb/redis
+  version: 1a608fca03e79a6bf6bbe2ab4579e0349e59bd40
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson

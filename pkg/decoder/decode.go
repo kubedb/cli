@@ -34,6 +34,12 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 			return nil, err
 		}
 		return mongodb, nil
+	case tapi.ResourceKindRedis:
+		var redis *tapi.Redis
+		if err := yaml.Unmarshal(data, &redis); err != nil {
+			return nil, err
+		}
+		return redis, nil
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(data, &snapshot); err != nil {
