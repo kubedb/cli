@@ -50,6 +50,7 @@ func (h *humanReadableDescriber) addDefaultHandlers() {
 	h.Handler(h.describePostgres)
 	h.Handler(h.describeMySQL)
 	h.Handler(h.describeMongoDB)
+	h.Handler(h.describeRedis)
 	h.Handler(h.describeSnapshot)
 	h.Handler(h.describeDormantDatabase)
 }
