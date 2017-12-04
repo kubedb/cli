@@ -246,7 +246,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: https://github.com/k8sdb/postgres-init-scripts.git
+        repository: https://github.com/kubedb/postgres-init-scripts.git
       scriptPath: postgres-init-scripts/run.sh
   resources: {}
   storage:

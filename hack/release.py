@@ -38,7 +38,7 @@ from os.path import expandvars
 import yaml
 from collections import Counter
 
-libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/k8sdb/cli'
+libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 
 def die(status):
     if status:
@@ -102,18 +102,18 @@ class Kitten(object):
         self.next_version = semver.bump_minor(self.tag)
         self.release_branch = 'release-{0}.{1}'.format(self.version['major'], self.version['minor'])
         self.rel_deps = {
-            'github.com/k8sdb/apimachinery': self.release_branch,
-            'github.com/k8sdb/postgres': self.tag,
-            'github.com/k8sdb/elasticsearch': self.tag,
+            'github.com/kubedb/apimachinery': self.release_branch,
+            'github.com/kubedb/postgres': self.tag,
+            'github.com/kubedb/elasticsearch': self.tag,
         }
         self.master_deps = {
-            'github.com/k8sdb/apimachinery': 'master',
-            'github.com/k8sdb/postgres': 'master',
-            'github.com/k8sdb/elasticsearch': 'master',
+            'github.com/kubedb/apimachinery': 'master',
+            'github.com/kubedb/postgres': 'master',
+            'github.com/kubedb/elasticsearch': 'master',
         }
 
     def release_apimachinery(self):
-        repo = libbuild.GOPATH + '/src/github.com/k8sdb/apimachinery'
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/apimachinery'
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
@@ -131,7 +131,7 @@ class Kitten(object):
         call('git push origin {0}'.format(self.release_branch), cwd=repo)
 
     def release_db(self, repo_name, short_code):
-        repo = libbuild.GOPATH + '/src/github.com/k8sdb/' + repo_name
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
@@ -162,7 +162,7 @@ class Kitten(object):
             call('git push origin master', cwd=repo)
 
     def release_operator(self):
-        repo = libbuild.GOPATH + '/src/github.com/k8sdb/operator'
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/operator'
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
@@ -193,7 +193,7 @@ class Kitten(object):
             call('git push origin master', cwd=repo)
 
     def release_cli(self):
-        repo = libbuild.GOPATH + '/src/github.com/k8sdb/cli'
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/cli'
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)

@@ -70,7 +70,7 @@ spec:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+        repository: "https://github.com/kubedb/postgres-init-scripts.git"
 
 $ kubedb create -f ./docs/examples/postgres/demo-1.yaml
 validating "./docs/examples/postgres/demo-1.yaml"
@@ -84,7 +84,7 @@ Here,
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/k8sdb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
+ - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/kubedb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
 KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
@@ -164,7 +164,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: https://github.com/k8sdb/postgres-init-scripts.git
+        repository: https://github.com/kubedb/postgres-init-scripts.git
       scriptPath: postgres-init-scripts/run.sh
   resources: {}
   storage:
@@ -361,7 +361,7 @@ spec:
     scriptSource:
       scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
-        repository: "https://github.com/k8sdb/postgres-init-scripts.git"
+        repository: "https://github.com/kubedb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: snap-secret
@@ -508,7 +508,7 @@ spec:
         init:
           scriptSource:
             gitRepo:
-              repository: https://github.com/k8sdb/postgres-init-scripts.git
+              repository: https://github.com/kubedb/postgres-init-scripts.git
             scriptPath: postgres-init-scripts/run.sh
         resources: {}
         storage:
@@ -569,7 +569,7 @@ spec:
         init:
           scriptSource:
             gitRepo:
-              repository: https://github.com/k8sdb/postgres-init-scripts.git
+              repository: https://github.com/kubedb/postgres-init-scripts.git
             scriptPath: postgres-init-scripts/run.sh
         resources: {}
         storage:
@@ -626,7 +626,7 @@ spec:
         init:
           scriptSource:
             gitRepo:
-              repository: https://github.com/k8sdb/postgres-init-scripts.git
+              repository: https://github.com/kubedb/postgres-init-scripts.git
             scriptPath: postgres-init-scripts/run.sh
         resources: {}
         storage:

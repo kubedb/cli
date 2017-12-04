@@ -21,7 +21,7 @@ Command line interface for KubeDB
 
 KubeDB by AppsCode - Kubernetes ready production-grade Databases 
 
-Find more information at https://github.com/k8sdb/cli.
+Find more information at https://github.com/kubedb/cli.
 
 ```
 kubedb [flags]

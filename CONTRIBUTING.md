@@ -21,8 +21,8 @@ If you have a question about KubeDB or having problem using it, you can contact 
 
 ## Bugs/Feature request
 If you have found a bug with KubeDB or want to request for new features, please file issues on Github.
- - For CLI issues, file a bug under [k8sdb/cli](https://github.com/k8sdb/cli) repository.
- - For Backend operator issues, file a bug under [k8sdb/operator](https://github.com/k8sdb/operator) repository.
+ - For CLI issues, file a bug under [kubedb/cli](https://github.com/kubedb/cli) repository.
+ - For Backend operator issues, file a bug under [kubedb/operator](https://github.com/kubedb/operator) repository.
 
 ## Contribution Flow
 If you fix a bug or developed a new feature, feel free to submit a PR. In either case, please file a Github issue first, so that we can have a discussion on it. This is a rough outline of what a contributor's workflow looks like:

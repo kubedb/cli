@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/k8sdb/cli/pkg/cmds"
+	"github.com/kubedb/cli/pkg/cmds"
 )
 
 func main() {

@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/k8sdb/cli/pkg/printer"
-	"github.com/k8sdb/cli/pkg/util"
+	"github.com/kubedb/cli/pkg/printer"
+	"github.com/kubedb/cli/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	kapi "k8s.io/kubernetes/pkg/api"

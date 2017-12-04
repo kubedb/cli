@@ -1,23 +1,23 @@
-package: github.com/k8sdb/cli
+package: github.com/kubedb/cli
 import:
 - package: github.com/appscode/go
 - package: github.com/ghodss/yaml
   version: v1.0.0
 - package: github.com/golang/glog
 - package: github.com/jpillora/go-ogle-analytics
-- package: github.com/k8sdb/apimachinery
+- package: github.com/kubedb/apimachinery
   version: master
-- package: github.com/k8sdb/elasticsearch
+- package: github.com/kubedb/elasticsearch
   version: master
-- package: github.com/k8sdb/postgres
+- package: github.com/kubedb/postgres
   version: master
-- package: github.com/k8sdb/mysql
+- package: github.com/kubedb/mysql
   version: master
-- package: github.com/k8sdb/mongodb
+- package: github.com/kubedb/mongodb
   version: master
-- package: github.com/k8sdb/redis
+- package: github.com/kubedb/redis
   version: master
-- package: github.com/k8sdb/memcached
+- package: github.com/kubedb/memcached
   version: master
 - package: github.com/spf13/cobra
 - package: github.com/yudai/gojsondiff
