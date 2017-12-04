@@ -1,3 +1,15 @@
+---
+title: CLI | KubeDB
+menu:
+  docs_0.7.1:
+    identifier: tutorials-cli
+    name: CLI
+    parent: tutorials
+    weight: 60
+menu_name: docs_0.7.1
+section_menu_id: tutorials
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Manage KubeDB objects using CLIs
@@ -347,7 +359,7 @@ $ kubectl delete postgres <name>
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
-- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres/README.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch/README.md).
 - Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

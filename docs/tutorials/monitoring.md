@@ -1,3 +1,15 @@
+---
+title: Monitoring
+menu:
+  docs_0.7.1:
+    identifier: tutorials-monitoring
+    name: Monitoring
+    parent: tutorials
+    weight: 70
+menu_name: docs_0.7.1
+section_menu_id: tutorials
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Using Prometheus with KubeDB
@@ -190,7 +202,7 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 ## Next Steps
 - Learn about the details of monitoring support [here](/docs/concepts/monitoring.md).
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
-- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres/README.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch/README.md).
 - Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

@@ -1,3 +1,15 @@
+---
+title: Release
+menu:
+  docs_0.7.1:
+    identifier: developer-guide-release
+    name: Release
+    parent: developer-guide
+    weight: 20
+menu_name: docs_0.7.1
+section_menu_id: developer-guide
+---
+
 ## apimachinery
 - Make sure `apimachinery` master builds and create a `release-*` branch.
 

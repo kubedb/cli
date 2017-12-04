@@ -1,3 +1,18 @@
+---
+title: Developer Guide
+menu:
+  docs_0.7.1:
+    identifier: developer-guide-readme
+    name: Overview
+    parent: developer-guide
+    weight: 10
+menu_name: docs_0.7.1
+section_menu_id: developer-guide
+url: /docs/0.7.1/developer-guide/
+aliases:
+  - /docs/0.7.1/developer-guide/README/
+---
+
 ## Development Guide
 This document is intended to be the canonical source of truth for things like supported toolchain versions for building KubeDB.
 If you find a requirement that this doc does not capture, please submit an issue on github.

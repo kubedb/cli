@@ -1,3 +1,18 @@
+---
+title: Postgres
+menu:
+  docs_0.7.1:
+    identifier: tutorials-postgres-readme
+    name: Overview
+    parent: tutorials-postgres
+    weight: 10
+menu_name: docs_0.7.1
+section_menu_id: tutorials
+url: /docs/0.7.1/tutorials/postgres/
+aliases:
+  - /docs/0.7.1/tutorials/postgres/README/
+---
+
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
 # Running PostgreSQL

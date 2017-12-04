@@ -1,10 +1,25 @@
+---
+title: Tutorials | KubeDB
+menu:
+  docs_0.7.1:
+    identifier: tutorials-overview
+    name: Overview
+    parent: tutorials
+    weight: 50
+menu_name: docs_0.7.1
+section_menu_id: tutorials
+url: /docs/0.7.1/tutorials/
+aliases:
+  - /docs/0.7.1/tutorials/README/
+---
+
 # Tutorials
 
 This section contains tutorials on how to use KubeDB. Please visit the links below to learn more:
 
- - [Running PostgreSQL](/docs/tutorials/postgres.md): This tutorial will show you how to use KubeDB to run a PostgreSQL database.
+ - [Running PostgreSQL](/docs/tutorials/postgres/README.md): This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
- - [Running Elasticsearch](/docs/tutorials/elasticsearch.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
+ - [Running Elasticsearch](/docs/tutorials/elasticsearch/README.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
  - [Manage KubeDB objects using CLIs](/docs/tutorials/cli.md): KubeDB comes with its own cli. It is called `kubedb` cli. kubedb can be used to deploy KubeDB operator in a cluster and manage all KubeDB tprs.
 
