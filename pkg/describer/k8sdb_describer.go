@@ -63,7 +63,7 @@ func (d *humanReadableDescriber) describeElastic(item *api.Elasticsearch, descri
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
+		statefulSetName := fmt.Sprintf("%v", item.Name)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -128,7 +128,7 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
+		statefulSetName := fmt.Sprintf("%v", item.Name)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -196,7 +196,7 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
+		statefulSetName := fmt.Sprintf("%v", item.Name)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -264,7 +264,7 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
+		statefulSetName := fmt.Sprintf("%v", item.Name)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
@@ -318,7 +318,7 @@ func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSetting
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v-%v", item.Name, item.ResourceCode())
+		statefulSetName := fmt.Sprintf("%v", item.Name)
 
 		d.describeStatefulSet(item.Namespace, statefulSetName, out)
 		d.describeService(item.Namespace, item.Name, out)
