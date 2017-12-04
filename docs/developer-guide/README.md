@@ -29,23 +29,23 @@ KubeDB is written in Google's GO programming language. Currently, KubeDB is deve
 development environment, please follow [these instructions](https://golang.org/doc/code.html) to install GO.
 
 #### Code Organization
-KubeDB codebase is across various repositories under github.com/k8sdb organization. There are 5 categories of git repositories:
+KubeDB codebase is across various repositories under github.com/kubedb organization. There are 5 categories of git repositories:
 
 | Repository                            | Description                                                                                             |
 |---------------------------------------|---------------------------------------------------------------------------------------------------------|
-| https://github.com/k8sdb/apimachinery | Contains api types, clientset and KubeDB framework interfaces.                                          |
-| https://github.com/k8sdb/db           | This repository contains operator for `db`, eg, https://github.com/k8sdb/postgres                       |
-| https://github.com/k8sdb/db_exporter  | This repository contains Prometheus exporter for `db`, eg, https://github.com/k8sdb/postgres_exporter . |
-| https://github.com/k8sdb/operator     | This repository contains the combined operator for all databases supported by KubeDB.                   |
-| https://github.com/k8sdb/cli          | This repository contains CLI for KubeDB.                                                                |
+| https://github.com/kubedb/apimachinery | Contains api types, clientset and KubeDB framework interfaces.                                          |
+| https://github.com/kubedb/db           | This repository contains operator for `db`, eg, https://github.com/kubedb/postgres                       |
+| https://github.com/kubedb/db_exporter  | This repository contains Prometheus exporter for `db`, eg, https://github.com/kubedb/postgres_exporter . |
+| https://github.com/kubedb/operator     | This repository contains the combined operator for all databases supported by KubeDB.                   |
+| https://github.com/kubedb/cli          | This repository contains CLI for KubeDB.                                                                |
 
 For each of these repositories, you can get source code and build code using the following steps:
 
 #### Download Source
 
 ```console
-$ go get github.com/k8sdb/operator
-$ cd $(go env GOPATH)/src/github.com/k8sdb/operator
+$ go get github.com/kubedb/operator
+$ cd $(go env GOPATH)/src/github.com/kubedb/operator
 ```
 
 #### Install Dev tools
@@ -85,6 +85,6 @@ $ docker push aerokite/operator:default
 
 #### Generate CLI Reference Docs
 ```console
-$ cd ~/go/src/github.com/k8sdb/cli
+$ cd ~/go/src/github.com/kubedb/cli
 $ ./hack/gendocs/make.sh 
 ```

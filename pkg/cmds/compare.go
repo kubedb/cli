@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"time"
 
-	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/k8sdb/cli/pkg/util"
+	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	diff "github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"

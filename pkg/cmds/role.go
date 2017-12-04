@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/k8sdb/apimachinery/apis/kubedb"
-	"github.com/k8sdb/apimachinery/pkg/docker"
+	"github.com/kubedb/apimachinery/apis/kubedb"
+	"github.com/kubedb/apimachinery/pkg/docker"
 	apps "k8s.io/api/apps/v1beta1"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"

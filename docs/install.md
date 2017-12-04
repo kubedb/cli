@@ -18,16 +18,16 @@ aliases:
 # Installation Guide
 
 ## Install KubeDB CLI
-KubeDB provides a CLI to work with database objects. Download pre-built binaries from [k8sdb/cli Github releases](https://github.com/k8sdb/cli/releases) and put the binary to some directory in your `PATH`. To install on Linux 64-bit and MacOS 64-bit you can run the following commands:
+KubeDB provides a CLI to work with database objects. Download pre-built binaries from [kubedb/cli Github releases](https://github.com/kubedb/cli/releases) and put the binary to some directory in your `PATH`. To install on Linux 64-bit and MacOS 64-bit you can run the following commands:
 
 ```console
 # Linux amd 64-bit
-wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.7.1/kubedb-linux-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.7.1/kubedb-linux-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 
 # Mac 64-bit
-wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.7.1/kubedb-darwin-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.7.1/kubedb-darwin-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 ```
@@ -35,13 +35,13 @@ wget -O kubedb https://github.com/k8sdb/cli/releases/download/0.7.1/kubedb-darwi
 If you prefer to install KubeDB cli from source code, you will need to set up a GO development environment following [these instructions](https://golang.org/doc/code.html). Then, install `kubedb` CLI using `go get` from source code.
 
 ```bash
-go get github.com/k8sdb/cli/...
+go get github.com/kubedb/cli/...
 ```
 
 Please note that this will install KubeDB cli from master branch which might include breaking and/or undocumented changes.
 
 ## Install KubeDB Operator
-To use KubeDB, you will need to install KubeDB [operator](https://github.com/k8sdb/operator).  `kubedb init` command will deploy operator for kubedb databases. 
+To use KubeDB, you will need to install KubeDB [operator](https://github.com/kubedb/operator).  `kubedb init` command will deploy operator for kubedb databases. 
 
 ```console
 $ kubedb init

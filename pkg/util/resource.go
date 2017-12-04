@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/ghodss/yaml"
-	tapi "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/k8sdb/cli/pkg/decoder"
+	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/kubedb/cli/pkg/decoder"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

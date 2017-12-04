@@ -45,7 +45,7 @@ spec:
 | `spec.monitor.prometheus.labels`    | map    | `Required`. Indicates labels applied to service monitor.                                                    |
 | `spec.monitor.prometheus.interval`  | string | `Optional`. Indicates the scrape interval for database exporter endpoint (eg, '10s')                        |
 
-__Known Limitations:__ If the databse password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/k8sdb/operator/issues/63).
+__Known Limitations:__ If the databse password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/kubedb/operator/issues/63).
 
 
 ## Next Steps

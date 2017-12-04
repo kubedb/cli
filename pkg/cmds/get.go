@@ -5,9 +5,9 @@ import (
 	"io"
 	"strings"
 
-	"github.com/k8sdb/cli/pkg/kube"
-	"github.com/k8sdb/cli/pkg/printer"
-	"github.com/k8sdb/cli/pkg/util"
+	"github.com/kubedb/cli/pkg/kube"
+	"github.com/kubedb/cli/pkg/printer"
+	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"

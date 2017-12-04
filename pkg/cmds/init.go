@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/appscode/go/types"
-	"github.com/k8sdb/apimachinery/pkg/docker"
-	"github.com/k8sdb/cli/pkg/kube"
-	"github.com/k8sdb/cli/pkg/util"
+	"github.com/kubedb/apimachinery/pkg/docker"
+	"github.com/kubedb/cli/pkg/kube"
+	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	core "k8s.io/api/core/v1"
 	extensions "k8s.io/api/extensions/v1beta1"

@@ -11,7 +11,7 @@ import (
 	"text/template"
 
 	"github.com/appscode/go/runtime"
-	"github.com/k8sdb/cli/pkg/cmds"
+	"github.com/kubedb/cli/pkg/cmds"
 	"github.com/spf13/cobra/doc"
 )
 
@@ -55,7 +55,7 @@ aliases:
 // ref: https://github.com/spf13/cobra/blob/master/doc/md_docs.md
 func main() {
 	rootCmd := cmds.NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr, version)
-	dir := runtime.GOPath() + "/src/github.com/k8sdb/cli/docs/reference"
+	dir := runtime.GOPath() + "/src/github.com/kubedb/cli/docs/reference"
 	fmt.Printf("Generating cli markdown tree in: %v\n", dir)
 	err := os.RemoveAll(dir)
 	if err != nil {

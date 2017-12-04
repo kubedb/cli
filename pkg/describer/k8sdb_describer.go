@@ -5,7 +5,7 @@ import (
 	"io"
 
 	mona "github.com/appscode/kutil/tools/monitoring/api"
-	api "github.com/k8sdb/apimachinery/apis/kubedb/v1alpha1"
+	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"

@@ -35,7 +35,7 @@ import subprocess
 import sys
 from os.path import expandvars
 
-libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/k8sdb/cli'
+libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 BUILD_METADATA = libbuild.metadata(libbuild.REPO_ROOT)
 libbuild.BIN_MATRIX = {
     "kubedb": {

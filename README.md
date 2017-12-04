@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/k8sdb/cli)](https://goreportcard.com/report/github.com/k8sdb/cli)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kubedb/cli)](https://goreportcard.com/report/github.com/kubedb/cli)
 
 [Website](https://kubedb.com) • [Slack](http://slack.kubernetes.io) • [Twitter](https://twitter.com/KubeDB)
 
@@ -20,8 +20,8 @@ Please pick a version of KubeDB that matches your Kubernetes installation.
 
 | KubeDB Version                                                      | Docs                                                       | Kubernetes Version |
 |---------------------------------------------------------------------|------------------------------------------------------------|--------------------|
-| [0.7.1](https://github.com/k8sdb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/k8sdb/cli/tree/0.7.1/docs) | 1.7.x+             |
-| [0.6.0](https://github.com/k8sdb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/k8sdb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
+| [0.7.1](https://github.com/kubedb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.7.1/docs) | 1.7.x+             |
+| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation
 To install KubeDB, please follow the guide [here](/docs/install.md).
@@ -45,6 +45,6 @@ Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 If you have any questions, talk to us on the [Kubernetes Slack team](http://slack.kubernetes.io/) channel `#kubedb`.
 
 If you have found a bug with KubeDB or want to request for new features, please file issues on Github.
- - For CLI issues, file a bug under [k8sdb/cli](https://github.com/k8sdb/cli) repository.
- - For Backend operator issues, file a bug under [k8sdb/operator](https://github.com/k8sdb/operator) repository.
+ - For CLI issues, file a bug under [kubedb/cli](https://github.com/kubedb/cli) repository.
+ - For Backend operator issues, file a bug under [kubedb/operator](https://github.com/kubedb/operator) repository.
 

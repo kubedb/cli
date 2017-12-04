@@ -14,7 +14,7 @@ aliases:
   - /docs/0.7.1/README/
 ---
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/k8sdb/cli)](https://goreportcard.com/report/github.com/k8sdb/cli)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kubedb/cli)](https://goreportcard.com/report/github.com/kubedb/cli)
 
 # KubeDB
 Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
@@ -34,8 +34,8 @@ Please pick a version of KubeDB that matches your Kubernetes installation.
 
 | KubeDB Version                                                      | Docs                                                       | Kubernetes Version |
 |---------------------------------------------------------------------|------------------------------------------------------------|--------------------|
-| [0.7.1](https://github.com/k8sdb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/k8sdb/cli/tree/0.7.1/docs) | 1.7.x+             |
-| [0.6.0](https://github.com/k8sdb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/k8sdb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
+| [0.7.1](https://github.com/kubedb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.7.1/docs) | 1.7.x+             |
+| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation
 To install KubeDB, please follow the guide [here](/docs/install.md).

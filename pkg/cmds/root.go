@@ -24,7 +24,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 		Long: templates.LongDesc(`
       KubeDB by AppsCode - Kubernetes ready production-grade Databases
 
-      Find more information at https://github.com/k8sdb/cli.`),
+      Find more information at https://github.com/kubedb/cli.`),
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if enableAnalytics && gaTrackingCode != "" {
 				if client, err := ga.NewClient(gaTrackingCode); err == nil {
