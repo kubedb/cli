@@ -430,7 +430,7 @@ spec:
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres.md).
-- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres/README.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch/README.md).
 - Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
