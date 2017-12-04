@@ -24,30 +24,29 @@ var (
 title: Reference
 description: KubeDB CLI Reference
 menu:
-  product_kubedb_{{ .Version }}:
+  docs_{{ .Version }}:
     identifier: reference
     name: Reference
     weight: 1000
-left_menu: product_kubedb_{{ .Version }}
+menu_name: docs_{{ .Version }}
 ---
 `))
 
 	_ = template.Must(tplFrontMatter.New("cmd").Parse(`---
 title: {{ .Name }}
 menu:
-  product_kubedb_{{ .Version }}:
+  docs_{{ .Version }}:
     identifier: {{ .ID }}
     name: {{ .Name }}
     parent: reference
 {{- if .RootCmd }}
     weight: 0
 {{ end }}
-product_name: kubedb
-left_menu: product_kubedb_{{ .Version }}
+menu_name: docs_{{ .Version }}
 section_menu_id: reference
 {{- if .RootCmd }}
 aliases:
-  - products/kubedb/{{ .Version }}/reference/
+  - /docs/{{ .Version }}/reference/
 {{ end }}
 ---
 `))
