@@ -44,7 +44,4 @@ Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 ## Support
 If you have any questions, talk to us on the [Kubernetes Slack team](http://slack.kubernetes.io/) channel `#kubedb`.
 
-If you have found a bug with KubeDB or want to request for new features, please file issues on Github.
- - For CLI issues, file a bug under [kubedb/cli](https://github.com/kubedb/cli) repository.
- - For Backend operator issues, file a bug under [kubedb/operator](https://github.com/kubedb/operator) repository.
-
+If you have found a bug with KubeDB or want to request for new features, please file issues under [kubedb/project](https://github.com/kubedb/project/issues/new) repository.
