@@ -30,7 +30,7 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 		if err := yaml.Unmarshal(objByte, &elastic); err != nil {
 			return err
 		}
-		return esv.ValidateElastic(client, elastic)
+		return esv.ValidateElasticsearch(client, elastic)
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres
 		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
