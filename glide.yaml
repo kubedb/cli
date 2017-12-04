@@ -15,6 +15,10 @@ import:
   version: master
 - package: github.com/k8sdb/mongodb
   version: master
+- package: github.com/k8sdb/redis
+  version: master
+- package: github.com/k8sdb/memcached
+  version: master
 - package: github.com/spf13/cobra
 - package: github.com/yudai/gojsondiff
   version: 1.0.0

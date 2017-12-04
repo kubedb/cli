@@ -46,6 +46,36 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 	fmt.Fprintf(out, "  Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
+func (d *humanReadableDescriber) describeDeployments(namespace, name string, out io.Writer) {
+	clientSet, err := d.ClientSet()
+	if err != nil {
+		return
+	}
+
+	ps, err := clientSet.Extensions().Deployments(namespace).Get(name, metav1.GetOptions{})
+	if err != nil {
+		return
+	}
+	pc := clientSet.Core().Pods(namespace)
+
+	selector, err := metav1.LabelSelectorAsSelector(ps.Spec.Selector)
+	if err != nil {
+		return
+	}
+
+	running, waiting, succeeded, failed, err := getPodStatusForController(pc, selector)
+	if err != nil {
+		return
+	}
+
+	fmt.Fprint(out, "\n")
+	fmt.Fprint(out, "Deployment:\t\n")
+	fmt.Fprintf(out, "  Name:\t%s\n", ps.Name)
+	fmt.Fprintf(out, "  Replicas:\t%d current / %d desired\n", ps.Status.Replicas, ps.Spec.Replicas)
+	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", timeToString(&ps.CreationTimestamp))
+	fmt.Fprintf(out, "  Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
+}
+
 func getPodStatusForController(c coreclient.PodInterface, selector labels.Selector) (running, waiting, succeeded, failed int, err error) {
 	options := metav1.ListOptions{LabelSelector: selector.String()}
 	rcPods, err := c.List(options)

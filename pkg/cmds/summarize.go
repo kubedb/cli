@@ -48,6 +48,8 @@ const (
     * postgreses
     * mysqls
     * mongodbs
+    * redises
+    * memcacheds
     `
 )
 
