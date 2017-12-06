@@ -19,21 +19,21 @@ import (
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/delete.go
 
 var (
-	delete_long = templates.LongDesc(`
+	deleteLong = templates.LongDesc(`
 		Delete resources by filenames, stdin, resources and names, or by resources and label selector.
 		JSON and YAML formats are accepted.
 
 		Note that the delete command does NOT do resource version checks`)
 
-	delete_example = templates.Examples(`
-		# Delete a elastic using the type and name specified in elastic.json.
+	deleteExample = templates.Examples(`
+		# Delete a elasticsearch using the type and name specified in elastic.json.
 		kubedb delete -f ./elastic.json
 
 		# Delete a postgres based on the type and name in the JSON passed into stdin.
 		cat postgres.json | kubedb delete -f -
 
-		# Delete elastic with label elasticsearch.kubedb.com/name=elasticsearch-demo.
-		kubedb delete elastic -l elasticsearch.kubedb.com/name=elasticsearch-demo`)
+		# Delete elasticsearch with label elasticsearch.kubedb.com/name=elasticsearch-demo.
+		kubedb delete elasticsearch -l elasticsearch.kubedb.com/name=elasticsearch-demo`)
 )
 
 func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
@@ -42,8 +42,8 @@ func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label)])",
 		Short:   "Delete resources by filenames, stdin, resources and names, or by resources and label selector",
-		Long:    delete_long,
-		Example: delete_example,
+		Long:    deleteLong,
+		Example: deleteExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			f := kube.NewKubeFactory(cmd)
 			cmdutil.CheckErr(RunDelete(f, cmd, out, args, options))
@@ -126,7 +126,7 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 	}
 
 	if found == 0 {
-		fmt.Fprintf(out, "No resources found\n")
+		fmt.Fprintln(out, "No resources found")
 	}
 	return nil
 }

@@ -26,11 +26,11 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 	switch kind {
 	case tapi.ResourceKindElasticsearch:
-		var elastic *tapi.Elasticsearch
-		if err := yaml.Unmarshal(objByte, &elastic); err != nil {
+		var elasticsearch *tapi.Elasticsearch
+		if err := yaml.Unmarshal(objByte, &elasticsearch); err != nil {
 			return err
 		}
-		return esv.ValidateElasticsearch(client, elastic)
+		return esv.ValidateElasticsearch(client, elasticsearch)
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres
 		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
@@ -80,12 +80,12 @@ func ValidateDeletion(info *resource.Info) error {
 	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
 	switch kind {
 	case tapi.ResourceKindElasticsearch:
-		var elastic *tapi.Elasticsearch
-		if err := yaml.Unmarshal(objByte, &elastic); err != nil {
+		var elasticsearch *tapi.Elasticsearch
+		if err := yaml.Unmarshal(objByte, &elasticsearch); err != nil {
 			return err
 		}
-		if elastic.Spec.DoNotPause {
-			return fmt.Errorf(`Elasticsearch "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, elastic.Name)
+		if elasticsearch.Spec.DoNotPause {
+			return fmt.Errorf(`Elasticsearch "%v" can't be paused. To continue delete, unset spec.doNotPause and retry.`, elasticsearch.Name)
 		}
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres

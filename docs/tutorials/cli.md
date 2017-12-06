@@ -135,7 +135,7 @@ To print only object name, run the following command:
 ```console
 $ kubedb get all -o name
 
-elastic/elasticsearch-demo
+elasticsearch/elasticsearch-demo
 postgres/postgres-demo
 postgres/postgres-dev
 postgres/postgres-prod

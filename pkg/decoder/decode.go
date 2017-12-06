@@ -11,11 +11,11 @@ import (
 func Decode(kind string, data []byte) (runtime.Object, error) {
 	switch kind {
 	case tapi.ResourceKindElasticsearch:
-		var elastic *tapi.Elasticsearch
-		if err := yaml.Unmarshal(data, &elastic); err != nil {
+		var elasticsearch *tapi.Elasticsearch
+		if err := yaml.Unmarshal(data, &elasticsearch); err != nil {
 			return nil, err
 		}
-		return elastic, nil
+		return elasticsearch, nil
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres
 		if err := yaml.Unmarshal(data, &postgres); err != nil {

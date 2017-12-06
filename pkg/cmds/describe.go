@@ -18,14 +18,14 @@ import (
 )
 
 var (
-	describe_long = templates.LongDesc(`
+	describeLong = templates.LongDesc(`
 		Show details of a specific resource or group of resources.
 		This command joins many API calls together to form a detailed description of a
 		given resource or group of resources.` + valid_resources)
 
-	describe_example = templates.Examples(`
-		# Describe a elastic
-		kubedb describe elastics elasticsearch-demo
+	describeExample = templates.Examples(`
+		# Describe a elasticsearch
+		kubedb describe elasticsearchs elasticsearch-demo
 
 		# Describe a postgres
 		kubedb describe pg/postgres-demo
@@ -40,8 +40,8 @@ func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "describe (TYPE [NAME_PREFIX] | TYPE/NAME)",
 		Short:   "Show details of a specific resource or group of resources",
-		Long:    describe_long,
-		Example: describe_example,
+		Long:    describeLong,
+		Example: describeExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			f := kube.NewKubeFactory(cmd)
 			cmdutil.CheckErr(RunDescribe(f, out, cmdErr, cmd, args, describerSettings))

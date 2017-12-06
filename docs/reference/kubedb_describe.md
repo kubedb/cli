@@ -17,14 +17,14 @@ Show details of a specific resource or group of resources
 Show details of a specific resource or group of resources. This command joins many API calls together to form a detailed description of a given resource or group of resources.Valid resource types include: 
 
   * all  
-  * elastic  
-  * postgres  
-  * mysql  
-  * mongodb  
-  * redis  
-  * memcached  
-  * snapshot  
-  * dormantdatabase
+  * elasticsearches  
+  * postgreses  
+  * mysqls  
+  * mongodbs  
+  * redises  
+  * memcacheds  
+  * snapshots  
+  * dormantdatabases
 
 ```
 kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [flags]
@@ -33,8 +33,8 @@ kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [flags]
 ### Examples
 
 ```
-  # Describe a elastic
-  kubedb describe elastics elasticsearch-demo
+  # Describe a elasticsearch
+  kubedb describe elasticsearchs elasticsearch-demo
   
   # Describe a postgres
   kubedb describe pg/postgres-demo

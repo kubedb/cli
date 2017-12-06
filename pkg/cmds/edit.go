@@ -44,7 +44,7 @@ var (
 		environment variables, or fall back to 'nano'`)
 
 	editExample = templates.Examples(`
-		# Edit the elastic named 'elasticsearch-demo':
+		# Edit the elasticsearch named 'elasticsearch-demo':
 		kubedb edit es/elasticsearch-demo
 
 		# Use an alternative editor
