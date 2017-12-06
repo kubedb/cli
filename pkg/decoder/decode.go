@@ -3,9 +3,14 @@ package decoder
 import (
 	"fmt"
 
+	"github.com/appscode/kutil/meta"
 	"github.com/ghodss/yaml"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	_ "github.com/spf13/cobra/doc"
+	"github.com/the-redback/go-oneliners"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	clientsetscheme "k8s.io/client-go/kubernetes/scheme"
 )
 
 func Decode(kind string, data []byte) (runtime.Object, error) {
@@ -17,11 +22,16 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 		}
 		return elastic, nil
 	case tapi.ResourceKindPostgres:
-		var postgres *tapi.Postgres
-		if err := yaml.Unmarshal(data, &postgres); err != nil {
+		//var postgres *tapi.Postgres
+		dataPost, err := meta.UnmarshalToYAML(data, tapi.SchemeGroupVersion)
+		if err != nil {
 			return nil, err
 		}
-		return postgres, nil
+		return dataPost, nil
+		//if err := yaml.Unmarshal(data, &postgres); err != nil {
+		//	return nil, err
+		//}
+		//return postgres, nil
 	case tapi.ResourceKindMySQL:
 		var mysql *tapi.MySQL
 		if err := yaml.Unmarshal(data, &mysql); err != nil {
@@ -61,4 +71,19 @@ func Decode(kind string, data []byte) (runtime.Object, error) {
 	}
 
 	return nil, fmt.Errorf(`Invalid kind: "%v"`, kind)
+}
+
+func unmarshalToYAML(data []byte, gv schema.GroupVersion) (runtime.Object, error) {
+
+	mediaType := "application/yaml"
+	info, ok := runtime.SerializerInfoForMediaType(clientsetscheme.Codecs.SupportedMediaTypes(), mediaType)
+	if !ok {
+		return nil, fmt.Errorf("unsupported media type %q", mediaType)
+	}
+	oneliners.PrettyJson(info, "info")
+
+	decoder := clientsetscheme.Codecs.DecoderToVersion(info.Serializer, gv)
+	dataaa, err := runtime.Decode(decoder, data)
+
+	return dataaa, err
 }

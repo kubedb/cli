@@ -9,6 +9,7 @@ import (
 	"github.com/kubedb/apimachinery/client/scheme"
 	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/decoder"
+	"github.com/the-redback/go-oneliners"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -103,7 +104,10 @@ func (h *humanReadableDescriber) Describe(obj runtime.Object, describerSettings 
 		}
 	}
 
+	oneliners.PrettyJson(obj, "Object..................")
+
 	t := reflect.TypeOf(obj)
+	oneliners.FILE("type..................", t)
 	if handler := h.handlerMap[t]; handler != nil {
 		args := []reflect.Value{reflect.ValueOf(obj), reflect.ValueOf(describerSettings)}
 		resultValue := handler.describeFunc.Call(args)

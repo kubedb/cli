@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
+kind: Elastic
 metadata:
-  name: e1
+  name: e3
   namespace: demo
 spec:
   version: 2.3.1

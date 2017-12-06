@@ -6,6 +6,8 @@ import (
 
 	"github.com/appscode/kutil/tools/monitoring/api"
 	core "k8s.io/api/core/v1"
+	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (e Elasticsearch) OffshootName() string {
@@ -91,4 +93,27 @@ func (r Elasticsearch) Scheme() string {
 
 func (r *Elasticsearch) StatsAccessor() api.StatsAccessor {
 	return r
+}
+
+func (r Elasticsearch) CustomResourceDefinition() *crd_api.CustomResourceDefinition {
+	resourceName := ResourceTypeElasticsearch + "." + SchemeGroupVersion.Group
+
+	return &crd_api.CustomResourceDefinition{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: resourceName,
+			Labels: map[string]string{
+				"app": "kubedb",
+			},
+		},
+		Spec: crd_api.CustomResourceDefinitionSpec{
+			Group:   SchemeGroupVersion.Group,
+			Version: SchemeGroupVersion.Version,
+			Scope:   crd_api.NamespaceScoped,
+			Names: crd_api.CustomResourceDefinitionNames{
+				Plural:     ResourceTypeElasticsearch,
+				Kind:       ResourceKindElasticsearch,
+				ShortNames: []string{ResourceCodeElasticsearch},
+			},
+		},
+	}
 }

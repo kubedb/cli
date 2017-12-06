@@ -9,6 +9,7 @@ import (
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
+	_ "github.com/spf13/cobra/doc"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
@@ -43,7 +44,23 @@ func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
 		Long:    describe_long,
 		Example: describe_example,
 		Run: func(cmd *cobra.Command, args []string) {
+
 			f := kube.NewKubeFactory(cmd)
+
+			//s := runtime.NewScheme()
+			//s.AddKnownTypes(tapi.SchemeGroupVersion,
+			//	&tapi.Snapshot{},
+			//	&tapi.DormantDatabase{},
+			//	&tapi.Elasticsearch{},
+			//	&tapi.Postgres{},
+			//	&tapi.MySQL{},
+			//	&tapi.MongoDB{},
+			//	&tapi.Redis{},
+			//	&tapi.Memcached{},
+			//)
+			//oneliners.FILE("scheme====================", s)
+			//clientsetscheme.AddToScheme(s)
+
 			cmdutil.CheckErr(RunDescribe(f, out, cmdErr, cmd, args, describerSettings))
 		},
 	}

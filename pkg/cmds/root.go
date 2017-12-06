@@ -18,6 +18,7 @@ const (
 // NewKubedbCommand creates the `kubedb` command and its nested children.
 func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.Command {
 	enableAnalytics := true
+
 	cmds := &cobra.Command{
 		Use:   "kubedb",
 		Short: "Command line interface for KubeDB",
