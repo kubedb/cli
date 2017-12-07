@@ -20,7 +20,9 @@ This section contains tutorials on how to use KubeDB. Please visit the links bel
  - [Running PostgreSQL](/docs/tutorials/postgres/README.md): This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
  - [Running Elasticsearch](/docs/tutorials/elasticsearch/README.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
-
+ 
+ - [Running Memcachged](/docs/tutorials/memcached/README.md): This tutorial will show you how to use KubeDB to run a Memcached database.
+ 
  - [Manage KubeDB objects using CLIs](/docs/tutorials/cli.md): KubeDB comes with its own cli. It is called `kubedb` cli. kubedb can be used to deploy KubeDB operator in a cluster and manage all KubeDB tprs.
 
  - [Using Prometheus with KubeDB](/docs/tutorials/monitoring.md): This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
