@@ -21,7 +21,7 @@ This section contains tutorials on how to use KubeDB. Please visit the links bel
 
  - [Running Elasticsearch](/docs/tutorials/elasticsearch/README.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
  
- - [Running Memcachged](/docs/tutorials/memcached/README.md): This tutorial will show you how to use KubeDB to run a Memcached database.
+ - [Running Memcached](/docs/tutorials/memcached/README.md): This tutorial will show you how to use KubeDB to run a Memcached database.
  
  - [Manage KubeDB objects using CLIs](/docs/tutorials/cli.md): KubeDB comes with its own cli. It is called `kubedb` cli. kubedb can be used to deploy KubeDB operator in a cluster and manage all KubeDB tprs.
 
