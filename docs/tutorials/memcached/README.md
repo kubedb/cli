@@ -37,7 +37,12 @@ spec:
   doNotPause: true
   resources:
     requests:
-      memory: 50Mi
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+
 
 $ kubedb create -f ./docs/examples/memcached/demo-1.yaml
 validating "./docs/examples/memcached/demo-1.yaml"
@@ -58,21 +63,21 @@ KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Me
 
 ```console
 $ kubedb describe mc -n demo mc1
-Name:		mc1
-Namespace:	demo
-StartTimestamp:	Thu, 07 Dec 2017 16:08:10 +0600
-Status:		Running
+Name:			mc1
+Namespace:		demo
+StartTimestamp:	Fri, 08 Dec 2017 15:11:25 +0600
+Status:			Running
 
 Deployment:		
-  Name:			mc1
-  Replicas:		3 current / 3 desired
-  CreationTimestamp:	Thu, 07 Dec 2017 16:08:14 +0600
-  Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:			        mc1
+  Replicas:		        3 current / 3 desired
+  CreationTimestamp:	Fri, 08 Dec 2017 15:11:28 +0600
+  Pods Status:		    3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:	
   Name:		mc1
   Type:		ClusterIP
-  IP:		10.106.213.85
+  IP:		10.106.52.153
   Port:		db	11211/TCP
 
 Events:
@@ -80,8 +85,8 @@ Events:
   ---------   --------   -----     ----                 --------   ------               -------
   2m          2m         1         Memcached operator   Normal     SuccessfulCreate     Successfully created Deployment
   2m          2m         1         Memcached operator   Normal     SuccessfulCreate     Successfully created Memcached
-  3m          3m         1         Memcached operator   Normal     SuccessfulValidate   Successfully validate Memcached
-  3m          3m         1         Memcached operator   Normal     Creating             Creating Kubernetes objects
+  2m          2m         1         Memcached operator   Normal     SuccessfulValidate   Successfully validate Memcached
+  2m          2m         1         Memcached operator   Normal     Creating             Creating Kubernetes objects
 
 
 $ kubectl get deployment -n demo
@@ -91,7 +96,7 @@ mc1       3         3         3            3           4m
 
 $ kubectl get service -n demo
 NAME      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
-mc1       ClusterIP   10.106.213.85   <none>        11211/TCP   12m
+mc1       ClusterIP   10.106.52.153   <none>        11211/TCP   4m
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified crd:
@@ -102,25 +107,29 @@ apiVersion: kubedb.com/v1alpha1
 kind: Memcached
 metadata:
   clusterName: ""
-  creationTimestamp: 2017-12-07T10:08:10Z
+  creationTimestamp: 2017-12-08T09:11:25Z
   deletionGracePeriodSeconds: null
   deletionTimestamp: null
   generation: 0
   initializers: null
   name: mc1
   namespace: demo
-  resourceVersion: "8816"
+  resourceVersion: "1400"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/memcacheds/mc1
-  uid: 876225d5-db36-11e7-b052-0800275191b8
+  uid: c408c92c-dbf7-11e7-8116-080027da1cc3
 spec:
   doNotPause: true
   replicas: 3
   resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
     requests:
-      memory: 50Mi
+      cpu: 250m
+      memory: 64Mi
   version: 1.5.3-alpine
 status:
-  creationTime: 2017-12-07T10:08:10Z
+  creationTime: 2017-12-08T09:11:25Z
   phase: Running
 ```
 
@@ -129,30 +138,36 @@ Now, you can connect to this Memcached cluster from inside the cluster.
 ```console
 $ kubectl get pods -n demo
 NAME                   READY     STATUS    RESTARTS   AGE
-mc1-66bc4d558d-6xkcz   1/1       Running   0          49m
-mc1-66bc4d558d-h48dw   1/1       Running   0          49m
-mc1-66bc4d558d-ns9zd   1/1       Running   0          49m
+NAME                   READY     STATUS    RESTARTS   AGE
+mc1-68b86b9f4b-b8mw8   1/1       Running   0          5m
+mc1-68b86b9f4b-bnpx8   1/1       Running   0          5m
+mc1-68b86b9f4b-kgl29   1/1       Running   0          5m
 
-$ kubectl get pods mc1-66bc4d558d-6xkcz -n demo -o yaml | grep IP
+
+$ kubectl get pods mc1-68b86b9f4b-b8mw8 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
-  podIP: 172.17.0.6
+  podIP: 172.17.0.5
+
   
 # Exec into kubedb operator pod
 $ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath='{.items[0].metadata.name}') -n kube-system sh
 
+
 ~ $ ps aux
 PID   USER     TIME   COMMAND
-    1 nobody     0:01 /operator run --address=:8080 --rbac=false --v=3
-   27 nobody     0:00 sh
-   33 nobody     0:00 ps aux
+    1 nobody     0:00 /operator run --address=:8080 --rbac=false --v=3
+   13 nobody     0:00 sh
+   18 nobody     0:00 ps aux
+
 
 # Connect Memcached cluster through telnet
-~ $ telnet 172.17.0.6 11211
+~ $ telnet 172.17.0.5 11211
 
 # Save a data
 > set my_key 0 2592000 1
-2          
-STORED
+2      
+# output    
+STORED 
 
 # Meaning:
 # 0       => no flags
@@ -162,6 +177,7 @@ STORED
 
 # View the data
 > get my_key
+# output
 VALUE my_key 0 1
 2
 END
@@ -196,7 +212,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   clusterName: ""
-  creationTimestamp: 2017-12-07T11:19:36Z
+  creationTimestamp: 2017-12-08T09:21:31Z
   deletionGracePeriodSeconds: null
   deletionTimestamp: null
   generation: 0
@@ -205,9 +221,9 @@ metadata:
     kubedb.com/kind: Memcached
   name: mc1
   namespace: demo
-  resourceVersion: "13639"
+  resourceVersion: "2117"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mc1
-  uid: 825ce6f1-db40-11e7-b052-0800275191b8
+  uid: 2d3cb25d-dbf9-11e7-8116-080027da1cc3
 spec:
   origin:
     metadata:
@@ -218,12 +234,16 @@ spec:
       memcached:
         replicas: 3
         resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
           requests:
-            memory: 50Mi
+            cpu: 250m
+            memory: 64Mi
         version: 1.5.3-alpine
 status:
-  creationTime: 2017-12-07T11:19:36Z
-  pausingTime: 2017-12-07T11:20:07Z
+  creationTime: 2017-12-08T09:21:31Z
+  pausingTime: 2017-12-08T09:22:01Z
   phase: Paused
 ```
 
@@ -243,7 +263,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   clusterName: ""
-  creationTimestamp: 2017-12-07T11:22:39Z
+  creationTimestamp: 2017-12-08T09:29:08Z
   deletionGracePeriodSeconds: null
   deletionTimestamp: null
   generation: 0
@@ -252,9 +272,9 @@ metadata:
     kubedb.com/kind: Memcached
   name: mc1
   namespace: demo
-  resourceVersion: "13875"
+  resourceVersion: "2900"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mc1
-  uid: eede27dd-db40-11e7-b052-0800275191b8
+  uid: 3da4796b-dbfa-11e7-8116-080027da1cc3
 spec:
   resume: true
   origin:
@@ -266,12 +286,17 @@ spec:
       memcached:
         replicas: 3
         resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
           requests:
-            memory: 50Mi
+            cpu: 250m
+            memory: 64Mi
         version: 1.5.3-alpine
 status:
-  creationTime: 2017-12-07T11:22:39Z
-  phase: Pausing
+  creationTime: 2017-12-08T09:29:08Z
+  pausingTime: 2017-12-08T09:29:58Z
+  phase: Paused
 ```
 
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase crd and create a new Memcached crd using the original spec. This will, in turn, start a new Deployment.This way the memcached database is resumed.
@@ -288,16 +313,16 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   clusterName: ""
-  creationTimestamp: 2017-12-07T11:32:21Z
+  creationTimestamp: 2017-12-08T09:31:20Z
   generation: 0
   initializers: null
   labels:
     kubedb.com/kind: Memcached
   name: mc1
   namespace: demo
-  resourceVersion: "14790"
+  resourceVersion: "3142"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mc1
-  uid: 49d89efe-db42-11e7-b052-0800275191b8
+  uid: 8c9143f2-dbfa-11e7-8116-080027da1cc3
 spec:
   origin:
     metadata:
@@ -308,20 +333,24 @@ spec:
       memcached:
         replicas: 3
         resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
           requests:
-            memory: 50Mi
+            cpu: 250m
+            memory: 64Mi
         version: 1.5.3-alpine
   wipeOut: true
 status:
-  creationTime: 2017-12-07T11:32:21Z
-  pausingTime: 2017-12-07T11:33:11Z
+  creationTime: 2017-12-08T09:31:20Z
+  pausingTime: 2017-12-08T09:32:00Z
   phase: WipedOut
-  wipeOutTime: 2017-12-07T11:34:08Z
+  wipeOutTime: 2017-12-08T09:32:00Z
+
 
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
-mc1       WipedOut   2m
-
+mc1       WipedOut   1m
 ```
 
  You still have a record that there used to be a Memcached database `mc1` in the form of a DormantDatabase database `mc1`. Since you have already wiped out the database, you can delete the DormantDatabase crd.
