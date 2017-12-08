@@ -7,7 +7,7 @@
 A `Memcached` is a Kubernetes `Third Party Object` (CRD). It provides declarative configuration for [Memcached](https://memcached.org/) in a Kubernetes native way. You only need to describe the desired database configuration in a Memcached object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
 ## Memcached Spec
-As with all other Kubernetes objects, a Memcached needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example of Memcached object.
+As with all other Kubernetes objects, a Memcached needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example of a Memcached object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -37,11 +37,11 @@ spec:
       cpu: "500m"
 ```
 ### spec.replicas
-`spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. If you do not specify .spec.replicas, then it defaults to 1..
+`spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. If you do not specify .spec.replicas, then it defaults to 1.
 
 
 ### spec.version
-`spec.version` is a required field specifying the version of Memcached database. Currently the supported value is `1.5.3-alpine`.
+`spec.version` is a required field specifying the version of Memcached database. Here the database version is [`1.5.3-alpine`](https://hub.docker.com/r/library/memcached/tags/).
 
 
 ### spec.nodeSelector

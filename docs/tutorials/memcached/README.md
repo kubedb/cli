@@ -43,7 +43,6 @@ spec:
       memory: "128Mi"
       cpu: "500m"
 
-
 $ kubedb create -f ./docs/examples/memcached/demo-1.yaml
 validating "./docs/examples/memcached/demo-1.yaml"
 memcached "mc1" created
@@ -88,12 +87,9 @@ Events:
   18s         18s        1         Memcached operator   Normal     SuccessfulValidate   Successfully validate Memcached
   18s         18s        1         Memcached operator   Normal     Creating             Creating Kubernetes objects
 
-
-
 $ kubectl get deployment -n demo
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 mc1       3         3         3            3           4m
-
 
 $ kubectl get service -n demo
 NAME      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
@@ -143,22 +139,18 @@ mc1-68b86b9f4b-bbfkb   1/1       Running   0          2m
 mc1-68b86b9f4b-m5hh6   1/1       Running   0          2m
 mc1-68b86b9f4b-w5469   1/1       Running   0          2m
 
-
 $ kubectl get pods mc1-68b86b9f4b-bbfkb -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.5
-
   
 # Exec into kubedb operator pod
 $ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath='{.items[0].metadata.name}') -n kube-system sh
-
 
 ~ $ ps aux
 PID   USER     TIME   COMMAND
     1 nobody     0:00 /operator run --address=:8080 --rbac=false --v=3
    13 nobody     0:00 sh
    18 nobody     0:00 ps aux
-
 
 # Connect Memcached cluster through telnet
 ~ $ telnet 172.17.0.5 11211
@@ -346,7 +338,6 @@ status:
   pausingTime: 2017-12-08T09:48:00Z
   phase: WipedOut
   wipeOutTime: 2017-12-08T09:48:50Z
-
 
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
