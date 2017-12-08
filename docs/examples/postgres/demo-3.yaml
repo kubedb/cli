@@ -4,8 +4,9 @@ metadata:
   name: p1
   namespace: demo
 spec:
-  version: 9.5
-  doNotPause: true
+  version: 9.6.5
+  replicas: 1
+  doNotPause: false
   storage:
     storageClassName: "standard"
     accessModes:
@@ -13,13 +14,9 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/kubedb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: snap-secret
-    gcs:
-      bucket: restic
+    s3:
+      endpoint: 's3.amazonaws.com'
+      bucket: kubedb

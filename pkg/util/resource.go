@@ -10,6 +10,7 @@ import (
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/apimachinery/pkg/util/mergepatch"
@@ -209,13 +210,26 @@ func GetStructuredObject(obj runtime.Object) (runtime.Object, error) {
 
 func checkChainKeyUnchanged(key string, mapData map[string]interface{}) bool {
 	keys := strings.Split(key, ".")
-	val, ok := mapData[keys[0]]
-	if !ok || len(keys) == 1 {
-		return !ok
-	}
 
 	newKey := strings.Join(keys[1:], ".")
-	return checkChainKeyUnchanged(newKey, val.(map[string]interface{}))
+	if keys[0] == "*" {
+		if len(keys) == 1 {
+			return true
+		}
+		for _, val := range mapData {
+			if !checkChainKeyUnchanged(newKey, val.(map[string]interface{})) {
+				return false
+			}
+		}
+	} else {
+		val, ok := mapData[keys[0]]
+		if !ok || len(keys) == 1 {
+			return !ok
+		}
+		return checkChainKeyUnchanged(newKey, val.(map[string]interface{}))
+	}
+
+	return true
 }
 
 func RequireChainKeyUnchanged(key string) mergepatch.PreconditionFunc {
@@ -243,6 +257,10 @@ func GetPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
 var PreconditionSpecField = map[string][]string{
 	tapi.ResourceKindElasticsearch: {
 		"spec.version",
+		"spec.topology.*.prefix",
+		"spec.enableSSL",
+		"spec.certificateSecret",
+		"spec.databaseSecret",
 		"spec.storage",
 		"spec.nodeSelector",
 		"spec.init",
@@ -283,7 +301,7 @@ var PreconditionSpecField = map[string][]string{
 }
 
 func GetConditionalPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
-	preconditions := []mergepatch.PreconditionFunc{}
+	preconditions := make([]mergepatch.PreconditionFunc, 0)
 
 	if fields, found := PreconditionSpecField[kind]; found {
 		for _, field := range fields {
@@ -298,32 +316,45 @@ func GetConditionalPreconditionFunc(kind string) []mergepatch.PreconditionFunc {
 
 func CheckResourceExists(client internalclientset.Interface, kind, name, namespace string) (bool, error) {
 	var err error
+	objectMata := metav1.ObjectMeta{
+		Name: name,
+	}
+	var offshootLabels map[string]string
 	switch kind {
 	case tapi.ResourceKindElasticsearch:
-		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeElasticsearch)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		offshootLabels = tapi.Elasticsearch{ObjectMeta: objectMata}.OffshootLabels()
 	case tapi.ResourceKindPostgres:
-		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodePostgres)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		offshootLabels = tapi.Postgres{ObjectMeta: objectMata}.OffshootLabels()
 	case tapi.ResourceKindMySQL:
-		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeMySQL)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		offshootLabels = tapi.MySQL{ObjectMeta: objectMata}.OffshootLabels()
 	case tapi.ResourceKindMongoDB:
-		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeMongoDB)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		offshootLabels = tapi.MongoDB{ObjectMeta: objectMata}.OffshootLabels()
 	case tapi.ResourceKindRedis:
-		statefulSetName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeRedis)
-		_, err = client.Apps().StatefulSets(namespace).Get(statefulSetName, metav1.GetOptions{})
+		offshootLabels = tapi.Redis{ObjectMeta: objectMata}.OffshootLabels()
 	case tapi.ResourceKindMemcached:
-		deploymentName := fmt.Sprintf("%v-%v", name, tapi.ResourceCodeMemcached)
-		_, err = client.Extensions().Deployments(namespace).Get(deploymentName, metav1.GetOptions{})
+		offshootLabels = tapi.Memcached{ObjectMeta: objectMata}.OffshootLabels()
 	}
 
+	labelSelector := labels.SelectorFromSet(offshootLabels)
+
+	statefulSets, err := client.Apps().StatefulSets(namespace).List(metav1.ListOptions{
+		LabelSelector: labelSelector.String(),
+	})
 	if err != nil {
-		if kerr.IsNotFound(err) {
-			return false, nil
-		}
 		return false, err
+	}
+	if len(statefulSets.Items) > 0 {
+		return true, nil
+	}
+
+	deployments, err := client.Extensions().Deployments(namespace).List(metav1.ListOptions{
+		LabelSelector: labelSelector.String(),
+	})
+	if err != nil {
+		return false, err
+	}
+	if len(deployments.Items) > 0 {
+		return true, nil
 	}
 
 	return true, nil

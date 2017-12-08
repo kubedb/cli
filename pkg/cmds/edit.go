@@ -284,8 +284,7 @@ func visitToPatch(
 		}
 		if resourceExists {
 			conditionalPreconditions := util.GetConditionalPreconditionFunc(kind)
-			err := util.CheckConditionalPrecondition(patch, conditionalPreconditions...)
-			if err != nil {
+			if err = util.CheckConditionalPrecondition(patch, conditionalPreconditions...); err != nil {
 				if util.IsPreconditionFailed(err) {
 					return conditionalPreconditionFailedError(kind)
 				}

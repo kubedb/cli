@@ -35,7 +35,7 @@ type PostgresSpec struct {
 	// Streaming mode
 	Streaming StreamingMode `json:"streaming,omitempty"`
 	// Archive for wal files
-	Archiver PostgresArchiverSpec `json:"archiver,omitempty"`
+	Archiver *PostgresArchiverSpec `json:"archiver,omitempty"`
 	// Database authentication secret
 	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
 	// Storage to specify how storage shall be used.
@@ -71,7 +71,7 @@ type PostgresSpec struct {
 }
 
 type PostgresArchiverSpec struct {
-	Storage *SnapshotStorageSpec `json:"archive,omitempty"`
+	Storage *SnapshotStorageSpec `json:"storage,omitempty"`
 	// wal_keep_segments
 }
 
