@@ -121,10 +121,10 @@ Events:
   3m          3m         1         mysql operator   Normal     SuccessfulValidate   Successfully validate MySQL
   3m          3m         1         mysql operator   Normal     Creating             Creating Kubernetes objects
 
+
 $ kubectl get statefulset -n demo
 NAME      DESIRED   CURRENT   AGE
 m1        1         1         9m
-
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
@@ -167,7 +167,7 @@ spec:
     scriptSource:
       gitRepo:
         directory: .
-        repository: https://github.com/the-redback/mysql-init-script.git #todo: kubedb
+        repository: https://github.com/the-redback/mysql-init-script.git
   storage:
     accessModes:
     - ReadWriteOnce
@@ -235,7 +235,7 @@ type: Opaque
 
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
 
-```
+```console
 $ kubedb create -f ./docs/examples/mysql/demo-2.yaml
 validating "./docs/examples/mysql/demo-2.yaml"
 snapshot "m1-xyz" created
@@ -366,7 +366,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: "https://github.com/the-redback/mysql-init-script.git" #todo: kubedb
+        repository: "https://github.com/the-redback/mysql-init-script.git"
         directory: .
   backupSchedule:
     cronExpression: "@every 1m"
@@ -496,7 +496,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   annotations:
-    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}' #todo: kubedb
+    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}'
   clusterName: ""
   creationTimestamp: 2017-12-08T11:14:08Z
   deletionGracePeriodSeconds: null
@@ -551,7 +551,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   annotations:
-    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-s$ #todo: kubedb
+    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}'
   clusterName: ""
   creationTimestamp: 2017-12-08T11:14:08Z
   deletionGracePeriodSeconds: null
@@ -619,7 +619,7 @@ spec:
   origin:
     metadata:
       annotations:
-        mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}' #todo: kubedb
+        mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}'
       creationTimestamp: null
       name: m1
       namespace: demo
