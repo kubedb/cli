@@ -124,7 +124,7 @@ status:
   phase: Running
 ```
 
-Now, you can connect to this Memcached cluster from inside the cluster..
+Now, you can connect to this Memcached cluster from inside the cluster.
 
 ```console
 $ kubectl get pods -n demo
@@ -274,7 +274,7 @@ status:
   phase: Pausing
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase crd and create a new Memcached crd using the original spec. This will in turn start a new Deployment.This way the memcached database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase crd and create a new Memcached crd using the original spec. This will, in turn, start a new Deployment.This way the memcached database is resumed.
 
 
 ## Delete Dormant Database
@@ -324,7 +324,7 @@ mc1       WipedOut   2m
 
 ```
 
- You still have a record that there used to be an Memcached database `mc1` in the form of a DormantDatabase database `mc1`. Since you have already wiped out the database, you can delete the DormantDatabase crd.
+ You still have a record that there used to be a Memcached database `mc1` in the form of a DormantDatabase database `mc1`. Since you have already wiped out the database, you can delete the DormantDatabase crd.
 
 ```console
 $ kubedb delete drmn mc1 -n demo
