@@ -60,7 +60,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: "https://github.com/the-redback/mysql-init-script.git" #todo: kubedb repo
+        repository: "https://github.com/kubedb/mysql-init-scripts.git"
         directory: .
 
 $ kubedb create -f ./docs/examples/mysql/demo-1.yaml
@@ -167,7 +167,7 @@ spec:
     scriptSource:
       gitRepo:
         directory: .
-        repository: https://github.com/the-redback/mysql-init-script.git
+        repository: https://github.com/kubedb/mysql-init-scripts.git
   storage:
     accessModes:
     - ReadWriteOnce
@@ -366,7 +366,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: "https://github.com/the-redback/mysql-init-script.git"
+        repository: "https://github.com/kubedb/mysql-init-scripts.git"
         directory: .
   backupSchedule:
     cronExpression: "@every 1m"
@@ -496,7 +496,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   annotations:
-    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}'
+    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/mysql-init-scripts.git","directory":"."}}}'
   clusterName: ""
   creationTimestamp: 2017-12-08T11:14:08Z
   deletionGracePeriodSeconds: null
@@ -551,7 +551,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   annotations:
-    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}'
+    mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/mysql-init-scripts.git","directory":"."}}}'
   clusterName: ""
   creationTimestamp: 2017-12-08T11:14:08Z
   deletionGracePeriodSeconds: null
@@ -619,7 +619,7 @@ spec:
   origin:
     metadata:
       annotations:
-        mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/mysql-init-script.git","directory":"."}}}'
+        mysqls.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/mysql-init-scripts.git","directory":"."}}}'
       creationTimestamp: null
       name: m1
       namespace: demo

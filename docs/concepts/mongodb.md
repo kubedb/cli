@@ -32,7 +32,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: "https://github.com/the-redback/mongodb-init-scripts.git" #todo: kubedb
+        repository: "https://github.com/kubedb/mongodb-init-scripts.git"
         directory: .
   backupSchedule:
     cronExpression: "@every 6h"
@@ -114,7 +114,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: "https://github.com/the-redback/mongodb-init-script.git" #todo: kubedb
+        repository: "https://github.com/kubedb/mongodb-init-scripts.git"
         directory: .
 ```
 

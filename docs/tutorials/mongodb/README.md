@@ -44,7 +44,7 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: "https://github.com/the-redback/k8s-mongodb-init-script.git"
+        repository: "https://github.com/kubedb/mongodb-init-scripts.git"
         directory: .
 
 
@@ -152,7 +152,7 @@ spec:
     scriptSource:
       gitRepo:
         directory: .
-        repository: https://github.com/the-redback/k8s-mongodb-init-script.git
+        repository: https://github.com/kubedb/mongodb-init-scripts.git
   storage:
     accessModes:
     - ReadWriteOnce
@@ -388,7 +388,7 @@ spec:
     scriptSource:
       gitRepo:
         directory: .
-        repository: https://github.com/the-redback/k8s-mongodb-init-script.git
+        repository: https://github.com/kubedb/mongodb-init-scripts.git
   storage:
     accessModes:
     - ReadWriteOnce
@@ -531,7 +531,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   annotations:
-    mongodbs.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/k8s-mongodb-init-script.git","directory":"."}}}'
+    mongodbs.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/mongodb-init-scripts.git","directory":"."}}}'
   clusterName: ""
   creationTimestamp: 2017-12-11T09:17:01Z
   deletionGracePeriodSeconds: null
@@ -586,7 +586,7 @@ apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
   annotations:
-    mongodbs.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/k8s-mongod-init-script.git","directory":"."}}}'
+    mongodbs.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/mongodb-init-scripts.git","directory":"."}}}'
   clusterName: ""
   creationTimestamp: 2017-12-11T09:17:01Z
   deletionGracePeriodSeconds: null
@@ -655,7 +655,7 @@ spec:
   origin:
     metadata:
       annotations:
-        mongodbs.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/the-redback/k8s-mongodb-init-script.git","directory":"."}}}'
+        mongodbs.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/mongodb-init-scripts.git","directory":"."}}}'
       creationTimestamp: null
       name: mgo1
       namespace: demo
