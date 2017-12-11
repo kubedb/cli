@@ -12,23 +12,21 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	kapi "k8s.io/kubernetes/pkg/api"
+	"k8s.io/kubernetes/pkg/apis/apps"
+	extensions "k8s.io/kubernetes/pkg/apis/extensions"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
 	printers "k8s.io/kubernetes/pkg/printers"
 )
 
-func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out io.Writer) {
+func (d *humanReadableDescriber) describeStatefulSet(statefulSet apps.StatefulSet, out io.Writer) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return
 	}
 
-	ps, err := clientSet.Apps().StatefulSets(namespace).Get(name, metav1.GetOptions{})
-	if err != nil {
-		return
-	}
-	pc := clientSet.Core().Pods(namespace)
+	pc := clientSet.Core().Pods(statefulSet.Namespace)
 
-	selector, err := metav1.LabelSelectorAsSelector(ps.Spec.Selector)
+	selector, err := metav1.LabelSelectorAsSelector(statefulSet.Spec.Selector)
 	if err != nil {
 		return
 	}
@@ -40,25 +38,20 @@ func (d *humanReadableDescriber) describeStatefulSet(namespace, name string, out
 
 	fmt.Fprint(out, "\n")
 	fmt.Fprint(out, "StatefulSet:\t\n")
-	fmt.Fprintf(out, "  Name:\t%s\n", ps.Name)
-	fmt.Fprintf(out, "  Replicas:\t%d current / %d desired\n", ps.Status.Replicas, ps.Spec.Replicas)
-	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", timeToString(&ps.CreationTimestamp))
+	fmt.Fprintf(out, "  Name:\t%s\n", statefulSet.Name)
+	fmt.Fprintf(out, "  Replicas:\t%d current / %d desired\n", statefulSet.Status.Replicas, statefulSet.Spec.Replicas)
+	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", timeToString(&statefulSet.CreationTimestamp))
 	fmt.Fprintf(out, "  Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
-func (d *humanReadableDescriber) describeDeployments(namespace, name string, out io.Writer) {
+func (d *humanReadableDescriber) describeDeployments(deployement extensions.Deployment, out io.Writer) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return
 	}
 
-	ps, err := clientSet.Extensions().Deployments(namespace).Get(name, metav1.GetOptions{})
-	if err != nil {
-		return
-	}
-	pc := clientSet.Core().Pods(namespace)
-
-	selector, err := metav1.LabelSelectorAsSelector(ps.Spec.Selector)
+	pc := clientSet.Core().Pods(deployement.Namespace)
+	selector, err := metav1.LabelSelectorAsSelector(deployement.Spec.Selector)
 	if err != nil {
 		return
 	}
@@ -70,9 +63,9 @@ func (d *humanReadableDescriber) describeDeployments(namespace, name string, out
 
 	fmt.Fprint(out, "\n")
 	fmt.Fprint(out, "Deployment:\t\n")
-	fmt.Fprintf(out, "  Name:\t%s\n", ps.Name)
-	fmt.Fprintf(out, "  Replicas:\t%d current / %d desired\n", ps.Status.Replicas, ps.Spec.Replicas)
-	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", timeToString(&ps.CreationTimestamp))
+	fmt.Fprintf(out, "  Name:\t%s\n", deployement.Name)
+	fmt.Fprintf(out, "  Replicas:\t%d current / %d desired\n", deployement.Status.Replicas, deployement.Spec.Replicas)
+	fmt.Fprintf(out, "  CreationTimestamp:\t%s\n", timeToString(&deployement.CreationTimestamp))
 	fmt.Fprintf(out, "  Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
@@ -97,19 +90,7 @@ func getPodStatusForController(c coreclient.PodInterface, selector labels.Select
 	return
 }
 
-func (d *humanReadableDescriber) describeService(namespace, name string, out io.Writer) {
-	clientSet, err := d.ClientSet()
-	if err != nil {
-		return
-	}
-
-	c := clientSet.Core().Services(namespace)
-
-	service, err := c.Get(name, metav1.GetOptions{})
-	if err != nil {
-		return
-	}
-
+func (d *humanReadableDescriber) describeService(service kapi.Service, out io.Writer) {
 	fmt.Fprint(out, "\n")
 	fmt.Fprint(out, "Service:\t\n")
 	fmt.Fprintf(out, "  Name:\t%s\n", service.Name)

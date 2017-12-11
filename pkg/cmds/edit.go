@@ -44,7 +44,7 @@ var (
 		environment variables, or fall back to 'nano'`)
 
 	editExample = templates.Examples(`
-		# Edit the elastic named 'elasticsearch-demo':
+		# Edit the elasticsearch named 'elasticsearch-demo':
 		kubedb edit es/elasticsearch-demo
 
 		# Use an alternative editor
@@ -284,8 +284,7 @@ func visitToPatch(
 		}
 		if resourceExists {
 			conditionalPreconditions := util.GetConditionalPreconditionFunc(kind)
-			err := util.CheckConditionalPrecondition(patch, conditionalPreconditions...)
-			if err != nil {
+			if err = util.CheckConditionalPrecondition(patch, conditionalPreconditions...); err != nil {
 				if util.IsPreconditionFailed(err) {
 					return conditionalPreconditionFailedError(kind)
 				}

@@ -4,7 +4,7 @@ metadata:
   name: recovered
   namespace: demo
 spec:
-  version: 2.3.1
+  version: 5.6.3
   storage:
     storageClassName: "standard"
     accessModes:

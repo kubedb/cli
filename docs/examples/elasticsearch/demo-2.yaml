@@ -8,5 +8,6 @@ metadata:
 spec:
   databaseName: e1
   storageSecretName: snap-secret
-  gcs:
-    bucket: restic
+  s3:
+    endpoint: 's3.amazonaws.com'
+    bucket: kubedb

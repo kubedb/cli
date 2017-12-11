@@ -20,16 +20,16 @@ import (
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/create.go
 
 var (
-	create_long = templates.LongDesc(`
+	createLong = templates.LongDesc(`
 		Create a resource by filename or stdin.
 
 		JSON and YAML formats are accepted.`)
 
-	create_example = templates.Examples(`
-		# Create a elastic using the data in elastic.json.
+	createExample = templates.Examples(`
+		# Create a elasticsearch using the data in elastic.json.
 		kubedb create -f ./elastic.json
 
-		# Create a elastic based on the JSON passed into stdin.
+		# Create a elasticsearch based on the JSON passed into stdin.
 		cat elastic.json | kubedb create -f -`)
 )
 
@@ -39,8 +39,8 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "create",
 		Short:   "Create a resource by filename or stdin",
-		Long:    create_long,
-		Example: create_example,
+		Long:    createLong,
+		Example: createExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			if cmdutil.IsFilenameSliceEmpty(options.Filenames) {
 				defaultRunFunc := cmdutil.DefaultSubCommandRun(errOut)

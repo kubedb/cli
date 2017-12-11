@@ -1116,9 +1116,7 @@ func autoConvert_v1alpha1_PostgresSpec_To_kubedb_PostgresSpec(in *PostgresSpec, 
 	out.Replicas = in.Replicas
 	out.Standby = kubedb.StandbyMode(in.Standby)
 	out.Streaming = kubedb.StreamingMode(in.Streaming)
-	if err := Convert_v1alpha1_PostgresArchiverSpec_To_kubedb_PostgresArchiverSpec(&in.Archiver, &out.Archiver, s); err != nil {
-		return err
-	}
+	out.Archiver = (*kubedb.PostgresArchiverSpec)(unsafe.Pointer(in.Archiver))
 	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
 	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
@@ -1143,9 +1141,7 @@ func autoConvert_kubedb_PostgresSpec_To_v1alpha1_PostgresSpec(in *kubedb.Postgre
 	out.Replicas = in.Replicas
 	out.Standby = StandbyMode(in.Standby)
 	out.Streaming = StreamingMode(in.Streaming)
-	if err := Convert_kubedb_PostgresArchiverSpec_To_v1alpha1_PostgresArchiverSpec(&in.Archiver, &out.Archiver, s); err != nil {
-		return err
-	}
+	out.Archiver = (*PostgresArchiverSpec)(unsafe.Pointer(in.Archiver))
 	out.DatabaseSecret = (*core_v1.SecretVolumeSource)(unsafe.Pointer(in.DatabaseSecret))
 	out.Storage = (*core_v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.NodeSelector = *(*map[string]string)(unsafe.Pointer(&in.NodeSelector))
@@ -1580,7 +1576,6 @@ func autoConvert_v1alpha1_SnapshotSpec_To_kubedb_SnapshotSpec(in *SnapshotSpec, 
 	if err := Convert_v1alpha1_SnapshotStorageSpec_To_kubedb_SnapshotStorageSpec(&in.SnapshotStorageSpec, &out.SnapshotStorageSpec, s); err != nil {
 		return err
 	}
-	out.Type = kubedb.SnapshotType(in.Type)
 	out.Resources = in.Resources
 	return nil
 }
@@ -1595,7 +1590,6 @@ func autoConvert_kubedb_SnapshotSpec_To_v1alpha1_SnapshotSpec(in *kubedb.Snapsho
 	if err := Convert_kubedb_SnapshotStorageSpec_To_v1alpha1_SnapshotStorageSpec(&in.SnapshotStorageSpec, &out.SnapshotStorageSpec, s); err != nil {
 		return err
 	}
-	out.Type = SnapshotType(in.Type)
 	out.Resources = in.Resources
 	return nil
 }

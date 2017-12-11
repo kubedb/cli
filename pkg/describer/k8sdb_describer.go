@@ -3,9 +3,11 @@ package describer
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	mona "github.com/appscode/kutil/tools/monitoring/api"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/kubedb/cli/pkg/printer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -16,20 +18,22 @@ import (
 
 const statusUnknown = "Unknown"
 
-func (d *humanReadableDescriber) describeElastic(item *api.Elasticsearch, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeElasticsearch(item *api.Elasticsearch, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
+
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		metav1.ListOptions{
-			LabelSelector: labels.SelectorFromSet(
-				map[string]string{
-					api.LabelDatabaseKind: item.ResourceKind(),
-					api.LabelDatabaseName: item.Name,
-				},
-			).String(),
+			LabelSelector: labelSelector.String(),
 		},
 	)
 	if err != nil {
@@ -61,12 +65,27 @@ func (d *humanReadableDescriber) describeElastic(item *api.Elasticsearch, descri
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
+		describeInitialization(item.Spec.Init, out)
+
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v", item.Name)
+		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
-		d.describeStatefulSet(item.Namespace, statefulSetName, out)
-		d.describeService(item.Namespace, item.Name, out)
+		secretVolumes := make(map[string]*core.SecretVolumeSource)
+		if item.Spec.DatabaseSecret != nil {
+			secretVolumes["Database"] = item.Spec.DatabaseSecret
+		}
+		if item.Spec.CertificateSecret != nil {
+			secretVolumes["Certificate"] = item.Spec.CertificateSecret
+		}
+		d.showSecret(item.Namespace, secretVolumes, describerSettings.ShowSecret, out)
+
+		specific := map[string]labels.Selector{
+			"master": labels.SelectorFromSet(map[string]string{"node.role.master": "set"}),
+			"client": labels.SelectorFromSet(map[string]string{"node.role.client": "set"}),
+			"data":   labels.SelectorFromSet(map[string]string{"node.role.data": "set"}),
+		}
+		d.showTopology(item.Namespace, labelSelector, specific, out)
 
 		if item.Spec.Monitor != nil {
 			describeMonitor(item.Spec.Monitor, out)
@@ -82,20 +101,22 @@ func (d *humanReadableDescriber) describeElastic(item *api.Elasticsearch, descri
 	})
 }
 
-func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
+
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		metav1.ListOptions{
-			LabelSelector: labels.SelectorFromSet(
-				map[string]string{
-					api.LabelDatabaseKind: item.ResourceKind(),
-					api.LabelDatabaseName: item.Name,
-				},
-			).String(),
+			LabelSelector: labelSelector.String(),
 		},
 	)
 	if err != nil {
@@ -126,15 +147,25 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
+		describeArchiver(item.Spec.Archiver, out)
+
+		describeInitialization(item.Spec.Init, out)
+
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v", item.Name)
+		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
-		d.describeStatefulSet(item.Namespace, statefulSetName, out)
-		d.describeService(item.Namespace, item.Name, out)
+		secretVolumes := make(map[string]*core.SecretVolumeSource)
 		if item.Spec.DatabaseSecret != nil {
-			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+			secretVolumes["Database"] = item.Spec.DatabaseSecret
 		}
+		d.showSecret(item.Namespace, secretVolumes, describerSettings.ShowSecret, out)
+
+		specific := map[string]labels.Selector{
+			"primary": labels.SelectorFromSet(map[string]string{"kubedb.com/role": "primary"}),
+			"replica": labels.SelectorFromSet(map[string]string{"kubedb.com/role": "replica"}),
+		}
+		d.showTopology(item.Namespace, labelSelector, specific, out)
 
 		if item.Spec.Monitor != nil {
 			describeMonitor(item.Spec.Monitor, out)
@@ -150,20 +181,22 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 	})
 }
 
-func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
+
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		metav1.ListOptions{
-			LabelSelector: labels.SelectorFromSet(
-				map[string]string{
-					api.LabelDatabaseKind: item.ResourceKind(),
-					api.LabelDatabaseName: item.Name,
-				},
-			).String(),
+			LabelSelector: labelSelector.String(),
 		},
 	)
 	if err != nil {
@@ -196,12 +229,11 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v", item.Name)
+		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
-		d.describeStatefulSet(item.Namespace, statefulSetName, out)
-		d.describeService(item.Namespace, item.Name, out)
+		secretVolumes := make(map[string]*core.SecretVolumeSource)
 		if item.Spec.DatabaseSecret != nil {
-			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+			secretVolumes["Database"] = item.Spec.DatabaseSecret
 		}
 
 		if item.Spec.Monitor != nil {
@@ -218,20 +250,22 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 	})
 }
 
-func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
+
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		metav1.ListOptions{
-			LabelSelector: labels.SelectorFromSet(
-				map[string]string{
-					api.LabelDatabaseKind: item.ResourceKind(),
-					api.LabelDatabaseName: item.Name,
-				},
-			).String(),
+			LabelSelector: labelSelector.String(),
 		},
 	)
 	if err != nil {
@@ -264,12 +298,11 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v", item.Name)
+		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
-		d.describeStatefulSet(item.Namespace, statefulSetName, out)
-		d.describeService(item.Namespace, item.Name, out)
+		secretVolumes := make(map[string]*core.SecretVolumeSource)
 		if item.Spec.DatabaseSecret != nil {
-			d.describeSecret(item.Namespace, item.Spec.DatabaseSecret.SecretName, "Database", out)
+			secretVolumes["Database"] = item.Spec.DatabaseSecret
 		}
 
 		if item.Spec.Monitor != nil {
@@ -286,11 +319,18 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 	})
 }
 
-func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
+
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
@@ -318,10 +358,7 @@ func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSetting
 
 		describeStorage(item.Spec.Storage, out)
 
-		statefulSetName := fmt.Sprintf("%v", item.Name)
-
-		d.describeStatefulSet(item.Namespace, statefulSetName, out)
-		d.describeService(item.Namespace, item.Name, out)
+		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
 		if item.Spec.Monitor != nil {
 			describeMonitor(item.Spec.Monitor, out)
@@ -335,11 +372,18 @@ func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSetting
 	})
 }
 
-func (d *humanReadableDescriber) describeMemcached(item *api.Memcached, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeMemcached(item *api.Memcached, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
+
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
 
 	var events *kapi.EventList
 	if describerSettings.ShowEvents {
@@ -365,10 +409,7 @@ func (d *humanReadableDescriber) describeMemcached(item *api.Memcached, describe
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
-		deploymentName := fmt.Sprintf("%v", item.Name)
-
-		d.describeDeployments(item.Namespace, deploymentName, out)
-		d.describeService(item.Namespace, item.Name, out)
+		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
 		if item.Spec.Monitor != nil {
 			describeMonitor(item.Spec.Monitor, out)
@@ -382,7 +423,7 @@ func (d *humanReadableDescriber) describeMemcached(item *api.Memcached, describe
 	})
 }
 
-func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
@@ -415,7 +456,14 @@ func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerS
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
-		d.describeSecret(item.Namespace, item.Spec.StorageSecretName, "Storage", out)
+		fmt.Fprintln(out, "Storage:")
+		describeSnapshotStorage(item.Spec.SnapshotStorageSpec, out, 2)
+
+		secretVolumes := make(map[string]*core.SecretVolumeSource)
+		if item.Spec.StorageSecretName != "" {
+			secretVolumes["Database"] = &core.SecretVolumeSource{SecretName: item.Spec.StorageSecretName}
+		}
+		d.showSecret(item.Namespace, secretVolumes, describerSettings.ShowSecret, out)
 
 		if events != nil {
 			describeEvents(events, out)
@@ -425,20 +473,22 @@ func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerS
 	})
 }
 
-func (d *humanReadableDescriber) describeDormantDatabase(item *api.DormantDatabase, describerSettings *printers.DescriberSettings) (string, error) {
+func (d *humanReadableDescriber) describeDormantDatabase(item *api.DormantDatabase, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {
 		return "", err
 	}
 
+	labelSelector := labels.SelectorFromSet(
+		map[string]string{
+			api.LabelDatabaseKind: item.ResourceKind(),
+			api.LabelDatabaseName: item.Name,
+		},
+	)
+
 	snapshots, err := d.extensionsClient.Snapshots(item.Namespace).List(
 		metav1.ListOptions{
-			LabelSelector: labels.SelectorFromSet(
-				map[string]string{
-					api.LabelDatabaseKind: item.Labels[api.LabelDatabaseKind],
-					api.LabelDatabaseName: item.Name,
-				},
-			).String(),
+			LabelSelector: labelSelector.String(),
 		},
 	)
 	if err != nil {
@@ -503,7 +553,40 @@ func describeStorage(pvcSpec *core.PersistentVolumeClaimSpec, out io.Writer) {
 		fmt.Fprintf(out, "  StorageClass:\t%s\n", *pvcSpec.StorageClassName)
 	}
 	fmt.Fprintf(out, "  Capacity:\t%s\n", capacity)
-	fmt.Fprintf(out, "  Access Modes:\t%s\n", accessModes)
+	if accessModes != "" {
+		fmt.Fprintf(out, "  Access Modes:\t%s\n", accessModes)
+	}
+}
+
+func describeArchiver(archiver *api.PostgresArchiverSpec, out io.Writer) {
+	if archiver == nil {
+		return
+	}
+	fmt.Fprintln(out, "Archiver:")
+	if archiver.Storage != nil {
+		describeSnapshotStorage(*archiver.Storage, out, 1)
+	}
+}
+
+func describeInitialization(init *api.InitSpec, out io.Writer) {
+	if init == nil {
+		return
+	}
+
+	fmt.Fprintln(out, "Init:")
+	if init.ScriptSource != nil {
+		fmt.Fprintln(out, "  scriptSource:")
+		describeVolumes(init.ScriptSource.VolumeSource, out)
+	}
+	if init.SnapshotSource != nil {
+		fmt.Fprintln(out, "  snapshotSource:")
+		fmt.Fprintf(out, "    namespace:\t%s\n", init.SnapshotSource.Namespace)
+		fmt.Fprintf(out, "    name:\t%s\n", init.SnapshotSource.Name)
+	}
+	if init.PostgresWAL != nil {
+		fmt.Fprintln(out, "  postgresWAL:")
+		describeSnapshotStorage(init.PostgresWAL.SnapshotStorageSpec, out, 2)
+	}
 }
 
 func describeMonitor(monitor *mona.AgentSpec, out io.Writer) {
@@ -565,4 +648,132 @@ func describeOrigin(origin api.Origin, out io.Writer) {
 	if origin.Annotations != nil {
 		printLabelsMultiline(out, "  Annotations", origin.Annotations)
 	}
+}
+
+func (d *humanReadableDescriber) showWorkload(namespace string, labelSelector labels.Selector, show bool, out io.Writer) {
+	clientSet, err := d.ClientSet()
+	if err != nil {
+		return
+	}
+
+	statefulSets, _ := clientSet.Apps().StatefulSets(namespace).List(metav1.ListOptions{
+		LabelSelector: labelSelector.String(),
+	})
+
+	deployments, _ := clientSet.Extensions().Deployments(namespace).List(metav1.ListOptions{
+		LabelSelector: labelSelector.String(),
+	})
+
+	services, _ := clientSet.Core().Services(namespace).List(metav1.ListOptions{
+		LabelSelector: labelSelector.String(),
+	})
+
+	if show {
+		if len(statefulSets.Items) > 0 {
+			for _, s := range statefulSets.Items {
+				d.describeStatefulSet(s, out)
+			}
+		}
+		if len(deployments.Items) > 0 {
+			for _, s := range deployments.Items {
+				d.describeDeployments(s, out)
+			}
+		}
+		if len(services.Items) > 0 {
+			for _, s := range services.Items {
+				d.describeService(s, out)
+			}
+		}
+	} else {
+		if len(statefulSets.Items) > 0 {
+			statefulSetNames := make([]string, 0)
+			for _, s := range statefulSets.Items {
+				statefulSetNames = append(statefulSetNames, s.Name)
+			}
+			fmt.Fprintf(out, "StatefulSet:\t%s\n", strings.Join(statefulSetNames, ", "))
+		}
+
+		if len(deployments.Items) > 0 {
+			deploymentNames := make([]string, 0)
+			for _, s := range deployments.Items {
+				deploymentNames = append(deploymentNames, s.Name)
+			}
+			fmt.Fprintf(out, "Deployment:\t%s\n", strings.Join(deploymentNames, ", "))
+		}
+
+		if len(services.Items) > 0 {
+			serviceNames := make([]string, 0)
+			for _, s := range services.Items {
+				serviceNames = append(serviceNames, s.Name)
+			}
+			fmt.Fprintf(out, "Service:\t%s\n", strings.Join(serviceNames, ", "))
+		}
+	}
+}
+
+func (d *humanReadableDescriber) showSecret(namespace string, secretVolumes map[string]*core.SecretVolumeSource, show bool, out io.Writer) {
+	clientSet, err := d.ClientSet()
+	if err != nil {
+		return
+	}
+
+	secrets := make(map[string]*kapi.Secret)
+
+	c := clientSet.Core().Secrets(namespace)
+
+	for key, sv := range secretVolumes {
+		secret, err := c.Get(sv.SecretName, metav1.GetOptions{})
+		if err != nil {
+			continue
+		}
+		secrets[key] = secret
+	}
+
+	if show {
+		for key, s := range secrets {
+			d.describeSecret(namespace, s.Name, key, out)
+		}
+	} else {
+		secretNames := make([]string, 0)
+		for _, s := range secrets {
+			secretNames = append(secretNames, s.Name)
+		}
+		fmt.Fprintf(out, "Secrets:\t%s\n", strings.Join(secretNames, ", "))
+	}
+}
+
+func (d *humanReadableDescriber) showTopology(namespace string, labelSelector labels.Selector, specific map[string]labels.Selector, out io.Writer) {
+	clientSet, err := d.ClientSet()
+	if err != nil {
+		return
+	}
+
+	fmt.Fprint(out, "\n")
+
+	fmt.Fprint(out, "Topology:\n")
+	w := printers.GetNewTabWriter(out)
+
+	fmt.Fprint(w, "  Type\tPod\tStartTime\tPhase\n")
+	fmt.Fprint(w, "  ----\t---\t---------\t-----\n")
+
+	pods, _ := clientSet.Core().Pods(namespace).List(metav1.ListOptions{
+		LabelSelector: labelSelector.String(),
+	})
+
+	for _, pod := range pods.Items {
+		types := make([]string, 0)
+		for key, val := range specific {
+			if val.Matches(labels.Set(pod.Labels)) {
+				types = append(types, key)
+			}
+		}
+		fmt.Fprintf(w, "  %s\t%s\t%s\t%s\n",
+			strings.Join(types, "|"),
+			pod.Name,
+			pod.Status.StartTime,
+			pod.Status.Phase,
+		)
+	}
+
+	w.Flush()
 }
