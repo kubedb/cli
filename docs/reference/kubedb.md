@@ -37,6 +37,7 @@ kubedb [flags]
 
 ### SEE ALSO
 
+* [kubedb autocomplete](/docs/reference/kubedb_autocomplete.md)	 - Generate bash autocompletions script
 * [kubedb compare](/docs/reference/kubedb_compare.md)	 - Compare summary reports
 * [kubedb create](/docs/reference/kubedb_create.md)	 - Create a resource by filename or stdin
 * [kubedb delete](/docs/reference/kubedb_delete.md)	 - Delete resources by filenames, stdin, resources and names, or by resources and label selector

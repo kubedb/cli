@@ -19,7 +19,7 @@ func NewCmdAutoComplete(out io.Writer, errOut io.Writer) *cobra.Command {
 	return cmd
 }
 
-const bashCompletionDir = "/etc/bash_completion.d/"
+const bashCompletionDir = "/etc/bash_completion.d"
 
 func RunAutoComplete(cmd *cobra.Command, out io.Writer) error {
 	fileName := fmt.Sprintf("%v/kubedb.sh", bashCompletionDir)
