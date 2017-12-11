@@ -1,5 +1,5 @@
-hash: 7c0fb86c62a7d1810e98fd6da0e6eba6bb22045f0839f7f5a240805e2ede7dfc
-updated: 2017-12-08T16:54:01.967742111+06:00
+hash: eb7a9514303e8cb6f6599a9246c3bffd1b905750a0402afd28e21da4d07bd351
+updated: 2017-12-11T12:34:18.474700934+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -250,7 +250,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: 0bca2d260bf5490dc1d61c488ec41a86bfd06a46
+  version: 29d9015df0562fa64b3fd149542bec4317733432
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -260,7 +260,7 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: 47a345980e4052653d57a7ffae82555ef30d90ad
+  version: fc0fdfd0ab192d5efa21cbba7fd8469289dacee3
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/memcached
@@ -276,7 +276,7 @@ imports:
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: 72216724e35d4e2b4a731eb5b52402a0d97299c0
+  version: aef1124eda977afc39158e3a576efb0c12ae285c
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/redis
@@ -403,7 +403,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: fb1d4474b70b485b7facc09bff19c312dec8b7be
+  version: ba22d24b46e8ea8b6dea3b8782695cece79574d4
   subpackages:
   - gensupport
   - googleapi
