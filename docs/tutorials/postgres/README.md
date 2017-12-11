@@ -1,3 +1,4 @@
+
 ---
 title: Postgres
 menu:
@@ -19,11 +20,11 @@ aliases:
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a PGAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a pgAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```console
 $ kubectl create -f ./docs/examples/postgres/demo-0.yaml
@@ -32,20 +33,20 @@ deployment "pgadmin" created
 service "pgadmin" created
 
 $ kubectl get pods -n demo --watch
-NAME                      READY     STATUS              RESTARTS   AGE
-pgadmin-538449054-s046r   0/1       ContainerCreating   0          13s
-pgadmin-538449054-s046r   1/1       Running   0          1m
-^C⏎                                                                                                                                                             
+NAME                       READY     STATUS				RESTARTS	AGE
+pgadmin-3504868301-jmx5h   0/1       ContainerCreating	0			13s
+pgadmin-3504868301-jmx5h   1/1       Running			0			41s
+^C⏎
 
 $ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
-pgadmin   10.0.0.92    <pending>     80:31188/TCP   1m
+NAME      CLUSTER-IP	EXTERNAL-IP	 PORT(S)		AGE
+pgadmin   10.0.0.92		<pending>	 80:32566/TCP	2m
 
 $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31188](http://192.168.99.100:31188). To log into the PGAdmin, use username __`admin`__ and password __`admin`__.
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:32566](http://192.168.99.100:32566). To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` CRD to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
@@ -57,7 +58,8 @@ metadata:
   name: p1
   namespace: demo
 spec:
-  version: 9.5
+  version: 9.6.5
+  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -68,9 +70,9 @@ spec:
         storage: 50Mi
   init:
     scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
       gitRepo:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
+
 
 $ kubedb create -f ./docs/examples/postgres/demo-1.yaml
 validating "./docs/examples/postgres/demo-1.yaml"
@@ -78,129 +80,179 @@ postgres "p1" created
 ```
 
 Here,
- - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.5 database is going to be created.
-
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+ - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6.5 database is going to be created.
+ - `spec.replicas` specifies the total number of primary and standby nodes in Postgres database cluster configuration.
+ - `spec.doNotPause` tells KubeDB operator that if this CRD object is deleted, it should be automatically reverted. This should be set to `true` for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.init.scriptSource` specifies a bash script used to initialize the database after it is created. In this tutorial, `run.sh` script from the git repository `https://github.com/kubedb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
+ - `spec.init.scriptSource` specifies scripts used to initialize the database after it is created. In this tutorial, `data.sql` script from the git repository `https://github.com/kubedb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
-KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name. KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching CRD object name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe pg -n demo p1
-Name:		p1
-Namespace:	demo
-StartTimestamp:	Mon, 17 Jul 2017 15:31:34 -0700
-Status:		Running
+Name:			p1
+Namespace:		demo
+StartTimestamp:	Mon, 11 Dec 2017 16:48:26 +0600
+Status:			Running
+Init:
+  scriptSource:
+	Type:       GitRepo (a volume that is pulled from git when the pod is created)
+    Repository:	https://github.com/kubedb/postgres-init-scripts.git
+    Revision:
 Volume:
   StorageClass:	standard
-  Capacity:	50Mi
+  Capacity:	    50Mi
   Access Modes:	RWO
 
-Service:	
+StatefulSet:
+  Name:			      p1
+  Replicas:		      1 current / 1 desired
+  CreationTimestamp:  Mon, 11 Dec 2017 16:48:27 +0600
+  Pods Status:		  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+Service:
   Name:		p1
   Type:		ClusterIP
-  IP:		10.0.0.161
-  Port:		db	5432/TCP
+  IP:		10.11.240.108
+  Port:		api	5432/TCP
+
+Service:
+  Name:		p1-primary
+  Type:		ClusterIP
+  IP:		10.11.254.13
+  Port:		api	5432/TCP
 
 Database Secret:
-  Name:	p1-admin-auth
+  Name:	p1-auth
   Type:	Opaque
   Data
   ====
   .admin:	35 bytes
+
+Topology:
+  Type      Pod       StartTime                       Phase
+  ----      ---       ---------                       -----
+  primary   p1-0      2017-12-11 16:48:34 +0600 +06   Running
 
 No Snapshots.
 
 Events:
   FirstSeen   LastSeen   Count     From                Type       Reason               Message
   ---------   --------   -----     ----                --------   ------               -------
-  2m          2m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
-  2m          2m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  3m          3m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+  6m          6m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  6m          6m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
+  7m          7m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  7m          7m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
 
-
-$ kubectl get statefulset -n demo
-NAME      DESIRED   CURRENT   AGE
-p1        1         1         1m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-p1-0   Bound     pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi RWO           standard       1m
+data-p1-0   Bound     pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           standard       10m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-e90b87d4-6b5a-11e7-b9ca-080027f73ab7   50Mi RWO           Delete          Bound     demo/data-p1-0   standard                 1m
+pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           Delete          Bound     demo/data-p1-0   standard                 11m
 
 $ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
-kubedb    None         <none>                       3m
-p1        10.0.0.143   <none>        5432/TCP       3m
-pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
+NAME         CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+kubedb       None            <none>                          11m
+p1           10.11.240.108   <none>           5432/TCP       11m
+p1-primary   10.11.254.13    <none>           5432/TCP       11m
+pgadmin      10.11.254.228   <pending>	 	  80:32566/TCP   22m
 ```
 
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified CRD object:
 
 ```yaml
 $ kubedb get pg -n demo p1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  creationTimestamp: 2017-07-17T22:31:34Z
+  clusterName: ""
+  creationTimestamp: 2017-12-11T10:48:26Z
+  deletionGracePeriodSeconds: null
+  deletionTimestamp: null
+  generation: 0
   name: p1
   namespace: demo
-  resourceVersion: "2677"
+  resourceVersion: "676719"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
-  uid: b02ccec1-6b3f-11e7-bdc0-080027aa4456
+  uid: d0f7d421-de60-11e7-b188-42010a800112
 spec:
   databaseSecret:
-    secretName: p1-admin-auth
+    secretName: p1-auth
   doNotPause: true
   init:
     scriptSource:
       gitRepo:
         repository: https://github.com/kubedb/postgres-init-scripts.git
-      scriptPath: postgres-init-scripts/run.sh
-  resources: {}
+  replicas: 1
   storage:
     accessModes:
     - ReadWriteOnce
-    storageClassName: standard
     resources:
       requests:
         storage: 50Mi
-  version: "9.5"
+    storageClassName: standard
+  version: 9.6.5
 status:
-  creationTime: 2017-07-17T22:31:34Z
+  creationTime: 2017-12-11T10:48:26Z
   phase: Running
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `p1-auth` (format: {crd-name}-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the PGAdmin dashboard using the database pod IP and `postgres` user password. Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the PGAdmin, use username __`admin`__ and password __`admin`__.
+Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password. Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.6
 
-$ kubectl get secrets -n demo p1-admin-auth -o jsonpath='{.data.\.admin}' | base64 -d
+$ kubectl get secrets -n demo p1-auth -o jsonpath='{.data.\.admin}' | base64 -d
 POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
+![Using p1 from pgAdmin4](/docs/images/postgres/p1-pgadmin.gif)
 
-![Using p1 from PGAdmin4](/docs/images/postgres/p1-pgadmin.gif)
+### Continuous Archiving  with WAL-G
+KubeDB Postgres also supports [WAL-G ](https://github.com/wal-g/wal-g) for Continuous Archiving and archival restoration process. WAL-G now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
+```console
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: p1
+  namespace: demo
+spec:
+  version: 9.6.5
+  replicas: 2
+  standby: hot
+  doNotPause: false
+  archiver:
+    storage:
+      storageSecretName: s3-secret
+      s3:
+        bucket: kubedb
+  storage:
+    resources:
+      requests:
+        storage: 50Mi
+```
+Here,
+- `spec.archiver.storage` specifies storage information that will be used by `wal-g`
+	- `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+	- `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
+- `spec.standby` specifies Standby mode (warm/hot) supported by Postgres. [default: `warm`]
 
+> **Hot Standby** can run read-only queries where **Warm Standby** is only used for replication purpose.
 
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `pg_dump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` CRD object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `pg_dumpall` command and uploads the output **sql** file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -227,8 +279,8 @@ data:
   GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2017-07-17T18:06:51Z
-  name: pg-snap-secret
+  creationTimestamp: 2017-12-11T11:43:12Z
+  name: snap-secret
   namespace: demo
   resourceVersion: "5461"
   selfLink: /api/v1/namespaces/demo/secrets/pg-snap-secret
@@ -237,9 +289,9 @@ type: Opaque
 ```
 
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
-```
+```console
 $ kubedb create -f ./docs/examples/postgres/demo-2.yaml
 validating "./docs/examples/postgres/demo-2.yaml"
 snapshot "p1-xyz" created
@@ -254,25 +306,24 @@ $ kubedb get snap -n demo p1-xyz -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2017-07-18T02:18:00Z
+  creationTimestamp: 2017-12-11T11:43:12Z
   labels:
     kubedb.com/kind: Postgres
     kubedb.com/name: p1
   name: p1-xyz
   namespace: demo
-  resourceVersion: "2973"
+  resourceVersion: "684011"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/p1-xyz
-  uid: 5269701f-6b5f-11e7-b9ca-080027f73ab7
+  uid: 77a6fe87-de68-11e7-b188-42010a800112
 spec:
   databaseName: p1
   gcs:
-    bucket: restic
-  resources: {}
+    bucket: kubedb
   storageSecretName: snap-secret
 status:
-  completionTime: 2017-07-18T02:19:11Z
+  completionTime: 2017-12-11T11:43:33Z
   phase: Succeeded
-  startTime: 2017-07-18T02:18:00Z
+  startTime: 2017-12-11T11:43:12Z
 ```
 
 Here,
@@ -289,51 +340,49 @@ Here,
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
 ```console
-$ kubedb describe pg -n demo p1
-Name:		p1
-Namespace:	demo
-StartTimestamp:	Mon, 17 Jul 2017 18:46:24 -0700
-Status:		Running
+$ kubedb describe pg -n demo p1 -S=false -W=false
+Name:			p1
+Namespace:		demo
+StartTimestamp:	Mon, 11 Dec 2017 16:48:26 +0600
+Status:			Running
+Init:
+  scriptSource:
+    Type:	    GitRepo (a volume that is pulled from git when the pod is created)
+    Repository:	https://github.com/kubedb/postgres-init-scripts.git
 Volume:
   StorageClass:	standard
-  Capacity:	50Mi
+  Capacity:	    50Mi
   Access Modes:	RWO
+StatefulSet:    p1
+Service:	    p1, p1-primary
+Secrets:	    p1-auth
 
-Service:	
-  Name:		p1
-  Type:		ClusterIP
-  IP:		10.0.0.143
-  Port:		db	5432/TCP
-
-Database Secret:
-  Name:	p1-admin-auth
-  Type:	Opaque
-  Data
-  ====
-  .admin:	35 bytes
+Topology:
+  Type      Pod       StartTime                       Phase
+  ----      ---       ---------                       -----
+  primary   p1-0      2017-12-11 16:48:34 +0600 +06   Running
 
 Snapshots:
   Name     Bucket      StartTime                         CompletionTime                    Phase
   ----     ------      ---------                         --------------                    -----
-  p1-xyz   gs:restic   Mon, 17 Jul 2017 19:18:00 -0700   Mon, 17 Jul 2017 19:19:11 -0700   Succeeded
+  p1-xyz   s3:kubedb   Mon, 11 Dec 2017 17:43:12 +0600   Mon, 11 Dec 2017 17:43:33 +0600   Succeeded
 
 Events:
   FirstSeen   LastSeen   Count     From                  Type       Reason               Message
   ---------   --------   -----     ----                  --------   ------               -------
-  1m          1m         1         Snapshot Controller   Normal     SuccessfulSnapshot   Successfully completed snapshot
-  2m          2m         1         Snapshot Controller   Normal     Starting             Backup running
-  33m         33m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
-  33m         33m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created StatefulSet
-  33m         33m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created Postgres
-  34m         34m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
-  34m         34m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
+  2m          2m         1         Snapshot Controller   Normal     SuccessfulSnapshot   Successfully completed snapshot
+  3m          3m         1         Snapshot Controller   Normal     Starting             Backup running
+  57m         57m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created StatefulSet
+  57m         57m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created Postgres
+  58m         58m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
+  58m         58m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
 ```
 
-Once the snapshot Job is complete, you should see the output of the `pg_dump` command stored in the GCS bucket.
+Once the snapshot Job is complete, you should see the output of the `pg_dumpall` command stored in the GCS bucket.
 
 ![snapshot-console](/docs/images/postgres/p1-xyz-snapshot.png)
 
-From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/{snapshot}/`.
 
 
 ### Scheduled Backups

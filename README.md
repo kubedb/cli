@@ -1,3 +1,4 @@
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/kubedb/cli)](https://goreportcard.com/report/github.com/kubedb/cli)
 
 [Website](https://kubedb.com) • [Slack](http://slack.kubernetes.io) • [Twitter](https://twitter.com/KubeDB)
@@ -6,17 +7,17 @@
 Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
 
  - Create a database declaratively using CRD.
- - Take one-off backups or period backups to various cloud stores, eg, S3, GCS, etc.
+ - Take one-off backups or periodical backups to various cloud stores, eg, S3, GCS, Azure etc.
  - Restore from backup or clone any database.
  - Native integration with Prometheus for monitoring via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
  - Apply deletion lock to avoid accidental deletion of database.
  - Keep track of deleted databases, cleanup prior snapshots with a single command.
  - Use cli to manage databases like kubectl for Kubernetes.
 
-KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their SAAS platform on Kubernetes. Currently we include complete implementations for Postgres and ElasticSearch database.
+KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their SAAS platform on Kubernetes. Currently we include complete implementations for Postgres and Elasticsearch database.
 
 ## Supported Versions
-Please pick a version of KubeDB that matches your Kubernetes installation.
+Please pick a version of `kubedb` that matches your Kubernetes installation.
 
 | KubeDB Version                                                      | Docs                                                       | Kubernetes Version |
 |---------------------------------------------------------------------|------------------------------------------------------------|--------------------|
@@ -24,10 +25,10 @@ Please pick a version of KubeDB that matches your Kubernetes installation.
 | [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation
-To install KubeDB, please follow the guide [here](/docs/install.md).
+To install `kubedb`, please follow the guide [here](/docs/install.md).
 
 ## Using KubeDB
-Want to learn how to use KubeDB? Please start [here](/docs/tutorials/README.md).
+Want to learn how to use `kubedb`? Please start [here](/docs/tutorials/README.md).
 
 ## Contribution guidelines
 Want to help improve KubeDB? Please start [here](/CONTRIBUTING.md).
