@@ -67,7 +67,7 @@ const (
 	valid_resources = `Valid resource types include:
 
     * all
-    * elasticsearches
+    * elasticsearchs
     * postgreses
     * mysqls
     * mongodbs

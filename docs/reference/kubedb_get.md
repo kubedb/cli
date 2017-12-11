@@ -19,7 +19,7 @@ Display one or many resources.
 Valid resource types include: 
 
   * all  
-  * elasticsearches  
+  * elasticsearchs  
   * postgreses  
   * mysqls  
   * mongodbs  
