@@ -682,7 +682,7 @@ status:
 
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
-mgo1        WipedOut   2m
+mgo1      WipedOut   3m
 ```
 
 
