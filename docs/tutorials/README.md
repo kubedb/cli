@@ -20,6 +20,8 @@ This section contains tutorials on how to use KubeDB. Please visit the links bel
  - [Running PostgreSQL](/docs/tutorials/postgres/README.md): This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
  - [Running Elasticsearch](/docs/tutorials/elasticsearch/README.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
+
+ - [Running MySQL](/docs/tutorials/mysql/README.md): This tutorial will show you how to use KubeDB to run a MySQL database.
  
  - [Running Memcached](/docs/tutorials/memcached/README.md): This tutorial will show you how to use KubeDB to run a Memcached database.
  
