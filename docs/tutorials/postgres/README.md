@@ -34,14 +34,14 @@ deployment "pgadmin" created
 service "pgadmin" created
 
 $ kubectl get pods -n demo --watch
-NAME                       READY     STATUS				RESTARTS	AGE
-pgadmin-3504868301-jmx5h   0/1       ContainerCreating	0			13s
-pgadmin-3504868301-jmx5h   1/1       Running			0			41s
+NAME                       READY     STATUS             RESTARTS    AGE
+pgadmin-3504868301-jmx5h   0/1       ContainerCreating  0           13s
+pgadmin-3504868301-jmx5h   1/1       Running            0           41s
 ^C⏎
 
 $ kubectl get service -n demo
-NAME      CLUSTER-IP	EXTERNAL-IP	 PORT(S)		AGE
-pgadmin   10.0.0.92		<pending>	 80:32566/TCP	2m
+NAME      CLUSTER-IP    EXTERNAL-IP     PORT(S)         AGE
+pgadmin   10.0.0.92     <pending>       80:32566/TCP    2m
 
 $ minikube ip
 192.168.99.100
