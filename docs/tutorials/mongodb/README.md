@@ -168,7 +168,7 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `mgo1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `mongodb` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database through MongoDB cli. In this tutorial, we are connecting to the MongoDB server from inside of pod. 
+Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside of pod. 
 ```console
 $ kubectl get secrets -n demo mgo1-admin-auth -o jsonpath='{.data.\.admin}' | base64 -d
 aaqCftpLsaGDLVIo

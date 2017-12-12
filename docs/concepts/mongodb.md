@@ -65,7 +65,7 @@ spec:
 ```
 
 ### spec.version
-`spec.version` is a required field specifying the version of MongoDB database. Official [mongodb docker images](https://hub.docker.com/r/library/mongo/tags/) will be used for the specific version.
+`spec.version` is a required field specifying the version of MongoDB database. Official [MongoDB docker images](https://hub.docker.com/r/library/mongo/tags/) will be used for the specific version.
 
 
 ### spec.storage
