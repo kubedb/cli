@@ -254,10 +254,6 @@ From the above image, you can see that continuous archiving data is stored in a 
 
 ![snapshot-console](/docs/images/postgres/archive.png)
 
-
-> * **Hot Standby** can run read-only queries.
-> * **Warm Standby** can't accept connect and only used for replication purpose.
-
 Now PostgreSQl database has started with one additional standby replica.
 This standby replica will be used as replication purpose and also serves read-only queries
 ```console
@@ -286,6 +282,10 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 
 ![Using p1 from pgAdmin4](/docs/images/postgres/standby.gif)
+
+
+> * **Hot Standby** can run read-only queries.
+> * **Warm Standby** can't accept connect and only used for replication purpose.
 
 
 ### Restore from WAL Archive
