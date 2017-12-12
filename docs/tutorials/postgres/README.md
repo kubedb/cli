@@ -205,7 +205,13 @@ Please note that KubeDB operator has created a new Secret called `p1-auth` (form
 This secret contains a `.admin` key with a ini formatted key-value pairs.
 If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password. Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
+Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password.
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
+To log into the pgAdmin, use following credentials
+```ini
+username:	admin
+password:	admin
+```
 
 ```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
