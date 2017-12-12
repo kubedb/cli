@@ -73,6 +73,7 @@ spec:
     scriptSource:
       gitRepo:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
+        directory: "."
 ```
 ```console
 $ kubedb create -f ./docs/examples/postgres/demo-1.yaml
@@ -93,44 +94,44 @@ KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Pos
 
 ```console
 $ kubedb describe pg -n demo p1
-Name:			p1
-Namespace:		demo
-StartTimestamp:	Mon, 11 Dec 2017 16:48:26 +0600
-Status:			Running
+Name:           p1
+Namespace:      demo
+StartTimestamp: Mon, 11 Dec 2017 16:48:26 +0600
+Status:         Running
 Init:
   scriptSource:
 	Type:       GitRepo (a volume that is pulled from git when the pod is created)
-    Repository:	https://github.com/kubedb/postgres-init-scripts.git
-    Revision:
+    Repository: https://github.com/kubedb/postgres-init-scripts.git
+    Directory:  .
 Volume:
-  StorageClass:	standard
-  Capacity:	    50Mi
-  Access Modes:	RWO
+  StorageClass: standard
+  Capacity:     50Mi
+  Access Modes: RWO
 
 StatefulSet:
-  Name:			      p1
-  Replicas:		      1 current / 1 desired
-  CreationTimestamp:  Mon, 11 Dec 2017 16:48:27 +0600
-  Pods Status:		  1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:                 p1
+  Replicas:             1 current / 1 desired
+  CreationTimestamp:    Mon, 11 Dec 2017 16:48:27 +0600
+  Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		p1
-  Type:		ClusterIP
-  IP:		10.11.240.108
-  Port:		api	5432/TCP
+  Name: p1
+  Type: ClusterIP
+  IP:   10.11.240.108
+  Port: api	5432/TCP
 
 Service:
-  Name:		p1-primary
-  Type:		ClusterIP
-  IP:		10.11.254.13
-  Port:		api	5432/TCP
+  Name: p1-primary
+  Type: ClusterIP
+  IP:   10.11.254.13
+  Port: api	5432/TCP
 
 Database Secret:
-  Name:	p1-auth
-  Type:	Opaque
+  Name: p1-auth
+  Type: Opaque
   Data
   ====
-  .admin:	35 bytes
+  .admin:   35 bytes
 
 Topology:
   Type      Pod       StartTime                       Phase
@@ -157,11 +158,11 @@ NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLIC
 pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           Delete          Bound     demo/data-p1-0   standard                 11m
 
 $ kubectl get service -n demo
-NAME         CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-kubedb       None            <none>                          11m
-p1           10.11.240.108   <none>           5432/TCP       11m
-p1-primary   10.11.254.13    <none>           5432/TCP       11m
-pgadmin      10.11.254.228   <pending>	 	  80:32566/TCP   22m
+NAME         CLUSTER-IP      EXTERNAL-IP    PORT(S)         AGE
+kubedb       None            <none>                         11m
+p1           10.11.240.108   <none>         5432/TCP        11m
+p1-primary   10.11.254.13    <none>         5432/TCP        11m
+pgadmin      10.11.254.228   <pending>      80:32566/TCP    22m
 ```
 
 
