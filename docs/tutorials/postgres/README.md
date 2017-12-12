@@ -160,11 +160,11 @@ NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLIC
 pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           Delete          Bound     demo/data-p1-0   standard                 11m
 
 $ kubectl get service -n demo
-NAME         CLUSTER-IP      EXTERNAL-IP    PORT(S)         AGE
-kubedb       None            <none>                         11m
-p1           10.11.240.108   <none>         5432/TCP        11m
-p1-primary   10.11.254.13    <none>         5432/TCP        11m
-pgadmin      10.11.254.228   <pending>      80:32566/TCP    22m
+NAME         CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubedb       None             <none>                       19m
+p1           10.111.209.148   <none>        5432/TCP       3m
+p1-primary   10.102.192.231   <none>        5432/TCP       19m
+pgadmin      10.99.54.130     <pending>     80:31998/TCP   35m
 ```
 
 
@@ -184,8 +184,8 @@ spec:
   init:
     scriptSource:
       gitRepo:
-        repository: https://github.com/kubedb/postgres-init-scripts.git
         directory: .
+        repository: https://github.com/kubedb/postgres-init-scripts.git
   replicas: 1
   storage:
     accessModes:
@@ -196,7 +196,7 @@ spec:
     storageClassName: standard
   version: 9.6.5
 status:
-  creationTime: 2017-12-11T10:48:26Z
+  creationTime: 2017-12-12T05:46:16Z
   phase: Running
 ```
 
