@@ -255,6 +255,36 @@ From the above image, you can see that continuous archiving data is stored in a 
 > * **Hot Standby** can run read-only queries.
 > * **Warm Standby** can't accept connect and only used for replication purpose.
 
+Now PostgreSQl database has started with one additional standby replica.
+This standby replica will be used as replication purpose and also serves read-only queries
+```console
+$ kubedb describe pg -n demo p2
+Topology:
+  Type      Pod       StartTime                       Phase
+  ----      ---       ---------                       -----
+  primary   p2-0      2017-12-12 12:03:48 +0600 +06   Running
+  replica   p2-1      2017-12-12 12:03:51 +0600 +06   Running
+```
+
+Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password.
+Open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
+
+```console
+$ kubectl get pods p2-0 -n demo -o yaml | grep IP
+  hostIP: 192.168.99.100
+  podIP: 172.17.0.7
+
+$ kubectl get pods p2-1 -n demo -o yaml | grep IP
+  hostIP: 192.168.99.100
+  podIP: 172.17.0.8
+
+$ kubectl get secrets -n demo p2-auth -o jsonpath='{.data.\.admin}' | base64 -d
+POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
+```
+
+![Using p1 from pgAdmin4](/docs/images/postgres/standby.gif)
+
+
 ### Restore from WAL Archive
 You can create a new database from archived data by wal-g. Specify storage information in the spec.init.postgresWAL field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
 ```yaml
