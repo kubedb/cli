@@ -25,6 +25,8 @@ This section contains tutorials on how to use KubeDB. Please visit the links bel
  
  - [Running MongoDB](/docs/tutorials/mongodb/README.md): This tutorial will show you how to use KubeDB to run a MongoDB database.
  
+ - [Running Redis](/docs/tutorials/redis/README.md): This tutorial will show you how to use KubeDB to run a Redis database.
+ 
  - [Running Memcached](/docs/tutorials/memcached/README.md): This tutorial will show you how to use KubeDB to run a Memcached database.
  
  - [Manage KubeDB objects using CLIs](/docs/tutorials/cli.md): KubeDB comes with its own cli. It is called `kubedb` cli. kubedb can be used to deploy KubeDB operator in a cluster and manage all KubeDB tprs.
