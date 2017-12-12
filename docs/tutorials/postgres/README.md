@@ -40,15 +40,15 @@ pgadmin-3504868301-jmx5h   1/1       Running            0           41s
 ^C⏎
 
 $ kubectl get service -n demo
-NAME      CLUSTER-IP    EXTERNAL-IP     PORT(S)         AGE
-pgadmin   10.0.0.92     <pending>       80:32566/TCP    2m
+NAME        CLUSTER-IP      EXTERNAL-IP     PORT(S)         AGE
+pgadmin     10.99.54.130    <pending>       80:31998/TCP    10m
 
 $ minikube ip
 192.168.99.100
 ```
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
-According to the above example, this URL will be [http://192.168.99.100:32566](http://192.168.99.100:32566).
+According to the above example, this URL will be [http://192.168.99.100:31998](http://192.168.99.100:31998).
 To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
