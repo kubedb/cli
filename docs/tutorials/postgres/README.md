@@ -130,13 +130,13 @@ Service:
   Name:		p1
   Type:		ClusterIP
   IP:		10.111.209.148
-  Port:		api	5432/TCP
+  Port:		api 5432/TCP
 
 Service:
   Name:		p1-primary
   Type:		ClusterIP
   IP:		10.102.192.231
-  Port:		api	5432/TCP
+  Port:		api 5432/TCP
 
 Database Secret:
   Name:	p1-auth
@@ -337,6 +337,7 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 | `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
 | `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
 
+
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
@@ -449,7 +450,7 @@ To take periodic backups, edit the Postgres CRD object to add following `spec.ba
 ```yaml
 $ kubedb edit pg p1 -n demo
   backupSchedule:
-    cronExpression: "@every 1m"
+    cronExpression: "@every 6h"
     storageSecretName: snap-secret
     gcs:
       bucket: restic
