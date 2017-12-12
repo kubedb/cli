@@ -207,11 +207,7 @@ If you want to use an existing secret please specify that when creating the CRD 
 
 Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password.
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
-To log into the pgAdmin, use following credentials
-
-* username:	admin
-* password:	admin
-
+To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
