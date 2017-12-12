@@ -201,7 +201,9 @@ status:
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `p1-auth` (format: {crd-name}-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `p1-auth` (format: {crd-name}-auth) for storing the password for `postgres` superuser.
+This secret contains a `.admin` key with a ini formatted key-value pairs.
+If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
 
 Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password. Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
@@ -216,24 +218,28 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ![Using p1 from pgAdmin4](/docs/images/postgres/p1-pgadmin.gif)
 
 ### Continuous Archiving with wal-g
-KubeDB Postgres also supports [wal-g ](https://github.com/wal-g/wal-g) for Continuous Archiving and archival restoration process. WAL-G now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
+KubeDB Postgres also supports [wal-g ](https://github.com/wal-g/wal-g) for continuous Archiving and archival restoration process.
+wal-g now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: p1
+  name: p2
   namespace: demo
 spec:
   version: 9.6.5
   replicas: 2
   standby: hot
-  doNotPause: false
+  doNotPause: true
   archiver:
     storage:
       storageSecretName: s3-secret
       s3:
         bucket: kubedb
   storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
     resources:
       requests:
         storage: 50Mi
