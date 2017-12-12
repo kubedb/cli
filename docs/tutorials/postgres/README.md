@@ -248,7 +248,7 @@ From the above image, you can see that continuous archiving data is stored in a 
 > * **Warm Standby** can't accept connect and only used for replication purpose.
 
 ### Restore from WAL Archive
-You can create a new database from archived data by WAL-G. Specify storage information in the spec.init.postgresWAL field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
+You can create a new database from archived data by wal-g. Specify storage information in the spec.init.postgresWAL field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
 ```yaml
   databaseSecret:
     secretName: p1-auth
@@ -266,7 +266,9 @@ This will create a new database with existing _basebackup_ and will restore from
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` CRD object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `pg_dumpall` command and uploads the output **sql** file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` CRD object.
+When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `pg_dumpall` command
+and uploads the output **sql** file to various cloud providers _S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -347,21 +349,21 @@ You can also run the `kubedb describe` command to see the recent snapshots taken
 
 ```console
 $ kubedb describe pg -n demo p1 -S=false -W=false
-Name:			p1
-Namespace:		demo
-StartTimestamp:	Mon, 11 Dec 2017 16:48:26 +0600
-Status:			Running
+Name:           p1
+Namespace:      demo
+StartTimestamp: Mon, 11 Dec 2017 16:48:26 +0600
+Status:         Running
 Init:
   scriptSource:
-    Type:	    GitRepo (a volume that is pulled from git when the pod is created)
-    Repository:	https://github.com/kubedb/postgres-init-scripts.git
+    Type:       GitRepo (a volume that is pulled from git when the pod is created)
+    Repository: https://github.com/kubedb/postgres-init-scripts.git
 Volume:
-  StorageClass:	standard
-  Capacity:	    50Mi
-  Access Modes:	RWO
+  StorageClass: standard
+  Capacity:     50Mi
+  Access Modes: RWO
 StatefulSet:    p1
-Service:	    p1, p1-primary
-Secrets:	    p1-auth
+Service:        p1, p1-primary
+Secrets:        p1-auth
 
 Topology:
   Type      Pod       StartTime                       Phase
@@ -407,7 +409,7 @@ Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snaps
 ```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
-p1-20171212-092036   pg/p1      Running		1m
+p1-20171212-092036   pg/p1      Running     1m
 p1-xyz               pg/p1      Succeeded   51m
 ```
 
@@ -443,21 +445,21 @@ p1          Running   10m
 recovered   Running   6m
 
 $ kubedb describe pg -n demo recovered
-Name:			recovered
-Namespace:		demo
-StartTimestamp:	Tue, 12 Dec 2017 09:33:06 +0600
-Status:			Running
+Name:           recovered
+Namespace:      demo
+StartTimestamp: Tue, 12 Dec 2017 09:33:06 +0600
+Status:         Running
 Init:
   snapshotSource:
-    namespace: demo
-    name:	   p1-xyz
+    namespace:  demo
+    name:       p1-xyz
 Volume:
-  StorageClass:	standard
-  Capacity:	    50Mi
-  Access Modes:	RWO
-StatefulSet:	recovered
-Service:	    recovered, recovered-primary
-Secrets:	    p1-auth
+  StorageClass: standard
+  Capacity:     50Mi
+  Access Modes: RWO
+StatefulSet:    recovered
+Service:        recovered, recovered-primary
+Secrets:        p1-auth
 
 Topology:
   Type      Pod           StartTime                       Phase
@@ -493,8 +495,8 @@ $ kubedb delete pg -n demo p1
 postgres "p1" deleted
 
 $ kubedb get drmn -n demo p1
-NAME      STATUS    AGE
-p1        Paused    3m
+NAME    STATUS  AGE
+p1      Paused  3m
 ```
 ```yaml
 $ kubedb get drmn -n demo p1 -o yaml
@@ -568,8 +570,8 @@ status:
 ```
 ```console
 $ kubedb get drmn -n demo
-NAME      STATUS     AGE
-p1        WipedOut   1h
+NAME    STATUS      AGE
+p1      WipedOut    1h
 ```
 
 
