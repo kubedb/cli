@@ -252,6 +252,9 @@ Here,
 
 From the above image, you can see that continuous archiving data is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/archive/`.
 
+![snapshot-console](/docs/images/postgres/archive.png)
+
+
 > * **Hot Standby** can run read-only queries.
 > * **Warm Standby** can't accept connect and only used for replication purpose.
 
@@ -286,7 +289,7 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 
 
 ### Restore from WAL Archive
-You can create a new database from archived data by wal-g. Specify storage information in the spec.init.postgresWAL field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
+You can create a new database from archived data by wal-g. Specify storage information in the `spec.init.postgresWAL` field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
 ```yaml
   databaseSecret:
     secretName: p1-auth
