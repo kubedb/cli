@@ -505,14 +505,14 @@ Topology:
 No Snapshots.
 
 Events:
-  FirstSeen  LastSeen  From               Type    Reason                Message
-  ---------  --------  ----               ----    ------                -------
-  17s        17s       Postgres operator  Normal  SuccessfulInitialize  Successfully completed initialization
-  17s        17s       Postgres operator  Normal  SuccessfulCreate      Successfully created Postgres
-  37s        37s       Postgres operator  Normal  SuccessfulCreate      Successfully created StatefulSet
-  37s        37s       Postgres operator  Normal  Initializing          Initializing from Snapshot: "p1-xyz"
-  57s        57s       Postgres operator  Normal  SuccessfulValidate    Successfully validate Postgres
-  57s        57s       Postgres operator  Normal  Creating              Creating Kubernetes objects
+  FirstSeen   LastSeen   From                Reason                 Message
+  ---------   --------   ----                ------                 -------
+  17s         17s        Postgres operator   SuccessfulInitialize   Successfully completed initialization
+  17s         17s        Postgres operator   SuccessfulCreate       Successfully created Postgres
+  37s         37s        Postgres operator   SuccessfulCreate       Successfully created StatefulSet
+  37s         37s        Postgres operator   Initializing           Initializing from Snapshot: "p1-xyz"
+  57s         57s        Postgres operator   SuccessfulValidate     Successfully validate Postgres
+  57s         57s        Postgres operator   Creating               Creating Kubernetes objects
 ```
 
 ## Pause Database
