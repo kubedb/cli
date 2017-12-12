@@ -400,17 +400,6 @@ Name:           p1
 Namespace:      demo
 StartTimestamp: Mon, 11 Dec 2017 16:48:26 +0600
 Status:         Running
-Init:
-  scriptSource:
-    Type:       GitRepo (a volume that is pulled from git when the pod is created)
-    Repository: https://github.com/kubedb/postgres-init-scripts.git
-Volume:
-  StorageClass: standard
-  Capacity:     50Mi
-  Access Modes: RWO
-StatefulSet:    p1
-Service:        p1, p1-primary
-Secrets:        p1-auth
 
 Topology:
   Type      Pod       StartTime                       Phase
@@ -423,14 +412,14 @@ Snapshots:
   p1-xyz   s3:kubedb   Mon, 11 Dec 2017 17:43:12 +0600   Mon, 11 Dec 2017 17:43:33 +0600   Succeeded
 
 Events:
-  FirstSeen   LastSeen   Count     From                  Type       Reason               Message
-  ---------   --------   -----     ----                  --------   ------               -------
-  2m          2m         1         Snapshot Controller   Normal     SuccessfulSnapshot   Successfully completed snapshot
-  3m          3m         1         Snapshot Controller   Normal     Starting             Backup running
-  57m         57m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created StatefulSet
-  57m         57m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created Postgres
-  58m         58m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
-  58m         58m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
+  FirstSeen  LastSeen  From                 Type    Reason              Message
+  ---------  --------  ----                 ----    ------              -------
+  2m         2m        Snapshot Controller  Normal  SuccessfulSnapshot  Successfully completed snapshot
+  3m         3m        Snapshot Controller  Normal  Starting            Backup running
+  57m        57m       Postgres operator    Normal  SuccessfulCreate    Successfully created StatefulSet
+  57m        57m       Postgres operator    Normal  SuccessfulCreate    Successfully created Postgres
+  58m        58m       Postgres operator    Normal  SuccessfulValidate  Successfully validate Postgres
+  58m        58m       Postgres operator    Normal  Creating            Creating Kubernetes objects
 ```
 
 Once the snapshot Job is complete, you should see the output of the `pg_dumpall` command stored in the GCS bucket.
