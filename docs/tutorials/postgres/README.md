@@ -65,7 +65,6 @@ spec:
   replicas: 1
   doNotPause: true
   storage:
-    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
@@ -98,13 +97,14 @@ KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Pos
 $ kubedb describe pg -n demo p1
 Name:           p1
 Namespace:      demo
-StartTimestamp: Mon, 11 Dec 2017 16:48:26 +0600
+StartTimestamp: Tue, 12 Dec 2017 11:46:16 +0600
 Status:         Running
 Init:
   scriptSource:
-	Type:       GitRepo (a volume that is pulled from git when the pod is created)
+    Type:       GitRepo (a volume that is pulled from git when the pod is created)
     Repository: https://github.com/kubedb/postgres-init-scripts.git
     Directory:  .
+    Revision:
 Volume:
   StorageClass: standard
   Capacity:     50Mi
@@ -113,42 +113,42 @@ Volume:
 StatefulSet:
   Name:                 p1
   Replicas:             1 current / 1 desired
-  CreationTimestamp:    Mon, 11 Dec 2017 16:48:27 +0600
+  CreationTimestamp:    Tue, 12 Dec 2017 11:46:21 +0600
   Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name: p1
-  Type: ClusterIP
-  IP:   10.11.240.108
-  Port: api	5432/TCP
+  Name:		p1
+  Type:		ClusterIP
+  IP:		10.111.209.148
+  Port:		api	5432/TCP
 
 Service:
-  Name: p1-primary
-  Type: ClusterIP
-  IP:   10.11.254.13
-  Port: api	5432/TCP
+  Name:		p1-primary
+  Type:		ClusterIP
+  IP:		10.102.192.231
+  Port:		api	5432/TCP
 
 Database Secret:
-  Name: p1-auth
-  Type: Opaque
+  Name:	p1-auth
+  Type:	Opaque
   Data
   ====
-  .admin:   35 bytes
+  .admin:	35 bytes
 
 Topology:
   Type      Pod       StartTime                       Phase
   ----      ---       ---------                       -----
-  primary   p1-0      2017-12-11 16:48:34 +0600 +06   Running
+  primary   p1-0      2017-12-12 11:46:22 +0600 +06   Running
 
 No Snapshots.
 
 Events:
   FirstSeen   LastSeen   Count     From                Type       Reason               Message
   ---------   --------   -----     ----                --------   ------               -------
-  6m          6m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  6m          6m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
-  7m          7m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  7m          7m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+  5s          5s         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  5s          5s         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
+  55s         55s        1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  55s         55s        1         Postgres operator   Normal     Creating             Creating Kubernetes objects
 
 
 $ kubectl get pvc -n demo

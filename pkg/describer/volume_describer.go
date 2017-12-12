@@ -197,8 +197,9 @@ func printAWSElasticBlockStoreVolumeSource(aws *core.AWSElasticBlockStoreVolumeS
 func printGitRepoVolumeSource(git *core.GitRepoVolumeSource, w PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tGitRepo (a volume that is pulled from git when the pod is created)\n"+
 		"    Repository:\t%v\n"+
+		"    Directory:\t%v\n"+
 		"    Revision:\t%v\n",
-		git.Repository, git.Revision)
+		git.Repository, git.Directory, git.Revision)
 }
 
 func printSecretVolumeSource(secret *core.SecretVolumeSource, w PrefixWriter) {

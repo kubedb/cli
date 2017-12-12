@@ -1,19 +1,19 @@
 package docker
 
 const (
-	ImageOperator          = "kubedb/operator"
-	ImagePostgresOperator  = "kubedb/pg-operator"
-	ImagePostgres          = "kubedb/postgres"
-	ImageMySQLOperator     = "kubedb/mysql-operator"
+	ImageOperator          = "aerokite/operator"
+	ImagePostgresOperator  = "aerokite/pg-operator"
+	ImagePostgres          = "aerokite/postgres"
+	ImageMySQLOperator     = "aerokite/mysql-operator"
 	ImageMySQL             = "library/mysql"
-	ImageElasticOperator   = "kubedb/es-operator"
-	ImageElasticsearch     = "kubedb/elasticsearch"
-	ImageElasticdump       = "kubedb/elasticdump"
-	ImageMongoDBOperator   = "kubedb/mongodb-operator"
+	ImageElasticOperator   = "aerokite/es-operator"
+	ImageElasticsearch     = "aerokite/elasticsearch"
+	ImageElasticdump       = "aerokite/elasticdump"
+	ImageMongoDBOperator   = "aerokite/mongodb-operator"
 	ImageMongoDB           = "library/mongo"
-	ImageRedisOperator     = "kubedb/redis-operator"
+	ImageRedisOperator     = "aerokite/redis-operator"
 	ImageRedis             = "library/redis"
-	ImageMemcachedOperator = "kubedb/mc-operator"
+	ImageMemcachedOperator = "aerokite/mc-operator"
 	ImageMemcached         = "library/memcached"
 )
 
