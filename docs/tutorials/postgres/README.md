@@ -47,7 +47,11 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:32566](http://192.168.99.100:32566). To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
+According to the above example, this URL will be [http://192.168.99.100:32566](http://192.168.99.100:32566).
+To log into the pgAdmin, use this credential
+- username: __`admin`__
+- password: __`admin`__.
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` CRD to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
