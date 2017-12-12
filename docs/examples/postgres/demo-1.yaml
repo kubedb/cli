@@ -18,3 +18,4 @@ spec:
     scriptSource:
       gitRepo:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
+        directory: "."

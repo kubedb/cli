@@ -173,16 +173,8 @@ $ kubedb get pg -n demo p1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  clusterName: ""
-  creationTimestamp: 2017-12-11T10:48:26Z
-  deletionGracePeriodSeconds: null
-  deletionTimestamp: null
-  generation: 0
   name: p1
   namespace: demo
-  resourceVersion: "676719"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/p1
-  uid: d0f7d421-de60-11e7-b188-42010a800112
 spec:
   databaseSecret:
     secretName: p1-auth
@@ -191,6 +183,7 @@ spec:
     scriptSource:
       gitRepo:
         repository: https://github.com/kubedb/postgres-init-scripts.git
+        directory: .
   replicas: 1
   storage:
     accessModes:
