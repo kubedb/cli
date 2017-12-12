@@ -149,8 +149,8 @@ Events:
   5s          5s         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
   55s         55s        1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
   55s         55s        1         Postgres operator   Normal     Creating             Creating Kubernetes objects
-
-
+```
+```yaml
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
 data-p1-0   Bound     pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           standard       10m
@@ -286,6 +286,10 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 
 > * **Hot Standby** can run read-only queries.
 > * **Warm Standby** can't accept connect and only used for replication purpose.
+
+#### Automatic failover using leader election
+When primary is no longer available to serve, standby replica will take control as primary.
+And if primary comes back, it will then act as standby replica.
 
 
 ### Restore from WAL Archive
