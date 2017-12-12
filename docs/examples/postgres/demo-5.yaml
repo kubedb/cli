@@ -7,7 +7,7 @@ spec:
   version: 9.6.5
   replicas: 2
   standby: hot
-  doNotPause: false
+  doNotPause: true
   archiver:
     storage:
       storageSecretName: s3-secret

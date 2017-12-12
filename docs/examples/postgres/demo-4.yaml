@@ -19,3 +19,4 @@ spec:
   init:
     snapshotSource:
       name: p1-xyz
+      namespace: demo

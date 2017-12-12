@@ -1,4 +1,5 @@
 
+
 ---
 title: Postgres
 menu:
@@ -72,8 +73,8 @@ spec:
     scriptSource:
       gitRepo:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
-
-
+```
+```console
 $ kubedb create -f ./docs/examples/postgres/demo-1.yaml
 validating "./docs/examples/postgres/demo-1.yaml"
 postgres "p1" created
@@ -220,7 +221,7 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 
 ### Continuous Archiving  with WAL-G
 KubeDB Postgres also supports [WAL-G ](https://github.com/wal-g/wal-g) for Continuous Archiving and archival restoration process. WAL-G now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
-```console
+```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
@@ -247,7 +248,26 @@ Here,
 	- `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
 - `spec.standby` specifies Standby mode (warm/hot) supported by Postgres. [default: `warm`]
 
-> **Hot Standby** can run read-only queries where **Warm Standby** is only used for replication purpose.
+From the above image, you can see that continuous archiving data is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/archive/`.
+
+> * **Hot Standby** can run read-only queries.
+> * **Warm Standby** can't accept connect and only used for replication purpose.
+
+### Restore from WAL Archive
+You can create a new database from archived data by WAL-G. Specify storage information in the spec.init.postgresWAL field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
+```yaml
+  databaseSecret:
+    secretName: p1-auth
+  init:
+    postgresWAL:
+      storageSecretName: s3-secret
+      s3:
+        endpoint: 's3.amazonaws.com'
+        bucket: kubedb
+        prefix: 'kubedb/demo/p1/archive'
+```
+This will create a new database with existing _basebackup_ and will restore from archived _wal_ files.
+> Need to use same secret of original database.
 
 ## Database Snapshots
 
@@ -271,7 +291,7 @@ secret "pg-snap-secret" created
 ```
 
 ```yaml
-$ kubectl get secret pg-snap-secret -n demo -o yaml
+$ kubectl get secret snap-secret -n demo -o yaml
 
 apiVersion: v1
 data:
@@ -279,12 +299,8 @@ data:
   GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2017-12-11T11:43:12Z
   name: snap-secret
   namespace: demo
-  resourceVersion: "5461"
-  selfLink: /api/v1/namespaces/demo/secrets/pg-snap-secret
-  uid: a6983b00-5c02-11e7-bb52-08002711f4aa
 type: Opaque
 ```
 
@@ -306,15 +322,11 @@ $ kubedb get snap -n demo p1-xyz -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2017-12-11T11:43:12Z
   labels:
     kubedb.com/kind: Postgres
     kubedb.com/name: p1
   name: p1-xyz
   namespace: demo
-  resourceVersion: "684011"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/p1-xyz
-  uid: 77a6fe87-de68-11e7-b188-42010a800112
 spec:
   databaseName: p1
   gcs:
@@ -386,31 +398,10 @@ From the above image, you can see that the snapshot output is stored in a folder
 
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres tpr to add `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres CRD object to add following `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit pg p1 -n demo
-
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
-metadata:
-  name: p1
-  namespace: demo
-spec:
-  version: 9.5
-  doNotPause: true
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 50Mi
-  init:
-    scriptSource:
-      scriptPath: "postgres-init-scripts/run.sh"
-      gitRepo:
-        repository: "https://github.com/kubedb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: snap-secret
@@ -418,47 +409,38 @@ spec:
       bucket: restic
 ```
 
-Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
 ```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
-p1-20170718-030836   pg/p1      Succeeded   1m
-p1-20170718-030956   pg/p1      Running     2s
+p1-20171212-092036   pg/p1      Running		1m
 p1-xyz               pg/p1      Succeeded   51m
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres tpr. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres object. See the example `recovered` object below:
 
 ```yaml
-$ cat ./docs/examples/postgres/demo-4.yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
-metadata:
-  name: recovered
-  namespace: demo
-spec:
-  version: 9.5
-  doNotPause: true
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 50Mi
+# See full YAML file here: /docs/examples/postgres/demo-4.yaml
+  databaseSecret:
+    secretName: p1-auth
   init:
     snapshotSource:
       name: p1-xyz
-
+      namespace: demo
+```
+```console
 $ kubectl create -f ./docs/examples/postgres/demo-4.yaml
+validating "./docs/examples/postgres/demo-4.yaml"
 postgres "recovered" created
 ```
 
 Here,
- - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a Postgres database in the same namespaces as this new `recovered` Postgres tpr.
+- `spec.init.snapshotSource` specifies Snapshot object information to be used in restoration process.
+	- `snapshotSource.name` refers to a Snapshot object name
+	- `snapshotSource.namespace` refers to a Snapshot object namespace
 
-Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
+Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then it launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
 
 ```console
 $ kubedb get pg -n demo
@@ -467,232 +449,130 @@ p1          Running   10m
 recovered   Running   6m
 
 $ kubedb describe pg -n demo recovered
-Name:		recovered
-Namespace:	demo
-StartTimestamp:	Tue, 18 Jul 2017 16:07:18 -0700
-Status:		Running
+Name:			recovered
+Namespace:		demo
+StartTimestamp:	Tue, 12 Dec 2017 09:33:06 +0600
+Status:			Running
+Init:
+  snapshotSource:
+    namespace: demo
+    name:	   p1-xyz
 Volume:
   StorageClass:	standard
-  Capacity:	50Mi
+  Capacity:	    50Mi
   Access Modes:	RWO
+StatefulSet:	recovered
+Service:	    recovered, recovered-primary
+Secrets:	    p1-auth
 
-Service:
-  Name:		recovered
-  Type:		ClusterIP
-  IP:		10.0.0.234
-  Port:		db	5432/TCP
-
-Database Secret:
-  Name:	recovered-admin-auth
-  Type:	Opaque
-  Data
-  ====
-  .admin:	35 bytes
+Topology:
+  Type      Pod           StartTime                       Phase
+  ----      ---           ---------                       -----
+  primary   recovered-0   2017-12-12 09:52:28 +0600 +06   Running
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                Type       Reason               Message
-  ---------   --------   -----     ----                --------   ------               -------
-  3m          3m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  3m          3m         1         Postgres operator   Warning    Failed               Failed to complete initialization
-  3m          3m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
-  5m          5m         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  5m          5m         1         Postgres operator   Normal     Initializing         Initializing from Snapshot: "p1-xyz"
-  5m          5m         1         Postgres operator   Normal     Creating             Creating Kubernetes objects
-  5m          5m         1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  FirstSeen   LastSeen   Count     From                Type       Reason                 Message
+  ---------   --------   -----     ----                --------   ------                 -------
+  17s         17s        1         Postgres operator   Normal     SuccessfulInitialize   Successfully completed initialization
+  17s         17s        1         Postgres operator   Normal     SuccessfulCreate       Successfully created Postgres
+  37s         37s        1         Postgres operator   Normal     SuccessfulCreate       Successfully created StatefulSet
+  37s         37s        1         Postgres operator   Normal     Initializing           Initializing from Snapshot: "p1-xyz"
+  57s         57s        1         Postgres operator   Normal     SuccessfulValidate     Successfully validate Postgres
+  57s         57s        1         Postgres operator   Normal     Creating               Creating Kubernetes objects
 ```
 
 ## Pause Database
 
-Since the Postgres tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the Postgres p1 has `spec.doNotPause` set to true, if you delete this object, KubeDB operator will recreate original Postgres object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete pg p1 -n demo
 error: Postgres "p1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Postgres tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `p1` PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Postgres object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that **p1** PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase CRD object.
 
-```yaml
+```console
 $ kubedb delete pg -n demo p1
 postgres "p1" deleted
 
 $ kubedb get drmn -n demo p1
 NAME      STATUS    AGE
-p1        Pausing   20s
-
-$ kubedb get drmn -n demo p1
-NAME      STATUS    AGE
 p1        Paused    3m
-
+```
+```yaml
 $ kubedb get drmn -n demo p1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: 2017-07-18T03:23:08Z
+  annotations:
+    postgreses.kubedb.com/init: '{"scriptSource":{"gitRepo":{"repository":"https://github.com/kubedb/postgres-init-scripts.git"}}}'
   labels:
     kubedb.com/kind: Postgres
   name: p1
   namespace: demo
-  resourceVersion: "8004"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
-  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
 spec:
   origin:
     metadata:
-      creationTimestamp: null
       name: p1
       namespace: demo
     spec:
       postgres:
-        backupSchedule:
-          cronExpression: '@every 1m'
-          gcs:
-            bucket: restic
-          resources: {}
-          storageSecretName: snap-secret
         databaseSecret:
-          secretName: p1-admin-auth
-        init:
-          scriptSource:
-            gitRepo:
-              repository: https://github.com/kubedb/postgres-init-scripts.git
-            scriptPath: postgres-init-scripts/run.sh
-        resources: {}
+          secretName: p1-auth
+        replicas: 1
         storage:
           accessModes:
           - ReadWriteOnce
-          storageClassName: standard
           resources:
             requests:
               storage: 50Mi
-        version: "9.5"
+          storageClassName: standard
+        version: 9.6.5
 status:
-  creationTime: 2017-07-18T03:23:08Z
-  pausingTime: 2017-07-18T03:23:48Z
+  creationTime: 2017-12-12T04:22:02Z
+  pausingTime: 2017-12-12T04:22:12Z
   phase: Paused
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original Postgres tpr.
+ - `spec.origin` is the spec of the original spec of the original Postgres object.
 
  - `status.phase` points to the current database state `Paused`.
 
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
 
 ```yaml
 $ kubedb edit drmn -n demo p1
-
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  creationTimestamp: 2017-07-18T03:23:08Z
-  labels:
-    kubedb.com/kind: Postgres
-  name: p1
-  namespace: demo
-  resourceVersion: "8004"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
-  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
 spec:
   resume: true
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: p1
-      namespace: demo
-    spec:
-      postgres:
-        backupSchedule:
-          cronExpression: '@every 1m'
-          gcs:
-            bucket: restic
-          resources: {}
-          storageSecretName: snap-secret
-        databaseSecret:
-          secretName: p1-admin-auth
-        init:
-          scriptSource:
-            gitRepo:
-              repository: https://github.com/kubedb/postgres-init-scripts.git
-            scriptPath: postgres-init-scripts/run.sh
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 50Mi
-        version: "9.5"
-status:
-  creationTime: 2017-07-18T03:23:08Z
-  pausingTime: 2017-07-18T03:23:48Z
-  phase: Paused
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Postgres tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Postgres  using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot  for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
 $ kubedb edit drmn -n demo p1
-# set spec.wipeOut: true
-
-$ kubedb get drmn -n demo p1 -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  creationTimestamp: 2017-07-18T03:23:08Z
-  labels:
-    kubedb.com/kind: Postgres
-  name: p1
-  namespace: demo
-  resourceVersion: "15223"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/p1
-  uid: 6ba8d3c9-6b68-11e7-b9ca-080027f73ab7
 spec:
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: p1
-      namespace: demo
-    spec:
-      postgres:
-        backupSchedule:
-          cronExpression: '@every 1m'
-          gcs:
-            bucket: restic
-          resources: {}
-          storageSecretName: snap-secret
-        databaseSecret:
-          secretName: p1-admin-auth
-        init:
-          scriptSource:
-            gitRepo:
-              repository: https://github.com/kubedb/postgres-init-scripts.git
-            scriptPath: postgres-init-scripts/run.sh
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 50Mi
-        version: "9.5"
   wipeOut: true
+```
+When database is completely wiped out, you can see  `phase: WipedOut`
+```yaml
+$ kubedb get drmn -n demo p1 -o yaml
 status:
   creationTime: 2017-07-18T03:23:08Z
   pausingTime: 2017-07-18T03:23:48Z
   phase: WipedOut
   wipeOutTime: 2017-07-18T05:09:59Z
-
+```
+```console
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
 p1        WipedOut   1h
@@ -700,7 +580,7 @@ p1        WipedOut   1h
 
 
 ## Delete Dormant Database
-You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
+You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn p1 -n demo
