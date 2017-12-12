@@ -115,7 +115,6 @@ Init:
     Type:       GitRepo (a volume that is pulled from git when the pod is created)
     Repository: https://github.com/kubedb/postgres-init-scripts.git
     Directory:  .
-    Revision:
 Volume:
   StorageClass: standard
   Capacity:     50Mi
