@@ -143,21 +143,21 @@ Topology:
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                Type       Reason               Message
-  ---------   --------   -----     ----                --------   ------               -------
-  5s          5s         1         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  5s          5s         1         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
-  55s         55s        1         Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
-  55s         55s        1         Postgres operator   Normal     Creating             Creating Kubernetes objects
+  FirstSeen   LastSeen   From                Type       Reason               Message
+  ---------   --------   ----                --------   ------               -------
+  5s          5s         Postgres operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  5s          5s         Postgres operator   Normal     SuccessfulCreate     Successfully created Postgres
+  55s         55s        Postgres operator   Normal     SuccessfulValidate   Successfully validate Postgres
+  55s         55s        Postgres operator   Normal     Creating             Creating Kubernetes objects
 ```
-```yaml
+```console
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
 data-p1-0   Bound     pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           standard       10m
 
 $ kubectl get pv -n demo
-NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           Delete          Bound     demo/data-p1-0   standard                 11m
+NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS     AGE
+pvc-d17cac3d-de60-11e7-b188-42010a800112   1Gi        RWO           Delete          Bound     demo/data-p1-0   standard         11m
 
 $ kubectl get service -n demo
 NAME         CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
