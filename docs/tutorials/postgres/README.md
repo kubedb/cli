@@ -213,8 +213,8 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ```
 ![Using p1 from pgAdmin4](/docs/images/postgres/p1-pgadmin.gif)
 
-### Continuous Archiving  with WAL-G
-KubeDB Postgres also supports [WAL-G ](https://github.com/wal-g/wal-g) for Continuous Archiving and archival restoration process. WAL-G now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
+### Continuous Archiving with wal-g
+KubeDB Postgres also supports [wal-g ](https://github.com/wal-g/wal-g) for Continuous Archiving and archival restoration process. WAL-G now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
