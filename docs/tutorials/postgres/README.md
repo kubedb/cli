@@ -489,10 +489,6 @@ Init:
   snapshotSource:
     namespace:  demo
     name:       p1-xyz
-Volume:
-  StorageClass: standard
-  Capacity:     50Mi
-  Access Modes: RWO
 StatefulSet:    recovered
 Service:        recovered, recovered-primary
 Secrets:        p1-auth
