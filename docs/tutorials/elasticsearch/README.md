@@ -149,50 +149,57 @@ e1        1         1         8m
 
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
-data-e1-0   Bound     pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi RWO           standard       8m
+data-e1-0   Bound     pvc-35683016-dfec-11e7-9e33-08002726ce5b   50Mi       RWO           standard       12m
 
 $ kubectl get pv -n demo
-NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS    CLAIM            STORAGECLASS   REASON    AGE
-pvc-0d32d0e8-6c01-11e7-b566-080027691dbf   50Mi RWO           Delete          Bound     demo/data-e1-0   standard                 8m
+NAME                                       CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS     CLAIM            STORAGECLASS   REASON    AGE
+pvc-35683016-dfec-11e7-9e33-08002726ce5b   50Mi       RWO           Delete          Bound      demo/data-e1-0   standard                 12m
 
 $ kubectl get service -n demo
-NAME      CLUSTER-IP   EXTERNAL-IP   PORT(S)             AGE
-e1        10.0.0.238   <none>        9200/TCP,9300/TCP   9m
-kubedb    None         <none>                            9m
+NAME        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+e1          10.99.174.203    <none>        9200/TCP   13m
+e1-master   10.103.121.146   <none>        9300/TCP   13m
+kubedb      None             <none>                   13
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified CRD object:
 
 ```yaml
 $ kubedb get es -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  creationTimestamp: 2017-07-18T21:35:41Z
   name: e1
   namespace: demo
-  resourceVersion: "608"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/elasticsearchs/e1
-  uid: 0c174082-6c01-11e7-b566-080027691dbf
 spec:
+  certificateSecret:
+    secretName: e1-cert
+  databaseSecret:
+    secretName: e1-auth
   doNotPause: true
   replicas: 1
-  resources: {}
   storage:
     accessModes:
     - ReadWriteOnce
-    storageClassName: standard
     resources:
       requests:
         storage: 50Mi
-  version: 2.3.1
+    storageClassName: standard
+  version: 5.6.3
 status:
-  creationTime: 2017-07-18T21:35:41Z
+  creationTime: 2017-12-13T09:58:40Z
   phase: Running
 ```
 
-
-Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `e1-auth` (format: {crd-name}-auth) for storing the password for `admin` user. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
+This secret contains following keys:
+  - `ADMIN_PASSWORD`
+  - `READALL_PASSWORD` 
+  - `sg_action_groups.yml`
+  - `sg_config.yml`
+  - `sg_internal_users.yml`
+  - `sg_roles.yml`
+  - `sg_roles_mapping.yml`
 
 Now, you can connect to this Elasticsearch cluster from inside the cluster.
 
