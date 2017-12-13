@@ -120,7 +120,7 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 
 ### spec.init
-`spec.init` is an optional section that can be used to initialize a newly created Postgres database. PostgreSQL databases can be initialized in one of three ways:
+`spec.init` is an optional section that can be used to initialize a newly created Postgres database. PostgreSQL database can be initialized in one of three ways:
 
 #### Initialize via Script
 To initialize a PostgreSQL database using a script (shell script, db migrator, etc.), set the `spec.init.scriptSource` section when creating a Postgres object. ScriptSource must have following information:
@@ -147,7 +147,7 @@ In the above example, Postgres will execute provided script once database is run
 
 
 #### Initialize from Snapshots
-To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating a Postgres object. In this case, SnapshotSource must have following information:
+To initialize from prior Snapshot, set the `spec.init.snapshotSource` section when creating a Postgres object. In this case, SnapshotSource must have following information:
 
  - `name:` Name of the Snapshot
  - `namespace:` Namespace of the Snapshot
@@ -168,6 +168,7 @@ spec:
 ```
 
 In the above example, PostgreSQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize PostgreSQL once StatefulSet pods are running.
+
 When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, lets say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use Secret of `postgres-old`. Otherwise, restoration process will be failed.
 
 
