@@ -20,9 +20,7 @@ This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
 ## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
-
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
-
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -47,7 +45,7 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 2.3.1
+  version: 5.6.3
   replicas: 1
   doNotPause: true
   storage:
@@ -57,53 +55,94 @@ spec:
     resources:
       requests:
         storage: 50Mi
+```
 
+```console
 $ kubedb create -f ./docs/examples/elasticsearch/demo-1.yaml
 validating "./docs/examples/elasticsearch/demo-1.yaml"
 elasticsearch "e1" created
 ```
 
 Here,
- - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 2.3.1 cluster is going to be created.
-
- - `spec.replicas` is the number of pods in the Elasticsearch cluster. In this tutorial, a single node Elasticsearch cluster is going to be created.
-
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
-
+ - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 5.6.3 cluster is going to be created.
+ - `spec.replicas` is the number of nodes in the Elasticsearch cluster. In this tutorial, a single node Elasticsearch cluster is going to be created.
+ - `spec.doNotPause` tells KubeDB operator that if this CRD object is deleted, it should be automatically reverted. This should be set to `true` for production databases to avoid accidental deletion.
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe es e1 -n demo
 Name:			e1
 Namespace:		demo
-CreationTimestamp:	Tue, 18 Jul 2017 14:35:41 -0700
-Status:			Running
+CreationTimestamp:	Wed, 13 Dec 2017 15:58:40 +0600
+Status:			Creating
 Replicas:		1  total
+Annotations:		kubedb.com/ignore=set
 Volume:
   StorageClass:	standard
   Capacity:	50Mi
   Access Modes:	RWO
 
-Service:	
+StatefulSet:
+  Name:			e1
+  Replicas:		1 current / 1 desired
+  CreationTimestamp:	Wed, 13 Dec 2017 15:58:45 +0600
+  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+Service:
   Name:		e1
   Type:		ClusterIP
-  IP:		10.0.0.238
-  Port:		db	9200/TCP
-  Port:		cluster	9300/TCP
+  IP:		10.99.174.203
+  Port:		http	9200/TCP
+
+Service:
+  Name:		e1-master
+  Type:		ClusterIP
+  IP:		10.103.121.146
+  Port:		transport	9300/TCP
+
+Database Secret:
+  Name:	e1-auth
+  Type:	Opaque
+  Data
+  ====
+  sg_roles_mapping.yml:		73 bytes
+  ADMIN_PASSWORD:		8 bytes
+  READALL_PASSWORD:		8 bytes
+  sg_action_groups.yml:		430 bytes
+  sg_config.yml:		240 bytes
+  sg_internal_users.yml:	156 bytes
+  sg_roles.yml:			312 bytes
+
+Certificate Secret:
+  Name:	e1-cert
+  Type:	Opaque
+  Data
+  ====
+  ca.pem:		1139 bytes
+  client-key.pem:	1679 bytes
+  client.pem:		1151 bytes
+  keystore.jks:		3049 bytes
+  sgadmin.jks:		3010 bytes
+  truststore.jks:	864 bytes
+
+Topology:
+  Type                 Pod       StartTime                       Phase
+  ----                 ---       ---------                       -----
+  master|client|data   e1-0      2017-12-13 15:58:47 +0600 +06   Running
 
 No Snapshots.
 
 Events:
   FirstSeen   LastSeen   Count     From                     Type       Reason               Message
   ---------   --------   -----     ----                     --------   ------               -------
-  6m          6m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  6m          6m         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
-  8m          8m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
-  8m          8m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
+  8s          8s         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  3m          3m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  3m          3m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
+```
 
-
+```console
 $ kubectl get statefulset -n demo
 NAME      DESIRED   CURRENT   AGE
 e1        1         1         8m
