@@ -75,7 +75,9 @@ spec:
 ```
 
 ### spec.version
-`spec.version` is a required field specifying the version of PostgreSQL database. Currently the supported versions are `[9.5, 9.6.5]`.
+`spec.version` is a required field specifying the version of PostgreSQL database. Currently the supported versions are:
+ - `9.5`
+ - `9.6.5`
 
 ### spec.replicas
 `spec.replicas` specifies the total number of primary and standby nodes in Postgres database cluster configuration. One pod is selected as Primary and others are acted as standby replicas.
