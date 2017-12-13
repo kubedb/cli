@@ -138,12 +138,12 @@ Topology:
 No Snapshots.
 
 Events:
-  FirstSeen  LastSeen  From               Type    Reason               Message
-  ---------  --------  ----               ----    ------               -------
-  5s         5s        Postgres operator  Normal  SuccessfulCreate     Successfully created StatefulSet
-  5s         5s        Postgres operator  Normal  SuccessfulCreate     Successfully created Postgres
-  55s        55s       Postgres operator  Normal  SuccessfulValidate   Successfully validate Postgres
-  55s        55s       Postgres operator  Normal  Creating             Creating Kubernetes objects
+  FirstSeen   LastSeen   Count    From                Type     Reason               Message
+  ---------   --------   -----    ----                ----     ------               -------
+  5s          5s         1        Postgres operator   Normal   SuccessfulCreate     Successfully created StatefulSet
+  5s          5s         1        Postgres operator   Normal   SuccessfulCreate     Successfully created Postgres
+  55s         55s        1        Postgres operator   Normal   SuccessfulValidate   Successfully validate Postgres
+  55s         55s        1        Postgres operator   Normal   Creating             Creating Kubernetes objects
 ```
 
 ```console
