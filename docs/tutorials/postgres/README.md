@@ -21,13 +21,9 @@ aliases:
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
-
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
-
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a pgAdmin to connect
-and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a pgAdmin to connect and test PostgreSQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```console
 $ kubectl create -f ./docs/examples/postgres/demo-0.yaml
@@ -49,9 +45,7 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
-According to the above example, this URL will be [http://192.168.99.100:31998](http://192.168.99.100:31998).
-To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. According to the above example, this URL will be [http://192.168.99.100:31998](http://192.168.99.100:31998). To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
 KubeDB implements a `Postgres` CRD to define the specification of a PostgreSQL database. Below is the `Postgres` object created in this tutorial.
@@ -87,22 +81,11 @@ postgres "p1" created
 Here,
  - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6.5 database is going to be created.
  - `spec.replicas` specifies the total number of primary and standby nodes in Postgres database cluster configuration.
- - `spec.doNotPause` tells KubeDB operator that if this CRD object is deleted, it should be automatically reverted. This should be set to `true` for
- production databases to avoid accidental deletion.
+ - `spec.doNotPause` tells KubeDB operator that if this CRD object is deleted, it should be automatically reverted. This should be set to `true` for production databases to avoid accidental deletion.
+ - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+ - `spec.init.scriptSource` specifies scripts used to initialize the database after it is created. In this tutorial, `data.sql` script from the git repository `https://github.com/kubedb/postgres-init-scripts.git` is used to create a `dashboard` table in `data` schema.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database.
- This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods.
- You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
-
- - `spec.init.scriptSource` specifies scripts used to initialize the database after it is created.
- In this tutorial, `data.sql` script from the git repository `https://github.com/kubedb/postgres-init-scripts.git` is
- used to create a `dashboard` table in `data` schema.
-
-KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created,
-KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name.
-KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
-If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching CRD object name will be created
-and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name. KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching CRD object name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe pg -n demo p1
@@ -160,6 +143,7 @@ Events:
   55s        55s       Postgres operator  Normal  SuccessfulValidate   Successfully validate Postgres
   55s        55s       Postgres operator  Normal  Creating             Creating Kubernetes objects
 ```
+
 ```console
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
@@ -210,14 +194,8 @@ status:
   phase: Running
 ```
 
-
-Please note that KubeDB operator has created a new Secret called `p1-auth` (format: {crd-name}-auth) for storing the password for `postgres` superuser.
-This secret contains a `.admin` key with a ini formatted key-value pairs.
-If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
-
-Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password.
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
-To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
+Please note that KubeDB operator has created a new Secret called `p1-auth` (format: {crd-name}-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
+Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password. Now, open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ```console
 $ kubectl get pods p1-0 -n demo -o yaml | grep IP
@@ -230,8 +208,8 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 ![Using p1 from pgAdmin4](/docs/images/postgres/p1-pgadmin.gif)
 
 ### Continuous Archiving with wal-g
-KubeDB Postgres also supports [wal-g ](https://github.com/wal-g/wal-g) for continuous Archiving and archival restoration process.
-wal-g now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
+KubeDB Postgres also supports [wal-g ](https://github.com/wal-g/wal-g) for continuous Archiving and archival restoration process. wal-g now supports only **Amazon S3** as cloud storage. Below is the Postgres object created with Continuous Archiving support.
+
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
@@ -266,8 +244,8 @@ From the above image, you can see that continuous archiving data is stored in a 
 
 ![snapshot-console](/docs/images/postgres/archive.png)
 
-Now PostgreSQl database has started with one additional standby replica.
-This standby replica will be used as replication purpose and also serves read-only queries
+Now PostgreSQl database has started with one additional standby replica. This standby replica will be used as replication purpose and also serves read-only queries
+
 ```console
 $ kubedb describe pg -n demo p2
 Topology:
@@ -277,9 +255,7 @@ Topology:
   replica   p2-1      2017-12-12 12:03:51 +0600 +06   Running
 ```
 
-Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password.
-Open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_.
-To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
+Now, you can connect to this database from the pgAdmin dashboard using the database pod IP and `postgres` user password. Open your browser and go to the following URL: _http://{minikube-ip}:{pgadmin-svc-nodeport}_. To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ```console
 $ kubectl get pods p2-0 -n demo -o yaml | grep IP
@@ -301,13 +277,12 @@ POSTGRES_PASSWORD=R9keKKRTqSJUPtNC
 > * **Warm Standby** can't accept connect and only used for replication purpose.
 
 #### Automatic failover using leader election
-When primary is no longer available to serve, standby replica will take control as primary.
-And if primary comes back, it will then act as standby replica.
+When primary is no longer available to serve, standby replica will take control as primary. And if primary comes back, it will then act as standby replica.
 
 
 ### Restore from WAL Archive
-You can create a new database from archived data by wal-g. Specify storage information in the `spec.init.postgresWAL` field of a new Postgres object.
-Add following additional information in `spec` of a new Postgres:
+You can create a new database from archived data by wal-g. Specify storage information in the `spec.init.postgresWAL` field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
+
 ```yaml
   databaseSecret:
     secretName: p1-auth
@@ -319,16 +294,14 @@ Add following additional information in `spec` of a new Postgres:
         bucket: kubedb
         prefix: 'kubedb/demo/p1/archive'
 ```
+
 This will create a new database with existing _basebackup_ and will restore from archived _wal_ files.
 > Need to use same secret of original database.
 
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` CRD object.
-When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `pg_dumpall` command
-and uploads the output **sql** file to various cloud providers _S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or
-locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` CRD object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `pg_dumpall` command and uploads the output **sql** file to various cloud providers _S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -398,11 +371,8 @@ status:
 Here,
 
 - `metadata.labels` should include the type of database `kubedb.com/kind: Postgres` whose snapshot will be taken.
-
 - `spec.databaseName` points to the database whose snapshot is taken.
-
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
-
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 
@@ -442,10 +412,8 @@ Once the snapshot Job is complete, you should see the output of the `pg_dumpall`
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/{snapshot}/`.
 
-
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
-To take periodic backups, edit the Postgres CRD object to add following `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres CRD object to add following `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit pg p1 -n demo
@@ -456,9 +424,8 @@ $ kubedb edit pg p1 -n demo
       bucket: restic
 ```
 
-Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression.
-This triggers KubeDB operator to create a Job as it would for any regular instant backup process.
-You can see the snapshots as they are created using `kubedb get snap` command.
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+
 ```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
@@ -467,8 +434,7 @@ p1-xyz               pg/p1      Succeeded   51m
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot.
-Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres object. See the example `recovered` object below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Postgres object. See the example `recovered` object below:
 
 ```yaml
 # See full YAML file here: /docs/examples/postgres/demo-4.yaml
@@ -490,8 +456,7 @@ Here,
 	- `snapshotSource.name` refers to a Snapshot object name
 	- `snapshotSource.namespace` refers to a Snapshot object namespace
 
-Now, wait several seconds. KubeDB operator will create a new StatefulSet.
-Then it launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
+Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then it launches a Kubernetes Job to initialize the new database using the data from `p1-xyz` Snapshot.
 
 ```console
 $ kubedb get pg -n demo
@@ -531,19 +496,14 @@ Events:
 ```
 
 ## Pause Database
-
-Since the Postgres p1 has `spec.doNotPause` set to true, if you delete this object, KubeDB operator will recreate original Postgres object
-and essentially nullify the delete operation. You can see this below:
+Since the Postgres p1 has `spec.doNotPause` set to true, if you delete this object, KubeDB operator will recreate original Postgres object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete pg p1 -n demo
 error: Postgres "p1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false).
-Then if you delete the Postgres object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged.
-In KubeDB parlance, we say that **p1** PostgreSQL database has entered into dormant state.
-This is represented by KubeDB operator by creating a matching DormantDatabase CRD object.
+Now, run `kubedb edit pg p1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Postgres object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that **p1** PostgreSQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase CRD object.
 
 ```console
 $ kubedb delete pg -n demo p1
@@ -590,7 +550,6 @@ status:
 
 Here,
  - `spec.origin` is the spec of the original spec of the original Postgres object.
-
  - `status.phase` points to the current database state `Paused`.
 
 
@@ -604,21 +563,19 @@ spec:
   resume: true
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object
-and create a new Postgres  using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs.
-Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Postgres  using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs,
-delete any relevant Snapshot for this database and also delete snapshot data stored in the Cloud Storage buckets.
-There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
 $ kubedb edit drmn -n demo p1
 spec:
   wipeOut: true
 ```
+
 When database is completely wiped out, you can see  `phase: WipedOut`
+
 ```yaml
 $ kubedb get drmn -n demo p1 -o yaml
 status:
@@ -627,6 +584,7 @@ status:
   phase: WipedOut
   wipeOutTime: 2017-07-18T05:09:59Z
 ```
+
 ```console
 $ kubedb get drmn -n demo
 NAME    STATUS      AGE
@@ -635,8 +593,7 @@ p1      WipedOut    1h
 
 
 ## Delete Dormant Database
-You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`.
-Since you have already wiped out the database, you can delete the DormantDatabase object.
+You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn p1 -n demo
@@ -645,6 +602,7 @@ dormantdatabase "p1" deleted
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
+
 ```console
 $ kubectl delete ns demo
 ```
