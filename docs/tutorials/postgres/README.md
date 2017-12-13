@@ -260,7 +260,7 @@ Here,
 - `spec.archiver.storage` specifies storage information that will be used by `wal-g`
 	- `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
 	- `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
-- `spec.standby` specifies Standby mode (warm/hot) supported by Postgres. [default: `warm`]
+- `spec.standby` specifies standby mode (warm/hot) supported by Postgres. [default: `warm`]
 
 From the above image, you can see that continuous archiving data is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/archive/`.
 
