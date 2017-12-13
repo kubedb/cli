@@ -3,7 +3,7 @@
 # MySQL
 
 ## What is MySQL
-A `MySQL` is a Kubernetes `Third Party Object` (CRD). It provides declarative configuration for [MySQL](https://www.mysql.com/) in a Kubernetes native way. You only need to describe the desired database configuration in a MySQL object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
+A `MySQL` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [MySQL](https://www.mysql.com/) in a Kubernetes native way. You only need to describe the desired database configuration in a MySQL object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
 ## MySQL Spec
 As with all other Kubernetes objects, a MySQL needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example MySQL object.
@@ -80,7 +80,7 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` super user. If not set, KubeDB operator creates a new Secret `{tpr-name}-admin-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` super user. If not set, KubeDB operator creates a new Secret `{mysql-object-name}-admin-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
 
 This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
 ```ini
@@ -149,7 +149,7 @@ KubeDB supports taking periodic snapshots for MySQL database. This is an optiona
 
 
 ### spec.doNotPause
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this tpr is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MySQL object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this MySQL object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MySQL object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
 
 ### spec.monitor

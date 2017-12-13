@@ -3,7 +3,7 @@
 # Memcached
 
 ## What is Memcached
-A `Memcached` is a Kubernetes `Third Party Object` (CRD). It provides declarative configuration for [Memcached](https://memcached.org/) in a Kubernetes native way. You only need to describe the desired database configuration in a Memcached object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
+A `Memcached` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [Memcached](https://memcached.org/) in a Kubernetes native way. You only need to describe the desired database configuration in a Memcached object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
 ## Memcached Spec
 As with all other Kubernetes objects, a Memcached needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example of a Memcached object.
@@ -48,7 +48,7 @@ spec:
 
 
 ### spec.doNotPause
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this tpr is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Memcached object put the database into a dormant state. 
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this Memcached object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Memcached object put the database into a dormant state. 
 
 
 ### spec.monitor

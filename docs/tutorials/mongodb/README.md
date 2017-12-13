@@ -224,7 +224,7 @@ bye
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `mongodump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `mongodump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -259,7 +259,7 @@ metadata:
 type: Opaque
 ```
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
 ```console
 $ kubedb create -f ./docs/examples/mongodb/demo-2.yaml
@@ -360,11 +360,11 @@ Once the snapshot Job is complete, you should see the output of the `mongodump` 
 
 ![snapshot-console](/docs/images/mongodb/mgo-xyz-snapshot.png)
 
-From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD-object}/{snapshot}/`.
 
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the MongoDB tpr to add `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the MongoDB  to add `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit mg mgo1 -n demo
@@ -407,7 +407,7 @@ status:
   phase: Running
 ```
 
-Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
 ```console
 $ kubedb get snap -n demo
 NAME                   DATABASE   STATUS      AGE
@@ -418,7 +418,7 @@ mgo1-20171211-090259   mg/mgo1    Running     3s
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MongoDB tpr. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MongoDB object. See the example `recovered` tpr below:
 
 ```yaml
 $ cat ./docs/examples/mongodb/demo-4.yaml
