@@ -68,11 +68,11 @@ Here,
 
  - `spec.replicas` is the number of pods in the Elasticsearch cluster. In this tutorial, a single node Elasticsearch cluster is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+ - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching Elasticsearch object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching object name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe es e1 -n demo
@@ -122,7 +122,7 @@ e1        10.0.0.238   <none>        9200/TCP,9300/TCP   9m
 kubedb    None         <none>                            9m
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified Elasticsearch object:
 
 ```yaml
 $ kubedb get es -n demo e1 -o yaml
@@ -153,7 +153,7 @@ status:
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `e1-admin-auth` (format: {elasticsearch-object-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the Elasticsearch object using `spec.databaseSecret.secretName`.
 
 Now, you can connect to this Elasticsearch cluster from inside the cluster.
 
@@ -191,7 +191,7 @@ PID   USER     TIME   COMMAND
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and uploads snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and uploads snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -228,7 +228,7 @@ type: Opaque
 ```
 
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
 ```
 $ kubedb create -f ./docs/examples/elasticsearch/demo-2.yaml
@@ -318,11 +318,11 @@ Once the snapshot Job is complete, you should see the output of the [elasticdump
 
 ![snapshot-console](/docs/images/elasticsearch/e1-xyz-snapshot.png)
 
-From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{elasticsearch-object}/{snapshot}/`.
 
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch tpr to add `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch object to add `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit es e1 -n demo
@@ -350,7 +350,7 @@ spec:
       bucket: restic
 ```
 
-Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
 ```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
@@ -360,7 +360,7 @@ e1-xyz               es/e1      Succeeded   18m
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch tpr. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch object. See the example `recovered` object below:
 
 ```yaml
 $ cat ./docs/examples/elasticsearch/demo-4.yaml
@@ -389,7 +389,7 @@ elasticsearch "recovered" created
 ```
 
 Here,
- - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a Elasticsearch database in the same namespaces as this new `recovered` Elasticsearch tpr.
+ - `spec.init.snapshotSource.name` refers to a Snapshot object for a Elasticsearch database in the same namespaces as this new `recovered` Elasticsearch object.
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `e1-xyz` Snapshot.
 
@@ -433,14 +433,14 @@ Events:
 
 ## Pause Database
 
-Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the Elasticsearch object created in this tutorial has `spec.doNotPause` set to true, if you delete the Elasticsearch object, KubeDB operator will recreate the object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete es e1 -n demo
 error: Elasticsearch "e1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
 ```yaml
 $ kubedb delete es -n demo e1
@@ -497,14 +497,14 @@ status:
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original Elasticsearch tpr.
+ - `spec.origin` is the spec of the original spec of the original Elasticsearch object.
 
  - `status.phase` points to the current database state `Paused`.
 
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
 
 ```yaml
 $ kubedb edit drmn -n demo e1
@@ -551,10 +551,10 @@ status:
   phase: Paused
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Elasticsearch tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Elasticsearch object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
 $ kubedb edit drmn -n demo e1
@@ -610,7 +610,7 @@ e1        WipedOut   1m
 
 
 ## Delete Dormant Database
-You still have a record that there used to be an Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr.
+You still have a record that there used to be an Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn e1 -n demo
@@ -627,7 +627,7 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 
 ## Next Steps
-- Learn about the details of Elasticsearch tpr [here](/docs/concepts/elasticsearch.md).
+- Learn about the details of Elasticsearch object [here](/docs/concepts/elasticsearch.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.

@@ -56,13 +56,13 @@ mongodb "mg1" created
 Here,
  - `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+ - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
  - `spec.init.scriptSource` specifies a sql script source used to initialize the database after it is created. The sql scripts will be executed alphabatically. In this tutorial, a sample sql script from the git repository `https://github.com/kubedb/mongodb-init-scripts.git` is used to create a test database.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching object name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe mg -n demo mgo1
@@ -126,7 +126,7 @@ kubedb    ClusterIP   None            <none>        <none>      7m
 mgo1      ClusterIP   10.105.200.75   <none>        27017/TCP   7m
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
 
 ```yaml
 $ kubedb get mg -n demo mgo1 -o yaml
@@ -166,7 +166,7 @@ status:
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `mgo1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `mongodb` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `mgo1-admin-auth` (format: {mongodb-object-name}-admin-auth) for storing the password for `mongodb` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`.
 
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside of pod. 
 ```console
@@ -360,7 +360,7 @@ Once the snapshot Job is complete, you should see the output of the `mongodump` 
 
 ![snapshot-console](/docs/images/mongodb/mgo-xyz-snapshot.png)
 
-From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD-object}/{snapshot}/`.
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{mongodb-object}/{snapshot}/`.
 
 
 ### Scheduled Backups
@@ -418,7 +418,7 @@ mgo1-20171211-090259   mg/mgo1    Running     3s
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MongoDB object. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MongoDB object. See the example `recovered` object below:
 
 ```yaml
 $ cat ./docs/examples/mongodb/demo-4.yaml
@@ -447,7 +447,7 @@ mongodb "recovered" created
 ```
 
 Here,
- - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a MongoDB database in the same namespaces as this new `recovered` MongoDB tpr.
+ - `spec.init.snapshotSource.name` refers to a Snapshot object for a MongoDB database in the same namespaces as this new `recovered` MongoDB object.
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `mgo-xyz` Snapshot.
 
@@ -504,14 +504,14 @@ Events:
 
 ## Pause Database
 
-Since the MongoDB tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will recreate the object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete mg mgo1 -n demo
 error: MongoDB "mgo1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit mg mgo1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MongoDB tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mgo1` MongoDB database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit mg mgo1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mgo1` MongoDB database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
 ```yaml
 $ kubedb delete mg mgo1 -n demo
@@ -571,14 +571,14 @@ status:
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original MongoDB tpr.
+ - `spec.origin` is the spec of the original spec of the original MongoDB object.
 
  - `status.phase` points to the current database state `Paused`.
 
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
 
 ```yaml
 $ kubedb edit drmn -n demo mgo1
@@ -627,10 +627,10 @@ status:
 
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new MongoDB tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new MongoDB object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
 $ kubedb edit drmn -n demo mgo1
@@ -687,7 +687,7 @@ mgo1      WipedOut   3m
 
 
 ## Delete Dormant Database
-You still have a record that there used to be a MongoDB database `mgo1` in the form of a DormantDatabase database `mgo1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
+You still have a record that there used to be a MongoDB database `mgo1` in the form of a DormantDatabase database `mgo1`. Since you have already wiped out the database, you can delete the DormantDatabase object. 
 
 ```console
 $ kubedb delete drmn mgo1 -n demo
@@ -705,7 +705,7 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 
 ## Next Steps
-- Learn about the details of MongoDB tpr [here](/docs/concepts/mongodb.md).
+- Learn about the details of MongoDB object [here](/docs/concepts/mongodb.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.

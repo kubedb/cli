@@ -51,11 +51,11 @@ redis "r1" created
 Here,
  - `spec.version` is the version of Redis database. In this tutorial, an Redis 4 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+ - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching Redis object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching object name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe rd r1 -n demo
@@ -110,7 +110,7 @@ kubedb    ClusterIP   None           <none>        <none>     4m
 r1        ClusterIP   10.102.1.255   <none>        6379/TCP   4m
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified Redis object:
 
 ```yaml
 $ kubedb get rd -n demo r1 -o yaml
@@ -166,14 +166,14 @@ OK
 
 ## Pause Database
 
-Since the Redis tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the Redis object created in this tutorial has `spec.doNotPause` set to true, if you delete the Redis object, KubeDB operator will recreate the object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete rd r1 -n demo
 error: Redis "r1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit rd r1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Redis tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `r1` Redis database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit rd r1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Redis object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `r1` Redis database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
 ```yaml
 $ kubedb delete rd -n demo r1
@@ -228,14 +228,14 @@ status:
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original Redis tpr.
+ - `spec.origin` is the spec of the original spec of the original Redis object.
 
  - `status.phase` points to the current database state `Paused`.
 
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
 
 ```yaml
 $ kubedb edit drmn -n demo r1
@@ -278,7 +278,7 @@ status:
   pausingTime: 2017-12-12T06:21:36Z
   phase: Paused
 ```
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Redis tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Redis object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 
 ## Wipeout Dormant Database
@@ -335,7 +335,7 @@ r1        WipedOut   1m
 
 
 ## Delete Dormant Database
-You still have a record that there used to be an Redis database `r1` in the form of a DormantDatabase database `r1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr.
+You still have a record that there used to be an Redis database `r1` in the form of a DormantDatabase database `r1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn r1 -n demo
@@ -352,8 +352,7 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 
 ## Next Steps
-- Learn about the details of Redis tpr [here](/docs/concepts/redis.md).
-- See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
+- Learn about the details of Redis object [here](/docs/concepts/redis.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
 - Wondering what features are coming next? Please visit [here](/ROADMAP.md). 

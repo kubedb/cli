@@ -71,13 +71,13 @@ mysql "m1" created
 Here,
  - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+ - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
  - `spec.init.scriptSource` specifies a sql script source used to initialize the database after it is created. The sql scripts will be executed alphabatically. In this tutorial, a sample sql script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a `dashboard` table in _test_ database.
 
-KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
+KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching object name will be created and used as the service account name for the corresponding StatefulSet.
 
 ```console
 $ kubedb describe ms -n demo m1
@@ -141,7 +141,7 @@ m1        ClusterIP      10.103.4.145    <none>        3306/TCP       5m
 myadmin   LoadBalancer   10.96.229.237   <pending>     80:32746/TCP   22m
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MySQL object:
 
 ```yaml
 $ kubedb get ms -n demo m1 -o yaml
@@ -181,7 +181,7 @@ status:
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `m1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `mysql` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `m1-admin-auth` (format: {mongodb-object-name}-admin-auth) for storing the password for `mysql` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
 
 Now, you can connect to this database from the phpMyAdmin dashboard using the database pod IP and `mysql` user password. 
 ```console
@@ -198,7 +198,7 @@ Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadm
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs the `mysqldump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `mysqldump` command and uploads the output sql file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -233,7 +233,7 @@ metadata:
 type: Opaque
 ```
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
 ```console
 $ kubedb create -f ./docs/examples/mysql/demo-2.yaml
@@ -340,11 +340,11 @@ Once the snapshot Job is complete, you should see the output of the `mysqldump` 
 
 ![snapshot-console](/docs/images/mysql/m1-xyz-snapshot.png)
 
-From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{mongodb-object}/{snapshot}/`.
 
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the MySQL tpr to add `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the MySQL object to add `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit ms m1 -n demo
@@ -375,7 +375,7 @@ spec:
       bucket: restic
 ```
 
-Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
 ```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
@@ -385,7 +385,7 @@ m1-xyz               ms/m1      Succeeded   18m
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MySQL tpr. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MySQL object. See the example `recovered` object below:
 
 ```yaml
 $ cat ./docs/examples/mysql/demo-4.yaml
@@ -414,7 +414,7 @@ mysql "recovered" created
 ```
 
 Here,
- - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a MySQL database in the same namespaces as this new `recovered` MySQL tpr.
+ - `spec.init.snapshotSource.name` refers to a Snapshot object for a MySQL database in the same namespaces as this new `recovered` MySQL object.
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `m1-xyz` Snapshot.
 
@@ -470,14 +470,14 @@ Events:
 
 ## Pause Database
 
-Since the MySQL tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the MySQL object created in this tutorial has `spec.doNotPause` set to true, if you delete the MySQL object, KubeDB operator will recreate the object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete ms m1 -n demo
 error: MySQL "m1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit ms m1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MySQL tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `m1` MySQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit ms m1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MySQL object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `m1` MySQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
 ```yaml
 $ kubedb delete ms -n demo m1
@@ -536,14 +536,14 @@ status:
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original MySQL tpr.
+ - `spec.origin` is the spec of the original spec of the original MySQL object.
 
  - `status.phase` points to the current database state `Paused`.
 
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
 
 ```yaml
 $ kubedb edit drmn -n demo m1
@@ -591,10 +591,10 @@ status:
   phase: Paused
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new MySQL tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new MySQL object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
 $ kubedb edit drmn -n demo m1
@@ -650,7 +650,7 @@ m1        WipedOut   2m
 
 
 ## Delete Dormant Database
-You still have a record that there used to be a MySQL database `m1` in the form of a DormantDatabase database `m1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr. 
+You still have a record that there used to be a MySQL database `m1` in the form of a DormantDatabase database `m1`. Since you have already wiped out the database, you can delete the DormantDatabase object. 
 
 ```console
 $ kubedb delete drmn m1 -n demo
@@ -668,7 +668,7 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 
 ## Next Steps
-- Learn about the details of MySQL tpr [here](/docs/concepts/mysql.md).
+- Learn about the details of MySQL object [here](/docs/concepts/mysql.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
