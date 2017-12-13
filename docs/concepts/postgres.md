@@ -169,7 +169,7 @@ spec:
 
 In the above example, PostgreSQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize PostgreSQL once StatefulSet pods are running.
 
-When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, lets say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use Secret of `postgres-old`. Otherwise, restoration process will be failed.
+When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, lets say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use same credential for superuser of `postgres-old`. Otherwise, restoration process will be failed.
 
 
 #### Initialize from WAL archive
