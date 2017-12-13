@@ -196,7 +196,8 @@ spec:
 ```
 
 In the above example, PostgreSQL database will be initialized from WAL archive.
-When initializing from WAL archive, superuser `postgres` must have to match with previous one. For example, lets say, we want to initialize this database from `postgres-old` WAL archive. In this case, new Postgres `postgres-db` should use Secret of `postgres-old`. Otherwise, restoration process will be failed.
+
+When initializing from WAL archive, superuser `postgres` must have to match with previous one. For example, lets say, we want to initialize this database from `postgres-old` WAL archive. In this case, superuser of new Postgres should use same password as `postgres-old`. Otherwise, restoration process will be failed.
 
 
 ### spec.backupSchedule
