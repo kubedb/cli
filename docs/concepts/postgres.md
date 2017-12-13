@@ -94,7 +94,7 @@ spec:
 Continuous archiving data will be stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/archive/`.
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user. If not set, KubeDB operator creates a new Secret `{tpr-name}-admin-auth` for storing the password for `postgres` superuser for each Postgres object. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` superuser. If not set, KubeDB operator creates a new Secret `{Postgres name}-auth` for storing the password for `postgres` superuser for each Postgres object. If you want to use an existing secret, please specify that when creating Postgres using `spec.databaseSecret.secretName`.
 
 This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
 ```ini
