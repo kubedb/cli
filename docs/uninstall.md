@@ -1,16 +1,16 @@
 ---
 title: KubeDB Uninstall
 menu:
-  docs_0.7.1:
+  docs_0.7.2:
     identifier: uninstall-kubedb
     name: Uninstall
     parent: getting-started
     weight: 30
-menu_name: docs_0.7.1
+menu_name: docs_0.7.2
 section_menu_id: getting-started
-url: /docs/0.7.1/getting-started/uninstall/
+url: /docs/0.7.2/getting-started/uninstall/
 aliases:
-  - /docs/0.7.1/uninstall/
+  - /docs/0.7.2/uninstall/
 ---
 
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).

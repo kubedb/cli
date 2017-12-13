@@ -267,8 +267,11 @@ var PreconditionSpecField = map[string][]string{
 	},
 	tapi.ResourceKindPostgres: {
 		"spec.version",
-		"spec.storage",
+		"spec.standby",
+		"spec.streaming",
+		"spec.archiver",
 		"spec.databaseSecret",
+		"spec.storage",
 		"spec.nodeSelector",
 		"spec.init",
 	},
