@@ -135,11 +135,11 @@ Topology:
 No Snapshots.
 
 Events:
-  FirstSeen  LastSeen  From                    Type    Reason               Message
-  ---------  --------  ----                    ----    ------               -------
-  8s         8s        Elasticsearch operator  Normal  SuccessfulCreate     Successfully created StatefulSet
-  3m         3m        Elasticsearch operator  Normal  SuccessfulValidate   Successfully validate Elasticsearch
-  3m         3m        Elasticsearch operator  Normal  Creating             Creating Kubernetes objects
+  FirstSeen   LastSeen   Count     From                     Type       Reason               Message
+  ---------   --------   -----     ----                     ----       ------               -------
+  8s          8s         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  3m          3m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  3m          3m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
 ```
 
 ```console
