@@ -393,7 +393,7 @@ Topology:
 Snapshots:
   Name     Bucket      StartTime                         CompletionTime                    Phase
   ----     ------      ---------                         --------------                    -----
-  p1-xyz   s3:kubedb   Mon, 11 Dec 2017 17:43:12 +0600   Mon, 11 Dec 2017 17:43:33 +0600   Succeeded
+  p1-xyz   gs:kubedb   Mon, 11 Dec 2017 17:43:12 +0600   Mon, 11 Dec 2017 17:43:33 +0600   Succeeded
 
 Events:
   FirstSeen  LastSeen  From                 Type    Reason              Message
