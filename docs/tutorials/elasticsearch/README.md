@@ -368,7 +368,7 @@ status:
 
 Here,
 
-- `metadata.labels` should include the type of database `kubedb.com/kind: Elasticsearch` whose snapshot will be taken.
+- `metadata.labels` should include the type of database `kubedb.com/kind: Elasticsearch`.
 - `spec.databaseName` points to the database whose snapshot is taken.
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
