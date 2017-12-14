@@ -335,7 +335,7 @@ type: Opaque
 
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
-```
+```console
 $ kubedb create -f ./docs/examples/elasticsearch/demo-2.yaml
 validating "./docs/examples/elasticsearch/demo-2.yaml"
 snapshot "e1-xyz" created
