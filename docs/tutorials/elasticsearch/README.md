@@ -65,7 +65,7 @@ elasticsearch "e1" created
 
 Here,
  - `spec.version` is the version of Elasticsearch database. In this tutorial, an Elasticsearch 5.6.4 database is going to be created.
- - `spec.replicas` is the number of nodes in the Elasticsearch cluster. In this tutorial, a single node Elasticsearch cluster is going to be created.
+ - `spec.replicas` is the number of nodes in the Elasticsearch cluster. Here, we are creating a single node Elasticsearch cluster.
  - `spec.doNotPause` tells KubeDB operator that if this CRD object is deleted, it should be automatically reverted. This should be set to `true` for production databases to avoid accidental deletion.
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
