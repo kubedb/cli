@@ -60,6 +60,7 @@ spec:
   replicas: 1
   doNotPause: true
   storage:
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
