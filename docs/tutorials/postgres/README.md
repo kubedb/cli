@@ -421,7 +421,7 @@ $ kubedb edit pg p1 -n demo
     cronExpression: "@every 6h"
     storageSecretName: snap-secret
     gcs:
-      bucket: restic
+      bucket: kubedb
 ```
 
 Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
