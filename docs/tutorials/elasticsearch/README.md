@@ -382,14 +382,6 @@ Name:               e1
 Namespace:          demo
 CreationTimestamp:  Thu, 14 Dec 2017 11:30:50 +0600
 Status:             Running
-Replicas:           1  total
-Volume:
-  StorageClass: standard
-  Capacity:     50Mi
-  Access Modes: RWO
-StatefulSet:    e1
-Service:        e1, e1-master
-Secrets:        e1-auth, e1-cert
 
 Topology:
   Type                 Pod       StartTime                       Phase
