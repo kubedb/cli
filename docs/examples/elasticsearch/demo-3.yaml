@@ -17,6 +17,5 @@ spec:
   backupSchedule:
     cronExpression: "@every 6h"
     storageSecretName: snap-secret
-    s3:
-      endpoint: 's3.amazonaws.com'
+    gcs:
       bucket: kubedb

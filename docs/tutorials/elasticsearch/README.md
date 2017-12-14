@@ -302,7 +302,7 @@ Topology:
 ## Database Snapshots
 
 ### Instant Backups
-Now, you can easily take a snapshot of this database by creating a `Snapshot` tpr. When a `Snapshot` tpr is created, KubeDB operator will launch a Job that runs [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and uploads snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+Now, you can easily take a snapshot of this database by creating a `Snapshot` CRD object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and uploads snapshot data to various cloud providers  _S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -314,14 +314,14 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-$ kubectl create secret generic es-snap-secret -n demo \
+$ kubectl create secret generic snap-secret -n demo \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "es-snap-secret" created
+secret "snap-secret" created
 ```
 
 ```yaml
-$ kubectl get secret es-snap-secret -o yaml
+$ kubectl get secret snap-secret -n demo -o yaml
 
 apiVersion: v1
 data:
@@ -329,17 +329,13 @@ data:
   GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2017-07-17T18:06:51Z
-  name: es-snap-secret
+  name: snap-secret
   namespace: demo
-  resourceVersion: "5461"
-  selfLink: /api/v1/namespaces/demo/secrets/es-snap-secret
-  uid: a6983b00-5c02-11e7-bb52-08002711f4aa
 type: Opaque
 ```
 
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot tpr.
+To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
 ```
 $ kubedb create -f ./docs/examples/elasticsearch/demo-2.yaml
@@ -347,8 +343,8 @@ validating "./docs/examples/elasticsearch/demo-2.yaml"
 snapshot "e1-xyz" created
 
 $ kubedb get snap -n demo
-NAME      DATABASE   STATUS    AGE
-e1-xyz    es/e1      Running   22s
+NAME      DATABASE   STATUS      AGE
+e1-xyz    es/e1      Succeeded   2m
 ```
 
 ```yaml
@@ -356,151 +352,117 @@ $ kubedb get snap -n demo e1-xyz -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2017-07-18T22:21:40Z
   labels:
     kubedb.com/kind: Elasticsearch
     kubedb.com/name: e1
   name: e1-xyz
   namespace: demo
-  resourceVersion: "3713"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/e1-xyz
-  uid: 78d99dfe-6c07-11e7-b566-080027691dbf
 spec:
   databaseName: e1
   gcs:
-    bucket: restic
-  resources: {}
+    bucket: kubedb
   storageSecretName: snap-secret
 status:
-  completionTime: 2017-07-18T22:23:53Z
+  completionTime: 2017-12-14T05:43:40Z
   phase: Succeeded
-  startTime: 2017-07-18T22:21:40Z
+  startTime: 2017-12-14T05:41:46Z
 ```
 
 Here,
 
 - `metadata.labels` should include the type of database `kubedb.com/kind: Elasticsearch` whose snapshot will be taken.
-
 - `spec.databaseName` points to the database whose snapshot is taken.
-
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
-
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
 ```console
-$ kubedb describe es -n demo e1
-Name:			e1
-Namespace:		demo
-CreationTimestamp:	Tue, 18 Jul 2017 14:35:41 -0700
-Status:			Running
-Replicas:		1  total
+$ kubedb describe es -n demo e1 -S=false -W=false
+Name:               e1
+Namespace:          demo
+CreationTimestamp:  Thu, 14 Dec 2017 11:30:50 +0600
+Status:             Running
+Replicas:           1  total
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass: standard
+  Capacity:     50Mi
+  Access Modes: RWO
+StatefulSet:    e1
+Service:        e1, e1-master
+Secrets:        e1-auth, e1-cert
 
-Service:	
-  Name:		e1
-  Type:		ClusterIP
-  IP:		10.0.0.238
-  Port:		db	9200/TCP
-  Port:		cluster	9300/TCP
+Topology:
+  Type                 Pod       StartTime                       Phase
+  ----                 ---       ---------                       -----
+  master|client|data   e1-0      2017-12-14 11:31:10 +0600 +06   Running
 
 Snapshots:
   Name     Bucket      StartTime                         CompletionTime                    Phase
   ----     ------      ---------                         --------------                    -----
-  e1-xyz   gs:restic   Tue, 18 Jul 2017 15:21:40 -0700   Tue, 18 Jul 2017 15:23:53 -0700   Succeeded
+  e1-xyz   gs:kubedb   Thu, 14 Dec 2017 11:41:46 +0600   Thu, 14 Dec 2017 11:43:40 +0600   Succeeded
 
 Events:
   FirstSeen   LastSeen   Count     From                     Type       Reason               Message
   ---------   --------   -----     ----                     --------   ------               -------
-  4m          4m         1         Snapshot Controller      Normal     SuccessfulSnapshot   Successfully completed snapshot
-  6m          6m         1         Snapshot Controller      Normal     Starting             Backup running
-  50m         50m        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  50m         50m        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
-  52m         52m        1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
-  52m         52m        1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
+  2m          2m         1         Snapshot Controller      Normal     SuccessfulSnapshot   Successfully completed snapshot
+  4m          4m         1         Snapshot Controller      Normal     Starting             Backup running
+  14m         14m        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
+  15m         15m        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  15m         15m        1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
+  15m         15m        1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
 ```
 
 Once the snapshot Job is complete, you should see the output of the [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) process stored in the GCS bucket.
 
 ![snapshot-console](/docs/images/elasticsearch/e1-xyz-snapshot.png)
 
-From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{tpr}/{snapshot}/`.
+From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/{snapshot}/`.
 
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch tpr to add `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Elasticsearch object to add `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit es e1 -n demo
-
-apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
-metadata:
-  name: e1
-  namespace: demo
-spec:
-  version: 2.3.1
-  replicas: 1
-  doNotPause: true
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 50Mi
   backupSchedule:
-    cronExpression: "@every 1m"
+    cronExpression: "@every 6h"
     storageSecretName: snap-secret
     gcs:
-      bucket: restic
+      bucket: kubedb
 ```
 
-Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot tpr on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
+
 ```console
 $ kubedb get snap -n demo
 NAME                 DATABASE   STATUS      AGE
-e1-20170718-223046   es/e1      Succeeded   8m
-e1-20170718-223206   es/e1      Running     7m
-e1-xyz               es/e1      Succeeded   18m
+e1-20171214-055100   es/e1      Running     31s
+e1-xyz               es/e1      Succeeded   9m
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch tpr. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch object. See the example `recovered` tpr below:
 
 ```yaml
-$ cat ./docs/examples/elasticsearch/demo-4.yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
-metadata:
-  name: recovered
-  namespace: demo
-spec:
-  version: 2.3.1
-  doNotPause: true
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 50Mi
+# See full YAML file here: /docs/examples/elasticsearch/demo-4.yaml
   init:
     snapshotSource:
+      namespace: demo
       name: e1-xyz
+```
 
+```console
 $ kubedb create -f ./docs/examples/elasticsearch/demo-4.yaml
 validating "./docs/examples/elasticsearch/demo-4.yaml"
 elasticsearch "recovered" created
 ```
 
 Here,
- - `spec.init.snapshotSource.name` refers to a Snapshot tpr for a Elasticsearch database in the same namespaces as this new `recovered` Elasticsearch tpr.
+- `spec.init.snapshotSource` specifies Snapshot object information to be used in restoration process.
+	- `snapshotSource.name` refers to a Snapshot object name
+	- `snapshotSource.namespace` refers to a Snapshot object namespace
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `e1-xyz` Snapshot.
 
@@ -511,217 +473,135 @@ e1          Running   1h
 recovered   Running   49s
 
 
-$ kubedb describe es -n demo recovered
-Name:			recovered
-Namespace:		demo
-CreationTimestamp:	Tue, 18 Jul 2017 15:41:45 -0700
-Status:			Running
-Replicas:		0  total
-Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+$ kubedb describe es -n demo recovered -S=false -W=false
+Name:			    recovered
+Namespace:		    demo
+CreationTimestamp:  Thu, 14 Dec 2017 12:08:57 +0600
+Status:			    Running
+Replicas:		    1  total
+Init:
+  snapshotSource:
+    namespace:	demo
+    name:	    e1-xyz
+StatefulSet:	recovered
+Service:	    recovered, recovered-master
+Secrets:	    recovered-auth, recovered-cert
 
-Service:	
-  Name:		recovered
-  Type:		ClusterIP
-  IP:		10.0.0.65
-  Port:		db	9200/TCP
-  Port:		cluster	9300/TCP
+Topology:
+  Type                 Pod             StartTime                       Phase
+  ----                 ---             ---------                       -----
+  data|master|client   recovered-0   2017-12-14 12:09:15 +0600 +06   Running
 
 No Snapshots.
 
 Events:
   FirstSeen   LastSeen   Count     From                     Type       Reason                 Message
   ---------   --------   -----     ----                     --------   ------                 -------
-  1m          1m         1         Elasticsearch operator   Normal     SuccessfulInitialize   Successfully completed initialization
   1m          1m         1         Elasticsearch operator   Normal     SuccessfulCreate       Successfully created Elasticsearch
-  1m          1m         1         Elasticsearch operator   Normal     SuccessfulValidate     Successfully validate Elasticsearch
-  1m          1m         1         Elasticsearch operator   Normal     Creating               Creating Kubernetes objects
-  1m          1m         1         Elasticsearch operator   Normal     Initializing           Initializing from Snapshot: "e1-xyz"
+  1m          1m         1         Elasticsearch operator   Normal     SuccessfulInitialize   Successfully completed initialization
+  3m          3m         1         Elasticsearch operator   Normal     Initializing           Initializing from Snapshot: "e1-xyz"
+  3m          3m         1         Elasticsearch operator   Normal     SuccessfulCreate       Successfully created StatefulSet
+  4m          4m         1         Elasticsearch operator   Normal     SuccessfulValidate     Successfully validate Elasticsearch
+  4m          4m         1         Elasticsearch operator   Normal     Creating               Creating Kubernetes objects
 ```
 
 
 ## Pause Database
 
-Since the Elasticsearch tpr created in this tpr has `spec.doNotPause` set to true, if you delete the tpr, KubeDB operator will recreate the tpr and essentially nullify the delete operation. You can see this below:
+Since the Elasticsearch `e1` has `spec.doNotPause` set to true, if you delete the object, KubeDB operator will recreate original Elasticsearch object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete es e1 -n demo
 error: Elasticsearch "e1" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch tpr, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `e1` Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase tpr.
+Now, run `kubedb edit es e1 -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Elasticsearch object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that **e1** Elasticsearch database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase CRD object.
 
-```yaml
+```console
 $ kubedb delete es -n demo e1
 elasticsearch "e1" deleted
 
 $ kubedb get drmn -n demo e1
-NAME      STATUS    AGE
-e1        Pausing   20s
+NAME    STATUS  AGE
+e1      Paused  3m
+```
 
-$ kubedb get drmn -n demo e1
-NAME      STATUS    AGE
-e1        Paused    3m
-
+```yaml
 $ kubedb get drmn -n demo e1 -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: 2017-07-18T22:47:51Z
   labels:
     kubedb.com/kind: Elasticsearch
   name: e1
   namespace: demo
-  resourceVersion: "6216"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
-  uid: 21464b6c-6c0b-11e7-b566-080027691dbf
 spec:
   origin:
     metadata:
-      creationTimestamp: null
       name: e1
       namespace: demo
     spec:
       elasticsearch:
         backupSchedule:
-          cronExpression: '@every 1m'
+          cronExpression: '@every 6h'
           gcs:
-            bucket: restic
-          resources: {}
+            bucket: kubedb
           storageSecretName: snap-secret
+        certificateSecret:
+          secretName: e1-cert
+        databaseSecret:
+          secretName: e1-auth
         replicas: 1
-        resources: {}
         storage:
           accessModes:
           - ReadWriteOnce
-          storageClassName: standard
           resources:
             requests:
               storage: 50Mi
-        version: 2.3.1
+          storageClassName: standard
+        version: 5.6.4
 status:
-  creationTime: 2017-07-18T22:47:51Z
-  pausingTime: 2017-07-18T22:48:01Z
+  creationTime: 2017-12-14T06:18:53Z
+  pausingTime: 2017-12-14T06:19:07Z
   phase: Paused
 ```
 
 Here,
- - `spec.origin` is the spec of the original spec of the original Elasticsearch tpr.
-
+ - `spec.origin` is the spec of the original spec of the original Elasticsearch object.
  - `status.phase` points to the current database state `Paused`.
 
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase tpr.
+To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
 
 ```yaml
 $ kubedb edit drmn -n demo e1
-
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  creationTimestamp: 2017-07-18T22:47:51Z
-  labels:
-    kubedb.com/kind: Elasticsearch
-  name: e1
-  namespace: demo
-  resourceVersion: "6216"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
-  uid: 21464b6c-6c0b-11e7-b566-080027691dbf
 spec:
   resume: true
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: e1
-      namespace: demo
-    spec:
-      elasticsearch:
-        backupSchedule:
-          cronExpression: '@every 1m'
-          gcs:
-            bucket: restic
-          resources: {}
-          storageSecretName: snap-secret
-        replicas: 1
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 50Mi
-        version: 2.3.1
-status:
-  creationTime: 2017-07-18T22:47:51Z
-  pausingTime: 2017-07-18T22:48:01Z
-  phase: Paused
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase tpr and create a new Elasticsearch tpr using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Elasticsearch using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot tprs for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
 $ kubedb edit drmn -n demo e1
-# set spec.wipeOut: true
-
-$ kubedb get drmn -n demo e1 -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  creationTimestamp: 2017-07-18T22:51:42Z
-  labels:
-    kubedb.com/kind: Elasticsearch
-  name: e1
-  namespace: demo
-  resourceVersion: "6653"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/e1
-  uid: aacfbbec-6c0b-11e7-b566-080027691dbf
 spec:
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: e1
-      namespace: demo
-    spec:
-      elasticsearch:
-        backupSchedule:
-          cronExpression: '@every 1m'
-          gcs:
-            bucket: restic
-          resources: {}
-          storageSecretName: snap-secret
-        replicas: 1
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 50Mi
-        version: 2.3.1
   wipeOut: true
-status:
-  creationTime: 2017-07-18T22:51:42Z
-  pausingTime: 2017-07-18T22:51:52Z
-  phase: WipedOut
-  wipeOutTime: 2017-07-18T22:52:37Z
-
-$ kubedb get drmn -n demo
-NAME      STATUS     AGE
-e1        WipedOut   1m
 ```
 
+When database is completely wiped out, you can see status `WipedOut`
+
+```console
+$ kubedb get drmn -n demo e1
+NAME      STATUS     AGE
+e1        WipedOut   4m
+```
 
 ## Delete Dormant Database
-You still have a record that there used to be an Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase tpr.
+You still have a record that there used to be an Elasticsearch database `e1` in the form of a DormantDatabase database `e1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn e1 -n demo
@@ -730,6 +610,7 @@ dormantdatabase "e1" deleted
 
 ## Cleaning up
 To cleanup the Kubernetes resources created by this tutorial, run:
+
 ```console
 $ kubectl delete ns demo
 ```

@@ -316,10 +316,10 @@ In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucke
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
 $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-$ kubectl create secret generic pg-snap-secret -n demo \
+$ kubectl create secret generic snap-secret -n demo \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "pg-snap-secret" created
+secret "snap-secret" created
 ```
 
 ```yaml
@@ -335,7 +335,6 @@ metadata:
   namespace: demo
 type: Opaque
 ```
-
 
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
@@ -415,7 +414,7 @@ Once the snapshot Job is complete, you should see the output of the `pg_dumpall`
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/{snapshot}/`.
 
 ### Scheduled Backups
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres CRD object to add following `spec.backupSchedule` section.
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). To take periodic backups, edit the Postgres object to add following `spec.backupSchedule` section.
 
 ```yaml
 $ kubedb edit pg p1 -n demo
@@ -447,6 +446,7 @@ You can create a new database from a previously taken Snapshot. Specify the Snap
       name: p1-xyz
       namespace: demo
 ```
+
 ```console
 $ kubectl create -f ./docs/examples/postgres/demo-4.yaml
 validating "./docs/examples/postgres/demo-4.yaml"
@@ -466,7 +466,7 @@ NAME        STATUS    AGE
 p1          Running   10m
 recovered   Running   6m
 
-$ kubedb describe pg -n demo recovered
+$ kubedb describe pg -n demo recovered -S=false -W=false
 Name:           recovered
 Namespace:      demo
 StartTimestamp: Tue, 12 Dec 2017 09:33:06 +0600
@@ -498,7 +498,7 @@ Events:
 ```
 
 ## Pause Database
-Since the Postgres p1 has `spec.doNotPause` set to true, if you delete this object, KubeDB operator will recreate original Postgres object and essentially nullify the delete operation. You can see this below:
+Since the Postgres `p1` has `spec.doNotPause` set to true, if you delete this object, KubeDB operator will recreate original Postgres object and essentially nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete pg p1 -n demo
@@ -515,6 +515,7 @@ $ kubedb get drmn -n demo p1
 NAME    STATUS  AGE
 p1      Paused  3m
 ```
+
 ```yaml
 $ kubedb get drmn -n demo p1 -o yaml
 apiVersion: kubedb.com/v1alpha1
@@ -565,7 +566,7 @@ spec:
   resume: true
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Postgres  using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Postgres using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 ## Wipeout Dormant Database
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
@@ -576,23 +577,13 @@ spec:
   wipeOut: true
 ```
 
-When database is completely wiped out, you can see  `phase: WipedOut`
-
-```yaml
-$ kubedb get drmn -n demo p1 -o yaml
-status:
-  creationTime: 2017-07-18T03:23:08Z
-  pausingTime: 2017-07-18T03:23:48Z
-  phase: WipedOut
-  wipeOutTime: 2017-07-18T05:09:59Z
-```
+When database is completely wiped out, you can see status `WipedOut`
 
 ```console
 $ kubedb get drmn -n demo
 NAME    STATUS      AGE
 p1      WipedOut    1h
 ```
-
 
 ## Delete Dormant Database
 You still have a record that there used to be a Postgres database `p1` in the form of a DormantDatabase database `p1`. Since you have already wiped out the database, you can delete the DormantDatabase object.

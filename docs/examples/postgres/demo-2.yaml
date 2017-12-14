@@ -8,5 +8,5 @@ metadata:
 spec:
   databaseName: p1
   storageSecretName: snap-secret
-  s3:
+  gcs:
     bucket: kubedb
