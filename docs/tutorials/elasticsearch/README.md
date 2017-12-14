@@ -470,11 +470,11 @@ Status:             Running
 Replicas:           1  total
 Init:
   snapshotSource:
-    namespace:	demo
-    name:	    e1-xyz
-StatefulSet:	recovered
-Service:	    recovered, recovered-master
-Secrets:	    recovered-auth, recovered-cert
+    namespace:  demo
+    name:       e1-xyz
+StatefulSet:    recovered
+Service:        recovered, recovered-master
+Secrets:        recovered-auth, recovered-cert
 
 Topology:
   Type                 Pod             StartTime                       Phase
