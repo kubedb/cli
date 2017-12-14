@@ -143,10 +143,6 @@ Events:
 ```
 
 ```console
-$ kubectl get statefulset -n demo
-NAME      DESIRED   CURRENT   AGE
-e1        1         1         8m
-
 $ kubectl get pvc -n demo
 NAME        STATUS    VOLUME                                     CAPACITY   ACCESSMODES   STORAGECLASS   AGE
 data-e1-0   Bound     pvc-35683016-dfec-11e7-9e33-08002726ce5b   50Mi       RWO           standard       12m
