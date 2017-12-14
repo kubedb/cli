@@ -270,6 +270,7 @@ Now Elasticsearch database has started with 4 pods under 3 different StatefulSet
 
 ```console
 $ kubedb describe es -n demo e2
+# Only showing additional information
 StatefulSet:
   Name:                 client-e2
   Replicas:             1 current / 1 desired
