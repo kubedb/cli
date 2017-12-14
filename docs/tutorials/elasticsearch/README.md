@@ -531,11 +531,6 @@ spec:
       namespace: demo
     spec:
       elasticsearch:
-        backupSchedule:
-          cronExpression: '@every 6h'
-          gcs:
-            bucket: kubedb
-          storageSecretName: snap-secret
         certificateSecret:
           secretName: e1-cert
         databaseSecret:
