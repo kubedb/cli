@@ -203,16 +203,16 @@ This will provide us URL for `e1` service of our Elasticsearch database
 
 ```console
 $ minikube service -n demo e1 --https --url
-https://192.168.99.100:30548
+https://192.168.99.100:30653
 
 $ kubectl get secrets -n demo e1-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
-bw72r6ek⏎
+wcun4tcq⏎
 ```
 
 Now, lets connect to this Elasticsearch cluster.
 
 ```console
-$ curl --user admin:bw72r6ek https://192.168.99.100:30548 --insecure
+$ curl --user admin:wcun4tcq https://192.168.99.100:30653 --insecure
 ```
 
 ```json
@@ -233,6 +233,72 @@ $ curl --user admin:bw72r6ek https://192.168.99.100:30548 --insecure
 
 
 ![Connect to ES](/docs/images/elasticsearch/connect-es.gif)
+
+### Elasticsearch Topology
+We can create Elasticsearch database with dedicated pods for `master`, `client` and `data` nodes. Below is the Elasticsearch object created with topology configuration.
+
+```
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: e2
+  namespace: demo
+spec:
+  version: 5.6.4
+  topology:
+    master:
+      replicas: 1
+      prefix: master
+    data:
+      replicas: 2
+      prefix: data
+    client:
+      replicas: 1
+      prefix: client
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+```
+Here,
+- `spec.topology.master` specifies how many pods we want as dedicated `master` node and also prefix for it's StatefulSet name
+- `spec.topology.data` specifies how many pods we want as dedicated `data` node and also prefix for it's StatefulSet name
+- `spec.topology.client` specifies how many pods we want as dedicated `client` node and also prefix for it's StatefulSet name
+
+Now Elasticsearch database has started with 4 pods under 3 different StatefulSets.
+
+```console
+$ kubedb describe es -n demo e2
+StatefulSet:
+  Name:                 client-e2
+  Replicas:             1 current / 1 desired
+  CreationTimestamp:    Thu, 14 Dec 2017 11:18:25 +0600
+  Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+StatefulSet:
+  Name:                 data-e2
+  Replicas:             2 current / 2 desired
+  CreationTimestamp:    Thu, 14 Dec 2017 11:19:29 +0600
+  Pods Status:          2 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+StatefulSet:
+  Name:                 master-e2
+  Replicas:             1 current / 1 desired
+  CreationTimestamp:    Thu, 14 Dec 2017 11:19:07 +0600
+  Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+Topology:
+  Type     Pod           StartTime                       Phase
+  ----     ---           ---------                       -----
+  client   client-e2-0   2017-12-14 11:18:32 +0600 +06   Running
+  data     data-e2-0     2017-12-14 11:19:36 +0600 +06   Running
+  data     data-e2-1     2017-12-14 11:19:55 +0600 +06   Running
+  master   master-e2-0   2017-12-14 11:19:14 +0600 +06   Running
+```
+
 
 ## Database Snapshots
 
