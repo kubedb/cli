@@ -45,7 +45,7 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 5.6.3
+  version: 5.6.4
   replicas: 1
   doNotPause: true
   storage:
@@ -73,33 +73,32 @@ KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a
 
 ```console
 $ kubedb describe es e1 -n demo
-Name:			e1
-Namespace:		demo
-CreationTimestamp:	Wed, 13 Dec 2017 15:58:40 +0600
-Status:			Creating
-Replicas:		1  total
-Annotations:		kubedb.com/ignore=set
+Name:               e1
+Namespace:          demo
+CreationTimestamp:  Thu, 14 Dec 2017 10:04:23 +0600
+Status:             Running
+Replicas:           1 total
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass: standard
+  Capacity:     50Mi
+  Access Modes: RWO
 
 StatefulSet:
-  Name:			e1
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Wed, 13 Dec 2017 15:58:45 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:                 e1
+  Replicas:             1 current / 1 desired
+  CreationTimestamp:    Thu, 14 Dec 2017 10:04:29 +0600
+  Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
   Name:		e1
   Type:		ClusterIP
-  IP:		10.99.174.203
+  IP:		10.108.4.122
   Port:		http	9200/TCP
 
 Service:
   Name:		e1-master
   Type:		ClusterIP
-  IP:		10.103.121.146
+  IP:		10.103.97.44
   Port:		transport	9300/TCP
 
 Database Secret:
@@ -107,39 +106,40 @@ Database Secret:
   Type:	Opaque
   Data
   ====
-  sg_roles_mapping.yml:		73 bytes
-  ADMIN_PASSWORD:		8 bytes
-  READALL_PASSWORD:		8 bytes
-  sg_action_groups.yml:		430 bytes
-  sg_config.yml:		240 bytes
-  sg_internal_users.yml:	156 bytes
-  sg_roles.yml:			312 bytes
+  sg_roles.yml:             312 bytes
+  sg_roles_mapping.yml:     73 bytes
+  ADMIN_PASSWORD:           8 bytes
+  READALL_PASSWORD:         8 bytes
+  sg_action_groups.yml:     430 bytes
+  sg_config.yml:            240 bytes
+  sg_internal_users.yml:    156 bytes
 
 Certificate Secret:
   Name:	e1-cert
   Type:	Opaque
   Data
   ====
-  ca.pem:		1139 bytes
-  client-key.pem:	1679 bytes
-  client.pem:		1151 bytes
-  keystore.jks:		3049 bytes
-  sgadmin.jks:		3010 bytes
-  truststore.jks:	864 bytes
+  ca.pem:           1139 bytes
+  client-key.pem:   1675 bytes
+  client.pem:       1151 bytes
+  keystore.jks:     3050 bytes
+  sgadmin.jks:      3011 bytes
+  truststore.jks:   864 bytes
 
 Topology:
   Type                 Pod       StartTime                       Phase
   ----                 ---       ---------                       -----
-  master|client|data   e1-0      2017-12-13 15:58:47 +0600 +06   Running
+  master|client|data   e1-0      2017-12-14 10:04:30 +0600 +06   Running
 
 No Snapshots.
 
 Events:
   FirstSeen   LastSeen   Count     From                     Type       Reason               Message
-  ---------   --------   -----     ----                     ----       ------               -------
-  8s          8s         1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
-  3m          3m         1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
-  3m          3m         1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
+  ---------   --------   -----     ----                     --------   ------               -------
+  16s         16s        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created Elasticsearch
+  46s         46s        1         Elasticsearch operator   Normal     SuccessfulCreate     Successfully created StatefulSet
+  59s         59s        1         Elasticsearch operator   Normal     SuccessfulValidate   Successfully validate Elasticsearch
+  59s         59s        1         Elasticsearch operator   Normal     Creating             Creating Kubernetes objects
 ```
 
 ```console
@@ -185,54 +185,54 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 5.6.3
+  version: 5.6.4
 status:
-  creationTime: 2017-12-13T09:58:40Z
+  creationTime: 2017-12-14T04:04:24Z
   phase: Running
 ```
 
 Please note that KubeDB operator has created a new Secret called `e1-auth` (format: {crd-name}-auth) for storing the password for `admin` user. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
-This secret contains following keys:
-  - `ADMIN_PASSWORD`
-  - `READALL_PASSWORD` 
-  - `sg_action_groups.yml`
-  - `sg_config.yml`
-  - `sg_internal_users.yml`
-  - `sg_roles.yml`
-  - `sg_roles_mapping.yml`
-
-Now, you can connect to this Elasticsearch cluster from inside the cluster.
 
 ```console
-$ kubectl get pods e1-0 -n demo -o yaml | grep IP
-  hostIP: 192.168.99.100
-  podIP: 172.17.0.5
+$ kubectl edit svc e1 -n demo
+spec:
+  type: NodePort
+```
 
-# Exec into kubedb operator pod
-$ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath='{.items[0].metadata.name}') -n kube-system sh
+This will provide us URL for `e1` service of our Elasticsearch database
 
-~ $ ps aux
-PID   USER     TIME   COMMAND
-    1 nobody     0:00 /operator run --address=:8080 --rbac=false --v=3
-   18 nobody     0:00 sh
-   26 nobody     0:00 ps aux
-~ $ wget -qO- http://172.17.0.5:9200
+```console
+$ minikube service -n demo e1 --https --url
+https://192.168.99.100:30548
+
+$ kubectl get secrets -n demo e1-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
+bw72r6ek⏎
+```
+
+Now, lets connect to this Elasticsearch cluster.
+
+```console
+$ curl --user admin:bw72r6ek https://192.168.99.100:30548 --insecure
+```
+
+```json
 {
-  "name" : "e1-0.demo",
+  "name" : "e1-0",
   "cluster_name" : "e1",
+  "cluster_uuid" : "11TBmi74ThmaSjXUStAA5w",
   "version" : {
-    "number" : "2.3.1",
-    "build_hash" : "bd980929010aef404e7cb0843e61d0665269fc39",
-    "build_timestamp" : "2016-04-04T12:25:05Z",
+    "number" : "5.6.4",
+    "build_hash" : "8bbedf5",
+    "build_date" : "2017-10-31T18:55:38.105Z",
     "build_snapshot" : false,
-    "lucene_version" : "5.5.0"
+    "lucene_version" : "6.6.1"
   },
   "tagline" : "You Know, for Search"
 }
 ```
 
-![Using e1 from esAdmin4](/docs/images/elasticsearch/e1.gif)
 
+![Connect to ES](/docs/images/elasticsearch/connect-es.gif)
 
 ## Database Snapshots
 
