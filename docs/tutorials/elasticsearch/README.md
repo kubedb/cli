@@ -189,6 +189,8 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `e1-auth` (format: {crd-name}-auth) for storing the password for `admin` user and `e1-cert` (format: {crd-name}-cert) for storing certificates. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
 
+Lets edit Service `e1` to set `type: NodePort`.
+
 ```console
 $ kubectl edit svc e1 -n demo
 spec:
