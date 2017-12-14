@@ -264,9 +264,7 @@ spec:
         storage: 50Mi
 ```
 Here,
-- `spec.topology.master` specifies how many pods we want as dedicated `master` node and also prefix for it's StatefulSet name
-- `spec.topology.data` specifies how many pods we want as dedicated `data` node and also prefix for it's StatefulSet name
-- `spec.topology.client` specifies how many pods we want as dedicated `client` node and also prefix for it's StatefulSet name
+- `spec.topology.` specifies how many pods we want as dedicated `master`, `client` and `data` nodes also prefix for their StatefulSet name
 
 Now Elasticsearch database has started with 4 pods under 3 different StatefulSets.
 
