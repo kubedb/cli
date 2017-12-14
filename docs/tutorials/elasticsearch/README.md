@@ -187,7 +187,7 @@ status:
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `e1-auth` (format: {crd-name}-auth) for storing the password for `admin` user. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `e1-auth` (format: {crd-name}-auth) for storing the password for `admin` user and `e1-cert` (format: {crd-name}-cert) for storing certificates. If you want to use an existing secret please specify that when creating the CRD using `spec.databaseSecret.secretName`.
 
 ```console
 $ kubectl edit svc e1 -n demo
