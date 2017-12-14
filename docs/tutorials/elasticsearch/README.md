@@ -433,7 +433,7 @@ e1-xyz               es/e1      Succeeded   9m
 ```
 
 ### Restore from Snapshot
-You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch object. See the example `recovered` tpr below:
+You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new Elasticsearch object. See the example `recovered` object below:
 
 ```yaml
 # See full YAML file here: /docs/examples/elasticsearch/demo-4.yaml
@@ -462,13 +462,12 @@ NAME        STATUS    AGE
 e1          Running   1h
 recovered   Running   49s
 
-
 $ kubedb describe es -n demo recovered -S=false -W=false
-Name:			    recovered
-Namespace:		    demo
+Name:               recovered
+Namespace:          demo
 CreationTimestamp:  Thu, 14 Dec 2017 12:08:57 +0600
-Status:			    Running
-Replicas:		    1  total
+Status:             Running
+Replicas:           1  total
 Init:
   snapshotSource:
     namespace:	demo
