@@ -127,7 +127,7 @@ If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` wit
   - `ca.pem:` The root CA in `pem` format
   - `truststore.jks:` The root CA in `jks` format
   - `keystore.jks:` The node certificate in `jks` format
-  - `sgadmin.jks:` Admin certificate is used to change the Search Guard configuration. This one is necessary as we use [sgadmin](http://floragunncom.github.io/search-guard-docs/sgadmin.html) command line tool.
+  - `sgadmin.jks:` Admin certificate is used to change the Search Guard configuration.
   - `client-key.pem:` The client key in `pem` format.
   - `client.pem:` The client certificate in `pem` format.
 
