@@ -108,19 +108,30 @@ spec:
 
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold Credential and [search guard](https://github.com/floragunncom/search-guard) configuration. If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` with generated credentials and default search-guard configuration. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold Credential and [search guard](https://github.com/floragunncom/search-guard) configuration.
 
   - `ADMIN_PASSWORD:` Password for `admin` user.
   - `READALL_PASSWORD:` Password for `readall` user.
 ##### Followings are used for search-guard configuration
-  - `sg_action_groups.yml:` Action Group.
-  - `sg_config.yml:` Configuration for authentication.
-  - `sg_internal_users.yml:` Internal Users configuration.
-  - `sg_roles.yml:` Action Roles.
-  - `sg_roles_mapping.yml:` Roles mapping for internal users.
+  - `sg_config.yml:` Configure authenticators and authorization backends
+  - `sg_internal_users.yml:` user and hashed passwords (hash with hasher.sh)
+  - `sg_roles_mapping.yml:` map backend roles, hosts and users to roles
+  - `sg_action_groups.yml:` define permission groups
+  - `sg_roles.yml:` define the roles and the associated permissions
+
+If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` with generated credentials and default search-guard configuration. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.databaseSecret.secretName`.
 
 ### spec.certificateSecret
-`spec.certificateSecret` is an optional field that points a Secret used to hold Certificates. If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
+`spec.certificateSecret` is an optional field that points a Secret used to hold following information for certificate.
+
+  - `ca.pem:` The root CA in `pem` format
+  - `truststore.jks:` The root CA in `jks` format
+  - `keystore.jks:` The node certificate in `jks` format
+  - `sgadmin.jks:` Admin certificate is used to change the Search Guard configuration. This one is necessary as we use [sgadmin](http://floragunncom.github.io/search-guard-docs/sgadmin.html) command line tool.
+  - `client-key.pem:` The client key in `pem` format.
+  - `client.pem:` The client certificate in `pem` format.
+
+If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
 
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
