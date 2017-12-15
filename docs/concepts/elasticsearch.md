@@ -40,6 +40,10 @@ spec:
     client:
       replicas: 1
       prefix: client
+  databaseSecret:
+    secretName: e1-auth
+  certificateSecret:
+    secretName: e1-cert
   storage:
     storageClassName: "standard"
     accessModes:
