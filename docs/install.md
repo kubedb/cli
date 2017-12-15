@@ -2,16 +2,16 @@
 ---
 title: KubeDB Install
 menu:
-  docs_0.7.2:
+  docs_0.8.0:
     identifier: install-kubedb
     name: Install
     parent: getting-started
     weight: 20
-menu_name: docs_0.7.2
+menu_name: docs_0.8.0
 section_menu_id: getting-started
-url: /docs/0.7.2/getting-started/install/
+url: /docs/0.8.0/getting-started/install/
 aliases:
-  - /docs/0.7.2/install/
+  - /docs/0.8.0/install/
 ---
 
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
@@ -23,12 +23,12 @@ KubeDB provides a CLI to work with database objects. Download pre-built binaries
 
 ```console
 # Linux amd 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.7.2/kubedb-linux-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0/kubedb-linux-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 
 # Mac 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.7.2/kubedb-darwin-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0/kubedb-darwin-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 ```
@@ -84,7 +84,7 @@ To upgrade KubeDB cli, just replace the old cli with the new version.
 `kubedb init` command can be used to upgrade operator. Re-run the `kubedb init` command with `--upgrade` flag to upgrade operator.
 
 ```console
-$ kubedb init --version='0.7.2' --upgrade
+$ kubedb init --version='0.8.0' --upgrade
 
 Successfully upgraded operator deployment.
 ```
