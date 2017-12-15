@@ -1,15 +1,15 @@
 ---
 title: Elasticsearch Concepts
 menu:
-  docs_0.7.1:
+  docs_0.7.2:
     identifier: concepts-elasticsearch
     name: Elasticsearch
     parent: concepts
     weight: 10
-menu_name: docs_0.7.1
+menu_name: docs_0.7.2
 section_menu_id: concepts
 aliases:
-  - /docs/0.7.1/concepts/
+  - /docs/0.7.2/concepts/
 ---
 
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
@@ -17,7 +17,7 @@ aliases:
 # Elasticsearch
 
 ## What is Elasticsearch
-A `Elasticsearch` is a Kubernetes `Third Party Object` (CRD). It provides declarative configuration for [Elasticsearch](https://www.elastic.co/products/elasticsearch) in a Kubernetes native way. You only need to describe the desired database configuration in a Elasticsearch object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
+A `Elasticsearch` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [Elasticsearch](https://www.elastic.co/products/elasticsearch) in a Kubernetes native way. You only need to describe the desired database configuration in a Elasticsearch object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
 ## Elasticsearch Spec
 As with all other Kubernetes objects, a Elasticsearch needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Elasticsearch object.
@@ -29,8 +29,17 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 2.3.1
-  replicas: 1
+  version: 5.6.4
+  topology:
+    master:
+      replicas: 1
+      prefix: master
+    data:
+      replicas: 2
+      prefix: data
+    client:
+      replicas: 1
+      prefix: client
   storage:
     storageClassName: "standard"
     accessModes:
@@ -74,12 +83,44 @@ spec:
 ```
 
 ### spec.version
-`spec.version` is a required field specifying the version of Elasticsearch cluster. Currently the supported value is `2.3.1`.
+
+`spec.version` is a required field specifying the version of Elasticsearch cluster. Currently the supported value is `5.6.4`.
 
 
-## spec.replicas
-`spec.replicas` specifies the number of pods in the Elasticsearch cluster. If not set, this defaults to 1.
+### spec.topology
 
+`spec.topology` is an optional field that specify to the number of pods we want as dedicated nodes and also specify prefix for their StatefulSet name
+
+- `spec.topology.master`
+    - `.replicas` is an optional field to specify how many pods we want as `master` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as prefix of StatefulSet name.
+- `spec.topology.data`
+    - `.replicas` is an optional field to specify how many pods we want as `data` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as prefix of StatefulSet name.
+- `spec.topology.client`
+    - `.replicas` is an optional field to specify how many pods we want as `client` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as prefix of StatefulSet name.
+
+> Note: Any two of them can't have same prefix.
+
+#### spec.replicas
+`spec.replicas` is an optional field that can be used if `spec.topology` is not specified. This field specifies the number of pods in the Elasticsearch cluster. If not set, this defaults to 1.
+
+
+### spec.databaseSecret
+`spec.databaseSecret` is an optional field that points to a Secret used to hold Credential and [search guard](https://github.com/floragunncom/search-guard) configuration. If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` with generated credentials and default search-guard configuration. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.databaseSecret.secretName`.
+
+  - `ADMIN_PASSWORD:` Password for `admin` user.
+  - `READALL_PASSWORD:` Password for `readall` user.
+##### Followings are used for search-guard configuration
+  - `sg_action_groups.yml:` Action Group.
+  - `sg_config.yml:` Configuration for authentication.
+  - `sg_internal_users.yml:` Internal Users configuration.
+  - `sg_roles.yml:` Action Roles.
+  - `sg_roles_mapping.yml:` Roles mapping for internal users.
+
+### spec.certificateSecret
+`spec.certificateSecret` is an optional field that points a Secret used to hold Certificates. If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
 
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
