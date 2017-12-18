@@ -11,6 +11,7 @@ import (
 	core "k8s.io/api/core/v1"
 	extensions "k8s.io/api/extensions/v1beta1"
 	rbac "k8s.io/api/rbac/v1beta1"
+	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -20,8 +21,13 @@ const ServiceAccountName = docker.OperatorName
 
 var policyRuleOperator = []rbac.PolicyRule{
 	{
+		APIGroups: []string{apiextensions.GroupName},
+		Resources: []string{"customresourcedefinitions"},
+		Verbs:     []string{"get", "create", "delete"},
+	},
+	{
 		APIGroups: []string{extensions.GroupName},
-		Resources: []string{"thirdpartyresources", "customresourcedefinitions"},
+		Resources: []string{"thirdpartyresources"},
 		Verbs:     []string{"get", "create", "delete"},
 	},
 	{
@@ -68,6 +74,11 @@ var policyRuleOperator = []rbac.PolicyRule{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"events"},
 		Verbs:     []string{"create"},
+	},
+	{
+		APIGroups: []string{core.GroupName},
+		Resources: []string{"nodes"},
+		Verbs:     []string{"list"},
 	},
 	{
 		APIGroups: []string{kubedb.GroupName},
