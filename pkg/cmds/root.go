@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	v "github.com/appscode/go/version"
+	"github.com/appscode/kutil/tools/analytics"
 	"github.com/jpillora/go-ogle-analytics"
 	"github.com/spf13/cobra"
 	_ "github.com/spf13/cobra/doc"
@@ -28,6 +29,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if enableAnalytics && gaTrackingCode != "" {
 				if client, err := ga.NewClient(gaTrackingCode); err == nil {
+					client.ClientID(analytics.ClientID())
 					parts := strings.Split(cmd.CommandPath(), " ")
 					client.Send(ga.NewEvent(parts[0], strings.Join(parts[1:], "/")).Label(version))
 				}

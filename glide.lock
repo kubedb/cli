@@ -1,5 +1,5 @@
 hash: eb7a9514303e8cb6f6599a9246c3bffd1b905750a0402afd28e21da4d07bd351
-updated: 2017-12-11T12:34:18.474700934+06:00
+updated: 2017-12-18T17:57:36.107625969-05:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,22 +7,26 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 0042f7fe164fd03992cfa5ea70a98615516be99b
+  version: cb650d0b1a3c04a86595cf2a31fa704dbf1bc42a
   subpackages:
+  - analytics
   - context
   - encoding/json/types
   - encoding/yaml
+  - homedir
   - log
   - net/httpclient
   - runtime
   - types
   - version
 - name: github.com/appscode/kutil
-  version: e0c1936a0ec86173f8278752bef81964b4ffbea5
+  version: 582273a0791d4d99ab1345d9e4867bec460aaf5a
   subpackages:
+  - meta
+  - tools/analytics
   - tools/monitoring/api
 - name: github.com/appscode/osm
-  version: b3ed1c7835d33f312616b260a949589cf33311ee
+  version: ec3d9489c057fa228cd223c929622f3d341a4e8e
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -171,7 +175,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
+  version: 44145f04b68cf362d9c4df2182967c2275eaefed
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -227,6 +231,10 @@ imports:
   version: 787624de3eb7bd915c329cba748687a3b22666a6
   subpackages:
   - diskcache
+- name: github.com/hashicorp/go-version
+  version: ac737305c16432f4c660c6fc68cdcda4b5a0b5ae
+  repo: https://github.com/appscode/go-version.git
+  vcs: git
 - name: github.com/hashicorp/golang-lru
   version: a0d98a5f288019575c6d1f4bb1573fef2d1fcdc4
   subpackages:
@@ -250,7 +258,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: 29d9015df0562fa64b3fd149542bec4317733432
+  version: 30878870d62af296af35878361b833b3df6bdabb
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -260,7 +268,7 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: fc0fdfd0ab192d5efa21cbba7fd8469289dacee3
+  version: d39b20c3ea8038f48f64c157ee86a8bc74bf1c43
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/memcached
@@ -276,7 +284,7 @@ imports:
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: aef1124eda977afc39158e3a576efb0c12ae285c
+  version: 38b79130cd5750bcbb873a2d5b61c011ab7a7762
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/redis
@@ -298,7 +306,7 @@ imports:
 - name: github.com/mitchellh/go-wordwrap
   version: ad45545899c7b13c020ea92b2072220eefad42b8
 - name: github.com/ncw/swift
-  version: c95c6e5c2d1a3d37fc44c8c6dc9e231c7500667d
+  version: 067578e41c8dd06bf557d02a92a77bd35e97c05a
 - name: github.com/opencontainers/go-digest
   version: a6d0ee40d4207ea02364bd3b9e8e77b9159ba1eb
 - name: github.com/opencontainers/image-spec
@@ -403,14 +411,14 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: ba22d24b46e8ea8b6dea3b8782695cece79574d4
+  version: 03a4a4fe3d2c5fb0d1a116cf20784fffa259a3d4
   subpackages:
   - gensupport
   - googleapi
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
+  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
   subpackages:
   - internal
   - internal/app_identity
