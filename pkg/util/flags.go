@@ -47,6 +47,12 @@ func AddInitFlags(cmd *cobra.Command) {
 	cmd.Flags().Bool("rbac", false, "If true, uses RBAC with operator and database objects")
 	cmd.Flags().String("version", "0.7.1", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
+
+	cmd.Flags().String("governing-service", "kubedb", "Governing service for database statefulset")
+	cmd.Flags().String("exporter-tag", "", "Tag of kubedb/operator used as exporter")
+	cmd.Flags().String("address", ":8080", "Address to listen on for web interface and telemetry.")
+	// elasticdump flags
+	cmd.Flags().String("elasticdump.tag", "5.6.3", "Tag of elasticdump")
 }
 
 func AddFilenameOptionFlags(cmd *cobra.Command, options *resource.FilenameOptions, usage string) {

@@ -48,7 +48,7 @@ func compareReports(cmd *cobra.Command, out, errOut io.Writer, args []string) er
 	}
 
 	if report1.Kind != report2.Kind {
-		return fmt.Errorf("Summary reports are not for same type database. (%s, %s)", report1.Kind, report2.Kind)
+		return fmt.Errorf("summary reports are not for same type database. (%s, %s)", report1.Kind, report2.Kind)
 	}
 
 	report1Bytes, err := json.Marshal(report1)

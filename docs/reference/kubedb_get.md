@@ -19,14 +19,14 @@ Display one or many resources.
 Valid resource types include: 
 
   * all  
-  * elastic  
-  * postgres  
-  * mysql  
-  * mongodb  
-  * redis  
-  * memcached  
-  * snapshot  
-  * dormantdatabase
+  * elasticsearchs  
+  * postgreses  
+  * mysqls  
+  * mongodbs  
+  * redises  
+  * memcacheds  
+  * snapshots  
+  * dormantdatabases
 
 ```
 kubedb get [flags]
@@ -35,11 +35,11 @@ kubedb get [flags]
 ### Examples
 
 ```
-  # List all elastic in ps output format.
-  kubedb get elastics
+  # List all elasticsearch in ps output format.
+  kubedb get es
   
-  # List all elastic in ps output format with more information (such as version).
-  kubedb get elastics -o wide
+  # List all elasticsearch in ps output format with more information (such as version).
+  kubedb get elasticsearchs -o wide
   
   # List a single postgres with specified NAME in ps output format.
   kubedb get postgres database
@@ -51,7 +51,7 @@ kubedb get [flags]
   kubedb get postgreses,elastics
   
   # List one or more resources by their type and names.
-  kubedb get elastic/es-db postgres/pg-db
+  kubedb get es/es-db postgres/pg-db
 ```
 
 ### Options

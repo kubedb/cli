@@ -33,6 +33,10 @@ kubedb init [flags]
 ### Options
 
 ```
+      --address string              Address to listen on for web interface and telemetry. (default ":8080")
+      --elasticdump.tag string      Tag of elasticdump (default "5.6.3")
+      --exporter-tag string         Tag of kubedb/operator used as exporter
+      --governing-service string    Governing service for database statefulset (default "kubedb")
   -h, --help                        help for init
       --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
       --rbac                        If true, uses RBAC with operator and database objects

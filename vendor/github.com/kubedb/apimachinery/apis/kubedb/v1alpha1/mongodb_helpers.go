@@ -6,6 +6,8 @@ import (
 
 	"github.com/appscode/kutil/tools/monitoring/api"
 	core "k8s.io/api/core/v1"
+	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (p MongoDB) OffshootName() string {
@@ -85,4 +87,26 @@ func (p MongoDB) Scheme() string {
 
 func (p *MongoDB) StatsAccessor() api.StatsAccessor {
 	return p
+}
+
+func (p MongoDB) CustomResourceDefinition() *crd_api.CustomResourceDefinition {
+	resourceName := ResourceTypeMongoDB + "." + SchemeGroupVersion.Group
+	return &crd_api.CustomResourceDefinition{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: resourceName,
+			Labels: map[string]string{
+				"app": "kubedb",
+			},
+		},
+		Spec: crd_api.CustomResourceDefinitionSpec{
+			Group:   SchemeGroupVersion.Group,
+			Version: SchemeGroupVersion.Version,
+			Scope:   crd_api.NamespaceScoped,
+			Names: crd_api.CustomResourceDefinitionNames{
+				Plural:     ResourceTypeMongoDB,
+				Kind:       ResourceKindMongoDB,
+				ShortNames: []string{ResourceCodeMongoDB},
+			},
+		},
+	}
 }

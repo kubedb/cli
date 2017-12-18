@@ -22,17 +22,17 @@ import (
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/get.go
 
 var (
-	get_long = templates.LongDesc(`
+	getLong = templates.LongDesc(`
 		Display one or many resources.
 
 		` + valid_resources)
 
-	get_example = templates.Examples(`
-		# List all elastic in ps output format.
-		kubedb get elastics
+	getExample = templates.Examples(`
+		# List all elasticsearch in ps output format.
+		kubedb get es
 
-		# List all elastic in ps output format with more information (such as version).
-		kubedb get elastics -o wide
+		# List all elasticsearch in ps output format with more information (such as version).
+		kubedb get elasticsearchs -o wide
 
 		# List a single postgres with specified NAME in ps output format.
 		kubedb get postgres database
@@ -44,15 +44,15 @@ var (
 		kubedb get postgreses,elastics
 
 		# List one or more resources by their type and names.
-		kubedb get elastic/es-db postgres/pg-db`)
+		kubedb get es/es-db postgres/pg-db`)
 )
 
 func NewCmdGet(out io.Writer, errOut io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "get",
 		Short:   "Display one or many resources",
-		Long:    get_long,
-		Example: get_example,
+		Long:    getLong,
+		Example: getExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			f := kube.NewKubeFactory(cmd)
 			cmdutil.CheckErr(RunGet(f, cmd, out, errOut, args))
@@ -67,14 +67,14 @@ const (
 	valid_resources = `Valid resource types include:
 
     * all
-    * elastic
-    * postgres
-    * mysql
-    * mongodb
-    * redis
-    * memcached
-    * snapshot
-    * dormantdatabase
+    * elasticsearchs
+    * postgreses
+    * mysqls
+    * mongodbs
+    * redises
+    * memcacheds
+    * snapshots
+    * dormantdatabases
     `
 )
 

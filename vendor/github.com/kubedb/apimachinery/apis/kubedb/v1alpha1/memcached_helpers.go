@@ -6,6 +6,8 @@ import (
 
 	"github.com/appscode/kutil/tools/monitoring/api"
 	core "k8s.io/api/core/v1"
+	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (r Memcached) OffshootName() string {
@@ -85,4 +87,27 @@ func (m Memcached) Scheme() string {
 
 func (m *Memcached) StatsAccessor() api.StatsAccessor {
 	return m
+}
+
+func (m Memcached) CustomResourceDefinition() *crd_api.CustomResourceDefinition {
+	resourceName := ResourceTypeMemcached + "." + SchemeGroupVersion.Group
+
+	return &crd_api.CustomResourceDefinition{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: resourceName,
+			Labels: map[string]string{
+				"app": "kubedb",
+			},
+		},
+		Spec: crd_api.CustomResourceDefinitionSpec{
+			Group:   SchemeGroupVersion.Group,
+			Version: SchemeGroupVersion.Version,
+			Scope:   crd_api.NamespaceScoped,
+			Names: crd_api.CustomResourceDefinitionNames{
+				Plural:     ResourceTypeMemcached,
+				Kind:       ResourceKindMemcached,
+				ShortNames: []string{ResourceCodeMemcached},
+			},
+		},
+	}
 }

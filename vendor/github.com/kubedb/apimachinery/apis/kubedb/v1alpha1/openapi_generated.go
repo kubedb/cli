@@ -2345,13 +2345,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Ref: ref("github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.SwiftSpec"),
 							},
 						},
-						"type": {
-							SchemaProps: spec.SchemaProps{
-								Description: "Snapshot Type",
-								Type:        []string{"string"},
-								Format:      "",
-							},
-						},
 						"resources": {
 							SchemaProps: spec.SchemaProps{
 								Description: "Compute Resources required by the sidecar container.",

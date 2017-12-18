@@ -13,6 +13,12 @@ import (
 
 // ref: k8s.io/kubernetes/pkg/kubectl/resource_printer.go
 
+type DescriberSettings struct {
+	ShowEvents   bool
+	ShowWorkload bool
+	ShowSecret   bool
+}
+
 func NewPrinter(cmd *cobra.Command) (printers.ResourcePrinter, error) {
 	humanReadablePrinter := NewHumanReadablePrinter(PrintOptions{
 		WithNamespace: cmdutil.GetFlagBool(cmd, "all-namespaces"),

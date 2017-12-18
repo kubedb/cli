@@ -25,10 +25,10 @@ kubedb create [flags]
 ### Examples
 
 ```
-  # Create a elastic using the data in elastic.json.
+  # Create a elasticsearch using the data in elastic.json.
   kubedb create -f ./elastic.json
   
-  # Create a elastic based on the JSON passed into stdin.
+  # Create a elasticsearch based on the JSON passed into stdin.
   cat elastic.json | kubedb create -f -
 ```
 

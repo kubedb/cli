@@ -4,8 +4,11 @@ metadata:
   name: recovered
   namespace: demo
 spec:
-  version: 9.5
-  doNotPause: true
+  version: 9.6.5
+  replicas: 1
+  doNotPause: false
+  databaseSecret:
+    secretName: p1-auth
   storage:
     storageClassName: "standard"
     accessModes:

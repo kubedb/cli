@@ -153,5 +153,5 @@ func NewOSMContext(client kubernetes.Interface, spec api.SnapshotStorageSpec, na
 		}
 		return nc, nil
 	}
-	return nil, errors.New("No storage provider is configured.")
+	return nil, errors.New("no storage provider is configured")
 }

@@ -5,18 +5,19 @@ metadata:
   namespace: demo
 spec:
   version: 5.6.3
-  replicas: 1
-  doNotPause: true
+  topology:
+    master:
+      replicas: 1
+      prefix: master
+    data:
+      replicas: 2
+      prefix: data
+    client:
+      replicas: 1
+      prefix: client
   storage:
-    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 50Mi
-  backupSchedule:
-    cronExpression: "@every 1m"
-    storageSecretName: snap-secret
-    s3:
-      endpoint: 's3.amazonaws.com'
-      bucket: kubedb

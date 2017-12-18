@@ -43,20 +43,22 @@ func ValidatePostgres(client kubernetes.Interface, postgres *api.Postgres) error
 		}
 	}
 
-	archiver := postgres.Spec.Archiver.Storage
-	if archiver != nil {
-		if archiver.StorageSecretName == "" {
-			return fmt.Errorf(`object 'StorageSecretName' is missing in '%v'`, archiver)
-		}
-		if archiver.S3 == nil {
-			return errors.New("no storage provider is configured")
-		}
-		if !(archiver.GCS == nil && archiver.Azure == nil && archiver.Swift == nil && archiver.Local == nil) {
-			return errors.New("invalid storage provider is configured")
-		}
+	if postgres.Spec.Archiver != nil {
+		archiverStorage := postgres.Spec.Archiver.Storage
+		if archiverStorage != nil {
+			if archiverStorage.StorageSecretName == "" {
+				return fmt.Errorf(`object 'StorageSecretName' is missing in '%v'`, archiverStorage)
+			}
+			if archiverStorage.S3 == nil {
+				return errors.New("no storage provider is configured")
+			}
+			if !(archiverStorage.GCS == nil && archiverStorage.Azure == nil && archiverStorage.Swift == nil && archiverStorage.Local == nil) {
+				return errors.New("invalid storage provider is configured")
+			}
 
-		if err := storage.CheckBucketAccess(client, *archiver, postgres.Namespace); err != nil {
-			return err
+			if err := storage.CheckBucketAccess(client, *archiverStorage, postgres.Namespace); err != nil {
+				return err
+			}
 		}
 	}
 

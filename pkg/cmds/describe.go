@@ -7,6 +7,7 @@ import (
 
 	"github.com/kubedb/cli/pkg/describer"
 	"github.com/kubedb/cli/pkg/kube"
+	"github.com/kubedb/cli/pkg/printer"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -14,18 +15,17 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
-	"k8s.io/kubernetes/pkg/printers"
 )
 
 var (
-	describe_long = templates.LongDesc(`
+	describeLong = templates.LongDesc(`
 		Show details of a specific resource or group of resources.
 		This command joins many API calls together to form a detailed description of a
 		given resource or group of resources.` + valid_resources)
 
-	describe_example = templates.Examples(`
-		# Describe a elastic
-		kubedb describe elastics elasticsearch-demo
+	describeExample = templates.Examples(`
+		# Describe a elasticsearch
+		kubedb describe elasticsearchs elasticsearch-demo
 
 		# Describe a postgres
 		kubedb describe pg/postgres-demo
@@ -35,13 +35,13 @@ var (
 )
 
 func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
-	describerSettings := &printers.DescriberSettings{}
+	describerSettings := &printer.DescriberSettings{}
 
 	cmd := &cobra.Command{
 		Use:     "describe (TYPE [NAME_PREFIX] | TYPE/NAME)",
 		Short:   "Show details of a specific resource or group of resources",
-		Long:    describe_long,
-		Example: describe_example,
+		Long:    describeLong,
+		Example: describeExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			f := kube.NewKubeFactory(cmd)
 			cmdutil.CheckErr(RunDescribe(f, out, cmdErr, cmd, args, describerSettings))
@@ -49,11 +49,13 @@ func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
 	}
 
 	util.AddDescribeFlags(cmd)
-	cmd.Flags().BoolVar(&describerSettings.ShowEvents, "show-events", true, "If true, display events related to the described object.")
+	cmd.Flags().BoolVarP(&describerSettings.ShowEvents, "show-event", "E", true, "If true, display events related to the described object.")
+	cmd.Flags().BoolVarP(&describerSettings.ShowWorkload, "show-workload", "W", true, "If true, describe statefulSet, service and secrets.")
+	cmd.Flags().BoolVarP(&describerSettings.ShowSecret, "show-secret", "S", true, "If true, display secrets.")
 	return cmd
 }
 
-func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string, describerSettings *printers.DescriberSettings) error {
+func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string, describerSettings *printer.DescriberSettings) error {
 	selector := cmdutil.GetFlagString(cmd, "selector")
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
@@ -107,7 +109,7 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 		return err
 	}
 
-	allErrs := []error{}
+	allErrs := make([]error, 0)
 	infos, err := r.Infos()
 	if err != nil {
 		allErrs = append(allErrs, err)

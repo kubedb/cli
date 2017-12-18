@@ -25,7 +25,7 @@ kubedb edit (RESOURCE/NAME) [flags]
 ### Examples
 
 ```
-  # Edit the elastic named 'elasticsearch-demo':
+  # Edit the elasticsearch named 'elasticsearch-demo':
   kubedb edit es/elasticsearch-demo
   
   # Use an alternative editor
