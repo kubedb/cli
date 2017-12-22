@@ -3,7 +3,6 @@ package describer
 import (
 	"fmt"
 	"io"
-	"strings"
 
 	mona "github.com/appscode/kube-mon/api"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
@@ -60,9 +59,7 @@ func (d *humanReadableDescriber) describeElasticsearch(item *api.Elasticsearch, 
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
 		}
-		if item.Spec.Tolerations == nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
-		}
+		fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
 		if item.Annotations != nil {
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}

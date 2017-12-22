@@ -4,10 +4,13 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 5.6.3
+  version: 5.6.4
   replicas: 1
-  doNotPause: false
+  doNotPause: true
   storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
     resources:
       requests:
         storage: 50Mi

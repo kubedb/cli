@@ -6,7 +6,7 @@ metadata:
 spec:
   version: 9.6.5
   replicas: 1
-  doNotPause: false
+  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -15,8 +15,7 @@ spec:
       requests:
         storage: 50Mi
   backupSchedule:
-    cronExpression: "@every 1m"
+    cronExpression: "@every 6h"
     storageSecretName: snap-secret
-    s3:
-      endpoint: 's3.amazonaws.com'
+    gcs:
       bucket: kubedb

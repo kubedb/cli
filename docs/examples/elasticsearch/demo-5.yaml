@@ -1,10 +1,11 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: e1
+  name: e2
   namespace: demo
 spec:
-  version: 5.6.3
+  version: 5.6.4
+  doNotPause: true
   topology:
     master:
       replicas: 1
@@ -16,6 +17,7 @@ spec:
       replicas: 1
       prefix: client
   storage:
+    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:

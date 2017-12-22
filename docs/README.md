@@ -1,17 +1,18 @@
+
 ---
 title: KubeDB Overview
 menu:
-  docs_0.7.1:
+  docs_0.8.0:
     identifier: kubedb-overview
     name: Overview
     parent: getting-started
     weight: 10
-menu_name: docs_0.7.1
+menu_name: docs_0.8.0
 section_menu_id: getting-started
-url: /docs/0.7.1/getting-started/
+url: /docs/0.8.0/getting-started/
 aliases:
-  - /docs/0.7.1/
-  - /docs/0.7.1/README/
+  - /docs/0.8.0/
+  - /docs/0.8.0/README/
 ---
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/kubedb/cli)](https://goreportcard.com/report/github.com/kubedb/cli)
@@ -34,7 +35,8 @@ Please pick a version of KubeDB that matches your Kubernetes installation.
 
 | KubeDB Version                                                      | Docs                                                       | Kubernetes Version |
 |---------------------------------------------------------------------|------------------------------------------------------------|--------------------|
-| [0.7.1](https://github.com/kubedb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.7.1/docs) | 1.7.x+             |
+| [0.8.0](https://github.com/kubedb/cli/releases/tag/0.8.0) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.8.0/docs) | 1.8.x+             |
+| [0.7.1](https://github.com/kubedb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.7.1/docs) | 1.7.x              |
 | [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation
