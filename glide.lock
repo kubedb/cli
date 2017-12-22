@@ -1,5 +1,5 @@
-hash: eb7a9514303e8cb6f6599a9246c3bffd1b905750a0402afd28e21da4d07bd351
-updated: 2017-12-18T18:11:39.14305729-05:00
+hash: 4d011107e6ea43ead8a70228c76bedd93614cd7cda6f9cf6fcbde51204377cf4
+updated: 2017-12-22T10:05:47.050074385-05:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: cb650d0b1a3c04a86595cf2a31fa704dbf1bc42a
+  version: f08cee5a2aa53a1ab6d30e4ae11e381d1b265f81
   subpackages:
   - analytics
   - context
@@ -19,14 +19,17 @@ imports:
   - runtime
   - types
   - version
+- name: github.com/appscode/kube-mon
+  version: dd6884c63ee4615ca9ecdb7f0ca3e35c975bcca3
+  subpackages:
+  - api
 - name: github.com/appscode/kutil
-  version: 582273a0791d4d99ab1345d9e4867bec460aaf5a
+  version: 04124fd21c654188d7a11908d8c8af994a4cccef
   subpackages:
   - meta
   - tools/analytics
-  - tools/monitoring/api
 - name: github.com/appscode/osm
-  version: ec3d9489c057fa228cd223c929622f3d341a4e8e
+  version: 8e933dfca7c6a2730d77a63282369d843b1db1f4
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -259,7 +262,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: 30878870d62af296af35878361b833b3df6bdabb
+  version: a6c692857adca446c25102036bbfe0cb80e2618c
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -269,27 +272,27 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: d39b20c3ea8038f48f64c157ee86a8bc74bf1c43
+  version: e0e0c58ad36baa182e873a8f42ae0f4eb1a10b3f
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 598baf0edec902a6c68e0c50f0c07cca74377a77
+  version: 7b16686cdb0bfcca54aa71c2fd33de9f46479292
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: 19e24ffbdf21bd4abb0cf98c75d1ea990d8dc2e1
+  version: a0c480997032ef4f131a76a09f5733960167086b
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: ca11f68380891eb7899a0f2765a43f04efea2f86
+  version: be34010306fefa5b2f7687a18414090e06784c33
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: 38b79130cd5750bcbb873a2d5b61c011ab7a7762
+  version: bd37f192be0070c948d8db4ba28bc294de5d71bd
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: 53ebaf03d7f06512915cec6e6c676b3cbae0ab98
+  version: e4cda32f1af902a67d21e4a2e2b9a64b1f23b702
   subpackages:
   - pkg/validator
 - name: github.com/mailru/easyjson
@@ -412,14 +415,14 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 03a4a4fe3d2c5fb0d1a116cf20784fffa259a3d4
+  version: 905d2b6c9443c02c46229c39d60442903a68c229
   subpackages:
   - gensupport
   - googleapi
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
+  version: 5bee14b453b4c71be47ec1781b0fa61c2ea182db
   subpackages:
   - internal
   - internal/app_identity

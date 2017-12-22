@@ -25,7 +25,6 @@ func ValidateMemcached(client kubernetes.Interface, memcached *api.Memcached) er
 		if err := amv.ValidateMonitorSpec(monitorSpec); err != nil {
 			return err
 		}
-
 	}
 	return nil
 }
