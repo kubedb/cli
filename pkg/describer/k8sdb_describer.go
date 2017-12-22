@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	mona "github.com/appscode/kutil/tools/monitoring/api"
+	mona "github.com/appscode/kube-mon/api"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/printer"
 	core "k8s.io/api/core/v1"
