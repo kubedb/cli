@@ -1,0 +1,16 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Memcached
+metadata:
+  name: mc1
+  namespace: demo
+spec:
+  replicas: 3
+  version: 1.5.3-alpine
+  doNotPause: true
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"

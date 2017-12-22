@@ -1,36 +1,21 @@
----
-title: Elasticsearch Concepts
-menu:
-  docs_0.7.1:
-    identifier: concepts-elasticsearch
-    name: Elasticsearch
-    parent: concepts
-    weight: 10
-menu_name: docs_0.7.1
-section_menu_id: concepts
-aliases:
-  - /docs/0.7.1/concepts/
----
-
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
 
-# Elasticsearch
+# MySQL
 
-## What is Elasticsearch
-A `Elasticsearch` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [Elasticsearch](https://www.elastic.co/products/elasticsearch) in a Kubernetes native way. You only need to describe the desired database configuration in a Elasticsearch object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
+## What is MySQL
+A `MySQL` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [MySQL](https://www.mysql.com/) in a Kubernetes native way. You only need to describe the desired database configuration in a MySQL object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
-## Elasticsearch Spec
-As with all other Kubernetes objects, a Elasticsearch needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Elasticsearch object.
+## MySQL Spec
+As with all other Kubernetes objects, a MySQL needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example MySQL object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
+kind: MySQL
 metadata:
-  name: e1
+  name: m1
   namespace: demo
 spec:
-  version: 2.3.1
-  replicas: 1
+  version: 8.0
   storage:
     storageClassName: "standard"
     accessModes:
@@ -38,14 +23,18 @@ spec:
     resources:
       requests:
         storage: 50Mi
+  databaseSecret:
+    secretName: m1-admin-auth
   nodeSelector:
     disktype: ssd
   init:
-    snapshotSource:
-      name: "snapshot-xyz"
+    scriptSource:
+      gitRepo:
+        repository: "https://github.com/kubedb/mysql-init-scripts.git"
+        directory: .
   backupSchedule:
     cronExpression: "@every 6h"
-    storageSecretName: snap-secret
+    storageSecretName: ms-snap-secret
     gcs:
       bucket: restic
       prefix: demo
@@ -56,6 +45,7 @@ spec:
       limits:
         memory: "128Mi"
         cpu: "500m"
+  doNotPause: true
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
@@ -63,7 +53,6 @@ spec:
       labels:
         app: kubedb
       interval: 10s
-  doNotPause: true
   resources:
     requests:
       memory: "64Mi"
@@ -74,11 +63,7 @@ spec:
 ```
 
 ### spec.version
-`spec.version` is a required field specifying the version of Elasticsearch cluster. Currently the supported value is `2.3.1`.
-
-
-## spec.replicas
-`spec.replicas` specifies the number of pods in the Elasticsearch cluster. If not set, this defaults to 1.
+`spec.version` is a required field specifying the version of MySQL database. Official [mysql docker images](https://hub.docker.com/r/library/mysql/tags/) will be used for the specific version.
 
 
 ### spec.storage
@@ -94,32 +79,67 @@ To learn how to configure `spec.storage`, please visit the links below:
  - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
 
 
+### spec.databaseSecret
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` super user. If not set, KubeDB operator creates a new Secret `{mysql-object-name}-admin-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
+
+This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
+```ini
+vPlT2PzewCaC3XZP
+```
+
+
 ### spec.nodeSelector
 `spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
 
 
 ### spec.init
-`spec.init` is an optional section that can be used to initialize a newly created Elasticsearch cluster from prior snapshots. To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating a Elasticsearch object. In this case, SnapshotSource must have following information:
+`spec.init` is an optional section that can be used to initialize a newly created MySQL database. MySQL databases can be initialized in one of two ways:
+
+#### Initialize via Script
+To initialize a MySQL database using a script (shell script, sql script etc.), set the `spec.init.scriptSource` section when creating a MySQL object. It will execute files alphabetically with extensions `.sh` , `.sql`  and `.sql.gz` that are found in the repository. ScriptSource must have following information:
+
+ - [VolumeSource](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes): Where your script is loaded from.
+
+Below is an example showing how a shell script from a git repository can be used to initialize a MySQL database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: m1
+spec:
+  version: 8.0
+  init:
+    scriptSource:
+      gitRepo:
+        repository: "https://github.com/kubedb/mysql-init-scripts.git"
+        directory: .
+```
+
+In the above example, KubeDB operator will launch a Job to execute all sql script of `mysql-init-script` repo in alphabetical  order once StatefulSet pods are running.
+
+
+#### Initialize from Snapshots
+To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating a MySQL object. In this case, SnapshotSource must have following information:
 
  - `name:` Name of the Snapshot
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
+kind: MySQL
 metadata:
-  name: elasticsearch-db
+  name: m1
 spec:
-  version: 2.3.1
-  replicas: 1
+  version: 8.0
   init:
     snapshotSource:
       name: "snapshot-xyz"
 ```
 
-In the above example, Elasticsearch cluster will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize Elasticsearch, once StatefulSet pods are running.
+In the above example, MySQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize MySQL once StatefulSet pods are running.
 
 ### spec.backupSchedule
-KubeDB supports taking periodic snapshots for Elasticsearch database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly.
+KubeDB supports taking periodic snapshots for MySQL database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly.
 
  - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
 
@@ -129,11 +149,11 @@ KubeDB supports taking periodic snapshots for Elasticsearch database. This is an
 
 
 ### spec.doNotPause
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this Elasticsearch object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Elasticsearch object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this MySQL object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MySQL object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
 
 ### spec.monitor
-To learn how to monitor Elasticsearch databases, please visit [here](/docs/concepts/monitoring.md).
+To learn how to monitor MySQL databases, please visit [here](/docs/concepts/monitoring.md).
 
 
 ### spec.resources
@@ -141,7 +161,7 @@ To learn how to monitor Elasticsearch databases, please visit [here](/docs/conce
 
 
 ## Next Steps
-- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch/README.md).
+- Learn how to use KubeDB to run a MySQL database [here](/docs/tutorials/mysql/README.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.

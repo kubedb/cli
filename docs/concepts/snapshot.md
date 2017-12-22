@@ -15,7 +15,7 @@ section_menu_id: concepts
 # Snapshot
 
 ## What is Snapshot
-A `Snapshot` is a Kubernetes `Third Party Object` (CRD). It provides declarative configuration for database snapshots in a Kubernetes native way.
+A `Snapshot` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for database snapshots in a Kubernetes native way.
 You only need to describe the desired backup behavior in a Snapshot object. KubeDB operator will launch a Job to perform backup operation. Once the snapshot process is complete, it uploads the snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 ## Snapshot Spec
@@ -127,7 +127,7 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Snapshot tpr using this secret. Following parameters are available for `S3` backend.
+Now, you can create a Snapshot object using this secret. Following parameters are available for `S3` backend.
 
 | Parameter                | Description                                                                     |
 |--------------------------|---------------------------------------------------------------------------------|
@@ -209,7 +209,7 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Snapshot tpr using this secret. Following parameters are available for `gcs` backend.
+Now, you can create a Snapshot object using this secret. Following parameters are available for `gcs` backend.
 
 | Parameter                | Description                                                                     |
 |--------------------------|---------------------------------------------------------------------------------|
@@ -288,7 +288,7 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Snapshot tpr using this secret. Following parameters are available for `Azure` backend.
+Now, you can create a Snapshot  using this secret. Following parameters are available for `Azure` backend.
 
 | Parameter                | Description                                                                     |
 |--------------------------|---------------------------------------------------------------------------------|
@@ -396,7 +396,7 @@ metadata:
 type: Opaque
 ```
 
-Now, you can create a Snapshot tpr using this secret. Following parameters are available for `Swift` backend.
+Now, you can create a Snapshot object using this secret. Following parameters are available for `Swift` backend.
 
 | Parameter                | Description                                                                     |
 |--------------------------|---------------------------------------------------------------------------------|

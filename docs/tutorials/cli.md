@@ -19,7 +19,7 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ### How to Create objects
 
-`kubedb create` creates a database tpr in `default` namespace by default. Following command will create a Postgres CRD as specified in `postgres.yaml`.
+`kubedb create` creates a database object in `default` namespace by default. Following command will create a Postgres CRD as specified in `postgres.yaml`.
 
 ```console
 $ kubedb create -f ./docs/examples/postgres/postgres.yaml
