@@ -71,6 +71,7 @@ Here,
 
 KubeDB operator watches for `Elasticsearch` objects using Kubernetes api. When a `Elasticsearch` object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. If [RBAC is enabled](/docs/tutorials/rbac.md), a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name will be created and used as the service account name for the corresponding StatefulSet.
 
+
 ```console
 $ kubedb describe es e1 -n demo
 Name:               e1
@@ -603,9 +604,9 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 
 ## Next Steps
-- Learn about the details of Elasticsearch tpr [here](/docs/concepts/elasticsearch.md).
+- Learn about the details of Elasticsearch object [here](/docs/concepts/elasticsearch.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
