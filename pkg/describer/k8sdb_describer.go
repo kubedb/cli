@@ -3,6 +3,7 @@ package describer
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	mona "github.com/appscode/kube-mon/api"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
