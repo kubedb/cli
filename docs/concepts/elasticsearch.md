@@ -1,15 +1,15 @@
 ---
 title: Elasticsearch Concepts
 menu:
-  docs_0.7.1:
+  docs_0.8.0:
     identifier: concepts-elasticsearch
     name: Elasticsearch
     parent: concepts
     weight: 10
-menu_name: docs_0.7.1
+menu_name: docs_0.8.0
 section_menu_id: concepts
 aliases:
-  - /docs/0.7.1/concepts/
+  - /docs/0.8.0/concepts/
 ---
 
 > New to KubeDB? Please start [here](/docs/tutorials/README.md).
@@ -29,8 +29,21 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 2.3.1
-  replicas: 1
+  version: 5.6.4
+  topology:
+    master:
+      replicas: 1
+      prefix: master
+    data:
+      replicas: 2
+      prefix: data
+    client:
+      replicas: 1
+      prefix: client
+  databaseSecret:
+    secretName: e1-auth
+  certificateSecret:
+    secretName: e1-cert
   storage:
     storageClassName: "standard"
     accessModes:
@@ -74,12 +87,56 @@ spec:
 ```
 
 ### spec.version
-`spec.version` is a required field specifying the version of Elasticsearch cluster. Currently the supported value is `2.3.1`.
+
+`spec.version` is a required field specifying the version of Elasticsearch cluster. Currently the supported value is `5.6.4`.
 
 
-## spec.replicas
-`spec.replicas` specifies the number of pods in the Elasticsearch cluster. If not set, this defaults to 1.
+### spec.topology
 
+`spec.topology` is an optional field that specify to the number of pods we want as dedicated nodes and also specify prefix for their StatefulSet name
+
+- `spec.topology.master`
+    - `.replicas` is an optional field to specify how many pods we want as `master` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as prefix of StatefulSet name.
+- `spec.topology.data`
+    - `.replicas` is an optional field to specify how many pods we want as `data` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as prefix of StatefulSet name.
+- `spec.topology.client`
+    - `.replicas` is an optional field to specify how many pods we want as `client` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as prefix of StatefulSet name.
+
+> Note: Any two of them can't have same prefix.
+
+#### spec.replicas
+`spec.replicas` is an optional field that can be used if `spec.topology` is not specified. This field specifies the number of pods in the Elasticsearch cluster. If not set, this defaults to 1.
+
+
+### spec.databaseSecret
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credential and [search guard](https://github.com/floragunncom/search-guard) configuration.
+
+  - `ADMIN_PASSWORD:` Password for `admin` user.
+  - `READALL_PASSWORD:` Password for `readall` user.
+
+Following keys are used for search-guard configuration
+  - `sg_config.yml:` Configure authenticators and authorization backends
+  - `sg_internal_users.yml:` user and hashed passwords (hash with hasher.sh)
+  - `sg_roles_mapping.yml:` map backend roles, hosts and users to roles
+  - `sg_action_groups.yml:` define permission groups
+  - `sg_roles.yml:` define the roles and the associated permissions
+
+If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` with generated credentials and default search-guard configuration. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.databaseSecret.secretName`.
+
+### spec.certificateSecret
+`spec.certificateSecret` is an optional field that points a Secret used to hold following information for certificate.
+
+  - `ca.pem:` The root CA in `pem` format
+  - `truststore.jks:` The root CA in `jks` format
+  - `keystore.jks:` The node certificate in `jks` format
+  - `sgadmin.jks:` Admin certificate is used to change the Search Guard configuration.
+  - `client-key.pem:` The client key in `pem` format.
+  - `client.pem:` The client certificate in `pem` format.
+
+If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
 
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.

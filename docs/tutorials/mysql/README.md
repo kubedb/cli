@@ -5,7 +5,7 @@
 This tutorial will show you how to use KubeDB to run a MySQL database.
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
@@ -30,8 +30,8 @@ $ minikube ip
 192.168.99.100
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_. 
-You can also get this URl by running the following command: 
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_.
+You can also get this URl by running the following command:
 ```console
 $ minikube service myadmin -n demo --url
 http://192.168.99.100:32746
@@ -90,13 +90,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			m1
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 08 Dec 2017 16:26:05 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		m1
   Type:		ClusterIP
   IP:		10.103.4.145
@@ -183,7 +183,7 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `m1-admin-auth` (format: {mongodb-object-name}-admin-auth) for storing the password for `mysql` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database from the phpMyAdmin dashboard using the database pod IP and `mysql` user password. 
+Now, you can connect to this database from the phpMyAdmin dashboard using the database pod IP and `mysql` user password.
 ```console
 $ kubectl get pods m1-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
@@ -299,13 +299,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			m1
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 08 Dec 2017 16:26:05 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		m1
   Type:		ClusterIP
   IP:		10.103.4.145
@@ -434,13 +434,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			recovered
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 08 Dec 2017 17:03:03 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		recovered
   Type:		ClusterIP
   IP:		10.105.61.80
@@ -650,7 +650,7 @@ m1        WipedOut   2m
 
 
 ## Delete Dormant Database
-You still have a record that there used to be a MySQL database `m1` in the form of a DormantDatabase database `m1`. Since you have already wiped out the database, you can delete the DormantDatabase object. 
+You still have a record that there used to be a MySQL database `m1` in the form of a DormantDatabase database `m1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn m1 -n demo
@@ -672,5 +672,5 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

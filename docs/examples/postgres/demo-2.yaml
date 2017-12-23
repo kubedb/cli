@@ -7,7 +7,6 @@ metadata:
     kubedb.com/kind: Postgres
 spec:
   databaseName: p1
-  storageSecretName: s3-secret
-  s3:
-    endpoint: 's3.amazonaws.com'
+  storageSecretName: snap-secret
+  gcs:
     bucket: kubedb

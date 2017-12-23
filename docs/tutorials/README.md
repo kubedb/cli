@@ -1,16 +1,16 @@
 ---
 title: Tutorials | KubeDB
 menu:
-  docs_0.7.1:
+  docs_0.8.0:
     identifier: tutorials-overview
     name: Overview
     parent: tutorials
     weight: 50
-menu_name: docs_0.7.1
+menu_name: docs_0.8.0
 section_menu_id: tutorials
-url: /docs/0.7.1/tutorials/
+url: /docs/0.8.0/tutorials/
 aliases:
-  - /docs/0.7.1/tutorials/README/
+  - /docs/0.8.0/tutorials/README/
 ---
 
 # Tutorials

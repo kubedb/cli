@@ -4,7 +4,7 @@
 This tutorial will show you how to use KubeDB to run a MongoDB database.
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
@@ -75,13 +75,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo1
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Mon, 11 Dec 2017 12:38:58 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo1
   Type:		ClusterIP
   IP:		10.105.200.75
@@ -168,7 +168,7 @@ status:
 
 Please note that KubeDB operator has created a new Secret called `mgo1-admin-auth` (format: {mongodb-object-name}-admin-auth) for storing the password for `mongodb` superuser. This secret contains a `.admin` key which contains the password for `mongodb` superuser. If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`.
 
-Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside of pod. 
+Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside of pod.
 ```console
 $ kubectl get secrets -n demo mgo1-admin-auth -o jsonpath='{.data.\.admin}' | base64 -d
 aaqCftpLsaGDLVIo
@@ -325,13 +325,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo1
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Mon, 11 Dec 2017 12:38:58 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo1
   Type:		ClusterIP
   IP:		10.105.200.75
@@ -468,13 +468,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			recovered
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Mon, 11 Dec 2017 15:04:38 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		recovered
   Type:		ClusterIP
   IP:		10.103.115.39
@@ -678,7 +678,7 @@ status:
   pausingTime: 2017-12-11T09:23:11Z
   phase: WipedOut
   wipeOutTime: 2017-12-11T09:24:09Z
-  
+
 
 $ kubedb get drmn -n demo
 NAME      STATUS     AGE
@@ -687,7 +687,7 @@ mgo1      WipedOut   3m
 
 
 ## Delete Dormant Database
-You still have a record that there used to be a MongoDB database `mgo1` in the form of a DormantDatabase database `mgo1`. Since you have already wiped out the database, you can delete the DormantDatabase object. 
+You still have a record that there used to be a MongoDB database `mgo1` in the form of a DormantDatabase database `mgo1`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
 $ kubedb delete drmn mgo1 -n demo
@@ -709,5 +709,5 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

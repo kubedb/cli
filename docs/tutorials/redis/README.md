@@ -68,13 +68,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			r1
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Tue, 12 Dec 2017 12:02:15 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		r1
   Type:		ClusterIP
   IP:		10.102.1.255
@@ -143,7 +143,7 @@ status:
   phase: Running
 ```
 
-Now, you can connect to this database through [redis-cli](https://redis.io/topics/rediscli). In this tutorial, we are connecting to the Redis server from inside of pod. 
+Now, you can connect to this database through [redis-cli](https://redis.io/topics/rediscli). In this tutorial, we are connecting to the Redis server from inside of pod.
 ```console
 $ kubectl exec -it r1-0 -n demo sh
 
@@ -355,5 +355,5 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 - Learn about the details of Redis object [here](/docs/concepts/redis.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

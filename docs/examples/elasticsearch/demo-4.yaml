@@ -4,7 +4,9 @@ metadata:
   name: recovered
   namespace: demo
 spec:
-  version: 5.6.3
+  version: 5.6.4
+  replicas: 1
+  doNotPause: false
   storage:
     storageClassName: "standard"
     accessModes:
@@ -14,4 +16,5 @@ spec:
         storage: 50Mi
   init:
     snapshotSource:
+      namespace: demo
       name: e1-xyz

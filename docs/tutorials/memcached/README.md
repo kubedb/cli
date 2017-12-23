@@ -4,7 +4,7 @@
 This tutorial will show you how to use KubeDB to run a Memcached database.
 
 ## Before You Begin
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). 
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/install.md).
 
@@ -67,13 +67,13 @@ Namespace:	demo
 StartTimestamp:	Fri, 08 Dec 2017 15:38:51 +0600
 Status:		Running
 
-Deployment:		
+Deployment:
   Name:			mc1
   Replicas:		3 current / 3 desired
   CreationTimestamp:	Fri, 08 Dec 2017 15:38:56 +0600
   Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mc1
   Type:		ClusterIP
   IP:		10.109.15.232
@@ -142,7 +142,7 @@ mc1-68b86b9f4b-w5469   1/1       Running   0          2m
 $ kubectl get pods mc1-68b86b9f4b-bbfkb -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.5
-  
+
 # Exec into kubedb operator pod
 $ kubectl exec -it $(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath='{.items[0].metadata.name}') -n kube-system sh
 
@@ -367,5 +367,5 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 - Learn about the details of Memcached crd [here](/docs/concepts/memcached.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
+- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).

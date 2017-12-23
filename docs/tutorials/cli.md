@@ -1,12 +1,12 @@
 ---
 title: CLI | KubeDB
 menu:
-  docs_0.7.1:
+  docs_0.8.0:
     identifier: tutorials-cli
     name: CLI
     parent: tutorials
     weight: 60
-menu_name: docs_0.7.1
+menu_name: docs_0.8.0
 section_menu_id: tutorials
 ---
 
@@ -15,30 +15,31 @@ section_menu_id: tutorials
 # Manage KubeDB objects using CLIs
 
 ## KubeDB CLI
-KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to deploy KubeDB operator in a cluster and manage all KubeDB tprs. `kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/install.md).
+KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to deploy KubeDB operator in a cluster and manage all KubeDB objects.
+`kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/install.md).
 
 ### How to Create objects
 
-`kubedb create` creates a database object in `default` namespace by default. Following command will create a Postgres CRD as specified in `postgres.yaml`.
+`kubedb create` creates a database CRD object in `default` namespace by default. Following command will create a Postgres object as specified in `postgres.yaml`.
 
 ```console
-$ kubedb create -f ./docs/examples/postgres/postgres.yaml
-
+$ kubedb create -f postgres-demo.yaml
+validating "postgres-demo.yaml"
 postgres "postgres-demo" created
 ```
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
 ```console
-$ kubedb create -f postgres.yaml --namespace=kube-system
-
+$ kubedb create -f postgres-demo.yaml --namespace=kube-system
+validating "postgres-demo.yaml"
 postgres "postgres-demo" created
 ```
 
 `kubedb create` command also considers `stdin` as input.
 
 ```console
-cat postgres.yaml | kubedb create -f -
+cat postgres-demo.yaml | kubedb create -f -
 ```
 
 To learn about various options of `create` command, please visit [here](/docs/reference/kubedb_create.md).
@@ -49,7 +50,6 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get postgres
-
 NAME            STATUS    AGE
 postgres-demo   Running   5h
 postgres-dev    Running   4h
@@ -61,7 +61,6 @@ To get YAML of an object, use `--output=yaml` flag.
 
 ```yaml
 $ kubedb get postgres postgres-demo --output=yaml
-
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
@@ -69,10 +68,10 @@ metadata:
   namespace: default
 spec:
   databaseSecret:
-    secretName: postgres-demo-admin-auth
-  version: "9.5"
+    secretName: postgres-demo-auth
+  version: 9.6.5
 status:
-  creationTime: 2017-06-05T04:10:06Z
+  creationTime: 2017-12-12T05:46:16Z
   phase: Running
 ```
 
@@ -87,19 +86,19 @@ To list all KubeDB objects, use following command:
 ```console
 $ kubedb get all -o wide
 
-NAME                    VERSION   STATUS    AGE
-es/elasticsearch-demo   2.3.1     Running   17m
+NAME                    VERSION     STATUS      AGE
+es/elasticsearch-demo   2.3.1       Running     17m
 
-NAME               VERSION   STATUS    AGE
-pg/postgres-demo   9.5       Running   3h
-pg/postgres-dev    9.5       Running   3h
-pg/postgres-prod   9.5       Running   3h
-pg/postgres-qa     9.5       Running   3h
+NAME                VERSION     STATUS  AGE
+pg/postgres-demo    9.6.5       Running 3h
+pg/postgres-dev     9.6.5       Running 3h
+pg/postgres-prod    9.6.5       Running 3h
+pg/postgres-qa      9.6.5       Running 3h
 
-NAME                                 DATABASE                BUCKET             STATUS      AGE
-snap/postgres-demo-20170605-073557   pg/postgres-demo        gs:bucket-name     Succeeded   9m
-snap/snapshot-20170505-1147          pg/postgres-demo        gs:bucket-name     Succeeded   1h
-snap/snapshot-xyz                    es/elasticsearch-demo   local:/directory   Succeeded   5m
+NAME                                DATABASE                BUCKET              STATUS      AGE
+snap/postgres-demo-20170605-073557  pg/postgres-demo        gs:bucket-name      Succeeded   9m
+snap/snapshot-20171212-114700       pg/postgres-demo        gs:bucket-name      Succeeded   1h
+snap/snapshot-xyz                   es/elasticsearch-demo   local:/directory    Succeeded   5m
 ```
 
 Flag `--output=wide` is used to print additional information.
@@ -117,7 +116,7 @@ $ kubedb get snap --show-labels
 
 NAME                            DATABASE                STATUS      AGE       LABELS
 postgres-demo-20170605-073557   pg/postgres-demo        Succeeded   11m       kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
-snapshot-20170505-1147          pg/postgres-demo        Succeeded   1h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
+snapshot-20171212-114700        pg/postgres-demo        Succeeded   1h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 snapshot-xyz                    es/elasticsearch-demo   Succeeded   6m        kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo
 ```
 
@@ -127,8 +126,8 @@ You can also filter list using `--selector` flag.
 $ kubedb get snap --selector='kubedb.com/kind=Postgres' --show-labels
 
 NAME                            DATABASE           STATUS      AGE       LABELS
-postgres-demo-20170605-073557   pg/postgres-demo   Succeeded   14m       kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
-snapshot-20170505-1147          pg/postgres-demo   Succeeded   2h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
+postgres-demo-20171212-073557   pg/postgres-demo   Succeeded   14m       kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
+snapshot-20171212-114700        pg/postgres-demo   Succeeded   2h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 ```
 
 To print only object name, run the following command:
@@ -141,7 +140,7 @@ postgres/postgres-dev
 postgres/postgres-prod
 postgres/postgres-qa
 snapshot/postgres-demo-20170605-073557
-snapshot/snapshot-20170505-1147
+snapshot/snapshot-20170505-114700
 snapshot/snapshot-xyz
 ```
 
@@ -153,46 +152,54 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ```console
 $ kubedb describe pg postgres-demo
-
-Name:		postgres-demo
-Namespace:	default
-StartTimestamp:	Mon, 05 Jun 2017 10:10:06 +0600
-Status:		Running
-No volumes.
+Name:           postgres-demo
+Namespace:      default
+StartTimestamp: Tue, 12 Dec 2017 11:46:16 +0600
+Status:         Running
+Volume:
+  StorageClass: standard
+  Capacity:     50Mi
+  Access Modes: RWO
 
 StatefulSet:
-  Name:			postgres-demo
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 05 Jun 2017 10:10:14 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:                 postgres-demo
+  Replicas:             1 current / 1 desired
+  CreationTimestamp:    Tue, 12 Dec 2017 11:46:21 +0600
+  Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
   Name:		postgres-demo
   Type:		ClusterIP
-  IP:		10.0.0.36
-  Port:		port	5432/TCP
+  IP:		10.111.209.148
+  Port:		api 5432/TCP
+
+Service:
+  Name:		postgres-demo-primary
+  Type:		ClusterIP
+  IP:		10.102.192.231
+  Port:		api 5432/TCP
 
 Database Secret:
-  Name:	postgres-demo-admin-auth
+  Name:	postgres-demo-auth
   Type:	Opaque
   Data
   ====
   .admin:	35 bytes
 
-Snapshots:
-  Name                     Bucket          StartTime                         CompletionTime                    Phase
-  ----                     ------          ---------                         --------------                    -----
-  postgres-demo-20170605-073557   database-test   Mon, 05 Jun 2017 13:35:57 +0600   Mon, 05 Jun 2017 13:36:10 +0600   Succeeded
-  snapshot-20170505-1147          database-test   Mon, 05 Jun 2017 11:48:06 +0600   Mon, 05 Jun 2017 12:01:39 +0600   Succeeded
+Topology:
+  Type      Pod             StartTime                       Phase
+  ----      ---             ---------                       -----
+  primary   postgres-demo-0 2017-12-12 11:46:22 +0600 +06   Running
+
+No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                  Type       Reason               Message
-  ---------   --------   -----     ----                  --------   ------               -------
-  3m          3m         1         Snapshot Controller   Normal     Starting             Backup running
-  21m         21m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created StatefulSet
-  21m         21m        1         Postgres operator     Normal     SuccessfulCreate     Successfully created Postgres
-  29m         29m        1         Postgres operator     Normal     SuccessfulValidate   Successfully validate Postgres
-  29m         29m        1         Postgres operator     Normal     Creating             Creating Kubernetes objects
+  FirstSeen  LastSeen  From               Type    Reason               Message
+  ---------  --------  ----               ----    ------               -------
+  5s         5s        Postgres operator  Normal  SuccessfulCreate     Successfully created StatefulSet
+  5s         5s        Postgres operator  Normal  SuccessfulCreate     Successfully created Postgres
+  55s        55s       Postgres operator  Normal  SuccessfulValidate   Successfully validate Postgres
+  55s        55s       Postgres operator  Normal  Creating             Creating Kubernetes objects
 ```
 
 `kubedb describe` command provides following basic information about a database.
@@ -201,10 +208,13 @@ Events:
 * Storage (Persistent Volume)
 * Service
 * Secret (If available)
+* Topology (If available)
 * Snapshots (If any)
 * Monitoring system (If available)
 
-This command also shows events unless `--show-events=false`
+To hide details about StatefulSet & Service, use flag `--show-workload=false`
+To hide details about Secret, use flag `--show-secret=false`
+To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all Postgres objects in `default` namespace, use following command
 ```console
@@ -258,12 +268,15 @@ Various fields of a KubeDb object can't be edited using `edit` command. The foll
 * _status_
 
 
-If StatefulSet exists for a database, following fields can't be modified as well.
+If StatefulSets or Deployments exists for a database, following fields can't be modified as well.
 
 Postgres:
 * _spec.version_
-* _spec.storage_
+* _spec.standby_
+* _spec.streaming_
+* _spec.archiver_
 * _spec.databaseSecret_
+* _spec.storage_
 * _spec.nodeSelector_
 * _spec.init_
 

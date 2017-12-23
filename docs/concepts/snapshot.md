@@ -1,12 +1,12 @@
 ---
 title: Snapshot
 menu:
-  docs_0.7.1:
+  docs_0.8.0:
     identifier: snapshot-concepts
     name: Snapshot
     parent: concepts
     weight: 25
-menu_name: docs_0.7.1
+menu_name: docs_0.8.0
 section_menu_id: concepts
 ---
 
