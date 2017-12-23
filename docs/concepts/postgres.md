@@ -129,7 +129,7 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 
 
 ### spec.init
-`spec.init` is an optional section that can be used to initialize a newly created Postgres database. PostgreSQL database can be initialized in one of three ways:
+`spec.init` is an optional section that can be used to initialize a newly created Postgres database. PostgreSQL databases can be initialized in one of three ways:
 
 #### Initialize via Script
 To initialize a PostgreSQL database using a script (shell script, db migrator, etc.), set the `spec.init.scriptSource` section when creating a Postgres object. ScriptSource must have following information:

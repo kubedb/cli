@@ -112,11 +112,12 @@ spec:
 
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold Credential and [search guard](https://github.com/floragunncom/search-guard) configuration.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credential and [search guard](https://github.com/floragunncom/search-guard) configuration.
 
   - `ADMIN_PASSWORD:` Password for `admin` user.
   - `READALL_PASSWORD:` Password for `readall` user.
-##### Followings are used for search-guard configuration
+
+Following keys are used for search-guard configuration
   - `sg_config.yml:` Configure authenticators and authorization backends
   - `sg_internal_users.yml:` user and hashed passwords (hash with hasher.sh)
   - `sg_roles_mapping.yml:` map backend roles, hosts and users to roles
