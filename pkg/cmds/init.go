@@ -29,7 +29,7 @@ var (
 		kubedb init
 
 		# Upgrade operator to use another version.
-		kubedb init --version=0.7.1 --upgrade`)
+		kubedb init --version=0.8.0 --upgrade`)
 )
 
 func NewCmdInit(out io.Writer, errOut io.Writer) *cobra.Command {
