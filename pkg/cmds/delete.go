@@ -1,6 +1,7 @@
 package cmds
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
@@ -10,10 +11,18 @@ import (
 	"github.com/kubedb/cli/pkg/validator"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
-	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
+
+	core_util "github.com/appscode/kutil/core/v1"
+	"github.com/ghodss/yaml"
+	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	"github.com/kubedb/cli/pkg/encoder"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/util/jsonmergepatch"
+	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/delete.go
@@ -135,6 +144,10 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 }
 
 func deleteResource(info *resource.Info, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
+	if forceDeletion {
+		err := forceRemoveFinalizer(info)
+		cmdutil.AddSourceToErr("deleting forcefully", info.Source, err)
+	}
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil {
 		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}
@@ -142,4 +155,74 @@ func deleteResource(info *resource.Info, out io.Writer, shortOutput bool, mapper
 	return nil
 }
 
-func forceRemoveFinalizer()
+func forceRemoveFinalizer(info *resource.Info) error {
+	objMeta, err := getObjectMeta(info)
+	if err == nil {
+		if core_util.HasFinalizer(objMeta, "kubedb.com") {
+			editedMeta := core_util.RemoveFinalizer(objMeta, "kubedb.com")
+			curJson, err := json.Marshal(objMeta)
+			if err != nil {
+				return err
+			}
+			modJson, err := json.Marshal(editedMeta)
+			if err != nil {
+				return err
+			}
+			patch, err := jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
+			patched, err := resource.NewHelper(info.Client, info.Mapping).Patch(info.Namespace, info.Name, types.StrategicMergePatchType, patch)
+			return err
+			fmt.Println("patch:", patch)
+			fmt.Println("patched:", patched)
+		}
+	}
+	return err
+}
+
+func getObjectMeta(info *resource.Info) (metav1.ObjectMeta, error) {
+	objByte, err := encoder.Encode(info.Object)
+	if err != nil {
+		return metav1.ObjectMeta{}, err
+	}
+
+	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
+	switch kind {
+	case tapi.ResourceKindElasticsearch:
+		var elasticsearch *tapi.Elasticsearch
+		if err := yaml.Unmarshal(objByte, &elasticsearch); err != nil {
+			return metav1.ObjectMeta{}, err
+		}
+		return elasticsearch.ObjectMeta, nil
+	case tapi.ResourceKindPostgres:
+		var postgres *tapi.Postgres
+		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
+			return metav1.ObjectMeta{}, err
+		}
+		return postgres.ObjectMeta, nil
+	case tapi.ResourceKindMySQL:
+		var mysql *tapi.MySQL
+		if err := yaml.Unmarshal(objByte, &mysql); err != nil {
+			return metav1.ObjectMeta{}, err
+		}
+		return mysql.ObjectMeta, nil
+	case tapi.ResourceKindMongoDB:
+		var mongodb *tapi.MongoDB
+		if err := yaml.Unmarshal(objByte, &mongodb); err != nil {
+			return metav1.ObjectMeta{}, err
+		}
+		return mongodb.ObjectMeta, nil
+
+	case tapi.ResourceKindRedis:
+		var redis *tapi.Redis
+		if err := yaml.Unmarshal(objByte, &redis); err != nil {
+			return metav1.ObjectMeta{}, err
+		}
+		return redis.ObjectMeta, nil
+	case tapi.ResourceKindMemcached:
+		var memcached *tapi.Memcached
+		if err := yaml.Unmarshal(objByte, &memcached); err != nil {
+			return metav1.ObjectMeta{}, err
+		}
+		return memcached.ObjectMeta, nil
+	}
+	return metav1.ObjectMeta{}, nil
+}

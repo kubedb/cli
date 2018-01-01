@@ -11,13 +11,15 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elasticsearch, docker dr.Docker) error {
+func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elasticsearch, docker *dr.Docker) error {
 	if elasticsearch.Spec.Version == "" {
 		return fmt.Errorf(`object 'Version' is missing in '%v'`, elasticsearch.Spec)
 	}
 
-	if err := adr.CheckDockerImageVersion(docker.GetImage(elasticsearch), string(elasticsearch.Spec.Version)); err != nil {
-		return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(elasticsearch))
+	if docker != nil {
+		if err := adr.CheckDockerImageVersion(docker.GetImage(elasticsearch), string(elasticsearch.Spec.Version)); err != nil {
+			return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(elasticsearch))
+		}
 	}
 
 	topology := elasticsearch.Spec.Topology

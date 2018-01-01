@@ -11,15 +11,16 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateMongoDB(client kubernetes.Interface, mongodb *api.MongoDB, docker dr.Docker) error {
+func ValidateMongoDB(client kubernetes.Interface, mongodb *api.MongoDB, docker *dr.Docker) error {
 	if mongodb.Spec.Version == "" {
-		return fmt.Errorf(`Object 'Version' is missing in '%v'`, mongodb.Spec)
+		return fmt.Errorf(`object 'Version' is missing in '%v'`, mongodb.Spec)
 	}
 
-	// Set Database Image version
-	version := fmt.Sprintf("%v", mongodb.Spec.Version)
-	if err := adr.CheckDockerImageVersion(docker.GetImage(mongodb), version); err != nil {
-		return fmt.Errorf(`Image %vs not found`, docker.GetImageWithTag(mongodb), version)
+	if docker != nil {
+		// Set Database Image version
+		if err := adr.CheckDockerImageVersion(docker.GetImage(mongodb), string(mongodb.Spec.Version)); err != nil {
+			return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(mongodb))
+		}
 	}
 
 	if mongodb.Spec.Storage != nil {

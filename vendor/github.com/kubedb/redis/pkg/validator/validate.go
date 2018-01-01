@@ -10,15 +10,16 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateRedis(client kubernetes.Interface, redis *api.Redis, docker dr.Docker) error {
+func ValidateRedis(client kubernetes.Interface, redis *api.Redis, docker *dr.Docker) error {
 	if redis.Spec.Version == "" {
-		return fmt.Errorf(`Object 'Version' is missing in '%v'`, redis.Spec)
+		return fmt.Errorf(`object 'Version' is missing in '%v'`, redis.Spec)
 	}
 
-	// Set Database Image version
-	version := string(redis.Spec.Version)
-	if err := adr.CheckDockerImageVersion(docker.GetImage(redis), version); err != nil {
-		return fmt.Errorf(`Image %v not found`, docker.GetImageWithTag(redis))
+	if docker != nil {
+		// Set Database Image version
+		if err := adr.CheckDockerImageVersion(docker.GetImage(redis), string(redis.Spec.Version)); err != nil {
+			return fmt.Errorf(`image %v not found`, docker.GetImageWithTag(redis))
+		}
 	}
 
 	if redis.Spec.Storage != nil {

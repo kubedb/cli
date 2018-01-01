@@ -10,14 +10,15 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateMemcached(client kubernetes.Interface, memcached *api.Memcached, docker dr.Docker) error {
+func ValidateMemcached(client kubernetes.Interface, memcached *api.Memcached, docker *dr.Docker) error {
 	if memcached.Spec.Version == "" {
 		return fmt.Errorf(`object 'Version' is missing in '%v'`, memcached.Spec)
 	}
 
-	version := string(memcached.Spec.Version)
-	if err := adr.CheckDockerImageVersion(docker.GetImage(memcached), version); err != nil {
-		return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(memcached))
+	if docker != nil {
+		if err := adr.CheckDockerImageVersion(docker.GetImage(memcached), string(memcached.Spec.Version)); err != nil {
+			return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(memcached))
+		}
 	}
 
 	monitorSpec := memcached.Spec.Monitor
