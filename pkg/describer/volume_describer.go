@@ -135,7 +135,7 @@ func describeSnapshotStorage(snapshot api.SnapshotStorageSpec, out io.Writer, sp
 	case snapshot.Local != nil:
 		describeVolumes(snapshot.Local.VolumeSource, out)
 		w.Write(spaceLevel, "Type:\tLocal\n"+
-			getSpace(spaceLevel)+"path:\t%v\n", snapshot.Local.Path)
+			getSpace(spaceLevel)+"path:\t%v\n", snapshot.Local.MountPath)
 	case snapshot.S3 != nil:
 		w.Write(spaceLevel, "Type:\tS3\n"+
 			getSpace(spaceLevel)+"endpoint:\t%v\n"+

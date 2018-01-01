@@ -30,37 +30,37 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 		if err := yaml.Unmarshal(objByte, &elasticsearch); err != nil {
 			return err
 		}
-		return esv.ValidateElasticsearch(client, elasticsearch)
+		return esv.ValidateElasticsearch(client, elasticsearch, nil)
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres
 		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
 			return err
 		}
-		return pgv.ValidatePostgres(client, postgres)
+		return pgv.ValidatePostgres(client, postgres, nil)
 	case tapi.ResourceKindMySQL:
 		var mysql *tapi.MySQL
 		if err := yaml.Unmarshal(objByte, &mysql); err != nil {
 			return err
 		}
-		return msv.ValidateMySQL(client, mysql)
+		return msv.ValidateMySQL(client, mysql, nil)
 	case tapi.ResourceKindMongoDB:
 		var mongodb *tapi.MongoDB
 		if err := yaml.Unmarshal(objByte, &mongodb); err != nil {
 			return err
 		}
-		return mgv.ValidateMongoDB(client, mongodb)
+		return mgv.ValidateMongoDB(client, mongodb, nil)
 	case tapi.ResourceKindRedis:
 		var redis *tapi.Redis
 		if err := yaml.Unmarshal(objByte, &redis); err != nil {
 			return err
 		}
-		return rdv.ValidateRedis(client, redis)
+		return rdv.ValidateRedis(client, redis, nil)
 	case tapi.ResourceKindMemcached:
 		var memcached *tapi.Memcached
 		if err := yaml.Unmarshal(objByte, &memcached); err != nil {
 			return err
 		}
-		return memv.ValidateMemcached(client, memcached)
+		return memv.ValidateMemcached(client, memcached, nil)
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(objByte, &snapshot); err != nil {

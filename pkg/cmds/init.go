@@ -62,23 +62,32 @@ var operatorLabel = map[string]string{
 	"app": "kubedb",
 }
 
+const (
+	imageOperator      = "kubedb/operator"
+	operatorName       = "kubedb-operator"
+	operatorContainer  = "operator"
+	operatorPortName   = "web"
+	operatorPortNumber = 8080
+)
+
 func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 
 	namespace := cmdutil.GetFlagString(cmd, "operator-namespace")
 	version := cmdutil.GetFlagString(cmd, "version")
 	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
 	governingService := cmdutil.GetFlagString(cmd, "governing-service")
-	exporterTag := cmdutil.GetFlagString(cmd, "exporter-tag")
+	dockerRegistry := cmdutil.GetFlagString(cmd, "docker-registry")
 	address := cmdutil.GetFlagString(cmd, "address")
-	esdumpTag := cmdutil.GetFlagString(cmd, "elasticdump.tag")
 
 	client, err := kube.NewKubeClient(cmd)
 	if err != nil {
 		return err
 	}
 
-	if err := docker.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
-		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, docker.ImageOperator, version))
+	repository := fmt.Sprintf("%s/%s", dockerRegistry, imageOperator)
+
+	if err := docker.CheckDockerImageVersion(repository, version); err != nil {
+		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %s:%s not found.`, repository, version))
 		return nil
 	}
 
@@ -90,7 +99,7 @@ func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 
 	deployment := &extensions.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      docker.OperatorName,
+			Name:      operatorName,
 			Namespace: namespace,
 			Labels:    operatorLabel,
 		},
@@ -103,15 +112,15 @@ func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 				Spec: core.PodSpec{
 					Containers: []core.Container{
 						{
-							Name:  docker.OperatorContainer,
-							Image: fmt.Sprintf("%v:%v", docker.ImageOperator, version),
+							Name:  operatorContainer,
+							Image: fmt.Sprintf("%v:%v", repository, version),
 							Args: []string{
 								"run",
 								fmt.Sprintf("--governing-service=%v", governingService),
-								fmt.Sprintf("--exporter-tag=%v", exporterTag),
+								fmt.Sprintf("--docker-registry=%v", dockerRegistry),
+								fmt.Sprintf("--exporter-tag=%v", version),
 								fmt.Sprintf("--address=%v", address),
 								fmt.Sprintf("--rbac=%v", configureRBAC),
-								fmt.Sprintf("--elasticdump.tag=%v", esdumpTag),
 								"--v=3",
 							},
 							Env: []core.EnvVar{
@@ -127,9 +136,9 @@ func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 							},
 							Ports: []core.ContainerPort{
 								{
-									Name:          docker.OperatorPortName,
+									Name:          operatorPortName,
 									Protocol:      core.ProtocolTCP,
-									ContainerPort: docker.OperatorPortNumber,
+									ContainerPort: operatorPortNumber,
 								},
 							},
 						},
@@ -172,21 +181,20 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 	version := cmdutil.GetFlagString(cmd, "version")
 	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
 	governingService := cmdutil.GetFlagString(cmd, "governing-service")
-	exporterTag := cmdutil.GetFlagString(cmd, "exporter-tag")
+	dockerRegistry := cmdutil.GetFlagString(cmd, "docker-registry")
 	address := cmdutil.GetFlagString(cmd, "address")
-	esdumpTag := cmdutil.GetFlagString(cmd, "elasticdump.tag")
 
 	client, err := kube.NewKubeClient(cmd)
 	if err != nil {
 		return err
 	}
 
-	deployment, err := client.ExtensionsV1beta1().Deployments(namespace).Get(docker.OperatorName, metav1.GetOptions{})
+	deployment, err := client.ExtensionsV1beta1().Deployments(namespace).Get(operatorName, metav1.GetOptions{})
 	if err != nil {
 		if kerr.IsNotFound(err) {
 			message := fmt.Sprintf("Operator deployment \"%v\" not found.\n\n"+
 				"Create operator using following commnad:\n"+
-				"kubedb init --version=%v --operator-namespace=%v", docker.OperatorName, version, namespace)
+				"kubedb init --version=%v --operator-namespace=%v", operatorName, version, namespace)
 
 			fmt.Fprintln(errOut, message)
 			return nil
@@ -197,7 +205,7 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 
 	containers := deployment.Spec.Template.Spec.Containers
 	if len(containers) == 0 {
-		fmt.Fprintln(errOut, fmt.Sprintf(`Invalid operator deployment "%v"`, docker.OperatorName))
+		fmt.Fprintln(errOut, fmt.Sprintf(`Invalid operator deployment "%v"`, operatorName))
 		return nil
 	}
 
@@ -206,7 +214,9 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 	image := items[0]
 	tag := items[1]
 
-	if image != docker.ImageOperator {
+	repository := fmt.Sprintf("%s/%s", dockerRegistry, imageOperator)
+
+	if image != repository {
 		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image mismatch. Can't upgrade to version "%v"`, version))
 		return nil
 	}
@@ -216,12 +226,12 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 		return nil
 	}
 
-	if err := docker.CheckDockerImageVersion(docker.ImageOperator, version); err != nil {
-		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, docker.ImageOperator, version))
+	if err := docker.CheckDockerImageVersion(repository, version); err != nil {
+		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, repository, version))
 		return nil
 	}
 
-	deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", docker.ImageOperator, version)
+	deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", repository, version)
 
 	if configureRBAC {
 		if err := EnsureRBACStuff(client, namespace, out); err != nil {
@@ -235,10 +245,10 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 	deployment.Spec.Template.Spec.Containers[0].Args = []string{
 		"run",
 		fmt.Sprintf("--governing-service=%v", governingService),
-		fmt.Sprintf("--exporter-tag=%v", exporterTag),
+		fmt.Sprintf("--docker-registry=%v", dockerRegistry),
+		fmt.Sprintf("--exporter-tag=%v", version),
 		fmt.Sprintf("--address=%v", address),
 		fmt.Sprintf("--rbac=%v", configureRBAC),
-		fmt.Sprintf("--elasticdump.tag=%v", esdumpTag),
 		"--v=3",
 	}
 
@@ -254,7 +264,7 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 func createOperatorService(client kubernetes.Interface, namespace string) error {
 	svc := &core.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      docker.OperatorName,
+			Name:      operatorName,
 			Namespace: namespace,
 			Labels:    operatorLabel,
 		},
@@ -262,10 +272,10 @@ func createOperatorService(client kubernetes.Interface, namespace string) error 
 			Type: core.ServiceTypeClusterIP,
 			Ports: []core.ServicePort{
 				{
-					Name:       docker.OperatorPortName,
-					Port:       docker.OperatorPortNumber,
+					Name:       operatorPortName,
+					Port:       operatorPortNumber,
 					Protocol:   core.ProtocolTCP,
-					TargetPort: intstr.FromString(docker.OperatorPortName),
+					TargetPort: intstr.FromString(operatorPortName),
 				},
 			},
 			Selector: operatorLabel,
