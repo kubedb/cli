@@ -19,6 +19,8 @@ import (
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/delete.go
 
 var (
+	forceDeletion = false
+
 	deleteLong = templates.LongDesc(`
 		Delete resources by filenames, stdin, resources and names, or by resources and label selector.
 		JSON and YAML formats are accepted.
@@ -51,6 +53,7 @@ func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 	}
 
 	util.AddDeleteFlags(cmd, options)
+	cmd.Flags().BoolVar(&forceDeletion, "force", false, "Immediate deletion of some resources may result in inconsistency or data loss.")
 	return cmd
 }
 
@@ -138,3 +141,5 @@ func deleteResource(info *resource.Info, out io.Writer, shortOutput bool, mapper
 	cmdutil.PrintSuccess(mapper, shortOutput, out, info.Mapping.Resource, info.Name, false, "deleted")
 	return nil
 }
+
+func forceRemoveFinalizer()
