@@ -6,23 +6,22 @@ import (
 	"io"
 	"strings"
 
+	core_util "github.com/appscode/kutil/core/v1"
+	"github.com/ghodss/yaml"
+	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
+	"github.com/kubedb/cli/pkg/encoder"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/kubedb/cli/pkg/validator"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
-	"k8s.io/kubernetes/pkg/kubectl/resource"
-
-	core_util "github.com/appscode/kutil/core/v1"
-	"github.com/ghodss/yaml"
-	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/cli/pkg/encoder"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/jsonmergepatch"
+	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/kubectl/resource"
 )
 
 // ref: k8s.io/kubernetes/pkg/kubectl/cmd/delete.go
@@ -103,10 +102,10 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 	}
 
 	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
-	return deleteResult(r, out, shortOutput, mapper)
+	return deleteResult(f, r, out, shortOutput, mapper)
 }
 
-func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
+func deleteResult(f cmdutil.Factory, r *resource.Result, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
 	infoList := make([]*resource.Info, 0)
 	err := r.Visit(func(info *resource.Info, err error) error {
 		if err != nil {
@@ -132,7 +131,7 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 	found := 0
 	for _, info := range infoList {
 		found++
-		if err := deleteResource(info, out, shortOutput, mapper); err != nil {
+		if err := deleteResource(f, info, out, shortOutput, mapper); err != nil {
 			return err
 		}
 	}
@@ -143,10 +142,11 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 	return nil
 }
 
-func deleteResource(info *resource.Info, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
+func deleteResource(f cmdutil.Factory, info *resource.Info, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
 	if forceDeletion {
-		err := forceRemoveFinalizer(info)
-		cmdutil.AddSourceToErr("deleting forcefully", info.Source, err)
+		if err := forceRemoveFinalizer(f, info) ; err !=nil {
+			cmdutil.AddSourceToErr("deleting forcefully", info.Source, err)
+		}
 	}
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil {
 		return cmdutil.AddSourceToErr("deleting", info.Source, err)
@@ -155,33 +155,32 @@ func deleteResource(info *resource.Info, out io.Writer, shortOutput bool, mapper
 	return nil
 }
 
-func forceRemoveFinalizer(info *resource.Info) error {
-	objMeta, err := getObjectMeta(info)
+func forceRemoveFinalizer(f cmdutil.Factory, info *resource.Info) error {
+	restConfig, err := f.ClientConfig()
+	if err != nil {
+		return err
+	}
+	extClient := tcs.NewForConfigOrDie(restConfig)
+	patch, err := patchFinalizer(f, info)
+
 	if err == nil {
-		if core_util.HasFinalizer(objMeta, "kubedb.com") {
-			editedMeta := core_util.RemoveFinalizer(objMeta, "kubedb.com")
-			curJson, err := json.Marshal(objMeta)
-			if err != nil {
-				return err
-			}
-			modJson, err := json.Marshal(editedMeta)
-			if err != nil {
-				return err
-			}
-			patch, err := jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
-			patched, err := resource.NewHelper(info.Client, info.Mapping).Patch(info.Namespace, info.Name, types.StrategicMergePatchType, patch)
-			return err
-			fmt.Println("patch:", patch)
-			fmt.Println("patched:", patched)
-		}
+		h := resource.NewHelper(extClient.RESTClient(), info.Mapping)
+		_, err := extClient.RESTClient().Patch(types.MergePatchType).
+			NamespaceIfScoped(info.Namespace, h.NamespaceScoped).
+			Resource(h.Resource).
+			Name(info.Name).
+			Body(patch).
+			Do().
+			Get()
+		return err
 	}
 	return err
 }
 
-func getObjectMeta(info *resource.Info) (metav1.ObjectMeta, error) {
+func patchFinalizer(f cmdutil.Factory, info *resource.Info) ([]byte, error) {
 	objByte, err := encoder.Encode(info.Object)
 	if err != nil {
-		return metav1.ObjectMeta{}, err
+		return nil, err
 	}
 
 	kind := info.Object.GetObjectKind().GroupVersionKind().Kind
@@ -189,40 +188,93 @@ func getObjectMeta(info *resource.Info) (metav1.ObjectMeta, error) {
 	case tapi.ResourceKindElasticsearch:
 		var elasticsearch *tapi.Elasticsearch
 		if err := yaml.Unmarshal(objByte, &elasticsearch); err != nil {
-			return metav1.ObjectMeta{}, err
+			return nil, err
 		}
-		return elasticsearch.ObjectMeta, nil
+		curJson, err := json.Marshal(elasticsearch)
+		if err != nil {
+			return nil, err
+		}
+		elasticsearch.ObjectMeta = core_util.RemoveFinalizer(elasticsearch.ObjectMeta, "kubedb.com")
+		modJson, err := json.Marshal(elasticsearch)
+		if err != nil {
+			return nil, err
+		}
+		return jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
 	case tapi.ResourceKindPostgres:
 		var postgres *tapi.Postgres
 		if err := yaml.Unmarshal(objByte, &postgres); err != nil {
-			return metav1.ObjectMeta{}, err
+			return nil, err
 		}
-		return postgres.ObjectMeta, nil
+		curJson, err := json.Marshal(postgres)
+		if err != nil {
+			return nil, err
+		}
+		postgres.ObjectMeta = core_util.RemoveFinalizer(postgres.ObjectMeta, "kubedb.com")
+		modJson, err := json.Marshal(postgres)
+		if err != nil {
+			return nil, err
+		}
+		return jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
 	case tapi.ResourceKindMySQL:
 		var mysql *tapi.MySQL
 		if err := yaml.Unmarshal(objByte, &mysql); err != nil {
-			return metav1.ObjectMeta{}, err
+			return nil, err
 		}
-		return mysql.ObjectMeta, nil
+		curJson, err := json.Marshal(mysql)
+		if err != nil {
+			return nil, err
+		}
+		mysql.ObjectMeta = core_util.RemoveFinalizer(mysql.ObjectMeta, "kubedb.com")
+		modJson, err := json.Marshal(mysql)
+		if err != nil {
+			return nil, err
+		}
+		return jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
 	case tapi.ResourceKindMongoDB:
 		var mongodb *tapi.MongoDB
 		if err := yaml.Unmarshal(objByte, &mongodb); err != nil {
-			return metav1.ObjectMeta{}, err
+			return nil, err
 		}
-		return mongodb.ObjectMeta, nil
-
+		curJson, err := json.Marshal(mongodb)
+		if err != nil {
+			return nil, err
+		}
+		mongodb.ObjectMeta = core_util.RemoveFinalizer(mongodb.ObjectMeta, "kubedb.com")
+		modJson, err := json.Marshal(mongodb)
+		if err != nil {
+			return nil, err
+		}
+		return jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
 	case tapi.ResourceKindRedis:
 		var redis *tapi.Redis
 		if err := yaml.Unmarshal(objByte, &redis); err != nil {
-			return metav1.ObjectMeta{}, err
+			return nil, err
 		}
-		return redis.ObjectMeta, nil
+		curJson, err := json.Marshal(redis)
+		if err != nil {
+			return nil, err
+		}
+		redis.ObjectMeta = core_util.RemoveFinalizer(redis.ObjectMeta, "kubedb.com")
+		modJson, err := json.Marshal(redis)
+		if err != nil {
+			return nil, err
+		}
+		return jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
 	case tapi.ResourceKindMemcached:
 		var memcached *tapi.Memcached
 		if err := yaml.Unmarshal(objByte, &memcached); err != nil {
-			return metav1.ObjectMeta{}, err
+			return nil, err
 		}
-		return memcached.ObjectMeta, nil
+		curJson, err := json.Marshal(memcached)
+		if err != nil {
+			return nil, err
+		}
+		memcached.ObjectMeta = core_util.RemoveFinalizer(memcached.ObjectMeta, "kubedb.com")
+		modJson, err := json.Marshal(memcached)
+		if err != nil {
+			return nil, err
+		}
+		return jsonmergepatch.CreateThreeWayJSONMergePatch(curJson, modJson, curJson)
 	}
-	return metav1.ObjectMeta{}, nil
+	return nil, nil
 }
