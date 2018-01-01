@@ -180,7 +180,7 @@ func forceRemoveFinalizer(f cmdutil.Factory, info *resource.Info) error {
 		return err
 	}
 
-	if modJson, err := patchFinalizer(f, info); err == nil {
+	if modJson, err := patchFinalizer(info); err == nil {
 		if patch, err := jsonmergepatch.CreateThreeWayJSONMergePatch(originalJson, modJson, originalJson); err == nil {
 			h := resource.NewHelper(extClient.RESTClient(), info.Mapping)
 			_, err := extClient.RESTClient().Patch(types.MergePatchType).
@@ -197,7 +197,7 @@ func forceRemoveFinalizer(f cmdutil.Factory, info *resource.Info) error {
 	return err
 }
 
-func patchFinalizer(f cmdutil.Factory, info *resource.Info) ([]byte, error) {
+func patchFinalizer(info *resource.Info) ([]byte, error) {
 	objByte, err := encoder.Encode(info.Object)
 	if err != nil {
 		return nil, err
