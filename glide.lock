@@ -1,5 +1,5 @@
 hash: 69a3a8b7a9d0599e8735c745c07b87edf78b6477d1a040140953079cbf33cc4e
-updated: 2018-01-01T16:57:35.071139472+06:00
+updated: 2018-01-01T19:20:02.612476188+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -284,7 +284,7 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: 8c1716f64df7744601ae96ccaaf7dd004c8a659a
+  version: 86b2b2f0ba1ac7d4b728f3c60c0f5afd7553e124
   subpackages:
   - pkg/docker
   - pkg/validator
