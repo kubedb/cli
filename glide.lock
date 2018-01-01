@@ -1,5 +1,5 @@
-hash: 4d011107e6ea43ead8a70228c76bedd93614cd7cda6f9cf6fcbde51204377cf4
-updated: 2017-12-22T10:05:47.050074385-05:00
+hash: 69a3a8b7a9d0599e8735c745c07b87edf78b6477d1a040140953079cbf33cc4e
+updated: 2018-01-01T15:20:45.547366743+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,16 +7,18 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: f08cee5a2aa53a1ab6d30e4ae11e381d1b265f81
+  version: 9a3559e6132eda4069baad2c63689729f5d20ac4
   subpackages:
   - analytics
   - context
   - encoding/json/types
   - encoding/yaml
   - homedir
+  - ioutil
   - log
   - net/httpclient
   - runtime
+  - strings
   - types
   - version
 - name: github.com/appscode/kube-mon
@@ -24,7 +26,7 @@ imports:
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: 04124fd21c654188d7a11908d8c8af994a4cccef
+  version: a506fd42d3c4d688675c639c9c14c27b79275e73
   subpackages:
   - meta
   - tools/analytics
@@ -33,7 +35,7 @@ imports:
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
-  version: 63ce630574a5ec05ecd8e8de5cea16332a5a684d
+  version: f4b2120243b92fc47d6a4af71b854b8d5f4de8b5
   subpackages:
   - aws
   - aws/awserr
@@ -178,7 +180,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 44145f04b68cf362d9c4df2182967c2275eaefed
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -194,6 +196,13 @@ imports:
   - ptypes/timestamp
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
+- name: github.com/google/go-cmp
+  version: 97a1ff3c48253a51c601f6e4420181273b6ca0ea
+  subpackages:
+  - cmp
+  - cmp/internal/diff
+  - cmp/internal/function
+  - cmp/internal/value
 - name: github.com/google/go-querystring
   version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
   subpackages:
@@ -262,7 +271,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: a6c692857adca446c25102036bbfe0cb80e2618c
+  version: f4fbe461c426dbecefee76e047e3a03058de525c
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -272,28 +281,34 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: e0e0c58ad36baa182e873a8f42ae0f4eb1a10b3f
+  version: 8c1716f64df7744601ae96ccaaf7dd004c8a659a
   subpackages:
+  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 7b16686cdb0bfcca54aa71c2fd33de9f46479292
+  version: 3fba5f4ef8fbb838567fa49c1a8d4313df7887cc
   subpackages:
+  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: a0c480997032ef4f131a76a09f5733960167086b
+  version: ef1b6e14ef979cfaa3d40915f0ff5f8cd8db176d
   subpackages:
+  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: be34010306fefa5b2f7687a18414090e06784c33
+  version: 788ae178f9b3c35c61d814deaa133be1e7b7425a
   subpackages:
+  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: bd37f192be0070c948d8db4ba28bc294de5d71bd
+  version: 4b8df806c06a7f50cca577f182793c6a22c92169
   subpackages:
+  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: e4cda32f1af902a67d21e4a2e2b9a64b1f23b702
+  version: f6572764f926062b2e83a8e17571262c70b0a539
   subpackages:
+  - pkg/docker
   - pkg/validator
 - name: github.com/mailru/easyjson
   version: d5b7844b561a7bc640052f1b935f7b800330d7e0
@@ -359,7 +374,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: ccaecb155a2177302cb56cae929251a256d0f646
+  version: b95ab734e27d33e0d8fbabf71ca990568d4e2020
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -415,7 +430,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 905d2b6c9443c02c46229c39d60442903a68c229
+  version: 92c31202d4179425301c9ad5a63abd8df45a9674
   subpackages:
   - gensupport
   - googleapi

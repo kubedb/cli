@@ -16,7 +16,6 @@ import (
 
 	"github.com/appscode/go/net/httpclient"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/pkg/docker"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
@@ -44,7 +43,7 @@ func NewCmdSummarize(out io.Writer, cmdErr io.Writer) *cobra.Command {
 const (
 	validResourcesForReport = `Valid resource types include:
 
-    * elastics
+    * elasticsearchs
     * postgreses
     * mysqls
     * mongodbs
@@ -122,7 +121,7 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		return err
 	}
 
-	tunnel := newTunnel(restClient, config, operatorNamespace, operatorPodList.Items[0].Name, docker.OperatorPortNumber)
+	tunnel := newTunnel(restClient, config, operatorNamespace, operatorPodList.Items[0].Name, operatorPortNumber)
 	if err := tunnel.forwardPort(); err != nil {
 		return err
 	}

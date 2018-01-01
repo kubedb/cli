@@ -22,7 +22,7 @@ func ValidateStorage(client kubernetes.Interface, spec *core.PersistentVolumeCla
 	if spec.StorageClassName != nil {
 		if _, err := client.StorageV1beta1().StorageClasses().Get(*spec.StorageClassName, metav1.GetOptions{}); err != nil {
 			if kerr.IsNotFound(err) {
-				return fmt.Errorf(`Spec.Storage.StorageClassName "%v" not found`, *spec.StorageClassName)
+				return fmt.Errorf(`spec.storage.storageClassName "%v" not found`, *spec.StorageClassName)
 			}
 			return err
 		}
@@ -30,10 +30,10 @@ func ValidateStorage(client kubernetes.Interface, spec *core.PersistentVolumeCla
 
 	if val, found := spec.Resources.Requests[core.ResourceStorage]; found {
 		if val.Value() <= 0 {
-			return errors.New("Invalid ResourceStorage request")
+			return errors.New("invalid ResourceStorage request")
 		}
 	} else {
-		return errors.New("Missing ResourceStorage request")
+		return errors.New("missing ResourceStorage request")
 	}
 
 	return nil
@@ -45,7 +45,7 @@ func ValidateBackupSchedule(client kubernetes.Interface, spec *api.BackupSchedul
 	}
 	// CronExpression can't be empty
 	if spec.CronExpression == "" {
-		return errors.New("Invalid cron expression")
+		return errors.New("invalid cron expression")
 	}
 
 	return ValidateSnapshotSpec(client, spec.SnapshotStorageSpec, namespace)
@@ -54,7 +54,7 @@ func ValidateBackupSchedule(client kubernetes.Interface, spec *api.BackupSchedul
 func ValidateSnapshotSpec(client kubernetes.Interface, spec api.SnapshotStorageSpec, namespace string) error {
 	// BucketName can't be empty
 	if spec.S3 == nil && spec.GCS == nil && spec.Azure == nil && spec.Swift == nil && spec.Local == nil {
-		return errors.New("No storage provider is configured.")
+		return errors.New("no storage provider is configured")
 	}
 
 	if spec.Local != nil {
@@ -63,7 +63,7 @@ func ValidateSnapshotSpec(client kubernetes.Interface, spec api.SnapshotStorageS
 
 	// Need to provide Storage credential secret
 	if spec.StorageSecretName == "" {
-		return fmt.Errorf(`Object 'SecretName' is missing in '%v'`, spec)
+		return fmt.Errorf(`object 'SecretName' is missing in '%v'`, spec)
 	}
 
 	if err := storage.CheckBucketAccess(client, spec, namespace); err != nil {
@@ -80,11 +80,11 @@ func ValidateMonitorSpec(monitorSpec *mona.AgentSpec) error {
 	}
 
 	if monitorSpec.Agent == "" {
-		return fmt.Errorf(`Object 'Agent' is missing in '%v'`, string(specData))
+		return fmt.Errorf(`object 'Agent' is missing in '%v'`, string(specData))
 	}
 	if monitorSpec.Prometheus != nil {
 		if monitorSpec.Agent != api.AgentCoreosPrometheus {
-			return fmt.Errorf(`Invalid 'Agent' in '%v'`, string(specData))
+			return fmt.Errorf(`invalid 'Agent' in '%v'`, string(specData))
 		}
 	}
 

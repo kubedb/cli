@@ -27,7 +27,7 @@ func (s Snapshot) Location() (string, error) {
 	} else if spec.Swift != nil {
 		return filepath.Join(spec.Swift.Prefix, DatabaseNamePrefix, s.Namespace, s.Spec.DatabaseName), nil
 	}
-	return "", errors.New("No storage provider is configured.")
+	return "", errors.New("no storage provider is configured")
 }
 
 func (s Snapshot) ResourceCode() string {
@@ -54,11 +54,11 @@ func (s SnapshotStorageSpec) Container() (string, error) {
 	} else if s.Azure != nil {
 		return s.Azure.Container, nil
 	} else if s.Local != nil {
-		return s.Local.Path, nil
+		return s.Local.MountPath, nil
 	} else if s.Swift != nil {
 		return s.Swift.Container, nil
 	}
-	return "", errors.New("No storage provider is configured.")
+	return "", errors.New("no storage provider is configured")
 }
 
 func (s SnapshotStorageSpec) Location() (string, error) {
@@ -69,11 +69,11 @@ func (s SnapshotStorageSpec) Location() (string, error) {
 	} else if s.Azure != nil {
 		return "azure:" + s.Azure.Container, nil
 	} else if s.Local != nil {
-		return "local:" + s.Local.Path, nil
+		return "local:" + s.Local.MountPath, nil
 	} else if s.Swift != nil {
 		return "swift:" + s.Swift.Container, nil
 	}
-	return "", errors.New("No storage provider is configured.")
+	return "", errors.New("no storage provider is configured")
 }
 
 func (s Snapshot) ObjectReference() *core.ObjectReference {
