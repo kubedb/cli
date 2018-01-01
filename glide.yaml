@@ -25,6 +25,7 @@ import:
 - package: github.com/kubedb/memcached
   version: master
 - package: github.com/spf13/cobra
+  version: master
 - package: github.com/yudai/gojsondiff
   version: 1.0.0
 - package: k8s.io/api
@@ -51,3 +52,9 @@ import:
   version: 19f72df4d05d31cbe1c56bfc8045c96babff6c7e
 - package: golang.org/x/sys
   version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
+- package: github.com/appscode/kube-mon
+  version: master
+- package: github.com/hashicorp/go-version
+  repo: https://github.com/appscode/go-version.git
+  vcs: git
+  version: master

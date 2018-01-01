@@ -4,21 +4,22 @@ import (
 	"fmt"
 
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/pkg/docker"
+	adr "github.com/kubedb/apimachinery/pkg/docker"
 	amv "github.com/kubedb/apimachinery/pkg/validator"
+	dr "github.com/kubedb/mongodb/pkg/docker"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateMongoDB(client kubernetes.Interface, mongodb *api.MongoDB) error {
+func ValidateMongoDB(client kubernetes.Interface, mongodb *api.MongoDB, docker dr.Docker) error {
 	if mongodb.Spec.Version == "" {
 		return fmt.Errorf(`Object 'Version' is missing in '%v'`, mongodb.Spec)
 	}
 
 	// Set Database Image version
-	version := string(mongodb.Spec.Version)
-	if err := docker.CheckDockerImageVersion(docker.ImageMongoDB, version); err != nil {
-		return fmt.Errorf(`Image %v:%v not found`, docker.ImageMongoDB, version)
+	version := fmt.Sprintf("%v", mongodb.Spec.Version)
+	if err := adr.CheckDockerImageVersion(docker.GetImage(mongodb), version); err != nil {
+		return fmt.Errorf(`Image %vs not found`, docker.GetImageWithTag(mongodb), version)
 	}
 
 	if mongodb.Spec.Storage != nil {

@@ -4,20 +4,20 @@ import (
 	"fmt"
 
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/pkg/docker"
+	adr "github.com/kubedb/apimachinery/pkg/docker"
 	amv "github.com/kubedb/apimachinery/pkg/validator"
+	dr "github.com/kubedb/memcached/pkg/docker"
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateMemcached(client kubernetes.Interface, memcached *api.Memcached) error {
+func ValidateMemcached(client kubernetes.Interface, memcached *api.Memcached, docker dr.Docker) error {
 	if memcached.Spec.Version == "" {
-		return fmt.Errorf(`Object 'Version' is missing in '%v'`, memcached.Spec)
+		return fmt.Errorf(`object 'Version' is missing in '%v'`, memcached.Spec)
 	}
 
-	// Set Database Image version
 	version := string(memcached.Spec.Version)
-	if err := docker.CheckDockerImageVersion(docker.ImageMemcached, version); err != nil {
-		return fmt.Errorf(`Image %v:%v not found`, docker.ImageMemcached, version)
+	if err := adr.CheckDockerImageVersion(docker.GetImage(memcached), version); err != nil {
+		return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(memcached))
 	}
 
 	monitorSpec := memcached.Spec.Monitor

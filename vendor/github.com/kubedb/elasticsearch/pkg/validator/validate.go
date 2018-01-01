@@ -5,18 +5,19 @@ import (
 	"fmt"
 
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/pkg/docker"
+	adr "github.com/kubedb/apimachinery/pkg/docker"
 	amv "github.com/kubedb/apimachinery/pkg/validator"
+	dr "github.com/kubedb/elasticsearch/pkg/docker"
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elasticsearch) error {
+func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elasticsearch, docker dr.Docker) error {
 	if elasticsearch.Spec.Version == "" {
 		return fmt.Errorf(`object 'Version' is missing in '%v'`, elasticsearch.Spec)
 	}
 
-	if err := docker.CheckDockerImageVersion(docker.ImageElasticsearch, string(elasticsearch.Spec.Version)); err != nil {
-		return fmt.Errorf(`image %v:%v not found`, docker.ImageElasticsearch, elasticsearch.Spec.Version)
+	if err := adr.CheckDockerImageVersion(docker.GetImage(elasticsearch), string(elasticsearch.Spec.Version)); err != nil {
+		return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(elasticsearch))
 	}
 
 	topology := elasticsearch.Spec.Topology
