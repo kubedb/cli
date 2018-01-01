@@ -1,5 +1,5 @@
 hash: 69a3a8b7a9d0599e8735c745c07b87edf78b6477d1a040140953079cbf33cc4e
-updated: 2017-12-31T19:55:29.633287009-05:00
+updated: 2018-01-01T15:20:45.547366743+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,13 +7,14 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: f08cee5a2aa53a1ab6d30e4ae11e381d1b265f81
+  version: 9a3559e6132eda4069baad2c63689729f5d20ac4
   subpackages:
   - analytics
   - context
   - encoding/json/types
   - encoding/yaml
   - homedir
+  - ioutil
   - log
   - net/httpclient
   - runtime
@@ -179,7 +180,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 44145f04b68cf362d9c4df2182967c2275eaefed
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -270,7 +271,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: 5aea7eccd748c923125d01100ba9051e7daf9052
+  version: f4fbe461c426dbecefee76e047e3a03058de525c
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -280,32 +281,32 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: bd0d3ecbb6facd0660d1fcf1dddfd2b7b0448c81
+  version: 8c1716f64df7744601ae96ccaaf7dd004c8a659a
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 1d88f33a9722790b8837f276ede3d1f4e5a80ae6
+  version: 3fba5f4ef8fbb838567fa49c1a8d4313df7887cc
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: f0bddd864e3303101840caa5352792fb5e321a2c
+  version: ef1b6e14ef979cfaa3d40915f0ff5f8cd8db176d
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: c966efd5f9b980588a2df93465e817d33b43a1c5
+  version: 788ae178f9b3c35c61d814deaa133be1e7b7425a
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: 03d4cdc729f961f54bfc3b6a8173af0857dbb502
+  version: 4b8df806c06a7f50cca577f182793c6a22c92169
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: 1dc0d5bf678d7a687b313033c13ae6bbc9a118e5
+  version: f6572764f926062b2e83a8e17571262c70b0a539
   subpackages:
   - pkg/docker
   - pkg/validator
@@ -436,7 +437,7 @@ imports:
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
+  version: 5bee14b453b4c71be47ec1781b0fa61c2ea182db
   subpackages:
   - internal
   - internal/app_identity

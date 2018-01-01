@@ -11,15 +11,15 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateMySQL(client kubernetes.Interface, mysql *api.MySQL, docker dr.Docker) error {
+func ValidateMySQL(client kubernetes.Interface, mysql *api.MySQL, docker *dr.Docker) error {
 	if mysql.Spec.Version == "" {
 		return fmt.Errorf(`object 'Version' is missing in '%v'`, mysql.Spec)
 	}
 
-	// Set Database Image version
-	version := fmt.Sprintf("%v", mysql.Spec.Version)
-	if err := adr.CheckDockerImageVersion(docker.GetImage(mysql), version); err != nil {
-		return fmt.Errorf(`Image %vs not found`, docker.GetImageWithTag(mysql), version)
+	if docker != nil {
+		if err := adr.CheckDockerImageVersion(docker.GetImage(mysql), string(mysql.Spec.Version)); err != nil {
+			return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(mysql))
+		}
 	}
 
 	if mysql.Spec.Storage != nil {

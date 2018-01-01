@@ -14,13 +14,15 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidatePostgres(client kubernetes.Interface, postgres *api.Postgres, docker dr.Docker) error {
+func ValidatePostgres(client kubernetes.Interface, postgres *api.Postgres, docker *dr.Docker) error {
 	if postgres.Spec.Version == "" {
 		return fmt.Errorf(`object 'Version' is missing in '%v'`, postgres.Spec)
 	}
 
-	if err := adr.CheckDockerImageVersion(docker.GetImage(postgres), string(postgres.Spec.Version)); err != nil {
-		return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(postgres))
+	if docker != nil {
+		if err := adr.CheckDockerImageVersion(docker.GetImage(postgres), string(postgres.Spec.Version)); err != nil {
+			return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(postgres))
+		}
 	}
 
 	if postgres.Spec.Storage != nil {
