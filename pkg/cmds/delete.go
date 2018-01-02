@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -90,11 +91,13 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		return err
 	}
 
-	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
-	return deleteResult(r, out, shortOutput, mapper)
+	return deleteResult(cmd, r, out, mapper)
 }
 
-func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
+func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
+	forceDeletion := cmdutil.GetFlagBool(cmd, "force")
+	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
+
 	infoList := make([]*resource.Info, 0)
 	err := r.Visit(func(info *resource.Info, err error) error {
 		if err != nil {
@@ -105,8 +108,10 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 			return err
 		}
 
-		if err := validator.ValidateDeletion(info); err != nil {
-			return cmdutil.AddSourceToErr("validating", info.Source, err)
+		if !forceDeletion {
+			if err := validator.ValidateDeletion(info); err != nil {
+				return cmdutil.AddSourceToErr("validating", info.Source, err)
+			}
 		}
 
 		infoList = append(infoList, info)
@@ -117,21 +122,37 @@ func deleteResult(r *resource.Result, out io.Writer, shortOutput bool, mapper me
 		return err
 	}
 
-	found := 0
+	if len(infoList) == 0 {
+		fmt.Fprintln(out, "No resources found")
+		return nil
+	}
+
 	for _, info := range infoList {
-		found++
-		if err := deleteResource(info, out, shortOutput, mapper); err != nil {
+		if err := deleteResource(info, out, mapper, shortOutput, forceDeletion); err != nil {
 			return err
 		}
 	}
 
-	if found == 0 {
-		fmt.Fprintln(out, "No resources found")
-	}
 	return nil
 }
 
-func deleteResource(info *resource.Info, out io.Writer, shortOutput bool, mapper meta.RESTMapper) error {
+var forceDeletePatch = `
+{
+   "metadata":{
+      "finalizers":null
+   }
+}
+`
+
+func deleteResource(info *resource.Info, out io.Writer, mapper meta.RESTMapper, shortOutput, forceDeletion bool) error {
+	if forceDeletion {
+		resource.NewHelper(info.Client, info.Mapping).Patch(
+			info.Namespace,
+			info.Name,
+			types.MergePatchType,
+			[]byte(forceDeletePatch),
+		)
+	}
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil {
 		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}

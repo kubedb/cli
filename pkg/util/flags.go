@@ -25,6 +25,7 @@ func AddCreateFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
 
 func AddDeleteFlags(cmd *cobra.Command, options *resource.FilenameOptions) {
 	cmd.Flags().StringP("namespace", "n", core.NamespaceDefault, "Delete object(s) from this namespace.")
+	cmd.Flags().BoolP("force", "", false, "Immediate deletion of some resources may result in inconsistency or data loss.")
 	cmd.Flags().StringP("selector", "l", "", "Selector (label query) to filter on.")
 	cmd.Flags().StringP("output", "o", "", "Output mode. Use \"-o name\" for shorter output (resource/name).")
 	usage := "delete the resource"
