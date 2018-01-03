@@ -94,10 +94,10 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		return err
 	}
 
-	return deleteResult(cmd, r, out, mapper, deleteAll)
+	return deleteResult(cmd, r, out, mapper)
 }
 
-func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper, deleteAll bool) error {
+func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
 	forceDeletion := cmdutil.GetFlagBool(cmd, "force")
 	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
 
@@ -132,10 +132,7 @@ func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper 
 
 	for _, info := range infoList {
 		if err := deleteResource(info, out, mapper, shortOutput, forceDeletion); err != nil {
-			if !deleteAll {
-				return err
-			}
-			fmt.Println(cmdutil.StandardErrorMessage(err))
+			return err
 		}
 	}
 
@@ -159,10 +156,8 @@ func deleteResource(info *resource.Info, out io.Writer, mapper meta.RESTMapper, 
 			[]byte(forceDeletePatch),
 		)
 	}
-	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil {
-		if !forceDeletion || (forceDeletion && !kerr.IsNotFound(err)) {
-			return cmdutil.AddSourceToErr("deleting", info.Source, err)
-		}
+	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil && !kerr.IsNotFound(err) {
+		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}
 	cmdutil.PrintSuccess(mapper, shortOutput, out, info.Mapping.Resource, info.Name, false, "deleted")
 	return nil
