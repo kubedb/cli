@@ -9,6 +9,7 @@ import (
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/kubedb/cli/pkg/validator"
 	"github.com/spf13/cobra"
+	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/types"
@@ -41,7 +42,7 @@ func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 	options := &resource.FilenameOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label)])",
+		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)])",
 		Short:   "Delete resources by filenames, stdin, resources and names, or by resources and label selector",
 		Long:    deleteLong,
 		Example: deleteExample,
@@ -57,6 +58,7 @@ func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
 
 func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []string, options *resource.FilenameOptions) error {
 	selector := cmdutil.GetFlagString(cmd, "selector")
+	deleteAll := cmdutil.GetFlagBool(cmd, "all")
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	categoryExpander := f.CategoryExpander()
 	mapper, typer, err := f.UnstructuredObject()
@@ -83,6 +85,7 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
 		SelectorParam(selector).
+		SelectAllParam(deleteAll).
 		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
 		Flatten().
 		Do()
@@ -91,10 +94,10 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		return err
 	}
 
-	return deleteResult(cmd, r, out, mapper)
+	return deleteResult(cmd, r, out, mapper, deleteAll)
 }
 
-func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
+func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper, deleteAll bool) error {
 	forceDeletion := cmdutil.GetFlagBool(cmd, "force")
 	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
 
@@ -129,7 +132,10 @@ func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper 
 
 	for _, info := range infoList {
 		if err := deleteResource(info, out, mapper, shortOutput, forceDeletion); err != nil {
-			return err
+			if !deleteAll {
+				return err
+			}
+			fmt.Println(cmdutil.StandardErrorMessage(err))
 		}
 	}
 
@@ -154,7 +160,9 @@ func deleteResource(info *resource.Info, out io.Writer, mapper meta.RESTMapper, 
 		)
 	}
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil {
-		return cmdutil.AddSourceToErr("deleting", info.Source, err)
+		if !forceDeletion || (forceDeletion && !kerr.IsNotFound(err)) {
+			return cmdutil.AddSourceToErr("deleting", info.Source, err)
+		}
 	}
 	cmdutil.PrintSuccess(mapper, shortOutput, out, info.Mapping.Resource, info.Name, false, "deleted")
 	return nil
