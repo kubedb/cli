@@ -35,7 +35,13 @@ var (
 		cat postgres.json | kubedb delete -f -
 
 		# Delete elasticsearch with label elasticsearch.kubedb.com/name=elasticsearch-demo.
-		kubedb delete elasticsearch -l elasticsearch.kubedb.com/name=elasticsearch-demo`)
+		kubedb delete elasticsearch -l elasticsearch.kubedb.com/name=elasticsearch-demo
+
+		# Force delete a mysql object
+		kubedb delete mysql m1 --force
+
+		# Delete all mysql objects
+		kubedb delete mysql --all`)
 )
 
 func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
