@@ -63,7 +63,7 @@ var operatorLabel = map[string]string{
 }
 
 const (
-	imageOperator      = "kubedb/operator"
+	imageOperator      = "operator"
 	operatorName       = "kubedb-operator"
 	operatorContainer  = "operator"
 	operatorPortName   = "web"
