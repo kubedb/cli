@@ -50,6 +50,7 @@ func AddInitFlags(cmd *cobra.Command) {
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 	cmd.Flags().String("governing-service", "kubedb", "Governing service for database statefulset")
 	cmd.Flags().String("docker-registry", "kubedb", "User provided docker repository")
+	cmd.Flags().String("image-pull-secret", "", " Reference to secret in the same namespace")
 	cmd.Flags().String("address", ":8080", "Address to listen on for web interface and telemetry.")
 	cmd.Flags().Bool("rbac", false, "If true, uses RBAC with operator and database objects")
 }
