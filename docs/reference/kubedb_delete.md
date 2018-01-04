@@ -19,7 +19,7 @@ Delete resources by filenames, stdin, resources and names, or by resources and l
 Note that the delete command does NOT do resource version checks
 
 ```
-kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
+kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [flags]
 ```
 
 ### Examples
@@ -33,11 +33,18 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label)]) [flags]
   
   # Delete elasticsearch with label elasticsearch.kubedb.com/name=elasticsearch-demo.
   kubedb delete elasticsearch -l elasticsearch.kubedb.com/name=elasticsearch-demo
+  
+  # Force delete a mysql object
+  kubedb delete mysql ms-demo --force
+  
+  # Delete all mysql objects
+  kubedb delete mysql --all
 ```
 
 ### Options
 
 ```
+      --all                    Delete all resources, including uninitialized ones, in the namespace of the specified resource types.
   -f, --filename stringSlice   Filename to use to delete the resource
       --force                  Immediate deletion of some resources may result in inconsistency or data loss.
   -h, --help                   help for delete
