@@ -1,4 +1,16 @@
-> New to KubeDB? Please start [here](/docs/tutorials/README.md).
+---
+title: MySQL
+menu:
+  docs_0.8.0-beta.0:
+    identifier: mysql-concepts
+    name: MySQL
+    parent: concepts
+    weight: 20
+menu_name: docs_0.8.0-beta.0
+section_menu_id: concepts
+---
+
+> New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # MySQL
 
@@ -143,7 +155,7 @@ KubeDB supports taking periodic snapshots for MySQL database. This is an optiona
 
  - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
 
- - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph , etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshots.md).
+ - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph , etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
 
  - `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
@@ -161,9 +173,9 @@ To learn how to monitor MySQL databases, please visit [here](/docs/concepts/moni
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a MySQL database [here](/docs/tutorials/mysql/README.md).
+- Learn how to use KubeDB to run a MySQL database [here](/docs/guides/mysql/overview.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
-- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
-- Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
-- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
+- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
+- Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
+- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
+- Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
