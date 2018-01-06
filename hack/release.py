@@ -39,6 +39,18 @@ import yaml
 from collections import Counter
 
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
+RELEASE_TAGS = {
+    'cli': '0.8.0-beta.0',
+    'operator': '0.8.0-beta.0',
+    'apimachinery': '0.8.0-beta.0',
+    'postgres': '0.8.0-beta.0',
+    'elasticsearch': '0.8.0-beta.0',
+    'mysql': '0.1.0-beta.0',
+    'mongodb': '0.1.0-beta.0',
+    'memcached': '0.1.0-beta.0',
+    'redis': '0.1.0-beta.0'
+}
+
 
 def die(status):
     if status:
@@ -96,41 +108,44 @@ def glide_write(f, glide_config):
 
 
 class Kitten(object):
-    def __init__(self, tag):
-        self.tag = tag
-        self.version = semver.parse(self.tag)
-        self.next_version = semver.bump_minor(self.tag)
-        self.release_branch = 'release-{0}.{1}'.format(self.version['major'], self.version['minor'])
-        self.rel_deps = {
-            'github.com/kubedb/apimachinery': self.release_branch,
-            'github.com/kubedb/postgres': self.tag,
-            'github.com/kubedb/elasticsearch': self.tag,
-        }
-        self.master_deps = {
-            'github.com/kubedb/apimachinery': 'master',
-            'github.com/kubedb/postgres': 'master',
-            'github.com/kubedb/elasticsearch': 'master',
-        }
+    def __init__(self):
+        self.rel_deps = {}
+        self.master_deps = {}
+        for k in RELEASE_TAGS:
+            self.rel_deps['github.com/kubedb/' + k] = RELEASE_TAGS[k]
+            self.master_deps['github.com/kubedb/' + k] = 'master'
+        print self.rel_deps
+        print self.master_deps
 
     def release_apimachinery(self):
-        repo = libbuild.GOPATH + '/src/github.com/kubedb/apimachinery'
+        repo_name = 'apimachinery'
+        tag = RELEASE_TAGS[repo_name]
+        version = semver.parse(tag)
+        release_branch = 'release-{0}.{1}'.format(version['major'], version['minor'])
+
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
         call('glide slow', cwd=repo)
-        if git_requires_commit(self.tag, cwd=repo):
+        if git_requires_commit(tag, cwd=repo):
             call('./hack/make.py', cwd=repo)
             call('git add --all', cwd=repo)
-            call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
+            call('git commit -a -m "Prepare release {0}"'.format(tag), cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
         else:
             call('git reset HEAD --hard', cwd=repo)
-        git_checkout(self.release_branch, cwd=repo)
+        git_checkout(release_branch, cwd=repo)
         call('git merge master', cwd=repo)
-        call('git push origin {0}'.format(self.release_branch), cwd=repo)
+        call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
+        call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
 
     def release_db(self, repo_name, short_code):
+        tag = RELEASE_TAGS[repo_name]
+        version = semver.parse(tag)
+        release_branch = 'release-{0}.{1}'.format(version['major'], version['minor'])
+
         repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
         print(repo)
         print('----------------------------------------------------------------------------------------')
@@ -141,28 +156,33 @@ class Kitten(object):
             glide_mod(glide_config, self.rel_deps)
             glide_write(glide_file, glide_config)
             call('glide slow', cwd=repo)
-            if git_requires_commit(self.tag, cwd=repo):
+            if git_requires_commit(tag, cwd=repo):
                 call('./hack/make.py', cwd=repo)
                 call('git add --all', cwd=repo)
-                call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
+                call('git commit -a -m "Prepare release {0}"'.format(tag), cwd=repo, eoe=False)
                 call('git push origin master', cwd=repo)
             else:
                 call('git reset HEAD --hard', cwd=repo)
-            git_checkout(self.release_branch, cwd=repo)
+            git_checkout(release_branch, cwd=repo)
             call('git merge master', cwd=repo)
-            call('git tag -fa {0} -m "Release {0}"'.format(self.tag), cwd=repo)
-            call('git push origin {0} --tags --force'.format(self.release_branch), cwd=repo)
+            call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
+            call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
             call('rm -rf dist', cwd=repo)
             call('./hack/docker/{0}-operator/setup.sh'.format(short_code), cwd=repo)
             call('env APPSCODE_ENV=prod ./hack/docker/{0}-operator/setup.sh release'.format(short_code), cwd=repo)
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
-            call('git commit -a -m "Start {0} dev cycle"'.format(self.next_version), cwd=repo, eoe=False)
+            call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
     def release_operator(self):
-        repo = libbuild.GOPATH + '/src/github.com/kubedb/operator'
+        repo_name = 'operator'
+        tag = RELEASE_TAGS[repo_name]
+        version = semver.parse(tag)
+        release_branch = 'release-{0}.{1}'.format(version['major'], version['minor'])
+
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
@@ -172,28 +192,33 @@ class Kitten(object):
             glide_mod(glide_config, self.rel_deps)
             glide_write(glide_file, glide_config)
             call('glide slow', cwd=repo)
-            if git_requires_commit(self.tag, cwd=repo):
+            if git_requires_commit(tag, cwd=repo):
                 call('./hack/make.py', cwd=repo)
                 call('git add --all', cwd=repo)
-                call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
+                call('git commit -a -m "Prepare release {0}"'.format(tag), cwd=repo, eoe=False)
                 call('git push origin master', cwd=repo)
             else:
                 call('git reset HEAD --hard', cwd=repo)
-            git_checkout(self.release_branch, cwd=repo)
+            git_checkout(release_branch, cwd=repo)
             call('git merge master', cwd=repo)
-            call('git tag -fa {0} -m "Release {0}"'.format(self.tag), cwd=repo)
-            call('git push origin {0} --tags --force'.format(self.release_branch), cwd=repo)
+            call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
+            call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
             call('rm -rf dist', cwd=repo)
             call('./hack/docker/setup.sh', cwd=repo)
             call('env APPSCODE_ENV=prod ./hack/docker/setup.sh release', cwd=repo)
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
-            call('git commit -a -m "Start {0} dev cycle"'.format(self.next_version), cwd=repo, eoe=False)
+            call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
     def release_cli(self):
-        repo = libbuild.GOPATH + '/src/github.com/kubedb/cli'
+        repo_name = 'cli'
+        tag = RELEASE_TAGS[repo_name]
+        version = semver.parse(tag)
+        release_branch = 'release-{0}.{1}'.format(version['major'], version['minor'])
+
+        repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
@@ -203,34 +228,52 @@ class Kitten(object):
             glide_mod(glide_config, self.rel_deps)
             glide_write(glide_file, glide_config)
             call('glide slow', cwd=repo)
-            if git_requires_commit(self.tag, cwd=repo):
+            if git_requires_commit(tag, cwd=repo):
                 call('./hack/make.py', cwd=repo)
                 call('git add --all', cwd=repo)
-                call('git commit -a -m "Prepare release {0}"'.format(self.tag), cwd=repo, eoe=False)
+                call('git commit -a -m "Prepare release {0}"'.format(tag), cwd=repo, eoe=False)
                 call('git push origin master', cwd=repo)
             else:
                 call('git reset HEAD --hard', cwd=repo)
-            git_checkout(self.release_branch, cwd=repo)
+            git_checkout(release_branch, cwd=repo)
             call('git merge master', cwd=repo)
-            call('git tag -fa {0} -m "Release {0}"'.format(self.tag), cwd=repo)
-            call('git push origin {0} --tags --force'.format(self.release_branch), cwd=repo)
+            call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
+            call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
             call('rm -rf dist', cwd=repo)
             call('env APPSCODE_ENV=prod ./hack/make.py build', cwd=repo)
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
-            call('git commit -a -m "Start {0} dev cycle"'.format(self.next_version), cwd=repo, eoe=False)
+            call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
 
-def release(comp=None, tag=None):
-    cat = Kitten(tag)
+def release(comp=None):
+    cat = Kitten()
     if comp is None:
         cat.release_apimachinery()
         cat.release_db('postgres', 'pg')
         cat.release_db('elasticsearch', 'es')
+        cat.release_db('mysql', 'my')
+        cat.release_db('mongodb', 'mg')
+        cat.release_db('memcached', 'mc')
+        cat.release_db('redis', 'rd')
         cat.release_operator()
         cat.release_cli()
+    elif comp == 'apimachinery':
+        cat.release_apimachinery()
+    elif comp in ['postgres', 'pg']:
+        cat.release_db('postgres', 'pg')
+    elif comp in ['elasticsearch', 'es']:
+        cat.release_db('elasticsearch', 'es')
+    elif comp in ['mysql', 'my']:
+        cat.release_db('mysql', 'my')
+    elif comp in ['mongodb', 'mg']:
+        cat.release_db('mongodb', 'mg')
+    elif comp in ['memcached', 'mc']:
+        cat.release_db('memcached', 'mc')
+    elif comp in ['redis', 'rd']:
+        cat.release_db('redis', 'rd')
     elif comp == 'operator':
         cat.release_operator()
     elif comp == 'cli':
@@ -238,11 +281,11 @@ def release(comp=None, tag=None):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        release(None, *sys.argv[1:])
-    elif len(sys.argv) > 2:
+    if len(sys.argv) == 1:
+        release(None)
+    elif len(sys.argv) > 1:
         # http://stackoverflow.com/a/834451
         # http://stackoverflow.com/a/817296
         release(*sys.argv[1:])
     else:
-        print('Usage ./hack/release.py [component] 0.3.0')
+        print('Usage ./hack/release.py [component]')
