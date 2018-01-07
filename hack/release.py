@@ -39,6 +39,7 @@ import yaml
 from collections import Counter
 
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
+DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
     'cli': '0.8.0-beta.0',
     'operator': '0.8.0-beta.0',
@@ -50,7 +51,8 @@ RELEASE_TAGS = {
     'memcached': '0.1.0-beta.0',
     'redis': '0.1.0-beta.0'
 }
-DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
+KUTIL_VERSION = 'release-5.0'
+KUBEMON_VERSION = 'release-5.0'
 
 
 def die(status):
@@ -115,6 +117,11 @@ class Kitten(object):
         for k in RELEASE_TAGS:
             self.rel_deps['github.com/kubedb/' + k] = RELEASE_TAGS[k]
             self.master_deps['github.com/kubedb/' + k] = 'master'
+        self.rel_deps['github.com/appscode/kutil'] = KUTIL_VERSION
+        self.master_deps['github.com/appscode/kutil'] = KUTIL_VERSION
+        self.rel_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
+        self.master_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
+
         print self.rel_deps
         print self.master_deps
 
@@ -204,8 +211,7 @@ class Kitten(object):
             call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
             call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
             call('rm -rf dist', cwd=repo)
-            call('./hack/docker/setup.sh', cwd=repo)
-            call('env APPSCODE_ENV=prod ./hack/docker/setup.sh release', cwd=repo)
+            call('./hack/release.sh', cwd=repo)
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
