@@ -1,5 +1,5 @@
-hash: 69a3a8b7a9d0599e8735c745c07b87edf78b6477d1a040140953079cbf33cc4e
-updated: 2018-01-01T19:20:02.612476188+06:00
+hash: 3e4f068ac0ae69a448a4d274d4045d1f8816bce775333188d7b8be3ab5c17654
+updated: 2018-01-06T23:28:17.215504945-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -22,19 +22,16 @@ imports:
   - types
   - version
 - name: github.com/appscode/kube-mon
-  version: dd6884c63ee4615ca9ecdb7f0ca3e35c975bcca3
+  version: 7f7ea00b96f4fe39dbcc4fbe405768eae032ba2f
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: a506fd42d3c4d688675c639c9c14c27b79275e73
+  version: 4a8306c9183a0dbebfc98327238735a1fb015e6a
   subpackages:
-  - core/v1
   - meta
   - tools/analytics
-- name: github.com/appscode/mergo
-  version: e3000cb3d28c72b837601cac94debd91032d19fe
 - name: github.com/appscode/osm
-  version: 8e933dfca7c6a2730d77a63282369d843b1db1f4
+  version: 8175dd853f6f3d4530b14018901c79140e305f3a
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -183,7 +180,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
+  version: 44145f04b68cf362d9c4df2182967c2275eaefed
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -200,7 +197,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 97a1ff3c48253a51c601f6e4420181273b6ca0ea
+  version: 97aa668b73e764ccdd786bc3ccd2edffe621150e
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -213,7 +210,7 @@ imports:
 - name: github.com/google/gofuzz
   version: 44d81051d367757e1c7c6a5a86423ece9afcf63c
 - name: github.com/google/uuid
-  version: e367a344cbe8e08149f9951115dc299ebd42b919
+  version: dec09d789f3dba190787f8b4454c7d3c936fed9e
 - name: github.com/googleapis/gnostic
   version: 0c5108395e2debce0d731cf0287ddf7242066aba
   subpackages:
@@ -248,7 +245,7 @@ imports:
   subpackages:
   - diskcache
 - name: github.com/hashicorp/go-version
-  version: ac737305c16432f4c660c6fc68cdcda4b5a0b5ae
+  version: 1b1de86cf2ec13494b6814b48157884efaf71c54
   repo: https://github.com/appscode/go-version.git
   vcs: git
 - name: github.com/hashicorp/golang-lru
@@ -274,7 +271,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: f4fbe461c426dbecefee76e047e3a03058de525c
+  version: 7604bdfdd4e2b6f1c301847c8d43ecd8e726dc9d
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -284,32 +281,32 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: 86b2b2f0ba1ac7d4b728f3c60c0f5afd7553e124
+  version: 02c95056e79e1b0d68c61ce872e7edf608ef030e
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 3fba5f4ef8fbb838567fa49c1a8d4313df7887cc
+  version: 72ac58c2530fdc791555f7b4a3a57491238e8543
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: ef1b6e14ef979cfaa3d40915f0ff5f8cd8db176d
+  version: a3947346193a6cc127254a853b8816c05c2ab83d
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: 788ae178f9b3c35c61d814deaa133be1e7b7425a
+  version: 2f1e4b7d1c3e85daea6c7fe6a1612b3d2859f26d
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: 4b8df806c06a7f50cca577f182793c6a22c92169
+  version: 67472b345441321ec30c48b79f1bcd8ddf5eb3aa
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: f6572764f926062b2e83a8e17571262c70b0a539
+  version: 473d2107b6b507531d7ff5d33d9a1e1c6a4b5ffc
   subpackages:
   - pkg/docker
   - pkg/validator
@@ -433,7 +430,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 92c31202d4179425301c9ad5a63abd8df45a9674
+  version: b1c0f9b3aa8fac163224fab909402d49c6dce50a
   subpackages:
   - gensupport
   - googleapi
@@ -483,7 +480,7 @@ imports:
   - storage/v1
   - storage/v1beta1
 - name: k8s.io/apiextensions-apiserver
-  version: 996a70a27a0dcf53642ca52601b9107cb2ad810a
+  version: d0becfa6529e20309bd6684f8486abc265cf0b59
   subpackages:
   - pkg/apis/apiextensions
   - pkg/apis/apiextensions/v1beta1
@@ -530,7 +527,6 @@ imports:
   - pkg/util/httpstream/spdy
   - pkg/util/intstr
   - pkg/util/json
-  - pkg/util/jsonmergepatch
   - pkg/util/mergepatch
   - pkg/util/net
   - pkg/util/rand
@@ -549,7 +545,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 2279c12eff8d4d1dc65a104dac36483c1b59ff54
+  version: 5f5a3e21b6c737592610cc10da258e88418ab895
   subpackages:
   - pkg/admission
   - pkg/admission/initializer
@@ -853,7 +849,7 @@ imports:
   - plugin/pkg/scheduler/util
   - staging/src/k8s.io/apimachinery/pkg/util/rand
 - name: k8s.io/metrics
-  version: 1c9c9d9dd5fbc5954f19e06aaa557b34c9857a5c
+  version: 7c6ce8e360c420e59fb0a8005972ddce5aa5bb9b
   subpackages:
   - pkg/apis/metrics
   - pkg/apis/metrics/v1alpha1

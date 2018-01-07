@@ -6,7 +6,7 @@ import (
 
 const (
 	ImageKubedbOperator = "operator"
-	ImageMySQLOperator  = "ms-operator"
+	ImageMySQLOperator  = "my-operator"
 	ImageMySQL          = "mysql"
 	ImageMySQLTools     = "mysql-tools"
 )

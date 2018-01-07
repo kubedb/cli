@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	ImageKubedbOperator   = "operator"
 	ImagePostgresOperator = "pg-operator"
 	ImagePostgres         = "postgres"
 	ImagePostgresTools    = "postgres-tools"
@@ -26,7 +27,7 @@ func (d Docker) GetImageWithTag(postgres *api.Postgres) string {
 }
 
 func (d Docker) GetOperatorImage(postgres *api.Postgres) string {
-	return d.Registry + "/" + ImagePostgresOperator
+	return d.Registry + "/" + ImageKubedbOperator
 }
 
 func (d Docker) GetOperatorImageWithTag(postgres *api.Postgres) string {
