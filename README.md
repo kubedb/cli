@@ -24,19 +24,19 @@ KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their S
 ## Supported Versions
 Please pick a version of KubeDB that matches your Kubernetes installation.
 
-| KubeDB Version                                                       | Docs                                                        | Kubernetes Version |
-|----------------------------------------------------------------------|-------------------------------------------------------------|--------------------|
-| [0.7.1](https://github.com/kubedb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.7.1/docs) | 1.7.x +            |
-| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
+| KubeDB Version                                                                     | Docs                                                        | Kubernetes Version |
+|------------------------------------------------------------------------------------|-------------------------------------------------------------|--------------------|
+| [0.8.0-beta.0](https://github.com/kubedb/cli/releases/tag/0.8.0-beta.0) (uses CRD) | [User Guide](https://kubedb.com/docs/0.8.0-beta.0/)         | 1.7.x +            |
+| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR)               | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation
-To install KubeDB, please follow the guide [here](/docs/setup/install.md).
+To install KubeDB, please follow the guide [here](https://kubedb.com/docs/latest/setup/install/).
 
 ## Using KubeDB
-Want to learn how to use KubeDB? Please start [here](/docs/guides//README.md).
+Want to learn how to use KubeDB? Please start [here](https://kubedb.com/docs/latest/guides/).
 
 ## Contribution guidelines
-Want to help improve KubeDB? Please start [here](/docs/CONTRIBUTING.md).
+Want to help improve KubeDB? Please start [here](https://kubedb.com/docs/latest/welcome/contributing/).
 
 ---
 
