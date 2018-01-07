@@ -50,6 +50,7 @@ RELEASE_TAGS = {
     'memcached': '0.1.0-beta.0',
     'redis': '0.1.0-beta.0'
 }
+DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
 
 
 def die(status):
@@ -141,7 +142,7 @@ class Kitten(object):
         call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
         call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
 
-    def release_db(self, repo_name, short_code):
+    def release_db(self, repo_name):
         tag = RELEASE_TAGS[repo_name]
         version = semver.parse(tag)
         release_branch = 'release-{0}.{1}'.format(version['major'], version['minor'])
@@ -168,8 +169,7 @@ class Kitten(object):
             call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
             call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
             call('rm -rf dist', cwd=repo)
-            call('./hack/docker/{0}-operator/setup.sh'.format(short_code), cwd=repo)
-            call('env APPSCODE_ENV=prod ./hack/docker/{0}-operator/setup.sh release'.format(short_code), cwd=repo)
+            call('./hack/release.sh', cwd=repo)
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
@@ -252,28 +252,14 @@ def release(comp=None):
     cat = Kitten()
     if comp is None:
         cat.release_apimachinery()
-        cat.release_db('postgres', 'pg')
-        cat.release_db('elasticsearch', 'es')
-        cat.release_db('mysql', 'my')
-        cat.release_db('mongodb', 'mg')
-        cat.release_db('memcached', 'mc')
-        cat.release_db('redis', 'rd')
+        for name in DATABASES:
+            cat.release_db(name)
         cat.release_operator()
         cat.release_cli()
     elif comp == 'apimachinery':
         cat.release_apimachinery()
-    elif comp in ['postgres', 'pg']:
-        cat.release_db('postgres', 'pg')
-    elif comp in ['elasticsearch', 'es']:
-        cat.release_db('elasticsearch', 'es')
-    elif comp in ['mysql', 'my']:
-        cat.release_db('mysql', 'my')
-    elif comp in ['mongodb', 'mg']:
-        cat.release_db('mongodb', 'mg')
-    elif comp in ['memcached', 'mc']:
-        cat.release_db('memcached', 'mc')
-    elif comp in ['redis', 'rd']:
-        cat.release_db('redis', 'rd')
+    elif comp in DATABASES:
+        cat.release_db(comp)
     elif comp == 'operator':
         cat.release_operator()
     elif comp == 'cli':
