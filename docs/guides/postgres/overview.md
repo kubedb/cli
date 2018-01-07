@@ -602,7 +602,7 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 
 ## Next Steps
-- Learn about the details of Postgres object [here](/docs/concepts/postgres.md).
+- Learn about the details of Postgres object [here](/docs/concepts/databases/postgres.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
