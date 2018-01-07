@@ -1,24 +1,23 @@
-
 ---
-title: KubeDB Overview
+title: Weclome | KubeDB
+description: Welcome to CLI
 menu:
-  docs_0.8.0:
-    identifier: kubedb-overview
-    name: Overview
-    parent: getting-started
-    weight: 10
-menu_name: docs_0.8.0
-section_menu_id: getting-started
-url: /docs/0.8.0/getting-started/
+  docs_0.8.0-beta.0:
+    identifier: readme-cli
+    name: Readme
+    parent: welcome
+    weight: -1
+menu_name: docs_0.8.0-beta.0
+section_menu_id: welcome
+url: /docs/0.8.0-beta.0/welcome/
 aliases:
-  - /docs/0.8.0/
-  - /docs/0.8.0/README/
+  - /docs/0.8.0-beta.0/
+  - /docs/0.8.0-beta.0/README/
 ---
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/kubedb/cli)](https://goreportcard.com/report/github.com/kubedb/cli)
 
 # KubeDB
-Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
+
+Running production quality databases in Kubernetes can be tricky. KubeDB is a framework for writing operators for any database that support the following operational requirements:
 
  - Create a database declaratively using CRD.
  - Take one-off backups or period backups to various cloud stores, eg,, S3, GCS, etc.
@@ -28,36 +27,28 @@ Running production quality database in Kubernetes can be tricky to say the least
  - Keep track of deleted databases, cleanup prior snapshots with a single command.
  - Use cli to manage databases like kubectl for Kubernetes.
 
-KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their SAAS platform on Kubernetes. Currently we include complete implementations for Postgres and Elasticsearch database.
+Currently KubeDB includes support for following datastores:
+ - Postgres
+ - Elasticsearch
+ - MySQL
+ - MongoDB
+ - Redis
+ - Memcached
 
-## Supported Versions
-Please pick a version of KubeDB that matches your Kubernetes installation.
+From here you can learn all about KubeDB's architecture and how to deploy and use KubeDB.
 
-| KubeDB Version                                                       | Docs                                                        | Kubernetes Version |
-|----------------------------------------------------------------------|-------------------------------------------------------------|--------------------|
-| [0.7.1](https://github.com/kubedb/cli/releases/tag/0.7.1) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.7.1/docs) | 1.7.x +            |
-| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR) | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
+- [Concepts](/docs/concepts/). Concepts explain some significant aspect of KubeDB. This is where you can learn about what KubeDB does and how it does it.
 
-## Installation
-To install KubeDB, please follow the guide [here](/docs/install.md).
+- [Setup](/docs/setup/). Setup contains instructions for installing the KubeDB in various cloud providers.
 
-## Using KubeDB
-Want to learn how to use KubeDB? Please start [here](/docs/tutorials/README.md).
+- [Guides](/docs/guides/). Guides show you how to perform tasks with KubeDB.
 
-## Contribution guidelines
-Want to help improve KubeDB? Please start [here](/CONTRIBUTING.md).
+- [Reference](/docs/reference/). Detailed exhaustive lists of command-line options, configuration options, API definitions, and procedures.
 
-## Project Status
-Wondering what features are coming next? Please visit [here](/ROADMAP.md).
+We're always looking for help improving our documentation, so please don't hesitate to [file an issue](https://github.com/kubedb/project/issues/new) if you see some problem. Or better yet, submit your own [contributions](/docs/CONTRIBUTING.md) to help make our docs better.
 
 ---
 
-**The KubeDB operator collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--analytics=false`.
+**KubeDB binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--analytics=false`.
 
 ---
-
-## Support
-If you have any questions, you can reach out to us.
-* [Slack](https://slack.appscode.com)
-* [Twitter](https://twitter.com/AppsCodeHQ)
-* [Website](https://appscode.com)

@@ -1,4 +1,16 @@
-> New to KubeDB? Please start [here](/docs/tutorials/README.md).
+---
+title: Memcached Concepts
+menu:
+  docs_0.8.0-beta.0:
+    identifier: concepts-memcached
+    name: Memcached
+    parent: concepts
+    weight: 13
+menu_name: docs_0.8.0-beta.0
+section_menu_id: concepts
+---
+
+> New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Memcached
 
@@ -60,8 +72,8 @@ To learn how to monitor Memcached databases, please visit [here](/docs/concepts/
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a Memcached database [here](/docs/tutorials/memcached/README.md).
-- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
-- Learn how to use KubeDB in a [RBAC](/docs/tutorials/rbac.md) enabled cluster.
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md).
-- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
+- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/overview.md).
+- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
+- Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
+- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
+- Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
