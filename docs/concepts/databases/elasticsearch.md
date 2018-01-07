@@ -1,10 +1,10 @@
 ---
-title: Elasticsearch Concepts
+title: Elasticsearch
 menu:
   docs_0.8.0-beta.0:
-    identifier: concepts-elasticsearch
+    identifier: elasticsearch-db
     name: Elasticsearch
-    parent: concepts
+    parent: databases
     weight: 10
 menu_name: docs_0.8.0-beta.0
 section_menu_id: concepts

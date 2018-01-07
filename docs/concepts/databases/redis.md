@@ -2,10 +2,10 @@
 title: Redis
 menu:
   docs_0.8.0-beta.0:
-    identifier: redis-concepts
+    identifier: redis-db
     name: Redis
-    parent: concepts
-    weight: 30
+    parent: databases
+    weight: 35
 menu_name: docs_0.8.0-beta.0
 section_menu_id: concepts
 ---

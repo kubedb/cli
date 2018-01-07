@@ -1,11 +1,11 @@
 ---
-title: Postgres Concepts
+title: Postgres
 menu:
   docs_0.8.0-beta.0:
-    identifier: concepts-postgres
+    identifier: postgres-db
     name: Postgres
-    parent: concepts
-    weight: 25
+    parent: databases
+    weight: 30
 menu_name: docs_0.8.0-beta.0
 section_menu_id: concepts
 ---
