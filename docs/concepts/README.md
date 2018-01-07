@@ -15,7 +15,7 @@ aliases:
 
 # Concepts
 
-Concepts help you learn about the different parts of the CLI and the abstractions it uses.
+Concepts help you learn about the different parts of the KubeDB and the abstractions it uses.
 
 - What is KubeDB
   - [Overview](/docs/concepts/what-is-kubedb/overview.md). Provides a conceptual introduction to KubeDB, including the problems it solves and its high-level architecture.

@@ -100,11 +100,11 @@ postgres "p1" created
 Here,
  - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.5 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this tpr is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+ - `spec.doNotPause` tells KubeDB operator that if this crd is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching tpr name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB operator watches for `Postgres` objects using Kubernetes api. When a `Postgres` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
 ```console
 $ kubedb describe pg -n demo p1
@@ -161,7 +161,7 @@ p1        10.0.0.143   <none>        5432/TCP       3m
 pgadmin   10.0.0.120   <pending>     80:30576/TCP   6m
 ```
 
-Since RBAC is enabled, a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching tpr name is also created and used as the service account name for the corresponding StatefulSet. This Role is used by Prometheus exporter sidecar container to connect to the database.
+Since RBAC is enabled, a ClusterRole, ServiceAccount and ClusterRoleBinding with the matching crd name is also created and used as the service account name for the corresponding StatefulSet. This Role is used by Prometheus exporter sidecar container to connect to the database.
 
 ```yaml
 $ kubectl get role -n demo p1 -o yaml
@@ -225,7 +225,7 @@ subjects:
   namespace: demo
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified tpr:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified crd:
 
 
 ```yaml
@@ -263,7 +263,7 @@ status:
 ```
 
 
-Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {tpr-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the tpr using `spec.databaseSecret.secretName`.
+Please note that KubeDB operator has created a new Secret called `p1-admin-auth` (format: {crd-name}-admin-auth) for storing the password for `postgres` superuser. This secret contains a `.admin` key with a ini formatted key-value pairs. If you want to use an existing secret please specify that when creating the crd using `spec.databaseSecret.secretName`.
 
 Now, you can connect to this database from the PGAdmin dashboard using the database pod IP and `postgres` user password. 
 

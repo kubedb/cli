@@ -1,6 +1,6 @@
 ---
 title: Weclome | KubeDB
-description: Welcome to CLI
+description: Welcome to KubeDB
 menu:
   docs_0.8.0-beta.0:
     identifier: readme-cli

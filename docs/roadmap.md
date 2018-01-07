@@ -1,6 +1,6 @@
 ---
 title: Roadmap | KubeDB
-description: Roadmap of CLI
+description: Roadmap of KubeDB
 menu:
   docs_0.8.0-beta.0:
     identifier: roadmap-cli
