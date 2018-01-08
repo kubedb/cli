@@ -1,16 +1,16 @@
 ---
 title: Snapshot
 menu:
-  docs_0.8.0:
+  docs_0.8.0-beta.0:
     identifier: snapshot-concepts
     name: Snapshot
     parent: concepts
-    weight: 25
-menu_name: docs_0.8.0
+    weight: 35
+menu_name: docs_0.8.0-beta.0
 section_menu_id: concepts
 ---
 
-> New to KubeDB? Please start [here](/docs/tutorials/README.md).
+> New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Snapshot
 
@@ -442,7 +442,7 @@ spec:
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres/README.md).
-- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch/README.md).
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
-- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/guides/postgres/overview.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/guides/elasticsearch/overview.md).
+- Wondering what features are coming next? Please visit [here](/docs/roadmap.md). 
+- Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -1,11 +1,11 @@
 ---
 title: Kubedb Init
 menu:
-  docs_0.8.0:
+  docs_0.8.0-beta.0:
     identifier: kubedb-init
     name: Kubedb Init
     parent: reference
-menu_name: docs_0.8.0
+menu_name: docs_0.8.0-beta.0
 section_menu_id: reference
 ---
 ## kubedb init
@@ -27,7 +27,7 @@ kubedb init [flags]
   kubedb init
   
   # Upgrade operator to use another version.
-  kubedb init --version=0.8.0 --upgrade
+  kubedb init --version=0.8.0-beta.0 --upgrade
 ```
 
 ### Options
@@ -40,7 +40,7 @@ kubedb init [flags]
       --operator-namespace string   Name of namespace where operator will be deployed. (default "kube-system")
       --rbac                        If true, uses RBAC with operator and database objects
       --upgrade                     If present, Upgrade operator to use provided version
-      --version string              Operator version (default "0.8.0")
+      --version string              Operator version (default "0.8.0-beta.0")
 ```
 
 ### Options inherited from parent commands

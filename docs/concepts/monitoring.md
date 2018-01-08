@@ -1,16 +1,16 @@
 ---
 title: Monitoring
 menu:
-  docs_0.8.0:
+  docs_0.8.0-beta.0:
     identifier: monitoring-concepts
     name: Monitoring
     parent: concepts
-    weight: 15
-menu_name: docs_0.8.0
+    weight: 18
+menu_name: docs_0.8.0-beta.0
 section_menu_id: concepts
 ---
 
-> New to KubeDB? Please start [here](/docs/tutorials/README.md).
+> New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Monitoring KubeDB
 
@@ -45,12 +45,12 @@ spec:
 | `spec.monitor.prometheus.labels`    | map    | `Required`. Indicates labels applied to service monitor.                                                    |
 | `spec.monitor.prometheus.interval`  | string | `Optional`. Indicates the scrape interval for database exporter endpoint (eg, '10s')                        |
 
-__Known Limitations:__ If the databse password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/kubedb/operator/issues/63).
+__Known Limitations:__ If the databse password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/kubedb/project/issues/53).
 
 
 ## Next Steps
-- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/tutorials/monitoring.md).
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/tutorials/postgres/README.md).
-- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/tutorials/elasticsearch/README.md).
-- Wondering what features are coming next? Please visit [here](/ROADMAP.md). 
-- Want to hack on KubeDB? Check our [contribution guidelines](/CONTRIBUTING.md).
+- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/guides/postgres/overview.md).
+- Learn how to use KubeDB to run an Elasticsearch database [here](/docs/guides/elasticsearch/overview.md).
+- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
+- Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/appscode/go/types"
-	"github.com/kubedb/apimachinery/pkg/docker"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
@@ -77,6 +76,7 @@ func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 	configureRBAC := cmdutil.GetFlagBool(cmd, "rbac")
 	governingService := cmdutil.GetFlagString(cmd, "governing-service")
 	dockerRegistry := cmdutil.GetFlagString(cmd, "docker-registry")
+	imagePullSecret := cmdutil.GetFlagString(cmd, "image-pull-secret")
 	address := cmdutil.GetFlagString(cmd, "address")
 
 	client, err := kube.NewKubeClient(cmd)
@@ -85,11 +85,6 @@ func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 	}
 
 	repository := fmt.Sprintf("%s/%s", dockerRegistry, imageOperator)
-
-	if err := docker.CheckDockerImageVersion(repository, version); err != nil {
-		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %s:%s not found.`, repository, version))
-		return nil
-	}
 
 	if configureRBAC {
 		if err := EnsureRBACStuff(client, namespace, out); err != nil {
@@ -146,6 +141,31 @@ func createOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 				},
 			},
 		},
+	}
+
+	if imagePullSecret != "" {
+		deployment.Spec.Template.Spec.ImagePullSecrets = []core.LocalObjectReference{
+			{
+				Name: imagePullSecret,
+			},
+		}
+		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = []core.VolumeMount{
+			{
+				Name:      "image-pull-secret",
+				ReadOnly:  true,
+				MountPath: "/srv/docker/secrets/",
+			},
+		}
+		deployment.Spec.Template.Spec.Volumes = []core.Volume{
+			{
+				Name: "image-pull-secret",
+				VolumeSource: core.VolumeSource{
+					Secret: &core.SecretVolumeSource{
+						SecretName: imagePullSecret,
+					},
+				},
+			},
+		}
 	}
 
 	if configureRBAC {
@@ -223,11 +243,6 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 
 	if tag == version {
 		fmt.Fprintln(out, "Operator deployment is already using this version.")
-		return nil
-	}
-
-	if err := docker.CheckDockerImageVersion(repository, version); err != nil {
-		fmt.Fprintln(errOut, fmt.Sprintf(`Operator image %v:%v not found.`, repository, version))
 		return nil
 	}
 

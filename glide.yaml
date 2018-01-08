@@ -5,7 +5,7 @@ import:
 - package: github.com/appscode/kutil
   version: release-5.0
 - package: github.com/appscode/kube-mon
-  version: master
+  version: release-5.0
 - package: github.com/ghodss/yaml
   version: v1.0.0
 - package: github.com/golang/glog
@@ -53,7 +53,7 @@ import:
 - package: golang.org/x/sys
   version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
 - package: github.com/appscode/kube-mon
-  version: master
+  version: release-5.0
 - package: github.com/hashicorp/go-version
   repo: https://github.com/appscode/go-version.git
   vcs: git
