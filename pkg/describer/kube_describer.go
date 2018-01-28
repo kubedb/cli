@@ -11,11 +11,11 @@ import (
 	"github.com/kubedb/cli/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
-	kapi "k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/apis/apps"
-	extensions "k8s.io/kubernetes/pkg/apis/extensions"
+	kapi "k8s.io/kubernetes/pkg/apis/core"
+	"k8s.io/kubernetes/pkg/apis/extensions"
 	coreclient "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset/typed/core/internalversion"
-	printers "k8s.io/kubernetes/pkg/printers"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
 func (d *humanReadableDescriber) describeStatefulSet(statefulSet apps.StatefulSet, out io.Writer) {

@@ -5,10 +5,9 @@ import (
 )
 
 const (
-	ImageKubedbOperator        = "operator"
-	ImageElasticsearchOperator = "es-operator"
-	ImageElasticsearch         = "elasticsearch"
-	ImageElasticsearchTools    = "elasticsearch-tools"
+	ImageKubedbOperator     = "operator"
+	ImageElasticsearch      = "elasticsearch"
+	ImageElasticsearchTools = "elasticsearch-tools"
 )
 
 type Docker struct {

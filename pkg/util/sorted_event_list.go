@@ -1,7 +1,7 @@
 package util
 
 import (
-	kapi "k8s.io/kubernetes/pkg/api"
+	kapi "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // ref: k8s.io/kubernetes/pkg/api/events/sorted_event_list.go
