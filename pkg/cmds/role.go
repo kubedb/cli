@@ -8,7 +8,6 @@ import (
 	apps "k8s.io/api/apps/v1beta1"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
-	extensions "k8s.io/api/extensions/v1beta1"
 	rbac "k8s.io/api/rbac/v1beta1"
 	storage "k8s.io/api/storage/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
@@ -26,11 +25,6 @@ var policyRuleOperator = []rbac.PolicyRule{
 		Verbs:     []string{"create", "delete", "get", "list"},
 	},
 	{
-		APIGroups: []string{extensions.GroupName},
-		Resources: []string{"thirdpartyresources"},
-		Verbs:     []string{"create", "delete", "get", "list"},
-	},
-	{
 		APIGroups: []string{rbac.GroupName},
 		Resources: []string{"rolebindings", "roles"},
 		Verbs:     []string{"create", "delete", "get", "patch"},
@@ -42,7 +36,12 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 	{
 		APIGroups: []string{core.GroupName},
-		Resources: []string{"secrets", "serviceaccounts"},
+		Resources: []string{"secrets"},
+		Verbs:     []string{"create", "delete", "get", "patch"},
+	},
+	{
+		APIGroups: []string{core.GroupName},
+		Resources: []string{"serviceaccounts"},
 		Verbs:     []string{"create", "delete", "get"},
 	},
 	{
@@ -53,7 +52,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{batch.GroupName},
 		Resources: []string{"jobs"},
-		Verbs:     []string{"create", "delete", "get"},
+		Verbs:     []string{"create", "delete", "get", "list"},
 	},
 	{
 		APIGroups: []string{storage.GroupName},
@@ -68,7 +67,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
-		Verbs:     []string{"delete", "get", "list", "watch"},
+		Verbs:     []string{"delete", "get", "list", "patch", "watch"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
