@@ -8,6 +8,7 @@ import (
 	adr "github.com/kubedb/apimachinery/pkg/docker"
 	amv "github.com/kubedb/apimachinery/pkg/validator"
 	dr "github.com/kubedb/elasticsearch/pkg/docker"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -37,6 +38,20 @@ func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elast
 
 	if elasticsearch.Spec.Storage != nil {
 		if err := amv.ValidateStorage(client, elasticsearch.Spec.Storage); err != nil {
+			return err
+		}
+	}
+
+	databaseSecret := elasticsearch.Spec.DatabaseSecret
+	if databaseSecret != nil {
+		if _, err := client.CoreV1().Secrets(elasticsearch.Namespace).Get(databaseSecret.SecretName, metav1.GetOptions{}); err != nil {
+			return err
+		}
+	}
+
+	certificateSecret := elasticsearch.Spec.CertificateSecret
+	if certificateSecret != nil {
+		if _, err := client.CoreV1().Secrets(elasticsearch.Namespace).Get(certificateSecret.SecretName, metav1.GetOptions{}); err != nil {
 			return err
 		}
 	}

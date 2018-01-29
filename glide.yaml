@@ -2,10 +2,6 @@ package: github.com/kubedb/cli
 import:
 - package: github.com/appscode/go
   version: master
-- package: github.com/appscode/kutil
-  version: release-5.0
-- package: github.com/appscode/kube-mon
-  version: release-5.0
 - package: github.com/ghodss/yaml
   version: v1.0.0
 - package: github.com/golang/glog
@@ -29,21 +25,27 @@ import:
 - package: github.com/yudai/gojsondiff
   version: 1.0.0
 - package: k8s.io/api
-  version: fe29995db37613b9c5b2a647544cf627bfa8d299
-- package: k8s.io/apiextensions-apiserver
-  version: release-1.8
+  version: kubernetes-1.9.0
 - package: k8s.io/apimachinery
-  version: 019ae5ada31de202164b118aee88ee2d14075c31
+  version: kubernetes-1.9.0
 - package: k8s.io/client-go
-  version: v5.0.0
+  version: v6.0.0
+- package: k8s.io/apiextensions-apiserver
+  version: kubernetes-1.9.0
 - package: k8s.io/kubernetes
-  version: v1.8.0
+  version: v1.9.0
+- package: github.com/appscode/kutil
+  version: release-6.0
+- package: github.com/appscode/kube-mon
+  version: release-6.0
 - package: k8s.io/metrics
-  version: release-1.8
+  version: kubernetes-1.9.0
 - package: github.com/graymeta/stow
   repo: https://github.com/appscode/stow.git
   vcs: git
   version: master
+- package: github.com/aws/aws-sdk-go/aws
+  version: v1.12.7
 - package: github.com/Azure/azure-sdk-for-go
   version: v10.2.1-beta
 - package: github.com/Azure/go-autorest
@@ -52,8 +54,6 @@ import:
   version: 19f72df4d05d31cbe1c56bfc8045c96babff6c7e
 - package: golang.org/x/sys
   version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
-- package: github.com/appscode/kube-mon
-  version: release-5.0
 - package: github.com/hashicorp/go-version
   repo: https://github.com/appscode/go-version.git
   vcs: git

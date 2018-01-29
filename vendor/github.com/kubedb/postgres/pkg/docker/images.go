@@ -5,10 +5,9 @@ import (
 )
 
 const (
-	ImageKubedbOperator   = "operator"
-	ImagePostgresOperator = "pg-operator"
-	ImagePostgres         = "postgres"
-	ImagePostgresTools    = "postgres-tools"
+	ImageKubedbOperator = "operator"
+	ImagePostgres       = "postgres"
+	ImagePostgresTools  = "postgres-tools"
 )
 
 type Docker struct {
