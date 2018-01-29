@@ -12,11 +12,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes/scheme"
-	kapi "k8s.io/kubernetes/pkg/api"
+	kapi "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/kubernetes/pkg/printers"
 )
-
-const statusUnknown = "Unknown"
 
 func (d *humanReadableDescriber) describeElasticsearch(item *api.Elasticsearch, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()

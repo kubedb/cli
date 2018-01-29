@@ -10,12 +10,11 @@ import (
 	"reflect"
 	"strings"
 
+	meta_util "github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/client/scheme"
 	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/editor"
-	"github.com/kubedb/cli/pkg/encoder"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/printer"
 	"github.com/kubedb/cli/pkg/util"
@@ -26,8 +25,8 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/jsonmergepatch"
 	"k8s.io/apimachinery/pkg/util/mergepatch"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -232,46 +231,31 @@ func visitToPatch(
 	}
 
 	extClient := tcs.NewForConfigOrDie(restClonfig)
-	codec := scheme.Codecs.LegacyCodec(tapi.SchemeGroupVersion)
 	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
 	err = patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
 
-		currOriginalObj, err := util.GetStructuredObject(originalObj)
+		originalJS, err := meta_util.MarshalToJson(originalObj, tapi.SchemeGroupVersion)
 		if err != nil {
 			return err
 		}
 
-		originalSerialization, err := runtime.Encode(codec, currOriginalObj)
-		if err != nil {
-			return err
-		}
-
-		editedSerialization, err := encoder.Encode(info.Object)
-		if err != nil {
-			return err
-		}
-
-		editedSerialization = stripComments(editedSerialization)
-
-		originalJS, err := yaml.ToJSON(originalSerialization)
-		if err != nil {
-			return err
-		}
-		editedJS, err := yaml.ToJSON(editedSerialization)
+		editedJS, err := meta_util.MarshalToJson(info.Object, tapi.SchemeGroupVersion)
 		if err != nil {
 			return err
 		}
 
 		if reflect.DeepEqual(originalJS, editedJS) {
 			// no edit, so just skip it.
-			cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "skipped")
+			f.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "skipped")
 			return nil
 		}
 
-		kind := currOriginalObj.GetObjectKind().GroupVersionKind().Kind
+		kind := originalObj.GetObjectKind().GroupVersionKind().Kind
 		preconditions := util.GetPreconditionFunc(kind)
-		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
+
+		patch, err := jsonmergepatch.CreateThreeWayJSONMergePatch(originalJS, editedJS, originalJS, preconditions...)
 		if err != nil {
+			fmt.Println(err.Error())
 			if mergepatch.IsPreconditionFailed(err) {
 				return preconditionFailedError()
 			}
@@ -308,7 +292,7 @@ func visitToPatch(
 		}
 
 		info.Refresh(patched, true)
-		cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
+		f.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
 		return nil
 	})
 	return err
@@ -316,22 +300,17 @@ func visitToPatch(
 
 func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
-	var mapper meta.RESTMapper
-	var typer runtime.ObjectTyper
-	categoryExpander := f.CategoryExpander()
-	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return nil, nil, nil, "", err
-	}
+
+	mapper, typer := f.Object()
 
 	resourceMapper := &resource.Mapper{
 		ObjectTyper:  typer,
 		RESTMapper:   mapper,
-		ClientMapper: resource.ClientMapperFunc(f.UnstructuredClientForMapping),
+		ClientMapper: resource.ClientMapperFunc(f.ClientForMapping),
 		Decoder:      unstructured.UnstructuredJSONScheme,
 	}
 
-	b := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	b := f.NewBuilder().Unstructured().
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()
@@ -342,7 +321,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 		Flatten().
 		Do()
 
-	err = r.Err()
+	err := r.Err()
 	if err != nil {
 		return nil, nil, nil, "", err
 	}

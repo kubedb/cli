@@ -10,7 +10,6 @@ import (
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/kubedb/cli/pkg/validator"
 	"github.com/spf13/cobra"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -58,26 +57,17 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 
 func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *resource.FilenameOptions) error {
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
-	categoryExpander := f.CategoryExpander()
-	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return err
-	}
 
-	r := resource.NewBuilder(
-		mapper,
-		categoryExpander,
-		typer,
-		resource.ClientMapperFunc(f.UnstructuredClientForMapping),
-		unstructured.UnstructuredJSONScheme).
-		Schema(util.Validator()).
+	mapper, _ := f.Object()
+
+	r := f.NewBuilder().Unstructured().Schema(util.Validator()).
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
 		Flatten().
 		Do()
 
-	err = r.Err()
+	err := r.Err()
 	if err != nil {
 		return err
 	}
@@ -135,7 +125,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 				resourceName = alias
 			}
 		}
-		cmdutil.PrintSuccess(mapper, false, out, resourceName, info.Name, false, "created")
+		f.PrintSuccess(mapper, false, out, resourceName, info.Name, false, "created")
 	}
 
 	if count == 0 {

@@ -10,7 +10,6 @@ import (
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
@@ -83,19 +82,14 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
 
-	categoryExpander := f.CategoryExpander()
-	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return err
-	}
-
 	if len(args) == 0 {
 		fmt.Fprint(errOut, "You must specify the type of resource to get. ", valid_resources)
 		usageString := "Required resource not specified."
 		return cmdutil.UsageErrorf(cmd, usageString)
 	}
 
-	var printAll bool = false
+	var printAll = false
+	var err error
 	resources := strings.Split(args[0], ",")
 	for i, r := range resources {
 		if r == "all" {
@@ -127,10 +121,12 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		cmd.Flag("show-all").Value.Set("true")
 	}
 
-	r := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	mapper, _ := f.Object()
+
+	r := f.NewBuilder().Unstructured().
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
-		SelectorParam(selector).
+		LabelSelectorParam(selector).
 		ResourceTypeOrNameArgs(true, args...).
 		ContinueOnError().
 		Latest().
@@ -156,7 +152,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		objs[ix] = infos[ix].Object
 	}
 
-	rPrinter, err := printer.NewPrinter(cmd)
+	rPrinter, err := printer.NewPrinter(cmd, mapper)
 	if err != nil {
 		return err
 	}
