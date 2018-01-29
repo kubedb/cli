@@ -49,8 +49,9 @@ func CheckDockerImageVersion(repository, reference string) error {
 		},
 		Logf: docker.Quiet,
 	}
-	if _, err := dockerRegistry.Manifest(repository, reference); err == nil {
-		return nil
+
+	if _, err := dockerRegistry.Manifest(repository, reference); err != nil {
+		return errors.New("failed to verify docker image")
 	}
-	return errors.New("failed to verify docker image")
+	return nil
 }

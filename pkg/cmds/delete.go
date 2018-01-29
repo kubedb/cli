@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/cobra"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -66,11 +65,8 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 	selector := cmdutil.GetFlagString(cmd, "selector")
 	deleteAll := cmdutil.GetFlagBool(cmd, "all")
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
-	categoryExpander := f.CategoryExpander()
-	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return err
-	}
+
+	mapper, _ := f.Object()
 
 	if len(args) > 0 {
 		resources := strings.Split(args[0], ",")
@@ -86,24 +82,23 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 		args[0] = strings.Join(resources, ",")
 	}
 
-	r := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
-		ContinueOnError().
+	r := f.NewBuilder().Unstructured().
 		NamespaceParam(cmdNamespace).DefaultNamespace().
 		FilenameParam(enforceNamespace, options).
-		SelectorParam(selector).
+		LabelSelectorParam(selector).
 		SelectAllParam(deleteAll).
 		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
 		Flatten().
 		Do()
-	err = r.Err()
+	err := r.Err()
 	if err != nil {
 		return err
 	}
 
-	return deleteResult(cmd, r, out, mapper)
+	return deleteResult(f, cmd, r, out, mapper)
 }
 
-func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
+func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
 	forceDeletion := cmdutil.GetFlagBool(cmd, "force")
 	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
 
@@ -137,7 +132,7 @@ func deleteResult(cmd *cobra.Command, r *resource.Result, out io.Writer, mapper 
 	}
 
 	for _, info := range infoList {
-		if err := deleteResource(info, out, mapper, shortOutput, forceDeletion); err != nil {
+		if err := deleteResource(f, info, out, mapper, shortOutput, forceDeletion); err != nil {
 			return err
 		}
 	}
@@ -153,7 +148,7 @@ var forceDeletePatch = `
 }
 `
 
-func deleteResource(info *resource.Info, out io.Writer, mapper meta.RESTMapper, shortOutput, forceDeletion bool) error {
+func deleteResource(f cmdutil.Factory, info *resource.Info, out io.Writer, mapper meta.RESTMapper, shortOutput, forceDeletion bool) error {
 	if forceDeletion {
 		resource.NewHelper(info.Client, info.Mapping).Patch(
 			info.Namespace,
@@ -165,6 +160,6 @@ func deleteResource(info *resource.Info, out io.Writer, mapper meta.RESTMapper, 
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil && !kerr.IsNotFound(err) {
 		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}
-	cmdutil.PrintSuccess(mapper, shortOutput, out, info.Mapping.Resource, info.Name, false, "deleted")
+	f.PrintSuccess(mapper, shortOutput, out, info.Mapping.Resource, info.Name, false, "deleted")
 	return nil
 }

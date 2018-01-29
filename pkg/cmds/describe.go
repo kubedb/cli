@@ -10,7 +10,6 @@ import (
 	"github.com/kubedb/cli/pkg/printer"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -67,14 +66,8 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 		return cmdutil.UsageErrorf(cmd, "Required resource not specified.")
 	}
 
-	categoryExpander := f.CategoryExpander()
-
-	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return err
-	}
-
-	var printAll bool = false
+	var printAll = false
+	var err error
 	resources := strings.Split(args[0], ",")
 	for i, r := range resources {
 		if r == "all" {
@@ -96,11 +89,11 @@ func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, a
 	}
 	args[0] = strings.Join(resources, ",")
 
-	r := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	r := f.NewBuilder().Unstructured().
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
-		SelectorParam(selector).
+		LabelSelectorParam(selector).
 		ResourceTypeOrNameArgs(true, args...).
 		Flatten().
 		Do()
