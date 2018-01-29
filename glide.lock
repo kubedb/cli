@@ -1,5 +1,5 @@
-hash: a0bbe9041555b0f2f28bf12a06e143bef8b5de12e1a09976d1266859df1bb483
-updated: 2018-01-29T18:47:42.981402503+06:00
+hash: 524d47ba2b9ae54115ade7c896a4fb9ca17c77d3db633fe10daf87a9c35f8df7
+updated: 2018-01-29T08:35:27.263987742-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: aee9dd25c6354457ed532ae0d463e54e53151ad8
+  version: 99dbf420807d9459b63d1d0bf702537bb7aa976f
   subpackages:
   - analytics
   - context
@@ -27,7 +27,7 @@ imports:
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: 60ced7f055b34d512a84f65ca0a7d412ec3d6ef2
+  version: a035b515d68bca793b2beacdf52e19a02f914017
   subpackages:
   - meta
   - tools/analytics
@@ -179,7 +179,7 @@ imports:
 - name: github.com/go-openapi/jsonreference
   version: 13c6e3589ad90f49bd3e3bbe2c2cb3d7a4142272
 - name: github.com/go-openapi/spec
-  version: 6aced65f8501fe1217321abf0749d354824ba2ff
+  version: 7abd5745472fff5eb3685386d5fb8bf38683154d
 - name: github.com/go-openapi/swag
   version: f3f9494671f93fcff853e3c6e9e948b3eb71e590
 - name: github.com/gogo/protobuf
@@ -254,7 +254,7 @@ imports:
   subpackages:
   - diskcache
 - name: github.com/hashicorp/go-version
-  version: 40efc0a21ca93e3bfbddefd4b5309a3e79d0aeb7
+  version: 53932f80ddea12bea96be074f9fb2dc545806aba
   repo: https://github.com/appscode/go-version.git
   vcs: git
 - name: github.com/hashicorp/golang-lru
@@ -280,7 +280,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: 455d1a753fcd939ecb9497ed4ab77567207c155c
+  version: 0de29010181b4b361fb210d5a85de7a4ff56e9df
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -290,32 +290,32 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: b95239a26a35182cd906ca4d980a260eb65fd172
+  version: b440c174990c33798231df2124aea3810a262acf
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 7bbee4aa80e6c83bb828fd0019221944587df48d
+  version: 08191a9cdbd143cebcb343c969d50b6420e19542
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: a2c4668e219f336236fb7f02b896c4fc425bf36e
+  version: de8f30be6c914ead85d25596836e7fb5313356f5
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: ebbfec2f507d142c146cd4749f1c376c49b536f1
+  version: 6db2ae8d66b38c00106969bc801b247033e129dd
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: a5824238a43aca07f22382701364eb0c668cbed5
+  version: d04e61ec820c48c076828471479d45ceee29ac9a
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: 682c8cc57ab32fa22bdadcf951d921d817f6f68a
+  version: 56cc3e767e6714b07f84915e9177c138df299c3b
   subpackages:
   - pkg/docker
   - pkg/validator
@@ -446,7 +446,7 @@ imports:
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 5bee14b453b4c71be47ec1781b0fa61c2ea182db
+  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
   subpackages:
   - internal
   - internal/app_identity
@@ -468,7 +468,7 @@ imports:
 - name: gopkg.in/warnings.v0
   version: 8a331561fe74dadba6edfc59f3be66c22c3b065d
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: d670f9405373e636a5a2765eea47fac0c9bc91a4
 - name: k8s.io/api
   version: af4bc157c3a209798fc897f6d4aaaaeb6c2e0d6a
   subpackages:
