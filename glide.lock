@@ -1,5 +1,5 @@
 hash: a0bbe9041555b0f2f28bf12a06e143bef8b5de12e1a09976d1266859df1bb483
-updated: 2018-01-29T15:52:31.849760905+06:00
+updated: 2018-01-29T18:47:42.981402503+06:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -290,7 +290,7 @@ imports:
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: df816b820e698383a7c0cf4b2758a57af6f19064
+  version: b95239a26a35182cd906ca4d980a260eb65fd172
   subpackages:
   - pkg/docker
   - pkg/validator
@@ -549,6 +549,7 @@ imports:
   - pkg/util/httpstream/spdy
   - pkg/util/intstr
   - pkg/util/json
+  - pkg/util/jsonmergepatch
   - pkg/util/mergepatch
   - pkg/util/net
   - pkg/util/rand
@@ -794,7 +795,6 @@ imports:
 - name: k8s.io/kubernetes
   version: 925c127ec6b946659ad0fd596fa959be43f0cc05
   subpackages:
-  - pkg/api
   - pkg/api/events
   - pkg/api/legacyscheme
   - pkg/api/pod

@@ -10,9 +10,9 @@ import (
 	"reflect"
 	"strings"
 
+	meta_util "github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/client/scheme"
 	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/editor"
 	"github.com/kubedb/cli/pkg/kube"
@@ -25,8 +25,8 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/jsonmergepatch"
 	"k8s.io/apimachinery/pkg/util/mergepatch"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -231,24 +231,15 @@ func visitToPatch(
 	}
 
 	extClient := tcs.NewForConfigOrDie(restClonfig)
-	codec := scheme.Codecs.LegacyCodec(tapi.SchemeGroupVersion)
 	patchVisitor := resource.NewFlattenListVisitor(updates, resourceMapper)
 	err = patchVisitor.Visit(func(info *resource.Info, incomingErr error) error {
 
-		currOriginalObj, err := util.GetStructuredObject(originalObj)
-		if err != nil {
-			return err
-		}
-		originalJS, err := encodeToJson(codec, currOriginalObj)
+		originalJS, err := meta_util.MarshalToJson(originalObj, tapi.SchemeGroupVersion)
 		if err != nil {
 			return err
 		}
 
-		curreditedJS, err := util.GetStructuredObject(info.Object)
-		if err != nil {
-			return err
-		}
-		editedJS, err := encodeToJson(codec, curreditedJS)
+		editedJS, err := meta_util.MarshalToJson(info.Object, tapi.SchemeGroupVersion)
 		if err != nil {
 			return err
 		}
@@ -262,7 +253,7 @@ func visitToPatch(
 		kind := originalObj.GetObjectKind().GroupVersionKind().Kind
 		preconditions := util.GetPreconditionFunc(kind)
 
-		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
+		patch, err := jsonmergepatch.CreateThreeWayJSONMergePatch(originalJS, editedJS, originalJS, preconditions...)
 		if err != nil {
 			fmt.Println(err.Error())
 			if mergepatch.IsPreconditionFailed(err) {
@@ -305,18 +296,6 @@ func visitToPatch(
 		return nil
 	})
 	return err
-}
-
-func encodeToJson(codec runtime.Encoder, obj runtime.Object) ([]byte, error) {
-	serialization, err := runtime.Encode(codec, obj)
-	if err != nil {
-		return nil, err
-	}
-	js, err := yaml.ToJSON(serialization)
-	if err != nil {
-		return nil, err
-	}
-	return js, nil
 }
 
 func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
