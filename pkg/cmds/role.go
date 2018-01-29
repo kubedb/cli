@@ -10,6 +10,7 @@ import (
 	core "k8s.io/api/core/v1"
 	extensions "k8s.io/api/extensions/v1beta1"
 	rbac "k8s.io/api/rbac/v1beta1"
+	storage "k8s.io/api/storage/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -22,52 +23,57 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{apiextensions.GroupName},
 		Resources: []string{"customresourcedefinitions"},
-		Verbs:     []string{"get", "create", "delete"},
+		Verbs:     []string{"create", "delete", "get", "list"},
 	},
 	{
 		APIGroups: []string{extensions.GroupName},
 		Resources: []string{"thirdpartyresources"},
-		Verbs:     []string{"get", "create", "delete"},
+		Verbs:     []string{"create", "delete", "get", "list"},
 	},
 	{
 		APIGroups: []string{rbac.GroupName},
-		Resources: []string{"roles", "rolebindings"},
-		Verbs:     []string{"get", "create", "update", "delete"},
+		Resources: []string{"rolebindings", "roles"},
+		Verbs:     []string{"create", "delete", "get", "patch"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
-		Resources: []string{"serviceaccounts"},
-		Verbs:     []string{"get", "create", "delete"},
+		Resources: []string{"services"},
+		Verbs:     []string{"create", "delete", "get", "patch"},
+	},
+	{
+		APIGroups: []string{core.GroupName},
+		Resources: []string{"secrets", "serviceaccounts"},
+		Verbs:     []string{"create", "delete", "get"},
 	},
 	{
 		APIGroups: []string{apps.GroupName},
-		Resources: []string{"statefulsets"},
-		Verbs:     []string{"get", "create", "update", "delete"},
-	},
-	{
-		APIGroups: []string{core.GroupName},
-		Resources: []string{"services", "secrets"},
-		Verbs:     []string{"get", "create", "delete"},
-	},
-	{
-		APIGroups: []string{core.GroupName},
-		Resources: []string{"endpoints"},
-		Verbs:     []string{"get"},
+		Resources: []string{"deployments", "statefulsets"},
+		Verbs:     []string{"create", "delete", "get", "patch", "update"},
 	},
 	{
 		APIGroups: []string{batch.GroupName},
 		Resources: []string{"jobs"},
-		Verbs:     []string{"get", "create", "delete"},
+		Verbs:     []string{"create", "delete", "get"},
+	},
+	{
+		APIGroups: []string{storage.GroupName},
+		Resources: []string{"storageclasses"},
+		Verbs:     []string{"get"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"pods"},
-		Verbs:     []string{"get", "create", "list", "delete", "deletecollection"},
+		Verbs:     []string{"deletecollection", "get", "list", "patch", "watch"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
-		Verbs:     []string{"list", "delete"},
+		Verbs:     []string{"delete", "get", "list", "watch"},
+	},
+	{
+		APIGroups: []string{core.GroupName},
+		Resources: []string{"configmaps"},
+		Verbs:     []string{"create", "delete", "get", "update"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
@@ -77,7 +83,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"nodes"},
-		Verbs:     []string{"list"},
+		Verbs:     []string{"get", "list", "watch"},
 	},
 	{
 		APIGroups: []string{kubedb.GroupName},
@@ -87,12 +93,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{"monitoring.coreos.com"},
 		Resources: []string{"servicemonitors"},
-		Verbs:     []string{"get", "create", "update"},
-	},
-	{
-		APIGroups: []string{"storage.k8s.io"},
-		Resources: []string{"storageclasses"},
-		Verbs:     []string{"get"},
+		Verbs:     []string{"create", "delete", "get", "list", "update"},
 	},
 }
 

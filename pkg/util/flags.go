@@ -46,7 +46,7 @@ func AddEditFlags(cmd *cobra.Command) {
 
 func AddInitFlags(cmd *cobra.Command) {
 	cmd.Flags().String("operator-namespace", "kube-system", "Name of namespace where operator will be deployed.")
-	cmd.Flags().String("version", "0.8.0", "Operator version")
+	cmd.Flags().String("version", "0.8.0-beta.0", "Operator version")
 	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
 	cmd.Flags().String("governing-service", "kubedb", "Governing service for database statefulset")
 	cmd.Flags().String("docker-registry", "kubedb", "User provided docker repository")
