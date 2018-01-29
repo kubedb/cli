@@ -16,8 +16,6 @@ import (
 	"k8s.io/kubernetes/pkg/printers"
 )
 
-const statusUnknown = "Unknown"
-
 func (d *humanReadableDescriber) describeElasticsearch(item *api.Elasticsearch, describerSettings *printer.DescriberSettings) (string, error) {
 	clientSet, err := d.ClientSet()
 	if err != nil {

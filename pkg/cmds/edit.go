@@ -15,7 +15,6 @@ import (
 	"github.com/kubedb/apimachinery/client/scheme"
 	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/editor"
-	"github.com/kubedb/cli/pkg/encoder"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/printer"
 	"github.com/kubedb/cli/pkg/util"
@@ -240,24 +239,16 @@ func visitToPatch(
 		if err != nil {
 			return err
 		}
-
-		originalSerialization, err := runtime.Encode(codec, currOriginalObj)
+		originalJS, err := encodeToJson(codec, currOriginalObj)
 		if err != nil {
 			return err
 		}
 
-		editedSerialization, err := encoder.Encode(info.Object)
+		curreditedJS, err := util.GetStructuredObject(info.Object)
 		if err != nil {
 			return err
 		}
-
-		editedSerialization = stripComments(editedSerialization)
-
-		originalJS, err := yaml.ToJSON(originalSerialization)
-		if err != nil {
-			return err
-		}
-		editedJS, err := yaml.ToJSON(editedSerialization)
+		editedJS, err := encodeToJson(codec, curreditedJS)
 		if err != nil {
 			return err
 		}
@@ -268,10 +259,12 @@ func visitToPatch(
 			return nil
 		}
 
-		kind := currOriginalObj.GetObjectKind().GroupVersionKind().Kind
+		kind := originalObj.GetObjectKind().GroupVersionKind().Kind
 		preconditions := util.GetPreconditionFunc(kind)
+
 		patch, err := strategicpatch.CreateTwoWayMergePatch(originalJS, editedJS, currOriginalObj, preconditions...)
 		if err != nil {
+			fmt.Println(err.Error())
 			if mergepatch.IsPreconditionFailed(err) {
 				return preconditionFailedError()
 			}
@@ -314,15 +307,27 @@ func visitToPatch(
 	return err
 }
 
+func encodeToJson(codec runtime.Encoder, obj runtime.Object) ([]byte, error) {
+	serialization, err := runtime.Encode(codec, obj)
+	if err != nil {
+		return nil, err
+	}
+	js, err := yaml.ToJSON(serialization)
+	if err != nil {
+		return nil, err
+	}
+	return js, nil
+}
+
 func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (meta.RESTMapper, *resource.Mapper, *resource.Result, string, error) {
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
-	var mapper meta.RESTMapper
-	var typer runtime.ObjectTyper
+
+	mapper, typer := f.Object()
 
 	resourceMapper := &resource.Mapper{
 		ObjectTyper:  typer,
 		RESTMapper:   mapper,
-		ClientMapper: resource.ClientMapperFunc(f.UnstructuredClientForMapping),
+		ClientMapper: resource.ClientMapperFunc(f.ClientForMapping),
 		Decoder:      unstructured.UnstructuredJSONScheme,
 	}
 
