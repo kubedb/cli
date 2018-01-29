@@ -264,7 +264,7 @@ func visitToPatch(
 
 		if reflect.DeepEqual(originalJS, editedJS) {
 			// no edit, so just skip it.
-			cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "skipped")
+			f.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "skipped")
 			return nil
 		}
 
@@ -308,7 +308,7 @@ func visitToPatch(
 		}
 
 		info.Refresh(patched, true)
-		cmdutil.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
+		f.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
 		return nil
 	})
 	return err
@@ -318,11 +318,6 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 	var mapper meta.RESTMapper
 	var typer runtime.ObjectTyper
-	categoryExpander := f.CategoryExpander()
-	mapper, typer, err := f.UnstructuredObject()
-	if err != nil {
-		return nil, nil, nil, "", err
-	}
 
 	resourceMapper := &resource.Mapper{
 		ObjectTyper:  typer,
@@ -331,7 +326,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 		Decoder:      unstructured.UnstructuredJSONScheme,
 	}
 
-	b := resource.NewBuilder(mapper, categoryExpander, typer, resource.ClientMapperFunc(f.UnstructuredClientForMapping), unstructured.UnstructuredJSONScheme).
+	b := f.NewBuilder().Unstructured().
 		ResourceTypeOrNameArgs(false, args...).
 		RequireObject(true).
 		Latest()
@@ -342,7 +337,7 @@ func getMapperAndResult(f cmdutil.Factory, cmd *cobra.Command, args []string) (m
 		Flatten().
 		Do()
 
-	err = r.Err()
+	err := r.Err()
 	if err != nil {
 		return nil, nil, nil, "", err
 	}
