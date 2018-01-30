@@ -38,13 +38,8 @@ var policyRuleOperator = []rbac.PolicyRule{
 	},
 	{
 		APIGroups: []string{core.GroupName},
-		Resources: []string{"secrets"},
+		Resources: []string{"secrets", "serviceaccounts"},
 		Verbs:     []string{"create", "delete", "get", "patch"},
-	},
-	{
-		APIGroups: []string{core.GroupName},
-		Resources: []string{"serviceaccounts"},
-		Verbs:     []string{"create", "delete", "get"},
 	},
 	{
 		APIGroups: []string{apps.GroupName},
