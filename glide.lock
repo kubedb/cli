@@ -1,5 +1,5 @@
 hash: 524d47ba2b9ae54115ade7c896a4fb9ca17c77d3db633fe10daf87a9c35f8df7
-updated: 2018-01-29T08:35:27.263987742-08:00
+updated: 2018-01-29T22:07:06.837426641-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -29,8 +29,12 @@ imports:
 - name: github.com/appscode/kutil
   version: a035b515d68bca793b2beacdf52e19a02f914017
   subpackages:
+  - core/v1
   - meta
+  - rbac/v1beta1
   - tools/analytics
+- name: github.com/appscode/mergo
+  version: e3000cb3d28c72b837601cac94debd91032d19fe
 - name: github.com/appscode/osm
   version: 8175dd853f6f3d4530b14018901c79140e305f3a
   subpackages:
@@ -439,7 +443,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: d7238a695cdc29affa1e76d5485eb2f72d30f8f8
+  version: 7d0e2d350555821bef5a5b8aecf0d12cc1def633
   subpackages:
   - gensupport
   - googleapi
