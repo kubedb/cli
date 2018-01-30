@@ -4,8 +4,8 @@ menu:
   docs_0.8.0-beta.0:
     identifier: guides-rbac
     name: RBAC
-    parent: guides
-    weight: 90
+    parent: guides-postgres
+    weight: 40
 menu_name: docs_0.8.0-beta.0
 section_menu_id: guides
 ---

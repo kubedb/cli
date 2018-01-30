@@ -8,8 +8,6 @@ menu:
     weight: 10
 menu_name: docs_0.8.0-beta.0
 section_menu_id: guides
-aliases:
-  - /docs/0.8.0-beta.0/guides/postgres/
 ---
 
 > New to KubeDB? Please start [here](/docs/guides/README.md).
