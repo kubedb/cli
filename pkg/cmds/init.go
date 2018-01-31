@@ -223,6 +223,15 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 		return err
 	}
 
+	if configureRBAC {
+		if err := EnsureRBACStuff(client, namespace, out); err != nil {
+			return err
+		}
+		deployment.Spec.Template.Spec.ServiceAccountName = ServiceAccountName
+	} else {
+		deployment.Spec.Template.Spec.ServiceAccountName = ""
+	}
+
 	containers := deployment.Spec.Template.Spec.Containers
 	if len(containers) == 0 {
 		fmt.Fprintln(errOut, fmt.Sprintf(`Invalid operator deployment "%v"`, operatorName))
@@ -247,15 +256,6 @@ func updateOperatorDeployment(cmd *cobra.Command, out, errOut io.Writer) error {
 	}
 
 	deployment.Spec.Template.Spec.Containers[0].Image = fmt.Sprintf("%v:%v", repository, version)
-
-	if configureRBAC {
-		if err := EnsureRBACStuff(client, namespace, out); err != nil {
-			return err
-		}
-		deployment.Spec.Template.Spec.ServiceAccountName = ServiceAccountName
-	} else {
-		deployment.Spec.Template.Spec.ServiceAccountName = ""
-	}
 
 	deployment.Spec.Template.Spec.Containers[0].Args = []string{
 		"run",

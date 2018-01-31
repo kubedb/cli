@@ -234,6 +234,7 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 		if item.Spec.DatabaseSecret != nil {
 			secretVolumes["Database"] = item.Spec.DatabaseSecret
 		}
+		d.showSecret(item.Namespace, secretVolumes, describerSettings.ShowSecret, out)
 
 		if item.Spec.Monitor != nil {
 			describeMonitor(item.Spec.Monitor, out)
@@ -303,6 +304,7 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 		if item.Spec.DatabaseSecret != nil {
 			secretVolumes["Database"] = item.Spec.DatabaseSecret
 		}
+		d.showSecret(item.Namespace, secretVolumes, describerSettings.ShowSecret, out)
 
 		if item.Spec.Monitor != nil {
 			describeMonitor(item.Spec.Monitor, out)

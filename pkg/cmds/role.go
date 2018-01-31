@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/appscode/kutil"
+	core_util "github.com/appscode/kutil/core/v1"
+	rbac_util "github.com/appscode/kutil/rbac/v1beta1"
 	"github.com/kubedb/apimachinery/apis/kubedb"
 	apps "k8s.io/api/apps/v1beta1"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
-	extensions "k8s.io/api/extensions/v1beta1"
 	rbac "k8s.io/api/rbac/v1beta1"
 	storage "k8s.io/api/storage/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
-	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -23,11 +24,6 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{apiextensions.GroupName},
 		Resources: []string{"customresourcedefinitions"},
-		Verbs:     []string{"create", "delete", "get", "list"},
-	},
-	{
-		APIGroups: []string{extensions.GroupName},
-		Resources: []string{"thirdpartyresources"},
 		Verbs:     []string{"create", "delete", "get", "list"},
 	},
 	{
@@ -43,7 +39,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"secrets", "serviceaccounts"},
-		Verbs:     []string{"create", "delete", "get"},
+		Verbs:     []string{"create", "delete", "get", "patch"},
 	},
 	{
 		APIGroups: []string{apps.GroupName},
@@ -53,7 +49,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{batch.GroupName},
 		Resources: []string{"jobs"},
-		Verbs:     []string{"create", "delete", "get"},
+		Verbs:     []string{"create", "delete", "get", "list", "watch"},
 	},
 	{
 		APIGroups: []string{storage.GroupName},
@@ -68,7 +64,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
-		Verbs:     []string{"delete", "get", "list", "watch"},
+		Verbs:     []string{"delete", "get", "list", "patch", "watch"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
@@ -98,50 +94,46 @@ var policyRuleOperator = []rbac.PolicyRule{
 }
 
 func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Writer) error {
+
 	name := ServiceAccountName
+
 	// Ensure ClusterRoles for operator
-	clusterRoleOperator, err := client.RbacV1beta1().ClusterRoles().Get(name, metav1.GetOptions{})
+	cr, vt1, err := rbac_util.CreateOrPatchClusterRole(
+		client,
+		metav1.ObjectMeta{
+			Name:      name,
+			Namespace: namespace,
+		},
+		func(in *rbac.ClusterRole) *rbac.ClusterRole {
+			in.Labels = core_util.UpsertMap(in.Labels, operatorLabel)
+			in.Rules = policyRuleOperator
+			return in
+		},
+	)
 	if err != nil {
-		if !kerr.IsNotFound(err) {
-			return err
-		}
-		// Create new one
-		role := &rbac.ClusterRole{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:   name,
-				Labels: operatorLabel,
-			},
-			Rules: policyRuleOperator,
-		}
-		if _, err := client.RbacV1beta1().ClusterRoles().Create(role); err != nil {
-			return err
-		}
-		fmt.Fprintln(out, "Successfully created cluster role.")
-	} else {
-		// Update existing one
-		clusterRoleOperator.Rules = policyRuleOperator
-		if _, err := client.RbacV1beta1().ClusterRoles().Update(clusterRoleOperator); err != nil {
-			return err
-		}
-		fmt.Fprintln(out, "Successfully updated cluster role.")
+		return err
+	}
+	if vt1 != kutil.VerbUnchanged {
+		fmt.Fprintf(out, `ClusterRole "%s" successfully %v`, cr.Name, vt1)
 	}
 
 	// Ensure ServiceAccounts
-	if _, err := client.CoreV1().ServiceAccounts(namespace).Get(name, metav1.GetOptions{}); err != nil {
-		if !kerr.IsNotFound(err) {
-			return err
-		}
-		sa := &core.ServiceAccount{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      name,
-				Namespace: namespace,
-				Labels:    operatorLabel,
-			},
-		}
-		if _, err := client.CoreV1().ServiceAccounts(namespace).Create(sa); err != nil {
-			return err
-		}
-		fmt.Fprintln(out, "Successfully created service account.")
+	sa, vt2, err := core_util.CreateOrPatchServiceAccount(
+		client,
+		metav1.ObjectMeta{
+			Name:      name,
+			Namespace: namespace,
+		},
+		func(in *core.ServiceAccount) *core.ServiceAccount {
+			in.Labels = core_util.UpsertMap(in.Labels, operatorLabel)
+			return in
+		},
+	)
+	if err != nil {
+		return err
+	}
+	if vt2 != kutil.VerbUnchanged {
+		fmt.Fprintf(out, `ServiceAccount "%s" successfully %v`, sa.Name, vt2)
 	}
 
 	var roleBindingRef = rbac.RoleRef{
@@ -158,34 +150,25 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 	}
 
 	// Ensure ClusterRoleBindings
-	roleBinding, err := client.RbacV1beta1().ClusterRoleBindings().Get(name, metav1.GetOptions{})
+	crb, vt3, err := rbac_util.CreateOrPatchClusterRoleBinding(
+		client,
+		metav1.ObjectMeta{
+			Name:      name,
+			Namespace: namespace,
+		},
+		func(in *rbac.ClusterRoleBinding) *rbac.ClusterRoleBinding {
+			in.Labels = core_util.UpsertMap(in.Labels, operatorLabel)
+			in.RoleRef = roleBindingRef
+			in.Subjects = roleBindingSubjects
+
+			return in
+		},
+	)
 	if err != nil {
-		if !kerr.IsNotFound(err) {
-			return err
-		}
-
-		roleBinding := &rbac.ClusterRoleBinding{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      name,
-				Namespace: namespace,
-				Labels:    operatorLabel,
-			},
-			RoleRef:  roleBindingRef,
-			Subjects: roleBindingSubjects,
-		}
-
-		if _, err := client.RbacV1beta1().ClusterRoleBindings().Create(roleBinding); err != nil {
-			return err
-		}
-		fmt.Fprintln(out, "Successfully created cluster role bindings.")
-	} else {
-		roleBinding.RoleRef = roleBindingRef
-		roleBinding.Subjects = roleBindingSubjects
-		if _, err := client.RbacV1beta1().ClusterRoleBindings().Update(roleBinding); err != nil {
-			return err
-		}
-		fmt.Fprintln(out, "Successfully updated cluster role bindings.")
+		return err
 	}
-
+	if vt3 != kutil.VerbUnchanged {
+		fmt.Fprintf(out, `ClusterRoleBinding "%s" successfully %v`, crb.Name, vt3)
+	}
 	return nil
 }

@@ -41,18 +41,19 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
-    'cli': '0.8.0-beta.0',
-    'operator': '0.8.0-beta.0',
-    'apimachinery': '0.8.0-beta.0',
-    'postgres': '0.8.0-beta.0',
-    'elasticsearch': '0.8.0-beta.0',
-    'mysql': '0.1.0-beta.0',
-    'mongodb': '0.1.0-beta.0',
-    'memcached': '0.1.0-beta.0',
-    'redis': '0.1.0-beta.0'
+    'cli': '0.8.0-beta.1',
+    'operator': '0.8.0-beta.1',
+    'apimachinery': '0.8.0-beta.1',
+    'postgres': '0.8.0-beta.1',
+    'elasticsearch': '0.8.0-beta.1',
+    'mysql': '0.1.0-beta.1',
+    'mongodb': '0.1.0-beta.1',
+    'memcached': '0.1.0-beta.1',
+    'redis': '0.1.0-beta.1',
+    'admission-webhook': '0.1.0-beta.0',
 }
-KUTIL_VERSION = 'release-5.0'
-KUBEMON_VERSION = 'release-5.0'
+KUTIL_VERSION = 'release-6.0'
+KUBEMON_VERSION = 'release-6.0'
 
 
 def die(status):
@@ -183,8 +184,7 @@ class Kitten(object):
             call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
-    def release_operator(self):
-        repo_name = 'operator'
+    def release_server_binary(self, repo_name):
         tag = RELEASE_TAGS[repo_name]
         version = semver.parse(tag)
         release_branch = 'release-{0}.{1}'.format(version['major'], version['minor'])
@@ -260,14 +260,15 @@ def release(comp=None):
         cat.release_apimachinery()
         for name in DATABASES:
             cat.release_db(name)
-        cat.release_operator()
+        cat.release_server_binary('admission-webhook')
+        cat.release_server_binary('operator')
         cat.release_cli()
     elif comp == 'apimachinery':
         cat.release_apimachinery()
     elif comp in DATABASES:
         cat.release_db(comp)
-    elif comp == 'operator':
-        cat.release_operator()
+    elif comp in ['admission-webhook', 'operator']:
+        cat.release_server_binary(comp)
     elif comp == 'cli':
         cat.release_cli()
 
