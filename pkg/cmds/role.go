@@ -114,7 +114,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 		return err
 	}
 	if vt1 != kutil.VerbUnchanged {
-		fmt.Fprintf(out, `ClusterRole "%s" successfully %v`, cr.Name, vt1)
+		fmt.Fprintln(out, fmt.Sprintf(`ClusterRole "%s" successfully %v`, cr.Name, vt1))
 	}
 
 	// Ensure ServiceAccounts
@@ -133,7 +133,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 		return err
 	}
 	if vt2 != kutil.VerbUnchanged {
-		fmt.Fprintf(out, `ServiceAccount "%s" successfully %v`, sa.Name, vt2)
+		fmt.Fprintln(out, fmt.Sprintf(`ServiceAccount "%s" successfully %v`, sa.Name, vt2))
 	}
 
 	var roleBindingRef = rbac.RoleRef{
@@ -168,7 +168,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 		return err
 	}
 	if vt3 != kutil.VerbUnchanged {
-		fmt.Fprintf(out, `ClusterRoleBinding "%s" successfully %v`, crb.Name, vt3)
+		fmt.Fprintln(out, fmt.Sprintf(`ClusterRoleBinding "%s" successfully %v`, crb.Name, vt3))
 	}
 	return nil
 }
