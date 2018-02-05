@@ -64,7 +64,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
-		Verbs:     []string{"delete", "get", "list", "patch", "watch"},
+		Verbs:     []string{"create", "delete", "get", "list", "patch", "watch"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
