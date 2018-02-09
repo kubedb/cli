@@ -1,14 +1,12 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: recovered
+  name: recovered-postgres
   namespace: demo
 spec:
-  version: 9.6.5
-  replicas: 1
-  doNotPause: false
+  version: 9.6
   databaseSecret:
-    secretName: p1-auth
+    secretName: script-postgres-auth
   storage:
     storageClassName: "standard"
     accessModes:
@@ -18,5 +16,5 @@ spec:
         storage: 50Mi
   init:
     snapshotSource:
-      name: p1-xyz
+      name: instant-snapshot
       namespace: demo

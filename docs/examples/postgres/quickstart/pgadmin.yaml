@@ -1,12 +1,4 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: demo
-spec:
-  finalizers:
-  - kubernetes
----
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -15,6 +7,9 @@ metadata:
   namespace: demo
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
   template:
     metadata:
       labels:
