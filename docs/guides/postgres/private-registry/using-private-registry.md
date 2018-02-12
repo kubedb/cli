@@ -2,7 +2,7 @@
 
 # Private Docker Registry
 
-KubeDB supports Postgres docker images from non public docker registry. A *docker-registry* type Secret is used to provide necessary information to KubeDB.
+KubeDB supports Postgres docker images from non-public docker registry. A *docker-registry* type Secret is used to provide necessary information to KubeDB.
 
 This tutorial will show you how to create this *docker-registry* type Secret and add that Secret in Postgres object.
 If you wish to follow other ways to pull private images see [official docs](https://kubernetes.io/docs/concepts/containers/images/) of kubernetes.
