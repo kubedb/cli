@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  name: recovered
+  name: mgo-mon-prometheus
   namespace: demo
 spec:
   version: 3.4
@@ -12,6 +12,5 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    snapshotSource:
-      name: mgo-xyz
+  monitor:
+    agent: prometheus.io/builtin

@@ -1,10 +1,11 @@
 apiVersion: kubedb.com/v1alpha1
-kind: MySQL
+kind: MongoDB
 metadata:
-  name: recovered
+  name: mgo-infant
   namespace: demo
 spec:
-  version: 8.0
+  version: 3.4
+  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -12,7 +13,3 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    snapshotSource:
-      name: m1-xyz
-      namespace: demo
