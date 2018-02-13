@@ -14,12 +14,13 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/admissionreviews
+      path: /apis/admission.kubedb.com/v1alpha1/reviews
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - operations:
     - CREATE
     - UPDATE
+    - DELETE
     apiGroups:
     - kubedb.com
     apiVersions:

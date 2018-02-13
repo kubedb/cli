@@ -32,46 +32,42 @@ spec:
       {{- end }}
       containers:
       - name: operator
-        image: {{ .Values.operator.image }}:{{ .Values.operator.tag }}
+        image: {{ .Values.dockerRegistry }}/operator:{{ .Values.imageTags.operator }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
         - run
         - --v=3
-        - --rbac={{ .Values.rbac.create }}
         - --docker-registry={{ .Values.dockerRegistry }}
+        - --exporter-tag={{ .Values.imageTags.exporter }}
+        - --governing-service=kubedb
+        - --rbac={{ .Values.rbac.create }}
+        env:
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+      - name: apiserver
+        image: {{ .Values.dockerRegistry }}/apiserver:{{ .Values.imageTags.apiserver }}
+        imagePullPolicy: {{ .Values.imagePullPolicy  }}
+        args:
+        - apiserver
+        - --v=3
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
         ports:
         - containerPort: 8443
-        - containerPort: 56790
+        volumeMounts:
+        - mountPath: /var/serving-cert
+          name: serving-cert
         readinessProbe:
           httpGet:
             path: /healthz
             port: 8443
             scheme: HTTPS
-        volumeMounts:
-        - mountPath: /var/serving-cert
-          name: serving-cert
-      - name: pushgateway
-        image: '{{ .Values.pushgateway.image }}:{{ .Values.pushgateway.tag }}'
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
-        args:
-        - -web.listen-address=:56789
-        - -persistence.file=/var/pv/pushgateway.dat
-        ports:
-        - containerPort: 56789
-        volumeMounts:
-        - mountPath: /var/pv
-          name: data-volume
-        - mountPath: /tmp
-          name: kubedb-scratchdir
       volumes:
-      - emptyDir: {}
-        name: data-volume
-      - emptyDir: {}
-        name: kubedb-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
