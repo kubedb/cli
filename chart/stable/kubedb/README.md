@@ -1,5 +1,6 @@
 # KubeDB
 [KubeDB by AppsCode](https://github.com/kubedb/cli) - Backup your Kubernetes Volumes
+
 ## TL;DR;
 
 ```console
@@ -38,22 +39,22 @@ The command removes all the Kubernetes components associated with the chart and 
 The following tables lists the configurable parameters of the KubeDB chart and their default values.
 
 
-| Parameter                          | Description                                                       | Default            |
-| --------------------------         | ----------------------------------------------------------------- | ------------------ |
+| Parameter                          | Description                                                        | Default            |
+| -----------------------------------| ------------------------------------------------------------------ | ------------------ |
 | `replicaCount`                     | Number of kubedb operator replicas to create (only 1 is supported) | `1`                |
-| `operator.image`                   | operator container image                                          | `appscode/kubedb`   |
-| `operator.tag`                     | operator container image tag                                      | `0.6.3`            |
-| `operator.pullPolicy`              | operator container image pull policy                              | `IfNotPresent`     |
-| `pushgateway.image`                | Prometheus pushgateway container image                            | `prom/pushgateway` |
-| `pushgateway.tag`                  | Prometheus pushgateway container image tag                        | `v0.4.0`           |
-| `pushgateway.pullPolicy`           | Prometheus pushgateway container image pull policy                | `IfNotPresent`     |
+| `dockerRegistry`                   | Docker registry used to pull KubeDB related images                 | `kubedb`           |
+| `imageTags.operator`               | Tag of KubeDB operator image                                       | `0.8.0-alpha.0`    |
+| `imageTags.exporter`               | Tag of KubeDB operator image                                       | `0.8.0-alpha.0`    |
+| `imageTags.apiserver`              | Tag of HAProxy container image                                     | `0.1.0-alpha.0`    |
+| `imagePullSecrets`                 | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
+| `imagePullPolicy`                  | Image pull policy                                                  | `IfNotPresent`     |
 | `criticalAddon`                    | If true, installs KubeDB operator as critical addon                | `false`            |
-| `rbac.create`                      | install required rbac service account, roles and rolebindings     | `false`            |
+| `rbac.create`                      | install required rbac service account, roles and rolebindings      | `false`            |
 | `rbac.serviceAccountName`          | ServiceAccount KubeDB will use (ignored if rbac.create=true)       | `default`          |
-| `apiserver.groupPriorityMinimum`   | The minimum priority the group should have.                       | 10000              |
-| `apiserver.versionPriority`        | The ordering of this API inside of the group.                     | 15                 |
+| `apiserver.groupPriorityMinimum`   | The minimum priority the group should have.                        | 10000              |
+| `apiserver.versionPriority`        | The ordering of this API inside of the group.                      | 15                 |
 | `apiserver.enableAdmissionWebhook` | Configure apiserver as admission webhooks for KubeDB CRDs          | false              |
-| `apiserver.ca`                     | CA certificate used by main Kubernetes api server                 | ``                 |
+| `apiserver.ca`                     | CA certificate used by main Kubernetes api server                  | ``                 |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
