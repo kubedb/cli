@@ -2,26 +2,26 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: admission.kubedb.appscode.com
+  name: admission.kubedb.com
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 webhooks:
-- name: admission.kubedb.appscode.com
+- name: admission.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.appscode.com/v1alpha1/admissionreviews
+      path: /apis/admission.kubedb.com/v1alpha1/admissionreviews
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - operations:
     - CREATE
     - UPDATE
     apiGroups:
-    - kubedb.appscode.com
+    - kubedb.com
     apiVersions:
     - "*"
     resources:

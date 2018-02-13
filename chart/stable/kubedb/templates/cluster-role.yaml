@@ -22,7 +22,7 @@ rules:
   verbs:
   - "*"
 - apiGroups:
-  - kubedb.appscode.com
+  - kubedb.com
   resources: ["*"]
   verbs: ["*"]
 - apiGroups:

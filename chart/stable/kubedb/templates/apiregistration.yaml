@@ -7,14 +7,14 @@
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.admission.kubedb.appscode.com
+  name: v1alpha1.admission.kubedb.com
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
-  group: admission.kubedb.appscode.com
+  group: admission.kubedb.com
   version: v1alpha1
   service:
     namespace: {{ .Release.Namespace }}

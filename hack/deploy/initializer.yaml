@@ -5,7 +5,7 @@ metadata:
   labels:
     app: kubedb
 initializers:
-- name: kubedb.appscode.com
+- name: kubedb.com
   rules:
   - apiGroups:
     - "*"
