@@ -64,7 +64,7 @@ var policyRuleOperator = []rbac.PolicyRule{
 	{
 		APIGroups: []string{core.GroupName},
 		Resources: []string{"persistentvolumeclaims"},
-		Verbs:     []string{"delete", "get", "list", "patch", "watch"},
+		Verbs:     []string{"create", "delete", "get", "list", "patch", "watch"},
 	},
 	{
 		APIGroups: []string{core.GroupName},
@@ -115,6 +115,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 	}
 	if vt1 != kutil.VerbUnchanged {
 		fmt.Fprintf(out, `ClusterRole "%s" successfully %v`, cr.Name, vt1)
+		fmt.Fprintln(out)
 	}
 
 	// Ensure ServiceAccounts
@@ -134,6 +135,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 	}
 	if vt2 != kutil.VerbUnchanged {
 		fmt.Fprintf(out, `ServiceAccount "%s" successfully %v`, sa.Name, vt2)
+		fmt.Fprintln(out)
 	}
 
 	var roleBindingRef = rbac.RoleRef{
@@ -169,6 +171,7 @@ func EnsureRBACStuff(client kubernetes.Interface, namespace string, out io.Write
 	}
 	if vt3 != kutil.VerbUnchanged {
 		fmt.Fprintf(out, `ClusterRoleBinding "%s" successfully %v`, crb.Name, vt3)
+		fmt.Fprintln(out)
 	}
 	return nil
 }
