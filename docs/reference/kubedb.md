@@ -43,7 +43,6 @@ kubedb [flags]
 * [kubedb describe](/docs/reference/kubedb_describe.md)	 - Show details of a specific resource or group of resources
 * [kubedb edit](/docs/reference/kubedb_edit.md)	 - Edit a resource on the server
 * [kubedb get](/docs/reference/kubedb_get.md)	 - Display one or many resources
-* [kubedb init](/docs/reference/kubedb_init.md)	 - Create or upgrade KubeDB operator
 * [kubedb summarize](/docs/reference/kubedb_summarize.md)	 - Export summary report
 * [kubedb version](/docs/reference/kubedb_version.md)	 - Prints binary version number.
 
