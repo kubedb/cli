@@ -27,7 +27,6 @@ spec:
         args:
         - run
         - --v=3
-        - --address=:8080
         - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
         - --exporter-tag=0.8.0-beta.0
         - --governing-service=kubedb
@@ -38,19 +37,15 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-        ports:
-        - containerPort: 8080
-          name: web
-          protocol: TCP
       - name: apiserver
         image: $KUBEDB_DOCKER_REGISTRY/apiserver:0.8.0-beta.0
         args:
         - apiserver
+        - --v=3
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
-        - --v=3
         ports:
         - containerPort: 8443
         volumeMounts:
@@ -92,10 +87,9 @@ metadata:
     app: kubedb
 spec:
   ports:
-  - name: web
-    port: 8080
-    protocol: TCP
-    targetPort: web
+  - name: api
+    port: 443
+    targetPort: 8443
   selector:
     app: kubedb
 ---
