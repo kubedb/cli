@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: kubedb-operator
@@ -23,19 +23,36 @@ spec:
       imagePullSecrets: [${KUBEDB_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
+        image: ${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0-beta.0
         args:
         - run
         - --v=3
-        - --rbac=${KUBEDB_ENABLE_RBAC}
+        - --address=:8080
         - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
+        - --exporter-tag=0.8.0-beta.0
+        - --governing-service=kubedb
+        - --rbac=${KUBEDB_ENABLE_RBAC}
+        env:
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+      - name: apiserver
+        image: $KUBEDB_DOCKER_REGISTRY/apiserver:0.8.0-beta.0
+        args:
+        - apiserver
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
-        image: ${KUBEDB_DOCKER_REGISTRY}/kubedb:0.7.0-alpha.0
+        - --v=3
         ports:
         - containerPort: 8443
-        - containerPort: 56790
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
@@ -44,29 +61,11 @@ spec:
             path: /healthz
             port: 8443
             scheme: HTTPS
-      - name: pushgateway
-        args:
-        - -web.listen-address=:56789
-        - -persistence.file=/var/pv/pushgateway.dat
-        image: prom/pushgateway:v0.4.0
-        ports:
-        - containerPort: 56789
-          name: pushgateway
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /var/pv
-          name: data-volume
-        - mountPath: /tmp
-          name: kubedb-scratchdir
       volumes:
-      - emptyDir: {}
-        name: data-volume
-      - emptyDir: {}
-        name: kubedb-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: kubedb-apiserver-cert
+          secretName: stash-apiserver-cert
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -84,7 +83,6 @@ data:
   tls.crt: ${TLS_SERVING_CERT}
   tls.key: ${TLS_SERVING_KEY}
 ---
-# to be able to expose TSB inside the cluster
 apiVersion: v1
 kind: Service
 metadata:
@@ -94,15 +92,10 @@ metadata:
     app: kubedb
 spec:
   ports:
-  - name: admission
-    port: 443
-    targetPort: 8443
-  - name: pushgateway
-    port: 56789
-    targetPort: 56789
-  - name: ops
-    port: 56790
-    targetPort: 56790
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: web
   selector:
     app: kubedb
 ---
