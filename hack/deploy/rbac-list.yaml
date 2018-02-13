@@ -1,9 +1,9 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: stash-operator
+  name: kubedb-operator
   labels:
-    app: stash
+    app: kubedb
 rules:
 - apiGroups:
   - apiextensions.k8s.io
@@ -18,7 +18,7 @@ rules:
   verbs:
   - "*"
 - apiGroups:
-  - stash.appscode.com
+  - kubedb.appscode.com
   resources: ["*"]
   verbs: ["*"]
 - apiGroups:
@@ -79,46 +79,46 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: stash-operator
+  name: kubedb-operator
   labels:
-    app: stash
+    app: kubedb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: stash-operator
+  name: kubedb-operator
 subjects:
 - kind: ServiceAccount
-  name: ${STASH_SERVICE_ACCOUNT}
-  namespace: ${STASH_NAMESPACE}
+  name: ${KUBEDB_SERVICE_ACCOUNT}
+  namespace: ${KUBEDB_NAMESPACE}
 # to read the config for terminating authentication
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: stash-apiserver-extension-server-authentication-reader
+  name: kubedb-apiserver-extension-server-authentication-reader
   namespace: kube-system
   labels:
-    app: stash
+    app: kubedb
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
   name: extension-apiserver-authentication-reader
 subjects:
 - kind: ServiceAccount
-  name: ${STASH_SERVICE_ACCOUNT}
-  namespace: ${STASH_NAMESPACE}
+  name: ${KUBEDB_SERVICE_ACCOUNT}
+  namespace: ${KUBEDB_NAMESPACE}
 ---
 # to delegate authentication and authorization
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: stash-apiserver-auth-delegator
+  name: kubedb-apiserver-auth-delegator
   labels:
-    app: stash
+    app: kubedb
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
   name: system:auth-delegator
 subjects:
 - kind: ServiceAccount
-  name: ${STASH_SERVICE_ACCOUNT}
-  namespace: ${STASH_NAMESPACE}
+  name: ${KUBEDB_SERVICE_ACCOUNT}
+  namespace: ${KUBEDB_NAMESPACE}

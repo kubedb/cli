@@ -1,9 +1,9 @@
-# Default values for stash.
+# Default values for kubedb.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 replicaCount: 1
 operator:
-  image: appscode/stash
+  image: appscode/kubedb
   tag: 0.6.3
 pushgateway:
   image: prom/pushgateway
@@ -18,7 +18,7 @@ pushgateway:
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
 imagePullPolicy: IfNotPresent
-## Installs Stash operator as critical addon
+## Installs KubeDB operator as critical addon
 ## https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/
 criticalAddon: false
 ## Install Default RBAC roles and bindings

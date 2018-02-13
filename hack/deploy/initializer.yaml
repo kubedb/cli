@@ -1,11 +1,11 @@
 apiVersion: admissionregistration.k8s.io/v1alpha1
 kind: InitializerConfiguration
 metadata:
-  name: stash-initializer
+  name: kubedb-initializer
   labels:
-    app: stash
+    app: kubedb
 initializers:
-- name: stash.appscode.com
+- name: kubedb.appscode.com
   rules:
   - apiGroups:
     - "*"

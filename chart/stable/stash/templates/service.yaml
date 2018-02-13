@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "stash.fullname" . }}
+  name: {{ template "kubedb.fullname" . }}
   labels:
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubedb.name" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -24,5 +24,5 @@ spec:
     protocol: TCP
     targetPort: 56790
   selector:
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubedb.name" . }}"
     release: "{{ .Release.Name }}"

@@ -1,4 +1,4 @@
-# kubectl patch deploy stash-operator -n kube-system --patch "$(cat run-on-master.yaml)"
+# kubectl patch deploy kubedb-operator -n kube-system --patch "$(cat run-on-master.yaml)"
 spec:
   template:
     spec:

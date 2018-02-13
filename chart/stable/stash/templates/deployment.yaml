@@ -1,10 +1,10 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "stash.fullname" . }}
+  name: {{ template "kubedb.fullname" . }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubedb.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
   initializers:
@@ -13,19 +13,19 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: "{{ template "stash.name" . }}"
+      app: "{{ template "kubedb.name" . }}"
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: "{{ template "stash.name" . }}"
+        app: "{{ template "kubedb.name" . }}"
         release: "{{ .Release.Name }}"
 {{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
 {{- end }}
     spec:
-      serviceAccountName: {{ if .Values.rbac.create }}{{ template "stash.fullname" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
+      serviceAccountName: {{ if .Values.rbac.create }}{{ template "kubedb.fullname" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
 {{ toYaml .Values.imagePullSecrets | indent 6 }}
@@ -66,16 +66,16 @@ spec:
         - mountPath: /var/pv
           name: data-volume
         - mountPath: /tmp
-          name: stash-scratchdir
+          name: kubedb-scratchdir
       volumes:
       - emptyDir: {}
         name: data-volume
       - emptyDir: {}
-        name: stash-scratchdir
+        name: kubedb-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: {{ template "stash.fullname" . }}-apiserver-cert
+          secretName: {{ template "kubedb.fullname" . }}-apiserver-cert
 {{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
       tolerations:
       - key: CriticalAddonsOnly

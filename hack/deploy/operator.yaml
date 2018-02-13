@@ -1,38 +1,38 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: stash-operator
-  namespace: ${STASH_NAMESPACE}
+  name: kubedb-operator
+  namespace: ${KUBEDB_NAMESPACE}
   labels:
-    app: stash
+    app: kubedb
   initializers:
     pending: []
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: stash
+      app: kubedb
   template:
     metadata:
       labels:
-        app: stash
+        app: kubedb
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
-      serviceAccountName: ${STASH_SERVICE_ACCOUNT}
-      imagePullSecrets: [${STASH_IMAGE_PULL_SECRET}]
+      serviceAccountName: ${KUBEDB_SERVICE_ACCOUNT}
+      imagePullSecrets: [${KUBEDB_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
         args:
         - run
         - --v=3
-        - --rbac=${STASH_ENABLE_RBAC}
-        - --docker-registry=${STASH_DOCKER_REGISTRY}
+        - --rbac=${KUBEDB_ENABLE_RBAC}
+        - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
-        image: ${STASH_DOCKER_REGISTRY}/stash:0.7.0-alpha.0
+        image: ${KUBEDB_DOCKER_REGISTRY}/kubedb:0.7.0-alpha.0
         ports:
         - containerPort: 8443
         - containerPort: 56790
@@ -57,16 +57,16 @@ spec:
         - mountPath: /var/pv
           name: data-volume
         - mountPath: /tmp
-          name: stash-scratchdir
+          name: kubedb-scratchdir
       volumes:
       - emptyDir: {}
         name: data-volume
       - emptyDir: {}
-        name: stash-scratchdir
+        name: kubedb-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: stash-apiserver-cert
+          secretName: kubedb-apiserver-cert
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -75,10 +75,10 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: stash-apiserver-cert
-  namespace: ${STASH_NAMESPACE}
+  name: kubedb-apiserver-cert
+  namespace: ${KUBEDB_NAMESPACE}
   labels:
-    app: stash
+    app: kubedb
 type: kubernetes.io/tls
 data:
   tls.crt: ${TLS_SERVING_CERT}
@@ -88,10 +88,10 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: stash-operator
-  namespace: ${STASH_NAMESPACE}
+  name: kubedb-operator
+  namespace: ${KUBEDB_NAMESPACE}
   labels:
-    app: stash
+    app: kubedb
 spec:
   ports:
   - name: admission
@@ -104,21 +104,21 @@ spec:
     port: 56790
     targetPort: 56790
   selector:
-    app: stash
+    app: kubedb
 ---
 # register as aggregated apiserver
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.admission.stash.appscode.com
+  name: v1alpha1.admission.kubedb.appscode.com
   labels:
-    app: stash
+    app: kubedb
 spec:
   caBundle: ${SERVICE_SERVING_CERT_CA}
-  group: admission.stash.appscode.com
+  group: admission.kubedb.appscode.com
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
-    name: stash-operator
-    namespace: ${STASH_NAMESPACE}
+    name: kubedb-operator
+    namespace: ${KUBEDB_NAMESPACE}
   version: v1alpha1

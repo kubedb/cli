@@ -2,10 +2,10 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: {{ template "stash.fullname" . }}
+  name: {{ template "kubedb.fullname" . }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubedb.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 rules:
@@ -22,7 +22,7 @@ rules:
   verbs:
   - "*"
 - apiGroups:
-  - stash.appscode.com
+  - kubedb.appscode.com
   resources: ["*"]
   verbs: ["*"]
 - apiGroups:
