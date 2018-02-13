@@ -15,23 +15,32 @@ section_menu_id: setup
 # Uninstall KubeDB
 Please follow the steps below to uninstall KubeDB:
 
-1. Delete the deployment and service used for KubeDB operator.
-```console
-$ kubectl delete deployment -l app=kubedb -n <operator-namespace>
-$ kubectl delete service -l app=kubedb -n <operator-namespace>
+- Delete the deployment and service used for KubeDB operator.
 
-# Delete RBAC objects, if --rbac flag was used.
-$ kubectl delete serviceaccount -l app=kubedb -n <operator-namespace>
-$ kubectl delete clusterrolebindings -l app=kubedb -n <operator-namespace>
-$ kubectl delete clusterrole -l app=kubedb -n <operator-namespace>
+```console
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+    | bash -s -- --uninstall [--namespace=NAMESPACE]
+
++ kubectl delete deployment -l app=kubedb -n kube-system
+deployment "kubedb-operator" deleted
++ kubectl delete service -l app=kubedb -n kube-system
+service "kubedb-operator" deleted
++ kubectl delete serviceaccount -l app=kubedb -n kube-system
+No resources found
++ kubectl delete clusterrolebindings -l app=kubedb -n kube-system
+No resources found
++ kubectl delete clusterrole -l app=kubedb -n kube-system
+No resources found
 ```
 
-2. Now, wait several seconds for KubeDB to stop running. To confirm that KubeDB operator pod(s) have stopped running, run:
+- Now, wait several seconds for KubeDB to stop running. To confirm that KubeDB operator pod(s) have stopped running, run:
+
 ```console
 $ kubectl get pods --all-namespaces -l app=kubedb
 ```
 
-3. To keep a copy of your existing KubeDB objects, run:
+- To keep a copy of your existing KubeDB objects, run:
+
 ```console
 kubectl get postgres.kubedb.com --all-namespaces -o yaml > postgres.yaml
 kubectl get elasticsearch.kubedb.com --all-namespaces -o yaml > elastic.yaml
@@ -39,7 +48,8 @@ kubectl get snapshot.kubedb.com --all-namespaces -o yaml > snapshot.yaml
 kubectl get dormant-database.kubedb.com --all-namespaces -o yaml > data.yaml
 ```
 
-4. To delete existing KubeDB objects from all namespaces, run the following command in each namespace one by one.
+- To delete existing KubeDB objects from all namespaces, run the following command in each namespace one by one.
+
 ```
 kubectl delete postgres.kubedb.com --all --cascade=false
 kubectl delete elasticsearch.kubedb.com --all --cascade=false
@@ -47,7 +57,8 @@ kubectl delete snapshot.kubedb.com --all --cascade=false
 kubectl delete dormant-database.kubedb.com --all --cascade=false
 ```
 
-5. Delete the old CRD-registration.
+- Delete the old CRD-registration.
+
 ```console
 kubectl delete crd -l app=kubedb
 ```

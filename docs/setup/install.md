@@ -148,13 +148,4 @@ $ kubectl get crd -l app=kubedb
 Now, you are ready to [create your first database](/docs/guides/README.md) using KubeDB.
 
 ## Upgrade KubeDB
-To upgrade KubeDB cli, just replace the old cli with the new version.
-
-`kubedb init` command can be used to upgrade operator. Re-run the `kubedb init` command with `--upgrade` flag to upgrade operator.
-
-```console
-$ kubedb init --version='0.8.0-beta.0' --upgrade
-
-Successfully upgraded operator deployment.
-```
-To learn about various options of `init` command, please visit [here](/docs/reference/kubedb_init.md).
+To upgrade KubeDB cli, just replace the old cli with the new version. To upgrade KubeDB operator, please follow the instruction for the corresponding release.
