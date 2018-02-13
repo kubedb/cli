@@ -1,5 +1,5 @@
 # KubeDB
-[KubeDB by AppsCode](https://github.com/kubedb/cli) - Backup your Kubernetes Volumes
+[KubeDB by AppsCode](https://github.com/kubedb/cli) - Making running production-grade databases easy on Kubernetes
 
 ## TL;DR;
 
@@ -17,6 +17,7 @@ This chart bootstraps a [KubeDB controller](https://github.com/kubedb/cli) deplo
 
 ## Installing the Chart
 To install the chart with the release name `my-release`:
+
 ```console
 $ helm install stable/kubedb --name my-release
 ```
