@@ -101,7 +101,7 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/dep
 ```
 
 ### Using Helm
-KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kubedb/cli/tree/master/chart/stable/kubedb) included in this repository or from official charts repository. To install the chart with the release name `my-release`:
+KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kubedb/cli/tree/master/chart/stable/kubedb) included in this repository. To install the chart with the release name `my-release`:
 
 ```console
 # Mac OSX amd64:
