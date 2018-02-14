@@ -306,8 +306,6 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
-
 
 ## Next Steps
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).

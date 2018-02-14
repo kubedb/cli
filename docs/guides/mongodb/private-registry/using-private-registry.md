@@ -164,7 +164,6 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
 
 ## Next Steps
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.

@@ -176,7 +176,6 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
 
 ## Next Steps
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
