@@ -36,7 +36,7 @@ spec:
       requests:
         storage: 50Mi
   databaseSecret:
-    secretName: m1-admin-auth
+    secretName: m1-auth
   nodeSelector:
     disktype: ssd
   init:
@@ -59,7 +59,7 @@ spec:
         cpu: "500m"
   doNotPause: true
   monitor:
-    agent: coreos-prometheus-operator
+    agent: prometheus.io/coreos-operator
     prometheus:
       namespace: demo
       labels:
@@ -88,15 +88,26 @@ spec:
  - `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
 
 To learn how to configure `spec.storage`, please visit the links below:
+
  - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
 
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` super user. If not set, KubeDB operator creates a new Secret `{mysql-object-name}-admin-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` super user. If not set, KubeDB operator creates a new Secret `{mysql-object-name}-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
 
-This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
+This secret contains a `user` key and a `password` key which contains the `username` and `password` respectively for `mysql` root user. Here the value of `user` key is fixed to be `root`. Example:
 ```ini
-vPlT2PzewCaC3XZP
+apiVersion: v1
+data:
+  password: NnE4dV8yak1PVy1PT1pYaw==
+  user: cm9vdA==
+kind: Secret
+metadata:
+  ...
+  name: m1-auth
+  namespace: demo
+  ...
+type: Opaque
 ```
 
 
@@ -163,17 +174,20 @@ KubeDB supports taking periodic snapshots for MySQL database. This is an optiona
 ### spec.doNotPause
 `spec.doNotPause` is an optional field that tells KubeDB operator that if this MySQL object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MySQL object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
+### spec.imagePullSecret
+`KubeDB` provides the flexibility of deploying MySQL database from a Private Docker Registry. To learn how to deploym MySQL from a Private Registry, please visit [here](/docs/guides/mysql/private-registry/using-private-registry.md).
 
 ### spec.monitor
-To learn how to monitor MySQL databases, please visit [here](/docs/concepts/monitoring.md).
-
+MySQL can be monitored with KubeDB using out-of-the-box builtin-Prometheus and out-of-the-box CoreOS-Prometheus Operator. To learn more,
+ - [Monitor MySQL with builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md)
+ - [Monitor MySQL with CoreOS-Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.resources
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a MySQL database [here](/docs/guides/mysql/overview.md).
+- Learn how to use KubeDB to run a MySQL database [here](/docs/guides/mysql/README.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
