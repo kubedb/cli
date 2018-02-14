@@ -25,7 +25,7 @@ Guides show you how to perform tasks with KubeDB.
 
  - [Running MongoDB](/docs/guides/mongodb/overview.md): This tutorial will show you how to use KubeDB to run a MongoDB database.
 
- - [Running Redis](/docs/guides/redis/overview.md): This tutorial will show you how to use KubeDB to run a Redis database.
+ - [Running Redis](/docs/guides/redis/README.md): This tutorial will show you how to use KubeDB to run a Redis database.
 
  - [Running Memcached](/docs/guides/memcached/overview.md): This tutorial will show you how to use KubeDB to run a Memcached database.
 

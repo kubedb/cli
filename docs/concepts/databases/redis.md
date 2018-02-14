@@ -78,18 +78,20 @@ To learn how to configure `spec.storage`, please visit the links below:
 ### spec.doNotPause
 `spec.doNotPause` is an optional field that tells KubeDB operator that if this Redis object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Redis object put the database into a dormant state. The StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
+### spec.imagePullSecret
+`KubeDB` provides the flexibility of deploying Redis database from a Private Docker Registry. To learn how to deploym Redis from a Private Registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
 
 ### spec.monitor
-To learn how to monitor Redis databases, please visit [here](/docs/concepts/monitoring.md).
-
+Redis can be monitored with KubeDB using out-of-the-box builtin-Prometheus and out-of-the-box CoreOS-Prometheus Operator. To learn more,
+ - [Monitor Redis with builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md)
+ - [Monitor Redis with CoreOS-Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.resources
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/overview.md).
-- See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
+- Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/README.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
