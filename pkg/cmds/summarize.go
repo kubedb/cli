@@ -52,6 +52,14 @@ const (
     `
 )
 
+var operatorLabel = map[string]string{
+	"app": "kubedb",
+}
+
+const (
+	operatorPortNumber = 8080
+)
+
 func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
 	if len(args) == 0 {
 		fmt.Fprint(errOut, "You must specify the type of resource. ", validResourcesForReport)
