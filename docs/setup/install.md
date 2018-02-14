@@ -132,36 +132,8 @@ $ helm install stable/kubedb --name my-release \
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/stable/kubedb).
 
-#### Private Docker Registry
-
-If you are using a private Docker registry, you need to pull the following docker images:
-
- - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
- - [kubedb/postgres](https://hub.docker.com/r/kubedb/postgres)
- - [kubedb/postgres-tools](https://hub.docker.com/r/kubedb/postgres-tools)
- - [kubedb/elasticsearch](https://hub.docker.com/r/kubedb/elasticsearch)
- - [kubedb/elasticsearch-tools](https://hub.docker.com/r/kubedb/elasticsearch-tools)
- - [kubedb/mongo](https://hub.docker.com/r/kubedb/mongo)
- - [kubedb/mongo-tools](https://hub.docker.com/r/kubedb/mongo-tools)
- - [kubedb/mysql](https://hub.docker.com/r/kubedb/mysql)
- - [kubedb/mysql-tools](https://hub.docker.com/r/kubedb/mysql-tools)
- - [kubedb/redis](https://hub.docker.com/r/kubedb/redis)
- - [kubedb/memcached](https://hub.docker.com/r/kubedb/memcached)
-
-To pass the address of your private registry and optionally a image pull secret use flags `--docker-registry` and `--image-pull-secret` respectively.
-
-```console
-$ kubedb init --docker-registry=<your-registry> --image-pull-secret=<secret-name>
-
-Successfully created operator deployment.
-Successfully created operator service.
-```
-
-See the official docs of kubernetes for other [methods to pull private images](https://kubernetes.io/docs/concepts/containers/images/) and steps to [create ImagePullSecrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/).
-
 ## Verify installation
 To check if KubeDB operator pods have started, run the following command:
-
 ```console
 $ kubectl get pods --all-namespaces -l app=kubedb --watch
 ```
@@ -169,7 +141,6 @@ $ kubectl get pods --all-namespaces -l app=kubedb --watch
 Once the operator pods are running, you can cancel the above command by typing `Ctrl+C`.
 
 Now, to confirm CRD groups have been registered by the operator, run the following command:
-
 ```console
 $ kubectl get crd -l app=kubedb
 ```
