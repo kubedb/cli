@@ -62,17 +62,20 @@ spec:
 ### spec.doNotPause
 `spec.doNotPause` is an optional field that tells KubeDB operator that if this Memcached object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Memcached object put the database into a dormant state. 
 
+### spec.imagePullSecret
+`KubeDB` provides the flexibility of deploying Memcached database from a Private Docker Registry. To learn how to deploym Memcached from a Private Registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
 
 ### spec.monitor
-To learn how to monitor Memcached databases, please visit [here](/docs/concepts/monitoring.md).
-
+Memcached can be monitored with KubeDB using out-of-the-box builtin-Prometheus and out-of-the-box CoreOS-Prometheus Operator. To learn more,
+ - [Monitor Memcached with builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md)
+ - [Monitor Memcached with CoreOS-Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.resources
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/overview.md).
+- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/README.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
