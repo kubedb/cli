@@ -10,7 +10,6 @@ This tutorial will show you how to use KubeDB to run a MySQL database.
 
 The yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-
 ## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
@@ -131,21 +130,17 @@ Events:
   9m          9m         1         MySQL operator   Normal     Successful   Successfully created Service
 
 
-
 $ kubectl get statefulset -n demo
 NAME               DESIRED   CURRENT   AGE
 mysql-quickstart   1         1         10m
-
 
 $ kubectl get pvc -n demo
 NAME                      STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 data-mysql-quickstart-0   Bound     pvc-652e02c7-0d7f-11e8-9091-08002751ae8c   50Mi       RWO            standard       10m
 
-
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                          STORAGECLASS   REASON    AGE
 pvc-652e02c7-0d7f-11e8-9091-08002751ae8c   50Mi       RWO            Delete           Bound     demo/data-mysql-quickstart-0   standard                 11m
-
 
 $ kubectl get service -n demo
 NAME               TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
@@ -372,7 +367,6 @@ status:
   pausingTime: 2018-02-09T10:44:08Z
   phase: WipedOut
   wipeOutTime: 2018-02-09T10:45:41Z
-
 
 $ kubedb get drmn -n demo
 NAME               STATUS     AGE
