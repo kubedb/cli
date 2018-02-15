@@ -1,9 +1,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus (CoreOS operator) with KubeDB
+
 This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -14,7 +16,8 @@ Please note that the yaml files that are used in this tutorial, stored in [docs/
 
 ## Deploy CoreOS-Prometheus Operator
 
-#### In RBAC enabled cluster
+### In RBAC enabled cluster
+
 If RBAC *is* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -36,7 +39,6 @@ alertmanagers.monitoring.coreos.com     11m
 prometheuses.monitoring.coreos.com      11m
 servicemonitors.monitoring.coreos.com   11m
 ```
-
 
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
@@ -68,8 +70,8 @@ prometheus            1         4m
 prometheus-operator   1         5m
 ```
 
+### In RBAC \*not\* enabled cluster
 
-#### In RBAC \*not\* enabled cluster
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -91,7 +93,6 @@ prometheuses.monitoring.coreos.com      44s
 servicemonitors.monitoring.coreos.com   44s
 ```
 
-
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
@@ -101,7 +102,8 @@ service "prometheus" created
 
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
+
 Now to open prometheus dashboard on Browser:
 
 ```console
@@ -118,10 +120,10 @@ $ minikube service prometheus -n demo --url
 http://192.168.99.100:30900
 ```
 
-
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
 ## Create a Memcached database
+
 KubeDB implements a `Memcached` CRD to define the specification of a Memcached database. Below is the `Memcached` object created in this tutorial.
 
 ```yaml
@@ -151,6 +153,7 @@ spec:
 ```
 
 The `Memcached` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `Memcached` database by adding the below part in it's `spec` field.
+
 ```yaml
 spec:
   monitor:
@@ -180,14 +183,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 memcached "memcd-mon-coreos" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
+- `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
 
- - `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
+- `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
- - `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
+- `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
 
 KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching crd name.
 
@@ -233,7 +235,6 @@ Events:
   1m          1m         1         Memcached operator   Normal     Successful   Successfully created Service
 ```
 
-
 Since `spec.monitoring` was configured, a ServiceMonitor object is created accordingly. You can verify it running the following commands:
 
 ```yaml
@@ -271,11 +272,11 @@ spec:
       kubedb.com/name: memcd-mon-coreos
 ```
 
-
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 ![prometheus-coreos](/docs/images/memcached/memcached-coreos.png)
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -289,8 +290,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
 - Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.

@@ -1,7 +1,7 @@
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Memcached QuickStart
+
 This tutorial will show you how to use KubeDB to run a Memcached database.
 
 <p align="center">
@@ -9,6 +9,7 @@ This tutorial will show you how to use KubeDB to run a Memcached database.
 </p>
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -30,6 +31,7 @@ kube-system   Active    45m
 Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a Memcached database
+
 KubeDB implements a `Memcached` CRD to define the specification of a Memcached database. Below is the `Memcached` object created in this tutorial.
 
 ```yaml
@@ -57,16 +59,15 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 memcached "memcd-quickstart" created
 ```
 
-
 Here,
 
- - `spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. It defaults to 1.
+- `spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. It defaults to 1.
 
- - `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
+- `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+- `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
- - `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
+- `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
 KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching Memcached object name. Even if [RBAC is enabled](/docs/guides/rbac.md), it won't affect anything to run Memcached database .
 
@@ -106,12 +107,10 @@ $ kubectl get deployment -n demo
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 memcd-quickstart   3         3         3            3           2m
 
-
 $ kubectl get service -n demo
 NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
 memcd-quickstart   ClusterIP   10.103.23.178   <none>        11211/TCP   3m
 ```
-
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified Memcached object:
 
@@ -161,12 +160,10 @@ memcd-quickstart-667cd68854-jlmwh   1/1       Running   0          4m
 $ kubectl port-forward -n demo memcd-quickstart-667cd68854-gs69q 11211
 Forwarding from 127.0.0.1:11211 -> 11211
 
-
 # Connect Memcached cluster from localmachine through telnet.
 ~ $ telnet 127.0.0.1 11211
 Trying 127.0.0.1...
 Connected to 127.0.0.1.
-
 
 # Save data Command:
 set my_key 0 2592000 1
@@ -191,7 +188,6 @@ END
 quit
 ```
 
-
 ## Pause Database
 
 KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the Memcached object created in this tutorial has `spec.doNotPause` set to true, if you delete the Memcached object, KubeDB operator will nullify the delete operation. You can see this below:
@@ -201,25 +197,22 @@ $ kubedb delete mc memcd-quickstart -n demo
 error: Memcached "memcd-quickstart" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-
 Now, run `kubedb edit mc memcd-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Memcached object, KubeDB operator will delete the Deployment and its pods. In KubeDB parlance, we say that `memcd-quickstart` Memcached database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
-```yaml
+```console
 $ kubedb delete mc memcd-quickstart -n demo
 memcached "memcd-quickstart" deleted
-
 
 $ kubedb get drmn -n demo memcd-quickstart
 NAME               STATUS    AGE
 memcd-quickstart   Pausing   6s
 
-
 $ kubedb get drmn -n demo memcd-quickstart
 NAME               STATUS    AGE
 memcd-quickstart   Paused    9s
+```
 
-
-
+```yaml
 $ kubedb get drmn -n demo memcd-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
@@ -259,13 +252,11 @@ status:
   phase: Paused
 ```
 
-
 Here,
 
- - `spec.origin` is the spec of the original spec of the original Memcached object.
+- `spec.origin` is the spec of the original spec of the original Memcached object.
 
- - `status.phase` points to the current database state `Paused`.
-
+- `status.phase` points to the current database state `Paused`.
 
 ## Resume Dormant Database
 
@@ -287,7 +278,6 @@ status:
   ...
 ```
 
-
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Memcached object using the original spec. It will start fresh as there is no persistent volume for Memcached.
 
 Please note that the dormant database can also be resumed by creating same `Memcached` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `Memcached` database using demo-1.yaml file. The below command resumes the dormant database `memcd-quickstart` that was created before.
@@ -298,11 +288,12 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 memcached "memcd-quickstart" created
 ```
 
-
 ## Wipeout Dormant Database
+
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 Create dormant database again and set `spec.wipeOut` to true:
+
 ```yaml
 $ kubedb delete mc memcd-quickstart -n demo
 memcached "memcd-quickstart" deleted
@@ -368,8 +359,8 @@ NAME               STATUS     AGE
 memcd-quickstart   WipedOut   5m
 ```
 
-
 ## Delete Dormant Database
+
 You still have a record that there used to be a Memcached database `memcd-quickstart` in the form of a DormantDatabase database `memcd-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
@@ -377,8 +368,8 @@ $ kubedb delete drmn memcd-quickstart -n demo
 dormantdatabase "memcd-quickstart" deleted
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -392,12 +383,11 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your Memcached database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

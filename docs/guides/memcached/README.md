@@ -26,12 +26,13 @@
 <br/>
 
 ## Life Cycle of Memcached in KubeDB
+
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/memcached/memcached-lifecycle.png" width="600" height="373">
 </p>
 
-
 ## User Guide
+
 - [Quickstart Memcached](/docs/guides/memcached/quickstart/quickstart.md) with KubeDB Operator.
 - Monitor your Memcached database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).

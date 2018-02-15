@@ -6,15 +6,15 @@
 KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Memcached database using private Docker images.
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
 You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For memcached, push the following images to your private registry.
 
- - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
- - [kubedb/memcached](https://hub.docker.com/r/kubedb/memcached)
-
+- [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
+- [kubedb/memcached](https://hub.docker.com/r/kubedb/memcached)
 
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
@@ -88,6 +88,7 @@ spec:
   imagePullSecrets:
     - name: myregistrykey
 ```
+
 Now run the command to deploy this `Memcached` object:
 
 ```console
@@ -116,6 +117,7 @@ memcd-pvt-reg   Running   2m
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -125,8 +127,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your Memcached database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
