@@ -224,7 +224,7 @@ Here,
 
 - `spec.init.snapshotSource.name` refers to a Snapshot object for a MongoDB database in the same namespaces as this new `mgo-recovered` MongoDB object.
 
-Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `mgo-xyz` Snapshot.
+Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `snapshot-infant` Snapshot.
 
 ```console
 $ kubedb get mg -n demo

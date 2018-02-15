@@ -2,7 +2,7 @@
 
 # Deploy MySQL from Private Docker Registry
 
-KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run MongoDB database using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run MySQL database using private Docker images.
 
 ## Before You Begin
 
