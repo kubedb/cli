@@ -19,7 +19,7 @@ webhooks:
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["elasticsearchs"]
+    resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
 - name: postgres.admission.kubedb.com

@@ -25,10 +25,10 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-// ElasticsearchsGetter has a method to return a ElasticsearchInterface.
+// ElasticsearchesGetter has a method to return a ElasticsearchInterface.
 // A group's client should implement this interface.
-type ElasticsearchsGetter interface {
-	Elasticsearchs(namespace string) ElasticsearchInterface
+type ElasticsearchesGetter interface {
+	Elasticsearches(namespace string) ElasticsearchInterface
 }
 
 // ElasticsearchInterface has methods to work with Elasticsearch resources.
@@ -45,26 +45,26 @@ type ElasticsearchInterface interface {
 	ElasticsearchExpansion
 }
 
-// elasticsearchs implements ElasticsearchInterface
-type elasticsearchs struct {
+// elasticsearches implements ElasticsearchInterface
+type elasticsearches struct {
 	client rest.Interface
 	ns     string
 }
 
-// newElasticsearchs returns a Elasticsearchs
-func newElasticsearchs(c *KubedbV1alpha1Client, namespace string) *elasticsearchs {
-	return &elasticsearchs{
+// newElasticsearches returns a Elasticsearches
+func newElasticsearches(c *KubedbV1alpha1Client, namespace string) *elasticsearches {
+	return &elasticsearches{
 		client: c.RESTClient(),
 		ns:     namespace,
 	}
 }
 
 // Get takes name of the elasticsearch, and returns the corresponding elasticsearch object, and an error if there is any.
-func (c *elasticsearchs) Get(name string, options v1.GetOptions) (result *v1alpha1.Elasticsearch, err error) {
+func (c *elasticsearches) Get(name string, options v1.GetOptions) (result *v1alpha1.Elasticsearch, err error) {
 	result = &v1alpha1.Elasticsearch{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
 		Do().
@@ -72,34 +72,34 @@ func (c *elasticsearchs) Get(name string, options v1.GetOptions) (result *v1alph
 	return
 }
 
-// List takes label and field selectors, and returns the list of Elasticsearchs that match those selectors.
-func (c *elasticsearchs) List(opts v1.ListOptions) (result *v1alpha1.ElasticsearchList, err error) {
+// List takes label and field selectors, and returns the list of Elasticsearches that match those selectors.
+func (c *elasticsearches) List(opts v1.ListOptions) (result *v1alpha1.ElasticsearchList, err error) {
 	result = &v1alpha1.ElasticsearchList{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Do().
 		Into(result)
 	return
 }
 
-// Watch returns a watch.Interface that watches the requested elasticsearchs.
-func (c *elasticsearchs) Watch(opts v1.ListOptions) (watch.Interface, error) {
+// Watch returns a watch.Interface that watches the requested elasticsearches.
+func (c *elasticsearches) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	opts.Watch = true
 	return c.client.Get().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Watch()
 }
 
 // Create takes the representation of a elasticsearch and creates it.  Returns the server's representation of the elasticsearch, and an error, if there is any.
-func (c *elasticsearchs) Create(elasticsearch *v1alpha1.Elasticsearch) (result *v1alpha1.Elasticsearch, err error) {
+func (c *elasticsearches) Create(elasticsearch *v1alpha1.Elasticsearch) (result *v1alpha1.Elasticsearch, err error) {
 	result = &v1alpha1.Elasticsearch{}
 	err = c.client.Post().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		Body(elasticsearch).
 		Do().
 		Into(result)
@@ -107,11 +107,11 @@ func (c *elasticsearchs) Create(elasticsearch *v1alpha1.Elasticsearch) (result *
 }
 
 // Update takes the representation of a elasticsearch and updates it. Returns the server's representation of the elasticsearch, and an error, if there is any.
-func (c *elasticsearchs) Update(elasticsearch *v1alpha1.Elasticsearch) (result *v1alpha1.Elasticsearch, err error) {
+func (c *elasticsearches) Update(elasticsearch *v1alpha1.Elasticsearch) (result *v1alpha1.Elasticsearch, err error) {
 	result = &v1alpha1.Elasticsearch{}
 	err = c.client.Put().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		Name(elasticsearch.Name).
 		Body(elasticsearch).
 		Do().
@@ -122,11 +122,11 @@ func (c *elasticsearchs) Update(elasticsearch *v1alpha1.Elasticsearch) (result *
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
 
-func (c *elasticsearchs) UpdateStatus(elasticsearch *v1alpha1.Elasticsearch) (result *v1alpha1.Elasticsearch, err error) {
+func (c *elasticsearches) UpdateStatus(elasticsearch *v1alpha1.Elasticsearch) (result *v1alpha1.Elasticsearch, err error) {
 	result = &v1alpha1.Elasticsearch{}
 	err = c.client.Put().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		Name(elasticsearch.Name).
 		SubResource("status").
 		Body(elasticsearch).
@@ -136,10 +136,10 @@ func (c *elasticsearchs) UpdateStatus(elasticsearch *v1alpha1.Elasticsearch) (re
 }
 
 // Delete takes name of the elasticsearch and deletes it. Returns an error if one occurs.
-func (c *elasticsearchs) Delete(name string, options *v1.DeleteOptions) error {
+func (c *elasticsearches) Delete(name string, options *v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		Name(name).
 		Body(options).
 		Do().
@@ -147,10 +147,10 @@ func (c *elasticsearchs) Delete(name string, options *v1.DeleteOptions) error {
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *elasticsearchs) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+func (c *elasticsearches) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		VersionedParams(&listOptions, scheme.ParameterCodec).
 		Body(options).
 		Do().
@@ -158,11 +158,11 @@ func (c *elasticsearchs) DeleteCollection(options *v1.DeleteOptions, listOptions
 }
 
 // Patch applies the patch and returns the patched elasticsearch.
-func (c *elasticsearchs) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Elasticsearch, err error) {
+func (c *elasticsearches) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Elasticsearch, err error) {
 	result = &v1alpha1.Elasticsearch{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
-		Resource("elasticsearchs").
+		Resource("elasticsearches").
 		SubResource(subresources...).
 		Name(name).
 		Body(data).

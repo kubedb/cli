@@ -91,7 +91,7 @@ func (goAwayFlowError) Error() string { return "connection exceeded flow control
 // with a string (for debugging) explaining why.
 //
 // Errors of this type are only returned by the frame parser functions
-// and converted into ConnectionError(Code), after kubedbing away
+// and converted into ConnectionError(Code), after stashing away
 // the Reason into the Framer's errDetail field, accessible via
 // the (*Framer).ErrorDetail method.
 type connError struct {
