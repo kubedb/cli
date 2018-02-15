@@ -42,14 +42,14 @@
 </p>
 
 ## User Guide
-- [Quickstart of Postgres](/docs/guides/postgres/quickstart.md) in KubeDB Operator.
-- [Take instant backup](/docs/guides/postgres/snapshot/instant_backup.md)  of PostgreSQL database using KubeDB Snapshot.
-- [Schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
+- [Quickstart PostgreSQL](/docs/guides/postgres/quickstart.md) with KubeDB Operator.
+- Take [Instant Snapshot](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB.
+- [Schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md) of PostgreSQL database using KubeDB.
 - Initialize [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
-- Initialize [PostgreSQL from KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).
-- [PostgreSQL Clustering](/docs/guides/postgres/clustering/ha_cluster.md) supported by KubeDB Postgres
-- [Streaming Replication](/docs/guides/postgres/clustering/streaming_replication.md) for PostgreSQL clustering
-- [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) of Write-Ahead Log by `wal-g`
+- Initialize [PostgreSQL with KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).
+- [PostgreSQL Clustering](/docs/guides/postgres/clustering/ha_cluster.md) supported by KubeDB Postgres.
+- [Streaming Replication](/docs/guides/postgres/clustering/streaming_replication.md) for PostgreSQL clustering.
+- [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) of Write-Ahead Log by `wal-g`.
 - Monitor your PostgreSQL database with KubeDB using [`out-of-the-box` builtin-Prometheus](/docs/guides/postgres/monitoring/using_builtin_prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using_coreos_prometheus_operator.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
