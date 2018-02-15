@@ -36,7 +36,7 @@ spec:
       requests:
         storage: 50Mi
   databaseSecret:
-    secretName: mgo1-admin-auth
+    secretName: mgo1-auth
   nodeSelector:
     disktype: ssd
   init:
@@ -59,7 +59,7 @@ spec:
         cpu: "500m"
   doNotPause: true
   monitor:
-    agent: coreos-prometheus-operator
+    agent: prometheus.io/coreos-operator
     prometheus:
       namespace: demo
       labels:
@@ -81,22 +81,33 @@ spec:
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
+- `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
 
- - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
+- `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
 
- - `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
+- `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
 
 To learn how to configure `spec.storage`, please visit the links below:
- - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+
+- https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
 
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mongodb` super user. If not set, KubeDB operator creates a new Secret `{mongodb-object-name}-admin-auth` for storing the password for `mongodb` superuser for each MongoDB object. If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mongodb` super user. If not set, KubeDB operator creates a new Secret `{mongodb-object-name}-auth` for storing the password for `mongodb` superuser for each MongoDB object. If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`.
 
-This secret contains a `.admin` key which contains the password for `mongodb` superuser. Example:
+This secret contains a `user` key and a `password` key which contains the `username` and `password` respectively for `mongodb` superuser. Example:
 ```ini
-vPlT2PzewCaC3XZP
+apiVersion: v1
+data:
+  password: NnE4dV8yak1PVy1PT1pYaw==
+  user: cm9vdA==
+kind: Secret
+metadata:
+  ...
+  name: mgo1-auth
+  namespace: demo
+  ...
+type: Opaque
 ```
 
 
@@ -163,17 +174,21 @@ KubeDB supports taking periodic snapshots for MongoDB database. This is an optio
 ### spec.doNotPause
 `spec.doNotPause` is an optional field that tells KubeDB operator that if this MongoDB object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MongoDB object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
 
+### spec.imagePullSecret
+`KubeDB` provides the flexibility of deploying MongoDB database from a Private Docker Registry. To learn how to deploym MongoDB from a Private Registry, please visit [here](/docs/guides/mongodb/private-registry/using-private-registry.md).
 
 ### spec.monitor
-To learn how to monitor MongoDB databases, please visit [here](/docs/concepts/monitoring.md).
+MongoDB managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
 
+- [Monitor MongoDB with builtin Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md)
+- [Monitor MongoDB with CoreOS Prometheus operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.resources
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a MongoDB database [here](/docs/guides/mongodb/overview.md).
+- Learn how to use KubeDB to run a MongoDB database [here](/docs/guides/mongodb/README.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
