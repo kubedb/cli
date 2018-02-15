@@ -71,7 +71,7 @@ prometheus            1         4m
 prometheus-operator   1         5m
 ```
 
-#### In RBAC \*not\* enabled cluster
+### In RBAC \*not\* enabled cluster
 
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
@@ -102,7 +102,7 @@ prometheus "prometheus" created
 service "prometheus" created
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
 
 Now to open prometheus dashboard on Browser:
 

@@ -302,7 +302,7 @@ default             1         48m
 prometheus-server   1         1m
 ```
 
-#### In RBAC \*not\* enabled cluster
+### In RBAC \*not\* enabled cluster
 
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
@@ -319,7 +319,7 @@ prometheus-server-79c7cf44fc-rdrpd   0/1       ContainerCreating   0          8s
 prometheus-server-79c7cf44fc-rdrpd   1/1       Running             0          1m
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
 
 Now to open prometheus dashboard on Browser:
 
