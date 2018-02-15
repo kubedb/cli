@@ -213,7 +213,7 @@ error: MySQL "mysql-quickstart" can't be paused. To continue delete, unset spec.
 
 Now, run `kubedb edit my mysql-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MySQL object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mysql-quickstart` MySQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
-```yaml
+```console
 $ kubedb delete my mysql-quickstart -n demo
 mysql "mysql-quickstart" deleted
 
@@ -224,7 +224,9 @@ mysql-quickstart   Pausing   16s
 $ kubedb get drmn -n demo mysql-quickstart
 NAME               STATUS    AGE
 mysql-quickstart   Paused    31s
+```
 
+```yaml
 $ kubedb get drmn -n demo mysql-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase

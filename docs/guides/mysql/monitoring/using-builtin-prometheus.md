@@ -122,7 +122,7 @@ Events:
 
 Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
 
-```yaml
+```console
 $ kubectl get services -n demo
 NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)              AGE
 kubedb                 ClusterIP   None           <none>        <none>               53s

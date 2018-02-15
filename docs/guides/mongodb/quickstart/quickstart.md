@@ -232,7 +232,7 @@ error: MongoDB "mgo-quickstart" can't be paused. To continue delete, unset spec.
 
 Now, run `kubedb edit mg mgo-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mgo-quickstart` MongoDB database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
-```yaml
+```console
 $ kubedb delete mg mgo-quickstart -n demo
 mongodb "mgo-quickstart" deleted
 
@@ -243,7 +243,9 @@ mgo-quickstart   Pausing   39s
 $ kubedb get drmn -n demo mgo-quickstart
 NAME             STATUS    AGE
 mgo-quickstart   Paused    1m
+```
 
+```yaml
 $ kubedb get drmn -n demo mgo-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
