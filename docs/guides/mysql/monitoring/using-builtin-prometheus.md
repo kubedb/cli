@@ -2,9 +2,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus with KubeDB
+
 This tutorial will show you how to monitor KubeDB databases using [Prometheus](https://prometheus.io/).
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -26,6 +28,7 @@ kube-system   Active    45m
 Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a MySQL database
+
 KubeDB implements a `MySQL` CRD to define the specification of a MySQL database. Below is the `MySQL` object created in this tutorial.
 
 ```yaml
@@ -53,14 +56,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mysql "mysql-mon-prometheus" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
+- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MySQL Exporter` and will receive metrics from exporter.
+- `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MySQL Exporter` and will receive metrics from exporter.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
@@ -118,7 +120,6 @@ Events:
   14s         14s        1         MySQL operator   Normal     Successful   Successfully created MySQL
   30s         30s        1         MySQL operator   Normal     Successful   Successfully created Service
 ```
-
 
 Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
 
@@ -273,7 +274,8 @@ spec:
           emptyDir: {}
 ```
 
-#### In RBAC enabled cluster
+### In RBAC enabled cluster
+
 If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes:
 
 ```console
@@ -300,8 +302,8 @@ default             1         48m
 prometheus-server   1         1m
 ```
 
-
 #### In RBAC \*not\* enabled cluster
+
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -318,6 +320,7 @@ prometheus-server-79c7cf44fc-rdrpd   1/1       Running             0          1m
 ```
 
 #### Prometheus Dashboard
+
 Now to open prometheus dashboard on Browser:
 
 ```console
@@ -341,6 +344,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 ![prometheus-builtin](/docs/images/mysql/mysql-builtin.png)
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -356,6 +360,7 @@ namespace "demo" deleted
 ```
 
 ## Next Steps
+
 - Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
 - [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.

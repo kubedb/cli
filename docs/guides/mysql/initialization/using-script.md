@@ -7,7 +7,6 @@ In this tutorial we will use .sql script stored in GitHub repository [kubedb/mys
 
 Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-
 ## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
@@ -47,8 +46,8 @@ http://192.168.99.100:32673
 
 According to the above example, this URL will be [http://192.168.99.100:32673](http://192.168.99.100:32673). The login informations to phpMyAdmin _(host, username and password)_ will be retrieved later in this tutorial.
 
-
 ## Create a MySQL database with Init-Script
+
 Below is the `MySQL` object created in this tutorial.
 
 ```yaml
@@ -81,14 +80,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mysql "mysql-init-script" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
+- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.sql, \*sql.gz and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
+- `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.sql, \*sql.gz and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC roles are required for [RBAC enabled clusters](/docs/guides/rbac.md).
 
@@ -157,7 +155,6 @@ kubedb              ClusterIP   None            <none>        <none>     13m
 mysql-init-script   ClusterIP   10.101.136.66   <none>        3306/TCP   13m
 ```
 
-
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MySQL object:
 
 ```yaml
@@ -220,6 +217,7 @@ Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadm
 As you can see here, the initial script has successfully created a table named `kubedb_table` in `mysql` database and inserted three rows of data into that table successfully.
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -229,8 +227,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Initialize [MySQL with Snapshot](/docs/guides/mysql/initialization/using-snapshot.md).
 - [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.

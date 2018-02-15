@@ -24,3 +24,4 @@ _testmain.go
 .idea/
 dist/
 .vscode/
+.markdownlint.json

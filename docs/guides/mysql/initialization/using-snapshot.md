@@ -1,9 +1,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Initialize MySQL with Snapshot
+
 This tutorial will show you how to use KubeDB to initialize a MySQL database with an existing snapshot.
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -13,6 +15,7 @@ This tutorial assumes that you have created a namespace `demo` and a snapshot `s
 Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create MySQL with Init-Snapshot
+
 Below is the `MySQL` object created in this tutorial.
 
 ```yaml
@@ -103,8 +106,8 @@ Events:
   2m          2m         1         MySQL operator   Normal     Initializing         Initializing from Snapshot: "snap-mysql-infant"
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -114,8 +117,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Use [Private Docker Registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
