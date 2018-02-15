@@ -63,7 +63,7 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-## Deploy Redis database from Private registry
+## Deploy Redis database from Private Registry
 
 While deploying `Redis` from private repository, you have to add `myregistrykey` secret in `Redis` `spec.imagePullSecrets`.
 Below is the Redis CRD object we will create.
