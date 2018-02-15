@@ -306,6 +306,6 @@ namespace "demo" deleted
 - Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.
 - Initialize [MongoDB with Script](/docs/guides/mongodb/initialization/using-script.md).
 - Initialize [MongoDB with Snapshot](/docs/guides/mongodb/initialization/using-snapshot.md).
-- Use [Private Docker Registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
+- Use [private Docker registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

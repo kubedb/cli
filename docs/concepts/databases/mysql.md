@@ -182,7 +182,7 @@ KubeDB supports taking periodic snapshots for MySQL database. This is an optiona
 
 ### spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying MySQL database from a Private Docker Registry. To learn how to deploym MySQL from a Private Registry, please visit [here](/docs/guides/mysql/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying MySQL database from a private Docker registry. To learn how to deploym MySQL from a Private Registry, please visit [here](/docs/guides/mysql/private-registry/using-private-registry.md).
 
 ### spec.monitor
 
