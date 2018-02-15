@@ -1,5 +1,3 @@
-
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 ## Redis versions supported by KubeDB
@@ -28,12 +26,13 @@
 <br/>
 
 ## Life Cycle of Redis in KubeDB
+
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="373">
 </p>
 
-
 ## User Guide
+
 - [Quickstart Redis](/docs/guides/redis/quickstart/quickstart.md) with KubeDB Operator.
 - Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).

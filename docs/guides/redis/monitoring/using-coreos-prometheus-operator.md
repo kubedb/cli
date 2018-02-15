@@ -1,22 +1,23 @@
-
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus (CoreOS operator) with KubeDB
+
 This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy CoreOS-Prometheus Operator
 
-#### In RBAC enabled cluster
+### In RBAC enabled cluster
+
 If RBAC *is* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -38,7 +39,6 @@ alertmanagers.monitoring.coreos.com     11m
 prometheuses.monitoring.coreos.com      11m
 servicemonitors.monitoring.coreos.com   11m
 ```
-
 
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
@@ -70,8 +70,8 @@ prometheus            1         4m
 prometheus-operator   1         5m
 ```
 
+### In RBAC \*not\* enabled cluster
 
-#### In RBAC \*not\* enabled cluster
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -93,7 +93,6 @@ prometheuses.monitoring.coreos.com      44s
 servicemonitors.monitoring.coreos.com   44s
 ```
 
-
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
@@ -103,7 +102,8 @@ service "prometheus" created
 
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
+
 Now to open prometheus dashboard on Browser:
 
 ```console
@@ -120,10 +120,10 @@ $ minikube service prometheus -n demo --url
 http://192.168.99.100:30900
 ```
 
-
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
 ## Create a Redis database
+
 KubeDB implements a `Redis` CRD to define the specification of a Redis database. Below is the `Redis` object created in this tutorial.
 
 ```yaml
@@ -151,6 +151,7 @@ spec:
 ```
 
 The `Redis` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `Redis` database by adding the below part in it's `spec` field.
+
 ```yaml
 spec:
   monitor:
@@ -180,14 +181,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 redis "redis-mon-coreos" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of Redis database. In this tutorial, a Redis 4 database is going to be created.
+- `spec.version` is the version of Redis database. In this tutorial, a Redis 4 database is going to be created.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
+- `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
 
 KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
@@ -241,7 +241,6 @@ Events:
   1m          1m         1         Redis operator   Normal     Successful   Successfully created Service
 ```
 
-
 Since `spec.monitoring` was configured, a ServiceMonitor object is created accordingly. You can verify it running the following commands:
 
 ```yaml
@@ -279,11 +278,11 @@ spec:
       kubedb.com/name: redis-mon-coreos
 ```
 
-
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 ![prometheus-coreos](/docs/images/redis/redis-coreos.png)
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -297,8 +296,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Use [Private Docker Registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.

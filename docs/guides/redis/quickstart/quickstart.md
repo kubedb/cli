@@ -1,10 +1,7 @@
-
-
-
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Redis QuickStart
+
 This tutorial will show you how to use KubeDB to run a Redis database.
 
 <p align="center">
@@ -12,6 +9,7 @@ This tutorial will show you how to use KubeDB to run a Redis database.
 </p>
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -30,9 +28,10 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a Redis database
+
 KubeDB implements a `Redis` CRD to define the specification of a Redis database. Below is the `Redis` object created in this tutorial.
 
 ```yaml
@@ -59,14 +58,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 redis "redis-quickstart" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of Redis database. In this tutorial, a Redis 4 database is going to be created.
+- `spec.version` is the version of Redis database. In this tutorial, a Redis 4 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+- `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
 KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching Redis object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. Even if [RBAC is enabled](/docs/guides/rbac.md), it won't affect anything to run Redis database .
 
@@ -128,7 +126,6 @@ kubedb             ClusterIP   None           <none>        <none>     3m
 redis-quickstart   ClusterIP   10.101.253.6   <none>        6379/TCP   3m
 ```
 
-
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified Redis object:
 
 ```yaml
@@ -162,6 +159,7 @@ status:
 ```
 
 Now, you can connect to this database through [redis-cli](https://redis.io/topics/rediscli). In this tutorial, we are connecting to the Redis server from inside of pod.
+
 ```console
 $ kubectl exec -it redis-quickstart-0 -n demo sh
 
@@ -181,20 +179,18 @@ OK
 127.0.0.1:6379> exit
 ```
 
-
 ## Pause Database
 
-The Admission Webhook of KubeDB gives some extra strength to `KubeDB-Operator` and one of the features is `spec.doNotPause`. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the Redis object created in this tutorial has `spec.doNotPause` set to true, if you delete the Redis object, KubeDB operator will nullify the delete operation. You can see this below:
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the Redis object created in this tutorial has `spec.doNotPause` set to true, if you delete the Redis object, KubeDB operator will nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete rd redis-quickstart -n demo
 error: Redis "redis-quickstart" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
-
 Now, run `kubedb edit rd redis-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the Redis object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `redis-quickstart` Redis database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
-```yaml
+```console
 $ kubedb delete rd redis-quickstart -n demo
 redis "redis-quickstart" deleted
 
@@ -207,8 +203,9 @@ redis-quickstart   Pausing   6s
 $ kubedb get drmn -n demo redis-quickstart
 NAME               STATUS    AGE
 redis-quickstart   Paused    10s
+```
 
-
+```yaml
 $ kubedb get drmn -n demo redis-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
@@ -248,13 +245,11 @@ status:
   phase: Paused
 ```
 
-
 Here,
 
- - `spec.origin` is the spec of the original spec of the original Redis object.
+- `spec.origin` is the spec of the original spec of the original Redis object.
 
- - `status.phase` points to the current database state `Paused`.
-
+- `status.phase` points to the current database state `Paused`.
 
 ## Resume Dormant Database
 
@@ -276,7 +271,6 @@ status:
   ...
 ```
 
-
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Redis object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 Please note that the dormant database can also be resumed by creating same `Redis` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `Redis` database using demo-1.yaml file. The below command resumes the dormant database `redis-quickstart` that was created before.
@@ -287,11 +281,12 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 redis "redis-quickstart" created
 ```
 
-
 ## Wipeout Dormant Database
+
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs that is used by `redis-quickstart`. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 Create dormant database again and set `spec.wipeOut` to true:
+
 ```yaml
 $ kubedb delete rd redis-quickstart -n demo
 redis "redis-quickstart" deleted
@@ -357,8 +352,8 @@ NAME               STATUS     AGE
 redis-quickstart   WipedOut   2m
 ```
 
-
 ## Delete Dormant Database
+
 You still have a record that there used to be a Redis database `redis-quickstart` in the form of a DormantDatabase database `redis-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
@@ -366,8 +361,8 @@ $ kubedb delete drmn redis-quickstart -n demo
 dormantdatabase "redis-quickstart" deleted
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -381,12 +376,11 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
 - Use [Private Docker Registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-
