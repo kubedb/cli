@@ -43,6 +43,7 @@ secret "myregistrykey" created.
 
 If you wish to follow other ways to pull private images see [official docs](https://kubernetes.io/docs/concepts/containers/images/) of kubernetes.
 
+NB: If you are using `kubectl` 1.9.0, update to 1.9.1 or later to avoid this [issue](https://github.com/kubernetes/kubernetes/issues/57427).
 
 ## Install KubeDB operator
 
