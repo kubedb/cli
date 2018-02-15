@@ -66,7 +66,7 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-## Deploy MongoDB database from Private Registry
+## Deploy MongoDB database from Private registry
 
 While deploying `MongoDB` from private repository, you have to add `myregistrykey` secret in `MongoDB` `spec.imagePullSecrets`.
 Below is the MongoDB CRD object we will create.

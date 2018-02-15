@@ -64,7 +64,7 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-## Deploy MySQL database from Private Registry
+## Deploy MySQL database from Private registry
 
 While deploying `MySQL` from private repository, you have to add `myregistrykey` secret in `MySQL` `spec.imagePullSecrets`.
 Below is the MySQL CRD object we will create.
