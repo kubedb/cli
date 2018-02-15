@@ -1,18 +1,21 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Initialize MongoDB with Snapshot
+
 This tutorial will show you how to use KubeDB to initialize a MongoDB database with an existing snapshot.
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
 This tutorial assumes that you have created a namespace `demo` and a snapshot `snapshot-infant`. Follow the steps [here](/docs/guides/mongodb/snapshot/backup-and-restore.md) to create a database and take [instant snapshot](/docs/guides/mongodb/snapshot/backup-and-restore.md#instant-backups), if you have not done so already. If you have changed the name of either namespace or snapshot object, please modify the YAMLs used in this tutorial accordingly.
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli). 
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create MongoDB with Init-Snapshot
+
 Below is the `MongoDB` object created in this tutorial.
 
 ```yaml
@@ -66,13 +69,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo-init-snapshot
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Tue, 06 Feb 2018 10:11:54 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo-init-snapshot
   Type:		ClusterIP
   IP:		10.100.233.80
@@ -101,8 +104,8 @@ Events:
   1m          1m         1         MongoDB operator   Normal     Successful             Successfully patched MongoDB
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -112,8 +115,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Use [Private Docker Registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.

@@ -1,9 +1,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Database Snapshots
+
 This tutorial will show you how to take snapshots of a KubeDB managed MySQL database.
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -29,6 +31,7 @@ mysql "mysql-infant" created
 Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Instant Backups
+
 You can easily take a snapshot of `MySQL` database by creating a `Snapshot` object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `mysql dump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
@@ -130,7 +133,6 @@ Here,
 
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
-
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
 ```console
@@ -187,8 +189,8 @@ Once the snapshot Job is complete, you should see the output of the `mysql dump`
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{mysql-object}/{snapshot}/`.
 
-
 ## Restore from Snapshot
+
 You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MySQL object. See the example `mysql-recovered` object below:
 
 ```yaml
@@ -220,7 +222,7 @@ mysql "mysql-recovered" created
 
 Here,
 
- - `spec.init.snapshotSource.name` refers to a Snapshot object for a MySQL database in the same namespaces as this new `mysql-recovered` MySQL object.
+- `spec.init.snapshotSource.name` refers to a Snapshot object for a MySQL database in the same namespaces as this new `mysql-recovered` MySQL object.
 
 Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `mgo-xyz` Snapshot.
 
@@ -280,8 +282,8 @@ Events:
   10m         10m        1         MySQL operator   Normal     Successful           Successfully created Service
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -291,8 +293,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
 - Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).
@@ -303,4 +305,3 @@ namespace "demo" deleted
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

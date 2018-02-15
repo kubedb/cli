@@ -2,20 +2,23 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus (CoreOS operator) with KubeDB
+
 This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy CoreOS-Prometheus Operator
 
-#### In RBAC enabled cluster
+### In RBAC enabled cluster
+
 If RBAC *is* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -38,7 +41,6 @@ prometheuses.monitoring.coreos.com      11m
 servicemonitors.monitoring.coreos.com   11m
 ```
 
-
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
@@ -50,7 +52,7 @@ prometheus "prometheus" created
 service "prometheus" created
 
 # Verify RBAC stuffs
-$ kubectl get clusterroles 
+$ kubectl get clusterroles
 NAME                  AGE
 prometheus            48s
 prometheus-operator   1m
@@ -69,8 +71,8 @@ prometheus            1         4m
 prometheus-operator   1         5m
 ```
 
+### In RBAC \*not\* enabled cluster
 
-#### In RBAC \*not\* enabled cluster
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -92,17 +94,16 @@ prometheuses.monitoring.coreos.com      44s
 servicemonitors.monitoring.coreos.com   44s
 ```
 
-
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
-
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
+
 Now to open prometheus dashboard on Browser:
 
 ```console
@@ -118,10 +119,10 @@ $ minikube service prometheus -n demo --url
 http://192.168.99.100:30900
 ```
 
-
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
 ## Create a MongoDB database
+
 KubeDB implements a `MongoDB` CRD to define the specification of a MongoDB database. Below is the `MongoDB` object created in this tutorial.
 
 ```yaml
@@ -149,6 +150,7 @@ spec:
 ```
 
 The `MongoDB` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `MongoDB` database by adding the below part in it's `spec` field.
+
 ```yaml
 spec:
   monitor:
@@ -157,7 +159,7 @@ spec:
       namespace: demo
       labels:
         app: kubedb
-      interval: 10s      
+      interval: 10s
 ```
 
 |  Keys  |  Value |  Description |
@@ -178,14 +180,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mongodb "mgo-mon-coreos" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
+- `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
+- `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
 
 KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
@@ -209,13 +210,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo-mon-coreos
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Mon, 05 Feb 2018 11:20:27 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo-mon-coreos
   Type:		ClusterIP
   IP:		10.107.145.36
@@ -248,7 +249,6 @@ Events:
   10m         10m        1         MongoDB operator   Normal     Successful   Successfully created MongoDB
   11m         11m        1         MongoDB operator   Normal     Successful   Successfully created Service
 ```
-
 
 Since `spec.monitoring` was configured, a ServiceMonitor object is created accordingly. You can verify it running the following commands:
 
@@ -288,11 +288,10 @@ spec:
       kubedb.com/name: mgo-mon-coreos
 ```
 
-
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -306,8 +305,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.

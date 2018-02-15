@@ -1,9 +1,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus with KubeDB
+
 This tutorial will show you how to monitor KubeDB databases using [Prometheus](https://prometheus.io/).
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -22,9 +24,10 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli). 
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a MongoDB database
+
 KubeDB implements a `MongoDB` CRD to define the specification of a MongoDB database. Below is the `MongoDB` object created in this tutorial.
 
 ```yaml
@@ -52,16 +55,15 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mongodb "mgo-mon-prometheus" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
+- `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MongoDB Exporter` and will receive metrics from exporter. 
+- `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MongoDB Exporter` and will receive metrics from exporter.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. 
+KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
 ```console
 $ kubedb get mg -n demo
@@ -83,13 +85,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo-mon-prometheus
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Mon, 05 Feb 2018 17:37:54 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo-mon-prometheus
   Type:		ClusterIP
   IP:		10.104.88.103
@@ -107,8 +109,8 @@ Database Secret:
 Monitoring System:
   Agent:	prometheus.io/builtin
   Prometheus:
-    Namespace:	
-    Interval:	
+    Namespace:
+    Interval:
 
 No Snapshots.
 
@@ -120,7 +122,6 @@ Events:
   15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
   15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
 ```
-
 
 Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
 
@@ -275,7 +276,8 @@ spec:
           emptyDir: {}
 ```
 
-#### In RBAC enabled cluster
+### In RBAC enabled cluster
+
 If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes:
 
 ```console
@@ -302,8 +304,8 @@ default             1         48m
 prometheus-server   1         1m
 ```
 
+### In RBAC \*not\* enabled cluster
 
-#### In RBAC \*not\* enabled cluster
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
@@ -318,7 +320,8 @@ mgo-mon-prometheus-0                     2/2       Running   0          48m
 prometheus-server-79c7cf44fc-m95lm   1/1       Running   0          34s
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
+
 Now to open prometheus dashboard on Browser:
 
 ```console
@@ -342,6 +345,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 ![prometheus-builtin](/docs/images/mongodb/builtin-prometheus.png)
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -357,6 +361,7 @@ namespace "demo" deleted
 ```
 
 ## Next Steps
+
 - Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.

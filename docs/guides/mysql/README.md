@@ -10,7 +10,7 @@
 
 <br/>
 
-## KubeDB Features and their availability for MySQL 
+## KubeDB Features and their availability for MySQL
 
 |Features |Availability|
 |--|:--:|
@@ -26,12 +26,13 @@
 <br/>
 
 ## Life Cycle of MySQL in KubeDB
+
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="373">
 </p>
 
-
 ## User Guide
+
 - [Quickstart MySQL](/docs/guides/mysql/quickstart/quickstart.md) with KubeDB Operator.
 - [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.

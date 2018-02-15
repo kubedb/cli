@@ -1,9 +1,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Database Scheduled Snapshots
+
 This tutorial will show you how to use KubeDB to take scheduled snapshot of a MySQL database.
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -22,10 +24,10 @@ kube-public   Active    1h
 kube-system   Active    1h
 ```
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli). 
-
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Scheduled Backups
+
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).  KubeDB operator will launch a Job periodically that runs the `mysql dump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
@@ -44,7 +46,6 @@ $ kubectl create secret generic my-snap-secret -n demo \
 secret "my-snap-secret" created
 ```
 
-
 ```yaml
 $ kubectl get secret my-snap-secret -n demo -o yaml
 apiVersion: v1
@@ -61,7 +62,6 @@ metadata:
   uid: c12eaa77-0fa6-11e8-a2d6-08002751ae8c
 type: Opaque
 ```
-
 
 To learn how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md).  Now, create the `MySQL` object with scheduled snapshot.
 
@@ -92,7 +92,6 @@ spec:
       bucket: restic
 ```
 
-
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-4.yaml
 validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-4.yaml"
@@ -100,6 +99,7 @@ mysql "mysql-scheduled" created
 ```
 
 It is also possible to add  backup scheduler to an existing `MySQL`. You just have to edit the `MySQL` CRD and add below spec:
+
 ```yaml
 $ kubedb edit mg {db-name} -n demo
 spec:
@@ -126,8 +126,8 @@ you should see the output of the `mysql dump` command for each snapshot stored i
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{mysql-object}/{snapshot}/`.
 
-
 ## Remove Scheduler
+
 To remove scheduler, edit the MySQL object  to remove `spec.backupSchedule` section.
 
 ```yaml
@@ -172,6 +172,7 @@ status:
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -181,8 +182,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).
 - Initialize [MySQL with Snapshot](/docs/guides/mysql/initialization/using-snapshot.md).
@@ -192,4 +193,3 @@ namespace "demo" deleted
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-
