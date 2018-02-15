@@ -76,7 +76,6 @@ $ kubedb get mc -n demo
 NAME               STATUS    AGE
 memcd-quickstart   Running   1m
 
-
 $ kubedb describe mc -n demo memcd-quickstart
 Name:		memcd-quickstart
 Namespace:	demo
@@ -101,7 +100,6 @@ Events:
   1m          1m         1         Memcached operator   Normal     Successful   Successfully created Deployment
   1m          1m         1         Memcached operator   Normal     Successful   Successfully created Memcached
   2m          2m         1         Memcached operator   Normal     Successful   Successfully created Service
-
 
 $ kubectl get deployment -n demo
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
@@ -312,7 +310,6 @@ status:
   phase: Paused
   ...
 
-
 $ kubedb get drmn -n demo memcd-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
@@ -352,7 +349,6 @@ status:
   pausingTime: 2018-02-13T05:59:57Z
   phase: WipedOut
   wipeOutTime: 2018-02-13T06:04:41Z
-
 
 $ kubedb get drmn -n demo
 NAME               STATUS     AGE

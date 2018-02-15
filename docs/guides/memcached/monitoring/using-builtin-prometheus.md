@@ -282,7 +282,6 @@ $ kubectl get clusterrolebindings
 NAME                AGE
 prometheus-server   1m
 
-
 $ kubectl get serviceaccounts -n demo
 NAME                SECRETS   AGE
 default             1         48m
@@ -297,7 +296,6 @@ If RBAC *is not* enabled, Run the following command to prepare your cluster for 
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 deployment "prometheus-server" created
 service "prometheus-service" created
-
 
 $ kubectl get pods -n demo
 NAME                                    READY     STATUS    RESTARTS   AGE
@@ -316,7 +314,6 @@ $ kubectl get svc -n demo
 NAME                   TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)               AGE
 memcd-mon-prometheus   ClusterIP      10.99.92.24    <none>        11211/TCP,56790/TCP   4m
 prometheus-service     LoadBalancer   10.99.73.172   <pending>     9090:30901/TCP        1m
-
 
 $ minikube ip
 192.168.99.100

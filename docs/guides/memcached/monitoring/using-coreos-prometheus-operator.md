@@ -32,7 +32,6 @@ $ kubectl get pods -n demo --watch
 NAME                                   READY     STATUS    RESTARTS   AGE
 prometheus-operator-79cb9dcd4b-2njgq   1/1       Running   0          2m
 
-
 $ kubectl get crd
 NAME                                    AGE
 alertmanagers.monitoring.coreos.com     11m
@@ -56,12 +55,10 @@ NAME                  AGE
 prometheus            48s
 prometheus-operator   1m
 
-
 $ kubectl get clusterrolebindings
 NAME                  AGE
 prometheus            7s
 prometheus-operator   25s
-
 
 $ kubectl get serviceaccounts -n demo
 NAME                  SECRETS   AGE
@@ -79,12 +76,10 @@ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/do
 namespace "demo" created
 deployment "prometheus-operator" created
 
-
 $ kubectl get pods -n demo --watch
 NAME                                   READY     STATUS              RESTARTS   AGE
 prometheus-operator-5dcd844486-2kgwv   0/1       ContainerCreating   0          9s
 prometheus-operator-5dcd844486-2kgwv   1/1       Running             0          28s
-
 
 $ kubectl get crd
 NAME                                    AGE
@@ -111,7 +106,6 @@ $ kubectl get svc -n demo
 NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 prometheus            LoadBalancer   10.104.95.211   <pending>     9090:30900/TCP   5s
 prometheus-operated   ClusterIP      None            <none>        9090/TCP         5s
-
 
 $ minikube ip
 192.168.99.100
@@ -198,7 +192,6 @@ $ kubedb get mc -n demo
 NAME               STATUS    AGE
 memcd-mon-coreos   Running   1m
 
-
 $ kubedb describe mc -n demo memcd-mon-coreos
 Name:		memcd-mon-coreos
 Namespace:	demo
@@ -241,7 +234,6 @@ Since `spec.monitoring` was configured, a ServiceMonitor object is created accor
 $ kubectl get servicemonitor -n demo
 NAME                           AGE
 kubedb-demo-memcd-mon-coreos   1m
-
 
 $ kubectl get servicemonitor -n demo kubedb-demo-memcd-mon-coreos -o yaml
 apiVersion: monitoring.coreos.com/v1

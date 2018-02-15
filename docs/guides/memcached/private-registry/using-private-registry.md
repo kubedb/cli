@@ -109,8 +109,6 @@ memcd-pvt-reg-7fd79d6c76-f42g5   1/1       Running             0          46s
 memcd-pvt-reg-7fd79d6c76-7xswr   1/1       Running             0          50s
 memcd-pvt-reg-7fd79d6c76-t7b9w   1/1       Running             0          54s
 
-
-
 $ kubedb get mc -n demo
 NAME            STATUS    AGE
 memcd-pvt-reg   Running   2m
