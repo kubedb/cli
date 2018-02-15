@@ -33,7 +33,6 @@ spec:
             name: prometheus-server-conf
         - name: prometheus-storage-volume
           emptyDir: {}
-
 ---
 apiVersion: v1
 kind: Service
@@ -48,4 +47,3 @@ spec:
     - port: 9090
       targetPort: 9090
       nodePort: 30901
-

@@ -1,13 +1,15 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
-# Initialize MySQL with Script
+# Initialize MySQL using Script
+
 This tutorial will show you how to use KubeDB to initialize a MySQL database with \*.sql, \*.sh and/or \*.sql.gz script.
 In this tutorial we will use .sql script stored in GitHub repository [kubedb/mysql-init-scripts](https://github.com/kubedb/mysql-init-scripts).
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -31,16 +33,18 @@ $ kubectl get service -n demo
 NAME                TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
 myadmin             LoadBalancer   10.101.247.127   <pending>     80:32673/TCP   50s
 
-
 $ minikube ip
 192.168.99.100
 ```
+
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_.
 You can also get this URl by running the following command:
+
 ```console
 $ minikube service myadmin -n demo --url
 http://192.168.99.100:32673
 ```
+
 According to the above example, this URL will be [http://192.168.99.100:32673](http://192.168.99.100:32673). The login informations to phpMyAdmin _(host, username and password)_ will be retrieved later in this tutorial.
 
 
@@ -86,7 +90,7 @@ Here,
 
  - `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.sql, \*sql.gz and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
 
-KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. Even if [RBAC is enabled](/docs/guides/rbac.md), it won't affect anything to run MySQL database .
+KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC roles are required for [RBAC enabled clusters](/docs/guides/rbac.md).
 
 ```console
 $ kubedb describe my -n demo mysql-init-script

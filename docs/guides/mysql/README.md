@@ -1,5 +1,3 @@
-
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 ## MySQL versions supported by KubeDB

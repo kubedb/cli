@@ -1,6 +1,7 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # MySQL QuickStart
+
 This tutorial will show you how to use KubeDB to run a MySQL database.
 
 <p align="center">
@@ -11,6 +12,7 @@ The yaml files that are used in this tutorial, stored in [docs/examples](https:/
 
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -40,13 +42,16 @@ $ minikube ip
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_.
 You can also get this URl by running the following command:
+
 ```console
 $ minikube service myadmin -n demo --url
 http://192.168.99.100:30158
 ```
+
 According to the above example, this URL will be [http://192.168.99.100:30158](http://192.168.99.100:30158). The login informations to phpMyAdmin _(host, username and password)_ will be retrieved later in this tutorial.
 
 ## Create a MySQL database
+
 KubeDB implements a `MySQL` CRD to define the specification of a MySQL database. Below is the `MySQL` object created in this tutorial.
 
 ```yaml
@@ -73,7 +78,6 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mysql "mysql-quickstart" created
 ```
 
-
 Here,
 
  - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
@@ -82,7 +86,7 @@ Here,
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. Even if [RBAC is enabled](/docs/guides/rbac.md), it won't affect anything to run MySQL database .
+KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC permission is required in [RBAC enabled clusters](/docs/guides/rbac.md).
 
 ```console
 $ kubedb describe my -n demo mysql-quickstart
@@ -150,7 +154,6 @@ myadmin            LoadBalancer   10.105.73.16    <pending>     80:30158/TCP   4
 mysql-quickstart   ClusterIP      10.104.50.139   <none>        3306/TCP       11m
 ```
 
-
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MySQL object:
 
 ```yaml
@@ -206,13 +209,12 @@ Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadm
 
 ## Pause Database
 
-The Admission Webhook of KubeDB gives some extra strength to `KubeDB-Operator` and one of the features is `spec.doNotPause`. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the MySQL object created in this tutorial has `spec.doNotPause` set to true, if you delete the MySQL object, KubeDB operator will nullify the delete operation. You can see this below:
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the MySQL object created in this tutorial has `spec.doNotPause` set to true, if you delete the MySQL object, KubeDB operator will nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete my mysql-quickstart -n demo
 error: MySQL "mysql-quickstart" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
-
 
 Now, run `kubedb edit my mysql-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MySQL object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mysql-quickstart` MySQL database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
@@ -224,11 +226,9 @@ $ kubedb get drmn -n demo mysql-quickstart
 NAME               STATUS    AGE
 mysql-quickstart   Pausing   16s
 
-
 $ kubedb get drmn -n demo mysql-quickstart
 NAME               STATUS    AGE
 mysql-quickstart   Paused    31s
-
 
 $ kubedb get drmn -n demo mysql-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
@@ -271,13 +271,11 @@ status:
   phase: Paused
 ```
 
-
 Here,
 
  - `spec.origin` is the spec of the original spec of the original MySQL object.
 
  - `status.phase` points to the current database state `Paused`.
-
 
 ## Resume Dormant Database
 
@@ -299,7 +297,6 @@ status:
   ...
 ```
 
-
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new MySQL object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 Please note that the dormant database can also be resumed by creating same `MySQL` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `MySQL` database using demo-2.yaml file. The below command resumes the dormant database `mysql-quickstart` that was created before.
@@ -310,11 +307,12 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mysql "mysql-quickstart" created
 ```
 
-
 ## Wipeout Dormant Database
+
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 Create dormant database again and set `spec.wipeOut` to true:
+
 ```yaml
 $ kubedb delete my mysql-quickstart -n demo
 mysql "mysql-quickstart" deleted
@@ -381,8 +379,8 @@ NAME               STATUS     AGE
 mysql-quickstart   WipedOut   6m
 ```
 
-
 ## Delete Dormant Database
+
 You still have a record that there used to be a MySQL database `mysql-quickstart` in the form of a DormantDatabase database `mysql-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
@@ -390,8 +388,8 @@ $ kubedb delete drmn mysql-quickstart -n demo
 dormantdatabase "mysql-quickstart" deleted
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -405,8 +403,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
 - Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).

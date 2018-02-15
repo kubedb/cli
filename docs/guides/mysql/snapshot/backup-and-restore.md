@@ -1,7 +1,7 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Database Snapshots
-This tutorial will show you how to use KubeDB to take snapshot of a MySQL database.
+This tutorial will show you how to take snapshots of a KubeDB managed MySQL database.
 
 ## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
@@ -26,7 +26,7 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mysql "mysql-infant" created
 ```
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli). 
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Instant Backups
 You can easily take a snapshot of `MySQL` database by creating a `Snapshot` object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `mysql dump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
@@ -47,7 +47,6 @@ $ kubectl create secret generic my-snap-secret -n demo \
 secret "my-snap-secret" created
 ```
 
-
 ```yaml
 $ kubectl get secret my-snap-secret -n demo -o yaml
 apiVersion: v1
@@ -64,7 +63,6 @@ metadata:
   uid: 0dccee80-0d91-11e8-9091-08002751ae8c
 type: Opaque
 ```
-
 
 To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
@@ -83,18 +81,15 @@ spec:
     bucket: restic
 ```
 
-
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-2.yaml
 validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-2.yaml"
 snapshot "snap-mysql-infant" created
 
-
 $ kubedb get snap -n demo
 NAME                DATABASE          STATUS    AGE
 snap-mysql-infant   my/mysql-infant   Running   22s
 ```
-
 
 ```yaml
 $ kubedb get snap -n demo snap-mysql-infant -o yaml
@@ -124,7 +119,6 @@ status:
   phase: Succeeded
   startTime: 2018-02-09T12:03:50Z
 ```
-
 
 Here,
 

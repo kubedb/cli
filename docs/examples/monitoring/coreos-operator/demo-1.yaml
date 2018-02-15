@@ -11,7 +11,6 @@ spec:
   resources:
     requests:
       memory: 400Mi
-
 ---
 apiVersion: v1
 kind: Service
