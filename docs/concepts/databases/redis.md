@@ -84,7 +84,7 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 ### spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying Redis database from a private Docker registry. To learn how to deploym Redis from a Private Registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying Redis database from a private Docker registry. To learn how to deploym Redis from a private registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
 
 ### spec.monitor
 

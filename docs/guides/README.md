@@ -27,7 +27,7 @@ Guides show you how to perform tasks with KubeDB.
 
 - [Running Redis](/docs/guides/redis/README.md): This tutorial will show you how to use KubeDB to run a Redis database.
 
-- [Running Memcached](/docs/guides/memcached/overview.md): This tutorial will show you how to use KubeDB to run a Memcached database.
+- [Running Memcached](/docs/guides/memcached/README.md): This tutorial will show you how to use KubeDB to run a Memcached database.
 
 - [Manage KubeDB objects using CLIs](/docs/guides/cli.md): KubeDB comes with its own cli. It is called `kubedb` cli. kubedb can be used to deploy KubeDB operator in a cluster and manage all KubeDB crds.
 

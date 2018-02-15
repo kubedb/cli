@@ -182,7 +182,7 @@ KubeDB supports taking periodic snapshots for MongoDB database. This is an optio
 
 ### spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying MongoDB database from a private Docker registry. To learn how to deploym MongoDB from a Private Registry, please visit [here](/docs/guides/mongodb/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying MongoDB database from a private Docker registry. To learn how to deploym MongoDB from a private registry, please visit [here](/docs/guides/mongodb/private-registry/using-private-registry.md).
 
 ### spec.monitor
 
