@@ -1,0 +1,18 @@
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDB
+metadata:
+  name: mgo-recovered
+  namespace: demo
+spec:
+  version: 3.4
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  init:
+    snapshotSource:
+      name: snapshot-infant
+      namespace: demo

@@ -1,10 +1,11 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: MongoDB
 metadata:
-  name: pmon
+  name: mgo-quickstart
   namespace: demo
 spec:
-  version: 9.5
+  version: 3.4
+  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -12,10 +13,3 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  monitor:
-    agent: coreos-prometheus-operator
-    prometheus:
-      namespace: demo
-      labels:
-        app: kubedb
-      interval: 10s

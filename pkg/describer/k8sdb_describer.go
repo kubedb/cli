@@ -601,11 +601,19 @@ func describeMonitor(monitor *mona.AgentSpec, out io.Writer) {
 	if monitor.Prometheus != nil {
 		prom := monitor.Prometheus
 		fmt.Fprint(out, "  Prometheus:\n")
-		fmt.Fprintf(out, "    Namespace:\t%s\n", prom.Namespace)
+		if prom.Port != 0 {
+			fmt.Fprintf(out, "    Port:\t%v\n", prom.Port)
+		}
+		if prom.Namespace != "" {
+			fmt.Fprintf(out, "    Namespace:\t%s\n", prom.Namespace)
+		}
 		if prom.Labels != nil {
 			printLabelsMultiline(out, "    Labels", prom.Labels)
 		}
-		fmt.Fprintf(out, "    Interval:\t%s\n", prom.Interval)
+		if prom.Interval != "" {
+			fmt.Fprintf(out, "    Interval:\t%s\n", prom.Interval)
+		}
+
 	}
 }
 
