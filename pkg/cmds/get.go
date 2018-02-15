@@ -31,7 +31,7 @@ var (
 		kubedb get es
 
 		# List all elasticsearch in ps output format with more information (such as version).
-		kubedb get elasticsearchs -o wide
+		kubedb get elasticsearches -o wide
 
 		# List a single postgres with specified NAME in ps output format.
 		kubedb get postgres database
@@ -66,7 +66,7 @@ const (
 	valid_resources = `Valid resource types include:
 
     * all
-    * elasticsearchs
+    * elasticsearches
     * postgreses
     * mysqls
     * mongodbs

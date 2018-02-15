@@ -1,0 +1,16 @@
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: mysql-quickstart
+  namespace: demo
+spec:
+  version: 8.0
+  doNotPause: true
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+
