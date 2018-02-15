@@ -1,5 +1,3 @@
-
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # MongoDB QuickStart
@@ -66,7 +64,7 @@ Here,
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. Even if [RBAC is enabled](/docs/guides/rbac.md), it won't affect anything to run MongoDB database .
+KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/guides/rbac.md).
 
 ```console
 $ kubedb describe mg -n demo mgo-quickstart
@@ -227,13 +225,12 @@ bye
 
 ## Pause Database
 
-The Admission Webhook of KubeDB gives some extra strength to `KubeDB-Operator` and one of the features is `spec.doNotPause`. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will nullify the delete operation. You can see this below:
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete mg mgo-quickstart -n demo
 error: MongoDB "mgo-quickstart" can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
-
 
 Now, run `kubedb edit mg mgo-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mgo-quickstart` MongoDB database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
@@ -292,7 +289,6 @@ status:
   phase: Paused
 ```
 
-
 Here,
 
  - `spec.origin` is the spec of the original spec of the original MongoDB object.
@@ -320,7 +316,6 @@ status:
   ...
 ```
 
-
 KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new MongoDB object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
 
 Please note that the dormant database can also be resumed by creating same `MongoDB` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `MongoDB` database using demo-1.yaml file. The below command resumes the dormant database `mgo-quickstart` that was created before.
@@ -331,8 +326,8 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mongodb "mgo-quickstart" created
 ```
 
-
 ## Wipeout Dormant Database
+
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
 ```yaml
@@ -388,8 +383,8 @@ mgo-quickstart   WipedOut   1m
 
 ```
 
-
 ## Delete Dormant Database
+
 You still have a record that there used to be a MongoDB database `mgo-quickstart` in the form of a DormantDatabase database `mgo-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
 
 ```console
@@ -397,8 +392,8 @@ $ kubedb delete drmn mgo-quickstart -n demo
 dormantdatabase "mgo-quickstart" deleted
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console

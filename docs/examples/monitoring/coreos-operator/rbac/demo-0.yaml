@@ -5,7 +5,6 @@ metadata:
 spec:
   finalizers:
   - kubernetes
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
@@ -59,14 +58,12 @@ rules:
   resources:
   - namespaces
   verbs: ["list"]
-
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: prometheus-operator
   namespace: demo
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -80,7 +77,6 @@ subjects:
 - kind: ServiceAccount
   name: prometheus-operator
   namespace: demo
-
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -99,7 +95,7 @@ spec:
       serviceAccountName: prometheus-operator
       containers:
       - name: prometheus-operator
-        image: quay.io/coreos/prometheus-operator:v0.14.0
+        image: quay.io/coreos/prometheus-operator:v0.16.0
         resources:
           requests:
             cpu: 100m
@@ -107,4 +103,3 @@ spec:
           limits:
             cpu: 200m
             memory: 100Mi
-

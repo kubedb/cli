@@ -81,15 +81,15 @@ spec:
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
- - `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
+- `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
 
- - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
+- `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
 
- - `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
+- `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
 
 To learn how to configure `spec.storage`, please visit the links below:
 
- - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+- https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
 
 
 ### spec.databaseSecret
@@ -178,9 +178,10 @@ KubeDB supports taking periodic snapshots for MongoDB database. This is an optio
 `KubeDB` provides the flexibility of deploying MongoDB database from a Private Docker Registry. To learn how to deploym MongoDB from a Private Registry, please visit [here](/docs/guides/mongodb/private-registry/using-private-registry.md).
 
 ### spec.monitor
-MongoDB can be monitored with KubeDB using out-of-the-box builtin-Prometheus and out-of-the-box CoreOS-Prometheus Operator. To learn more,
- - [Monitor MongoDB with builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md) 
- - [Monitor MongoDB with CoreOS-Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md)
+MongoDB managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
+
+- [Monitor MongoDB with builtin Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md)
+- [Monitor MongoDB with CoreOS Prometheus operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.resources
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).

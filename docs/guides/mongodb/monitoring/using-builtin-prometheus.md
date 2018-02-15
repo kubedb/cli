@@ -171,6 +171,7 @@ status:
 ```
 
 We can see that the service contains these specific annotations. The Prometheus server will discover the exporter using these specifications.
+
 ```yaml
 prometheus.io/path: ...
 prometheus.io/port: ...
@@ -182,6 +183,7 @@ prometheus.io/scrape: ...
 The Prometheus server is needed to configure so that it can discover endpoints of services. If a Prometheus server is already running in cluster and if it is configured in a way that it can discover service endpoints, no extra configuration will be needed. If there is no existing Prometheus server running, rest of this tutorial will create a Prometheus server with appropriate configuration.
 
 The configuration file to `Prometheus-Server` will be provided by `ConfigMap`. The below config map will be created:
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -228,13 +230,13 @@ data:
         target_label: kubernetes_name
 ```
 
-
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap "prometheus-server-conf" created
 ```
 
 Now, the below yaml is used to deploy Prometheus in kubernetes :
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -334,7 +336,6 @@ $ minikube service prometheus-service -n demo --url
 http://192.168.99.100:30901
 ```
 
-
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
@@ -354,7 +355,6 @@ $ kubedb delete mg,drmn,snap -n demo --all --force
 $ kubectl delete ns demo
 namespace "demo" deleted
 ```
-
 
 ## Next Steps
 - Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
