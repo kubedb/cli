@@ -1,5 +1,3 @@
-
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 ## Memcached versions supported by KubeDB
@@ -37,7 +35,7 @@
 - [Quickstart Memcached](/docs/guides/memcached/quickstart/quickstart.md) with KubeDB Operator.
 - Monitor your Memcached database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
-- Use [Private Docker Registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
+- Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

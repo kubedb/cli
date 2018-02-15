@@ -48,7 +48,7 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 		if err := yaml.Unmarshal(objByte, &mongodb); err != nil {
 			return err
 		}
-		return mgv.ValidateMongoDB(client, mongodb, nil)
+		return mgv.ValidateMongoDB(client, mongodb)
 	case tapi.ResourceKindRedis:
 		var redis *tapi.Redis
 		if err := yaml.Unmarshal(objByte, &redis); err != nil {

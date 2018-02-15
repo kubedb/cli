@@ -17,7 +17,7 @@ Show details of a specific resource or group of resources
 Show details of a specific resource or group of resources. This command joins many API calls together to form a detailed description of a given resource or group of resources.Valid resource types include: 
 
   * all  
-  * elasticsearchs  
+  * elasticsearches  
   * postgreses  
   * mysqls  
   * mongodbs  
@@ -34,7 +34,7 @@ kubedb describe (TYPE [NAME_PREFIX] | TYPE/NAME) [flags]
 
 ```
   # Describe a elasticsearch
-  kubedb describe elasticsearchs elasticsearch-demo
+  kubedb describe elasticsearches elasticsearch-demo
   
   # Describe a postgres
   kubedb describe pg/postgres-demo

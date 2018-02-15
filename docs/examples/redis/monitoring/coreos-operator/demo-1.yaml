@@ -1,0 +1,22 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Redis
+metadata:
+  name: redis-mon-coreos
+  namespace: demo
+spec:
+  version: 4
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
+

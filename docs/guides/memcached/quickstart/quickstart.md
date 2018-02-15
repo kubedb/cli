@@ -194,7 +194,7 @@ quit
 
 ## Pause Database
 
-The Admission Webhook of KubeDB gives some extra strength to `KubeDB-Operator` and one of the features is `spec.doNotPause`. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the Memcached object created in this tutorial has `spec.doNotPause` set to true, if you delete the Memcached object, KubeDB operator will nullify the delete operation. You can see this below:
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the Memcached object created in this tutorial has `spec.doNotPause` set to true, if you delete the Memcached object, KubeDB operator will nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete mc memcd-quickstart -n demo
@@ -396,7 +396,7 @@ namespace "demo" deleted
 ## Next Steps
 - Monitor your Memcached database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
-- Use [Private Docker Registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
+- Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

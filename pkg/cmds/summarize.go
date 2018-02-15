@@ -43,7 +43,7 @@ func NewCmdSummarize(out io.Writer, cmdErr io.Writer) *cobra.Command {
 const (
 	validResourcesForReport = `Valid resource types include:
 
-    * elasticsearchs
+    * elasticsearches
     * postgreses
     * mysqls
     * mongodbs

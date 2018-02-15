@@ -66,9 +66,11 @@ spec:
 `KubeDB` provides the flexibility of deploying Memcached database from a Private Docker Registry. To learn how to deploym Memcached from a Private Registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
 
 ### spec.monitor
-Memcached can be monitored with KubeDB using out-of-the-box builtin-Prometheus and out-of-the-box CoreOS-Prometheus Operator. To learn more,
- - [Monitor Memcached with builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md)
- - [Monitor Memcached with CoreOS-Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md)
+
+Memcached managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
+
+- [Monitor Memcached with builtin Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md)
+- [Monitor Memcached with CoreOS Prometheus operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.resources
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).

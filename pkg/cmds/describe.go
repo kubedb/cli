@@ -24,7 +24,7 @@ var (
 
 	describeExample = templates.Examples(`
 		# Describe a elasticsearch
-		kubedb describe elasticsearchs elasticsearch-demo
+		kubedb describe elasticsearches elasticsearch-demo
 
 		# Describe a postgres
 		kubedb describe pg/postgres-demo
