@@ -1,6 +1,7 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # MongoDB QuickStart
+
 This tutorial will show you how to use KubeDB to run a MongoDB database.
 
 <p align="center">
@@ -8,6 +9,7 @@ This tutorial will show you how to use KubeDB to run a MongoDB database.
 </p>
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -26,9 +28,10 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a MongoDB database
+
 KubeDB implements a `MongoDB` CRD to define the specification of a MongoDB database. Below is the `MongoDB` object created in this tutorial.
 
 ```yaml
@@ -55,14 +58,13 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mongodb "mgo-quickstart" created
 ```
 
-
 Here,
 
- - `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
+- `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
 
- - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
+- `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
 
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
 KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/guides/rbac.md).
 
@@ -77,13 +79,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo-quickstart
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 02 Feb 2018 15:11:24 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo-quickstart
   Type:		ClusterIP
   IP:		10.103.114.139
@@ -112,23 +114,19 @@ $ kubectl get statefulset -n demo
 NAME             DESIRED   CURRENT   AGE
 mgo-quickstart   1         1         4m
 
-
 $ kubectl get pvc -n demo
 NAME                    STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 data-mgo-quickstart-0   Bound     pvc-16158aae-07fa-11e8-946f-080027c05a6e   50Mi       RWO            standard       2m
 
-
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                        STORAGECLASS   REASON    AGE
 pvc-16158aae-07fa-11e8-946f-080027c05a6e   50Mi       RWO            Delete           Bound     demo/data-mgo-quickstart-0   standard                 3m
-
 
 $ kubectl get service -n demo
 NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
 kubedb           ClusterIP   None             <none>        <none>      3m
 mgo-quickstart   ClusterIP   10.107.133.189   <none>        27017/TCP   3m
 ```
-
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
 
@@ -164,8 +162,8 @@ status:
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `mgo-quickstart-auth` *(format: {mongodb-object-name}-auth)* for storing the password for `mongodb` superuser. This secret contains a `user` key which contains the *username* for MongoDB superuser and a `password` key which contains the *password* for MongoDB superuser. 
-                                                                                                                                                                      If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password`.
+Please note that KubeDB operator has created a new Secret called `mgo-quickstart-auth` *(format: {mongodb-object-name}-auth)* for storing the password for `mongodb` superuser. This secret contains a `user` key which contains the *username* for MongoDB superuser and a `password` key which contains the *password* for MongoDB superuser.
+If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password`.
 
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside the pod.
 
@@ -234,7 +232,7 @@ error: MongoDB "mgo-quickstart" can't be paused. To continue delete, unset spec.
 
 Now, run `kubedb edit mg mgo-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods, but leaves the PVCs unchanged. In KubeDB parlance, we say that `mgo-quickstart` MongoDB database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
-```yaml
+```console
 $ kubedb delete mg mgo-quickstart -n demo
 mongodb "mgo-quickstart" deleted
 
@@ -245,9 +243,9 @@ mgo-quickstart   Pausing   39s
 $ kubedb get drmn -n demo mgo-quickstart
 NAME             STATUS    AGE
 mgo-quickstart   Paused    1m
+```
 
-
-
+```yaml
 $ kubedb get drmn -n demo mgo-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
@@ -291,10 +289,9 @@ status:
 
 Here,
 
- - `spec.origin` is the spec of the original spec of the original MongoDB object.
+- `spec.origin` is the spec of the original spec of the original MongoDB object.
 
- - `status.phase` points to the current database state `Paused`.
-
+- `status.phase` points to the current database state `Paused`.
 
 ## Resume Dormant Database
 
@@ -376,11 +373,9 @@ status:
   phase: WipedOut
   wipeOutTime: 2018-02-02T09:30:51Z
 
-
 $ kubedb get drmn -n demo
 NAME             STATUS     AGE
 mgo-quickstart   WipedOut   1m
-
 ```
 
 ## Delete Dormant Database
@@ -407,8 +402,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.
 - Initialize [MongoDB with Script](/docs/guides/mongodb/initialization/using-script.md).
@@ -419,4 +414,3 @@ namespace "demo" deleted
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

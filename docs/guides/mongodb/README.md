@@ -10,7 +10,7 @@
 
 <br/>
 
-## KubeDB Features and their availability for MongoDB 
+## KubeDB Features and their availability for MongoDB
 
 |Features |Availability|
 |--|:--:|
@@ -26,12 +26,13 @@
 <br/>
 
 ## Life Cycle of MongoDB in KubeDB
+
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="373">
 </p>
 
-
 ## User Guide
+
 - [Quickstart MongoDB](/docs/guides/mongodb/quickstart/quickstart.md) with KubeDB Operator.
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.

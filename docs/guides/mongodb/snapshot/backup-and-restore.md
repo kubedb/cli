@@ -1,9 +1,11 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Database Snapshots
+
 This tutorial will show you how to take snapshots of a KubeDB managed MongoDB database.
 
 ## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
@@ -26,9 +28,10 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examp
 mongodb "mgo-infant" created
 ```
 
-Please note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Instant Backups
+
 You can easily take a snapshot of `MongoDB` database by creating a `Snapshot` object. When a `Snapshot` object is created, KubeDB operator will launch a Job that runs the `mongodump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
@@ -130,7 +133,6 @@ Here,
 
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
-
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.
 
 ```console
@@ -144,13 +146,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo-infant
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 02 Feb 2018 16:04:56 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo-infant
   Type:		ClusterIP
   IP:		10.99.34.23
@@ -181,15 +183,14 @@ Events:
   10m         10m        1         MongoDB operator      Normal     Successful           Successfully created Service
 ```
 
-
 Once the snapshot Job is complete, you should see the output of the `mongodump` command stored in the GCS bucket.
 
 ![snapshot-console](/docs/images/mongodb/mgo-xyz-snapshot.png)
 
 From the above image, you can see that the snapshot output is stored in a folder called `{bucket}/kubedb/{namespace}/{mongodb-object}/{snapshot}/`.
 
-
 ## Restore from Snapshot
+
 You can create a new database from a previously taken Snapshot. Specify the Snapshot name in the `spec.init.snapshotSource` field of a new MongoDB object. See the example `mgo-recovered` object below:
 
 ```yaml
@@ -221,9 +222,9 @@ mongodb "mgo-recovered" created
 
 Here,
 
- - `spec.init.snapshotSource.name` refers to a Snapshot object for a MongoDB database in the same namespaces as this new `mgo-recovered` MongoDB object.
+- `spec.init.snapshotSource.name` refers to a Snapshot object for a MongoDB database in the same namespaces as this new `mgo-recovered` MongoDB object.
 
-Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `mgo-xyz` Snapshot.
+Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then KubeDB operator launches a Kubernetes Job to initialize the new database using the data from `snapshot-infant` Snapshot.
 
 ```console
 $ kubedb get mg -n demo
@@ -242,13 +243,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mgo-recovered
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 02 Feb 2018 16:24:36 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mgo-recovered
   Type:		ClusterIP
   IP:		10.107.157.253
@@ -278,8 +279,8 @@ Events:
   4m          4m         1         MongoDB operator   Normal     Successful             Successfully created Service
 ```
 
-
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -289,8 +290,8 @@ $ kubectl delete ns demo
 namespace "demo" deleted
 ```
 
-
 ## Next Steps
+
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.
 - Initialize [MongoDB with Script](/docs/guides/mongodb/initialization/using-script.md).
@@ -301,4 +302,3 @@ namespace "demo" deleted
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

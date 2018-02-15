@@ -1,11 +1,10 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  name: m1
+  name: mysql-scheduled
   namespace: demo
 spec:
   version: 8.0
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -18,3 +17,8 @@ spec:
       gitRepo:
         repository: "https://github.com/kubedb/mysql-init-scripts.git"
         directory: .
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: my-snap-secret
+    gcs:
+      bucket: restic

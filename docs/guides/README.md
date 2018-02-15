@@ -21,7 +21,7 @@ Guides show you how to perform tasks with KubeDB.
 
  - [Running Elasticsearch](/docs/guides/elasticsearch/overview.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
- - [Running MySQL](/docs/guides/mysql/overview.md): This tutorial will show you how to use KubeDB to run a MySQL database.
+ - [Running MySQL](/docs/guides/mysql/README.md): This tutorial will show you how to use KubeDB to run a MySQL database.
 
  - [Running MongoDB](/docs/guides/mongodb/README.md): This tutorial will show you how to use KubeDB to run a MongoDB database.
 

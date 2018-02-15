@@ -1,3 +1,4 @@
+
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus with KubeDB
@@ -13,7 +14,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mongodb/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/demo-0.yaml
 namespace "demo" created
 
 $ kubectl get ns
@@ -26,18 +27,18 @@ kube-system   Active    45m
 
 Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create a MongoDB database
+## Create a MySQL database
 
-KubeDB implements a `MongoDB` CRD to define the specification of a MongoDB database. Below is the `MongoDB` object created in this tutorial.
+KubeDB implements a `MySQL` CRD to define the specification of a MySQL database. Below is the `MySQL` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: MongoDB
+kind: MySQL
 metadata:
-  name: mgo-mon-prometheus
+  name: mysql-mon-prometheus
   namespace: demo
 spec:
-  version: 3.4
+  version: 8.0
   storage:
     storageClassName: "standard"
     accessModes:
@@ -50,35 +51,30 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mongodb/monitoring/builtin-prometheus/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mongodb/monitoring/builtin-prometheus/demo-1.yaml"
-mongodb "mgo-mon-prometheus" created
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/monitoring/builtin-prometheus/demo-1.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/monitoring/builtin-prometheus/demo-1.yaml"
+mysql "mysql-mon-prometheus" created
 ```
 
 Here,
 
-- `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
+- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
 
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
-- `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MongoDB Exporter` and will receive metrics from exporter.
+- `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MySQL Exporter` and will receive metrics from exporter.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
 ```console
-$ kubedb get mg -n demo
-NAME                 STATUS     AGE
-mgo-mon-prometheus   Creating   30s
+$ kubedb get my -n demo
+NAME                   STATUS    AGE
+mysql-mon-prometheus   Running   19s
 
-
-$ kubedb get mg -n demo
-NAME                 STATUS    AGE
-mgo-mon-prometheus   Running   10m
-
-$ kubedb describe mg -n demo mgo-mon-prometheus
-Name:		mgo-mon-prometheus
+$ kubedb describe my -n demo mysql-mon-prometheus
+Name:		mysql-mon-prometheus
 Namespace:	demo
-StartTimestamp:	Mon, 05 Feb 2018 17:38:29 +0600
+StartTimestamp:	Mon, 12 Feb 2018 11:52:27 +0600
 Status:		Running
 Volume:
   StorageClass:	standard
@@ -86,25 +82,25 @@ Volume:
   Access Modes:	RWO
 
 StatefulSet:
-  Name:			mgo-mon-prometheus
+  Name:			mysql-mon-prometheus
   Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 05 Feb 2018 17:37:54 +0600
+  CreationTimestamp:	Mon, 12 Feb 2018 11:52:29 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mgo-mon-prometheus
+  Name:		mysql-mon-prometheus
   Type:		ClusterIP
-  IP:		10.104.88.103
-  Port:		db		27017/TCP
+  IP:		10.101.55.20
+  Port:		db		3306/TCP
   Port:		prom-http	56790/TCP
 
 Database Secret:
-  Name:	mgo-mon-prometheus-auth
+  Name:	mysql-mon-prometheus-auth
   Type:	Opaque
   Data
   ====
-  user:		4 bytes
   password:	16 bytes
+  user:		4 bytes
 
 Monitoring System:
   Agent:	prometheus.io/builtin
@@ -115,47 +111,48 @@ Monitoring System:
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From               Type       Reason       Message
-  ---------   --------   -----     ----               --------   ------       -------
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
+  FirstSeen   LastSeen   Count     From             Type       Reason       Message
+  ---------   --------   -----     ----             --------   ------       -------
+  11s         11s        1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
+  11s         11s        1         MySQL operator   Normal     Successful   Successfully patched MySQL
+  14s         14s        1         MySQL operator   Normal     Successful   Successfully created StatefulSet
+  14s         14s        1         MySQL operator   Normal     Successful   Successfully created MySQL
+  30s         30s        1         MySQL operator   Normal     Successful   Successfully created Service
 ```
 
 Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
 
 ```console
 $ kubectl get services -n demo
-NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)               AGE
-kubedb               ClusterIP   None            <none>        <none>                22m
-mgo-mon-prometheus   ClusterIP   10.104.88.103   <none>        27017/TCP,56790/TCP   22m
+NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)              AGE
+kubedb                 ClusterIP   None           <none>        <none>               53s
+mysql-mon-prometheus   ClusterIP   10.101.55.20   <none>        3306/TCP,56790/TCP   52s
 ```
 
 ```yaml
-$ kubectl get services mgo-mon-prometheus -n demo -o yaml
+$ kubectl get services mysql-mon-prometheus -n demo -o yaml
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
     monitoring.appscode.com/agent: prometheus.io/builtin
-    prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-mon-prometheus/metrics
+    prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-mon-prometheus/metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
-  creationTimestamp: 2018-02-05T11:37:53Z
+  creationTimestamp: 2018-02-12T05:52:28Z
   labels:
-    kubedb.com/kind: MongoDB
-    kubedb.com/name: mgo-mon-prometheus
-  name: mgo-mon-prometheus
+    kubedb.com/kind: MySQL
+    kubedb.com/name: mysql-mon-prometheus
+  name: mysql-mon-prometheus
   namespace: demo
-  resourceVersion: "1709"
-  selfLink: /api/v1/namespaces/demo/services/mgo-mon-prometheus
-  uid: 00a3de77-0a69-11e8-9639-080027869227
+  resourceVersion: "38255"
+  selfLink: /api/v1/namespaces/demo/services/mysql-mon-prometheus
+  uid: e86bb1a4-0fb8-11e8-a2d6-08002751ae8c
 spec:
-  clusterIP: 10.104.88.103
+  clusterIP: 10.101.55.20
   ports:
   - name: db
-    port: 27017
+    port: 3306
     protocol: TCP
     targetPort: db
   - name: prom-http
@@ -163,8 +160,8 @@ spec:
     protocol: TCP
     targetPort: prom-http
   selector:
-    kubedb.com/kind: MongoDB
-    kubedb.com/name: mgo-mon-prometheus
+    kubedb.com/kind: MySQL
+    kubedb.com/name: mysql-mon-prometheus
   sessionAffinity: None
   type: ClusterIP
 status:
@@ -315,9 +312,10 @@ service "prometheus-service" created
 
 
 $ kubectl get pods -n demo --watch
-NAME                                     READY     STATUS    RESTARTS   AGE
-mgo-mon-prometheus-0                     2/2       Running   0          48m
-prometheus-server-79c7cf44fc-m95lm       1/1       Running   0          34s
+NAME                                 READY     STATUS              RESTARTS   AGE
+mysql-mon-prometheus-0               2/2       Running             0          2m
+prometheus-server-79c7cf44fc-rdrpd   0/1       ContainerCreating   0          8s
+prometheus-server-79c7cf44fc-rdrpd   1/1       Running             0          1m
 ```
 
 ### Prometheus Dashboard
@@ -326,10 +324,10 @@ Now to open prometheus dashboard on Browser:
 
 ```console
 $ kubectl get svc -n demo
-NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)               AGE
-kubedb               ClusterIP      None             <none>        <none>                59m
-mgo-mon-prometheus   ClusterIP      10.104.88.103    <none>        27017/TCP,56790/TCP   59m
-prometheus-service   LoadBalancer   10.103.201.246   <pending>     9090:30901/TCP        8s
+NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)              AGE
+kubedb                 ClusterIP      None            <none>        <none>               4m
+mysql-mon-prometheus   ClusterIP      10.101.55.20    <none>        3306/TCP,56790/TCP   4m
+prometheus-service     LoadBalancer   10.105.89.246   <pending>     9090:30901/TCP       2m
 
 
 $ minikube ip
@@ -342,14 +340,14 @@ http://192.168.99.100:30901
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
-![prometheus-builtin](/docs/images/mongodb/builtin-prometheus.png)
+![prometheus-builtin](/docs/images/mysql/mysql-builtin.png)
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubedb delete my,drmn,snap -n demo --all --force
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrole prometheus-server
@@ -362,12 +360,12 @@ namespace "demo" deleted
 
 ## Next Steps
 
-- Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
-- Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
-- [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.
-- Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.
-- Initialize [MongoDB with Script](/docs/guides/mongodb/initialization/using-script.md).
-- Initialize [MongoDB with Snapshot](/docs/guides/mongodb/initialization/using-snapshot.md).
-- Use [Private Docker Registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
+- Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
+- Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
+- Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
+- Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).
+- Initialize [MySQL with Snapshot](/docs/guides/mysql/initialization/using-snapshot.md).
+- Use [Private Docker Registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
