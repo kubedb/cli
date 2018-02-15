@@ -68,7 +68,7 @@ spec:
 
 ### spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying Memcached database from a Private Docker Registry. To learn how to deploym Memcached from a Private Registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying Memcached database from a private Docker registry. To learn how to deploym Memcached from a private registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
 
 ### spec.monitor
 
