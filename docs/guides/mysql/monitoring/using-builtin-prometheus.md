@@ -71,7 +71,6 @@ $ kubedb get my -n demo
 NAME                   STATUS    AGE
 mysql-mon-prometheus   Running   19s
 
-
 $ kubedb describe my -n demo mysql-mon-prometheus
 Name:		mysql-mon-prometheus
 Namespace:	demo

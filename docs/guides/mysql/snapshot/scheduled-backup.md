@@ -135,16 +135,9 @@ $ kubedb edit my mysql-scheduled -n demo
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-12T03:44:20Z
-  finalizers:
-  - kubedb.com
-  generation: 0
   name: mysql-scheduled
   namespace: demo
-  resourceVersion: "32380"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-scheduled
-  uid: 02300015-0fa7-11e8-a2d6-08002751ae8c
+  ...
 spec:
 #  backupSchedule:
 #    cronExpression: '@every 1m'

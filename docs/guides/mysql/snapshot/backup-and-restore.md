@@ -232,10 +232,10 @@ NAME              STATUS         AGE
 mysql-infant      Running        8m
 mysql-recovered   Initializing   21s
 
+$ kubedb get my -n demo
 $ NAME              STATUS    AGE
-mysql-infant      Running   14m
-mysql-recovered   Running   6m
-
+mysql-infant      Running     14m
+mysql-recovered   Running     6m
 
 $ kubedb describe my -n demo mysql-recovered
 Name:		mysql-recovered

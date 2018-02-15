@@ -317,7 +317,7 @@ service "prometheus-service" created
 $ kubectl get pods -n demo --watch
 NAME                                     READY     STATUS    RESTARTS   AGE
 mgo-mon-prometheus-0                     2/2       Running   0          48m
-prometheus-server-79c7cf44fc-m95lm   1/1       Running   0          34s
+prometheus-server-79c7cf44fc-m95lm       1/1       Running   0          34s
 ```
 
 ### Prometheus Dashboard

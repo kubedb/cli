@@ -10,7 +10,7 @@
 
 <br/>
 
-## KubeDB Features and their availability for MongoDB 
+## KubeDB Features and their availability for MongoDB
 
 |Features |Availability|
 |--|:--:|

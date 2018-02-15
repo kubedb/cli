@@ -1,11 +1,8 @@
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Deploy MySQL from Private Docker Registry
 
-`KubeDB` can be installed in a way that it only uses images from a specific docker-registry (may be private images) by providing the flag `--docker-registry=<your-registry>`.
-
-KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run MySQL database using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run MongoDB database using private Docker images.
 
 ## Before You Begin
 

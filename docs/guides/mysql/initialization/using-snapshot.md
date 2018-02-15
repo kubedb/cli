@@ -62,7 +62,6 @@ NAME                  STATUS    AGE
 mysql-infant          Running   17m
 mysql-init-snapshot   Running   2m
 
-
 $ kubedb describe my -n demo mysql-init-snapshot
 Name:		mysql-init-snapshot
 Namespace:	demo

@@ -114,16 +114,13 @@ $ kubectl get statefulset -n demo
 NAME             DESIRED   CURRENT   AGE
 mgo-quickstart   1         1         4m
 
-
 $ kubectl get pvc -n demo
 NAME                    STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 data-mgo-quickstart-0   Bound     pvc-16158aae-07fa-11e8-946f-080027c05a6e   50Mi       RWO            standard       2m
 
-
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                        STORAGECLASS   REASON    AGE
 pvc-16158aae-07fa-11e8-946f-080027c05a6e   50Mi       RWO            Delete           Bound     demo/data-mgo-quickstart-0   standard                 3m
-
 
 $ kubectl get service -n demo
 NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
@@ -166,7 +163,7 @@ status:
 ```
 
 Please note that KubeDB operator has created a new Secret called `mgo-quickstart-auth` *(format: {mongodb-object-name}-auth)* for storing the password for `mongodb` superuser. This secret contains a `user` key which contains the *username* for MongoDB superuser and a `password` key which contains the *password* for MongoDB superuser.
-                                                                                                                                                                      If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password`.
+If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password`.
 
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside the pod.
 
@@ -246,8 +243,6 @@ mgo-quickstart   Pausing   39s
 $ kubedb get drmn -n demo mgo-quickstart
 NAME             STATUS    AGE
 mgo-quickstart   Paused    1m
-
-
 
 $ kubedb get drmn -n demo mgo-quickstart -o yaml
 apiVersion: kubedb.com/v1alpha1
@@ -376,11 +371,9 @@ status:
   phase: WipedOut
   wipeOutTime: 2018-02-02T09:30:51Z
 
-
 $ kubedb get drmn -n demo
 NAME             STATUS     AGE
 mgo-quickstart   WipedOut   1m
-
 ```
 
 ## Delete Dormant Database

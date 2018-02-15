@@ -57,12 +57,10 @@ NAME                  AGE
 prometheus            48s
 prometheus-operator   1m
 
-
 $ kubectl get clusterrolebindings
 NAME                  AGE
 prometheus            7s
 prometheus-operator   25s
-
 
 $ kubectl get serviceaccounts -n demo
 NAME                  SECRETS   AGE
@@ -80,12 +78,10 @@ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/do
 namespace "demo" created
 deployment "prometheus-operator" created
 
-
 $ kubectl get pods -n demo --watch
 NAME                                   READY     STATUS              RESTARTS   AGE
 prometheus-operator-5dcd844486-nprmk   0/1       ContainerCreating   0          27s
 prometheus-operator-5dcd844486-nprmk   1/1       Running   0         46s
-
 
 $ kubectl get crd
 NAME                                    AGE
@@ -199,7 +195,6 @@ $ kubedb get mg -n demo
 NAME             STATUS    AGE
 mgo-mon-coreos   Running   1m
 
-
 $ kubedb describe mg -n demo mgo-mon-coreos
 Name:		mgo-mon-coreos
 Namespace:	demo
@@ -256,8 +251,6 @@ Since `spec.monitoring` was configured, a ServiceMonitor object is created accor
 $ kubectl get servicemonitor -n demo
 NAME                         AGE
 kubedb-demo-mgo-mon-coreos   11m
-
-
 
 $ kubectl get servicemonitor -n demo kubedb-demo-mgo-mon-coreos -o yaml
 apiVersion: monitoring.coreos.com/v1

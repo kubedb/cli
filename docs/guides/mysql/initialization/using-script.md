@@ -204,7 +204,6 @@ $ kubectl get pods mysql-init-script-0 -n demo -o yaml | grep IP
   hostIP: 192.168.99.100
   podIP: 172.17.0.5
 
-
 $ kubectl get secrets -n demo mysql-init-script-auth -o jsonpath='{.data.\user}' | base64 -d
 root
 
