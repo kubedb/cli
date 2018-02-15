@@ -1,8 +1,9 @@
+
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
-# Deploy MySQL from private Docker registry
+# Using private Docker registry
 
-KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run MySQL database using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Redis database using private Docker images.
 
 ## Before You Begin
 
@@ -10,18 +11,16 @@ At first, you need to have a Kubernetes cluster, and the kubectl command-line to
 
 You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
-You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For mysql, push the following images to your private registry.
+You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For redis, push the following images to your private registry.
 
 - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
-- [kubedb/mysql](https://hub.docker.com/r/kubedb/mysql)
-- [kubedb/mysql-tools](https://hub.docker.com/r/kubedb/mysql-tools)
+- [kubedb/redis](https://hub.docker.com/r/kubedb/redis)
 
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
 $ docker pull kubedb/operator:0.8.0-beta.0-4 ; docker tag kubedb/operator:0.8.0-beta.0-4 $DOCKER_REGISTRY/operator:0.8.0-beta.0-4 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.0-4
-$ docker pull kubedb/mysql:8.0 ; docker tag kubedb/mysql:8.0 $DOCKER_REGISTRY/mysql:8.0 ; docker push $DOCKER_REGISTRY/mysql:8.0
-$ docker pull kubedb/mysql-tools:8.0 ; docker tag kubedb/mysql-tools:8.0 $DOCKER_REGISTRY/mysql-tools:8.0 ; docker push $DOCKER_REGISTRY/mysql-tools:8.0
+$ docker pull kubedb/redis:4 ; docker tag kubedb/redis:4 $DOCKER_REGISTRY/redis:4 ; docker push $DOCKER_REGISTRY/redis:4
 ```
 
 ## Create ImagePullSecret
@@ -53,7 +52,7 @@ When installing KubeDB operator, set the flags `--docker-registry` and `--image-
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/redis/demo-0.yaml
 namespace "demo" created
 
 $ kubectl get ns
@@ -64,19 +63,19 @@ kube-public   Active    45m
 kube-system   Active    45m
 ```
 
-## Deploy MySQL database from Private Registry
+## Deploy Redis database from Private Registry
 
-While deploying `MySQL` from private repository, you have to add `myregistrykey` secret in `MySQL` `spec.imagePullSecrets`.
-Below is the MySQL CRD object we will create.
+While deploying `Redis` from private repository, you have to add `myregistrykey` secret in `Redis` `spec.imagePullSecrets`.
+Below is the Redis CRD object we will create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: MySQL
+kind: Redis
 metadata:
-  name: mysql-pvt-reg
+  name: redis-pvt-reg
   namespace: demo
 spec:
-  version: 8.0
+  version: 4
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -89,41 +88,36 @@ spec:
     - name: myregistrykey
 ```
 
-Now run the command to deploy this `MySQL` object:
+Now run the command to deploy this `Redis` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/private-registry/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/private-registry/demo-2.yaml"
-mysql "mysql-pvt-reg" created
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/redis/private-registry/demo-2.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/redis/private-registry/demo-2.yaml"
+redis "redis-pvt-reg" created
 ```
 
-To check if the images pulled successfully from the repository, see if the `MySQL` is in running state:
+To check if the images pulled successfully from the repository, see if the `Redis` is in running state:
 
 ```console
 $ kubectl get pods -n demo -w
 NAME              READY     STATUS              RESTARTS   AGE
-mysql-pvt-reg-0   0/1       Pending             0          0s
-mysql-pvt-reg-0   0/1       Pending             0          0s
-mysql-pvt-reg-0   0/1       ContainerCreating   0          1s
-mysql-pvt-reg-0   1/1       Running             0          8s
+redis-pvt-reg-0   0/1       Pending             0          0s
+redis-pvt-reg-0   0/1       Pending             0          0s
+redis-pvt-reg-0   0/1       ContainerCreating   0          0s
+redis-pvt-reg-0   1/1       Running             0          2m
 
 
-$ kubedb get my -n demo
+$ kubedb get rd -n demo
 NAME            STATUS    AGE
-mysql-pvt-reg   Running   26s
+redis-pvt-reg   Running   15s
 ```
-
-## Snapshot
-
-We don't need to add `imagePullSecret` for `snapshot` objects.
-Just create [snapshot object](/docs/guides/mysql/snapshot/backup-and-restore.md) and KubeDB operator will reuse the `ImagePullSecret` from `MySQL` object.
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubedb delete rd,drmn -n demo --all --force
 
 $ kubectl delete ns demo
 namespace "demo" deleted
@@ -131,13 +125,8 @@ namespace "demo" deleted
 
 ## Next Steps
 
-- [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
-- Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
-- Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).
-- Initialize [MySQL with Snapshot](/docs/guides/mysql/initialization/using-snapshot.md).
-- Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
-- Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
-- Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
-- Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
+- Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
+- Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
+- Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

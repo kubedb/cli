@@ -15,10 +15,12 @@ section_menu_id: concepts
 # Snapshot
 
 ## What is Snapshot
+
 A `Snapshot` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for database snapshots in a Kubernetes native way.
 You only need to describe the desired backup behavior in a Snapshot object. KubeDB operator will launch a Job to perform backup operation. Once the snapshot process is complete, it uploads the snapshot data to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 ## Snapshot Spec
+
 As with all other Kubernetes objects, a Snapshot needs `apiVersion`, `kind`, and `metadata` fields.
 The metadata field must contain a label with `kubedb.com/kind` key.
 The valid values for this label are `Postgres` or `Elasticsearch`. It also needs a `.spec` section. Below is an example Snapshot object.
@@ -49,6 +51,7 @@ spec:
 The `.spec` section supports the following different storage providers for storing snapshot data:
 
 ### Local
+
 `Local` backend refers to a local path inside snapshot job container. Any Kubernetes supported [persistent volume](https://kubernetes.io/docs/concepts/storage/volumes/) can be used here. Some examples are: `emptyDir` for testing, NFS, Ceph, GlusterFS, etc.
 To configure this backend, no secret is needed. Following parameters are available for `Local` backend.
 
@@ -93,6 +96,7 @@ spec:
 ```
 
 ### AWS S3
+
 KubeDB supports AWS S3 service or [Minio](https://minio.io/) servers as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                     | Description                                                |
@@ -173,8 +177,8 @@ spec:
       cpu: "500m"
 ```
 
-
 ### Google Cloud Storage (GCS)
+
 KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                               | Description                                                |
@@ -254,6 +258,7 @@ spec:
 ```
 
 ### Microsoft Azure Storage
+
 KubeDB supports Microsoft Azure Storage as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                     | Description                                                |
@@ -333,6 +338,7 @@ spec:
 ```
 
 ### OpenStack Swift
+
 KubeDB supports OpenStack Swift as snapshot storage backend. To configure this backend, following secret keys are needed:
 
 | Key                      | Description                                                |
@@ -355,7 +361,6 @@ KubeDB supports OpenStack Swift as snapshot storage backend. To configure this b
 | `OS_PROJECT_DOMAIN_NAME` | For keystone v3 authentication                             |
 | `OS_STORAGE_URL`         | For authentication based on tokens                         |
 | `OS_AUTH_TOKEN`          | For authentication based on tokens                         |
-
 
 ```console
 $ echo -n '<your-auth-url>' > OS_AUTH_URL
@@ -440,9 +445,9 @@ spec:
       cpu: "500m"
 ```
 
-
 ## Next Steps
+
 - Learn how to use KubeDB to run a PostgreSQL database [here](/docs/guides/postgres/overview.md).
 - Learn how to use KubeDB to run an Elasticsearch database [here](/docs/guides/elasticsearch/overview.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md). 
+- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

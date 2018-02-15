@@ -1,4 +1,3 @@
-
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
 # Using Prometheus (CoreOS operator) with KubeDB
@@ -100,6 +99,7 @@ Once the Prometheus operator CRDs are registered, run the following command to c
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
+
 ```
 
 ### Prometheus Dashboard
@@ -108,9 +108,9 @@ Now to open prometheus dashboard on Browser:
 
 ```console
 $ kubectl get svc -n demo
-NAME                  TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
-prometheus            LoadBalancer   10.98.86.76   <pending>     9090:30900/TCP   16s
-prometheus-operated   ClusterIP      None          <none>        9090/TCP         16s
+NAME                  TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+prometheus            LoadBalancer   10.110.173.135   <pending>     9090:30900/TCP   11s
+prometheus-operated   ClusterIP      None             <none>        9090/TCP         11s
 
 
 $ minikube ip
@@ -122,18 +122,18 @@ http://192.168.99.100:30900
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
 
-## Create a MySQL database
+## Create a Redis database
 
-KubeDB implements a `MySQL` CRD to define the specification of a MySQL database. Below is the `MySQL` object created in this tutorial.
+KubeDB implements a `Redis` CRD to define the specification of a Redis database. Below is the `Redis` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: MySQL
+kind: Redis
 metadata:
-  name: mysql-mon-coreos
+  name: redis-mon-coreos
   namespace: demo
 spec:
-  version: 8.0
+  version: 4
   storage:
     storageClassName: "standard"
     accessModes:
@@ -150,7 +150,7 @@ spec:
       interval: 10s
 ```
 
-The `MySQL` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `MySQL` database by adding the below part in it's `spec` field.
+The `Redis` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `Redis` database by adding the below part in it's `spec` field.
 
 ```yaml
 spec:
@@ -173,34 +173,38 @@ spec:
 
 __Known Limitations:__ If the database password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/kubedb/project/issues/53).
 
-Run the following command to deploy the above `MySQL` CRD object.
+Run the following command to deploy the above `Redis` CRD object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml"
-mysql "mysql-mon-coreos" created
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/redis/monitoring/coreos-operator/demo-1.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/redis/monitoring/coreos-operator/demo-1.yaml"
+redis "redis-mon-coreos" created
 ```
 
 Here,
 
-- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
+- `spec.version` is the version of Redis database. In this tutorial, a Redis 4 database is going to be created.
 
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
 - `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
 
-KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
 
 ```console
-$ kubedb get my -n demo
+$ kubedb get rd -n demo
 NAME               STATUS    AGE
-mysql-mon-coreos   Running   36s
+redis-mon-coreos   Creating  36s
+
+$ kubedb get rd -n demo
+NAME               STATUS    AGE
+redis-mon-coreos   Running   26s
 
 
-$ kubedb describe my -n demo mysql-mon-coreos
-Name:		mysql-mon-coreos
+$ kubedb describe rd -n demo redis-mon-coreos
+Name:		redis-mon-coreos
 Namespace:	demo
-StartTimestamp:	Mon, 12 Feb 2018 11:26:56 +0600
+StartTimestamp:	Mon, 12 Feb 2018 17:12:03 +0600
 Status:		Running
 Volume:
   StorageClass:	standard
@@ -208,25 +212,17 @@ Volume:
   Access Modes:	RWO
 
 StatefulSet:
-  Name:			mysql-mon-coreos
+  Name:			redis-mon-coreos
   Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 12 Feb 2018 11:26:58 +0600
+  CreationTimestamp:	Mon, 12 Feb 2018 17:12:05 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mysql-mon-coreos
+  Name:		redis-mon-coreos
   Type:		ClusterIP
-  IP:		10.98.111.66
-  Port:		db		3306/TCP
+  IP:		10.108.164.193
+  Port:		db		6379/TCP
   Port:		prom-http	56790/TCP
-
-Database Secret:
-  Name:	mysql-mon-coreos-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
 
 Monitoring System:
   Agent:	prometheus.io/coreos-operator
@@ -235,16 +231,14 @@ Monitoring System:
     Labels:	app=kubedb
     Interval:	10s
 
-No Snapshots.
-
 Events:
   FirstSeen   LastSeen   Count     From             Type       Reason       Message
   ---------   --------   -----     ----             --------   ------       -------
-  31s         31s        1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
-  31s         31s        1         MySQL operator   Normal     Successful   Successfully patched MySQL
-  34s         34s        1         MySQL operator   Normal     Successful   Successfully created StatefulSet
-  34s         34s        1         MySQL operator   Normal     Successful   Successfully created MySQL
-  49s         49s        1         MySQL operator   Normal     Successful   Successfully created Service
+  46s         46s        1         Redis operator   Normal     Successful   Successfully patched StatefulSet
+  46s         46s        1         Redis operator   Normal     Successful   Successfully patched Redis
+  48s         48s        1         Redis operator   Normal     Successful   Successfully created StatefulSet
+  48s         48s        1         Redis operator   Normal     Successful   Successfully created Redis
+  1m          1m         1         Redis operator   Normal     Successful   Successfully created Service
 ```
 
 Since `spec.monitoring` was configured, a ServiceMonitor object is created accordingly. You can verify it running the following commands:
@@ -252,27 +246,27 @@ Since `spec.monitoring` was configured, a ServiceMonitor object is created accor
 ```yaml
 $ kubectl get servicemonitor -n demo
 NAME                           AGE
-kubedb-demo-mysql-mon-coreos   51s
+kubedb-demo-redis-mon-coreos   1m
 
 
-$ kubectl get servicemonitor -n demo kubedb-demo-mysql-mon-coreos -o yaml
+$ kubectl get servicemonitor -n demo kubedb-demo-redis-mon-coreos -o yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   clusterName: ""
-  creationTimestamp: 2018-02-12T05:27:13Z
+  creationTimestamp: 2018-02-12T11:12:20Z
   labels:
     app: kubedb
-    monitoring.appscode.com/service: mysql-mon-coreos.demo
-  name: kubedb-demo-mysql-mon-coreos
+    monitoring.appscode.com/service: redis-mon-coreos.demo
+  name: kubedb-demo-redis-mon-coreos
   namespace: demo
-  resourceVersion: "37184"
-  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/servicemonitors/kubedb-demo-mysql-mon-coreos
-  uid: 61bc7bf4-0fb5-11e8-a2d6-08002751ae8c
+  resourceVersion: "47974"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/servicemonitors/kubedb-demo-redis-mon-coreos
+  uid: 9824ef63-0fe5-11e8-a2d6-08002751ae8c
 spec:
   endpoints:
   - interval: 10s
-    path: /kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-mon-coreos/metrics
+    path: /kubedb.com/v1alpha1/namespaces/demo/redises/redis-mon-coreos/metrics
     port: prom-http
     targetPort: 0
   namespaceSelector:
@@ -280,19 +274,19 @@ spec:
     - demo
   selector:
     matchLabels:
-      kubedb.com/kind: MySQL
-      kubedb.com/name: mysql-mon-coreos
+      kubedb.com/kind: Redis
+      kubedb.com/name: redis-mon-coreos
 ```
 
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
-![prometheus-coreos](/docs/images/mysql/mysql-coreos.png)
+![prometheus-coreos](/docs/images/redis/redis-coreos.png)
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubedb delete rd,drmn -n demo --all --force
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrolebindings prometheus-operator  prometheus
@@ -304,12 +298,8 @@ namespace "demo" deleted
 
 ## Next Steps
 
-- Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
-- Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
-- [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
-- Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
-- Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).
-- Initialize [MySQL with Snapshot](/docs/guides/mysql/initialization/using-snapshot.md).
-- Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
+- Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
+- Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
+- Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

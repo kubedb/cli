@@ -1,6 +1,6 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
-# Using Private Docker Registry
+# Using private Docker registry
 
 KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run MongoDB database using private Docker images.
 
@@ -30,7 +30,7 @@ $ docker pull kubedb/mongo-tools:3.6 ; docker tag kubedb/mongo-tools:3.6 $DOCKER
 
 ImagePullSecrets is a type of a Kubernete Secret whose sole purpose is to pull private images from a Docker registry. It allows you to specify the url of the docker registry, credentials for logging in and the image name of your private docker image.
 
-Run the following command, substituting the appropriate uppercase values to create an image pull secret for your private docker registry:
+Run the following command, substituting the appropriate uppercase values to create an image pull secret for your private Docker registry:
 
 ```console
 $ kubectl create secret docker-registry myregistrykey \
