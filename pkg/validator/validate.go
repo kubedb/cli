@@ -42,7 +42,7 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 		if err := yaml.Unmarshal(objByte, &mysql); err != nil {
 			return err
 		}
-		return msv.ValidateMySQL(client, mysql, nil)
+		return msv.ValidateMySQL(client, mysql)
 	case tapi.ResourceKindMongoDB:
 		var mongodb *tapi.MongoDB
 		if err := yaml.Unmarshal(objByte, &mongodb); err != nil {
@@ -54,13 +54,13 @@ func Validate(client kubernetes.Interface, info *resource.Info) error {
 		if err := yaml.Unmarshal(objByte, &redis); err != nil {
 			return err
 		}
-		return rdv.ValidateRedis(client, redis, nil)
+		return rdv.ValidateRedis(client, redis)
 	case tapi.ResourceKindMemcached:
 		var memcached *tapi.Memcached
 		if err := yaml.Unmarshal(objByte, &memcached); err != nil {
 			return err
 		}
-		return memv.ValidateMemcached(client, memcached, nil)
+		return memv.ValidateMemcached(client, memcached)
 	case tapi.ResourceKindSnapshot:
 		var snapshot *tapi.Snapshot
 		if err := yaml.Unmarshal(objByte, &snapshot); err != nil {

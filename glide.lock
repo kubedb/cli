@@ -1,5 +1,5 @@
 hash: a0bbe9041555b0f2f28bf12a06e143bef8b5de12e1a09976d1266859df1bb483
-updated: 2018-02-14T22:10:26.007633758-08:00
+updated: 2018-02-17T12:06:17.326877665-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 1be9b0441d73831aaa93df76e42a751caa5dba88
+  version: 8367769380cf93a12b381d957941ddf2a19d0356
   subpackages:
   - analytics
   - context
@@ -190,7 +190,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 44145f04b68cf362d9c4df2182967c2275eaefed
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -280,43 +280,40 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: c3e38172bd159ef8b001283124150d338162fcdd
+  version: 89214d2501bcf65be0ccfa067086d9dc5f0c511d
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
-  - client/scheme
-  - client/typed/kubedb/v1alpha1
+  - client/clientset/versioned/scheme
+  - client/clientset/versioned/typed/kubedb/v1alpha1
   - pkg/docker
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: 0cafc00c38db1bcfb54931c8fb5168befc3917f3
+  version: 4867374fc0b4a3a4134dc1e887108cc2727d529f
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 08191a9cdbd143cebcb343c969d50b6420e19542
+  version: 9eb51f1b2ef822927e62ae6aa4b0571f1530a95f
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: 6af9587243e8c8d50d24b8b1394781735e63c345
+  version: b28b7ca3799c61c4ecac5024b7ebd64320f1f78c
   subpackages:
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: 6db2ae8d66b38c00106969bc801b247033e129dd
+  version: 37a1e4fd52b5e77e9682ae4dc6acb2b6b6a35c95
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: 20ecfa415967c961dd39d7dcd49918378d8b331c
+  version: 848f17aa1b71e96adc39c2a2199e43751933b0f7
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: 56cc3e767e6714b07f84915e9177c138df299c3b
+  version: dc3173ab4af18258da47bda6e3a69235fe42c16a
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
@@ -441,7 +438,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 3acc4f94acb5b02441cce6db56fc82a1016eadb4
+  version: c7a403bb5fe12fe4644bb956edd5cd677626120a
   subpackages:
   - gensupport
   - googleapi

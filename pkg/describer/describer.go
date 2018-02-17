@@ -6,8 +6,8 @@ import (
 
 	"github.com/golang/glog"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/client/scheme"
-	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
+	"github.com/kubedb/apimachinery/client/clientset/versioned/scheme"
+	tcs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/decoder"
 	"github.com/kubedb/cli/pkg/printer"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"

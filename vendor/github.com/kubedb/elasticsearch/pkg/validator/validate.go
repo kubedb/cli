@@ -1,13 +1,13 @@
 package validator
 
 import (
-	"errors"
 	"fmt"
 
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	adr "github.com/kubedb/apimachinery/pkg/docker"
 	amv "github.com/kubedb/apimachinery/pkg/validator"
 	dr "github.com/kubedb/elasticsearch/pkg/docker"
+	"github.com/pkg/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )

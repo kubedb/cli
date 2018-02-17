@@ -11,7 +11,7 @@ import (
 
 	"github.com/golang/glog"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/client/scheme"
+	"github.com/kubedb/apimachinery/client/clientset/versioned/scheme"
 	"github.com/kubedb/cli/pkg/decoder"
 	"github.com/kubedb/cli/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
