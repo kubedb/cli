@@ -165,6 +165,7 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
     kubectl create serviceaccount $KUBEDB_SERVICE_ACCOUNT --namespace $KUBEDB_NAMESPACE
     kubectl label serviceaccount $KUBEDB_SERVICE_ACCOUNT app=kubedb --namespace $KUBEDB_NAMESPACE
     curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
+    curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
 
 fi
 
