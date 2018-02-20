@@ -176,7 +176,7 @@ In summary,
 - If `enableSSL` is not set, you do not need certificate to validate client, but still you need basic auth.
 - If `enableSSL` is set, you need root certificate to validate client.
 
-If certificate Secret is not provided when creating Elasticsearch, one will be created for user. You will get root certificate as `root.pem`.
+If certificate Secret is not provided when creating Elasticsearch, one will be created for user.
 
 > Note: Do not need to provide client certificate. Client is verified by valid host name.
 
