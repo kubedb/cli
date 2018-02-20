@@ -93,7 +93,7 @@ In this tutorial, we will expose ClusterIP Service `ssl-elasticsearch` to connec
 ```console
 $ kubectl expose svc -n demo ssl-elasticsearch --name=ssl-es-exposed --port=9200 --protocol=TCP --type=NodePort
 service "ssl-es-exposed" exposed
-``
+```
 
 ```console
 $ kubectl get svc -n demo ssl-es-exposed
