@@ -375,7 +375,7 @@ quick-elasticsearch   5.6       Running   33m
 
 ## Next Steps
 
-- Learn how to use TLS [certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
+- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
 - Learn how to generate [search-guard configuration](/docs/guides/elasticsearch/search-guard/configuration.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
