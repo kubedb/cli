@@ -9,6 +9,13 @@ rules:
   - kubedb.com
   resources:
   - dormantdatabases
+  - elasticsearches
+  - memcacheds
+  - mongodbs
+  - mysqls
+  - postgreses
+  - redises
+  - snapshots
   verbs:
   - create
   - delete
@@ -24,7 +31,6 @@ kind: ClusterRole
 metadata:
   name: kubedb:core:edit
   labels:
-    rbac.authorization.k8s.io/aggregate-to-admin: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
 - apiGroups:
