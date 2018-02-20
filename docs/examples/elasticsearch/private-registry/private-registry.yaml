@@ -1,12 +1,10 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: recovered
+  name: pvt-reg-elasticsearch
   namespace: demo
 spec:
-  version: 5.6.4
-  replicas: 1
-  doNotPause: false
+  version: 5.6
   storage:
     storageClassName: "standard"
     accessModes:
@@ -14,7 +12,5 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    snapshotSource:
-      namespace: demo
-      name: e1-xyz
+  imagePullSecrets:
+    - name: myregistrykey

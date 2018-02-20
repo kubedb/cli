@@ -1,0 +1,20 @@
+UNLIMITED:
+  - "*"
+
+READ:
+  - "indices:data/read*"
+  - "indices:admin/mappings/fields/get*"
+
+CLUSTER_COMPOSITE_OPS_RO:
+  - "indices:data/read/mget"
+  - "indices:data/read/msearch"
+  - "indices:data/read/mtv"
+  - "indices:data/read/coordinate-msearch*"
+  - "indices:admin/aliases/exists*"
+  - "indices:admin/aliases/get*"
+
+CLUSTER_KUBEDB_SNAPSHOT:
+  - "indices:data/read/scroll*"
+
+INDICES_KUBEDB_SNAPSHOT:
+  - "indices:admin/get"

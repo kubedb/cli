@@ -1,0 +1,11 @@
+searchguard:
+  dynamic:
+    authc:
+      basic_internal_auth_domain:
+        enabled: true
+        order: 4
+        http_authenticator:
+          type: basic
+          challenge: true
+        authentication_backend:
+          type: intern

@@ -1,0 +1,15 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: multi-node-es
+  namespace: demo
+spec:
+  version: 5.6
+  replicas: 3
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi

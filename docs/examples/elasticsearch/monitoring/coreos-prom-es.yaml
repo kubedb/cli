@@ -1,21 +1,10 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: e2
+  name: coreos-prom-es
   namespace: demo
 spec:
-  version: 5.6.4
-  doNotPause: true
-  topology:
-    master:
-      replicas: 1
-      prefix: master
-    data:
-      replicas: 2
-      prefix: data
-    client:
-      replicas: 1
-      prefix: client
+  version: 5.6
   storage:
     storageClassName: "standard"
     accessModes:
@@ -23,3 +12,10 @@ spec:
     resources:
       requests:
         storage: 50Mi
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s

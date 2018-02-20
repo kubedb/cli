@@ -1,12 +1,10 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: e1
+  name: scheduled-es
   namespace: demo
 spec:
-  version: 5.6.4
-  replicas: 1
-  doNotPause: true
+  version: 5.6
   storage:
     storageClassName: "standard"
     accessModes:
@@ -16,6 +14,6 @@ spec:
         storage: 50Mi
   backupSchedule:
     cronExpression: "@every 6h"
-    storageSecretName: snap-secret
+    storageSecretName: gcs-secret
     gcs:
       bucket: kubedb

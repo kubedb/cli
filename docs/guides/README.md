@@ -17,9 +17,9 @@ aliases:
 
 Guides show you how to perform tasks with KubeDB.
 
-- [Running PostgreSQL](/docs/guides/postgres/overview.md): This tutorial will show you how to use KubeDB to run a PostgreSQL database.
+- [Running PostgreSQL](/docs/guides/postgres/README.md): This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
-- [Running Elasticsearch](/docs/guides/elasticsearch/overview.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
+- [Running Elasticsearch](/docs/guides/elasticsearch/README.md): This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
 - [Running MySQL](/docs/guides/mysql/README.md): This tutorial will show you how to use KubeDB to run a MySQL database.
 
