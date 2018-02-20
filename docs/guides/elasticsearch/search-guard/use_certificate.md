@@ -22,7 +22,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/elasticsearch-docs/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 We need an Elasticsearch object in `Running` phase where `enableSSL` is set to be `true`.
 
@@ -41,8 +41,8 @@ spec:
 If Elasticsearch object `ssl-elasticsearch` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml"
 elasticsearch "ssl-elasticsearch" created
 ```
 

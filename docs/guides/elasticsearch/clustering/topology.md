@@ -21,7 +21,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/elasticsearch-docs/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create multi-node Elasticsearch
 
@@ -57,8 +57,8 @@ Here,
 Create example above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/clustering/multi-node-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/clustering/multi-node-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/multi-node-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/multi-node-es.yaml"
 elasticsearch "multi-node-es" created
 ```
 
@@ -140,8 +140,8 @@ Here,
 Lets create this Elasticsearch object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/clustering/topology-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/clustering/topology-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/topology-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/topology-es.yaml"
 elasticsearch "topology-es" created
 ```
 

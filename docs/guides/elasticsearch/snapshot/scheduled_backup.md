@@ -21,7 +21,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/elasticsearch-docs/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ##### Create Snapshot storage Secret
 
@@ -93,8 +93,8 @@ Here,
 > Note: Secret object must be in the same namespace as Elasticsearch, `scheduled-es`, in this case.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/snapshot/scheduled-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/scheduled-es.yaml"
 elasticsearch "scheduled-es" created
 ```
 

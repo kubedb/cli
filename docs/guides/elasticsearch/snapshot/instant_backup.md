@@ -21,7 +21,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/elasticsearch-docs/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 We need an Elasticsearch object in `Running` phase to perform backup operation.
 
@@ -38,8 +38,8 @@ spec:
 If Elasticsearch object `infant-elasticsearch` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
 elasticsearch "infant-elasticsearch" created
 ```
 
@@ -185,8 +185,8 @@ To lean how to configure other storage destinations for snapshot data, please vi
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml"
 snapshot "instant-snapshot" created
 ```
 

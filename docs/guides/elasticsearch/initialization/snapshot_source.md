@@ -21,7 +21,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/elasticsearch-docs/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 This tutorial will show you how to use KubeDB to initialize a Elasticsearch database with an existing Snapshot.
 
@@ -32,8 +32,8 @@ Follow these steps to prepare this tutorial
 * Create Elasticsearch object `infant-elasticsearch`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+    validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
     elasticsearch "infant-elasticsearch" created
     ```
 
@@ -43,7 +43,7 @@ Follow these steps to prepare this tutorial
     infant-elasticsearch   Running   57s
     ```
 
-* Populate database with some data. Follow [this](https://github.com/kubedb/cli/blob/elasticsearch-docs/docs/guides/elasticsearch/snapshot/instant_backup.md#populate-database).
+* Populate database with some data. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#populate-database).
 * Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
     ```console
     $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
@@ -53,7 +53,7 @@ Follow these steps to prepare this tutorial
         --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
     secret "gcs-secret" created
     ```
-* Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/elasticsearch-docs/docs/guides/elasticsearch/snapshot/instant_backup.md#instant-backup).
+* Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#instant-backup).
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Elasticsearch,kubedb.com/name=infant-elasticsearch"
@@ -111,8 +111,8 @@ instant-snapshot   es/infant-elasticsearch   Succeeded   2m
 Now, create the Elasticsearch object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/initialization/recovered-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/initialization/recovered-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/initialization/recovered-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/initialization/recovered-es.yaml"
 elasticsearch "recovered-es" created
 ```
 

@@ -21,7 +21,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/elasticsearch-docs/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 This tutorial assumes that you are familiar with Elasticsearch concept.
 
@@ -55,8 +55,8 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml"
 elasticsearch "builtin-prom-es" created
 ```
 
@@ -170,7 +170,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap "prometheus-server-conf" created
 ```
 
@@ -219,7 +219,7 @@ spec:
 If RBAC *is* enabled, run the following command to prepare your cluster for this tutorial
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -255,7 +255,7 @@ prometheus-server   2m
 If RBAC *is not* enabled, Run the following command to deploy prometheus in kubernetes
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/elasticsearch-docs/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 deployment "prometheus-server" created
 service "prometheus-service" created
 ```
