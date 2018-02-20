@@ -28,7 +28,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-We will use `htpasswd`** to hash password. Install `apache2-utils` package for this.
+We will use `htpasswd`** to hash user password. Install `apache2-utils` package for this.
 
 ```console
 $ sudo apt-get install apache2-utils
@@ -53,7 +53,7 @@ The configuration consists of the following files.
 - `sg_roles.yml` define roles and the associated permissions.
 - `sg_roles_mapping.yml` map backend roles, hosts and users to roles.
 
-If you do not provide Secret for configuration, KubeDB will create one with following setup.
+If you do not provide Secret for configuration, KubeDB will create one with default setup.
 
 ### sg_config.yml
 
@@ -73,7 +73,7 @@ searchguard:
 
 See details about [authentication and authorisation](http://docs.search-guard.com/v5/authentication-authorization) in Search Guard documentation.
 
-We will use following config data
+We will use following config data in this tutorial
 
 ```yml
 searchguard:
@@ -123,10 +123,10 @@ export READALL_PASSWORD_HASHED=$(htpasswd -bnBC 12 "" $READALL_PASSWORD | tr -d 
 
 Here,
 
-- 'admin' user password : `admin-password`
-- 'readall' user password : `readall-password`
+- `admin` user password : `admin-password`
+- `readall` user password : `readall-password`
 
-This following template file is used to substitute secret for internal user.
+This following template file is used to substitute password for internal user.
 
 ```yaml
 admin:
@@ -142,7 +142,7 @@ Run following command to write user information in `sg_internal_users.yml` file 
 curl https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/search-guard/sg-config/sg_internal_users.yml | envsubst > sg_internal_users.yml
 ```
 
-> Note: Random password is used if KubeDB creates Secret for User.
+> Note: Random password is set if KubeDB creates Secret for Users.
 
 ### sg_action_groups.yml
 
@@ -424,8 +424,8 @@ curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
 
 ## Next Steps
 
-- Learn how to create TLS [certificates](/docs/guides/elasticsearch/search-guard/certificate.md).
-- Learn how to use TLS [certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
+- Learn how to [create TLS certificates](/docs/guides/elasticsearch/search-guard/certificate.md).
+- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
 

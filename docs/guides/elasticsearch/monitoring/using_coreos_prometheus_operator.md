@@ -166,7 +166,7 @@ Here,
  - `monitor.prometheus` specifies the information for monitoring by prometheus
       - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
       - `prometheus.labels` specifies the labels applied to ServiceMonitor.
-      - `prometheus.port` indicates the port for Postgres exporter endpoint (default is `56790`)
+      - `prometheus.port` indicates the port for Elasticsearch exporter endpoint (default is `56790`)
       - `prometheus.interval` indicates the scraping interval (eg, '10s')
 
 

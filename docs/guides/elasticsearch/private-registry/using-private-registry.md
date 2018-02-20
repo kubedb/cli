@@ -109,7 +109,7 @@ pvt-reg-elasticsearch   5.6       Running   33m
 
 ## Snapshot
 
-We don't need to add `imagePullSecret` for `snapshot` objects. Just create Snapshot object and KubeDB operator will reuse the `ImagePullSecret` from Postgres object.
+We don't need to add `imagePullSecret` for `snapshot` objects. Just create Snapshot object and KubeDB operator will reuse the `ImagePullSecret` from Elasticsearch object.
 
 ## Cleaning up
 
