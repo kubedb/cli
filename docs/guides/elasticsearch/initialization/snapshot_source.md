@@ -180,7 +180,7 @@ $ kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADM
 3pk6qxxo⏎
 ```
 
-```bash
+```console
 export es_service=$(minikube service recovered-es-exposed -n demo --https --url)
 export es_admin_pass=$(kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
 curl -XGET --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" --insecure

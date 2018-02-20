@@ -145,7 +145,7 @@ uv2io5au⏎
 
 Now run following commands to connect to Elasticsearch server in secure mode with basic auth information.
 
-```bash
+```console
 export es_service=https://ssl-elasticsearch.demo.svc:30582
 export es_admin_pass=$(kubectl get secrets -n demo ssl-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
 curl --user "admin:$es_admin_pass" "$es_service/_cluster/health?pretty" --cacert root.pem

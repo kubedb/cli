@@ -297,7 +297,7 @@ ud7cagcu⏎
 
 Check health of the elasticsearch database
 
-```bash
+```console
 export es_service=$(minikube service quick-es-exposed -n demo --url)
 export es_admin_pass=$(kubectl get secrets -n demo quick-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
 curl --user "admin:$es_admin_pass" "$es_service/_cluster/health?pretty"

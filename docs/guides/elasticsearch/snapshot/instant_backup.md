@@ -62,7 +62,7 @@ Check [this tutorial](/docs/guides/elasticsearch/quickstart.md#connect-elasticse
 
 Before taking backup, insert some data into this Elasticsearch.
 
-```bash
+```console
 export es_service=$(minikube service infant-es-exposed -n demo --url)
 export es_admin_pass=$(kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
 curl -XPUT --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" -H 'Content-Type: application/json' -d'

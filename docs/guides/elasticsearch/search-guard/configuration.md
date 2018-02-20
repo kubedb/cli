@@ -36,7 +36,7 @@ $ sudo apt-get install apache2-utils
 
 To keep configuration files separated, open a new terminal and create a directory `/tmp/kubedb/sg`
 
-```bash
+```console
 mkdir -p /tmp/kubedb/sg
 cd /tmp/kubedb/sg
 ```
@@ -113,7 +113,7 @@ KubeDB needs user `admin` and `readall` for backup and restore process.
 
 Create two hashed password for user `admin` and `readall`
 
-```bash
+```console
 export ADMIN_PASSWORD=admin-password
 export READALL_PASSWORD=readall-password
 
@@ -397,7 +397,7 @@ config-es-exposed   NodePort   10.98.174.49   <none>        9200:31704/TCP   5s
 
 Now, you can connect to this database using curl.
 
-```bash
+```console
 export es_service=$(minikube service config-es-exposed -n demo --url)
 curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
 ```

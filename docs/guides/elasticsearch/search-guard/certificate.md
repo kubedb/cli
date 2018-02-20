@@ -53,7 +53,7 @@ If already installed, it will print a list of available commands.
 
 To keep generated files separated, open a new terminal and create a directory `/tmp/kubedb/certs`
 
-```bash
+```console
 mkdir -p /tmp/kubedb/certs
 cd /tmp/kubedb/certs
 ```
@@ -180,7 +180,7 @@ Here,
 
 Also, you need to create a `index.txt` file and `serial.txt` file with value `01`
 
-```bash
+```console
 touch index.txt
 echo '01' > serial.txt
 ```
@@ -217,7 +217,7 @@ transport layer.
 
 Now run following commands
 
-```bash
+```console
 wget https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/search-guard/openssl-config/openssl-node.ini
 openssl req -config openssl-node.ini -newkey rsa:4096 -sha256 -nodes -out node-csr.pem -keyout node-key.pem
 openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out node.pem -infiles node-csr.pem
