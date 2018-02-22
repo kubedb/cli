@@ -88,14 +88,14 @@ spec:
 Here,
 
  - `metadata.labels` should include the type of database.
- - `spec.databaseName` indicates the Postgres object name, `p1`, whose snapshot is taken.
+ - `spec.databaseName` indicates the Postgres object name, `script-postgres`, whose snapshot is taken.
  - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
  - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object.
 Only Postgres controller will handle this Snapshot object.
 
-> Note: Snapshot and Secret objects must be in the same namespace as Postgres, `p1`, in our case.
+> Note: Snapshot and Secret objects must be in the same namespace as Postgres, `script-postgres`, in our case.
 
 
 #### Snapshot Storage Secret
