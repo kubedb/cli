@@ -67,6 +67,7 @@ metadata:
   namespace: demo
 spec:
   version: 9.6
+  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -79,6 +80,8 @@ spec:
 Here,
 
  - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
+
+ - `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
 
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
  created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
@@ -93,6 +96,16 @@ postgres "quick-postgres" created
 
 KubeDB operator watches for Postgres objects using Kubernetes api. When a Postgres object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name.
 KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
+
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
+
+```console
+$ kubedb get pg -n demo quick-postgres -o wide
+NAME             VERSION   STATUS    AGE
+quick-postgres   9.6       Running   17m
+```
+
+Lets describe Postgres object `quick-postgres`
 
 ```console
 $ kubedb describe pg -n demo quick-postgres
@@ -166,15 +179,7 @@ To learn how to configure highly available PostgreSQL cluster, click [here](/doc
 
 Here, we create a PostgreSQL database with single node, *primary* only.
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
-
-```console
-$ kubedb get pg -n demo quick-postgres -o wide
-NAME             VERSION   STATUS    AGE
-quick-postgres   9.6       Running   17m
-```
-
-Please note that KubeDB operator has created a new Secret called `quick-postgres-auth` (format: {postgres-name}-auth) for storing the password for `postgres` superuser.
+Please note that KubeDB operator has created a new Secret called `quick-postgres-auth` for storing the password for `postgres` superuser.
 
 ```yaml
 apiVersion: v1
@@ -195,6 +200,8 @@ type: Opaque
 ```
 
 This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
+
+> Note: Auth Secret name format: `{postgres-name}-auth`
 
 Now, you can connect to this database from the pgAdmin dashboard using Service `quick-postgres-primary.demo` and `postgres` superuser password .
 
@@ -219,8 +226,25 @@ Run following command to get `postgres` superuser password
 
 ## Pause Database
 
-If you delete the Postgres object, KubeDB operator will create a matching DormantDatabase object.
-KubeDB operator watches for DormantDatabase objects and it will take necessary steps when a DormantDatabase object is created.
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature.
+If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set `true`.
+
+In this tutorial, Postgres `quick-postgres` is created with `spec.doNotPause: true`. So, if you delete this Postgres object, admission webhook will nullify the delete operation.
+
+```console
+$ kubedb delete pg -n demo quick-postgres
+error: Postgres "quick-postgres " can't be paused. To continue delete, unset spec.doNotPause and retry.
+```
+
+To continue with this tutorial, unset `spec.doNotPause` by updating Postgres object
+
+```console
+$ kubedb edit pg -n demo quick-postgres
+spec:
+  doNotPause: false
+```
+
+Now, if you delete the Postgres object, KubeDB operator will create a matching DormantDatabase object. KubeDB operator watches for DormantDatabase objects and it will take necessary steps when a DormantDatabase object is created.
 
 KubeDB operator will delete the StatefulSet and its Pods, but leaves the Secret, PVCs unchanged.
 
@@ -353,8 +377,6 @@ $ kubedb delete pg,drmn,snap -n demo --all --force
 $ kubectl delete ns demo
 ```
 
-If you want to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
-
 ## Next Steps
 - Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.
 - Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
@@ -363,6 +385,8 @@ If you want to uninstall KubeDB operator, please follow the steps [here](/docs/s
 - Want to setup PostgreSQL cluster? Check how to [configure Highly Available PostgreSQL Cluster](/docs/guides/postgres/clustering/ha_cluster.md)
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
-- Want to use your own docker registry or private repository for docker. Check how to [use non public docker images](/docs/guides/postgres/private-registry/using-private-registry.md)
+- Detail concepts of [Postgres object](/docs/concepts/databases/postgres.md).
+- Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
+- Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy Postgres with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

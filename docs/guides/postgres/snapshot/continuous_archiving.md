@@ -1,8 +1,31 @@
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart.md).
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 ## Continuous Archiving with wal-g
 
 KubeDB Postgres also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports only amazon _S3_ as cloud storage.
+
+### Before You Begin
+
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+```console
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
+
+## Create Postgres with Continuous Archiving
 
 Below is the Postgres object created with Continuous Archiving support.
 
@@ -133,6 +156,14 @@ you can see continuous archiving data stored in S3 bucket.
 </p>
 
 From the above image, you can see that the archived data is stored in a folder `kubedb/kubedb/demo/wal-postgres/archive`.
+
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 

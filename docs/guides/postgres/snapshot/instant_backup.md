@@ -1,4 +1,4 @@
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart.md).
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # KubeDB Snapshot
 
@@ -6,14 +6,60 @@ KubeDB operator maintains another Custom Resource Definition (CRD) for database 
 
 ### Before You Begin
 
-In this tutorial, we will take instant backup of a PostgreSQL database using KubeDB Snapshot object.
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
-So, lets create a Postgres object first following [this tutorial](/docs/guides/postgres/initialization/script_source.md#script-source).
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
 ```console
-$ kubedb get pg -n demo script-postgres
-NAME              STATUS    AGE
-script-postgres   Running   24m
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
+We need an Postgres object in Running phase to perform backup operation.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: script-postgres
+  namespace: demo
+spec:
+  version: 9.6
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  init:
+    scriptSource:
+      gitRepo:
+        repository: "https://github.com/kubedb/postgres-init-scripts.git"
+        directory: "."
+```
+
+If Postgres object `script-postgres` doesn't exists, create it first.
+
+```console
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml"
+postgres "script-postgres" created
+```
+
+```console
+$ kubedb get es -n demo script-postgres
+NAME                STATUS      AGE
+script-postgres     Running     11m
 ```
 
 We will take backup of this PostgreSQL database `script-postgres`.
@@ -216,7 +262,13 @@ $ kubectl delete snap -n demo instant-snapshot
 snapshot "instant-snapshot" deleted
 ```
 
-Once Snapshot object is deleted, you can't revert this process and snapshot data from storage will be deleted permanently.
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 - Setup [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) in PostgreSQL using `wal-g`

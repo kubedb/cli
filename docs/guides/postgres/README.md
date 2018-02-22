@@ -42,7 +42,7 @@
 </p>
 
 ## User Guide
-- [Quickstart PostgreSQL](/docs/guides/postgres/quickstart.md) with KubeDB Operator.
+- [Quickstart PostgreSQL](/docs/guides/postgres/quickstart/quickstart.md) with KubeDB Operator.
 - Take [Instant Snapshot](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB.
 - [Schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md) of PostgreSQL database using KubeDB.
 - Initialize [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
