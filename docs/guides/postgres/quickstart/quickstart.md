@@ -97,6 +97,8 @@ postgres "quick-postgres" created
 KubeDB operator watches for Postgres objects using Kubernetes api. When a Postgres object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name.
 KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
 
+If RBAC is enabled in clusters, Postgres specific RBAC permission is required. [Check here](/docs/guides/postgres/quickstart/rbac.md) for details.
+
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
 
 ```console
@@ -368,6 +370,7 @@ dormantdatabase "quick-postgres" deleted
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
