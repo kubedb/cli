@@ -31,7 +31,7 @@ demo    Active  5s
 
 You can create a new database from archived WAL files using [wal-g ](https://github.com/wal-g/wal-g).
 
-Specify storage backend in the `spec.init.postgresWAL` field of a new Postgres object. Add following additional information in `spec` of a new Postgres:
+Specify storage backend in the `spec.init.postgresWAL` field of a new Postgres object.
 
 See the example Postgres object below
 
@@ -73,9 +73,9 @@ Here,
 	- `s3.bucket` points to the bucket name used to store continuous archiving data.
 	- `s3.prefix` points to the path where archived WAL data is stored.
 
-**wal-g** gets data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
+**wal-g** receives archived WAL data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
 
-Here, `{namespace}` & `{postgres-name}` indicates Postgres object from where this archived WAL data is collected.
+Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL archived data will be replayed.
 
 > Note: Postgres `replay-postgres` must have same `postgres` superuser password as Postgres `wal-postgres`.
 
