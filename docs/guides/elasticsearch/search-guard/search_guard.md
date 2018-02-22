@@ -5,8 +5,8 @@
 [Search Guard(®)](https://github.com/floragunncom/search-guard) is an Elasticsearch plugin that offers encryption, authentication, and authorization.
 It supports fine grained role-based access control to clusters, indices, documents and fields.
 
-* Search Guard authenticates the credentials against the configured authentication backend(s).
-* Search Guard authorizes the user by retrieving a list of the user’s roles from the configured authorization backend
+- Search Guard authenticates the credentials against the configured authentication backend(s).
+- Search Guard authorizes the user by retrieving a list of the user’s roles from the configured authorization backend
 
 ## TLS certificates
 
@@ -50,8 +50,8 @@ searchguard.authcz.admin_dn:
 
 With TLS client authentication enabled, REST clients can send a TLS certificate with the HTTP request to provide identity information to Search Guard.
 
-* You can provide an admin certificate when using the REST API.
-* You can provide Basic Auth with client certificates.
+- You can provide an admin certificate when using the REST API.
+- You can provide Basic Auth with client certificates.
 
 > Note: Search Guard accepts TLS client certificates if they are sent, but does not enforce them.
 

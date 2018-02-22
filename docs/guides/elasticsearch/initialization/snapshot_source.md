@@ -4,7 +4,7 @@
 
 KubeDB supports Elasticsearch database initialization.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -29,7 +29,7 @@ So, we need a Snapshot object in `Succeeded` phase to perform this initializatio
 
 Follow these steps to prepare this tutorial
 
-* Create Elasticsearch object `infant-elasticsearch`, if not exists.
+- Create Elasticsearch object `infant-elasticsearch`, if not exists.
 
     ```console
     $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
@@ -43,8 +43,9 @@ Follow these steps to prepare this tutorial
     infant-elasticsearch   Running   57s
     ```
 
-* Populate database with some data. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#populate-database).
-* Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
+- Populate database with some data. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#populate-database).
+- Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
+
     ```console
     $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
     $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
@@ -53,7 +54,8 @@ Follow these steps to prepare this tutorial
         --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
     secret "gcs-secret" created
     ```
-* Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#instant-backup).
+
+- Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#instant-backup).
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Elasticsearch,kubedb.com/name=infant-elasticsearch"

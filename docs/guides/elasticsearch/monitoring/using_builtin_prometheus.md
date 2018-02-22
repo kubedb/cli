@@ -4,7 +4,7 @@
 
 This tutorial will show you how to monitor Elasticsearch database using [Prometheus](https://prometheus.io/).
 
-### Before You begin
+## Before You begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -110,7 +110,6 @@ prometheus.io/scrape=true
 ```
 
 The prometheus server will discover the service endpoint aka `Elasticsearch Exporter` using these specifications and will scrap metrics from exporter.
-
 
 ## Deploy and configure Prometheus server
 
@@ -248,7 +247,6 @@ $ kubectl get clusterrolebinding prometheus-server -n demo
 NAME                AGE
 prometheus-server   2m
 ```
-
 
 #### In RBAC \*not\* enabled cluster
 

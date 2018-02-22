@@ -8,7 +8,7 @@ This tutorial will show you how to use KubeDB to run a Elasticsearch database.
   <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
 </p>
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -182,6 +182,7 @@ Here, we create a Elasticsearch database with single node. This single node will
 To learn how to configure Elasticsearch cluster, click [here](/docs/guides/elasticsearch/clustering/topology.md).
 
 Please note that KubeDB operator has created two new Secrets for Elasticsearch object.
+
 1. `quick-elasticsearch-auth` for storing the passwords and [search-guard](https://github.com/floragunncom/search-guard) configuration.
 2. `quick-elasticsearch-cert` for storing certificates used for SSL connection.
 
@@ -218,14 +219,15 @@ type: Opaque
 > Note: Auth Secret name format: `{elasticsearch-name}-auth`
 
 This Secret contains:
-* `ADMIN_PASSWORD` password for `admin` user used in search-guard configuration as internal user.
-* `READALL_PASSWORD` password for `readall` user with read-only permission only.
-* Followings are used as search-guard configuration
-    * `sg_action_groups.yml`
-    * `sg_config.yml`
-    * `sg_internal_users.yml`
-    * `sg_roles.yml`
-    * `sg_roles_mapping.yml`
+
+- `ADMIN_PASSWORD` password for `admin` user used in search-guard configuration as internal user.
+- `READALL_PASSWORD` password for `readall` user with read-only permission only.
+- Followings are used as search-guard configuration
+    - `sg_action_groups.yml`
+    - `sg_config.yml`
+    - `sg_internal_users.yml`
+    - `sg_roles.yml`
+    - `sg_roles_mapping.yml`
 
 See details about [search-guard configuration](/docs/guides/elasticsearch/search-guard/configuration.md)
 

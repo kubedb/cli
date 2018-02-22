@@ -1,10 +1,10 @@
 > New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
 
-## Elasticsearch Topology
+# Elasticsearch Topology
 
 KubeDB Elasticsearch supports multi-node database cluster.
 
-### Before You Begin
+## Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
@@ -135,6 +135,7 @@ spec:
 ```
 
 Here,
+
 - `spec.topology` point to the number of pods we want as dedicated `master`, `client` and `data` nodes and also specify prefix for their StatefulSet name
 
 Lets create this Elasticsearch object
@@ -157,7 +158,7 @@ master-topology-es   1         1         2m        kubedb.com/kind=Elasticsearch
 
 Three StatefulSets are created
 
-* client-topology-es
+- client-topology-es
 
     ```yaml
     spec:
@@ -168,10 +169,11 @@ Three StatefulSets are created
     ```
 
     This configuration creates a StatefulSet named `client-topology-es` for client node
+
     - `spec.replicas` is set to `2`. Two dedicated nodes is created as client.
     - Label `node.role.client: set` is added in Pods
 
-* data-topology-es
+- data-topology-es
 
     ```yaml
     spec:
@@ -182,9 +184,10 @@ Three StatefulSets are created
     ```
 
     This configuration creates a StatefulSet named `data-topology-es` for data node
+
     - `spec.replicas` is set to `2`. Two dedicated nodes is created for data.
 
-* master-topology-es
+- master-topology-es
 
     ```yaml
     spec:
@@ -195,6 +198,7 @@ Three StatefulSets are created
     ```
 
     This configuration creates a StatefulSet named `data-topology-es` for master node
+
     - `spec.replicas` is set to `1`. One dedicated node is created as master.
     - Label `node.role.master: set` is added in Pods
 
@@ -282,6 +286,17 @@ Two services are also created for this Elasticsearch object.
 
  - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
+
+## Cleaning up
+
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete es,drmn,snap -n demo --all --force
+
+$ kubectl delete ns demo
+namespace "demo" deleted
+```
 
 ## Next Steps
 

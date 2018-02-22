@@ -1,10 +1,10 @@
 > Don't know how backup works?  Check [tutorial](/docs/guides/elasticsearch/snapshot/instant_backup.md) on Instant Backup.
 
-## Database Scheduled Snapshots
+# Database Scheduled Snapshots
 
 KubeDB supports taking periodic backups for Elasticsearch database.
 
-### Before you begin
+## Before you begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 

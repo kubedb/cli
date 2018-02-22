@@ -1,10 +1,10 @@
 > New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
 
-## Use TLS certificate
+# Use TLS certificate
 
 If `enableSSL` is set to be true in Elasticsearch object, only HTTPS calls are allowed to database server.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).

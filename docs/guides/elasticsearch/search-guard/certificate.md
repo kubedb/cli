@@ -1,6 +1,6 @@
 > New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
 
-## TLS certificates
+# TLS certificates
 
 In KubeDB Elasticsearch, keystore and truststore files in JKS format are used instead of certificates and private keys in PEM format.
 
@@ -15,7 +15,7 @@ But, KubeDB distinguishes between the following types of keystore for security p
 - **sgadmin keystore** are used as admin client that have elevated rights to perform administrative tasks.
 
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -105,9 +105,11 @@ You need to follow these steps
     ```console
     $ openssl req -x509 -config openssl-ca.ini -newkey rsa:4096 -sha256 -nodes -out root.pem -keyout root-key.pem -batch -passin "pass:$KEY_PASS"
     ```
+
     Here,
-    * `root-key.pem` holds Private Key
-    * `root.key`holds CA Certificate
+
+    - `root-key.pem` holds Private Key
+    - `root.key`holds CA Certificate
 
 
 4. Finally, import certificate as keystore
@@ -116,7 +118,8 @@ You need to follow these steps
     $ keytool -import -file root.pem -keystore root.jks -storepass $KEY_PASS -srcstoretype pkcs12 -noprompt
     ```
     Here,
-    * `root.jks` is truststore for Elasticsearch
+
+    - `root.jks` is truststore for Elasticsearch
 
 
 ## Generate keystore
@@ -175,8 +178,8 @@ commonName             = supplied
 
 Here,
 
-* `certificate` denotes CA certificate path
-* `private_key` denotes CA key path
+- `certificate` denotes CA certificate path
+- `private_key` denotes CA key path
 
 Also, you need to create a `index.txt` file and `serial.txt` file with value `01`
 
@@ -212,7 +215,7 @@ RID.1 = 1.2.3.4.5.5
 
 Here,
 
-* `RID.1=1.2.3.4.5.5` is used in node certificate. All certificates with registeredID `1.2.3.4.5.5` is considered as valid certificate for
+- `RID.1=1.2.3.4.5.5` is used in node certificate. All certificates with registeredID `1.2.3.4.5.5` is considered as valid certificate for
 transport layer.
 
 Now run following commands
@@ -254,7 +257,7 @@ DNS.2 = sg-elasticsearch.demo.svc
 
 Here,
 
-* `sg-elasticsearch` is used as a Common Name so that host `sg-elasticsearch` is verified as valid Client.
+- `sg-elasticsearch` is used as a Common Name so that host `sg-elasticsearch` is verified as valid Client.
 
 Now run following commands
 
@@ -295,7 +298,7 @@ DNS.1 = localhost
 
 Here,
 
-* `sgadmin` is used as Common Name. Because in searchguard, certificate with `sgadmin` common name is considered as admin certificate.
+- `sgadmin` is used as Common Name. Because in searchguard, certificate with `sgadmin` common name is considered as admin certificate.
 
 Now run following commands
 
@@ -306,6 +309,7 @@ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions si
 openssl pkcs12 -export -certfile root.pem -inkey sgadmin-key.pem -in sgadmin.pem -password "pass:$KEY_PASS" -out sgadmin.pkcs12
 keytool -importkeystore -srckeystore sgadmin.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore sgadmin.jks -deststoretype pkcs12
 ```
+
 Generated `sgadmin.pkcs12` will be used as keystore for admin usage.
 
 ## Create Secret

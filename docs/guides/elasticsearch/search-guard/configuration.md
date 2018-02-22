@@ -1,6 +1,6 @@
 > New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
 
-## Search Guard Configuration
+# Search Guard Configuration
 
 Search Guard configuration enables basic flow as follows:
 
@@ -11,7 +11,7 @@ Search Guard configuration enables basic flow as follows:
 - Search Guard determines the permissions associated with the Search Guard role and
 decides whether the action the user wants to perform is allowed or not.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
