@@ -423,6 +423,7 @@ curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console

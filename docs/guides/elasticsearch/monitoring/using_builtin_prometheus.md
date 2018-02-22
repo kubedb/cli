@@ -242,6 +242,7 @@ $ kubectl get clusterrole prometheus-server -n demo
 NAME                AGE
 prometheus-server   1m
 ```
+
 ```console
 $ kubectl get clusterrolebinding prometheus-server -n demo
 NAME                AGE

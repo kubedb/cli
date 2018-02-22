@@ -278,6 +278,7 @@ snapshot "instant-snapshot" deleted
 Once Snapshot object is deleted, you can't revert this process and snapshot data from storage will be deleted permanently.
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console

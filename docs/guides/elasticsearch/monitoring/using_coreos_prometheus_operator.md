@@ -76,6 +76,7 @@ NAME                  AGE
 prometheus            1m
 prometheus-operator   5m
 ```
+
 ```console
 $ kubectl get clusterrolebindings
 NAME                  AGE

@@ -181,6 +181,7 @@ If certificate Secret is not provided when creating Elasticsearch, one will be c
 > Note: Do not need to provide client certificate. Client is verified by valid host name.
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console

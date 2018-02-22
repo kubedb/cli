@@ -117,6 +117,7 @@ You need to follow these steps
     ```console
     $ keytool -import -file root.pem -keystore root.jks -storepass $KEY_PASS -srcstoretype pkcs12 -noprompt
     ```
+
     Here,
 
     - `root.jks` is truststore for Elasticsearch
@@ -378,6 +379,7 @@ sg-elasticsearch    5.6       Running   33m
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
