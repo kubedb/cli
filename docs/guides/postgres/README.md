@@ -37,11 +37,13 @@
 <br/>
 
 ## Life Cycle of Postgres in KubeDB
+
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="581" height="362">
 </p>
 
 ## User Guide
+
 - [Quickstart PostgreSQL](/docs/guides/postgres/quickstart/quickstart.md) with KubeDB Operator.
 - Take [Instant Snapshot](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB.
 - [Schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md) of PostgreSQL database using KubeDB.

@@ -4,7 +4,7 @@
 
 KubeDB operator maintains another Custom Resource Definition (CRD) for database backups called Snapshot. Snapshot object is used to take backup or restore from a backup.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -98,7 +98,7 @@ Only Postgres controller will handle this Snapshot object.
 > Note: Snapshot and Secret objects must be in the same namespace as Postgres, `p1`, in our case.
 
 
-##### Snapshot Storage Secret
+#### Snapshot Storage Secret
 
 Storage Secret should contain credentials that will be used to access storage destination.
 In this tutorial, snapshot data will be stored in a Google Cloud Storage (GCS) bucket.
@@ -136,7 +136,7 @@ metadata:
 type: Opaque
 ```
 
-##### Snapshot Storage Backend
+#### Snapshot Storage Backend
 
 KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes) as snapshot storage backend.
 In this tutorial, _GCS_ backend is used.
@@ -263,6 +263,7 @@ snapshot "instant-snapshot" deleted
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -271,6 +272,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Setup [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) in PostgreSQL using `wal-g`
 - Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
 - Learn about initializing [PostgreSQL from KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).

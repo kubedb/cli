@@ -1,10 +1,10 @@
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-## Using private Docker registry
+# Using private Docker registry
 
 KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Postgres database using private Docker images.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -127,6 +127,7 @@ $ kubectl delete ns demo
 If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
 
 ## Next Steps
+
 - Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.
 - Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).

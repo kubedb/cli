@@ -1,13 +1,15 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
-## Running PostgreSQL
+# Running PostgreSQL
+
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="581" height="362">
 </p>
 
-### Before You Begin
+## Before You Begin
+
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
@@ -80,9 +82,7 @@ spec:
 Here,
 
  - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
-
  - `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
-
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
  created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
  If no storage spec is given, an `emptyDir` is used.
@@ -171,7 +171,6 @@ quick-postgres-primary   ClusterIP   10.96.98.122   <none>        5432/TCP   5m
 Two services for each Postgres object.
 
  - Service *`quick-postgres`* targets all Pods created by StatefulSet
-
  - Service *`quick-postgres-primary`* targets only one Pod which is acting as *primary* server
 
 KubeDB supports PostgreSQL clustering where Pod can be either *primary* or *standby*.
@@ -310,7 +309,6 @@ status:
 Here,
 
  - `spec.origin` contains original Postgres object.
-
  - `status.phase` points to the current database state `Paused`.
 
 ## Resume DormantDatabase
@@ -378,6 +376,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.
 - Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).

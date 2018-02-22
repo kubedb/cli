@@ -2,11 +2,11 @@
 
 > Don't know how to take continuous backup?  Check [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
-## Postgres Initialization
+# Postgres Initialization
 
 KubeDB supports PostgreSQL database initialization. When you create a new Postgres object, you can provide existing WAL files to restore from by "replaying" the log entries.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -25,7 +25,6 @@ demo    Active  5s
 ```
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
-
 
 ## Create Postgres with WAL Source
 
@@ -88,11 +87,13 @@ $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/exam
 validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/replay-postgres.yaml"
 postgres "replay-postgres" created
 ```
+
 This will create a new database with existing _basebackup_ and will restore from archived _wal_ files.
 
 When this database is ready, **wal-g** takes a _basebackup_ and uploads it to cloud storage defined by storage backend in `spec.archiver`.
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -101,6 +102,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using_builtin_prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using_coreos_prometheus_operator.md).

@@ -4,7 +4,7 @@
 
 This tutorial will show you how to monitor PostgreSQL database using [Prometheus](https://prometheus.io/).
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -250,7 +250,6 @@ service "prometheus-service" created
 
 Watch the Deployment’s Pods.
 
-
 ```console
 $ kubectl get pods -n demo --selector=app=prometheus-server --watch
 NAME                                 READY     STATUS              RESTARTS   AGE
@@ -279,6 +278,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -287,6 +287,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using_coreos_prometheus_operator.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

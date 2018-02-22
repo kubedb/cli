@@ -1,10 +1,10 @@
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
-## Database Scheduled Snapshots
+# Database Scheduled Snapshots
 
 KubeDB supports taking periodic backups for PostgreSQL database.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -24,7 +24,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-### Create Postgres with BackupSchedule
+## Create Postgres with BackupSchedule
 
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
 KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure,
@@ -96,7 +96,7 @@ NAME                           DATABASE          STATUS      AGE
 scheduled-pg-20180208-105341   pg/scheduled-pg   Succeeded   32s
 ```
 
-### Update Postgres to disable periodic backups
+## Update Postgres to disable periodic backups
 
 If you already have a running Postgres that takes backup periodically, you can disable that by removing BackupSchedule field.
 
@@ -112,7 +112,7 @@ spec:
 #      bucket: kubedb
 ```
 
-### Update Postgres to enable periodic backups
+## Update Postgres to enable periodic backups
 
 If you already have a running Postgres, you can enable periodic backups by adding BackupSchedule.
 
@@ -137,6 +137,7 @@ script-postgres-20180208-105625   pg/script-postgres   Succeeded   1m
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -145,6 +146,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.
 - Learn about initializing [PostgreSQL from KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).
 - Setup [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) in PostgreSQL using `wal-g`

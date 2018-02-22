@@ -38,6 +38,7 @@ In this examples:
 A standby server that can accept connections and serves read-only queries is called a *hot standby* server.
 
 The following Postgres will create PostgreSQL cluster with *hot standby* servers.
+
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
@@ -79,7 +80,7 @@ There are many approaches available to scale PostgreSQL beyond running on a sing
 
 Now KubeDB supports only following one:
 
-* **Streaming Replication** provides *asynchronous* replication to one or more *standby* servers.
+- **Streaming Replication** provides *asynchronous* replication to one or more *standby* servers.
 These *standby* servers can also be *hot standby* server. This is the fastest type of replication available as
 WAL data is sent immediately rather than waiting for a whole segment to be produced and shipped.
 

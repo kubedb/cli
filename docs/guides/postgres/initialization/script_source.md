@@ -1,10 +1,10 @@
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-## Initialize Postgres with Script
+# Initialize Postgres with Script
 
 KubeDB supports PostgreSQL database initialization.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -70,7 +70,6 @@ validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/po
 postgres "script-postgres" created
 ```
 
-
 ```console
 $ kubedb describe pg -n demo script-postgres -S=false -W=false
 Name:           script-postgres
@@ -134,6 +133,7 @@ select * from pg_catalog.pg_tables where schemaname = 'data';
 We can see TABLE `dashboard` in `data` Schema which is created for initialization.
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -142,6 +142,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.
 - Learn about initializing [PostgreSQL from KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).
 - Want to setup PostgreSQL cluster? Check how to [configure Highly Available PostgreSQL Cluster](/docs/guides/postgres/clustering/ha_cluster.md)

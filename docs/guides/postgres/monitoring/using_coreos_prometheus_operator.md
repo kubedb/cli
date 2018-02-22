@@ -1,10 +1,10 @@
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-## Using Prometheus (CoreOS operator) with KubeDB
+# Using Prometheus (CoreOS operator) with KubeDB
 
 This tutorial will show you how to monitor PostgreSQL using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -28,7 +28,7 @@ This tutorial assumes that you are familiar with Postgres concept.
 
 ## Deploy CoreOS-Prometheus Operator
 
-#### In RBAC enabled cluster
+### In RBAC enabled cluster
 
 If RBAC is enabled, Run the following command to prepare your cluster for this tutorial:
 
@@ -85,7 +85,7 @@ prometheus            1m
 prometheus-operator   5m
 ```
 
-#### In RBAC *not* enabled cluster
+### In RBAC *not* enabled cluster
 
 If RBAC is not enabled, Run the following command to prepare your cluster for this tutorial:
 
@@ -123,7 +123,7 @@ service "prometheus" created
 
 ```
 
-### Prometheus Dashboard
+#### Prometheus Dashboard
 
 Now open prometheus dashboard on browser by running `minikube service prometheus-service -n demo`.
 
@@ -195,6 +195,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 </p>
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console

@@ -1,10 +1,10 @@
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
-## Initialize Postgres with Snapshot
+# Initialize Postgres with Snapshot
 
 KubeDB supports PostgreSQL database initialization.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -30,7 +30,7 @@ So, we need a Snapshot object in Succeeded phase to perform this initialization 
 
 Follow these steps to prepare this tutorial
 
-* Create Postgres object `script-postgres`, if not exists.
+- Create Postgres object `script-postgres`, if not exists.
 
     ```console
     $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
@@ -44,7 +44,8 @@ Follow these steps to prepare this tutorial
     script-postgres     Running   57s
     ```
 
-* Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
+- Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
+
     ```console
     $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
     $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
@@ -54,14 +55,13 @@ Follow these steps to prepare this tutorial
     secret "gcs-secret" created
     ```
 
-* Take an instant backup, if not available. Follow [this](/docs/guides/postgres/snapshot/instant_backup.md#instant-backup).
+- Take an instant backup, if not available. Follow [this](/docs/guides/postgres/snapshot/instant_backup.md#instant-backup).
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
 NAME               DATABASE             STATUS      AGE
 instant-snapshot   pg/script-postgres   Succeeded   39s
 ```
-
 
 ## Create Postgres with Snapshot source
 
@@ -194,6 +194,7 @@ We can see TABLE `dashboard` in `data` Schema which is created for initializatio
 </p>
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -202,6 +203,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
 - Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
 - Want to setup PostgreSQL cluster? Check how to [configure Highly Available PostgreSQL Cluster](/docs/guides/postgres/clustering/ha_cluster.md)

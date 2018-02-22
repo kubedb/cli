@@ -1,8 +1,10 @@
-## Streaming Replication
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
+
+# Streaming Replication
 
 Streaming Replication provides *asynchronous* replication to one or more *standby* servers.
 
-### Before You Begin
+## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
@@ -208,7 +210,7 @@ You can see here, now `ha-postgres-0` and `ha-postgres-2` are streaming asynchro
 
 [//]: # (If you want to know how this failover process works, [read here])
 
-### Streaming Replication with `hot standby`
+## Streaming Replication with `hot standby`
 
 Streaming Replication also works with one or more *hot standby* servers.
 
@@ -233,10 +235,10 @@ spec:
 
 In this examples:
 
-* The Postgres create three PostgreSQL servers, indicated by the **`replicas`** field.
-* One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
+- The Postgres create three PostgreSQL servers, indicated by the **`replicas`** field.
+- One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
 
-###### `hot standby` setup
+##### `hot standby` setup
 
 Following parameters are set in `postgresql.conf` for *standby* server
 
@@ -308,6 +310,7 @@ postgres=# select pg_last_xlog_receive_location();
 So, you can see here that you can connect to *hot standby* and it only accepts read-only queries.
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
@@ -316,6 +319,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Setup [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) in PostgreSQL using `wal-g`
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using_builtin_prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using_coreos_prometheus_operator.md).
