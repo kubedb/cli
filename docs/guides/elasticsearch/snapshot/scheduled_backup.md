@@ -23,19 +23,6 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-##### Create Snapshot storage Secret
-
-In this tutorial, we need a storage Secret for backup process
-
-```console
-$ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
-$ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-$ kubectl create secret -n demo generic gcs-secret \
-    --from-file=./GOOGLE_PROJECT_ID \
-    --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "gcs-secret" created
-```
-
 ## Create Elasticsearch with BackupSchedule
 
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
