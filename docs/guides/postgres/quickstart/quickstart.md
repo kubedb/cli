@@ -1,13 +1,13 @@
 > New to KubeDB? Please start [here](/docs/guides/README.md).
 
-# Running PostgreSQL
+## Running PostgreSQL
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="581" height="362">
 </p>
 
-## Before You Begin
+### Before You Begin
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
 If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 

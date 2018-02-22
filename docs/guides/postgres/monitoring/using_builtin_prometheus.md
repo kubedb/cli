@@ -1,8 +1,30 @@
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart.md).
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-# Using Prometheus (CoreOS operator) with KubeDB
+# Using Prometheus with KubeDB
 
 This tutorial will show you how to monitor PostgreSQL database using [Prometheus](https://prometheus.io/).
+
+### Before You Begin
+
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+```console
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
+This tutorial assumes that you are familiar with Postgres concept.
 
 ## Monitor with builtin Prometheus
 
@@ -31,22 +53,20 @@ Here,
 
  - `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
 
+Run following command to create example above.
+
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
 validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml"
 postgres "builtin-prom-postgres" created
 ```
 
-KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Postgres Exporter` and
-will receive metrics from exporter.
+KubeDB operator will configure its service once the Postgres is successfully running.
 
-You can verify it running the following commands:
-
-```yaml
-$ kubectl get svc -n demo --selector="kubedb.com/name=builtin-prom-postgres"
-NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
-builtin-prom-postgres           ClusterIP   10.107.124.174   <none>        56790/TCP   16s
-builtin-prom-postgres-primary   ClusterIP   10.96.250.3      <none>        5432/TCP    16s
+```console
+$ kubedb get pg -n demo builtin-prom-postgres
+NAME                    STATUS    AGE
+builtin-prom-postgres   Running   5m
 ```
 
 Lets describe Service `builtin-prom-postgres`
@@ -70,13 +90,15 @@ Endpoints:         172.17.0.8:56790
 Session Affinity:  None
 ```
 
-You can see that the service contains following annotations. The prometheus server will discover the exporter using these specifications.
+You can see that the service contains following annotations.
 
 ```console
 prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
 prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
+
+The prometheus server will discover the service endpoint aka Postgres Exporter using these specifications and will scrap metrics from exporter.
 
 ## Deploy and configure Prometheus Server
 
@@ -85,7 +107,8 @@ and if it is configured in a way that it can discover service endpoints, no extr
 
 If there is no existing Prometheus server running, rest of this tutorial will create a Prometheus server with appropriate configuration.
 
-The configuration file of Prometheus server will be provided by ConfigMap. The below config map will be created
+The configuration file of Prometheus server will be provided by ConfigMap. Create following ConfigMap with Prometheus configuration.
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -132,6 +155,7 @@ data:
         target_label: kubernetes_name
 ```
 
+Create above ConfigMap
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
@@ -179,6 +203,7 @@ spec:
 ```
 
 #### In RBAC enabled cluster
+
 If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes
 
 ```console
@@ -190,20 +215,28 @@ deployment "prometheus-server" created
 service "prometheus-service" created
 ```
 
-Verify RBAC stuffs
+Watch the Deployment’s Pods.
 
 ```console
-$ kubectl get clusterrole,clusterrolebinding,sa prometheus-server -n demo
-NAME                             AGE
-clusterroles/prometheus-server   1m
-
-NAME                                    AGE
-clusterrolebindings/prometheus-server   1m
-
-NAME                   SECRETS   AGE
-sa/prometheus-server   1         1m
+$ kubectl get pods -n demo --selector=app=prometheus-server --watch
+NAME                                 READY     STATUS              RESTARTS   AGE
+prometheus-server-6b8476d6c5-kx78z   0/1       ContainerCreating   0          1m
+prometheus-server-6b8476d6c5-kx78z   1/1       Running   0         1m
 ```
 
+And also verify RBAC stuffs
+
+```console
+$ kubectl get clusterrole prometheus-server -n demo
+NAME                AGE
+prometheus-server   1m
+```
+
+```console
+$ kubectl get clusterrolebinding prometheus-server -n demo
+NAME                AGE
+prometheus-server   2m
+```
 
 #### In RBAC \*not\* enabled cluster
 
@@ -213,6 +246,16 @@ If RBAC *is not* enabled, Run the following command to deploy prometheus in kube
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 deployment "prometheus-server" created
 service "prometheus-service" created
+```
+
+Watch the Deployment’s Pods.
+
+
+```console
+$ kubectl get pods -n demo --selector=app=prometheus-server --watch
+NAME                                 READY     STATUS              RESTARTS   AGE
+prometheus-server-6b8476d6c5-kx78z   0/1       ContainerCreating   0          1m
+prometheus-server-6b8476d6c5-kx78z   1/1       Running   0         1m
 ```
 
 #### Prometheus Dashboard
@@ -233,6 +276,15 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
     <img alt="builtin-prom-postgres"  src="/docs/images/postgres/builtin-prom-postgres.png">
   </kbd>
 </p>
+
+
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using_coreos_prometheus_operator.md).

@@ -1,4 +1,4 @@
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart.md).
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 ## Configuring Highly Available PostgreSQL Cluster
 

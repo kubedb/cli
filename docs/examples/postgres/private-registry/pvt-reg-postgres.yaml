@@ -13,4 +13,4 @@ spec:
       requests:
         storage: 50Mi
   imagePullSecrets:
-    - name: private-registry
+    - name: myregistrykey

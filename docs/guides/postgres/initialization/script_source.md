@@ -1,12 +1,32 @@
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart.md).
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-# Postgres Initialization
+## Initialize Elasticsearch with Script
 
 KubeDB supports PostgreSQL database initialization.
 
+### Before You Begin
+
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+```console
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
 This tutorial will show you how to use KubeDB to initialize a PostgreSQL database with supported script.
 
-## Script Source
+## Create Postgres with script source
 
 PostgreSQL database can be initialized by scripts provided to it.
 
@@ -49,7 +69,6 @@ $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/do
 validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/script-postgres.yaml"
 postgres "script-postgres" created
 ```
-
 
 
 ```console
@@ -113,6 +132,14 @@ select * from pg_catalog.pg_tables where schemaname = 'data';
  data       | dashboard | postgres   | t          | f        | f           | f
 
 We can see TABLE `dashboard` in `data` Schema which is created for initialization.
+
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 - Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.

@@ -1,12 +1,33 @@
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart.md).
+> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 > Don't know how to take continuous backup?  Check [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
-# Postgres Initialization
+## Postgres Initialization
 
 KubeDB supports PostgreSQL database initialization. When you create a new Postgres object, you can provide existing WAL files to restore from by "replaying" the log entries.
 
-## PostgreSQL WAL Source
+### Before You Begin
+
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+```console
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
+
+## Create Postgres with WAL Source
 
 You can create a new database from archived WAL files using [wal-g ](https://github.com/wal-g/wal-g).
 
@@ -67,6 +88,14 @@ postgres "replay-postgres" created
 This will create a new database with existing _basebackup_ and will restore from archived _wal_ files.
 
 When this database is ready, **wal-g** takes a _basebackup_ and uploads it to cloud storage defined by storage backend in `spec.archiver`.
+
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).

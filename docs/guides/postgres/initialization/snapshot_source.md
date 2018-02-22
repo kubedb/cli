@@ -1,24 +1,69 @@
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
-# Postgres Initialization
+# Initialize Elasticsearch with Snapshot
 
 KubeDB supports PostgreSQL database initialization.
 
 ### Before You Begin
 
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+```console
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
 This tutorial will show you how to use KubeDB to initialize a PostgreSQL database with existing snapshot data.
 
-So, lets create a Postgres and take an instant backup following [this tutorial](/docs/guides/postgres/snapshot/instant_backup.md).
+So, we need a Snapshot object in Succeeded phase to perform this initialization .
+
+Follow these steps to prepare this tutorial
+
+* Create Postgres object `script-postgres`, if not exists.
+
+    ```console
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/script-postgres.yaml
+    validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/script-postgres.yaml"
+    postgres "script-postgres" created
+    ```
+
+    ```console
+    $ kubedb get pg -n demo script-postgres
+    NAME                STATUS    AGE
+    script-postgres     Running   57s
+    ```
+
+* Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
+    ```console
+    $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
+    $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+    $ kubectl create secret -n demo generic gcs-secret \
+        --from-file=./GOOGLE_PROJECT_ID \
+        --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+    secret "gcs-secret" created
+    ```
+
+* Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/postgres/snapshot/instant_backup.md).
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
-NAME               DATABASE             STATUS    AGE
-instant-snapshot   pg/script-postgres   Running   10m
+NAME               DATABASE             STATUS      AGE
+instant-snapshot   pg/script-postgres   Succeeded   39s
 ```
 
-We will create a new PostgreSQL database initialized with Snapshot `instant-snapshot`.
 
-## Snapshot Source
+## Initialize with Snapshot source
 
 Specify the Snapshot `name` and `namespace` in the `spec.init.snapshotSource` field of your new Postgres object.
 
@@ -148,6 +193,13 @@ We can see TABLE `dashboard` in `data` Schema which is created for initializatio
   </kbd>
 </p>
 
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).

@@ -2,6 +2,28 @@
 
 Streaming Replication provides *asynchronous* replication to one or more *standby* servers.
 
+### Before You Begin
+
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+
+Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+
+To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+```console
+$ kubectl create ns demo
+namespace "demo" created
+
+$ kubectl get ns demo
+NAME    STATUS  AGE
+demo    Active  5s
+```
+
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
+## Create Postgres with Streaming replication
+
 The documentation below demonstrates KubeDB Postgres for Streaming Replication
 
 ```yaml
@@ -284,6 +306,14 @@ postgres=# select pg_last_xlog_receive_location();
 ```
 
 So, you can see here that you can connect to *hot standby* and it only accepts read-only queries.
+
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
 
 ## Next Steps
 - Setup [Continuous Archiving](/docs/guides/postgres/snapshot/continuous_archiving.md) in PostgreSQL using `wal-g`
