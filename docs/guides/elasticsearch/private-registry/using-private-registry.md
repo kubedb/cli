@@ -76,7 +76,7 @@ Below is the Elasticsearch CRD object we will create in this tutorial.
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: quick-elasticsearch
+  name: pvt-reg-elasticsearch
   namespace: demo
 spec:
   version: 5.6
@@ -109,7 +109,7 @@ pvt-reg-elasticsearch   5.6       Running   33m
 
 ## Snapshot
 
-We don't need to add `imagePullSecret` for `snapshot` objects. Just create Snapshot object and KubeDB operator will reuse the `ImagePullSecret` from Elasticsearch object.
+We don't need to add `imagePullSecret` for Snapshot objects. Just create Snapshot object and KubeDB operator will reuse the `ImagePullSecret` from Elasticsearch object.
 
 ## Cleaning up
 
@@ -117,7 +117,6 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubedb delete es,drmn,snap -n demo --all --force
-
 $ kubectl delete ns demo
 ```
 
@@ -131,6 +130,5 @@ $ kubectl delete ns demo
 - Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/elasticsearch/monitoring/using_coreos_prometheus_operator.md).
 - Detail concepts of [Elasticsearch object](/docs/concepts/databases/elasticsearch.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Use [private Docker registry](/docs/guides/elasticsearch/private-registry/using-private-registry.md) to deploy Elasticsearch with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
