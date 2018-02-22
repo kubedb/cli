@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-server
@@ -46,3 +46,4 @@ spec:
   ports:
     - port: 9090
       targetPort: 9090
+      nodePort: 30901

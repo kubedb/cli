@@ -165,14 +165,14 @@ Since RBAC is enabled, a ClusterRole, ServiceAccount and ClusterRoleBinding with
 
 ```yaml
 $ kubectl get role -n demo p1 -o yaml
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   creationTimestamp: 2017-07-18T20:35:43Z
   name: p1
   namespace: demo
   resourceVersion: "1308"
-  selfLink: /apis/rbac.authorization.k8s.io/v1beta1/namespaces/demo/roles/p1
+  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/demo/roles/p1
   uid: ab72299c-6bf8-11e7-ab55-080027815c31
 rules:
 - apiGroups:
@@ -206,14 +206,14 @@ secrets:
 - name: p1-token-qxdtf
 
 $ kubectl get rolebindings -n demo p1 -o yaml
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   creationTimestamp: 2017-07-18T20:35:43Z
   name: p1
   namespace: demo
   resourceVersion: "1310"
-  selfLink: /apis/rbac.authorization.k8s.io/v1beta1/namespaces/demo/rolebindings/p1
+  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/demo/rolebindings/p1
   uid: ab7d1eb4-6bf8-11e7-ab55-080027815c31
 roleRef:
   apiGroup: rbac.authorization.k8s.io

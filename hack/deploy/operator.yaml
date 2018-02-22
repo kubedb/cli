@@ -1,0 +1,111 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kubedb-operator
+  namespace: ${KUBEDB_NAMESPACE}
+  labels:
+    app: kubedb
+  initializers:
+    pending: []
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubedb
+  template:
+    metadata:
+      labels:
+        app: kubedb
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      serviceAccountName: ${KUBEDB_SERVICE_ACCOUNT}
+      imagePullSecrets: [${KUBEDB_IMAGE_PULL_SECRET}]
+      containers:
+      - name: operator
+        image: ${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0-beta.0
+        args:
+        - run
+        - --v=3
+        - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
+        - --exporter-tag=0.8.0-beta.0
+        - --governing-service=kubedb
+        - --rbac=${KUBEDB_ENABLE_RBAC}
+        env:
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+      - name: apiserver
+        image: $KUBEDB_DOCKER_REGISTRY/apiserver:0.8.0-beta.0
+        args:
+        - apiserver
+        - --v=3
+        - --secure-port=8443
+        - --audit-log-path=-
+        - --tls-cert-file=/var/serving-cert/tls.crt
+        - --tls-private-key-file=/var/serving-cert/tls.key
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - mountPath: /var/serving-cert
+          name: serving-cert
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8443
+            scheme: HTTPS
+      volumes:
+      - name: serving-cert
+        secret:
+          defaultMode: 420
+          secretName: stash-apiserver-cert
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+---
+# kube lacks the service serving cert signer, so provide a manual secret for it
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubedb-apiserver-cert
+  namespace: ${KUBEDB_NAMESPACE}
+  labels:
+    app: kubedb
+type: kubernetes.io/tls
+data:
+  tls.crt: ${TLS_SERVING_CERT}
+  tls.key: ${TLS_SERVING_KEY}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubedb-operator
+  namespace: ${KUBEDB_NAMESPACE}
+  labels:
+    app: kubedb
+spec:
+  ports:
+  - name: api
+    port: 443
+    targetPort: 8443
+  selector:
+    app: kubedb
+---
+# register as aggregated apiserver
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: v1alpha1.admission.kubedb.com
+  labels:
+    app: kubedb
+spec:
+  caBundle: ${SERVICE_SERVING_CERT_CA}
+  group: admission.kubedb.com
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: kubedb-operator
+    namespace: ${KUBEDB_NAMESPACE}
+  version: v1alpha1

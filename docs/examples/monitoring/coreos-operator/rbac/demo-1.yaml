@@ -1,4 +1,4 @@
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: prometheus
@@ -16,16 +16,14 @@ rules:
   verbs: ["get"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
-
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: prometheus
   namespace: demo
-
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus
@@ -37,7 +35,6 @@ subjects:
 - kind: ServiceAccount
   name: prometheus
   namespace: demo
-
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -53,7 +50,6 @@ spec:
   resources:
     requests:
       memory: 400Mi
-
 ---
 apiVersion: v1
 kind: Service

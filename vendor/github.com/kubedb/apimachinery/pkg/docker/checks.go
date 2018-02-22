@@ -1,11 +1,11 @@
 package docker
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/appscode/go/ioutil"
 	docker "github.com/heroku/docker-registry-client/registry"
+	"github.com/pkg/errors"
 )
 
 const (

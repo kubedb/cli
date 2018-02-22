@@ -1,5 +1,5 @@
-hash: 524d47ba2b9ae54115ade7c896a4fb9ca17c77d3db633fe10daf87a9c35f8df7
-updated: 2018-01-29T22:07:06.837426641-08:00
+hash: a0bbe9041555b0f2f28bf12a06e143bef8b5de12e1a09976d1266859df1bb483
+updated: 2018-02-17T12:06:17.326877665-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 99dbf420807d9459b63d1d0bf702537bb7aa976f
+  version: 8367769380cf93a12b381d957941ddf2a19d0356
   subpackages:
   - analytics
   - context
@@ -23,18 +23,14 @@ imports:
   - types
   - version
 - name: github.com/appscode/kube-mon
-  version: 6c843f8c6418d421ec6e7d62d7840b114e043334
+  version: 69036cc40b44a7ba97be91d530f421e3adaba407
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: a035b515d68bca793b2beacdf52e19a02f914017
+  version: 579ddb8cc946c9e5f09d59863a3c5fe27cdc56f5
   subpackages:
-  - core/v1
   - meta
-  - rbac/v1beta1
   - tools/analytics
-- name: github.com/appscode/mergo
-  version: e3000cb3d28c72b837601cac94debd91032d19fe
 - name: github.com/appscode/osm
   version: 8175dd853f6f3d4530b14018901c79140e305f3a
   subpackages:
@@ -174,6 +170,8 @@ imports:
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
   version: f6a740d52f961c60348ebb109adde9f4635d7540
+- name: github.com/fsnotify/fsnotify
+  version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
 - name: github.com/ghodss/yaml
   version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
 - name: github.com/go-ini/ini
@@ -192,7 +190,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 44145f04b68cf362d9c4df2182967c2275eaefed
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -200,17 +198,15 @@ imports:
 - name: github.com/golang/protobuf
   version: 1643683e1b54a9e88ad26d98f81400c8c9d9f4f9
   subpackages:
-  - jsonpb
   - proto
   - ptypes
   - ptypes/any
   - ptypes/duration
-  - ptypes/struct
   - ptypes/timestamp
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 97aa668b73e764ccdd786bc3ccd2edffe621150e
+  version: 3af367b6b30c263d47e8895973edcca9a49cf029
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -284,44 +280,40 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/kubedb/apimachinery
-  version: 0de29010181b4b361fb210d5a85de7a4ff56e9df
+  version: 89214d2501bcf65be0ccfa067086d9dc5f0c511d
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
-  - client/scheme
-  - client/typed/kubedb/v1alpha1
+  - client/clientset/versioned/scheme
+  - client/clientset/versioned/typed/kubedb/v1alpha1
   - pkg/docker
   - pkg/storage
   - pkg/validator
 - name: github.com/kubedb/elasticsearch
-  version: b440c174990c33798231df2124aea3810a262acf
+  version: 4867374fc0b4a3a4134dc1e887108cc2727d529f
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/memcached
-  version: 08191a9cdbd143cebcb343c969d50b6420e19542
+  version: 9eb51f1b2ef822927e62ae6aa4b0571f1530a95f
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mongodb
-  version: de8f30be6c914ead85d25596836e7fb5313356f5
+  version: b28b7ca3799c61c4ecac5024b7ebd64320f1f78c
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/mysql
-  version: 6db2ae8d66b38c00106969bc801b247033e129dd
+  version: 37a1e4fd52b5e77e9682ae4dc6acb2b6b6a35c95
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/postgres
-  version: d04e61ec820c48c076828471479d45ceee29ac9a
+  version: 848f17aa1b71e96adc39c2a2199e43751933b0f7
   subpackages:
   - pkg/docker
   - pkg/validator
 - name: github.com/kubedb/redis
-  version: 56cc3e767e6714b07f84915e9177c138df299c3b
+  version: dc3173ab4af18258da47bda6e3a69235fe42c16a
   subpackages:
-  - pkg/docker
   - pkg/validator
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
@@ -387,7 +379,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: f91529fc609202eededff4de2dc0ba2f662240a3
+  version: be77323fc05148ef091e83b3866c0d47c8e74a8b
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -407,10 +399,13 @@ imports:
   subpackages:
   - context
   - context/ctxhttp
+  - html
+  - html/atom
   - http2
   - http2/hpack
   - idna
   - lex/httplex
+  - websocket
 - name: golang.org/x/oauth2
   version: a6bd8cefa1811bd24b86f8902872e4e8225f74c4
   subpackages:
@@ -443,7 +438,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: 7d0e2d350555821bef5a5b8aecf0d12cc1def633
+  version: c7a403bb5fe12fe4644bb956edd5cd677626120a
   subpackages:
   - gensupport
   - googleapi
@@ -472,7 +467,7 @@ imports:
 - name: gopkg.in/warnings.v0
   version: 8a331561fe74dadba6edfc59f3be66c22c3b065d
 - name: gopkg.in/yaml.v2
-  version: d670f9405373e636a5a2765eea47fac0c9bc91a4
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
 - name: k8s.io/api
   version: af4bc157c3a209798fc897f6d4aaaaeb6c2e0d6a
   subpackages:
@@ -574,91 +569,14 @@ imports:
 - name: k8s.io/apiserver
   version: 1270e9f1ad9eaf6127691df90af0836f7e152495
   subpackages:
-  - pkg/admission
-  - pkg/admission/configuration
-  - pkg/admission/initializer
-  - pkg/admission/metrics
-  - pkg/admission/plugin/initialization
-  - pkg/admission/plugin/namespace/lifecycle
-  - pkg/admission/plugin/webhook/config
-  - pkg/admission/plugin/webhook/config/apis/webhookadmission
-  - pkg/admission/plugin/webhook/config/apis/webhookadmission/v1alpha1
-  - pkg/admission/plugin/webhook/errors
-  - pkg/admission/plugin/webhook/mutating
-  - pkg/admission/plugin/webhook/namespace
-  - pkg/admission/plugin/webhook/request
-  - pkg/admission/plugin/webhook/rules
-  - pkg/admission/plugin/webhook/validating
-  - pkg/admission/plugin/webhook/versioned
-  - pkg/apis/apiserver
-  - pkg/apis/apiserver/install
-  - pkg/apis/apiserver/v1alpha1
   - pkg/apis/audit
-  - pkg/apis/audit/install
-  - pkg/apis/audit/v1alpha1
-  - pkg/apis/audit/v1beta1
-  - pkg/apis/audit/validation
-  - pkg/audit
-  - pkg/audit/policy
   - pkg/authentication/authenticator
-  - pkg/authentication/authenticatorfactory
-  - pkg/authentication/group
-  - pkg/authentication/request/anonymous
-  - pkg/authentication/request/bearertoken
-  - pkg/authentication/request/headerrequest
-  - pkg/authentication/request/union
-  - pkg/authentication/request/websocket
-  - pkg/authentication/request/x509
   - pkg/authentication/serviceaccount
-  - pkg/authentication/token/tokenfile
   - pkg/authentication/user
-  - pkg/authorization/authorizer
-  - pkg/authorization/authorizerfactory
-  - pkg/authorization/union
-  - pkg/endpoints
-  - pkg/endpoints/discovery
-  - pkg/endpoints/filters
-  - pkg/endpoints/handlers
-  - pkg/endpoints/handlers/negotiation
-  - pkg/endpoints/handlers/responsewriters
-  - pkg/endpoints/metrics
-  - pkg/endpoints/openapi
   - pkg/endpoints/request
   - pkg/features
-  - pkg/registry/generic
-  - pkg/registry/generic/registry
-  - pkg/registry/rest
-  - pkg/server
-  - pkg/server/filters
-  - pkg/server/healthz
-  - pkg/server/httplog
-  - pkg/server/mux
-  - pkg/server/options
-  - pkg/server/routes
-  - pkg/server/routes/data/swagger
-  - pkg/server/storage
-  - pkg/storage
-  - pkg/storage/errors
-  - pkg/storage/etcd
-  - pkg/storage/etcd/metrics
-  - pkg/storage/etcd/util
-  - pkg/storage/etcd3
-  - pkg/storage/etcd3/preflight
-  - pkg/storage/names
-  - pkg/storage/storagebackend
-  - pkg/storage/storagebackend/factory
-  - pkg/storage/value
   - pkg/util/feature
   - pkg/util/flag
-  - pkg/util/flushwriter
-  - pkg/util/logs
-  - pkg/util/trace
-  - pkg/util/webhook
-  - pkg/util/wsstream
-  - plugin/pkg/audit/log
-  - plugin/pkg/audit/webhook
-  - plugin/pkg/authenticator/token/webhook
-  - plugin/pkg/authorizer/webhook
 - name: k8s.io/client-go
   version: 78700dec6369ba22221b72770783300f143df150
   subpackages:

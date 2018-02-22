@@ -13,7 +13,7 @@ import (
 	meta_util "github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	tcs "github.com/kubedb/apimachinery/client/typed/kubedb/v1alpha1"
+	tcs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/editor"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/printer"

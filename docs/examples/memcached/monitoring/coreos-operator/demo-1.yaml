@@ -1,0 +1,24 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Memcached
+metadata:
+  name: memcd-mon-coreos
+  namespace: demo
+spec:
+  replicas: 3
+  version: 1.5.4
+  doNotPause: true
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 250m
+    limits:
+      memory: 128Mi
+      cpu: 500m
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
+

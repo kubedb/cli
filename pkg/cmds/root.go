@@ -43,7 +43,6 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 			Message: "Basic Commands (Beginner):",
 			Commands: []*cobra.Command{
 				NewCmdCreate(out, err),
-				NewCmdInit(out, err),
 			},
 		},
 		{

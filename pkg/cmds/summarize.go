@@ -43,13 +43,21 @@ func NewCmdSummarize(out io.Writer, cmdErr io.Writer) *cobra.Command {
 const (
 	validResourcesForReport = `Valid resource types include:
 
-    * elasticsearchs
+    * elasticsearches
     * postgreses
     * mysqls
     * mongodbs
     * redises
     * memcacheds
     `
+)
+
+var operatorLabel = map[string]string{
+	"app": "kubedb",
+}
+
+const (
+	operatorPortNumber = 8080
 )
 
 func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {

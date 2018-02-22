@@ -1,4 +1,4 @@
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: prometheus-server
@@ -25,7 +25,7 @@ metadata:
   name: prometheus-server
   namespace: demo
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus-server
@@ -38,7 +38,7 @@ subjects:
   name: prometheus-server
   namespace: demo
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-server
@@ -83,7 +83,8 @@ metadata:
 spec:
   selector:
     app: prometheus-server
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 9090
       targetPort: 9090
+      nodePort: 30901
