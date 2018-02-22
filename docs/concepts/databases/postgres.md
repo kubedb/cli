@@ -53,13 +53,13 @@ spec:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 6h"
-    storageSecretName: snap-secret
+    storageSecretName: gcs-secret
     gcs:
       bucket: kubedb
       prefix: demo
   doNotPause: true
   monitor:
-    agent: coreos-prometheus-operator
+    agent: prometheus.io/coreos-operator
     prometheus:
       namespace: demo
       labels:
@@ -93,13 +93,11 @@ spec:
 Continuous archiving data will be stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{postgres-name}/archive/`.
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` superuser. If not set, KubeDB operator creates a new Secret `{Postgres name}-auth` for storing the password for `postgres` superuser for each Postgres object. If you want to use an existing secret, please specify that when creating Postgres using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user.
+If not set, KubeDB operator creates a new Secret `{postgres-name}-auth` for storing the password for `postgres` superuser for each Postgres object.
+If you want to use an existing secret please specify that when creating the Postgres object using `spec.databaseSecret.secretName`.
 
-This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
-```ini
-POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
-```
-
+This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
@@ -112,15 +110,6 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 
 To learn how to configure `spec.storage`, please visit the links below:
  - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
-
-
-### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user.
-If not set, KubeDB operator creates a new Secret `{postgres-name}-auth` for storing the password for `postgres` superuser for each Postgres object.
-If you want to use an existing secret please specify that when creating the Postgres object using `spec.databaseSecret.secretName`.
-
-This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
-
 
 ### spec.nodeSelector
 `spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
