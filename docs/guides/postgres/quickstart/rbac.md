@@ -175,6 +175,7 @@ subjects:
 
 This  object binds Role `quick-postgres` with ServiceAccount `quick-postgres`.
 
+Leader Election process get access to Kubernetes API using this RBAC permissions.
 
 ## Cleaning up
 
