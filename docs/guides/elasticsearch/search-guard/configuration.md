@@ -422,6 +422,14 @@ curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
 }
 ```
 
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
+```
+
 ## Next Steps
 
 - Learn how to [create TLS certificates](/docs/guides/elasticsearch/search-guard/certificate.md).

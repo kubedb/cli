@@ -369,8 +369,16 @@ KubeDB operator sets the `status.phase` to `Running` once the database is succes
 
 ```console
 $ kubedb get es -n demo sg-elasticsearch -o wide
-NAME                  VERSION   STATUS    AGE
-quick-elasticsearch   5.6       Running   33m
+NAME                VERSION   STATUS    AGE
+sg-elasticsearch    5.6       Running   33m
+```
+
+## Cleaning up
+To cleanup the Kubernetes resources created by this tutorial, run:
+
+```console
+$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl delete ns demo
 ```
 
 ## Next Steps

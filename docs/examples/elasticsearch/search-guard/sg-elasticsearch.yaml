@@ -5,7 +5,6 @@ metadata:
   namespace: demo
 spec:
   version: 5.6
-  replicas: 3
   enableSSL: true
   certificateSecret:
     secretName: sg-elasticsearch-cert
