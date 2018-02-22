@@ -229,7 +229,7 @@ If you open this `test.data.json` file, you will see the data you have created p
 }
 ```
 
-Lets see the Snapshot list for Elasticsearch `quick-elasticsearch` by running `kubedb describe` command.
+Lets see the Snapshot list for Elasticsearch `infant-elasticsearch` by running `kubedb describe` command.
 
 ```console
 $ kubedb describe es -n demo infant-elasticsearch -S=false -W=false

@@ -139,7 +139,6 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubedb delete es,drmn,snap -n demo --all --force
-
 $ kubectl delete ns demo
 ```
 

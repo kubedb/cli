@@ -116,7 +116,7 @@ We don't need to add `imagePullSecret` for `snapshot` objects. Just create Snaps
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubedb delete es,drmn,snap -n demo --all --force
 
 $ kubectl delete ns demo
 ```
