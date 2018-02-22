@@ -54,7 +54,7 @@ Follow these steps to prepare this tutorial
     secret "gcs-secret" created
     ```
 
-* Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/postgres/snapshot/instant_backup.md).
+* Take an instant backup, if not available. Follow [this](/docs/guides/postgres/snapshot/instant_backup.md#instant-backup).
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
