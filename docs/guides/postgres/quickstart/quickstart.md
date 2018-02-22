@@ -29,7 +29,7 @@ This tutorial will also use a pgAdmin to connect and test PostgreSQL database, o
 Run the following command to prepare your cluster for this tutorial
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/quickstart/pgadmin.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/pgadmin.yaml
 deployment "pgadmin" created
 service "pgadmin" created
 
@@ -51,7 +51,7 @@ http://192.168.99.100:32231
 
 To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a PostgreSQL database
 
@@ -89,8 +89,8 @@ Here,
 
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
@@ -333,8 +333,8 @@ In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creatin
 The below command will resume the DormantDatabase `quick-postgres`
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 

@@ -22,7 +22,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 We need an Postgres object in Running phase to perform backup operation.
 
@@ -155,8 +155,8 @@ To lean how to configure other storage destinations for snapshot data, please vi
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/snapshot/instant-snapshot.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/snapshot/instant-snapshot.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/instant-snapshot.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/instant-snapshot.yaml"
 snapshot "instant-snapshot" created
 ```
 

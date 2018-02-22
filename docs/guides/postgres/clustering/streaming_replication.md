@@ -20,7 +20,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create Postgres with Streaming replication
 
@@ -91,8 +91,8 @@ Here,
 Now create this Postgres object with Streaming Replication support
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/clustering/ha-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/clustering/ha-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/ha-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/ha-postgres.yaml"
 postgres "ha-postgres" created
 ```
 
@@ -252,8 +252,8 @@ Here,
 Now create this Postgres object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/clustering/hot-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/clustering/hot-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/hot-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/hot-postgres.yaml"
 postgres "hot-postgres" created
 ```
 

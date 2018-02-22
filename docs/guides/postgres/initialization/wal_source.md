@@ -24,7 +24,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 
 ## Create Postgres with WAL Source
@@ -84,8 +84,8 @@ Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL arch
 Now create this Postgres
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/replay-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/replay-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/replay-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/replay-postgres.yaml"
 postgres "replay-postgres" created
 ```
 This will create a new database with existing _basebackup_ and will restore from archived _wal_ files.

@@ -22,7 +22,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 This tutorial assumes that you are familiar with Postgres concept.
 
@@ -33,7 +33,7 @@ This tutorial assumes that you are familiar with Postgres concept.
 If RBAC is enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
- $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/monitoring/coreos-operator/rbac/demo-0.yaml
+ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/coreos-operator/rbac/demo-0.yaml
 clusterrole "prometheus-operator" created
 serviceaccount "prometheus-operator" created
 clusterrolebinding "prometheus-operator" created
@@ -61,7 +61,7 @@ servicemonitors.monitoring.coreos.com   11m
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/monitoring/coreos-operator/rbac/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/coreos-operator/rbac/demo-1.yaml
 clusterrole "prometheus" created
 serviceaccount "prometheus" created
 clusterrolebinding "prometheus" created
@@ -90,7 +90,7 @@ prometheus-operator   5m
 If RBAC is not enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/monitoring/coreos-operator/demo-0.yaml
+$ https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/coreos-operator/demo-0.yaml
 namespace "demo" created
 deployment "prometheus-operator" created
 ```
@@ -117,7 +117,7 @@ servicemonitors.monitoring.coreos.com   44s
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/monitoring/coreos-operator/demo-1.yaml
+$ https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/coreos-operator/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
 
@@ -173,8 +173,8 @@ Here,
 Now create Postgres with monitoring spec
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml"
 postgres "coreos-prom-postgres" created
 ```
 

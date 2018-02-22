@@ -22,7 +22,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 This tutorial will show you how to use KubeDB to initialize a PostgreSQL database with existing snapshot data.
 
@@ -33,8 +33,8 @@ Follow these steps to prepare this tutorial
 * Create Postgres object `script-postgres`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/script-postgres.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/script-postgres.yaml"
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
+    validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml"
     postgres "script-postgres" created
     ```
 
@@ -113,8 +113,8 @@ instant-snapshot   pg/script-postgres   Succeeded   12m
 Now, create the Postgres object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/recovered-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/initialization/recovered-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/recovered-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/recovered-postgres.yaml"
 postgres "recovered-postgres" created
 ```
 

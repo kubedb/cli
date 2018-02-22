@@ -22,7 +22,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/postgres-docs/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).
 In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
@@ -97,7 +97,7 @@ spec:
 Now run the command to create this Postgres object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/postgres-docs/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
 validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml"
 postgres "pvt-reg-postgres" created
 ```
