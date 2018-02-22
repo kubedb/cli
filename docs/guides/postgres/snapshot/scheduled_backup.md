@@ -103,7 +103,7 @@ If you already have a running Postgres that takes backup periodically, you can d
 Edit your Postgres object and remove BackupSchedule. This will stop taking future backups for this schedule.
 
 ```console
-$ kubedb edit es -n demo scheduled-pg
+$ kubedb edit pg -n demo scheduled-pg
 spec:
 #  backupSchedule:
 #    cronExpression: '@every 6h'

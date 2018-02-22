@@ -69,7 +69,7 @@ If you wish to follow other ways to pull private images see [official docs](http
 When installing KubeDB operator, set the flags `--docker-registry` and `--image-pull-secret` to appropriate value.
 Follow the steps to [install KubeDB operator](/docs/setup/install.md) properly in cluster so that to points to the DOCKER_REGISTRY you wish to pull images from.
 
-## Deploy Elasticsearch database from Private Registry
+## Deploy Postgres database from Private Registry
 
 While deploying Postgres from private repository, you have to add `myregistrykey` secret in Postgres `spec.imagePullSecrets`.
 

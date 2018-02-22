@@ -1,6 +1,6 @@
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
-# Initialize Elasticsearch with Snapshot
+# Initialize Postgres with Snapshot
 
 KubeDB supports PostgreSQL database initialization.
 

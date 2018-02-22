@@ -57,7 +57,7 @@ postgres "script-postgres" created
 ```
 
 ```console
-$ kubedb get es -n demo script-postgres
+$ kubedb get pg -n demo script-postgres
 NAME                STATUS      AGE
 script-postgres     Running     11m
 ```

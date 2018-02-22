@@ -1,6 +1,6 @@
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-## Initialize Elasticsearch with Script
+## Initialize Postgres with Script
 
 KubeDB supports PostgreSQL database initialization.
 
