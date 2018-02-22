@@ -71,8 +71,11 @@ Here,
 - `spec.init.postgresWAL` specifies storage information that will be used by `wal-g`
 	- `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
 	- `s3.bucket` points to the bucket name used to store continuous archiving data.
-	- `s3.prefix` points to the path where archived WAL data is stored. Prefix format: `/kubedb/{namespace}/{postgres-name}/archive/`.
-	Here `{namespace}` & `{postgres-name}` indicates Postgres object from where this archived WAL data is generated.
+	- `s3.prefix` points to the path where archived WAL data is stored.
+
+**wal-g** gets data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
+
+Here, `{namespace}` & `{postgres-name}` indicates Postgres object from where this archived WAL data is collected.
 
 > Note: Postgres `replay-postgres` must have same `postgres` superuser password as Postgres `wal-postgres`.
 

@@ -1,6 +1,6 @@
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
-# Initialize Postgres with Snapshot
+## Initialize Postgres with Snapshot
 
 KubeDB supports PostgreSQL database initialization.
 
@@ -63,7 +63,7 @@ instant-snapshot   pg/script-postgres   Succeeded   39s
 ```
 
 
-## Initialize with Snapshot source
+## Create Postgres with Snapshot source
 
 Specify the Snapshot `name` and `namespace` in the `spec.init.snapshotSource` field of your new Postgres object.
 
