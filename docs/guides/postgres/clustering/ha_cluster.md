@@ -2,8 +2,8 @@
 
 ## Configuring Highly Available PostgreSQL Cluster
 
-In PostgreSQL, multiple servers can work together to serve high availability and load balancing. These servers will be either is *Master* or *Standby* mode.
-
+In PostgreSQL, multiple servers can work together to serve high availability and load balancing. These servers will be either in *Master* or *Standby* mode.
+``
 In *master* mode, server that can modify data. In *standby* mode, the server continuously applies WAL received from the master server. The standby server can read WAL from a WAL archive (see restore_command) or directly from the master over a TCP connection (streaming replication).
 
 Standby servers can be either *warm standby* or *hot standby* server.
