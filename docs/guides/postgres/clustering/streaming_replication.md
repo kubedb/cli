@@ -223,7 +223,7 @@ metadata:
 spec:
   version: 9.6
   replicas: 3
-  standby: hot
+  standbyMode: hot
   storage:
     storageClassName: "standard"
     accessModes:

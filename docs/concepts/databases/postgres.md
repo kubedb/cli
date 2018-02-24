@@ -32,7 +32,7 @@ metadata:
 spec:
   version: 9.6
   replicas: 2
-  standby: hot
+  standbyMode: hot
   archiver:
     storage:
       storageSecretName: s3-secret

@@ -24,7 +24,7 @@ metadata:
 spec:
   version: 9.6
   replicas: 3
-  standby: warm
+  standbyMode: warm
 ```
 
 In this examples:
@@ -47,7 +47,7 @@ metadata:
 spec:
   version: 9.6
   replicas: 3
-  standby: hot
+  standbyMode: hot
 ```
 
 In this examples:
