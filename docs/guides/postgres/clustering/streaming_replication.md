@@ -53,14 +53,14 @@ In this examples:
 * One server will be *primary* and two others will be *warm standby* servers, default of **`spec.standby`**
 
 
-###### What is this Streaming Replication
+### What is Streaming Replication
 
 Streaming Replication allows a *standby* server to stay more up-to-date by shipping and applying the [WAL XLOG](http://www.postgresql.org/docs/9.6/static/wal.html)
 records continuously. The *standby* connects to the *primary*, which streams WAL records to the *standby* as they're generated, without waiting for the WAL file to be filled.
 
 Streaming Replication is **asynchronous** by default. As a result, there is a small delay between committing a transaction in the *primary* and the changes becoming visible in the *standby*.
 
-###### Streaming Replication setup
+### Streaming Replication setup
 
 Following parameters are set in `postgresql.conf` for both *primary* and *standby* server
 
@@ -166,7 +166,7 @@ postgres=# select * from pg_stat_replication;
 
 Here, both `ha-postgres-1` and `ha-postgres-2` are streaming asynchronously from *primary* server.
 
-#### Automatic failover
+### Automatic failover
 
 If *primary* server fails, another *standby* server will take over and serve as *primary*.
 
@@ -238,7 +238,7 @@ In this examples:
 - The Postgres create three PostgreSQL servers, indicated by the **`replicas`** field.
 - One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
 
-##### `hot standby` setup
+### `hot standby` setup
 
 Following parameters are set in `postgresql.conf` for *standby* server
 
