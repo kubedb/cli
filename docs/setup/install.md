@@ -158,11 +158,11 @@ Now, you are ready to [create your first database](/docs/guides/README.md) using
 
 KubeDB installer will create 3 user facing cluster roles:
 
-| ClusterRole | Aggregates To | Desription |
-| ----------- | :-----------: | ---------- |
-| kubedb:core:admin | admin | Allows edit access to all `KubeDB` CRDs, intended to be granted within a namespace using a RoleBinding. |
-| kubedb:core:edit | edit | Allows edit access to all `KubeDB` CRDs except `dormantdatabase` CRD, intended to be granted within a namespace using a RoleBinding. |
-| kubedb:core:view | view | Allows read-only access to `KubeDB` CRDs, intended to be granted within a namespace using a RoleBinding. |
+| ClusterRole       | Aggregates To | Desription |
+| ----------------- | --------------| ---------- |
+| kubedb:core:admin | admin         | Allows edit access to all `KubeDB` CRDs, intended to be granted within a namespace using a RoleBinding. This grants ability to wipeout dormant database and delete their record. |
+| kubedb:core:edit  | edit          | Allows edit access to all `KubeDB` CRDs except `DormantDatabase` CRD, intended to be granted within a namespace using a RoleBinding. |
+| kubedb:core:view  | view          | Allows read-only access to `KubeDB` CRDs, intended to be granted within a namespace using a RoleBinding. |
 
 These user facing roles supports [ClusterRole Aggregation](https://kubernetes.io/docs/admin/authorization/rbac/#aggregated-clusterroles) feature in Kubernetes 1.9 or later clusters.
 
