@@ -1,0 +1,5 @@
+admin:
+  hash: $ADMIN_PASSWORD_HASHED
+
+readall:
+  hash: $READALL_PASSWORD_HASHED

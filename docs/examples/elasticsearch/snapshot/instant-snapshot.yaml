@@ -1,12 +1,12 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  name: e1-xyz
+  name: instant-snapshot
   namespace: demo
   labels:
     kubedb.com/kind: Elasticsearch
 spec:
-  databaseName: e1
-  storageSecretName: snap-secret
+  databaseName: infant-elasticsearch
+  storageSecretName: gcs-secret
   gcs:
     bucket: kubedb

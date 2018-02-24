@@ -1,0 +1,25 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: topology-es
+  namespace: demo
+spec:
+  version: 5.6
+  topology:
+    master:
+      prefix: master
+      replicas: 1
+    data:
+      prefix: data
+      replicas: 2
+    client:
+      prefix: client
+      replicas: 2
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+

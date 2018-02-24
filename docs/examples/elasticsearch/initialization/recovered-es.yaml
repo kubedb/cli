@@ -1,0 +1,20 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: recovered-es
+  namespace: demo
+spec:
+  version: 5.6
+  databaseSecret:
+    secretName: infant-elasticsearch-auth
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  init:
+    snapshotSource:
+      name: instant-snapshot
+      namespace: demo

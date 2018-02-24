@@ -1,0 +1,17 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: sg-elasticsearch
+  namespace: demo
+spec:
+  version: 5.6
+  enableSSL: true
+  certificateSecret:
+    secretName: sg-elasticsearch-cert
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi

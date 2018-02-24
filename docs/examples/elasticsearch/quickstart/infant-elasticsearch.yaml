@@ -1,0 +1,7 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: infant-elasticsearch
+  namespace: demo
+spec:
+  version: 5.6
