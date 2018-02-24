@@ -3,24 +3,27 @@ package validator
 import (
 	"fmt"
 
+	"github.com/appscode/go/types"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	adr "github.com/kubedb/apimachinery/pkg/docker"
 	amv "github.com/kubedb/apimachinery/pkg/validator"
-	dr "github.com/kubedb/elasticsearch/pkg/docker"
 	"github.com/pkg/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/kubernetes"
 )
 
-func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elasticsearch, docker *dr.Docker) error {
+var (
+	elasticVersions = sets.NewString("5.6", "5.6.4")
+)
+
+func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elasticsearch) error {
 	if elasticsearch.Spec.Version == "" {
 		return fmt.Errorf(`object 'Version' is missing in '%v'`, elasticsearch.Spec)
 	}
 
-	if docker != nil {
-		if err := adr.CheckDockerImageVersion(docker.GetImage(elasticsearch), string(elasticsearch.Spec.Version)); err != nil {
-			return fmt.Errorf(`image %s not found`, docker.GetImageWithTag(elasticsearch))
-		}
+	// check Elasticsearch version validation
+	if !elasticVersions.Has(string(elasticsearch.Spec.Version)) {
+		return fmt.Errorf(`KubeDB doesn't support Elasticsearch version: %s`, string(elasticsearch.Spec.Version))
 	}
 
 	topology := elasticsearch.Spec.Topology
@@ -33,6 +36,34 @@ func ValidateElasticsearch(client kubernetes.Interface, elasticsearch *api.Elast
 		}
 		if topology.Master.Prefix == topology.Data.Prefix {
 			return errors.New("master & data node should not have same prefix")
+		}
+
+		if topology.Client.Replicas != nil {
+			replicas := topology.Client.Replicas
+			if types.Int32(replicas) < 1 {
+				return fmt.Errorf(`topology.client.replicas "%d" invalid. Must be greater than zero`, replicas)
+			}
+		}
+
+		if topology.Master.Replicas != nil {
+			replicas := topology.Master.Replicas
+			if types.Int32(replicas) < 1 {
+				return fmt.Errorf(`topology.master.replicas "%d" invalid. Must be greater than zero`, replicas)
+			}
+		}
+
+		if topology.Data.Replicas != nil {
+			replicas := topology.Data.Replicas
+			if types.Int32(replicas) < 1 {
+				return fmt.Errorf(`topology.data.replicas "%d" invalid. Must be greater than zero`, replicas)
+			}
+		}
+	} else {
+		if elasticsearch.Spec.Replicas != nil {
+			replicas := types.Int32(elasticsearch.Spec.Replicas)
+			if replicas < 1 {
+				return fmt.Errorf(`spec.replicas "%d" invalid. Must be greater than zero`, replicas)
+			}
 		}
 	}
 
