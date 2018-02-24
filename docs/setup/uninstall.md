@@ -50,7 +50,7 @@ kubectl get dormant-database.kubedb.com --all-namespaces -o yaml > data.yaml
 
 - To delete existing KubeDB objects from all namespaces, run the following command in each namespace one by one.
 
-```
+```console
 kubectl delete postgres.kubedb.com --all --cascade=false
 kubectl delete elasticsearch.kubedb.com --all --cascade=false
 kubectl delete snapshot.kubedb.com --all --cascade=false

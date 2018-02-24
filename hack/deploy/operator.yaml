@@ -40,7 +40,7 @@ spec:
       - name: apiserver
         image: $KUBEDB_DOCKER_REGISTRY/apiserver:0.8.0-beta.0
         args:
-        - apiserver
+        - run
         - --v=3
         - --secure-port=8443
         - --audit-log-path=-
@@ -60,7 +60,7 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: stash-apiserver-cert
+          secretName: kubedb-apiserver-cert
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists

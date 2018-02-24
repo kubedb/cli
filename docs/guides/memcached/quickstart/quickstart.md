@@ -69,7 +69,7 @@ Here,
 
 - `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
-KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching Memcached object name. Even if [RBAC is enabled](/docs/guides/rbac.md), it won't affect anything to run Memcached database .
+KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching Memcached object name. No Memcached specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
 ```console
 $ kubedb get mc -n demo
