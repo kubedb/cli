@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/appscode/go/types"
 	mona "github.com/appscode/kube-mon/api"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/printer"
@@ -60,7 +61,7 @@ func (d *humanReadableDescriber) describeElasticsearch(item *api.Elasticsearch, 
 		}
 
 		if item.Spec.Replicas != nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 
 		if item.Annotations != nil {
@@ -145,7 +146,7 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 		if item.Spec.Replicas != nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -228,7 +229,7 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 		if item.Spec.Replicas != nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -301,7 +302,7 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 		if item.Spec.Replicas != nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -365,7 +366,7 @@ func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSetting
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 		if item.Spec.Replicas != nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
@@ -421,7 +422,7 @@ func (d *humanReadableDescriber) describeMemcached(item *api.Memcached, describe
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 		if item.Spec.Replicas != nil {
-			fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
