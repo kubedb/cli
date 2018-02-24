@@ -15,10 +15,13 @@ section_menu_id: concepts
 # Postgres
 
 ## What is Postgres
-A `Postgres` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [PostgreSQL](https://www.postgresql.org/) in a Kubernetes native way. You only need to describe the desired database configuration in a Postgres object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
+
+`Postgres` is a Kubernetes `Custom Resource Definitions` (CRD). It provides declarative configuration for [PostgreSQL](https://www.postgresql.org/) in a Kubernetes native way. You only need to describe the desired database configuration in a Postgres object, and the KubeDB operator will create Kubernetes objects in the desired state for you.
 
 ## Postgres Spec
-As with all other Kubernetes objects, a Postgres needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Postgres object.
+As with all other Kubernetes objects, a Postgres needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section.
+
+Below is an example Postgres object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -27,9 +30,9 @@ metadata:
   name: p1
   namespace: demo
 spec:
-  version: 9.6.5
+  version: 9.6
   replicas: 2
-  standby: hot
+  standbyMode: hot
   archiver:
     storage:
       storageSecretName: s3-secret
@@ -53,13 +56,13 @@ spec:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
   backupSchedule:
     cronExpression: "@every 6h"
-    storageSecretName: snap-secret
+    storageSecretName: gcs-secret
     gcs:
       bucket: kubedb
       prefix: demo
   doNotPause: true
   monitor:
-    agent: coreos-prometheus-operator
+    agent: prometheus.io/coreos-operator
     prometheus:
       namespace: demo
       labels:
@@ -76,8 +79,7 @@ spec:
 
 ### spec.version
 `spec.version` is a required field specifying the version of PostgreSQL database. Currently the supported versions are:
- - `9.5`
- - `9.6.5`
+ - `9.6.5`, `9.6`
 
 ### spec.replicas
 `spec.replicas` specifies the total number of primary and standby nodes in Postgres database cluster configuration. One pod is selected as Primary and others are acted as standby replicas.
@@ -91,16 +93,14 @@ spec:
  - `spec.archiver.storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
  - `spec.archiver.storage.s3.bucket` points to the bucket name used to store continuous archiving data.
 
-Continuous archiving data will be stored in a folder called `{bucket}/kubedb/{namespace}/{CRD object}/archive/`.
+Continuous archiving data will be stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{postgres-name}/archive/`.
 
 ### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` superuser. If not set, KubeDB operator creates a new Secret `{Postgres name}-auth` for storing the password for `postgres` superuser for each Postgres object. If you want to use an existing secret, please specify that when creating Postgres using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user.
+If not set, KubeDB operator creates a new Secret `{postgres-name}-auth` for storing the password for `postgres` superuser for each Postgres object.
+If you want to use an existing secret please specify that when creating the Postgres object using `spec.databaseSecret.secretName`.
 
-This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
-```ini
-POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
-```
-
+This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
 ### spec.storage
 `spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
@@ -113,16 +113,6 @@ POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
 
 To learn how to configure `spec.storage`, please visit the links below:
  - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
-
-
-### spec.databaseSecret
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user. If not set, KubeDB operator creates a new Secret `{postgres-object-name}-admin-auth` for storing the password for `postgres` superuser for each Postgres object. If you want to use an existing secret please specify that when creating the Postgres object using `spec.databaseSecret.secretName`.
-
-This secret contains a `.admin` key with a ini formatted key-value pairs. Example:
-```ini
-POSTGRES_PASSWORD=vPlT2PzewCaC3XZP
-```
-
 
 ### spec.nodeSelector
 `spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
@@ -144,7 +134,7 @@ kind: Postgres
 metadata:
   name: postgres-db
 spec:
-  version: 9.6.5
+  version: 9.6
   init:
     scriptSource:
       gitRepo:
@@ -167,7 +157,7 @@ kind: Postgres
 metadata:
   name: postgres-db
 spec:
-  version: 9.6.5
+  version: 9.6
   databaseSecret:
     secretName: postgres-old-auth
   init:
@@ -178,7 +168,7 @@ spec:
 
 In the above example, PostgreSQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize PostgreSQL once StatefulSet pods are running.
 
-When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, lets say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use same credential for superuser of `postgres-old`. Otherwise, restoration process will be failed.
+When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, lets say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use same credential for superuser of `postgres-old`. Otherwise, restoration process will fail.
 
 
 #### Initialize from WAL archive
@@ -192,7 +182,7 @@ kind: Postgres
 metadata:
   name: postgres-db
 spec:
-  version: 9.6.5
+  version: 9.6
   databaseSecret:
     secretName: postgres-old
   init:
@@ -206,7 +196,8 @@ spec:
 
 In the above example, PostgreSQL database will be initialized from WAL archive.
 
-When initializing from WAL archive, superuser `postgres` must have to match with previous one. For example, lets say, we want to initialize this database from `postgres-old` WAL archive. In this case, superuser of new Postgres should use same password as `postgres-old`. Otherwise, restoration process will be failed.
+When initializing from WAL archive, superuser `postgres` must have to match with previous one. For example, lets say, we want to initialize this
+database from `postgres-old` WAL archive. In this case, superuser of new Postgres should use same password as `postgres-old`. Otherwise, restoration process will be failed.
 
 
 ### spec.backupSchedule
@@ -232,7 +223,7 @@ To learn how to monitor Postgres databases, please visit [here](/docs/concepts/m
 
 
 ## Next Steps
-- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/guides/postgres/overview.md).
+- Learn how to use KubeDB to run a PostgreSQL database [here](/docs/guides/postgres/quickstart/quickstart.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
 - Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
 - Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.

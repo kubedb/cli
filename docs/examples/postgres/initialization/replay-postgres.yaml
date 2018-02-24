@@ -1,29 +1,28 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: recovered
+  name: replay-postgres
   namespace: demo
 spec:
-  version: 9.6.5
+  version: 9.6
   replicas: 2
-  standby: hot
-  doNotPause: false
   databaseSecret:
-    secretName: p1-auth
+    secretName: wal-postgres-auth
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
   archiver:
     storage:
       storageSecretName: s3-secret
       s3:
-        endpoint: 's3.amazonaws.com'
         bucket: kubedb
   init:
     postgresWAL:
       storageSecretName: s3-secret
       s3:
-        endpoint: 's3.amazonaws.com'
         bucket: kubedb
-        prefix: 'kubedb/demo/p1/archive'
-  storage:
-    resources:
-      requests:
-        storage: 50Mi
+        prefix: 'kubedb/demo/wal-postgres/archive'

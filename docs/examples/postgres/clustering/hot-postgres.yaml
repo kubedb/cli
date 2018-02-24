@@ -1,12 +1,12 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: p1
+  name: hot-postgres
   namespace: demo
 spec:
-  version: 9.6.5
-  replicas: 1
-  doNotPause: true
+  version: 9.6
+  replicas: 3
+  standbyMode: hot
   storage:
     storageClassName: "standard"
     accessModes:
@@ -14,8 +14,3 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/postgres-init-scripts.git"
-        directory: "."

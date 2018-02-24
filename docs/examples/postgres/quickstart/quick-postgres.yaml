@@ -1,0 +1,15 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: quick-postgres
+  namespace: demo
+spec:
+  version: 9.6
+  doNotPause: true
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
