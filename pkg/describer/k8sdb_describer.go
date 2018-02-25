@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/appscode/go/types"
 	mona "github.com/appscode/kube-mon/api"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/printer"
@@ -58,7 +59,11 @@ func (d *humanReadableDescriber) describeElasticsearch(item *api.Elasticsearch, 
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
 		}
-		fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
+
+		if item.Spec.Replicas != nil {
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
+
 		if item.Annotations != nil {
 			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
@@ -137,13 +142,15 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
+		if item.Spec.Replicas != nil {
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		fmt.Fprintf(out, "Replicas:\t%d  total\n", item.Spec.Replicas)
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		describeArchiver(item.Spec.Archiver, out)
@@ -218,12 +225,15 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
+		if item.Spec.Replicas != nil {
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		describeStorage(item.Spec.Storage, out)
@@ -288,12 +298,15 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
+		if item.Spec.Replicas != nil {
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		describeStorage(item.Spec.Storage, out)
@@ -349,12 +362,15 @@ func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSetting
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
+		if item.Spec.Replicas != nil {
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		describeStorage(item.Spec.Storage, out)
@@ -402,12 +418,15 @@ func (d *humanReadableDescriber) describeMemcached(item *api.Memcached, describe
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
+		if item.Spec.Replicas != nil {
+			fmt.Fprintf(out, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
@@ -449,12 +468,12 @@ func (d *humanReadableDescriber) describeSnapshot(item *api.Snapshot, describerS
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		fmt.Fprintln(out, "Storage:")
@@ -518,12 +537,12 @@ func (d *humanReadableDescriber) describeDormantDatabase(item *api.DormantDataba
 		if item.Labels != nil {
 			printLabelsMultiline(out, "Labels", item.Labels)
 		}
+		if item.Annotations != nil {
+			printLabelsMultiline(out, "Annotations", item.Annotations)
+		}
 		fmt.Fprintf(out, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(out, "Annotations", item.Annotations)
 		}
 
 		describeOrigin(item.Spec.Origin, out)
