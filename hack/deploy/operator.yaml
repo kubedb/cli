@@ -37,8 +37,8 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-      - name: apiserver
-        image: $KUBEDB_DOCKER_REGISTRY/apiserver:0.8.0-beta.0
+      - name: server
+        image: $KUBEDB_DOCKER_REGISTRY/kubedb-server:0.8.0-beta.0
         args:
         - run
         - --v=3
@@ -60,7 +60,7 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: kubedb-apiserver-cert
+          secretName: kubedb-server-cert
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -69,7 +69,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kubedb-apiserver-cert
+  name: kubedb-server-cert
   namespace: ${KUBEDB_NAMESPACE}
   labels:
     app: kubedb
