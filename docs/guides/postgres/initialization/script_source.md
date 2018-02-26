@@ -86,7 +86,7 @@ Volume:
   Capacity:     50Mi
   Access Modes: RWO
 StatefulSet:    script-postgres
-Service:        script-postgres, script-postgres-primary
+Service:        script-postgres, script-postgres-replicas
 Secrets:        script-postgres-auth
 
 Topology:
@@ -111,7 +111,7 @@ Now lets connect to our Postgres `script-postgres`  using pgAdmin we have instal
 
 Connection information:
 
-- address: use Service `script-postgres-primary.demo`
+- address: use Service `script-postgres.demo`
 - port: `5432`
 - database: `postgres`
 - username: `postgres`

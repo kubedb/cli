@@ -139,7 +139,7 @@ Volume:
   Capacity:     50Mi
   Access Modes: RWO
 StatefulSet:    recovered-postgres
-Service:        recovered-postgres, recovered-postgres-primary
+Service:        recovered-postgres, recovered-postgres-replicas
 Secrets:        script-postgres-auth
 
 Topology:
@@ -166,7 +166,7 @@ Now lets connect to our Postgres `recovered-postgres`  using pgAdmin we have ins
 
 Connection information:
 
-- address: use Service `recovered-postgres-primary.demo`
+- address: use Service `recovered-postgres.demo`
 - port: `5432`
 - database: `postgres`
 - username: `postgres`
