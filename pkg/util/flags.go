@@ -44,17 +44,6 @@ func AddEditFlags(cmd *cobra.Command) {
 	cmd.Flags().StringP("output", "o", "yaml", "Output format. One of: yaml|json.")
 }
 
-func AddInitFlags(cmd *cobra.Command) {
-	cmd.Flags().String("operator-namespace", "kube-system", "Name of namespace where operator will be deployed.")
-	cmd.Flags().String("version", "0.8.0-beta.0", "Operator version")
-	cmd.Flags().Bool("upgrade", false, "If present, Upgrade operator to use provided version")
-	cmd.Flags().String("governing-service", "kubedb", "Governing service for database statefulset")
-	cmd.Flags().String("docker-registry", "kubedb", "User provided docker repository")
-	cmd.Flags().String("image-pull-secret", "", " Reference to secret in the same namespace")
-	cmd.Flags().String("address", ":8080", "Address to listen on for web interface and telemetry.")
-	cmd.Flags().Bool("rbac", false, "If true, uses RBAC with operator and database objects")
-}
-
 func AddFilenameOptionFlags(cmd *cobra.Command, options *resource.FilenameOptions, usage string) {
 	cmd.Flags().StringSliceVarP(&options.Filenames, "filename", "f", options.Filenames, "Filename to use to "+usage)
 	cmd.Flags().BoolVarP(&options.Recursive, "recursive", "R", options.Recursive, "Process the directory used in -f, --filename recursively.")
