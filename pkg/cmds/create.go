@@ -6,6 +6,7 @@ import (
 	"io"
 
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	cs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/kubedb/cli/pkg/validator"
@@ -81,6 +82,11 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		return err
 	}
 
+	extClient, err := cs.NewForConfig(config)
+	if err != nil {
+		return err
+	}
+
 	infoList := make([]*resource.Info, 0)
 	err = r.Visit(func(info *resource.Info, err error) error {
 		if err != nil {
@@ -97,7 +103,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		}
 
 		fmt.Println(fmt.Sprintf(`validating "%v"`, info.Source))
-		if err := validator.Validate(client, info); err != nil {
+		if err := validator.Validate(client, extClient, info); err != nil {
 			return cmdutil.AddSourceToErr("validating", info.Source, err)
 		}
 
