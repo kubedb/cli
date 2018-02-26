@@ -65,7 +65,8 @@ Streaming Replication is **asynchronous** by default. As a result, there is a sm
 Following parameters are set in `postgresql.conf` for both *primary* and *standby* server
 
 ```console
-archive_mode = always
+wal_level = replica
+max_wal_senders = 99
 wal_keep_segments = 32
 ```
 
@@ -119,20 +120,20 @@ And two services for Postgres `ha-postgres` are created.
 $ kubectl get svc -n demo --selector="kubedb.com/name=ha-postgres"
 NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 ha-postgres           ClusterIP   10.106.9.219    <none>        5432/TCP   4m
-ha-postgres-primary   ClusterIP   10.104.95.105   <none>        5432/TCP   4m
+ha-postgres-replicas  ClusterIP   10.104.95.105   <none>        5432/TCP   4m
 ```
 
 ```console
 $ kubectl get svc -n demo --selector="kubedb.com/name=ha-postgres" -o=custom-columns=NAME:.metadata.name,SELECTOR:.spec.selector
-NAME                  SELECTOR
-ha-postgres           map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
-ha-postgres-primary   map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres kubedb.com/role:primary]
+NAME                    SELECTOR
+ha-postgres             map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres kubedb.com/role:primary]
+ha-postgres-replicas    map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
 ```
 
 Here,
 
-- Service `ha-postgres` targets all Pods (*`ha-postgres-0`*, *`ha-postgres-1`* and *`ha-postgres-2`*) with label `kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres`.
-- Service `ha-postgres-primary` targets Pod `ha-postgres-0`, which is *primary* server, by selector `kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary`.
+- Service `ha-postgres` targets Pod `ha-postgres-0`, which is *primary* server, by selector `kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary`.
+- Service `ha-postgres-replicas` targets all Pods (*`ha-postgres-0`*, *`ha-postgres-1`* and *`ha-postgres-2`*) with label `kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres`.
 
 > These *standby* servers are asynchronous *warm standby* server.
 
@@ -143,7 +144,7 @@ Now connect to this *primary* server Pod `ha-postgres-0` using pgAdmin installed
 Connection information:
 
 - address: you can use any of these
-    - Service `ha-postgres-primary.demo`
+    - Service `ha-postgres.demo`
     - Pod IP (`$ kubectl get pods ha-postgres-0 -n demo -o yaml | grep podIP`)
 - port: `5432`
 - database: `postgres`

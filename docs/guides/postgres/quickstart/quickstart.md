@@ -133,7 +133,7 @@ Service:
   Port: api	5432/TCP
 
 Service:
-  Name: quick-postgres-primary
+  Name: quick-postgres-replicas
   Type: ClusterIP
   IP:   10.96.98.122
   Port: api	5432/TCP
@@ -165,15 +165,15 @@ Events:
 
 ```console
 $ kubectl get service -n demo --selector=kubedb.com/kind=Postgres,kubedb.com/name=quick-postgres
-NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-quick-postgres           ClusterIP   10.104.43.68   <none>        5432/TCP   5m
-quick-postgres-primary   ClusterIP   10.96.98.122   <none>        5432/TCP   5m
+NAME                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+quick-postgres              ClusterIP   10.104.43.68   <none>        5432/TCP   5m
+quick-postgres-replicas     ClusterIP   10.96.98.122   <none>        5432/TCP   5m
 ```
 
 Two services for each Postgres object.
 
- - Service *`quick-postgres`* targets all Pods created by StatefulSet
- - Service *`quick-postgres-primary`* targets only one Pod which is acting as *primary* server
+ - Service *`quick-postgres`* targets only one Pod which is acting as *primary* server
+ - Service *`quick-postgres-replicas`* targets all Pods created by StatefulSet
 
 KubeDB supports PostgreSQL clustering where Pod can be either *primary* or *standby*.
 To learn how to configure highly available PostgreSQL cluster, click [here](/docs/guides/postgres/clustering/ha_cluster.md).
@@ -204,12 +204,12 @@ This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
 > Note: Auth Secret name format: `{postgres-name}-auth`
 
-Now, you can connect to this database from the pgAdmin dashboard using Service `quick-postgres-primary.demo` and `postgres` superuser password .
+Now, you can connect to this database from the pgAdmin dashboard using Service `quick-postgres.demo` and `postgres` superuser password .
 
 Connection information:
 
 - address: you can use any of these
-    - Service `quick-postgres-primary.demo`
+    - Service `quick-postgres.demo`
     - Pod IP (`$ kubectl get pods quick-postgres-0 -n demo -o yaml | grep podIP`)
 - port: `5432`
 - database: `postgres`

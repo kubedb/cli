@@ -226,7 +226,7 @@ Volume:
   Capacity:     50Mi
   Access Modes: RWO
 StatefulSet:    script-postgres
-Service:        script-postgres, script-postgres-primary
+Service:        script-postgres, script-postgres-replicas
 Secrets:        script-postgres-auth
 
 Topology:
