@@ -69,7 +69,7 @@ metadata:
 spec:
   databaseSecret:
     secretName: postgres-demo-auth
-  version: 9.6.5
+  version: 9.6.7
 status:
   creationTime: 2017-12-12T05:46:16Z
   phase: Running
@@ -90,10 +90,10 @@ NAME                    VERSION     STATUS      AGE
 es/elasticsearch-demo   2.3.1       Running     17m
 
 NAME                VERSION     STATUS  AGE
-pg/postgres-demo    9.6.5       Running 3h
-pg/postgres-dev     9.6.5       Running 3h
-pg/postgres-prod    9.6.5       Running 3h
-pg/postgres-qa      9.6.5       Running 3h
+pg/postgres-demo    9.6.7       Running 3h
+pg/postgres-dev     9.6.7       Running 3h
+pg/postgres-prod    9.6.7       Running 3h
+pg/postgres-qa      9.6.7       Running 3h
 
 NAME                                DATABASE                BUCKET              STATUS      AGE
 snap/postgres-demo-20170605-073557  pg/postgres-demo        gs:bucket-name      Succeeded   9m
