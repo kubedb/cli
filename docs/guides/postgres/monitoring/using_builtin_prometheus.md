@@ -35,7 +35,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-This tutorial assumes that you are familiar with Postgres concept.
+This tutorial assumes that you are familiar with PostgreSQL concept.
 
 ## Monitor with builtin Prometheus
 
@@ -72,7 +72,7 @@ validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/po
 postgres "builtin-prom-postgres" created
 ```
 
-KubeDB operator will configure its service once the Postgres is successfully running.
+KubeDB operator will configure its service once the PostgreSQL is successfully running.
 
 ```console
 $ kubedb get pg -n demo builtin-prom-postgres
@@ -109,7 +109,7 @@ prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
 
-The prometheus server will discover the service endpoint aka Postgres Exporter using these specifications and will scrap metrics from exporter.
+The prometheus server will discover the service endpoint aka PostgreSQL Exporter using these specifications and will scrap metrics from exporter.
 
 ## Deploy and configure Prometheus Server
 

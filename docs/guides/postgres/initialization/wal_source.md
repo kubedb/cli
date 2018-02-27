@@ -13,7 +13,7 @@ section_menu_id: guides
 
 > Don't know how to take continuous backup?  Check [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
-# Postgres Initialization
+# PostgreSQL Initialization
 
 KubeDB supports PostgreSQL database initialization. When you create a new Postgres object, you can provide existing WAL files to restore from by "replaying" the log entries.
 
@@ -37,7 +37,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create Postgres with WAL Source
+## Create PostgreSQL with WAL Source
 
 You can create a new database from archived WAL files using [wal-g ](https://github.com/wal-g/wal-g).
 

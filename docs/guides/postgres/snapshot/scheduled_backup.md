@@ -35,7 +35,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create Postgres with BackupSchedule
+## Create PostgreSQL with BackupSchedule
 
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
 KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure,
@@ -99,7 +99,7 @@ validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/po
 postgres "scheduled-pg" created
 ```
 
-When Postgres is successfully created, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
+When PostgreSQL is successfully created, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg"
@@ -107,9 +107,9 @@ NAME                           DATABASE          STATUS      AGE
 scheduled-pg-20180208-105341   pg/scheduled-pg   Succeeded   32s
 ```
 
-## Update Postgres to disable periodic backups
+## Update PostgreSQL to disable periodic backups
 
-If you already have a running Postgres that takes backup periodically, you can disable that by removing BackupSchedule field.
+If you already have a running PostgreSQL that takes backup periodically, you can disable that by removing BackupSchedule field.
 
 Edit your Postgres object and remove BackupSchedule. This will stop taking future backups for this schedule.
 
@@ -123,7 +123,7 @@ spec:
 #      bucket: kubedb
 ```
 
-## Update Postgres to enable periodic backups
+## Update PostgreSQL to enable periodic backups
 
 If you already have a running Postgres, you can enable periodic backups by adding BackupSchedule.
 

@@ -35,7 +35,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-This tutorial assumes that you are familiar with Postgres concept.
+This tutorial assumes that you are familiar with PostgreSQL concept.
 
 ## Deploy CoreOS-Prometheus Operator
 
@@ -177,11 +177,11 @@ Here,
  - `monitor.prometheus` specifies the information for monitoring by prometheus
       - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
       - `prometheus.labels` specifies the labels applied to ServiceMonitor.
-      - `prometheus.port` indicates the port for Postgres exporter endpoint (default is `56790`)
+      - `prometheus.port` indicates the port for PostgreSQL exporter endpoint (default is `56790`)
       - `prometheus.interval` indicates the scraping interval (eg, '10s')
 
 
-Now create Postgres with monitoring spec
+Now create PostgreSQL with monitoring spec
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
@@ -189,7 +189,7 @@ validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/po
 postgres "coreos-prom-postgres" created
 ```
 
-KubeDB operator will create a ServiceMonitor object once the Postgres is successfully running.
+KubeDB operator will create a ServiceMonitor object once the PostgreSQL is successfully running.
 
 ```yaml
 $ kubectl get servicemonitor -n demo

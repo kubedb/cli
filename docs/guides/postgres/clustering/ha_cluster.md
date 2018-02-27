@@ -24,7 +24,7 @@ Standby servers can be either *warm standby* or *hot standby* server.
 A standby server that cannot be connected to until it is promoted to a *master* server is called a *warm standby* server.
 *Standby* servers are by default *warm standby* unless we make them *hot standby*.
 
-The following is an example of a Postgres which creates PostgreSQL cluster of three servers.
+The following is an example of a PostgreSQL which creates PostgreSQL cluster of three servers.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -40,14 +40,14 @@ spec:
 
 In this examples:
 
-* The Postgres create three PostgreSQL servers, indicated by the **`replicas`** field.
+* The PostgreSQL create three PostgreSQL servers, indicated by the **`replicas`** field.
 * One server will be *primary* and two others will be *warm standby* servers, as instructed by **`spec.standby`**
 
 #### Hot Standby
 
 A standby server that can accept connections and serves read-only queries is called a *hot standby* server.
 
-The following Postgres will create PostgreSQL cluster with *hot standby* servers.
+The following PostgreSQL will create PostgreSQL cluster with *hot standby* servers.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -63,7 +63,7 @@ spec:
 
 In this examples:
 
-* The Postgres create three PostgreSQL servers, indicated by the **`replicas`** field.
+* The PostgreSQL create three PostgreSQL servers, indicated by the **`replicas`** field.
 * One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
 
 #### High Availability
@@ -92,7 +92,7 @@ Now KubeDB supports only following one:
 These *standby* servers can also be *hot standby* server. This is the fastest type of replication available as
 WAL data is sent immediately rather than waiting for a whole segment to be produced and shipped.
 
-    KubeDB Postgres support [Streaming Replication](/docs/guides/postgres/clustering/streaming_replication.md)
+    KubeDB PostgreSQL support [Streaming Replication](/docs/guides/postgres/clustering/streaming_replication.md)
 
 ## Next Steps
 

@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Continuous Archiving with wal-g
 
-KubeDB Postgres also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports only amazon _S3_ as cloud storage.
+KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports only amazon _S3_ as cloud storage.
 
 ## Before You Begin
 
@@ -36,7 +36,7 @@ demo    Active  5s
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 
-## Create Postgres with Continuous Archiving
+## Create PostgreSQL with Continuous Archiving
 
 Below is the Postgres object created with Continuous Archiving support.
 
@@ -77,7 +77,7 @@ a third strategy for backing up databases and if recovery is needed, restore fro
 
 ##### Continuous Archiving setup
 
-KubeDB Postgres supports **wal-g** for this continuous archiving.
+KubeDB PostgreSQL supports **wal-g** for this continuous archiving.
 
 Following additional parameters are set in `postgresql.conf` for *primary* server
 

@@ -68,7 +68,7 @@ To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
 
-KubeDB implements a Postgres CRD to define the specification of a PostgreSQL database.
+KubeDB implements a PostgreSQL CRD to define the specification of a PostgreSQL database.
 
 Below is the Postgres object created in this tutorial.
 
@@ -108,7 +108,7 @@ postgres "quick-postgres" created
 KubeDB operator watches for Postgres objects using Kubernetes api. When a Postgres object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name.
 KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
 
-If RBAC is enabled in clusters, Postgres specific RBAC permission is required. [Check here](/docs/guides/postgres/quickstart/rbac.md) for details.
+If RBAC is enabled in clusters, PostgreSQL specific RBAC permission is required. [Check here](/docs/guides/postgres/quickstart/rbac.md) for details.
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
 
@@ -245,7 +245,7 @@ In this tutorial, Postgres `quick-postgres` is created with `spec.doNotPause: tr
 
 ```console
 $ kubedb delete pg -n demo quick-postgres
-error: Postgres "quick-postgres " can't be paused. To continue delete, unset spec.doNotPause and retry.
+error: PostgreSQL "quick-postgres " can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
 To continue with this tutorial, unset `spec.doNotPause` by updating Postgres object
@@ -334,7 +334,7 @@ spec:
   resume: true
 ```
 
-KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new Postgres using `spec.origin` from DormantDatabase.
+KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new PostgreSQL using `spec.origin` from DormantDatabase.
 This will in turn start a new StatefulSet which will mount the originally created Persistent Volume Claim. Thus the original database is resumed.
 
 Please note that the dormant database can also be resumed by creating same Postgres object with same Spec.
@@ -352,7 +352,7 @@ postgres "quick-postgres" created
 ## WipeOut DormantDatabase
 
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to `true`.
-KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this Postgres and also delete snapshot data stored in the Cloud Storage buckets.
+KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this PostgreSQL and also delete snapshot data stored in the Cloud Storage buckets.
 
 There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
@@ -400,6 +400,6 @@ $ kubectl delete ns demo
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [Postgres object](/docs/concepts/databases/postgres.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy Postgres with KubeDB.
+- Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy PostgreSQL with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

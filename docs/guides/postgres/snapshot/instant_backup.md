@@ -104,7 +104,7 @@ Here,
  - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object.
-Only Postgres controller will handle this Snapshot object.
+Only PostgreSQL controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Postgres, `script-postgres`, in our case.
 
@@ -182,7 +182,7 @@ instant-snapshot   pg/script-postgres   Running   42s
 KubeDB operator watches for Snapshot objects using Kubernetes API. When a Snapshot object is created, it will launch a Job that runs the `pg_dumpall` command and
 uploads the output **sql** file to cloud storage using [osm](https://github.com/appscode/osm).
 
-Snapshot data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{Postgres name}/{Snapshot name}/`.
+Snapshot data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{PostgreSQL name}/{Snapshot name}/`.
 
 Once the snapshot Job is completed, you can see the output of the `pg_dumpall` command stored in the GCS bucket.
 

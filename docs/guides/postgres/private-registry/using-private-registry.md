@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using private Docker registry
 
-KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Postgres database using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run PostgreSQL database using private Docker images.
 
 ## Before You Begin
 
@@ -80,9 +80,9 @@ If you wish to follow other ways to pull private images see [official docs](http
 When installing KubeDB operator, set the flags `--docker-registry` and `--image-pull-secret` to appropriate value.
 Follow the steps to [install KubeDB operator](/docs/setup/install.md) properly in cluster so that to points to the DOCKER_REGISTRY you wish to pull images from.
 
-## Deploy Postgres database from Private Registry
+## Deploy PostgreSQL database from Private Registry
 
-While deploying Postgres from private repository, you have to add `myregistrykey` secret in Postgres `spec.imagePullSecrets`.
+While deploying PostgreSQL from private repository, you have to add `myregistrykey` secret in Postgres `spec.imagePullSecrets`.
 
 Below is the Postgres object we will create in this tutorial
 
@@ -113,7 +113,7 @@ validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examp
 postgres "pvt-reg-postgres" created
 ```
 
-To check if the images pulled successfully from the repository, see if the Postgres is in Running state:
+To check if the images pulled successfully from the repository, see if the PostgreSQL is in Running state:
 
 ```console
 $ kubectl get pods -n demo --selector="kubedb.com/name=pvt-reg-postgres" --watch

@@ -13,9 +13,9 @@ section_menu_id: guides
 
 # RBAC Permissions for Postgres
 
-If RBAC is enabled in clusters, some Postgres specific RBAC permissions are required.
+If RBAC is enabled in clusters, some PostgreSQL specific RBAC permissions are required.
 
-These permissions are required for Leader Election process of Postgres clustering.
+These permissions are required for Leader Election process of PostgreSQL clustering.
 
 Here is the list of additional permissions required by StatefulSet of Postgres:
 
@@ -76,7 +76,7 @@ validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/po
 postgres "quick-postgres" created
 ```
 
-When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching Postgres name
+When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching PostgreSQL name
 and uses that ServiceAccount name in the corresponding StatefulSet.
 
 Lets see what KubeDB operator has created for additional RBAC permission

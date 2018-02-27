@@ -11,7 +11,7 @@ section_menu_id: guides
 ---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-# Initialize Postgres with Script
+# Initialize PostgreSQL with Script
 
 KubeDB supports PostgreSQL database initialization.
 
@@ -37,7 +37,7 @@ demo    Active  5s
 
 This tutorial will show you how to use KubeDB to initialize a PostgreSQL database with supported script.
 
-## Create Postgres with script source
+## Create PostgreSQL with script source
 
 PostgreSQL database can be initialized by scripts provided to it.
 
