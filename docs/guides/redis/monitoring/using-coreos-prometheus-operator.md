@@ -1,4 +1,4 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using Prometheus (CoreOS operator) with KubeDB
 

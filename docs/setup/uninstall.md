@@ -10,7 +10,7 @@ menu_name: docs_0.8.0-beta.2
 section_menu_id: setup
 ---
 
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Uninstall KubeDB
 Please follow the steps below to uninstall KubeDB:
