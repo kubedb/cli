@@ -30,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-beta.2-4 ; docker tag kubedb/operator:0.8.0-beta.2-4 $DOCKER_REGISTRY/operator:0.8.0-beta.2-4 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2-4
+$ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
 $ docker pull kubedb/mongo:3.4 ; docker tag kubedb/mongo:3.4 $DOCKER_REGISTRY/mongo:3.4 ; docker push $DOCKER_REGISTRY/mongo:3.4
 $ docker pull kubedb/mongo:3.6 ; docker tag kubedb/mongo:3.6 $DOCKER_REGISTRY/mongo:3.6 ; docker push $DOCKER_REGISTRY/mongo:3.6
 $ docker pull kubedb/mongo-tools:3.4 ; docker tag kubedb/mongo-tools:3.4 $DOCKER_REGISTRY/mongo-tools:3.4 ; docker push $DOCKER_REGISTRY/mongo-tools:3.4

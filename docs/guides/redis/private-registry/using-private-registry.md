@@ -30,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-beta.2-4 ; docker tag kubedb/operator:0.8.0-beta.2-4 $DOCKER_REGISTRY/operator:0.8.0-beta.2-4 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2-4
+$ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
 $ docker pull kubedb/redis:4 ; docker tag kubedb/redis:4 $DOCKER_REGISTRY/redis:4 ; docker push $DOCKER_REGISTRY/redis:4
 ```
 
