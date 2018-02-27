@@ -1,9 +1,9 @@
 ---
-title: Docs Guides
+title: Guides
 menu:
   docs_0.8.0-beta.2:
     identifier: guides
-    name: Docs Guides
+    name: Guides
     parent: docs-cli
     weight: 10
 menu_name: docs_0.8.0-beta.2
