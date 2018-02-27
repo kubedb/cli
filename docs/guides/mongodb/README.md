@@ -1,9 +1,9 @@
 ---
-title: MongoDB README
+title: MongoDB
 menu:
   docs_0.8.0-beta.2:
     identifier: readme-mongodb
-    name: MongoDB README
+    name: MongoDB
     parent: mongodb-guides
     weight: 10
 menu_name: docs_0.8.0-beta.2

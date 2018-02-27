@@ -1,9 +1,9 @@
 ---
-title: Postgres README
+title: Postgres
 menu:
   docs_0.8.0-beta.2:
     identifier: readme-postgres
-    name: Postgres README
+    name: Postgres
     parent: postgres-guides
     weight: 10
 menu_name: docs_0.8.0-beta.2
