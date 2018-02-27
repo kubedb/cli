@@ -69,8 +69,8 @@ Here,
 Create example above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/multi-node-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/multi-node-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/multi-node-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/multi-node-es.yaml"
 elasticsearch "multi-node-es" created
 ```
 
@@ -153,8 +153,8 @@ Here,
 Lets create this Elasticsearch object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/topology-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/clustering/topology-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/topology-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/topology-es.yaml"
 elasticsearch "topology-es" created
 ```
 

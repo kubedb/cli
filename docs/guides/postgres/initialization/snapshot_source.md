@@ -44,8 +44,8 @@ Follow these steps to prepare this tutorial
 - Create Postgres object `script-postgres`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml"
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
+    validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
     postgres "script-postgres" created
     ```
 
@@ -124,8 +124,8 @@ instant-snapshot   pg/script-postgres   Succeeded   12m
 Now, create the Postgres object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/recovered-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/recovered-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/recovered-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/recovered-postgres.yaml"
 postgres "recovered-postgres" created
 ```
 

@@ -94,8 +94,8 @@ Here,
 
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/scheduled-pg.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/scheduled-pg.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/scheduled-pg.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/scheduled-pg.yaml"
 postgres "scheduled-pg" created
 ```
 

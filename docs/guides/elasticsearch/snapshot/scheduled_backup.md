@@ -91,8 +91,8 @@ Here,
 > Note: Secret object must be in the same namespace as Elasticsearch, `scheduled-es`, in this case.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/scheduled-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/scheduled-es.yaml"
 elasticsearch "scheduled-es" created
 ```
 

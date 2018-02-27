@@ -42,7 +42,7 @@ This tutorial will also use a pgAdmin to connect and test PostgreSQL database, o
 Run the following command to prepare your cluster for this tutorial
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/pgadmin.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/pgadmin.yaml
 deployment "pgadmin" created
 service "pgadmin" created
 
@@ -100,8 +100,8 @@ Here,
 
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
@@ -344,8 +344,8 @@ In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creatin
 The below command will resume the DormantDatabase `quick-postgres`
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
