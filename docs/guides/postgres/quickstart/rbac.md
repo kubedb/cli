@@ -1,3 +1,14 @@
+---
+title: Quickstart Rbac
+menu:
+  docs_0.8.0-beta.2:
+    identifier: rbac-quickstart
+    name: Quickstart Rbac
+    parent: quickstart-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # RBAC Permissions for Postgres

@@ -1,3 +1,14 @@
+---
+title: Memcached README
+menu:
+  docs_0.8.0-beta.2:
+    identifier: readme-memcached
+    name: Memcached README
+    parent: memcached-guides
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 ## Memcached versions supported by KubeDB

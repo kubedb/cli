@@ -1,3 +1,14 @@
+---
+title: Private Registry Using Private Registry
+menu:
+  docs_0.8.0-beta.2:
+    identifier: using-private-registry-private-registry
+    name: Private Registry Using Private Registry
+    parent: private-registry-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Using private Docker registry

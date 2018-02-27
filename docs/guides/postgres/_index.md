@@ -1,10 +1,10 @@
 ---
-title: Postgres
+title: Guides Postgres
 menu:
   docs_0.8.0-beta.2:
-    identifier: guides-postgres
-    name: PostgreSQL
-    parent: guides
-    weight: 50
+    identifier: postgres-guides
+    name: Guides Postgres
+    parent: guides-docs
+    weight: 10
 menu_name: docs_0.8.0-beta.2
 ---

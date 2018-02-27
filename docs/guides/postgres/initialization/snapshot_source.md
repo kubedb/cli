@@ -1,3 +1,14 @@
+---
+title: Initialization Snapshot Source
+menu:
+  docs_0.8.0-beta.2:
+    identifier: snapshot-source-initialization
+    name: Initialization Snapshot Source
+    parent: initialization-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
 # Initialize Postgres with Snapshot

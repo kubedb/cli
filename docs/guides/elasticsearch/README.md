@@ -1,3 +1,14 @@
+---
+title: Elasticsearch README
+menu:
+  docs_0.8.0-beta.2:
+    identifier: readme-elasticsearch
+    name: Elasticsearch README
+    parent: elasticsearch-guides
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 ## Elasticsearch versions supported by KubeDB

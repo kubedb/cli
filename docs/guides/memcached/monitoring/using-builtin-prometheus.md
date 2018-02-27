@@ -1,3 +1,14 @@
+---
+title: Monitoring Using Builtin Prometheus
+menu:
+  docs_0.8.0-beta.2:
+    identifier: using-builtin-prometheus-monitoring
+    name: Monitoring Using Builtin Prometheus
+    parent: monitoring-memcached
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 

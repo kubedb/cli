@@ -1,3 +1,14 @@
+---
+title: Snapshot Continuous Archiving
+menu:
+  docs_0.8.0-beta.2:
+    identifier: continuous-archiving-snapshot
+    name: Snapshot Continuous Archiving
+    parent: snapshot-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Continuous Archiving with wal-g
