@@ -38,7 +38,7 @@ spec:
               apiVersion: v1
               fieldPath: metadata.namespace
       - name: server
-        image: $KUBEDB_DOCKER_REGISTRY/kubedb-server:0.8.0-beta.0
+        image: ${KUBEDB_DOCKER_REGISTRY}/kubedb-server:0.8.0-beta.0
         args:
         - run
         - --v=3
