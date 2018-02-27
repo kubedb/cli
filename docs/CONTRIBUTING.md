@@ -2,16 +2,16 @@
 title: Contributing | KubeDB
 description: Contributing
 menu:
-  docs_0.8.0-beta.0:
+  docs_0.8.0-beta.2:
     identifier: contributing-cli
     name: Contributing
     parent: welcome
     weight: 10
-menu_name: docs_0.8.0-beta.0
+menu_name: docs_0.8.0-beta.2
 section_menu_id: welcome
-url: /docs/0.8.0-beta.0/welcome/contributing/
+url: /docs/0.8.0-beta.2/welcome/contributing/
 aliases:
-  - /docs/0.8.0-beta.0/CONTRIBUTING/
+  - /docs/0.8.0-beta.2/CONTRIBUTING/
 ---
 
 # Contribution Guidelines

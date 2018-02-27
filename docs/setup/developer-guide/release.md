@@ -1,12 +1,12 @@
 ---
 title: Release
 menu:
-  docs_0.8.0-beta.0:
+  docs_0.8.0-beta.2:
     identifier: developer-guide-release
     name: Release Process
     parent: developer-guide
     weight: 20
-menu_name: docs_0.8.0-beta.0
+menu_name: docs_0.8.0-beta.2
 section_menu_id: setup
 ---
 

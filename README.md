@@ -26,7 +26,7 @@ Please pick a version of KubeDB that matches your Kubernetes installation.
 
 | KubeDB Version                                                                     | Docs                                                        | Kubernetes Version |
 |------------------------------------------------------------------------------------|-------------------------------------------------------------|--------------------|
-| [0.8.0-beta.0](https://github.com/kubedb/cli/releases/tag/0.8.0-beta.0) (uses CRD) | [User Guide](https://kubedb.com/docs/0.8.0-beta.0/)         | 1.7.x +            |
+| [0.8.0-beta.2](https://github.com/kubedb/cli/releases/tag/0.8.0-beta.2) (uses CRD) | [User Guide](https://kubedb.com/docs/0.8.0-beta.2/)         | 1.9.x +            |
 | [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR)               | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
 
 ## Installation

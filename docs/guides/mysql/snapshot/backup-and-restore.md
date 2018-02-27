@@ -13,7 +13,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 A `MySQL` database is needed to take snapshot for this tutorial. To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
 namespace "demo" created
 
 $ kubectl get ns
@@ -23,8 +23,8 @@ demo          Active    1m
 kube-public   Active    1h
 kube-system   Active    1h
 
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-1.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-1.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-1.yaml"
 mysql "mysql-infant" created
 ```
 
@@ -85,8 +85,8 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-2.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-2.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-2.yaml"
 snapshot "snap-mysql-infant" created
 
 $ kubedb get snap -n demo
@@ -215,8 +215,8 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-3.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/snapshot/demo-3.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-3.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-3.yaml"
 mysql "mysql-recovered" created
 ```
 

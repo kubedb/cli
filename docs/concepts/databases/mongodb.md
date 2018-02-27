@@ -1,12 +1,12 @@
 ---
 title: MongoDB
 menu:
-  docs_0.8.0-beta.0:
+  docs_0.8.0-beta.2:
     identifier: mongodb-db
     name: MongoDB
     parent: databases
     weight: 20
-menu_name: docs_0.8.0-beta.0
+menu_name: docs_0.8.0-beta.2
 section_menu_id: concepts
 ---
 
