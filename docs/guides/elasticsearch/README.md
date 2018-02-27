@@ -32,6 +32,16 @@
 
 <br/>
 
+## External tools dependency
+
+|Tool                                                               |Version   |
+|-------------------------------------------------------------------|:--------:|
+|[searchguard](https://github.com/floragunncom/search-guard)        | 5.6.4-18 |
+|[elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | 3.3.1    |
+|[osm](https://github.com/appscode/osm)                             | 0.6.2    |
+
+<br/>
+
 ## Life Cycle of Elasticsearch in KubeDB
 
 <p align="center">

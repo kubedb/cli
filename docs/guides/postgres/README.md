@@ -36,6 +36,15 @@
 
 <br/>
 
+## External tools dependency
+
+|Tool                                      |Version  |
+|------------------------------------------|:-------:|
+|[wal-g](https://github.com/wal-g/wal-g)   | v0.1.7  |
+|[osm](https://github.com/appscode/osm)    | 0.6.2   |
+
+<br/>
+
 ## Life Cycle of Postgres in KubeDB
 
 <p align="center">
