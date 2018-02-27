@@ -35,7 +35,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create PostgreSQL with BackupSchedule
+## Create Postgres with BackupSchedule
 
 KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
 KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure,
@@ -107,7 +107,7 @@ NAME                           DATABASE          STATUS      AGE
 scheduled-pg-20180208-105341   pg/scheduled-pg   Succeeded   32s
 ```
 
-## Update PostgreSQL to disable periodic backups
+## Update Postgres to disable periodic backups
 
 If you already have a running PostgreSQL that takes backup periodically, you can disable that by removing BackupSchedule field.
 
@@ -123,7 +123,7 @@ spec:
 #      bucket: kubedb
 ```
 
-## Update PostgreSQL to enable periodic backups
+## Update Postgres to enable periodic backups
 
 If you already have a running Postgres, you can enable periodic backups by adding BackupSchedule.
 

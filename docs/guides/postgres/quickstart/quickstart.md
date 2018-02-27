@@ -68,7 +68,7 @@ To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Create a PostgreSQL database
 
-KubeDB implements a PostgreSQL CRD to define the specification of a PostgreSQL database.
+KubeDB implements a Postgres CRD to define the specification of a PostgreSQL database.
 
 Below is the Postgres object created in this tutorial.
 
@@ -245,7 +245,7 @@ In this tutorial, Postgres `quick-postgres` is created with `spec.doNotPause: tr
 
 ```console
 $ kubedb delete pg -n demo quick-postgres
-error: PostgreSQL "quick-postgres " can't be paused. To continue delete, unset spec.doNotPause and retry.
+error: Postgres "quick-postgres " can't be paused. To continue delete, unset spec.doNotPause and retry.
 ```
 
 To continue with this tutorial, unset `spec.doNotPause` by updating Postgres object
@@ -334,7 +334,7 @@ spec:
   resume: true
 ```
 
-KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new PostgreSQL using `spec.origin` from DormantDatabase.
+KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new Postgres using `spec.origin` from DormantDatabase.
 This will in turn start a new StatefulSet which will mount the originally created Persistent Volume Claim. Thus the original database is resumed.
 
 Please note that the dormant database can also be resumed by creating same Postgres object with same Spec.

@@ -244,7 +244,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 `kubedb edit` command allows users to directly edit any KubeDB object. It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `nano`.
 
-Lets edit an existing running PostgreSQL database to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
+Lets edit an existing running Postgres object to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
 
 ```bash
 $ kubedb edit pg postgres-demo

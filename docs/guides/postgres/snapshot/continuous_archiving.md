@@ -77,7 +77,7 @@ a third strategy for backing up databases and if recovery is needed, restore fro
 
 ##### Continuous Archiving setup
 
-KubeDB PostgreSQL supports **wal-g** for this continuous archiving.
+KubeDB PostgreSQL supports [wal-g](https://github.com/wal-g/wal-g) for this continuous archiving.
 
 Following additional parameters are set in `postgresql.conf` for *primary* server
 

@@ -24,7 +24,7 @@ Standby servers can be either *warm standby* or *hot standby* server.
 A standby server that cannot be connected to until it is promoted to a *master* server is called a *warm standby* server.
 *Standby* servers are by default *warm standby* unless we make them *hot standby*.
 
-The following is an example of a PostgreSQL which creates PostgreSQL cluster of three servers.
+The following is an example of a `Postgres` object which creates PostgreSQL cluster of three servers.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -40,14 +40,14 @@ spec:
 
 In this examples:
 
-* The PostgreSQL create three PostgreSQL servers, indicated by the **`replicas`** field.
+* This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 * One server will be *primary* and two others will be *warm standby* servers, as instructed by **`spec.standby`**
 
 #### Hot Standby
 
 A standby server that can accept connections and serves read-only queries is called a *hot standby* server.
 
-The following PostgreSQL will create PostgreSQL cluster with *hot standby* servers.
+The following `Postgres` object will create PostgreSQL cluster with *hot standby* servers.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -63,7 +63,7 @@ spec:
 
 In this examples:
 
-* The PostgreSQL create three PostgreSQL servers, indicated by the **`replicas`** field.
+* This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 * One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
 
 #### High Availability

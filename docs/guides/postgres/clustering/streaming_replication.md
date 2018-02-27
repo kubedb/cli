@@ -37,7 +37,7 @@ demo    Active  5s
 
 ## Create PostgreSQL with Streaming replication
 
-The documentation below demonstrates KubeDB PostgreSQL for Streaming Replication
+The example below demonstrates KubeDB PostgreSQL for Streaming Replication
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -59,7 +59,7 @@ spec:
 
 In this examples:
 
-* The PostgreSQL creates three PostgreSQL servers, indicated by the **`replicas`** field.
+* This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 
 * One server will be *primary* and two others will be *warm standby* servers, default of **`spec.standby`**
 
@@ -247,7 +247,7 @@ spec:
 
 In this examples:
 
-- The PostgreSQL create three PostgreSQL servers, indicated by the **`replicas`** field.
+- This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 - One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
 
 ### `hot standby` setup
