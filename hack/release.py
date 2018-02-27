@@ -39,7 +39,7 @@ import yaml
 from collections import Counter
 
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
-DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
+DATABASES = ['mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
     'cli': '0.8.0-beta.2',
     'operator': '0.8.0-beta.2',
@@ -137,6 +137,7 @@ class Kitten(object):
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
+        call('git pull --rebase origin master', cwd=repo)
         call('glide slow', cwd=repo)
         if git_requires_commit(tag, cwd=repo):
             call('./hack/make.py', cwd=repo)
@@ -160,6 +161,7 @@ class Kitten(object):
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
+        call('git pull --rebase origin master', cwd=repo)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
             glide_mod(glide_config, self.rel_deps)
@@ -194,6 +196,7 @@ class Kitten(object):
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
         git_checkout('master', cwd=repo)
+        call('git pull --rebase origin master', cwd=repo)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
             glide_mod(glide_config, self.rel_deps)
@@ -257,17 +260,17 @@ class Kitten(object):
 def release(comp=None):
     cat = Kitten()
     if comp is None:
-        cat.release_apimachinery()
+        # cat.release_apimachinery()
         for name in DATABASES:
             cat.release_db(name)
-        cat.release_server_binary('admission-webhook')
+        cat.release_server_binary('kubedb-server')
         cat.release_server_binary('operator')
         cat.release_cli()
     elif comp == 'apimachinery':
         cat.release_apimachinery()
     elif comp in DATABASES:
         cat.release_db(comp)
-    elif comp in ['admission-webhook', 'operator']:
+    elif comp in ['kubedb-server', 'operator']:
         cat.release_server_binary(comp)
     elif comp == 'cli':
         cat.release_cli()
