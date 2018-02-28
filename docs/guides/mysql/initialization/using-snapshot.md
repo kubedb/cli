@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: my-using-snapshot-initialization
     name: Initialization Using Snapshot
-    parent: initialization-mysql
+    parent: my-initialization-mysql
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

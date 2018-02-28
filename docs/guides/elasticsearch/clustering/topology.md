@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: es-topology-clustering
     name: Clustering Topology
-    parent: clustering-elasticsearch
+    parent: es-clustering-elasticsearch
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

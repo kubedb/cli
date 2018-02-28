@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: es-using-builtin-prometheus-monitoring
     name: Monitoring Using Builtin Prometheus
-    parent: monitoring-elasticsearch
+    parent: es-monitoring-elasticsearch
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: pg-cli-cli
     name: CLI
-    parent: cli-postgres
+    parent: pg-cli-postgres
     weight: 70
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

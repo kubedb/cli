@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: rd-using-coreos-prometheus-operator-monitoring
     name: Monitoring Using Coreos Prometheus Operator
-    parent: monitoring-redis
+    parent: rd-monitoring-redis
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

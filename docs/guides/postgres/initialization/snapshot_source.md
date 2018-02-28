@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: pg-snapshot-source-initialization
     name: Initialization Snapshot Source
-    parent: initialization-postgres
+    parent: pg-initialization-postgres
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

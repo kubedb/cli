@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: rd-quickstart-quickstart
     name: Quickstart Quickstart
-    parent: quickstart-redis
+    parent: rd-quickstart-redis
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides

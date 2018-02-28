@@ -4,7 +4,7 @@ menu:
   docs_0.8.0-beta.2:
     identifier: mg-using-private-registry-private-registry
     name: Private Registry Using Private Registry
-    parent: private-registry-mongodb
+    parent: mg-private-registry-mongodb
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
