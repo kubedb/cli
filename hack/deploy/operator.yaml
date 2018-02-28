@@ -23,12 +23,12 @@ spec:
       imagePullSecrets: [${KUBEDB_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
-        image: ${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0-beta.0
+        image: ${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0-beta.2
         args:
         - run
         - --v=3
         - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
-        - --exporter-tag=0.8.0-beta.0
+        - --exporter-tag=0.8.0-beta.2
         - --governing-service=kubedb
         - --rbac=${KUBEDB_ENABLE_RBAC}
         env:
@@ -38,7 +38,7 @@ spec:
               apiVersion: v1
               fieldPath: metadata.namespace
       - name: server
-        image: ${KUBEDB_DOCKER_REGISTRY}/kubedb-server:0.8.0-beta.0
+        image: ${KUBEDB_DOCKER_REGISTRY}/kubedb-server:0.1.0-beta.2
         args:
         - run
         - --v=3
