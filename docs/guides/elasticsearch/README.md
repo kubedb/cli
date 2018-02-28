@@ -64,8 +64,8 @@ aliases:
 - [Schedule backup](/docs/guides/elasticsearch/snapshot/scheduled_backup.md)  of Elasticsearch database.
 - Initialize [Elasticsearch with Snapshot](/docs/guides/elasticsearch/initialization/snapshot_source.md).
 - [Elasticsearch Topology](/docs/guides/elasticsearch/clustering/topology.md) supported by KubeDB
-- Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` builtin-Prometheus](/docs/guides/elasticsearch/monitoring/using_builtin_prometheus.md).
-- Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/elasticsearch/monitoring/using_coreos_prometheus_operator.md).
+- Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` builtin-Prometheus](/docs/guides/elasticsearch/monitoring/using-builtin-prometheus.md).
+- Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/elasticsearch/monitoring/using-coreos-prometheus-operator.md).
 - Use [private Docker registry](/docs/guides/elasticsearch/private-registry/using-private-registry.md) to deploy Elasticsearch with KubeDB.
 - Detail concepts of [Elasticsearch object](/docs/concepts/databases/elasticsearch.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
