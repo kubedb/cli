@@ -26,6 +26,7 @@ aliases:
 |Persistent Volume                                      | &#10003;   |
 |Instant Backup                                         | &#10003;   |
 |Scheduled Backup                                       | &#10003;   |
+|Initialization from Script                             | &#10007;   |
 |Initialization from Snapshot                           | &#10003;   |
 |Builtin Prometheus Discovery                           | &#10003;   |
 |Using CoreOS Prometheus Operator                       | &#10003;   |
