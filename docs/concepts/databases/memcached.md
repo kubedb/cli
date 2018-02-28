@@ -84,7 +84,5 @@ Memcached managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-
 ## Next Steps
 
 - Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/README.md).
-- Thinking about monitoring your database? KubeDB works [out-of-the-box with Prometheus](/docs/guides/monitoring.md).
-- Learn how to use KubeDB in a [RBAC](/docs/guides/rbac.md) enabled cluster.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
