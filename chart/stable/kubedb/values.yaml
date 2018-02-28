@@ -1,7 +1,7 @@
 ##
 ## KubeDB chart configuration
 ##
-# Docker registry containing KubeDB & HAProxy images
+# Docker registry containing KubeDB images
 dockerRegistry: kubedb
 ## Tags for Docker images
 imageTags:
