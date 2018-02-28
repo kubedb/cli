@@ -1,23 +1,25 @@
 ---
-title: Monitor Elasticsearch using Builtin Prometheus Discovery
+title: Monitor PostgreSQL using Builtin Prometheus Discovery
 menu:
   docs_0.8.0-beta.2:
-    identifier: es-using-builtin-prometheus-monitoring
+    identifier: pg-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
-    parent: es-monitoring-elasticsearch
+    parent: pg-monitoring-postgres
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using Prometheus with KubeDB
 
-This tutorial will show you how to monitor Elasticsearch database using [Prometheus](https://prometheus.io/).
+This tutorial will show you how to monitor PostgreSQL database using [Prometheus](https://prometheus.io/).
 
-## Before You begin
+## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -32,22 +34,22 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-This tutorial assumes that you are familiar with Elasticsearch concept.
+This tutorial assumes that you are familiar with PostgreSQL concept.
 
 ## Monitor with builtin Prometheus
 
-Below is the Elasticsearch object created in this tutorial.
+Below is the Postgres object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
+kind: Postgres
 metadata:
-  name: builtin-prom-es
+  name: builtin-prom-postgres
   namespace: demo
 spec:
-  version: 5.6
+  version: 9.6
   storage:
     storageClassName: "standard"
     accessModes:
@@ -66,46 +68,34 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml"
-elasticsearch "builtin-prom-es" created
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml"
+postgres "builtin-prom-postgres" created
 ```
 
-KubeDB operator will configure its service once the Elasticsearch is successfully running.
+KubeDB operator will configure its service once the PostgreSQL is successfully running.
 
 ```console
-$ kubedb get es -n demo builtin-prom-es
-NAME              STATUS    AGE
-builtin-prom-es   Running   5m
+$ kubedb get pg -n demo builtin-prom-postgres
+NAME                    STATUS    AGE
+builtin-prom-postgres   Running   5m
 ```
 
-You can verify it running the following commands:
+Lets describe Service `builtin-prom-postgres`
 
 ```console
-$ kubectl get svc -n demo --selector="kubedb.com/name=builtin-prom-es"
-NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)              AGE
-builtin-prom-es          ClusterIP   10.101.27.83     <none>        9200/TCP,56790/TCP   41s
-builtin-prom-es-master   ClusterIP   10.111.170.101   <none>        9300/TCP             41s
-```
-
-Lets describe Service `builtin-prom-es`
-
-```console
-$ kubectl describe svc -n demo builtin-prom-es
-Name:              builtin-prom-es
+$ kubectl describe svc -n demo builtin-prom-postgres
+Name:              builtin-prom-postgres
 Namespace:         demo
-Labels:            kubedb.com/kind=Elasticsearch
-                   kubedb.com/name=builtin-prom-es
+Labels:            kubedb.com/kind=Postgres
+                   kubedb.com/name=builtin-prom-postgres
 Annotations:       monitoring.appscode.com/agent=prometheus.io/builtin
-                   prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/elasticsearchs/builtin-prom-es/metrics
+                   prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
                    prometheus.io/port=56790
                    prometheus.io/scrape=true
-Selector:          kubedb.com/kind=Elasticsearch,kubedb.com/name=builtin-prom-es,node.role.client=set
+Selector:          kubedb.com/kind=Postgres,kubedb.com/name=builtin-prom-postgres
 Type:              ClusterIP
-IP:                10.101.27.83
-Port:              http  9200/TCP
-TargetPort:        %!d(string=http)/TCP
-Endpoints:         172.17.0.8:9200
+IP:                10.107.124.174
 Port:              prom-http  56790/TCP
 TargetPort:        %!d(string=prom-http)/TCP
 Endpoints:         172.17.0.8:56790
@@ -115,14 +105,14 @@ Session Affinity:  None
 You can see that the service contains following annotations.
 
 ```console
-prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/elasticsearchs/builtin-prom-es/metrics
+prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
 prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
 
-The prometheus server will discover the service endpoint aka `Elasticsearch Exporter` using these specifications and will scrap metrics from exporter.
+The prometheus server will discover the service endpoint aka PostgreSQL Exporter using these specifications and will scrap metrics from exporter.
 
-## Deploy and configure Prometheus server
+## Deploy and configure Prometheus Server
 
 The prometheus server is needed to configure so that it can discover endpoints of services. If a Prometheus server is already running in cluster
 and if it is configured in a way that it can discover service endpoints, no extra configuration will be needed.
@@ -226,7 +216,7 @@ spec:
 
 #### In RBAC enabled cluster
 
-If RBAC *is* enabled, run the following command to prepare your cluster for this tutorial
+If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
@@ -279,7 +269,7 @@ prometheus-server-6b8476d6c5-kx78z   0/1       ContainerCreating   0          1m
 prometheus-server-6b8476d6c5-kx78z   1/1       Running   0         1m
 ```
 
-### Prometheus Dashboard
+#### Prometheus Dashboard
 
 Now open prometheus dashboard on browser by running `minikube service prometheus-service -n demo`.
 
@@ -290,32 +280,26 @@ $ minikube service prometheus-service -n demo --url
 http://192.168.99.100:30901
 ```
 
-Now, if you go to the Prometheus Dashboard, you will see this database endpoint in target list.
+Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
 <p align="center">
   <kbd>
-    <img alt="builtin-prom-elasticsearch"  src="/docs/images/elasticsearch/builtin-prom-es.png">
+    <img alt="builtin-prom-postgres"  src="/docs/images/postgres/builtin-prom-postgres.png">
   </kbd>
 </p>
 
+
 ## Cleaning up
 
-To cleanup the Kubernetes resources created by this tutorial, run following commands
+To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es -n demo --all --force
-
+$ kubedb delete pg,drmn,snap -n demo --all --force
 $ kubectl delete ns demo
-namespace "demo" deleted
 ```
 
 ## Next Steps
 
-- Learn about [taking instant backup](/docs/guides/elasticsearch/snapshot/instant_backup.md) of Elasticsearch database using KubeDB.
-- Learn how to [schedule backup](/docs/guides/elasticsearch/snapshot/scheduled_backup.md)  of Elasticsearch database.
-- Learn about initializing [Elasticsearch with Snapshot](/docs/guides/elasticsearch/initialization/snapshot_source.md).
-- Learn how to configure [Elasticsearch Topology](/docs/guides/elasticsearch/clustering/topology.md).
-- Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/elasticsearch/monitoring/using_coreos_prometheus_operator.md).
-- Use [private Docker registry](/docs/guides/elasticsearch/private-registry/using-private-registry.md) to deploy Elasticsearch with KubeDB.
+- Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
