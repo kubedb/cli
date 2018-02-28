@@ -1,16 +1,16 @@
 ---
 title: Install
 menu:
-  docs_0.8.0-beta.0:
+  docs_0.8.0-beta.2:
     identifier: install-kubedb
     name: Install
     parent: setup
     weight: 10
-menu_name: docs_0.8.0-beta.0
+menu_name: docs_0.8.0-beta.2
 section_menu_id: setup
 ---
 
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Installation Guide
 
@@ -20,12 +20,12 @@ KubeDB provides a CLI to work with database objects. Download pre-built binaries
 
 ```console
 # Linux amd 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.0/kubedb-linux-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.2/kubedb-linux-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 
 # Mac 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.0/kubedb-darwin-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.2/kubedb-darwin-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 ```

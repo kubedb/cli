@@ -1,3 +1,15 @@
+---
+title: Initialize Elasticsearch from Snapshot
+menu:
+  docs_0.8.0-beta.2:
+    identifier: es-snapshot-source-initialization
+    name: Using Snapshot
+    parent: es-initialization-elasticsearch
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+
 > Don't know how backup works?  Check [tutorial](/docs/guides/elasticsearch/snapshot/instant_backup.md) on Instant Backup.
 
 # Initialize Elasticsearch with Snapshot
@@ -32,8 +44,8 @@ Follow these steps to prepare this tutorial
 - Create Elasticsearch object `infant-elasticsearch`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+    validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
     elasticsearch "infant-elasticsearch" created
     ```
 
@@ -113,8 +125,8 @@ instant-snapshot   es/infant-elasticsearch   Succeeded   2m
 Now, create the Elasticsearch object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/initialization/recovered-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/initialization/recovered-es.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/initialization/recovered-es.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/initialization/recovered-es.yaml"
 elasticsearch "recovered-es" created
 ```
 

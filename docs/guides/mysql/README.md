@@ -1,35 +1,49 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: MySQL
+menu:
+  docs_0.8.0-beta.2:
+    identifier: my-readme-mysql
+    name: MySQL
+    parent: my-mysql-guides
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+url: /docs/0.8.0-beta.2/guides/mysql/
+aliases:
+  - /docs/0.8.0-beta.2/guides/mysql/README/
+---
 
-## MySQL versions supported by KubeDB
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-| KubeDB Version | MySQL:8.0 |
-|:--:|:--:|
-| 0.1.0 - 0.7.0 | &#10007; |
-| 0.8.0-beta.0 | &#10003; |
-| 0.8.0-beta.1 | &#10003; |
+## Supported MySQL Features
+
+|Features                                                | Availability |
+|--------------------------------------------------------|:------------:|
+|Clustering                                              | &#10007;     |
+|Persistent Volume                                       | &#10003;     |
+|Instant Backup                                          | &#10003;     |
+|Scheduled Backup                                        | &#10003;     |
+|Initialize using Snapshot                               | &#10003;     |
+|Initialize using Script (\*.sql, \*sql.gz and/or \*.sh) | &#10003;     |
+|Builtin Prometheus Discovery                            | &#10003;     |
+|Using CoreOS Prometheus Operator                        | &#10003;     |
 
 <br/>
 
-## KubeDB Features and their availability for MySQL
-
-|Features |Availability|
-|--|:--:|
-|Clustering | &#10007; |
-|Persistent Volume | &#10003; |
-|Instant Backup | &#10003; |
-|Scheduled Backup  | &#10003; |
-|Initialize using Snapshot | &#10003; |
-|Initialize using Script (\*.sql, \*sql.gz and/or \*.sh) | &#10003; |
-|out-of-the-box builtin-Prometheus Monitoring | &#10003; |
-|out-of-the-box CoreOS-Prometheus-Operator Monitoring | &#10003; |
-
-<br/>
-
-## Life Cycle of MySQL in KubeDB
+## Life Cycle of a MySQL Object
 
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="373">
 </p>
+
+<br/>
+
+## Supported MySQL Versions
+
+| KubeDB Version | MySQL:8.0 |
+|:--------------:|:---------:|
+| 0.1.0 - 0.7.0  | &#10007;  |
+| 0.8.0-beta.2   | &#10003;  |
 
 ## User Guide
 

@@ -1,3 +1,15 @@
+---
+title: Using Postgres Streaming Replication
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-streaming-replication-clustering
+    name: Streaming Replication
+    parent: pg-clustering-postgres
+    weight: 15
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Streaming Replication
@@ -24,9 +36,9 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create Postgres with Streaming replication
+## Create PostgreSQL with Streaming replication
 
-The documentation below demonstrates KubeDB Postgres for Streaming Replication
+The example below demonstrates KubeDB PostgreSQL for Streaming Replication
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -48,7 +60,7 @@ spec:
 
 In this examples:
 
-* The Postgres creates three PostgreSQL servers, indicated by the **`replicas`** field.
+* This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 
 * One server will be *primary* and two others will be *warm standby* servers, default of **`spec.standby`**
 
@@ -94,8 +106,8 @@ Here,
 Now create this Postgres object with Streaming Replication support
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/ha-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/ha-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/clustering/ha-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/clustering/ha-postgres.yaml"
 postgres "ha-postgres" created
 ```
 
@@ -236,7 +248,7 @@ spec:
 
 In this examples:
 
-- The Postgres create three PostgreSQL servers, indicated by the **`replicas`** field.
+- This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 - One server will be *primary* and two others will be *hot standby* servers, as instructed by **`spec.standby`**
 
 ### `hot standby` setup
@@ -255,8 +267,8 @@ Here,
 Now create this Postgres object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/hot-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/clustering/hot-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/clustering/hot-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/clustering/hot-postgres.yaml"
 postgres "hot-postgres" created
 ```
 

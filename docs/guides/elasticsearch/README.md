@@ -1,52 +1,61 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: Elasticsearch
+menu:
+  docs_0.8.0-beta.2:
+    identifier: es-readme-elasticsearch
+    name: Elasticsearch
+    parent: es-elasticsearch-guides
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+url: /docs/0.8.0-beta.2/guides/elasticsearch/
+aliases:
+  - /docs/0.8.0-beta.2/guides/elasticsearch/README/
+---
 
-## Elasticsearch versions supported by KubeDB
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-| KubeDB Version | Elasticsearch:2.3 | Elasticsearch:5.6 |
-|----------------|:------------:|:------------:|
-| 0.1.0 - 0.7.0  | &#10003;     | &#10007;     |
-| 0.8.0-beta.0   | &#10007;     | &#10003;     |
-| 0.8.0-beta.1   | &#10007;     | &#10003;     |
-
-<br/>
-
-## KubeDB features and their availability for Elasticsearch
-
-|Features                                               |Availability|
-|-------------------------------------------------------|:----------:|
-|Persistent Volume                                      | &#10003;   |
-|Instant Backup                                         | &#10003;   |
-|Scheduled Backup                                       | &#10003;   |
-|Initialization from Snapshot                           | &#10003;   |
-|out-of-the-box builtin-Prometheus Monitoring           | &#10003;   |
-|out-of-the-box CoreOS-Prometheus-Operator Monitoring   | &#10003;   |
-
-## Elasticsearch features and their availability in KubeDB Elasticsearch
+## Supported Elasticsearch Features
 
 |Features                                               |Availability|
 |-------------------------------------------------------|:----------:|
 |Clustering                                             | &#10003;   |
-|Authentication                                         | &#10003;   |
-|Authorization                                          | &#10003;   |
-|TLS certificates                                       | &#10003;   |
+|Authentication (using [Search Guard](https://github.com/floragunncom/search-guard))   | &#10003;   |
+|Authorization (using [Search Guard](https://github.com/floragunncom/search-guard))    | &#10003;   |
+|TLS certificates (using [Search Guard](https://github.com/floragunncom/search-guard)) | &#10003;   |
+|Persistent Volume                                      | &#10003;   |
+|Instant Backup                                         | &#10003;   |
+|Scheduled Backup                                       | &#10003;   |
+|Initialization from Snapshot                           | &#10003;   |
+|Builtin Prometheus Discovery                           | &#10003;   |
+|Using CoreOS Prometheus Operator                       | &#10003;   |
 
 <br/>
+
+## Life Cycle of an Elasticsearch Object
+
+<p align="center">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
+</p>
+
+<br/>
+
+## Supported Elasticsearch Version
+
+| KubeDB Version | Elasticsearch:2.3 | Elasticsearch:5.6 |
+|----------------|:------------:|:------------:|
+| 0.1.0 - 0.7.0  | &#10003;     | &#10007;     |
+| 0.8.0-beta.2   | &#10007;     | &#10003;     |
 
 ## External tools dependency
 
 |Tool                                                               |Version   |
 |-------------------------------------------------------------------|:--------:|
-|[searchguard](https://github.com/floragunncom/search-guard)        | 5.6.4-18 |
-|[elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | 3.3.1    |
+|[Search Guard](https://github.com/floragunncom/search-guard)       | 5.6.4-18 |
+|[Elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | 3.3.1    |
 |[osm](https://github.com/appscode/osm)                             | 0.6.2    |
 
 <br/>
-
-## Life Cycle of Elasticsearch in KubeDB
-
-<p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
-</p>
 
 ## User Guide
 

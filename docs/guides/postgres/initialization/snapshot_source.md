@@ -1,6 +1,17 @@
+---
+title: Initialize Postgres using Snapshot Source
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-snapshot-source-initialization
+    name: From Snapshot
+    parent: pg-initialization-postgres
+    weight: 15
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
-# Initialize Postgres with Snapshot
+# Initialize PostgreSQL with Snapshot
 
 KubeDB supports PostgreSQL database initialization.
 
@@ -33,8 +44,8 @@ Follow these steps to prepare this tutorial
 - Create Postgres object `script-postgres`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml"
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
+    validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
     postgres "script-postgres" created
     ```
 
@@ -63,7 +74,7 @@ NAME               DATABASE             STATUS      AGE
 instant-snapshot   pg/script-postgres   Succeeded   39s
 ```
 
-## Create Postgres with Snapshot source
+## Create PostgreSQL with Snapshot source
 
 Specify the Snapshot `name` and `namespace` in the `spec.init.snapshotSource` field of your new Postgres object.
 
@@ -113,8 +124,8 @@ instant-snapshot   pg/script-postgres   Succeeded   12m
 Now, create the Postgres object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/recovered-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/recovered-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/recovered-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/recovered-postgres.yaml"
 postgres "recovered-postgres" created
 ```
 

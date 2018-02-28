@@ -1,4 +1,15 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: Run Elasticsearch using Private Registry
+menu:
+  docs_0.8.0-beta.2:
+    identifier: es-using-private-registry-private-registry
+    name: Quickstart
+    parent: es-private-registry-elasticsearch
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using private Docker registry
 
@@ -36,7 +47,7 @@ For Elasticsearch, push the following images to your private registry.
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-beta.0-4 ; docker tag kubedb/operator:0.8.0-beta.0-4 $DOCKER_REGISTRY/operator:0.8.0-beta.0-4 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.0-4
+$ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
 $ docker pull kubedb/elasticsearch:5.6 ; docker tag kubedb/elasticsearch:5.6 $DOCKER_REGISTRY/elasticsearch:5.6 ; docker push $DOCKER_REGISTRY/elasticsearch:5.6
 $ docker pull kubedb/elasticsearch-tools:5.6 ; docker tag kubedb/elasticsearch-tools:5.6 $DOCKER_REGISTRY/elasticsearch-tools:5.6 ; docker push $DOCKER_REGISTRY/elasticsearch-tools:5.6
 ```
@@ -94,8 +105,8 @@ spec:
 Now run the command to deploy this Elasticsearch object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/private-registry/private-registry.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/private-registry/private-registry.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/private-registry/private-registry.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/private-registry/private-registry.yaml"
 elasticsearch "pvt-reg-elasticsearch" created
 ```
 

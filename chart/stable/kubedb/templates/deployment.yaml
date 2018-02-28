@@ -47,11 +47,11 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-      - name: apiserver
-        image: {{ .Values.dockerRegistry }}/apiserver:{{ .Values.imageTags.apiserver }}
+      - name: server
+        image: {{ .Values.dockerRegistry }}/kubedb-server:{{ .Values.imageTags.apiserver }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
-        - apiserver
+        - run
         - --v=3
         - --secure-port=8443
         - --audit-log-path=-

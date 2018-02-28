@@ -1,16 +1,16 @@
 ---
 title: CLI | KubeDB
 menu:
-  docs_0.8.0-beta.0:
-    identifier: guides-cli
-    name: CLI
-    parent: guides
-    weight: 70
-menu_name: docs_0.8.0-beta.0
+  docs_0.8.0-beta.2:
+    identifier: pg-cli-cli
+    name: Quickstart
+    parent: pg-cli-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
 
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Manage KubeDB objects using CLIs
 
@@ -131,6 +131,7 @@ snapshot-20171212-114700        pg/postgres-demo   Succeeded   2h        kubedb.
 ```
 
 To print only object name, run the following command:
+
 ```console
 $ kubedb get all -o name
 
@@ -148,7 +149,7 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ### How to Describe Objects
 
-`kubedb describe` command allows users to describe any KubeDB object. The following command will describe Postgres database `postgres-demo` with relevant information.
+`kubedb describe` command allows users to describe any KubeDB object. The following command will describe PostgreSQL database `postgres-demo` with relevant information.
 
 ```console
 $ kubedb describe pg postgres-demo
@@ -244,7 +245,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 `kubedb edit` command allows users to directly edit any KubeDB object. It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `nano`.
 
-Lets edit an existing running Postgres database to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
+Lets edit an existing running Postgres object to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
 
 ```bash
 $ kubedb edit pg postgres-demo

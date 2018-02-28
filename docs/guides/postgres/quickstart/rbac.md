@@ -1,10 +1,21 @@
+---
+title: RBAC for PostgreSQL
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-rbac-quickstart
+    name: RBAC
+    parent: pg-quickstart-postgres
+    weight: 15
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # RBAC Permissions for Postgres
 
-If RBAC is enabled in clusters, some Postgres specific RBAC permissions are required.
+If RBAC is enabled in clusters, some PostgreSQL specific RBAC permissions are required.
 
-These permissions are required for Leader Election process of Postgres clustering.
+These permissions are required for Leader Election process of PostgreSQL clustering.
 
 Here is the list of additional permissions required by StatefulSet of Postgres:
 
@@ -60,12 +71,12 @@ spec:
 Create above Postgres object with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
-When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching Postgres name
+When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching PostgreSQL name
 and uses that ServiceAccount name in the corresponding StatefulSet.
 
 Lets see what KubeDB operator has created for additional RBAC permission

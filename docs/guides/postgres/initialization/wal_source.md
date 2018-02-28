@@ -1,8 +1,19 @@
+---
+title: Initialize Postgres from WAL
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-wal-source-initialization
+    name: From WAL
+    parent: pg-initialization-postgres
+    weight: 20
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 > Don't know how to take continuous backup?  Check [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
-# Postgres Initialization
+# PostgreSQL Initialization
 
 KubeDB supports PostgreSQL database initialization. When you create a new Postgres object, you can provide existing WAL files to restore from by "replaying" the log entries.
 
@@ -26,7 +37,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create Postgres with WAL Source
+## Create PostgreSQL with WAL Source
 
 You can create a new database from archived WAL files using [wal-g ](https://github.com/wal-g/wal-g).
 
@@ -83,8 +94,8 @@ Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL arch
 Now create this Postgres
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/replay-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/replay-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/replay-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/replay-postgres.yaml"
 postgres "replay-postgres" created
 ```
 

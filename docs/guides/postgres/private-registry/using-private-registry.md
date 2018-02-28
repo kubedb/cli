@@ -1,8 +1,19 @@
+---
+title: Run PostgreSQL using Private Registry
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-using-private-registry-private-registry
+    name: Quickstart
+    parent: pg-private-registry-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Using private Docker registry
 
-KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Postgres database using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run PostgreSQL database using private Docker images.
 
 ## Before You Begin
 
@@ -38,7 +49,7 @@ For Postgres, push the following images to your private registry.
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-beta.0-4 ; docker tag kubedb/operator:0.8.0-beta.0-4 $DOCKER_REGISTRY/operator:0.8.0-beta.0-4 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.0-4
+$ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
 $ docker pull kubedb/postgres:9.6 ; docker tag kubedb/postgres:9.6 $DOCKER_REGISTRY/postgres:9.6 ; docker push $DOCKER_REGISTRY/postgres:9.6
 $ docker pull kubedb/postgres-tools:9.6 ; docker tag kubedb/postgres-tools:9.6 $DOCKER_REGISTRY/postgres-tools:9.6 ; docker push $DOCKER_REGISTRY/postgres-tools:9.6
 ```
@@ -69,9 +80,9 @@ If you wish to follow other ways to pull private images see [official docs](http
 When installing KubeDB operator, set the flags `--docker-registry` and `--image-pull-secret` to appropriate value.
 Follow the steps to [install KubeDB operator](/docs/setup/install.md) properly in cluster so that to points to the DOCKER_REGISTRY you wish to pull images from.
 
-## Deploy Postgres database from Private Registry
+## Deploy PostgreSQL database from Private Registry
 
-While deploying Postgres from private repository, you have to add `myregistrykey` secret in Postgres `spec.imagePullSecrets`.
+While deploying PostgreSQL from private repository, you have to add `myregistrykey` secret in Postgres `spec.imagePullSecrets`.
 
 Below is the Postgres object we will create in this tutorial
 
@@ -97,12 +108,12 @@ spec:
 Now run the command to create this Postgres object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml"
 postgres "pvt-reg-postgres" created
 ```
 
-To check if the images pulled successfully from the repository, see if the Postgres is in Running state:
+To check if the images pulled successfully from the repository, see if the PostgreSQL is in Running state:
 
 ```console
 $ kubectl get pods -n demo --selector="kubedb.com/name=pvt-reg-postgres" --watch

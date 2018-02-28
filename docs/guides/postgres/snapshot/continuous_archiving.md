@@ -1,8 +1,19 @@
+---
+title: Continuous Archiving of PostgreSQL
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-continuous-archiving-snapshot
+    name: WAL Archiving
+    parent: pg-snapshot-postgres
+    weight: 20
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Continuous Archiving with wal-g
 
-KubeDB Postgres also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports only amazon _S3_ as cloud storage.
+KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports only amazon _S3_ as cloud storage.
 
 ## Before You Begin
 
@@ -25,7 +36,7 @@ demo    Active  5s
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 
-## Create Postgres with Continuous Archiving
+## Create PostgreSQL with Continuous Archiving
 
 Below is the Postgres object created with Continuous Archiving support.
 
@@ -66,7 +77,7 @@ a third strategy for backing up databases and if recovery is needed, restore fro
 
 ##### Continuous Archiving setup
 
-KubeDB Postgres supports **wal-g** for this continuous archiving.
+KubeDB PostgreSQL supports [wal-g](https://github.com/wal-g/wal-g) for this continuous archiving.
 
 Following additional parameters are set in `postgresql.conf` for *primary* server
 
@@ -138,8 +149,8 @@ To configure this backend, following parameters are available:
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/wal-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/wal-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/wal-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/wal-postgres.yaml"
 postgres "wal-postgres" created
 ```
 

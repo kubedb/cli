@@ -1,3 +1,14 @@
+---
+title: Instant Backup of Elasticsearch
+menu:
+  docs_0.8.0-beta.2:
+    identifier: es-instant-backup-snapshot
+    name: Instant Backup
+    parent: es-snapshot-elasticsearch
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
 
 # KubeDB Snapshot
@@ -38,8 +49,8 @@ spec:
 If Elasticsearch object `infant-elasticsearch` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
 elasticsearch "infant-elasticsearch" created
 ```
 
@@ -186,8 +197,8 @@ To lean how to configure other storage destinations for snapshot data, please vi
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml"
 snapshot "instant-snapshot" created
 ```
 

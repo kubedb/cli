@@ -1,3 +1,14 @@
+---
+title: Scheduled Backup of PostgreSQL
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-scheduled-backup-snapshot
+    name: Scheduled Backup
+    parent: pg-snapshot-postgres
+    weight: 15
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
 
 # Database Scheduled Snapshots
@@ -83,12 +94,12 @@ Here,
 
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/scheduled-pg.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/scheduled-pg.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/scheduled-pg.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/scheduled-pg.yaml"
 postgres "scheduled-pg" created
 ```
 
-When Postgres is successfully created, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
+When PostgreSQL is successfully created, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
 
 ```console
 $ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg"
@@ -98,7 +109,7 @@ scheduled-pg-20180208-105341   pg/scheduled-pg   Succeeded   32s
 
 ## Update Postgres to disable periodic backups
 
-If you already have a running Postgres that takes backup periodically, you can disable that by removing BackupSchedule field.
+If you already have a running PostgreSQL that takes backup periodically, you can disable that by removing BackupSchedule field.
 
 Edit your Postgres object and remove BackupSchedule. This will stop taking future backups for this schedule.
 

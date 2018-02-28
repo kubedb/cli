@@ -1,4 +1,15 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: Initialize MySQL using Script
+menu:
+  docs_0.8.0-beta.2:
+    identifier: my-using-script-initialization
+    name: Using Script
+    parent: my-initialization-mysql
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Initialize MySQL using Script
 
@@ -16,10 +27,10 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a phpMyAdmin to connect and test MySQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
 namespace "demo" created
 
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/quickstart/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-1.yaml
 deployment "myadmin" created
 service "myadmin" created
 
@@ -75,8 +86,8 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/Initialization/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/Initialization/demo-1.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/Initialization/demo-1.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/Initialization/demo-1.yaml"
 mysql "mysql-init-script" created
 ```
 

@@ -1,3 +1,14 @@
+---
+title: Search Guard Use Certificate
+menu:
+  docs_0.8.0-beta.2:
+    identifier: es-use-certificate-search-guard
+    name: Use Certificate
+    parent: es-search-guard-elasticsearch
+    weight: 20
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
 
 # Use TLS certificate
@@ -41,8 +52,8 @@ spec:
 If Elasticsearch object `ssl-elasticsearch` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml"
 elasticsearch "ssl-elasticsearch" created
 ```
 

@@ -1,6 +1,18 @@
+---
+title: Initialize Postgres using Script Source
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-script-source-initialization
+    name: Using Script
+    parent: pg-initialization-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
-# Initialize Postgres with Script
+# Initialize PostgreSQL with Script
 
 KubeDB supports PostgreSQL database initialization.
 
@@ -26,7 +38,7 @@ demo    Active  5s
 
 This tutorial will show you how to use KubeDB to initialize a PostgreSQL database with supported script.
 
-## Create Postgres with script source
+## Create PostgreSQL with script source
 
 PostgreSQL database can be initialized by scripts provided to it.
 
@@ -65,8 +77,8 @@ In this tutorial, `data.sql` script from the git repository `https://github.com/
 > Note: PostgreSQL supports initialization with `.sh`, `.sql` and `.sql.gz` files.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
 postgres "script-postgres" created
 ```
 

@@ -1,5 +1,16 @@
+---
+title: Monitor MongoDB using Coreos Prometheus Operator
+menu:
+  docs_0.8.0-beta.2:
+    identifier: mg-using-coreos-prometheus-operator-monitoring
+    name: Coreos Prometheus Operator
+    parent: mg-monitoring-mongodb
+    weight: 15
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using Prometheus (CoreOS operator) with KubeDB
 
@@ -22,7 +33,7 @@ Note that the yaml files that are used in this tutorial, stored in [docs/example
 If RBAC *is* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/coreos-operator/rbac/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/coreos-operator/rbac/demo-0.yaml
 namespace "demo" created
 clusterrole "prometheus-operator" created
 serviceaccount "prometheus-operator" created
@@ -44,7 +55,7 @@ servicemonitors.monitoring.coreos.com   11m
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/coreos-operator/rbac/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/coreos-operator/rbac/demo-1.yaml
 clusterrole "prometheus" created
 serviceaccount "prometheus" created
 clusterrolebinding "prometheus" created
@@ -74,7 +85,7 @@ prometheus-operator   1         5m
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/coreos-operator/demo-0.yaml
 namespace "demo" created
 deployment "prometheus-operator" created
 
@@ -93,7 +104,7 @@ servicemonitors.monitoring.coreos.com   44s
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/coreos-operator/demo-1.yaml
 prometheus "prometheus" created
 service "prometheus" created
 ```
@@ -171,8 +182,8 @@ __Known Limitations:__ If the database password is updated, exporter must be res
 Run the following command to deploy the above `MongoDB` CRD object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml"
 mongodb "mgo-mon-coreos" created
 ```
 

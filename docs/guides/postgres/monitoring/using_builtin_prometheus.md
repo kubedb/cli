@@ -1,3 +1,15 @@
+---
+title: Monitor PostgreSQL using Builtin Prometheus Discovery
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-using-builtin-prometheus-monitoring
+    name: Builtin Prometheus Discovery
+    parent: pg-monitoring-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Using Prometheus with KubeDB
@@ -24,7 +36,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-This tutorial assumes that you are familiar with Postgres concept.
+This tutorial assumes that you are familiar with PostgreSQL concept.
 
 ## Monitor with builtin Prometheus
 
@@ -56,12 +68,12 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml"
 postgres "builtin-prom-postgres" created
 ```
 
-KubeDB operator will configure its service once the Postgres is successfully running.
+KubeDB operator will configure its service once the PostgreSQL is successfully running.
 
 ```console
 $ kubedb get pg -n demo builtin-prom-postgres
@@ -98,7 +110,7 @@ prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
 
-The prometheus server will discover the service endpoint aka Postgres Exporter using these specifications and will scrap metrics from exporter.
+The prometheus server will discover the service endpoint aka PostgreSQL Exporter using these specifications and will scrap metrics from exporter.
 
 ## Deploy and configure Prometheus Server
 
@@ -158,7 +170,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap "prometheus-server-conf" created
 ```
 
@@ -207,7 +219,7 @@ spec:
 If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -243,7 +255,7 @@ prometheus-server   2m
 If RBAC *is not* enabled, Run the following command to deploy prometheus in kubernetes
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 deployment "prometheus-server" created
 service "prometheus-service" created
 ```

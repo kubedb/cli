@@ -2,16 +2,16 @@
 title: Roadmap | KubeDB
 description: Roadmap of KubeDB
 menu:
-  docs_0.8.0-beta.0:
+  docs_0.8.0-beta.2:
     identifier: roadmap-cli
     name: Roadmap
     parent: welcome
     weight: 15
-menu_name: docs_0.8.0-beta.0
+menu_name: docs_0.8.0-beta.2
 section_menu_id: welcome
-url: /docs/0.8.0-beta.0/welcome/roadmap/
+url: /docs/0.8.0-beta.2/welcome/roadmap/
 aliases:
-  - /docs/0.8.0-beta.0/roadmap/
+  - /docs/0.8.0-beta.2/roadmap/
 ---
 
 # Project Status

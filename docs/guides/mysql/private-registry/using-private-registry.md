@@ -1,4 +1,15 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: Run MySQL using Private Registry
+menu:
+  docs_0.8.0-beta.2:
+    identifier: my-using-private-registry-private-registry
+    name: Quickstart
+    parent: my-private-registry-mysql
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Deploy MySQL from private Docker registry
 
@@ -19,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-beta.0-4 ; docker tag kubedb/operator:0.8.0-beta.0-4 $DOCKER_REGISTRY/operator:0.8.0-beta.0-4 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.0-4
+$ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
 $ docker pull kubedb/mysql:8.0 ; docker tag kubedb/mysql:8.0 $DOCKER_REGISTRY/mysql:8.0 ; docker push $DOCKER_REGISTRY/mysql:8.0
 $ docker pull kubedb/mysql-tools:8.0 ; docker tag kubedb/mysql-tools:8.0 $DOCKER_REGISTRY/mysql-tools:8.0 ; docker push $DOCKER_REGISTRY/mysql-tools:8.0
 ```
@@ -53,7 +64,7 @@ When installing KubeDB operator, set the flags `--docker-registry` and `--image-
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
 namespace "demo" created
 
 $ kubectl get ns
@@ -92,8 +103,8 @@ spec:
 Now run the command to deploy this `MySQL` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/private-registry/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.1/docs/examples/mysql/private-registry/demo-2.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/private-registry/demo-2.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/private-registry/demo-2.yaml"
 mysql "mysql-pvt-reg" created
 ```
 

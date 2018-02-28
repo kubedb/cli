@@ -1,9 +1,10 @@
 ---
-title: Guides
+title: Guides | KubeDB
 menu:
-  docs_0.8.0-beta.0:
+  docs_0.8.0-beta.2:
     identifier: guides
     name: Guides
     weight: 40
-menu_name: docs_0.8.0-beta.0
+    pre: dropdown
+menu_name: docs_0.8.0-beta.2
 ---

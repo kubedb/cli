@@ -1,3 +1,14 @@
+---
+title: Instant Backup of PostgreSQL
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-instant-backup-snapshot
+    name: Instant Backup
+    parent: pg-snapshot-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # KubeDB Snapshot
@@ -51,8 +62,8 @@ spec:
 If Postgres object `script-postgres` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/initialization/script-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
 postgres "script-postgres" created
 ```
 
@@ -93,7 +104,7 @@ Here,
  - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object.
-Only Postgres controller will handle this Snapshot object.
+Only PostgreSQL controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Postgres, `script-postgres`, in our case.
 
@@ -155,8 +166,8 @@ To lean how to configure other storage destinations for snapshot data, please vi
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/instant-snapshot.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/snapshot/instant-snapshot.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/instant-snapshot.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/instant-snapshot.yaml"
 snapshot "instant-snapshot" created
 ```
 
@@ -171,7 +182,7 @@ instant-snapshot   pg/script-postgres   Running   42s
 KubeDB operator watches for Snapshot objects using Kubernetes API. When a Snapshot object is created, it will launch a Job that runs the `pg_dumpall` command and
 uploads the output **sql** file to cloud storage using [osm](https://github.com/appscode/osm).
 
-Snapshot data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{Postgres name}/{Snapshot name}/`.
+Snapshot data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{PostgreSQL name}/{Snapshot name}/`.
 
 Once the snapshot Job is completed, you can see the output of the `pg_dumpall` command stored in the GCS bucket.
 

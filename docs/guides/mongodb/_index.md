@@ -1,10 +1,10 @@
 ---
 title: MongoDB
 menu:
-  docs_0.8.0-beta.0:
-    identifier: guides-mongodb
+  docs_0.8.0-beta.2:
+    identifier: mg-mongodb-guides
     name: MongoDB
     parent: guides
-    weight: 30
-menu_name: docs_0.8.0-beta.0
+    weight: 10
+menu_name: docs_0.8.0-beta.2
 ---

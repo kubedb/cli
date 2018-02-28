@@ -1,31 +1,45 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: Redis
+menu:
+  docs_0.8.0-beta.2:
+    identifier: rd-readme-redis
+    name: Redis
+    parent: rd-redis-guides
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+url: /docs/0.8.0-beta.2/guides/redis/
+aliases:
+  - /docs/0.8.0-beta.2/guides/redis/README/
+---
 
-## Redis versions supported by KubeDB
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-| KubeDB Version | Redis:4 |
-|:--:|:--:|
-| 0.1.0 - 0.7.0 | &#10007; |
-| 0.8.0-beta.0 | &#10003; |
-| 0.8.0-beta.1 | &#10003; |
+## Supported Redis Features
+
+|Features                                                | Availability |
+|--------------------------------------------------------|:------------:|
+|Clustering                                              | &#10007;     |
+|Instant Backup                                          | &#10007;     |
+|Scheduled Backup                                        | &#10007;     |
+|Initialize using Snapshot                               | &#10007;     |
+|Initialize using Script                                 | &#10007;     |
+|Persistent Volume                                       | &#10003;     |
+|Builtin Prometheus Discovery                            | &#10003;     |
+|Using CoreOS Prometheus Operator                        | &#10003;     |
 
 <br/>
 
-## KubeDB Features and their availability for Redis
+## Supported Redis Versions
 
-|Features |Availability|
-|--|:--:|
-|Clustering | &#10007; |
-|Instant Backup | &#10007; |
-|Scheduled Backup  | &#10007; |
-|Initialize using Snapshot | &#10007; |
-|Initialize using Script | &#10007; |
-|Persistent Volume | &#10003; |
-|out-of-the-box builtin-Prometheus Monitoring | &#10003; |
-|out-of-the-box CoreOS-Prometheus-Operator Monitoring | &#10003; |
+| KubeDB Version | Redis:4  |
+|:--------------:|:--------:|
+| 0.1.0 - 0.7.0  | &#10007; |
+| 0.8.0-beta.2   | &#10003; |
 
 <br/>
 
-## Life Cycle of Redis in KubeDB
+## Life Cycle of a Redis Object
 
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="373">

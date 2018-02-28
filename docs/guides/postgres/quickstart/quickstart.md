@@ -1,4 +1,15 @@
-> New to KubeDB? Please start [here](/docs/guides/README.md).
+---
+title: PostgreSQL Quickstart
+menu:
+  docs_0.8.0-beta.2:
+    identifier: pg-quickstart-quickstart
+    name: Overview
+    parent: pg-quickstart-postgres
+    weight: 10
+menu_name: docs_0.8.0-beta.2
+section_menu_id: guides
+---
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Running PostgreSQL
 
@@ -31,7 +42,7 @@ This tutorial will also use a pgAdmin to connect and test PostgreSQL database, o
 Run the following command to prepare your cluster for this tutorial
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/pgadmin.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/pgadmin.yaml
 deployment "pgadmin" created
 service "pgadmin" created
 
@@ -89,15 +100,15 @@ Here,
 
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
 KubeDB operator watches for Postgres objects using Kubernetes api. When a Postgres object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name.
 KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
 
-If RBAC is enabled in clusters, Postgres specific RBAC permission is required. [Check here](/docs/guides/postgres/quickstart/rbac.md) for details.
+If RBAC is enabled in clusters, PostgreSQL specific RBAC permission is required. [Check here](/docs/guides/postgres/quickstart/rbac.md) for details.
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
 
@@ -333,15 +344,15 @@ In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creatin
 The below command will resume the DormantDatabase `quick-postgres`
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/postgres/quickstart/quick-postgres.yaml"
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
+validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
 ## WipeOut DormantDatabase
 
 You can also wipe out a DormantDatabase by setting `spec.wipeOut` to `true`.
-KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this Postgres and also delete snapshot data stored in the Cloud Storage buckets.
+KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this PostgreSQL and also delete snapshot data stored in the Cloud Storage buckets.
 
 There is no way to resume a wiped out database. So, be sure before you wipe out a database.
 
@@ -389,6 +400,6 @@ $ kubectl delete ns demo
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [Postgres object](/docs/concepts/databases/postgres.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy Postgres with KubeDB.
+- Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy PostgreSQL with KubeDB.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
