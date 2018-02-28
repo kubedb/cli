@@ -103,7 +103,7 @@ def build_cmd(name):
     cfg = libbuild.BIN_MATRIX[name]
     entrypoint = 'cmd/{}/*.go'.format(name)
     compress = libbuild.ENV in ['prod']
-    upx= True
+    upx= False
     if cfg['type'] == 'go':
         if 'distro' in cfg:
             for goos, archs in cfg['distro'].items():
