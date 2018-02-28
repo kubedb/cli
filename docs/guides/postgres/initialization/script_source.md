@@ -119,7 +119,7 @@ Events:
   5m          5m         1         Postgres operator   Normal     Successful   Successfully created Service
 ```
 
-Now lets connect to our Postgres `script-postgres`  using pgAdmin we have installed in [quickstart](/docs/guides/postgres/quickstart.md#before-you-begin) tutorial.
+Now lets connect to our Postgres `script-postgres`  using pgAdmin we have installed in [quickstart](/docs/guides/postgres/quickstart/quickstart.md#before-you-begin) tutorial.
 
 Connection information:
 

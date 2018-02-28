@@ -173,7 +173,7 @@ Events:
   35s         35s        1         Postgres operator   Normal     Successful           Successfully created Service
 ```
 
-Now lets connect to our Postgres `recovered-postgres`  using pgAdmin we have installed in [quickstart](/docs/guides/postgres/quickstart.md#before-you-begin) tutorial.
+Now lets connect to our Postgres `recovered-postgres`  using pgAdmin we have installed in [quickstart](/docs/guides/postgres/quickstart/quickstart.md#before-you-begin) tutorial.
 
 Connection information:
 
