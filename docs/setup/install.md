@@ -44,10 +44,10 @@ To use `kubedb`, you will need to install KubeDB [operator](https://github.com/k
 
 ### Using YAML
 
-KubeDB can be installed via installer script included in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.8.0-alpha.0/hack/deploy) folder.
+KubeDB can be installed via installer script included in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.8.0-beta.2/hack/deploy) folder.
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh | bash -s -- -h
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh | bash -s -- -h
 kubedb.sh - install kubedb operator
 
 kubedb.sh [options]
@@ -63,18 +63,18 @@ options:
     --uninstall                    uninstall kubedb
 
 # install without RBAC roles
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash
 
 # Install with RBAC roles
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash -s -- --rbac
 ```
 
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash -s -- --run-on-master [--rbac]
 ```
 
@@ -82,7 +82,7 @@ KubeDB operator will be installed in a `kube-system` namespace by default. If yo
 
 ```console
 $ kubectl create namespace kubedb
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash -s -- --namespace=kubedb [--run-on-master] [--rbac]
 ```
 
@@ -92,14 +92,14 @@ To pass the address of your private registry and optionally a image pull secret 
 
 ```console
 $ kubectl create namespace kubedb
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash -s -- --docker-registry=MY_REGISTRY [--image-pull-secret=SECRET_NAME] [--rbac]
 ```
 
-KubeDB implements a [validating admission webhook](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) to validate KubeDB CRDs. To enable this feature, pass the `--enable-admission-webhook` flag. _Please note that, this works with Kubernetes 1.9.0 or later releases_.
+KubeDB implements a [validating admission webhook](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) to validate KubeDB CRDs. This is enabled by default for Kubernetes 1.9.0 or later releases. To disable this feature, pass the `--enable-admission-webhook=false` flag.
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash -s -- --enable-admission-webhook [--rbac]
 ```
 
