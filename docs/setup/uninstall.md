@@ -18,7 +18,7 @@ Please follow the steps below to uninstall KubeDB:
 - Delete the deployment and service used for KubeDB operator.
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-alpha.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash -s -- --uninstall [--namespace=NAMESPACE]
 
 + kubectl delete deployment -l app=kubedb -n kube-system
@@ -43,7 +43,11 @@ $ kubectl get pods --all-namespaces -l app=kubedb
 
 ```console
 kubectl get postgres.kubedb.com --all-namespaces -o yaml > postgres.yaml
-kubectl get elasticsearch.kubedb.com --all-namespaces -o yaml > elastic.yaml
+kubectl get elasticsearch.kubedb.com --all-namespaces -o yaml > elasticsearch.yaml
+kubectl get memcached.kubedb.com --all-namespaces -o yaml > memcached.yaml
+kubectl get mongodb.kubedb.com --all-namespaces -o yaml > mongodb.yaml
+kubectl get mysql.kubedb.com --all-namespaces -o yaml > mysql.yaml
+kubectl get redis.kubedb.com --all-namespaces -o yaml > redis.yaml
 kubectl get snapshot.kubedb.com --all-namespaces -o yaml > snapshot.yaml
 kubectl get dormant-database.kubedb.com --all-namespaces -o yaml > data.yaml
 ```
@@ -53,6 +57,10 @@ kubectl get dormant-database.kubedb.com --all-namespaces -o yaml > data.yaml
 ```console
 kubectl delete postgres.kubedb.com --all --cascade=false
 kubectl delete elasticsearch.kubedb.com --all --cascade=false
+kubectl delete memcached.kubedb.com --all --cascade=false
+kubectl delete mongodb.kubedb.com --all --cascade=false
+kubectl delete mysql.kubedb.com --all --cascade=false
+kubectl delete redis.kubedb.com --all --cascade=false
 kubectl delete snapshot.kubedb.com --all --cascade=false
 kubectl delete dormant-database.kubedb.com --all --cascade=false
 ```

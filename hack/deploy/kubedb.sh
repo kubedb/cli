@@ -43,7 +43,6 @@ export KUBEDB_NAMESPACE=kube-system
 export KUBEDB_SERVICE_ACCOUNT=default
 export KUBEDB_ENABLE_RBAC=false
 export KUBEDB_RUN_ON_MASTER=0
-export KUBEDB_ENABLE_INITIALIZER=false
 export KUBEDB_ENABLE_ADMISSION_WEBHOOK=false
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_IMAGE_PULL_SECRET=
@@ -68,7 +67,6 @@ show_help() {
     echo "    --image-pull-secret            name of secret used to pull kubedb operator images"
     echo "    --run-on-master                run kubedb operator on master"
     echo "    --enable-admission-webhook     configure admission webhook for kubedb CRDs"
-    echo "    --enable-initializer           configure kubedb operator as workload initializer"
     echo "    --uninstall                    uninstall kubedb"
 }
 
@@ -101,12 +99,13 @@ while test $# -gt 0; do
             export KUBEDB_IMAGE_PULL_SECRET="name: '$secret'"
             shift
             ;;
-        --enable-admission-webhook)
-            export KUBEDB_ENABLE_ADMISSION_WEBHOOK=true
-            shift
-            ;;
-        --enable-initializer)
-            export KUBEDB_ENABLE_INITIALIZER=true
+        --enable-admission-webhook*)
+            val=`echo $1 | sed -e 's/^[^=]*=//g'`
+            if [ "$val" = "false" ]; then
+                export VOYAGER_ENABLE_ADMISSION_WEBHOOK=false
+            else
+                export VOYAGER_ENABLE_ADMISSION_WEBHOOK=true
+            fi
             shift
             ;;
         --rbac)
@@ -159,25 +158,21 @@ export TLS_SERVING_CERT=$(cat server.crt | $ONESSL base64)
 export TLS_SERVING_KEY=$(cat server.key | $ONESSL base64)
 export KUBE_CA=$($ONESSL get kube-ca | $ONESSL base64)
 
-curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/operator.yaml | $ONESSL envsubst | kubectl apply -f -
+curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/operator.yaml | $ONESSL envsubst | kubectl apply -f -
 
 if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
     kubectl create serviceaccount $KUBEDB_SERVICE_ACCOUNT --namespace $KUBEDB_NAMESPACE
     kubectl label serviceaccount $KUBEDB_SERVICE_ACCOUNT app=kubedb --namespace $KUBEDB_NAMESPACE
-    curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
-    curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
+    curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
+    curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
 
 fi
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
     kubectl patch deploy kubedb-operator -n $KUBEDB_NAMESPACE \
-      --patch="$(curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/run-on-master.yaml)"
-fi
-
-if [ "$KUBEDB_ENABLE_INITIALIZER" = true ]; then
-    kubectl apply -f https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/initializer.yaml
+      --patch="$(curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/run-on-master.yaml)"
 fi
 
 if [ "$KUBEDB_ENABLE_ADMISSION_WEBHOOK" = true ]; then
-    curl -fsSL https://raw.githubusercontent.com/appscode/kubedb/0.7.0-alpha.0/hack/deploy/admission.yaml | $ONESSL envsubst | kubectl apply -f -
+    curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/admission.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
