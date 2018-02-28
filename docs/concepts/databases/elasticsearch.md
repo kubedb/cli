@@ -189,7 +189,11 @@ KubeDB supports taking periodic snapshots for Elasticsearch database. This is an
 
 
 ### spec.monitor
-To learn how to monitor Elasticsearch databases, please visit [here](/docs/concepts/monitoring.md).
+
+Elasticsearch managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
+
+- [Monitor Elasticsearch with builtin Prometheus](/docs/guides/elasticsearch/monitoring/using-builtin-prometheus.md)
+- [Monitor Elasticsearch with CoreOS Prometheus operator](/docs/guides/elasticsearch/monitoring/using-coreos-prometheus-operator.md)
 
 
 ### spec.resources
