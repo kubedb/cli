@@ -117,6 +117,7 @@ spec:
   - `READALL_PASSWORD:` Password for `readall` user.
 
 Following keys are used for search-guard configuration
+
   - `sg_config.yml:` Configure authenticators and authorization backends
   - `sg_internal_users.yml:` user and hashed passwords (hash with hasher.sh)
   - `sg_roles_mapping.yml:` map backend roles, hosts and users to roles
@@ -128,12 +129,12 @@ If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` wit
 ### spec.certificateSecret
 `spec.certificateSecret` is an optional field that points a Secret used to hold following information for certificate.
 
-  - `ca.pem:` The root CA in `pem` format
-  - `truststore.jks:` The root CA in `jks` format
-  - `keystore.jks:` The node certificate in `jks` format
-  - `sgadmin.jks:` Admin certificate is used to change the Search Guard configuration.
-  - `client-key.pem:` The client key in `pem` format.
-  - `client.pem:` The client certificate in `pem` format.
+  - `root.pem:` The root CA in `pem` format
+  - `root.jks:` The root CA in `jks` format
+  - `node.jks:` The node certificate used for transport layer
+  - `client.jks:` The client certificate used for http layer
+  - `sgadmin.jks:` The admin certificate used to change the Search Guard configuration.
+  - `key_pass:` The key password used to encrypt certificates.
 
 If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
 
