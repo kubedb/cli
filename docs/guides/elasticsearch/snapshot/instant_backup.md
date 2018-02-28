@@ -9,7 +9,7 @@ menu:
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
-> New to KubeDB Elasticsearch?  Quick start [here](/docs/guides/elasticsearch/quickstart.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # KubeDB Snapshot
 
@@ -69,7 +69,7 @@ $ kubectl expose svc -n demo infant-elasticsearch --name=infant-es-exposed --por
 service "infant-es-exposed" exposed
 ```
 
-Check [this tutorial](/docs/guides/elasticsearch/quickstart.md#connect-elasticsearch) to see how to connect Elasticsearch.
+Check [this tutorial](/docs/guides/elasticsearch/quickstart/quickstart.md#connect-elasticsearch) to see how to connect Elasticsearch.
 
 Before taking backup, insert some data into this Elasticsearch.
 

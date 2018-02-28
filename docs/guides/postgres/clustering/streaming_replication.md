@@ -10,7 +10,7 @@ menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
 
-> New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Streaming Replication
 
@@ -151,7 +151,7 @@ Here,
 
 That means, you can only connect to *primary* sever.
 
-Now connect to this *primary* server Pod `ha-postgres-0` using pgAdmin installed in [quickstart](/docs/guides/postgres/quickstart.md#before-you-begin) tutorial.
+Now connect to this *primary* server Pod `ha-postgres-0` using pgAdmin installed in [quickstart](/docs/guides/postgres/quickstart/quickstart.md#before-you-begin) tutorial.
 
 Connection information:
 
@@ -291,7 +291,7 @@ Here,
 
 That means, you can connect to both *primary* and *standby* sever. But these *hot standby* servers only accept read-only queries.
 
-Now connect to one of our *hot standby* servers Pod `hot-postgres-2` using pgAdmin installed in [quickstart](/docs/guides/postgres/quickstart.md#before-you-begin) tutorial.
+Now connect to one of our *hot standby* servers Pod `hot-postgres-2` using pgAdmin installed in [quickstart](/docs/guides/postgres/quickstart/quickstart.md#before-you-begin) tutorial.
 
 Connection information:
 
