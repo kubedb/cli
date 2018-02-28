@@ -1,5 +1,5 @@
 hash: ae4e2319a53921b5d55ab57f08c7129f422ee33e6971e251ba15c5c7c538ad1b
-updated: 2018-02-27T04:45:34.153965132-08:00
+updated: 2018-02-27T23:31:08.440502039-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -321,7 +321,7 @@ imports:
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
-  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+  version: 30136e27e2ac8d167177e8a583aa4c3fea5be833
 - name: github.com/prometheus/client_golang
   version: c5b7fccd204277076155f10851dad72b76a49317
   subpackages:
@@ -357,7 +357,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: a1e4933ab784095895e33dbe9f001ba10cfe2060
+  version: 6644d46b81fa1831979c4cded0106e774e0ef0ab
   subpackages:
   - doc
 - name: github.com/spf13/pflag
