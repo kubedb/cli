@@ -130,7 +130,8 @@ $ helm install stable/kubedb --name my-release
 # Kubernetes 1.9.0 or later
 $ helm repo update
 $ helm install stable/kubedb --name my-release \
-  --set apiserver.ca="$(onessl get kube-ca)"
+  --set apiserver.ca="$(onessl get kube-ca)" \
+  --set apiserver.enableAdmissionWebhook=true
 ```
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/stable/kubedb).
