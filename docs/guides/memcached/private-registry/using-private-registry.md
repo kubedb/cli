@@ -1,9 +1,9 @@
 ---
-title: Private Registry Using Private Registry
+title: Run Memcached using Private Registry
 menu:
   docs_0.8.0-beta.2:
     identifier: mc-using-private-registry-private-registry
-    name: Private Registry Using Private Registry
+    name: Quickstart
     parent: mc-private-registry-memcached
     weight: 10
 menu_name: docs_0.8.0-beta.2

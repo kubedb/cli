@@ -1,9 +1,9 @@
 ---
-title: Monitoring Using Coreos Prometheus Operator
+title: Monitoring Elasticsearch using Coreos Prometheus Operator
 menu:
   docs_0.8.0-beta.2:
     identifier: es-using-coreos-prometheus-operator-monitoring
-    name: Monitoring Using Coreos Prometheus Operator
+    name: Coreos Prometheus Operator
     parent: es-monitoring-elasticsearch
     weight: 10
 menu_name: docs_0.8.0-beta.2

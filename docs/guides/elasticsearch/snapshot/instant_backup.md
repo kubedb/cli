@@ -1,9 +1,9 @@
 ---
-title: Snapshot Instant Backup
+title: Instant Backup of Elasticsearch
 menu:
   docs_0.8.0-beta.2:
     identifier: es-instant-backup-snapshot
-    name: Snapshot Instant Backup
+    name: Instant Backup
     parent: es-snapshot-elasticsearch
     weight: 10
 menu_name: docs_0.8.0-beta.2

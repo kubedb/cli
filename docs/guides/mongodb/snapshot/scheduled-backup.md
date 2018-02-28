@@ -1,14 +1,15 @@
 ---
-title: Snapshot Scheduled Backup
+title: Scheduled Backup of MongoDB
 menu:
   docs_0.8.0-beta.2:
     identifier: mg-scheduled-backup-snapshot
-    name: Snapshot Scheduled Backup
+    name: Scheduled Backup
     parent: mg-snapshot-mongodb
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Database Scheduled Snapshots

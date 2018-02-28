@@ -1,11 +1,11 @@
 ---
-title: Snapshot Scheduled Backup
+title: Scheduled Backup of PostgreSQL
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-scheduled-backup-snapshot
-    name: Snapshot Scheduled Backup
+    name: Scheduled Backup
     parent: pg-snapshot-postgres
-    weight: 10
+    weight: 15
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

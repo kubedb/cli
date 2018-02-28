@@ -1,10 +1,10 @@
 ---
-title: MongoDB Snapshot
+title: MongoDB Snapshotting
 menu:
   docs_0.8.0-beta.2:
     identifier: mg-snapshot-mongodb
-    name: MongoDB Snapshot
+    name: Snapshotting
     parent: mg-mongodb-guides
-    weight: 10
+    weight: 20
 menu_name: docs_0.8.0-beta.2
 ---

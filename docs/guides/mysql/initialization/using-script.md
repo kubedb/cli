@@ -1,9 +1,9 @@
 ---
-title: Initialization Using Script
+title: Initialize MySQL using Script
 menu:
   docs_0.8.0-beta.2:
     identifier: my-using-script-initialization
-    name: Initialization Using Script
+    name: Using Script
     parent: my-initialization-mysql
     weight: 10
 menu_name: docs_0.8.0-beta.2

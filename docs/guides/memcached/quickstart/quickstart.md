@@ -1,9 +1,9 @@
 ---
-title: Quickstart Quickstart
+title: Memcached Quickstart
 menu:
   docs_0.8.0-beta.2:
     identifier: mc-quickstart-quickstart
-    name: Quickstart Quickstart
+    name: Overview
     parent: mc-quickstart-memcached
     weight: 10
 menu_name: docs_0.8.0-beta.2

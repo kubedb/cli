@@ -1,10 +1,10 @@
 ---
-title: Elasticsearch Private Registry
+title: Run Elasticsearch from Private Registry
 menu:
   docs_0.8.0-beta.2:
     identifier: es-private-registry-elasticsearch
-    name: Elasticsearch Private Registry
+    name: Private Registry
     parent: es-elasticsearch-guides
-    weight: 10
+    weight: 40
 menu_name: docs_0.8.0-beta.2
 ---

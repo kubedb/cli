@@ -1,11 +1,11 @@
 ---
-title: Monitoring Using Coreos Prometheus Operator
+title: Monitor MongoDB using Coreos Prometheus Operator
 menu:
   docs_0.8.0-beta.2:
     identifier: mg-using-coreos-prometheus-operator-monitoring
-    name: Monitoring Using Coreos Prometheus Operator
+    name: Coreos Prometheus Operator
     parent: mg-monitoring-mongodb
-    weight: 10
+    weight: 15
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

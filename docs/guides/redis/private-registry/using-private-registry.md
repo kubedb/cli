@@ -1,9 +1,9 @@
 ---
-title: Private Registry Using Private Registry
+title: Run Redis using Private Registry
 menu:
   docs_0.8.0-beta.2:
     identifier: rd-using-private-registry-private-registry
-    name: Private Registry Using Private Registry
+    name: Quickstart
     parent: rd-private-registry-redis
     weight: 10
 menu_name: docs_0.8.0-beta.2

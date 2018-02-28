@@ -1,9 +1,9 @@
 ---
-title: Clustering Topology
+title: Elasticsearch Cluster Topology
 menu:
   docs_0.8.0-beta.2:
     identifier: es-topology-clustering
-    name: Clustering Topology
+    name: Topology
     parent: es-clustering-elasticsearch
     weight: 10
 menu_name: docs_0.8.0-beta.2

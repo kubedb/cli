@@ -1,14 +1,15 @@
 ---
-title: Initialization Using Script
+title: Initialize MongoDB using Script
 menu:
   docs_0.8.0-beta.2:
     identifier: mg-using-script-initialization
-    name: Initialization Using Script
+    name: Using Script
     parent: mg-initialization-mongodb
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Initialize MongoDB using Script

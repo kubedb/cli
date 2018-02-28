@@ -1,10 +1,10 @@
 ---
-title: PostgreSQL Private Registry
+title: Run PostgreSQL using Private Registry
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-private-registry-postgres
-    name: PostgreSQL Private Registry
+    name: Private Registry
     parent: pg-postgres-guides
-    weight: 10
+    weight: 35
 menu_name: docs_0.8.0-beta.2
 ---

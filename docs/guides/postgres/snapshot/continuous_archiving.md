@@ -1,11 +1,11 @@
 ---
-title: Snapshot Continuous Archiving
+title: Continuous Archiving of PostgreSQL
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-continuous-archiving-snapshot
-    name: Snapshot Continuous Archiving
+    name: WAL Archiving
     parent: pg-snapshot-postgres
-    weight: 10
+    weight: 20
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

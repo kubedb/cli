@@ -1,11 +1,11 @@
 ---
-title: Quickstart Rbac
+title: RBAC for PostgreSQL
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-rbac-quickstart
-    name: Quickstart Rbac
+    name: RBAC
     parent: pg-quickstart-postgres
-    weight: 10
+    weight: 15
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

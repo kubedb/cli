@@ -1,11 +1,11 @@
 ---
-title: Initialization Snapshot Source
+title: Initialize Postgres using Snapshot Source
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-snapshot-source-initialization
-    name: Initialization Snapshot Source
+    name: From Snapshot
     parent: pg-initialization-postgres
-    weight: 10
+    weight: 15
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

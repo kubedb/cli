@@ -1,14 +1,15 @@
 ---
-title: Monitoring Using Builtin Prometheus
+title: Monitor MongoDB using Builtin Prometheus Discovery
 menu:
   docs_0.8.0-beta.2:
     identifier: mg-using-builtin-prometheus-monitoring
-    name: Monitoring Using Builtin Prometheus
+    name: Builtin Prometheus Discovery
     parent: mg-monitoring-mongodb
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using Prometheus with KubeDB

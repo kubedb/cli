@@ -3,9 +3,9 @@ title: Search Guard Certificate
 menu:
   docs_0.8.0-beta.2:
     identifier: es-certificate-search-guard
-    name: Search Guard Certificate
+    name: Issue Certificate
     parent: es-search-guard-elasticsearch
-    weight: 10
+    weight: 15
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

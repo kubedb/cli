@@ -1,10 +1,10 @@
 ---
-title: PostgreSQL Snapshot
+title: PostgreSQL Snapshotting
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-snapshot-postgres
-    name: PostgreSQL Snapshot
+    name: Snapshotting
     parent: pg-postgres-guides
-    weight: 10
+    weight: 25
 menu_name: docs_0.8.0-beta.2
 ---

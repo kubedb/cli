@@ -1,14 +1,15 @@
 ---
-title: Monitoring Using Builtin Prometheus
+title: Monitor PostgreSQL using Builtin Prometheus Discovery
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-using-builtin-prometheus-monitoring
-    name: Monitoring Using Builtin Prometheus
+    name: Builtin Prometheus Discovery
     parent: pg-monitoring-postgres
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
+
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Using Prometheus with KubeDB

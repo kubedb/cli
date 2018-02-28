@@ -1,9 +1,9 @@
 ---
-title: Quickstart Quickstart
+title: Elasticsearch Quickstart
 menu:
   docs_0.8.0-beta.2:
     identifier: es-quickstart-quickstart
-    name: Quickstart Quickstart
+    name: Overview
     parent: es-quickstart-elasticsearch
     weight: 10
 menu_name: docs_0.8.0-beta.2

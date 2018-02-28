@@ -1,10 +1,10 @@
 ---
-title: Memcached Monitoring
+title: Monitoring Memcached
 menu:
   docs_0.8.0-beta.2:
     identifier: mc-monitoring-memcached
-    name: Memcached Monitoring
+    name: Monitoring
     parent: mc-memcached-guides
-    weight: 10
+    weight: 25
 menu_name: docs_0.8.0-beta.2
 ---

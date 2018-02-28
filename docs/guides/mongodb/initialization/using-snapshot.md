@@ -1,11 +1,11 @@
 ---
-title: Initialization Using Snapshot
+title: Initialize MongoDB from Snapshot
 menu:
   docs_0.8.0-beta.2:
     identifier: mg-using-snapshot-initialization
-    name: Initialization Using Snapshot
+    name: From Snapshot
     parent: mg-initialization-mongodb
-    weight: 10
+    weight: 15
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

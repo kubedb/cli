@@ -1,14 +1,15 @@
 ---
-title: Initialization Script Source
+title: Initialize Postgres using Script Source
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-script-source-initialization
-    name: Initialization Script Source
+    name: Using Script
     parent: pg-initialization-postgres
     weight: 10
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---
+
 > New to KubeDB Postgres?  Quick start [here](/docs/guides/postgres/quickstart/quickstart.md).
 
 # Initialize PostgreSQL with Script

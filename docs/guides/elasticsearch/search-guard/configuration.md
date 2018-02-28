@@ -3,9 +3,9 @@ title: Search Guard Configuration
 menu:
   docs_0.8.0-beta.2:
     identifier: es-configuration-search-guard
-    name: Search Guard Configuration
+    name: Configuration
     parent: es-search-guard-elasticsearch
-    weight: 10
+    weight: 25
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

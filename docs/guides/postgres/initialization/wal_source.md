@@ -1,11 +1,11 @@
 ---
-title: Initialization Wal Source
+title: Initialize Postgres from WAL
 menu:
   docs_0.8.0-beta.2:
     identifier: pg-wal-source-initialization
-    name: Initialization Wal Source
+    name: From WAL
     parent: pg-initialization-postgres
-    weight: 10
+    weight: 20
 menu_name: docs_0.8.0-beta.2
 section_menu_id: guides
 ---

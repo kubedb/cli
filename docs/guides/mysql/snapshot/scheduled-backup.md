@@ -1,9 +1,9 @@
 ---
-title: Snapshot Scheduled Backup
+title: Scheduled Backup of MySQL
 menu:
   docs_0.8.0-beta.2:
     identifier: my-scheduled-backup-snapshot
-    name: Snapshot Scheduled Backup
+    name: Scheduled Backup
     parent: my-snapshot-mysql
     weight: 10
 menu_name: docs_0.8.0-beta.2
