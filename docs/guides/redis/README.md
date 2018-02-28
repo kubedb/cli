@@ -2,7 +2,7 @@
 title: Redis
 menu:
   docs_0.8.0-beta.2:
-    identifier: readme-redis
+    identifier: rd-readme-redis
     name: Redis
     parent: redis-guides
     weight: 10

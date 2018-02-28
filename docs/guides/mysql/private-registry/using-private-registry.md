@@ -2,7 +2,7 @@
 title: Private Registry Using Private Registry
 menu:
   docs_0.8.0-beta.2:
-    identifier: using-private-registry-private-registry
+    identifier: my-using-private-registry-private-registry
     name: Private Registry Using Private Registry
     parent: private-registry-mysql
     weight: 10

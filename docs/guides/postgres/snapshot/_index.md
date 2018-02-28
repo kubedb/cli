@@ -2,7 +2,7 @@
 title: PostgreSQL Snapshot
 menu:
   docs_0.8.0-beta.2:
-    identifier: snapshot-postgres
+    identifier: pg-snapshot-postgres
     name: PostgreSQL Snapshot
     parent: postgres-guides
     weight: 10

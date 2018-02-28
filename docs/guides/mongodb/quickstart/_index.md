@@ -2,7 +2,7 @@
 title: MongoDB Quickstart
 menu:
   docs_0.8.0-beta.2:
-    identifier: quickstart-mongodb
+    identifier: mg-quickstart-mongodb
     name: MongoDB Quickstart
     parent: mongodb-guides
     weight: 10

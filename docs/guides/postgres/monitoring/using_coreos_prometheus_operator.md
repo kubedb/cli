@@ -2,7 +2,7 @@
 title: Monitoring Using Coreos Prometheus Operator
 menu:
   docs_0.8.0-beta.2:
-    identifier: using-coreos-prometheus-operator-monitoring
+    identifier: pg-using-coreos-prometheus-operator-monitoring
     name: Monitoring Using Coreos Prometheus Operator
     parent: monitoring-postgres
     weight: 10

@@ -2,7 +2,7 @@
 title: Clustering Ha Cluster
 menu:
   docs_0.8.0-beta.2:
-    identifier: ha-cluster-clustering
+    identifier: pg-ha-cluster-clustering
     name: Clustering Ha Cluster
     parent: clustering-postgres
     weight: 10

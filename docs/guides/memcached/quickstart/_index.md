@@ -2,7 +2,7 @@
 title: Memcached Quickstart
 menu:
   docs_0.8.0-beta.2:
-    identifier: quickstart-memcached
+    identifier: mc-quickstart-memcached
     name: Memcached Quickstart
     parent: memcached-guides
     weight: 10

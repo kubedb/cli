@@ -2,7 +2,7 @@
 title: MongoDB Initialization
 menu:
   docs_0.8.0-beta.2:
-    identifier: initialization-mongodb
+    identifier: mg-initialization-mongodb
     name: MongoDB Initialization
     parent: mongodb-guides
     weight: 10

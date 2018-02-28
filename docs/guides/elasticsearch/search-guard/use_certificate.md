@@ -2,7 +2,7 @@
 title: Search Guard Use Certificate
 menu:
   docs_0.8.0-beta.2:
-    identifier: use-certificate-search-guard
+    identifier: es-use-certificate-search-guard
     name: Search Guard Use Certificate
     parent: search-guard-elasticsearch
     weight: 10

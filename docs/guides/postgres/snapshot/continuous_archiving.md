@@ -2,7 +2,7 @@
 title: Snapshot Continuous Archiving
 menu:
   docs_0.8.0-beta.2:
-    identifier: continuous-archiving-snapshot
+    identifier: pg-continuous-archiving-snapshot
     name: Snapshot Continuous Archiving
     parent: snapshot-postgres
     weight: 10

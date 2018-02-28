@@ -2,7 +2,7 @@
 title: Quickstart Rbac
 menu:
   docs_0.8.0-beta.2:
-    identifier: rbac-quickstart
+    identifier: pg-rbac-quickstart
     name: Quickstart Rbac
     parent: quickstart-postgres
     weight: 10

@@ -2,7 +2,7 @@
 title: PostgreSQL Clustering
 menu:
   docs_0.8.0-beta.2:
-    identifier: clustering-postgres
+    identifier: pg-clustering-postgres
     name: PostgreSQL Clustering
     parent: postgres-guides
     weight: 10

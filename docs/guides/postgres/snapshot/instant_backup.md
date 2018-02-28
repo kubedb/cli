@@ -2,7 +2,7 @@
 title: Snapshot Instant Backup
 menu:
   docs_0.8.0-beta.2:
-    identifier: instant-backup-snapshot
+    identifier: pg-instant-backup-snapshot
     name: Snapshot Instant Backup
     parent: snapshot-postgres
     weight: 10

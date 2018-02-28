@@ -2,7 +2,7 @@
 title: Initialization Wal Source
 menu:
   docs_0.8.0-beta.2:
-    identifier: wal-source-initialization
+    identifier: pg-wal-source-initialization
     name: Initialization Wal Source
     parent: initialization-postgres
     weight: 10

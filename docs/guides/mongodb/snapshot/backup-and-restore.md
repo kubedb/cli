@@ -2,7 +2,7 @@
 title: Snapshot Backup And Restore
 menu:
   docs_0.8.0-beta.2:
-    identifier: backup-and-restore-snapshot
+    identifier: mg-backup-and-restore-snapshot
     name: Snapshot Backup And Restore
     parent: snapshot-mongodb
     weight: 10

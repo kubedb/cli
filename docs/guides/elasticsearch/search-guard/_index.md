@@ -2,7 +2,7 @@
 title: Elasticsearch Search Guard
 menu:
   docs_0.8.0-beta.2:
-    identifier: search-guard-elasticsearch
+    identifier: es-search-guard-elasticsearch
     name: Elasticsearch Search Guard
     parent: elasticsearch-guides
     weight: 10

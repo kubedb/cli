@@ -2,7 +2,7 @@
 title: MongoDB
 menu:
   docs_0.8.0-beta.2:
-    identifier: mongodb-guides
+    identifier: mg-mongodb-guides
     name: MongoDB
     parent: guides
     weight: 10

@@ -2,7 +2,7 @@
 title: Snapshot Backup And Restore
 menu:
   docs_0.8.0-beta.2:
-    identifier: backup-and-restore-snapshot
+    identifier: my-backup-and-restore-snapshot
     name: Snapshot Backup And Restore
     parent: snapshot-mysql
     weight: 10

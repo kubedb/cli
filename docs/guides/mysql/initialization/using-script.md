@@ -2,7 +2,7 @@
 title: Initialization Using Script
 menu:
   docs_0.8.0-beta.2:
-    identifier: using-script-initialization
+    identifier: my-using-script-initialization
     name: Initialization Using Script
     parent: initialization-mysql
     weight: 10

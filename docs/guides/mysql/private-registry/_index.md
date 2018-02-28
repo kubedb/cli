@@ -2,7 +2,7 @@
 title: MySQL Private Registry
 menu:
   docs_0.8.0-beta.2:
-    identifier: private-registry-mysql
+    identifier: my-private-registry-mysql
     name: MySQL Private Registry
     parent: mysql-guides
     weight: 10

@@ -2,7 +2,7 @@
 title: Initialization Snapshot Source
 menu:
   docs_0.8.0-beta.2:
-    identifier: snapshot-source-initialization
+    identifier: es-snapshot-source-initialization
     name: Initialization Snapshot Source
     parent: initialization-elasticsearch
     weight: 10

@@ -2,7 +2,7 @@
 title: MySQL
 menu:
   docs_0.8.0-beta.2:
-    identifier: readme-mysql
+    identifier: my-readme-mysql
     name: MySQL
     parent: mysql-guides
     weight: 10

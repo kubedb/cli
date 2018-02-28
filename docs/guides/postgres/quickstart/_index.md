@@ -2,7 +2,7 @@
 title: PostgreSQL Quickstart
 menu:
   docs_0.8.0-beta.2:
-    identifier: quickstart-postgres
+    identifier: pg-quickstart-postgres
     name: PostgreSQL Quickstart
     parent: postgres-guides
     weight: 10

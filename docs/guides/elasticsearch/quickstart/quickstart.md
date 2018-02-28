@@ -2,7 +2,7 @@
 title: Quickstart Quickstart
 menu:
   docs_0.8.0-beta.2:
-    identifier: quickstart-quickstart
+    identifier: es-quickstart-quickstart
     name: Quickstart Quickstart
     parent: quickstart-elasticsearch
     weight: 10

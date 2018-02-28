@@ -2,7 +2,7 @@
 title: Elasticsearch Quickstart
 menu:
   docs_0.8.0-beta.2:
-    identifier: quickstart-elasticsearch
+    identifier: es-quickstart-elasticsearch
     name: Elasticsearch Quickstart
     parent: elasticsearch-guides
     weight: 10

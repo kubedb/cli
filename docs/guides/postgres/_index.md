@@ -2,7 +2,7 @@
 title: PostgreSQL
 menu:
   docs_0.8.0-beta.2:
-    identifier: postgres-guides
+    identifier: pg-postgres-guides
     name: PostgreSQL
     parent: guides
     weight: 10

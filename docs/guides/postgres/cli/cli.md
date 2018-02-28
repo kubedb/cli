@@ -2,7 +2,7 @@
 title: CLI | KubeDB
 menu:
   docs_0.8.0-beta.2:
-    identifier: cli-cli
+    identifier: pg-cli-cli
     name: CLI
     parent: cli-postgres
     weight: 70

@@ -2,7 +2,7 @@
 title: Initialization Script Source
 menu:
   docs_0.8.0-beta.2:
-    identifier: script-source-initialization
+    identifier: pg-script-source-initialization
     name: Initialization Script Source
     parent: initialization-postgres
     weight: 10

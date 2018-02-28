@@ -2,7 +2,7 @@
 title: PostgreSQL Initialization
 menu:
   docs_0.8.0-beta.2:
-    identifier: initialization-postgres
+    identifier: pg-initialization-postgres
     name: PostgreSQL Initialization
     parent: postgres-guides
     weight: 10

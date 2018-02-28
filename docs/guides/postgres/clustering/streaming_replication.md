@@ -2,7 +2,7 @@
 title: Clustering Streaming Replication
 menu:
   docs_0.8.0-beta.2:
-    identifier: streaming-replication-clustering
+    identifier: pg-streaming-replication-clustering
     name: Clustering Streaming Replication
     parent: clustering-postgres
     weight: 10

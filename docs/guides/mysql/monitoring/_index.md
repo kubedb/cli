@@ -2,7 +2,7 @@
 title: MySQL Monitoring
 menu:
   docs_0.8.0-beta.2:
-    identifier: monitoring-mysql
+    identifier: my-monitoring-mysql
     name: MySQL Monitoring
     parent: mysql-guides
     weight: 10

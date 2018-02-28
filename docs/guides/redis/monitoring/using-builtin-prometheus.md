@@ -2,7 +2,7 @@
 title: Monitoring Using Builtin Prometheus
 menu:
   docs_0.8.0-beta.2:
-    identifier: using-builtin-prometheus-monitoring
+    identifier: rd-using-builtin-prometheus-monitoring
     name: Monitoring Using Builtin Prometheus
     parent: monitoring-redis
     weight: 10
