@@ -102,9 +102,9 @@ while test $# -gt 0; do
         --enable-admission-webhook*)
             val=`echo $1 | sed -e 's/^[^=]*=//g'`
             if [ "$val" = "false" ]; then
-                export VOYAGER_ENABLE_ADMISSION_WEBHOOK=false
+                export KUBEDB_ENABLE_ADMISSION_WEBHOOK=false
             else
-                export VOYAGER_ENABLE_ADMISSION_WEBHOOK=true
+                export KUBEDB_ENABLE_ADMISSION_WEBHOOK=true
             fi
             shift
             ;;
