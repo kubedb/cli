@@ -44,9 +44,9 @@ The following tables lists the configurable parameters of the KubeDB chart and t
 | -----------------------------------| ------------------------------------------------------------------ | ------------------ |
 | `replicaCount`                     | Number of kubedb operator replicas to create (only 1 is supported) | `1`                |
 | `dockerRegistry`                   | Docker registry used to pull KubeDB related images                 | `kubedb`           |
-| `imageTags.operator`               | Tag of KubeDB operator image                                       | `0.8.0-alpha.0`    |
-| `imageTags.exporter`               | Tag of KubeDB operator image                                       | `0.8.0-alpha.0`    |
-| `imageTags.apiserver`              | Tag of HAProxy container image                                     | `0.1.0-alpha.0`    |
+| `imageTags.operator`               | Tag of KubeDB operator image                                       | `0.8.0-beta.2`    |
+| `imageTags.exporter`               | Tag of KubeDB operator image                                       | `0.8.0-beta.2`    |
+| `imageTags.apiserver`              | Tag of HAProxy container image                                     | `0.1.0-beta.2`    |
 | `imagePullSecrets`                 | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
 | `imagePullPolicy`                  | Image pull policy                                                  | `IfNotPresent`     |
 | `criticalAddon`                    | If true, installs KubeDB operator as critical addon                | `false`            |

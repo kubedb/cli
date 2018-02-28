@@ -6,11 +6,11 @@ dockerRegistry: kubedb
 ## Tags for Docker images
 imageTags:
   ## Docker image tag containing KubeDB operator
-  operator: 0.8.0-alpha.0
+  operator: 0.8.0-beta.2
   ## Docker image tag containing KubeDB exporter
-  exporter: 0.8.0-alpha.0
+  exporter: 0.8.0-beta.2
   ## Docker image tag containing KubeDB apiserver
-  apiserver: 0.1.0-alpha.0
+  apiserver: 0.1.0-beta.2
 # Declare variables to be passed into your templates.
 replicaCount: 1
 ## Optionally specify an array of imagePullSecrets.
