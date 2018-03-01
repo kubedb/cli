@@ -197,6 +197,7 @@ From the above image, you can see that the snapshot data file `dumpfile.sql` is 
 If you open this `dumpfile.sql` file, you will see the query to create `dashboard` TABLE.
 
 ```console
+
 --
 -- Name: dashboard; Type: TABLE; Schema: data; Owner: postgres
 --

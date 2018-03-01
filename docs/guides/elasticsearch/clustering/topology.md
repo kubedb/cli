@@ -295,7 +295,6 @@ Topology:
 Two services are also created for this Elasticsearch object.
 
  - Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
-
  - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
 

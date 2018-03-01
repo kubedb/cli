@@ -60,9 +60,8 @@ spec:
 
 In this examples:
 
-* This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
-
-* One server will be *primary* and two others will be *warm standby* servers, default of **`spec.standby`**
+- This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
+- One server will be *primary* and two others will be *warm standby* servers, default of **`spec.standby`**
 
 
 ### What is Streaming Replication
@@ -99,7 +98,6 @@ primary_conninfo = 'application_name=$HOSTNAME host=$PRIMARY_HOST'
 Here,
 
 - _trigger_file_ is created to trigger a *standby* to take over as *primary* server.
-
 - *$PRIMARY_HOST* holds the Kubernetes Service name that targets *primary* server
 
 

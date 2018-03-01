@@ -17,6 +17,7 @@ aliases:
 # Project Status
 
 ## Versioning Policy
+
 There are 2 parts to versioning policy:
 
  - Operator & cli version: KubeDB follows semver versioning policy. Until 1.0 release is done, there might be breaking changes between point releases of the operator. Please always check the release notes for upgrade instructions.

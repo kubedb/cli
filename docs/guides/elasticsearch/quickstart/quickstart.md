@@ -65,9 +65,7 @@ spec:
 Here,
 
  - `spec.version` is the version of Elasticsearch database. In this tutorial, a Elasticsearch 5.6 database is created.
-
  - `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
-
  - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
  created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
  If no storage spec is given, an `emptyDir` is used.
@@ -174,7 +172,6 @@ quick-elasticsearch-master   ClusterIP   10.105.209.152   <none>        9300/TCP
 Two services for each Elasticsearch object.
 
  - Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
-
  - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
 KubeDB supports Elasticsearch clustering where Pod can be any of these three role: *master*, *data* or *client*.
@@ -426,7 +423,6 @@ status:
 Here,
 
  - `spec.origin` contains original Elasticsearch object.
-
  - `status.phase` points to the current database state `Paused`.
 
 ## Resume DormantDatabase
