@@ -101,7 +101,6 @@ To list all KubeDB objects, use following command:
 
 ```console
 $ kubedb get all -o wide
-
 NAME                VERSION     STATUS  AGE
 mg/mongodb-demo     3.4         Running 3h
 mg/mongodb-dev      3.4         Running 3h
@@ -247,7 +246,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 Lets edit an existing running MongoDB object to setup [Scheduled Backup](/docs/guides/mongodb/snapshot/scheduled-backup.md). The following command will open MongoDB `mongodb-demo` in editor.
 
-```bash
+```console
 $ kubedb edit mg mongodb-demo
 
 # Add following under Spec to configure periodic backups

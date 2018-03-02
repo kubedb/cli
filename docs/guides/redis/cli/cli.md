@@ -213,7 +213,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 Lets edit an existing running Redis object to setup [Monitoring](/docs/guides/redis/monitoring/using-builtin-prometheus.md). The following command will open Redis `redis-demo` in editor.
 
-```bash
+```console
 $ kubedb edit rd redis-demo
 #spec:
 #  monitor:

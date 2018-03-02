@@ -127,7 +127,6 @@ You can print labels with objects. The following command will list all Snapshots
 
 ```console
 $ kubedb get snap --show-labels
-
 NAME                                 DATABASE                     STATUS      AGE       LABELS
 elasticsearch-demo-20170605-073557   es/elasticsearch-demo        Succeeded   11m       kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo
 snapshot-20171212-114700             es/elasticsearch-demo        Succeeded   1h        kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo
@@ -137,7 +136,6 @@ You can also filter list using `--selector` flag.
 
 ```console
 $ kubedb get snap --selector='kubedb.com/kind=Elasticsearch' --show-labels
-
 NAME                                 DATABASE                STATUS      AGE       LABELS
 elasticsearch-demo-20171212-073557   es/elasticsearch-demo   Succeeded   14m       kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo
 snapshot-20171212-114700             es/elasticsearch-demo   Succeeded   2h        kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo
@@ -147,7 +145,6 @@ To print only object name, run the following command:
 
 ```console
 $ kubedb get all -o name
-
 elasticsearch/elasticsearch-demo
 elasticsearch/elasticsearch-dev
 elasticsearch/elasticsearch-prod
@@ -274,9 +271,9 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 `kubedb edit` command allows users to directly edit any KubeDB object. It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `nano`.
 
-Lets edit an existing running Elasticsearch object to setup [Scheduled Backup](). The following command will open Elasticsearch `elasticsearch-demo` in editor.
+Lets edit an existing running Elasticsearch object to setup [Scheduled Backup](/docs/guides/elasticsearch/snapshot/scheduled_backup.md). The following command will open Elasticsearch `elasticsearch-demo` in editor.
 
-```bash
+```console
 $ kubedb edit es elasticsearch-demo
 
 # Add following under Spec to configure periodic backups

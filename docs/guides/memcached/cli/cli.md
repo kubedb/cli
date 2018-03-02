@@ -210,8 +210,9 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 Lets edit an existing running Memcached object to setup [Monitoring](/docs/guides/memcached/monitoring/using-builtin-prometheus.md). The following command will open Memcached `memcached-demo` in editor.
 
-```bash
+```console
 $ kubedb edit mc memcached-demo
+
 #spec:
 #  monitor:
 #    agent: prometheus.io/builtin

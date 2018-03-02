@@ -234,7 +234,7 @@ $ kubedb describe all --all-namespaces
 
 You can also describe KubeDb objects with matching labels. The following command will describe all Elasticsearch & Postgres objects with specified labels from every namespace.
 
-```bash
+```console
 $ kubedb describe pg,es --all-namespaces --selector='group=dev'
 ```
 
@@ -247,7 +247,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 Lets edit an existing running Postgres object to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
 
-```bash
+```console
 $ kubedb edit pg postgres-demo
 
 # Add following under Spec to configure periodic backups

@@ -101,7 +101,6 @@ To list all KubeDB objects, use following command:
 
 ```console
 $ kubedb get all -o wide
-
 NAME                VERSION     STATUS   AGE
 my/mysql-demo       8.0         Running  3h
 my/mysql-dev        8.0         Running  3h
@@ -244,7 +243,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 Lets edit an existing running MySQL object to setup [Scheduled Backup](/docs/guides/mysql/snapshot/scheduled-backup.md). The following command will open MySQL `mysql-demo` in editor.
 
-```bash
+```console
 $ kubedb edit my mysql-demo
 
 # Add following under Spec to configure periodic backups
