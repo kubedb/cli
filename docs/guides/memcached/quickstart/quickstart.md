@@ -73,11 +73,8 @@ memcached "memcd-quickstart" created
 Here,
 
 - `spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. It defaults to 1.
-
 - `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
-
 - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
-
 - `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 
 KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching Memcached object name. No Memcached specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
@@ -264,7 +261,6 @@ status:
 Here,
 
 - `spec.origin` is the spec of the original spec of the original Memcached object.
-
 - `status.phase` points to the current database state `Paused`.
 
 ## Resume Dormant Database

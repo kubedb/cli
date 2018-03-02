@@ -15,6 +15,7 @@ aliases:
 ---
 
 # Contribution Guidelines
+
 Want to hack on KubeDB?
 
 AppsCode projects are [Apache 2.0 licensed](https://github.com/kubedb/cli/blob/master/LICENSE) and accept contributions via GitHub pull requests.  This document outlines some of the conventions on development workflow, commit message formatting, contact points and other resources to make it easier to get your contribution accepted.

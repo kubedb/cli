@@ -70,9 +70,7 @@ redis "redis-mon-prometheus" created
 Here,
 
 - `spec.version` is the version of Redis database. In this tutorial, a Redis 3.4 database is going to be created.
-
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
-
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Redis Exporter` and will receive metrics from exporter.
 
 KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
@@ -234,7 +232,7 @@ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/do
 configmap "prometheus-server-conf" created
 ```
 
-Now, the below yaml is used to deploy Prometheus in kubernetes :
+Now, the below yaml is used to deploy Prometheus in kubernetes:
 
 ```yaml
 apiVersion: apps/v1
@@ -340,6 +338,7 @@ http://192.168.99.100:30901
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
+
 ![prometheus-builtin](/docs/images/redis/redis-builtin.png)
 
 ## Cleaning up

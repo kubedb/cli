@@ -138,11 +138,8 @@ status:
 Here,
 
 - `metadata.labels` should include the type of database `kubedb.com/kind: MongoDB` whose snapshot will be taken.
-
 - `spec.databaseName` points to the database whose snapshot is taken.
-
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
-
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 You can also run the `kubedb describe` command to see the recent snapshots taken for a database.

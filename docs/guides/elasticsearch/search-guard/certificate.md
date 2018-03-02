@@ -20,9 +20,7 @@ KubeDB applies same **truststore**  for both transport layer TLS and REST layer 
 But, KubeDB distinguishes between the following types of keystore for security purpose.
 
 - **transport layer keystore** are used to identify and secure traffic between Elasticsearch nodes on the transport layer
-
 - **http layer keystore** are used to identify Elasticsearch clients on the REST and transport layer.
-
 - **sgadmin keystore** are used as admin client that have elevated rights to perform administrative tasks.
 
 

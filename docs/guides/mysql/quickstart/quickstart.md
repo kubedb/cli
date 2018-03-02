@@ -91,9 +91,7 @@ mysql "mysql-quickstart" created
 Here,
 
 - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
-
 - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
-
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
@@ -282,7 +280,6 @@ status:
 Here,
 
 - `spec.origin` is the spec of the original spec of the original MySQL object.
-
 - `status.phase` points to the current database state `Paused`.
 
 ## Resume Dormant Database

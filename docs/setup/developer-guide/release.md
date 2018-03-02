@@ -13,6 +13,7 @@ section_menu_id: setup
 # Release Process
 
 ## apimachinery
+
 - Make sure `apimachinery` master builds and create a `release-*` branch.
 
 ```console
@@ -35,12 +36,10 @@ apimachinery (release-0.1) $ git merge master
 - Change the apimachinery dependency to `release-*` branch
 - Revendor `glide slow`
 - Make sure master branch compiles, commit any changes due to vendoring & push to origin master
-
 - Create a matching `release-*` branch
 - Apply a matching `X.Y.Z` tag
 - Push to origin `release-*` branch
 - Build and release docker image for pg operator.
-
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
 ```console
@@ -66,12 +65,10 @@ postgres (master) $ git push origin master
 - Change the apimachinery dependency to `release-*` branch
 - Revendor `glide slow`
 - Make sure master branch compiles, commit any changes due to vendoring & push to origin master
-
 - Create a matching `release-*` branch
 - Apply a matching `X.Y.Z` tag
 - Push to origin `release-*` branch
 - Build and release docker image for pg operator.
-
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
 ```console
@@ -97,12 +94,10 @@ elasticsearch (master) $ git push origin master
 - Change the `apimachinery` & specific db operator dependency to `release-*` branch
 - Revendor `glide slow`
 - Make sure master branch compiles, commit any changes due to vendoring & push to origin master
-
 - Create a matching `release-*` branch
 - Apply a matching `X.Y.Z` tag
 - Push to origin `release-*` branch
 - Build and release docker image for pg operator.
-
 - Go back to master branch and change the dependency on `apimachinery` & specific db operator dependency back to master branch.
 
 ```console
@@ -128,12 +123,10 @@ operator (master) $ git push origin master
 - Change the apimachinery dependency to `release-*` branch
 - Revendor `glide slow`
 - Make sure master branch compiles, commit any changes due to vendoring & push to origin master
-
 - Create a matching `release-*` branch
 - Apply a matching `X.Y.Z` tag
 - Push to origin `release-*` branch
 - Build and upload cli binaries to Github.
-
 - Go back to master branch and change the dependency on `apimachinery` back to master branch.
 
 ```console
