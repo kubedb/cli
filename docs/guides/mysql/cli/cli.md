@@ -317,7 +317,7 @@ To learn about various options of `delete` command, please visit [here](/docs/re
 
 ## Using Kubectl
 
-Kubectl has limited support for CRDs in general. You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
+You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
 # List objects
