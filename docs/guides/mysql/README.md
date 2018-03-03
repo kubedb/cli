@@ -55,6 +55,7 @@ aliases:
 - Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
+- Use [kubedb cli](/docs/guides/mysql/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).

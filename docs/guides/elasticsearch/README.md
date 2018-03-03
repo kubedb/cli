@@ -68,6 +68,7 @@ aliases:
 - Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` builtin-Prometheus](/docs/guides/elasticsearch/monitoring/using-builtin-prometheus.md).
 - Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/elasticsearch/monitoring/using-coreos-prometheus-operator.md).
 - Use [private Docker registry](/docs/guides/elasticsearch/private-registry/using-private-registry.md) to deploy Elasticsearch with KubeDB.
+- Use [kubedb cli](/docs/guides/elasticsearch/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [Elasticsearch object](/docs/concepts/databases/elasticsearch.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).

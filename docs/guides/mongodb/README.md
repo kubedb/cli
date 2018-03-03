@@ -55,6 +55,7 @@ aliases:
 - Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
+- Use [kubedb cli](/docs/guides/mongodb/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).

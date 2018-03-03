@@ -15,8 +15,7 @@ section_menu_id: guides
 # Manage KubeDB objects using CLIs
 
 ## KubeDB CLI
-KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to deploy KubeDB operator in a cluster and manage all KubeDB objects.
-`kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/setup/install.md).
+KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to manage any KubeDB object. `kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/setup/install.md).
 
 ### How to Create objects
 
@@ -234,7 +233,7 @@ $ kubedb describe all --all-namespaces
 
 You can also describe KubeDb objects with matching labels. The following command will describe all Elasticsearch & Postgres objects with specified labels from every namespace.
 
-```bash
+```console
 $ kubedb describe pg,es --all-namespaces --selector='group=dev'
 ```
 
@@ -247,7 +246,7 @@ To learn about various options of `describe` command, please visit [here](/docs/
 
 Lets edit an existing running Postgres object to setup [Scheduled Backup](/docs/backup.md). The following command will open Postgres `postgres-demo` in editor.
 
-```bash
+```console
 $ kubedb edit pg postgres-demo
 
 # Add following under Spec to configure periodic backups
@@ -360,7 +359,7 @@ $ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl
-Kubectl has limited support for CRDs in general. You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
+You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
 # List objects

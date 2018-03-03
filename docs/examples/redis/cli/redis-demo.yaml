@@ -1,10 +1,11 @@
 apiVersion: kubedb.com/v1alpha1
-kind: MySQL
+kind: Redis
 metadata:
-  name: mysql-init-snapshot
-  namespace: demo
+  name: redis-demo
+  labels:
+    kubedb: cli-demo
 spec:
-  version: "8.0"
+  version: 4
   storage:
     storageClassName: "standard"
     accessModes:
@@ -12,7 +13,3 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    snapshotSource:
-      name: snap-mysql-infant
-      namespace: demo

@@ -1,10 +1,9 @@
 apiVersion: kubedb.com/v1alpha1
-kind: MySQL
+kind: MongoDB
 metadata:
-  name: mysql-init-snapshot
-  namespace: demo
+  name: mongodb-demo
 spec:
-  version: "8.0"
+  version: 3.4
   storage:
     storageClassName: "standard"
     accessModes:
@@ -12,7 +11,3 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    snapshotSource:
-      name: snap-mysql-infant
-      namespace: demo

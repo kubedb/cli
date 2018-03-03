@@ -1,8 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  name: mysql-init-snapshot
-  namespace: demo
+  name: mysql-demo
 spec:
   version: "8.0"
   storage:
@@ -12,7 +11,3 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    snapshotSource:
-      name: snap-mysql-infant
-      namespace: demo
