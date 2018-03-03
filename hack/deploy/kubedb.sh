@@ -5,29 +5,35 @@ echo "checking kubeconfig context"
 kubectl config current-context || { echo "Set a context (kubectl use-context <context>) out of the following:"; echo; kubectl config get-contexts; exit 1; }
 echo ""
 
-# ref: https://stackoverflow.com/a/27776822/244009
-case "$(uname -s)" in
-    Darwin)
-        curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-darwin-amd64
-        chmod +x onessl
-        export ONESSL=./onessl
-        ;;
+# https://stackoverflow.com/a/677212/244009
+if ! [ -x "$(command -v onessl >/dev/null 2>&1)" ]; then
+    echo "using onessl found in the machine"
+    export ONESSL=onessl
+else
+    # ref: https://stackoverflow.com/a/27776822/244009
+    case "$(uname -s)" in
+        Darwin)
+            curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-darwin-amd64
+            chmod +x onessl
+            export ONESSL=./onessl
+            ;;
 
-    Linux)
-        curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-linux-amd64
-        chmod +x onessl
-        export ONESSL=./onessl
-        ;;
+        Linux)
+            curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-linux-amd64
+            chmod +x onessl
+            export ONESSL=./onessl
+            ;;
 
-    CYGWIN*|MINGW32*|MSYS*)
-        curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-windows-amd64.exe
-        chmod +x onessl.exe
-        export ONESSL=./onessl.exe
-        ;;
-    *)
-        echo 'other OS'
-        ;;
-esac
+        CYGWIN*|MINGW32*|MSYS*)
+            curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-windows-amd64.exe
+            chmod +x onessl.exe
+            export ONESSL=./onessl.exe
+            ;;
+        *)
+            echo 'other OS'
+            ;;
+    esac
+fi
 
 # http://redsymbol.net/articles/bash-exit-traps/
 function cleanup {
@@ -145,6 +151,10 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
     exit 0
 fi
 
+echo "checking whether extended apiserver feature is enabled"
+$ONESSL has-keys configmap --namespace=kube-system --keys=requestheader-client-ca-file extension-apiserver-authentication || { echo "Set --requestheader-client-ca-file flag on Kubernetes apiserver"; exit 1; }
+echo ""
+
 env | sort | grep KUBEDB*
 echo ""
 
@@ -176,3 +186,19 @@ fi
 if [ "$KUBEDB_ENABLE_ADMISSION_WEBHOOK" = true ]; then
     curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/admission.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
+
+echo "waiting until kubedb operator deployment is ready"
+$ONESSL wait-until-ready deployment kubedb-operator --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
+
+echo "waiting until kubedb apiservice is available"
+$ONESSL wait-until-ready apiservice v1alpha1.admission.kubedb.com || { echo "KubeDB apiservice failed to be ready"; exit 1; }
+
+echo "waiting until kubedb crds are ready"
+$ONESSL wait-until-ready crd elasticsearches.kubedb.com || { echo "Elasticsearch CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd memcacheds.kubedb.com || { echo "Memcached CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd mongodbs.kubedb.com || { echo "MongoDB CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd mysqls.kubedb.com || { echo "MySQL CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd postgreses.kubedb.com || { echo "Postgres CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd redises.kubedb.com || { echo "Redis CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd snapshots.kubedb.com || { echo "Snapshot CRD failed to be ready"; exit 1; }
+$ONESSL wait-until-ready crd dormantdatabases.kubedb.com || { echo "DormantDatabase CRD failed to be ready"; exit 1; }
