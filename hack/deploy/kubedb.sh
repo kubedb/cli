@@ -6,8 +6,7 @@ kubectl config current-context || { echo "Set a context (kubectl use-context <co
 echo ""
 
 # https://stackoverflow.com/a/677212/244009
-if ! [ -x "$(command -v onessl >/dev/null 2>&1)" ]; then
-    echo "using onessl found in the machine"
+if [ -x "$(command -v onessl >/dev/null 2>&1)" ]; then
     export ONESSL=onessl
 else
     # ref: https://stackoverflow.com/a/27776822/244009
@@ -46,8 +45,8 @@ trap cleanup EXIT
 # ref: http://tldp.org/LDP/abs/html/comparison-ops.html
 
 export KUBEDB_NAMESPACE=kube-system
-export KUBEDB_SERVICE_ACCOUNT=default
-export KUBEDB_ENABLE_RBAC=false
+export KUBEDB_SERVICE_ACCOUNT=kubedb-operator
+export KUBEDB_ENABLE_RBAC=true
 export KUBEDB_RUN_ON_MASTER=0
 export KUBEDB_ENABLE_ADMISSION_WEBHOOK=false
 export KUBEDB_DOCKER_REGISTRY=kubedb
@@ -68,7 +67,7 @@ show_help() {
     echo "options:"
     echo "-h, --help                         show brief help"
     echo "-n, --namespace=NAMESPACE          specify namespace (default: kube-system)"
-    echo "    --rbac                         create RBAC roles and bindings"
+    echo "    --rbac                         create RBAC roles and bindings (default: true)"
     echo "    --docker-registry              docker registry used to pull kubedb images (default: appscode)"
     echo "    --image-pull-secret            name of secret used to pull kubedb operator images"
     echo "    --run-on-master                run kubedb operator on master"
@@ -114,9 +113,12 @@ while test $# -gt 0; do
             fi
             shift
             ;;
-        --rbac)
-            export KUBEDB_SERVICE_ACCOUNT=kubedb-operator
-            export KUBEDB_ENABLE_RBAC=true
+        --rbac*)
+            val=`echo $1 | sed -e 's/^[^=]*=//g'`
+            if [ "$val" = "false" ]; then
+                export KUBEDB_SERVICE_ACCOUNT=default
+                export KUBEDB_ENABLE_RBAC=false
+            fi
             shift
             ;;
         --run-on-master)
@@ -202,3 +204,6 @@ $ONESSL wait-until-ready crd postgreses.kubedb.com || { echo "Postgres CRD faile
 $ONESSL wait-until-ready crd redises.kubedb.com || { echo "Redis CRD failed to be ready"; exit 1; }
 $ONESSL wait-until-ready crd snapshots.kubedb.com || { echo "Snapshot CRD failed to be ready"; exit 1; }
 $ONESSL wait-until-ready crd dormantdatabases.kubedb.com || { echo "DormantDatabase CRD failed to be ready"; exit 1; }
+
+echo
+echo "Successfully installed KubeDB operator!"

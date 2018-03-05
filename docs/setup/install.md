@@ -55,21 +55,18 @@ kubedb.sh [options]
 options:
 -h, --help                         show brief help
 -n, --namespace=NAMESPACE          specify namespace (default: kube-system)
-    --rbac                         create RBAC roles and bindings
+    --rbac                         create RBAC roles and bindings (default: true)
     --docker-registry              docker registry used to pull kubedb images (default: appscode)
     --image-pull-secret            name of secret used to pull kubedb operator images
     --run-on-master                run kubedb operator on master
     --enable-admission-webhook     configure admission webhook for kubedb CRDs
     --uninstall                    uninstall kubedb
 
-# install without RBAC roles
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
     | bash
-
-# Install with RBAC roles
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
-    | bash -s -- --rbac
 ```
+
+### Customizing Installer
 
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
 
