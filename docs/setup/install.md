@@ -47,6 +47,14 @@ To use `kubedb`, you will need to install KubeDB [operator](https://github.com/k
 KubeDB can be installed via installer script included in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.8.0-beta.2/hack/deploy) folder.
 
 ```console
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh | bash
+```
+
+#### Customizing Installer
+
+You can see the full list of flags available to installer using `-h` flag.
+
+```console
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh | bash -s -- -h
 kubedb.sh - install kubedb operator
 
@@ -61,12 +69,7 @@ options:
     --run-on-master                run kubedb operator on master
     --enable-admission-webhook     configure admission webhook for kubedb CRDs
     --uninstall                    uninstall kubedb
-
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
-    | bash
 ```
-
-### Customizing Installer
 
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
 
