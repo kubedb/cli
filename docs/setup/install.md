@@ -40,19 +40,26 @@ Please note that this will install KubeDB cli from master branch which might inc
 
 ## Install KubeDB Operator
 
-To use `kubedb`, you will need to install KubeDB [operator](https://github.com/kubedb/operator).
+To use `kubedb`, you will need to install KubeDB [operator](https://github.com/kubedb/operator). KubeDB operator can be installed via a script or as a Helm chart.
 
-### Using YAML
+### Using Script
 
-KubeDB can be installed via installer script included in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.8.0-beta.2/hack/deploy) folder.
+To install KubeDB in your Kubernetes cluster, run the following command:
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh | bash
 ```
 
+After successful installation, you should have a `kubedb-operator-***` pod running in the `kube-system` namespace.
+
+```console
+$ kubectl get pods -n kube-system | grep kubedb-operator
+kubedb-operator-65d97f8cf9-8c9tj        2/2       Running   0          1m
+```
+
 #### Customizing Installer
 
-You can see the full list of flags available to installer using `-h` flag.
+The installer script and associated yaml files can be found in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.8.0-beta.2/hack/deploy) folder. You can see the full list of flags available to installer using `-h` flag.
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh | bash -s -- -h
@@ -69,6 +76,7 @@ options:
     --run-on-master                run kubedb operator on master
     --enable-admission-webhook     configure admission webhook for kubedb CRDs
     --uninstall                    uninstall kubedb
+    --purge                        purges kubedb crd objects and crds
 ```
 
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
