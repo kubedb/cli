@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/cobra"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/resource"
@@ -99,7 +98,6 @@ func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []stri
 }
 
 func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
-	forceDeletion := cmdutil.GetFlagBool(cmd, "force")
 	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
 
 	infoList := make([]*resource.Info, 0)
@@ -112,10 +110,8 @@ func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out
 			return err
 		}
 
-		if !forceDeletion {
-			if err := validator.ValidateDeletion(info); err != nil {
-				return cmdutil.AddSourceToErr("validating", info.Source, err)
-			}
+		if err := validator.ValidateDeletion(info); err != nil {
+			return cmdutil.AddSourceToErr("validating", info.Source, err)
 		}
 
 		infoList = append(infoList, info)
@@ -132,7 +128,7 @@ func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out
 	}
 
 	for _, info := range infoList {
-		if err := deleteResource(f, info, out, mapper, shortOutput, forceDeletion); err != nil {
+		if err := deleteResource(f, info, out, mapper, shortOutput); err != nil {
 			return err
 		}
 	}
@@ -140,23 +136,7 @@ func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out
 	return nil
 }
 
-var forceDeletePatch = `
-{
-   "metadata":{
-      "finalizers":null
-   }
-}
-`
-
-func deleteResource(f cmdutil.Factory, info *resource.Info, out io.Writer, mapper meta.RESTMapper, shortOutput, forceDeletion bool) error {
-	if forceDeletion {
-		resource.NewHelper(info.Client, info.Mapping).Patch(
-			info.Namespace,
-			info.Name,
-			types.MergePatchType,
-			[]byte(forceDeletePatch),
-		)
-	}
+func deleteResource(f cmdutil.Factory, info *resource.Info, out io.Writer, mapper meta.RESTMapper, shortOutput bool) error {
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil && !kerr.IsNotFound(err) {
 		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}

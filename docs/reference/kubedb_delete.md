@@ -46,7 +46,6 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [flags]
 ```
       --all                    Delete all resources, including uninitialized ones, in the namespace of the specified resource types.
   -f, --filename stringSlice   Filename to use to delete the resource
-      --force                  Immediate deletion of some resources may result in inconsistency or data loss.
   -h, --help                   help for delete
   -n, --namespace string       Delete object(s) from this namespace. (default "default")
   -o, --output string          Output mode. Use "-o name" for shorter output (resource/name).
