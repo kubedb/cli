@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eou pipefail
 
+crds=(elasticsearches memcacheds mongodbs mysqls postgreses redises snapshots dormantdatabases)
+
 echo "checking kubeconfig context"
 kubectl config current-context || { echo "Set a context (kubectl use-context <context>) out of the following:"; echo; kubectl config get-contexts; exit 1; }
 echo ""
@@ -52,6 +54,7 @@ export KUBEDB_ENABLE_ADMISSION_WEBHOOK=false
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_IMAGE_PULL_SECRET=
 export KUBEDB_UNINSTALL=0
+export KUBEDB_PURGE=0
 
 KUBE_APISERVER_VERSION=$(kubectl version -o=json | $ONESSL jsonpath '{.serverVersion.gitVersion}')
 $ONESSL semver --check='>=1.9.0' $KUBE_APISERVER_VERSION
@@ -73,6 +76,7 @@ show_help() {
     echo "    --run-on-master                run kubedb operator on master"
     echo "    --enable-admission-webhook     configure admission webhook for kubedb CRDs"
     echo "    --uninstall                    uninstall kubedb"
+    echo "    --purge                        purges kubedb crd objects and crds"
 }
 
 while test $# -gt 0; do
@@ -129,6 +133,10 @@ while test $# -gt 0; do
             export KUBEDB_UNINSTALL=1
             shift
             ;;
+        --purge)
+            export KUBEDB_PURGE=1
+            shift
+            ;;
         *)
             show_help
             exit 1
@@ -150,6 +158,45 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
     kubectl delete rolebindings -l app=kubedb --namespace $KUBEDB_NAMESPACE
     kubectl delete role -l app=kubedb --namespace $KUBEDB_NAMESPACE
 
+    echo "waiting for kubedb operator pod to stop running"
+    for (( ; ; )); do
+       pods=($(kubectl get pods --all-namespaces -l app=kubedb -o jsonpath='{range .items[*]}{.metadata.name} {end}'))
+       total=${#pods[*]}
+        if [ $total -eq 0 ] ; then
+            break
+        fi
+       sleep 2
+    done
+
+    # https://github.com/kubernetes/kubernetes/issues/60538
+    if [ "$KUBEDB_PURGE" -eq 1 ]; then
+        for crd in "${crds[@]}"; do
+            pairs=($(kubectl get ${crd}.kubedb.com --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
+            total=${#pairs[*]}
+
+            # save objects
+            if [ $total -gt 0 ]; then
+                echo "dumping ${crd} objects into ${crd}.yaml"
+                kubectl get ${crd}.kubedb.com --all-namespaces -o yaml > ${crd}.yaml
+            fi
+
+            for (( i=0; i<$total; i+=2 )); do
+                name=${pairs[$i]}
+                namespace=${pairs[$i + 1]}
+                # remove finalizers
+                kubectl patch ${crd}.kubedb.com $name -n $namespace  -p '{"metadata":{"finalizers":[]}}' --type=merge
+                # delete crd object
+                echo "deleting ${crd} $namespace/$name"
+                kubectl delete ${crd}.kubedb.com $name -n $namespace
+            done
+
+            # delete crd
+            kubectl delete crd ${crd}.kubedb.com || true
+        done
+    fi
+
+    echo
+    echo "Successfully uninstalled KubeDB!"
     exit 0
 fi
 
@@ -189,6 +236,7 @@ if [ "$KUBEDB_ENABLE_ADMISSION_WEBHOOK" = true ]; then
     curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/admission.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
 
+echo
 echo "waiting until kubedb operator deployment is ready"
 $ONESSL wait-until-ready deployment kubedb-operator --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
 
@@ -196,14 +244,9 @@ echo "waiting until kubedb apiservice is available"
 $ONESSL wait-until-ready apiservice v1alpha1.admission.kubedb.com || { echo "KubeDB apiservice failed to be ready"; exit 1; }
 
 echo "waiting until kubedb crds are ready"
-$ONESSL wait-until-ready crd elasticsearches.kubedb.com || { echo "Elasticsearch CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd memcacheds.kubedb.com || { echo "Memcached CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd mongodbs.kubedb.com || { echo "MongoDB CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd mysqls.kubedb.com || { echo "MySQL CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd postgreses.kubedb.com || { echo "Postgres CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd redises.kubedb.com || { echo "Redis CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd snapshots.kubedb.com || { echo "Snapshot CRD failed to be ready"; exit 1; }
-$ONESSL wait-until-ready crd dormantdatabases.kubedb.com || { echo "DormantDatabase CRD failed to be ready"; exit 1; }
+for crd in "${crds[@]}"; do
+    $ONESSL wait-until-ready crd ${crd}.kubedb.com || { echo "$crd crd failed to be ready"; exit 1; }
+done
 
 echo
 echo "Successfully installed KubeDB operator!"

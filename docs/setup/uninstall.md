@@ -14,25 +14,26 @@ section_menu_id: setup
 
 # Uninstall KubeDB
 
-Please follow the steps below to uninstall KubeDB:
+To uninstall KubeDB operator, run the following command:
 
-- Delete the deployment and service used for KubeDB operator.
+```console
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
+    | bash -s -- --uninstall [--namespace=NAMESPACE]
 
-    ```console
-    $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
-        | bash -s -- --uninstall [--namespace=NAMESPACE]
++ kubectl delete deployment -l app=kubedb -n kube-system
+deployment "kubedb-operator" deleted
++ kubectl delete service -l app=kubedb -n kube-system
+service "kubedb-operator" deleted
++ kubectl delete serviceaccount -l app=kubedb -n kube-system
+No resources found
++ kubectl delete clusterrolebindings -l app=kubedb -n kube-system
+No resources found
++ kubectl delete clusterrole -l app=kubedb -n kube-system
+No resources found
+```
 
-    + kubectl delete deployment -l app=kubedb -n kube-system
-    deployment "kubedb-operator" deleted
-    + kubectl delete service -l app=kubedb -n kube-system
-    service "kubedb-operator" deleted
-    + kubectl delete serviceaccount -l app=kubedb -n kube-system
-    No resources found
-    + kubectl delete clusterrolebindings -l app=kubedb -n kube-system
-    No resources found
-    + kubectl delete clusterrole -l app=kubedb -n kube-system
-    No resources found
-    ```
+The above command will leave the KubeDB crd objects as-is. If you wish to **nuke** all KubeDB crd objects, also pass the `--purge` flag. This will keep a copy of KubeDB crd objects in your current directory.
+
 
 - Now, wait several seconds for KubeDB to stop running. To confirm that KubeDB operator pod(s) have stopped running, run:
 
