@@ -1,4 +1,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kubedb/cli)](https://goreportcard.com/report/github.com/kubedb/cli)
+[![Build Status](https://travis-ci.org/kubedb/cli.svg?branch=master)](https://travis-ci.org/kubedb/cli)
+[![codecov](https://codecov.io/gh/kubedb/cli/branch/master/graph/badge.svg)](https://codecov.io/gh/kubedb/cli)
+[![Docker Pulls](https://img.shields.io/docker/pulls/kubedb/cli.svg)](https://hub.docker.com/r/kubedb/cli/)
+[![Slack](https://slack.appscode.com/badge.svg)](https://slack.appscode.com)
+[![Twitter](https://img.shields.io/twitter/follow/appscodehq.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/intent/follow?screen_name=AppsCodeHQ)
 
 [Website](https://kubedb.com) • [Slack](http://slack.kubernetes.io) • [Twitter](https://twitter.com/KubeDB)
 
