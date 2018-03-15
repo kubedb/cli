@@ -1,5 +1,5 @@
 hash: ae4e2319a53921b5d55ab57f08c7129f422ee33e6971e251ba15c5c7c538ad1b
-updated: 2018-02-27T23:31:08.440502039-08:00
+updated: 2018-03-15T17:31:16.003981744Z
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 83e7fc1967ed737eedfc87da60c42e9fc4dc684c
+  version: f8f2e1c7d2d10789cdd0540468b487d14421dbf9
   subpackages:
   - analytics
   - context
@@ -20,12 +20,14 @@ imports:
   - strings
   - types
   - version
+- name: github.com/appscode/jsonpatch
+  version: 3e75a56b8967932466984d4432401e1c1a7ff61e
 - name: github.com/appscode/kube-mon
-  version: 69036cc40b44a7ba97be91d530f421e3adaba407
+  version: a670a5ff28df12938aa324b9f13683caeb216f8f
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: 6a5c108367b50c78b783e51490f015d03ce62259
+  version: 3e1d387015c275db5fd3d605fcf1f61af6ab6866
   subpackages:
   - meta
   - tools/analytics
@@ -92,9 +94,9 @@ imports:
   subpackages:
   - quantile
 - name: github.com/cenkalti/backoff
-  version: 61153c768f31ee5f130071d08fc82b85208528de
+  version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
 - name: github.com/cpuguy83/go-md2man
-  version: 71acacd42f85e5e82f70a55327789582a5200a90
+  version: 48d8747a2ca13185e7cc8efe6e9fc196a83f71a5
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -170,7 +172,7 @@ imports:
 - name: github.com/go-openapi/jsonreference
   version: 13c6e3589ad90f49bd3e3bbe2c2cb3d7a4142272
 - name: github.com/go-openapi/spec
-  version: 7abd5745472fff5eb3685386d5fb8bf38683154d
+  version: d8000b5bfbd1147255710505a27c735b6b2ae2ac
 - name: github.com/go-openapi/swag
   version: f3f9494671f93fcff853e3c6e9e948b3eb71e590
 - name: github.com/gogo/protobuf
@@ -179,7 +181,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 44145f04b68cf362d9c4df2182967c2275eaefed
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/groupcache
   version: 02826c3e79038b59d737d3b1c0a1d937f71a4433
   subpackages:
@@ -195,7 +197,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 0c93777250bd58222171888d1651979319d8b381
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -321,7 +323,7 @@ imports:
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
-  version: 30136e27e2ac8d167177e8a583aa4c3fea5be833
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/prometheus/client_golang
   version: c5b7fccd204277076155f10851dad72b76a49317
   subpackages:
@@ -357,11 +359,11 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: 6644d46b81fa1831979c4cded0106e774e0ef0ab
+  version: c6c44e6fdcc30161c7f4480754da7230d01c06e3
   subpackages:
   - doc
 - name: github.com/spf13/pflag
-  version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
+  version: ee5fd03fd6acfd43e44aea0b4135958546ed8e73
 - name: github.com/yudai/gojsondiff
   version: 7b1b7adf999dab73a6eb02669c3d82dbb27a3dd6
   subpackages:
@@ -416,14 +418,14 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: ab90adb3efa287b869ecb698db42f923cc734972
+  version: c24aa0e5ed34558ea50c016e4fb92c5e9aa69f2c
   subpackages:
   - gensupport
   - googleapi
   - googleapi/internal/uritemplates
   - storage/v1
 - name: google.golang.org/appengine
-  version: 4f7eeb5305a4ba1966344836ba4af9996b7b4e05
+  version: 5bee14b453b4c71be47ec1781b0fa61c2ea182db
   subpackages:
   - internal
   - internal/app_identity
