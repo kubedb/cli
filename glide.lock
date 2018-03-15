@@ -1,5 +1,5 @@
 hash: ae4e2319a53921b5d55ab57f08c7129f422ee33e6971e251ba15c5c7c538ad1b
-updated: 2018-02-27T23:31:08.440502039-08:00
+updated: 2018-03-15T13:25:16.561653523-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 83e7fc1967ed737eedfc87da60c42e9fc4dc684c
+  version: f8f2e1c7d2d10789cdd0540468b487d14421dbf9
   subpackages:
   - analytics
   - context
@@ -20,17 +20,19 @@ imports:
   - strings
   - types
   - version
+- name: github.com/appscode/jsonpatch
+  version: ee757872f6aca6d412d0d80543725bd4cf48f793
 - name: github.com/appscode/kube-mon
-  version: 69036cc40b44a7ba97be91d530f421e3adaba407
+  version: a670a5ff28df12938aa324b9f13683caeb216f8f
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: 6a5c108367b50c78b783e51490f015d03ce62259
+  version: 3e1d387015c275db5fd3d605fcf1f61af6ab6866
   subpackages:
   - meta
   - tools/analytics
 - name: github.com/appscode/osm
-  version: 8175dd853f6f3d4530b14018901c79140e305f3a
+  version: 97ececed243045a4d55a99b4ca126f1b65a7b596
   subpackages:
   - context
 - name: github.com/aws/aws-sdk-go
@@ -195,7 +197,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 0c93777250bd58222171888d1651979319d8b381
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -321,7 +323,7 @@ imports:
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
-  version: 30136e27e2ac8d167177e8a583aa4c3fea5be833
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/prometheus/client_golang
   version: c5b7fccd204277076155f10851dad72b76a49317
   subpackages:
@@ -357,7 +359,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cobra
-  version: 6644d46b81fa1831979c4cded0106e774e0ef0ab
+  version: c6c44e6fdcc30161c7f4480754da7230d01c06e3
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -416,7 +418,7 @@ imports:
   - unicode/norm
   - width
 - name: google.golang.org/api
-  version: ab90adb3efa287b869ecb698db42f923cc734972
+  version: a96eae85978352858b50d3d75dadf5f906c2a023
   subpackages:
   - gensupport
   - googleapi
