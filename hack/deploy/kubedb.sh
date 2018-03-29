@@ -57,10 +57,7 @@ export KUBEDB_UNINSTALL=0
 export KUBEDB_PURGE=0
 
 KUBE_APISERVER_VERSION=$(kubectl version -o=json | $ONESSL jsonpath '{.serverVersion.gitVersion}')
-$ONESSL semver --check='>=1.9.0' $KUBE_APISERVER_VERSION
-if [ $? -eq 0 ]; then
-    export KUBEDB_ENABLE_ADMISSION_WEBHOOK=true
-fi
+$ONESSL semver --check='<1.9.0' $KUBE_APISERVER_VERSION || { export KUBEDB_ENABLE_ADMISSION_WEBHOOK=true; }
 
 show_help() {
     echo "kubedb.sh - install kubedb operator"
@@ -146,8 +143,8 @@ done
 
 if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
     # delete webhooks and apiservices
-    kubectl delete validatingwebhookconfiguration -l app=kubedb
-    kubectl delete mutatingwebhookconfiguration -l app=kubedb
+    kubectl delete validatingwebhookconfiguration -l app=kubedb || true
+    kubectl delete mutatingwebhookconfiguration -l app=kubedb || true
     kubectl delete apiservice -l app=kubedb
     # delete kubedb operator
     kubectl delete deployment -l app=kubedb --namespace $KUBEDB_NAMESPACE
