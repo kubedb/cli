@@ -4,7 +4,9 @@
 ## TL;DR;
 
 ```console
-$ helm install stable/kubedb
+$ helm repo add appscode https://charts.appscode.com/stable/
+$ helm repo update
+$ helm install appscode/kubedb
 ```
 
 ## Introduction
@@ -19,7 +21,7 @@ This chart bootstraps a [KubeDB controller](https://github.com/kubedb/cli) deplo
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install stable/kubedb --name my-release
+$ helm install appscode/kubedb --name my-release
 ```
 The command deploys KubeDB operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
@@ -62,14 +64,14 @@ The following tables lists the configurable parameters of the KubeDB chart and t
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
 ```console
-$ helm install --name my-release --set image.tag=v0.2.1 stable/kubedb
+$ helm install --name my-release --set image.tag=v0.2.1 appscode/kubedb
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```console
-$ helm install --name my-release --values values.yaml stable/kubedb
+$ helm install --name my-release --values values.yaml appscode/kubedb
 ```
 
 ## RBAC
@@ -90,5 +92,5 @@ If the output contains "beta", you may install the chart with RBAC enabled (see 
 To enable the creation of RBAC resources (On clusters with RBAC). Do the following:
 
 ```console
-$ helm install --name my-release stable/kubedb --set rbac.create=true
+$ helm install --name my-release appscode/kubedb --set rbac.create=true
 ```

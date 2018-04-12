@@ -113,7 +113,7 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/depl
 
 ### Using Helm
 
-KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kubedb/cli/tree/master/chart/stable/kubedb) included in this repository. To install the chart with the release name `my-release`:
+KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kubedb/cli/tree/master/chart/kubedb) from [AppsCode Charts Repository](https://github.com/appscode/charts). To install the chart with the release name `my-release`:
 
 ```console
 # Mac OSX amd64:
@@ -132,17 +132,19 @@ curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/
   && sudo mv onessl /usr/local/bin/
 
 # Kubernetes 1.8.x
+$ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install stable/kubedb --name my-release
+$ helm install appscode/kubedb --name my-release
 
 # Kubernetes 1.9.0 or later
+$ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install stable/kubedb --name my-release \
+$ helm install appscode/kubedb --name my-release \
   --set apiserver.ca="$(onessl get kube-ca)" \
   --set apiserver.enableAdmissionWebhook=true
 ```
 
-To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/stable/kubedb).
+To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).
 
 ## Verify installation
 
