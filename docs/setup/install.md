@@ -146,6 +146,19 @@ $ helm install appscode/kubedb --name my-release \
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).
 
+### Installing in GKE Cluster
+
+If you are installing KubeDB on a GKE cluster, you will need cluster admin permissions to install KubeDB operator. Run the following command to grant admin permision to the cluster.
+
+```console
+# get current google identity
+$ gcloud info | grep Account
+Account: [user@example.org]
+
+$ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=user@example.org
+```
+
+
 ## Verify installation
 
 To check if KubeDB operator pods have started, run the following command:
