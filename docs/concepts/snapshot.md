@@ -55,11 +55,12 @@ The `.spec` section supports the following different storage providers for stori
 `Local` backend refers to a local path inside snapshot job container. Any Kubernetes supported [persistent volume](https://kubernetes.io/docs/concepts/storage/volumes/) can be used here. Some examples are: `emptyDir` for testing, NFS, Ceph, GlusterFS, etc.
 To configure this backend, no secret is needed. Following parameters are available for `Local` backend.
 
-| Parameter                 | Description                                                                             |
-|---------------------------|-----------------------------------------------------------------------------------------|
-| `spec.databaseName`       | `Required`. Name of database                                                            |
-| `spec.local.path`         | `Required`. Path where this volume will be mounted in the job container. Example: /repo |
-| `spec.local.volumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) |
+| Parameter                 | Description                                                                                        |
+|---------------------------|----------------------------------------------------------------------------------------------------|
+| `spec.databaseName`       | `Required`. Name of database                                                                       |
+| `spec.local.VolumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes). Can be specified inlined. Example: `hostPath`              |
+| `spec.local.mountPath`    | `Required`. Path where this volume will be mounted in the snapshot job container. Example: `/repo` |
+| `spec.local.subPath`      | `Optional`. Sub-path inside the referenced volume instead of its root.                             |
 | `spec.resources`          | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
 
 ```console
