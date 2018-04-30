@@ -2,13 +2,12 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "kubedb.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
-  initializers:
-    pending: []
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -32,31 +31,26 @@ spec:
       {{- end }}
       containers:
       - name: operator
-        image: {{ .Values.dockerRegistry }}/operator:{{ .Values.imageTags.operator }}
+        image: {{ .Values.kubedb.registry }}/{{ .Values.kubedb.repository }}:{{ .Values.kubedb.tag }}
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
         - run
         - --v=3
-        - --docker-registry={{ .Values.dockerRegistry }}
-        - --exporter-tag={{ .Values.imageTags.exporter }}
+        - --docker-registry={{ .Values.kubedb.registry }}
+        - --exporter-tag={{ .Values.kubedb.tag }}
         - --governing-service=kubedb
         - --rbac={{ .Values.rbac.create }}
+        - --secure-port=8443
+        - --audit-log-path=-
+        - --tls-cert-file=/var/serving-cert/tls.crt
+        - --tls-private-key-file=/var/serving-cert/tls.key
+        - --enable-analytics={{ .Values.enableAnalytics }}
         env:
         - name: OPERATOR_NAMESPACE
           valueFrom:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-      - name: server
-        image: {{ .Values.dockerRegistry }}/kubedb-server:{{ .Values.imageTags.apiserver }}
-        imagePullPolicy: {{ .Values.imagePullPolicy  }}
-        args:
-        - run
-        - --v=3
-        - --secure-port=8443
-        - --audit-log-path=-
-        - --tls-cert-file=/var/serving-cert/tls.crt
-        - --tls-private-key-file=/var/serving-cert/tls.key
         ports:
         - containerPort: 8443
         volumeMounts:

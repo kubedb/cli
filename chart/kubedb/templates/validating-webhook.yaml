@@ -1,0 +1,103 @@
+{{- if .Values.apiserver.enableValidatingWebhook }}
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validators.kubedb.com
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+webhooks:
+- name: elasticsearch.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/elasticsearchs
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["elasticsearches"]
+    operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: postgres.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/postgress
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["postgreses"]
+    operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: mysql.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/mysqls
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["mysqls"]
+    operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: mongodb.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/mongodbs
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["mongodbs"]
+    operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: redis.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/rediss
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["redises"]
+    operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: memcached.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/memcacheds
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["memcacheds"]
+    operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: snapshot.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/snapshots
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["snapshots"]
+    operations: ["CREATE", "UPDATE"]
+  failurePolicy: Fail
+{{ end }}
