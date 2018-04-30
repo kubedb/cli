@@ -1,99 +1,103 @@
-# register to intercept kubedb CRD creates / updates
+{{- if .Values.apiserver.enableMutatingWebhook }}
 apiVersion: admissionregistration.k8s.io/v1beta1
-kind: ValidatingWebhookConfiguration
+kind: MutatingWebhookConfiguration
 metadata:
-  name: admission.kubedb.com
+  name: mutators.kubedb.com
   labels:
-    app: kubedb
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
 webhooks:
-- name: elasticsearch.admission.kubedb.com
+- name: elasticsearch.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/elasticsearchreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearchs
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: postgres.admission.kubedb.com
+- name: postgres.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/postgresreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/postgress
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["postgreses"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: mysql.admission.kubedb.com
+- name: mysql.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/mysqlreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/mysqls
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["mysqls"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: mongodb.admission.kubedb.com
+- name: mongodb.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/mongodbreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/mongodbs
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["mongodbs"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: redis.admission.kubedb.com
+- name: redis.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/redisreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/rediss
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["redises"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: memcached.admission.kubedb.com
+- name: memcached.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/memcachedreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/memcacheds
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["memcacheds"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: snapshot.admission.kubedb.com
+- name: snapshot.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubedb.com/v1alpha1/snapshotreviews
-    caBundle: ${KUBE_CA}
+      path: /apis/mutators.kubedb.com/v1alpha1/snapshots
+    caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["snapshots"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+{{ end }}

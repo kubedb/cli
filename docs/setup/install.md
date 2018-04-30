@@ -71,12 +71,14 @@ options:
 -h, --help                         show brief help
 -n, --namespace=NAMESPACE          specify namespace (default: kube-system)
     --rbac                         create RBAC roles and bindings (default: true)
-    --docker-registry              docker registry used to pull kubedb images (default: appscode)
-    --image-pull-secret            name of secret used to pull kubedb operator images
-    --run-on-master                run kubedb operator on master
-    --enable-admission-webhook     configure admission webhook for kubedb CRDs
-    --uninstall                    uninstall kubedb
-    --purge                        purges kubedb crd objects and crds
+    --docker-registry              docker registry used to pull KubeDB images (default: appscode)
+    --image-pull-secret            name of secret used to pull KubeDB operator images
+    --run-on-master                run KubeDB operator on master
+    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs
+    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs
+    --enable-analytics             send usage events to Google Analytics (default: true)
+    --uninstall                    uninstall KubeDB
+    --purge                        purges KubeDB crd objects and crds
 ```
 
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
@@ -104,11 +106,11 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/depl
     | bash -s -- --docker-registry=MY_REGISTRY [--image-pull-secret=SECRET_NAME] [--rbac]
 ```
 
-KubeDB implements a [validating admission webhook](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) to validate KubeDB CRDs. This is enabled by default for Kubernetes 1.9.0 or later releases. To disable this feature, pass the `--enable-admission-webhook=false` flag.
+KubeDB implements [validating and mutating admission webhooks](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) for KubeDB CRDs. This is enabled by default for Kubernetes 1.9.0 or later releases. To disable this feature, pass the `--enable-validating-webhook=false` and `--enable-mutating-webhook=false` flag respectively.
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/deploy/kubedb.sh \
-    | bash -s -- --enable-admission-webhook [--rbac]
+    | bash -s -- --enable-validating-webhook=false --enable-mutating-webhook=false [--rbac]
 ```
 
 ### Using Helm
@@ -131,17 +133,13 @@ curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/
   && chmod +x onessl \
   && sudo mv onessl /usr/local/bin/
 
-# Kubernetes 1.8.x
-$ helm repo add appscode https://charts.appscode.com/stable/
-$ helm repo update
-$ helm install appscode/kubedb --name my-release
-
 # Kubernetes 1.9.0 or later
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
 $ helm install appscode/kubedb --name my-release \
   --set apiserver.ca="$(onessl get kube-ca)" \
-  --set apiserver.enableAdmissionWebhook=true
+  --set apiserver.enableValidatingWebhook=true \
+  --set apiserver.enableMutatingWebhook=true
 ```
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).

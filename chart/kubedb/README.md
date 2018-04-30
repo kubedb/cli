@@ -23,6 +23,7 @@ To install the chart with the release name `my-release`:
 ```console
 $ helm install appscode/kubedb --name my-release
 ```
+
 The command deploys KubeDB operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
@@ -39,26 +40,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following tables lists the configurable parameters of the KubeDB chart and their default values.
+The following table lists the configurable parameters of the KubeDB chart and their default values.
 
 
-| Parameter                          | Description                                                        | Default            |
-| -----------------------------------| ------------------------------------------------------------------ | ------------------ |
-| `replicaCount`                     | Number of kubedb operator replicas to create (only 1 is supported) | `1`                |
-| `dockerRegistry`                   | Docker registry used to pull KubeDB related images                 | `kubedb`           |
-| `imageTags.operator`               | Tag of KubeDB operator image                                       | `0.8.0-beta.2`     |
-| `imageTags.exporter`               | Tag of KubeDB operator image                                       | `0.8.0-beta.2`     |
-| `imageTags.apiserver`              | Tag of KubeDB server image                                         | `0.1.0-beta.2`     |
-| `imagePullSecrets`                 | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
-| `imagePullPolicy`                  | Image pull policy                                                  | `IfNotPresent`     |
-| `criticalAddon`                    | If true, installs KubeDB operator as critical addon                | `false`            |
-| `rbac.create`                      | If `true`, create and use RBAC resources                           | `true`             |
-| `serviceAccount.create`            | If `true`, create a new service account                            | `true`             |
-| `serviceAccount.name`              | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
-| `apiserver.groupPriorityMinimum`   | The minimum priority the group should have.                        | 10000              |
-| `apiserver.versionPriority`        | The ordering of this API inside of the group.                      | 15                 |
-| `apiserver.enableAdmissionWebhook` | Configure apiserver as admission webhooks for KubeDB CRDs          | false              |
-| `apiserver.ca`                     | CA certificate used by main Kubernetes api server                  | ``                 |
+| Parameter                           | Description                                                        | Default            |
+| ----------------------------------- | ------------------------------------------------------------------ | ------------------ |
+| `replicaCount`                      | Number of kubedb operator replicas to create (only 1 is supported) | `1`                |
+| `kubedb.registry`                   | Docker registry used to pull Kubedb operator image                 | `kubedb`           |
+| `kubedb.repository`                 | Kubedb operator container image                                    | `operator`         |
+| `kubedb.tag`                        | Kubedb operator container image tag                                | `0.8.0-beta.2`     |
+| `imagePullSecrets`                  | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
+| `imagePullPolicy`                   | Image pull policy                                                  | `IfNotPresent`     |
+| `criticalAddon`                     | If true, installs KubeDB operator as critical addon                | `false`            |
+| `rbac.create`                       | If `true`, create and use RBAC resources                           | `true`             |
+| `serviceAccount.create`             | If `true`, create a new service account                            | `true`             |
+| `serviceAccount.name`               | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
+| `apiserver.groupPriorityMinimum`    | The minimum priority the group should have.                        | 10000              |
+| `apiserver.versionPriority`         | The ordering of this API inside of the group.                      | 15                 |
+| `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | false              |
+| `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | false              |
+| `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | ``                 |
+| `enableAnalytics`                   | Send usage events to Google Analytics                              | `true`             |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
@@ -79,7 +81,7 @@ By default the chart will not install the recommended RBAC roles and rolebinding
 
 You need to have the flag `--authorization-mode=RBAC` on the api server. See the following document for how to enable [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/).
 
-To determine if your cluster supports RBAC, run the the following command:
+To determine if your cluster supports RBAC, run the following command:
 
 ```console
 $ kubectl api-versions | grep rbac

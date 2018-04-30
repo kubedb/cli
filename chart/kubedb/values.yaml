@@ -1,18 +1,13 @@
 ##
 ## KubeDB chart configuration
 ##
-# Docker registry containing KubeDB images
-dockerRegistry: kubedb
-## Tags for Docker images
-imageTags:
-  ## Docker image tag containing KubeDB operator
-  operator: 0.8.0-beta.2
-  ## Docker image tag containing KubeDB exporter
-  exporter: 0.8.0-beta.2
-  ## Docker image tag containing KubeDB apiserver
-  apiserver: 0.1.0-beta.2
 # Declare variables to be passed into your templates.
 replicaCount: 1
+# Docker registry containing Kubedb images
+kubedb:
+  registry: kubedb
+  repository: operator
+  tag: 0.8.0-beta.2
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
 ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
@@ -47,7 +42,12 @@ apiserver:
   # https://github.com/kubernetes/kube-aggregator/blob/release-1.9/pkg/apis/apiregistration/v1beta1/types.go#L66-L70
   # for more information on proper values of this field
   versionPriority: 15
-  # enableAdmissionWebhook is used to configure apiserver as admission webhook for KubeDB CRDs
-  enableAdmissionWebhook: false
+  # enableMutatingWebhook is used to configure mutating webhook for KubeDB CRDs
+  enableMutatingWebhook: false
+  # enableValidatingWebhook is used to configure validating webhook for KubeDB CRDs
+  enableValidatingWebhook: false
   # CA certificate used by main Kubernetes api server
   ca:
+
+# Send usage events to Google Analytics
+enableAnalytics: true

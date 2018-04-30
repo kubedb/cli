@@ -5,8 +5,6 @@ metadata:
   namespace: ${KUBEDB_NAMESPACE}
   labels:
     app: kubedb
-  initializers:
-    pending: []
 spec:
   replicas: 1
   selector:
@@ -23,29 +21,26 @@ spec:
       imagePullSecrets: [${KUBEDB_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
-        image: ${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0-beta.2
+        image: ${KUBEDB_DOCKER_REGISTRY}/operator:${KUBEDB_OPERATOR_TAG}
+        imagePullPolicy: ${KUBEDB_IMAGE_PULL_POLICY}
         args:
         - run
         - --v=3
         - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
-        - --exporter-tag=0.8.0-beta.2
+        - --exporter-tag=${KUBEDB_OPERATOR_TAG}
         - --governing-service=kubedb
         - --rbac=${KUBEDB_ENABLE_RBAC}
+        - --secure-port=8443
+        - --audit-log-path=-
+        - --tls-cert-file=/var/serving-cert/tls.crt
+        - --tls-private-key-file=/var/serving-cert/tls.key
+        - --enable-analytics=${KUBEDB_ENABLE_ANALYTICS}
         env:
         - name: OPERATOR_NAMESPACE
           valueFrom:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
-      - name: server
-        image: ${KUBEDB_DOCKER_REGISTRY}/kubedb-server:0.1.0-beta.2
-        args:
-        - run
-        - --v=3
-        - --secure-port=8443
-        - --audit-log-path=-
-        - --tls-cert-file=/var/serving-cert/tls.crt
-        - --tls-private-key-file=/var/serving-cert/tls.key
         ports:
         - containerPort: 8443
         volumeMounts:
@@ -97,12 +92,29 @@ spec:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.admission.kubedb.com
+  name: v1alpha1.validators.kubedb.com
   labels:
     app: kubedb
 spec:
   caBundle: ${SERVICE_SERVING_CERT_CA}
-  group: admission.kubedb.com
+  group: validators.kubedb.com
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: kubedb-operator
+    namespace: ${KUBEDB_NAMESPACE}
+  version: v1alpha1
+---
+# register as aggregated apiserver
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: v1alpha1.mutators.kubedb.com
+  labels:
+    app: kubedb
+spec:
+  caBundle: ${SERVICE_SERVING_CERT_CA}
+  group: mutators.kubedb.com
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
