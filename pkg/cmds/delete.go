@@ -128,7 +128,7 @@ func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out
 	}
 
 	for _, info := range infoList {
-		if err := deleteResource(f, info, out, mapper, shortOutput); err != nil {
+		if err := deleteResource(info, out, shortOutput); err != nil {
 			return err
 		}
 	}
@@ -136,10 +136,10 @@ func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out
 	return nil
 }
 
-func deleteResource(f cmdutil.Factory, info *resource.Info, out io.Writer, mapper meta.RESTMapper, shortOutput bool) error {
+func deleteResource(info *resource.Info, out io.Writer, shortOutput bool) error {
 	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil && !kerr.IsNotFound(err) {
 		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}
-	f.PrintSuccess(mapper, shortOutput, out, info.Mapping.Resource, info.Name, false, "deleted")
+	cmdutil.PrintSuccess(shortOutput, out, info.Object, false, "deleted")
 	return nil
 }

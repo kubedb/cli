@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
+	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	cs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
@@ -59,8 +59,6 @@ func NewCmdCreate(out io.Writer, errOut io.Writer) *cobra.Command {
 func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *resource.FilenameOptions) error {
 	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
 
-	mapper, _ := f.Object()
-
 	r := f.NewBuilder().Unstructured().Schema(util.Validator()).
 		ContinueOnError().
 		NamespaceParam(cmdNamespace).DefaultNamespace().
@@ -98,7 +96,7 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 			return err
 		}
 
-		if kind == tapi.ResourceKindDormantDatabase {
+		if kind == api.ResourceKindDormantDatabase {
 			return fmt.Errorf(`resource type "%v" doesn't support create operation`, kind)
 		}
 
@@ -114,24 +112,13 @@ func RunCreate(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, options *re
 		return err
 	}
 
-	showAlias := false
-	if len(infoList) > 1 {
-		showAlias = true
-	}
-
 	count := 0
 	for _, info := range infoList {
 		if err := createAndRefresh(info); err != nil {
 			return cmdutil.AddSourceToErr("creating", info.Source, err)
 		}
 		count++
-		resourceName := info.Mapping.Resource
-		if showAlias {
-			if alias, ok := util.ResourceShortFormFor(info.Mapping.Resource); ok {
-				resourceName = alias
-			}
-		}
-		f.PrintSuccess(mapper, false, out, resourceName, info.Name, false, "created")
+		cmdutil.PrintSuccess(false, out, info.Object, false, "created")
 	}
 
 	if count == 0 {

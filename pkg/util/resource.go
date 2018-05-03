@@ -21,45 +21,45 @@ import (
 func GetSupportedResource(resource string) (string, error) {
 	switch strings.ToLower(resource) {
 	case strings.ToLower(tapi.ResourceKindElasticsearch),
-		strings.ToLower(tapi.ResourceTypeElasticsearch),
+		strings.ToLower(tapi.ResourcePluralElasticsearch),
 		strings.ToLower(tapi.ResourceCodeElasticsearch),
-		strings.ToLower(tapi.ResourceNameElasticsearch):
-		return tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularElasticsearch):
+		return tapi.ResourcePluralElasticsearch + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
-		strings.ToLower(tapi.ResourceTypePostgres),
+		strings.ToLower(tapi.ResourcePluralPostgres),
 		strings.ToLower(tapi.ResourceCodePostgres),
-		strings.ToLower(tapi.ResourceNamePostgres):
-		return tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularPostgres):
+		return tapi.ResourcePluralPostgres + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindMySQL),
-		strings.ToLower(tapi.ResourceTypeMySQL),
+		strings.ToLower(tapi.ResourcePluralMySQL),
 		strings.ToLower(tapi.ResourceCodeMySQL),
-		strings.ToLower(tapi.ResourceNameMySQL):
-		return tapi.ResourceTypeMySQL + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularMySQL):
+		return tapi.ResourcePluralMySQL + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindMongoDB),
-		strings.ToLower(tapi.ResourceTypeMongoDB),
+		strings.ToLower(tapi.ResourcePluralMongoDB),
 		strings.ToLower(tapi.ResourceCodeMongoDB),
-		strings.ToLower(tapi.ResourceNameMongoDB):
-		return tapi.ResourceTypeMongoDB + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularMongoDB):
+		return tapi.ResourcePluralMongoDB + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindRedis),
-		strings.ToLower(tapi.ResourceTypeRedis),
+		strings.ToLower(tapi.ResourcePluralRedis),
 		strings.ToLower(tapi.ResourceCodeRedis),
-		strings.ToLower(tapi.ResourceNameRedis):
-		return tapi.ResourceTypeRedis + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularRedis):
+		return tapi.ResourcePluralRedis + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindMemcached),
-		strings.ToLower(tapi.ResourceTypeMemcached),
+		strings.ToLower(tapi.ResourcePluralMemcached),
 		strings.ToLower(tapi.ResourceCodeMemcached),
-		strings.ToLower(tapi.ResourceNameMemcached):
-		return tapi.ResourceTypeMemcached + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularMemcached):
+		return tapi.ResourcePluralMemcached + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot),
-		strings.ToLower(tapi.ResourceTypeSnapshot),
+		strings.ToLower(tapi.ResourcePluralSnapshot),
 		strings.ToLower(tapi.ResourceCodeSnapshot),
-		strings.ToLower(tapi.ResourceNameSnapshot):
-		return tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularSnapshot):
+		return tapi.ResourcePluralSnapshot + "." + tapi.SchemeGroupVersion.Group, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase),
-		strings.ToLower(tapi.ResourceTypeDormantDatabase),
+		strings.ToLower(tapi.ResourcePluralDormantDatabase),
 		strings.ToLower(tapi.ResourceCodeDormantDatabase),
-		strings.ToLower(tapi.ResourceNameDormantDatabase):
-		return tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group, nil
+		strings.ToLower(tapi.ResourceSingularDormantDatabase):
+		return tapi.ResourcePluralDormantDatabase + "." + tapi.SchemeGroupVersion.Group, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -68,45 +68,45 @@ func GetSupportedResource(resource string) (string, error) {
 func GetResourceType(resource string) (string, error) {
 	switch strings.ToLower(resource) {
 	case strings.ToLower(tapi.ResourceKindElasticsearch),
-		strings.ToLower(tapi.ResourceTypeElasticsearch),
+		strings.ToLower(tapi.ResourcePluralElasticsearch),
 		strings.ToLower(tapi.ResourceCodeElasticsearch),
-		strings.ToLower(tapi.ResourceNameElasticsearch):
-		return tapi.ResourceTypeElasticsearch, nil
+		strings.ToLower(tapi.ResourceSingularElasticsearch):
+		return tapi.ResourcePluralElasticsearch, nil
 	case strings.ToLower(tapi.ResourceKindPostgres),
-		strings.ToLower(tapi.ResourceTypePostgres),
+		strings.ToLower(tapi.ResourcePluralPostgres),
 		strings.ToLower(tapi.ResourceCodePostgres),
-		strings.ToLower(tapi.ResourceNamePostgres):
-		return tapi.ResourceTypePostgres, nil
+		strings.ToLower(tapi.ResourceSingularPostgres):
+		return tapi.ResourcePluralPostgres, nil
 	case strings.ToLower(tapi.ResourceKindMySQL),
-		strings.ToLower(tapi.ResourceTypeMySQL),
+		strings.ToLower(tapi.ResourcePluralMySQL),
 		strings.ToLower(tapi.ResourceCodeMySQL),
-		strings.ToLower(tapi.ResourceNameMySQL):
-		return tapi.ResourceTypeMySQL, nil
+		strings.ToLower(tapi.ResourceSingularMySQL):
+		return tapi.ResourcePluralMySQL, nil
 	case strings.ToLower(tapi.ResourceKindMongoDB),
-		strings.ToLower(tapi.ResourceTypeMongoDB),
+		strings.ToLower(tapi.ResourcePluralMongoDB),
 		strings.ToLower(tapi.ResourceCodeMongoDB),
-		strings.ToLower(tapi.ResourceNameMongoDB):
-		return tapi.ResourceTypeMongoDB, nil
+		strings.ToLower(tapi.ResourceSingularMongoDB):
+		return tapi.ResourcePluralMongoDB, nil
 	case strings.ToLower(tapi.ResourceKindRedis),
-		strings.ToLower(tapi.ResourceTypeRedis),
+		strings.ToLower(tapi.ResourcePluralRedis),
 		strings.ToLower(tapi.ResourceCodeRedis),
-		strings.ToLower(tapi.ResourceNameRedis):
-		return tapi.ResourceTypeRedis, nil
+		strings.ToLower(tapi.ResourceSingularRedis):
+		return tapi.ResourcePluralRedis, nil
 	case strings.ToLower(tapi.ResourceKindMemcached),
-		strings.ToLower(tapi.ResourceTypeMemcached),
+		strings.ToLower(tapi.ResourcePluralMemcached),
 		strings.ToLower(tapi.ResourceCodeMemcached),
-		strings.ToLower(tapi.ResourceNameMemcached):
-		return tapi.ResourceTypeMemcached, nil
+		strings.ToLower(tapi.ResourceSingularMemcached):
+		return tapi.ResourcePluralMemcached, nil
 	case strings.ToLower(tapi.ResourceKindSnapshot),
-		strings.ToLower(tapi.ResourceTypeSnapshot),
+		strings.ToLower(tapi.ResourcePluralSnapshot),
 		strings.ToLower(tapi.ResourceCodeSnapshot),
-		strings.ToLower(tapi.ResourceNameSnapshot):
-		return tapi.ResourceTypeSnapshot, nil
+		strings.ToLower(tapi.ResourceSingularSnapshot):
+		return tapi.ResourcePluralSnapshot, nil
 	case strings.ToLower(tapi.ResourceKindDormantDatabase),
-		strings.ToLower(tapi.ResourceTypeDormantDatabase),
+		strings.ToLower(tapi.ResourcePluralDormantDatabase),
 		strings.ToLower(tapi.ResourceCodeDormantDatabase),
-		strings.ToLower(tapi.ResourceNameDormantDatabase):
-		return tapi.ResourceTypeDormantDatabase, nil
+		strings.ToLower(tapi.ResourceSingularDormantDatabase):
+		return tapi.ResourcePluralDormantDatabase, nil
 	default:
 		return "", fmt.Errorf(`kubedb doesn't support a resource type "%v"`, resource)
 	}
@@ -131,14 +131,14 @@ func CheckSupportedResource(kind string) error {
 func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 
 	resources := []string{
-		tapi.ResourceTypeElasticsearch + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypePostgres + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypeMySQL + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypeMongoDB + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypeRedis + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypeMemcached + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypeSnapshot + "." + tapi.SchemeGroupVersion.Group,
-		tapi.ResourceTypeDormantDatabase + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralElasticsearch + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralPostgres + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralMySQL + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralMongoDB + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralRedis + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralMemcached + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralSnapshot + "." + tapi.SchemeGroupVersion.Group,
+		tapi.ResourcePluralDormantDatabase + "." + tapi.SchemeGroupVersion.Group,
 	}
 
 	restConfig, err := f.ClientConfig()
@@ -167,14 +167,14 @@ func GetAllSupportedResources(f cmdutil.Factory) ([]string, error) {
 }
 
 var ShortForms = map[string]string{
-	tapi.ResourceCodeElasticsearch:   tapi.ResourceTypeElasticsearch,
-	tapi.ResourceCodePostgres:        tapi.ResourceTypePostgres,
-	tapi.ResourceCodeMySQL:           tapi.ResourceTypeMySQL,
-	tapi.ResourceCodeMongoDB:         tapi.ResourceTypeMongoDB,
-	tapi.ResourceCodeRedis:           tapi.ResourceTypeRedis,
-	tapi.ResourceCodeMemcached:       tapi.ResourceTypeMemcached,
-	tapi.ResourceCodeSnapshot:        tapi.ResourceTypeSnapshot,
-	tapi.ResourceCodeDormantDatabase: tapi.ResourceTypeDormantDatabase,
+	tapi.ResourceCodeElasticsearch:   tapi.ResourcePluralElasticsearch,
+	tapi.ResourceCodePostgres:        tapi.ResourcePluralPostgres,
+	tapi.ResourceCodeMySQL:           tapi.ResourcePluralMySQL,
+	tapi.ResourceCodeMongoDB:         tapi.ResourcePluralMongoDB,
+	tapi.ResourceCodeRedis:           tapi.ResourcePluralRedis,
+	tapi.ResourceCodeMemcached:       tapi.ResourcePluralMemcached,
+	tapi.ResourceCodeSnapshot:        tapi.ResourcePluralSnapshot,
+	tapi.ResourceCodeDormantDatabase: tapi.ResourcePluralDormantDatabase,
 }
 
 func ResourceShortFormFor(resource string) (string, bool) {
