@@ -246,7 +246,7 @@ func visitToPatch(
 
 		if reflect.DeepEqual(originalJS, editedJS) {
 			// no edit, so just skip it.
-			f.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "skipped")
+			cmdutil.PrintSuccess(false, out, info.Object, false, "skipped")
 			return nil
 		}
 
@@ -292,7 +292,7 @@ func visitToPatch(
 		}
 
 		info.Refresh(patched, true)
-		f.PrintSuccess(mapper, false, out, info.Mapping.Resource, info.Name, false, "edited")
+		cmdutil.PrintSuccess(false, out, info.Object, false, "edited")
 		return nil
 	})
 	return err

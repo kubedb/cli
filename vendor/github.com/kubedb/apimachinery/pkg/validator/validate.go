@@ -73,6 +73,7 @@ func ValidateSnapshotSpec(client kubernetes.Interface, spec api.SnapshotStorageS
 	return nil
 }
 
+// ValidateMonitorSpec validates the Monitoring spec after all the defaulting is done.
 func ValidateMonitorSpec(monitorSpec *mona.AgentSpec) error {
 	specData, err := json.Marshal(monitorSpec)
 	if err != nil {
@@ -84,10 +85,12 @@ func ValidateMonitorSpec(monitorSpec *mona.AgentSpec) error {
 	}
 
 	if monitorSpec.Agent.Vendor() == mona.VendorPrometheus {
-		if monitorSpec.Agent == mona.AgentPrometheusBuiltin ||
-			(monitorSpec.Agent == mona.AgentCoreOSPrometheus && monitorSpec.Prometheus != nil) {
+		if monitorSpec.Prometheus != nil &&
+			monitorSpec.Prometheus.Port >= 1024 &&
+			monitorSpec.Prometheus.Port <= 65535 {
 			return nil
 		}
+		return fmt.Errorf(`invalid 'Monitor.Prometheus' in '%v'. Prometheus.Port value must be between 1024 and 65535, inclusive`, string(specData))
 	}
 
 	return fmt.Errorf(`invalid 'Agent' in '%v'`, string(specData))

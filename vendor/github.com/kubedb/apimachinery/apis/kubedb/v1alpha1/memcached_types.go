@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	ResourceCodeMemcached = "mc"
-	ResourceKindMemcached = "Memcached"
-	ResourceNameMemcached = "memcached"
-	ResourceTypeMemcached = "memcacheds"
+	ResourceCodeMemcached     = "mc"
+	ResourceKindMemcached     = "Memcached"
+	ResourceSingularMemcached = "memcached"
+	ResourcePluralMemcached   = "memcacheds"
 )
 
 // +genclient
@@ -29,7 +29,7 @@ type Memcached struct {
 
 type MemcachedSpec struct {
 	// Version of Memcached to be deployed.
-	Version types.StrYo `json:"version,omitempty"`
+	Version types.StrYo `json:"version"`
 	// Number of instances to deploy for a Memcached database.
 	Replicas *int32 `json:"replicas,omitempty"`
 	// NodeSelector is a selector which must be true for the pod to fit on a node

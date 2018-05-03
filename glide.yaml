@@ -7,39 +7,39 @@ import:
 - package: github.com/golang/glog
 - package: github.com/jpillora/go-ogle-analytics
 - package: github.com/kubedb/apimachinery
-  version: 0.8.0-beta.2
+  version: master
 - package: github.com/kubedb/elasticsearch
-  version: 0.8.0-beta.2
+  version: master
 - package: github.com/kubedb/postgres
-  version: 0.8.0-beta.2
+  version: master
 - package: github.com/kubedb/mysql
-  version: 0.1.0-beta.2
+  version: master
 - package: github.com/kubedb/mongodb
-  version: 0.1.0-beta.2
+  version: master
 - package: github.com/kubedb/redis
-  version: 0.1.0-beta.2
+  version: master
 - package: github.com/kubedb/memcached
-  version: 0.1.0-beta.2
+  version: master
 - package: github.com/spf13/cobra
   version: master
 - package: github.com/yudai/gojsondiff
   version: 1.0.0
 - package: k8s.io/api
-  version: kubernetes-1.9.0
+  version: kubernetes-1.10.0
 - package: k8s.io/apimachinery
-  version: kubernetes-1.9.0
+  version: kubernetes-1.10.0
 - package: k8s.io/client-go
-  version: v6.0.0
+  version: v7.0.0
 - package: k8s.io/apiextensions-apiserver
-  version: kubernetes-1.9.0
+  version: kubernetes-1.10.0
 - package: k8s.io/kubernetes
-  version: v1.9.0
+  version: v1.10.0
 - package: github.com/appscode/kutil
-  version: release-6.0
+  version: release-7.0
 - package: github.com/appscode/kube-mon
-  version: release-6.0
+  version: release-7.0
 - package: k8s.io/metrics
-  version: kubernetes-1.9.0
+  version: kubernetes-1.10.0
 - package: github.com/graymeta/stow
   repo: https://github.com/appscode/stow.git
   vcs: git

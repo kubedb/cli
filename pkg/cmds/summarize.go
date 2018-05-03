@@ -79,7 +79,7 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 	}
 
 	switch kubedbType {
-	case tapi.ResourceTypeSnapshot, tapi.ResourceTypeDormantDatabase:
+	case tapi.ResourcePluralSnapshot, tapi.ResourcePluralDormantDatabase:
 		return fmt.Errorf(`Failed to summarize resource type "%v"`, items[0])
 	}
 

@@ -121,8 +121,6 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		cmd.Flag("show-all").Value.Set("true")
 	}
 
-	mapper, _ := f.Object()
-
 	r := f.NewBuilder().Unstructured().
 		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
 		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
@@ -152,7 +150,7 @@ func RunGet(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args [
 		objs[ix] = infos[ix].Object
 	}
 
-	rPrinter, err := printer.NewPrinter(cmd, mapper)
+	rPrinter, err := printer.NewPrinter(cmd)
 	if err != nil {
 		return err
 	}

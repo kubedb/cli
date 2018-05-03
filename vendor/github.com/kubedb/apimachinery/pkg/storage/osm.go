@@ -2,12 +2,17 @@ package storage
 
 import (
 	"bytes"
+	"fmt"
+	"io/ioutil"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	stringz "github.com/appscode/go/strings"
 	"github.com/appscode/go/types"
+	meta_util "github.com/appscode/kutil/meta"
 	otx "github.com/appscode/osm/context"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -30,7 +35,22 @@ import (
 
 const (
 	SecretMountPath = "/etc/osm"
+	CaCertFileName  = "ca.crt"
 )
+
+// NewOSMSecret creates a secret that contains the config file of OSM.
+// So, generally, if this secret is mounted in `etc/osm`,
+// the tree of `/etc/osm` directory will be similar to,
+//
+// /etc/osm
+// └── config
+//
+// However, if the EndPoint is `S3 Minio Server`, then the secret will contain two file,
+// `config` and `ca.crt`. So, the tree of the file path will look as,
+//
+// /etc/osm
+// ├── ca.crt
+// └── config
 
 func NewOSMSecret(client kubernetes.Interface, snapshot *api.Snapshot) (*core.Secret, error) {
 	osmCtx, err := NewOSMContext(client, snapshot.Spec.SnapshotStorageSpec, snapshot.Namespace)
@@ -45,7 +65,7 @@ func NewOSMSecret(client kubernetes.Interface, snapshot *api.Snapshot) (*core.Se
 	if err != nil {
 		return nil, err
 	}
-	return &core.Secret{
+	return upserCaCertFile(osmCtx, &core.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      snapshot.OSMSecretName(),
 			Namespace: snapshot.Namespace,
@@ -53,7 +73,20 @@ func NewOSMSecret(client kubernetes.Interface, snapshot *api.Snapshot) (*core.Se
 		Data: map[string][]byte{
 			"config": osmBytes,
 		},
-	}, nil
+	})
+}
+
+func upserCaCertFile(osmCtx *otx.Context, secret *core.Secret) (*core.Secret, error) {
+	if osmCtx != nil {
+		if certFileName, err := meta_util.GetStringValue(osmCtx.Config, s3.ConfigCACertFile); err == nil {
+			caCertData, err := ioutil.ReadFile(certFileName)
+			if err != nil {
+				return nil, fmt.Errorf("error in reading CaCertFile in path %v, err: %v", certFileName, err)
+			}
+			secret.Data[CaCertFileName] = caCertData
+		}
+	}
+	return secret, nil
 }
 
 func CheckBucketAccess(client kubernetes.Interface, spec api.SnapshotStorageSpec, namespace string) error {
@@ -145,8 +178,24 @@ func NewOSMContext(client kubernetes.Interface, spec api.SnapshotStorageSpec, na
 			nc.Config[s3.ConfigRegion] = stringz.Val(types.String(out.LocationConstraint), "us-east-1")
 		} else {
 			nc.Config[s3.ConfigEndpoint] = spec.S3.Endpoint
-			if u, err := url.Parse(spec.S3.Endpoint); err == nil {
-				nc.Config[s3.ConfigDisableSSL] = strconv.FormatBool(u.Scheme == "http")
+			u, err := url.Parse(spec.S3.Endpoint)
+			if err != nil {
+				return nil, err
+			}
+			nc.Config[s3.ConfigDisableSSL] = strconv.FormatBool(u.Scheme == "http")
+
+			cacertData, ok := config[api.CA_CERT_DATA]
+			if ok && u.Scheme == "https" {
+				certFileName := filepath.Join(SecretMountPath, CaCertFileName)
+				err = os.MkdirAll(filepath.Dir(certFileName), 0755)
+				if err != nil {
+					return nil, err
+				}
+				err = ioutil.WriteFile(certFileName, cacertData, 0755)
+				if err != nil {
+					return nil, err
+				}
+				nc.Config[s3.ConfigCACertFile] = certFileName
 			}
 		}
 		return nc, nil

@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	ResourceCodeElasticsearch = "es"
-	ResourceKindElasticsearch = "Elasticsearch"
-	ResourceNameElasticsearch = "elasticsearch"
-	ResourceTypeElasticsearch = "elasticsearches"
+	ResourceCodeElasticsearch     = "es"
+	ResourceKindElasticsearch     = "Elasticsearch"
+	ResourceSingularElasticsearch = "elasticsearch"
+	ResourcePluralElasticsearch   = "elasticsearches"
 )
 
 // +genclient
@@ -29,7 +29,7 @@ type Elasticsearch struct {
 
 type ElasticsearchSpec struct {
 	// Version of Elasticsearch to be deployed.
-	Version types.StrYo `json:"version,omitempty"`
+	Version types.StrYo `json:"version"`
 	// Number of instances to deploy for a Elasticsearch database.
 	Replicas *int32 `json:"replicas,omitempty"`
 	// Elasticsearch topology for node specification

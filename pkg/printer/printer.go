@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/scheme"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
@@ -19,7 +18,7 @@ type DescriberSettings struct {
 	ShowSecret   bool
 }
 
-func NewPrinter(cmd *cobra.Command, mapper meta.RESTMapper) (printers.ResourcePrinter, error) {
+func NewPrinter(cmd *cobra.Command) (printers.ResourcePrinter, error) {
 	humanReadablePrinter := NewHumanReadablePrinter(PrintOptions{
 		WithNamespace: cmdutil.GetFlagBool(cmd, "all-namespaces"),
 		Wide:          cmdutil.GetWideFlag(cmd),
@@ -38,7 +37,6 @@ func NewPrinter(cmd *cobra.Command, mapper meta.RESTMapper) (printers.ResourcePr
 		return &printers.NamePrinter{
 			Typer:    scheme.Scheme,
 			Decoders: []runtime.Decoder{scheme.Codecs.UniversalDecoder()},
-			Mapper:   mapper,
 		}, nil
 	case "wide":
 		fallthrough
