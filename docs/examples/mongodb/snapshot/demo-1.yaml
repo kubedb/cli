@@ -4,7 +4,8 @@ metadata:
   name: mgo-infant
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
+  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"

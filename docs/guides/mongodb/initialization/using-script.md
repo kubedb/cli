@@ -51,7 +51,8 @@ metadata:
   name: mgo-init-script
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
+  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -165,6 +166,7 @@ metadata:
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-init-script
   uid: a9348cad-0af1-11e8-a107-080027869227
 spec:
+  replicas: 1
   databaseSecret:
     secretName: mgo-init-script-auth
   doNotPause: true
@@ -180,7 +182,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 3.4
+  version: "3.4"
 status:
   creationTime: 2018-02-06T03:56:12Z
   phase: Running
@@ -256,7 +258,17 @@ As you can see here, the initial script has successfully created a database name
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mg/mgo-init-script -p '{"spec":{"doNotPause":false}}' --type="merge"
+mongodb.kubedb.com "mgo-init-script" patched
+
+$ kubectl delete -n demo mg/mgo-init-script
+mongodb.kubedb.com "mgo-init-script" deleted
+
+$ kubectl patch -n demo drmn/mgo-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mgo-init-script" patched
+
+$ kubectl delete -n demo drmn/mgo-init-script
+dormantdatabase.kubedb.com "mgo-init-script" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

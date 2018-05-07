@@ -90,7 +90,8 @@ metadata:
   name: mgo-pvt-reg
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
+  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -137,7 +138,17 @@ Just create [snapshot object](/docs/guides/mongodb/snapshot/backup-and-restore.m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mg/mgo-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+mongodb.kubedb.com "mgo-pvt-reg" patched
+
+$ kubectl delete -n demo mg/mgo-pvt-reg
+mongodb.kubedb.com "mgo-pvt-reg" deleted
+
+$ kubectl patch -n demo drmn/mgo-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mgo-pvt-reg" patched
+
+$ kubectl delete -n demo drmn/mgo-pvt-reg
+dormantdatabase.kubedb.com "mgo-pvt-reg" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

@@ -139,7 +139,8 @@ metadata:
   name: mgo-mon-coreos
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
+  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -182,8 +183,7 @@ __Known Limitations:__ If the database password is updated, exporter must be res
 Run the following command to deploy the above `MongoDB` CRD object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml"
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
 mongodb "mgo-mon-coreos" created
 ```
 
@@ -297,7 +297,17 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mg/mgo-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
+mongodb.kubedb.com "mgo-mon-coreos" patched
+
+$ kubectl delete -n demo mg/mgo-mon-coreos
+mongodb.kubedb.com "mgo-mon-coreos" deleted
+
+$ kubectl patch -n demo drmn/mgo-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mgo-mon-coreos" patched
+
+$ kubectl delete -n demo drmn/mgo-mon-coreos
+dormantdatabase.kubedb.com "mgo-mon-coreos" deleted
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrolebindings prometheus-operator  prometheus

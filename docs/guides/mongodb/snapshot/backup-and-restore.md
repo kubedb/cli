@@ -209,7 +209,8 @@ metadata:
   name: mgo-recovered
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
+  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -293,7 +294,22 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mg/mgo-infant mg/mgo-recovered -p '{"spec":{"doNotPause":false}}' --type="merge"
+mongodb.kubedb.com "mgo-infant" patched
+mongodb.kubedb.com "mgo-recovered" patched
+
+$ kubectl delete -n demo mg/mgo-infant mg/mgo-recovered
+mongodb.kubedb.com "mgo-infant" deleted
+mongodb.kubedb.com "mgo-recovered" deleted
+
+$ kubectl patch -n demo drmn/mgo-infant drmn/mgo-recovered -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mgo-infant" patched
+dormantdatabase.kubedb.com "mgo-recovered" patched
+
+$ kubectl delete -n demo drmn/mgo-infant drmn/mgo-recovered
+dormantdatabase.kubedb.com "mgo-infant" deleted
+dormantdatabase.kubedb.com "mgo-recovered" deleted
+
 
 $ kubectl delete ns demo
 namespace "demo" deleted

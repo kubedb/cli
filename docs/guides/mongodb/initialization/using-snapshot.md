@@ -36,7 +36,8 @@ metadata:
   name: mgo-init-snapshot
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
+  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -51,8 +52,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-2.yaml"
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-2.yaml
 mongodb "mgo-init-snapshot" created
 ```
 
@@ -120,7 +120,17 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mg/mgo-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
+mongodb.kubedb.com "mgo-init-snapshot" patched
+
+$ kubectl delete -n demo mg/mgo-init-snapshot
+mongodb.kubedb.com "mgo-init-snapshot" deleted
+
+$ kubectl patch -n demo drmn/mgo-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mgo-init-snapshot" patched
+
+$ kubectl delete -n demo drmn/mgo-init-snapshot
+dormantdatabase.kubedb.com "mgo-init-snapshot" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted
