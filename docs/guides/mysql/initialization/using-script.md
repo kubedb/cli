@@ -68,7 +68,8 @@ metadata:
   name: mysql-init-script
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
+  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -182,6 +183,7 @@ metadata:
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-init-script
   uid: ebbcc002-0d8a-11e8-9091-08002751ae8c
 spec:
+  replicas: 1
   databaseSecret:
     secretName: mysql-init-script-auth
   doNotPause: true
@@ -197,7 +199,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 8
+  version: "8.0"
 status:
   creationTime: 2018-02-09T11:18:14Z
   phase: Running

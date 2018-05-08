@@ -87,7 +87,8 @@ metadata:
   name: mysql-pvt-reg
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
+  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -134,7 +135,17 @@ Just create [snapshot object](/docs/guides/mysql/snapshot/backup-and-restore.md)
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+mysql.kubedb.com "mysql-pvt-reg" patched
+
+$ kubectl delete -n demo mysql/mysql-pvt-reg
+mysql.kubedb.com "mysql-pvt-reg" deleted
+
+$ kubectl patch -n demo drmn/mysql-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mysql-pvt-reg" patched
+
+$ kubectl delete -n demo drmn/mysql-pvt-reg
+dormantdatabase.kubedb.com "mysql-pvt-reg" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

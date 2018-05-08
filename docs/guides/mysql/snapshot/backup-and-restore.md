@@ -208,7 +208,8 @@ metadata:
   name: mysql-recovered
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
+  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -224,7 +225,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-3.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-3.yaml"
 mysql "mysql-recovered" created
 ```
 
@@ -295,7 +295,21 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-infant mysql/mysql-recovered -p '{"spec":{"doNotPause":false}}' --type="merge"
+mysql.kubedb.com "mysql-infant" patched
+mysql.kubedb.com "mysql-recovered" patched
+
+$ kubectl delete -n demo mysql/mysql-infant mysql/mysql-recovered
+mysql.kubedb.com "mysql-infant" deleted
+mysql.kubedb.com "mysql-recovered" deleted
+
+$ kubectl patch -n demo drmn/mysql-infant drmn/mysql-recovered -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mysql-infant" patched
+dormantdatabase.kubedb.com "mysql-recovered" patched
+
+$ kubectl delete -n demo drmn/mysql-infant drmn/mysql-recovered
+dormantdatabase.kubedb.com "mysql-infant" deleted
+dormantdatabase.kubedb.com "mysql-recovered" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

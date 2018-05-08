@@ -19,6 +19,8 @@ This tutorial will show you how to use KubeDB to run a MongoDB database.
   <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="373">
 </p>
 
+The yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+
 ## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
@@ -319,7 +321,18 @@ You can wipe out a DormantDatabase while deleting the objet by setting `spec.wip
 
 ```yaml
 $ kubedb edit drmn -n demo mgo-quickstart
-# set spec.wipeOut: true
+apiVersion: kubedb.com/v1alpha1
+kind: DormantDatabase
+metadata:
+  name: mgo-quickstart
+  namespace: demo
+  ...
+spec:
+  wipeOut: true
+  ...
+status:
+  phase: Paused
+  ...
 ```
 
 If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.

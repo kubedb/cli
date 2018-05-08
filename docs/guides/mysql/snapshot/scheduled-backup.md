@@ -83,7 +83,8 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
+  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -180,7 +181,17 @@ status:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-scheduled -p '{"spec":{"doNotPause":false}}' --type="merge"
+mysql.kubedb.com "mysql-scheduled" patched
+
+$ kubectl delete -n demo mysql/mysql-scheduled
+mysql.kubedb.com "mysql-scheduled" deleted
+
+$ kubectl patch -n demo drmn/mysql-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mysql-scheduled" patched
+
+$ kubectl delete -n demo drmn/mysql-scheduled
+dormantdatabase.kubedb.com "mysql-scheduled" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

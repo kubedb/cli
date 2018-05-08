@@ -121,7 +121,17 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ $ kubectl patch -n demo mysql/mysql-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
+mysql.kubedb.com "mysql-init-snapshot" patched
+
+$ kubectl delete -n demo mysql/mysql-init-snapshot
+mysql.kubedb.com "mysql-init-snapshot" deleted
+
+$ kubectl patch -n demo drmn/mysql-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
+dormantdatabase.kubedb.com "mysql-init-snapshot" patched
+
+$ kubectl delete -n demo drmn/mysql-init-snapshot
+dormantdatabase.kubedb.com "mysql-init-snapshot" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted
