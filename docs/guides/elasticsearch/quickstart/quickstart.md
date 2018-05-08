@@ -51,7 +51,7 @@ metadata:
   name: quick-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -75,7 +75,6 @@ Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml"
 elasticsearch "quick-elasticsearch" created
 ```
 
@@ -446,7 +445,6 @@ The below command will resume the DormantDatabase `quick-elasticsearch`
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml"
 elasticsearch "quick-elasticsearch" created
 ```
 

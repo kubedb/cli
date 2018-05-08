@@ -67,7 +67,6 @@ Run following command to create example above.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml"
 elasticsearch "builtin-prom-es" created
 ```
 

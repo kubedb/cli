@@ -88,7 +88,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/Initialization/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/Initialization/demo-1.yaml"
 mysql "mysql-init-script" created
 ```
 

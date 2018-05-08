@@ -78,7 +78,6 @@ In this tutorial, `data.sql` script from the git repository `https://github.com/
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
 postgres "script-postgres" created
 ```
 

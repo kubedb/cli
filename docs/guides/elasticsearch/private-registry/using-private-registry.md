@@ -106,7 +106,6 @@ Now run the command to deploy this Elasticsearch object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/private-registry/private-registry.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/private-registry/private-registry.yaml"
 elasticsearch "pvt-reg-elasticsearch" created
 ```
 

@@ -50,7 +50,6 @@ If Elasticsearch object `infant-elasticsearch` doesn't exists, create it first.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
 elasticsearch "infant-elasticsearch" created
 ```
 
@@ -198,7 +197,6 @@ Now, create the Snapshot object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml"
 snapshot "instant-snapshot" created
 ```
 

@@ -24,7 +24,6 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f memcached-demo.yaml
-validating "memcached-demo.yaml"
 memcached "memcached-demo" created
 ```
 
@@ -32,7 +31,6 @@ You can provide namespace as a flag `--namespace`. Provided namespace should mat
 
 ```console
 $ kubedb create -f memcached-demo.yaml --namespace=kube-system
-validating "memcached-demo.yaml"
 memcached "memcached-demo" created
 ```
 

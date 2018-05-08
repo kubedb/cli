@@ -107,7 +107,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/snapshot/demo-4.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/snapshot/demo-4.yaml"
 mongodb "mgo-scheduled" created
 ```
 

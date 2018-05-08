@@ -188,7 +188,6 @@ Run the following command to deploy the above `MySQL` CRD object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml"
 mysql "mysql-mon-coreos" created
 ```
 

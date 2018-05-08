@@ -103,7 +103,6 @@ Now run the command to deploy this `Redis` object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/private-registry/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/private-registry/demo-2.yaml"
 redis "redis-pvt-reg" created
 ```
 

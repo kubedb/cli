@@ -185,7 +185,6 @@ Now create PostgreSQL with monitoring spec
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml"
 postgres "coreos-prom-postgres" created
 ```
 

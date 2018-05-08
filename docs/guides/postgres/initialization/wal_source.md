@@ -95,7 +95,6 @@ Now create this Postgres
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/replay-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/replay-postgres.yaml"
 postgres "replay-postgres" created
 ```
 

@@ -106,7 +106,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-4.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-4.yaml"
 mysql "mysql-scheduled" created
 ```
 

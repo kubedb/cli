@@ -375,7 +375,6 @@ Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml"
 elasticsearch "sg-elasticsearch" created
 ```
 

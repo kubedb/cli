@@ -105,7 +105,6 @@ Now run the command to deploy this `MySQL` object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/private-registry/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/private-registry/demo-2.yaml"
 mysql "mysql-pvt-reg" created
 ```
 

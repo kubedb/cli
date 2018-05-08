@@ -29,6 +29,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 - [kubedb/mongo-tools](https://hub.docker.com/r/kubedb/mongo-tools)
 
 ```console
+
 $ export DOCKER_REGISTRY=<your-registry>
 
 $ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
@@ -108,7 +109,6 @@ Now run the command to deploy this `MongoDB` object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/private-registry/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/private-registry/demo-2.yaml"
 mongodb "mgo-pvt-reg" created
 ```
 

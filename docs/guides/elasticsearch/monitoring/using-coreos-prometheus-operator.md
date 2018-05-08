@@ -186,7 +186,6 @@ Now create this Elasticsearch object with monitoring spec
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml"
 elasticsearch "coreos-prom-es" created
 ```
 

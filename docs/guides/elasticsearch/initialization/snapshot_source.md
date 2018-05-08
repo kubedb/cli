@@ -45,7 +45,6 @@ Follow these steps to prepare this tutorial
 
     ```console
     $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
     elasticsearch "infant-elasticsearch" created
     ```
 
@@ -126,7 +125,6 @@ Now, create the Elasticsearch object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/initialization/recovered-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/initialization/recovered-es.yaml"
 elasticsearch "recovered-es" created
 ```
 

@@ -92,7 +92,6 @@ Here,
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/scheduled-es.yaml"
 elasticsearch "scheduled-es" created
 ```
 

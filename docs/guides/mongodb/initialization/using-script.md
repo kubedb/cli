@@ -71,7 +71,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-1.yaml"
 mongodb "mgo-init-script" created
 ```
 

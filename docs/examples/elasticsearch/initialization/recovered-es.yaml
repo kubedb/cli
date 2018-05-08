@@ -4,7 +4,7 @@ metadata:
   name: recovered-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   databaseSecret:
     secretName: infant-elasticsearch-auth
   storage:
