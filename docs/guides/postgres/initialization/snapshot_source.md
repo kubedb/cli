@@ -86,7 +86,7 @@ metadata:
   name: recovered-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   databaseSecret:
     secretName: script-postgres-auth
   storage:
@@ -105,8 +105,8 @@ spec:
 Here,
 
 - `spec.init.snapshotSource` specifies Snapshot object information to be used in this initialization process.
-	- `snapshotSource.name` refers to a Snapshot object `name`.
-	- `snapshotSource.namespace` refers to a Snapshot object `namespace`.
+  - `snapshotSource.name` refers to a Snapshot object `name`.
+  - `snapshotSource.namespace` refers to a Snapshot object `namespace`.
 
 Snapshot `instant-snapshot` in `demo` namespace belongs to Postgres `script-postgres`:
 

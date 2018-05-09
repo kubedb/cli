@@ -36,7 +36,7 @@ metadata:
   name: mysql-init-snapshot
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -120,17 +120,11 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ $ kubectl patch -n demo mysql/mysql-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
-mysql.kubedb.com "mysql-init-snapshot" patched
-
+$ kubectl patch -n demo mysql/mysql-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
 $ kubectl delete -n demo mysql/mysql-init-snapshot
-mysql.kubedb.com "mysql-init-snapshot" deleted
 
 $ kubectl patch -n demo drmn/mysql-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mysql-init-snapshot" patched
-
 $ kubectl delete -n demo drmn/mysql-init-snapshot
-dormantdatabase.kubedb.com "mysql-init-snapshot" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

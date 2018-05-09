@@ -57,7 +57,7 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   doNotPause: true
   storage:
     storageClassName: "standard"

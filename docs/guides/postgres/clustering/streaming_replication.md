@@ -47,7 +47,7 @@ metadata:
   name: ha-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 3
   storage:
     storageClassName: "standard"
@@ -62,7 +62,6 @@ In this examples:
 
 - This `Postgres` object creates three PostgreSQL servers, indicated by the **`replicas`** field.
 - One server will be *primary* and two others will be *warm standby* servers, default of **`spec.standby`**
-
 
 ### What is Streaming Replication
 
@@ -85,7 +84,6 @@ Here,
 
 - _wal_keep_segments_ specifies the minimum number of past log file segments kept in the pg_xlog directory.
 
-
 And followings are in `recovery.conf` for *standby* server
 
 ```console
@@ -99,7 +97,6 @@ Here,
 
 - _trigger_file_ is created to trigger a *standby* to take over as *primary* server.
 - *$PRIMARY_HOST* holds the Kubernetes Service name that targets *primary* server
-
 
 Now create this Postgres object with Streaming Replication support
 
@@ -153,15 +150,17 @@ Now connect to this *primary* server Pod `ha-postgres-0` using pgAdmin installed
 Connection information:
 
 - address: you can use any of these
-    - Service `ha-postgres.demo`
-    - Pod IP (`$ kubectl get pods ha-postgres-0 -n demo -o yaml | grep podIP`)
+  - Service `ha-postgres.demo`
+  - Pod IP (`$ kubectl get pods ha-postgres-0 -n demo -o yaml | grep podIP`)
 - port: `5432`
 - database: `postgres`
 - username: `postgres`
 
 Run following command to get `postgres` superuser password
 
+```yaml
     $ kubectl get secrets -n demo ha-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
+```
 
 You can check `pg_stat_replication` information to know who is currently streaming from *primary*.
 
@@ -231,7 +230,7 @@ metadata:
   name: hot-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 3
   standbyMode: hot
   storage:
@@ -259,7 +258,6 @@ hot_standby = on
 Here,
 
 - _hot_standby_ specifies that *standby* server will act as *hot standby*.
-
 
 Now create this Postgres object
 

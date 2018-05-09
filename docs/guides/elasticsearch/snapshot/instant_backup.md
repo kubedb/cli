@@ -43,7 +43,7 @@ metadata:
   name: infant-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
 ```
 
 If Elasticsearch object `infant-elasticsearch` doesn't exists, create it first.
@@ -128,16 +128,15 @@ spec:
 
 Here,
 
- - `metadata.labels` should include the type of database.
- - `spec.databaseName` indicates the Elasticsearch object name, `infant-elasticsearch`, whose snapshot is taken.
- - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
- - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
+- `metadata.labels` should include the type of database.
+- `spec.databaseName` indicates the Elasticsearch object name, `infant-elasticsearch`, whose snapshot is taken.
+- `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
+- `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 In this case, `kubedb.com/kind: Elasticsearch` tells KubeDB operator that this Snapshot belongs to a Elasticsearch object.
 Only Elasticsearch controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Elasticsearch, `infant-elasticsearch`.
-
 
 #### Snapshot storage Secret
 
@@ -291,7 +290,11 @@ Once Snapshot object is deleted, you can't revert this process and snapshot data
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/infant-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/infant-elasticsearch
+
+$ kubectl patch -n demo drmn/infant-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/infant-elasticsearch
 
 $ kubectl delete ns demo
 ```

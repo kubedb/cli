@@ -144,7 +144,7 @@ metadata:
   name: mysql-mon-coreos
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -301,16 +301,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mysql/mysql-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
-mysql.kubedb.com "mysql-mon-coreos" patched
-
 $ kubectl delete -n demo mysql/mysql-mon-coreos
-mysql.kubedb.com "mysql-mon-coreos" deleted
 
 $ kubectl patch -n demo drmn/mysql-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mysql-mon-coreos" patched
-
 $ kubectl delete -n demo drmn/mysql-mon-coreos
-dormantdatabase.kubedb.com "mysql-mon-coreos" deleted
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrolebindings prometheus-operator  prometheus

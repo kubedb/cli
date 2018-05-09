@@ -37,7 +37,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4"
-  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -120,17 +119,11 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
-mongodb.kubedb.com "mgo-init-snapshot" patched
+$ kubectl patch -n demo mg/mgo-infant mg/mgo-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mg/mgo-infant mg/mgo-init-snapshot
 
-$ kubectl delete -n demo mg/mgo-init-snapshot
-mongodb.kubedb.com "mgo-init-snapshot" deleted
-
-$ kubectl patch -n demo drmn/mgo-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mgo-init-snapshot" patched
-
-$ kubectl delete -n demo drmn/mgo-init-snapshot
-dormantdatabase.kubedb.com "mgo-init-snapshot" deleted
+$ kubectl patch -n demo drmn/mgo-infant drmn/mgo-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mgo-infant drmn/mgo-init-snapshot
 
 $ kubectl delete ns demo
 namespace "demo" deleted

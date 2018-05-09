@@ -50,7 +50,7 @@ metadata:
   namespace: demo
 spec:
   replicas: 3
-  version: 1.5.4
+  version: "1.5.4"
   doNotPause: true
   resources:
     requests:

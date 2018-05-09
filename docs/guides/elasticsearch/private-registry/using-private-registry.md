@@ -90,7 +90,7 @@ metadata:
   name: pvt-reg-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -126,7 +126,12 @@ We don't need to add `imagePullSecret` for Snapshot objects. Just create Snapsho
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/pvt-reg-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/pvt-reg-elasticsearch
+
+$ kubectl patch -n demo drmn/pvt-reg-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/pvt-reg-elasticsearch
+
 $ kubectl delete ns demo
 ```
 

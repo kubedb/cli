@@ -154,7 +154,7 @@ metadata:
   name: coreos-prom-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -173,13 +173,12 @@ spec:
 
 Here,
 
- - `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
- - `monitor.prometheus` specifies the information for monitoring by prometheus
-      - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
-      - `prometheus.labels` specifies the labels applied to ServiceMonitor.
-      - `prometheus.port` indicates the port for PostgreSQL exporter endpoint (default is `56790`)
-      - `prometheus.interval` indicates the scraping interval (eg, '10s')
-
+- `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
+- `monitor.prometheus` specifies the information for monitoring by prometheus
+  - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
+  - `prometheus.labels` specifies the labels applied to ServiceMonitor.
+  - `prometheus.port` indicates the port for PostgreSQL exporter endpoint (default is `56790`)
+  - `prometheus.interval` indicates the scraping interval (eg, '10s')
 
 Now create PostgreSQL with monitoring spec
 
@@ -214,6 +213,7 @@ $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -29,7 +29,6 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 - [kubedb/mongo-tools](https://hub.docker.com/r/kubedb/mongo-tools)
 
 ```console
-
 $ export DOCKER_REGISTRY=<your-registry>
 
 $ docker pull kubedb/operator:0.8.0-beta.2 ; docker tag kubedb/operator:0.8.0-beta.2 $DOCKER_REGISTRY/operator:0.8.0-beta.2 ; docker push $DOCKER_REGISTRY/operator:0.8.0-beta.2
@@ -92,7 +91,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4"
-  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -139,16 +137,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mg/mgo-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
-mongodb.kubedb.com "mgo-pvt-reg" patched
-
 $ kubectl delete -n demo mg/mgo-pvt-reg
-mongodb.kubedb.com "mgo-pvt-reg" deleted
 
 $ kubectl patch -n demo drmn/mgo-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mgo-pvt-reg" patched
-
 $ kubectl delete -n demo drmn/mgo-pvt-reg
-dormantdatabase.kubedb.com "mgo-pvt-reg" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

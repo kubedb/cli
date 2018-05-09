@@ -35,7 +35,6 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-
 ## Create PostgreSQL with Continuous Archiving
 
 Below is the Postgres object created with Continuous Archiving support.
@@ -47,7 +46,7 @@ metadata:
   name: wal-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 2
   storage:
     storageClassName: "standard"
@@ -66,9 +65,8 @@ spec:
 Here,
 
 - `spec.archiver.storage` specifies storage information that will be used by `wal-g`
-	- `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-	- `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
-
+  - `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+  - `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
 
 ##### What is this Continuous Archiving
 
@@ -144,7 +142,6 @@ To configure this backend, following parameters are available:
 | `spec.s3.endpoint`       | `Required`. For S3, use `s3.amazonaws.com`                                      |
 | `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
 | `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store                |
-
 
 Now create this Postgres object with Continuous Archiving support.
 

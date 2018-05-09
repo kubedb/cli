@@ -181,16 +181,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mysql/mysql-scheduled -p '{"spec":{"doNotPause":false}}' --type="merge"
-mysql.kubedb.com "mysql-scheduled" patched
-
 $ kubectl delete -n demo mysql/mysql-scheduled
-mysql.kubedb.com "mysql-scheduled" deleted
 
 $ kubectl patch -n demo drmn/mysql-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mysql-scheduled" patched
-
 $ kubectl delete -n demo drmn/mysql-scheduled
-dormantdatabase.kubedb.com "mysql-scheduled" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

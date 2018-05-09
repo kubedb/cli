@@ -140,7 +140,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4"
-  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -298,16 +297,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mg/mgo-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
-mongodb.kubedb.com "mgo-mon-coreos" patched
-
 $ kubectl delete -n demo mg/mgo-mon-coreos
-mongodb.kubedb.com "mgo-mon-coreos" deleted
 
 $ kubectl patch -n demo drmn/mgo-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mgo-mon-coreos" patched
-
 $ kubectl delete -n demo drmn/mgo-mon-coreos
-dormantdatabase.kubedb.com "mgo-mon-coreos" deleted
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrolebindings prometheus-operator  prometheus

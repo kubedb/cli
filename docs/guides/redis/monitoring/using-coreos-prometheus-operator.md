@@ -144,7 +144,7 @@ metadata:
   name: redis-mon-coreos
   namespace: demo
 spec:
-  version: 4
+  version: "4"
   storage:
     storageClassName: "standard"
     accessModes:

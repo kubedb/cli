@@ -55,7 +55,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4"
-  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -160,7 +159,6 @@ spec:
   databaseSecret:
     secretName: mgo-quickstart-auth
   doNotPause: true
-  replicas: 1
   storage:
     accessModes:
     - ReadWriteOnce
@@ -306,16 +304,18 @@ Here,
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, create same `MongoDB` database by using same Specs.
+To resume the database from the dormant state, create same `MongoDB` object with same Spec.
 
-In this tutorial, the dormant database can be resumed by creating `MongoDB` database using `demo-1.yaml` file. The below command resumes the dormant database `mgo-quickstart` that was created before.
+In this tutorial, the dormant database can be resumed by creating original MongoDB object.
+
+The below command will resume the DormantDatabase `mgo-quickstart`.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
 mongodb "mgo-quickstart" created
 ```
 
-## WipeOut Dormant Database
+## WipeOut DormantDatabase
 
 You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `MongoDB` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
@@ -337,7 +337,7 @@ status:
 
 If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
-## Delete Dormant Database
+## Delete DormantDatabase
 
 As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 

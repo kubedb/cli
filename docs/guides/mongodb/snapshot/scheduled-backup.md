@@ -85,7 +85,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4"
-  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -183,16 +182,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mg/mgo-scheduled -p '{"spec":{"doNotPause":false}}' --type="merge"
-mongodb.kubedb.com "mgo-scheduled" patched
-
 $ kubectl delete -n demo mg/mgo-scheduled
-mongodb.kubedb.com "mgo-scheduled" deleted
 
 $ kubectl patch -n demo drmn/mgo-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mgo-scheduled" patched
-
 $ kubectl delete -n demo drmn/mgo-scheduled
-dormantdatabase.kubedb.com "mgo-scheduled" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

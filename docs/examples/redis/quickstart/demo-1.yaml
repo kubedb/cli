@@ -4,7 +4,7 @@ metadata:
   name: redis-quickstart
   namespace: demo
 spec:
-  version: 4
+  version: "4"
   doNotPause: true
   storage:
     storageClassName: "standard"

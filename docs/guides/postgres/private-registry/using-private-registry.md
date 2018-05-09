@@ -93,7 +93,7 @@ metadata:
   name: pvt-reg-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:

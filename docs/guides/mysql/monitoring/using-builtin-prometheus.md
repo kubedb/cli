@@ -357,16 +357,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mysql/mysql-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
-mysql.kubedb.com "mysql-mon-prometheus" patched
-
 $ kubectl delete -n demo mysql/mysql-mon-prometheus
-mysql.kubedb.com "mysql-mon-prometheus" deleted
 
 $ kubectl patch -n demo drmn/mysql-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mysql-mon-prometheus" patched
-
 $ kubectl delete -n demo drmn/mysql-mon-prometheus
-dormantdatabase.kubedb.com "mysql-mon-prometheus" deleted
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrole prometheus-server

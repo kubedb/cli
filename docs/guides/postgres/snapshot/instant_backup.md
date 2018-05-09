@@ -44,7 +44,7 @@ metadata:
   name: script-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -97,16 +97,15 @@ spec:
 
 Here,
 
- - `metadata.labels` should include the type of database.
- - `spec.databaseName` indicates the Postgres object name, `script-postgres`, whose snapshot is taken.
- - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
- - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
+- `metadata.labels` should include the type of database.
+- `spec.databaseName` indicates the Postgres object name, `script-postgres`, whose snapshot is taken.
+- `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
+- `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object.
 Only PostgreSQL controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Postgres, `script-postgres`, in our case.
-
 
 #### Snapshot Storage Secret
 
@@ -217,7 +216,6 @@ CREATE TABLE dashboard (
 ALTER TABLE dashboard OWNER TO postgres;
 ```
 
-
 Lets see the Snapshot list for Postgres `script-postgres` by running `kubedb describe` command.
 
 ```console
@@ -261,7 +259,6 @@ Events:
   48m         48m        1         Postgres operator     Normal     Successful           Successfully created Service
   48m         48m        1         Postgres operator     Normal     Successful           Successfully created Service
 ```
-
 
 ## Cleanup Snapshot
 

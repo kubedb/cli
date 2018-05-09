@@ -49,7 +49,7 @@ metadata:
   name: builtin-prom-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,7 +63,7 @@ spec:
 
 Here,
 
- - `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
+- `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
 
 Run following command to create example above.
 
@@ -286,7 +286,6 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
     <img alt="builtin-prom-postgres"  src="/docs/images/postgres/builtin-prom-postgres.png">
   </kbd>
 </p>
-
 
 ## Cleaning up
 

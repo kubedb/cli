@@ -294,20 +294,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mysql/mysql-infant mysql/mysql-recovered -p '{"spec":{"doNotPause":false}}' --type="merge"
-mysql.kubedb.com "mysql-infant" patched
-mysql.kubedb.com "mysql-recovered" patched
-
 $ kubectl delete -n demo mysql/mysql-infant mysql/mysql-recovered
-mysql.kubedb.com "mysql-infant" deleted
-mysql.kubedb.com "mysql-recovered" deleted
 
 $ kubectl patch -n demo drmn/mysql-infant drmn/mysql-recovered -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mysql-infant" patched
-dormantdatabase.kubedb.com "mysql-recovered" patched
-
 $ kubectl delete -n demo drmn/mysql-infant drmn/mysql-recovered
-dormantdatabase.kubedb.com "mysql-infant" deleted
-dormantdatabase.kubedb.com "mysql-recovered" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

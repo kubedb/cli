@@ -51,7 +51,7 @@ metadata:
   name: script-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -68,7 +68,7 @@ spec:
 
 Here,
 
- -  `init.scriptSource` specifies scripts used to initialize the database when it is being created.
+- `init.scriptSource` specifies scripts used to initialize the database when it is being created.
 
 VolumeSource provided in `init.scriptSource` will be mounted in Pod and will be executed while creating PostgreSQL.
 

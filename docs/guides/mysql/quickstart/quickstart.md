@@ -333,16 +333,10 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
 $ kubectl patch -n demo mysql/mysql-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
-mysql.kubedb.com "mysql-quickstart" patched
-
 $ kubectl delete -n demo mysql/mysql-quickstart
-mysql.kubedb.com "mysql-quickstart" deleted
 
 $ kubectl patch -n demo drmn/mysql-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
-dormantdatabase.kubedb.com "mysql-quickstart" patched
-
 $ kubectl delete -n demo drmn/mysql-quickstart
-dormantdatabase.kubedb.com "mysql-quickstart" deleted
 
 $ kubectl delete ns demo
 namespace "demo" deleted

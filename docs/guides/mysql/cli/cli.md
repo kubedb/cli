@@ -164,13 +164,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mysql-demo
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Thu, 01 Mar 2018 13:02:12 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mysql-demo
   Type:		ClusterIP
   IP:		10.97.55.246

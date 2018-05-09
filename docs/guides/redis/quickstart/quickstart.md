@@ -52,7 +52,7 @@ metadata:
   name: redis-quickstart
   namespace: demo
 spec:
-  version: 4
+  version: "4"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -160,7 +160,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 4
+  version: "4"
 status:
   creationTime: 2018-02-12T10:41:40Z
   phase: Running

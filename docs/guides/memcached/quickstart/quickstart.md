@@ -53,7 +53,7 @@ metadata:
   namespace: demo
 spec:
   replicas: 3
-  version: 1.5.4
+  version: "1.5.4"
   doNotPause: true
   resources:
     requests:
@@ -144,7 +144,7 @@ spec:
     requests:
       cpu: 250m
       memory: 64Mi
-  version: 1.5.4
+  version: "1.5.4"
 status:
   creationTime: 2018-02-13T04:53:47Z
   phase: Running
@@ -250,7 +250,7 @@ spec:
           requests:
             cpu: 250m
             memory: 64Mi
-        version: 1.5.4
+        version: "1.5.4"
 status:
   creationTime: 2018-02-13T05:34:05Z
   pausingTime: 2018-02-13T05:34:14Z
@@ -347,7 +347,7 @@ spec:
           requests:
             cpu: 250m
             memory: 64Mi
-        version: 1.5.4
+        version: "1.5.4"
   wipeOut: true
 status:
   creationTime: 2018-02-13T05:59:44Z

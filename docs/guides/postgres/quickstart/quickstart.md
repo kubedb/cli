@@ -79,7 +79,7 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -92,12 +92,11 @@ spec:
 
 Here,
 
- - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
- - `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
+- `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
+- `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
  created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
  If no storage spec is given, an `emptyDir` is used.
-
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
@@ -182,8 +181,8 @@ quick-postgres-replicas     ClusterIP   10.96.98.122   <none>        5432/TCP   
 
 Two services for each Postgres object.
 
- - Service *`quick-postgres`* targets only one Pod which is acting as *primary* server
- - Service *`quick-postgres-replicas`* targets all Pods created by StatefulSet
+- Service *`quick-postgres`* targets only one Pod which is acting as *primary* server
+- Service *`quick-postgres-replicas`* targets all Pods created by StatefulSet
 
 KubeDB supports PostgreSQL clustering where Pod can be either *primary* or *standby*.
 To learn how to configure highly available PostgreSQL cluster, click [here](/docs/guides/postgres/clustering/ha_cluster.md).
@@ -219,8 +218,8 @@ Now, you can connect to this database from the pgAdmin dashboard using Service `
 Connection information:
 
 - address: you can use any of these
-    - Service `quick-postgres.demo`
-    - Pod IP (`$ kubectl get pods quick-postgres-0 -n demo -o yaml | grep podIP`)
+  - Service `quick-postgres.demo`
+  - Pod IP (`$ kubectl get pods quick-postgres-0 -n demo -o yaml | grep podIP`)
 - port: `5432`
 - database: `postgres`
 - username: `postgres`
@@ -320,8 +319,8 @@ status:
 
 Here,
 
- - `spec.origin` contains original Postgres object.
- - `status.phase` points to the current database state `Paused`.
+- `spec.origin` contains original Postgres object.
+- `status.phase` points to the current database state `Paused`.
 
 ## Resume DormantDatabase
 

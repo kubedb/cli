@@ -86,7 +86,7 @@ metadata:
   name: redis-pvt-reg
   namespace: demo
 spec:
-  version: 4
+  version: "4"
   doNotPause: true
   storage:
     storageClassName: "standard"

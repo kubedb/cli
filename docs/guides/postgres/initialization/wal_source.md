@@ -52,7 +52,7 @@ metadata:
   name: replay-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 2
   databaseSecret:
     secretName: wal-postgres-auth
@@ -79,9 +79,9 @@ spec:
 Here,
 
 - `spec.init.postgresWAL` specifies storage information that will be used by `wal-g`
-	- `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-	- `s3.bucket` points to the bucket name used to store continuous archiving data.
-	- `s3.prefix` points to the path where archived WAL data is stored.
+  - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+  - `s3.bucket` points to the bucket name used to store continuous archiving data.
+  - `s3.prefix` points to the path where archived WAL data is stored.
 
 **wal-g** receives archived WAL data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
 
