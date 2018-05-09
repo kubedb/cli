@@ -42,7 +42,7 @@ aliases:
 ## Life Cycle of a Redis Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="660">
 </p>
 
 ## User Guide

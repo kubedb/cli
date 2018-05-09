@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a Elasticsearch database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="600" height="660">
 </p>
 
 ## Before You Begin

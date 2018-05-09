@@ -36,7 +36,7 @@ aliases:
 ## Life Cycle of an Elasticsearch Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
