@@ -107,7 +107,12 @@ When this database is ready, **wal-g** takes a _basebackup_ and uploads it to cl
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/replay-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/replay-postgres
+
+$ kubectl patch -n demo drmn/replay-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/replay-postgres
+
 $ kubectl delete ns demo
 ```
 

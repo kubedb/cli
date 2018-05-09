@@ -292,7 +292,17 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/builtin-prom-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/builtin-prom-postgres
+
+$ kubectl patch -n demo drmn/builtin-prom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/builtin-prom-postgres
+
+# In rbac enabled cluster,
+# $ kubectl delete clusterrole prometheus-server
+# $ kubectl delete clusterrolebindings  prometheus-server
+# $ kubectl delete serviceaccounts -n demo  prometheus-server
+
 $ kubectl delete ns demo
 ```
 

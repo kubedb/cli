@@ -324,18 +324,7 @@ Here,
 
 ## Resume DormantDatabase
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
-
-```yaml
-$ kubedb edit drmn -n demo quick-postgres
-spec:
-  resume: true
-```
-
-KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new Postgres using `spec.origin` from DormantDatabase.
-This will in turn start a new StatefulSet which will mount the originally created Persistent Volume Claim. Thus the original database is resumed.
-
-Please note that the dormant database can also be resumed by creating same Postgres object with same Spec.
+To resume the database from the dormant state, create same Postgres object with same Spec.
 
 In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creating original Postgres object.
 
@@ -348,10 +337,7 @@ postgres "quick-postgres" created
 
 ## WipeOut DormantDatabase
 
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to `true`.
-KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this PostgreSQL and also delete snapshot data stored in the Cloud Storage buckets.
-
-There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Elasticsearch` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
 $ kubedb edit drmn -n demo quick-postgres
@@ -359,18 +345,11 @@ spec:
   wipeOut: true
 ```
 
-When database is completely wiped out, you will see status `WipedOut`
-
-```console
-$ kubedb get drmn -n demo quick-postgres
-NAME             STATUS     AGE
-quick-postgres   WipedOut   32s
-```
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 
-You still have a record that there was a Postgres object `quick-postgres` in the form of a DormantDatabase `quick-postgres`.
-Since you have already wiped out the database, you can delete the DormantDatabase object.
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
 $ kubedb delete drmn -n demo quick-postgres
@@ -382,7 +361,12 @@ dormantdatabase "quick-postgres" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/quick-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/quick-postgres
+
+$ kubectl patch -n demo drmn/quick-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/quick-postgres
+
 $ kubectl delete ns demo
 ```
 

@@ -129,7 +129,11 @@ memcd-pvt-reg   Running   2m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mc,drmn -n demo --all --force
+$ kubectl patch -n demo mc/memcd-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mc/memcd-pvt-reg
+
+$ kubectl patch -n demo drmn/memcd-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/memcd-pvt-reg
 
 $ kubectl delete ns demo
 namespace "demo" deleted

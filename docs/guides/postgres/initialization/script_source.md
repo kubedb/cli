@@ -148,7 +148,12 @@ We can see TABLE `dashboard` in `data` Schema which is created for initializatio
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/script-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/script-postgres
+
+$ kubectl patch -n demo drmn/script-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/script-postgres
+
 $ kubectl delete ns demo
 ```
 

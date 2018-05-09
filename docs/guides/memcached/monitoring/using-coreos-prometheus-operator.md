@@ -280,7 +280,11 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mc,drmn -n demo --all --force
+$ kubectl patch -n demo mc/memcd-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mc/memcd-mon-coreos
+
+$ kubectl patch -n demo drmn/memcd-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/memcd-mon-coreos
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrolebindings prometheus-operator  prometheus

@@ -321,7 +321,12 @@ So, you can see here that you can connect to *hot standby* and it only accepts r
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/ha-postgres pg/hot-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/ha-postgres pg/hot-postgres
+
+$ kubectl patch -n demo drmn/ha-postgres drmn/hot-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/ha-postgres drmn/hot-postgres
+
 $ kubectl delete ns demo
 ```
 

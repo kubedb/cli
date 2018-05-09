@@ -130,7 +130,12 @@ We don't need to add `imagePullSecret` for Snapshot objects. Just create Snapsho
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/pvt-reg-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/pvt-reg-postgres
+
+$ kubectl patch -n demo drmn/pvt-reg-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/pvt-reg-postgres
+
 $ kubectl delete ns demo
 ```
 

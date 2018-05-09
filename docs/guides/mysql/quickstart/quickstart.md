@@ -283,16 +283,18 @@ Here,
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, create same `MySQL` database by using same Specs.
+To resume the database from the dormant state, create same `MySQL` object with same Spec.
 
-In this tutorial, the dormant database can be resumed by creating `MySQL` database using `demo-1.yaml` file. The below command resumes the dormant database `mysql-quickstart` that was created before.
+In this tutorial, the dormant database can be resumed by creating original `MySQL` object.
+
+The below command will resume the DormantDatabase `mysql-quickstart` that was created before.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-2.yaml
 mysql "mysql-quickstart" created
 ```
 
-## WipeOut Dormant Database
+## WipeOut DormantDatabase
 
 You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `MySQL` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 

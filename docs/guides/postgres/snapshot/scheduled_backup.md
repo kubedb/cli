@@ -150,7 +150,12 @@ script-postgres-20180208-105625   pg/script-postgres   Succeeded   1m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/scheduled-pg -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/scheduled-pg
+
+$ kubectl patch -n demo drmn/scheduled-pg -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/scheduled-pg
+
 $ kubectl delete ns demo
 ```
 

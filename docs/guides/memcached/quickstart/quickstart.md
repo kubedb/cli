@@ -264,27 +264,11 @@ Here,
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
+To resume the database from the dormant state, create same `Memcached` object with same Spec.
 
-```yaml
-$ kubedb edit drmn -n demo memcd-quickstart
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  name: memcd-quickstart
-  namespace: demo
-  ...
-spec:
-  resume: true
-  ...
-status:
-  phase: Paused
-  ...
-```
+ In this tutorial, the dormant database can be resumed by creating `Memcached` database using demo-1.yaml file.
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Memcached object using the original spec. It will start fresh as there is no persistent volume for Memcached.
-
-Please note that the dormant database can also be resumed by creating same `Memcached` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `Memcached` database using demo-1.yaml file. The below command resumes the dormant database `memcd-quickstart` that was created before.
+ The below command resumes the dormant database `memcd-quickstart`.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/quickstart/demo-1.yaml
@@ -293,9 +277,7 @@ memcached "memcd-quickstart" created
 
 ## Wipeout Dormant Database
 
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
-
-Create dormant database again and set `spec.wipeOut` to true:
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Memcached` database.
 
 ```yaml
 $ kubedb delete mc memcd-quickstart -n demo
@@ -314,55 +296,13 @@ spec:
 status:
   phase: Paused
   ...
-
-$ kubedb get drmn -n demo memcd-quickstart -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-13T05:59:44Z
-  finalizers:
-  - kubedb.com
-  generation: 0
-  labels:
-    kubedb.com/kind: Memcached
-  name: memcd-quickstart
-  namespace: demo
-  resourceVersion: "4093"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/memcd-quickstart
-  uid: 16e9a846-1083-11e8-801e-080027e82bd4
-spec:
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: memcd-quickstart
-      namespace: demo
-    spec:
-      memcached:
-        replicas: 3
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 250m
-            memory: 64Mi
-        version: "1.5.4"
-  wipeOut: true
-status:
-  creationTime: 2018-02-13T05:59:44Z
-  pausingTime: 2018-02-13T05:59:57Z
-  phase: WipedOut
-  wipeOutTime: 2018-02-13T06:04:41Z
-
-$ kubedb get drmn -n demo
-NAME               STATUS     AGE
-memcd-quickstart   WipedOut   5m
 ```
 
-## Delete Dormant Database
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets.
 
-You still have a record that there used to be a Memcached database `memcd-quickstart` in the form of a DormantDatabase database `memcd-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
+## Delete DormantDatabase
+
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
 $ kubedb delete drmn memcd-quickstart -n demo
@@ -374,11 +314,11 @@ dormantdatabase "memcd-quickstart" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mc memcd-quickstart -n demo --force
-$ kubedb delete drmn memcd-quickstart -n demo --force
+$ kubectl patch -n demo mc/memcd-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mc/memcd-quickstart
 
-# or
-# $ kubedb delete mc,drmn -n demo --all --force
+$ kubectl patch -n demo drmn/memcd-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/memcd-quickstart
 
 $ kubectl delete ns demo
 namespace "demo" deleted
