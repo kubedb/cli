@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a MongoDB database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="611" height="684">
 </p>
 
 The yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
