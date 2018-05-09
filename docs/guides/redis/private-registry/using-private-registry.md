@@ -127,7 +127,11 @@ redis-pvt-reg   Running   15s
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete rd,drmn -n demo --all --force
+$ kubectl patch -n demo rd/redis-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo rd/redis-pvt-reg
+
+$ kubectl patch -n demo drmn/redis-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/redis-pvt-reg
 
 $ kubectl delete ns demo
 namespace "demo" deleted
