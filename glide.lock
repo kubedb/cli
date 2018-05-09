@@ -1,5 +1,5 @@
 hash: 09c1a9ad73e01ea72555a20384c93a324889598e06dfd3c0298c4c9b8088b019
-updated: 2018-05-08T13:02:03.592354106+06:00
+updated: 2018-05-09T11:05:22.20729359+06:00
 imports:
 - name: github.com/appscode/go
   version: 230e0e4622c682b5d117db8c28a66404ed874ed5
@@ -195,17 +195,17 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 0ce5fded3eac18079468e834845bc426b6e159d4
+  version: f3862d50830316201846753443428047bf2a8ddd
 - name: github.com/kubedb/memcached
-  version: bbe2c007c44bf5b6aac5bfd85f976504358ed58e
+  version: 71cb7c36a181c580bc8d9275d2298421ccf7f012
 - name: github.com/kubedb/mongodb
-  version: 227f32687bc76bf57e5b45333a1238e6486063d6
+  version: d50b1ddacbf235963dddfa51b0efed90e9dba5c7
 - name: github.com/kubedb/mysql
-  version: eeb7add0c1f961e6955ade0d0b346cc38673f82f
+  version: 18ebb959598fa816267bce40a6df372c9eacb5ce
 - name: github.com/kubedb/postgres
-  version: 89e32bff658b5952e2221c60353d872bddfab853
+  version: 09ee73cf5e09b5c3e3b9a31ed289e87210e4ae7e
 - name: github.com/kubedb/redis
-  version: 362e314622934551dd120ec11dc5eb7691d0f035
+  version: 6737e5f81b0023595fa022e3d7aef45d425a79b0
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
