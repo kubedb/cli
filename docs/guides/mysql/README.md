@@ -33,7 +33,7 @@ aliases:
 ## Life Cycle of a MySQL Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
