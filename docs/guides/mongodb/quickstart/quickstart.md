@@ -66,7 +66,7 @@ spec:
 ```
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
 mongodb "mgo-quickstart" created
 ```
 

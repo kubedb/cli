@@ -51,7 +51,7 @@ spec:
 ```
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-2.yaml
 mongodb "mgo-init-snapshot" created
 ```
 

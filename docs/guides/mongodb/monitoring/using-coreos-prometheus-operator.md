@@ -182,7 +182,7 @@ __Known Limitations:__ If the database password is updated, exporter must be res
 Run the following command to deploy the above `MongoDB` CRD object.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
 mongodb "mgo-mon-coreos" created
 ```
 
