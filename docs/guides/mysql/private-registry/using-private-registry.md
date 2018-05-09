@@ -88,7 +88,6 @@ metadata:
   namespace: demo
 spec:
   version: "8.0"
-  replicas: 1
   doNotPause: true
   storage:
     storageClassName: "standard"

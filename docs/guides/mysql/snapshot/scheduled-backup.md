@@ -84,7 +84,6 @@ metadata:
   namespace: demo
 spec:
   version: "8.0"
-  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:

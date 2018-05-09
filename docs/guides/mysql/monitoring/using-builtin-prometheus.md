@@ -50,7 +50,6 @@ metadata:
   namespace: demo
 spec:
   version: "8.0"
-  replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -251,7 +250,6 @@ metadata:
   name: prometheus-server
   namespace: demo
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: prometheus-server
