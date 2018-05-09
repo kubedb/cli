@@ -33,7 +33,7 @@ aliases:
 ## Life Cycle of a MongoDB Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="600">
+  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="670">
 </p>
 
 <br/>
