@@ -44,13 +44,13 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [flags]
 ### Options
 
 ```
-      --all                    Delete all resources, including uninitialized ones, in the namespace of the specified resource types.
-  -f, --filename stringSlice   Filename to use to delete the resource
-  -h, --help                   help for delete
-  -n, --namespace string       Delete object(s) from this namespace. (default "default")
-  -o, --output string          Output mode. Use "-o name" for shorter output (resource/name).
-  -R, --recursive              Process the directory used in -f, --filename recursively.
-  -l, --selector string        Selector (label query) to filter on.
+      --all                Delete all resources, including uninitialized ones, in the namespace of the specified resource types.
+  -f, --filename strings   Filename to use to delete the resource
+  -h, --help               help for delete
+  -n, --namespace string   Delete object(s) from this namespace. (default "default")
+  -o, --output string      Output mode. Use "-o name" for shorter output (resource/name).
+  -R, --recursive          Process the directory used in -f, --filename recursively.
+  -l, --selector string    Selector (label query) to filter on.
 ```
 
 ### Options inherited from parent commands

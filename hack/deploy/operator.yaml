@@ -1,7 +1,7 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kubedb-operator
+  name: kubedb-${KUBEDB_OPERATOR_NAME}
   namespace: ${KUBEDB_NAMESPACE}
   labels:
     app: kubedb
@@ -21,7 +21,7 @@ spec:
       imagePullSecrets: [${KUBEDB_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
-        image: ${KUBEDB_DOCKER_REGISTRY}/operator:${KUBEDB_OPERATOR_TAG}
+        image: ${KUBEDB_DOCKER_REGISTRY}/${KUBEDB_OPERATOR_NAME}:${KUBEDB_OPERATOR_TAG}
         imagePullPolicy: ${KUBEDB_IMAGE_PULL_POLICY}
         args:
         - run
@@ -76,7 +76,7 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubedb-operator
+  name: kubedb-${KUBEDB_OPERATOR_NAME}
   namespace: ${KUBEDB_NAMESPACE}
   labels:
     app: kubedb
@@ -101,7 +101,7 @@ spec:
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
-    name: kubedb-operator
+    name: kubedb-${KUBEDB_OPERATOR_NAME}
     namespace: ${KUBEDB_NAMESPACE}
   version: v1alpha1
 ---
@@ -118,6 +118,6 @@ spec:
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
-    name: kubedb-operator
+    name: kubedb-${KUBEDB_OPERATOR_NAME}
     namespace: ${KUBEDB_NAMESPACE}
   version: v1alpha1
