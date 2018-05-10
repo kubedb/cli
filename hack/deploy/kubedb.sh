@@ -328,10 +328,12 @@ for api in "${apiServices[@]}"; do
     $ONESSL wait-until-ready apiservice ${api}.kubedb.com || { echo "KubeDB apiservice $api failed to be ready"; exit 1; }
 done
 
-echo "waiting until kubedb crds are ready"
-for crd in "${crds[@]}"; do
-    $ONESSL wait-until-ready crd ${crd}.kubedb.com || { echo "$crd crd failed to be ready"; exit 1; }
-done
+if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
+    echo "waiting until kubedb crds are ready"
+    for crd in "${crds[@]}"; do
+        $ONESSL wait-until-ready crd ${crd}.kubedb.com || { echo "$crd crd failed to be ready"; exit 1; }
+    done
+fi
 
 echo
 echo "Successfully installed KubeDB operator in $KUBEDB_NAMESPACE namespace!"
