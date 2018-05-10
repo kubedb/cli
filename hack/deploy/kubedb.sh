@@ -291,7 +291,7 @@ echo ""
 # - a local CA key and cert
 # - a webhook server key and cert signed by the local CA
 $ONESSL create ca-cert
-$ONESSL create server-cert server --domains=kubedb-operator.$KUBEDB_NAMESPACE.svc
+$ONESSL create server-cert server --domains=kubedb-$KUBEDB_OPERATOR_NAME.$KUBEDB_NAMESPACE.svc
 export SERVICE_SERVING_CERT_CA=$(cat ca.crt | $ONESSL base64)
 export TLS_SERVING_CERT=$(cat server.crt | $ONESSL base64)
 export TLS_SERVING_KEY=$(cat server.key | $ONESSL base64)
@@ -307,7 +307,7 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
 fi
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
-    kubectl patch deploy kubedb-operator -n $KUBEDB_NAMESPACE \
+    kubectl patch deploy kubedb-$KUBEDB_OPERATOR_NAME -n $KUBEDB_NAMESPACE \
       --patch="$(${SCRIPT_LOCATION}hack/deploy/run-on-master.yaml)"
 fi
 
@@ -321,7 +321,7 @@ fi
 
 echo
 echo "waiting until kubedb operator deployment is ready"
-$ONESSL wait-until-ready deployment kubedb-operator --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
+$ONESSL wait-until-ready deployment kubedb-$KUBEDB_OPERATOR_NAME --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
 
 echo "waiting until kubedb apiservice is available"
 for api in "${apiServices[@]}"; do
