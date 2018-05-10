@@ -95,6 +95,7 @@ export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_OPERATOR_TAG=0.8.0-beta.2
+export KUBEDB_OPERATOR_NAME=operator
 export KUBEDB_IMAGE_PULL_SECRET=
 export KUBEDB_IMAGE_PULL_POLICY=IfNotPresent
 export KUBEDB_ENABLE_ANALYTICS=true
@@ -128,6 +129,7 @@ show_help() {
     echo "    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs"
     echo "    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs"
     echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
+    echo "    --operator-name                specify which kubedb operator to deploy (default: operator)"
     echo "    --uninstall                    uninstall KubeDB"
     echo "    --purge                        purges KubeDB crd objects and crds"
 }
@@ -192,6 +194,10 @@ while test $# -gt 0; do
             ;;
         --run-on-master)
             export KUBEDB_RUN_ON_MASTER=1
+            shift
+            ;;
+        --operator-name)
+            export KUBEDB_OPERATOR_NAME=`echo $1 | sed -e 's/^[^=]*=//g'`
             shift
             ;;
         --uninstall)
