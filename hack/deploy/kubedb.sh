@@ -196,7 +196,7 @@ while test $# -gt 0; do
             export KUBEDB_RUN_ON_MASTER=1
             shift
             ;;
-        --operator-name)
+        --operator-name*)
             export KUBEDB_OPERATOR_NAME=`echo $1 | sed -e 's/^[^=]*=//g'`
             shift
             ;;
@@ -209,6 +209,7 @@ while test $# -gt 0; do
             shift
             ;;
         *)
+            echo "Error: unknown flag:" $1
             show_help
             exit 1
             ;;
