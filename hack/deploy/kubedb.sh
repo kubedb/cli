@@ -111,8 +111,8 @@ if [ "$APPSCODE_ENV" = "dev" ]; then
     export KUBEDB_IMAGE_PULL_POLICY=Always
 fi
 
-if [ ! -z "$CUSTOM_OPERATOR_TAG" ]; then
-    export KUBEDB_OPERATOR_TAG="$CUSTOM_OPERATOR_TAG"
+if [ ! -z ${CUSTOM_OPERATOR_TAG:-} ]; then
+    export KUBEDB_OPERATOR_TAG="${CUSTOM_OPERATOR_TAG}"
 fi
 
 KUBE_APISERVER_VERSION=$(kubectl version -o=json | $ONESSL jsonpath '{.serverVersion.gitVersion}')
