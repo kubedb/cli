@@ -111,6 +111,10 @@ if [ "$APPSCODE_ENV" = "dev" ]; then
     export KUBEDB_IMAGE_PULL_POLICY=Always
 fi
 
+if [ ! -z ${CUSTOM_OPERATOR_TAG:-} ]; then
+    export KUBEDB_OPERATOR_TAG="${CUSTOM_OPERATOR_TAG}"
+fi
+
 KUBE_APISERVER_VERSION=$(kubectl version -o=json | $ONESSL jsonpath '{.serverVersion.gitVersion}')
 $ONESSL semver --check='<1.9.0' $KUBE_APISERVER_VERSION || { export KUBEDB_ENABLE_VALIDATING_WEBHOOK=true; export KUBEDB_ENABLE_MUTATING_WEBHOOK=true; }
 
