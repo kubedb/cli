@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"github.com/kubedb/cli/pkg/cmds"
 )
 

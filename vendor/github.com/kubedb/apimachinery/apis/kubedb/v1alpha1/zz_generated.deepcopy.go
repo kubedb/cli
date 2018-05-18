@@ -270,6 +270,8 @@ func (in *ElasticsearchNode) DeepCopyInto(out *ElasticsearchNode) {
 			**out = **in
 		}
 	}
+	in.Storage.DeepCopyInto(&out.Storage)
+	in.Resources.DeepCopyInto(&out.Resources)
 	return
 }
 
@@ -365,7 +367,15 @@ func (in *ElasticsearchSpec) DeepCopyInto(out *ElasticsearchSpec) {
 			(*in).DeepCopyInto(*out)
 		}
 	}
-	in.Resources.DeepCopyInto(&out.Resources)
+	if in.Resources != nil {
+		in, out := &in.Resources, &out.Resources
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(v1.ResourceRequirements)
+			(*in).DeepCopyInto(*out)
+		}
+	}
 	if in.Affinity != nil {
 		in, out := &in.Affinity, &out.Affinity
 		if *in == nil {
@@ -905,15 +915,7 @@ func (in *MongoDBSpec) DeepCopyInto(out *MongoDBSpec) {
 			**out = **in
 		}
 	}
-	if in.Storage != nil {
-		in, out := &in.Storage, &out.Storage
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(v1.PersistentVolumeClaimSpec)
-			(*in).DeepCopyInto(*out)
-		}
-	}
+	in.Storage.DeepCopyInto(&out.Storage)
 	if in.DatabaseSecret != nil {
 		in, out := &in.DatabaseSecret, &out.DatabaseSecret
 		if *in == nil {
@@ -1089,15 +1091,7 @@ func (in *MySQLSpec) DeepCopyInto(out *MySQLSpec) {
 			**out = **in
 		}
 	}
-	if in.Storage != nil {
-		in, out := &in.Storage, &out.Storage
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(v1.PersistentVolumeClaimSpec)
-			(*in).DeepCopyInto(*out)
-		}
-	}
+	in.Storage.DeepCopyInto(&out.Storage)
 	if in.DatabaseSecret != nil {
 		in, out := &in.DatabaseSecret, &out.DatabaseSecret
 		if *in == nil {
@@ -1459,15 +1453,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 			(*in).DeepCopyInto(*out)
 		}
 	}
-	if in.Storage != nil {
-		in, out := &in.Storage, &out.Storage
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(v1.PersistentVolumeClaimSpec)
-			(*in).DeepCopyInto(*out)
-		}
-	}
+	in.Storage.DeepCopyInto(&out.Storage)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
@@ -1695,15 +1681,7 @@ func (in *RedisSpec) DeepCopyInto(out *RedisSpec) {
 			**out = **in
 		}
 	}
-	if in.Storage != nil {
-		in, out := &in.Storage, &out.Storage
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(v1.PersistentVolumeClaimSpec)
-			(*in).DeepCopyInto(*out)
-		}
-	}
+	in.Storage.DeepCopyInto(&out.Storage)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
