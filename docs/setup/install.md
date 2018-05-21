@@ -14,35 +14,14 @@ section_menu_id: setup
 
 # Installation Guide
 
-## Install KubeDB CLI
+There are 2 parts to installing KubeDB. You need to install a Kubernetes operator in your cluster using scripts or via Helm and download kubedb cli on your workstation. You can also use kubectl cli with KubeDB custom resource objects.
 
-KubeDB provides a CLI to work with database objects. Download pre-built binaries from [kubedb/cli Github releases](https://github.com/kubedb/cli/releases) and put the binary to some directory in your `PATH`. To install on Linux 64-bit and MacOS 64-bit you can run the following commands:
-
-```console
-# Linux amd 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.2/kubedb-linux-amd64 \
-  && chmod +x kubedb \
-  && sudo mv kubedb /usr/local/bin/
-
-# Mac 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.2/kubedb-darwin-amd64 \
-  && chmod +x kubedb \
-  && sudo mv kubedb /usr/local/bin/
-```
-
-If you prefer to install KubeDB cli from source code, you will need to set up a GO development environment following [these instructions](https://golang.org/doc/code.html). Then, install `kubedb` CLI using `go get` from source code.
-
-```bash
-go get github.com/kubedb/cli/...
-```
-
-Please note that this will install KubeDB cli from master branch which might include breaking and/or undocumented changes.
 
 ## Install KubeDB Operator
 
 To use `kubedb`, you will need to install KubeDB [operator](https://github.com/kubedb/operator). KubeDB operator can be installed via a script or as a Helm chart.
 
-### Using Script
+### Using Scripts
 
 To install KubeDB in your Kubernetes cluster, run the following command:
 
@@ -157,7 +136,7 @@ $ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-
 ```
 
 
-## Verify installation
+## Verify operator installation
 
 To check if KubeDB operator pods have started, run the following command:
 
@@ -175,6 +154,32 @@ $ kubectl get crd -l app=kubedb
 
 Now, you are ready to [create your first database](/docs/guides/README.md) using KubeDB.
 
+
+## Install KubeDB CLI
+
+KubeDB provides a CLI to work with database objects. Download pre-built binaries from [kubedb/cli Github releases](https://github.com/kubedb/cli/releases) and put the binary to some directory in your `PATH`. To install on Linux 64-bit and MacOS 64-bit you can run the following commands:
+
+```console
+# Linux amd 64-bit
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.2/kubedb-linux-amd64 \
+  && chmod +x kubedb \
+  && sudo mv kubedb /usr/local/bin/
+
+# Mac 64-bit
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.8.0-beta.2/kubedb-darwin-amd64 \
+  && chmod +x kubedb \
+  && sudo mv kubedb /usr/local/bin/
+```
+
+If you prefer to install KubeDB cli from source code, you will need to set up a GO development environment following [these instructions](https://golang.org/doc/code.html). Then, install `kubedb` CLI using `go get` from source code.
+
+```bash
+go get github.com/kubedb/cli/...
+```
+
+Please note that this will install KubeDB cli from master branch which might include breaking and/or undocumented changes.
+
+
 ## Configuring RBAC
 
 KubeDB installer will create 3 user facing cluster roles:
@@ -186,6 +191,7 @@ KubeDB installer will create 3 user facing cluster roles:
 | kubedb:core:view  | view          | Allows read-only access to `KubeDB` CRDs, intended to be granted within a namespace using a RoleBinding. |
 
 These user facing roles supports [ClusterRole Aggregation](https://kubernetes.io/docs/admin/authorization/rbac/#aggregated-clusterroles) feature in Kubernetes 1.9 or later clusters.
+
 
 ## Upgrade KubeDB
 
