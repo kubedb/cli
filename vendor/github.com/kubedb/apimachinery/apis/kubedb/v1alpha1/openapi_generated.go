@@ -373,6 +373,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
+					Required: []string{"master", "data", "client"},
 				},
 			},
 			Dependencies: []string{
@@ -426,8 +427,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 					Properties: map[string]spec.Schema{
 						"replicas": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"integer"},
-								Format: "int32",
+								Description: "Replicas represents number of replica for this specific type of node",
+								Type:        []string{"integer"},
+								Format:      "int32",
 							},
 						},
 						"prefix": {
@@ -436,10 +438,24 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Format: "",
 							},
 						},
+						"storage": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Storage to specify how storage shall be used.",
+								Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+							},
+						},
+						"resources": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Compute Resources required by the sidecar container.",
+								Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							},
+						},
 					},
+					Required: []string{"storage"},
 				},
 			},
-			Dependencies: []string{},
+			Dependencies: []string{
+				"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/api/core/v1.ResourceRequirements"},
 		},
 		"github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.ElasticsearchSpec": {
 			Schema: spec.Schema{
@@ -1508,7 +1524,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"version"},
+					Required: []string{"version", "storage"},
 				},
 			},
 			Dependencies: []string{
@@ -1738,7 +1754,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"version"},
+					Required: []string{"version", "storage"},
 				},
 			},
 			Dependencies: []string{
@@ -2100,7 +2116,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"version"},
+					Required: []string{"version", "storage"},
 				},
 			},
 			Dependencies: []string{
@@ -2417,7 +2433,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
-					Required: []string{"version"},
+					Required: []string{"version", "storage"},
 				},
 			},
 			Dependencies: []string{

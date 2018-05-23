@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/kubedb/cli/pkg/cmds"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 func main() {
