@@ -13,7 +13,8 @@ rules:
   - apiextensions.k8s.io
   resources:
   - customresourcedefinitions
-  verbs: ["create", "delete", "get", "list"]
+  verbs:
+  - "*"
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -24,7 +25,7 @@ rules:
   - ""
   resources:
   - services
-  verbs: ["create", "delete", "get", "patch"]
+  verbs: ["create", "delete", "get", "patch", "list"]
 - apiGroups:
   - ""
   resources:

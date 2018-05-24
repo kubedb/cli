@@ -97,28 +97,36 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/hack/depl
 KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kubedb/cli/tree/master/chart/kubedb) from [AppsCode Charts Repository](https://github.com/appscode/charts). To install the chart with the release name `my-release`:
 
 ```console
+$ helm repo add appscode https://charts.appscode.com/stable/
+$ helm repo update
+$ helm search appscode/kubedb
+NAME            CHART VERSION APP VERSION   DESCRIPTION
+appscode/kubedb 0.8.0-beta.2  0.8.0-beta.2  KubeDB by AppsCode - Production ready databases...
+
+# Kubernetes 1.9.0 or later
+$ helm install appscode/kubedb --name kubedb-operator --version 0.8.0-beta.2 \
+  --set apiserver.ca="$(onessl get kube-ca)" \
+  --set apiserver.enableValidatingWebhook=true \
+  --set apiserver.enableMutatingWebhook=true
+```
+
+To install `onessl`, run the following commands:
+
+```console
 # Mac OSX amd64:
-curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-darwin-amd64 \
+curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.3.0/onessl-darwin-amd64 \
   && chmod +x onessl \
   && sudo mv onessl /usr/local/bin/
 
 # Linux amd64:
-curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-linux-amd64 \
+curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.3.0/onessl-linux-amd64 \
   && chmod +x onessl \
   && sudo mv onessl /usr/local/bin/
 
 # Linux arm64:
-curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.1.0/onessl-linux-arm64 \
+curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.3.0/onessl-linux-arm64 \
   && chmod +x onessl \
   && sudo mv onessl /usr/local/bin/
-
-# Kubernetes 1.9.0 or later
-$ helm repo add appscode https://charts.appscode.com/stable/
-$ helm repo update
-$ helm install appscode/kubedb --name my-release \
-  --set apiserver.ca="$(onessl get kube-ca)" \
-  --set apiserver.enableValidatingWebhook=true \
-  --set apiserver.enableMutatingWebhook=true
 ```
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).

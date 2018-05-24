@@ -271,6 +271,9 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
             # delete crd
             kubectl delete crd ${crd}.kubedb.com || true
         done
+
+        # delete user roles
+        kubectl delete clusterroles kubedb:core:admin kubedb:core:edit kubedb:core:view
     fi
 
     echo
