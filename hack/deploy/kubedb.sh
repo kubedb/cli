@@ -95,6 +95,7 @@ export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_OPERATOR_TAG=0.8.0-beta.2
+export KUBEDB_OPERATOR_NAME=operator
 export KUBEDB_IMAGE_PULL_SECRET=
 export KUBEDB_IMAGE_PULL_POLICY=IfNotPresent
 export KUBEDB_ENABLE_ANALYTICS=true
@@ -108,6 +109,10 @@ if [ "$APPSCODE_ENV" = "dev" ]; then
     export SCRIPT_LOCATION="cat "
     export KUBEDB_OPERATOR_TAG=$TAG
     export KUBEDB_IMAGE_PULL_POLICY=Always
+fi
+
+if [ ! -z ${CUSTOM_OPERATOR_TAG:-} ]; then
+    export KUBEDB_OPERATOR_TAG="${CUSTOM_OPERATOR_TAG}"
 fi
 
 KUBE_APISERVER_VERSION=$(kubectl version -o=json | $ONESSL jsonpath '{.serverVersion.gitVersion}')
@@ -128,6 +133,7 @@ show_help() {
     echo "    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs"
     echo "    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs"
     echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
+    echo "    --operator-name                specify which kubedb operator to deploy (default: operator)"
     echo "    --uninstall                    uninstall KubeDB"
     echo "    --purge                        purges KubeDB crd objects and crds"
 }
@@ -194,6 +200,10 @@ while test $# -gt 0; do
             export KUBEDB_RUN_ON_MASTER=1
             shift
             ;;
+        --operator-name*)
+            export KUBEDB_OPERATOR_NAME=`echo $1 | sed -e 's/^[^=]*=//g'`
+            shift
+            ;;
         --uninstall)
             export KUBEDB_UNINSTALL=1
             shift
@@ -203,6 +213,7 @@ while test $# -gt 0; do
             shift
             ;;
         *)
+            echo "Error: unknown flag:" $1
             show_help
             exit 1
             ;;
@@ -260,6 +271,9 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
             # delete crd
             kubectl delete crd ${crd}.kubedb.com || true
         done
+
+        # delete user roles
+        kubectl delete clusterroles kubedb:core:admin kubedb:core:edit kubedb:core:view
     fi
 
     echo
@@ -284,7 +298,7 @@ echo ""
 # - a local CA key and cert
 # - a webhook server key and cert signed by the local CA
 $ONESSL create ca-cert
-$ONESSL create server-cert server --domains=kubedb-operator.$KUBEDB_NAMESPACE.svc
+$ONESSL create server-cert server --domains=kubedb-$KUBEDB_OPERATOR_NAME.$KUBEDB_NAMESPACE.svc
 export SERVICE_SERVING_CERT_CA=$(cat ca.crt | $ONESSL base64)
 export TLS_SERVING_CERT=$(cat server.crt | $ONESSL base64)
 export TLS_SERVING_KEY=$(cat server.key | $ONESSL base64)
@@ -300,7 +314,7 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
 fi
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
-    kubectl patch deploy kubedb-operator -n $KUBEDB_NAMESPACE \
+    kubectl patch deploy kubedb-$KUBEDB_OPERATOR_NAME -n $KUBEDB_NAMESPACE \
       --patch="$(${SCRIPT_LOCATION}hack/deploy/run-on-master.yaml)"
 fi
 
@@ -314,17 +328,19 @@ fi
 
 echo
 echo "waiting until kubedb operator deployment is ready"
-$ONESSL wait-until-ready deployment kubedb-operator --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
+$ONESSL wait-until-ready deployment kubedb-$KUBEDB_OPERATOR_NAME --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
 
 echo "waiting until kubedb apiservice is available"
 for api in "${apiServices[@]}"; do
     $ONESSL wait-until-ready apiservice ${api}.kubedb.com || { echo "KubeDB apiservice $api failed to be ready"; exit 1; }
 done
 
-echo "waiting until kubedb crds are ready"
-for crd in "${crds[@]}"; do
-    $ONESSL wait-until-ready crd ${crd}.kubedb.com || { echo "$crd crd failed to be ready"; exit 1; }
-done
+if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
+    echo "waiting until kubedb crds are ready"
+    for crd in "${crds[@]}"; do
+        $ONESSL wait-until-ready crd ${crd}.kubedb.com || { echo "$crd crd failed to be ready"; exit 1; }
+    done
+fi
 
 echo
 echo "Successfully installed KubeDB operator in $KUBEDB_NAMESPACE namespace!"

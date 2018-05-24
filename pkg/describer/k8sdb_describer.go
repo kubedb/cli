@@ -157,7 +157,7 @@ func (d *humanReadableDescriber) describePostgres(item *api.Postgres, describerS
 
 		describeInitialization(item.Spec.Init, out)
 
-		describeStorage(item.Spec.Storage, out)
+		describeStorage(&item.Spec.Storage, out)
 
 		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
@@ -236,7 +236,7 @@ func (d *humanReadableDescriber) describeMySQL(item *api.MySQL, describerSetting
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
 		}
 
-		describeStorage(item.Spec.Storage, out)
+		describeStorage(&item.Spec.Storage, out)
 
 		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
@@ -309,7 +309,7 @@ func (d *humanReadableDescriber) describeMongoDB(item *api.MongoDB, describerSet
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
 		}
 
-		describeStorage(item.Spec.Storage, out)
+		describeStorage(&item.Spec.Storage, out)
 
 		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 
@@ -373,7 +373,7 @@ func (d *humanReadableDescriber) describeRedis(item *api.Redis, describerSetting
 			fmt.Fprintf(out, "Reason:\t%s\n", item.Status.Reason)
 		}
 
-		describeStorage(item.Spec.Storage, out)
+		describeStorage(&item.Spec.Storage, out)
 
 		d.showWorkload(item.Namespace, labelSelector, describerSettings.ShowWorkload, out)
 

@@ -61,6 +61,7 @@ spec:
             path: /healthz
             port: 8443
             scheme: HTTPS
+          timeoutSeconds: 5
       volumes:
       - name: serving-cert
         secret:

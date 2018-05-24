@@ -35,10 +35,10 @@ kubedb create [flags]
 ### Options
 
 ```
-  -f, --filename stringSlice   Filename to use to create the resource
-  -h, --help                   help for create
-  -n, --namespace string       Create object(s) in this namespace. (default "default")
-  -R, --recursive              Process the directory used in -f, --filename recursively.
+  -f, --filename strings   Filename to use to create the resource
+  -h, --help               help for create
+  -n, --namespace string   Create object(s) in this namespace. (default "default")
+  -R, --recursive          Process the directory used in -f, --filename recursively.
 ```
 
 ### Options inherited from parent commands
