@@ -144,7 +144,7 @@ metadata:
   name: mysql-mon-coreos
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -188,7 +188,6 @@ Run the following command to deploy the above `MySQL` CRD object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml"
 mysql "mysql-mon-coreos" created
 ```
 
@@ -301,7 +300,11 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mysql/mysql-mon-coreos
+
+$ kubectl patch -n demo drmn/mysql-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mysql-mon-coreos
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrolebindings prometheus-operator  prometheus

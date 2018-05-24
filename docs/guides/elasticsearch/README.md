@@ -36,7 +36,7 @@ aliases:
 ## Life Cycle of an Elasticsearch Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
@@ -47,6 +47,7 @@ aliases:
 |----------------|:------------:|:------------:|
 | 0.1.0 - 0.7.0  | &#10003;     | &#10007;     |
 | 0.8.0-beta.2   | &#10007;     | &#10003;     |
+| 0.8.0-beta.3   | &#10007;     | &#10003;     |
 
 ## External tools dependency
 
@@ -54,7 +55,7 @@ aliases:
 |-------------------------------------------------------------------|:--------:|
 |[Search Guard](https://github.com/floragunncom/search-guard)       | 5.6.4-18 |
 |[Elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | 3.3.1    |
-|[osm](https://github.com/appscode/osm)                             | 0.6.2    |
+|[osm](https://github.com/appscode/osm)                             | 0.7.0    |
 
 <br/>
 

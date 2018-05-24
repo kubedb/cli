@@ -36,13 +36,14 @@ aliases:
 |:--------------:|:--------:|
 | 0.1.0 - 0.7.0  | &#10007; |
 | 0.8.0-beta.2   | &#10003; |
+| 0.8.0-beta.3   | &#10003; |
 
 <br/>
 
 ## Life Cycle of a Redis Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="660">
 </p>
 
 ## User Guide

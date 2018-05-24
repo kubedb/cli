@@ -33,17 +33,18 @@ aliases:
 ## Life Cycle of a MySQL Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
 
 ## Supported MySQL Versions
 
-| KubeDB Version | MySQL:8.0 |
-|:--------------:|:---------:|
-| 0.1.0 - 0.7.0  | &#10007;  |
-| 0.8.0-beta.2   | &#10003;  |
+| KubeDB Version | MySQL:8.0 | MySQL:5.7 |
+|:--------------:|:---------:|:---------:|
+| 0.1.0 - 0.7.0  | &#10007;  | &#10007;  |
+| 0.8.0-beta.2   | &#10003;  | &#10007;  |
+| 0.8.0-beta.3   | &#10003;  | &#10003;  |
 
 ## User Guide
 

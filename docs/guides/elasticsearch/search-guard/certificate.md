@@ -23,7 +23,6 @@ But, KubeDB distinguishes between the following types of keystore for security p
 - **http layer keystore** are used to identify Elasticsearch clients on the REST and transport layer.
 - **sgadmin keystore** are used as admin client that have elevated rights to perform administrative tasks.
 
-
 ## Before You Begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
@@ -120,7 +119,6 @@ You need to follow these steps
     - `root-key.pem` holds Private Key
     - `root.key`holds CA Certificate
 
-
 4. Finally, import certificate as keystore
 
     ```console
@@ -131,7 +129,6 @@ You need to follow these steps
 
     - `root.jks` is truststore for Elasticsearch
 
-
 ## Generate keystore
 
 Steps to generate certificate and keystore for Elasticsearch
@@ -141,7 +138,6 @@ Steps to generate certificate and keystore for Elasticsearch
 3. Sign certificate using root certificate
 4. Generate PKCS12 file using root certificate
 5. Import PKCS12 as keystore
-
 
 You need to follow these steps to generate three keystore.
 
@@ -225,8 +221,7 @@ RID.1 = 1.2.3.4.5.5
 
 Here,
 
-- `RID.1=1.2.3.4.5.5` is used in node certificate. All certificates with registeredID `1.2.3.4.5.5` is considered as valid certificate for
-transport layer.
+- `RID.1=1.2.3.4.5.5` is used in node certificate. All certificates with registeredID `1.2.3.4.5.5` is considered as valid certificate for transport layer.
 
 Now run following commands
 
@@ -280,7 +275,6 @@ keytool -importkeystore -srckeystore client.pkcs12  -storepass $KEY_PASS  -srcst
 ```
 
 Generated `client.jks` will be used as keystore for http layer TLS.
-
 
 ### sgadmin
 
@@ -353,7 +347,7 @@ metadata:
   name: sg-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   enableSSL: true
   certificateSecret:
     secretName: sg-elasticsearch-cert
@@ -368,14 +362,12 @@ spec:
 
 Here,
 
- - `spec.certificateSecret` specifies Secret with certificates those will be used in Elasticsearch database.
-
+- `spec.certificateSecret` specifies Secret with certificates those will be used in Elasticsearch database.
 
 Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml"
 elasticsearch "sg-elasticsearch" created
 ```
 
@@ -392,7 +384,12 @@ sg-elasticsearch    5.6       Running   33m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/sg-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/sg-elasticsearch
+
+$ kubectl patch -n demo drmn/sg-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/sg-elasticsearch
+
 $ kubectl delete ns demo
 ```
 

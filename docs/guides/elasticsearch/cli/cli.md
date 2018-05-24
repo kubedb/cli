@@ -24,7 +24,6 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f elasticsearch-demo.yaml
-validating "elasticsearch-demo.yaml"
 elasticsearch "elasticsearch-demo" created
 ```
 
@@ -32,7 +31,6 @@ You can provide namespace as a flag `--namespace`. Provided namespace should mat
 
 ```console
 $ kubedb create -f elasticsearch-demo.yaml --namespace=kube-system
-validating "elasticsearch-demo.yaml"
 elasticsearch "elasticsearch-demo" created
 ```
 
@@ -87,7 +85,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 5.6
+  version: "5.6"
 status:
   creationTime: 2018-03-02T05:46:59Z
   phase: Running
@@ -170,19 +168,19 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			elasticsearch-demo
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Fri, 02 Mar 2018 11:47:00 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		elasticsearch-demo
   Type:		ClusterIP
   IP:		10.110.91.198
   Port:		http	9200/TCP
 
-Service:	
+Service:
   Name:		elasticsearch-demo-master
   Type:		ClusterIP
   IP:		10.100.126.132

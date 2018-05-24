@@ -52,7 +52,7 @@ metadata:
   name: replay-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 2
   databaseSecret:
     secretName: wal-postgres-auth
@@ -79,9 +79,9 @@ spec:
 Here,
 
 - `spec.init.postgresWAL` specifies storage information that will be used by `wal-g`
-	- `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-	- `s3.bucket` points to the bucket name used to store continuous archiving data.
-	- `s3.prefix` points to the path where archived WAL data is stored.
+  - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+  - `s3.bucket` points to the bucket name used to store continuous archiving data.
+  - `s3.prefix` points to the path where archived WAL data is stored.
 
 **wal-g** receives archived WAL data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
 
@@ -95,7 +95,6 @@ Now create this Postgres
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/replay-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/replay-postgres.yaml"
 postgres "replay-postgres" created
 ```
 
@@ -108,7 +107,12 @@ When this database is ready, **wal-g** takes a _basebackup_ and uploads it to cl
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/replay-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/replay-postgres
+
+$ kubectl patch -n demo drmn/replay-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/replay-postgres
+
 $ kubectl delete ns demo
 ```
 

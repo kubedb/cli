@@ -45,7 +45,6 @@ Follow these steps to prepare this tutorial
 
     ```console
     $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml"
     elasticsearch "infant-elasticsearch" created
     ```
 
@@ -88,7 +87,7 @@ metadata:
   name: recovered-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   databaseSecret:
     secretName: infant-elasticsearch-auth
   storage:
@@ -107,8 +106,8 @@ spec:
 Here,
 
 - `spec.init.snapshotSource` specifies Snapshot object information to be used in this initialization process.
-	- `snapshotSource.name` refers to a Snapshot object `name`.
-	- `snapshotSource.namespace` refers to a Snapshot object `namespace`.
+  - `snapshotSource.name` refers to a Snapshot object `name`.
+  - `snapshotSource.namespace` refers to a Snapshot object `namespace`.
 
 Snapshot `instant-snapshot` in `demo` namespace belongs to Elasticsearch `infant-elasticsearch`:
 
@@ -126,7 +125,6 @@ Now, create the Elasticsearch object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/initialization/recovered-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/initialization/recovered-es.yaml"
 elasticsearch "recovered-es" created
 ```
 
@@ -222,7 +220,11 @@ Elasticsearch `recovered-es` is successfully initialized with Snapshot `instant-
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/infant-elasticsearch es/recovered-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/infant-elasticsearch es/recovered-es
+
+$ kubectl patch -n demo drmn/infant-elasticsearch drmn/recovered-es -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/infant-elasticsearch drmn/recovered-es
 
 $ kubectl delete ns demo
 namespace "demo" deleted

@@ -4,7 +4,7 @@ metadata:
   name: topology-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   topology:
     master:
       prefix: master

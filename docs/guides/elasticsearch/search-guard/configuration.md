@@ -17,10 +17,9 @@ Search Guard configuration enables basic flow as follows:
 
 - Search Guard **authenticates** the credentials against the configured authentication backend(s).
 - Search Guard authorizes the user by retrieving a list of the user’s roles from the configured authorization backend
-    - Roles retrieved from authorization backends are called backend roles.
+  - Roles retrieved from authorization backends are called backend roles.
 - Search Guard maps the user and backend roles to Search Guard roles.
-- Search Guard determines the permissions associated with the Search Guard role and
-decides whether the action the user wants to perform is allowed or not.
+- Search Guard determines the permissions associated with the Search Guard role and decides whether the action the user wants to perform is allowed or not.
 
 ## Before You Begin
 
@@ -177,7 +176,6 @@ Run following command to get action groups we will use in this tutorial
 $ wget https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/sg-config/sg_action_groups.yml
 ```
 
-
 ```yml
 UNLIMITED:
   - "*"
@@ -233,7 +231,7 @@ See details about [roles and permissions](http://docs.search-guard.com/v5/roles-
 
 We will use following roles for Search Guard users.
 
-```
+```yaml
 sg_all_access:
   cluster:
     - UNLIMITED
@@ -256,11 +254,9 @@ sg_readall:
         - INDICES_KUBEDB_SNAPSHOT
 ```
 
-
 ```console
 $ wget https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/sg-config/sg_roles.yml
 ```
-
 
 ### sg_roles_mapping.yml
 
@@ -318,7 +314,6 @@ sg_readall:
   </kbd>
 </p>
 
-
 ## Create Secret
 
 Now create a Secret with these files to use in your Elasticsearch object.
@@ -343,7 +338,7 @@ Here,
 
 If you do not use these two features of Snapshot, you can ignore adding this
 
-```
+```console
 --from-literal=ADMIN_PASSWORD=$ADMIN_PASSWORD
 --from-literal=READALL_PASSWORD=$READALL_PASSWORD
 ```
@@ -361,7 +356,7 @@ metadata:
   name: config-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   databaseSecret:
     secretName: config-elasticsearch-auth
   storage:
@@ -375,13 +370,12 @@ spec:
 
 Here,
 
- - `spec.databaseSecret` specifies Secret with Search Guard configuration and basic auth for internal user.
+- `spec.databaseSecret` specifies Secret with Search Guard configuration and basic auth for internal user.
 
 Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/config-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/config-elasticsearch.yaml"
 elasticsearch "config-elasticsearch" created
 ```
 
@@ -438,7 +432,12 @@ curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/config-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/config-elasticsearch
+
+$ kubectl patch -n demo drmn/config-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/config-elasticsearch
+
 $ kubectl delete ns demo
 ```
 
@@ -448,4 +447,3 @@ $ kubectl delete ns demo
 - Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

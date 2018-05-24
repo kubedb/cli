@@ -24,7 +24,6 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f mysql-demo.yaml
-validating "mysql-demo.yaml"
 mysql "mysql-demo" created
 ```
 
@@ -32,7 +31,6 @@ You can provide namespace as a flag `--namespace`. Provided namespace should mat
 
 ```console
 $ kubedb create -f mysql-demo.yaml --namespace=kube-system
-validating "mysql-demo.yaml"
 mysql "mysql-demo" created
 ```
 
@@ -166,13 +164,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			mysql-demo
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Thu, 01 Mar 2018 13:02:12 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		mysql-demo
   Type:		ClusterIP
   IP:		10.97.55.246

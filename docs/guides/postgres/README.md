@@ -40,7 +40,7 @@ aliases:
 ## Life Cycle of a PostgreSQL Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="581" height="362">
+  <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
@@ -51,6 +51,7 @@ aliases:
 |----------------|:------------:|:------------:|:-------------:|
 | 0.1.0 - 0.7.0  | &#10003;     | &#10007;     | &#10007;      |
 | 0.8.0-beta.2   | &#10007;     | &#10003;     | &#10003;      |
+| 0.8.0-beta.3   | &#10007;     | &#10003;     | &#10003;      |
 
 <br/>
 
@@ -59,7 +60,7 @@ aliases:
 |Tool                                      |Version  |
 |------------------------------------------|:-------:|
 |[wal-g](https://github.com/wal-g/wal-g)   | v0.1.7  |
-|[osm](https://github.com/appscode/osm)    | 0.6.2   |
+|[osm](https://github.com/appscode/osm)    | 0.7.0   |
 
 ## User Guide
 

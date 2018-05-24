@@ -24,7 +24,6 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f memcached-demo.yaml
-validating "memcached-demo.yaml"
 memcached "memcached-demo" created
 ```
 
@@ -32,7 +31,6 @@ You can provide namespace as a flag `--namespace`. Provided namespace should mat
 
 ```console
 $ kubedb create -f memcached-demo.yaml --namespace=kube-system
-validating "memcached-demo.yaml"
 memcached "memcached-demo" created
 ```
 
@@ -85,7 +83,7 @@ spec:
     requests:
       cpu: 250m
       memory: 64Mi
-  version: 1.5.4
+  version: "1.5.4"
 status:
   creationTime: 2018-03-01T11:30:18Z
   phase: Running
@@ -148,13 +146,13 @@ Labels:		kubedb=cli-demo
 Replicas:	3  total
 Status:		Running
 
-Deployment:		
+Deployment:
   Name:			memcached-demo
   Replicas:		3 current / 3 desired
   CreationTimestamp:	Thu, 01 Mar 2018 17:30:20 +0600
   Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		memcached-demo
   Type:		ClusterIP
   IP:		10.100.158.166

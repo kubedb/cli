@@ -44,7 +44,7 @@ metadata:
   name: ssl-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   replicas: 2
   enableSSL: true
 ```
@@ -53,7 +53,6 @@ If Elasticsearch object `ssl-elasticsearch` doesn't exists, create it first.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml"
 elasticsearch "ssl-elasticsearch" created
 ```
 
@@ -196,7 +195,12 @@ If certificate Secret is not provided when creating Elasticsearch, one will be c
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/ssl-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/ssl-elasticsearch
+
+$ kubectl patch -n demo drmn/ssl-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/ssl-elasticsearch
+
 $ kubectl delete ns demo
 ```
 

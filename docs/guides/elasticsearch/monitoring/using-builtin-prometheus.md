@@ -47,7 +47,7 @@ metadata:
   name: builtin-prom-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -61,13 +61,12 @@ spec:
 
 Here,
 
- - `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
+- `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
 
 Run following command to create example above.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml"
 elasticsearch "builtin-prom-es" created
 ```
 
@@ -303,7 +302,16 @@ Now, if you go to the Prometheus Dashboard, you will see this database endpoint 
 To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-$ kubedb delete es -n demo --all --force
+$ kubectl patch -n demo es/builtin-prom-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/builtin-prom-es
+
+$ kubectl patch -n demo drmn/builtin-prom-es -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/builtin-prom-es
+
+# In rbac enabled cluster,
+# $ kubectl delete clusterrole prometheus-server
+# $ kubectl delete clusterrolebindings  prometheus-server
+# $ kubectl delete serviceaccounts -n demo  prometheus-server
 
 $ kubectl delete ns demo
 namespace "demo" deleted

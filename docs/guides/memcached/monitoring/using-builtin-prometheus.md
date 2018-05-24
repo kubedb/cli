@@ -25,7 +25,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -50,7 +50,7 @@ metadata:
   namespace: demo
 spec:
   replicas: 3
-  version: 1.5.4
+  version: "1.5.4"
   doNotPause: true
   resources:
     requests:
@@ -65,7 +65,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/monitoring/builtin-prometheus/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/monitoring/builtin-prometheus/demo-1.yaml"
 memcached "memcd-mon-prometheus" created
 ```
 
@@ -341,7 +340,11 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mc,drmn -n demo --all --force
+$ kubectl patch -n demo mc/memcd-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mc/memcd-mon-prometheus
+
+$ kubectl patch -n demo drmn/memcd-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/memcd-mon-prometheus
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrole prometheus-server

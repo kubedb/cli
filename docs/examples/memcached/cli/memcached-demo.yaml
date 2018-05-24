@@ -6,7 +6,7 @@ metadata:
     kubedb: cli-demo
 spec:
   replicas: 3
-  version: 1.5.4
+  version: "1.5.4"
   resources:
     requests:
       memory: 64Mi

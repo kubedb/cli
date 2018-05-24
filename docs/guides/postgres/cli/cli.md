@@ -15,6 +15,7 @@ section_menu_id: guides
 # Manage KubeDB objects using CLIs
 
 ## KubeDB CLI
+
 KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to manage any KubeDB object. `kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/setup/install.md).
 
 ### How to Create objects
@@ -23,7 +24,6 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f postgres-demo.yaml
-validating "postgres-demo.yaml"
 postgres "postgres-demo" created
 ```
 
@@ -31,7 +31,6 @@ You can provide namespace as a flag `--namespace`. Provided namespace should mat
 
 ```console
 $ kubedb create -f postgres-demo.yaml --namespace=kube-system
-validating "postgres-demo.yaml"
 postgres "postgres-demo" created
 ```
 
@@ -43,7 +42,7 @@ cat postgres-demo.yaml | kubedb create -f -
 
 To learn about various options of `create` command, please visit [here](/docs/reference/kubedb_create.md).
 
-###  How to List Objects
+### How to List Objects
 
 `kubedb get` command allows users to list or find any KubeDB object. To list all Postgres objects in `default` namespace, run the following command:
 
@@ -68,7 +67,7 @@ metadata:
 spec:
   databaseSecret:
     secretName: postgres-demo-auth
-  version: 9.6.7
+  version: "9.6"
 status:
   creationTime: 2017-12-12T05:46:16Z
   phase: Running
@@ -103,10 +102,11 @@ snap/snapshot-xyz                   es/elasticsearch-demo   local:/directory    
 Flag `--output=wide` is used to print additional information.
 
 List command supports short names for each object types. You can use it like `kubedb get <short-name>`. Below are the short name for KubeDB objects:
- - Postgres: `pg`
- - Elasticsearch: `es`
- - Snapshot: `snap`
- - DormantDatabase: `drmn`
+
+- Postgres: `pg`
+- Elasticsearch: `es`
+- Snapshot: `snap`
+- DormantDatabase: `drmn`
 
 You can print labels with objects. The following command will list all Snapshots with their corresponding labels.
 
@@ -204,29 +204,32 @@ Events:
 
 `kubedb describe` command provides following basic information about a database.
 
-* StatefulSet
-* Storage (Persistent Volume)
-* Service
-* Secret (If available)
-* Topology (If available)
-* Snapshots (If any)
-* Monitoring system (If available)
+- StatefulSet
+- Storage (Persistent Volume)
+- Service
+- Secret (If available)
+- Topology (If available)
+- Snapshots (If any)
+- Monitoring system (If available)
 
 To hide details about StatefulSet & Service, use flag `--show-workload=false`
 To hide details about Secret, use flag `--show-secret=false`
 To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all Postgres objects in `default` namespace, use following command
+
 ```console
 $ kubedb describe pg
 ```
 
 To describe all Postgres objects from every namespace, provide `--all-namespaces` flag.
+
 ```console
 $ kubedb describe pg --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
+
 ```console
 $ kubedb describe all --all-namespaces
 ```
@@ -238,7 +241,6 @@ $ kubedb describe pg,es --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
-
 
 ### How to Edit Objects
 
@@ -260,37 +262,41 @@ postgres "postgres-demo" edited
 ```
 
 #### Edit restrictions
-Various fields of a KubeDb object can't be edited using `edit` command. The following fields are restricted from updates for all KubeDB objects:
-* _apiVersion_
-* _kind_
-* _metadata.name_
-* _metadata.namespace_
-* _status_
 
+Various fields of a KubeDb object can't be edited using `edit` command. The following fields are restricted from updates for all KubeDB objects:
+
+- _apiVersion_
+- _kind_
+- _metadata.name_
+- _metadata.namespace_
+- _status_
 
 If StatefulSets or Deployments exists for a database, following fields can't be modified as well.
 
 Postgres:
-* _spec.version_
-* _spec.standby_
-* _spec.streaming_
-* _spec.archiver_
-* _spec.databaseSecret_
-* _spec.storage_
-* _spec.nodeSelector_
-* _spec.init_
+
+- _spec.version_
+- _spec.standby_
+- _spec.streaming_
+- _spec.archiver_
+- _spec.databaseSecret_
+- _spec.storage_
+- _spec.nodeSelector_
+- _spec.init_
 
 Elasticsearch:
-* _spec.version_
-* _spec.storage_
-* _spec.nodeSelector_
-* _spec.init_
+
+- _spec.version_
+- _spec.storage_
+- _spec.nodeSelector_
+- _spec.init_
 
 For DormantDatabase, _spec.origin_ can't be edited using `kubedb edit`
 
 To learn about various options of `edit` command, please visit [here](/docs/reference/kubedb_edit.md).
 
 ### How to Summarize Databases
+
 `kubedb summarize` command can be used to generate a JSON formatted summary report for any supported database. The summary contains various stats on database tables and/or indices like, number of rows, the maximum id. This report is intended to be used as a tool to quickly verify whether backup/restore process has worked properly or not. To learn about various options of `summarize` command, please visit [here](/docs/reference/kubedb_summarize.md).
 
 ```console
@@ -301,7 +307,6 @@ Summary report for "postgreses/p1" has been stored in 'report-20170719-153247.js
 ```
 
 `kubed compare` command compares two summary reports for the same type of database. By default it dumps a git diff-like output on terminal. To learn about various options of `compare` command, please visit [here](/docs/reference/kubedb_compare.md).
-
 
 ```yaml
 $ kubedb compare report-20170719-152824.json report-20170719-153247.json
@@ -352,6 +357,7 @@ cat postgres.yaml | kubedb delete -f -
 ```
 
 To delete database with matching labels, use `--selector` flag. The following command will delete postgres with label `postgres.kubedb.com/name=postgres-demo`.
+
 ```console
 $ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 ```
@@ -359,6 +365,7 @@ $ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl
+
 You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
@@ -370,9 +377,9 @@ $ kubectl get postgres.kubedb.com
 $ kubectl delete postgres <name>
 ```
 
-
 ## Next Steps
+
 - Learn how to use KubeDB to run a PostgreSQL database [here](/docs/guides/postgres/overview.md).
 - Learn how to use KubeDB to run an Elasticsearch database [here](/docs/guides/elasticsearch/overview.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md). 
+- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

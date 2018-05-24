@@ -35,7 +35,6 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-
 ## Create PostgreSQL with Continuous Archiving
 
 Below is the Postgres object created with Continuous Archiving support.
@@ -47,7 +46,7 @@ metadata:
   name: wal-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 2
   storage:
     storageClassName: "standard"
@@ -66,9 +65,8 @@ spec:
 Here,
 
 - `spec.archiver.storage` specifies storage information that will be used by `wal-g`
-	- `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-	- `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
-
+  - `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+  - `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
 
 ##### What is this Continuous Archiving
 
@@ -145,12 +143,10 @@ To configure this backend, following parameters are available:
 | `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
 | `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store                |
 
-
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/wal-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/wal-postgres.yaml"
 postgres "wal-postgres" created
 ```
 
@@ -173,7 +169,12 @@ From the above image, you can see that the archived data is stored in a folder `
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/wal-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/wal-postgres
+
+$ kubectl patch -n demo drmn/wal-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/wal-postgres
+
 $ kubectl delete ns demo
 ```
 

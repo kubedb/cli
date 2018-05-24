@@ -67,7 +67,7 @@ metadata:
   name: scheduled-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -84,15 +84,14 @@ spec:
 
 Here,
 
- - [`cronExpression`](https://github.com/robfig/cron/blob/v2/doc.go) represents a set of times or interval when a single backup will be created.
- - `storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
- - `gcs.bucket` points to the bucket name used to store the snapshot data
+- [`cronExpression`](https://github.com/robfig/cron/blob/v2/doc.go) represents a set of times or interval when a single backup will be created.
+- `storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
+- `gcs.bucket` points to the bucket name used to store the snapshot data
 
 > Note: Secret object must be in the same namespace as Elasticsearch, `scheduled-es`, in this case.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/snapshot/scheduled-es.yaml"
 elasticsearch "scheduled-es" created
 ```
 
@@ -149,7 +148,12 @@ scheduled-es-20180214-100711   es/scheduled-es   Running     9s
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/scheduled-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/scheduled-es
+
+$ kubectl patch -n demo drmn/scheduled-es -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/scheduled-es
+
 $ kubectl delete ns demo
 ```
 

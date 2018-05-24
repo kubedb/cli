@@ -25,7 +25,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -49,7 +49,7 @@ metadata:
   name: mysql-mon-prometheus
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,14 +63,13 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/monitoring/builtin-prometheus/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/monitoring/builtin-prometheus/demo-1.yaml"
 mysql "mysql-mon-prometheus" created
 ```
 
 Here,
 
 - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for MySQL.
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MySQL Exporter` and will receive metrics from exporter.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
@@ -356,7 +355,11 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mysql/mysql-mon-prometheus
+
+$ kubectl patch -n demo drmn/mysql-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mysql-mon-prometheus
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrole prometheus-server

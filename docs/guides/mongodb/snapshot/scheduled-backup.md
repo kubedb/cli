@@ -25,7 +25,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -84,7 +84,7 @@ metadata:
   name: mgo-scheduled
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -106,7 +106,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/snapshot/demo-4.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/snapshot/demo-4.yaml"
 mongodb "mgo-scheduled" created
 ```
 
@@ -182,7 +181,11 @@ status:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mg/mgo-scheduled -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mg/mgo-scheduled
+
+$ kubectl patch -n demo drmn/mgo-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mgo-scheduled
 
 $ kubectl delete ns demo
 namespace "demo" deleted

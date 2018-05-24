@@ -24,7 +24,6 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f redis-demo.yaml
-validating "redis-demo.yaml"
 redis "redis-demo" created
 ```
 
@@ -32,7 +31,6 @@ You can provide namespace as a flag `--namespace`. Provided namespace should mat
 
 ```console
 $ kubedb create -f redis-demo.yaml --namespace=kube-system
-validating "redis-demo.yaml"
 redis "redis-demo" created
 ```
 
@@ -84,7 +82,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 4
+  version: "4"
 status:
   creationTime: 2018-03-01T11:08:11Z
   phase: Running
@@ -150,13 +148,13 @@ Volume:
   Capacity:	50Mi
   Access Modes:	RWO
 
-StatefulSet:		
+StatefulSet:
   Name:			redis-demo
   Replicas:		1 current / 1 desired
   CreationTimestamp:	Thu, 01 Mar 2018 17:08:12 +0600
   Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
+Service:
   Name:		redis-demo
   Type:		ClusterIP
   IP:		10.101.218.235

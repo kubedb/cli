@@ -24,7 +24,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 A `MySQL` database is needed to take snapshot for this tutorial. To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -35,7 +35,6 @@ kube-public   Active    1h
 kube-system   Active    1h
 
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-1.yaml"
 mysql "mysql-infant" created
 ```
 
@@ -97,7 +96,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-2.yaml"
 snapshot "snap-mysql-infant" created
 
 $ kubedb get snap -n demo
@@ -208,7 +206,7 @@ metadata:
   name: mysql-recovered
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -224,7 +222,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-3.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-3.yaml"
 mysql "mysql-recovered" created
 ```
 
@@ -295,7 +292,11 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-infant mysql/mysql-recovered -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mysql/mysql-infant mysql/mysql-recovered
+
+$ kubectl patch -n demo drmn/mysql-infant drmn/mysql-recovered -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mysql-infant drmn/mysql-recovered
 
 $ kubectl delete ns demo
 namespace "demo" deleted

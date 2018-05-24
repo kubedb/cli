@@ -154,7 +154,7 @@ metadata:
   name: coreos-prom-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -173,19 +173,17 @@ spec:
 
 Here,
 
- - `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
- - `monitor.prometheus` specifies the information for monitoring by prometheus
-      - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
-      - `prometheus.labels` specifies the labels applied to ServiceMonitor.
-      - `prometheus.port` indicates the port for PostgreSQL exporter endpoint (default is `56790`)
-      - `prometheus.interval` indicates the scraping interval (eg, '10s')
-
+- `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
+- `monitor.prometheus` specifies the information for monitoring by prometheus
+  - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
+  - `prometheus.labels` specifies the labels applied to ServiceMonitor.
+  - `prometheus.port` indicates the port for PostgreSQL exporter endpoint (default is `56790`)
+  - `prometheus.interval` indicates the scraping interval (eg, '10s')
 
 Now create PostgreSQL with monitoring spec
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml"
 postgres "coreos-prom-postgres" created
 ```
 
@@ -210,11 +208,21 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/coreos-prom-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/coreos-prom-postgres
+
+$ kubectl patch -n demo drmn/coreos-prom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/coreos-prom-postgres
+
+# In rbac enabled cluster,
+# $ kubectl delete clusterrolebindings prometheus-operator  prometheus
+# $ kubectl delete clusterrole prometheus-operator prometheus
+
 $ kubectl delete ns demo
 ```
 
 ## Next Steps
+
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

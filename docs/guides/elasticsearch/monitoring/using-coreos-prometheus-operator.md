@@ -15,7 +15,7 @@ section_menu_id: guides
 
 This tutorial will show you how to monitor Elasticsearch database using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
 
-### Before You begin
+## Before You begin
 
 At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -60,7 +60,7 @@ prometheus-operator-79cb9dcd4b-24khh   1/1       Running   0          46s
 
 This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
 
-```
+```console
 $ kubectl get crd
 NAME                                    AGE
 alertmanagers.monitoring.coreos.com     3m
@@ -95,7 +95,6 @@ prometheus            1m
 prometheus-operator   5m
 ```
 
-
 #### In RBAC *not* enabled cluster
 
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
@@ -115,7 +114,7 @@ prometheus-operator-79cb9dcd4b-24khh   1/1       Running   0          46s
 
 This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
 
-```
+```console
 $ kubectl get crd
 NAME                                    AGE
 alertmanagers.monitoring.coreos.com     3m
@@ -155,7 +154,7 @@ metadata:
   name: coreos-prom-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -174,19 +173,17 @@ spec:
 
 Here,
 
- - `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
- - `monitor.prometheus` specifies the information for monitoring by prometheus
-      - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
-      - `prometheus.labels` specifies the labels applied to ServiceMonitor.
-      - `prometheus.port` indicates the port for Elasticsearch exporter endpoint (default is `56790`)
-      - `prometheus.interval` indicates the scraping interval (eg, '10s')
-
+- `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
+- `monitor.prometheus` specifies the information for monitoring by prometheus
+  - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
+  - `prometheus.labels` specifies the labels applied to ServiceMonitor.
+  - `prometheus.port` indicates the port for Elasticsearch exporter endpoint (default is `56790`)
+  - `prometheus.interval` indicates the scraping interval (eg, '10s')
 
 Now create this Elasticsearch object with monitoring spec
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml"
 elasticsearch "coreos-prom-es" created
 ```
 
@@ -219,12 +216,19 @@ Now, if you go the Prometheus Dashboard, you will see this database endpoint in 
 To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-$ kubedb delete es -n demo --all --force
+$ kubectl patch -n demo es/coreos-prom-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/coreos-prom-es
+
+$ kubectl patch -n demo drmn/coreos-prom-es -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/coreos-prom-es
+
+# In rbac enabled cluster,
+# $ kubectl delete clusterrolebindings prometheus-operator  prometheus
+# $ kubectl delete clusterrole prometheus-operator prometheus
 
 $ kubectl delete ns demo
 namespace "demo" deleted
 ```
-
 
 ## Next Steps
 

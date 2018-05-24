@@ -1,5 +1,5 @@
 hash: 970394493ff6cbc2091d7fd29cdee18c9c6f8b889ee3164db47ae59cc059eb5b
-updated: 2018-05-22T22:21:26.012259333-07:00
+updated: 2018-05-24T14:47:23.622959778-07:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -24,7 +24,7 @@ imports:
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: 1071d579106207585c16e774e11e8b53e876c135
+  version: e04d4d7ed42f54b68fc1e6a5926679883b0e5b56
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -51,7 +51,7 @@ imports:
   subpackages:
   - quantile
 - name: github.com/cenkalti/backoff
-  version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
+  version: 61153c768f31ee5f130071d08fc82b85208528de
 - name: github.com/cpuguy83/go-md2man
   version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:

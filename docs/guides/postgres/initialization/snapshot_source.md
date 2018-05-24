@@ -45,7 +45,6 @@ Follow these steps to prepare this tutorial
 
     ```console
     $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
-    validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
     postgres "script-postgres" created
     ```
 
@@ -87,7 +86,7 @@ metadata:
   name: recovered-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   databaseSecret:
     secretName: script-postgres-auth
   storage:
@@ -106,8 +105,8 @@ spec:
 Here,
 
 - `spec.init.snapshotSource` specifies Snapshot object information to be used in this initialization process.
-	- `snapshotSource.name` refers to a Snapshot object `name`.
-	- `snapshotSource.namespace` refers to a Snapshot object `namespace`.
+  - `snapshotSource.name` refers to a Snapshot object `name`.
+  - `snapshotSource.namespace` refers to a Snapshot object `namespace`.
 
 Snapshot `instant-snapshot` in `demo` namespace belongs to Postgres `script-postgres`:
 
@@ -125,7 +124,6 @@ Now, create the Postgres object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/recovered-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/recovered-postgres.yaml"
 postgres "recovered-postgres" created
 ```
 
@@ -209,7 +207,12 @@ We can see TABLE `dashboard` in `data` Schema which is created for initializatio
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/script-postgres pg/recovered-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/script-postgres pg/recovered-postgres
+
+$ kubectl patch -n demo drmn/script-postgres drmn/recovered-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/script-postgres drmn/recovered-postgres
+
 $ kubectl delete ns demo
 ```
 

@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a MySQL database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="660">
 </p>
 
 The yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -30,7 +30,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a [phpMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) deployment to connect and test MySQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-1.yaml
@@ -71,7 +71,7 @@ metadata:
   name: mysql-quickstart
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -84,7 +84,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-2.yaml"
 mysql "mysql-quickstart" created
 ```
 
@@ -92,7 +91,7 @@ Here,
 
 - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
 - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for MySQL.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
@@ -284,39 +283,20 @@ Here,
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
+To resume the database from the dormant state, create same `MySQL` object with same Spec.
 
-```yaml
-$ kubedb edit drmn -n demo mysql-quickstart
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  name: mysql-quickstart
-  namespace: demo
-  ...
-spec:
-  resume: true
-  ...
-status:
-  phase: Paused
-  ...
-```
+In this tutorial, the dormant database can be resumed by creating original `MySQL` object.
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new MySQL object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
-
-Please note that the dormant database can also be resumed by creating same `MySQL` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `MySQL` database using demo-2.yaml file. The below command resumes the dormant database `mysql-quickstart` that was created before.
+The below command will resume the DormantDatabase `mysql-quickstart` that was created before.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-2.yaml"
 mysql "mysql-quickstart" created
 ```
 
-## Wipeout Dormant Database
+## WipeOut DormantDatabase
 
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
-
-Create dormant database again and set `spec.wipeOut` to true:
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `MySQL` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
 $ kubedb delete my mysql-quickstart -n demo
@@ -335,57 +315,13 @@ spec:
 status:
   phase: Paused
   ...
-
-$ kubedb get drmn -n demo mysql-quickstart -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-09T10:43:52Z
-  finalizers:
-  - kubedb.com
-  generation: 0
-  labels:
-    kubedb.com/kind: MySQL
-  name: mysql-quickstart
-  namespace: demo
-  resourceVersion: "27323"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mysql-quickstart
-  uid: 1e9ab842-0d86-11e8-9091-08002751ae8c
-spec:
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: mysql-quickstart
-      namespace: demo
-    spec:
-      mysql:
-        databaseSecret:
-          secretName: mysql-quickstart-auth
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 50Mi
-          storageClassName: standard
-        version: "8"
-  wipeOut: true
-status:
-  creationTime: 2018-02-09T10:43:52Z
-  pausingTime: 2018-02-09T10:44:08Z
-  phase: WipedOut
-  wipeOutTime: 2018-02-09T10:45:41Z
-
-$ kubedb get drmn -n demo
-NAME               STATUS     AGE
-mysql-quickstart   WipedOut   6m
 ```
+
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete Dormant Database
 
-You still have a record that there used to be a MySQL database `mysql-quickstart` in the form of a DormantDatabase database `mysql-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
 $ kubedb delete drmn mysql-quickstart -n demo
@@ -397,11 +333,11 @@ dormantdatabase "mysql-quickstart" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my mysql-quickstart -n demo --force
-$ kubedb delete drmn mysql-quickstart -n demo --force
+$ kubectl patch -n demo mysql/mysql-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mysql/mysql-quickstart
 
-# or
-# $ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo drmn/mysql-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mysql-quickstart
 
 $ kubectl delete ns demo
 namespace "demo" deleted

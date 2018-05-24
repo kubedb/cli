@@ -27,7 +27,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a phpMyAdmin to connect and test MySQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/quickstart/demo-1.yaml
@@ -68,7 +68,7 @@ metadata:
   name: mysql-init-script
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -87,14 +87,13 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/Initialization/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/Initialization/demo-1.yaml"
 mysql "mysql-init-script" created
 ```
 
 Here,
 
 - `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for MySQL.
 - `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.sql, \*sql.gz and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC roles are required for [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
@@ -182,6 +181,7 @@ metadata:
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-init-script
   uid: ebbcc002-0d8a-11e8-9091-08002751ae8c
 spec:
+  replicas: 1
   databaseSecret:
     secretName: mysql-init-script-auth
   doNotPause: true
@@ -197,7 +197,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 8
+  version: "8.0"
 status:
   creationTime: 2018-02-09T11:18:14Z
   phase: Running

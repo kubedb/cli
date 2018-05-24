@@ -49,7 +49,7 @@ metadata:
   name: multi-node-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   replicas: 3
   storage:
     storageClassName: "standard"
@@ -70,7 +70,6 @@ Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/multi-node-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/multi-node-es.yaml"
 elasticsearch "multi-node-es" created
 ```
 
@@ -126,7 +125,7 @@ metadata:
   name: topology-es
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   topology:
     master:
       prefix: master
@@ -154,7 +153,6 @@ Lets create this Elasticsearch object
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/topology-es.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/clustering/topology-es.yaml"
 elasticsearch "topology-es" created
 ```
 
@@ -182,8 +180,8 @@ Three StatefulSets are created
 
     This configuration creates a StatefulSet named `client-topology-es` for client node
 
-    - `spec.replicas` is set to `2`. Two dedicated nodes is created as client.
-    - Label `node.role.client: set` is added in Pods
+  - `spec.replicas` is set to `2`. Two dedicated nodes is created as client.
+  - Label `node.role.client: set` is added in Pods
 
 - data-topology-es
 
@@ -197,7 +195,7 @@ Three StatefulSets are created
 
     This configuration creates a StatefulSet named `data-topology-es` for data node
 
-    - `spec.replicas` is set to `2`. Two dedicated nodes is created for data.
+  - `spec.replicas` is set to `2`. Two dedicated nodes is created for data.
 
 - master-topology-es
 
@@ -211,9 +209,8 @@ Three StatefulSets are created
 
     This configuration creates a StatefulSet named `data-topology-es` for master node
 
-    - `spec.replicas` is set to `1`. One dedicated node is created as master.
+  - `spec.replicas` is set to `1`. One dedicated node is created as master.
     - Label `node.role.master: set` is added in Pods
-
 
 > Note: StatefulSet name format: `{topology-prefix}-{elasticsearch-name}`
 
@@ -264,7 +261,7 @@ We can see in Topology section that
 
 Two Pods are dedicated as client
 
-```
+```console
 Topology:
   Type     Pod                    StartTime                       Phase
   ----     ---                    ---------                       -----
@@ -274,7 +271,7 @@ Topology:
 
 Two Pods for data node
 
-```
+```console
 Topology:
   Type     Pod                    StartTime                       Phase
   ----     ---                    ---------                       -----
@@ -284,26 +281,28 @@ Topology:
 
 And one Pod as master node
 
-```
+```console
 Topology:
   Type     Pod                    StartTime                       Phase
   ----     ---                    ---------                       -----
   master   master-topology-es-0   2018-02-20 16:38:44 +0600 +06   Running
 ```
 
-
 Two services are also created for this Elasticsearch object.
 
- - Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
- - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
-
+- Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
+- Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/multi-node-es es/topology-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/multi-node-es es/topology-es
+
+$ kubectl patch -n demo drmn/multi-node-es drmn/topology-es -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/multi-node-es drmn/topology-es
 
 $ kubectl delete ns demo
 namespace "demo" deleted

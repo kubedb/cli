@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a Elasticsearch database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="581" height="362">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="600" height="660">
 </p>
 
 ## Before You Begin
@@ -51,7 +51,7 @@ metadata:
   name: quick-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -64,18 +64,16 @@ spec:
 
 Here,
 
- - `spec.version` is the version of Elasticsearch database. In this tutorial, a Elasticsearch 5.6 database is created.
- - `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
+- `spec.version` is the version of Elasticsearch database. In this tutorial, a Elasticsearch 5.6 database is created.
+- `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
  created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
  If no storage spec is given, an `emptyDir` is used.
-
 
 Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml"
 elasticsearch "quick-elasticsearch" created
 ```
 
@@ -171,8 +169,8 @@ quick-elasticsearch-master   ClusterIP   10.105.209.152   <none>        9300/TCP
 
 Two services for each Elasticsearch object.
 
- - Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
- - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
+- Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
+- Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
 KubeDB supports Elasticsearch clustering where Pod can be any of these three role: *master*, *data* or *client*.
 
@@ -231,11 +229,11 @@ This Secret contains:
 - `ADMIN_PASSWORD` password for `admin` user used in search-guard configuration as internal user.
 - `READALL_PASSWORD` password for `readall` user with read-only permission only.
 - Followings are used as search-guard configuration
-    - `sg_action_groups.yml`
-    - `sg_config.yml`
-    - `sg_internal_users.yml`
-    - `sg_roles.yml`
-    - `sg_roles_mapping.yml`
+  - `sg_action_groups.yml`
+  - `sg_config.yml`
+  - `sg_internal_users.yml`
+  - `sg_roles.yml`
+  - `sg_roles_mapping.yml`
 
 See details about [search-guard configuration](/docs/guides/elasticsearch/search-guard/configuration.md)
 
@@ -422,23 +420,12 @@ status:
 
 Here,
 
- - `spec.origin` contains original Elasticsearch object.
- - `status.phase` points to the current database state `Paused`.
+- `spec.origin` contains original Elasticsearch object.
+- `status.phase` points to the current database state `Paused`.
 
 ## Resume DormantDatabase
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
-
-```yaml
-$ kubedb edit drmn -n demo quick-elasticsearch
-spec:
-  resume: true
-```
-
-KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new Elasticsearch using `spec.origin` from DormantDatabase.
-This will in turn start a new StatefulSet which will mount the originally created Persistent Volume Claim. Thus the original database is resumed.
-
-Please note that the dormant database can also be resumed by creating same Elasticsearch object with same Spec.
+To resume the database from the dormant state, create same Elasticsearch object with same Spec.
 
 In this tutorial, the DormantDatabase `quick-elasticsearch` can be resumed by creating original Elasticsearch object.
 
@@ -446,16 +433,12 @@ The below command will resume the DormantDatabase `quick-elasticsearch`
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml"
 elasticsearch "quick-elasticsearch" created
 ```
 
 ## WipeOut DormantDatabase
 
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to `true`.
-KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this Elasticsearch and also delete snapshot data stored in the Cloud Storage buckets.
-
-There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Elasticsearch` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
 $ kubedb edit drmn -n demo quick-elasticsearch
@@ -463,18 +446,11 @@ spec:
   wipeOut: true
 ```
 
-When database is completely wiped out, you will see status `WipedOut`
-
-```console
-$ kubedb get drmn -n demo quick-elasticsearch
-NAME                  STATUS     AGE
-quick-elasticsearch   WipedOut   1m
-```
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 
-You still have a record that there was a Elasticsearch object `quick-elasticsearch` in the form of a DormantDatabase `quick-elasticsearch`.
-Since you have already wiped out the database, you can delete the DormantDatabase object.
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
 $ kubedb delete drmn -n demo quick-elasticsearch
@@ -482,10 +458,16 @@ dormantdatabase "quick-elasticsearch" deleted
 ```
 
 ## Cleaning up
+
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete es,drmn,snap -n demo --all --force
+$ kubectl patch -n demo es/quick-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo es/quick-elasticsearch
+
+$ kubectl patch -n demo drmn/quick-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/quick-elasticsearch
+
 $ kubectl delete ns demo
 ```
 

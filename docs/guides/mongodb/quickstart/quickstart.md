@@ -16,8 +16,10 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a MongoDB database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="660">
 </p>
+
+The yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Before You Begin
 
@@ -28,7 +30,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -52,7 +54,7 @@ metadata:
   name: mgo-quickstart
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -65,7 +67,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml"
 mongodb "mgo-quickstart" created
 ```
 
@@ -73,7 +74,7 @@ Here,
 
 - `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
 - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for MongoDB.
 
 KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
@@ -165,7 +166,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 3.4
+  version: "3.4"
 status:
   creationTime: 2018-02-02T09:18:50Z
   phase: Running
@@ -303,7 +304,20 @@ Here,
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
+To resume the database from the dormant state, create same `MongoDB` object with same Spec.
+
+In this tutorial, the dormant database can be resumed by creating original MongoDB object.
+
+The below command will resume the DormantDatabase `mgo-quickstart`.
+
+```console
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
+mongodb "mgo-quickstart" created
+```
+
+## WipeOut DormantDatabase
+
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `MongoDB` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
 $ kubedb edit drmn -n demo mgo-quickstart
@@ -314,84 +328,21 @@ metadata:
   namespace: demo
   ...
 spec:
-  resume: true
+  wipeOut: true
   ...
 status:
   phase: Paused
   ...
 ```
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new MongoDB object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
-Please note that the dormant database can also be resumed by creating same `MongoDB` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `MongoDB` database using demo-1.yaml file. The below command resumes the dormant database `mgo-quickstart` that was created before.
+## Delete DormantDatabase
 
-```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/quickstart/demo-1.yaml"
-mongodb "mgo-quickstart" created
-```
-
-## Wipeout Dormant Database
-
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs, delete any relevant Snapshot objects for this database and also delete snapshot data stored in the Cloud Storage buckets. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
-
-```yaml
-$ kubedb edit drmn -n demo mgo-quickstart
-# set spec.wipeOut: true
-
-$ kubedb get drmn -n demo mgo-quickstart -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-02T09:30:06Z
-  finalizers:
-  - kubedb.com
-  generation: 0
-  labels:
-    kubedb.com/kind: MongoDB
-  name: mgo-quickstart
-  namespace: demo
-  resourceVersion: "47440"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mgo-quickstart
-  uid: a75e6314-07fb-11e8-946f-080027c05a6e
-spec:
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: mgo-quickstart
-      namespace: demo
-    spec:
-      mongodb:
-        databaseSecret:
-          secretName: mgo-quickstart-auth
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 50Mi
-          storageClassName: standard
-        version: "3.4"
-  wipeOut: true
-status:
-  creationTime: 2018-02-02T09:30:07Z
-  pausingTime: 2018-02-02T09:30:21Z
-  phase: WipedOut
-  wipeOutTime: 2018-02-02T09:30:51Z
-
-$ kubedb get drmn -n demo
-NAME             STATUS     AGE
-mgo-quickstart   WipedOut   1m
-```
-
-## Delete Dormant Database
-
-You still have a record that there used to be a MongoDB database `mgo-quickstart` in the form of a DormantDatabase database `mgo-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
-$ kubedb delete drmn mgo-quickstart -n demo
+$ kubectl delete drmn mgo-quickstart -n demo
 dormantdatabase "mgo-quickstart" deleted
 ```
 
@@ -400,11 +351,11 @@ dormantdatabase "mgo-quickstart" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mg mgo-quickstart -n demo --force
-$ kubedb delete drmn mgo-quickstart -n demo --force
+$ kubectl patch -n demo mg/mgo-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mg/mgo-quickstart
 
-# or
-# $ kubedb delete mg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo drmn/mgo-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mgo-quickstart
 
 $ kubectl delete ns demo
 namespace "demo" deleted

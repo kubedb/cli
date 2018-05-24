@@ -63,7 +63,7 @@ When installing KubeDB operator, set the flags `--docker-registry` and `--image-
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -87,7 +87,7 @@ metadata:
   namespace: demo
 spec:
   replicas: 3
-  version: 1.5.4
+  version: "1.5.4"
   doNotPause: true
   resources:
     requests:
@@ -104,7 +104,6 @@ Now run the command to deploy this `Memcached` object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/private-registry/demo-2.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/private-registry/demo-2.yaml"
 memcached "memcached-pvt-reg" created
 ```
 
@@ -130,7 +129,11 @@ memcd-pvt-reg   Running   2m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete mc,drmn -n demo --all --force
+$ kubectl patch -n demo mc/memcd-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mc/memcd-pvt-reg
+
+$ kubectl patch -n demo drmn/memcd-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/memcd-pvt-reg
 
 $ kubectl delete ns demo
 namespace "demo" deleted

@@ -49,7 +49,7 @@ metadata:
   name: builtin-prom-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,13 +63,12 @@ spec:
 
 Here,
 
- - `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
+- `spec.monitor` specifies that built-in [prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance.
 
 Run following command to create example above.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml"
 postgres "builtin-prom-postgres" created
 ```
 
@@ -288,13 +287,22 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
   </kbd>
 </p>
 
-
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/builtin-prom-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/builtin-prom-postgres
+
+$ kubectl patch -n demo drmn/builtin-prom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/builtin-prom-postgres
+
+# In rbac enabled cluster,
+# $ kubectl delete clusterrole prometheus-server
+# $ kubectl delete clusterrolebindings  prometheus-server
+# $ kubectl delete serviceaccounts -n demo  prometheus-server
+
 $ kubectl delete ns demo
 ```
 

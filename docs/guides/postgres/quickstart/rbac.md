@@ -57,7 +57,7 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -72,7 +72,6 @@ Create above Postgres object with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
@@ -193,6 +192,11 @@ Leader Election process get access to Kubernetes API using this RBAC permissions
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg -n demo --all --force
+$ kubectl patch -n demo pg/quick-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/quick-postgres
+
+$ kubectl patch -n demo drmn/quick-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/quick-postgres
+
 $ kubectl delete ns demo
 ```

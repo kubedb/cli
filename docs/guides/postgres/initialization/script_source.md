@@ -51,7 +51,7 @@ metadata:
   name: script-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -68,7 +68,7 @@ spec:
 
 Here,
 
- -  `init.scriptSource` specifies scripts used to initialize the database when it is being created.
+- `init.scriptSource` specifies scripts used to initialize the database when it is being created.
 
 VolumeSource provided in `init.scriptSource` will be mounted in Pod and will be executed while creating PostgreSQL.
 
@@ -78,7 +78,6 @@ In this tutorial, `data.sql` script from the git repository `https://github.com/
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
 postgres "script-postgres" created
 ```
 
@@ -149,7 +148,12 @@ We can see TABLE `dashboard` in `data` Schema which is created for initializatio
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/script-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/script-postgres
+
+$ kubectl patch -n demo drmn/script-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/script-postgres
+
 $ kubectl delete ns demo
 ```
 

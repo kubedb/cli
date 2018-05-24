@@ -4,7 +4,7 @@ metadata:
   name: mgo-quickstart
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
   doNotPause: true
   storage:
     storageClassName: "standard"

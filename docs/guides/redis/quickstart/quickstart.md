@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a Redis database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="660">
 </p>
 
 ## Before You Begin
@@ -28,7 +28,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -52,7 +52,7 @@ metadata:
   name: redis-quickstart
   namespace: demo
 spec:
-  version: 4
+  version: "4"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -65,7 +65,6 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/quickstart/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/quickstart/demo-1.yaml"
 redis "redis-quickstart" created
 ```
 
@@ -73,7 +72,7 @@ Here,
 
 - `spec.version` is the version of Redis database. In this tutorial, a Redis 4 database is going to be created.
 - `spec.doNotPause` tells KubeDB operator that if this object is deleted, it should be automatically reverted. This should be set to true for production databases to avoid accidental deletion.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for Redis.
 
 KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching Redis object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No Redis specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
@@ -161,7 +160,7 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 4
+  version: "4"
 status:
   creationTime: 2018-02-12T10:41:40Z
   phase: Running
@@ -261,39 +260,20 @@ Here,
 
 ## Resume Dormant Database
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
+To resume the database from the dormant state, create same `Redis` object with same Spec.
 
-```yaml
-$ kubedb edit drmn -n demo redis-quickstart
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  name: redis-quickstart
-  namespace: demo
-  ...
-spec:
-  resume: true
-  ...
-status:
-  phase: Paused
-  ...
-```
+In this tutorial, the dormant database can be resumed by creating original `Redis` object.
 
-KubeDB operator will notice that `spec.resume` is set to true. KubeDB operator will delete the DormantDatabase object and create a new Redis object using the original spec. This will in turn start a new StatefulSet which will mount the originally created PVCs. Thus the original database is resumed.
-
-Please note that the dormant database can also be resumed by creating same `Redis` database by using same Specs. In this tutorial, the dormant database can be resumed by creating `Redis` database using demo-1.yaml file. The below command resumes the dormant database `redis-quickstart` that was created before.
+The below command will resume the DormantDatabase `redis-quickstart`.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/quickstart/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/quickstart/demo-1.yaml"
 redis "redis-quickstart" created
 ```
 
-## Wipeout Dormant Database
+## WipeOut DormantDatabase
 
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to true. KubeDB operator will delete the PVCs that is used by `redis-quickstart`. There is no way to resume a wiped out database. So, be sure before you wipe out a database.
-
-Create dormant database again and set `spec.wipeOut` to true:
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Redis` database (i.e, PVCs, Secrets).
 
 ```yaml
 $ kubedb delete rd redis-quickstart -n demo
@@ -312,57 +292,13 @@ spec:
 status:
   phase: Paused
   ...
-
-
-$ kubedb get drmn -n demo redis-quickstart -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-12T10:56:24Z
-  finalizers:
-  - kubedb.com
-  generation: 0
-  labels:
-    kubedb.com/kind: Redis
-  name: redis-quickstart
-  namespace: demo
-  resourceVersion: "47168"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/redis-quickstart
-  uid: 5e085768-0fe3-11e8-a2d6-08002751ae8c
-spec:
-  origin:
-    metadata:
-      creationTimestamp: null
-      name: redis-quickstart
-      namespace: demo
-    spec:
-      redis:
-        resources: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 50Mi
-          storageClassName: standard
-        version: "4"
-  wipeOut: true
-status:
-  creationTime: 2018-02-12T10:56:24Z
-  pausingTime: 2018-02-12T10:56:35Z
-  phase: WipedOut
-  wipeOutTime: 2018-02-12T10:57:24Z
-
-
-$ kubedb get drmn -n demo
-NAME               STATUS     AGE
-redis-quickstart   WipedOut   2m
 ```
 
-## Delete Dormant Database
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the PVCs.
 
-You still have a record that there used to be a Redis database `redis-quickstart` in the form of a DormantDatabase database `redis-quickstart`. Since you have already wiped out the database, you can delete the DormantDatabase object.
+## Delete DormantDatabase
+
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
 $ kubedb delete drmn redis-quickstart -n demo
@@ -374,11 +310,11 @@ dormantdatabase "redis-quickstart" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete rd redis-quickstart -n demo --force
-$ kubedb delete drmn redis-quickstart -n demo --force
+$ kubectl patch -n demo rd/redis-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo rd/redis-quickstart
 
-# or
-# $ kubedb delete rd,drmn -n demo --all --force
+$ kubectl patch -n demo drmn/redis-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/redis-quickstart
 
 $ kubectl delete ns demo
 namespace "demo" deleted

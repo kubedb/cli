@@ -93,7 +93,7 @@ metadata:
   name: pvt-reg-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -109,7 +109,6 @@ Now run the command to create this Postgres object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml"
 postgres "pvt-reg-postgres" created
 ```
 
@@ -131,7 +130,12 @@ We don't need to add `imagePullSecret` for Snapshot objects. Just create Snapsho
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/pvt-reg-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/pvt-reg-postgres
+
+$ kubectl patch -n demo drmn/pvt-reg-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/pvt-reg-postgres
+
 $ kubectl delete ns demo
 ```
 

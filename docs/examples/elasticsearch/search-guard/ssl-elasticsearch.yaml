@@ -4,6 +4,6 @@ metadata:
   name: ssl-elasticsearch
   namespace: demo
 spec:
-  version: 5.6
+  version: "5.6"
   replicas: 2
   enableSSL: true

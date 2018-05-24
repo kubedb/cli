@@ -44,7 +44,7 @@ metadata:
   name: script-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,7 +63,6 @@ If Postgres object `script-postgres` doesn't exists, create it first.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/initialization/script-postgres.yaml"
 postgres "script-postgres" created
 ```
 
@@ -98,16 +97,15 @@ spec:
 
 Here,
 
- - `metadata.labels` should include the type of database.
- - `spec.databaseName` indicates the Postgres object name, `script-postgres`, whose snapshot is taken.
- - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
- - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
+- `metadata.labels` should include the type of database.
+- `spec.databaseName` indicates the Postgres object name, `script-postgres`, whose snapshot is taken.
+- `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
+- `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
 In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object.
 Only PostgreSQL controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Postgres, `script-postgres`, in our case.
-
 
 #### Snapshot Storage Secret
 
@@ -167,7 +165,6 @@ Now, create the Snapshot object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/instant-snapshot.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/snapshot/instant-snapshot.yaml"
 snapshot "instant-snapshot" created
 ```
 
@@ -219,7 +216,6 @@ CREATE TABLE dashboard (
 ALTER TABLE dashboard OWNER TO postgres;
 ```
 
-
 Lets see the Snapshot list for Postgres `script-postgres` by running `kubedb describe` command.
 
 ```console
@@ -264,7 +260,6 @@ Events:
   48m         48m        1         Postgres operator     Normal     Successful           Successfully created Service
 ```
 
-
 ## Cleanup Snapshot
 
 If you want to delete snapshot data from storage, you can delete Snapshot object.
@@ -279,7 +274,12 @@ snapshot "instant-snapshot" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/script-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/script-postgres
+
+$ kubectl patch -n demo drmn/script-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/script-postgres
+
 $ kubectl delete ns demo
 ```
 

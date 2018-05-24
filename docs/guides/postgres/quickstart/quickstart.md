@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a PostgreSQL database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="581" height="362">
+  <img alt="lifecycle"  src="/docs/images/postgres/lifecycle.png" width="600" height="660">
 </p>
 
 ## Before You Begin
@@ -79,7 +79,7 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   doNotPause: true
   storage:
     storageClassName: "standard"
@@ -92,16 +92,12 @@ spec:
 
 Here,
 
- - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
- - `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
- - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
- created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
- If no storage spec is given, an `emptyDir` is used.
-
+- `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
+- `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for MySQL.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
@@ -183,8 +179,8 @@ quick-postgres-replicas     ClusterIP   10.96.98.122   <none>        5432/TCP   
 
 Two services for each Postgres object.
 
- - Service *`quick-postgres`* targets only one Pod which is acting as *primary* server
- - Service *`quick-postgres-replicas`* targets all Pods created by StatefulSet
+- Service *`quick-postgres`* targets only one Pod which is acting as *primary* server
+- Service *`quick-postgres-replicas`* targets all Pods created by StatefulSet
 
 KubeDB supports PostgreSQL clustering where Pod can be either *primary* or *standby*.
 To learn how to configure highly available PostgreSQL cluster, click [here](/docs/guides/postgres/clustering/ha_cluster.md).
@@ -220,8 +216,8 @@ Now, you can connect to this database from the pgAdmin dashboard using Service `
 Connection information:
 
 - address: you can use any of these
-    - Service `quick-postgres.demo`
-    - Pod IP (`$ kubectl get pods quick-postgres-0 -n demo -o yaml | grep podIP`)
+  - Service `quick-postgres.demo`
+  - Pod IP (`$ kubectl get pods quick-postgres-0 -n demo -o yaml | grep podIP`)
 - port: `5432`
 - database: `postgres`
 - username: `postgres`
@@ -321,23 +317,12 @@ status:
 
 Here,
 
- - `spec.origin` contains original Postgres object.
- - `status.phase` points to the current database state `Paused`.
+- `spec.origin` contains original Postgres object.
+- `status.phase` points to the current database state `Paused`.
 
 ## Resume DormantDatabase
 
-To resume the database from the dormant state, set `spec.resume` to `true` in the DormantDatabase object.
-
-```yaml
-$ kubedb edit drmn -n demo quick-postgres
-spec:
-  resume: true
-```
-
-KubeDB operator will notice that `spec.resume` is set to `true`. It will delete the DormantDatabase object and create a new Postgres using `spec.origin` from DormantDatabase.
-This will in turn start a new StatefulSet which will mount the originally created Persistent Volume Claim. Thus the original database is resumed.
-
-Please note that the dormant database can also be resumed by creating same Postgres object with same Spec.
+To resume the database from the dormant state, create same Postgres object with same Spec.
 
 In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creating original Postgres object.
 
@@ -345,16 +330,12 @@ The below command will resume the DormantDatabase `quick-postgres`
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/postgres/quickstart/quick-postgres.yaml"
 postgres "quick-postgres" created
 ```
 
 ## WipeOut DormantDatabase
 
-You can also wipe out a DormantDatabase by setting `spec.wipeOut` to `true`.
-KubeDB operator will delete the PVC(if available), delete any relevant Snapshot for this PostgreSQL and also delete snapshot data stored in the Cloud Storage buckets.
-
-There is no way to resume a wiped out database. So, be sure before you wipe out a database.
+You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Elasticsearch` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
 $ kubedb edit drmn -n demo quick-postgres
@@ -362,18 +343,11 @@ spec:
   wipeOut: true
 ```
 
-When database is completely wiped out, you will see status `WipedOut`
-
-```console
-$ kubedb get drmn -n demo quick-postgres
-NAME             STATUS     AGE
-quick-postgres   WipedOut   32s
-```
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 
-You still have a record that there was a Postgres object `quick-postgres` in the form of a DormantDatabase `quick-postgres`.
-Since you have already wiped out the database, you can delete the DormantDatabase object.
+As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
 $ kubedb delete drmn -n demo quick-postgres
@@ -385,7 +359,12 @@ dormantdatabase "quick-postgres" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete pg,drmn,snap -n demo --all --force
+$ kubectl patch -n demo pg/quick-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo pg/quick-postgres
+
+$ kubectl patch -n demo drmn/quick-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/quick-postgres
+
 $ kubectl delete ns demo
 ```
 

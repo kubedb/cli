@@ -25,7 +25,7 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/demo-0.yaml
+$ kubectl create ns demo
 namespace "demo" created
 
 $ kubectl get ns
@@ -49,7 +49,7 @@ metadata:
   name: redis-mon-prometheus
   namespace: demo
 spec:
-  version: 4
+  version: "4"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,14 +63,13 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml
-validating "https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml"
 redis "redis-mon-prometheus" created
 ```
 
 Here,
 
 - `spec.version` is the version of Redis database. In this tutorial, a Redis 3.4 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for Redis.
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Redis Exporter` and will receive metrics from exporter.
 
 KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
@@ -346,7 +345,11 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete rd,drmn -n demo --all --force
+$ kubectl patch -n demo rd/redis-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo rd/redis-mon-prometheus
+
+$ kubectl patch -n demo drmn/redis-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/redis-mon-prometheus
 
 # In rbac enabled cluster,
 # $ kubectl delete clusterrole prometheus-server

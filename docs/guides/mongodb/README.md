@@ -33,7 +33,7 @@ aliases:
 ## Life Cycle of a MongoDB Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="373">
+  <img alt="lifecycle"  src="/docs/images/mongodb/mgo-lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
@@ -44,6 +44,7 @@ aliases:
 |:--------------:|:---------:|:---------:|
 | 0.1.0 - 0.7.0  | &#10007;  | &#10007;  |
 | 0.8.0-beta.2   | &#10003;  | &#10003;  |
+| 0.8.0-beta.3   | &#10003;  | &#10003;  |
 
 ## User Guide
 
