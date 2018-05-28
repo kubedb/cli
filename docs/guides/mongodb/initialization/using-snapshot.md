@@ -1,12 +1,12 @@
 ---
 title: Initialize MongoDB from Snapshot
 menu:
-  docs_0.8.0-beta.2:
+  docs_0.8.0-rc.0:
     identifier: mg-using-snapshot-initialization
     name: From Snapshot
     parent: mg-initialization-mongodb
     weight: 15
-menu_name: docs_0.8.0-beta.2
+menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -51,7 +51,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mongodb/Initialization/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mongodb/Initialization/demo-2.yaml
 mongodb "mgo-init-snapshot" created
 ```
 

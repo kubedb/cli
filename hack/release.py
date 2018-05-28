@@ -41,19 +41,18 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
-    'cli': '0.8.0-beta.2',
-    'operator': '0.8.0-beta.2',
-    'apimachinery': '0.8.0-beta.2',
-    'postgres': '0.8.0-beta.2',
-    'elasticsearch': '0.8.0-beta.2',
-    'mysql': '0.1.0-beta.2',
-    'mongodb': '0.1.0-beta.2',
-    'memcached': '0.1.0-beta.2',
-    'redis': '0.1.0-beta.2',
-    'kubedb-server': '0.1.0-beta.2',
+    'cli': '0.8.0-rc.0',
+    'operator': '0.8.0-rc.0',
+    'apimachinery': '0.8.0-rc.0',
+    'postgres': '0.8.0-rc.0',
+    'elasticsearch': '0.8.0-rc.0',
+    'mysql': '0.1.0-rc.0',
+    'mongodb': '0.1.0-rc.0',
+    'memcached': '0.1.0-rc.0',
+    'redis': '0.1.0-rc.0',
 }
-KUTIL_VERSION = 'release-6.0'
-KUBEMON_VERSION = 'release-6.0'
+KUTIL_VERSION = 'release-7.0'
+KUBEMON_VERSION = 'release-7.0'
 
 
 def die(status):
@@ -263,14 +262,13 @@ def release(comp=None):
         # cat.release_apimachinery()
         for name in DATABASES:
             cat.release_db(name)
-        cat.release_server_binary('kubedb-server')
         cat.release_server_binary('operator')
         cat.release_cli()
     elif comp == 'apimachinery':
         cat.release_apimachinery()
     elif comp in DATABASES:
         cat.release_db(comp)
-    elif comp in ['kubedb-server', 'operator']:
+    elif comp in ['operator']:
         cat.release_server_binary(comp)
     elif comp == 'cli':
         cat.release_cli()

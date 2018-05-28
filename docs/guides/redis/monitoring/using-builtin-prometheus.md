@@ -1,12 +1,12 @@
 ---
 title: Monitoring Redis Using Builtin Prometheus Discovery
 menu:
-  docs_0.8.0-beta.2:
+  docs_0.8.0-rc.0:
     identifier: rd-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: rd-monitoring-redis
     weight: 10
-menu_name: docs_0.8.0-beta.2
+menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
 ---
 
@@ -62,14 +62,14 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml
 redis "redis-mon-prometheus" created
 ```
 
 Here,
 
 - `spec.version` is the version of Redis database. In this tutorial, a Redis 3.4 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-beta.3, a storage spec is required for Redis.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0-rc.0, a storage spec is required for Redis.
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Redis Exporter` and will receive metrics from exporter.
 
 KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
@@ -227,7 +227,7 @@ data:
 ```
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap "prometheus-server-conf" created
 ```
 
@@ -276,7 +276,7 @@ spec:
 If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -304,7 +304,7 @@ prometheus-server   1         1m
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 deployment "prometheus-server" created
 service "prometheus-service" created
 

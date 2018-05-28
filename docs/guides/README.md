@@ -1,16 +1,16 @@
 ---
 title: Guides | KubeDB
 menu:
-  docs_0.8.0-beta.2:
+  docs_0.8.0-rc.0:
     identifier: guides-readme
     name: Readme
     parent: guides
     weight: -1
-menu_name: docs_0.8.0-beta.2
+menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0-beta.2/guides/
+url: /docs/0.8.0-rc.0/guides/
 aliases:
-  - /docs/0.8.0-beta.2/guides/README/
+  - /docs/0.8.0-rc.0/guides/README/
 ---
 
 # Guides
