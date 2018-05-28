@@ -8,9 +8,9 @@ menu:
     weight: 10
 menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0-beta.2/guides/elasticsearch/
+url: /docs/0.8.0-rc.0/guides/elasticsearch/
 aliases:
-  - /docs/0.8.0-beta.2/guides/elasticsearch/README/
+  - /docs/0.8.0-rc.0/guides/elasticsearch/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).

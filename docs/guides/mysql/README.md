@@ -8,9 +8,9 @@ menu:
     weight: 10
 menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0-beta.2/guides/mysql/
+url: /docs/0.8.0-rc.0/guides/mysql/
 aliases:
-  - /docs/0.8.0-beta.2/guides/mysql/README/
+  - /docs/0.8.0-rc.0/guides/mysql/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
