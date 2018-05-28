@@ -39,7 +39,7 @@ import yaml
 from collections import Counter
 
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
-DATABASES = ['mongodb', 'memcached', 'redis']
+DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
     'cli': '0.8.0-rc.0',
     'operator': '0.8.0-rc.0',
@@ -259,7 +259,7 @@ class Kitten(object):
 def release(comp=None):
     cat = Kitten()
     if comp is None:
-        # cat.release_apimachinery()
+        cat.release_apimachinery()
         for name in DATABASES:
             cat.release_db(name)
         cat.release_server_binary('operator')
