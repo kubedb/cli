@@ -1,12 +1,12 @@
 ---
 title: Monitor Memcached using Builtin Prometheus Discovery
 menu:
-  docs_0.8.0-beta.2:
+  docs_0.8.0-rc.0:
     identifier: mc-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: mc-monitoring-memcached
     weight: 10
-menu_name: docs_0.8.0-beta.2
+menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
 ---
 
@@ -64,7 +64,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/memcached/monitoring/builtin-prometheus/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/memcached/monitoring/builtin-prometheus/demo-1.yaml
 memcached "memcd-mon-prometheus" created
 ```
 
@@ -225,7 +225,7 @@ data:
 ```
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap "prometheus-server-conf" created
 ```
 
@@ -274,7 +274,7 @@ spec:
 If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -301,7 +301,7 @@ prometheus-server   1         1m
 If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 deployment "prometheus-server" created
 service "prometheus-service" created
 

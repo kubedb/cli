@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of MySQL
 menu:
-  docs_0.8.0-beta.2:
+  docs_0.8.0-rc.0:
     identifier: my-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: my-snapshot-mysql
     weight: 10
-menu_name: docs_0.8.0-beta.2
+menu_name: docs_0.8.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -104,7 +104,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-beta.2/docs/examples/mysql/snapshot/demo-4.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mysql/snapshot/demo-4.yaml
 mysql "mysql-scheduled" created
 ```
 

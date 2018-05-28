@@ -1,12 +1,12 @@
 ---
 title: Memcached
 menu:
-  docs_0.8.0-beta.2:
+  docs_0.8.0-rc.0:
     identifier: memcached-db
     name: Memcached
     parent: databases
     weight: 15
-menu_name: docs_0.8.0-beta.2
+menu_name: docs_0.8.0-rc.0
 section_menu_id: concepts
 ---
 
