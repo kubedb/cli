@@ -286,9 +286,11 @@ $ONESSL has-keys configmap --namespace=kube-system --keys=requestheader-client-c
 echo ""
 
 export KUBE_CA=
+export KUBEDB_ENABLE_APISERVER=false
 if [ "$KUBEDB_ENABLE_VALIDATING_WEBHOOK" = true ] || [ "$KUBEDB_ENABLE_MUTATING_WEBHOOK" = true ]; then
     $ONESSL get kube-ca >/dev/null 2>&1 || { echo "Admission webhooks can't be used when kube apiserver is accesible without verifying its TLS certificate (insecure-skip-tls-verify : true)."; echo; exit 1; }
     export KUBE_CA=$($ONESSL get kube-ca | $ONESSL base64)
+    export KUBEDB_ENABLE_APISERVER=true
 fi
 
 env | sort | grep KUBEDB*
@@ -306,11 +308,9 @@ export TLS_SERVING_KEY=$(cat server.key | $ONESSL base64)
 ${SCRIPT_LOCATION}hack/deploy/operator.yaml | $ONESSL envsubst | kubectl apply -f -
 
 if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
-    kubectl create serviceaccount $KUBEDB_SERVICE_ACCOUNT --namespace $KUBEDB_NAMESPACE
-    kubectl label serviceaccount $KUBEDB_SERVICE_ACCOUNT app=kubedb --namespace $KUBEDB_NAMESPACE
+    ${SCRIPT_LOCATION}hack/deploy/service-account.yaml | $ONESSL envsubst | kubectl apply -f -
     ${SCRIPT_LOCATION}hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
     ${SCRIPT_LOCATION}hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
-
 fi
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
@@ -330,10 +330,12 @@ echo
 echo "waiting until kubedb operator deployment is ready"
 $ONESSL wait-until-ready deployment kubedb-$KUBEDB_OPERATOR_NAME --namespace $KUBEDB_NAMESPACE || { echo "KubeDB operator deployment failed to be ready"; exit 1; }
 
-echo "waiting until kubedb apiservice is available"
-for api in "${apiServices[@]}"; do
-    $ONESSL wait-until-ready apiservice ${api}.kubedb.com || { echo "KubeDB apiservice $api failed to be ready"; exit 1; }
-done
+if [ "$KUBEDB_ENABLE_APISERVER" = true ]; then
+    echo "waiting until kubedb apiservice is available"
+    for api in "${apiServices[@]}"; do
+        $ONESSL wait-until-ready apiservice ${api}.kubedb.com || { echo "KubeDB apiservice $api failed to be ready"; exit 1; }
+    done
+fi
 
 if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
     echo "waiting until kubedb crds are ready"
