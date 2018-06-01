@@ -53,7 +53,7 @@ spec:
             scheme: HTTPS
         resources:
           requests:
-            cpu: "50m"
+            cpu: "100m"
       volumes:
       - name: serving-cert
         secret:
