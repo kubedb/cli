@@ -34,9 +34,6 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [flags]
   # Delete elasticsearch with label elasticsearch.kubedb.com/name=elasticsearch-demo.
   kubedb delete elasticsearch -l elasticsearch.kubedb.com/name=elasticsearch-demo
   
-  # Force delete a mysql object
-  kubedb delete mysql ms-demo --force
-  
   # Delete all mysql objects
   kubedb delete mysql --all
 ```

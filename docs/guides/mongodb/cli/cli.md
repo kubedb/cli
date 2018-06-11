@@ -306,13 +306,6 @@ To delete database with matching labels, use `--selector` flag. The following co
 $ kubedb delete mongodb -l mongodb.kubedb.com/name=mongodb-demo
 ```
 
-To delete all MongoDB without following further steps, add flag `--force`
-
-```console
-$ kubedb delete mongodb -n kube-system --all --force
-mongodb "mongodb-demo" deleted
-```
-
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl

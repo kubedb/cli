@@ -264,13 +264,6 @@ To delete database with matching labels, use `--selector` flag. The following co
 $ kubedb delete memcached -l memcached.kubedb.com/name=memcached-demo
 ```
 
-To delete all Memcached without following further steps, add flag `--force`
-
-```console
-$ kubedb delete memcached -n kube-system --all --force
-memcached "memcached-demo" deleted
-```
-
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl

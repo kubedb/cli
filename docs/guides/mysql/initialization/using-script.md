@@ -229,7 +229,11 @@ As you can see here, the initial script has successfully created a table named `
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubedb delete my,drmn,snap -n demo --all --force
+$ kubectl patch -n demo mysql/mysql-init-script -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl delete -n demo mysql/mysql-init-script
+
+$ kubectl patch -n demo drmn/mysql-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/mysql-init-script
 
 $ kubectl delete ns demo
 namespace "demo" deleted
