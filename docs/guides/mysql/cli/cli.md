@@ -303,13 +303,6 @@ To delete database with matching labels, use `--selector` flag. The following co
 $ kubedb delete mysql -l mysql.kubedb.com/name=mysql-demo
 ```
 
-To delete all MySQL without following further steps, add flag `--force`
-
-```console
-$ kubedb delete mysql -n kube-system --all --force
-mysql "mysql-demo" deleted
-```
-
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl

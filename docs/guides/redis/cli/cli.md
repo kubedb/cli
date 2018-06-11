@@ -267,13 +267,6 @@ To delete database with matching labels, use `--selector` flag. The following co
 $ kubedb delete redis -l redis.kubedb.com/name=redis-demo
 ```
 
-To delete all Redis without following further steps, add flag `--force`
-
-```console
-$ kubedb delete redis -n kube-system --all --force
-redis "redis-demo" deleted
-```
-
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
 
 ## Using Kubectl
