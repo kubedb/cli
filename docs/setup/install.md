@@ -21,7 +21,18 @@ There are 2 parts to installing KubeDB. You need to install a Kubernetes operato
 
 To use `kubedb`, you will need to install KubeDB [operator](https://github.com/kubedb/operator). KubeDB operator can be installed via a script or as a Helm chart.
 
-### Using Scripts
+<ul class="nav nav-tabs" id="installerTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true">Script</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="helm-tab" data-toggle="tab" href="#helm" role="tab" aria-controls="helm" aria-selected="false">Helm</a>
+  </li>
+</ul>
+<div class="tab-content" id="installerTabContent">
+  <div class="tab-pane fade show active" id="script" role="tabpanel" aria-labelledby="script-tab">
+
+## Using Script
 
 To install KubeDB in your Kubernetes cluster, run the following command:
 
@@ -92,7 +103,10 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/hack/deploy
     | bash -s -- --enable-validating-webhook=false --enable-mutating-webhook=false [--rbac]
 ```
 
-### Using Helm
+</div>
+<div class="tab-pane fade" id="helm" role="tabpanel" aria-labelledby="helm-tab">
+
+## Using Helm
 
 KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kubedb/cli/tree/master/chart/kubedb) from [AppsCode Charts Repository](https://github.com/appscode/charts). To install the chart with the release name `my-release`:
 
@@ -130,6 +144,8 @@ curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.3.0/
 ```
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).
+
+</div>
 
 ### Installing in GKE Cluster
 
