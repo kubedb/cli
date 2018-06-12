@@ -1,11 +1,13 @@
 # Change Log
 
-## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
-
-[Full Changelog](https://github.com/kubedb/cli/compare/0.8.0-rc.0...HEAD)
+## [0.8.0](https://github.com/kubedb/cli/tree/0.8.0) (2018-06-12)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.8.0-rc.0...0.8.0)
 
 **Merged pull requests:**
 
+- Update db support info [\#238](https://github.com/kubedb/cli/pull/238) ([tamalsaha](https://github.com/tamalsaha))
+- Updated doc [\#237](https://github.com/kubedb/cli/pull/237) ([the-redback](https://github.com/the-redback))
+- Prepare docs for 0.8.0 release [\#236](https://github.com/kubedb/cli/pull/236) ([tamalsaha](https://github.com/tamalsaha))
 - Prepare release script for 0.8.0 release [\#235](https://github.com/kubedb/cli/pull/235) ([tamalsaha](https://github.com/tamalsaha))
 - Add togglable tabs for Installation: Script & Helm [\#234](https://github.com/kubedb/cli/pull/234) ([sajibcse68](https://github.com/sajibcse68))
 - Removed left over documents of deprecated flag '--force' [\#233](https://github.com/kubedb/cli/pull/233) ([the-redback](https://github.com/the-redback))
