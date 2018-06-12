@@ -43,18 +43,18 @@ aliases:
 
 ## Supported Elasticsearch Version
 
-| KubeDB Version | Elasticsearch:2.3 | Elasticsearch:5.6 |
-|----------------|:------------:|:------------:|
-| 0.1.0 - 0.7.0  | &#10003;     | &#10007;     |
-| 0.8.0-beta.2   | &#10007;     | &#10003;     |
-| 0.8.0   | &#10007;     | &#10003;     |
+| KubeDB Version | Elasticsearch:2.3 | Elasticsearch:5.6 | Elasticsearch:6.2 |
+|----------------|:------------:|:------------:|:------------:|
+| 0.1.0 - 0.7.0  | &#10003;     | &#10007;     | &#10007;     |
+| 0.8.0-beta.2   | &#10007;     | &#10003;     | &#10007;     |
+| 0.8.0   | &#10007;     | &#10003;     | &#10003;     |
 
 ## External tools dependency
 
 |Tool                                                               |Version   |
 |-------------------------------------------------------------------|:--------:|
-|[Search Guard](https://github.com/floragunncom/search-guard)       | 5.6.4-18 |
-|[Elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | 3.3.1    |
+|[Search Guard](https://github.com/floragunncom/search-guard)       | `5.6.4-18` and `6.2.4-22.1` |
+|[Elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | `3.3.1` and `3.3.14`    |
 |[osm](https://github.com/appscode/osm)                             | 0.7.0    |
 
 <br/>
