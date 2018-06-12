@@ -1,5 +1,5 @@
-hash: 970394493ff6cbc2091d7fd29cdee18c9c6f8b889ee3164db47ae59cc059eb5b
-updated: 2018-05-24T14:47:23.622959778-07:00
+hash: 9fa1d06b6192e7cda948dcca2c8c55c55a65fd8a6f47466fe64891c099ca0317
+updated: 2018-06-12T05:08:33.699095258-07:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 230e0e4622c682b5d117db8c28a66404ed874ed5
+  version: 578091d435e848d79527d8b911fdf1dd5423b227
   subpackages:
   - analytics
   - encoding/json/types
@@ -18,13 +18,13 @@ imports:
   - types
   - version
 - name: github.com/appscode/jsonpatch
-  version: 58a38a46ddb591a543c6b1003213353e29331c5a
+  version: 1359b374de83fa14fd58ab10aa8ea4935f84d249
 - name: github.com/appscode/kube-mon
-  version: dc81c09a885b0862f1bbbae3e440a68fbf2b36a6
+  version: 69f0fdb694d6ff71ae85010e1d39a07e72357e51
   subpackages:
   - api
 - name: github.com/appscode/kutil
-  version: e04d4d7ed42f54b68fc1e6a5926679883b0e5b56
+  version: 85abe6c009de4b732e5963cb1ec82950efd2fdda
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -51,7 +51,7 @@ imports:
   subpackages:
   - quantile
 - name: github.com/cenkalti/backoff
-  version: 61153c768f31ee5f130071d08fc82b85208528de
+  version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
 - name: github.com/cpuguy83/go-md2man
   version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:
@@ -153,7 +153,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 5411ab924f9ffa6566244a9e504bc347edacffd3
+  version: 3af367b6b30c263d47e8895973edcca9a49cf029
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -183,7 +183,7 @@ imports:
   - openstack/utils
   - pagination
 - name: github.com/graymeta/stow
-  version: a2bb5ac932dfea981d79ab395a0ab4ea09365d52
+  version: 477570d22b013061d83f2939943177abdc8a9287
   repo: https://github.com/appscode/stow.git
   vcs: git
 - name: github.com/gregjones/httpcache
@@ -209,24 +209,24 @@ imports:
 - name: github.com/json-iterator/go
   version: 13f86432b882000a51c6e610c620974462691a97
 - name: github.com/kubedb/apimachinery
-  version: 1f462fe2a8b320d95f5f81b3a063fc83c34d28f1
+  version: a5e86ceb63069fd32b89cfbb1fc31a7ac9d8ce75
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 2aede6ac83aee4af75eb4ac14e1d9e95831d064d
+  version: da52611729d713ef2bca7b07c7aef0d29b0a367d
 - name: github.com/kubedb/memcached
-  version: 185ea480513a2f6eff978637d9ac65f0d32649f0
+  version: 21a9a1447fc0e60018bc4023394ab345d662d505
 - name: github.com/kubedb/mongodb
-  version: 9dc3feb941c70c99539370b151821b647ca6d870
+  version: 13eaf93320e78c38fb91cab5f48376689c6fb0b9
 - name: github.com/kubedb/mysql
-  version: a2d13c828b1da61d94d4ad5455679707ee7bbfac
+  version: 10e309c05d2a55b74b29f67de379a6719b58621e
 - name: github.com/kubedb/postgres
-  version: 3e4ae3174f261fb742bc631171ce0486dee83269
+  version: 864e6fd2191e1d1a12a23e469b105fce2f13e694
 - name: github.com/kubedb/redis
-  version: 98ee895ef35dbc1abff9f4de5dd8402b1bed2652
+  version: c45c2ab950b6af4950f25c065c2ba454aacf1a00
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -255,9 +255,10 @@ imports:
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/prometheus/client_golang
-  version: c5b7fccd204277076155f10851dad72b76a49317
+  version: e7e903064f5e9eb5da98208bae10b475d4db0f8c
   subpackages:
   - prometheus
+  - prometheus/promhttp
 - name: github.com/prometheus/client_model
   version: fa8ad6fec33561be4280a8f0514318c79d7f6cb6
   subpackages:
@@ -285,13 +286,13 @@ imports:
 - name: github.com/shurcooL/sanitized_anchor_name
   version: 10ef21a441db47d8b13ebcc5fd2310f636973c77
 - name: github.com/sirupsen/logrus
-  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
+  version: 89742aefa4b206dcf400792f3bd35b542998eb3b
 - name: github.com/spf13/cobra
-  version: ef82de70bb3f60c65fb8eebacbb2d122ef517385
+  version: 1e58aa3361fd650121dceeedc399e7189c05674a
   subpackages:
   - doc
 - name: github.com/spf13/pflag
-  version: 583c0c0531f06d5278b7d917446061adc344b5cd
+  version: 3ebe029320b2676d667ae88da602a5f854788a8a
 - name: github.com/yudai/gojsondiff
   version: 7b1b7adf999dab73a6eb02669c3d82dbb27a3dd6
   subpackages:
