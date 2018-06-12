@@ -1,12 +1,12 @@
 ---
 title: Run Memcached using Private Registry
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: mc-using-private-registry-private-registry
     name: Quickstart
     parent: mc-private-registry-memcached
     weight: 10
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 
@@ -30,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-rc.0 ; docker tag kubedb/operator:0.8.0-rc.0 $DOCKER_REGISTRY/operator:0.8.0-rc.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0-rc.0
+$ docker pull kubedb/operator:0.8.0 ; docker tag kubedb/operator:0.8.0 $DOCKER_REGISTRY/operator:0.8.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0
 $ docker pull kubedb/memcached:1.5.4 ; docker tag kubedb/memcached:1.5.4 $DOCKER_REGISTRY/memcached:1.5.4 ; docker push $DOCKER_REGISTRY/memcached:1.5.4
 ```
 
@@ -103,7 +103,7 @@ spec:
 Now run the command to deploy this `Memcached` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/memcached/private-registry/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/memcached/private-registry/demo-2.yaml
 memcached "memcached-pvt-reg" created
 ```
 

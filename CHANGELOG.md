@@ -1,5 +1,19 @@
 # Change Log
 
+## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
+
+[Full Changelog](https://github.com/kubedb/cli/compare/0.8.0-rc.0...HEAD)
+
+**Merged pull requests:**
+
+- Prepare release script for 0.8.0 release [\#235](https://github.com/kubedb/cli/pull/235) ([tamalsaha](https://github.com/tamalsaha))
+- Add togglable tabs for Installation: Script & Helm [\#234](https://github.com/kubedb/cli/pull/234) ([sajibcse68](https://github.com/sajibcse68))
+- Removed left over documents of deprecated flag '--force' [\#233](https://github.com/kubedb/cli/pull/233) ([the-redback](https://github.com/the-redback))
+- Fix chart: Use resource 100m CPU to run operator pod [\#232](https://github.com/kubedb/cli/pull/232) ([the-redback](https://github.com/the-redback))
+- Use resource 100m to run operator pod [\#231](https://github.com/kubedb/cli/pull/231) ([the-redback](https://github.com/the-redback))
+- Improve installer [\#230](https://github.com/kubedb/cli/pull/230) ([tamalsaha](https://github.com/tamalsaha))
+- Add changelog [\#229](https://github.com/kubedb/cli/pull/229) ([tamalsaha](https://github.com/tamalsaha))
+
 ## [0.8.0-rc.0](https://github.com/kubedb/cli/tree/0.8.0-rc.0) (2018-05-28)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.8.0-beta.2...0.8.0-rc.0)
 

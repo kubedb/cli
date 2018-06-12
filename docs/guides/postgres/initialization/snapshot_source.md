@@ -1,12 +1,12 @@
 ---
 title: Initialize Postgres using Snapshot Source
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: pg-snapshot-source-initialization
     name: From Snapshot
     parent: pg-initialization-postgres
     weight: 15
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
@@ -44,7 +44,7 @@ Follow these steps to prepare this tutorial
 - Create Postgres object `script-postgres`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/postgres/initialization/script-postgres.yaml
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/initialization/script-postgres.yaml
     postgres "script-postgres" created
     ```
 
@@ -123,7 +123,7 @@ instant-snapshot   pg/script-postgres   Succeeded   12m
 Now, create the Postgres object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/postgres/initialization/recovered-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/initialization/recovered-postgres.yaml
 postgres "recovered-postgres" created
 ```
 

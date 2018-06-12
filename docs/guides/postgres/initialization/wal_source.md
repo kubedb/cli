@@ -1,12 +1,12 @@
 ---
 title: Initialize Postgres from WAL
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: pg-wal-source-initialization
     name: From WAL
     parent: pg-initialization-postgres
     weight: 20
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -94,7 +94,7 @@ Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL arch
 Now create this Postgres
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/postgres/initialization/replay-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/initialization/replay-postgres.yaml
 postgres "replay-postgres" created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of MongoDB
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: mg-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: mg-snapshot-mongodb
     weight: 10
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 
@@ -105,7 +105,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mongodb/snapshot/demo-4.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/snapshot/demo-4.yaml
 mongodb "mgo-scheduled" created
 ```
 

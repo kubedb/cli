@@ -1,12 +1,12 @@
 ---
 title: Run MySQL using Private Registry
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: my-using-private-registry-private-registry
     name: Quickstart
     parent: my-private-registry-mysql
     weight: 10
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -30,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0-rc.0 ; docker tag kubedb/operator:0.8.0-rc.0 $DOCKER_REGISTRY/operator:0.8.0-rc.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0-rc.0
+$ docker pull kubedb/operator:0.8.0 ; docker tag kubedb/operator:0.8.0 $DOCKER_REGISTRY/operator:0.8.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0
 $ docker pull kubedb/mysql:8.0 ; docker tag kubedb/mysql:8.0 $DOCKER_REGISTRY/mysql:8.0 ; docker push $DOCKER_REGISTRY/mysql:8.0
 $ docker pull kubedb/mysql-tools:8.0 ; docker tag kubedb/mysql-tools:8.0 $DOCKER_REGISTRY/mysql-tools:8.0 ; docker push $DOCKER_REGISTRY/mysql-tools:8.0
 ```
@@ -103,7 +103,7 @@ spec:
 Now run the command to deploy this `MySQL` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mysql/private-registry/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/private-registry/demo-2.yaml
 mysql "mysql-pvt-reg" created
 ```
 

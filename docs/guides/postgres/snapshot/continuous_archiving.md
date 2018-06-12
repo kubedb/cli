@@ -1,12 +1,12 @@
 ---
 title: Continuous Archiving of PostgreSQL
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: pg-continuous-archiving-snapshot
     name: WAL Archiving
     parent: pg-snapshot-postgres
     weight: 20
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -146,7 +146,7 @@ To configure this backend, following parameters are available:
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/postgres/snapshot/wal-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/snapshot/wal-postgres.yaml
 postgres "wal-postgres" created
 ```
 
