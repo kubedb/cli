@@ -1,12 +1,12 @@
 ---
 title: Instant Backup of PostgreSQL
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: pg-instant-backup-snapshot
     name: Instant Backup
     parent: pg-snapshot-postgres
     weight: 10
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -62,7 +62,7 @@ spec:
 If Postgres object `script-postgres` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/postgres/initialization/script-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/initialization/script-postgres.yaml
 postgres "script-postgres" created
 ```
 
@@ -164,7 +164,7 @@ To lean how to configure other storage destinations for snapshot data, please vi
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/postgres/snapshot/instant-snapshot.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/snapshot/instant-snapshot.yaml
 snapshot "instant-snapshot" created
 ```
 

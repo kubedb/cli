@@ -1,12 +1,12 @@
 ---
 title: Redis
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: redis-db
     name: Redis
     parent: databases
     weight: 35
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: concepts
 ---
 
@@ -62,7 +62,7 @@ spec:
 
 ### spec.storage
 
-Since 0.8.0-rc.0, `spec.storage` is a required field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
+Since 0.8.0, `spec.storage` is a required field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
 
 - `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
 - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.

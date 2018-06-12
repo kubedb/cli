@@ -1,11 +1,11 @@
 ---
 title: Kubedb Compare
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: kubedb-compare
     name: Kubedb Compare
     parent: reference
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: reference
 ---
 ## kubedb compare

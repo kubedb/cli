@@ -1,12 +1,12 @@
 ---
 title: Instant Backup of MySQL
 menu:
-  docs_0.8.0-rc.0:
+  docs_0.8.0:
     identifier: my-backup-and-restore-snapshot
     name: Instant Backup
     parent: my-snapshot-mysql
     weight: 10
-menu_name: docs_0.8.0-rc.0
+menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -34,7 +34,7 @@ demo          Active    1m
 kube-public   Active    1h
 kube-system   Active    1h
 
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mysql/snapshot/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/snapshot/demo-1.yaml
 mysql "mysql-infant" created
 ```
 
@@ -95,7 +95,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mysql/snapshot/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/snapshot/demo-2.yaml
 snapshot "snap-mysql-infant" created
 
 $ kubedb get snap -n demo
@@ -221,7 +221,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0-rc.0/docs/examples/mysql/snapshot/demo-3.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/snapshot/demo-3.yaml
 mysql "mysql-recovered" created
 ```
 
