@@ -41,15 +41,15 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
-    'cli': '0.8.0-rc.0',
-    'operator': '0.8.0-rc.0',
-    'apimachinery': '0.8.0-rc.0',
-    'postgres': '0.8.0-rc.0',
-    'elasticsearch': '0.8.0-rc.0',
-    'mysql': '0.1.0-rc.0',
-    'mongodb': '0.1.0-rc.0',
-    'memcached': '0.1.0-rc.0',
-    'redis': '0.1.0-rc.0',
+    'cli': '0.8.0',
+    'operator': '0.8.0',
+    'apimachinery': '0.8.0',
+    'postgres': '0.8.0',
+    'elasticsearch': '0.8.0',
+    'mysql': '0.1.0',
+    'mongodb': '0.1.0',
+    'memcached': '0.1.0',
+    'redis': '0.1.0',
 }
 KUTIL_VERSION = 'release-7.0'
 KUBEMON_VERSION = 'release-7.0'
