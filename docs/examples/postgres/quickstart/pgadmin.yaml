@@ -25,9 +25,9 @@ spec:
         - name: PGADMIN_DEFAULT_PASSWORD
           value: "admin"
         - name: PGADMIN_PORT
-          value: "5050"
+          value: "80"
         ports:
-        - containerPort: 5050
+        - containerPort: 80
           name: http
           protocol: TCP
 ---
