@@ -39,6 +39,12 @@ To install KubeDB, please follow the guide [here](https://kubedb.com/docs/latest
 ## Using KubeDB
 Want to learn how to use KubeDB? Please start [here](https://kubedb.com/docs/latest/guides/).
 
+## KubeDB API Clients
+You can use KubeDB api clients to programmatically access its CRD objects. Here are the supported clients:
+
+- Go: [https://github.com/kubedb/apimachinery](https://github.com/kubedb/apimachinery/tree/master/client/clientset/versioned)
+- Java: https://github.com/kubedb-client/java
+
 ## Contribution guidelines
 Want to help improve KubeDB? Please start [here](https://kubedb.com/docs/latest/welcome/contributing/).
 
