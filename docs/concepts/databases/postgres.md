@@ -110,6 +110,36 @@ If you want to use an existing secret please specify that when creating the Post
 
 This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
+### spec.env
+
+`spec.env` is an optional field that specifies the environment variables to pass to the Postgres docker image. To know about supported environment variables, please visit [here](https://hub.docker.com/_/postgres/).
+
+Note that, Kubedb does not allow `POSTGRES_PASSWORD` environment variable to set in `spec.env`. If you want to set the root password, please use `spec.databaseSecret` instead described earlier.
+
+If you try to set `POSTGRES_PASSWORD` environment variable in Postgres crd, Kubed operator will reject the request with following error,
+```
+Error from server (Forbidden): error when creating "./postgres.yaml": admission webhook "postgres.validators.kubedb.com" denied the request: environment variable POSTGRES_PASSWORD is forbidden to use in Postgres spec
+```
+
+Also note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment, Kubedb operator will reject the request with following error,
+```
+Error from server (BadRequest): error when applying patch:
+....
+for: "./postgres.yaml": admission webhook "postgres.validators.kubedb.com" denied the request: precondition failed for:
+....
+spec:map[env:[map[name:<env-name> value:<value>]]]].At least one of the following was changed:
+    apiVersion
+    kind
+    name
+    namespace
+    spec.version
+    spec.storage
+    spec.databaseSecret
+    spec.nodeSelector
+    spec.init
+    spec.env
+```
+
 ### spec.storage
 
 Since 0.8.0, `spec.storage` is a required field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
