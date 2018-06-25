@@ -108,7 +108,8 @@ $ kubectl create secret generic m1-auth -n demo --from-literal=user=root --from-
 secret "m1-auth" created
 ```
 
-```ini
+```console
+$ kubectl get secret -n demo m1-auth  -o yaml
 apiVersion: v1
 data:
   password: NnE4dV8yak1PVy1PT1pYaw==
