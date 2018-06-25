@@ -147,7 +147,7 @@ If you try to set `POSTGRES_PASSWORD` environment variable in Postgres crd, Kube
 Error from server (Forbidden): error when creating "./postgres.yaml": admission webhook "postgres.validators.kubedb.com" denied the request: environment variable POSTGRES_PASSWORD is forbidden to use in Postgres spec
 ```
 
-Also, note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment, Kubedb operator will reject the request with following error,
+Also, note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, Kubedb operator will reject the request with following error,
 
 ```ini
 Error from server (BadRequest): error when applying patch:

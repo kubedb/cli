@@ -134,7 +134,7 @@ If you try to set `MYSQL_ROOT_PASSWORD` environment variable in MySQL crd, Kubed
 Error from server (Forbidden): error when creating "./mysql.yaml": admission webhook "mysql.validators.kubedb.com" denied the request: environment variable MYSQL_ROOT_PASSWORD is forbidden to use in MySQL spec
 ```
 
-Also note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment, Kubedb operator will reject the request with following error,
+Also note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, Kubedb operator will reject the request with following error,
 ```
 Error from server (BadRequest): error when applying patch:
 ....
