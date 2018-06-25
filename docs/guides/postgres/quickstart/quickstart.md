@@ -211,7 +211,7 @@ This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
 > Note: Auth Secret name format: `{postgres-name}-auth`
 
-If you want to use custom password, please create the secret manually and specify that when creating the Postgres object using `spec.databaseSecret.secretName`.For more details see [here](/docs/concepts/databases/postgres.md#spec.databaseSecret).
+If you want to use custom password, please create the secret manually and specify that when creating the Postgres object using `spec.databaseSecret.secretName`.For more details see [here](/docs/concepts/databases/postgres.md#specdatabasesecret).
 
 Now, you can connect to this database from the pgAdmin dashboard using Service `quick-postgres.demo` and `postgres` superuser password.
 
