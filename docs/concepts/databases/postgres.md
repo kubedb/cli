@@ -110,6 +110,8 @@ If you want to use an existing secret please specify that when creating the Post
 
 This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
+Example:
+
 ### spec.env
 
 `spec.env` is an optional field that specifies the environment variables to pass to the Postgres docker image. To know about supported environment variables, please visit [here](https://hub.docker.com/_/postgres/).
