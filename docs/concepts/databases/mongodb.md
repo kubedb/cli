@@ -127,7 +127,7 @@ type: Opaque
 
 `spec.env` is an optional field that specifies the environment variables to pass to the MongoDB docker image. To know about supported environment variables, please visit [here](https://hub.docker.com/r/_/mongo/).
 
-Note that, Kubedb does not allow `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` environment variables to set in `spec.env`. If you want to custom user and password, please use `spec.databaseSecret` instead described earlier.
+Note that, Kubedb does not allow `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` environment variables to set in `spec.env`. If you want to use custom superuser and password, please use `spec.databaseSecret` instead described earlier.
 
 If you try to set `MONGO_INITDB_ROOT_USERNAME` or `MONGO_INITDB_ROOT_PASSWORD` environment variable in MongoDB crd, Kubed operator will reject the request with following error,
 
