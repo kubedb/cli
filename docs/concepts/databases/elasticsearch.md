@@ -44,6 +44,9 @@ spec:
     secretName: e1-auth
   certificateSecret:
     secretName: e1-cert
+  env:
+    - name:  CLUSTER_NAME
+      value: "my-elastic-cluster"
   storage:
     storageClassName: "standard"
     accessModes:
