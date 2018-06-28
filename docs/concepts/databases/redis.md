@@ -42,7 +42,7 @@ spec:
   doNotPause: true
   env:
     - name:  MY_ENV
-      value: "just-for-fun"
+      value: "env-example"
   monitor:
     agent: coreos-prometheus-operator
     prometheus:

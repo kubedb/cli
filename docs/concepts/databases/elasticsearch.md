@@ -151,25 +151,25 @@ If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` wit
 
 A list of the supported environment variables, their permission to use in Kubedb and their default value is given below.
 
-| Environment variables           | Permission to use | Default value                                                                                   |
-| ------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| CLUSTER_NAME                    | `allowed`         | `metadata.name`                                                                          |
-| NODE_NAME                       | `not allowed`     | Pod name                                                                                        |
-| NODE_MASTER                     | `not allowed`     | Kubedb set it based on `Elasticsearch` crd sepcification                                        |
-| NODE_DATA                       | `not allowed`     | Kubedb set it based on `Elasticsearch` crd sepcification                                        |
-| NETWORK_HOST                    | `allowed`         | `_site_`                                                                                        |
+| Environment variables           | Permission to use | Default value                                                                                      |
+| ------------------------------- | :---------------: | -------------------------------------------------------------------------------------------------- |
+| CLUSTER_NAME                    | `allowed`         | `metadata.name`                                                                                    |
+| NODE_NAME                       | `not allowed`     | Pod name                                                                                           |
+| NODE_MASTER                     | `not allowed`     | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
+| NODE_DATA                       | `not allowed`     | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
+| NETWORK_HOST                    | `allowed`         | `_site_`                                                                                           |
 | HTTP_ENABLE                     | `allowed`         | If `spec.topology` is not specified then `true`. Otherwise, `false` for Master node and Data node. |
-| HTTP_CORS_ENABLE                | `allowed`         | `true`                                                                                          |
-| HTTP_CORS_ALLOW_ORIGIN          | `allowed`         | `*`                                                                                             |
-| NUMBER_OF_MASTERS               | `allowed`         | `(replicas/2)+1`                                                                                |
-| MAX_LOCAL_STORAGE_NODES         | `allowed`         | `1`                                                                                             |
-| ES_JAVA_OPTS                    | `allowed`         | `-Xms128m -Xmx128m`                                                                             |
-| ES_PLUGINS_INSTALL              | `allowed`         | Not set                                                                                         |
-| SHARD_ALLOCATION_AWARENESS      | `allowed`         | `""`                                                                                            |
-| SHARD_ALLOCATION_AWARENESS_ATTR | `allowed`         | `""`                                                                                            |
-| MEMORY_LOCK                     | `allowed`         | `true`                                                                                          |
-| REPO_LOCATIONS                  | `allowed`         | `""`                                                                                            |
-| PROCESSORS                      | `allowed`         | `1`                                                                                             |
+| HTTP_CORS_ENABLE                | `allowed`         | `true`                                                                                             |
+| HTTP_CORS_ALLOW_ORIGIN          | `allowed`         | `*`                                                                                                |
+| NUMBER_OF_MASTERS               | `allowed`         | `(replicas/2)+1`                                                                                   |
+| MAX_LOCAL_STORAGE_NODES         | `allowed`         | `1`                                                                                                |
+| ES_JAVA_OPTS                    | `allowed`         | `-Xms128m -Xmx128m`                                                                                |
+| ES_PLUGINS_INSTALL              | `allowed`         | Not set                                                                                            |
+| SHARD_ALLOCATION_AWARENESS      | `allowed`         | `""`                                                                                               |
+| SHARD_ALLOCATION_AWARENESS_ATTR | `allowed`         | `""`                                                                                               |
+| MEMORY_LOCK                     | `allowed`         | `true`                                                                                             |
+| REPO_LOCATIONS                  | `allowed`         | `""`                                                                                               |
+| PROCESSORS                      | `allowed`         | `1`                                                                                                |
 
 Note that, Kubedb does not allow `NODE_NAME`, `NODE_MASTER`, and `NODE_DATA` environment variables to set in`spec.env`. Kubedb operator set them based on Elasticsearch crd specification.
 
