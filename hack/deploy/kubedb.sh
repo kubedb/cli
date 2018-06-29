@@ -19,6 +19,7 @@ crds=(
   redisversions
   snapshots
 )
+
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
 echo "checking kubeconfig context"
