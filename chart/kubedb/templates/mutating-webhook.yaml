@@ -90,17 +90,4 @@ webhooks:
     resources: ["memcacheds"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: snapshot.mutators.kubedb.com
-  clientConfig:
-    service:
-      namespace: default
-      name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/snapshots
-    caBundle: {{ b64enc .Values.apiserver.ca }}
-  rules:
-  - apiGroups: ["kubedb.com"]
-    apiVersions: ["*"]
-    resources: ["snapshots"]
-    operations: ["CREATE", "UPDATE"]
-  failurePolicy: Fail
 {{ end }}
