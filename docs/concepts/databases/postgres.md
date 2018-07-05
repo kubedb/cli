@@ -41,6 +41,9 @@ spec:
         bucket: kubedb
   databaseSecret:
     secretName: p1-auth
+  configFile:
+      configMap:
+        name: pg-custom-config
   storage:
     storageClassName: standard
     accessModes:
@@ -109,6 +112,10 @@ If not set, KubeDB operator creates a new Secret `{postgres-name}-auth` for stor
 If you want to use an existing secret please specify that when creating the Postgres object using `spec.databaseSecret.secretName`.
 
 This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
+
+### spec.configFile
+
+`spec.configFile` is an optional field that allows the users to provide a custom configuration file for PostgreSQL. This field accept a `v1.VolumeSource`. So you can use any kubernetes supported volume source such as `configMap`, `secret`, `hostPath` `gitRepo` `azureDisk` etc. To know more about how to use a custom configuration file see [here](/docs/guides/postgres/custom-config/using-custom-config.md).
 
 ### spec.storage
 
