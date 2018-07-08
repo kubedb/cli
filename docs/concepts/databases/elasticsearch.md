@@ -252,7 +252,7 @@ KubeDB supports taking periodic snapshots for Elasticsearch database. This is an
 
 ### spec.doNotPause
 
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this Elasticsearch object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting an Elasticsearch object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows the users to resume the database later.
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this Elasticsearch object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting an Elasticsearch object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
 
 
 ### spec.monitor

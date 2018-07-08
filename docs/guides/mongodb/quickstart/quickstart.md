@@ -234,7 +234,7 @@ bye
 
 ## Pause Database
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents the users from deleting the database as long as the `spec.doNotPause` is set to true. Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will nullify the delete operation. You can see this below:
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set to true. Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will nullify the delete operation. You can see this below:
 
 ```console
 $ kubedb delete mg mgo-quickstart -n demo
@@ -336,7 +336,7 @@ status:
   ...
 ```
 
-If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs, and Snapshots. So, the users still can access the stored data in the cloud storage buckets as well as PVCs.
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs, and Snapshots. So, users still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 

@@ -278,7 +278,7 @@ KubeDB supports taking periodic snapshots for Postgres database. This is an opti
 
 ### spec.doNotPause
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents the users from deleting the database as long as the `spec.doNotPause` is set `true`. If not set or set to false, deleting a Postgres object put the database into a dormant state. The StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows the users to resume the database later.
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set `true`. If not set or set to false, deleting a Postgres object put the database into a dormant state. The StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
 
 ### spec.monitor
 

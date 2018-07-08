@@ -93,7 +93,7 @@ spec:
 Here,
 
 - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
-- `spec.doNotPause` prevents the users from deleting this object if admission webhook is enabled.
+- `spec.doNotPause` prevents users from deleting this object if admission webhook is enabled.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MySQL.
 
 ```console
@@ -237,7 +237,7 @@ Run the following command to get `postgres` superuser password
 ## Pause Database
 
 KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature.
-If admission webhook is enabled, It prevents the users from deleting the database as long as the `spec.doNotPause` is set `true`.
+If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set `true`.
 
 In this tutorial, Postgres `quick-postgres` is created with `spec.doNotPause: true`. So, if you delete this Postgres object, admission webhook will nullify the delete operation.
 
@@ -345,7 +345,7 @@ spec:
   wipeOut: true
 ```
 
-If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs, and Snapshots. So, the users still can access the stored data in the cloud storage buckets as well as PVCs.
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs, and Snapshots. So, users still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 
