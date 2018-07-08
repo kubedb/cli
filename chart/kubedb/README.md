@@ -60,6 +60,7 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | false              |
 | `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | false              |
 | `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | ``                 |
+| `apiserver.enableStatusSubresource` | If true, uses status sub resource for crds                         | `false`            |
 | `enableAnalytics`                   | Send usage events to Google Analytics                              | `true`             |
 
 

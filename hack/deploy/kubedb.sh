@@ -106,6 +106,7 @@ export KUBEDB_IMAGE_PULL_POLICY=IfNotPresent
 export KUBEDB_ENABLE_ANALYTICS=true
 export KUBEDB_UNINSTALL=0
 export KUBEDB_PURGE=0
+export KUBEDB_ENABLE_STATUS_SUBRESOURCE=false
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
 export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/"
@@ -125,6 +126,7 @@ $ONESSL semver --check='<1.9.0' $KUBE_APISERVER_VERSION || {
   export KUBEDB_ENABLE_VALIDATING_WEBHOOK=true
   export KUBEDB_ENABLE_MUTATING_WEBHOOK=true
 }
+$ONESSL semver --check='<1.11.0' $KUBE_APISERVER_VERSION || { export KUBEDB_ENABLE_STATUS_SUBRESOURCE=true; }
 
 show_help() {
   echo "kubedb.sh - install kubedb operator"
@@ -140,6 +142,7 @@ show_help() {
   echo "    --run-on-master                run KubeDB operator on master"
   echo "    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs"
   echo "    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs"
+  echo "    --enable-status-subresource    If enabled, uses status sub resource for KubeDB crds"
   echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
   echo "    --operator-name                specify which kubedb operator to deploy (default: operator)"
   echo "    --uninstall                    uninstall KubeDB"
@@ -186,6 +189,13 @@ while test $# -gt 0; do
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
         export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
+      fi
+      shift
+      ;;
+    --enable-status-subresource*)
+      val=$(echo $1 | sed -e 's/^[^=]*=//g')
+      if [ "$val" = "false" ]; then
+        export KUBEDB_ENABLE_STATUS_SUBRESOURCE=false
       fi
       shift
       ;;
