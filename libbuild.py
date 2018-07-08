@@ -38,6 +38,8 @@ def _goenv():
 
 
 GOENV = _goenv()
+GOPATH = GOENV["GOPATH"]
+GOBIN = GOENV["GOPATH"] + '/bin'
 GOHOSTOS = GOENV["GOHOSTOS"]
 GOHOSTARCH = GOENV["GOHOSTARCH"]
 GOC = 'go'
@@ -148,7 +150,7 @@ def to_upper_camel(lower_snake):
 
 
 # ref: https://golang.org/cmd/go/
-def go_build(name, goos, goarch, main):
+def go_build(name, goos, goarch, main, compress=False, upx=False):
     linker_opts = []
     if BIN_MATRIX[name].get('go_version', False):
         md = metadata(REPO_ROOT, goos, goarch)
@@ -175,19 +177,61 @@ def go_build(name, goos, goarch, main):
     bindir = 'dist/{name}'.format(name=name)
     if not os.path.isdir(bindir):
         os.makedirs(bindir)
-    cmd = "GOOS={goos} GOARCH={goarch} {cgo_env} {goc} build -o {bindir}/{name}-{goos}-{goarch}{ext} {cgo} {ldflags} {main}".format(
-        name=name,
-        goc=GOC,
-        goos=goos,
-        goarch=goarch,
-        bindir=bindir,
-        cgo_env=cgo_env,
-        cgo=cgo,
-        ldflags=ldflags,
-        ext='.exe' if goos == 'windows' else '',
-        main=main
-    )
+    if goos == 'alpine':
+        repo_dir = REPO_ROOT[len(GOPATH):]
+        uid = check_output('id -u').strip()
+        cmd = "docker run --rm -u {uid} -v /tmp:/.cache -v {repo_root}:/go{repo_dir} -w /go{repo_dir} -e {cgo_env} golang:1.9-alpine {goc} build -o {bindir}/{name}-{goos}-{goarch}{ext} {cgo} {ldflags} {main}".format(
+            repo_root=REPO_ROOT,
+            repo_dir=repo_dir,
+            uid=uid,
+            name=name,
+            goc=GOC,
+            goos=goos,
+            goarch=goarch,
+            bindir=bindir,
+            cgo_env=cgo_env,
+            cgo=cgo,
+            ldflags=ldflags,
+            ext='.exe' if goos == 'windows' else '',
+            main=main
+        )
+    else:
+        cmd = "GOOS={goos} GOARCH={goarch} {cgo_env} {goc} build -o {bindir}/{name}-{goos}-{goarch}{ext} {cgo} {ldflags} {main}".format(
+            name=name,
+            goc=GOC,
+            goos=goos,
+            goarch=goarch,
+            bindir=bindir,
+            cgo_env=cgo_env,
+            cgo=cgo,
+            ldflags=ldflags,
+            ext='.exe' if goos == 'windows' else '',
+            main=main
+        )
     die(call(cmd, cwd=REPO_ROOT))
+
+    if upx and (goos in ['linux', 'darwin']) and (goarch in ['amd64', '386']):
+        cmd = "upx --brute {name}-{goos}-{goarch}{ext}".format(
+                name=name,
+                goos=goos,
+                goarch=goarch,
+                bindir=bindir,
+                ext='.exe' if goos == 'windows' else ''
+            )
+        die(call(cmd, cwd=REPO_ROOT + '/' + bindir))
+
+    if compress:
+        if goos in ['windows']:
+            cmd = "zip {name}-{goos}-{goarch}.zip {name}-{goos}-{goarch}{ext}"
+        else:
+            cmd = "bzip2 --keep -vf {name}-{goos}-{goarch}{ext}"
+        cmd = cmd.format(
+                name=name,
+                goos=goos,
+                goarch=goarch,
+                ext='.exe' if goos == 'windows' else ''
+            )
+        die(call(cmd, cwd=REPO_ROOT + '/' + bindir))
     print('')
 
 
