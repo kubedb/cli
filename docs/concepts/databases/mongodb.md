@@ -29,7 +29,7 @@ metadata:
   name: mgo1
   namespace: demo
 spec:
-  version: 3.4
+  version: "3.4"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -39,6 +39,9 @@ spec:
         storage: 50Mi
   databaseSecret:
     secretName: mgo1-auth
+  env:
+    - name: MONGO_INITDB_DATABASE
+      value: myDB
   nodeSelector:
     disktype: ssd
   init:
@@ -94,22 +97,62 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 ### spec.databaseSecret
 
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mongodb` super user. If not set, KubeDB operator creates a new Secret `{mongodb-object-name}-auth` for storing the password for `mongodb` superuser for each MongoDB object. If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mongodb` superuser. If not set, KubeDB operator creates a new Secret `{mongodb-object-name}-auth` for storing the password for `mongodb` superuser for each MongoDB object. If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`.
 
-This secret contains a `user` key and a `password` key which contains the `username` and `password` respectively for `mongodb` superuser. Example:
+This secret contains a `user` key and a `password` key which contains the `username` and `password` respectively for `mongodb` superuser.
+
+Example:
+
+```console
+$ kubectl create secret generic mgo1-auth -n demo --from-literal=user=jhon-doe --from-literal=password=6q8u_2jMOW-OOZXk
+secret "mgo1-auth" created
+```
 
 ```ini
 apiVersion: v1
 data:
   password: NnE4dV8yak1PVy1PT1pYaw==
-  user: cm9vdA==
+  user: amhvbi1kb2U=
 kind: Secret
 metadata:
   ...
   name: mgo1-auth
   namespace: demo
+  resourceVersion: "1702"
   ...
 type: Opaque
+```
+
+### spec.env
+
+`spec.env` is an optional field that specifies the environment variables to pass to the MongoDB docker image. To know about supported environment variables, please visit [here](https://hub.docker.com/r/_/mongo/).
+
+Note that, Kubedb does not allow `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` environment variables to set in `spec.env`. If you want to use custom superuser and password, please use `spec.databaseSecret` instead described earlier.
+
+If you try to set `MONGO_INITDB_ROOT_USERNAME` or `MONGO_INITDB_ROOT_PASSWORD` environment variable in MongoDB crd, Kubed operator will reject the request with following error,
+
+```ini
+Error from server (Forbidden): error when creating "./mongodb.yaml": admission webhook "mongodb.validators.kubedb.com" denied the request: environment variable MONGO_INITDB_ROOT_USERNAME is forbidden to use in MongoDB spec
+```
+
+Also, note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, Kubedb operator will reject the request with following error,
+
+```ini
+Error from server (BadRequest): error when applying patch:
+...
+for: "./mongodb.yaml": admission webhook "mongodb.validators.kubedb.com" denied the request: precondition failed for:
+...
+spec:map[env:[map[name:MONGO_INITDB_DATABASE value:patched]]]].At least one of the following was changed:
+    apiVersion
+    kind
+    name
+    namespace
+    spec.version
+    spec.storage
+    spec.databaseSecret
+    spec.nodeSelector
+    spec.init
+    spec.env
 ```
 
 ### spec.nodeSelector
@@ -142,7 +185,7 @@ spec:
         directory: .
 ```
 
-In the above example, KubeDB operator will launch a Job to execute all js script of `mongodb-init-script` repo in alphabetical  order once StatefulSet pods are running.
+In the above example, KubeDB operator will launch a Job to execute all js script of `mongodb-init-script` repo in alphabetical order once StatefulSet pods are running.
 
 #### Initialize from Snapshots
 
@@ -169,12 +212,12 @@ In the above example, MongoDB database will be initialized from Snapshot `snapsh
 KubeDB supports taking periodic snapshots for MongoDB database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly.
 
 - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
-- `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph , etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
-- `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+- `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph, etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
+- `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take a snapshot or initialize databases from a snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 ### spec.doNotPause
 
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this MongoDB object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MongoDB object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this MongoDB object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MongoDB object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
 
 ### spec.imagePullSecret
 

@@ -31,7 +31,7 @@ metadata:
   name: p1
   namespace: demo
 spec:
-  version: 9.6
+  version: "9.6"
   replicas: 2
   standbyMode: hot
   archiver:
@@ -41,6 +41,9 @@ spec:
         bucket: kubedb
   databaseSecret:
     secretName: p1-auth
+  env:
+    - name: POSTGRES_DB
+      value: pgdb
   storage:
     storageClassName: standard
     accessModes:
@@ -80,7 +83,7 @@ spec:
 
 ### spec.version
 
-`spec.version` is a required field specifying the version of PostgreSQL database. Currently the supported versions are:
+`spec.version` is a required field specifying the version of PostgreSQL database. Currently, the supported versions are:
 
  - `9.6.7`, `9.6`
  - `10.2`
@@ -104,11 +107,68 @@ Continuous archiving data will be stored in a folder called `{bucket}/{prefix}/k
 
 ### spec.databaseSecret
 
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` super user.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `postgres` superuser.
 If not set, KubeDB operator creates a new Secret `{postgres-name}-auth` for storing the password for `postgres` superuser for each Postgres object.
-If you want to use an existing secret please specify that when creating the Postgres object using `spec.databaseSecret.secretName`.
 
-This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
+If you want to use an existing or custom secret, please specify that when creating the Postgres object using `spec.databaseSecret.secretName`. This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
+
+Example:
+
+```console
+$ kubectl create secret generic p1-auth -n demo --from-literal=POSTGRES_PASSWORD=skd8Ad@doslasd
+secret "p1-auth" created
+```
+
+```console
+$ kubectl get secret -n demo p1-auth  -o yaml
+apiVersion: v1
+data:
+  POSTGRES_PASSWORD: c2tkOEFkQGRvc2xhc2Q=
+kind: Secret
+metadata:
+  creationTimestamp: 2018-06-25T06:28:25Z
+  name: p1-auth
+  namespace: demo
+  resourceVersion: "13081"
+  selfLink: /api/v1/namespaces/demo/secrets/p1-auth
+  uid: f6f6cc66-7840-11e8-b418-080027e35e51
+type: Opaque
+```
+
+### spec.env
+
+`spec.env` is an optional field that specifies the environment variables to pass to the Postgres docker image. To know about supported environment variables, please visit [here](https://hub.docker.com/_/postgres/).
+
+Note that, Kubedb does not allow `POSTGRES_PASSWORD` environment variable to set in `spec.env`. If you want to set the superuser password, please use `spec.databaseSecret` instead described earlier.
+
+If you try to set `POSTGRES_PASSWORD` environment variable in Postgres crd, Kubed operator will reject the request with following error,
+
+```ini
+Error from server (Forbidden): error when creating "./postgres.yaml": admission webhook "postgres.validators.kubedb.com" denied the request: environment variable POSTGRES_PASSWORD is forbidden to use in Postgres spec
+```
+
+Also, note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, Kubedb operator will reject the request with following error,
+
+```ini
+Error from server (BadRequest): error when applying patch:
+...
+for: "./postgres.yaml": admission webhook "postgres.validators.kubedb.com" denied the request: precondition failed for:
+...
+At least one of the following was changed:
+    apiVersion
+    kind
+    name
+    namespace
+    spec.version
+    spec.standby
+    spec.streaming
+    spec.archiver
+    spec.databaseSecret
+    spec.storage
+    spec.nodeSelector
+    spec.init
+    spec.env
+```
 
 ### spec.storage
 
@@ -124,7 +184,6 @@ To learn how to configure `spec.storage`, please visit the links below:
 ### spec.nodeSelector
 
 `spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
-
 
 ### spec.init
 
@@ -152,7 +211,7 @@ spec:
         repository: "https://github.com/kubedb/postgres-init-scripts.git"
 ```
 
-In the above example, Postgres will execute provided script once database is running. `directory: .` is used to get repository contents directly in mount path.
+In the above example, Postgres will execute provided script once the database is running. `directory: .` is used to get repository contents directly in mount path.
 
 #### Initialize from Snapshots
 
@@ -178,8 +237,7 @@ spec:
 
 In the above example, PostgreSQL database will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize PostgreSQL once StatefulSet pods are running.
 
-When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, lets say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use same credential for superuser of `postgres-old`. Otherwise, restoration process will fail.
-
+When initializing from Snapshot, superuser `postgres` must have to match with previous one. For example, let's say, Snapshot `snapshot-xyz` is for Postgres `postgres-old`. In this case, new Postgres `postgres-db` should use the same credential for superuser of `postgres-old`. Otherwise, restoration process will fail.
 
 #### Initialize from WAL archive
 
@@ -207,22 +265,20 @@ spec:
 
 In the above example, PostgreSQL database will be initialized from WAL archive.
 
-When initializing from WAL archive, superuser `postgres` must have to match with previous one. For example, lets say, we want to initialize this
-database from `postgres-old` WAL archive. In this case, superuser of new Postgres should use same password as `postgres-old`. Otherwise, restoration process will be failed.
+When initializing from WAL archive, superuser `postgres` must have to match with previous one. For example, let's say, we want to initialize this
+database from `postgres-old` WAL archive. In this case, superuser of new Postgres should use the same password as `postgres-old`. Otherwise, restoration process will be failed.
 
 ### spec.backupSchedule
 
 KubeDB supports taking periodic snapshots for Postgres database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly.
 
  - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
- - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph , etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
- - `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
-
+ - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph, etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
+ - `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take a snapshot or initialize databases from a snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 ### spec.doNotPause
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set `true`. If not set or set to false, deleting a Postgres object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
-
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set `true`. If not set or set to false, deleting a Postgres object put the database into a dormant state. The StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
 
 ### spec.monitor
 
@@ -231,11 +287,9 @@ PostgreSQL managed by KubeDB can be monitored with builtin-Prometheus and CoreOS
 - [Monitor PostgreSQL with builtin Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md)
 - [Monitor PostgreSQL with CoreOS Prometheus operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md)
 
-
 ### spec.resources
 
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
-
 
 ## Next Steps
 

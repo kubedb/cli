@@ -29,7 +29,7 @@ metadata:
   name: m1
   namespace: demo
 spec:
-  version: 8.0
+  version: "8.0"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -39,6 +39,9 @@ spec:
         storage: 50Mi
   databaseSecret:
     secretName: m1-auth
+  env:
+    - name:  MYSQL_DATABASE
+      value: myDB
   nodeSelector:
     disktype: ssd
   init:
@@ -94,11 +97,19 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 ### spec.databaseSecret
 
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` super user. If not set, KubeDB operator creates a new Secret `{mysql-object-name}-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials for `mysql` superuser. If not set, KubeDB operator creates a new Secret `{mysql-object-name}-auth` for storing the password for `mysql` superuser for each MySQL object. If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`.
 
-This secret contains a `user` key and a `password` key which contains the `username` and `password` respectively for `mysql` root user. Here the value of `user` key is fixed to be `root`. Example:
+This secret contains a `user` key and a `password` key which contains the `username` and `password` respectively for `mysql` root user. Here, the value of `user` key is fixed to be `root`.
 
-```ini
+Example:
+
+```console
+$ kubectl create secret generic m1-auth -n demo --from-literal=user=root --from-literal=password=6q8u_2jMOW-OOZXk
+secret "m1-auth" created
+```
+
+```console
+$ kubectl get secret -n demo m1-auth  -o yaml
 apiVersion: v1
 data:
   password: NnE4dV8yak1PVy1PT1pYaw==
@@ -110,6 +121,36 @@ metadata:
   namespace: demo
   ...
 type: Opaque
+```
+
+### spec.env
+
+`spec.env` is an optional field that specifies the environment variables to pass to the MySQL docker image. To know about supported environment variables, please visit [here](https://hub.docker.com/_/mysql/).
+
+Note that, Kubedb does not allow `MYSQL_ROOT_PASSWORD`, `MYSQL_ALLOW_EMPTY_PASSWORD`, `MYSQL_RANDOM_ROOT_PASSWORD`, and `MYSQL_ONETIME_PASSWORD` environment variables to set in `spec.env`. If you want to set the root password, please use `spec.databaseSecret` instead described earlier.
+
+If you try to set any of the forbidden environment variables i.e. `MYSQL_ROOT_PASSWORD` in MySQL crd, Kubed operator will reject the request with following error,
+```
+Error from server (Forbidden): error when creating "./mysql.yaml": admission webhook "mysql.validators.kubedb.com" denied the request: environment variable MYSQL_ROOT_PASSWORD is forbidden to use in MySQL spec
+```
+
+Also note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, Kubedb operator will reject the request with following error,
+```
+Error from server (BadRequest): error when applying patch:
+....
+for: "./mysql.yaml": admission webhook "mysql.validators.kubedb.com" denied the request: precondition failed for:
+....
+spec:map[env:[map[name:<env-name> value:<value>]]]].At least one of the following was changed:
+    apiVersion
+    kind
+    name
+    namespace
+    spec.version
+    spec.storage
+    spec.databaseSecret
+    spec.nodeSelector
+    spec.init
+    spec.env
 ```
 
 ### spec.nodeSelector
@@ -142,7 +183,7 @@ spec:
         directory: .
 ```
 
-In the above example, KubeDB operator will launch a Job to execute all sql script of `mysql-init-script` repo in alphabetical  order once StatefulSet pods are running.
+In the above example, KubeDB operator will launch a Job to execute all sql script of `mysql-init-script` repo in alphabetical order once StatefulSet pods are running.
 
 #### Initialize from Snapshots
 
@@ -169,12 +210,12 @@ In the above example, MySQL database will be initialized from Snapshot `snapshot
 KubeDB supports taking periodic snapshots for MySQL database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly.
 
 - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
-- `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph , etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
-- `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+- `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph, etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
+- `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take a snapshot or initialize databases from a snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
 ### spec.doNotPause
 
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this MySQL object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MySQL object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows user to resume the database later.
+`spec.doNotPause` is an optional field that tells KubeDB operator that if this MySQL object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MySQL object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
 
 ### spec.imagePullSecret
 
