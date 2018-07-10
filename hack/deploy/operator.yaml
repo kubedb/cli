@@ -34,6 +34,7 @@ spec:
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
+        - --enable-status-subresource=${KUBEDB_ENABLE_STATUS_SUBRESOURCE}
         - --enable-analytics=${KUBEDB_ENABLE_ANALYTICS}
         env:
         - name: OPERATOR_NAMESPACE

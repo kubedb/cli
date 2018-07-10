@@ -66,6 +66,7 @@ options:
     --run-on-master                run KubeDB operator on master
     --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs
     --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs
+    --enable-status-subresource    If enabled, uses status sub resource for crds
     --enable-analytics             send usage events to Google Analytics (default: true)
     --uninstall                    uninstall KubeDB
     --purge                        purges KubeDB crd objects and crds
@@ -103,6 +104,8 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/hack/deploy/kube
     | bash -s -- --enable-validating-webhook=false --enable-mutating-webhook=false [--rbac]
 ```
 
+KubeDB 0.9.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
+
 </div>
 <div class="tab-pane fade" id="helm" role="tabpanel" aria-labelledby="helm-tab">
 
@@ -117,11 +120,18 @@ $ helm search appscode/kubedb
 NAME            CHART VERSION APP VERSION   DESCRIPTION
 appscode/kubedb 0.8.0  0.8.0  KubeDB by AppsCode - Production ready databases...
 
-# Kubernetes 1.9.0 or later
+# Kubernetes 1.9.x - 1.10.x
 $ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
   --set apiserver.ca="$(onessl get kube-ca)" \
   --set apiserver.enableValidatingWebhook=true \
   --set apiserver.enableMutatingWebhook=true
+
+# Kubernetes 1.11.0 or later
+$ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
+  --set apiserver.ca="$(onessl get kube-ca)" \
+  --set apiserver.enableValidatingWebhook=true \
+  --set apiserver.enableMutatingWebhook=true \
+  --set apiserver.enableStatusSubresource=true
 ```
 
 To install `onessl`, run the following commands:

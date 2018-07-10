@@ -93,7 +93,7 @@ spec:
 Here,
 
 - `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
-- `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
+- `spec.doNotPause` prevents users from deleting this object if admission webhook is enabled.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MySQL.
 
 ```console
@@ -137,17 +137,17 @@ Service:
   Name: quick-postgres
   Type: ClusterIP
   IP:   10.104.43.68
-  Port: api	5432/TCP
+  Port: api    5432/TCP
 
 Service:
   Name: quick-postgres-replicas
   Type: ClusterIP
   IP:   10.96.98.122
-  Port: api	5432/TCP
+  Port: api    5432/TCP
 
 Database Secret:
-  Name:	quick-postgres-auth
-  Type:	Opaque
+  Name:    quick-postgres-auth
+  Type:    Opaque
   Data
   ====
   POSTGRES_PASSWORD:    16 bytes
@@ -211,7 +211,9 @@ This Secret contains `postgres` superuser password as `POSTGRES_PASSWORD` key.
 
 > Note: Auth Secret name format: `{postgres-name}-auth`
 
-Now, you can connect to this database from the pgAdmin dashboard using Service `quick-postgres.demo` and `postgres` superuser password .
+If you want to use custom password, please create the secret manually and specify that when creating the Postgres object using `spec.databaseSecret.secretName`. For more details see [here](/docs/concepts/databases/postgres.md#specdatabasesecret).
+
+Now, you can connect to this database from the pgAdmin dashboard using Service `quick-postgres.demo` and `postgres` superuser password.
 
 Connection information:
 
@@ -222,7 +224,7 @@ Connection information:
 - database: `postgres`
 - username: `postgres`
 
-Run following command to get `postgres` superuser password
+Run the following command to get `postgres` superuser password
 
     $ kubectl get secrets -n demo quick-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
 
@@ -235,7 +237,7 @@ Run following command to get `postgres` superuser password
 ## Pause Database
 
 KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature.
-If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set `true`.
+If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set `true`.
 
 In this tutorial, Postgres `quick-postgres` is created with `spec.doNotPause: true`. So, if you delete this Postgres object, admission webhook will nullify the delete operation.
 
@@ -254,7 +256,7 @@ spec:
 
 Now, if you delete the Postgres object, KubeDB operator will create a matching DormantDatabase object. KubeDB operator watches for DormantDatabase objects and it will take necessary steps when a DormantDatabase object is created.
 
-KubeDB operator will delete the StatefulSet and its Pods, but leaves the Secret, PVCs unchanged.
+KubeDB operator will delete the StatefulSet and its Pods but leaves the Secret, PVCs unchanged.
 
 ```console
 $ kubedb delete pg -n demo quick-postgres
@@ -269,9 +271,9 @@ NAME             STATUS    AGE
 quick-postgres   Paused    19s
 ```
 
-In KubeDB parlance, we say that Postgres `quick-postgres`  has entered into dormant state.
+In KubeDB parlance, we say that Postgres `quick-postgres`  has entered into the dormant state.
 
-Lets see, what we have in this DormantDatabase object
+Let's see, what we have in this DormantDatabase object
 
 ```yaml
 $ kubedb get drmn -n demo quick-postgres -o yaml
@@ -335,7 +337,7 @@ postgres "quick-postgres" created
 
 ## WipeOut DormantDatabase
 
-You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Elasticsearch` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
+You can wipe out a DormantDatabase while deleting the object by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `PostgresSQL` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
 $ kubedb edit drmn -n demo quick-postgres
@@ -343,7 +345,7 @@ spec:
   wipeOut: true
 ```
 
-If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs, and Snapshots. So, users still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 

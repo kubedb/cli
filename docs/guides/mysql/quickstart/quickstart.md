@@ -192,7 +192,8 @@ status:
 ```
 
 Please note that KubeDB operator has created a new Secret called `mysql-quickstart-auth` *(format: {mysql-object-name}-auth)* for storing the password for `mysql` superuser. This secret contains a `user` key which contains the *username* for MySQL superuser and a `password` key which contains the *password* for MySQL superuser.
-If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password` and also make sure of using `root` as value of `user`.
+
+If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password` and also make sure of using `root` as value of `user`. For more details see [here](/docs/concepts/databases/mysql.md#specdatabasesecret).
 
 Now, you can connect to this database from the phpMyAdmin dashboard using the database pod IP and and `mysql` user password.
 

@@ -34,6 +34,9 @@ spec:
   nodeSelector:
     disktype: ssd
   doNotPause: true
+  env:
+    - name:  MY_ENV
+      value: "env-example"
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
@@ -69,6 +72,27 @@ spec:
 ### spec.imagePullSecret
 
 `KubeDB` provides the flexibility of deploying Memcached database from a private Docker registry. To learn how to deploym Memcached from a private registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
+
+### spec.env
+
+`spec.env` is an optional field that specifies the environment variables to pass to the Memcached docker image.
+
+Note that, Kubedb does not allow to update the environment variables. If you try to update environment variables, Kubedb operator will reject the request with following error,
+
+```ini
+Error from server (BadRequest): error when applying patch:
+...
+for: "./mc.yaml": admission webhook "memcached.validators.kubedb.com" denied the request: precondition failed for:
+...
+At least one of the following was changed:
+	apiVersion
+	kind
+	name
+	namespace
+	spec.version
+	spec.nodeSelector
+	spec.env
+```
 
 ### spec.monitor
 

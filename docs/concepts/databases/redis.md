@@ -40,6 +40,9 @@ spec:
   nodeSelector:
     disktype: ssd
   doNotPause: true
+  env:
+    - name:  MY_ENV
+      value: "env-example"
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
@@ -82,7 +85,29 @@ To learn how to configure `spec.storage`, please visit the links below:
 
 ### spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying Redis database from a private Docker registry. To learn how to deploym Redis from a private registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying Redis database from a private Docker registry. To learn how to deploy Redis from a private registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
+
+### spec.env
+
+`spec.env` is an optional field that specifies the environment variables to pass to the Redis docker image.
+
+Note that, Kubedb does not allow to update the environment variables. If you try to update environment variables, Kubedb operator will reject the request with following error,
+
+```ini
+Error from server (BadRequest): error when applying patch:
+...
+for: "./redis.yaml": admission webhook "redis.validators.kubedb.com" denied the request: precondition failed for:
+...
+At least one of the following was changed:
+	apiVersion
+	kind
+	name
+	namespace
+	spec.version
+	spec.storage
+	spec.nodeSelector
+	spec.env
+```
 
 ### spec.monitor
 
