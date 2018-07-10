@@ -122,12 +122,14 @@ appscode/kubedb 0.8.0  0.8.0  KubeDB by AppsCode - Production ready databases...
 
 # Kubernetes 1.9.x - 1.10.x
 $ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
+  --namespace kube-system \
   --set apiserver.ca="$(onessl get kube-ca)" \
   --set apiserver.enableValidatingWebhook=true \
   --set apiserver.enableMutatingWebhook=true
 
 # Kubernetes 1.11.0 or later
 $ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
+  --namespace kube-system \
   --set apiserver.ca="$(onessl get kube-ca)" \
   --set apiserver.enableValidatingWebhook=true \
   --set apiserver.enableMutatingWebhook=true \
