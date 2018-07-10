@@ -1,14 +1,14 @@
 apiVersion: kubedb.com/v1alpha1
-kind: Postgres
+kind: MySQL
 metadata:
-  name: custom-postgres
+  name: custom-mysql
   namespace: demo
 spec:
-  version: "9.6"
+  version: "8.0"
+  doNotPause: true
   configSource:
       configMap:
-        name: pg-custom-config
-  doNotPause: true
+        name: my-custom-config
   storage:
     storageClassName: "standard"
     accessModes:

@@ -39,6 +39,9 @@ spec:
         storage: 50Mi
   databaseSecret:
     secretName: m1-auth
+  configSource:
+      configMap:
+        name: my-custom-config
   env:
     - name:  MYSQL_DATABASE
       value: myDB
@@ -122,6 +125,10 @@ metadata:
   ...
 type: Opaque
 ```
+
+### spec.configSource
+
+`spec.configSource` is an optional field that allows the users to provide a custom configuration file for MySQL. This field accept a `v1.VolumeSource`. So you can use any kubernetes supported volume source such as `configMap`, `secret`, `hostPath` `gitRepo` `azureDisk` etc. To know more about how to use a custom configuration file see [here](/docs/guides/mysql/custom-config/using-custom-config.md).
 
 ### spec.env
 

@@ -1,5 +1,5 @@
 ---
-title: Run PostgreSQL with Custom Configuration File
+title: Run PostgreSQL with Custom Configuration
 menu:
   docs_0.8.0:
     identifier: pg-custom-config-quickstart
@@ -39,7 +39,7 @@ demo    Active  5s
 
 PostgreSQL allow to configure database via **Configuration File**, **SQL** and **Shell**. The most fundamental way is to edit configuration file `postgresql.conf`. When PostgreSQL docker image start, it uses the configurations specified in `postgresql.conf` file. This file can have `include` directive which allows to include configuration from other files. One of these `include` directives is `include_if_exists` which accept a file reference. If the referenced file exists, it includes configuration from the file. Otherwise, it uses default configurations. KubeDB takes this opportunity to enable the users to provide their custom configuration. To know more about configuring PostgreSQL see [here](https://www.postgresql.org/docs/current/static/runtime-config.html).
 
-At first, you have to create a config file named `user.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume while creating Postgres crd in `spec.configFile` section. Kubedb will mount this volume into `/etc/config/` directory of the database pod which will be referenced by `include_if_exists` directive.
+At first, you have to create a config file named `user.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Postgres crd. KubeDB will mount this volume into `/etc/config/` directory of the database pod which will be referenced by `include_if_exists` directive.
 
 In this tutorial, we will configure `max_connections` and `shared_buffers` via a custom config file. We will use configMap as volume source.
 
@@ -79,7 +79,7 @@ metadata:
   ...
 ```
 
-Now, create Postgres crd specifying `spec.configFile` field.
+Now, create Postgres crd specifying `spec.configSource` field.
 
 ```console
 $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/custom-config/pg-custom-config.yaml

@@ -1,5 +1,5 @@
 ---
-title: Run PostgreSQL with Custom Configuration File
+title: Run PostgreSQL with Custom Configuration
 menu:
   docs_0.8.0:
     identifier: pg-custom-config
