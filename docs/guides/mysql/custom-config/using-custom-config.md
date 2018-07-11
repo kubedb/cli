@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using Custom Configuration File
 
-KubeDB operator supports providing a custom configuration file for MySQL. This tutorial will show you how to use KubeDB to run a  MySQL database with a custom configuration file.
+KubeDB supports providing a custom configuration file for MySQL. This tutorial will show you how to use KubeDB to run a  MySQL database with a custom configuration file.
 
 ## Before You Begin
 

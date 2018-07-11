@@ -40,6 +40,9 @@ spec:
   nodeSelector:
     disktype: ssd
   doNotPause: true
+  configSource:
+      configMap:
+        name: rd-custom-config
   env:
     - name:  MY_ENV
       value: "env-example"
@@ -86,6 +89,10 @@ To learn how to configure `spec.storage`, please visit the links below:
 ### spec.imagePullSecret
 
 `KubeDB` provides the flexibility of deploying Redis database from a private Docker registry. To learn how to deploy Redis from a private registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
+
+### spec.configSource
+
+`spec.configSource` is an optional field that allows the users to provide a custom configuration file for Redis. This field accept a `v1.VolumeSource`. So you can use any kubernetes supported volume source such as `configMap`, `secret`, `hostPath` `gitRepo` `azureDisk` etc. To know more about how to use a custom configuration file see [here](/docs/guides/redis/custom-config/using-custom-config.md).
 
 ### spec.env
 
