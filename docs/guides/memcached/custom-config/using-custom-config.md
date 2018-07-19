@@ -36,11 +36,11 @@ demo    Active  5s
 
 ## Overview
 
-Memcached does not allow to configure database via any configuration file. However, configuration parameters can be sent as arguments while starting the memcached docker image. To keep similarity with other KubeDB supported databases which support configuration through a config file, KubeBD takes help of an additional executable script. This script parses the configuration file then send them as arguments of `docker-entrypoint.sh` script which starts memcached server.
+Memcached does not allow to configure database via any configuration file. However, configuration parameters can be sent as arguments while starting the memcached docker image. To keep similarity with other KubeDB supported databases which support configuration through a config file, KubeBD has added an additional executable script on top of the official memcached docker image. This script parses the configuration file then send them as arguments of memcached binary.
 
 To know more about configuring Memcached server see [here](https://github.com/memcached/memcached/wiki/ConfiguringServer).
 
-At first, you have to create a config file named `memcached.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Memcached crd. KubeDB will mount this volume into `/usr/config` directory of the database pod. KubeDB will also create a configMap with name `{memcached crd name}-config-parser` which contain a shell script named `config-parser.sh`. This configMap will be mounted in `/usr/config-parser` directory of database pod with `defaultMode: 0744` that makes the script executable. Then KubeDB will start the pod executing the `config-parser.sh` script.
+At first, you have to create a config file named `memcached.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Memcached crd. KubeDB will mount this volume into `/usr/config` directory of the database pod.
 
 In this tutorial, we will configure [max_connections](https://github.com/memcached/memcached/blob/ee171109b3afe1f30ff053166d205768ce635342/doc/protocol.txt#L672) and [limit_maxbytes](https://github.com/memcached/memcached/blob/ee171109b3afe1f30ff053166d205768ce635342/doc/protocol.txt#L720) via a custom config file. We will use configMap as volume source.
 
