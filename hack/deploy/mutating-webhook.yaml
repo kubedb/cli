@@ -17,7 +17,7 @@ webhooks:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["elasticsearches"]
-    operations: ["CREATE", "UPDATE", "DELETE"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 - name: postgres.mutators.kubedb.com
   clientConfig:
@@ -30,7 +30,7 @@ webhooks:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["postgreses"]
-    operations: ["CREATE", "UPDATE", "DELETE"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 - name: mysql.mutators.kubedb.com
   clientConfig:
@@ -43,7 +43,7 @@ webhooks:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["mysqls"]
-    operations: ["CREATE", "UPDATE", "DELETE"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 - name: mongodb.mutators.kubedb.com
   clientConfig:
@@ -56,7 +56,7 @@ webhooks:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["mongodbs"]
-    operations: ["CREATE", "UPDATE", "DELETE"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 - name: redis.mutators.kubedb.com
   clientConfig:
@@ -69,7 +69,7 @@ webhooks:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["redises"]
-    operations: ["CREATE", "UPDATE", "DELETE"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 - name: memcached.mutators.kubedb.com
   clientConfig:
@@ -82,5 +82,5 @@ webhooks:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
     resources: ["memcacheds"]
-    operations: ["CREATE", "UPDATE", "DELETE"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
