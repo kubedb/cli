@@ -48,7 +48,8 @@ rules:
   - ""
   resources:
   - pods
-  verbs: ["deletecollection", "get", "list", "patch", "watch"]
+  verbs:
+  - "*"
 - apiGroups:
   - ""
   resources:
