@@ -38,7 +38,7 @@ This tutorial assumes that you are familiar with Elasticsearch concept.
 
 ## Deploy CoreOS-Prometheus Operator
 
-Run the following command to CoreOS-Prometheus operator.
+Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
