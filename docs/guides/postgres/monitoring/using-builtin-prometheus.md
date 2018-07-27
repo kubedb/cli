@@ -213,12 +213,10 @@ spec:
           emptyDir: {}
 ```
 
-#### In RBAC enabled cluster
-
-If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes
+Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -249,26 +247,7 @@ NAME                AGE
 prometheus-server   2m
 ```
 
-#### In RBAC \*not\* enabled cluster
-
-If RBAC *is not* enabled, Run the following command to deploy prometheus in kubernetes
-
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-deployment "prometheus-server" created
-service "prometheus-service" created
-```
-
-Watch the Deployment’s Pods.
-
-```console
-$ kubectl get pods -n demo --selector=app=prometheus-server --watch
-NAME                                 READY     STATUS              RESTARTS   AGE
-prometheus-server-6b8476d6c5-kx78z   0/1       ContainerCreating   0          1m
-prometheus-server-6b8476d6c5-kx78z   1/1       Running   0         1m
-```
-
-#### Prometheus Dashboard
+### Prometheus Dashboard
 
 Now open prometheus dashboard on browser by running `minikube service prometheus-service -n demo`.
 
@@ -298,10 +277,9 @@ $ kubectl delete -n demo pg/builtin-prom-postgres
 $ kubectl patch -n demo drmn/builtin-prom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
 $ kubectl delete -n demo drmn/builtin-prom-postgres
 
-# In rbac enabled cluster,
-# $ kubectl delete clusterrole prometheus-server
-# $ kubectl delete clusterrolebindings  prometheus-server
-# $ kubectl delete serviceaccounts -n demo  prometheus-server
+$ kubectl delete clusterrole prometheus-server
+$ kubectl delete clusterrolebindings  prometheus-server
+$ kubectl delete serviceaccounts -n demo  prometheus-server
 
 $ kubectl delete ns demo
 ```
