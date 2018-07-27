@@ -164,11 +164,9 @@ To see the detailed configuration options, visit [here](https://github.com/kubed
 If you are installing KubeDB on a GKE cluster, you will need cluster admin permissions to install KubeDB operator. Run the following command to grant admin permision to the cluster.
 
 ```console
-# get current google identity
-$ gcloud info | grep Account
-Account: [user@example.org]
-
-$ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=user@example.org
+$ kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
+  --clusterrole=cluster-admin \
+  --user="$(gcloud config get-value core/account)"
 ```
 
 
