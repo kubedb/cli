@@ -62,7 +62,7 @@ rules:
   - ""
   resources:
   - configmaps
-  verbs: ["create", "delete", "get", "update"]
+  verbs: ["create", "delete", "get", "update", "list", "patch"]
 - apiGroups:
   - ""
   resources:
