@@ -271,12 +271,10 @@ spec:
           emptyDir: {}
 ```
 
-### In RBAC enabled cluster
-
-If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes:
+Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -297,22 +295,6 @@ $ kubectl get serviceaccounts -n demo
 NAME                SECRETS   AGE
 default             1         48m
 prometheus-server   1         1m
-```
-
-### In RBAC \*not\* enabled cluster
-
-If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
-
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-deployment "prometheus-server" created
-service "prometheus-service" created
-
-
-$ kubectl get pods -n demo
-NAME                                 READY     STATUS    RESTARTS   AGE
-prometheus-server-79c7cf44fc-xgjp7   1/1       Running   0          26s
-redis-mon-prometheus-0               2/2       Running   0          13m
 ```
 
 ### Prometheus Dashboard
@@ -351,10 +333,9 @@ $ kubectl delete -n demo rd/redis-mon-prometheus
 $ kubectl patch -n demo drmn/redis-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
 $ kubectl delete -n demo drmn/redis-mon-prometheus
 
-# In rbac enabled cluster,
-# $ kubectl delete clusterrole prometheus-server
-# $ kubectl delete clusterrolebindings  prometheus-server
-# $ kubectl delete serviceaccounts -n demo  prometheus-server
+$ kubectl delete clusterrole prometheus-server
+$ kubectl delete clusterrolebindings  prometheus-server
+$ kubectl delete serviceaccounts -n demo  prometheus-server
 
 $ kubectl delete ns demo
 namespace "demo" deleted
