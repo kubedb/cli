@@ -1,0 +1,39 @@
+apiVersion: v1
+items:
+- apiVersion: kubedb.com/v1alpha1
+  kind: Snapshot
+  metadata:
+    clusterName: ""
+    creationTimestamp: 2018-07-30T11:37:29Z
+    finalizers:
+    - kubedb.com
+    generation: 1
+    labels:
+      kubedb.com/kind: Etcd
+      kubedb.com/name: etcdb
+    name: snapshot-et
+    namespace: demo
+    resourceVersion: "9741"
+    selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/snapshot-et
+    uid: f0db82e8-93ec-11e8-8563-080027665e99
+  spec:
+    databaseName: etcdb
+    gcs:
+      bucket: kubedbetcd
+      prefix: etcdb
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
+    storageSecretName: gcs-secret
+  status:
+    completionTime: 2018-07-30T11:37:55Z
+    phase: Succeeded
+    startTime: 2018-07-30T11:37:32Z
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
