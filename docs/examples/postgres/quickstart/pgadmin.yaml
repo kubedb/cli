@@ -16,14 +16,18 @@ spec:
         app: pgadmin
     spec:
       containers:
-      - args:
-        - admin
-        - admin
-        image: appscode/pgadmin:4-1.0
+      - image: dpage/pgadmin4:3
         imagePullPolicy: Always
         name: pgadmin
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: "admin"
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: "admin"
+        - name: PGADMIN_PORT
+          value: "80"
         ports:
-        - containerPort: 5050
+        - containerPort: 80
           name: http
           protocol: TCP
 ---
