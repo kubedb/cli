@@ -3,21 +3,22 @@ items:
 - apiVersion: kubedb.com/v1alpha1
   kind: Etcd
   metadata:
-    annotations:
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"kubedb.com/v1alpha1","kind":"Etcd","metadata":{"annotations":{},"name":"etcdb","namespace":"demo"},"spec":{"replicas":3,"storage":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}},"storageClassName":"standard"},"version":"3.3.9"}}
     clusterName: ""
-    creationTimestamp: 2018-07-31T07:06:04Z
+    creationTimestamp: 2018-07-31T12:23:16Z
     finalizers:
     - kubedb.com
     generation: 1
     name: etcdb
     namespace: demo
-    resourceVersion: "7319"
+    resourceVersion: "11136"
     selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/etcds/etcdb
-    uid: 3086cf38-9490-11e8-9591-080027468b8a
+    uid: 807d34ef-94bc-11e8-8628-080027142efe
   spec:
-    replicas: 3
+    monitor:
+      agent: prometheus.io/builtin
+      prometheus:
+        port: 56790
+    replicas: 1
     storage:
       accessModes:
       - ReadWriteOnce
@@ -25,9 +26,10 @@ items:
         requests:
           storage: 1Gi
       storageClassName: standard
-    version: 3.3.9
+    version: 3.2.13
   status:
-    phase: Running
+    phase: Failed
+    reason: ignore failed cluster (etcdb). Please delete its CR
 kind: List
 metadata:
   resourceVersion: ""

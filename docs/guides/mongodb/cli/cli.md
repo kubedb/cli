@@ -2,9 +2,9 @@
 title: CLI | KubeDB
 menu:
   docs_0.8.0:
-    identifier: mg-cli-cli
+    identifier: etcd-cli-cli
     name: Quickstart
-    parent: mg-cli-mongodb
+    parent: etcd-cli-mongodb
     weight: 10
 menu_name: docs_0.8.0
 section_menu_id: guides
@@ -16,14 +16,14 @@ section_menu_id: guides
 
 ## KubeDB CLI
 
-KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to manage any KubeDB object. `kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/setup/install.md).
+KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used to manage any Etcd object. `kubedb` cli also performs various validations to improve ux. To install KubeDB cli on your workstation, follow the steps [here](/docs/setup/install.md).
 
 ### How to Create objects
 
-`kubedb create` creates a database CRD object in `default` namespace by default. Following command will create a MongoDB object as specified in `mongodb.yaml`.
+`kubedb create` creates a database CRD object in `default` namespace by default. Following command will create a Etcd object as specified in `etcd.yaml`.
 
 ```console
-$ kubedb create -f mongodb-demo.yaml
+$ kubedb create -f etcd-demo.yaml
 mongodb "mongodb-demo" created
 ```
 
@@ -99,21 +99,21 @@ To list all KubeDB objects, use following command:
 ```console
 $ kubedb get all -o wide
 NAME                VERSION     STATUS  AGE
-mg/mongodb-demo     3.4         Running 3h
-mg/mongodb-dev      3.4         Running 3h
-mg/mongodb-prod     3.4         Running 3h
-mg/mongodb-qa       3.4         Running 3h
+etcd/mongodb-demo     3.4         Running 3h
+etcd/mongodb-dev      3.4         Running 3h
+etcd/mongodb-prod     3.4         Running 3h
+etcd/mongodb-qa       3.4         Running 3h
 
 NAME                                DATABASE                BUCKET              STATUS      AGE
-snap/mongodb-demo-20170605-073557   mg/mongodb-demo         gs:bucket-name      Succeeded   9m
-snap/snapshot-20171212-114700       mg/mongodb-demo         gs:bucket-name      Succeeded   1h
+snap/mongodb-demo-20170605-073557   etcd/mongodb-demo         gs:bucket-name      Succeeded   9m
+snap/snapshot-20171212-114700       etcd/mongodb-demo         gs:bucket-name      Succeeded   1h
 ```
 
 Flag `--output=wide` is used to print additional information.
 
 List command supports short names for each object types. You can use it like `kubedb get <short-name>`. Below are the short name for KubeDB objects:
 
-- MongoDB: `mg`
+- MongoDB: `etcd`
 - Snapshot: `snap`
 - DormantDatabase: `drmn`
 
@@ -122,8 +122,8 @@ You can print labels with objects. The following command will list all Snapshots
 ```console
 $ kubedb get snap --show-labels
 NAME                            DATABASE                STATUS      AGE       LABELS
-mongodb-demo-20170605-073557    mg/mongodb-demo         Succeeded   11m       kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
-snapshot-20171212-114700        mg/mongodb-demo         Succeeded   1h        kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
+mongodb-demo-20170605-073557    etcd/mongodb-demo         Succeeded   11m       kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
+snapshot-20171212-114700        etcd/mongodb-demo         Succeeded   1h        kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
 ```
 
 You can also filter list using `--selector` flag.
@@ -131,8 +131,8 @@ You can also filter list using `--selector` flag.
 ```console
 $ kubedb get snap --selector='kubedb.com/kind=MongoDB' --show-labels
 NAME                            DATABASE           STATUS      AGE       LABELS
-mongodb-demo-20171212-073557    mg/mongodb-demo    Succeeded   14m       kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
-snapshot-20171212-114700        mg/mongodb-demo    Succeeded   2h        kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
+mongodb-demo-20171212-073557    etcd/mongodb-demo    Succeeded   14m       kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
+snapshot-20171212-114700        etcd/mongodb-demo    Succeeded   2h        kubedb.com/kind=MongoDB,kubedb.com/name=mongodb-demo
 ```
 
 To print only object name, run the following command:
@@ -154,7 +154,7 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 `kubedb describe` command allows users to describe any KubeDB object. The following command will describe MongoDB database `mongodb-demo` with relevant information.
 
 ```console
-$ kubedb describe mg mongodb-demo
+$ kubedb describe etcd mongodb-demo
 Name:		mongodb-demo
 Namespace:	default
 StartTimestamp:	Wed, 28 Feb 2018 14:21:29 +0600
@@ -214,13 +214,13 @@ To hide events on KubeDB object, use flag `--show-events=false`
 To describe all MongoDB objects in `default` namespace, use following command
 
 ```console
-$ kubedb describe mg
+$ kubedb describe etcd
 ```
 
 To describe all MongoDB objects from every namespace, provide `--all-namespaces` flag.
 
 ```console
-$ kubedb describe mg --all-namespaces
+$ kubedb describe etcd --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
@@ -232,7 +232,7 @@ $ kubedb describe all --all-namespaces
 You can also describe KubeDb objects with matching labels. The following command will describe all MongoDB objects with specified labels from every namespace.
 
 ```console
-$ kubedb describe mg --all-namespaces --selector='group=dev'
+$ kubedb describe etcd --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
@@ -244,12 +244,12 @@ To learn about various options of `describe` command, please visit [here](/docs/
 Lets edit an existing running MongoDB object to setup [Scheduled Backup](/docs/guides/mongodb/snapshot/scheduled-backup.md). The following command will open MongoDB `mongodb-demo` in editor.
 
 ```console
-$ kubedb edit mg mongodb-demo
+$ kubedb edit etcd mongodb-demo
 
 # Add following under Spec to configure periodic backups
 # backupSchedule:
 #   cronExpression: '@every 1m'
-#   storageSecretName: mg-snap-secret
+#   storageSecretName: etcd-snap-secret
 #   gcs:
 #     bucket: bucket-name
 
