@@ -1,0 +1,19 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: custom-elasticsearch
+  namespace: demo
+spec:
+  version: "6.2.4"
+  replicas: 2
+  doNotPause: true
+  configSource:
+    configMap:
+      name: es-custom-config
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
