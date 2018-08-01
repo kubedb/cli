@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eou pipefail
 
-crds=(elasticsearches memcacheds mongodbs mysqls postgreses redises snapshots dormantdatabases)
+crds=(elasticsearches memcacheds mongodbs mysqls postgreses redises etcds snapshots dormantdatabases)
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
 echo "checking kubeconfig context"

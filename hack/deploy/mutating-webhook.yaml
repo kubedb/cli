@@ -84,3 +84,16 @@ webhooks:
     resources: ["memcacheds"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+- name: etcd.mutators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/mutators.kubedb.com/v1alpha1/etcds
+    caBundle: ${KUBE_CA}
+  rules:
+  - apiGroups: ["kubedb.com"]
+    apiVersions: ["*"]
+    resources: ["etcds"]
+    operations: ["CREATE", "UPDATE"]
+  failurePolicy: Fail
