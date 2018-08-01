@@ -317,7 +317,6 @@ var PreconditionSpecField = map[string][]string{
 	tapi.ResourceKindEtcd: {
 		"spec.version",
 		"spec.storage",
-		"spec.databaseSecret",
 		"spec.nodeSelector",
 		"spec.init",
 	},
@@ -357,7 +356,7 @@ func CheckResourceExists(client internalclientset.Interface, kind, name, namespa
 	case tapi.ResourceKindMemcached:
 		offshootLabels = tapi.Memcached{ObjectMeta: objectMata}.OffshootLabels()
 	case tapi.ResourceKindEtcd:
-		offshootLabels = tapi.Memcached{ObjectMeta: objectMata}.OffshootLabels()
+		offshootLabels = tapi.Etcd{ObjectMeta: objectMata}.OffshootLabels()
 	}
 
 	labelSelector := labels.SelectorFromSet(offshootLabels)

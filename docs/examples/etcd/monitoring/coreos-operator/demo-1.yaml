@@ -4,7 +4,7 @@ metadata:
   name: etcdb
   namespace: demo
 spec:
-  replicas: 1
+  replicas: 3
   version: "3.2.13"
   storage:
     storageClassName: "standard"
@@ -13,3 +13,10 @@ spec:
     resources:
       requests:
         storage: 1Gi
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s

@@ -167,6 +167,10 @@ func getColumns(options PrintOptions, t reflect.Type) []string {
 		if options.Wide {
 			columns = append(columns, "BUCKET")
 		}
+	case "*v1alpha1.Etcd", "*v1alpha1.EtcdList":
+		if options.Wide {
+			columns = append(columns, "VERSION")
+		}
 	}
 
 	columns = append(columns, "STATUS")
