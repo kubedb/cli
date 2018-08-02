@@ -1,0 +1,53 @@
+---
+apiVersion: kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "9.6"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/postgres:9.6"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "9.6.7"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/postgres:9.6.7"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "10.2"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/postgres:10.2"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2"

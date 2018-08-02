@@ -98,6 +98,7 @@ export KUBEDB_ENABLE_RBAC=true
 export KUBEDB_RUN_ON_MASTER=0
 export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
+export KUBEDB_ENABLE_CATALOG=true
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_OPERATOR_TAG=0.8.0
 export KUBEDB_OPERATOR_NAME=operator
@@ -144,6 +145,7 @@ show_help() {
   echo "    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs"
   echo "    --enable-status-subresource    If enabled, uses status sub resource for KubeDB crds"
   echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
+  echo "    --enable-catalog               If enabled, installs kubedb database version catalog (default: true)"
   echo "    --operator-name                specify which kubedb operator to deploy (default: operator)"
   echo "    --uninstall                    uninstall KubeDB"
   echo "    --purge                        purges KubeDB crd objects and crds"
@@ -206,6 +208,13 @@ while test $# -gt 0; do
       fi
       shift
       ;;
+    --enable-catalog*)
+      shift
+      val=$(echo $1 | sed -e 's/^[^=]*=//g')
+      if [ "$val" = "false" ]; then
+        export KUBEDB_ENABLE_CATALOG=false
+      fi
+      ;;
     --rbac*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
@@ -253,6 +262,8 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   kubectl delete clusterrole -l app=kubedb
   kubectl delete rolebindings -l app=kubedb --namespace $KUBEDB_NAMESPACE
   kubectl delete role -l app=kubedb --namespace $KUBEDB_NAMESPACE
+
+  kubectl delete postgresversion -l app=kubedb
 
   echo "waiting for kubedb operator pod to stop running"
   for (( ; ; )); do
@@ -376,6 +387,11 @@ if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
       exit 1
     }
   done
+fi
+
+if [ "$KUBEDB_ENABLE_CATALOG" = true ]; then
+  echo "adding kubedb catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
 
 echo
