@@ -302,9 +302,13 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
         kubectl get ${crd}.kubedb.com --all-namespaces -o yaml >${crd}.yaml
       fi
 
-      for ((i = 0; i < $total; i += 2)); do
+      for ((i = 0; i < $total; i++ )); do
         name=${pairs[$i]}
-        namespace=${pairs[$i + 1]}
+        namespace="default"
+        if [ ${crd: -8} != "versions" ]; then
+          namespace=${pairs[$i + 1]}
+          i+=1
+        fi
         # remove finalizers
         kubectl patch ${crd}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge
         # delete crd object
