@@ -1,8 +1,24 @@
 #!/bin/bash
 set -eou pipefail
 
-crds=(elasticsearches memcacheds mongodbs mysqls postgreses redises etcds snapshots dormantdatabases)
-catalogs=(elasticsearchversions memcachedversions mongodbversions mysqlversions postgresversions redisversions etcdversions)
+crds=(
+    elasticsearches
+    memcacheds
+    mongodbs
+    mysqls
+    postgreses
+    redises
+    etcds
+    snapshots
+    dormantdatabases
+    elasticsearchversions
+    memcachedversions
+    mongodbversions
+    mysqlversions
+    postgresversions
+    redisversions
+    etcdversions
+)
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
 echo "checking kubeconfig context"
@@ -298,31 +314,6 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
 
       # delete crd
       kubectl delete crd ${crd}.kubedb.com || true
-    done
-
-    # Backup & purge DBversions
-    for crd in "${crds[@]}"; do
-      pairs=($(kubectl get ${catalogs}.kubedb.com --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
-      total=${#pairs[*]}
-
-      # save objects
-      if [ $total -gt 0 ]; then
-        echo "dumping ${catalogs} objects into ${catalogs}.yaml"
-        kubectl get ${catalogs}.kubedb.com --all-namespaces -o yaml >${catalogs}.yaml
-      fi
-
-      for ((i = 0; i < $total; i += 2)); do
-        name=${pairs[$i]}
-        namespace=${pairs[$i + 1]}
-        # remove finalizers
-        kubectl patch ${catalogs}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge
-        # delete crd object
-        echo "deleting ${catalogs} $namespace/$name"
-        kubectl delete ${catalogs}.kubedb.com $name -n $namespace
-      done
-
-      # delete crd
-      kubectl delete crd ${catalogs}.kubedb.com || true
     done
 
     # delete user roles
