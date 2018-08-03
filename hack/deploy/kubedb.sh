@@ -298,7 +298,6 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
 
       # delete crd
       kubectl delete crd ${crd}.kubedb.com || true
-      kubectl delete postgresversion -l app=kubedb || true
     done
 
     # Backup & purge DBversions
