@@ -92,7 +92,7 @@ spec:
 
 Here,
 
-- `spec.version` is the version of PostgreSQL database. In this tutorial, a PostgreSQL 9.6 database is created.
+- `spec.version` is name of the PostgresVersion crd where the docker images are specified. In this tutorial, a PostgreSQL 9.6 database is created.
 - `spec.doNotPause` prevents users from deleting this object if admission webhook is enabled.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MySQL.
 
@@ -376,6 +376,7 @@ $ kubectl delete ns demo
 - Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
 - Learn about initializing [PostgreSQL from KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).
+- Learn about [custom PostgresVersions](/docs/guides/postgres/custom-versions/setup.md).
 - Want to setup PostgreSQL cluster? Check how to [configure Highly Available PostgreSQL Cluster](/docs/guides/postgres/clustering/ha_cluster.md)
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).

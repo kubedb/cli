@@ -1,0 +1,12 @@
+apiVersion: v1
+description: 'KubeDB Catalog by AppsCode - Catalog for database versions'
+name: kubedb-catalog
+version: 0.8.0
+appVersion: 0.8.0
+home: https://github.com/kubedb/cli
+icon: https://cdn.appscode.com/images/icon/kubedb.png
+sources:
+  - https://github.com/kubedb/cli
+maintainers:
+  - name: appscode
+    email: kubedb@appscode.com

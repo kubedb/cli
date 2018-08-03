@@ -83,7 +83,7 @@ spec:
 
 ### spec.version
 
-`spec.version` is a required field specifying the version of PostgreSQL database. Currently, the supported versions are:
+`spec.version` is a required field specifying the name of the PostgresVersion crd where the docker images are specified. Currently, the kubedb catalog installs:
 
  - `9.6.7`, `9.6`
  - `10.2`

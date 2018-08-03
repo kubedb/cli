@@ -68,6 +68,7 @@ options:
     --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs
     --enable-status-subresource    If enabled, uses status sub resource for crds
     --enable-analytics             send usage events to Google Analytics (default: true)
+    --enable-catalog               If enabled, installs kubedb database version catalog (default: true)
     --uninstall                    uninstall KubeDB
     --purge                        purges KubeDB crd objects and crds
 ```
@@ -106,6 +107,13 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/hack/deploy/kube
 
 KubeDB 0.9.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
 
+KubeDB 0.9.0 or later installs a catalog of database versions. To disable this pass the `--enable-catalog=false` flag.
+
+```console
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/hack/deploy/kubedb.sh \
+    | bash -s -- --enable-catalog=false [--rbac]
+```
+
 </div>
 <div class="tab-pane fade" id="helm" role="tabpanel" aria-labelledby="helm-tab">
 
@@ -134,6 +142,9 @@ $ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
   --set apiserver.enableValidatingWebhook=true \
   --set apiserver.enableMutatingWebhook=true \
   --set apiserver.enableStatusSubresource=true
+
+# KubeDB catalog of database versions
+$ helm install appscode/kubedb-catalog --name kubedb-catalog
 ```
 
 To install `onessl`, run the following commands:
