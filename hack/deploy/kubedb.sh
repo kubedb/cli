@@ -2,22 +2,22 @@
 set -eou pipefail
 
 crds=(
-    elasticsearches
-    memcacheds
-    mongodbs
-    mysqls
-    postgreses
-    redises
-    etcds
-    snapshots
     dormantdatabases
+    elasticsearches
     elasticsearchversions
-    memcachedversions
-    mongodbversions
-    mysqlversions
-    postgresversions
-    redisversions
+    etcds
     etcdversions
+    memcacheds
+    memcachedversions
+    mongodbs
+    mongodbversions
+    mysqls
+    mysqlversions
+    postgreses
+    postgresversions
+    redises
+    redisversions
+    snapshots
 )
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
