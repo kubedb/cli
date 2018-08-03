@@ -1,7 +1,24 @@
 #!/bin/bash
 set -eou pipefail
 
-crds=(elasticsearches memcacheds mongodbs mysqls postgreses redises etcds snapshots dormantdatabases)
+crds=(
+    dormantdatabases
+    elasticsearches
+    elasticsearchversions
+    etcds
+    etcdversions
+    memcacheds
+    memcachedversions
+    mongodbs
+    mongodbversions
+    mysqls
+    mysqlversions
+    postgreses
+    postgresversions
+    redises
+    redisversions
+    snapshots
+)
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
 echo "checking kubeconfig context"
@@ -262,8 +279,6 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   kubectl delete clusterrole -l app=kubedb
   kubectl delete rolebindings -l app=kubedb --namespace $KUBEDB_NAMESPACE
   kubectl delete role -l app=kubedb --namespace $KUBEDB_NAMESPACE
-
-  kubectl delete postgresversion -l app=kubedb
 
   echo "waiting for kubedb operator pod to stop running"
   for (( ; ; )); do
