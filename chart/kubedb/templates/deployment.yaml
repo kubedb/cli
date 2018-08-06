@@ -36,8 +36,6 @@ spec:
         args:
         - run
         - --v=3
-        - --docker-registry={{ .Values.kubedb.registry }}
-        - --exporter-tag={{ .Values.kubedb.tag }}
         - --governing-service=kubedb
         - --rbac={{ .Values.rbac.create }}
         - --secure-port=8443
