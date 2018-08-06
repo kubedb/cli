@@ -266,8 +266,8 @@ done
 
 if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices
-  kubectl delete validatingwebhookconfiguration -l app=kubedb || true
-  kubectl delete mutatingwebhookconfiguration -l app=kubedb || true
+  kubectl delete validatingwebhookconfiguration -l app=kubedb --ignore-not-found=true
+  kubectl delete mutatingwebhookconfiguration -l app=kubedb --ignore-not-found=true
   kubectl delete apiservice -l app=kubedb
   # delete kubedb operator
   kubectl delete deployment -l app=kubedb --namespace $KUBEDB_NAMESPACE
@@ -313,15 +313,15 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
         kubectl patch ${crd}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge
         # delete crd object
         echo "deleting ${crd} $namespace/$name"
-        kubectl delete ${crd}.kubedb.com $name -n $namespace
+        kubectl delete ${crd}.kubedb.com $name -n $namespace --ignore-not-found=true
       done
 
       # delete crd
-      kubectl delete crd ${crd}.kubedb.com || true
+      kubectl delete crd ${crd}.kubedb.com --ignore-not-found=true
     done
 
     # delete user roles
-    kubectl delete clusterroles kubedb:core:admin kubedb:core:edit kubedb:core:view
+    kubectl delete clusterroles kubedb:core:admin kubedb:core:edit kubedb:core:view --ignore-not-found=true
   fi
 
   echo
@@ -406,6 +406,10 @@ if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
       exit 1
     }
   done
+fi
+
+if [ "$KUBEDB_OPERATOR_NAME" != "operator" ]; then
+  set +e
 fi
 
 if [ "$KUBEDB_ENABLE_CATALOG" = true ]; then
