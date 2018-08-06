@@ -42,3 +42,231 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6.4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2.4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3.0"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.6"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.6"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8.0"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5.7"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5.7"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5.4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4.0.6"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0.6"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4.0"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+---
+apiVersion: kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
