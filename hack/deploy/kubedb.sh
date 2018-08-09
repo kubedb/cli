@@ -2,22 +2,22 @@
 set -eou pipefail
 
 crds=(
-    dormantdatabases
-    elasticsearches
-    elasticsearchversions
-    etcds
-    etcdversions
-    memcacheds
-    memcachedversions
-    mongodbs
-    mongodbversions
-    mysqls
-    mysqlversions
-    postgreses
-    postgresversions
-    redises
-    redisversions
-    snapshots
+  dormantdatabases
+  elasticsearches
+  elasticsearchversions
+  etcds
+  etcdversions
+  memcacheds
+  memcachedversions
+  mongodbs
+  mongodbversions
+  mysqls
+  mysqlversions
+  postgreses
+  postgresversions
+  redises
+  redisversions
+  snapshots
 )
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
@@ -302,10 +302,10 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
         kubectl get ${crd}.kubedb.com --all-namespaces -o yaml >${crd}.yaml
       fi
 
-      for ((i = 0; i < $total; i++ )); do
+      for ((i = 0; i < $total; i++)); do
         name=${pairs[$i]}
         namespace="default"
-        if [ ${crd: -8} != "versions" ]; then
+        if [ ${#crd} -lt 8 ] || [ ${crd: -8} != "versions" ]; then
           namespace=${pairs[$i + 1]}
           i+=1
         fi
