@@ -266,8 +266,8 @@ done
 
 if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices
-  kubectl delete validatingwebhookconfiguration -l app=kubedb --ignore-not-found=true
-  kubectl delete mutatingwebhookconfiguration -l app=kubedb --ignore-not-found=true
+  kubectl delete validatingwebhookconfiguration -l app=kubedb || true
+  kubectl delete mutatingwebhookconfiguration -l app=kubedb || true
   kubectl delete apiservice -l app=kubedb
   # delete kubedb operator
   kubectl delete deployment -l app=kubedb --namespace $KUBEDB_NAMESPACE
