@@ -1,0 +1,53 @@
+---
+apiVersion: kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4.0.6"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/redis:4.0.6"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/redis-tools:4.0.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4.0"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/redis:4.0"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/redis-tools:4.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/redis:4"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/redis-tools:4"

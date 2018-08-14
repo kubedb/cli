@@ -115,7 +115,7 @@ export KUBEDB_ENABLE_RBAC=true
 export KUBEDB_RUN_ON_MASTER=0
 export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
-export KUBEDB_ENABLE_CATALOG=true
+export KUBEDB_ENABLE_CATALOG=${KUBEDB_ENABLE_CATALOG:-all}
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_OPERATOR_TAG=0.8.0
 export KUBEDB_OPERATOR_NAME=operator
@@ -408,14 +408,33 @@ if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
   done
 fi
 
-if [ "$KUBEDB_OPERATOR_NAME" != "operator" ]; then
-  set +e
-fi
+echo "adding kubedb catalog"
+case "$KUBEDB_ENABLE_CATALOG" in
+  all)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/* | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  elasticsearch)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  postgres)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  mongodb)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  mysql)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  redis)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/redis.yaml | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  memcached)
+    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
+    ;;
+  *)
+    ;;
 
-if [ "$KUBEDB_ENABLE_CATALOG" = true ]; then
-  echo "adding kubedb catalog"
-  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog.yaml | $ONESSL envsubst | kubectl apply -f -
-fi
+esac
 
 echo
 echo "Successfully installed KubeDB operator in $KUBEDB_NAMESPACE namespace!"
