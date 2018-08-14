@@ -26,8 +26,6 @@ spec:
         args:
         - run
         - --v=3
-        - --docker-registry=${KUBEDB_DOCKER_REGISTRY}
-        - --exporter-tag=${KUBEDB_OPERATOR_TAG}
         - --governing-service=kubedb
         - --rbac=${KUBEDB_ENABLE_RBAC}
         - --secure-port=8443

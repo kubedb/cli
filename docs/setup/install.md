@@ -66,9 +66,9 @@ options:
     --run-on-master                run KubeDB operator on master
     --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs
     --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs
-    --enable-status-subresource    If enabled, uses status sub resource for crds
+    --enable-status-subresource    if enabled, uses status sub resource for crds
     --enable-analytics             send usage events to Google Analytics (default: true)
-    --enable-catalog               If enabled, installs kubedb database version catalog (default: true)
+    --install-catalog              installs KubeDB database version catalog (default: all)
     --uninstall                    uninstall KubeDB
     --purge                        purges KubeDB crd objects and crds
 ```
@@ -107,11 +107,11 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/hack/deploy/kube
 
 KubeDB 0.9.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
 
-KubeDB 0.9.0 or later installs a catalog of database versions. To disable this pass the `--enable-catalog=false` flag.
+KubeDB 0.9.0 or later installs a catalog of database versions. To disable this pass the `--install-catalog=none` flag.
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/hack/deploy/kubedb.sh \
-    | bash -s -- --enable-catalog=false [--rbac]
+    | bash -s -- --install-catalog=none [--rbac]
 ```
 
 </div>

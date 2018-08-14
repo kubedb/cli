@@ -1,0 +1,89 @@
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6.4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2.4"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3.0"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3"
+  labels:
+    app: kubedb
+spec:
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3"

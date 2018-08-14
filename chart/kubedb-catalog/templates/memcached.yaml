@@ -1,0 +1,33 @@
+{{ if .Values.catalog.memcached }}
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/memcached:1.5"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5.4"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  db:
+    image: "{{ .Values.dockerRegistry }}/memcached:1.5.4"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+{{ end }}

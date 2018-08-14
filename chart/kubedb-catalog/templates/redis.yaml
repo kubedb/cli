@@ -1,9 +1,9 @@
-{{ if .Values.catalog.postgres }}
+{{ if .Values.catalog.redis }}
 ---
 apiVersion: kubedb.com/v1alpha1
-kind: PostgresVersion
+kind: RedisVersion
 metadata:
-  name: "9.6"
+  name: "4.0.6"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
@@ -11,17 +11,15 @@ metadata:
     release: "{{ .Release.Name }}"
 spec:
   db:
-    image: "{{ .Values.dockerRegistry }}/postgres:9.6"
+    image: "{{ .Values.dockerRegistry }}/redis:4.0.6"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
-  tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6"
 
 ---
 apiVersion: kubedb.com/v1alpha1
-kind: PostgresVersion
+kind: RedisVersion
 metadata:
-  name: "9.6.7"
+  name: "4.0"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
@@ -29,17 +27,15 @@ metadata:
     release: "{{ .Release.Name }}"
 spec:
   db:
-    image: "{{ .Values.dockerRegistry }}/postgres:9.6.7"
+    image: "{{ .Values.dockerRegistry }}/redis:4.0"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
-  tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7"
 
 ---
 apiVersion: kubedb.com/v1alpha1
-kind: PostgresVersion
+kind: RedisVersion
 metadata:
-  name: "10.2"
+  name: "4"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
@@ -47,9 +43,7 @@ metadata:
     release: "{{ .Release.Name }}"
 spec:
   db:
-    image: "{{ .Values.dockerRegistry }}/postgres:10.2"
+    image: "{{ .Values.dockerRegistry }}/redis:4"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
-  tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2"
 {{ end }}

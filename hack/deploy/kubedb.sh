@@ -2,22 +2,22 @@
 set -eou pipefail
 
 crds=(
-    dormantdatabases
-    elasticsearches
-    elasticsearchversions
-    etcds
-    etcdversions
-    memcacheds
-    memcachedversions
-    mongodbs
-    mongodbversions
-    mysqls
-    mysqlversions
-    postgreses
-    postgresversions
-    redises
-    redisversions
-    snapshots
+  dormantdatabases
+  elasticsearches
+  elasticsearchversions
+  etcds
+  etcdversions
+  memcacheds
+  memcachedversions
+  mongodbs
+  mongodbversions
+  mysqls
+  mysqlversions
+  postgreses
+  postgresversions
+  redises
+  redisversions
+  snapshots
 )
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
@@ -115,7 +115,7 @@ export KUBEDB_ENABLE_RBAC=true
 export KUBEDB_RUN_ON_MASTER=0
 export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
-export KUBEDB_ENABLE_CATALOG=true
+export KUBEDB_CATALOG=${KUBEDB_CATALOG:-all}
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_OPERATOR_TAG=0.8.0
 export KUBEDB_OPERATOR_NAME=operator
@@ -160,10 +160,10 @@ show_help() {
   echo "    --run-on-master                run KubeDB operator on master"
   echo "    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs"
   echo "    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs"
-  echo "    --enable-status-subresource    If enabled, uses status sub resource for KubeDB crds"
+  echo "    --enable-status-subresource    if enabled, uses status sub resource for KubeDB crds"
   echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
-  echo "    --enable-catalog               If enabled, installs kubedb database version catalog (default: true)"
-  echo "    --operator-name                specify which kubedb operator to deploy (default: operator)"
+  echo "    --install-catalog              installs KubeDB database version catalog (default: all)"
+  echo "    --operator-name                specify which KubeDB operator to deploy (default: operator)"
   echo "    --uninstall                    uninstall KubeDB"
   echo "    --purge                        purges KubeDB crd objects and crds"
 }
@@ -225,11 +225,11 @@ while test $# -gt 0; do
       fi
       shift
       ;;
-    --enable-catalog*)
+    --install-catalog*)
       shift
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBEDB_ENABLE_CATALOG=false
+        export KUBEDB_CATALOG=false
       fi
       ;;
     --rbac*)
@@ -302,10 +302,10 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
         kubectl get ${crd}.kubedb.com --all-namespaces -o yaml >${crd}.yaml
       fi
 
-      for ((i = 0; i < $total; i++ )); do
+      for ((i = 0; i < $total; i++)); do
         name=${pairs[$i]}
         namespace="default"
-        if [ ${crd: -8} != "versions" ]; then
+        if [ ${#crd} -lt 8 ] || [ ${crd: -8} != "versions" ]; then
           namespace=${pairs[$i + 1]}
           i+=1
         fi
@@ -313,15 +313,15 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
         kubectl patch ${crd}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge
         # delete crd object
         echo "deleting ${crd} $namespace/$name"
-        kubectl delete ${crd}.kubedb.com $name -n $namespace
+        kubectl delete ${crd}.kubedb.com $name -n $namespace --ignore-not-found=true
       done
 
       # delete crd
-      kubectl delete crd ${crd}.kubedb.com || true
+      kubectl delete crd ${crd}.kubedb.com --ignore-not-found=true
     done
 
     # delete user roles
-    kubectl delete clusterroles kubedb:core:admin kubedb:core:edit kubedb:core:view
+    kubectl delete clusterroles kubedb:core:admin kubedb:core:edit kubedb:core:view --ignore-not-found=true
   fi
 
   echo
@@ -408,9 +408,34 @@ if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
   done
 fi
 
-if [ "$KUBEDB_ENABLE_CATALOG" = true ]; then
-  echo "adding kubedb catalog"
-  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog.yaml | $ONESSL envsubst | kubectl apply -f -
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "elasticsearch" ]; then
+  echo "installing KubeDB Elasticsearch catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "postgres" ]; then
+  echo "installing KubeDB Postgres catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "mongo" ]; then
+  echo "installing KubeDB MongoDB catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "mysql" ]; then
+  echo "installing KubeDB MySQL catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "redis" ]; then
+  echo "installing KubeDB Redis catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/redis.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "memcached" ]; then
+  echo "installing KubeDB Memcached catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
 
 echo
