@@ -433,7 +433,6 @@ case "$KUBEDB_ENABLE_CATALOG" in
     ;;
   *)
     ;;
-
 esac
 
 echo
