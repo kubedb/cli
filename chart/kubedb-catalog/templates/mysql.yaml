@@ -1,3 +1,4 @@
+{{ if .Values.catalog.mysql }}
 ---
 apiVersion: kubedb.com/v1alpha1
 kind: MySQLVersion
@@ -51,3 +52,4 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5"
+{{ end }}

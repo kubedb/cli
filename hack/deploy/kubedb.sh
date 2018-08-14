@@ -115,7 +115,7 @@ export KUBEDB_ENABLE_RBAC=true
 export KUBEDB_RUN_ON_MASTER=0
 export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
-export KUBEDB_ENABLE_CATALOG=${KUBEDB_ENABLE_CATALOG:-all}
+export KUBEDB_CATALOG=${KUBEDB_CATALOG:-all}
 export KUBEDB_DOCKER_REGISTRY=kubedb
 export KUBEDB_OPERATOR_TAG=0.8.0
 export KUBEDB_OPERATOR_NAME=operator
@@ -160,10 +160,10 @@ show_help() {
   echo "    --run-on-master                run KubeDB operator on master"
   echo "    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs"
   echo "    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs"
-  echo "    --enable-status-subresource    If enabled, uses status sub resource for KubeDB crds"
+  echo "    --enable-status-subresource    if enabled, uses status sub resource for KubeDB crds"
   echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
-  echo "    --enable-catalog               If enabled, installs kubedb database version catalog (default: true)"
-  echo "    --operator-name                specify which kubedb operator to deploy (default: operator)"
+  echo "    --install-catalog              installs KubeDB database version catalog (default: all)"
+  echo "    --operator-name                specify which KubeDB operator to deploy (default: operator)"
   echo "    --uninstall                    uninstall KubeDB"
   echo "    --purge                        purges KubeDB crd objects and crds"
 }
@@ -225,11 +225,11 @@ while test $# -gt 0; do
       fi
       shift
       ;;
-    --enable-catalog*)
+    --install-catalog*)
       shift
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBEDB_ENABLE_CATALOG=false
+        export KUBEDB_CATALOG=false
       fi
       ;;
     --rbac*)
@@ -408,32 +408,35 @@ if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
   done
 fi
 
-echo "adding kubedb catalog"
-case "$KUBEDB_ENABLE_CATALOG" in
-  all)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/* | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  elasticsearch)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  postgres)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  mongodb)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  mysql)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  redis)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/redis.yaml | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  memcached)
-    ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
-    ;;
-  *)
-    ;;
-esac
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "elasticsearch" ]; then
+  echo "installing KubeDB Elasticsearch catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "postgres" ]; then
+  echo "installing KubeDB Postgres catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "mongo" ]; then
+  echo "installing KubeDB MongoDB catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "mysql" ]; then
+  echo "installing KubeDB MySQL catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "redis" ]; then
+  echo "installing KubeDB Redis catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/redis.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
+if [ "KUBEDB_CATALOG" = "all" ] || [ "KUBEDB_CATALOG" = "memcached" ]; then
+  echo "installing KubeDB Memcached catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
 
 echo
 echo "Successfully installed KubeDB operator in $KUBEDB_NAMESPACE namespace!"

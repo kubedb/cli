@@ -1,3 +1,4 @@
+{{ if .Values.catalog.mongo }}
 ---
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDBVersion
@@ -33,3 +34,4 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6"
+{{ end }}
