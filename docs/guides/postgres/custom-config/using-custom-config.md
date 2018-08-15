@@ -86,7 +86,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examp
 postgres.kubedb.com "custom-postgres" created
 ```
 
-Bellow is the YAML for the Postgres crd we just created.
+Below is the YAML for the Postgres crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1

@@ -88,7 +88,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examp
 mysql.kubedb.com "custom-mysql" created
 ```
 
-Bellow is the YAML for the MySQL crd we just created.
+Below is the YAML for the MySQL crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
