@@ -285,5 +285,6 @@ $ kubectl delete redis <name>
 ## Next Steps
 
 - Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/README.md).
+- Learn how to use custom configuration in Redis with KubeDB [here](/docs/guides/redis/custom-config/using-custom-config.md)
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

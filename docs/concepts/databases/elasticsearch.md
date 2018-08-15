@@ -44,6 +44,9 @@ spec:
     secretName: e1-auth
   certificateSecret:
     secretName: e1-cert
+  configSource:
+    configMap:
+      name: es-custom-config
   env:
     - name:  CLUSTER_NAME
       value: "my-elastic-cluster"
@@ -144,6 +147,10 @@ If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` wit
   - `key_pass:` The key password used to encrypt certificates.
 
 If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
+
+### spec.configSource
+
+`spec.configSource` is an optional field that allows users to provide custom configuration for Elasticsearch. This field accepts a [`VolumeSource`](https://github.com/kubernetes/api/blob/release-1.11/core/v1/types.go#L47). So you can use any kubernetes supported volume source such as `configMap`, `secret`, `azureDisk` etc. To learn more about how to use a custom configuration file see [here](/docs/guides/elasticsearch/custom-config/overview.md).
 
 ### spec.env
 

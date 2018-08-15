@@ -37,7 +37,7 @@ demo    Active  5s
 
 ## Create multi-node Elasticsearch
 
-Elasticsearch can be created with multiple nodes. If you want to create Elasticsearch cluster with three nodes, you need to set `spec.replicas` to `3`.
+Elasticsearch can be created with multiple nodes. If you want to create an Elasticsearch cluster with three nodes, you need to set `spec.replicas` to `3`.
 In this case, all of these three nodes will act as *master*, *data* and *client*.
 
 Check following Elasticsearch object

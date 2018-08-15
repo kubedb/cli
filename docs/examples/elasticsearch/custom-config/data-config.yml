@@ -1,0 +1,4 @@
+node:
+  name:  es-node-data
+path:
+  data: ["/data/elasticsearch/data-datadir"]

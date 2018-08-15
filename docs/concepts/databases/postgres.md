@@ -41,6 +41,9 @@ spec:
         bucket: kubedb
   databaseSecret:
     secretName: p1-auth
+  configSource:
+      configMap:
+        name: pg-custom-config
   env:
     - name: POSTGRES_DB
       value: pgdb
@@ -134,6 +137,10 @@ metadata:
   uid: f6f6cc66-7840-11e8-b418-080027e35e51
 type: Opaque
 ```
+
+### spec.configSource
+
+`spec.configSource` is an optional field that allows users to provide custom configuration for PostgreSQL. This field accepts a [`VolumeSource`](https://github.com/kubernetes/api/blob/release-1.11/core/v1/types.go#L47). So you can use any kubernetes supported volume source such as `configMap`, `secret`, `azureDisk` etc. To learn more about how to use a custom configuration file see [here](/docs/guides/postgres/custom-config/using-custom-config.md).
 
 ### spec.env
 
