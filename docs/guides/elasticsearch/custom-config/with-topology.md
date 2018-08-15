@@ -1,5 +1,5 @@
 ---
-title: Using Custom Configuration in Elasticsearch with Topology 
+title: Using Custom Configuration in Elasticsearch with Topology
 menu:
   docs_0.8.0:
     identifier: es-custom-config-with-topology
@@ -13,9 +13,9 @@ section_menu_id: guides
 
 # Using Custom Configuration in Elasticsearch with Topology
 
-This tutorial will show you how to use custom configuration in Elasticsearch cluster in KubeDB specifying `spec.topology` field.
+This tutorial will show you how to use custom configuration in an Elasticsearch cluster in KubeDB specifying `spec.topology` field.
 
-If you don't know how KubeDB handle custom configuration files for Elasticsearch cluster, please visit [here](/docs/guides/elasticsearch/custom-config/overview.md).
+If you don't know how KubeDB handles custom configuration for an Elasticsearch cluster, please visit [here](/docs/guides/elasticsearch/custom-config/overview.md).
 
 ## Before You Begin
 
@@ -38,9 +38,9 @@ demo    Active  5s
 
 ## Use Custom Configuration
 
-At first, let's create four configuration files with some configuration named `master-config.yaml`, `client-config.yaml`, `data-config.yaml` and `common-config.yalm` respectively.
+At first, let's create four configuration files namely `master-config.yml`, `client-config.yml`, `data-config.yml` and `common-config.yalm`.
 
-Content of `master-config.yaml`,
+Content of `master-config.yml`,
 
 ```yaml
 node:
@@ -49,7 +49,7 @@ path:
   data: ["/data/elasticsearch/master-datadir"]
 ```
 
-Content of `client-config.yaml`,
+Content of `client-config.yml`,
 
 ```yaml
 node:
@@ -58,7 +58,7 @@ path:
   data: ["/data/elasticsearch/client-datadir"]
 ```
 
-Content of `data-config.yaml`,
+Content of `data-config.yml`,
 
 ```yaml
 node:
@@ -67,7 +67,7 @@ path:
   data: ["/data/elasticsearch/data-datadir"]
 ```
 
-Content of `common-config.yaml`,
+Content of `common-config.yml`,
 
 ```yaml
 path:
@@ -77,11 +77,11 @@ path:
 Now, let's create a configMap with these configuration files,
 
 ```console
- $ kubectl create configmap  -n demo es-custom-config \
-                        --from-file=./common-config.yaml \
-                        --from-file=./master-config.yaml \
-                        --from-file=./data-config.yaml \
-                        --from-file=./client-config.yaml
+ $ kubectl create configmap -n demo es-custom-config \
+                        --from-file=./common-config.yml \
+                        --from-file=./master-config.yml \
+                        --from-file=./data-config.yml \
+                        --from-file=./client-config.yml
 configmap/es-custom-config created
 ```
 
@@ -91,20 +91,20 @@ Check that the configMap has these configuration files,
 $ kubectl get configmap -n demo es-custom-config -o yaml
 apiVersion: v1
 data:
-  client-config.yaml: |-
+  client-config.yml: |-
     node:
       name:  es-node-client
     path:
       data: ["/data/elasticsearch/client-datadir"]
-  common-config.yaml: |
+  common-config.yml: |
     path:
       logs: /data/elasticsearch/common-logdir
-  data-config.yaml: |-
+  data-config.yml: |-
     node:
       name:  es-node-data
     path:
       data: ["/data/elasticsearch/data-datadir"]
-  master-config.yaml: |-
+  master-config.yml: |-
     node:
       name:  es-node-master
     path:
@@ -124,7 +124,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examp
 elasticsearch.kubedb.com/custom-elasticsearch created
 ```
 
-Bellow the YAML for the Elasticsearch crd we have created above,
+Bellow is the YAML for the Elasticsearch crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -171,7 +171,7 @@ spec:
             storage: 50Mi
 ```
 
-Wait for few minutes, KubeDB will create necessary secrets, services, and statefulsets.
+Now, wait for few minutes. KubeDB will create necessary secrets, services, and statefulsets.
 
 Check resources created in `demo` namespace by KubeDB,
 
@@ -204,7 +204,7 @@ custom-elasticsearch-cert   Opaque                                4         10m
 default-token-qnf27         kubernetes.io/service-account-token   3         14m
 ```
 
-Once everything is created, Elasticsearch will go to `Running` state. Check that Elasticsearch is in running state,
+Once everything is created, Elasticsearch will go to `Running` state. Check that Elasticsearch is in running state.
 
 ```console
 $ kubectl get es -n demo custom-elasticsearch
@@ -214,7 +214,7 @@ custom-elasticsearch   6.2.4     Running   14m
 
 ## Verify Configuration
 
-Now, we will connect with the Elasticsearch cluster we have created. We will query for nodes settings to verify that the cluster is using the custom configurations we have provided.
+Now, we will connect with the Elasticsearch cluster we have created. We will query for nodes settings to verify that the cluster is using the custom configuration we have provided.
 
 At first, expose Service `custom-elasticsearch`,
 
@@ -231,7 +231,7 @@ NAME                TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AG
 custom-es-exposed   NodePort   10.99.144.141   <none>        9200:32604/TCP   1m
 ```
 
-To connect with Elasticsearch cluster we have to use the NodePort of the service along with the cluster's IP address.
+To connect with the Elasticsearch cluster we have to use the NodePort of the service along with the cluster's IP address.
 
 For minikube, we can get the url by,
 
@@ -254,7 +254,7 @@ $ export es_service=$(minikube service custom-es-exposed -n demo --url)
 $ export es_admin_pass=$(kubectl get secrets -n demo custom-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
 ```
 
-Now, we will query for settings of all nodes in Elasticsearch cluster,
+Now, we will query for settings of all nodes in an Elasticsearch cluster,
 
 ```console
 $ curl --user "admin:$es_admin_pass" "$es_service/_nodes/_all/settings"
@@ -372,9 +372,9 @@ This will return a large JSON with nodes settings information. Here is the prett
 
 We have total four (1 master + 2 client + 1 data) nodes in our Elasticsearch cluster. Here, we have an array of these node's settings information. Here, `"roles"` field represents if the node is working as either a master, ingest/client or data node.
 
-From the response above, we can see that `"node.name"` and `"path.data"` fields are set accordingly to node rules to the value we have specified in configuration files.
+From the response above, we can see that `"node.name"` and `"path.data"` fields are set according to node rules to the value we have specified in configuration files.
 
-Note that, the `"path.logs"` field of each node is set to the value we have specified in `common-config.yaml` file.
+Note that, the `"path.logs"` field of each node is set to the value we have specified in `common-config.yml` file.
 
 ## Cleanup
 

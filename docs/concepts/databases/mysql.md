@@ -128,7 +128,7 @@ type: Opaque
 
 ### spec.configSource
 
-`spec.configSource` is an optional field that allows the users to provide a custom configuration file for MySQL. This field accept a `v1.VolumeSource`. So you can use any kubernetes supported volume source such as `configMap`, `secret`, `hostPath` `gitRepo` `azureDisk` etc. To know more about how to use a custom configuration file see [here](/docs/guides/mysql/custom-config/using-custom-config.md).
+`spec.configSource` is an optional field that allows users to provide custom configuration for MySQL. This field accepts a [`VolumeSource`](https://github.com/kubernetes/api/blob/release-1.11/core/v1/types.go#L47). So you can use any kubernetes supported volume source such as `configMap`, `secret`, `azureDisk` etc. To learn more about how to use a custom configuration file see [here](/docs/guides/mysql/custom-config/using-custom-config.md).
 
 ### spec.env
 

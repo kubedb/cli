@@ -172,7 +172,7 @@ Two services for each Elasticsearch object.
 - Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
 - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
-KubeDB supports Elasticsearch clustering where Pod can be any of these three role: *master*, *data* or *client*.
+KubeDB supports Elasticsearch clustering where pods can be any of these three role: *master*, *data* or *client*.
 
 If you see `Topology` section in `kubedb describe` result, you will know role(s) of each Pod.
 
@@ -185,7 +185,7 @@ Topology:
 
 Here, we create a Elasticsearch database with single node. This single node will act as *master*, *data* and *client*.
 
-To learn how to configure Elasticsearch cluster, click [here](/docs/guides/elasticsearch/clustering/topology.md).
+To learn how to configure an Elasticsearch cluster, click [here](/docs/guides/elasticsearch/clustering/topology.md).
 
 Please note that KubeDB operator has created two new Secrets for Elasticsearch object.
 

@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using Custom Configuration File
 
-KubeDB supports providing a custom configuration file for MySQL. This tutorial will show you how to use KubeDB to run a  MySQL database with a custom configuration file.
+KubeDB supports providing custom configuration for MySQL. This tutorial will show you how to use KubeDB to run a MySQL database with custom configuration.
 
 ## Before You Begin
 
@@ -37,9 +37,9 @@ demo    Active  5s
 
 ## Overview
 
-MySQL allow to configure database via configuration file.The default configuration for MySQL can be found in `/etc/mysql/my.cnf` file. When MySQL start, it will look for custom configuration file in `/etc/mysql/conf.d` directory. If configuration file exist, MySQL instance will use combined startup setting from both `/etc/mysql/my.cnf` and `*.cnf` files in `/etc/mysql/conf.d` directory. This custom configurations will overwrite the existing default one. To know more about configuring MySQL see [here](https://dev.mysql.com/doc/refman/8.0/en/server-configuration.html).
+MySQL allows to configure database via configuration file. The default configuration for MySQL can be found in `/etc/mysql/my.cnf` file. When MySQL starts, it will look for custom configuration file in `/etc/mysql/conf.d` directory. If configuration file exist, MySQL instance will use combined startup setting from both `/etc/mysql/my.cnf` and `*.cnf` files in `/etc/mysql/conf.d` directory. This custom configuration will overwrite the existing default one. To know more about configuring MySQL see [here](https://dev.mysql.com/doc/refman/8.0/en/server-configuration.html).
 
-At first, you have to create a config file with `.cnf` extension with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume  in `spec.configSource` section while creating MySQL crd. KubeDB will mount this volume into `/etc/mysql/conf.d` directory of the database pod.
+At first, you have to create a config file with `.cnf` extension with your desired configuration. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume  in `spec.configSource` section while creating MySQL crd. KubeDB will mount this volume into `/etc/mysql/conf.d` directory of the database pod.
 
 In this tutorial, we will configure [max_connections](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_max_connections) and [read_buffer_size](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_read_buffer_size) via a custom config file. We will use configMap as volume source.
 
@@ -84,11 +84,11 @@ metadata:
 Now, create MySQL crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/custom-config//mysql-custom.yaml 
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/custom-config//mysql-custom.yaml
 mysql.kubedb.com "custom-mysql" created
 ```
 
-Below the YAML of MySQL crd that we have created above.
+Bellow is the YAML for the MySQL crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -111,7 +111,7 @@ spec:
         storage: 50Mi
 ```
 
-Now, wait for sometimes. KubeDB operator will create necessary PVC, statefulset, services, secret etc. If everything goes well we will see that a pod with the name `custom-mysql-0` has been created.
+Now, wait a few minutes. KubeDB operator will create necessary PVC, statefulset, services, secret etc. If everything goes well, we will see that a pod with the name `custom-mysql-0` has been created.
 
 Check that the statefulset's pod is running
 
@@ -124,7 +124,7 @@ custom-mysql-0   1/1       Running   0          7m
 Check the pod's log to see if the database is ready
 
 ```console
-$ kubectl logs -f -n demo custom-mysql-0 
+$ kubectl logs -f -n demo custom-mysql-0
 Initializing database
 .....
 Database initialized
@@ -141,7 +141,7 @@ MySQL init process done. Ready for start up.
 
 Once we see `[Note] /usr/sbin/mysqld: ready for connections.` in the log, the database is ready.
 
-Now, we will check if the database has started with the custom configurations we have provided.
+Now, we will check if the database has started with the custom configuration we have provided.
 
 First, deploy [phpMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) to connect with the MySQL database we have just created.
 

@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using Custom Configuration File
 
-KubeDB supports providing a custom configuration file for PostgreSQL. This tutorial will show you how to use KubeDB to run PostgreSQL database with a custom configuration file.
+KubeDB supports providing custom configuration for PostgreSQL. This tutorial will show you how to use KubeDB to run PostgreSQL database with custom configuration.
 
 ## Before You Begin
 
@@ -37,9 +37,9 @@ demo    Active  5s
 
 ## Overview
 
-PostgreSQL allow to configure database via **Configuration File**, **SQL** and **Shell**. The most fundamental way is to edit configuration file `postgresql.conf`. When PostgreSQL docker image start, it uses the configurations specified in `postgresql.conf` file. This file can have `include` directive which allows to include configuration from other files. One of these `include` directives is `include_if_exists` which accept a file reference. If the referenced file exists, it includes configuration from the file. Otherwise, it uses default configurations. KubeDB takes this opportunity to enable users to provide their custom configuration. To know more about configuring PostgreSQL see [here](https://www.postgresql.org/docs/current/static/runtime-config.html).
+PostgreSQL allows to configure database via **Configuration File**, **SQL** and **Shell**. The most common way is to edit configuration file `postgresql.conf`. When PostgreSQL docker image starts, it uses the configuration specified in `postgresql.conf` file. This file can have `include` directive which allows to include configuration from other files. One of these `include` directives is `include_if_exists` which accept a file reference. If the referenced file exists, it includes configuration from the file. Otherwise, it uses default configuration. KubeDB takes advantage of this feature to allow users to provide their custom configuration. To know more about configuring PostgreSQL see [here](https://www.postgresql.org/docs/current/static/runtime-config.html).
 
-At first, you have to create a config file named `user.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Postgres crd. KubeDB will mount this volume into `/etc/config/` directory of the database pod which will be referenced by `include_if_exists` directive.
+At first, you have to create a config file named `user.conf` with your desired configuration. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Postgres crd. KubeDB will mount this volume into `/etc/config/` directory of the database pod which will be referenced by `include_if_exists` directive.
 
 In this tutorial, we will configure `max_connections` and `shared_buffers` via a custom config file. We will use configMap as volume source.
 
@@ -86,7 +86,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examp
 postgres.kubedb.com "custom-postgres" created
 ```
 
-Below the YAML of Postgres crd that we have created above.
+Bellow is the YAML for the Postgres crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -109,7 +109,7 @@ spec:
         storage: 50Mi
 ```
 
-Now, wait for sometimes. KubeDB operator will create necessary PVC, statefulset, services, secret etc. If everything goes well we will see that a pod with the name `custom-postgres-0` has been created.
+Now, wait a few minutes. KubeDB operator will create necessary PVC, statefulset, services, secret etc. If everything goes well, we will see that a pod with the name `custom-postgres-0` has been created.
 
 Check that the statefulset's pod is running
 
@@ -122,7 +122,7 @@ custom-postgres-0   1/1       Running   0          14m
 Check the pod's log to see if the database is ready
 
 ```console
-$ kubectl logs -f -n demo custom-postgres-0 
+$ kubectl logs -f -n demo custom-postgres-0
 I0705 12:05:51.697190       1 logs.go:19] FLAG: --alsologtostderr="false"
 I0705 12:05:51.717485       1 logs.go:19] FLAG: --enable-analytics="true"
 I0705 12:05:51.717543       1 logs.go:19] FLAG: --help="false"
@@ -153,7 +153,7 @@ LOG:  autovacuum launcher started
 
 Once we see `LOG:  database system is ready to accept connections` in the log, the database is ready.
 
-Now, we will check if the database has started with the custom configurations we have provided. We will `exec` into the pod and use [SHOW](https://www.postgresql.org/docs/9.6/static/sql-show.html) query to check the run-time parameters.
+Now, we will check if the database has started with the custom configuration we have provided. We will `exec` into the pod and use [SHOW](https://www.postgresql.org/docs/9.6/static/sql-show.html) query to check the run-time parameters.
 
 ```console
  $ kubectl exec -it -n demo custom-postgres-0 sh
@@ -183,7 +183,7 @@ postgres=# \q
 
 ```
 
-You can also connect to this database from pgAdmin and use following SQL query to check these configurations.
+You can also connect to this database from pgAdmin and use following SQL query to check these configuration.
 
 ```sql
 SELECT name,setting

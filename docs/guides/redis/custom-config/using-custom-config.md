@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using Custom Configuration File
 
-KubeDB supports providing a custom configuration file for Redis. This tutorial will show you how to use KubeDB to run Redis database with custom configuration.
+KubeDB supports providing custom configuration for Redis. This tutorial will show you how to use KubeDB to run Redis with custom configuration.
 
 ## Before You Begin
 
@@ -36,9 +36,9 @@ demo    Active  5s
 
 ## Overview
 
-Redis allows  configure database via a configuration file. When redis docker image starts, it executes `redis-server` command. If we provide a `.conf` file directory as an argument of this command, Redis server will use configuration specified in the file. To know more about configuring Redis see [here](https://redis.io/topics/config).
+Redis allows configuration via a config file. When redis docker image starts, it executes `redis-server` command. If we provide a `.conf` file directory as an argument of this command, Redis server will use configuration specified in the file. To know more about configuring Redis see [here](https://redis.io/topics/config).
 
-At first, you have to create a config file named `redis.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Redis crd. KubeDB will mount this volume into `/usr/local/etc/redis` directory of the database pod and the `redis.conf` file path will be sent as an argument of `redis-server` command.
+At first, you have to create a config file named `redis.conf` with your desired configuration. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Redis crd. KubeDB will mount this volume into `/usr/local/etc/redis` directory of the pod and the `redis.conf` file path will be sent as an argument of `redis-server` command.
 
 In this tutorial, we will configure `databases` and `maxclients` via a custom config file. We will use configMap as volume source.
 
@@ -81,11 +81,11 @@ metadata:
 Now, create Redis crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/redis/custom-config/redis-custom.yaml 
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/redis/custom-config/redis-custom.yaml
 redis.kubedb.com "custom-redis" created
 ```
 
-Below the YAML of Redis crd that we have created above.
+Bellow is the YAML for the Redis crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -108,7 +108,7 @@ spec:
         storage: 50Mi
 ```
 
-Now, wait for sometimes. KubeDB operator will create necessary statefulset, services etc. If everything goes well we will see that a pod with the name `custom-redis-0` has been created.
+Now, wait a few minutes. KubeDB operator will create necessary statefulset, services etc. If everything goes well, we will see that a pod with the name `custom-redis-0` has been created.
 
 Check that the statefulset's pod is running
 
@@ -121,7 +121,7 @@ custom-redis-0   1/1       Running   0          2m
 Check the pod's log to see if the database is ready
 
 ```console
-$ kubectl logs -f -n demo custom-redis-0 
+$ kubectl logs -f -n demo custom-redis-0
 1:C 11 Jul 13:32:39.397 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
 1:C 11 Jul 13:32:39.397 # Redis version=4.0.6, bits=64, commit=00000000, modified=0, pid=1, just started
 1:C 11 Jul 13:32:39.397 # Configuration loaded
@@ -133,7 +133,7 @@ $ kubectl logs -f -n demo custom-redis-0
 
 Once we see `Ready to accept connections` in the log, the database is ready.
 
-Now, we will check if the database has started with the custom configurations we have provided. We will `exec` into the pod and use [CONFIG GET](https://redis.io/commands/config-get) command to check the configurations.
+Now, we will check if the database has started with the custom configuration we have provided. We will `exec` into the pod and use [CONFIG GET](https://redis.io/commands/config-get) command to check the configuration.
 
 ```console
  $ kubectl exec -it -n demo custom-redis-0 sh

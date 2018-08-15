@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using Custom Configuration File
 
-KubeDB supports providing a custom configuration file for Memcached. This tutorial will show you how to use KubeDB to run Memcached database with custom configuration.
+KubeDB supports providing custom configuration for Memcached. This tutorial will show you how to use KubeDB to run Memcached with custom configuration.
 
 ## Before You Begin
 
@@ -36,13 +36,13 @@ demo    Active  5s
 
 ## Overview
 
-Memcached does not allow to configure database via any configuration file. However, configuration parameters can be sent as arguments while starting the memcached docker image. To keep similarity with other KubeDB supported databases which support configuration through a config file, KubeBD has added an additional executable script on top of the official memcached docker image. This script parses the configuration file then send them as arguments of memcached binary.
+Memcached does not allows to configuration via any file. However, configuration parameters can be set as arguments while starting the memcached docker image. To keep similarity with other KubeDB supported databases which support configuration through a config file, KubeDB has added an additional executable script on top of the official memcached docker image. This script parses the configuration file then set them as arguments of memcached binary.
 
 To know more about configuring Memcached server see [here](https://github.com/memcached/memcached/wiki/ConfiguringServer).
 
-At first, you have to create a config file named `memcached.conf` with your desired configurations. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Memcached crd. KubeDB will mount this volume into `/usr/config` directory of the database pod.
+At first, you have to create a config file named `memcached.conf` with your desired configuration. Then you have to put this file into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Memcached crd. KubeDB will mount this volume into `/usr/config` directory of the database pod.
 
-In this tutorial, we will configure [max_connections](https://github.com/memcached/memcached/blob/ee171109b3afe1f30ff053166d205768ce635342/doc/protocol.txt#L672) and [limit_maxbytes](https://github.com/memcached/memcached/blob/ee171109b3afe1f30ff053166d205768ce635342/doc/protocol.txt#L720) via a custom config file. We will use configMap as volume source.
+In this tutorial, we will configure [max_connections](https://github.com/memcached/memcached/blob/ee171109b3afe1f30ff053166d205768ce635342/doc/protocol.txt#L672) and [limit_maxbytes](https://github.com/memcached/memcached/blob/ee171109b3afe1f30ff053166d205768ce635342/doc/protocol.txt#L720) via a custom config file. We will use a ConfigMap as volume source.
 
 **Configuration File Format:**
 KubeDB support providing `memcached.conf` file in the following formats,
@@ -115,7 +115,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examp
 memcached.kubedb.com/custom-memcached created
 ```
 
-Below the YAML of Memcached crd that we have created above.
+Bellow is the YAML for the Memcached crd we just created.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -139,9 +139,9 @@ spec:
       cpu: 500m
 ```
 
-Now, wait for sometimes. KubeDB operator will create the necessary deployment, services etc. If everything goes well we will see that a deployment with the name `custom-memcached` has been created.
+Now, wait a few minutes. KubeDB operator will create the necessary deployment, services etc. If everything goes well, we will see that a deployment with the name `custom-memcached` has been created.
 
-Check that the deployment's pod is running
+Check that the pods for the deployment is running:
 
 ```console
 $ kubectl get pods -n demo
@@ -149,7 +149,7 @@ NAME                                READY     STATUS    RESTARTS   AGE
 custom-memcached-5b5866f5b8-cbc2d   1/1       Running   0          8m
 ```
 
-Now, we will check if the database has started with the custom configurations we have provided. We will use [stats](https://github.com/memcached/memcached/wiki/ConfiguringServer#inspecting-running-configuration) command to check the configurations.
+Now, we will check if the database has started with the custom configuration we have provided. We will use [stats](https://github.com/memcached/memcached/wiki/ConfiguringServer#inspecting-running-configuration) command to check the configuration.
 
 We will connect to `custom-memcached-5b5866f5b8-cbc2d` pod from local-machine using port-frowarding.
 
@@ -176,6 +176,7 @@ END
 ```
 
 Here, `limit_maxbytes` is represented in bytes.
+
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
