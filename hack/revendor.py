@@ -44,6 +44,9 @@ DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redi
 REPO_LIST = DATABASES + ['cli', 'operator', 'apimachinery']
 KUTIL_VERSION = 'release-8.0'
 KUBEMON_VERSION = 'release-8.0'
+FORCED_DEPS = {
+    'github.com/cpuguy83/go-md2man': 'v1.0.8',
+}
 
 
 def die(status):
@@ -87,6 +90,18 @@ def glide_mod(glide_config, changes):
     for dep in glide_config['import']:
         if dep['package'] in changes:
             dep['version'] = changes[dep['package']]
+    for pkg, ver in FORCED_DEPS.iteritems():
+        found = False
+        for dep in glide_config['import']:
+            if dep['package'] == pkg:
+                dep['version'] = ver
+                found = True
+                break
+        if not found:
+            glide_config['import'].append({
+                'package': pkg,
+                'version': ver,
+            })
 
 
 def glide_write(f, glide_config):
