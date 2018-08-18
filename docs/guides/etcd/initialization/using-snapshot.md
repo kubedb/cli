@@ -100,6 +100,12 @@ Events:
   3m          3m         1         Etcd operator   Normal     Initializing       Initializing from Snapshot: "snapshot"
 ```
 
+To show existing data `kubectl exec` into a etcd pod and run following command:
+
+```
+ETCDCTL_API=3 etcdctl get "" --prefix=true
+```
+
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:

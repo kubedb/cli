@@ -286,12 +286,11 @@ spec:
           emptyDir: {}
 ```
 
-### In RBAC enabled cluster
 
-If RBAC *is* enabled, Run the following command to deploy prometheus in kubernetes:
+Run the following command to deploy prometheus in kubernetes:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/rbac/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created
@@ -312,24 +311,6 @@ $ kubectl get serviceaccounts -n demo
 NAME                SECRETS   AGE
 default             1         48m
 prometheus-server   1         1m
-```
-
-### In RBAC \*not\* enabled cluster
-
-If RBAC *is not* enabled, Run the following command to prepare your cluster for this tutorial:
-
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-deployment "prometheus-server" created
-service "prometheus-service" created
-
-
-$ $ kubectl get pods -n demo --watch
-  NAME                                READY     STATUS    RESTARTS   AGE
-  etcd-mon-prometheus-7pvzjcd7dx      1/1       Running   0          20m
-  etcd-mon-prometheus-8slp4xxxl8      1/1       Running   0          20m
-  etcd-mon-prometheus-ld7n576tv5      1/1       Running   0          21m
-  prometheus-server-96cc4bfbc-dvw8p   1/1       Running   0          6m
 ```
 
 ### Prometheus Dashboard
@@ -366,10 +347,9 @@ $ kubectl delete etcd.kubedb.com/etcd-mon-prometheus -n demo
 
 $ kubectl delete  dormantdatabase.kubedb.com/etcd-mon-prometheus -n demo
 
-# In rbac enabled cluster,
-# $ kubectl delete clusterrole prometheus-server
-# $ kubectl delete clusterrolebindings  prometheus-server
-# $ kubectl delete serviceaccounts -n demo  prometheus-server
+$ kubectl delete clusterrole prometheus-server
+$ kubectl delete clusterrolebindings  prometheus-server
+$ kubectl delete serviceaccounts -n demo  prometheus-server
 
 $ kubectl delete ns demo
 namespace "demo" deleted
