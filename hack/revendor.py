@@ -47,6 +47,7 @@ KUBEMON_VERSION = 'release-8.0'
 FORCED_DEPS = {
     'github.com/cpuguy83/go-md2man': 'v1.0.8',
     'github.com/json-iterator/go': '1.1.5',
+    'github.com/coreos/prometheus-operator': 'v0.23.1',
 }
 
 
