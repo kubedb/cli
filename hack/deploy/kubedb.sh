@@ -424,6 +424,11 @@ if [ "$KUBEDB_CATALOG" = "all" ] || [ "$KUBEDB_CATALOG" = "mongo" ]; then
   ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
 
+if [ "$KUBEDB_CATALOG" = "all" ] || [ "$KUBEDB_CATALOG" = "etcd" ]; then
+  echo "installing KubeDB Etcd catalog"
+  ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/etcd.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
+
 if [ "$KUBEDB_CATALOG" = "all" ] || [ "$KUBEDB_CATALOG" = "mysql" ]; then
   echo "installing KubeDB MySQL catalog"
   ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
