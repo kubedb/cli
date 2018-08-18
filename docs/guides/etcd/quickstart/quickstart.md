@@ -16,7 +16,7 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to run a Etcd database.
 
 <p align="center">
-  <ietcd alt="lifecycle"  src="/docs/images/etcd/etcd-lifecycle.png" width="600" height="660">
+  <ietcd alt="lifecycle"  src="docs/images/etcd/etcd-lifecycle.png" width="600" height="660">
 </p>
 
 The yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).

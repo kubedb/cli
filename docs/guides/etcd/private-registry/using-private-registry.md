@@ -25,8 +25,8 @@ You will also need a docker private [registry](https://docs.docker.com/registry/
 You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For etcd, push the following images to your private registry.
 
 - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
-- [kubedb/mongo](https://hub.docker.com/r/kubedb/mongo)
-- [kubedb/mongo-tools](https://hub.docker.com/r/kubedb/mongo-tools)
+- [kubedb/etcd](https://hub.docker.com/r/kubedb/etcd)
+- [kubedb/etcd-tools](https://hub.docker.com/r/kubedb/etcd-tools)
 
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
