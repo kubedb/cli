@@ -46,6 +46,7 @@ KUTIL_VERSION = 'release-8.0'
 KUBEMON_VERSION = 'release-8.0'
 FORCED_DEPS = {
     'github.com/cpuguy83/go-md2man': 'v1.0.8',
+    'github.com/json-iterator/go': '1.1.5',
 }
 
 
