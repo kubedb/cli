@@ -31,7 +31,7 @@ aliases:
 ## Life Cycle of a Etcd Object
 
 <p align="center">
-  <ietcd alt="lifecycle"  src="/docs/images/etcd/etcd-lifecycle.png" width="600" height="660">
+  <ietcd alt="lifecycle"  src="docs/images/etcd/etcd-lifecycle.png" width="600" height="660">
 </p>
 
 <br/>
