@@ -52,6 +52,9 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `imagePullSecrets`                  | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
 | `imagePullPolicy`                   | Image pull policy                                                  | `IfNotPresent`     |
 | `criticalAddon`                     | If true, installs KubeDB operator as critical addon                | `false`            |
+| `affinity`                          | Affinity rules for pod assignment                                  | `{}`               |
+| `nodeSelector`                      | Node labels for pod assignment                                     | `{}`               |
+| `tolerations`                       | Tolerations used pod assignment                                    | `{}`               |
 | `rbac.create`                       | If `true`, create and use RBAC resources                           | `true`             |
 | `serviceAccount.create`             | If `true`, create a new service account                            | `true`             |
 | `serviceAccount.name`               | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
