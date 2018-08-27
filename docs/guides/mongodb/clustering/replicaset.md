@@ -1,14 +1,15 @@
 ---
-title: MongoDB ReplicaSet
+title: MongoDB ReplicaSet Guide
 menu:
   docs_0.8.0:
-    identifier: mg-quickstart-quickstart
-    name: Overview
-    parent: mg-quickstart-mongodb
-    weight: 10
+    identifier: mg-clustering-replicaset
+    name: ReplicaSet Guide
+    parent: mg-clustering-mongodb
+    weight: 15
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # KubeDB - MongoDB ReplicaSet
@@ -40,7 +41,7 @@ Note that the yaml files that are used in this tutorial, stored in [docs/example
 
 ## Deploy MongoDB ReplicaSet
 
-To deploy a MongoDB ReplicaSet, user have to specify `spec.clusterMode.replicaSet` option in `Mongodb` CRD.
+To deploy a MongoDB ReplicaSet, user have to specify `spec.replicaSet` option in `Mongodb` CRD.
 
 The following is an example of a `Mongodb` object which creates MongoDB ReplicaSet of three members.
 
@@ -53,9 +54,8 @@ metadata:
 spec:
   version: "3.6"
   replicas: 3
-  clusterMode:
-    replicaSet:
-      name: rs0
+  replicaSet:
+    name: rs0
   storage:
     storageClassName: "standard"
     accessModes:
@@ -66,13 +66,13 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/clustering/demo-1.yaml 
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/clustering/demo-1.yaml
 mongodb.kubedb.com "mgo-replicaset" created
 ```
 
 Here,
 
-- `spec.clusterMode.replicaSet` represents the configuration for replicaset.
+- `spec.replicaSet` represents the configuration for replicaset.
   - `name` denotes the name of mongodb replicaset.
   - `KeyFileSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod instances in the replica set uses the contents of the keyfile as the shared password for authenticating other members in the deployment. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `KeyFileSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `KeyFileSecret`._ If `KeyFileSecret` is not given, KubeDB operator will generate a `KeyFileSecret` itself.
 - `spec.replicas` denotes the number of members in `rs0` mongodb replicaset.
@@ -84,7 +84,7 @@ KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `Mong
 $ kubedb describe mg -n demo mgo-replicaset
 Name:		mgo-replicaset
 Namespace:	demo
-StartTimestamp:	Mon, 30 Jul 2018 16:56:34 +0600
+StartTimestamp:	Mon, 27 Aug 2018 15:21:18 +0600
 Replicas:	3  total
 Status:		Running
 Volume:
@@ -95,17 +95,17 @@ Volume:
 StatefulSet:		
   Name:			mgo-replicaset
   Replicas:		3 current / 3 desired
-  CreationTimestamp:	Mon, 30 Jul 2018 16:56:36 +0600
+  CreationTimestamp:	Mon, 27 Aug 2018 15:21:20 +0600
   Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:	
   Name:		mgo-replicaset
   Type:		ClusterIP
-  IP:		10.104.25.110
+  IP:		10.107.205.95
   Port:		db	27017/TCP
 
 Service:	
-  Name:		mgo-replicaset-gvr-svc
+  Name:		mgo-replicaset-gvr
   Type:		ClusterIP
   IP:		None
   Port:		db	27017/TCP
@@ -123,12 +123,11 @@ No Snapshots.
 Events:
   FirstSeen   LastSeen   Count     From               Type       Reason       Message
   ---------   --------   -----     ----               --------   ------       -------
-  4m          4m         1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  4m          4m         1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  4m          4m         1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  4m          4m         1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  4m          4m         1         MongoDB operator   Normal     Successful   Successfully created StatefulSet
-  4m          4m         1         MongoDB operator   Normal     Successful   Successfully created MongoDB
+  1m          1m         1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
+  1m          1m         1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
+  1m          1m         1         MongoDB operator   Normal     Successful   Successfully created StatefulSet
+  1m          1m         1         MongoDB operator   Normal     Successful   Successfully created MongoDB
+  8m          8m         1         MongoDB operator   Normal     Successful   Successfully created Service
 
 $ kubectl get statefulset -n demo
 NAME             DESIRED   CURRENT   AGE
@@ -147,10 +146,9 @@ pvc-3b0cdf3a-93e7-11e8-b61b-0800275c4256   1Gi        RWO            Delete     
 pvc-e58ab7f7-93e7-11e8-b61b-0800275c4256   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-1   standard                 7m
 
 $ kubectl get service -n demo
-NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
-NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
-mgo-replicaset           ClusterIP   10.104.25.110   <none>        27017/TCP   13m
-mgo-replicaset-gvr-svc   ClusterIP   None            <none>        27017/TCP   13m
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
+mgo-replicaset       ClusterIP   10.107.205.95   <none>        27017/TCP   9m
+mgo-replicaset-gvr   ClusterIP   None            <none>        27017/TCP   9m
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
@@ -160,27 +158,22 @@ $ kubedb get mg -n demo mgo-replicaset -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  creationTimestamp: 2018-07-30T10:56:34Z
+  creationTimestamp: 2018-08-27T09:21:18Z
   finalizers:
   - kubedb.com
-  generation: 4
+  generation: 3
   name: mgo-replicaset
   namespace: demo
-  resourceVersion: "29581"
+  resourceVersion: "16747"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-replicaset
-  uid: 39529638-93e7-11e8-b61b-0800275c4256
+  uid: 8e0654e9-a9da-11e8-bb0b-08002727b231
 spec:
-  clusterMode:
-    replicaSet:
-      keyFileSecret:
-        secretName: mgo-replicaset-keyfile
-      name: rs0
-  configSource:
-    configMap:
-      defaultMode: 420
-      name: mgo-replicaset-conf
   databaseSecret:
     secretName: mgo-replicaset-auth
+  replicaSet:
+    keyFile:
+      secretName: mgo-replicaset-keyfile
+    name: rs0
   replicas: 3
   storage:
     accessModes:
@@ -189,9 +182,10 @@ spec:
       requests:
         storage: 1Gi
     storageClassName: standard
+  storageType: Durable
   version: "3.6"
 status:
-  creationTime: 2018-07-30T10:56:34Z
+  observedGeneration: 3
   phase: Running
 ```
 
@@ -252,8 +246,8 @@ rs0:PRIMARY> exit
 bye
 ```
 
-Now, check the redundancy and data availability in secondary members. 
-We will exec in `mgo-replicaset-1`(which is secondary member right now) to check the data availability. 
+Now, check the redundancy and data availability in secondary members.
+We will exec in `mgo-replicaset-1`(which is secondary member right now) to check the data availability.
 
 ```console
 $ kubectl exec -it mgo-replicaset-1 -n demo bash
@@ -330,17 +324,13 @@ rs0:SECONDARY> rs.isMaster().primary
 mgo-replicaset-2.mgo-replicaset-gvr-svc.demo.svc.cluster.local:27017
 ```
 
-
 ## Pause Database
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set to true. Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will nullify the delete operation. You can see this below:
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set to true.
 
-```console
-$ kubedb delete mg mgo-replicaset -n demo
-error: MongoDB "mgo-replicaset" can't be paused. To continue delete, unset spec.doNotPause and retry.
-```
+Since the MongoDB object created in this tutorial has `spec.doNotPause` set to `false`, if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods but leaves the PVCs unchanged.
 
-Now, run `kubedb edit mg mgo-replicaset -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods but leaves the PVCs unchanged. In KubeDB parlance, we say that `mgo-replicaset` MongoDB database has entered into the dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
+Note that, It is recommended to set `spec.doNotPause` to `true` for production usage.
 
 ```console
 $ kubedb delete mg mgo-replicaset -n demo
@@ -360,40 +350,50 @@ $ kubedb get drmn -n demo mgo-replicaset -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-02T09:24:49Z
-  finalizers:
-  - kubedb.com
-  generation: 0
+  creationTimestamp: 2018-08-27T09:42:04Z
+  generation: 1
   labels:
     kubedb.com/kind: MongoDB
   name: mgo-replicaset
   namespace: demo
-  resourceVersion: "47107"
+  resourceVersion: "17796"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mgo-replicaset
-  uid: eadf575b-07fa-11e8-946f-080027c05a6e
+  uid: 74b34f29-a9dd-11e8-bb0b-08002727b231
 spec:
   origin:
     metadata:
-      creationTimestamp: null
+      creationTimestamp: 2018-08-27T09:21:18Z
       name: mgo-replicaset
       namespace: demo
     spec:
       mongodb:
         databaseSecret:
           secretName: mgo-replicaset-auth
-        resources: {}
+        podTemplate:
+          controller: {}
+          metadata: {}
+          spec:
+            resources: {}
+        replicaSet:
+          keyFile:
+            secretName: mgo-replicaset-keyfile
+          name: rs0
+        replicas: 3
+        serviceTemplate:
+          metadata: {}
+          spec: {}
         storage:
           accessModes:
           - ReadWriteOnce
           resources:
             requests:
-              storage: 50Mi
+              storage: 1Gi
           storageClassName: standard
-        version: "3.4"
+        storageType: Durable
+        version: "3.6"
 status:
-  creationTime: 2018-02-02T09:24:50Z
-  pausingTime: 2018-02-02T09:25:11Z
+  observedGeneration: 1
+  pausingTime: 2018-08-27T09:42:34Z
   phase: Paused
 ```
 
@@ -411,9 +411,11 @@ In this tutorial, the dormant database can be resumed by creating original Mongo
 The below command will resume the DormantDatabase `mgo-replicaset`.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/clustering/demo-1.yaml
 mongodb "mgo-replicaset" created
 ```
+
+Now, If you again exec into `pod` and look for previous data, you will see that, all the data persists.
 
 ## WipeOut DormantDatabase
 

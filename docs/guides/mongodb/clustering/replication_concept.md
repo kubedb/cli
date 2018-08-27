@@ -1,14 +1,15 @@
 ---
-title: MongoDB Replication Concept
+title: MongoDB ReplicaSet Concept
 menu:
   docs_0.8.0:
-    identifier: mg-clustering-replication
-    name: Overview
+    identifier: mg-clustering-replicaset-concept
+    name: ReplicaSet Concept
     parent: mg-clustering-mongodb
     weight: 10
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # MongoDB Replication
@@ -32,7 +33,7 @@ The minimum recommended configuration for a replica set is a three member replic
 ### Primary
 
 The primary is the only member in the replica set that receives write operations. MongoDB applies write operations on the primary and then records the operations on the primary’s oplog. Secondary members replicate this log and apply the operations to their data sets.
-    
+
 In the following three-member replica set, the primary accepts all write operations. Then the secondaries replicate the oplog to apply to their data sets.
 
 <p align="center">
@@ -46,7 +47,7 @@ The replica set can have at most one primary. If the current primary becomes una
 ### Secondaries
 
 A secondary maintains a copy of the primary’s data set. To replicate data, a secondary applies operations from the primary’s oplog to its own data set in an asynchronous process. A replica set can have one or more secondaries.
-    
+
 The following three-member replica set has two secondary members. The secondaries replicate the primary’s oplog and apply the operations to their data sets.
 
 <p align="center">
@@ -60,7 +61,7 @@ A secondary can become a primary. If the current primary becomes unavailable, th
 ### Arbiter
 
 An arbiter does not have a copy of data set and cannot become a primary. Replica sets may have arbiters to add a vote in elections for primary. Arbiters always have exactly 1 election vote, and thus allow replica sets to have an uneven number of voting members without the overhead of an additional member that replicates data.
-    
+
 Changed in version 3.6: Starting in MongoDB 3.6, arbiters have priority 0. When you upgrade a replica set to MongoDB 3.6, if the existing configuration has an arbiter with priority 1, MongoDB 3.6 reconfigures the arbiter to have priority 0.
 
 > IMPORTANT: Do not run an arbiter on systems that also host the primary or the secondary members of the replica set. [[reference]](https://docs.mongodb.com/manual/core/replica-set-members/#arbiter).
@@ -88,7 +89,7 @@ Your application connection logic should include tolerance for automatic failove
 ## Read Operations
 
 By default, clients read from the primary; however, clients can specify a read preference to send read operations to secondaries. Asynchronous replication to secondaries means that reads from secondaries may return data that does not reflect the state of the data on the primary. For information on reading from replica sets, see [Read Preference](https://docs.mongodb.com/manual/core/read-preference/).
-   
+
 [Multi-document transactions](https://docs.mongodb.com/manual/core/transactions/) that contain read operations must use read preference primary.
 
 All operations in a given transaction must route to the same member.
