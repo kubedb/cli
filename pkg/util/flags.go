@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	core "k8s.io/api/core/v1"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/kubectl/resource"
+	// "k8s.io/kubernetes/pkg/kubectl/resource"
 )
 
 func AddGetFlags(cmd *cobra.Command) {
