@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/kubedb/cli/pkg/cmds/get"
+	"github.com/kubedb/cli/pkg/describer"
 	"github.com/spf13/cobra"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -99,6 +100,7 @@ func NewCmdDescribe(parent string, f cmdutil.Factory, streams genericclioptions.
 	cmd.Flags().StringVarP(&o.Selector, "selector", "l", o.Selector, "Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)")
 	cmd.Flags().BoolVar(&o.AllNamespaces, "all-namespaces", o.AllNamespaces, "If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even if specified with --namespace.")
 	cmd.Flags().BoolVar(&o.DescriberSettings.ShowEvents, "show-events", o.DescriberSettings.ShowEvents, "If true, display events related to the described object.")
+
 	cmdutil.AddIncludeUninitializedFlag(cmd)
 	return cmd
 }
@@ -121,7 +123,7 @@ func (o *DescribeOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args [
 	o.BuilderArgs = args
 
 	o.Describer = func(mapping *meta.RESTMapping) (printers.Describer, error) {
-		return cmdutil.DescriberFn(f, mapping)
+		return describer.DescriberFn(f, mapping)
 	}
 
 	o.NewBuilder = f.NewBuilder

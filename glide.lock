@@ -1,5 +1,5 @@
 hash: 85c7f2506158250397688baadce52888157db373ccdbc915cf90963fddd7c08a
-updated: 2018-08-28T07:15:35.393946524-07:00
+updated: 2018-08-29T01:52:15.50072152-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -23,10 +23,6 @@ imports:
   version: 0dcf3ac121c7c30e035b41ba9f652d1ce5994242
 - name: github.com/appscode/jsonpatch
   version: 1359b374de83fa14fd58ab10aa8ea4935f84d249
-- name: github.com/appscode/kube-mon
-  version: 2b926a410fbfe224acd3297619e15734eb0ad75d
-  subpackages:
-  - api
 - name: github.com/appscode/kutil
   version: ab96b8d0056d39ca0c57dc6705864423b50515bc
   subpackages:
@@ -213,7 +209,7 @@ imports:
 - name: github.com/json-iterator/go
   version: f2b4162afba35581b6d4a50d3b8f34e33c144682
 - name: github.com/kubedb/apimachinery
-  version: 444c3cb00470463264c603ecf261cf370eb764c3
+  version: 4b12d3ad40e014ee0c9a33dafecf8e83d07769e6
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -254,8 +250,6 @@ imports:
   subpackages:
   - specs-go
   - specs-go/v1
-- name: github.com/pborman/uuid
-  version: ca53cad383cad2479bbba7f7a1a05797ec1386e4
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
@@ -337,7 +331,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 7954115fcf34e0dcda6981c9ed8a81a293f0489b
+  version: 087779f1d2c96357d4c45bd04c4d10d7b5f22736
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
@@ -452,7 +446,6 @@ imports:
   - pkg/util/runtime
   - pkg/util/sets
   - pkg/util/strategicpatch
-  - pkg/util/uuid
   - pkg/util/validation
   - pkg/util/validation/field
   - pkg/util/wait

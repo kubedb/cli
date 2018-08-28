@@ -14,30 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package uuid
+package events
 
 import (
-	"sync"
-
-	"github.com/pborman/uuid"
-
-	"k8s.io/apimachinery/pkg/types"
+	core "k8s.io/api/core/v1"
 )
 
-var uuidLock sync.Mutex
-var lastUUID uuid.UUID
+// SortableEvents implements sort.Interface for []api.Event based on the Timestamp field
+type SortableEvents []core.Event
 
-func NewUUID() types.UID {
-	uuidLock.Lock()
-	defer uuidLock.Unlock()
-	result := uuid.NewUUID()
-	// The UUID package is naive and can generate identical UUIDs if the
-	// time interval is quick enough.
-	// The UUID uses 100 ns increments so it's short enough to actively
-	// wait for a new value.
-	for uuid.Equal(lastUUID, result) == true {
-		result = uuid.NewUUID()
-	}
-	lastUUID = result
-	return types.UID(result.String())
+func (list SortableEvents) Len() int {
+	return len(list)
+}
+
+func (list SortableEvents) Swap(i, j int) {
+	list[i], list[j] = list[j], list[i]
+}
+
+func (list SortableEvents) Less(i, j int) bool {
+	return list[i].LastTimestamp.Time.Before(list[j].LastTimestamp.Time)
 }

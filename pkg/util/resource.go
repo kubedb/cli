@@ -4,12 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ghodss/yaml"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/cli/pkg/decoder"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/apimachinery/pkg/util/mergepatch"
 	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
@@ -192,19 +189,6 @@ func ResourceShortFormFor(resource string) (string, bool) {
 		}
 	}
 	return alias, exists
-}
-
-func GetObjectData(obj runtime.Object) ([]byte, error) {
-	return yaml.Marshal(obj)
-}
-
-func GetStructuredObject(obj runtime.Object) (runtime.Object, error) {
-	kind := obj.GetObjectKind().GroupVersionKind().Kind
-	data, err := GetObjectData(obj)
-	if err != nil {
-		return obj, err
-	}
-	return decoder.Decode(kind, data)
 }
 
 func checkChainKeyUnchanged(key string, mapData map[string]interface{}) bool {
