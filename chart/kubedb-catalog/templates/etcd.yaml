@@ -1,0 +1,21 @@
+{{ if .Values.catalog.etcd }}
+---
+apiVersion: kubedb.com/v1alpha1
+kind: EtcdVersion
+metadata:
+  name: "3.2.13"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "3.2.13"
+  db:
+    image: "{{ .Values.dockerRegistry }}/etcd:v3.2.13"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/etcd:v3.2.13"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/etcd-tools:3.2.13"
+
+---
