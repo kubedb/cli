@@ -10,6 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  version: "8.0"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:8.0"
   exporter:
@@ -28,6 +29,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  version: "5.7"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:5.7"
   exporter:
@@ -46,6 +48,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  version: "5"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:5"
   exporter:

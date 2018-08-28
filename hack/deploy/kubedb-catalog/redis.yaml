@@ -6,6 +6,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "4.0.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0.6"
   exporter:
@@ -19,6 +20,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "4.0"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0"
   exporter:
@@ -32,6 +34,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4"
   exporter:

@@ -6,6 +6,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "9.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6"
   exporter:
@@ -21,6 +22,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "9.6.7"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7"
   exporter:
@@ -36,6 +38,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "10.2"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2"
   exporter:

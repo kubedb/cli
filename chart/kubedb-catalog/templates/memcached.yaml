@@ -10,6 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  version: "1.5"
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5"
   exporter:
@@ -26,6 +27,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  version: "1.5.4"
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5.4"
   exporter:

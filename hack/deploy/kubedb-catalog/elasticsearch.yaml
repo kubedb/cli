@@ -6,6 +6,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "5.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6"
   exporter:
@@ -21,6 +22,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "5.6.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4"
   exporter:
@@ -36,6 +38,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "6.2"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2"
   exporter:
@@ -51,6 +54,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "6.2.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4"
   exporter:
@@ -66,6 +70,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "6.3.0"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0"
   exporter:
@@ -81,6 +86,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "6.3"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3"
   exporter:
