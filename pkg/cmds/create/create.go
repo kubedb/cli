@@ -26,11 +26,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
-	"k8s.io/apimachinery/pkg/api/meta"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	kruntime "k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/client-go/dynamic"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
@@ -38,8 +34,6 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/cmd/util/editor"
 	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
 	"k8s.io/kubernetes/pkg/kubectl/genericclioptions/resource"
-	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
-	"k8s.io/kubernetes/pkg/printers"
 )
 
 type CreateOptions struct {
@@ -90,7 +84,7 @@ func NewCmdCreate(f cmdutil.Factory, ioStreams genericclioptions.IOStreams) *cob
 	cmd := &cobra.Command{
 		Use:                   "create -f FILENAME",
 		DisableFlagsInUseLine: true,
-		Short:                 i18n.T("Create a resource from a file or from stdin."),
+		Short:                 "Create a resource from a file or from stdin.",
 		Long:                  createLong,
 		Example:               createExample,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -304,129 +298,4 @@ func createAndRefresh(info *resource.Info) error {
 	}
 	info.Refresh(obj, true)
 	return nil
-}
-
-// NameFromCommandArgs is a utility function for commands that assume the first argument is a resource name
-func NameFromCommandArgs(cmd *cobra.Command, args []string) (string, error) {
-	if len(args) != 1 {
-		return "", cmdutil.UsageErrorf(cmd, "exactly one NAME is required, got %d", len(args))
-	}
-	return args[0], nil
-}
-
-// CreateSubcommandOptions is an options struct to support create subcommands
-type CreateSubcommandOptions struct {
-	// PrintFlags holds options necessary for obtaining a printer
-	PrintFlags *PrintFlags
-	// Name of resource being created
-	Name string
-	// StructuredGenerator is the resource generator for the object being created
-	StructuredGenerator kubectl.StructuredGenerator
-	// DryRun is true if the command should be simulated but not run against the server
-	DryRun           bool
-	CreateAnnotation bool
-
-	Namespace        string
-	EnforceNamespace bool
-
-	Mapper        meta.RESTMapper
-	DynamicClient dynamic.Interface
-
-	PrintObj printers.ResourcePrinterFunc
-
-	genericclioptions.IOStreams
-}
-
-func NewCreateSubcommandOptions(ioStreams genericclioptions.IOStreams) *CreateSubcommandOptions {
-	return &CreateSubcommandOptions{
-		PrintFlags: NewPrintFlags("created", legacyscheme.Scheme),
-		IOStreams:  ioStreams,
-	}
-}
-
-func (o *CreateSubcommandOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []string, generator kubectl.StructuredGenerator) error {
-	name, err := NameFromCommandArgs(cmd, args)
-	if err != nil {
-		return err
-	}
-
-	o.Name = name
-	o.StructuredGenerator = generator
-	o.DryRun = cmdutil.GetDryRunFlag(cmd)
-	o.CreateAnnotation = cmdutil.GetFlagBool(cmd, cmdutil.ApplyAnnotationsFlag)
-
-	if o.DryRun {
-		o.PrintFlags.Complete("%s (dry run)")
-	}
-	printer, err := o.PrintFlags.ToPrinter()
-	if err != nil {
-		return err
-	}
-
-	o.PrintObj = func(obj kruntime.Object, out io.Writer) error {
-		return printer.PrintObj(obj, out)
-	}
-
-	o.Namespace, o.EnforceNamespace, err = f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		return err
-	}
-
-	o.DynamicClient, err = f.DynamicClient()
-	if err != nil {
-		return err
-	}
-
-	o.Mapper, err = f.ToRESTMapper()
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// RunCreateSubcommand executes a create subcommand using the specified options
-func (o *CreateSubcommandOptions) Run() error {
-	obj, err := o.StructuredGenerator.StructuredGenerate()
-	if err != nil {
-		return err
-	}
-	if !o.DryRun {
-		// create subcommands have compiled knowledge of things they create, so type them directly
-		gvks, _, err := legacyscheme.Scheme.ObjectKinds(obj)
-		if err != nil {
-			return err
-		}
-		gvk := gvks[0]
-		mapping, err := o.Mapper.RESTMapping(schema.GroupKind{Group: gvk.Group, Kind: gvk.Kind}, gvk.Version)
-		if err != nil {
-			return err
-		}
-
-		if err := kubectl.CreateOrUpdateAnnotation(o.CreateAnnotation, obj, cmdutil.InternalVersionJSONEncoder()); err != nil {
-			return err
-		}
-
-		asUnstructured := &unstructured.Unstructured{}
-
-		if err := legacyscheme.Scheme.Convert(obj, asUnstructured, nil); err != nil {
-			return err
-		}
-		if mapping.Scope.Name() == meta.RESTScopeNameRoot {
-			o.Namespace = ""
-		}
-		actualObject, err := o.DynamicClient.Resource(mapping.Resource).Namespace(o.Namespace).Create(asUnstructured)
-		if err != nil {
-			return err
-		}
-
-		// ensure we pass a versioned object to the printer
-		obj = actualObject
-	} else {
-		if meta, err := meta.Accessor(obj); err == nil && o.EnforceNamespace {
-			meta.SetNamespace(o.Namespace)
-		}
-	}
-
-	return o.PrintObj(obj, o.Out)
 }
