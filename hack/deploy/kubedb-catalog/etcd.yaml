@@ -1,0 +1,17 @@
+---
+apiVersion: kubedb.com/v1alpha1
+kind: EtcdVersion
+metadata:
+  name: "3.2.13"
+  labels:
+    app: kubedb
+spec:
+  version: "3.2.13"
+  db:
+    image: "quay.io/coreos/etcd:v3.2.13"
+  exporter:
+    image: "quay.io/coreos/etcd:v3.2.13"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/etcd-tools:3.2.13"
+
+---
