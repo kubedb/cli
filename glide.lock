@@ -1,5 +1,5 @@
 hash: 85c7f2506158250397688baadce52888157db373ccdbc915cf90963fddd7c08a
-updated: 2018-08-27T23:53:03.518681944-07:00
+updated: 2018-08-28T07:15:35.393946524-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -50,6 +50,13 @@ imports:
   - autorest/date
 - name: github.com/cenkalti/backoff
   version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
+- name: github.com/chai2010/gettext-go
+  version: c6fed771bfd517099caf0f7a961671fa8ed08723
+  subpackages:
+  - gettext
+  - gettext/mo
+  - gettext/plural
+  - gettext/po
 - name: github.com/cpuguy83/go-md2man
   version: 20f5889cbdc3c73dbd2862796665e7c465ade7d1
   subpackages:
@@ -115,7 +122,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: afac545df32f2287a079e2dfb7ba2745a643747e
+  version: 94e38aa1586e8a6c8a75770bddf5ff84c48a106b
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -213,17 +220,17 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: fd379cc5536f7d5c12ab36ce53996b9872b3b22d
+  version: 45306807c4e94556eeaaecc8493411ff695fc1f5
 - name: github.com/kubedb/memcached
-  version: 058c500e96383c17b7fbf28372880f8788841a44
+  version: f64af50681f5061c4ea9cce87f7e3b62f095d573
 - name: github.com/kubedb/mongodb
-  version: 68796a0b6246e5d416d2aece03290e16842a321e
+  version: fb48b128a4559bace72d5da50c3cf399fee37faf
 - name: github.com/kubedb/mysql
-  version: 559cdb6a0e81793439b8214cc590243d45398db4
+  version: 9ee88bd2cbca695b56cb4d9f08d2bc4ec9e6c608
 - name: github.com/kubedb/postgres
-  version: 334157ae350a918f90924dee303f4aa9831acda5
+  version: 72b37b5e31d61f69d2568a249a24af06903bd5eb
 - name: github.com/kubedb/redis
-  version: fc213f7ac8e99a393363ee4951ff046189169b92
+  version: e280162cd8d4d799a032c0e3304b82b6e3d1c6b4
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -247,6 +254,8 @@ imports:
   subpackages:
   - specs-go
   - specs-go/v1
+- name: github.com/pborman/uuid
+  version: ca53cad383cad2479bbba7f7a1a05797ec1386e4
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
@@ -436,7 +445,6 @@ imports:
   - pkg/util/httpstream/spdy
   - pkg/util/intstr
   - pkg/util/json
-  - pkg/util/jsonmergepatch
   - pkg/util/mergepatch
   - pkg/util/net
   - pkg/util/rand
@@ -444,6 +452,7 @@ imports:
   - pkg/util/runtime
   - pkg/util/sets
   - pkg/util/strategicpatch
+  - pkg/util/uuid
   - pkg/util/validation
   - pkg/util/validation/field
   - pkg/util/wait
@@ -463,6 +472,7 @@ imports:
   - pkg/endpoints/request
   - pkg/features
   - pkg/util/feature
+  - pkg/util/flag
 - name: k8s.io/client-go
   version: 066b071dea4a96506eb2e32b68de755e7d37b331
   repo: https://github.com/pharmer/client-go.git
@@ -660,6 +670,7 @@ imports:
   - pkg/credentialprovider
   - pkg/features
   - pkg/fieldpath
+  - pkg/generated
   - pkg/kubectl
   - pkg/kubectl/apps
   - pkg/kubectl/cmd/templates
@@ -668,12 +679,14 @@ imports:
   - pkg/kubectl/cmd/util/editor/crlf
   - pkg/kubectl/cmd/util/openapi
   - pkg/kubectl/cmd/util/openapi/validation
+  - pkg/kubectl/cmd/wait
   - pkg/kubectl/genericclioptions
   - pkg/kubectl/genericclioptions/printers
   - pkg/kubectl/genericclioptions/resource
   - pkg/kubectl/scheme
   - pkg/kubectl/util
   - pkg/kubectl/util/hash
+  - pkg/kubectl/util/i18n
   - pkg/kubectl/util/slice
   - pkg/kubectl/util/term
   - pkg/kubectl/validation

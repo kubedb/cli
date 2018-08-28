@@ -16,7 +16,6 @@ import (
 
 	"github.com/appscode/go/net/httpclient"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/cli/pkg/kube"
 	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -25,15 +24,15 @@ import (
 	"k8s.io/client-go/tools/portforward"
 	"k8s.io/client-go/transport/spdy"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
 )
 
-func NewCmdSummarize(out io.Writer, cmdErr io.Writer) *cobra.Command {
+func NewCmdSummarize(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "summarize",
 		Short: "Export summary report",
 		Run: func(cmd *cobra.Command, args []string) {
-			f := kube.NewKubeFactory(cmd)
-			cmdutil.CheckErr(exportReport(f, cmd, out, cmdErr, args))
+			cmdutil.CheckErr(exportReport(f, cmd, streams, args))
 		},
 	}
 	util.AddAuditReportFlags(cmd)
@@ -60,9 +59,9 @@ const (
 	operatorPortNumber = 8080
 )
 
-func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, args []string) error {
+func exportReport(f cmdutil.Factory, cmd *cobra.Command, streams genericclioptions.IOStreams, args []string) error {
 	if len(args) == 0 {
-		fmt.Fprint(errOut, "You must specify the type of resource. ", validResourcesForReport)
+		fmt.Fprint(streams.ErrOut, "You must specify the type of resource. ", validResourcesForReport)
 		usageString := "Required resource not specified."
 		return cmdutil.UsageErrorf(cmd, usageString)
 	}
@@ -124,12 +123,12 @@ func exportReport(f cmdutil.Factory, cmd *cobra.Command, out, errOut io.Writer, 
 		return err
 	}
 
-	config, err := f.ClientConfig()
-	if err != nil {
-		return err
-	}
+	//config, err := f.ClientConfig()
+	//if err != nil {
+	//	return err
+	//}
 
-	tunnel := newTunnel(restClient, config, operatorNamespace, operatorPodList.Items[0].Name, operatorPortNumber)
+	tunnel := newTunnel(restClient, nil, operatorNamespace, operatorPodList.Items[0].Name, operatorPortNumber)
 	if err := tunnel.forwardPort(); err != nil {
 		return err
 	}

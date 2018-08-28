@@ -3,7 +3,6 @@ package cmds
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"path/filepath"
 	"time"
 
@@ -13,23 +12,24 @@ import (
 	diff "github.com/yudai/gojsondiff"
 	"github.com/yudai/gojsondiff/formatter"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
 )
 
-func NewCmdCompare(out io.Writer, cmdErr io.Writer) *cobra.Command {
+func NewCmdCompare(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "compare",
 		Short: "Compare summary reports",
 		Run: func(cmd *cobra.Command, args []string) {
-			cmdutil.CheckErr(compareReports(cmd, out, cmdErr, args))
+			cmdutil.CheckErr(compareReports(cmd, streams, args))
 		},
 	}
 	util.AddCompareFlags(cmd)
 	return cmd
 }
 
-func compareReports(cmd *cobra.Command, out, errOut io.Writer, args []string) error {
+func compareReports(cmd *cobra.Command, streams genericclioptions.IOStreams, args []string) error {
 	if len(args) != 2 {
-		fmt.Fprint(errOut, "You must provide two summary report to compare.")
+		fmt.Fprint(streams.ErrOut, "You must provide two summary report to compare.")
 		usageString := "Summary reports not provided."
 		return cmdutil.UsageErrorf(cmd, usageString)
 	}
