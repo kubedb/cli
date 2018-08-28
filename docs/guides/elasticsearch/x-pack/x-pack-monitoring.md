@@ -11,7 +11,7 @@ section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Using Kibana with KubeDB Elasticsearch
+# X-Pack Monitoring with KubeDB Elasticsearch
 
 This tutorial will show you how to use X-Pack monitoring in an Elasticsearch cluster in KubeDB.
 
