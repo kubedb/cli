@@ -6,6 +6,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "1.5"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5"
   exporter:
@@ -19,6 +20,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  version: "1.5.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5.4"
   exporter:
