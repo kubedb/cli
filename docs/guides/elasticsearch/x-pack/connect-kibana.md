@@ -419,7 +419,7 @@ $ kubectl logs -n demo kibana-84b8cbcf7c-mg699 -f
 
 Once you see `"message":"Server running at http://0.0.0.0:5601"` in the log, Kibana is ready. Now it is time to access Kibana UI.
 
-In order to access Kibana UI from outside of the cluster, we need to create a service with type `NodePort`.
+In order to access Kibana UI from outside of the cluster, we will use a `NodePort` type service.
 ```console
 $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/kibana-service.yaml
 service/kibana created

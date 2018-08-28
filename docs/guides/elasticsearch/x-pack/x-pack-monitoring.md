@@ -1,9 +1,9 @@
 ---
-title: Monitoring Single Elasticsearch Cluster in KubeDB
+title: X-Pack Monitoring of Elasticsearch Cluster in KubeDB
 menu:
   docs_0.8.0:
-    identifier: es-x-pack-monitoring-single-cluster
-    name: Monitoring Single Cluster
+    identifier: es-x-pack-monitoring
+    name: X-Pack Monitoring
     parent: es-x-pack
     weight: 20
 menu_name: docs_0.8.0
@@ -447,7 +447,7 @@ $ kubectl logs -n demo kibana-84b8cbcf7c-mg699 -f
 
 Once you see `"message":"Server running at http://0.0.0.0:5601"` in the log, Kibana is ready. Now it is time to access Kibana UI.
 
-In order to access Kibana UI from outside of the cluster, we need to create a service with type `NodePort`.
+In order to access Kibana UI from outside of the cluster, we will use a `NodePort` type service.
 ```console
 $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/kibana-service.yaml
 service/kibana created
@@ -498,6 +498,17 @@ After login, go to `Monitoring` tab in Kibana UI. You will see Kibana has connec
 ![Kibana Monitoring Node](/docs/images/elasticsearch/x-pack/monitoring-node.png)
 
 ![Kibana Monitoring Overview](/docs/images/elasticsearch/x-pack/monitoring-overview.png)
+
+## Monitoring Multiple Cluster
+
+Monitoring multiple cluster is paid feature of X-Pack. If you are interested then follow these steps,
+
+1. First, create a separate cluster to store monitoring data. Let's say it **monitoring-cluster**.
+2. Configure monitoring-cluster to connect with Kibana.
+3. Configure Kibana to view monitoring data from monitoring-cluster.
+4. Configure `http` exporter of your production clusters to export monitoring data to the monitoring-cluster. Set `xpack.monitoring.exporters.<exporter-name>.host:` field to the address of the monitoring-cluster.
+
+Now, your production clusters will send monitoring data to the monitoring-cluster and Kibana will retrieve these data from it.
 
 ## Cleanup
 
