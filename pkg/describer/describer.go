@@ -24,8 +24,8 @@ import (
 	"strconv"
 	"strings"
 	"text/tabwriter"
-	"time"
 
+	meta_util "github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	cs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
@@ -140,8 +140,10 @@ func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, fa
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "StatefulSet:\t\n")
 	w.Write(LEVEL_1, "Name:\t%s\n", ps.ObjectMeta.Name)
+	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", timeToString(&ps.CreationTimestamp))
+	printLabelsMultiline(LEVEL_1, w, "Labels", ps.Labels)
+	printAnnotationsMultiline(LEVEL_1, w, "Annotations", ps.Annotations)
 	w.Write(LEVEL_1, "Replicas:\t%d desired | %d total\n", ps.Spec.Replicas, ps.Status.Replicas)
-	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", ps.CreationTimestamp.Time.Format(time.RFC1123Z))
 	w.Write(LEVEL_1, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
@@ -149,8 +151,10 @@ func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, faile
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Deployment:\t\n")
 	w.Write(LEVEL_1, "Name:\t%s\n", d.ObjectMeta.Name)
+	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", timeToString(&d.CreationTimestamp))
+	printLabelsMultiline(LEVEL_1, w, "Labels", d.Labels)
+	printAnnotationsMultiline(LEVEL_1, w, "Annotations", d.Annotations)
 	w.Write(LEVEL_1, "Replicas:\t%d desired | %d updated | %d total | %d available | %d unavailable\n", *(d.Spec.Replicas), d.Status.UpdatedReplicas, d.Status.Replicas, d.Status.AvailableReplicas, d.Status.UnavailableReplicas)
-	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", d.CreationTimestamp.Time.Format(time.RFC1123Z))
 	w.Write(LEVEL_1, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
@@ -198,6 +202,8 @@ func describeService(service *core.Service, endpoints *core.Endpoints, w printer
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Service:\t\n")
 	w.Write(LEVEL_1, "Name:\t%s\n", service.Name)
+	printLabelsMultiline(LEVEL_1, w, "Labels", service.Labels)
+	printAnnotationsMultiline(LEVEL_1, w, "Annotations", service.Annotations)
 	w.Write(LEVEL_1, "Type:\t%s\n", service.Spec.Type)
 	w.Write(LEVEL_1, "IP:\t%s\n", service.Spec.ClusterIP)
 	if len(service.Spec.ExternalIPs) > 0 {
@@ -242,6 +248,10 @@ func describeSecret(secret *core.Secret, prefix string, w printersinternal.Prefi
 		w.Write(LEVEL_0, "%s Secret:\n", prefix)
 	}
 	w.Write(LEVEL_1, "Name:\t%s\n", secret.Name)
+	printLabelsMultiline(LEVEL_1, w, "Labels", secret.Labels)
+	skipAnnotations := sets.NewString(meta_util.LastAppliedConfigAnnotation)
+	printAnnotationsMultilineWithFilter(LEVEL_1, w, "Annotations", secret.Annotations, skipAnnotations)
+
 	w.Write(LEVEL_1, "\nType:\t%s\n", secret.Type)
 
 	w.Write(LEVEL_1, "\nData\n====\n")
@@ -587,14 +597,16 @@ func DescribeEvents(el *core.EventList, w printersinternal.PrefixWriter) {
 	}
 }
 
+var maxAnnotationLen = 200
+
 // printLabelsMultiline prints multiple labels with a proper alignment.
-func printLabelsMultiline(w printersinternal.PrefixWriter, title string, labels map[string]string) {
-	printLabelsMultilineWithIndent(w, "", title, "\t", labels, sets.NewString())
+func printLabelsMultiline(level int, w printersinternal.PrefixWriter, title string, labels map[string]string) {
+	printLabelsMultilineWithIndent(level, w, "", title, "\t", labels, sets.NewString())
 }
 
 // printLabelsMultiline prints multiple labels with a user-defined alignment.
-func printLabelsMultilineWithIndent(w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.String) {
-	w.Write(LEVEL_0, "%s%s:%s", initialIndent, title, innerIndent)
+func printLabelsMultilineWithIndent(level int, w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.String) {
+	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
 	if labels == nil || len(labels) == 0 {
 		w.WriteLine("<none>")
@@ -617,80 +629,11 @@ func printLabelsMultilineWithIndent(w printersinternal.PrefixWriter, initialInde
 
 	for i, key := range keys {
 		if i != 0 {
-			w.Write(LEVEL_0, "%s", initialIndent)
-			w.Write(LEVEL_0, "%s", innerIndent)
+			w.Write(level, "%s", initialIndent)
+			w.Write(level, "%s", innerIndent)
 		}
-		w.Write(LEVEL_0, "%s=%s\n", key, labels[key])
+		w.Write(level, "%s=%s\n", key, labels[key])
 		i++
-	}
-}
-
-// printTaintsMultiline prints multiple taints with a proper alignment.
-func printNodeTaintsMultiline(w printersinternal.PrefixWriter, title string, taints []core.Taint) {
-	printTaintsMultilineWithIndent(w, "", title, "\t", taints)
-}
-
-// printTaintsMultilineWithIndent prints multiple taints with a user-defined alignment.
-func printTaintsMultilineWithIndent(w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, taints []core.Taint) {
-	w.Write(LEVEL_0, "%s%s:%s", initialIndent, title, innerIndent)
-
-	if taints == nil || len(taints) == 0 {
-		w.WriteLine("<none>")
-		return
-	}
-
-	// to print taints in the sorted order
-	sort.Slice(taints, func(i, j int) bool {
-		cmpKey := func(taint core.Taint) string {
-			return string(taint.Effect) + "," + taint.Key
-		}
-		return cmpKey(taints[i]) < cmpKey(taints[j])
-	})
-
-	for i, taint := range taints {
-		if i != 0 {
-			w.Write(LEVEL_0, "%s", initialIndent)
-			w.Write(LEVEL_0, "%s", innerIndent)
-		}
-		w.Write(LEVEL_0, "%s\n", taint.ToString())
-	}
-}
-
-// printPodTolerationsMultiline prints multiple tolerations with a proper alignment.
-func printPodTolerationsMultiline(w printersinternal.PrefixWriter, title string, tolerations []core.Toleration) {
-	printTolerationsMultilineWithIndent(w, "", title, "\t", tolerations)
-}
-
-// printTolerationsMultilineWithIndent prints multiple tolerations with a user-defined alignment.
-func printTolerationsMultilineWithIndent(w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, tolerations []core.Toleration) {
-	w.Write(LEVEL_0, "%s%s:%s", initialIndent, title, innerIndent)
-
-	if tolerations == nil || len(tolerations) == 0 {
-		w.WriteLine("<none>")
-		return
-	}
-
-	// to print tolerations in the sorted order
-	sort.Slice(tolerations, func(i, j int) bool {
-		return tolerations[i].Key < tolerations[j].Key
-	})
-
-	for i, toleration := range tolerations {
-		if i != 0 {
-			w.Write(LEVEL_0, "%s", initialIndent)
-			w.Write(LEVEL_0, "%s", innerIndent)
-		}
-		w.Write(LEVEL_0, "%s", toleration.Key)
-		if len(toleration.Value) != 0 {
-			w.Write(LEVEL_0, "=%s", toleration.Value)
-		}
-		if len(toleration.Effect) != 0 {
-			w.Write(LEVEL_0, ":%s", toleration.Effect)
-		}
-		if toleration.TolerationSeconds != nil {
-			w.Write(LEVEL_0, " for %ds", *toleration.TolerationSeconds)
-		}
-		w.Write(LEVEL_0, "\n")
 	}
 }
 
@@ -707,4 +650,54 @@ func tabbedString(f func(io.Writer) error) (string, error) {
 	out.Flush()
 	str := string(buf.String())
 	return str, nil
+}
+
+// printAnnotationsMultilineWithFilter prints filtered multiple annotations with a proper alignment.
+func printAnnotationsMultilineWithFilter(level int, w printersinternal.PrefixWriter, title string, annotations map[string]string, skip sets.String) {
+	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, skip)
+}
+
+// printAnnotationsMultiline prints multiple annotations with a proper alignment.
+func printAnnotationsMultiline(level int, w printersinternal.PrefixWriter, title string, annotations map[string]string) {
+	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, sets.NewString())
+}
+
+// printAnnotationsMultilineWithIndent prints multiple annotations with a user-defined alignment.
+// If annotation string is too long, we omit chars more than 200 length.
+func printAnnotationsMultilineWithIndent(level int, w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, annotations map[string]string, skip sets.String) {
+
+	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
+
+	if len(annotations) == 0 {
+		w.WriteLine("<none>")
+		return
+	}
+
+	// to print labels in the sorted order
+	keys := make([]string, 0, len(annotations))
+	for key := range annotations {
+		if skip.Has(key) {
+			continue
+		}
+		keys = append(keys, key)
+	}
+	if len(annotations) == 0 {
+		w.WriteLine("<none>")
+		return
+	}
+	sort.Strings(keys)
+
+	for i, key := range keys {
+		if i != 0 {
+			w.Write(level, initialIndent)
+			w.Write(level, innerIndent)
+		}
+		line := fmt.Sprintf("%s=%s", key, annotations[key])
+		if len(line) > maxAnnotationLen {
+			w.Write(level, "%s...\n", line[:maxAnnotationLen])
+		} else {
+			w.Write(level, "%s\n", line)
+		}
+		i++
+	}
 }
