@@ -154,13 +154,13 @@ def update_registry():
 
 
 def install():
-    die(call('GO15VENDOREXPERIMENT=1 go install ./cmd/...'))
+    die(call('go install ./cmd/...'))
 
 
 def default():
     gen()
     fmt()
-    die(call('GO15VENDOREXPERIMENT=1 go install ./cmd/...'))
+    die(call('go install ./cmd/...'))
 
 
 if __name__ == "__main__":

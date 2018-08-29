@@ -22,7 +22,7 @@ func GenerationHash(in metav1.Object) string {
 	if len(in.GetAnnotations()) > 0 {
 		data := make(map[string]string, len(in.GetAnnotations()))
 		for k, v := range in.GetAnnotations() {
-			if k != lastAppliedConfiguration {
+			if k != LastAppliedConfigAnnotation {
 				data[k] = v
 			}
 		}

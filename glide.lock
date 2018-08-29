@@ -1,5 +1,5 @@
 hash: 85c7f2506158250397688baadce52888157db373ccdbc915cf90963fddd7c08a
-updated: 2018-08-29T01:52:15.50072152-07:00
+updated: 2018-08-29T09:38:57.650628745-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -14,7 +14,6 @@ imports:
   - encoding/json/types
   - homedir
   - log
-  - net/httpclient
   - runtime
   - sets
   - types
@@ -24,7 +23,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 1359b374de83fa14fd58ab10aa8ea4935f84d249
 - name: github.com/appscode/kutil
-  version: ab96b8d0056d39ca0c57dc6705864423b50515bc
+  version: 033b938d05c0fbabfe8ee056f2088f61cc5f78d9
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -44,8 +43,6 @@ imports:
   - autorest/adal
   - autorest/azure
   - autorest/date
-- name: github.com/cenkalti/backoff
-  version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
 - name: github.com/chai2010/gettext-go
   version: c6fed771bfd517099caf0f7a961671fa8ed08723
   subpackages:
@@ -165,10 +162,6 @@ imports:
   - cmp/internal/diff
   - cmp/internal/function
   - cmp/internal/value
-- name: github.com/google/go-querystring
-  version: 53e6ce116135b80d037921a7fdd5138cf32d7a8a
-  subpackages:
-  - query
 - name: github.com/google/gofuzz
   version: 44d81051d367757e1c7c6a5a86423ece9afcf63c
 - name: github.com/google/uuid
@@ -209,7 +202,7 @@ imports:
 - name: github.com/json-iterator/go
   version: f2b4162afba35581b6d4a50d3b8f34e33c144682
 - name: github.com/kubedb/apimachinery
-  version: 4b12d3ad40e014ee0c9a33dafecf8e83d07769e6
+  version: b42939759a52b9e0f4969d6fa82dc23873414356
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
@@ -218,13 +211,13 @@ imports:
 - name: github.com/kubedb/elasticsearch
   version: 45306807c4e94556eeaaecc8493411ff695fc1f5
 - name: github.com/kubedb/memcached
-  version: f64af50681f5061c4ea9cce87f7e3b62f095d573
+  version: 2077b923e9a3ffa37d8b63fe919e7de68ced4fd7
 - name: github.com/kubedb/mongodb
   version: fb48b128a4559bace72d5da50c3cf399fee37faf
 - name: github.com/kubedb/mysql
-  version: 9ee88bd2cbca695b56cb4d9f08d2bc4ec9e6c608
+  version: 0b99785597e353540dc633ba2dd68cc014a51557
 - name: github.com/kubedb/postgres
-  version: 72b37b5e31d61f69d2568a249a24af06903bd5eb
+  version: 926c0fa16fe6ee4196a40bd7ff29c64b93ce616e
 - name: github.com/kubedb/redis
   version: e280162cd8d4d799a032c0e3304b82b6e3d1c6b4
 - name: github.com/mailru/easyjson
@@ -269,7 +262,7 @@ imports:
 - name: github.com/sirupsen/logrus
   version: 89742aefa4b206dcf400792f3bd35b542998eb3b
 - name: github.com/spf13/cobra
-  version: 6fd8e29b07d8242ebe2888060fede5766e240c25
+  version: 99dc123558852f67743bd0b2caf8383cb3c6d720
   subpackages:
   - doc
 - name: github.com/spf13/pflag
@@ -536,7 +529,6 @@ imports:
   - tools/clientcmd/api/v1
   - tools/metrics
   - tools/pager
-  - tools/portforward
   - tools/record
   - tools/reference
   - tools/remotecommand

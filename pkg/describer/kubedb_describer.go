@@ -57,9 +57,8 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
@@ -67,10 +66,6 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
-		}
-
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
 		}
 
 		describeInitialization(item.Spec.Init, w)
@@ -153,13 +148,10 @@ func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels
 		w := printersinternal.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
-		w.Write(LEVEL_0, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
@@ -246,13 +238,10 @@ func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector
 		w := printersinternal.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
-		w.Write(LEVEL_0, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
@@ -329,13 +318,10 @@ func (d *MongoDBDescriber) describeMongoDB(item *api.MongoDB, selector labels.Se
 		w := printersinternal.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
-		w.Write(LEVEL_0, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
@@ -412,13 +398,10 @@ func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector
 		w := printersinternal.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
-		w.Write(LEVEL_0, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
@@ -489,13 +472,10 @@ func (d *MemcachedDescriber) describeMemcached(item *api.Memcached, selector lab
 		w := printersinternal.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
-		w.Write(LEVEL_0, "StartTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
@@ -553,12 +533,9 @@ func (d *SnapshotDescriber) describeSnapshot(item *api.Snapshot, events *core.Ev
 		if item.Status.CompletionTime != nil {
 			w.Write(LEVEL_0, "CompletionTimestamp:\t%s\n", timeToString(item.Status.CompletionTime))
 		}
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
@@ -627,12 +604,9 @@ func (d *DormantDatabaseDescriber) describeDormantDatabase(item *api.DormantData
 		if item.Status.WipeOutTime != nil {
 			w.Write(LEVEL_0, "WipeOutTimestamp:\t%s\n", timeToString(item.Status.WipeOutTime))
 		}
-		if item.Labels != nil {
-			printLabelsMultiline(w, "Labels", item.Labels)
-		}
-		if item.Annotations != nil {
-			printLabelsMultiline(w, "Annotations", item.Annotations)
-		}
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
 		if len(item.Status.Reason) > 0 {
 			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
@@ -746,7 +720,7 @@ func describeMonitor(monitor *mona.AgentSpec, w printersinternal.PrefixWriter) {
 			w.Write(LEVEL_0, "    Namespace:\t%s\n", prom.Namespace)
 		}
 		if prom.Labels != nil {
-			printLabelsMultiline(w, "    Labels", prom.Labels)
+			printLabelsMultiline(LEVEL_0, w, "    Labels", prom.Labels)
 		}
 		if prom.Interval != "" {
 			w.Write(LEVEL_0, "    Interval:\t%s\n", prom.Interval)
@@ -788,12 +762,8 @@ func describeOrigin(origin api.Origin, w printersinternal.PrefixWriter) {
 	w.Write(LEVEL_0, "Origin:\n")
 	w.Write(LEVEL_0, "  Name:\t%s\n", origin.Name)
 	w.Write(LEVEL_0, "  Namespace:\t%s\n", origin.Namespace)
-	if origin.Labels != nil {
-		printLabelsMultiline(w, "  Labels", origin.Labels)
-	}
-	if origin.Annotations != nil {
-		printLabelsMultiline(w, "  Annotations", origin.Annotations)
-	}
+	printLabelsMultiline(LEVEL_0, w, "Labels", origin.Labels)
+	printAnnotationsMultiline(LEVEL_0, w, "Annotations", origin.Annotations)
 }
 
 func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w printersinternal.PrefixWriter) {

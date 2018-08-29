@@ -72,7 +72,10 @@ func (e elasticsearchStatsService) Path() string {
 }
 
 func (e elasticsearchStatsService) Scheme() string {
-	return ""
+	if e.Spec.EnableSSL {
+		return "https"
+	}
+	return "http"
 }
 
 func (e Elasticsearch) StatsService() mona.StatsAccessor {
