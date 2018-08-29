@@ -70,11 +70,7 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 
 		describeInitialization(item.Spec.Init, w)
 
-		if item.Spec.StorageType == api.StorageTypeEphemeral {
-			// TODO:
-		} else {
-			describeStorage(item.Spec.Storage, w)
-		}
+		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
@@ -164,11 +160,7 @@ func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels
 
 		describeInitialization(item.Spec.Init, w)
 
-		if item.Spec.StorageType == api.StorageTypeEphemeral {
-			// TODO:
-		} else {
-			describeStorage(item.Spec.Storage, w)
-		}
+		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
@@ -250,11 +242,7 @@ func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector
 			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
 		}
 
-		if item.Spec.StorageType == api.StorageTypeEphemeral {
-			// TODO:
-		} else {
-			describeStorage(item.Spec.Storage, w)
-		}
+		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
@@ -330,11 +318,7 @@ func (d *MongoDBDescriber) describeMongoDB(item *api.MongoDB, selector labels.Se
 			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
 		}
 
-		if item.Spec.StorageType == api.StorageTypeEphemeral {
-			// TODO:
-		} else {
-			describeStorage(item.Spec.Storage, w)
-		}
+		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
@@ -410,11 +394,7 @@ func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector
 			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
 		}
 
-		if item.Spec.StorageType == api.StorageTypeEphemeral {
-			// TODO:
-		} else {
-			describeStorage(item.Spec.Storage, w)
-		}
+		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
@@ -542,8 +522,7 @@ func (d *SnapshotDescriber) describeSnapshot(item *api.Snapshot, events *core.Ev
 		}
 
 		w.Write(LEVEL_0, "Storage:\n")
-		// TODO
-		// describeSnapshotStorage(item.Spec.Backend, w, 2)
+		describeSnapshotStorage(item.Spec.Backend, w)
 
 		secretVolumes := make(map[string]*core.SecretVolumeSource)
 		if item.Spec.StorageSecretName != "" {
@@ -626,7 +605,12 @@ func (d *DormantDatabaseDescriber) describeDormantDatabase(item *api.DormantData
 	})
 }
 
-func describeStorage(pvcSpec *core.PersistentVolumeClaimSpec, w printersinternal.PrefixWriter) {
+func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w printersinternal.PrefixWriter) {
+	if st == api.StorageTypeEphemeral {
+		w.Write(LEVEL_0, "  StorageType:\t%s\n", api.StorageTypeEphemeral)
+	} else {
+		w.Write(LEVEL_0, "  StorageType:\t%s\n", api.StorageTypeDurable)
+	}
 	if pvcSpec == nil {
 		w.Write(LEVEL_0, "No volumes.\n")
 		return
