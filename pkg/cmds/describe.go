@@ -1,26 +1,45 @@
+/*
+Copyright 2014 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package cmds
 
 import (
 	"fmt"
-	"io"
 	"strings"
 
+	"github.com/kubedb/cli/pkg/cmds/get"
 	"github.com/kubedb/cli/pkg/describer"
-	"github.com/kubedb/cli/pkg/kube"
-	"github.com/kubedb/cli/pkg/printer"
-	"github.com/kubedb/cli/pkg/util"
 	"github.com/spf13/cobra"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/meta"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/kubectl/resource"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions/resource"
+	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
+	"k8s.io/kubernetes/pkg/printers"
 )
 
 var (
 	describeLong = templates.LongDesc(`
 		Show details of a specific resource or group of resources.
 		This command joins many API calls together to form a detailed description of a
-		given resource or group of resources.` + valid_resources)
+		given resource or group of resources.` + get.ValidResources)
 
 	describeExample = templates.Examples(`
 		# Describe a elasticsearch
@@ -33,97 +52,184 @@ var (
 		kubedb describe drmn`)
 )
 
-func NewCmdDescribe(out, cmdErr io.Writer) *cobra.Command {
-	describerSettings := &printer.DescriberSettings{}
+type DescribeOptions struct {
+	CmdParent string
+	Selector  string
+	Namespace string
 
-	cmd := &cobra.Command{
-		Use:     "describe (TYPE [NAME_PREFIX] | TYPE/NAME)",
-		Short:   "Show details of a specific resource or group of resources",
-		Long:    describeLong,
-		Example: describeExample,
-		Run: func(cmd *cobra.Command, args []string) {
-			f := kube.NewKubeFactory(cmd)
-			cmdutil.CheckErr(RunDescribe(f, out, cmdErr, cmd, args, describerSettings))
+	Describer  func(*meta.RESTMapping) (printers.Describer, error)
+	NewBuilder func() *resource.Builder
+
+	BuilderArgs []string
+
+	EnforceNamespace     bool
+	AllNamespaces        bool
+	IncludeUninitialized bool
+
+	DescriberSettings *printers.DescriberSettings
+	FilenameOptions   *resource.FilenameOptions
+
+	genericclioptions.IOStreams
+}
+
+func NewCmdDescribe(parent string, f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
+	o := &DescribeOptions{
+		FilenameOptions: &resource.FilenameOptions{},
+		DescriberSettings: &printers.DescriberSettings{
+			ShowEvents: true,
 		},
+
+		CmdParent: parent,
+
+		IOStreams: streams,
 	}
 
-	util.AddDescribeFlags(cmd)
-	cmd.Flags().BoolVarP(&describerSettings.ShowEvents, "show-event", "E", true, "If true, display events related to the described object.")
-	cmd.Flags().BoolVarP(&describerSettings.ShowWorkload, "show-workload", "W", true, "If true, describe statefulSet, service and secrets.")
-	cmd.Flags().BoolVarP(&describerSettings.ShowSecret, "show-secret", "S", true, "If true, display secrets.")
+	cmd := &cobra.Command{
+		Use:                   "describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)",
+		DisableFlagsInUseLine: true,
+		Short:                 i18n.T("Show details of a specific resource or group of resources"),
+		Long:                  describeLong + "\n\n" + cmdutil.SuggestApiResources(parent),
+		Example:               describeExample,
+		Run: func(cmd *cobra.Command, args []string) {
+			cmdutil.CheckErr(o.Complete(f, cmd, args))
+			cmdutil.CheckErr(o.Run())
+		},
+	}
+	usage := "containing the resource to describe"
+	cmdutil.AddFilenameOptionFlags(cmd, o.FilenameOptions, usage)
+	cmd.Flags().StringVarP(&o.Selector, "selector", "l", o.Selector, "Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)")
+	cmd.Flags().BoolVar(&o.AllNamespaces, "all-namespaces", o.AllNamespaces, "If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even if specified with --namespace.")
+	cmd.Flags().BoolVar(&o.DescriberSettings.ShowEvents, "show-events", o.DescriberSettings.ShowEvents, "If true, display events related to the described object.")
+
+	cmdutil.AddIncludeUninitializedFlag(cmd)
 	return cmd
 }
 
-func RunDescribe(f cmdutil.Factory, out, cmdErr io.Writer, cmd *cobra.Command, args []string, describerSettings *printer.DescriberSettings) error {
-	selector := cmdutil.GetFlagString(cmd, "selector")
-	allNamespaces := cmdutil.GetFlagBool(cmd, "all-namespaces")
-	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
-	if allNamespaces {
-		enforceNamespace = false
-	}
-	if len(args) == 0 {
-		fmt.Fprint(cmdErr, "You must specify the type of resource to describe. ", valid_resources)
-		return cmdutil.UsageErrorf(cmd, "Required resource not specified.")
-	}
-
-	var printAll = false
+func (o *DescribeOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []string) error {
 	var err error
-	resources := strings.Split(args[0], ",")
-	for i, r := range resources {
-		if r == "all" {
-			printAll = true
-		} else {
-			items := strings.Split(r, "/")
-			kind, err := util.GetSupportedResource(items[0])
-			if err != nil {
-				return err
-			}
-			items[0] = kind
-			resources[i] = strings.Join(items, "/")
-		}
-	}
-	if printAll {
-		if resources, err = util.GetAllSupportedResources(f); err != nil {
-			return err
-		}
-	}
-	args[0] = strings.Join(resources, ",")
-
-	r := f.NewBuilder().Unstructured().
-		ContinueOnError().
-		NamespaceParam(cmdNamespace).DefaultNamespace().AllNamespaces(allNamespaces).
-		FilenameParam(enforceNamespace, &resource.FilenameOptions{}).
-		LabelSelectorParam(selector).
-		ResourceTypeOrNameArgs(true, args...).
-		Flatten().
-		Do()
-	err = r.Err()
+	o.Namespace, o.EnforceNamespace, err = f.ToRawKubeConfigLoader().Namespace()
 	if err != nil {
 		return err
 	}
 
-	allErrs := make([]error, 0)
+	if o.AllNamespaces {
+		o.EnforceNamespace = false
+	}
+
+	if len(args) == 0 && cmdutil.IsFilenameSliceEmpty(o.FilenameOptions.Filenames) {
+		return fmt.Errorf("You must specify the type of resource to describe. %s\n", cmdutil.SuggestApiResources(o.CmdParent))
+	}
+
+	o.BuilderArgs = args
+
+	o.Describer = func(mapping *meta.RESTMapping) (printers.Describer, error) {
+		return describer.DescriberFn(f, mapping)
+	}
+
+	o.NewBuilder = f.NewBuilder
+
+	// include the uninitialized objects by default
+	// unless user explicitly set --include-uninitialized=false
+	o.IncludeUninitialized = cmdutil.ShouldIncludeUninitialized(cmd, true)
+	return nil
+}
+
+func (o *DescribeOptions) Validate(args []string) error {
+	return nil
+}
+
+func (o *DescribeOptions) Run() error {
+	r := o.NewBuilder().
+		Unstructured().
+		ContinueOnError().
+		NamespaceParam(o.Namespace).DefaultNamespace().AllNamespaces(o.AllNamespaces).
+		FilenameParam(o.EnforceNamespace, o.FilenameOptions).
+		LabelSelectorParam(o.Selector).
+		IncludeUninitialized(o.IncludeUninitialized).
+		ResourceTypeOrNameArgs(true, o.BuilderArgs...).
+		Flatten().
+		Do()
+	err := r.Err()
+	if err != nil {
+		return err
+	}
+
+	allErrs := []error{}
 	infos, err := r.Infos()
 	if err != nil {
+		if apierrors.IsNotFound(err) && len(o.BuilderArgs) == 2 {
+			return o.DescribeMatchingResources(err, o.BuilderArgs[0], o.BuilderArgs[1])
+		}
 		allErrs = append(allErrs, err)
 	}
 
-	rDescriber := describer.NewDescriber(f)
+	errs := sets.NewString()
 	first := true
 	for _, info := range infos {
-		s, err := rDescriber.Describe(info.Object, describerSettings)
+		mapping := info.ResourceMapping()
+		describer, err := o.Describer(mapping)
 		if err != nil {
+			if errs.Has(err.Error()) {
+				continue
+			}
 			allErrs = append(allErrs, err)
+			errs.Insert(err.Error())
+			continue
+		}
+		s, err := describer.Describe(info.Namespace, info.Name, *o.DescriberSettings)
+		if err != nil {
+			if errs.Has(err.Error()) {
+				continue
+			}
+			allErrs = append(allErrs, err)
+			errs.Insert(err.Error())
 			continue
 		}
 		if first {
 			first = false
-			fmt.Fprint(out, s)
+			fmt.Fprint(o.Out, s)
 		} else {
-			fmt.Fprintf(out, "\n\n%s", s)
+			fmt.Fprintf(o.Out, "\n\n%s", s)
 		}
 	}
 
 	return utilerrors.NewAggregate(allErrs)
+}
 
+func (o *DescribeOptions) DescribeMatchingResources(originalError error, resource, prefix string) error {
+	r := o.NewBuilder().
+		Unstructured().
+		NamespaceParam(o.Namespace).DefaultNamespace().
+		ResourceTypeOrNameArgs(true, resource).
+		SingleResourceType().
+		Flatten().
+		Do()
+	mapping, err := r.ResourceMapping()
+	if err != nil {
+		return err
+	}
+	describer, err := o.Describer(mapping)
+	if err != nil {
+		return err
+	}
+	infos, err := r.Infos()
+	if err != nil {
+		return err
+	}
+	isFound := false
+	for ix := range infos {
+		info := infos[ix]
+		if strings.HasPrefix(info.Name, prefix) {
+			isFound = true
+			s, err := describer.Describe(info.Namespace, info.Name, *o.DescriberSettings)
+			if err != nil {
+				return err
+			}
+			fmt.Fprintf(o.Out, "%s\n", s)
+		}
+	}
+	if !isFound {
+		return originalError
+	}
+	return nil
 }

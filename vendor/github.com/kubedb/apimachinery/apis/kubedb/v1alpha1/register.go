@@ -24,6 +24,11 @@ func init() {
 	localSchemeBuilder.Register(addKnownTypes)
 }
 
+// Kind takes an unqualified kind and returns a Group qualified GroupKind
+func Kind(kind string) schema.GroupKind {
+	return SchemeGroupVersion.WithKind(kind).GroupKind()
+}
+
 // Resource takes an unqualified resource and returns a Group qualified GroupResource
 func Resource(resource string) schema.GroupResource {
 	return SchemeGroupVersion.WithResource(resource).GroupResource()
@@ -34,18 +39,32 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&Postgres{},
 		&PostgresList{},
+		&PostgresVersion{},
+		&PostgresVersionList{},
 		&Elasticsearch{},
 		&ElasticsearchList{},
+		&ElasticsearchVersion{},
+		&ElasticsearchVersionList{},
 		&Memcached{},
 		&MemcachedList{},
+		&MemcachedVersion{},
+		&MemcachedVersionList{},
 		&MongoDB{},
 		&MongoDBList{},
+		&MongoDBVersion{},
+		&MongoDBVersionList{},
 		&MySQL{},
 		&MySQLList{},
+		&MySQLVersion{},
+		&MySQLVersionList{},
 		&Redis{},
 		&RedisList{},
+		&RedisVersion{},
+		&RedisVersionList{},
 		&Etcd{},
 		&EtcdList{},
+		&EtcdVersion{},
+		&EtcdVersionList{},
 		&Snapshot{},
 		&SnapshotList{},
 		&DormantDatabase{},

@@ -1,15 +1,20 @@
 package cmds
 
 import (
+	"flag"
 	"io"
 	"strings"
 
 	v "github.com/appscode/go/version"
 	"github.com/appscode/kutil/tools/analytics"
 	"github.com/jpillora/go-ogle-analytics"
+	"github.com/kubedb/cli/pkg/cmds/create"
+	"github.com/kubedb/cli/pkg/cmds/get"
 	"github.com/spf13/cobra"
-	_ "github.com/spf13/cobra/doc"
+	utilflag "k8s.io/apiserver/pkg/util/flag"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
+	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
 )
 
 const (
@@ -38,37 +43,50 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 		Run: runHelp,
 	}
 
+	flags := cmds.PersistentFlags()
+	// Normalize all flags that are coming from other packages or pre-configurations
+	// a.k.a. change all "_" to "-". e.g. glog package
+	flags.SetNormalizeFunc(utilflag.WordSepNormalizeFunc)
+
+	kubeConfigFlags := genericclioptions.NewConfigFlags()
+	kubeConfigFlags.AddFlags(flags)
+	matchVersionKubeConfigFlags := cmdutil.NewMatchVersionFlags(kubeConfigFlags)
+	matchVersionKubeConfigFlags.AddFlags(flags)
+
+	flags.AddGoFlagSet(flag.CommandLine)
+	// ref: https://github.com/kubernetes/kubernetes/issues/17162#issuecomment-225596212
+	flag.CommandLine.Parse([]string{})
+	flags.BoolVar(&enableAnalytics, "analytics", enableAnalytics, "Send analytical events to Google Analytics")
+
+	f := cmdutil.NewFactory(matchVersionKubeConfigFlags)
+
+	ioStreams := genericclioptions.IOStreams{In: in, Out: out, ErrOut: err}
+
 	groups := templates.CommandGroups{
 		{
 			Message: "Basic Commands (Beginner):",
 			Commands: []*cobra.Command{
-				NewCmdCreate(out, err),
+				create.NewCmdCreate(f, ioStreams),
 			},
 		},
 		{
 			Message: "Basic Commands (Intermediate):",
 			Commands: []*cobra.Command{
-				NewCmdGet(out, err),
-				NewCmdEdit(out, err),
-				NewCmdDelete(out, err),
+				get.NewCmdGet("kubedb", f, ioStreams),
+				NewCmdEdit(f, ioStreams),
+				NewCmdDelete(f, ioStreams),
 			},
 		},
 		{
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
-				NewCmdDescribe(out, err),
-				NewCmdSummarize(out, err),
-				NewCmdCompare(out, err),
+				NewCmdDescribe("kubedb", f, ioStreams),
 				v.NewCmdVersion(),
 			},
 		},
 	}
-
 	groups.Add(cmds)
 	templates.ActsAsRootCommand(cmds, nil, groups...)
-
-	cmds.PersistentFlags().String("kube-context", "", "name of the kubeconfig context to use")
-	cmds.PersistentFlags().BoolVar(&enableAnalytics, "analytics", enableAnalytics, "Send analytical events to Google Analytics")
 
 	return cmds
 }

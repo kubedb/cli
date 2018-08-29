@@ -5,6 +5,10 @@ import (
 	"k8s.io/kube-openapi/pkg/common"
 )
 
+var (
+	EnableStatusSubresource bool
+)
+
 type ResourceInfo interface {
 	ResourceShortCode() string
 	ResourceKind() string
@@ -24,5 +28,15 @@ func setNameSchema(openapiSpec map[string]common.OpenAPIDefinition) {
 			Pattern:     `^[a-z]([-a-z0-9]*[a-z0-9])?$`,
 			MaxLength:   &maxLength,
 		},
+	}
+}
+
+func (e *BackupScheduleSpec) Migrate() {
+	if e == nil {
+		return
+	}
+	if e.Resources != nil {
+		e.PodTemplate.Spec.Resources = *e.Resources
+		e.Resources = nil
 	}
 }

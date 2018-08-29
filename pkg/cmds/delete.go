@@ -1,31 +1,49 @@
+/*
+Copyright 2014 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package cmds
 
 import (
 	"fmt"
-	"io"
 	"strings"
+	"time"
 
-	"github.com/kubedb/cli/pkg/kube"
-	"github.com/kubedb/cli/pkg/util"
-	"github.com/kubedb/cli/pkg/validator"
+	"github.com/golang/glog"
 	"github.com/spf13/cobra"
-	kerr "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/dynamic"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/kubectl/resource"
+	kubectlwait "k8s.io/kubernetes/pkg/kubectl/cmd/wait"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions/printers"
+	"k8s.io/kubernetes/pkg/kubectl/genericclioptions/resource"
+	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
 )
 
-// ref: k8s.io/kubernetes/pkg/kubectl/cmd/delete.go
-
 var (
-	deleteLong = templates.LongDesc(`
+	delete_long = templates.LongDesc(`
 		Delete resources by filenames, stdin, resources and names, or by resources and label selector.
 		JSON and YAML formats are accepted.
 
 		Note that the delete command does NOT do resource version checks`)
 
-	deleteExample = templates.Examples(`
+	delete_example = templates.Examples(`
 		# Delete a elasticsearch using the type and name specified in elastic.json.
 		kubedb delete -f ./elastic.json
 
@@ -39,104 +57,233 @@ var (
 		kubedb delete mysql --all`)
 )
 
-func NewCmdDelete(out, errOut io.Writer) *cobra.Command {
-	options := &resource.FilenameOptions{}
+type DeleteOptions struct {
+	resource.FilenameOptions
+
+	LabelSelector   string
+	FieldSelector   string
+	DeleteAll       bool
+	IgnoreNotFound  bool
+	Cascade         bool
+	DeleteNow       bool
+	ForceDeletion   bool
+	WaitForDeletion bool
+
+	GracePeriod int
+	Timeout     time.Duration
+
+	Output string
+
+	DynamicClient dynamic.Interface
+	Mapper        meta.RESTMapper
+	Result        *resource.Result
+
+	genericclioptions.IOStreams
+}
+
+func NewCmdDelete(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
+	deleteFlags := NewDeleteCommandFlags("containing the resource to delete.")
 
 	cmd := &cobra.Command{
-		Use:     "delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)])",
-		Short:   "Delete resources by filenames, stdin, resources and names, or by resources and label selector",
-		Long:    deleteLong,
-		Example: deleteExample,
+		Use:                   "delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)])",
+		DisableFlagsInUseLine: true,
+		Short:                 i18n.T("Delete resources by filenames, stdin, resources and names, or by resources and label selector"),
+		Long:                  delete_long,
+		Example:               delete_example,
 		Run: func(cmd *cobra.Command, args []string) {
-			f := kube.NewKubeFactory(cmd)
-			cmdutil.CheckErr(RunDelete(f, cmd, out, args, options))
+			o := deleteFlags.ToOptions(nil, streams)
+			cmdutil.CheckErr(o.Complete(f, args, cmd))
+			cmdutil.CheckErr(o.Validate(cmd))
+			cmdutil.CheckErr(o.RunDelete())
 		},
+		SuggestFor: []string{"rm"},
 	}
 
-	util.AddDeleteFlags(cmd, options)
+	deleteFlags.AddFlags(cmd)
+
+	cmdutil.AddIncludeUninitializedFlag(cmd)
 	return cmd
 }
 
-func RunDelete(f cmdutil.Factory, cmd *cobra.Command, out io.Writer, args []string, options *resource.FilenameOptions) error {
-	selector := cmdutil.GetFlagString(cmd, "selector")
-	deleteAll := cmdutil.GetFlagBool(cmd, "all")
-	cmdNamespace, enforceNamespace := util.GetNamespace(cmd)
-
-	mapper, _ := f.Object()
-
-	if len(args) > 0 {
-		resources := strings.Split(args[0], ",")
-		for i, r := range resources {
-			items := strings.Split(r, "/")
-			kind, err := util.GetSupportedResource(items[0])
-			if err != nil {
-				return err
-			}
-			items[0] = kind
-			resources[i] = strings.Join(items, "/")
-		}
-		args[0] = strings.Join(resources, ",")
-	}
-
-	r := f.NewBuilder().Unstructured().
-		NamespaceParam(cmdNamespace).DefaultNamespace().
-		FilenameParam(enforceNamespace, options).
-		LabelSelectorParam(selector).
-		SelectAllParam(deleteAll).
-		ResourceTypeOrNameArgs(false, args...).RequireObject(true).
-		Flatten().
-		Do()
-	err := r.Err()
+func (o *DeleteOptions) Complete(f cmdutil.Factory, args []string, cmd *cobra.Command) error {
+	cmdNamespace, enforceNamespace, err := f.ToRawKubeConfigLoader().Namespace()
 	if err != nil {
 		return err
 	}
 
-	return deleteResult(f, cmd, r, out, mapper)
+	if o.DeleteAll || len(o.LabelSelector) > 0 || len(o.FieldSelector) > 0 {
+		if f := cmd.Flags().Lookup("ignore-not-found"); f != nil && !f.Changed {
+			// If the user didn't explicitly set the option, default to ignoring NotFound errors when used with --all, -l, or --field-selector
+			o.IgnoreNotFound = true
+		}
+	}
+	if o.DeleteNow {
+		if o.GracePeriod != -1 {
+			return fmt.Errorf("--now and --grace-period cannot be specified together")
+		}
+		o.GracePeriod = 1
+	}
+	if o.GracePeriod == 0 && !o.ForceDeletion {
+		// To preserve backwards compatibility, but prevent accidental data loss, we convert --grace-period=0
+		// into --grace-period=1. Users may provide --force to bypass this conversion.
+		o.GracePeriod = 1
+	}
+
+	includeUninitialized := cmdutil.ShouldIncludeUninitialized(cmd, false)
+	r := f.NewBuilder().
+		Unstructured().
+		ContinueOnError().
+		NamespaceParam(cmdNamespace).DefaultNamespace().
+		FilenameParam(enforceNamespace, &o.FilenameOptions).
+		LabelSelectorParam(o.LabelSelector).
+		FieldSelectorParam(o.FieldSelector).
+		IncludeUninitialized(includeUninitialized).
+		SelectAllParam(o.DeleteAll).
+		ResourceTypeOrNameArgs(false, args...).RequireObject(false).
+		Flatten().
+		Do()
+	err = r.Err()
+	if err != nil {
+		return err
+	}
+	o.Result = r
+
+	o.Mapper, err = f.ToRESTMapper()
+	if err != nil {
+		return err
+	}
+
+	o.DynamicClient, err = f.DynamicClient()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func deleteResult(f cmdutil.Factory, cmd *cobra.Command, r *resource.Result, out io.Writer, mapper meta.RESTMapper) error {
-	shortOutput := cmdutil.GetFlagString(cmd, "output") == "name"
+func (o *DeleteOptions) Validate(cmd *cobra.Command) error {
+	if o.Output != "" && o.Output != "name" {
+		return cmdutil.UsageErrorf(cmd, "Unexpected -o output mode: %v. We only support '-o name'.", o.Output)
+	}
 
-	infoList := make([]*resource.Info, 0)
+	if o.DeleteAll && len(o.LabelSelector) > 0 {
+		return fmt.Errorf("cannot set --all and --selector at the same time")
+	}
+	if o.DeleteAll && len(o.FieldSelector) > 0 {
+		return fmt.Errorf("cannot set --all and --field-selector at the same time")
+	}
+
+	if o.GracePeriod == 0 && !o.ForceDeletion && !o.WaitForDeletion {
+		// With the explicit --wait flag we need extra validation for backward compatibility
+		return fmt.Errorf("--grace-period=0 must have either --force specified, or --wait to be set to true")
+	}
+
+	switch {
+	case o.GracePeriod == 0 && o.ForceDeletion:
+		fmt.Fprintf(o.ErrOut, "warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.\n")
+	case o.ForceDeletion:
+		fmt.Fprintf(o.ErrOut, "warning: --force is ignored because --grace-period is not 0.\n")
+	}
+	return nil
+}
+
+func (o *DeleteOptions) RunDelete() error {
+	return o.DeleteResult(o.Result)
+}
+
+func (o *DeleteOptions) DeleteResult(r *resource.Result) error {
+	found := 0
+	if o.IgnoreNotFound {
+		r = r.IgnoreErrors(errors.IsNotFound)
+	}
+	deletedInfos := []*resource.Info{}
 	err := r.Visit(func(info *resource.Info, err error) error {
 		if err != nil {
 			return err
 		}
-		kind := info.Object.GetObjectKind().GroupVersionKind().Kind
-		if err := util.CheckSupportedResource(kind); err != nil {
-			return err
+		deletedInfos = append(deletedInfos, info)
+		found++
+
+		options := &metav1.DeleteOptions{}
+		if o.GracePeriod >= 0 {
+			options = metav1.NewDeleteOptions(int64(o.GracePeriod))
 		}
-
-		if err := validator.ValidateDeletion(info); err != nil {
-			return cmdutil.AddSourceToErr("validating", info.Source, err)
+		policy := metav1.DeletePropagationForeground
+		if !o.Cascade {
+			policy = metav1.DeletePropagationOrphan
 		}
+		options.PropagationPolicy = &policy
 
-		infoList = append(infoList, info)
-		return nil
-
+		return o.deleteResource(info, options)
 	})
 	if err != nil {
 		return err
 	}
-
-	if len(infoList) == 0 {
-		fmt.Fprintln(out, "No resources found")
+	if found == 0 {
+		fmt.Fprintf(o.Out, "No resources found\n")
+		return nil
+	}
+	if !o.WaitForDeletion {
+		return nil
+	}
+	// if we don't have a dynamic client, we don't want to wait.  Eventually when delete is cleaned up, this will likely
+	// drop out.
+	if o.DynamicClient == nil {
 		return nil
 	}
 
-	for _, info := range infoList {
-		if err := deleteResource(info, out, shortOutput); err != nil {
-			return err
-		}
+	effectiveTimeout := o.Timeout
+	if effectiveTimeout == 0 {
+		// if we requested to wait forever, set it to a week.
+		effectiveTimeout = 168 * time.Hour
+	}
+	waitOptions := kubectlwait.WaitOptions{
+		ResourceFinder: genericclioptions.ResourceFinderForResult(resource.InfoListVisitor(deletedInfos)),
+		DynamicClient:  o.DynamicClient,
+		Timeout:        effectiveTimeout,
+
+		Printer:     printers.NewDiscardingPrinter(),
+		ConditionFn: kubectlwait.IsDeleted,
+		IOStreams:   o.IOStreams,
+	}
+	err = waitOptions.RunWait()
+	if errors.IsForbidden(err) {
+		// if we're forbidden from waiting, we shouldn't fail.
+		glog.V(1).Info(err)
+		return nil
+	}
+	return err
+}
+
+func (o *DeleteOptions) deleteResource(info *resource.Info, deleteOptions *metav1.DeleteOptions) error {
+	if err := resource.NewHelper(info.Client, info.Mapping).DeleteWithOptions(info.Namespace, info.Name, deleteOptions); err != nil {
+		return cmdutil.AddSourceToErr("deleting", info.Source, err)
 	}
 
+	o.PrintObj(info)
 	return nil
 }
 
-func deleteResource(info *resource.Info, out io.Writer, shortOutput bool) error {
-	if err := resource.NewHelper(info.Client, info.Mapping).Delete(info.Namespace, info.Name); err != nil && !kerr.IsNotFound(err) {
-		return cmdutil.AddSourceToErr("deleting", info.Source, err)
+// deletion printing is special because we do not have an object to print.
+// This mirrors name printer behavior
+func (o *DeleteOptions) PrintObj(info *resource.Info) {
+	operation := "deleted"
+	groupKind := info.Mapping.GroupVersionKind
+	kindString := fmt.Sprintf("%s.%s", strings.ToLower(groupKind.Kind), groupKind.Group)
+	if len(groupKind.Group) == 0 {
+		kindString = strings.ToLower(groupKind.Kind)
 	}
-	cmdutil.PrintSuccess(shortOutput, out, info.Object, false, "deleted")
-	return nil
+
+	if o.GracePeriod == 0 {
+		operation = "force deleted"
+	}
+
+	if o.Output == "name" {
+		// -o name: prints resource/name
+		fmt.Fprintf(o.Out, "%s/%s\n", kindString, info.Name)
+		return
+	}
+
+	// understandable output by default
+	fmt.Fprintf(o.Out, "%s \"%s\" %s\n", kindString, info.Name, operation)
 }

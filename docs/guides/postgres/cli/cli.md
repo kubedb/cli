@@ -295,43 +295,6 @@ For DormantDatabase, _spec.origin_ can't be edited using `kubedb edit`
 
 To learn about various options of `edit` command, please visit [here](/docs/reference/kubedb_edit.md).
 
-### How to Summarize Databases
-
-`kubedb summarize` command can be used to generate a JSON formatted summary report for any supported database. The summary contains various stats on database tables and/or indices like, number of rows, the maximum id. This report is intended to be used as a tool to quickly verify whether backup/restore process has worked properly or not. To learn about various options of `summarize` command, please visit [here](/docs/reference/kubedb_summarize.md).
-
-```console
-$ kubedb summarize pg p1 -n demo
-E0719 08:32:47.285561   16159 portforward.go:212] Unable to create listener: Error listen tcp6 [::1]:36226: bind: cannot assign requested address
-E0719 08:32:47.791193   16159 portforward.go:317] error copying from local connection to remote stream: read tcp4 127.0.0.1:36226->127.0.0.1:52904: read: connection reset by peer
-Summary report for "postgreses/p1" has been stored in 'report-20170719-153247.json'
-```
-
-`kubed compare` command compares two summary reports for the same type of database. By default it dumps a git diff-like output on terminal. To learn about various options of `compare` command, please visit [here](/docs/reference/kubedb_compare.md).
-
-```yaml
-$ kubedb compare report-20170719-152824.json report-20170719-153247.json
-Comparison result has been stored in 'result-20170719-153401.txt'.
-
- {
-   "apiVersion": "kubedb.com/v1alpha1",
-   "kind": "Postgres",
-   "metadata": {
-     "creationTimestamp": "2017-07-19T15:11:45Z",
-     "name": "p1",
-     "namespace": "demo"
-   },
-   "status": {
--    "completionTime": "2017-07-19T15:28:24Z",
-+    "completionTime": "2017-07-19T15:32:47Z",
--    "startTime": "2017-07-19T15:28:24Z"
-+    "startTime": "2017-07-19T15:32:47Z"
-   },
-   "summary": {
-     "postgres": {
-       "postgres": {
-...
-```
-
 ### How to Delete Objects
 
 `kubedb delete` command will delete an object in `default` namespace by default unless namespace is provided. The following command will delete a Postgres `postgres-dev` in default namespace
