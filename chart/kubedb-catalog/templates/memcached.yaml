@@ -14,7 +14,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -31,5 +31,5 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5.4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
 {{ end }}
