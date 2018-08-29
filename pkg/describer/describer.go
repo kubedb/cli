@@ -36,7 +36,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/dynamic"
@@ -137,70 +136,31 @@ func DescriberFor(kind schema.GroupKind, clientConfig *rest.Config) (printers.De
 	return f, ok
 }
 
-func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, failed int) (string, error) {
-	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
-		w.Write(LEVEL_0, "StatefulSet:\t\n")
-		w.Write(LEVEL_0, "Name:\t%s\n", ps.ObjectMeta.Name)
-		w.Write(LEVEL_0, "Replicas:\t%d desired | %d total\n", ps.Spec.Replicas, ps.Status.Replicas)
-		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", ps.CreationTimestamp.Time.Format(time.RFC1123Z))
-		w.Write(LEVEL_0, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
-
-		return nil
-	})
+func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, failed int, w printersinternal.PrefixWriter) {
+	w.Write(LEVEL_0, "\n")
+	w.Write(LEVEL_0, "StatefulSet:\t\n")
+	w.Write(LEVEL_1, "Name:\t%s\n", ps.ObjectMeta.Name)
+	w.Write(LEVEL_1, "Replicas:\t%d desired | %d total\n", ps.Spec.Replicas, ps.Status.Replicas)
+	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", ps.CreationTimestamp.Time.Format(time.RFC1123Z))
+	w.Write(LEVEL_1, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
-// DeploymentDescriber generates information about a deployment.
-type DeploymentDescriber struct {
-	kubernetes.Interface
-	external kubernetes.Interface
+func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, failed int, w printersinternal.PrefixWriter) {
+	w.Write(LEVEL_0, "\n")
+	w.Write(LEVEL_0, "Deployment:\t\n")
+	w.Write(LEVEL_1, "Name:\t%s\n", d.ObjectMeta.Name)
+	w.Write(LEVEL_1, "Replicas:\t%d desired | %d updated | %d total | %d available | %d unavailable\n", *(d.Spec.Replicas), d.Status.UpdatedReplicas, d.Status.Replicas, d.Status.AvailableReplicas, d.Status.UnavailableReplicas)
+	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", d.CreationTimestamp.Time.Format(time.RFC1123Z))
+	w.Write(LEVEL_1, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
-func (dd *DeploymentDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
-	d, err := dd.external.AppsV1().Deployments(namespace).Get(name, metav1.GetOptions{})
-	if err != nil {
-		return "", err
-	}
-	pc := dd.Core().Pods(namespace)
-
-	selector, err := metav1.LabelSelectorAsSelector(d.Spec.Selector)
-	if err != nil {
-		return "", err
-	}
-
-	running, waiting, succeeded, failed, err := getPodStatusForController(pc, selector, d.UID)
-	if err != nil {
-		return "", err
-	}
-
-	return describeDeployment(d, running, waiting, succeeded, failed)
-}
-
-func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, failed int) (string, error) {
-	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
-		w.Write(LEVEL_0, "Deployment:\t\n")
-		w.Write(LEVEL_0, "Name:\t%s\n", d.ObjectMeta.Name)
-		w.Write(LEVEL_0, "Replicas:\t%d desired | %d updated | %d total | %d available | %d unavailable\n", *(d.Spec.Replicas), d.Status.UpdatedReplicas, d.Status.Replicas, d.Status.AvailableReplicas, d.Status.UnavailableReplicas)
-		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", d.CreationTimestamp.Time.Format(time.RFC1123Z))
-		w.Write(LEVEL_0, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
-
-		return nil
-	})
-}
-
-func getPodStatusForController(c coreclient.PodInterface, selector labels.Selector, uid types.UID) (running, waiting, succeeded, failed int, err error) {
+func getPodStatusForController(c coreclient.PodInterface, selector labels.Selector) (running, waiting, succeeded, failed int, err error) {
 	options := metav1.ListOptions{LabelSelector: selector.String()}
 	rcPods, err := c.List(options)
 	if err != nil {
 		return
 	}
 	for _, pod := range rcPods.Items {
-		controllerRef := metav1.GetControllerOf(&pod)
-		// Skip pods that are orphans or owned by other controllers.
-		if controllerRef == nil || controllerRef.UID != uid {
-			continue
-		}
 		switch pod.Status.Phase {
 		case core.PodRunning:
 			running++
@@ -213,24 +173,6 @@ func getPodStatusForController(c coreclient.PodInterface, selector labels.Select
 		}
 	}
 	return
-}
-
-// ServiceDescriber generates information about a service.
-type ServiceDescriber struct {
-	kubernetes.Interface
-}
-
-func (d *ServiceDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
-	c := d.Core().Services(namespace)
-
-	service, err := c.Get(name, metav1.GetOptions{})
-	if err != nil {
-		return "", err
-	}
-
-	endpoints, _ := d.Core().Endpoints(namespace).Get(name, metav1.GetOptions{})
-
-	return describeService(service, endpoints)
 }
 
 func buildIngressString(ingress []core.LoadBalancerIngress) string {
@@ -249,85 +191,68 @@ func buildIngressString(ingress []core.LoadBalancerIngress) string {
 	return buffer.String()
 }
 
-func describeService(service *core.Service, endpoints *core.Endpoints) (string, error) {
+func describeService(service *core.Service, endpoints *core.Endpoints, w printersinternal.PrefixWriter) {
 	if endpoints == nil {
 		endpoints = &core.Endpoints{}
 	}
-	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
-		w.Write(LEVEL_0, "Service:\t\n")
-		w.Write(LEVEL_0, "Name:\t%s\n", service.Name)
-		w.Write(LEVEL_0, "Type:\t%s\n", service.Spec.Type)
-		w.Write(LEVEL_0, "IP:\t%s\n", service.Spec.ClusterIP)
-		if len(service.Spec.ExternalIPs) > 0 {
-			w.Write(LEVEL_0, "External IPs:\t%v\n", strings.Join(service.Spec.ExternalIPs, ","))
-		}
-		if service.Spec.LoadBalancerIP != "" {
-			w.Write(LEVEL_0, "IP:\t%s\n", service.Spec.LoadBalancerIP)
-		}
-		if service.Spec.ExternalName != "" {
-			w.Write(LEVEL_0, "External Name:\t%s\n", service.Spec.ExternalName)
-		}
-		if len(service.Status.LoadBalancer.Ingress) > 0 {
-			list := buildIngressString(service.Status.LoadBalancer.Ingress)
-			w.Write(LEVEL_0, "LoadBalancer Ingress:\t%s\n", list)
-		}
-		for i := range service.Spec.Ports {
-			sp := &service.Spec.Ports[i]
+	w.Write(LEVEL_0, "\n")
+	w.Write(LEVEL_0, "Service:\t\n")
+	w.Write(LEVEL_1, "Name:\t%s\n", service.Name)
+	w.Write(LEVEL_1, "Type:\t%s\n", service.Spec.Type)
+	w.Write(LEVEL_1, "IP:\t%s\n", service.Spec.ClusterIP)
+	if len(service.Spec.ExternalIPs) > 0 {
+		w.Write(LEVEL_1, "External IPs:\t%v\n", strings.Join(service.Spec.ExternalIPs, ","))
+	}
+	if service.Spec.LoadBalancerIP != "" {
+		w.Write(LEVEL_1, "IP:\t%s\n", service.Spec.LoadBalancerIP)
+	}
+	if service.Spec.ExternalName != "" {
+		w.Write(LEVEL_1, "External Name:\t%s\n", service.Spec.ExternalName)
+	}
+	if len(service.Status.LoadBalancer.Ingress) > 0 {
+		list := buildIngressString(service.Status.LoadBalancer.Ingress)
+		w.Write(LEVEL_1, "LoadBalancer Ingress:\t%s\n", list)
+	}
+	for i := range service.Spec.Ports {
+		sp := &service.Spec.Ports[i]
 
-			name := sp.Name
-			if name == "" {
-				name = "<unset>"
-			}
-			w.Write(LEVEL_0, "Port:\t%s\t%d/%s\n", name, sp.Port, sp.Protocol)
-			if sp.TargetPort.Type == intstr.Type(intstr.Int) {
-				w.Write(LEVEL_0, "TargetPort:\t%d/%s\n", sp.TargetPort.IntVal, sp.Protocol)
-			} else {
-				w.Write(LEVEL_0, "TargetPort:\t%s/%s\n", sp.TargetPort.StrVal, sp.Protocol)
-			}
-			if sp.NodePort != 0 {
-				w.Write(LEVEL_0, "NodePort:\t%s\t%d/%s\n", name, sp.NodePort, sp.Protocol)
-			}
-			w.Write(LEVEL_0, "Endpoints:\t%s\n", formatEndpoints(endpoints, sets.NewString(sp.Name)))
+		name := sp.Name
+		if name == "" {
+			name = "<unset>"
 		}
-		return nil
-	})
+		w.Write(LEVEL_1, "Port:\t%s\t%d/%s\n", name, sp.Port, sp.Protocol)
+		if sp.TargetPort.Type == intstr.Type(intstr.Int) {
+			w.Write(LEVEL_1, "TargetPort:\t%d/%s\n", sp.TargetPort.IntVal, sp.Protocol)
+		} else {
+			w.Write(LEVEL_1, "TargetPort:\t%s/%s\n", sp.TargetPort.StrVal, sp.Protocol)
+		}
+		if sp.NodePort != 0 {
+			w.Write(LEVEL_1, "NodePort:\t%s\t%d/%s\n", name, sp.NodePort, sp.Protocol)
+		}
+		w.Write(LEVEL_1, "Endpoints:\t%s\n", formatEndpoints(endpoints, sets.NewString(sp.Name)))
+	}
 }
 
 // describeSecret generates information about a secret
-func describeSecret(secret *core.Secret, prefix string) (string, error) {
-	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
-		if prefix == "" {
-			w.Write(LEVEL_0, "Secret:\n")
-		} else {
-			w.Write(LEVEL_0, "%s Secret:\n", prefix)
-		}
-		w.Write(LEVEL_0, "Name:\t%s\n", secret.Name)
-		w.Write(LEVEL_0, "\nType:\t%s\n", secret.Type)
-
-		w.Write(LEVEL_0, "\nData\n====\n")
-		for k, v := range secret.Data {
-			switch {
-			case k == core.ServiceAccountTokenKey && secret.Type == core.SecretTypeServiceAccountToken:
-				w.Write(LEVEL_0, "%s:\t%s\n", k, string(v))
-			default:
-				w.Write(LEVEL_0, "%s:\t%d bytes\n", k, len(v))
-			}
-		}
-
-		return nil
-	})
-}
-
-func getSpace(spaceLevel int) string {
-	levelSpace := "  "
-	prefix := ""
-	for i := 0; i < spaceLevel; i++ {
-		prefix += levelSpace
+func describeSecret(secret *core.Secret, prefix string, w printersinternal.PrefixWriter) {
+	w.Write(LEVEL_0, "\n")
+	if prefix == "" {
+		w.Write(LEVEL_0, "Secret:\n")
+	} else {
+		w.Write(LEVEL_0, "%s Secret:\n", prefix)
 	}
+	w.Write(LEVEL_1, "Name:\t%s\n", secret.Name)
+	w.Write(LEVEL_1, "\nType:\t%s\n", secret.Type)
 
-	return prefix
+	w.Write(LEVEL_1, "\nData\n====\n")
+	for k, v := range secret.Data {
+		switch {
+		case k == core.ServiceAccountTokenKey && secret.Type == core.SecretTypeServiceAccountToken:
+			w.Write(LEVEL_1, "%s:\t%s\n", k, string(v))
+		default:
+			w.Write(LEVEL_1, "%s:\t%d bytes\n", k, len(v))
+		}
+	}
 }
 
 func describeVolume(volume core.VolumeSource, w printersinternal.PrefixWriter) {
@@ -636,6 +561,7 @@ func printFlockerVolumeSource(flocker *core.FlockerVolumeSource, w printersinter
 }
 
 func DescribeEvents(el *core.EventList, w printersinternal.PrefixWriter) {
+	w.Write(LEVEL_0, "\n")
 	if len(el.Items) == 0 {
 		w.Write(LEVEL_0, "Events:\t<none>\n")
 		return

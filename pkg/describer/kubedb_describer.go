@@ -801,41 +801,41 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 	opts := metav1.ListOptions{LabelSelector: selector.String()}
 
 	if statefulSets, err := client.AppsV1().StatefulSets(namespace).List(opts); err == nil {
-		for _, w := range statefulSets.Items {
-			selector, err := metav1.LabelSelectorAsSelector(w.Spec.Selector)
+		for _, s := range statefulSets.Items {
+			selector, err := metav1.LabelSelectorAsSelector(s.Spec.Selector)
 			if err != nil {
 				continue
 			}
 
-			running, waiting, succeeded, failed, err := getPodStatusForController(pc, selector, w.UID)
+			running, waiting, succeeded, failed, err := getPodStatusForController(pc, selector)
 			if err != nil {
 				continue
 			}
 
-			describeStatefulSet(&w, running, waiting, succeeded, failed)
+			describeStatefulSet(&s, running, waiting, succeeded, failed, w)
 		}
 	}
 
 	if deployments, err := client.AppsV1().Deployments(namespace).List(opts); err == nil {
-		for _, w := range deployments.Items {
-			selector, err := metav1.LabelSelectorAsSelector(w.Spec.Selector)
+		for _, d := range deployments.Items {
+			selector, err := metav1.LabelSelectorAsSelector(d.Spec.Selector)
 			if err != nil {
 				continue
 			}
 
-			running, waiting, succeeded, failed, err := getPodStatusForController(pc, selector, w.UID)
+			running, waiting, succeeded, failed, err := getPodStatusForController(pc, selector)
 			if err != nil {
 				continue
 			}
 
-			describeDeployment(&w, running, waiting, succeeded, failed)
+			describeDeployment(&d, running, waiting, succeeded, failed, w)
 		}
 	}
 
 	if services, err := client.Core().Services(namespace).List(opts); err == nil {
 		for _, s := range services.Items {
 			endpoints, _ := client.Core().Endpoints(namespace).Get(s.Name, metav1.GetOptions{})
-			describeService(&s, endpoints)
+			describeService(&s, endpoints, w)
 		}
 	}
 }
@@ -848,7 +848,7 @@ func showSecret(client kubernetes.Interface, namespace string, secretVolumes map
 		if err != nil {
 			continue
 		}
-		describeSecret(secret, key)
+		describeSecret(secret, key, w)
 	}
 }
 
