@@ -14,7 +14,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:8.0"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0"
 
@@ -33,7 +33,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:5.7"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7"
 
@@ -52,7 +52,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:5"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5"
 {{ end }}
