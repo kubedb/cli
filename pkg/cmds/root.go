@@ -81,8 +81,6 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer, version string) *cobra.C
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
 				NewCmdDescribe("kubedb", f, ioStreams),
-				NewCmdSummarize(f, ioStreams),
-				NewCmdCompare(f, ioStreams),
 				v.NewCmdVersion(),
 			},
 		},
