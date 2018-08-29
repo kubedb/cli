@@ -18,6 +18,82 @@ import (
 	store "kmodules.xyz/objectstore-api/api/v1"
 )
 
+type EtcdDescriber struct {
+	client kubernetes.Interface
+	kubedb cs.KubedbV1alpha1Interface
+}
+
+func (d *EtcdDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+	item, err := d.kubedb.Etcds(namespace).Get(name, metav1.GetOptions{})
+	if err != nil {
+		return "", err
+	}
+
+	selector := labels.SelectorFromSet(item.OffshootSelectors())
+
+	snapshots, err := d.kubedb.Snapshots(item.Namespace).List(
+		metav1.ListOptions{
+			LabelSelector: selector.String(),
+		},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	var events *core.EventList
+	if describerSettings.ShowEvents {
+		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return d.describeEtcd(item, selector, snapshots, events)
+}
+
+func (d *EtcdDescriber) describeEtcd(item *api.Etcd, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
+	return tabbedString(func(out io.Writer) error {
+		w := printersinternal.NewPrefixWriter(out)
+		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
+		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
+		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
+		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
+		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
+
+		if item.Spec.Replicas != nil {
+			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+		}
+		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
+		if len(item.Status.Reason) > 0 {
+			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
+		}
+
+		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
+
+		showWorkload(d.client, item.Namespace, selector, w)
+
+		secretVolumes := make(map[string]*core.SecretVolumeSource)
+		if item.Spec.DatabaseSecret != nil {
+			secretVolumes["Database"] = item.Spec.DatabaseSecret
+		}
+		showSecret(d.client, item.Namespace, secretVolumes, w)
+
+		if item.Spec.Monitor != nil {
+			describeMonitor(item.Spec.Monitor, w)
+		}
+
+		if snapshots != nil {
+			listSnapshots(snapshots, w)
+		}
+
+		if events != nil {
+			DescribeEvents(events, w)
+		}
+
+		return nil
+	})
+}
+
 type ElasticsearchDescriber struct {
 	client kubernetes.Interface
 	kubedb cs.KubedbV1alpha1Interface

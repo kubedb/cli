@@ -112,6 +112,7 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]printers.Desc
 	}
 
 	m := map[schema.GroupKind]printers.Describer{
+		api.Kind(api.ResourceKindEtcd):          &EtcdDescriber{c, k},
 		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{c, k},
 		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{c, k},
 		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{c, k},

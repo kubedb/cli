@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kubedb/cli/pkg/cmds/get"
 	"github.com/kubedb/cli/pkg/describer"
 	"github.com/spf13/cobra"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -39,7 +38,8 @@ var (
 	describeLong = templates.LongDesc(`
 		Show details of a specific resource or group of resources.
 		This command joins many API calls together to form a detailed description of a
-		given resource or group of resources.` + get.ValidResources)
+		given resource or group of resources.
+    `)
 
 	describeExample = templates.Examples(`
 		# Describe a elasticsearch
@@ -49,7 +49,20 @@ var (
 		kubedb describe pg/postgres-demo
 
 		# Describe all dormantdatabases
-		kubedb describe drmn`)
+		kubedb describe drmn
+
+ 		Valid resource types include:
+    		* all
+    		* etcds
+    		* elasticsearches
+    		* postgreses
+    		* mysqls
+    		* mongodbs
+    		* redises
+    		* memcacheds
+    		* snapshots
+    		* dormantdatabases
+`)
 )
 
 type DescribeOptions struct {

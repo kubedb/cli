@@ -81,25 +81,9 @@ type GetOptions struct {
 	genericclioptions.IOStreams
 }
 
-const (
-	ValidResources = `Valid resource types include:
-    * all
-    * elasticsearches
-    * postgreses
-    * mysqls
-    * mongodbs
-    * redises
-    * memcacheds
-    * snapshots
-    * dormantdatabases
-    `
-)
-
 var (
 	getLong = templates.LongDesc(`
-		Display one or many resources.
-
-		` + ValidResources)
+		Display one or many resources.`)
 
 	getExample = templates.Examples(`
 		# List all elasticsearch in ps output format.
@@ -118,7 +102,20 @@ var (
 		kubedb get postgreses,elastics
 
 		# List one or more resources by their type and names.
-		kubedb get es/es-db postgres/pg-db`)
+		kubedb get es/es-db postgres/pg-db
+		
+		Valid resource types include:
+    		* all
+    		* etcds
+    		* elasticsearches
+    		* postgreses
+    		* mysqls
+    		* mongodbs
+    		* redises
+    		* memcacheds
+    		* snapshots
+    		* dormantdatabases
+`)
 )
 
 const (

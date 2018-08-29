@@ -14,9 +14,7 @@ Display one or many resources
 
 ### Synopsis
 
-Display one or many resources. 
-
-Valid resource types include:  * all  * elasticsearches  * postgreses  * mysqls  * mongodbs  * redises  * memcacheds  * snapshots  * dormantdatabases
+Display one or many resources.
 
 Use "kubedb api-resources" for a complete list of supported resources.
 
@@ -44,6 +42,18 @@ kubedb get [(-o|--output=)json|yaml|wide|custom-columns=...|custom-columns-file=
   
   # List one or more resources by their type and names.
   kubedb get es/es-db postgres/pg-db
+  
+  Valid resource types include:
+  * all
+  * etcds
+  * elasticsearches
+  * postgreses
+  * mysqls
+  * mongodbs
+  * redises
+  * memcacheds
+  * snapshots
+  * dormantdatabases
 ```
 
 ### Options
