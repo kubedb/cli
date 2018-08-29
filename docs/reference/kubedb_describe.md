@@ -14,7 +14,7 @@ Show details of a specific resource or group of resources
 
 ### Synopsis
 
-Show details of a specific resource or group of resources. This command joins many API calls together to form a detailed description of a given resource or group of resources.Valid resource types include:  * all  * elasticsearches  * postgreses  * mysqls  * mongodbs  * redises  * memcacheds  * snapshots  * dormantdatabases
+Show details of a specific resource or group of resources. This command joins many API calls together to form a detailed description of a given resource or group of resources.
 
 Use "kubedb api-resources" for a complete list of supported resources.
 
@@ -33,6 +33,18 @@ kubedb describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)
   
   # Describe all dormantdatabases
   kubedb describe drmn
+  
+  Valid resource types include:
+  * all
+  * etcds
+  * elasticsearches
+  * postgreses
+  * mysqls
+  * mongodbs
+  * redises
+  * memcacheds
+  * snapshots
+  * dormantdatabases
 ```
 
 ### Options
