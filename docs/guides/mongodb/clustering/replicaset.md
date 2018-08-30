@@ -78,7 +78,7 @@ Here,
 - `spec.replicas` denotes the number of members in `rs0` mongodb replicaset.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. So, each members will have a pod of this storage configuration. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MongoDB.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `<mongodb-name>-gvr-svc`. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
+KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `<mongodb-name>-gvr`. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
 ```console
 $ kubedb describe mg -n demo mgo-replicaset
@@ -321,7 +321,7 @@ MongoDB server version: 3.6.6
 Welcome to the MongoDB shell.
 
 rs0:SECONDARY> rs.isMaster().primary
-mgo-replicaset-2.mgo-replicaset-gvr-svc.demo.svc.cluster.local:27017
+mgo-replicaset-2.mgo-replicaset-gvr.demo.svc.cluster.local:27017
 ```
 
 ## Pause Database
