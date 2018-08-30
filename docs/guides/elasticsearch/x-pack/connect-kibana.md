@@ -139,7 +139,11 @@ kibanauser:
     - kibanauser
 ```
 
-Here, we have used `admin@secret` password for `admin` user and  `kibana@secret` password for `kibanauser` user.
+Here, we have used `admin@secret` password for `admin` user and  `kibana@secret` password for `kibanauser` user. You can use `htpasswd` to generate the bcrypt encrypted password hashes.
+
+```console
+$htpasswd -bnBC 12 "" <password_here>| tr -d ':\n'
+```
 
 **sg_roles_mapping.yml:**
 
