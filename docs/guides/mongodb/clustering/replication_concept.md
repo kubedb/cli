@@ -113,4 +113,4 @@ Starting in MongoDB 3.6, [change streams](https://docs.mongodb.com/manual/change
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
 
-> NB: The images in this page are taken from [MongoDB website](https://docs.mongodb.com/manual/replication/).
+NB: The images in this page are taken from [MongoDB website](https://docs.mongodb.com/manual/replication/).
