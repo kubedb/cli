@@ -10,7 +10,7 @@ spec:
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0.6"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -24,7 +24,7 @@ spec:
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -38,4 +38,4 @@ spec:
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
