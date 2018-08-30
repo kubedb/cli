@@ -10,7 +10,7 @@ spec:
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.4"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4"
 
@@ -26,6 +26,6 @@ spec:
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.6"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6"

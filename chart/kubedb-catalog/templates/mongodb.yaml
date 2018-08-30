@@ -14,7 +14,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/mongo:3.4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4"
 
@@ -33,7 +33,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/mongo:3.6"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6"
 {{ end }}
