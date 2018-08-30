@@ -14,7 +14,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/elasticsearch:5.6"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:5.6"
 
@@ -33,7 +33,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/elasticsearch:5.6.4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:5.6.4"
 
@@ -52,7 +52,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/elasticsearch:6.2.4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.2.4"
 
@@ -71,7 +71,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/elasticsearch:6.2"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.2"
 
@@ -90,7 +90,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/elasticsearch:6.3.0"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.3.0"
 
@@ -109,7 +109,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/elasticsearch:6.3"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.3"
 {{ end }}

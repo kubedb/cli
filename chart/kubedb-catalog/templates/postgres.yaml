@@ -14,7 +14,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/postgres:9.6"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6"
 
@@ -33,7 +33,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/postgres:9.6.7"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7"
 
@@ -52,7 +52,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/postgres:10.2"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2"
 {{ end }}
