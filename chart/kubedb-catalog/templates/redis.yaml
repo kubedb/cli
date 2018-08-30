@@ -14,7 +14,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/redis:4.0.6"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -31,7 +31,7 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/redis:4.0"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -48,5 +48,5 @@ spec:
   db:
     image: "{{ .Values.dockerRegistry }}/redis:4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
 {{ end }}
