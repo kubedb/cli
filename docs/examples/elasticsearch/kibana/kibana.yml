@@ -1,0 +1,9 @@
+xpack.security.enabled: false
+server.host: 0.0.0.0
+
+elasticsearch.url: "http://es-kibana-demo.demo.svc:9200"
+elasticsearch.username: "kibanauser"
+elasticsearch.password: "kibana@secret"
+
+searchguard.auth.type: "basicauth"
+searchguard.cookie.secure: false

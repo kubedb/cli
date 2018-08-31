@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: kubedb/kibana:6.3.0
+        volumeMounts:
+        - name:  kibana-config
+          mountPath: /usr/share/kibana/config
+      volumes:
+      - name:  kibana-config
+        configMap:
+          name: kibana-config

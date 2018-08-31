@@ -1,0 +1,11 @@
+# In this file users, backendroles and hosts can be mapped to Search Guard roles.
+# Permissions for Search Guard roles are configured in sg_roles.yml
+sg_all_access:
+  readonly: true
+  backendroles:
+    - admin
+
+sg_xp_monitoring:
+  readonly: true
+  backendroles:
+    - monitor

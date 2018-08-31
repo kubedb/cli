@@ -1,0 +1,10 @@
+xpack.security.enabled: false
+xpack.monitoring.enabled: true
+xpack.monitoring.collection.enabled: true
+xpack.monitoring.exporters:
+  my-http-exporter:
+    type: http
+    host: ["http://127.0.0.1:9200"]
+    auth:
+      username: monitor
+      password: monitor@secret

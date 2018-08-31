@@ -1,0 +1,35 @@
+### Admin
+sg_all_access:
+  readonly: true
+  cluster:
+    - UNLIMITED
+  indices:
+    '*':
+      '*':
+        - UNLIMITED
+  tenants:
+    admin_tenant: RW
+
+### X-Pack Monitoring
+sg_xp_monitoring:
+  cluster:
+    - cluster:admin/xpack/monitoring/*
+    - cluster:admin/ingest/pipeline/put       
+    - cluster:admin/ingest/pipeline/get
+    - indices:admin/template/get
+    - indices:admin/template/put
+    - CLUSTER_MONITOR
+    - CLUSTER_COMPOSITE_OPS
+  indices:
+    '?monitor*':
+      '*':
+        - INDICES_ALL
+    '?marvel*':
+      '*':
+        - INDICES_ALL
+    '?kibana*':
+      '*':
+        - READ
+    '*':
+      '*':
+        - indices:data/read/field_caps

@@ -1,0 +1,13 @@
+xpack.security.enabled: false
+xpack.monitoring.enabled: true
+xpack.monitoring.kibana.collection.enabled: true
+xpack.monitoring.ui.enabled: true
+
+server.host: 0.0.0.0
+
+elasticsearch.url: "http://es-mon-demo.demo.svc:9200"
+elasticsearch.username: "monitor"
+elasticsearch.password: "monitor@secret"
+
+searchguard.auth.type: "basicauth"
+searchguard.cookie.secure: false
