@@ -1,3 +1,4 @@
+### Admin
 sg_all_access:
   readonly: true
   cluster:
@@ -9,15 +10,26 @@ sg_all_access:
   tenants:
     admin_tenant: RW
 
-# For the kibana user
-sg_kibana_user:
-  readonly: true
+### X-Pack Monitoring
+sg_xp_monitoring:
   cluster:
-      - CLUSTER_MONITOR
-      - CLUSTER_COMPOSITE_OPS
-      - cluster:admin/xpack/monitoring*
-      - indices:admin/template*
+    - cluster:admin/xpack/monitoring/*
+    - cluster:admin/ingest/pipeline/put       
+    - cluster:admin/ingest/pipeline/get
+    - indices:admin/template/get
+    - indices:admin/template/put
+    - CLUSTER_MONITOR
+    - CLUSTER_COMPOSITE_OPS
   indices:
-    '*':
+    '?monitor*':
       '*':
         - INDICES_ALL
+    '?marvel*':
+      '*':
+        - INDICES_ALL
+    '?kibana*':
+      '*':
+        - READ
+    '*':
+      '*':
+        - indices:data/read/field_caps

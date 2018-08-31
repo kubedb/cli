@@ -2,9 +2,9 @@
 title: Using Kibana with KubeDB Elasticsearch
 menu:
   docs_0.8.0:
-    identifier: es-x-pack-kibana
+    identifier: es-kibana-connect
     name: Use Kibana
-    parent: es-x-pack
+    parent: es-kibana
     weight: 10
 menu_name: docs_0.8.0
 section_menu_id: guides
@@ -229,7 +229,7 @@ Create a ConfigMap using this file,
 
 ```console
 $ kubectl create configmap -n demo es-custom-config \
-                        --from-file=./common-config.yaml
+                        --from-file=./common-config.yml
 configmap/es-custom-config created
 ```
 
@@ -255,7 +255,7 @@ metadata:
 Now, create Elasticsearch crd specifying  `spec.databaseSecret` and `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/es-kibana-demo.yaml 
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/kibana/es-kibana-demo.yaml
 elasticsearch.kubedb.com/es-kibana-demo created
 ```
 
@@ -337,26 +337,21 @@ Once you see `Done with success` success line in the log, the cluster is ready t
 
 In order to connect the Elasticsearch cluster that we have just deployed, we need to configure `kibana.yml` with appropriate configuration.
 
-First, we need to know the IP address of the service created by KubeDB for `es-kibana-demo` cluster. Let's retrieve by,
+KubeDB has created a service with name`es-kibana-demo` in `demo` namespace for the Elasticsearch cluster. We will use this service in `elasticsearch.url` field. Kibana will use this service to connect with the Elasticsearch cluster.
 
-```console
-$ kubectl get service -n demo es-kibana-demo
-NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-es-kibana-demo   ClusterIP   10.102.246.114   <none>        9200/TCP   6m
-```
-
-Here, `10.102.246.114` is our desired IP address. Now, configure `kibana.yml` as below,
+Let's, configure `kibana.yml` as below,
 
 ```yaml
 xpack.security.enabled: false
 server.host: 0.0.0.0
 
-elasticsearch.url: "http://10.102.246.114:9200"
+elasticsearch.url: "http://es-kibana-demo.demo.svc:9200"
 elasticsearch.username: "kibanauser"
 elasticsearch.password: "kibana@secret"
 
 searchguard.auth.type: "basicauth"
 searchguard.cookie.secure: false
+
 ```
 
 Notice the `elasticsearch.username` and `elasticsearch.password` field. Kibana will connect to Elasticsearch cluster with this credentials. They must match with the credentials we have provided in `sg_internal_users.yml` file while creating the cluster.
@@ -371,7 +366,7 @@ configmap/kibana-config created
 
 Finally, deploy Kibana deployment,
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/kibana-deployment.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/kibana/kibana-deployment.yaml
 deployment.apps/kibana created
 ```
 
@@ -395,7 +390,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: kubedbci/kibana:6.3.0
+        image: kubedb/kibana:6.3.0
         volumeMounts:
         - name:  kibana-config
           mountPath: /usr/share/kibana/config
@@ -423,57 +418,25 @@ $ kubectl logs -n demo kibana-84b8cbcf7c-mg699 -f
 
 Once you see `"message":"Server running at http://0.0.0.0:5601"` in the log, Kibana is ready. Now it is time to access Kibana UI.
 
-In order to access Kibana UI from outside of the cluster, we will use a `NodePort` type service.
-```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/kibana-service.yaml
-service/kibana created
-```
+Kibana is running on port `5601` in of `kibana-84b8cbcf7c-mg699` pod. In order to access Kibana UI from outside of the cluster, we will use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster).
 
-Below is the YAML for the service we just created.
-
-```yaml
-kind: Service
-apiVersion: v1
-metadata:
-  name:  kibana
-  namespace: demo
-spec:
-  selector:
-    app:  kibana
-  type:  NodePort
-  ports:
-  - name:  http
-    protocol: TCP
-    port:  5601
-    targetPort: 5601
-```
-
-Now, we can access the Kibana UI using `Cluster's IP address` and the `NodePort` of the service.
+First, open a new terminal and run,
 
 ```console
-$ kubectl get service -n demo kibana
-NAME      TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
-kibana    NodePort   10.99.71.19   <none>        5601:30162/TCP   3m
+$ kubectl port-forward -n demo kibana-84b8cbcf7c-mg699 5601
+Forwarding from 127.0.0.1:5601 -> 5601
+Forwarding from [::1]:5601 -> 5601
 ```
 
-Here, `30162` is the desired `NodePort`. Now you can open `http://{cluster-ip-address:30162}` in your browser to access Kibana UI.
+Now, open `localhost:5601` in your browser. When you will open the address, you will be greeted with Search Guard login UI.
 
-For minikube, we can get the url by,
-
-```console
-$ minikube service -n demo kibana --url
-http://192.168.99.100:30162
-```
-
-When you will open the address, you will be greeted with Search Guard login UI.
-
-![Search Guard Login UI](/docs/images/elasticsearch/x-pack/search-guard-login-ui.png)
+![Search Guard Login UI](/docs/images/elasticsearch/kibana/search-guard-login-ui.png)
 
 Login with following credentials: `username: kibanauser` and `password: kibana@secret`.
 
 After login, you will be redirected to Kibana Home UI.
 
-![Kibana Home](/docs/images/elasticsearch/x-pack/kibana-home.png)
+![Kibana Home](/docs/images/elasticsearch/kibana/kibana-home.png)
 
 Now, it is time to perform some operations on our cluster from the Kibana UI.
 
@@ -536,11 +499,11 @@ POST /shakespeare/doc
 
 Now, let's create index_pattern.
 
-![Create Index_Pattern](/docs/images/elasticsearch/x-pack/kibana-create-index.png)
+![Create Index_Pattern](/docs/images/elasticsearch/kibana/kibana-create-index.png)
 
 Once we have created an index_pattern, we can use the Discovery UI.
 
-![](/docs/images/elasticsearch/x-pack/kibana-discovery-ui.png)
+![](/docs/images/elasticsearch/kibana/kibana-discovery-ui.png)
 
 ## Cleanup
 
@@ -562,8 +525,6 @@ $ kubectl delete -n demo secret/es-auth
 $ kubectl delete -n demo configmap/kibana-config
 
 $ kubectl delete -n demo deployment/kibana
-
-$ kubectl delete -n demo service/kibana
 
 $ kubectl delete ns demo
 ```

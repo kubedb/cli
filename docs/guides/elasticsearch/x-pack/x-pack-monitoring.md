@@ -3,9 +3,9 @@ title: X-Pack Monitoring of Elasticsearch Cluster in KubeDB
 menu:
   docs_0.8.0:
     identifier: es-x-pack-monitoring
-    name: X-Pack Monitoring
+    name: Monitoring
     parent: es-x-pack
-    weight: 20
+    weight: 10
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
@@ -38,7 +38,7 @@ demo    Active  5s
 
 ## Overview
 
-At first, we will create some necessary Search Guard configuration and roles to give an user permission to monitor an Elasticsearch cluster from Kibana. We will create a secret with this configuration files. Then we will provide this secret in `spec.databaseSecret` field of Elasticsearch crd so that our Elasticsearch cluster start with this configuration. We will also configure Elasticsearch cluster with a [custom configuration](/docs/guides/elasticsearch/custom-config/overview.md) file.
+At first, we will create some necessary Search Guard configuration and roles to give an user permission to monitor an Elasticsearch cluster from Kibana. We will create a secret with this configuration files. Then we will provide this secret in `spec.databaseSecret` field of Elasticsearch crd so that our Elasticsearch cluster start with this configuration. We are going to configure Elasticsearch cluster to collect and send x-pack monitoring data over [HTTP Exporters](https://www.elastic.co/guide/en/elasticsearch/reference/current/http-exporter.html) using a [custom configuration](/docs/guides/elasticsearch/custom-config/overview.md) file.
 
 Then, we will deploy Kibana with Search Guard plugin installed. We will configure Kibana to connect with our Elasticsearch cluster and view monitoring data from it.
 
@@ -280,7 +280,7 @@ metadata:
 Now, create Elasticsearch crd specifying  `spec.databaseSecret` and `spec.configSource` field.
 
 ```console
-$ kubectl apply -f kubectl apply -f ./es-mon-demo.yaml 
+$ kubectl apply -f kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/es-mon-demo.yaml
 elasticsearch.kubedb.com/es-mon-demo created
 ```
 
@@ -374,7 +374,7 @@ xpack.monitoring.ui.enabled: true
 
 server.host: 0.0.0.0
 
-elasticsearch.url: "http://es-mon-demo.demo.svc"
+elasticsearch.url: "http://es-mon-demo.demo.svc:9200"
 elasticsearch.username: "monitor"
 elasticsearch.password: "monitor@secret"
 
@@ -395,7 +395,7 @@ configmap/kibana-config created
 
 Finally, deploy Kibana deployment,
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/kibana-deployment.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/kibana/kibana-deployment.yaml
 deployment.apps/kibana created
 ```
 
@@ -419,7 +419,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: kubedbci/kibana:6.3.0
+        image: kubedb/kibana:6.3.0
         volumeMounts:
         - name:  kibana-config
           mountPath: /usr/share/kibana/config
@@ -447,51 +447,19 @@ $ kubectl logs -n demo kibana-84b8cbcf7c-mg699 -f
 
 Once you see `"message":"Server running at http://0.0.0.0:5601"` in the log, Kibana is ready. Now it is time to access Kibana UI.
 
-In order to access Kibana UI from outside of the cluster, we will use a `NodePort` type service.
-```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/x-pack/kibana-service.yaml
-service/kibana created
-```
+Kibana is running on port `5601` in of `kibana-84b8cbcf7c-mg699` pod. In order to access Kibana UI from outside of the cluster, we will use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster).
 
-Below is the YAML for the service we just created.
-
-```yaml
-kind: Service
-apiVersion: v1
-metadata:
-  name:  kibana
-  namespace: demo
-spec:
-  selector:
-    app:  kibana
-  type:  NodePort
-  ports:
-  - name:  http
-    protocol: TCP
-    port:  5601
-    targetPort: 5601
-```
-
-Now, we can access the Kibana UI using `Cluster's IP address` and the `NodePort` of the service.
+First, open a new terminal and run,
 
 ```console
-$ kubectl get service -n demo kibana 
-NAME      TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-kibana    NodePort   10.102.33.55   <none>        5601:32473/TCP   1h
+$ kubectl port-forward -n demo kibana-84b8cbcf7c-mg699 5601
+Forwarding from 127.0.0.1:5601 -> 5601
+Forwarding from [::1]:5601 -> 5601
 ```
 
-Here, `32473` is the desired `NodePort`. Now you can open `http://{cluster-ip-address:32473}` in your browser to access Kibana UI.
+Now, open `localhost:5601` in your browser. When you will open the address, you will be greeted with Search Guard login UI. When you will open the address, you will be greeted with Search Guard login UI.
 
-For minikube, we can get the url by,
-
-```console
-$ minikube service -n demo kibana --url
-http://192.168.99.100:32473
-```
-
-When you will open the address, you will be greeted with Search Guard login UI. Login with following credentials: `username: monitor` and `password: monitor@secret`.
-
-After login, go to `Monitoring` tab in Kibana UI. You will see Kibana has connected with the Elasticsearch cluster and showing monitoring data. Some screenshots of monitoring `es-mon-demo` cluster is given below.
+Login with following credentials: `username: monitor` and `password: monitor@secret`. After login, go to `Monitoring` tab in Kibana UI. You will see Kibana has connected with the Elasticsearch cluster and showing monitoring data. Some screenshots of monitoring `es-mon-demo` cluster is given below.
 
 ![Kibana Monitoring Home](/docs/images/elasticsearch/x-pack/monitoring-home.png)
 
@@ -530,8 +498,6 @@ $ kubectl delete -n demo secret/es-auth
 $ kubectl delete -n demo configmap/kibana-config
 
 $ kubectl delete -n demo deployment/kibana
-
-$ kubectl delete -n demo service/kibana
 
 $ kubectl delete ns demo
 ```

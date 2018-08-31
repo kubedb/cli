@@ -1,0 +1,2 @@
+xpack.security.enabled: false
+searchguard.restapi.roles_enabled: ["sg_all_access","sg_kibana_user"]

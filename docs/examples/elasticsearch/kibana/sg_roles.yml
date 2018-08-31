@@ -1,0 +1,23 @@
+sg_all_access:
+  readonly: true
+  cluster:
+    - UNLIMITED
+  indices:
+    '*':
+      '*':
+        - UNLIMITED
+  tenants:
+    admin_tenant: RW
+
+# For the kibana user
+sg_kibana_user:
+  readonly: true
+  cluster:
+      - CLUSTER_MONITOR
+      - CLUSTER_COMPOSITE_OPS
+      - cluster:admin/xpack/monitoring*
+      - indices:admin/template*
+  indices:
+    '*':
+      '*':
+        - INDICES_ALL

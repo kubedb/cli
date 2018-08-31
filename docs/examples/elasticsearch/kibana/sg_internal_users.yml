@@ -8,9 +8,9 @@ admin:
   roles:
     - admin
 
-#password is: monitor@secret
-monitor:
+#password is: kibana@secret
+kibanauser:
   readonly: true
-  hash: $2y$12$JDTXih3AqV/1MDRYQ.KIY.u68CkzCIq.xiiqwtRJx3cjN0YmFavTe
+  hash: $2y$12$dk2UrPTjhgCRbFOm/gThX.aJ47yH0zyQcYEuWiNiyw6NlVmeOjM7a
   roles:
-    - monitor
+    - kibanauser

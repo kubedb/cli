@@ -1,10 +1,16 @@
-###### UNLIMITED ######
 UNLIMITED:
   readonly: true
   permissions:
     - "*"
 
-###### CLUSTER LEVEL #####
+###### INDEX LEVEL ######
+
+INDICES_ALL:
+  readonly: true
+  permissions:
+    - "indices:*"
+
+###### CLUSTER LEVEL ######
 CLUSTER_MONITOR:
   readonly: true
   permissions:
@@ -28,16 +34,3 @@ CLUSTER_COMPOSITE_OPS:
     - "indices:admin/aliases*"
     - "indices:data/write/reindex"
     - CLUSTER_COMPOSITE_OPS_RO
-
-###### INDEX LEVEL ######
-INDICES_ALL:
-  readonly: true
-  permissions:
-    - "indices:*"
-
-READ:
-  readonly: true
-  permissions:
-    - "indices:data/read*"
-    - "indices:admin/mappings/fields/get*"
-    - "indices:admin/mappings/get*"

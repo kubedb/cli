@@ -5,7 +5,7 @@ sg_all_access:
   backendroles:
     - admin
 
-sg_xp_monitoring:
+sg_kibana_user:
   readonly: true
   backendroles:
-    - monitor
+    - kibanauser

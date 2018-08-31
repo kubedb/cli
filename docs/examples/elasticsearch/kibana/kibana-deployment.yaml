@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: kubedbci/kibana:6.3.0
+        image: kubedb/kibana:6.3.0
         volumeMounts:
         - name:  kibana-config
           mountPath: /usr/share/kibana/config
