@@ -115,7 +115,7 @@ sg_all_access:
 sg_xp_monitoring:
   cluster:
     - cluster:admin/xpack/monitoring/*
-    - cluster:admin/ingest/pipeline/put       
+    - cluster:admin/ingest/pipeline/put
     - cluster:admin/ingest/pipeline/get
     - indices:admin/template/get
     - indices:admin/template/put
@@ -154,7 +154,11 @@ monitor:
     - monitor
 ```
 
-Here, we have used `admin@secret` password for `admin` user and  `monitor@secret` password for `monitor` user.
+Here, we have used `admin@secret` password for `admin` user and  `monitor@secret` password for `monitor` user. You can use `htpasswd` to generate the bcrypt encrypted password hashes.
+
+```console
+$htpasswd -bnBC 12 "" <password_here>| tr -d ':\n'
+```
 
 **sg_roles_mapping.yml:**
 
@@ -184,7 +188,7 @@ searchguard:
           challenge: false
         authentication_backend:
           type: internal
-      basic_internal_auth_domain: 
+      basic_internal_auth_domain:
         http_enabled: true
         transport_enabled: true
         order: 1
