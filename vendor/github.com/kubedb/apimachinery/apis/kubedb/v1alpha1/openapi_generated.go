@@ -23,6 +23,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	types "github.com/appscode/go/encoding/json/types"
 	spec "github.com/go-openapi/spec"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,6 +33,7 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
+		"github.com/appscode/go/encoding/json/types.IntHash":                               schema_go_encoding_json_types_IntHash(ref),
 		"github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.BackupScheduleSpec":           schema_apimachinery_apis_kubedb_v1alpha1_BackupScheduleSpec(ref),
 		"github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.DormantDatabase":              schema_apimachinery_apis_kubedb_v1alpha1_DormantDatabase(ref),
 		"github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.DormantDatabaseList":          schema_apimachinery_apis_kubedb_v1alpha1_DormantDatabaseList(ref),
@@ -390,6 +392,18 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 	}
 }
 
+func schema_go_encoding_json_types_IntHash(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "IntHash represents as int64 Generation and string Hash. It is json serialized into <int64>$<hash_string>.",
+				Type:        types.IntHash{}.OpenAPISchemaType(),
+				Format:      types.IntHash{}.OpenAPISchemaFormat(),
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha1_BackupScheduleSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -601,21 +615,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_DormantDatabaseStatus(ref common.R
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/appscode/go/encoding/json/types.IntHash", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -962,20 +969,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchStatus(ref common.Ref
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -1400,20 +1401,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_EtcdStatus(ref common.ReferenceCal
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -1881,20 +1876,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MemcachedStatus(ref common.Referen
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -2344,20 +2333,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MongoDBStatus(ref common.Reference
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -2802,20 +2785,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MySQLStatus(ref common.ReferenceCa
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -3404,20 +3381,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PostgresStatus(ref common.Referenc
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -3963,20 +3934,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_RedisStatus(ref common.ReferenceCa
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"github.com/appscode/go/encoding/json/types.IntHash"},
 	}
 }
 
@@ -4632,21 +4597,14 @@ func schema_apimachinery_apis_kubedb_v1alpha1_SnapshotStatus(ref common.Referenc
 					"observedGeneration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"observedGenerationHash": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref:         ref("github.com/appscode/go/encoding/json/types.IntHash"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/appscode/go/encoding/json/types.IntHash", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
