@@ -40,7 +40,7 @@ import yaml
 from collections import Counter
 
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
-DATABASES = ['postgres', 'elasticsearch', 'mysql', 'mongodb', 'memcached', 'redis']
+DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 REPO_LIST = DATABASES + ['cli', 'operator', 'apimachinery']
 KUTIL_VERSION = 'release-8.0'
 KUBEMON_VERSION = 'release-8.0'
