@@ -1,5 +1,5 @@
 hash: 7a66f58affe1801dd7f6c916266c6fe658ad84cf52ab83845cb18801d1d26809
-updated: 2018-09-03T11:16:15.490355577-07:00
+updated: 2018-09-04T01:57:36.537939702-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -23,7 +23,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 1359b374de83fa14fd58ab10aa8ea4935f84d249
 - name: github.com/appscode/kutil
-  version: c0e187ec9d028e1ad6bdab9dfe2612838a02bf50
+  version: 5cf2a974fc598dbf5ed833f4bf9d766b9dc4fa02
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -204,24 +204,24 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 69794f3d4e96e2e3b0a48342d55a8a741c6f632e
+  version: 47d981b293ceda5827bafd9fa1ba0425fd1f3d88
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: aad37a548f234e373e01d8ae682c9624312cc937
+  version: 84415ff308b6202359fa4dc47cccfa2023751ca3
 - name: github.com/kubedb/memcached
-  version: def92650bc3b417c7114217f966ceccb74b89983
+  version: b6dfc5f3ecbb28adec99e5c9c13d1da1bc7d8bc1
 - name: github.com/kubedb/mongodb
-  version: 760df044e8fb0917e4b5ba8c9695e7b3e101c159
+  version: febff5058185054512c1857465dfed99f05f2d04
 - name: github.com/kubedb/mysql
-  version: 5e196b95d6f380872a62cbdcc0274566bbc3213e
+  version: c01b55e89c3c36388defdd0d1e7844e427cc9f7b
 - name: github.com/kubedb/postgres
-  version: 6734ab69ff1004414f520ad87edcb540f3758979
+  version: 24bf0766d9c9fc641c0d5d05af3e47c96bd1cfb9
 - name: github.com/kubedb/redis
-  version: 972bcc908952e564ca4d478b3d016a2cfa358c36
+  version: cb2f0ea6b3ddcc7f71ea6099f7cbf7831ac6580f
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -268,7 +268,7 @@ imports:
   subpackages:
   - doc
 - name: github.com/spf13/pflag
-  version: d929dcbb10863323c436af3cf76cb16a6dfc9b29
+  version: 298182f68c66c05229eb03ac171abe6e309ee79a
 - name: github.com/yudai/gojsondiff
   version: 7b1b7adf999dab73a6eb02669c3d82dbb27a3dd6
   subpackages:
@@ -326,7 +326,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: b810576d88a056b90ef18a0b5328544c9c074c68
+  version: 0ad5a633fea1d4b64bf5e6a01e30d1fc466038e5
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
