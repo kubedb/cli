@@ -358,7 +358,7 @@ Notice the `elasticsearch.username` and `elasticsearch.password` field. Kibana w
 
 Now, create a ConfigMap with `kibana.yml` file. We will mount this ConfigMap in Kibana deployment so that Kibana starts with this configuration.
 
-```conlose
+```console
 $ kubectl create configmap -n demo kibana-config \
                         --from-file=./kibana.yml
 configmap/kibana-config created
@@ -428,7 +428,7 @@ Forwarding from 127.0.0.1:5601 -> 5601
 Forwarding from [::1]:5601 -> 5601
 ```
 
-Now, open `localhost:5601` in your browser. When you will open the address, you will be greeted with Search Guard login UI.
+Now, open `localhost:5601` in your browser. When you open the address, you will be greeted with Search Guard login UI.
 
 ![Search Guard Login UI](/docs/images/elasticsearch/kibana/search-guard-login-ui.png)
 
