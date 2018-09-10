@@ -91,15 +91,31 @@ func (d DormantDatabase) CustomResourceDefinition() *apiextensions.CustomResourc
 	}, setNameSchema)
 }
 
-func (d *DormantDatabase) Migrate() {
+func (d *DormantDatabase) SetDefaults() {
 	if d == nil {
 		return
 	}
-	d.Spec.Origin.Spec.Elasticsearch.Migrate()
-	d.Spec.Origin.Spec.Postgres.Migrate()
-	d.Spec.Origin.Spec.MySQL.Migrate()
-	d.Spec.Origin.Spec.MongoDB.Migrate()
-	d.Spec.Origin.Spec.Redis.Migrate()
-	d.Spec.Origin.Spec.Memcached.Migrate()
-	d.Spec.Origin.Spec.Etcd.Migrate()
+	d.Spec.Origin.Spec.Elasticsearch.SetDefaults()
+	d.Spec.Origin.Spec.Postgres.SetDefaults()
+	d.Spec.Origin.Spec.MySQL.SetDefaults()
+	d.Spec.Origin.Spec.MongoDB.SetDefaults()
+	d.Spec.Origin.Spec.Redis.SetDefaults()
+	d.Spec.Origin.Spec.Memcached.SetDefaults()
+	d.Spec.Origin.Spec.Etcd.SetDefaults()
+}
+
+func (d *DormantDatabase) GetDatabaseSecrets() []string {
+	if d == nil {
+		return nil
+	}
+
+	var secrets []string
+	secrets = append(secrets, d.Spec.Origin.Spec.Elasticsearch.GetSecrets()...)
+	secrets = append(secrets, d.Spec.Origin.Spec.Postgres.GetSecrets()...)
+	secrets = append(secrets, d.Spec.Origin.Spec.MySQL.GetSecrets()...)
+	secrets = append(secrets, d.Spec.Origin.Spec.MongoDB.GetSecrets()...)
+	secrets = append(secrets, d.Spec.Origin.Spec.Redis.GetSecrets()...)
+	secrets = append(secrets, d.Spec.Origin.Spec.Memcached.GetSecrets()...)
+	secrets = append(secrets, d.Spec.Origin.Spec.Etcd.GetSecrets()...)
+	return secrets
 }

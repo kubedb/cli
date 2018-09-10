@@ -32,6 +32,9 @@ type MySQLVersionSpec struct {
 	Exporter MySQLVersionExporter `json:"exporter"`
 	// Tools Image
 	Tools MySQLVersionTools `json:"tools"`
+	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
+	// +optional
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // MySQLVersionDatabase is the MySQL Database image

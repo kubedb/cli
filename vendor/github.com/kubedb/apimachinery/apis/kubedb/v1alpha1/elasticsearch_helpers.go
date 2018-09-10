@@ -6,6 +6,7 @@ import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	"github.com/appscode/kutil/meta"
 	meta_util "github.com/appscode/kutil/meta"
+	apps "k8s.io/api/apps/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
@@ -49,6 +50,18 @@ func (e Elasticsearch) ServiceName() string {
 
 func (e *Elasticsearch) MasterServiceName() string {
 	return fmt.Sprintf("%v-master", e.ServiceName())
+}
+
+func (e *Elasticsearch) GetConnectionScheme() string {
+	scheme := "http"
+	if e.Spec.EnableSSL {
+		scheme = "https"
+	}
+	return scheme
+}
+
+func (e *Elasticsearch) GetConnectionURL() string {
+	return fmt.Sprintf("%v://%s.%s:%d", e.GetConnectionScheme(), e.OffshootName(), e.Namespace, ElasticsearchRestPort)
 }
 
 type elasticsearchStatsService struct {
@@ -129,18 +142,20 @@ func (e Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceD
 	}, setNameSchema)
 }
 
-func (e *Elasticsearch) Migrate() {
+func (e *Elasticsearch) SetDefaults() {
 	if e == nil {
 		return
 	}
-	e.Spec.Migrate()
+	e.Spec.SetDefaults()
 }
 
-func (e *ElasticsearchSpec) Migrate() {
+func (e *ElasticsearchSpec) SetDefaults() {
 	if e == nil {
 		return
 	}
-	e.BackupSchedule.Migrate()
+
+	// migrate first to avoid incorrect defaulting
+	e.BackupSchedule.SetDefaults()
 	if len(e.NodeSelector) > 0 {
 		e.PodTemplate.Spec.NodeSelector = e.NodeSelector
 		e.NodeSelector = nil
@@ -165,6 +180,32 @@ func (e *ElasticsearchSpec) Migrate() {
 		e.PodTemplate.Spec.ImagePullSecrets = e.ImagePullSecrets
 		e.ImagePullSecrets = nil
 	}
+
+	// perform defaulting
+	if e.StorageType == "" {
+		e.StorageType = StorageTypeDurable
+	}
+	if e.UpdateStrategy.Type == "" {
+		e.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	}
+	if e.TerminationPolicy == "" {
+		e.TerminationPolicy = TerminationPolicyPause
+	}
+}
+
+func (e *ElasticsearchSpec) GetSecrets() []string {
+	if e == nil {
+		return nil
+	}
+
+	var secrets []string
+	if e.DatabaseSecret != nil {
+		secrets = append(secrets, e.DatabaseSecret.SecretName)
+	}
+	if e.CertificateSecret != nil {
+		secrets = append(secrets, e.CertificateSecret.SecretName)
+	}
+	return secrets
 }
 
 const (

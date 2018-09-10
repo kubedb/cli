@@ -92,7 +92,7 @@ func (s Snapshot) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 	}, setNameSchema)
 }
 
-func (s *Snapshot) Migrate() {
+func (s *Snapshot) SetDefaults() {
 	if s == nil {
 		return
 	}

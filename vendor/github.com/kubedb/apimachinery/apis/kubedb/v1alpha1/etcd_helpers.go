@@ -5,6 +5,7 @@ import (
 
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	meta_util "github.com/appscode/kutil/meta"
+	apps "k8s.io/api/apps/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
@@ -126,15 +127,30 @@ func (e Etcd) CustomResourceDefinition() *apiextensions.CustomResourceDefinition
 	}, setNameSchema)
 }
 
-func (e *Etcd) Migrate() {
+func (e *Etcd) SetDefaults() {
 	if e == nil {
 		return
 	}
-	e.Spec.Migrate()
+	e.Spec.SetDefaults()
 }
 
-func (e *EtcdSpec) Migrate() {
+func (e *EtcdSpec) SetDefaults() {
 	if e == nil {
 		return
 	}
+
+	// perform defaulting
+	if e.StorageType == "" {
+		e.StorageType = StorageTypeDurable
+	}
+	if e.UpdateStrategy.Type == "" {
+		e.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	}
+	if e.TerminationPolicy == "" {
+		e.TerminationPolicy = TerminationPolicyPause
+	}
+}
+
+func (e *EtcdSpec) GetSecrets() []string {
+	return nil
 }

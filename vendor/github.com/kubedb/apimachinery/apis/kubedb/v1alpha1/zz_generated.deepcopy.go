@@ -373,6 +373,7 @@ func (in *ElasticsearchSpec) DeepCopyInto(out *ElasticsearchSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
@@ -703,6 +704,7 @@ func (in *EtcdSpec) DeepCopyInto(out *EtcdSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	return
 }
 
@@ -1019,6 +1021,7 @@ func (in *MemcachedSpec) DeepCopyInto(out *MemcachedSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
@@ -1366,6 +1369,7 @@ func (in *MongoDBSpec) DeepCopyInto(out *MongoDBSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
@@ -1696,6 +1700,7 @@ func (in *MySQLSpec) DeepCopyInto(out *MySQLSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
@@ -2203,6 +2208,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))
@@ -2567,6 +2573,7 @@ func (in *RedisSpec) DeepCopyInto(out *RedisSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector
 		*out = make(map[string]string, len(*in))

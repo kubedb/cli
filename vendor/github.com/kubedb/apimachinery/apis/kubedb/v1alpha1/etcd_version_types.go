@@ -32,6 +32,9 @@ type EtcdVersionSpec struct {
 	Exporter EtcdVersionExporter `json:"exporter"`
 	// Tools Image
 	Tools EtcdVersionTools `json:"tools"`
+	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
+	// +optional
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // EtcdVersionDatabase is the Etcd Database image

@@ -32,6 +32,9 @@ type MongoDBVersionSpec struct {
 	Exporter MongoDBVersionExporter `json:"exporter"`
 	// Tools Image
 	Tools MongoDBVersionTools `json:"tools"`
+	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
+	// +optional
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // MongoDBVersionDatabase is the MongoDB Database image
