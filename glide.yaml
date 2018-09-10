@@ -21,9 +21,9 @@ import:
 - package: github.com/kubedb/memcached
   version: master
 - package: github.com/spf13/cobra
-  version: master
+  version: v0.0.3
 - package: github.com/spf13/pflag
-  version: master
+  version: v1.0.1
 - package: github.com/yudai/gojsondiff
   version: 1.0.0
 - package: k8s.io/api
@@ -37,9 +37,7 @@ import:
 - package: k8s.io/apiextensions-apiserver
   version: kubernetes-1.11.3
 - package: k8s.io/kubernetes
-  repo: https://github.com/pharmer/kubernetes.git
-  vcs: git
-  version: v1.11.0-ac
+  version: v1.11.3
 - package: github.com/appscode/kutil
   version: release-8.0
 - package: kmodules.xyz/monitoring-agent-api

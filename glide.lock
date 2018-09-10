@@ -1,5 +1,5 @@
-hash: a254c7b4c342969fafdd632ef1eb57de2229041650f444a30032270c4cfc2a39
-updated: 2018-09-10T11:16:15.840764571-07:00
+hash: 2cd40927816fe87ecd00dc1977f102c134d814efdaab8cda7b0f9109fba38c4f
+updated: 2018-09-10T16:30:33.576212392-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -158,7 +158,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 2006917edc5a27cd174dbc4baba31a137d6cb9ff
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -211,17 +211,17 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: c937b1cd77570e1323297dd10aeff9c67fe8acc3
+  version: 60c8f8973732e4853671f971697bb0a02c37ac72
 - name: github.com/kubedb/memcached
-  version: 739a23b8f39834fcba7c9e31b61cd71ae6e34d86
+  version: c87f44a360e23d596a5f2c5904c31a6a9627653c
 - name: github.com/kubedb/mongodb
-  version: 97160b1b4a6d87098202afaabab596b24f9a6b23
+  version: 41b2f81daeb609963acc2fc3594548ec1da0b5e5
 - name: github.com/kubedb/mysql
-  version: 809a3c49153fa436cfaf0800042310d60c7178fc
+  version: 796c93dad463302334aad12ea25bd4f73b6bb091
 - name: github.com/kubedb/postgres
-  version: 70109f228fd6d03b2307cb34fc00b48dec0030fd
+  version: 4af241215cdb71b95e9664d829dca4e330b0ce43
 - name: github.com/kubedb/redis
-  version: 1168c561e98a32eeb03dce0dfc5d276ccc658833
+  version: 978db413808d0da7380847d2ddeb738f27bd3727
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -264,11 +264,11 @@ imports:
 - name: github.com/sirupsen/logrus
   version: 89742aefa4b206dcf400792f3bd35b542998eb3b
 - name: github.com/spf13/cobra
-  version: 99dc123558852f67743bd0b2caf8383cb3c6d720
+  version: ef82de70bb3f60c65fb8eebacbb2d122ef517385
   subpackages:
   - doc
 - name: github.com/spf13/pflag
-  version: 298182f68c66c05229eb03ac171abe6e309ee79a
+  version: 583c0c0531f06d5278b7d917446061adc344b5cd
 - name: github.com/yudai/gojsondiff
   version: 7b1b7adf999dab73a6eb02669c3d82dbb27a3dd6
   subpackages:
@@ -451,7 +451,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 8573140a007810ee0d5a165647f171b0a77acfe5
+  version: 9970aee1898bc65beb8f3829b2ddf8e191777f78
   repo: https://github.com/pharmer/apiserver.git
   vcs: git
   subpackages:
@@ -552,9 +552,7 @@ imports:
   - pkg/util/proto
   - pkg/util/proto/validation
 - name: k8s.io/kubernetes
-  version: acfc3fbb3a2f86e8b4cc674193b19b5dd3877149
-  repo: https://github.com/pharmer/kubernetes.git
-  vcs: git
+  version: a4529464e4629c21224b3d52edfe0ea91b072862
   subpackages:
   - pkg/api/events
   - pkg/api/legacyscheme

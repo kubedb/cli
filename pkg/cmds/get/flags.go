@@ -34,7 +34,7 @@ type PrintFlags struct {
 	NamePrintFlags     *genericclioptions.NamePrintFlags
 	CustomColumnsFlags *printers.CustomColumnsPrintFlags
 	HumanReadableFlags *HumanPrintFlags
-	TemplateFlags      *printers.KubeTemplatePrintFlags
+	TemplateFlags      *genericclioptions.KubeTemplatePrintFlags
 
 	NoHeaders    *bool
 	OutputFormat *string
@@ -181,7 +181,7 @@ func NewGetPrintFlags() *PrintFlags {
 
 		JSONYamlPrintFlags: genericclioptions.NewJSONYamlPrintFlags(),
 		NamePrintFlags:     genericclioptions.NewNamePrintFlags(""),
-		TemplateFlags:      printers.NewKubeTemplatePrintFlags(),
+		TemplateFlags:      genericclioptions.NewKubeTemplatePrintFlags(),
 
 		HumanReadableFlags: NewHumanPrintFlags(),
 		CustomColumnsFlags: printers.NewCustomColumnsPrintFlags(),
