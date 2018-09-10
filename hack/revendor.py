@@ -155,54 +155,7 @@ class Kitten(object):
         self.master_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
         print self.master_deps
 
-    def revendor_db(self, repo_name):
-        revendor_branch = 'api-{0}'.format(self.seed)
-
-        repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
-        print(repo)
-        print('----------------------------------------------------------------------------------------')
-        call('git reset HEAD --hard', cwd=repo)
-        call('git clean -xfd', cwd=repo)
-        git_checkout('master', cwd=repo)
-        call('git pull --rebase origin master', cwd=repo)
-        git_checkout(revendor_branch, cwd=repo)
-        with open(repo + '/glide.yaml', 'r+') as glide_file:
-            glide_config = yaml.load(glide_file)
-            glide_mod(glide_config, self.master_deps)
-            glide_write(glide_file, glide_config)
-            call('glide slow', cwd=repo)
-            if git_requires_commit(cwd=repo):
-                call('git add --all', cwd=repo)
-                call('git commit -s -a -m "Revendor api"', cwd=repo, eoe=False)
-                call('git push origin {0}'.format(revendor_branch), cwd=repo)
-            else:
-                call('git reset HEAD --hard', cwd=repo)
-
-    def revendor_server_binary(self, repo_name):
-        revendor_branch = 'api-{0}'.format(self.seed)
-
-        repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
-        print(repo)
-        print('----------------------------------------------------------------------------------------')
-        call('git reset HEAD --hard', cwd=repo)
-        call('git clean -xfd', cwd=repo)
-        git_checkout('master', cwd=repo)
-        call('git pull --rebase origin master', cwd=repo)
-        git_checkout(revendor_branch, cwd=repo)
-        with open(repo + '/glide.yaml', 'r+') as glide_file:
-            glide_config = yaml.load(glide_file)
-            glide_mod(glide_config, self.master_deps)
-            glide_write(glide_file, glide_config)
-            call('glide slow', cwd=repo)
-            if git_requires_commit(cwd=repo):
-                call('git add --all', cwd=repo)
-                call('git commit -s -a -m "Revendor api"', cwd=repo, eoe=False)
-                call('git push origin {0}'.format(revendor_branch), cwd=repo)
-            else:
-                call('git reset HEAD --hard', cwd=repo)
-
-    def revendor_cli(self):
-        repo_name = 'cli'
+    def revendor_repo(self, repo_name):
         revendor_branch = 'api-{0}'.format(self.seed)
 
         repo = libbuild.GOPATH + '/src/github.com/kubedb/' + repo_name
@@ -230,18 +183,20 @@ def revendor(comp=None):
     cat = Kitten()
     if comp is None:
         for name in DATABASES:
-            cat.revendor_db(name)
+            cat.revendor_repo(name)
     elif comp == 'all':
         for name in DATABASES:
-            cat.revendor_db(name)
-        cat.revendor_server_binary('operator')
-        cat.revendor_cli()
+            cat.revendor_repo(name)
+        cat.revendor_repo('operator')
+        cat.revendor_repo('cli')
     elif comp in DATABASES:
         cat.revendor_db(comp)
     elif comp == 'operator':
-        cat.revendor_server_binary(comp)
+        cat.revendor_repo(comp)
     elif comp == 'cli':
-        cat.revendor_cli()
+        cat.revendor_repo(comp)
+    elif comp == 'apimachinery':
+        cat.revendor_repo(comp)
 
 
 if __name__ == "__main__":
