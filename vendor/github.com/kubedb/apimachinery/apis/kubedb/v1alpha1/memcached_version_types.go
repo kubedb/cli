@@ -30,6 +30,9 @@ type MemcachedVersionSpec struct {
 	DB MemcachedVersionDatabase `json:"db"`
 	// Exporter Image
 	Exporter MemcachedVersionExporter `json:"exporter"`
+	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
+	// +optional
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // MemcachedVersionDatabase is the Memcached Database image

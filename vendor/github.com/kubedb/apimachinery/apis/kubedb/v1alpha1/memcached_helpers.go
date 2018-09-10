@@ -5,6 +5,7 @@ import (
 
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	meta_util "github.com/appscode/kutil/meta"
+	apps "k8s.io/api/apps/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
@@ -122,17 +123,19 @@ func (m Memcached) CustomResourceDefinition() *apiextensions.CustomResourceDefin
 	}, setNameSchema)
 }
 
-func (m *Memcached) Migrate() {
+func (m *Memcached) SetDefaults() {
 	if m == nil {
 		return
 	}
-	m.Spec.Migrate()
+	m.Spec.SetDefaults()
 }
 
-func (m *MemcachedSpec) Migrate() {
+func (m *MemcachedSpec) SetDefaults() {
 	if m == nil {
 		return
 	}
+
+	// migrate first to avoid incorrect defaulting
 	if len(m.NodeSelector) > 0 {
 		m.PodTemplate.Spec.NodeSelector = m.NodeSelector
 		m.NodeSelector = nil
@@ -157,4 +160,16 @@ func (m *MemcachedSpec) Migrate() {
 		m.PodTemplate.Spec.ImagePullSecrets = m.ImagePullSecrets
 		m.ImagePullSecrets = nil
 	}
+
+	// perform defaulting
+	if m.UpdateStrategy.Type == "" {
+		m.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	}
+	if m.TerminationPolicy == "" {
+		m.TerminationPolicy = TerminationPolicyPause
+	}
+}
+
+func (e *MemcachedSpec) GetSecrets() []string {
+	return nil
 }

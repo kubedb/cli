@@ -30,6 +30,9 @@ type RedisVersionSpec struct {
 	DB RedisVersionDatabase `json:"db"`
 	// Exporter Image
 	Exporter RedisVersionExporter `json:"exporter"`
+	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
+	// +optional
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // RedisVersionDatabase is the Redis Database image

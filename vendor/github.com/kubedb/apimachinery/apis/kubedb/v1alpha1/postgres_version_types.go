@@ -32,6 +32,9 @@ type PostgresVersionSpec struct {
 	Exporter PostgresVersionExporter `json:"exporter"`
 	// Tools Image
 	Tools PostgresVersionTools `json:"tools"`
+	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
+	// +optional
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // PostgresVersionDatabase is the Postgres Database image
