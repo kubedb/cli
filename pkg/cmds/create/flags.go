@@ -30,7 +30,7 @@ import (
 type PrintFlags struct {
 	JSONYamlPrintFlags *genericclioptions.JSONYamlPrintFlags
 	NamePrintFlags     *genericclioptions.NamePrintFlags
-	TemplateFlags      *printers.KubeTemplatePrintFlags
+	TemplateFlags      *genericclioptions.KubeTemplatePrintFlags
 
 	TypeSetter *genericprinters.TypeSetterPrinter
 
@@ -85,7 +85,7 @@ func NewPrintFlags(operation string, scheme runtime.ObjectTyper) *PrintFlags {
 
 		JSONYamlPrintFlags: genericclioptions.NewJSONYamlPrintFlags(),
 		NamePrintFlags:     genericclioptions.NewNamePrintFlags(operation),
-		TemplateFlags:      printers.NewKubeTemplatePrintFlags(),
+		TemplateFlags:      genericclioptions.NewKubeTemplatePrintFlags(),
 
 		TypeSetter: genericprinters.NewTypeSetter(scheme),
 	}
