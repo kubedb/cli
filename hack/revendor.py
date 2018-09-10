@@ -44,11 +44,48 @@ DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached
 REPO_LIST = DATABASES + ['cli', 'operator', 'apimachinery']
 KUTIL_VERSION = 'release-8.0'
 KUBEMON_VERSION = 'release-8.0'
-FORCED_DEPS = {
-    'github.com/cpuguy83/go-md2man': 'v1.0.8',
-    'github.com/json-iterator/go': '1.1.5',
-    'github.com/coreos/prometheus-operator': 'v0.23.1',
-}
+FORCED_DEPS = [
+    {
+        'package': 'github.com/cpuguy83/go-md2man',
+        'version': 'v1.0.8',
+    },
+    {
+        'package': 'github.com/json-iterator/go',
+        'version': '1.1.5',
+    },
+    {
+        'package': 'github.com/coreos/prometheus-operator',
+        'version': 'v0.23.2',
+    },
+    {
+      "package": "k8s.io/api",
+      "version": "kubernetes-1.11.3"
+    },
+    {
+      "package": "k8s.io/apiextensions-apiserver",
+      "version": "kubernetes-1.11.3"
+    },
+    {
+      "package": "k8s.io/apimachinery",
+      "repo": "https://github.com/pharmer/apimachinery.git",
+      "vcs": "git",
+      "version": "release-1.11.3"
+    },
+    {
+      "package": "k8s.io/apiserver",
+      "repo": "https://github.com/pharmer/apiserver.git",
+      "vcs": "git",
+      "version": "release-1.11.3"
+    },
+    {
+      "package": "k8s.io/client-go",
+      "version": "kubernetes-1.11.3"
+    },
+    {
+      "package": "k8s.io/kube-openapi",
+      "version": "master"
+    },
+]
 
 
 def die(status):
@@ -92,18 +129,11 @@ def glide_mod(glide_config, changes):
     for dep in glide_config['import']:
         if dep['package'] in changes:
             dep['version'] = changes[dep['package']]
-    for pkg, ver in FORCED_DEPS.iteritems():
-        found = False
-        for dep in glide_config['import']:
-            if dep['package'] == pkg:
-                dep['version'] = ver
-                found = True
+    for x in FORCED_DEPS:
+        for idx, dep in enumerate(glide_config['import']):
+            if dep['package'] == x['package']:
+                glide_config['import'][idx] = x
                 break
-        if not found:
-            glide_config['import'].append({
-                'package': pkg,
-                'version': ver,
-            })
 
 
 def glide_write(f, glide_config):
