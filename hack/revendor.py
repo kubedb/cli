@@ -82,12 +82,92 @@ FORCED_DEPS = [
       "version": "kubernetes-1.11.3"
     },
     {
+      "package": "k8s.io/kubernetes",
+      "version": "v1.11.3"
+    },
+    {
       "package": "k8s.io/kube-aggregator",
       "version": "kubernetes-1.11.3"
     },
     {
       "package": "k8s.io/kube-openapi",
       "version": "master"
+    },
+    {
+      "package": "github.com/appscode/kutil",
+      "version": "release-8.0"
+    },
+    {
+      "package": "github.com/appscode/kubernetes-webhook-util",
+      "version": "release-8.0"
+    },
+    {
+      "package": "kmodules.xyz/monitoring-agent-api",
+      "repo": "https://github.com/kmodules/monitoring-agent-api.git",
+      "vcs": "git",
+      "version": "release-8.0"
+    },
+    {
+      "package": "kmodules.xyz/objectstore-api",
+      "repo": "https://github.com/kmodules/objectstore-api.git",
+      "vcs": "git",
+      "version": "release-8.0"
+    },
+    {
+      "package": "kmodules.xyz/offshoot-api",
+      "repo": "https://github.com/kmodules/offshoot-api.git",
+      "vcs": "git",
+      "version": "release-8.0"
+    },
+    {
+      "package": "github.com/appscode/kubernetes-webhook-util",
+      "version": "release-8.0"
+    },
+    {
+      "package": "github.com/openshift/api",
+      "version": "31a7bbd2266d178da3c12bb83f5274d387f775e6"
+    },
+    {
+      "package": "github.com/openshift/client-go",
+      "version": "4688ad28de2e88110c0ea30179c51b9b205f99be"
+    },
+    {
+      "package": "github.com/openshift/origin",
+      "version": "fecffb2fce100260088a1b9f268c0901a778cf2b"
+    },
+    {
+      "package": "github.com/spf13/cobra",
+      "version": "v0.0.3"
+    },
+    {
+      "package": "github.com/spf13/pflag",
+      "version": "v1.0.1"
+    },
+        {
+      "package": "github.com/graymeta/stow",
+      "repo": "https://github.com/appscode/stow.git",
+      "vcs": "git",
+      "version": "master"
+    },
+    {
+      "package": "github.com/Azure/azure-sdk-for-go",
+      "version": "v14.6.0"
+    },
+    {
+      "package": "github.com/Azure/go-autorest",
+      "version": "v10.6.2"
+    },
+    {
+      "package": "github.com/aws/aws-sdk-go",
+      "version": "v1.12.7"
+    },
+    {
+      "package": "google.golang.org/api/storage/v1",
+      "version": "master"
+    },
+    {
+      "package": "cloud.google.com/go",
+      "version": "v0.2.0"
     },
 ]
 
