@@ -79,7 +79,9 @@ FORCED_DEPS = [
     },
     {
       "package": "k8s.io/client-go",
-      "version": "kubernetes-1.11.3"
+      "repo": "https://github.com/pharmer/client-go.git",
+      "vcs": "git",
+      "version": "release-1.11.3"
     },
     {
       "package": "k8s.io/kubernetes",
