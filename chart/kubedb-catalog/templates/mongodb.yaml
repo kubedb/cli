@@ -3,25 +3,6 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
-  name: "3.4-v1"
-  labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
-spec:
-  version: "3.4"
-  db:
-    image: "{{ .Values.dockerRegistry }}/mongo:3.4-v1"
-  exporter:
-    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
-  tools:
-    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v1"
-
----
-apiVersion: kubedb.com/v1alpha1
-kind: MongoDBVersion
-metadata:
   name: "3.4"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -42,21 +23,20 @@ spec:
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
-  name: "3.6-v1"
+  name: "3.4-v1"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
-  version: "3.6"
+  version: "3.4"
   db:
-    image: "{{ .Values.dockerRegistry }}/mongo:3.6-v1"
+    image: "{{ .Values.dockerRegistry }}/mongo:3.4-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
-    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v1"
-{{ end }}
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -77,4 +57,23 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.6-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "3.6"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mongo:3.6-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v1"
 {{ end }}

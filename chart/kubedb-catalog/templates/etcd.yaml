@@ -17,5 +17,4 @@ spec:
     image: "{{ .Values.dockerRegistry }}/etcd:v3.2.13"
   tools:
     image: "{{ .Values.dockerRegistry }}/etcd-tools:3.2.13"
-
----
+{{ end }}
