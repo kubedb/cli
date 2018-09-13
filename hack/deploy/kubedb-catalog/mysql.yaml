@@ -2,17 +2,50 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
-  name: "8.0"
+  name: "8.0-v1"
   labels:
     app: kubedb
 spec:
   version: "8.0"
   db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8.0-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
   tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0-v1"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8.0"
+  labels:
+    app: kubedb
+spec:
+  deprecated: true
+  version: "8.0"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "8"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -22,13 +55,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "8"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql:8"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5.7-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "5.7"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5.7-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -38,13 +88,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.7"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5.7"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "5"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -54,10 +121,11 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5"

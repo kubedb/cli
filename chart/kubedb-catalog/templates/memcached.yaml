@@ -3,7 +3,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MemcachedVersion
 metadata:
-  name: "1.5"
+  name: "1.5-v1"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
@@ -12,9 +12,45 @@ metadata:
 spec:
   version: "1.5"
   db:
-    image: "{{ .Values.dockerRegistry }}/memcached:1.5"
+    image: "{{ .Values.dockerRegistry }}/memcached:1.5-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  deprecated: true
+  version: "1.5"
+  db:
+    image: "{{ .Values.dockerRegistry }}/memcached:1.5"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5.4-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "1.5.4"
+  db:
+    image: "{{ .Values.dockerRegistry }}/memcached:1.5.4-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
+{{ end }}
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -27,9 +63,10 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  deprecated: true
   version: "1.5.4"
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5.4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
 {{ end }}
