@@ -6,13 +6,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "5.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -22,13 +39,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.6.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6.4-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "5.6.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -38,13 +72,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.2"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "6.2"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -54,11 +105,12 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.2.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4"
 
@@ -66,17 +118,17 @@ spec:
 apiVersion: kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
-  name: "6.3.0"
+  name: "6.2.4-v1"
   labels:
     app: kubedb
 spec:
-  version: "6.3.0"
+  version: "6.2.4"
   db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -86,10 +138,60 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.3"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "6.3"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v1"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3.0"
+  labels:
+    app: kubedb
+spec:
+  deprecated: true
+  version: "6.3.0"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3.0-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "6.3.0"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2-v1"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0-v1"

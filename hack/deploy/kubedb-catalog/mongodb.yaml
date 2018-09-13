@@ -6,13 +6,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "3.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.4"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.4-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "3.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.4-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -22,10 +39,28 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "3.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.6"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.6-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "3.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.6-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6-v1"
+

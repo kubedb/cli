@@ -6,9 +6,24 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "1.5"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "1.5"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached-exporter:v0.4.1"
 
@@ -20,8 +35,23 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "1.5.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MemcachedVersion
+metadata:
+  name: "1.5.4-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "1.5.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5.4-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached-exporter:v0.4.1"

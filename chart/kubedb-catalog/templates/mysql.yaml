@@ -3,20 +3,40 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
-  name: "8.0"
+  name: "5"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
-  version: "8.0"
+  deprecated: true
+  version: "5"
   db:
-    image: "{{ .Values.dockerRegistry }}/mysql:8.0"
+    image: "{{ .Values.dockerRegistry }}/mysql:5"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:5"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "5"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:5-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
-    image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0"
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:5-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -29,11 +49,12 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  deprecated: true
   version: "5.7"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:5.7"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7"
 
@@ -41,18 +62,57 @@ spec:
 apiVersion: kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
-  name: "5"
+  name: "5.7-v1"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubedb-catalog.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
-  version: "5"
+  version: "5.7"
   db:
-    image: "{{ .Values.dockerRegistry }}/mysql:5"
+    image: "{{ .Values.dockerRegistry }}/mysql:5.7-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
-    image: "{{ .Values.dockerRegistry }}/mysql-tools:5"
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7-v1"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8.0"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  deprecated: true
+  version: "8.0"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:8.0"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8.0-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "8.0"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:8.0-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0-v1"
 {{ end }}

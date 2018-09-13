@@ -10,13 +10,33 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  deprecated: true
   version: "3.4"
   db:
     image: "{{ .Values.dockerRegistry }}/mongo:3.4"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.4-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "3.4"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mongo:3.4-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -29,11 +49,31 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
+  deprecated: true
   version: "3.6"
   db:
     image: "{{ .Values.dockerRegistry }}/mongo:3.6"
   exporter:
-    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.6-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "3.6"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mongo:3.6-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v1"
 {{ end }}

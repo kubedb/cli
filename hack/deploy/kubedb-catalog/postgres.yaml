@@ -6,13 +6,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "9.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "9.6-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "9.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -22,13 +39,30 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "9.6.7"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "9.6.7-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "9.6.7"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7-v1"
 
 ---
 apiVersion: kubedb.com/v1alpha1
@@ -38,10 +72,27 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "10.2"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2"
   exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
+    image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2"
+
+---
+apiVersion: kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "10.2-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "10.2"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v1"
