@@ -80,6 +80,9 @@ rules:
   resources:
   - servicemonitors
   verbs: ["create", "delete", "get", "list", "update"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
