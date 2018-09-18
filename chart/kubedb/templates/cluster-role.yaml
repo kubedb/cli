@@ -90,4 +90,9 @@ rules:
   resources:
   - servicemonitors
   verbs: ["create", "delete", "get", "list", "update"]
+- apiGroups:
+  - ""
+  resources:
+  - "pods/exec"
+  verbs: ["create"]
 {{ end }}
