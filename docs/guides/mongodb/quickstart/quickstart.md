@@ -66,7 +66,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mongodb/quickstart/demo-1.yaml
 mongodb "mgo-quickstart" created
 ```
 
@@ -312,7 +312,7 @@ In this tutorial, the dormant database can be resumed by creating original Mongo
 The below command will resume the DormantDatabase `mgo-quickstart`.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mongodb/quickstart/demo-1.yaml
 mongodb "mgo-quickstart" created
 ```
 

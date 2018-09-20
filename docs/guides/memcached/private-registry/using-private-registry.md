@@ -30,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0 ; docker tag kubedb/operator:0.8.0 $DOCKER_REGISTRY/operator:0.8.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0
+$ docker pull kubedb/operator:0.9.0-beta.0 ; docker tag kubedb/operator:0.9.0-beta.0 $DOCKER_REGISTRY/operator:0.9.0-beta.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.0
 $ docker pull kubedb/memcached:1.5.4 ; docker tag kubedb/memcached:1.5.4 $DOCKER_REGISTRY/memcached:1.5.4 ; docker push $DOCKER_REGISTRY/memcached:1.5.4
 ```
 
@@ -103,7 +103,7 @@ spec:
 Now run the command to deploy this `Memcached` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/memcached/private-registry/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/memcached/private-registry/demo-2.yaml
 memcached "memcached-pvt-reg" created
 ```
 

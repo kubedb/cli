@@ -49,7 +49,7 @@ For Postgres, push the following images to your private registry.
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0 ; docker tag kubedb/operator:0.8.0 $DOCKER_REGISTRY/operator:0.8.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0
+$ docker pull kubedb/operator:0.9.0-beta.0 ; docker tag kubedb/operator:0.9.0-beta.0 $DOCKER_REGISTRY/operator:0.9.0-beta.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.0
 $ docker pull kubedb/postgres:9.6 ; docker tag kubedb/postgres:9.6 $DOCKER_REGISTRY/postgres:9.6 ; docker push $DOCKER_REGISTRY/postgres:9.6
 $ docker pull kubedb/postgres-tools:9.6 ; docker tag kubedb/postgres-tools:9.6 $DOCKER_REGISTRY/postgres-tools:9.6 ; docker push $DOCKER_REGISTRY/postgres-tools:9.6
 ```
@@ -108,7 +108,7 @@ spec:
 Now run the command to create this Postgres object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
 postgres "pvt-reg-postgres" created
 ```
 

@@ -34,7 +34,7 @@ demo          Active    1m
 kube-public   Active    1h
 kube-system   Active    1h
 
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/snapshot/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/snapshot/demo-1.yaml
 mysql "mysql-infant" created
 ```
 
@@ -95,7 +95,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/snapshot/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/snapshot/demo-2.yaml
 snapshot "snap-mysql-infant" created
 
 $ kubedb get snap -n demo
@@ -221,7 +221,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/snapshot/demo-3.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/snapshot/demo-3.yaml
 mysql "mysql-recovered" created
 ```
 

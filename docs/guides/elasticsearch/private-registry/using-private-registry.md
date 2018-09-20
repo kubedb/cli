@@ -47,7 +47,7 @@ For Elasticsearch, push the following images to your private registry.
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.8.0 ; docker tag kubedb/operator:0.8.0 $DOCKER_REGISTRY/operator:0.8.0 ; docker push $DOCKER_REGISTRY/operator:0.8.0
+$ docker pull kubedb/operator:0.9.0-beta.0 ; docker tag kubedb/operator:0.9.0-beta.0 $DOCKER_REGISTRY/operator:0.9.0-beta.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.0
 $ docker pull kubedb/elasticsearch:5.6 ; docker tag kubedb/elasticsearch:5.6 $DOCKER_REGISTRY/elasticsearch:5.6 ; docker push $DOCKER_REGISTRY/elasticsearch:5.6
 $ docker pull kubedb/elasticsearch-tools:5.6 ; docker tag kubedb/elasticsearch-tools:5.6 $DOCKER_REGISTRY/elasticsearch-tools:5.6 ; docker push $DOCKER_REGISTRY/elasticsearch-tools:5.6
 ```
@@ -105,7 +105,7 @@ spec:
 Now run the command to deploy this Elasticsearch object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/private-registry/private-registry.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/private-registry/private-registry.yaml
 elasticsearch "pvt-reg-elasticsearch" created
 ```
 

@@ -68,7 +68,7 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
 postgres "builtin-prom-postgres" created
 ```
 
@@ -169,7 +169,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap "prometheus-server-conf" created
 ```
 
@@ -216,7 +216,7 @@ spec:
 Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole "prometheus-server" created
 serviceaccount "prometheus-server" created
 clusterrolebinding "prometheus-server" created

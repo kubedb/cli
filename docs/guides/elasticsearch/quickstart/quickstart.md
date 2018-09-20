@@ -73,7 +73,7 @@ Here,
 Create example above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
 elasticsearch "quick-elasticsearch" created
 ```
 
@@ -432,7 +432,7 @@ In this tutorial, the DormantDatabase `quick-elasticsearch` can be resumed by cr
 The below command will resume the DormantDatabase `quick-elasticsearch`
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
 elasticsearch "quick-elasticsearch" created
 ```
 

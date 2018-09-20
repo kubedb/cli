@@ -82,7 +82,7 @@ metadata:
 Now, create Postgres crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/custom-config/pg-custom-config.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/custom-config/pg-custom-config.yaml
 postgres.kubedb.com "custom-postgres" created
 ```
 

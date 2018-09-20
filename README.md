@@ -34,10 +34,11 @@ KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their S
 ## Supported Versions
 Please pick a version of KubeDB that matches your Kubernetes installation.
 
-| KubeDB Version                                                                     | Docs                                                        | Kubernetes Version |
-|------------------------------------------------------------------------------------|-------------------------------------------------------------|--------------------|
-| [0.8.0](https://github.com/kubedb/cli/releases/tag/0.8.0) (uses CRD) | [User Guide](https://kubedb.com/docs/0.8.0/)         | 1.9.x +            |
-| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR)               | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs) | 1.5.x - 1.7.x      |
+| KubeDB Version                                                                     | Docs                                                                | Kubernetes Version |
+|------------------------------------------------------------------------------------|---------------------------------------------------------------------|--------------------|
+| [0.9.0-beta.0](https://github.com/kubedb/cli/releases/tag/0.9.0-beta.0) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.9.0-beta.0/docs)  | 1.9.x + (for qa)   |
+| [0.8.0](https://github.com/kubedb/cli/releases/tag/0.8.0) (uses CRD)               | [User Guide](https://kubedb.com/docs/0.8.0/)                        | 1.9.x +            |
+| [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR)               | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs)         | 1.5.x - 1.7.x      |
 
 ## Installation
 To install KubeDB, please follow the guide [here](https://kubedb.com/docs/latest/setup/install/).
