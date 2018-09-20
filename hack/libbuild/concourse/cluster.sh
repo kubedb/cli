@@ -24,8 +24,12 @@ function cleanup_test_stuff() {
   kubectl get nodes
   kubectl describe nodes
 
-  pushd $GOPATH/src/github.com/$ORG_NAME/$REPO_NAME
-  ./hack/deploy/setup.sh --uninstall --purge
+  if [ -d "$BASE_DIR/creds" ]; then
+    rm -rf $BASE_DIR/creds
+  fi
+
+  pushd $REPO_ROOT
+  ./hack/concourse/uninstall.sh
   popd
 
   # delete cluster on exit
@@ -44,15 +48,6 @@ function cleanup_test_stuff() {
     pharmer apply "$NAME"
     pharmer get cluster
   fi
-
-  pushd $GOPATH/src/github.com/$ORG_NAME/$REPO_NAME
-  ./hack/deploy/setup.sh --uninstall --purge
-  popd
-
-  # delete docker image on exit
-  curl -LO https://raw.githubusercontent.com/appscodelabs/libbuild/master/docker.py
-  chmod +x docker.py
-  ./docker.py del_tag $DOCKER_REGISTRY $OPERATOR_NAME $TAG
 }
 trap cleanup_test_stuff EXIT
 
@@ -241,7 +236,7 @@ if [ "${ClusterProvider}" = "gke" ]; then
   CredProvider=GoogleCloud
   ZONE=us-central1-f
   NODE=n1-standard-2
-  K8S_VERSION=${K8S_VERSION:-"1.10.4-gke.2"}
+  K8S_VERSION=${K8S_VERSION:-"1.10.6-gke.2"}
 
   pharmer_common
 elif [ "${ClusterProvider}" = "aws" ]; then
