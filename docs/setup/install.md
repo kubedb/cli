@@ -125,8 +125,9 @@ KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://g
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
 $ helm search appscode/kubedb
-NAME            CHART VERSION APP VERSION   DESCRIPTION
-appscode/kubedb 0.9.0-beta.0  0.9.0-beta.0  KubeDB by AppsCode - Production ready databases...
+NAME                    CHART VERSION APP VERSION   DESCRIPTION
+appscode/kubedb         0.9.0-beta.0  0.9.0-beta.0  KubeDB by AppsCode - Production ready databases ...
+appscode/kubedb-catalog 0.9.0-beta.0  0.9.0-beta.0  KubeDB Catalog by AppsCode - Catalog for database versions
 
 # Step 1(a): Kubernetes 1.9.x - 1.10.x
 $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0-beta.0 \
