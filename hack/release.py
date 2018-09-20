@@ -41,19 +41,17 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
-    'cli': '0.8.0',
-    'operator': '0.8.0',
-    'apimachinery': '0.8.0',
-    'postgres': '0.8.0',
-    'elasticsearch': '0.8.0',
-    'etcd': '0.1.0',
-    'mysql': '0.1.0',
-    'mongodb': '0.1.0',
-    'memcached': '0.1.0',
-    'redis': '0.1.0',
+    'cli': '0.9.0-beta.0',
+    'operator': '0.9.0-beta.0',
+    'apimachinery': '0.9.0-beta.0',
+    'postgres': '0.9.0-beta.0',
+    'elasticsearch': '0.9.0-beta.0',
+    'etcd': '0.1.0-beta.0',
+    'mysql': '0.2.0-beta.0',
+    'mongodb': '0.2.0-beta.0',
+    'memcached': '0.2.0-beta.0',
+    'redis': '0.2.0-beta.0',
 }
-KUTIL_VERSION = 'release-7.0'
-KUBEMON_VERSION = 'release-7.0'
 
 
 def die(status):
@@ -118,10 +116,6 @@ class Kitten(object):
         for k in RELEASE_TAGS:
             self.rel_deps['github.com/kubedb/' + k] = RELEASE_TAGS[k]
             self.master_deps['github.com/kubedb/' + k] = 'master'
-        self.rel_deps['github.com/appscode/kutil'] = KUTIL_VERSION
-        self.master_deps['github.com/appscode/kutil'] = KUTIL_VERSION
-        self.rel_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
-        self.master_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
 
         print self.rel_deps
         print self.master_deps
