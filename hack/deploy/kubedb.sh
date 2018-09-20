@@ -409,6 +409,7 @@ if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
 fi
 
 if [ "$KUBEDB_CATALOG" = "all" ] || [ "$KUBEDB_CATALOG" = "elasticsearch" ]; then
+  echo
   echo "installing KubeDB Elasticsearch catalog"
   ${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
 fi

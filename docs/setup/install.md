@@ -66,7 +66,7 @@ options:
     --run-on-master                run KubeDB operator on master
     --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs
     --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs
-    --enable-status-subresource    if enabled, uses status sub resource for crds
+    --enable-status-subresource    if enabled, uses status sub resource for KubeDB crds
     --enable-analytics             send usage events to Google Analytics (default: true)
     --install-catalog              installs KubeDB database version catalog (default: all)
     --uninstall                    uninstall KubeDB
