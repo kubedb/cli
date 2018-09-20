@@ -83,19 +83,19 @@ else
   # ref: https://stackoverflow.com/a/27776822/244009
   case "$(uname -s)" in
     Darwin)
-      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.3.0/onessl-darwin-amd64
+      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.7.0/onessl-darwin-amd64
       chmod +x onessl
       export ONESSL=./onessl
       ;;
 
     Linux)
-      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.3.0/onessl-linux-amd64
+      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.7.0/onessl-linux-amd64
       chmod +x onessl
       export ONESSL=./onessl
       ;;
 
     CYGWIN* | MINGW32* | MSYS*)
-      curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.3.0/onessl-windows-amd64.exe
+      curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.7.0/onessl-windows-amd64.exe
       chmod +x onessl.exe
       export ONESSL=./onessl.exe
       ;;
@@ -310,7 +310,7 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
           i+=1
         fi
         # remove finalizers
-        kubectl patch ${crd}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge
+        kubectl patch ${crd}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge || true
         # delete crd object
         echo "deleting ${crd} $namespace/$name"
         kubectl delete ${crd}.kubedb.com $name -n $namespace --ignore-not-found=true
