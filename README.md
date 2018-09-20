@@ -26,7 +26,8 @@ Running production quality database in Kubernetes can be tricky to say the least
 KubeDB is developed at [AppsCode](https://twitter.com/AppsCodeHQ) to run their SAAS platform on Kubernetes. Currently KubeDB includes support for following datastores:
  - Postgres
  - Elasticsearch
- - MySQL
+ - Etcd
+ - MySQL / MariaDB / Percona Server for MySQL
  - MongoDB
  - Redis
  - Memcached
