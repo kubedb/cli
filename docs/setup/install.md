@@ -128,14 +128,14 @@ $ helm search appscode/kubedb
 NAME            CHART VERSION APP VERSION   DESCRIPTION
 appscode/kubedb 0.9.0-beta.0  0.9.0-beta.0  KubeDB by AppsCode - Production ready databases...
 
-# Kubernetes 1.9.x - 1.10.x
+# Step 1(a): Kubernetes 1.9.x - 1.10.x
 $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0-beta.0 \
   --namespace kube-system \
   --set apiserver.ca="$(onessl get kube-ca)" \
   --set apiserver.enableValidatingWebhook=true \
   --set apiserver.enableMutatingWebhook=true
 
-# Kubernetes 1.11.0 or later
+# Step 1(b): Kubernetes 1.11.0 or later
 $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0-beta.0 \
   --namespace kube-system \
   --set apiserver.ca="$(onessl get kube-ca)" \
@@ -143,7 +143,27 @@ $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0-beta.0 \
   --set apiserver.enableMutatingWebhook=true \
   --set apiserver.enableStatusSubresource=true
 
-# KubeDB catalog of database versions
+# Step 2: wait until crds are registered
+$ kubectl get crds -l app=kubedb -w
+NAME                               AGE
+dormantdatabases.kubedb.com        6s
+elasticsearches.kubedb.com         12s
+elasticsearchversions.kubedb.com   8s
+etcds.kubedb.com                   8s
+etcdversions.kubedb.com            8s
+memcacheds.kubedb.com              6s
+memcachedversions.kubedb.com       6s
+mongodbs.kubedb.com                7s
+mongodbversions.kubedb.com         6s
+mysqls.kubedb.com                  7s
+mysqlversions.kubedb.com           7s
+postgreses.kubedb.com              8s
+postgresversions.kubedb.com        7s
+redises.kubedb.com                 6s
+redisversions.kubedb.com           6s
+snapshots.kubedb.com               6s
+
+# Step 3: KubeDB catalog of database versions
 $ helm install appscode/kubedb-catalog --name kubedb-catalog
 ```
 
