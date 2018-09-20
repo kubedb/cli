@@ -4,7 +4,7 @@ metadata:
   name: es-mon-demo
   namespace: demo
 spec:
-  version: "6.3.0"
+  version: "6.3.0-v1"
   doNotPause: false
   replicas: 1
   databaseSecret:
@@ -19,3 +19,4 @@ spec:
     resources:
       requests:
         storage: 50Mi
+        

@@ -4,7 +4,7 @@ metadata:
   name: mysql-pvt-reg
   namespace: demo
 spec:
-  version: "8.0"
+  version: "8.0-v1"
   doNotPause: true
   storage:
     storageClassName: "standard"
