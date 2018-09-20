@@ -4,7 +4,7 @@ metadata:
   name: config-elasticsearch
   namespace: demo
 spec:
-  version: "5.6"
+  version: "5.6-v1"
   databaseSecret:
     secretName: config-elasticsearch-auth
   storage:
