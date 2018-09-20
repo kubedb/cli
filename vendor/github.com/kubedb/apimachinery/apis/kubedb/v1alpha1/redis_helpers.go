@@ -3,6 +3,7 @@ package v1alpha1
 import (
 	"fmt"
 
+	"github.com/appscode/go/types"
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	meta_util "github.com/appscode/kutil/meta"
 	apps "k8s.io/api/apps/v1"
@@ -42,6 +43,10 @@ func (r Redis) ResourcePlural() string {
 }
 
 func (r Redis) ServiceName() string {
+	return r.OffshootName()
+}
+
+func (r Redis) ConfigMapName() string {
 	return r.OffshootName()
 }
 
@@ -162,6 +167,19 @@ func (r *RedisSpec) SetDefaults() {
 	}
 
 	// perform defaulting
+	if r.Mode == "" {
+		r.Mode = RedisModeStandalone
+	} else if r.Mode == RedisModeCluster {
+		if r.Cluster == nil {
+			r.Cluster = &RedisClusterSpec{}
+		}
+		if r.Cluster.Master == nil {
+			r.Cluster.Master = types.Int32P(3)
+		}
+		if r.Cluster.Replicas == nil {
+			r.Cluster.Replicas = types.Int32P(1)
+		}
+	}
 	if r.StorageType == "" {
 		r.StorageType = StorageTypeDurable
 	}

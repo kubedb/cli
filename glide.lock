@@ -1,5 +1,5 @@
-hash: 2cd40927816fe87ecd00dc1977f102c134d814efdaab8cda7b0f9109fba38c4f
-updated: 2018-09-10T16:30:33.576212392-07:00
+hash: 31bf17f8455b134a865b129ae6400112b853917d7bfd2aa0fb8ad47c0dd53752
+updated: 2018-09-20T15:33:35.302863246-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -21,9 +21,9 @@ imports:
 - name: github.com/appscode/go-version
   version: 0dcf3ac121c7c30e035b41ba9f652d1ce5994242
 - name: github.com/appscode/jsonpatch
-  version: 1359b374de83fa14fd58ab10aa8ea4935f84d249
+  version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: 6a61b0d2df81e2d5b4764bee574eb43a9a954a5a
+  version: bd70cefb33397b4c196aca7e33cab656755e195e
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -123,7 +123,7 @@ imports:
 - name: github.com/fatih/camelcase
   version: f6a740d52f961c60348ebb109adde9f4635d7540
 - name: github.com/fatih/structs
-  version: ebf56d35bba727c68ac77f56f2fcf90b181851aa
+  version: 4966fc68f5b7593aafa6cbbba2d65ec6e1416047
 - name: github.com/ghodss/yaml
   version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
 - name: github.com/go-openapi/jsonpointer
@@ -158,7 +158,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 2006917edc5a27cd174dbc4baba31a137d6cb9ff
+  version: 3af367b6b30c263d47e8895973edcca9a49cf029
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -184,7 +184,7 @@ imports:
   - openstack/utils
   - pagination
 - name: github.com/graymeta/stow
-  version: afce6d90444a3ba63c6d6671498c6cdc79375369
+  version: 1849a82ac7fbd3e5cb144bcc711544e90903eac4
   repo: https://github.com/appscode/stow.git
   vcs: git
 - name: github.com/gregjones/httpcache
@@ -204,24 +204,26 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: b708c5206e4e9fdb0753d18036b5b17dac5d8b5c
+  version: 7760fb61e363cdc939e78708046db6a4d92ca77c
   subpackages:
   - apis/kubedb
   - apis/kubedb/v1alpha1
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 60c8f8973732e4853671f971697bb0a02c37ac72
+  version: efd4971e11b83abd7ee5f486759ed14d054c6cb0
+- name: github.com/kubedb/etcd
+  version: e537d186d2184f1a1c728483c2b72e4c813fe830
 - name: github.com/kubedb/memcached
-  version: c87f44a360e23d596a5f2c5904c31a6a9627653c
+  version: 3b18436ca39adb62a45c60be7dd04c278e8c07a4
 - name: github.com/kubedb/mongodb
-  version: 41b2f81daeb609963acc2fc3594548ec1da0b5e5
+  version: 9094d089533138995e55a8e9e36463e8cc40ca6d
 - name: github.com/kubedb/mysql
-  version: 796c93dad463302334aad12ea25bd4f73b6bb091
+  version: 04eb9bb5156ae6c4109a0398073f4b90de22ba93
 - name: github.com/kubedb/postgres
-  version: 4af241215cdb71b95e9664d829dca4e330b0ce43
+  version: 85783294de09f749fd77b558901c7c602edac1ca
 - name: github.com/kubedb/redis
-  version: 978db413808d0da7380847d2ddeb738f27bd3727
+  version: 301038d1ec3872ba5bb17155159cbb877e20963d
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -326,7 +328,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 7ca32eb868bf53ea2fc406698eb98583a8073d19
+  version: 1d193494d9b89e3f4dbd64a2d7992a998b0450e6
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine

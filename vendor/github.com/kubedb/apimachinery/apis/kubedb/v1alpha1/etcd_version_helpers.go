@@ -53,14 +53,14 @@ func (p EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDef
 				JSONPath: ".spec.version",
 			},
 			{
-				Name:     "DbImage",
+				Name:     "DB_IMAGE",
 				Type:     "string",
 				JSONPath: ".spec.db.image",
 			},
 			{
-				Name:     "ExporterImage",
-				Type:     "string",
-				JSONPath: ".spec.exporter.image",
+				Name:     "Deprecated",
+				Type:     "boolean",
+				JSONPath: ".spec.deprecated",
 			},
 			{
 				Name:     "Age",
