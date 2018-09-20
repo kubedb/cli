@@ -35,7 +35,7 @@ demo          Active    1m
 kube-public   Active    1h
 kube-system   Active    1h
 
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/snapshot/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mongodb/snapshot/demo-1.yaml
 mongodb "mgo-infant" created
 ```
 
@@ -96,7 +96,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/snapshot/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mongodb/snapshot/demo-2.yaml
 snapshot "snapshot-infant" created
 
 $ kubedb get snap -n demo
@@ -222,7 +222,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mongodb/snapshot/demo-3.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mongodb/snapshot/demo-3.yaml
 mongodb "mgo-recovered" created
 ```
 

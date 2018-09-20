@@ -10,6 +10,8 @@ import:
   version: 0.9.0-beta.0
 - package: github.com/kubedb/elasticsearch
   version: 0.9.0-beta.0
+- package: github.com/kubedb/etcd
+  version: 0.1.0-beta.0
 - package: github.com/kubedb/postgres
   version: 0.9.0-beta.0
 - package: github.com/kubedb/mysql

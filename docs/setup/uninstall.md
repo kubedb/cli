@@ -17,7 +17,7 @@ section_menu_id: setup
 To uninstall KubeDB operator, run the following command:
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.8.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/hack/deploy/kubedb.sh \
     | bash -s -- --uninstall [--namespace=NAMESPACE]
 
 + kubectl delete deployment -l app=kubedb -n kube-system

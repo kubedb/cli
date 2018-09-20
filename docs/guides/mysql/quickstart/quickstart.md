@@ -33,7 +33,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 $ kubectl create ns demo
 namespace "demo" created
 
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/quickstart/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/quickstart/demo-1.yaml
 deployment "myadmin" created
 service "myadmin" created
 
@@ -83,7 +83,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/quickstart/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/quickstart/demo-2.yaml
 mysql "mysql-quickstart" created
 ```
 
@@ -291,7 +291,7 @@ In this tutorial, the dormant database can be resumed by creating original `MySQ
 The below command will resume the DormantDatabase `mysql-quickstart` that was created before.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/mysql/quickstart/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/quickstart/demo-2.yaml
 mysql "mysql-quickstart" created
 ```
 

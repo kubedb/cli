@@ -62,7 +62,7 @@ spec:
 If Postgres object `script-postgres` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/initialization/script-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/initialization/script-postgres.yaml
 postgres "script-postgres" created
 ```
 
@@ -164,7 +164,7 @@ To lean how to configure other storage destinations for snapshot data, please vi
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/snapshot/instant-snapshot.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/snapshot/instant-snapshot.yaml
 snapshot "instant-snapshot" created
 ```
 

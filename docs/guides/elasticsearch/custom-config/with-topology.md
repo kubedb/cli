@@ -120,7 +120,7 @@ metadata:
 Now, create an Elasticsearch crd with topology specified,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/elasticsearch/custom-config/es-custom-with-topology.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/custom-config/es-custom-with-topology.yaml
 elasticsearch.kubedb.com/custom-elasticsearch created
 ```
 
