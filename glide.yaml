@@ -7,19 +7,19 @@ import:
 - package: github.com/golang/glog
 - package: github.com/jpillora/go-ogle-analytics
 - package: github.com/kubedb/apimachinery
-  version: master
+  version: 0.9.0-beta.0
 - package: github.com/kubedb/elasticsearch
-  version: master
+  version: 0.9.0-beta.0
 - package: github.com/kubedb/postgres
-  version: master
+  version: 0.9.0-beta.0
 - package: github.com/kubedb/mysql
-  version: master
+  version: 0.2.0-beta.0
 - package: github.com/kubedb/mongodb
-  version: master
+  version: 0.2.0-beta.0
 - package: github.com/kubedb/redis
-  version: master
+  version: 0.2.0-beta.0
 - package: github.com/kubedb/memcached
-  version: master
+  version: 0.2.0-beta.0
 - package: github.com/spf13/cobra
   version: v0.0.3
 - package: github.com/spf13/pflag
