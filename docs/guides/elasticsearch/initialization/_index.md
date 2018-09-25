@@ -5,6 +5,6 @@ menu:
     identifier: es-initialization-elasticsearch
     name: Initialization
     parent: es-elasticsearch-guides
-    weight: 35
+    weight: 30
 menu_name: docs_0.8.0
 ---

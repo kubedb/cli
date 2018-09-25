@@ -5,6 +5,6 @@ menu:
     identifier: es-search-guard-elasticsearch
     name: Search Guard
     parent: es-elasticsearch-guides
-    weight: 25
+    weight: 50
 menu_name: docs_0.8.0
 ---
