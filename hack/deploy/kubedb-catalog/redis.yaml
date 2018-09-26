@@ -1,5 +1,5 @@
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
   name: "4"
@@ -14,7 +14,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
   name: "4-v1"
@@ -28,7 +28,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
   name: "4.0"
@@ -43,7 +43,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
   name: "4.0-v1"
@@ -57,7 +57,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
   name: "4.0.6"
@@ -72,7 +72,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
   name: "4.0.6-v1"

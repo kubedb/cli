@@ -1,5 +1,5 @@
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "5"
@@ -16,7 +16,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "5-v1"
@@ -32,7 +32,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "5.7"
@@ -49,7 +49,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "5.7-v1"
@@ -65,7 +65,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "8"
@@ -82,7 +82,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "8-v1"
@@ -98,7 +98,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "8.0"
@@ -115,7 +115,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
   name: "8.0-v1"

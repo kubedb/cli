@@ -1,5 +1,5 @@
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "5.6"
@@ -16,7 +16,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "5.6-v1"
@@ -32,7 +32,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "5.6.4"
@@ -49,7 +49,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "5.6.4-v1"
@@ -65,7 +65,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.2"
@@ -82,7 +82,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.2-v1"
@@ -98,7 +98,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.2.4"
@@ -115,7 +115,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.2.4-v1"
@@ -131,7 +131,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.3"
@@ -148,7 +148,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.3-v1"
@@ -164,7 +164,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.3.0"
@@ -181,7 +181,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.3.0-v1"
