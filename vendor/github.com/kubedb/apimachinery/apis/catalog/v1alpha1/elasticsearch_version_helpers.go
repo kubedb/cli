@@ -2,34 +2,35 @@ package v1alpha1
 
 import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
+	"github.com/kubedb/apimachinery/apis"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-var _ ResourceInfo = &PostgresVersion{}
+var _ apis.ResourceInfo = &ElasticsearchVersion{}
 
-func (p PostgresVersion) ResourceShortCode() string {
-	return ResourceCodePostgresVersion
+func (p ElasticsearchVersion) ResourceShortCode() string {
+	return ResourceCodeElasticsearchVersion
 }
 
-func (p PostgresVersion) ResourceKind() string {
-	return ResourceKindPostgresVersion
+func (p ElasticsearchVersion) ResourceKind() string {
+	return ResourceKindElasticsearchVersion
 }
 
-func (p PostgresVersion) ResourceSingular() string {
-	return ResourceSingularPostgresVersion
+func (p ElasticsearchVersion) ResourceSingular() string {
+	return ResourceSingularElasticsearchVersion
 }
 
-func (p PostgresVersion) ResourcePlural() string {
-	return ResourcePluralPostgresVersion
+func (p ElasticsearchVersion) ResourcePlural() string {
+	return ResourcePluralElasticsearchVersion
 }
 
-func (p PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralPostgresVersion,
-		Singular:      ResourceSingularPostgresVersion,
-		Kind:          ResourceKindPostgresVersion,
-		ShortNames:    []string{ResourceCodePostgresVersion},
+		Plural:        ResourcePluralElasticsearchVersion,
+		Singular:      ResourceSingularElasticsearchVersion,
+		Kind:          ResourceKindElasticsearchVersion,
+		ShortNames:    []string{ResourceCodeElasticsearchVersion},
 		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
 		ResourceScope: string(apiextensions.ClusterScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
@@ -42,7 +43,7 @@ func (p PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourc
 		Labels: crdutils.Labels{
 			LabelsMap: map[string]string{"app": "kubedb"},
 		},
-		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.PostgresVersion",
+		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersion",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
 		EnableStatusSubresource: false,

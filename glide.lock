@@ -1,5 +1,5 @@
-hash: 31bf17f8455b134a865b129ae6400112b853917d7bfd2aa0fb8ad47c0dd53752
-updated: 2018-09-20T15:33:35.302863246-07:00
+hash: e1cb5bac4c7bb87d0f49972a0ec3fbdfc9c6a7bb81edbdef90d26fd637df0cc2
+updated: 2018-09-26T03:29:34.181957812-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -204,26 +204,29 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 7760fb61e363cdc939e78708046db6a4d92ca77c
+  version: 483ed62aba8976cb227e543ed9d1223a560f3278
   subpackages:
+  - apis
+  - apis/catalog
+  - apis/catalog/v1alpha1
   - apis/kubedb
   - apis/kubedb/v1alpha1
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: efd4971e11b83abd7ee5f486759ed14d054c6cb0
+  version: 1475c6205c7f46a2c83a026df60d41887af9551d
 - name: github.com/kubedb/etcd
-  version: e537d186d2184f1a1c728483c2b72e4c813fe830
+  version: 785fc3971fb83bca19994d8cdf617e54522167b7
 - name: github.com/kubedb/memcached
-  version: 3b18436ca39adb62a45c60be7dd04c278e8c07a4
+  version: c2caeaf6e25de81f8893480907adefffc5ed9944
 - name: github.com/kubedb/mongodb
-  version: 9094d089533138995e55a8e9e36463e8cc40ca6d
+  version: c0598ead162f5b36e593527b88e1ace1d06aab00
 - name: github.com/kubedb/mysql
-  version: 04eb9bb5156ae6c4109a0398073f4b90de22ba93
+  version: e7695400d51d044442046e4d543b618e84e02b41
 - name: github.com/kubedb/postgres
-  version: 85783294de09f749fd77b558901c7c602edac1ca
+  version: 46d7f121d276f236a3cedd45308201de04dd982d
 - name: github.com/kubedb/redis
-  version: 301038d1ec3872ba5bb17155159cbb877e20963d
+  version: ff9d26d04923a4d454c33e4474b65b309a326eb1
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -328,7 +331,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 1d193494d9b89e3f4dbd64a2d7992a998b0450e6
+  version: e5ba110cb6cd042d05ea6ea2ce9dd13198c6387a
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
@@ -466,7 +469,9 @@ imports:
   - pkg/util/feature
   - pkg/util/flag
 - name: k8s.io/client-go
-  version: 2cefa64ff137e128daeddbd1775cd775708a05bf
+  version: 805859b028aa45844e5d3b699d1dfad9eed753ad
+  repo: https://github.com/pharmer/client-go.git
+  vcs: git
   subpackages:
   - discovery
   - dynamic
