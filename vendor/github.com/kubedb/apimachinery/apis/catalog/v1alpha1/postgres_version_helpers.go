@@ -2,34 +2,35 @@ package v1alpha1
 
 import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
+	"github.com/kubedb/apimachinery/apis"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-var _ ResourceInfo = &EtcdVersion{}
+var _ apis.ResourceInfo = &PostgresVersion{}
 
-func (p EtcdVersion) ResourceShortCode() string {
-	return ResourceCodeEtcdVersion
+func (p PostgresVersion) ResourceShortCode() string {
+	return ResourceCodePostgresVersion
 }
 
-func (p EtcdVersion) ResourceKind() string {
-	return ResourceKindEtcdVersion
+func (p PostgresVersion) ResourceKind() string {
+	return ResourceKindPostgresVersion
 }
 
-func (p EtcdVersion) ResourceSingular() string {
-	return ResourceSingularEtcdVersion
+func (p PostgresVersion) ResourceSingular() string {
+	return ResourceSingularPostgresVersion
 }
 
-func (p EtcdVersion) ResourcePlural() string {
-	return ResourcePluralEtcdVersion
+func (p PostgresVersion) ResourcePlural() string {
+	return ResourcePluralPostgresVersion
 }
 
-func (p EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralEtcdVersion,
-		Singular:      ResourceSingularEtcdVersion,
-		Kind:          ResourceKindEtcdVersion,
-		ShortNames:    []string{ResourceCodeEtcdVersion},
+		Plural:        ResourcePluralPostgresVersion,
+		Singular:      ResourceSingularPostgresVersion,
+		Kind:          ResourceKindPostgresVersion,
+		ShortNames:    []string{ResourceCodePostgresVersion},
 		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
 		ResourceScope: string(apiextensions.ClusterScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
@@ -42,7 +43,7 @@ func (p EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDef
 		Labels: crdutils.Labels{
 			LabelsMap: map[string]string{"app": "kubedb"},
 		},
-		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.EtcdVersion",
+		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/catalog/v1alpha1.PostgresVersion",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
 		EnableStatusSubresource: false,

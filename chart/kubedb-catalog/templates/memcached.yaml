@@ -1,6 +1,6 @@
 {{ if .Values.catalog.memcached }}
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MemcachedVersion
 metadata:
   name: "1.5"
@@ -18,7 +18,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MemcachedVersion
 metadata:
   name: "1.5-v1"
@@ -35,7 +35,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MemcachedVersion
 metadata:
   name: "1.5.4"
@@ -53,7 +53,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MemcachedVersion
 metadata:
   name: "1.5.4-v1"

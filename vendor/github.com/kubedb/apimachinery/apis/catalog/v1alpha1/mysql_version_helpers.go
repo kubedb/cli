@@ -2,34 +2,35 @@ package v1alpha1
 
 import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
+	"github.com/kubedb/apimachinery/apis"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-var _ ResourceInfo = &ElasticsearchVersion{}
+var _ apis.ResourceInfo = &MySQLVersion{}
 
-func (p ElasticsearchVersion) ResourceShortCode() string {
-	return ResourceCodeElasticsearchVersion
+func (p MySQLVersion) ResourceShortCode() string {
+	return ResourceCodeMySQLVersion
 }
 
-func (p ElasticsearchVersion) ResourceKind() string {
-	return ResourceKindElasticsearchVersion
+func (p MySQLVersion) ResourceKind() string {
+	return ResourceKindMySQLVersion
 }
 
-func (p ElasticsearchVersion) ResourceSingular() string {
-	return ResourceSingularElasticsearchVersion
+func (p MySQLVersion) ResourceSingular() string {
+	return ResourceSingularMySQLVersion
 }
 
-func (p ElasticsearchVersion) ResourcePlural() string {
-	return ResourcePluralElasticsearchVersion
+func (p MySQLVersion) ResourcePlural() string {
+	return ResourcePluralMySQLVersion
 }
 
-func (p ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralElasticsearchVersion,
-		Singular:      ResourceSingularElasticsearchVersion,
-		Kind:          ResourceKindElasticsearchVersion,
-		ShortNames:    []string{ResourceCodeElasticsearchVersion},
+		Plural:        ResourcePluralMySQLVersion,
+		Singular:      ResourceSingularMySQLVersion,
+		Kind:          ResourceKindMySQLVersion,
+		ShortNames:    []string{ResourceCodeMySQLVersion},
 		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
 		ResourceScope: string(apiextensions.ClusterScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
@@ -42,7 +43,7 @@ func (p ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomRe
 		Labels: crdutils.Labels{
 			LabelsMap: map[string]string{"app": "kubedb"},
 		},
-		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.ElasticsearchVersion",
+		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/catalog/v1alpha1.MySQLVersion",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
 		EnableStatusSubresource: false,

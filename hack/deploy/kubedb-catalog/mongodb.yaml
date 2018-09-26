@@ -1,5 +1,5 @@
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
   name: "3.4"
@@ -16,7 +16,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
   name: "3.4-v1"
@@ -32,7 +32,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
   name: "3.6"
@@ -49,7 +49,7 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
   name: "3.6-v1"

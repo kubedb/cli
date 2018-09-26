@@ -1,7 +1,7 @@
 package v1alpha1
 
 import (
-	"github.com/kubedb/apimachinery/apis/kubedb"
+	"github.com/kubedb/apimachinery/apis/catalog"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -37,24 +37,20 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
-		&Postgres{},
-		&PostgresList{},
-		&Elasticsearch{},
-		&ElasticsearchList{},
-		&Memcached{},
-		&MemcachedList{},
-		&MongoDB{},
-		&MongoDBList{},
-		&MySQL{},
-		&MySQLList{},
-		&Redis{},
-		&RedisList{},
-		&Etcd{},
-		&EtcdList{},
-		&Snapshot{},
-		&SnapshotList{},
-		&DormantDatabase{},
-		&DormantDatabaseList{},
+		&PostgresVersion{},
+		&PostgresVersionList{},
+		&ElasticsearchVersion{},
+		&ElasticsearchVersionList{},
+		&MemcachedVersion{},
+		&MemcachedVersionList{},
+		&MongoDBVersion{},
+		&MongoDBVersionList{},
+		&MySQLVersion{},
+		&MySQLVersionList{},
+		&RedisVersion{},
+		&RedisVersionList{},
+		&EtcdVersion{},
+		&EtcdVersionList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

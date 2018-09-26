@@ -2,34 +2,35 @@ package v1alpha1
 
 import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
+	"github.com/kubedb/apimachinery/apis"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-var _ ResourceInfo = &MongoDBVersion{}
+var _ apis.ResourceInfo = &RedisVersion{}
 
-func (p MongoDBVersion) ResourceShortCode() string {
-	return ResourceCodeMongoDBVersion
+func (p RedisVersion) ResourceShortCode() string {
+	return ResourceCodeRedisVersion
 }
 
-func (p MongoDBVersion) ResourceKind() string {
-	return ResourceKindMongoDBVersion
+func (p RedisVersion) ResourceKind() string {
+	return ResourceKindRedisVersion
 }
 
-func (p MongoDBVersion) ResourceSingular() string {
-	return ResourceSingularMongoDBVersion
+func (p RedisVersion) ResourceSingular() string {
+	return ResourceSingularRedisVersion
 }
 
-func (p MongoDBVersion) ResourcePlural() string {
-	return ResourcePluralMongoDBVersion
+func (p RedisVersion) ResourcePlural() string {
+	return ResourcePluralRedisVersion
 }
 
-func (p MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralMongoDBVersion,
-		Singular:      ResourceSingularMongoDBVersion,
-		Kind:          ResourceKindMongoDBVersion,
-		ShortNames:    []string{ResourceCodeMongoDBVersion},
+		Plural:        ResourcePluralRedisVersion,
+		Singular:      ResourceSingularRedisVersion,
+		Kind:          ResourceKindRedisVersion,
+		ShortNames:    []string{ResourceCodeRedisVersion},
 		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
 		ResourceScope: string(apiextensions.ClusterScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
@@ -42,7 +43,7 @@ func (p MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResource
 		Labels: crdutils.Labels{
 			LabelsMap: map[string]string{"app": "kubedb"},
 		},
-		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.MongoDBVersion",
+		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/catalog/v1alpha1.RedisVersion",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
 		EnableStatusSubresource: false,

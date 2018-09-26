@@ -2,34 +2,35 @@ package v1alpha1
 
 import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
+	"github.com/kubedb/apimachinery/apis"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-var _ ResourceInfo = &MemcachedVersion{}
+var _ apis.ResourceInfo = &MongoDBVersion{}
 
-func (p MemcachedVersion) ResourceShortCode() string {
-	return ResourceCodeMemcachedVersion
+func (p MongoDBVersion) ResourceShortCode() string {
+	return ResourceCodeMongoDBVersion
 }
 
-func (p MemcachedVersion) ResourceKind() string {
-	return ResourceKindMemcachedVersion
+func (p MongoDBVersion) ResourceKind() string {
+	return ResourceKindMongoDBVersion
 }
 
-func (p MemcachedVersion) ResourceSingular() string {
-	return ResourceSingularMemcachedVersion
+func (p MongoDBVersion) ResourceSingular() string {
+	return ResourceSingularMongoDBVersion
 }
 
-func (p MemcachedVersion) ResourcePlural() string {
-	return ResourcePluralMemcachedVersion
+func (p MongoDBVersion) ResourcePlural() string {
+	return ResourcePluralMongoDBVersion
 }
 
-func (p MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralMemcachedVersion,
-		Singular:      ResourceSingularMemcachedVersion,
-		Kind:          ResourceKindMemcachedVersion,
-		ShortNames:    []string{ResourceCodeMemcachedVersion},
+		Plural:        ResourcePluralMongoDBVersion,
+		Singular:      ResourceSingularMongoDBVersion,
+		Kind:          ResourceKindMongoDBVersion,
+		ShortNames:    []string{ResourceCodeMongoDBVersion},
 		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
 		ResourceScope: string(apiextensions.ClusterScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
@@ -42,7 +43,7 @@ func (p MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResour
 		Labels: crdutils.Labels{
 			LabelsMap: map[string]string{"app": "kubedb"},
 		},
-		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.MemcachedVersion",
+		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/catalog/v1alpha1.MongoDBVersion",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
 		EnableStatusSubresource: false,
