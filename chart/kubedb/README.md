@@ -49,6 +49,9 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `kubedb.registry`                   | Docker registry used to pull Kubedb operator image                 | `kubedb`           |
 | `kubedb.repository`                 | Kubedb operator container image                                    | `operator`         |
 | `kubedb.tag`                        | Kubedb operator container image tag                                | `0.9.0-beta.0`     |
+| `cleaner.registry`                  | Docker registry used to pull Webhook cleaner image                 | `appcode`          |
+| `cleaner.repository`                | Webhook cleaner container image                                    | `kubectl`          |
+| `cleaner.tag`                       | Webhook cleaner container image tag                                | `v1.11`            |
 | `imagePullSecrets`                  | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
 | `imagePullPolicy`                   | Image pull policy                                                  | `IfNotPresent`     |
 | `criticalAddon`                     | If true, installs KubeDB operator as critical addon                | `false`            |
