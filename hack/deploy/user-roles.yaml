@@ -25,6 +25,24 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - catalog.kubedb.com
+  resources:
+  - elasticsearchversions
+  - memcachedversions
+  - mongodbversions
+  - mysqlversions
+  - postgresversions
+  - redisversions
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -60,6 +78,24 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - catalog.kubedb.com
+  resources:
+  - elasticsearchversions
+  - memcachedversions
+  - mongodbversions
+  - mysqlversions
+  - postgresversions
+  - redisversions
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -79,6 +115,19 @@ rules:
   - postgreses
   - redises
   - snapshots
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - catalog.kubedb.com
+  resources:
+  - elasticsearchversions
+  - memcachedversions
+  - mongodbversions
+  - mysqlversions
+  - postgresversions
+  - redisversions
   verbs:
   - get
   - list

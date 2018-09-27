@@ -86,6 +86,11 @@ rules:
   - '*'
   verbs: ['*']
 - apiGroups:
+  - catalog.kubedb.com
+  resources:
+  - '*'
+  verbs: ['*']
+- apiGroups:
   - monitoring.coreos.com
   resources:
   - servicemonitors
