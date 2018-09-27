@@ -10,7 +10,7 @@ rules:
   resources:
   - customresourcedefinitions
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -49,7 +49,7 @@ rules:
   resources:
   - pods
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
   - ""
   resources:

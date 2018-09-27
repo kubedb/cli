@@ -14,7 +14,7 @@ rules:
   resources:
   - customresourcedefinitions
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
   - admissionregistration.k8s.io
   resources:
