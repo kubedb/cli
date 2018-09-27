@@ -82,10 +82,6 @@ rules:
   verbs: ["get", "list", "watch"]
 - apiGroups:
   - kubedb.com
-  resources:
-  - '*'
-  verbs: ['*']
-- apiGroups:
   - catalog.kubedb.com
   resources:
   - '*'
