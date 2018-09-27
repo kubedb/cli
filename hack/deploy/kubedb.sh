@@ -2,22 +2,22 @@
 set -eou pipefail
 
 crds=(
-  dormantdatabases
-  elasticsearches
-  elasticsearchversions
-  etcds
-  etcdversions
-  memcacheds
-  memcachedversions
-  mongodbs
-  mongodbversions
-  mysqls
-  mysqlversions
-  postgreses
-  postgresversions
-  redises
-  redisversions
-  snapshots
+  dormantdatabases.kubedb.com
+  elasticsearches.kubedb.com
+  etcds.kubedb.com
+  memcacheds.kubedb.com
+  mongodbs.kubedb.com
+  mysqls.kubedb.com
+  postgreses.kubedb.com
+  redises.kubedb.com
+  snapshots.kubedb.com
+  elasticsearchversions.catalog.kubedb.com
+  etcdversions.catalog.kubedb.com
+  memcachedversions.catalog.kubedb.com
+  mongodbversions.catalog.kubedb.com
+  mysqlversions.catalog.kubedb.com
+  postgresversions.catalog.kubedb.com
+  redisversions.catalog.kubedb.com
 )
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
@@ -293,13 +293,13 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   # https://github.com/kubernetes/kubernetes/issues/60538
   if [ "$KUBEDB_PURGE" -eq 1 ]; then
     for crd in "${crds[@]}"; do
-      pairs=($(kubectl get ${crd}.kubedb.com --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
+      pairs=($(kubectl get ${crd} --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
       total=${#pairs[*]}
 
       # save objects
       if [ $total -gt 0 ]; then
         echo "dumping ${crd} objects into ${crd}.yaml"
-        kubectl get ${crd}.kubedb.com --all-namespaces -o yaml >${crd}.yaml
+        kubectl get ${crd} --all-namespaces -o yaml >${crd}.yaml
       fi
 
       for ((i = 0; i < $total; i++)); do
@@ -310,14 +310,14 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
           i+=1
         fi
         # remove finalizers
-        kubectl patch ${crd}.kubedb.com $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge || true
+        kubectl patch ${crd} $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge || true
         # delete crd object
         echo "deleting ${crd} $namespace/$name"
-        kubectl delete ${crd}.kubedb.com $name -n $namespace --ignore-not-found=true
+        kubectl delete ${crd} $name -n $namespace --ignore-not-found=true
       done
 
       # delete crd
-      kubectl delete crd ${crd}.kubedb.com --ignore-not-found=true
+      kubectl delete crd ${crd} --ignore-not-found=true
     done
 
     # delete user roles
@@ -401,7 +401,7 @@ fi
 if [ "$KUBEDB_OPERATOR_NAME" = "operator" ]; then
   echo "waiting until kubedb crds are ready"
   for crd in "${crds[@]}"; do
-    $ONESSL wait-until-ready crd ${crd}.kubedb.com || {
+    $ONESSL wait-until-ready crd ${crd} || {
       echo "$crd crd failed to be ready"
       exit 1
     }
