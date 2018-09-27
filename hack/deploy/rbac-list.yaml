@@ -10,7 +10,7 @@ rules:
   resources:
   - customresourcedefinitions
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -49,7 +49,7 @@ rules:
   resources:
   - pods
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
   - ""
   resources:
@@ -72,6 +72,11 @@ rules:
   verbs: ["get", "list", "watch"]
 - apiGroups:
   - kubedb.com
+  resources:
+  - '*'
+  verbs: ['*']
+- apiGroups:
+  - catalog.kubedb.com
   resources:
   - '*'
   verbs: ['*']
