@@ -2,34 +2,35 @@ package v1alpha1
 
 import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
+	"github.com/kubedb/apimachinery/apis"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-var _ ResourceInfo = &MySQLVersion{}
+var _ apis.ResourceInfo = &EtcdVersion{}
 
-func (p MySQLVersion) ResourceShortCode() string {
-	return ResourceCodeMySQLVersion
+func (p EtcdVersion) ResourceShortCode() string {
+	return ResourceCodeEtcdVersion
 }
 
-func (p MySQLVersion) ResourceKind() string {
-	return ResourceKindMySQLVersion
+func (p EtcdVersion) ResourceKind() string {
+	return ResourceKindEtcdVersion
 }
 
-func (p MySQLVersion) ResourceSingular() string {
-	return ResourceSingularMySQLVersion
+func (p EtcdVersion) ResourceSingular() string {
+	return ResourceSingularEtcdVersion
 }
 
-func (p MySQLVersion) ResourcePlural() string {
-	return ResourcePluralMySQLVersion
+func (p EtcdVersion) ResourcePlural() string {
+	return ResourcePluralEtcdVersion
 }
 
-func (p MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralMySQLVersion,
-		Singular:      ResourceSingularMySQLVersion,
-		Kind:          ResourceKindMySQLVersion,
-		ShortNames:    []string{ResourceCodeMySQLVersion},
+		Plural:        ResourcePluralEtcdVersion,
+		Singular:      ResourceSingularEtcdVersion,
+		Kind:          ResourceKindEtcdVersion,
+		ShortNames:    []string{ResourceCodeEtcdVersion},
 		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
 		ResourceScope: string(apiextensions.ClusterScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
@@ -42,7 +43,7 @@ func (p MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDe
 		Labels: crdutils.Labels{
 			LabelsMap: map[string]string{"app": "kubedb"},
 		},
-		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1.MySQLVersion",
+		SpecDefinitionName:      "github.com/kubedb/apimachinery/apis/catalog/v1alpha1.EtcdVersion",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
 		EnableStatusSubresource: false,

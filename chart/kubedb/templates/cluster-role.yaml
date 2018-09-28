@@ -14,7 +14,7 @@ rules:
   resources:
   - customresourcedefinitions
   verbs:
-  - "*"
+  - '*'
 - apiGroups:
   - admissionregistration.k8s.io
   resources:
@@ -82,6 +82,7 @@ rules:
   verbs: ["get", "list", "watch"]
 - apiGroups:
   - kubedb.com
+  - catalog.kubedb.com
   resources:
   - '*'
   verbs: ['*']

@@ -1,6 +1,6 @@
 {{ if .Values.catalog.postgres }}
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "9.6"
@@ -20,7 +20,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "9.6-v1"
@@ -39,7 +39,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "9.6.7"
@@ -59,7 +59,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "9.6.7-v1"
@@ -78,7 +78,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7-v1"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "10.2"
@@ -98,7 +98,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2"
 
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "10.2-v1"

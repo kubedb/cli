@@ -1,6 +1,6 @@
 {{ if .Values.catalog.etcd }}
 ---
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: EtcdVersion
 metadata:
   name: "3.2.13"
