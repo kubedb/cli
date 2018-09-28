@@ -1,33 +1,52 @@
 ---
-title: Kubedb
+title: Kubedb Api-Resources
 menu:
   docs_0.9.0-beta.0:
-    identifier: kubedb
-    name: Kubedb
+    identifier: kubedb-api-resources
+    name: Kubedb Api-Resources
     parent: reference
-    weight: 0
-
 menu_name: docs_0.9.0-beta.0
 section_menu_id: reference
-aliases:
-  - /docs/0.9.0-beta.0/reference/
-
 ---
-## kubedb
+## kubedb api-resources
 
-Command line interface for KubeDB
+Print the supported API resources on the server
 
 ### Synopsis
 
-KubeDB by AppsCode - Kubernetes ready production-grade Databases 
-
-Find more information at https://github.com/kubedb/cli.
+Print the supported API resources on the server
 
 ```
-kubedb [flags]
+kubedb api-resources [flags]
+```
+
+### Examples
+
+```
+  # Print the supported API Resources
+  kubedb api-resources
+  # Print the supported API Resources with more information
+  kubedb api-resources -o wide
+  # Print the supported namespaced resources
+  kubedb api-resources --namespaced=true
+  # Print the supported non-namespaced resources
+  kubedb api-resources --namespaced=false
+  # Print the supported API Resources with specific APIGroup
+  kubedb api-resources --api-group=extensions
 ```
 
 ### Options
+
+```
+      --cached          Use the cached list of resources if available.
+  -h, --help            help for api-resources
+      --namespaced      If false, non-namespaced resources will be returned, otherwise returning namespaced resources by default. (default true)
+      --no-headers      When using the default or custom-column output format, don't print headers (default print headers).
+  -o, --output string   Output format. One of: wide|name.
+      --verbs strings   Limit to resources that support the specified verbs.
+```
+
+### Options inherited from parent commands
 
 ```
       --alsologtostderr                  log to standard error as well as files
@@ -40,7 +59,6 @@ kubedb [flags]
       --client-key string                Path to a client key file for TLS
       --cluster string                   The name of the kubeconfig cluster to use
       --context string                   The name of the kubeconfig context to use
-  -h, --help                             help for kubedb
       --insecure-skip-tls-verify         If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
       --kubeconfig string                Path to the kubeconfig file to use for CLI requests.
       --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)
@@ -59,12 +77,6 @@ kubedb [flags]
 
 ### SEE ALSO
 
-* [kubedb api-resources](/docs/reference/kubedb_api-resources.md)	 - Print the supported API resources on the server
-* [kubedb create](/docs/reference/kubedb_create.md)	 - Create a resource from a file or from stdin.
-* [kubedb delete](/docs/reference/kubedb_delete.md)	 - Delete resources by filenames, stdin, resources and names, or by resources and label selector
-* [kubedb describe](/docs/reference/kubedb_describe.md)	 - Show details of a specific resource or group of resources
-* [kubedb edit](/docs/reference/kubedb_edit.md)	 - Edit a resource on the server
-* [kubedb get](/docs/reference/kubedb_get.md)	 - Display one or many resources
-* [kubedb version](/docs/reference/kubedb_version.md)	 - Prints binary version number.
+* [kubedb](/docs/reference/kubedb.md)	 - Command line interface for KubeDB
 
 
