@@ -305,7 +305,7 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
       for ((i = 0; i < $total; i++)); do
         name=${pairs[$i]}
         namespace="default"
-        if [ ${#crd} -lt 8 ] || [ ${crd: -8} != "versions" ]; then
+        if [[ $crd != *"catalog.kubedb.com" ]]; then
           namespace=${pairs[$i + 1]}
           i+=1
         fi
