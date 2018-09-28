@@ -25,7 +25,7 @@ Using a separate crd for specifying respective docker images allows us to modify
 As with all other Kubernetes objects, a ElasticsearchVersion needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section.
 
 ```yaml
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.2.4-v1"
