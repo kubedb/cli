@@ -18,7 +18,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/elasticsearches
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -31,7 +31,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/postgreses
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -44,7 +44,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/mysqls
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -57,7 +57,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/mongodbs
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -70,7 +70,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/redises
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -83,7 +83,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/memcacheds
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -96,7 +96,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/etcds
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -109,7 +109,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/snapshots
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -122,7 +122,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/validators.kubedb.com/v1alpha1/dormantdatabases
-    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
+    caBundle: {{ default "not-ca-cert" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
