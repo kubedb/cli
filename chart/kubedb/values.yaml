@@ -66,9 +66,9 @@ apiserver:
   # for more information on proper values of this field
   versionPriority: 15
   # enableMutatingWebhook is used to configure mutating webhook for KubeDB CRDs
-  enableMutatingWebhook: false
+  enableMutatingWebhook: true
   # enableValidatingWebhook is used to configure validating webhook for KubeDB CRDs
-  enableValidatingWebhook: false
+  enableValidatingWebhook: true
   # CA certificate used by main Kubernetes api server
   ca:
   # If true, uses status sub resource for crds.

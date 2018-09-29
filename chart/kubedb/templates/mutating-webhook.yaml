@@ -18,7 +18,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/elasticsearches
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -31,7 +31,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/postgreses
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -44,7 +44,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/mysqls
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -57,7 +57,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/mongodbs
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -70,7 +70,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/redises
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -83,7 +83,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/memcacheds
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
@@ -96,7 +96,7 @@ webhooks:
       namespace: default
       name: kubernetes
       path: /apis/mutators.kubedb.com/v1alpha1/etcds
-    caBundle: {{ b64enc .Values.apiserver.ca }}
+    caBundle: {{ default "" .Values.apiserver.ca | b64enc }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]

@@ -64,8 +64,8 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `serviceAccount.name`               | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
 | `apiserver.groupPriorityMinimum`    | The minimum priority the group should have.                        | 10000              |
 | `apiserver.versionPriority`         | The ordering of this API inside of the group.                      | 15                 |
-| `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | false              |
-| `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | false              |
+| `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | `true`             |
+| `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | `true`             |
 | `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | ``                 |
 | `apiserver.enableStatusSubresource` | If true, uses status sub resource for crds                         | `false`            |
 | `enableAnalytics`                   | Send usage events to Google Analytics                              | `true`             |
