@@ -9,7 +9,7 @@ kubedb:
   repository: operator
   tag: 0.9.0-beta.0
 cleaner:
-  registry: appcode
+  registry: appscode
   repository: kubectl
   tag: v1.11
 ## Optionally specify an array of imagePullSecrets.
