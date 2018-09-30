@@ -66,7 +66,7 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `apiserver.versionPriority`         | The ordering of this API inside of the group.                      | 15                 |
 | `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | `true`             |
 | `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | `true`             |
-| `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | ``                 |
+| `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | `not-ca-cert`      |
 | `apiserver.disableStatusSubresource` | If true, disables status sub resource for crds. Otherwise enables based on Kubernetes version | `false`            |
 | `enableAnalytics`                   | Send usage events to Google Analytics                              | `true`             |
 

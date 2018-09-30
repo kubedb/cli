@@ -129,20 +129,8 @@ NAME                    CHART VERSION APP VERSION   DESCRIPTION
 appscode/kubedb         0.9.0-beta.0  0.9.0-beta.0  KubeDB by AppsCode - Production ready databases ...
 appscode/kubedb-catalog 0.9.0-beta.0  0.9.0-beta.0  KubeDB Catalog by AppsCode - Catalog for database versions
 
-# Step 1(a): Kubernetes 1.9.x - 1.10.x
 $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0-beta.0 \
-  --namespace kube-system \
-  --set apiserver.ca="$(onessl get kube-ca)" \
-  --set apiserver.enableValidatingWebhook=true \
-  --set apiserver.enableMutatingWebhook=true
-
-# Step 1(b): Kubernetes 1.11.0 or later
-$ helm install appscode/kubedb --name kubedb-operator --version 0.9.0-beta.0 \
-  --namespace kube-system \
-  --set apiserver.ca="$(onessl get kube-ca)" \
-  --set apiserver.enableValidatingWebhook=true \
-  --set apiserver.enableMutatingWebhook=true \
-  --set apiserver.enableStatusSubresource=true
+  --namespace kube-system
 
 # Step 2: wait until crds are registered
 $ kubectl get crds -l app=kubedb -w
@@ -166,25 +154,6 @@ snapshots.kubedb.com               6s
 
 # Step 3: KubeDB catalog of database versions
 $ helm install appscode/kubedb-catalog --name kubedb-catalog
-```
-
-To install `onessl`, run the following commands:
-
-```console
-# Mac OSX amd64:
-curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.7.0/onessl-darwin-amd64 \
-  && chmod +x onessl \
-  && sudo mv onessl /usr/local/bin/
-
-# Linux amd64:
-curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.7.0/onessl-linux-amd64 \
-  && chmod +x onessl \
-  && sudo mv onessl /usr/local/bin/
-
-# Linux arm64:
-curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.7.0/onessl-linux-arm64 \
-  && chmod +x onessl \
-  && sudo mv onessl /usr/local/bin/
 ```
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).

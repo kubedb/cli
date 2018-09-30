@@ -70,7 +70,7 @@ apiserver:
   # enableValidatingWebhook is used to configure validating webhook for KubeDB CRDs
   enableValidatingWebhook: true
   # CA certificate used by main Kubernetes api server
-  ca:
+  ca: not-ca-cert
   # If true, disables status sub resource for crds.
   # Otherwise, enables status sub resource for Kubernetes version >= 1.11 and disables for other versions.
   disableStatusSubresource: false
