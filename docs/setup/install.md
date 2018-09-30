@@ -156,7 +156,7 @@ snapshots.kubedb.com               6s
 $ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.9.0-beta.1 \
   --namespace kube-system
 
-# Step 3(b): In previously installed, upgrade KubeDB catalog of database versions
+# Step 3(b): If previously installed, upgrade KubeDB catalog of database versions
 $ helm upgrade kubedb-catalog appscode/kubedb-catalog --version 0.9.0-beta.1 \
   --namespace kube-system
 ```
