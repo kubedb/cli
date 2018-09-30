@@ -171,6 +171,10 @@ FORCED_DEPS = [
       "package": "cloud.google.com/go",
       "version": "v0.2.0"
     },
+    {
+      "package": "golang.org/x/text",
+      "version": "b19bf474d317b857955b12035d2c5acb57ce8b01"
+    },
 ]
 
 
