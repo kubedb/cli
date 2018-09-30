@@ -65,7 +65,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/memcached/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/memcached/quickstart/demo-1.yaml
 memcached "memcd-quickstart" created
 ```
 
@@ -271,7 +271,7 @@ To resume the database from the dormant state, create same `Memcached` object wi
  The below command resumes the dormant database `memcd-quickstart`.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/memcached/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/memcached/quickstart/demo-1.yaml
 memcached "memcd-quickstart" created
 ```
 

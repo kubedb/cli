@@ -30,7 +30,7 @@ You have to push the required images from KubeDB's [Docker hub account](https://
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.9.0-beta.0 ; docker tag kubedb/operator:0.9.0-beta.0 $DOCKER_REGISTRY/operator:0.9.0-beta.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.0
+$ docker pull kubedb/operator:0.9.0-beta.1 ; docker tag kubedb/operator:0.9.0-beta.1 $DOCKER_REGISTRY/operator:0.9.0-beta.1 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.1
 $ docker pull kubedb/mysql:8.0 ; docker tag kubedb/mysql:8.0 $DOCKER_REGISTRY/mysql:8.0 ; docker push $DOCKER_REGISTRY/mysql:8.0
 $ docker pull kubedb/mysql-tools:8.0 ; docker tag kubedb/mysql-tools:8.0 $DOCKER_REGISTRY/mysql-tools:8.0 ; docker push $DOCKER_REGISTRY/mysql-tools:8.0
 ```
@@ -103,7 +103,7 @@ spec:
 Now run the command to deploy this `MySQL` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/mysql/private-registry/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/private-registry/demo-2.yaml
 mysql "mysql-pvt-reg" created
 ```
 

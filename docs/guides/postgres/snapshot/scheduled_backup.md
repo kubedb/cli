@@ -93,7 +93,7 @@ Here,
 > Note: Secret object must be in the same namespace as Postgres, `scheduled-pg`, in this case.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/snapshot/scheduled-pg.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/scheduled-pg.yaml
 postgres "scheduled-pg" created
 ```
 

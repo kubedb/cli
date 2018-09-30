@@ -42,7 +42,7 @@ This tutorial assumes that you are familiar with PostgreSQL concept.
 Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
 clusterrole "prometheus-operator" created
 serviceaccount "prometheus-operator" created
 clusterrolebinding "prometheus-operator" created
@@ -70,7 +70,7 @@ servicemonitors.monitoring.coreos.com   11m
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
 clusterrole "prometheus" created
 serviceaccount "prometheus" created
 clusterrolebinding "prometheus" created
@@ -143,7 +143,7 @@ Here,
 Now create PostgreSQL with monitoring spec
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
 postgres "coreos-prom-postgres" created
 ```
 

@@ -44,7 +44,7 @@ Follow these steps to prepare this tutorial
 - Create Elasticsearch object `infant-elasticsearch`, if not exists.
 
     ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
     elasticsearch "infant-elasticsearch" created
     ```
 
@@ -124,7 +124,7 @@ instant-snapshot   es/infant-elasticsearch   Succeeded   2m
 Now, create the Elasticsearch object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/initialization/recovered-es.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/initialization/recovered-es.yaml
 elasticsearch "recovered-es" created
 ```
 
