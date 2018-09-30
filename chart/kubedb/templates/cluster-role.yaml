@@ -13,8 +13,7 @@ rules:
   - apiextensions.k8s.io
   resources:
   - customresourcedefinitions
-  verbs:
-  - "*"
+  verbs: ["*"]
 - apiGroups:
   - admissionregistration.k8s.io
   resources:
