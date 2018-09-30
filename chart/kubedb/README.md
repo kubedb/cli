@@ -49,7 +49,7 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `kubedb.registry`                   | Docker registry used to pull Kubedb operator image                 | `kubedb`           |
 | `kubedb.repository`                 | Kubedb operator container image                                    | `operator`         |
 | `kubedb.tag`                        | Kubedb operator container image tag                                | `0.9.0-beta.0`     |
-| `cleaner.registry`                  | Docker registry used to pull Webhook cleaner image                 | `appcode`          |
+| `cleaner.registry`                  | Docker registry used to pull Webhook cleaner image                 | `appscode`         |
 | `cleaner.repository`                | Webhook cleaner container image                                    | `kubectl`          |
 | `cleaner.tag`                       | Webhook cleaner container image tag                                | `v1.11`            |
 | `imagePullSecrets`                  | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
@@ -64,10 +64,10 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `serviceAccount.name`               | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
 | `apiserver.groupPriorityMinimum`    | The minimum priority the group should have.                        | 10000              |
 | `apiserver.versionPriority`         | The ordering of this API inside of the group.                      | 15                 |
-| `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | false              |
-| `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | false              |
-| `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | ``                 |
-| `apiserver.enableStatusSubresource` | If true, uses status sub resource for crds                         | `false`            |
+| `apiserver.enableValidatingWebhook` | Enable validating webhooks for KubeDB CRDs                         | `true`             |
+| `apiserver.enableMutatingWebhook`   | Enable mutating webhooks for KubeDB CRDs                           | `true`             |
+| `apiserver.ca`                      | CA certificate used by main Kubernetes api server                  | `not-ca-cert`      |
+| `apiserver.disableStatusSubresource` | If true, disables status sub resource for crds. Otherwise enables based on Kubernetes version | `false`            |
 | `enableAnalytics`                   | Send usage events to Google Analytics                              | `true`             |
 
 

@@ -14,14 +14,13 @@ rules:
   resources:
   - customresourcedefinitions
   verbs:
-  - '*'
+  - "*"
 - apiGroups:
   - admissionregistration.k8s.io
   resources:
   - mutatingwebhookconfigurations
   - validatingwebhookconfigurations
-  verbs:
-  - delete
+  verbs: ["delete", "list", "watch", "patch"]
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -59,7 +58,7 @@ rules:
   - ""
   resources:
   - pods
-  verbs: ["deletecollection", "get", "list", "patch", "watch"]
+  verbs: ["*"]
 - apiGroups:
   - ""
   resources:
@@ -84,8 +83,8 @@ rules:
   - kubedb.com
   - catalog.kubedb.com
   resources:
-  - '*'
-  verbs: ['*']
+  - "*"
+  verbs: ["*"]
 - apiGroups:
   - monitoring.coreos.com
   resources:

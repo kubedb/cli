@@ -1,3 +1,5 @@
 To verify that KubeDB has started, run:
 
   kubectl --namespace={{ .Release.Namespace }} get deployments -l "release={{ .Release.Name }}, app={{ template "kubedb.name" . }}"
+
+If you have not installed appscode/kubedb-catalog chart, install it. If already installed, upgrade appscode/kubedb-catalog chart.
