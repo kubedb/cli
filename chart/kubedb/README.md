@@ -48,7 +48,7 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `replicaCount`                      | Number of kubedb operator replicas to create (only 1 is supported) | `1`                |
 | `kubedb.registry`                   | Docker registry used to pull Kubedb operator image                 | `kubedb`           |
 | `kubedb.repository`                 | Kubedb operator container image                                    | `operator`         |
-| `kubedb.tag`                        | Kubedb operator container image tag                                | `0.9.0-beta.0`     |
+| `kubedb.tag`                        | Kubedb operator container image tag                                | `0.9.0-beta.1`     |
 | `cleaner.registry`                  | Docker registry used to pull Webhook cleaner image                 | `appscode`         |
 | `cleaner.repository`                | Webhook cleaner container image                                    | `kubectl`          |
 | `cleaner.tag`                       | Webhook cleaner container image tag                                | `v1.11`            |

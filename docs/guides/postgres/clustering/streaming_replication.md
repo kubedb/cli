@@ -101,7 +101,7 @@ Here,
 Now create this Postgres object with Streaming Replication support
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/clustering/ha-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/clustering/ha-postgres.yaml
 postgres "ha-postgres" created
 ```
 
@@ -262,7 +262,7 @@ Here,
 Now create this Postgres object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/clustering/hot-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/clustering/hot-postgres.yaml
 postgres "hot-postgres" created
 ```
 

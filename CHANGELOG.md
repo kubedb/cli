@@ -1,5 +1,26 @@
 # Change Log
 
+## [0.9.0-beta.1](https://github.com/kubedb/cli/tree/0.9.0-beta.1) (2018-09-30)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-beta.0...0.9.0-beta.1)
+
+**Merged pull requests:**
+
+- Revendor api [\#315](https://github.com/kubedb/cli/pull/315) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare release script for 0.9.0-beta.1 [\#314](https://github.com/kubedb/cli/pull/314) ([tamalsaha](https://github.com/tamalsaha))
+- Enable webhooks by default in chart [\#313](https://github.com/kubedb/cli/pull/313) ([tamalsaha](https://github.com/tamalsaha))
+- Add `kubedb api-resources` command [\#312](https://github.com/kubedb/cli/pull/312) ([tamalsaha](https://github.com/tamalsaha))
+- Fix purging of DBVersions [\#311](https://github.com/kubedb/cli/pull/311) ([the-redback](https://github.com/the-redback))
+- Simplify operator cluster role [\#309](https://github.com/kubedb/cli/pull/309) ([tamalsaha](https://github.com/tamalsaha))
+- Add rbac permissions for catalog.kubedb.com [\#308](https://github.com/kubedb/cli/pull/308) ([the-redback](https://github.com/the-redback))
+- Update installer for catalog apigroup [\#307](https://github.com/kubedb/cli/pull/307) ([tamalsaha](https://github.com/tamalsaha))
+- Add values for cleaner image in chart [\#306](https://github.com/kubedb/cli/pull/306) ([tamalsaha](https://github.com/tamalsaha))
+- Revendor api for catalog apigroup [\#305](https://github.com/kubedb/cli/pull/305) ([tamalsaha](https://github.com/tamalsaha))
+- Update changelog [\#302](https://github.com/kubedb/cli/pull/302) ([tamalsaha](https://github.com/tamalsaha))
+- Update onessl version [\#301](https://github.com/kubedb/cli/pull/301) ([tamalsaha](https://github.com/tamalsaha))
+- Update helm installer instructions [\#300](https://github.com/kubedb/cli/pull/300) ([tamalsaha](https://github.com/tamalsaha))
+- Update helm installer steps [\#299](https://github.com/kubedb/cli/pull/299) ([tamalsaha](https://github.com/tamalsaha))
+- Update installer docs [\#298](https://github.com/kubedb/cli/pull/298) ([tamalsaha](https://github.com/tamalsaha))
+
 ## [0.9.0-beta.0](https://github.com/kubedb/cli/tree/0.9.0-beta.0) (2018-09-20)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.8.0...0.9.0-beta.0)
 

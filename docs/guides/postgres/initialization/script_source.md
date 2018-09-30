@@ -77,7 +77,7 @@ In this tutorial, `data.sql` script from the git repository `https://github.com/
 > Note: PostgreSQL supports initialization with `.sh`, `.sql` and `.sql.gz` files.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/initialization/script-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/initialization/script-postgres.yaml
 postgres "script-postgres" created
 ```
 
