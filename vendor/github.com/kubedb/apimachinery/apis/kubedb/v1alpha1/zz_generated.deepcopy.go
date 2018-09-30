@@ -1512,7 +1512,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 		if *in == nil {
 			*out = nil
 		} else {
-			*out = new(StandbyMode)
+			*out = new(PostgresStandbyMode)
 			**out = **in
 		}
 	}
@@ -1521,7 +1521,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 		if *in == nil {
 			*out = nil
 		} else {
-			*out = new(StreamingMode)
+			*out = new(PostgresStreamingMode)
 			**out = **in
 		}
 	}
