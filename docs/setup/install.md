@@ -152,8 +152,13 @@ redises.kubedb.com                 6s
 redisversions.kubedb.com           6s
 snapshots.kubedb.com               6s
 
-# Step 3: KubeDB catalog of database versions
-$ helm install appscode/kubedb-catalog --name kubedb-catalog
+# Step 3(a): Install KubeDB catalog of database versions
+$ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.9.0-beta.1 \
+  --namespace kube-system
+
+# Step 3(b): In previously installed, upgrade KubeDB catalog of database versions
+$ helm upgrade kubedb-catalog appscode/kubedb-catalog --version 0.9.0-beta.1 \
+  --namespace kube-system
 ```
 
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).
