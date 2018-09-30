@@ -44,7 +44,33 @@ DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached
 REPO_LIST = DATABASES + ['cli', 'operator', 'apimachinery']
 KUTIL_VERSION = 'release-8.0'
 KUBEMON_VERSION = 'release-8.0'
-FORCED_DEPS = [
+REQUIRED_DEPS = [
+    {
+        'package': 'github.com/cpuguy83/go-md2man',
+        'version': 'v1.0.8',
+    },
+    {
+        'package': 'github.com/json-iterator/go',
+        'version': '1.1.5',
+    },
+    {
+      "package": "github.com/spf13/cobra",
+      "version": "v0.0.3"
+    },
+    {
+      "package": "github.com/spf13/pflag",
+      "version": "v1.0.1"
+    },
+    {
+      "package": "golang.org/x/text",
+      "version": "b19bf474d317b857955b12035d2c5acb57ce8b01"
+    },
+    {
+      "package": "golang.org/x/net",
+      "version": "1c05540f6879653db88113bc4a2b70aec4bd491f"
+    },
+]
+DEP_LIST = [
     {
         'package': 'github.com/cpuguy83/go-md2man',
         'version': 'v1.0.8',
@@ -219,7 +245,16 @@ def glide_mod(glide_config, changes):
     for dep in glide_config['import']:
         if dep['package'] in changes:
             dep['version'] = changes[dep['package']]
-    for x in FORCED_DEPS:
+    for x in REQUIRED_DEPS:
+        for idx, dep in enumerate(glide_config['import']):
+            found = False
+            if dep['package'] == x['package']:
+                glide_config['import'][idx] = x
+                found = True
+                break
+        if not found:
+            glide_config['import'].append(x)
+    for x in DEP_LIST:
         for idx, dep in enumerate(glide_config['import']):
             if dep['package'] == x['package']:
                 glide_config['import'][idx] = x

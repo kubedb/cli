@@ -84,3 +84,7 @@ import:
   version: 1.1.5
 - package: github.com/coreos/prometheus-operator
   version: v0.23.2
+- package: golang.org/x/text
+  version: b19bf474d317b857955b12035d2c5acb57ce8b01
+- package: golang.org/x/net
+  version: 1c05540f6879653db88113bc4a2b70aec4bd491f
