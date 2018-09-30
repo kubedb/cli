@@ -5,6 +5,8 @@
 
 **Merged pull requests:**
 
+- Update kubedb-catalog chart installation instructions [\#318](https://github.com/kubedb/cli/pull/318) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare docs for 0.9.0-beta.1 release [\#316](https://github.com/kubedb/cli/pull/316) ([tamalsaha](https://github.com/tamalsaha))
 - Revendor api [\#315](https://github.com/kubedb/cli/pull/315) ([tamalsaha](https://github.com/tamalsaha))
 - Prepare release script for 0.9.0-beta.1 [\#314](https://github.com/kubedb/cli/pull/314) ([tamalsaha](https://github.com/tamalsaha))
 - Enable webhooks by default in chart [\#313](https://github.com/kubedb/cli/pull/313) ([tamalsaha](https://github.com/tamalsaha))

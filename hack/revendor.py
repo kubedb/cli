@@ -69,6 +69,10 @@ REQUIRED_DEPS = [
       "package": "golang.org/x/net",
       "version": "1c05540f6879653db88113bc4a2b70aec4bd491f"
     },
+    {
+      "package": "golang.org/x/sys",
+      "version": "95c6576299259db960f6c5b9b69ea52422860fce"
+    }
 ]
 DEP_LIST = [
     {
@@ -201,6 +205,14 @@ DEP_LIST = [
       "package": "golang.org/x/text",
       "version": "b19bf474d317b857955b12035d2c5acb57ce8b01"
     },
+    {
+      "package": "golang.org/x/net",
+      "version": "1c05540f6879653db88113bc4a2b70aec4bd491f"
+    },
+    {
+      "package": "golang.org/x/sys",
+      "version": "95c6576299259db960f6c5b9b69ea52422860fce"
+    }
 ]
 
 
