@@ -46,12 +46,12 @@ KUTIL_VERSION = 'release-8.0'
 KUBEMON_VERSION = 'release-8.0'
 REQUIRED_DEPS = [
     {
-        'package': 'github.com/cpuguy83/go-md2man',
-        'version': 'v1.0.8',
+      "package": "github.com/cpuguy83/go-md2man",
+      "version": "v1.0.8"
     },
     {
-        'package': 'github.com/json-iterator/go',
-        'version': '1.1.5',
+      "package": "github.com/json-iterator/go",
+      "version": "1.1.5"
     },
     {
       "package": "github.com/spf13/cobra",
@@ -72,20 +72,28 @@ REQUIRED_DEPS = [
     {
       "package": "golang.org/x/sys",
       "version": "95c6576299259db960f6c5b9b69ea52422860fce"
+    },
+    {
+      "package": "k8s.io/kube-openapi",
+      "version": "91cfa479c814065e420cee7ed227db0f63a5854e"
+    },
+    {
+      "package": "github.com/golang/protobuf",
+      "version": "v1.1.0"
     }
 ]
 DEP_LIST = [
     {
-        'package': 'github.com/cpuguy83/go-md2man',
-        'version': 'v1.0.8',
+        "package": "github.com/cpuguy83/go-md2man",
+        "version": "v1.0.8"
     },
     {
-        'package': 'github.com/json-iterator/go',
-        'version': '1.1.5',
+        "package": "github.com/json-iterator/go",
+        "version": "1.1.5"
     },
     {
-        'package': 'github.com/coreos/prometheus-operator',
-        'version': 'v0.23.2',
+        "package": "github.com/coreos/prometheus-operator",
+        "version": "v0.23.2"
     },
     {
       "package": "k8s.io/api",
@@ -122,15 +130,11 @@ DEP_LIST = [
       "version": "kubernetes-1.11.3"
     },
     {
-      "package": "k8s.io/kube-openapi",
-      "version": "master"
+      "package": "k8s.io/metrics",
+      "version": "kubernetes-1.11.3"
     },
     {
       "package": "github.com/appscode/kutil",
-      "version": "release-8.0"
-    },
-    {
-      "package": "github.com/appscode/kubernetes-webhook-util",
       "version": "release-8.0"
     },
     {
@@ -200,18 +204,6 @@ DEP_LIST = [
     {
       "package": "cloud.google.com/go",
       "version": "v0.2.0"
-    },
-    {
-      "package": "golang.org/x/text",
-      "version": "b19bf474d317b857955b12035d2c5acb57ce8b01"
-    },
-    {
-      "package": "golang.org/x/net",
-      "version": "1c05540f6879653db88113bc4a2b70aec4bd491f"
-    },
-    {
-      "package": "golang.org/x/sys",
-      "version": "95c6576299259db960f6c5b9b69ea52422860fce"
     }
 ]
 
