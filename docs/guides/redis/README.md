@@ -17,16 +17,16 @@ aliases:
 
 ## Supported Redis Features
 
-|Features                                                | Availability |
-|--------------------------------------------------------|:------------:|
-|Clustering                                              | &#10007;     |
-|Instant Backup                                          | &#10007;     |
-|Scheduled Backup                                        | &#10007;     |
-|Initialize using Snapshot                               | &#10007;     |
-|Initialize using Script                                 | &#10007;     |
-|Persistent Volume                                       | &#10003;     |
-|Builtin Prometheus Discovery                            | &#10003;     |
-|Using CoreOS Prometheus Operator                        | &#10003;     |
+|             Features             | Availability |
+| -------------------------------- | :----------: |
+| Clustering                       |   &#10007;   |
+| Instant Backup                   |   &#10007;   |
+| Scheduled Backup                 |   &#10007;   |
+| Initialize using Snapshot        |   &#10007;   |
+| Initialize using Script          |   &#10007;   |
+| Persistent Volume                |   &#10003;   |
+| Builtin Prometheus Discovery     |   &#10003;   |
+| Using CoreOS Prometheus Operator |   &#10003;   |
 
 <br/>
 
