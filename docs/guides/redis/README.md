@@ -17,36 +17,38 @@ aliases:
 
 ## Supported Redis Features
 
-|Features                                                | Availability |
-|--------------------------------------------------------|:------------:|
-|Clustering                                              | &#10007;     |
-|Instant Backup                                          | &#10007;     |
-|Scheduled Backup                                        | &#10007;     |
-|Initialize using Snapshot                               | &#10007;     |
-|Initialize using Script                                 | &#10007;     |
-|Persistent Volume                                       | &#10003;     |
-|Builtin Prometheus Discovery                            | &#10003;     |
-|Using CoreOS Prometheus Operator                        | &#10003;     |
-
-<br/>
-
-## Supported Redis Versions
-
-| KubeDB Version | Redis:4.0.6  |
-|:--------------:|:------------:|
-| 0.1.0 - 0.7.0  | &#10007;     |
-| 0.8.0-beta.2   | &#10003;     |
-| 0.8.0-rc.0     | &#10003;     |
-| 0.8.0          | &#10003;     |
-| 0.8.0-beta.2   | &#10003;     |
+|             Features             | Availability |
+| -------------------------------- | :----------: |
+| Clustering                       |   &#10007;   |
+| Instant Backup                   |   &#10007;   |
+| Scheduled Backup                 |   &#10007;   |
+| Persistent Volume                |   &#10003;   |
+| Initialize using Snapshot        |   &#10007;   |
+| Initialize using Script          |   &#10007;   |
+| Custom Configuration             |   &#10003;   |
+| Using Custom docker image        |   &#10003;   |
+| Builtin Prometheus Discovery     |   &#10003;   |
+| Using CoreOS Prometheus Operator |   &#10003;   |
 
 <br/>
 
 ## Life Cycle of a Redis Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png" width="600" height="660">
+  <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png">
 </p>
+
+<br/>
+
+## Supported Redis Versions
+
+| KubeDB Version | Redis:4, 4.0, 4.0.6 | 4-v1, 4.0-v1, 4.0.6-v1 |
+| :------------: | :-----------------: | :--------------------: |
+| 0.1.0 - 0.7.0  |      &#10007;       |        &#10007;        |
+|     0.8.0      |      &#10003;       |        &#10007;        |
+|  0.9.0-beta.1  |      &#10007;       |        &#10003;        |
+
+<br/>
 
 ## User Guide
 
@@ -56,5 +58,6 @@ aliases:
 - Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
 - Use [kubedb cli](/docs/guides/redis/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
+- Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -24,14 +24,14 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f redis-demo.yaml
-redis "redis-demo" created
+redis.kubedb.com/redis-demo created
 ```
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
 ```console
 $ kubedb create -f redis-demo.yaml --namespace=kube-system
-redis "redis-demo" created
+redis.kubedb.com/redis-demo created
 ```
 
 `kubedb create` command also considers `stdin` as input.
@@ -48,11 +48,11 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get redis
-NAME          STATUS    AGE
-redis-demo    Running   5h
-redis-dev     Running   4h
-redis-prod    Running   30m
-redis-qa      Running   2h
+NAME         VERSION   STATUS    AGE
+redis-demo   4.0-v1    Running   13s
+redis-dev    4.0-v1    Running   13s
+redis-prod   4.0-v1    Running   13s
+redis-qa     4.0-v1    Running   13s
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -62,19 +62,28 @@ $ kubedb get redis redis-demo --output=yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Redis
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-03-01T11:08:10Z
+  creationTimestamp: 2018-10-01T08:14:27Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 1
   labels:
     kubedb: cli-demo
   name: redis-demo
   namespace: default
-  resourceVersion: "16072"
+  resourceVersion: "18201"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/redises/redis-demo
-  uid: d42b66be-1d40-11e8-8599-0800272b52b5
+  uid: 039aeaa1-c552-11e8-9ba7-0800274bef12
 spec:
+  mode: Standalone
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 1
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -82,27 +91,31 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: "4"
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 4.0-v1
 status:
-  creationTime: 2018-03-01T11:08:11Z
+  observedGeneration: 1$7916315637361465932
   phase: Running
 ```
 
 To get JSON of an object, use `--output=json` flag.
 
 ```console
-$ kubedb get redis redis-demo --output=json
+kubedb get redis redis-demo --output=json
 ```
 
 To list all KubeDB objects, use following command:
 
 ```console
 $ kubedb get all -o wide
-NAME                VERSION     STATUS   AGE
-rd/redis-demo       4          Running  3h
-rd/redis-dev        4          Running  3h
-rd/redis-prod       4          Running  3h
-rd/redis-qa         4          Running  3h
+NAME                          VERSION   STATUS    AGE
+redis.kubedb.com/redis-demo   4.0-v1    Running   3m
+redis.kubedb.com/redis-dev    4.0-v1    Running   3m
+redis.kubedb.com/redis-prod   4.0-v1    Running   3m
+redis.kubedb.com/redis-qa     4.0-v1    Running   3m
 ```
 
 Flag `--output=wide` is used to print additional information.
@@ -116,8 +129,8 @@ You can print labels with objects. The following command will list all Redis wit
 
 ```console
 $ kubedb get rd --show-labels
-NAME         STATUS    AGE       LABELS
-redis-demo   Running   1m        kubedb=cli-demo
+NAME         VERSION   STATUS    AGE       LABELS
+redis-demo   4.0-v1    Running   4m        kubedb=cli-demo
 ```
 
 To print only object name, run the following command:
@@ -138,34 +151,50 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ```console
 $ kubedb describe rd redis-demo
-Name:		redis-demo
-Namespace:	default
-StartTimestamp:	Thu, 01 Mar 2018 17:08:10 +0600
-Labels:		kubedb=cli-demo
-Status:		Running
+Name:               redis-demo
+Namespace:          default
+CreationTimestamp:  Mon, 01 Oct 2018 14:14:27 +0600
+Labels:             kubedb=cli-demo
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			redis-demo
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Thu, 01 Mar 2018 17:08:12 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               redis-demo
+  CreationTimestamp:  Mon, 01 Oct 2018 14:14:31 +0600
+  Labels:               kubedb=cli-demo
+                        kubedb.com/kind=Redis
+                        kubedb.com/name=redis-demo
+  Annotations:        <none>
+  Replicas:           824640807604 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		redis-demo
-  Type:		ClusterIP
-  IP:		10.101.218.235
-  Port:		db	6379/TCP
+  Name:         redis-demo
+  Labels:         kubedb.com/kind=Redis
+                  kubedb.com/name=redis-demo
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.102.148.196
+  Port:         db  6379/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.4:6379
+
+No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason       Message
-  ---------   --------   -----     ----             --------   ------       -------
-  7m          7m         1         Redis operator   Normal     Successful   Successfully created Redis
-  7m          7m         1         Redis operator   Normal     Successful   Successfully created StatefulSet
-  7m          7m         1         Redis operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From            Message
+  ----    ------      ----  ----            -------
+  Normal  Successful  5m    Redis operator  Successfully created Service
+  Normal  Successful  5m    Redis operator  Successfully created StatefulSet
+  Normal  Successful  5m    Redis operator  Successfully created Redis
+  Normal  Successful  5m    Redis operator  Successfully patched StatefulSet
+  Normal  Successful  5m    Redis operator  Successfully patched Redis
 ```
 
 `kubedb describe` command provides following basic information about a Redis database.
@@ -175,31 +204,30 @@ Events:
 - Service
 - Monitoring system (If available)
 
-To hide details about StatefulSet & Service, use flag `--show-workload=false`
 To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all Redis objects in `default` namespace, use following command
 
 ```console
-$ kubedb describe rd
+kubedb describe rd
 ```
 
 To describe all Redis objects from every namespace, provide `--all-namespaces` flag.
 
 ```console
-$ kubedb describe rd --all-namespaces
+kubedb describe rd --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
 
 ```console
-$ kubedb describe all --all-namespaces
+kubedb describe all --all-namespaces
 ```
 
 You can also describe KubeDB objects with matching labels. The following command will describe all Redis objects with specified labels from every namespace.
 
 ```console
-$ kubedb describe rd --all-namespaces --selector='group=dev'
+kubedb describe rd --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
@@ -227,13 +255,13 @@ Various fields of a KubeDB object can't be edited using `edit` command. The foll
 - kind
 - metadata.name
 - metadata.namespace
-- status
 
 If StatefulSets exists for a Redis database, following fields can't be modified as well.
 
-- spec.version
+- spec.storageType
 - spec.storage
-- spec.nodeSelector
+- spec.podTemplate.spec.nodeSelector
+- spec.podTemplate.spec.env
 
 For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
@@ -245,14 +273,14 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 
 ```console
 $ kubedb delete redis redis-dev
-redis "redis-dev" deleted
+redis.kubedb.com "redis-dev" deleted
 ```
 
 You can also use YAML files to delete objects. The following command will delete a redis using the type and name specified in `redis.yaml`.
 
 ```console
 $ kubedb delete -f redis-demo.yaml
-redis "redis-dev" deleted
+redis.kubedb.com "redis-dev" deleted
 ```
 
 `kubedb delete` command also takes input from `stdin`.
@@ -264,7 +292,7 @@ cat redis-demo.yaml | kubedb delete -f -
 To delete database with matching labels, use `--selector` flag. The following command will delete redis with label `redis.kubedb.com/name=redis-demo`.
 
 ```console
-$ kubedb delete redis -l redis.kubedb.com/name=redis-demo
+kubedb delete redis -l redis.kubedb.com/name=redis-demo
 ```
 
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
