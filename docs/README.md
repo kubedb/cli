@@ -1,5 +1,5 @@
 ---
-title: Weclome | KubeDB
+title: Welcome | KubeDB
 description: Welcome to KubeDB
 menu:
   docs_0.8.0:
