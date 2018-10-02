@@ -81,6 +81,46 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
+  name: "8"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  deprecated: true
+  version: "8"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:8"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:8"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "8-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "8"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:8-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:8-v1"
+  {{ end }}
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
   name: "8.0"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
