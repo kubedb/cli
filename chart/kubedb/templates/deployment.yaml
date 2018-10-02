@@ -42,7 +42,7 @@ spec:
         imagePullPolicy: {{ .Values.imagePullPolicy  }}
         args:
         - run
-        - --v=3
+        - --v={{ .Values.logLevel }}
         - --governing-service=kubedb
         - --rbac={{ .Values.rbac.create }}
         - --secure-port=8443
