@@ -55,6 +55,7 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `imagePullSecrets`                  | Specify image pull secrets                                         | `nil` (does not add image pull secrets to deployed pods) |
 | `imagePullPolicy`                   | Image pull policy                                                  | `IfNotPresent`     |
 | `criticalAddon`                     | If true, installs KubeDB operator as critical addon                | `false`            |
+| `logLevel`                          | Log level for operator                                             | `3`                |
 | `affinity`                          | Affinity rules for pod assignment                                  | `{}`               |
 | `annotations`                       | Annotations applied to operator pod(s)                             | `{}`               |
 | `nodeSelector`                      | Node labels for pod assignment                                     | `{}`               |
