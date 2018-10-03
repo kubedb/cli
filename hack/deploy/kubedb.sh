@@ -366,6 +366,7 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/service-account.yaml | $ONESSL envsubst | kubectl apply -f -
   ${SCRIPT_LOCATION}hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
   ${SCRIPT_LOCATION}hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
+  ${SCRIPT_LOCATION}hack/deploy/appcatalog-user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
 fi
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
