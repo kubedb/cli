@@ -81,6 +81,11 @@ rules:
   - "*"
   verbs: ["*"]
 - apiGroups:
+  - appcatalog.appscode.com
+  resources:
+  - "*"
+  verbs: ["*"]
+- apiGroups:
   - monitoring.coreos.com
   resources:
   - servicemonitors
