@@ -78,6 +78,8 @@ spec:
         disktype: ssd
       imagePullSecrets:
       - name: myregistrykey
+      args:
+      - --maxConns=100
       env:
       - name: MONGO_INITDB_DATABASE
         value: myDB
@@ -93,8 +95,9 @@ spec:
       passMe: ToService
     spec:
       type: NodePort
-  updateStrategy: "RollingUpdate"
-  terminationPolicy: "Pause"
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
 ```
 
 ### spec.version
@@ -240,7 +243,7 @@ You can also specify a template for pod of backup job through `spec.backupSchedu
   - priorityClassName
   - priority
   - securityContext
-  
+
 ### spec.doNotPause
 
 `spec.doNotPause` is an optional field that tells KubeDB operator that if this MongoDB object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MongoDB object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
@@ -269,6 +272,7 @@ KubeDB accept following fields to set in `spec.podTemplate:`
 - annotations (pod's annotation)
 - controller.annotations (statefulset's annotation)
 - spec:
+  - args
   - env
   - resources
   - initContainers
@@ -282,6 +286,10 @@ KubeDB accept following fields to set in `spec.podTemplate:`
   - securityContext
 
 Uses of some field of `spec.podTemplate` is described below,
+
+#### spec.podTemplate.spec.args
+
+`spec.podTemplate.spec.args` is an optional field. This can be used to provide additional arguments to database installation. To learn about available args of `mongod`, visit [here](https://docs.mongodb.com/manual/reference/program/mongod/).
 
 #### spec.podTemplate.spec.env
 

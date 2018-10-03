@@ -2,7 +2,7 @@
 title: Run mongodb with Custom Configuration
 menu:
   docs_0.8.0:
-    identifier: mg-custom-config
+    identifier: mg-configuration
     name: Custom Configuration
     parent: mg-mongodb-guides
     weight: 27

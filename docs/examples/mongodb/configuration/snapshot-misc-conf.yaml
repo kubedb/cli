@@ -1,0 +1,16 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mgo-config
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-misc-config
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      args:
+      - --gzip
