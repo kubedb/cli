@@ -60,6 +60,8 @@ spec:
         disktype: ssd
       imagePullSecrets:
       - name: myregistrykey
+      args:
+      - "--loglevel verbose"
       env:
       - name: ENV_VARIABLE
         value: "value"
@@ -75,8 +77,9 @@ spec:
       passMe: ToService
     spec:
       type: NodePort
-  updateStrategy: "RollingUpdate"
-  terminationPolicy: "Pause"
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
 ```
 
 ### spec.version
@@ -121,6 +124,7 @@ KubeDB accept following fields to set in `spec.podTemplate:`
 - annotations (pod's annotation)
 - controller.annotations (statefulset's annotation)
 - spec:
+  - args
   - env
   - resources
   - initContainers
@@ -134,6 +138,9 @@ KubeDB accept following fields to set in `spec.podTemplate:`
   - securityContext
 
 Uses of some field of `spec.podTemplate` is described below,
+
+#### spec.podTemplate.spec.args
+ `spec.podTemplate.spec.args` is an optional field. This can be used to provide additional arguments to database installation. To learn about available args of `mongod`, visit [here](https://docs.mongodb.com/manual/reference/program/mongod/).
 
 ### spec.podTemplate.spec.env
 
