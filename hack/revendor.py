@@ -42,8 +42,6 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 REPO_LIST = DATABASES + ['cli', 'operator', 'apimachinery']
-KUTIL_VERSION = 'release-8.0'
-KUBEMON_VERSION = 'release-8.0'
 REQUIRED_DEPS = [
     {
       "package": "github.com/cpuguy83/go-md2man",
@@ -80,6 +78,12 @@ REQUIRED_DEPS = [
     {
       "package": "github.com/golang/protobuf",
       "version": "v1.1.0"
+    },
+    {
+      "package": "kmodules.xyz/custom-resources",
+      "repo": "https://github.com/kmodules/custom-resources.git",
+      "vcs": "git",
+      "version": "release-8.0"
     }
 ]
 DEP_LIST = [
@@ -274,14 +278,12 @@ def glide_write(f, glide_config):
     glide_config['package'] = pkg
 
 
-class Kitten(object):
+class DepFixer(object):
     def __init__(self):
         self.seed = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
         self.master_deps = {}
         for k in REPO_LIST:
             self.master_deps['github.com/kubedb/' + k] = 'master'
-        self.master_deps['github.com/appscode/kutil'] = KUTIL_VERSION
-        self.master_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
         print self.master_deps
 
     def revendor_repo(self, repo_name):
@@ -309,7 +311,7 @@ class Kitten(object):
 
 
 def revendor(comp=None):
-    cat = Kitten()
+    cat = DepFixer()
     if comp is None:
         for name in DATABASES:
             cat.revendor_repo(name)
