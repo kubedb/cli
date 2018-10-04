@@ -85,7 +85,6 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -209,7 +208,6 @@ metadata:
 spec:
   databaseSecret:
     secretName: mysql-init-script-auth
-  doNotPause: true
   init:
     scriptSource:
       configMap:
@@ -266,7 +264,7 @@ As you can see here, the initial script has successfully created a table named `
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mysql/mysql-init-script -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mysql/mysql-init-script -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mysql/mysql-init-script
 
 kubectl patch -n demo drmn/mysql-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"

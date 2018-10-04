@@ -140,7 +140,7 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mysql/mysql-infant mysql/mysql-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mysql/mysql-infant mysql/mysql-init-snapshot -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mysql/mysql-infant mysql/mysql-init-snapshot
 
 kubectl patch -n demo drmn/mysql-infant drmn/mysql-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"

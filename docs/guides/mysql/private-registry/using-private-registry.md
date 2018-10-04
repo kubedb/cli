@@ -109,7 +109,6 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -147,7 +146,7 @@ You can specify `imagePullSecret` for Snapshot objects in `spec.podTemplate.spec
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mysql/mysql-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mysql/mysql-pvt-reg -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mysql/mysql-pvt-reg
 
 kubectl patch -n demo drmn/mysql-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"

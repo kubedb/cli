@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  name: mysql-qa
+  name: mysql-demo
 spec:
   version: "8.0-v1"
   storage:

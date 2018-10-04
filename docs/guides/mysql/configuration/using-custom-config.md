@@ -103,7 +103,6 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
-  doNotPause: true
   configSource:
     configMap:
       name: my-custom-config
@@ -187,7 +186,7 @@ Once, you have connected to the database with phpMyAdmin go to **Variables** tab
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo my/custom-mysql -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo my/custom-mysql -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo my/custom-mysql
 
 kubectl patch -n demo drmn/custom-mysql -p '{"spec":{"wipeOut":true}}' --type="merge"

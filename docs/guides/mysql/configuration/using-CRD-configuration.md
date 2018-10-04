@@ -248,7 +248,7 @@ snap-mysql-config                   mysql-misc-config   Succeeded   12m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo my/mysql-misc-config -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo my/mysql-misc-config -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo my/mysql-misc-config
 
 kubectl patch -n demo drmn/mysql-misc-config -p '{"spec":{"wipeOut":true}}' --type="merge"

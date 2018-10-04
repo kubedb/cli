@@ -369,7 +369,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mysql/mysql-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mysql/mysql-mon-prometheus -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mysql/mysql-mon-prometheus
 
 kubectl patch -n demo drmn/mysql-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
