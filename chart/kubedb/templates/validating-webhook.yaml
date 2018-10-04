@@ -129,4 +129,17 @@ webhooks:
     resources: ["dormantdatabases"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+- name: namespaces.validators.kubedb.com
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/validators.kubedb.com/v1alpha1/namespaces
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - apiGroups: [""]
+    apiVersions: ["*"]
+    resources: ["namespaces"]
+    operations: ["DELETE"]
+  failurePolicy: Fail
 {{ end }}

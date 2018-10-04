@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
-	"github.com/appscode/kutil/meta"
 	meta_util "github.com/appscode/kutil/meta"
 	"github.com/kubedb/apimachinery/apis"
 	apps "k8s.io/api/apps/v1"
@@ -183,6 +182,9 @@ func (e *ElasticsearchSpec) SetDefaults() {
 	}
 
 	// perform defaulting
+	if e.AuthPlugin == "" {
+		e.AuthPlugin = ElasticsearchAuthPluginSearchGuard
+	}
 	if e.StorageType == "" {
 		e.StorageType = StorageTypeDurable
 	}
@@ -207,13 +209,4 @@ func (e *ElasticsearchSpec) GetSecrets() []string {
 		secrets = append(secrets, e.CertificateSecret.SecretName)
 	}
 	return secrets
-}
-
-const (
-	ESSearchGuardDisabled = ElasticsearchKey + "/searchguard-disabled"
-)
-
-func (e Elasticsearch) SearchGuardDisabled() bool {
-	v, _ := meta.GetBoolValue(e.Annotations, ESSearchGuardDisabled)
-	return v
 }

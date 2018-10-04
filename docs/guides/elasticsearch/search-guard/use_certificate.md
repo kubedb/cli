@@ -52,7 +52,7 @@ spec:
 If Elasticsearch object `ssl-elasticsearch` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
 elasticsearch "ssl-elasticsearch" created
 ```
 

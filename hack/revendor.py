@@ -42,20 +42,62 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 REPO_LIST = DATABASES + ['cli', 'operator', 'apimachinery']
-KUTIL_VERSION = 'release-8.0'
-KUBEMON_VERSION = 'release-8.0'
-FORCED_DEPS = [
+REQUIRED_DEPS = [
     {
-        'package': 'github.com/cpuguy83/go-md2man',
-        'version': 'v1.0.8',
+      "package": "github.com/cpuguy83/go-md2man",
+      "version": "v1.0.8"
     },
     {
-        'package': 'github.com/json-iterator/go',
-        'version': '1.1.5',
+      "package": "github.com/json-iterator/go",
+      "version": "1.1.5"
     },
     {
-        'package': 'github.com/coreos/prometheus-operator',
-        'version': 'v0.23.2',
+      "package": "github.com/spf13/cobra",
+      "version": "v0.0.3"
+    },
+    {
+      "package": "github.com/spf13/pflag",
+      "version": "v1.0.1"
+    },
+    {
+      "package": "golang.org/x/text",
+      "version": "b19bf474d317b857955b12035d2c5acb57ce8b01"
+    },
+    {
+      "package": "golang.org/x/net",
+      "version": "1c05540f6879653db88113bc4a2b70aec4bd491f"
+    },
+    {
+      "package": "golang.org/x/sys",
+      "version": "95c6576299259db960f6c5b9b69ea52422860fce"
+    },
+    {
+      "package": "k8s.io/kube-openapi",
+      "version": "91cfa479c814065e420cee7ed227db0f63a5854e"
+    },
+    {
+      "package": "github.com/golang/protobuf",
+      "version": "v1.1.0"
+    },
+    {
+      "package": "kmodules.xyz/custom-resources",
+      "repo": "https://github.com/kmodules/custom-resources.git",
+      "vcs": "git",
+      "version": "release-8.0"
+    }
+]
+DEP_LIST = [
+    {
+        "package": "github.com/cpuguy83/go-md2man",
+        "version": "v1.0.8"
+    },
+    {
+        "package": "github.com/json-iterator/go",
+        "version": "1.1.5"
+    },
+    {
+        "package": "github.com/coreos/prometheus-operator",
+        "version": "v0.23.2"
     },
     {
       "package": "k8s.io/api",
@@ -92,15 +134,11 @@ FORCED_DEPS = [
       "version": "kubernetes-1.11.3"
     },
     {
-      "package": "k8s.io/kube-openapi",
-      "version": "master"
+      "package": "k8s.io/metrics",
+      "version": "kubernetes-1.11.3"
     },
     {
       "package": "github.com/appscode/kutil",
-      "version": "release-8.0"
-    },
-    {
-      "package": "github.com/appscode/kubernetes-webhook-util",
       "version": "release-8.0"
     },
     {
@@ -170,7 +208,7 @@ FORCED_DEPS = [
     {
       "package": "cloud.google.com/go",
       "version": "v0.2.0"
-    },
+    }
 ]
 
 
@@ -215,7 +253,16 @@ def glide_mod(glide_config, changes):
     for dep in glide_config['import']:
         if dep['package'] in changes:
             dep['version'] = changes[dep['package']]
-    for x in FORCED_DEPS:
+    for x in REQUIRED_DEPS:
+        for idx, dep in enumerate(glide_config['import']):
+            found = False
+            if dep['package'] == x['package']:
+                glide_config['import'][idx] = x
+                found = True
+                break
+        if not found:
+            glide_config['import'].append(x)
+    for x in DEP_LIST:
         for idx, dep in enumerate(glide_config['import']):
             if dep['package'] == x['package']:
                 glide_config['import'][idx] = x
@@ -231,14 +278,12 @@ def glide_write(f, glide_config):
     glide_config['package'] = pkg
 
 
-class Kitten(object):
+class DepFixer(object):
     def __init__(self):
         self.seed = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
         self.master_deps = {}
         for k in REPO_LIST:
             self.master_deps['github.com/kubedb/' + k] = 'master'
-        self.master_deps['github.com/appscode/kutil'] = KUTIL_VERSION
-        self.master_deps['github.com/appscode/kube-mon'] = KUBEMON_VERSION
         print self.master_deps
 
     def revendor_repo(self, repo_name):
@@ -266,7 +311,7 @@ class Kitten(object):
 
 
 def revendor(comp=None):
-    cat = Kitten()
+    cat = DepFixer()
     if comp is None:
         for name in DATABASES:
             cat.revendor_repo(name)

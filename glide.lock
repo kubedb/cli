@@ -1,5 +1,5 @@
-hash: e1cb5bac4c7bb87d0f49972a0ec3fbdfc9c6a7bb81edbdef90d26fd637df0cc2
-updated: 2018-09-26T03:29:34.181957812-07:00
+hash: 2cb98aec3ee068a21d45f85a82508f58601c09b9c4e8cdc0c491df9e2d7077f8
+updated: 2018-09-30T00:10:05.917259295-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -23,7 +23,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: bd70cefb33397b4c196aca7e33cab656755e195e
+  version: 8098faaaba7e4781cbaecf630c8583be1b58d36c
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -204,7 +204,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 483ed62aba8976cb227e543ed9d1223a560f3278
+  version: b93e1eba97539a3eefeae622b05f79b3365d1d28
   subpackages:
   - apis
   - apis/catalog
@@ -214,19 +214,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 1475c6205c7f46a2c83a026df60d41887af9551d
+  version: 9476ec693f26b7dd061651b71b85b8e6d0fc0188
 - name: github.com/kubedb/etcd
-  version: 785fc3971fb83bca19994d8cdf617e54522167b7
+  version: b31abbe2cb252b44bf379eed5b9c326c25d9dab5
 - name: github.com/kubedb/memcached
-  version: c2caeaf6e25de81f8893480907adefffc5ed9944
+  version: 3cdcfe7e6aa9f3d16b753b6d3c961d331fb64bc1
 - name: github.com/kubedb/mongodb
-  version: c0598ead162f5b36e593527b88e1ace1d06aab00
+  version: 1ed8cdc6eae69961ce1c4603e48333bfb3521c56
 - name: github.com/kubedb/mysql
-  version: e7695400d51d044442046e4d543b618e84e02b41
+  version: a79ff03b350db4b66c6d564c12e7c784d048d3b7
 - name: github.com/kubedb/postgres
-  version: 46d7f121d276f236a3cedd45308201de04dd982d
+  version: 70e8f6cb4d2df05274d1335be6249eb2d55b05c3
 - name: github.com/kubedb/redis
-  version: ff9d26d04923a4d454c33e4474b65b309a326eb1
+  version: fda87f37aba16ef1d166aa5e0558b294360c514a
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -331,7 +331,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: e5ba110cb6cd042d05ea6ea2ce9dd13198c6387a
+  version: 5da02d31af7d15cc65a207f8a46a6e3c50d41178
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine

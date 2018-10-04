@@ -808,6 +808,13 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchSpec(ref common.Refer
 							Ref:         ref("k8s.io/api/core/v1.SecretVolumeSource"),
 						},
 					},
+					"authPlugin": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Authentication plugin used by Elasticsearch cluster. If unset, defaults to SearchGuard.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"databaseSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database authentication secret",

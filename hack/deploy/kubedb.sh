@@ -117,7 +117,7 @@ export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
 export KUBEDB_CATALOG=${KUBEDB_CATALOG:-all}
 export KUBEDB_DOCKER_REGISTRY=kubedb
-export KUBEDB_OPERATOR_TAG=0.9.0-beta.0
+export KUBEDB_OPERATOR_TAG=0.9.0-beta.1
 export KUBEDB_OPERATOR_NAME=operator
 export KUBEDB_IMAGE_PULL_SECRET=
 export KUBEDB_IMAGE_PULL_POLICY=IfNotPresent
@@ -127,7 +127,7 @@ export KUBEDB_PURGE=0
 export KUBEDB_ENABLE_STATUS_SUBRESOURCE=false
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
-export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/"
+export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/"
 if [ "$APPSCODE_ENV" = "dev" ]; then
   detect_tag
   export SCRIPT_LOCATION="cat "
@@ -305,7 +305,7 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
       for ((i = 0; i < $total; i++)); do
         name=${pairs[$i]}
         namespace="default"
-        if [ ${#crd} -lt 8 ] || [ ${crd: -8} != "versions" ]; then
+        if [[ $crd != *"catalog.kubedb.com" ]]; then
           namespace=${pairs[$i + 1]}
           i+=1
         fi
@@ -366,6 +366,7 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/service-account.yaml | $ONESSL envsubst | kubectl apply -f -
   ${SCRIPT_LOCATION}hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
   ${SCRIPT_LOCATION}hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
+  ${SCRIPT_LOCATION}hack/deploy/appcatalog-user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
 fi
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then

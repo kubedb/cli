@@ -13,8 +13,8 @@ rules:
   - kubedb.com
   - catalog.kubedb.com
   resources:
-  - '*'
-  verbs: ['*']
+  - "*"
+  verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -36,23 +36,12 @@ rules:
   - postgreses
   - redises
   - snapshots
-  verbs:
-  - create
-  - delete
-  - deletecollection
-  - get
-  - list
-  - patch
-  - update
-  - watch
+  verbs: ["*"]
 - apiGroups:
   - kubedb.com
   resources:
   - dormantdatabases
-  verbs:
-  - get
-  - list
-  - watch
+  verbs: ["get", "list", "watch"]
 - apiGroups:
   - catalog.kubedb.com
   resources:
@@ -62,10 +51,7 @@ rules:
   - mysqlversions
   - postgresversions
   - redisversions
-  verbs:
-  - get
-  - list
-  - watch
+  verbs: ["get", "list", "watch"]
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -88,10 +74,7 @@ rules:
   - postgreses
   - redises
   - snapshots
-  verbs:
-  - get
-  - list
-  - watch
+  verbs: ["get", "list", "watch"]
 - apiGroups:
   - catalog.kubedb.com
   resources:
@@ -101,8 +84,5 @@ rules:
   - mysqlversions
   - postgresversions
   - redisversions
-  verbs:
-  - get
-  - list
-  - watch
+  verbs: ["get", "list", "watch"]
 {{ end }}
