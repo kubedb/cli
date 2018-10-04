@@ -362,11 +362,10 @@ mgo-replicaset-2.mgo-replicaset-gvr.demo.svc.cluster.local:27017
 
 ## Pause Database
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set to true.
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
 
-Since the MongoDB object created in this tutorial has `spec.doNotPause` set to `false`, if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods but leaves the PVCs unchanged.
 
-Note that, It is recommended to set `spec.doNotPause` to `true` for production usage.
+Since the MongoDB object created in this tutorial has `spec.terminationPolicy` set to `Resume` (default), if you delete the MongoDB object, KubeDB operator will create a dormant database while deleting the StatefulSet and its pods but leaves the PVCs unchanged.
 
 ```console
 $ kubedb delete mg mgo-replicaset -n demo
@@ -494,7 +493,7 @@ dormantdatabase "mgo-replicaset" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mg/mgo-replicaset -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mg/mgo-replicaset -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mg/mgo-replicaset
 
 kubectl patch -n demo drmn/mgo-replicaset -p '{"spec":{"wipeOut":true}}' --type="merge"

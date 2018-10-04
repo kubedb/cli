@@ -55,7 +55,6 @@ spec:
     gcs:
       bucket: kubedb
       prefix: demo
-  doNotPause: true
   monitor:
     agent: prometheus.io/coreos-operator
     prometheus:
@@ -244,10 +243,6 @@ You can also specify a template for pod of backup job through `spec.backupSchedu
   - priority
   - securityContext
 
-### spec.doNotPause
-
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this MongoDB object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a MongoDB object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
-
 ### spec.monitor
 
 MongoDB managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
@@ -325,7 +320,7 @@ for: "./mongodb.yaml": admission webhook "mongodb.validators.kubedb.com" denied 
 
 #### spec.podTemplate.spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying MongoDB database from a private Docker registry. To learn how to deploy MongoDB from a private registry, please visit [here](/docs/guides/mongodb/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying MongoDB database from a private Docker registry. `spec.podTemplate.spec.imagePullSecrets` is an optional field that points to secrets to be used for pulling docker image if you are using a private docker registry. To learn how to deploy MongoDB from a private registry, please visit [here](/docs/guides/mongodb/private-registry/using-private-registry.md).
 
 #### spec.podTemplate.spec.nodeSelector
 
@@ -356,23 +351,27 @@ You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/
 
 ### spec.terminationPolicy
 
-You can control which resources KubeDB should keep or delete when you delete MongoDB crd through `spec.terminationPolicy`. KubeDB provides following three termination policies:
+`terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `MongoDB` crd or which resources KubeDB should keep or delete when you delete `MongoDB` crd. KubeDB provides following four termination policies:
 
-- Pause
+- DoNotTerminate
+- Pause (`Default`)
 - Delete
 - WipeOut
 
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, `DoNotTerminate` prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
+
 Following table show what KubeDB does when you delete MongoDB crd for different termination policies,
 
-|               Behaviour                |  Pause   |  Delete  | WipeOut  |
-| -------------------------------------- | :------: | :------: | :------: |
-| 1. Create Dormant Database             | &#10003; | &#10007; | &#10007; |
-| 2. Delete StatefulSet                  | &#10003; | &#10003; | &#10003; |
-| 3. Delete Services                     | &#10003; | &#10003; | &#10003; |
-| 4. Delete PVCs                         | &#10007; | &#10003; | &#10003; |
-| 5. Delete Secrets                      | &#10007; | &#10007; | &#10003; |
-| 6. Delete Snapshots                    | &#10007; | &#10007; | &#10003; |
-| 7. Delete Snapshot data from bucket    | &#10007; | &#10007; | &#10003; |
+|              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
+| ----------------------------------- | :------------: | :------: | :------: | :------: |
+| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
+| 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 5. Delete PVCs                      |    &#10007;    | &#10007; | &#10003; | &#10003; |
+| 6. Delete Secrets                   |    &#10007;    | &#10007; | &#10007; | &#10003; |
+| 7. Delete Snapshots                 |    &#10007;    | &#10007; | &#10007; | &#10003; |
+| 8. Delete Snapshot data from bucket |    &#10007;    | &#10007; | &#10007; | &#10003; |
 
 If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination policy by default.
 

@@ -93,7 +93,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4-v1"
-  doNotPause: true
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -178,7 +177,7 @@ As we can see from the configuration of running mongodb, the value of `maxIncomi
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mg/mgo-custom-config -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mg/mgo-custom-config -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mg/mgo-custom-config
 
 kubectl patch -n demo drmn/mgo-custom-config -p '{"spec":{"wipeOut":true}}' --type="merge"

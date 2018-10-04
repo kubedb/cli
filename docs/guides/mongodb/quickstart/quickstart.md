@@ -71,7 +71,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4-v1"
-  doNotPause: true
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -80,6 +79,7 @@ spec:
     resources:
       requests:
         storage: 50Mi
+  terminationPolicy: DoNotTerminate
 ```
 
 ```console
@@ -90,9 +90,9 @@ mongodb.kubedb.com/mgo-quickstart created
 Here,
 
 - `spec.version` is name of the MongoDBVersion crd where the docker images are specified. In this tutorial, a MongoDB 3.4-v1 database is created.
-- `spec.doNotPause` prevents users from deleting this object if admission webhook is enabled.. This should be set to true for production databases to avoid accidental deletion.
 - `spec.storageType` specifies the type of storage that will be used for MongoDB database. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create MongoDB database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
 - `spec.storage` specifies PVC spec that will be dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MongoDB.
+- `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `MongoDB` crd or which resources KubeDB should keep or delete when you delete `MongoDB` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here]
 
 > Note: spec.storage section is used to create PVC for database pod. It will create PVC with storage size specified instorage.resources.requests field. Don't specify limits here. PVC does not get resized automatically.
 
@@ -208,7 +208,6 @@ metadata:
 spec:
   databaseSecret:
     secretName: mgo-quickstart-auth
-  doNotPause: true
   replicas: 1
   storage:
     accessModes:
@@ -278,16 +277,18 @@ WriteResult({ "nInserted" : 1 })
 bye
 ```
 
-## DoNotPause Property
+## DoNotTerminate Property
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set to true. Since the MongoDB object created in this tutorial has `spec.doNotPause` set to true, if you delete the MongoDB object, KubeDB operator will nullify the delete operation. You can see this below:
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. You can see this below:
 
 ```console
-$ kubedb delete mg mgo-quickstart -n demo
-error: MongoDB "mgo-quickstart" can't be paused. To continue delete, unset spec.doNotPause and retry.
+$ kubedb delete my mgo-quickstart -n demo
+Error from server (BadRequest): admission webhook "mongodb.validators.kubedb.com" denied the request: mongodb "mgo-quickstart" can't be paused. To delete, change spec.terminationPolicy
 ```
 
-Now, run `kubedb edit mg mgo-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then you will be able to delete/pause the database.
+Now, run `kubedb edit mg mgo-quickstart -n demo` to set `spec.terminationPolicy` to `Resume` (which creates `domantdatabase` when mongodb is deleted and keeps PVC, snapshots, Secrets intact) or remove this field (which default to `Resume`). Then you will be able to delete/pause the database.
+
+Learn details of all `TerminationPolicy` [here](docs/concepts/databases/mongodb.md#specterminationpolicy)
 
 ## Pause Database
 
@@ -415,7 +416,7 @@ dormantdatabase "mgo-quickstart" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mg/mgo-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mg/mgo-quickstart -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mg/mgo-quickstart
 
 kubectl patch -n demo drmn/mgo-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
@@ -428,9 +429,8 @@ kubectl delete ns demo
 
 If you are just testing some basic functionalities, you might want to avoid additional hassles due to some safety features that are great for production environment. You can follow these tips to avoid them.
 
-1. **Use `doNotPause: false`**. To avoid accidental deletion of database in production environment we recommend to use `spec.doNotPause: true`. It does not allow to delete MongoDB crd. You have to update this to `false` first, then you will be able to delete MongoDB crd. For testing purpose, you can just set `spec.donotPause: false`. You will not require to go through an additional step of updating to delete the MongoDB crd.
-2. **Use `storageType: Ephemeral`**. Databases are precious. You might not want to lose your data in your production environment if database pod fail. So, we recommend to use `spec.storageType: Durable` and provide storage spec in `spec.storage` section. For testing purpose, you can just use `spec.storageType: Ephemeral`. KubeDB will use [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) for storage. You will not require to provide `spec.storage` section.
-3. **Use `terminationPolicy: WipeOut`**. It is nice to be able to resume database from previous one. So, we create `DormantDatabase` and preserve all your `PVCs`, `Secrets`, `Snapshots` etc. If you don't want to resume database, you can just use `spec.terminationPolicy: WipeOut`. It will not create `DormantDatabase` and it will delete everything created by KubeDB for a particular MongoDB crd when you delete the crd. For more details about termination policy, please visit [here](/docs/concepts/databases/mongodb.md#specterminationpolicy).
+1. **Use `storageType: Ephemeral`**. Databases are precious. You might not want to lose your data in your production environment if database pod fail. So, we recommend to use `spec.storageType: Durable` and provide storage spec in `spec.storage` section. For testing purpose, you can just use `spec.storageType: Ephemeral`. KubeDB will use [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) for storage. You will not require to provide `spec.storage` section.
+2. **Use `terminationPolicy: WipeOut`**. It is nice to be able to resume database from previous one. So, we create `DormantDatabase` and preserve all your `PVCs`, `Secrets`, `Snapshots` etc. If you don't want to resume database, you can just use `spec.terminationPolicy: WipeOut`. It will not create `DormantDatabase` and it will delete everything created by KubeDB for a particular MongoDB crd when you delete the crd. For more details about termination policy, please visit [here](/docs/concepts/databases/mongodb.md#specterminationpolicy).
 
 ## Next Steps
 

@@ -65,7 +65,6 @@ metadata:
   namespace: demo
 spec:
   version: "3.4-v1"
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -199,7 +198,6 @@ metadata:
 spec:
   databaseSecret:
     secretName: mgo-init-script-auth
-  doNotPause: true
   init:
     scriptSource:
       configMap:
@@ -300,7 +298,7 @@ As you can see here, the initial script has successfully created a database name
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mg/mgo-init-script -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mg/mgo-init-script -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mg/mgo-init-script
 
 kubectl patch -n demo drmn/mgo-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
