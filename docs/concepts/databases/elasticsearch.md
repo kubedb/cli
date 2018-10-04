@@ -375,7 +375,7 @@ A list of the supported environment variables, their permission to use in KubeDB
 | REPO_LOCATIONS                  |     `allowed`     | `""`                                                                                               |
 | PROCESSORS                      |     `allowed`     | `1`                                                                                                |
 
-Note that, KubeDB does not allow `NODE_NAME`, `NODE_MASTER`, and `NODE_DATA` environment variables to set in`spec.podTemplate.spec.env`. KubeDB operator set them based on Elasticsearch crd specification.
+Note that, KubeDB does not allow `NODE_NAME`, `NODE_MASTER`, and `NODE_DATA` environment variables to set in `spec.podTemplate.spec.env`. KubeDB operator set them based on Elasticsearch crd specification.
 
 If you try to set any these forbidden environment variable in Elasticsearch crd, KubeDB operator will reject the request with following error,
 
@@ -449,19 +449,20 @@ You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/
 - Delete
 - WipeOut
 
-When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, `DoNotTerminate` prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to provide safety from accidental deletion of database. If admission webhook is enabled, KubeDB prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
 
 Following table show what KubeDB does when you delete Elasticsearch crd for different termination policies,
 
-|               Behaviour                |  Pause   |  Delete  | WipeOut  |
-| -------------------------------------- | :------: | :------: | :------: |
-| 1. Create Dormant Database             | &#10003; | &#10007; | &#10007; |
-| 2. Delete StatefulSet                  | &#10003; | &#10003; | &#10003; |
-| 3. Delete Services                     | &#10003; | &#10003; | &#10003; |
-| 4. Delete PVCs                         | &#10007; | &#10003; | &#10003; |
-| 5. Delete Secrets                      | &#10007; | &#10007; | &#10003; |
-| 6. Delete Snapshots                    | &#10007; | &#10007; | &#10003; |
-| 7. Delete Snapshot data from bucket    | &#10007; | &#10007; | &#10003; |
+|              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
+| ----------------------------------- | :------------: | :------: | :------: | :------: |
+| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
+| 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 5. Delete PVCs                      |    &#10007;    | &#10007; | &#10003; | &#10003; |
+| 6. Delete Secrets                   |    &#10007;    | &#10007; | &#10007; | &#10003; |
+| 7. Delete Snapshots                 |    &#10007;    | &#10007; | &#10007; | &#10003; |
+| 8. Delete Snapshot data from bucket |    &#10007;    | &#10007; | &#10007; | &#10003; |
 
 If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination policy by default.
 
