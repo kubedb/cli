@@ -105,7 +105,6 @@ metadata:
 spec:
   replicas: 3
   version: "1.5.4-v1"
-  doNotPause: true
   podTemplate:
     spec:
       resources:
@@ -148,7 +147,7 @@ memcd-pvt-reg   1.5.4-v1   Running   59s
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mc/memcd-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mc/memcd-pvt-reg -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mc/memcd-pvt-reg
 
 kubectl patch -n demo drmn/memcd-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"

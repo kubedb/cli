@@ -31,7 +31,6 @@ metadata:
 spec:
   replicas: 3
   version: 1.5.3-v1
-  doNotPause: true
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
@@ -85,10 +84,6 @@ spec:
 `spec.version` is a required field specifying the name of the [MemcachedVersion](/docs/concepts/catalog/memcached.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `MemcachedVersion` crd,
 
 - `1.5.4`, `1.5.4-v1`, `1.5`, `1.5-v1`
-
-### spec.doNotPause
-
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this Memcached object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Memcached object put the database into a dormant state.
 
 ### spec.monitor
 
@@ -182,19 +177,23 @@ You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/
 
 ### spec.terminationPolicy
 
-You can control which resources KubeDB should keep or delete when you delete Memcached crd through `spec.terminationPolicy`. KubeDB provides following three termination policies:
+`terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Memcached` crd or which resources KubeDB should keep or delete when you delete `Memcached` crd. KubeDB provides following four termination policies:
 
-- Pause
+- DoNotTerminate
+- Pause (`Default`)
 - Delete
 - WipeOut
 
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, `DoNotTerminate` prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
+
 Following table show what KubeDB does when you delete Memcached crd for different termination policies,
 
-|               Behaviour                |  Pause   |  Delete  | WipeOut  |
-| -------------------------------------- | :------: | :------: | :------: |
-| 1. Create Dormant Database             | &#10003; | &#10007; | &#10007; |
-| 2. Delete Deployment                  | &#10003; | &#10003; | &#10003; |
-| 3. Delete Services                     | &#10003; | &#10003; | &#10003; |
+|              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
+| ----------------------------------- | :------------: | :------: | :------: | :------: |
+| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
+| 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |
 
 If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination policy by default.
 

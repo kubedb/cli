@@ -134,7 +134,6 @@ metadata:
 spec:
   replicas: 1
   version: "1.5.4-v1"
-  doNotPause: true
   configSource:
     configMap:
       name: mc-custom-config
@@ -192,7 +191,7 @@ Here, `limit_maxbytes` is represented in bytes.
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mc/custom-memcached -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mc/custom-memcached -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mc/custom-memcached
 
 kubectl patch -n demo drmn/custom-memcached -p '{"spec":{"wipeOut":true}}' --type="merge"

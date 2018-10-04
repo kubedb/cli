@@ -6,7 +6,6 @@ metadata:
 spec:
   replicas: 3
   version: "1.5.4-v1"
-  doNotPause: true
   podTemplate:
     spec:
       resources:
@@ -16,3 +15,4 @@ spec:
         requests:
           cpu: 250m
           memory: 64Mi
+  terminationPolicy: DoNotTerminate

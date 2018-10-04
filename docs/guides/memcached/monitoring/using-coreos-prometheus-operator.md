@@ -116,7 +116,6 @@ metadata:
 spec:
   replicas: 3
   version: "1.5.4-v1"
-  doNotPause: true
   podTemplate:
     spec:
       resources:
@@ -281,7 +280,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo mc/memcd-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mc/memcd-mon-coreos -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo mc/memcd-mon-coreos
 
 kubectl patch -n demo drmn/memcd-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
