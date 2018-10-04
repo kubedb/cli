@@ -296,7 +296,7 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo rd/redis-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo rd/redis-mon-coreos -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo rd/redis-mon-coreos
 
 kubectl patch -n demo drmn/redis-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"

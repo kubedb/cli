@@ -73,7 +73,6 @@ metadata:
   namespace: demo
 spec:
   version: "4.0-v1"
-  doNotPause: true
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -92,9 +91,9 @@ redis.kubedb.com/redis-quickstart created
 Here,
 
 - `spec.version` is name of the RedisVersion crd where the docker images are specified. In this tutorial, a Redis 4.0-v1 database is created.
-- `spec.doNotPause` prevents users from deleting this object if admission webhook is enabled.. This should be set to true for production databases to avoid accidental deletion.
 - `spec.storageType` specifies the type of storage that will be used for Redis database. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Redis database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
 - `spec.storage` specifies PVC spec that will be dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for Redis.
+- `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Redis` crd or which resources KubeDB should keep or delete when you delete `Redis` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](docs/concepts/databases/redis.md#specterminationpolicy)
 
 > Note: spec.storage section is used to create PVC for database pod. It will create PVC with storage size specified instorage.resources.requests field. Don't specify limits here. PVC does not get resized automatically.
 
@@ -185,7 +184,6 @@ metadata:
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/redises/redis-quickstart
   uid: 6cc214c9-c53f-11e8-9ba7-0800274bef12
 spec:
-  doNotPause: true
   mode: Standalone
   podTemplate:
     controller: {}
@@ -234,16 +232,18 @@ OK
 127.0.0.1:6379> exit
 ```
 
-## DoNotPause Property
+## DoNotTerminate Property
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents user from deleting the database as long as the `spec.doNotPause` is set to true. Since the Redis object created in this tutorial has `spec.doNotPause` set to true, if you delete the Redis object, KubeDB operator will nullify the delete operation. You can see this below:
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. You can see this below:
 
 ```console
 $ kubedb delete rd redis-quickstart -n demo
-error: Redis "redis-quickstart" can't be paused. To continue delete, unset spec.doNotPause and retry.
+Error from server (BadRequest): admission webhook "redis.validators.kubedb.com" denied the request: redis "redis-quickstart" can't be paused. To delete, change spec.terminationPolicy
 ```
 
-Now, run `kubedb edit rd redis-quickstart -n demo` to set `spec.doNotPause` to false or remove this field (which default to false). Then you will be able to delete/pause the database.
+Now, run `kubedb edit rd redis-quickstart -n demo` to set `spec.terminationPolicy` to `Resume` (which creates `domantdatabase` when redis is deleted and keeps PVCs intact) or remove this field (which default to `Resume`). Then you will be able to delete/pause the database. 
+
+Learn details of all `TerminationPolicy` [here](docs/concepts/databases/redis.md#specterminationpolicy)
 
 ## Pause Database
 
@@ -370,7 +370,7 @@ dormantdatabase.kubedb.com "redis-quickstart" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo rd/redis-quickstart -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo rd/redis-quickstart -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo rd/redis-quickstart
 
 kubectl patch -n demo drmn/redis-quickstart -p '{"spec":{"wipeOut":true}}' --type="merge"
@@ -383,9 +383,8 @@ kubectl delete ns demo
 
 If you are just testing some basic functionalities, you might want to avoid additional hassles due to some safety features that are great for production environment. You can follow these tips to avoid them.
 
-1. **Use `doNotPause: false`**. To avoid accidental deletion of database in production environment we recommend to use `spec.doNotPause: true`. It does not allow to delete Redis crd. You have to update this to `false` first, then you will be able to delete Redis crd. For testing purpose, you can just set `spec.donotPause: false`. You will not require to go through an additional step of updating to delete the Redis crd.
-2. **Use `storageType: Ephemeral`**. Databases are precious. You might not want to lose your data in your production environment if database pod fail. So, we recommend to use `spec.storageType: Durable` and provide storage spec in `spec.storage` section. For testing purpose, you can just use `spec.storageType: Ephemeral`. KubeDB will use [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) for storage. You will not require to provide `spec.storage` section.
-3. **Use `terminationPolicy: WipeOut`**. It is nice to be able to resume database from previous one. So, we create `DormantDatabase` and preserve all your `PVCs`, `Secrets`, `Snapshots` etc. If you don't want to resume database, you can just use `spec.terminationPolicy: WipeOut`. It will not create `DormantDatabase` and it will delete everything created by KubeDB for a particular Redis crd when you delete the crd. For more details about termination policy, please visit [here](/docs/concepts/databases/redis.md#specterminationpolicy).
+1. **Use `storageType: Ephemeral`**. Databases are precious. You might not want to lose your data in your production environment if database pod fail. So, we recommend to use `spec.storageType: Durable` and provide storage spec in `spec.storage` section. For testing purpose, you can just use `spec.storageType: Ephemeral`. KubeDB will use [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) for storage. You will not require to provide `spec.storage` section.
+2. **Use `terminationPolicy: WipeOut`**. It is nice to be able to resume database from previous one. So, we create `DormantDatabase` and preserve all your `PVCs`, `Secrets`, `Snapshots` etc. If you don't want to resume database, you can just use `spec.terminationPolicy: WipeOut`. It will not create `DormantDatabase` and it will delete everything created by KubeDB for a particular Redis crd when you delete the crd. For more details about termination policy, please visit [here](/docs/concepts/databases/redis.md#specterminationpolicy).
 
 ## Next Steps
 

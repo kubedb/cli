@@ -98,7 +98,6 @@ metadata:
   namespace: demo
 spec:
   version: "4.0-v1"
-  doNotPause: true
   configSource:
       configMap:
         name: rd-custom-config
@@ -158,7 +157,7 @@ PONG
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo rd/custom-redis -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo rd/custom-redis -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo rd/custom-redis
 
 kubectl patch -n demo drmn/custom-redis -p '{"spec":{"wipeOut":true}}' --type="merge"

@@ -103,7 +103,6 @@ metadata:
   namespace: demo
 spec:
   version: "4.0-v1"
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:
@@ -145,7 +144,7 @@ redis-pvt-reg   4.0-v1    Running   40s
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-kubectl patch -n demo rd/redis-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo rd/redis-pvt-reg -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo rd/redis-pvt-reg
 
 kubectl patch -n demo drmn/redis-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
