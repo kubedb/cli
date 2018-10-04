@@ -15,6 +15,5 @@ spec:
         storage: 50Mi
   init:
     scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/mysql-init-scripts.git"
-        directory: .
+      configMap:
+        name: my-init-script

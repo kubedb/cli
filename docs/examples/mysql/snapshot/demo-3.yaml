@@ -5,6 +5,8 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
+  databaseSecret:
+    secretName: mysql-infant-auth
   storage:
     storageClassName: "standard"
     accessModes:
