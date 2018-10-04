@@ -31,6 +31,7 @@ metadata:
 spec:
   version: "6.3-v1"
   replicas: 2
+  authPlugin: "SearchGuard"
   enableSSL: true
   certificateSecret:
     secretName: e1-certs
@@ -54,7 +55,6 @@ spec:
     gcs:
       bucket: kubedb
       prefix: demo
-  doNotPause: true
   monitor:
     agent: prometheus.io/coreos-operator
     prometheus:
@@ -92,8 +92,13 @@ spec:
       passMe: ToService
     spec:
       type: NodePort
-  updateStrategy: "RollingUpdate"
-  terminationPolicy: "Pause"
+      ports:
+      - name:  http
+        port:  9200
+        targetPort: http
+  updateStrategy:
+    type: "RollingUpdate"
+  terminationPolicy: "DoNotTerminate"
 ```
 
 ### spec.version
@@ -195,6 +200,10 @@ If you specify `spec.topology` field then you are not allowed to specify followi
 ### spec.replicas
 
 `spec.replicas` is an optional field that can be used if `spec.topology` is not specified. This field specifies the number of pods in the Elasticsearch cluster. The default value of this field is 1.
+
+### spec.authPlugin
+
+`spec.authPlugin` is an optional field that specifies which plugin to use for authentication. Currently, this field accepts `None` or `SearchGuard`. By default, KubeDB uses [Search Guard](https://github.com/floragunncom/search-guard) for authentication. If you specify `None` in this field, KubeDB will disable Search Guard plugin and your database will not be protected anymore.
 
 ### spec.enableSSL
 
@@ -299,10 +308,9 @@ You can also specify a template for pod of backup job through `spec.backupSchedu
   - priorityClassName
   - priority
   - securityContext
-  
-### spec.doNotPause
-
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. It prevents users from deleting the database as long as the `spec.doNotPause` is set `true`. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to `false`, deleting an Elasticsearch object put the database into a dormant state. In dormant state, KubeDB deletes StatefulSet for the database but the underlying PVCs are left intact. This allows users to resume the database later.
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
 
 ### spec.monitor
 
@@ -335,6 +343,9 @@ KubeDB accept following fields to set in `spec.podTemplate:`
   - priorityClassName
   - priority
   - securityContext
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
 
 Uses of some fields of `spec.podTemplate` are described below,
 
@@ -417,6 +428,7 @@ KubeDB allows following fields to set in `spec.serviceTemplate`:
 
 - annotations
 - type
+- ports
 - clusterIP
 - externalIPs
 - loadBalancerIP
@@ -430,11 +442,14 @@ You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/
 
 ### spec.terminationPolicy
 
-You can control which resources KubeDB should keep or delete when you delete Elasticsearch crd through `spec.terminationPolicy`. KubeDB provides following three termination policies:
+`terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Elasticsearch` crd or which resources KubeDB should keep or delete when you delete `Elasticsearch` crd. KubeDB provides following four termination policies:
 
-- Pause
+- DoNotTerminate
+- Pause (`Default`)
 - Delete
 - WipeOut
+
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, `DoNotTerminate` prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`
 
 Following table show what KubeDB does when you delete Elasticsearch crd for different termination policies,
 
