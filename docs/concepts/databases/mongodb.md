@@ -94,6 +94,10 @@ spec:
       passMe: ToService
     spec:
       type: NodePort
+      ports:
+      - name:  http
+        port:  9200
+        targetPort: http
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
@@ -242,6 +246,9 @@ You can also specify a template for pod of backup job through `spec.backupSchedu
   - priorityClassName
   - priority
   - securityContext
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
 
 ### spec.monitor
 
@@ -279,6 +286,9 @@ KubeDB accept following fields to set in `spec.podTemplate:`
   - priorityClassName
   - priority
   - securityContext
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
 
 Uses of some field of `spec.podTemplate` is described below,
 
@@ -338,6 +348,7 @@ KubeDB allows following fields to set in `spec.serviceTemplate`:
 
 - annotations
 - type
+- ports
 - clusterIP
 - externalIPs
 - loadBalancerIP
