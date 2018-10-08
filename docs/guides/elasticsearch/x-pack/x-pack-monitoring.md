@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # X-Pack Monitoring with KubeDB Elasticsearch
 
-This tutorial will show you how to use X-Pack monitoring in an Elasticsearch cluster in KubeDB.
+This tutorial will show you how to use X-Pack monitoring in an Elasticsearch cluster deployed with KubeDB.
 
 ## Before You Begin
 
@@ -42,7 +42,7 @@ At first, we will create some necessary Search Guard configuration and roles to 
 
 Then, we will deploy Kibana with Search Guard plugin installed. We will configure Kibana to connect with our Elasticsearch cluster and view monitoring data from it.
 
-For this tutorial, we will use Elasticsearch 6.3.0 with Search Guard plugin 23.0 and Kibana 6.3.0 with Search Guard plugin 14 installed.
+For this tutorial, we will use Elasticsearch 6.3.0 with Search Guard plugin 23.1 and Kibana 6.3.0 with Search Guard plugin 14 installed.
 
 ## Deploy Elasticsearch Cluster
 
@@ -202,12 +202,14 @@ searchguard:
 Now, create a secret with these Search Guard configuration files.
 
 ```console
- $ kubectl create secret generic -n demo  es-auth \
-                        --from-file=./sg_action_groups.yml \
-                        --from-file=./sg_config.yml \
-                        --from-file=./sg_internal_users.yml \
-                        --from-file=./sg_roles_mapping.yml \
-                        --from-file=./sg_roles.yml
+ $ kubectl create secret generic -n demo es-auth \
+             --from-literal=ADMIN_USERNAME=admin \
+             --from-literal=ADMIN_PASSWORD=admin@secret \
+             --from-file=./sg_action_groups.yml \
+             --from-file=./sg_config.yml \
+             --from-file=./sg_internal_users.yml \
+             --from-file=./sg_roles_mapping.yml \
+             --from-file=./sg_roles.yml
 secret/es-auth created
 ```
 
@@ -297,8 +299,7 @@ metadata:
   name: es-mon-demo
   namespace: demo
 spec:
-  version: "6.3.0"
-  doNotPause: false
+  version: "6.3.0-v1"
   replicas: 1
   databaseSecret:
     secretName: es-auth
@@ -319,25 +320,24 @@ Now, wait for few minutes. KubeDB will create necessary secrets, services, and s
 Check resources created in demo namespace by KubeDB,
 
 ```console
-$  kubectl get all -n demo
+$  kubectl get all -n demo -l=kubedb.com/name=es-mon-demo
 NAME                READY     STATUS    RESTARTS   AGE
-pod/es-mon-demo-0   1/1       Running   0          54s
+pod/es-mon-demo-0   1/1       Running   0          37s
 
-NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/es-mon-demo          ClusterIP   10.105.183.97   <none>        9200/TCP   1m
-service/es-mon-demo-master   ClusterIP   10.102.108.64   <none>        9300/TCP   59s
-service/kubedb               ClusterIP   None            <none>        <none>     13m
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/es-mon-demo          ClusterIP   10.110.227.143   <none>        9200/TCP   40s
+service/es-mon-demo-master   ClusterIP   10.104.12.90     <none>        9300/TCP   40s
 
 NAME                           DESIRED   CURRENT   AGE
-statefulset.apps/es-mon-demo   1         1         54s
+statefulset.apps/es-mon-demo   1         1         39s
 ```
 
 Once everything is created, Elasticsearch will go to Running state. Check that Elasticsearch is in running state.
 
 ```console
 $ kubectl get es -n demo es-mon-demo
-NAME          VERSION   STATUS    AGE
-es-mon-demo   6.3.0     Running   1m
+NAME          VERSION    STATUS    AGE
+es-mon-demo   6.3.0-v1   Running   1m
 ```
 
 Now, check elasticsearch log to see if the cluster is ready to accept requests,
@@ -487,17 +487,11 @@ Now, your production clusters will send monitoring data to the monitoring-cluste
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/es-mon-demo -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/es-mon-demo -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 
 $ kubectl delete -n demo es/es-mon-demo
 
-$ kubectl patch -n demo drmn/es-mon-demo -p '{"spec":{"wipeOut":true}}' --type="merge"
-
-$ kubectl delete -n demo drmn/es-mon-demo
-
 $ kubectl delete  -n demo configmap/es-custom-config
-
-$ kubectl delete -n demo secret/es-auth
 
 $ kubectl delete -n demo configmap/kibana-config
 
