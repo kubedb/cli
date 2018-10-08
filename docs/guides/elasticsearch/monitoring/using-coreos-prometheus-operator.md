@@ -42,55 +42,62 @@ Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
-clusterrole "prometheus-operator" created
-serviceaccount "prometheus-operator" created
-clusterrolebinding "prometheus-operator" created
-deployment "prometheus-operator" created
+namespace/demo configured
+clusterrole.rbac.authorization.k8s.io/prometheus-operator created
+serviceaccount/prometheus-operator created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created
+deployment.extensions/prometheus-operator created
 ```
 
-Watch the Deployment’s Pods.
+Wait for running the Deployment’s Pods.
 
 ```console
-$ kubectl get pods -n demo --selector=operator=prometheus --watch
+$ kubectl get pods -n demo --selector=operator=prometheus
 NAME                                   READY     STATUS    RESTARTS   AGE
-prometheus-operator-79cb9dcd4b-24khh   1/1       Running   0          46s
+prometheus-operator-857455484c-mbzsp   1/1       Running   0          57s
 ```
 
 This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
 
 ```console
 $ kubectl get crd
-NAME                                    AGE
-alertmanagers.monitoring.coreos.com     3m
-prometheuses.monitoring.coreos.com      3m
-servicemonitors.monitoring.coreos.com   3m
+NAME                                          CREATED AT
+...
+alertmanagers.monitoring.coreos.com           2018-10-08T12:53:46Z
+prometheuses.monitoring.coreos.com            2018-10-08T12:53:46Z
+servicemonitors.monitoring.coreos.com         2018-10-08T12:53:47Z
+...
 ```
 
 Once the Prometheus CRDs are registered, run the following command to create a Prometheus.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
-clusterrole "prometheus" created
-serviceaccount "prometheus" created
-clusterrolebinding "prometheus" created
-prometheus "prometheus" created
-service "prometheus" created
+clusterrole.rbac.authorization.k8s.io/prometheus created
+serviceaccount/prometheus created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus created
+prometheus.monitoring.coreos.com/prometheus created
+service/prometheus created
 ```
 
 Verify RBAC stuffs
 
 ```console
 $ kubectl get clusterroles
-NAME                  AGE
-prometheus            1m
-prometheus-operator   5m
+NAME                             AGE
+...
+prometheus                       28s
+prometheus-operator              10m
+...
 ```
 
 ```console
 $ kubectl get clusterrolebindings
 NAME                  AGE
-prometheus            1m
-prometheus-operator   5m
+...
+prometheus            2m
+prometheus-operator   11m
+...
 ```
 
 ### Prometheus Dashboard
@@ -103,6 +110,8 @@ Or you can get the URL of `prometheus` Service by running following command
 $ minikube service prometheus -n demo --url
 http://192.168.99.100:30900
 ```
+
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
 
 Now, if you go to the Prometheus Dashboard, you will see that target list is now empty.
 
@@ -117,7 +126,7 @@ metadata:
   name: coreos-prom-es
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -146,16 +155,16 @@ Here,
 Now create this Elasticsearch object with monitoring spec
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
-elasticsearch "coreos-prom-es" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
+elasticsearch.kubedb.com/coreos-prom-es created
 ```
 
 KubeDB operator will create a ServiceMonitor object once the Elasticsearch is successfully running.
 
 ```console
-$ kubedb get es -n demo builtin-prom-es
-NAME              STATUS    AGE
-builtin-prom-es   Running   5m
+$ kubectl get es -n demo coreos-prom-es
+NAME             VERSION   STATUS    AGE
+coreos-prom-es   6.3-v1    Running   1m
 ```
 
 You can verify it running the following commands
@@ -179,11 +188,13 @@ Now, if you go the Prometheus Dashboard, you will see this database endpoint in 
 To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-$ kubectl patch -n demo es/coreos-prom-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/coreos-prom-es -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/coreos-prom-es
 
-$ kubectl patch -n demo drmn/coreos-prom-es -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/coreos-prom-es
+$ kubectl delete -n demo deployment/prometheus-operator
+$ kubectl delete -n demo service/prometheus
+$ kubectl delete -n demo service/prometheus-operated
+$ kubectl delete -n demo statefulset.apps/prometheus-prometheus
 
 $ kubectl delete clusterrolebindings prometheus-operator  prometheus
 $ kubectl delete clusterrole prometheus-operator prometheus
