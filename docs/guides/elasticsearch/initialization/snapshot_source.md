@@ -35,50 +35,17 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-This tutorial will show you how to use KubeDB to initialize a Elasticsearch database with an existing Snapshot.
+## Prepare Snapshot
 
-So, we need a Snapshot object in `Succeeded` phase to perform this initialization .
+This tutorial will show you how to use KubeDB to initialize a Elasticsearch database with an existing Snapshot. So, we need a Snapshot to perform this initialization. If you don't have a Snapshot already, create one by following the tutorial [here](/docs/guides/elasticsearch/snapshot/instant_backup.md).
 
-Follow these steps to prepare this tutorial
-
-- Create Elasticsearch object `infant-elasticsearch`, if not exists.
-
-    ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-    elasticsearch "infant-elasticsearch" created
-    ```
-
-    ```console
-    $ kubedb get es -n demo infant-elasticsearch
-    NAME                   STATUS    AGE
-    infant-elasticsearch   Running   57s
-    ```
-
-- Populate database with some data. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#populate-database).
-- Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
-
-    ```console
-    $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
-    $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-    $ kubectl create secret -n demo generic gcs-secret \
-        --from-file=./GOOGLE_PROJECT_ID \
-        --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-    secret "gcs-secret" created
-    ```
-
-- Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#instant-backup).
-
-```console
-$ kubedb get snap -n demo --selector="kubedb.com/kind=Elasticsearch,kubedb.com/name=infant-elasticsearch"
-NAME               DATABASE                  STATUS      AGE
-instant-snapshot   es/infant-elasticsearch   Succeeded   39s
-```
+If you have changed the name of either namespace or snapshot object, please modify the YAMLs used in this tutorial accordingly.
 
 ## Initialize with Snapshot source
 
-Specify the Snapshot `name` and `namespace` in the `spec.init.snapshotSource` field of your new Elasticsearch object.
+You have to specify the Snapshot name and namespace in the `spec.init.snapshotSource` field of your new Elasticsearch object.
 
-See the example Elasticsearch object below
+Below is the YAML for Elasticsearch object will create in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -87,9 +54,10 @@ metadata:
   name: recovered-es
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
   databaseSecret:
     secretName: infant-elasticsearch-auth
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -112,12 +80,12 @@ Here,
 Snapshot `instant-snapshot` in `demo` namespace belongs to Elasticsearch `infant-elasticsearch`:
 
 ```console
-$ kubedb get snap -n demo instant-snapshot
-NAME               DATABASE                  STATUS      AGE
-instant-snapshot   es/infant-elasticsearch   Succeeded   2m
+$ kubectl get snap -n demo instant-snapshot
+NAME               DATABASENAME           STATUS      AGE
+instant-snapshot   infant-elasticsearch   Succeeded   51m
 ```
 
-> Note: Elasticsearch `recovered-es` must have same `admin` user password as Elasticsearch `infant-elasticsearch`.
+> Note: Elasticsearch `recovered-es` must have same superuser credentials as Elasticsearch `infant-elasticsearch`.
 
 [//]: # (Describe authentication part. This should match with existing one)
 
@@ -125,13 +93,12 @@ Now, create the Elasticsearch object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/initialization/recovered-es.yaml
-elasticsearch "recovered-es" created
+elasticsearch.kubedb.com/recovered-es created
 ```
 
 When Elasticsearch database is ready, KubeDB operator launches a Kubernetes Job to initialize this database using the data from Snapshot `instant-snapshot`.
 
-As a final step of initialization, KubeDB Job controller adds `kubedb.com/initialized` annotation in initialized Elasticsearch object.
-This prevents further invocation of initialization process.
+As a final step of initialization, KubeDB Job controller adds `kubedb.com/initialized` annotation in initialized Elasticsearch object. This prevents further invocation of initialization process.
 
 ```console
 $ kubedb describe es -n demo recovered-es -S=false -W=false
