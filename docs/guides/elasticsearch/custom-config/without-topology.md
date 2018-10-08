@@ -124,9 +124,8 @@ metadata:
   name: custom-elasticsearch
   namespace: demo
 spec:
-  version: "6.2.4"
+  version: "6.2.4-v1"
   replicas: 2
-  doNotPause: true
   configSource:
     configMap:
       name: es-custom-config
@@ -144,84 +143,71 @@ Now, wait for few minutes. KubeDB will create necessary secrets, services, and s
 Check resources created in `demo` namespace by KubeDB,
 
 ```console
-$ kubectl get all -n demo
+$ kubectl get all -n demo -l=kubedb.com/name=custom-elasticsearch
 NAME                         READY     STATUS    RESTARTS   AGE
-pod/custom-elasticsearch-0   1/1       Running   0          1m
-pod/custom-elasticsearch-1   1/1       Running   0          48s
+pod/custom-elasticsearch-0   1/1       Running   0          6m
+pod/custom-elasticsearch-1   1/1       Running   0          5m
 
-NAME                                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/custom-elasticsearch          ClusterIP   10.97.175.61    <none>        9200/TCP   1m
-service/custom-elasticsearch-master   ClusterIP   10.100.153.28   <none>        9300/TCP   1m
-service/kubedb                        ClusterIP   None            <none>        <none>     1m
+NAME                                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/custom-elasticsearch          ClusterIP   10.110.0.164   <none>        9200/TCP   6m
+service/custom-elasticsearch-master   ClusterIP   10.97.53.188   <none>        9300/TCP   6m
 
 NAME                                    DESIRED   CURRENT   AGE
-statefulset.apps/custom-elasticsearch   2         2         1m
+statefulset.apps/custom-elasticsearch   2         2         6m
 ```
 
 Check secrets created by KubeDB,
 
 ```console
-$ kubectl get secret -n demo
-NAME                        TYPE                                  DATA      AGE
-custom-elasticsearch-auth   Opaque                                7         2m
-custom-elasticsearch-cert   Opaque                                4         2m
-default-token-58ddc         kubernetes.io/service-account-token   3         2m
+$ kubectl get secret -n demo -l=kubedb.com/name=custom-elasticsearch
+NAME                        TYPE      DATA      AGE
+custom-elasticsearch-auth   Opaque    9         6m
+custom-elasticsearch-cert   Opaque    4         6m
 ```
 
 Once everything is created, Elasticsearch will go to `Running` state. Check that Elasticsearch is in running state.
 
 ```console
 $ kubectl get es -n demo custom-elasticsearch
-NAME                   VERSION   STATUS    AGE
-custom-elasticsearch   6.2.4     Running   2m
+NAME                   VERSION    STATUS    AGE
+custom-elasticsearch   6.2.4-v1   Running   7m
 ```
 
 ## Verify Configuration
 
 Now, we will connect with the Elasticsearch cluster we have created. We will query for nodes settings to verify that the cluster is using the custom configuration we have provided.
 
-At first, expose Service `custom-elasticsearch`,
+At first, forward `9200` port of `custom-elasticsearch-0` pod. Run following command on a separate terminal,
 
 ```console
-$ kubectl expose svc -n demo custom-elasticsearch --name=custom-es-exposed --port=9200 --protocol=TCP --type=NodePort
-service/custom-es-exposed exposed
+$ kubectl port-forward -n demo custom-elasticsearch-0 9200
+Forwarding from 127.0.0.1:9200 -> 9200
+Forwarding from [::1]:9200 -> 9200
 ```
 
-Verify the Service exposed successfully,
+Now, we can connect to the database at `localhost:9200`. Let's find out necessary connection information first.
 
-```console
-$ kubectl get svc -n demo custom-es-exposed
-NAME                TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
-custom-es-exposed   NodePort   10.96.7.103   <none>        9200:32413/TCP   19s
-```
+**Connection information:**
 
-To connect with the Elasticsearch cluster we have to use the NodePort of the service along with the cluster's IP address.
+- Address: `localhost:9200`
+- Username: Run following command to get *username*
 
-For minikube, we can get the url by,
+  ```console
+  $ kubectl get secrets -n demo custom-elasticsearch-auth -o jsonpath='{.data.\ADMIN_USERNAME}' | base64 -d
+    admin
+  ```
 
-```console
-$ minikube service custom-es-exposed -n demo --url
-http://192.168.99.100:32413
-```
+- Password: Run following command to get *password*
 
-Run the following command to get `admin` user password
-
-```console
-$ kubectl get secret -n demo custom-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
-ieeu57oj
-```
-
-Let's export this `url` and `password` for later use,
-
-```ini
-$ export es_service=$(minikube service custom-es-exposed -n demo --url)
-$ export es_admin_pass=$(kubectl get secrets -n demo custom-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
-```
+  ```console
+  $ kubectl get secrets -n demo custom-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
+    fqc6rkha
+  ```
 
 Now, we will query for settings of all nodes in an Elasticsearch cluster,
 
 ```console
-$ curl --user "admin:$es_admin_pass" "$es_service/_nodes/_all/settings"
+$ curl --user "admin:fqc6rkha" "localhost:9200/_nodes/_all/settings"
 ```
 
 This will return a large JSON with nodes settings information. Here is the prettified JSON response,
@@ -313,13 +299,8 @@ Also note that, the `"path.logs"` field of each node is set to the value we have
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/custom-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
-
+$ kubectl patch -n demo es/custom-elasticsearch -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/custom-elasticsearch
-
-$ kubectl patch -n demo drmn/custom-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
-
-$ kubectl delete -n demo drmn/custom-elasticsearch
 
 $ kubectl delete  -n demo configmap/es-custom-config
 
