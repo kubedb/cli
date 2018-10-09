@@ -44,20 +44,28 @@ metadata:
   name: ssl-elasticsearch
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
   replicas: 2
+  authPlugin: "SearchGuard"
   enableSSL: true
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
 ```
 
 If Elasticsearch object `ssl-elasticsearch` doesn't exists, create it first.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
-elasticsearch "ssl-elasticsearch" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
+elasticsearch.kubedb.com/ssl-elasticsearch created
 ```
 
 ```console
-$ kubedb get es -n demo ssl-elasticsearch
+$ kubectl get es -n demo ssl-elasticsearch
 NAME                STATUS    AGE
 ssl-elasticsearch   Running   17m
 ```
@@ -96,7 +104,7 @@ metadata:
 type: Opaque
 ```
 
-#### Connect Elasticsearch
+## Connect to Elasticsearch Database
 
 In this tutorial, we will expose ClusterIP Service `ssl-elasticsearch` to connect database from local.
 
