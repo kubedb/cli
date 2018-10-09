@@ -307,7 +307,7 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
         namespace="default"
         if [[ $crd != *"catalog.kubedb.com" ]]; then
           namespace=${pairs[$i + 1]}
-          i+=1
+          i=$((i + 1))
         fi
         # remove finalizers
         kubectl patch ${crd} $name -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge || true
