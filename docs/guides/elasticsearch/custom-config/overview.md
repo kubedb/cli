@@ -58,5 +58,5 @@ At first, you have to create configuration files with name specified earlier wit
 
 ## Next Steps
 
-- [Learn how to use custom configuration specifying topology](/docs/guides/elasticsearch/custom-config/with-topology.md).
-- [Learn how to use custom configuration without specifying topology](/docs/guides/elasticsearch/custom-config/without-topology.md).
+- Learn how to use custom configuration specifying topology from [here](/docs/guides/elasticsearch/custom-config/with-topology.md).
+- Learn how to use custom configuration without specifying topology from [here](/docs/guides/elasticsearch/custom-config/without-topology.md).

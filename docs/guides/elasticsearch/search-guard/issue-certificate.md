@@ -2,16 +2,20 @@
 title: Search Guard Certificate
 menu:
   docs_0.8.0:
-    identifier: es-certificate-search-guard
+    identifier: es-issue-certificate-search-guard
     name: Issue Certificate
     parent: es-search-guard-elasticsearch
-    weight: 15
+    weight: 25
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# TLS certificates
+# Issue TLS Certificates
+
+Search Guard requires certificates to enable TLS. KubeDB creates necessary certificates automatically. However, if you want to use your own certificates, you can provide them through `spec.certificateSecret` field of Elasticsearch object.
+
+This tutorial will show you how to generate certificates for Search Guard and use them with Elasticsearch database.
 
 In KubeDB Elasticsearch, keystore and truststore files in JKS format are used instead of certificates and private keys in PEM format.
 
@@ -393,7 +397,7 @@ $ kubectl delete ns demo
 
 ## Next Steps
 
-- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
+- Learn how to use TLS certificates to connect Elasticsearch from [here](/docs/guides/elasticsearch/search-guard/use-tls.md).
 - Learn how to generate [search-guard configuration](/docs/guides/elasticsearch/search-guard/configuration.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

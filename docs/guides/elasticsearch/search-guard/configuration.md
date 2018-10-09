@@ -5,7 +5,7 @@ menu:
     identifier: es-configuration-search-guard
     name: Configuration
     parent: es-search-guard-elasticsearch
-    weight: 25
+    weight: 15
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
@@ -442,6 +442,6 @@ $ kubectl delete ns demo
 ## Next Steps
 
 - Learn how to [create TLS certificates](/docs/guides/elasticsearch/search-guard/certificate.md).
-- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
+- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use-tls.md) to connect Elasticsearch.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
