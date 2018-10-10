@@ -110,6 +110,8 @@ Here,
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If you don't specify `spec.storageType: Ephemeral`, then this field is required.
 - `spec.terminationPolicy` specifies what KubeDB should do when user try to delete Elasticsearch crd. Termination policy `DoNotTerminate` prevents a user from deleting this object if admission webhook is enabled.
 
+>Note: `spec.storage` section is used to create PVC for database pod. It will create PVC with storage size specified in`storage.resources.requests` field. Don't specify `limits` here. PVC does not get resized automatically.
+
 Let's create Elasticsearch crd that is shown above with following command
 
 ```console
