@@ -12,9 +12,9 @@ import (
 	"github.com/kubedb/cli/pkg/cmds/get"
 	"github.com/spf13/cobra"
 	utilflag "k8s.io/apiserver/pkg/util/flag"
+	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/kubectl/genericclioptions"
 )
 
 const (
