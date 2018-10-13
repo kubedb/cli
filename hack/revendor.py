@@ -206,6 +206,10 @@ DEP_LIST = [
     {
       "package": "github.com/spf13/afero",
       "version": "v1.1.2"
+    },
+    {
+      "package": "github.com/appscode/osm",
+      "version": "0.9.0"
     }
 ]
 
@@ -296,7 +300,7 @@ class DepFixer(object):
         call('git pull --rebase origin master', cwd=repo)
         git_checkout(revendor_branch, cwd=repo)
         # https://stackoverflow.com/a/6759339/244009
-        call("find " + repo + "/apis -type f -exec sed -i -e 's/k8s.io\\/apimachinery\\/pkg\\/api\\/testing\\/roundtrip/k8s.io\\/apimachinery\\/pkg\\/api\\/apitesting\\/roundtrip/g' {} \;")
+        call("find " + repo + "/apis -type f -exec sed -i -e 's/k8s.io\\/apimachinery\\/pkg\\/api\\/testing\\/roundtrip/k8s.io\\/apimachinery\\/pkg\\/api\\/apitesting\\/roundtrip/g' {} \;", eoe=False)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
             glide_mod(glide_config, self.master_deps)
