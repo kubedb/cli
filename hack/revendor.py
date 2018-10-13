@@ -57,7 +57,7 @@ REQUIRED_DEPS = [
     },
     {
       "package": "github.com/spf13/pflag",
-      "version": "v1.0.1"
+      "version": "v1.0.3"
     },
     {
       "package": "golang.org/x/text",
@@ -126,6 +126,10 @@ DEP_LIST = [
     {
       "package": "k8s.io/client-go",
       "version": "v9.0.0"
+    },
+    {
+      "package": "k8s.io/cli-runtime",
+      "version": "kubernetes-1.12.0"
     },
     {
       "package": "k8s.io/kubernetes",
