@@ -1,12 +1,12 @@
 ---
 title: Using Postgres Streaming Replication
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-streaming-replication-clustering
     name: Streaming Replication
     parent: pg-clustering-postgres
     weight: 15
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 
@@ -47,8 +47,9 @@ metadata:
   name: ha-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   replicas: 3
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -110,9 +111,9 @@ KubeDB operator creates three Pod as PostgreSQL server.
 ```console
 $ kubectl get pods -n demo --selector="kubedb.com/name=ha-postgres" --show-labels
 NAME            READY     STATUS    RESTARTS   AGE       LABELS
-ha-postgres-0   1/1       Running   0          48s       kubedb.com/role=primary,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,statefulset.kubernetes.io/pod-name=ha-postgres-0,controller-revision-hash=ha-postgres-69c84579bb
-ha-postgres-1   1/1       Running   0          47s       kubedb.com/role=replica,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,statefulset.kubernetes.io/pod-name=ha-postgres-1,controller-revision-hash=ha-postgres-69c84579bb
-ha-postgres-2   1/1       Running   0          45s       kubedb.com/role=replica,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,statefulset.kubernetes.io/pod-name=ha-postgres-2,controller-revision-hash=ha-postgres-69c84579bb
+ha-postgres-0   1/1       Running   0          2m        controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary,statefulset.kubernetes.io/pod-name=ha-postgres-0
+ha-postgres-1   1/1       Running   0          1m        controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-1
+ha-postgres-2   1/1       Running   0          1m        controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-2
 ```
 
 Here,
@@ -124,16 +125,16 @@ And two services for Postgres `ha-postgres` are created.
 
 ```console
 $ kubectl get svc -n demo --selector="kubedb.com/name=ha-postgres"
-NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-ha-postgres           ClusterIP   10.106.9.219    <none>        5432/TCP   4m
-ha-postgres-replicas  ClusterIP   10.104.95.105   <none>        5432/TCP   4m
+NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+ha-postgres            ClusterIP   10.102.19.49   <none>        5432/TCP   4m
+ha-postgres-replicas   ClusterIP   10.97.36.117   <none>        5432/TCP   4m
 ```
 
 ```console
 $ kubectl get svc -n demo --selector="kubedb.com/name=ha-postgres" -o=custom-columns=NAME:.metadata.name,SELECTOR:.spec.selector
-NAME                    SELECTOR
-ha-postgres             map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres kubedb.com/role:primary]
-ha-postgres-replicas    map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
+NAME                   SELECTOR
+ha-postgres            map[kubedb.com/role:primary kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
+ha-postgres-replicas   map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
 ```
 
 Here,
@@ -141,26 +142,30 @@ Here,
 - Service `ha-postgres` targets Pod `ha-postgres-0`, which is *primary* server, by selector `kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary`.
 - Service `ha-postgres-replicas` targets all Pods (*`ha-postgres-0`*, *`ha-postgres-1`* and *`ha-postgres-2`*) with label `kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres`.
 
-> These *standby* servers are asynchronous *warm standby* server.
-
-That means, you can only connect to *primary* sever.
+>These *standby* servers are asynchronous *warm standby* server. That means, you can only connect to *primary* sever.
 
 Now connect to this *primary* server Pod `ha-postgres-0` using pgAdmin installed in [quickstart](/docs/guides/postgres/quickstart/quickstart.md#before-you-begin) tutorial.
 
-Connection information:
+**Connection information:**
 
-- address: you can use any of these
-  - Service `ha-postgres.demo`
-  - Pod IP (`$ kubectl get pods ha-postgres-0 -n demo -o yaml | grep podIP`)
-- port: `5432`
-- database: `postgres`
-- username: `postgres`
+- Host name/address: you can use any of these
+  - Service: `ha-postgres.demo`
+  - Pod IP: (`$kubectl get pods ha-postgres-0 -n demo -o yaml | grep podIP`)
+- Port: `5432`
+- Maintenance database: `postgres`
+- Username: Run following command to get *username*,
 
-Run following command to get `postgres` superuser password
+  ```console
+  $ kubectl get secrets -n demo ha-postgres-auth -o jsonpath='{.data.\POSTGRES_USER}' | base64 -d
+  postgres
+  ```
 
-```yaml
-    $ kubectl get secrets -n demo ha-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
-```
+- Password: Run the following command to get *password*,
+
+  ```console
+  $ kubectl get secrets -n demo ha-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
+  MHRrOcuyddfh3YpU
+  ```
 
 You can check `pg_stat_replication` information to know who is currently streaming from *primary*.
 
@@ -188,9 +193,9 @@ $ kubectl delete pod -n demo ha-postgres-0
 ```console
 $ kubectl get pods -n demo --selector="kubedb.com/name=ha-postgres" --show-labels
 NAME            READY     STATUS    RESTARTS   AGE       LABELS
-ha-postgres-0   1/1       Running   0          9s        kubedb.com/role=replica,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,statefulset.kubernetes.io/pod-name=ha-postgres-0,controller-revision-hash=ha-postgres-69c84579bb
-ha-postgres-1   1/1       Running   0          6m        kubedb.com/role=primary,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,statefulset.kubernetes.io/pod-name=ha-postgres-1,controller-revision-hash=ha-postgres-69c84579bb
-ha-postgres-2   1/1       Running   0          6m        kubedb.com/role=replica,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,statefulset.kubernetes.io/pod-name=ha-postgres-2,controller-revision-hash=ha-postgres-69c84579bb
+ha-postgres-0   1/1       Running   0          10s       controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-0
+ha-postgres-1   1/1       Running   0          52m       controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary,statefulset.kubernetes.io/pod-name=ha-postgres-1
+ha-postgres-2   1/1       Running   0          51m       controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-2
 ```
 
 Here,
@@ -230,9 +235,10 @@ metadata:
   name: hot-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   replicas: 3
-  standbyMode: hot
+  standbyMode: Hot
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -271,9 +277,9 @@ KubeDB operator creates three Pod as PostgreSQL server.
 ```console
 $ kubectl get pods -n demo --selector="kubedb.com/name=hot-postgres" --show-labels
 NAME             READY     STATUS    RESTARTS   AGE       LABELS
-hot-postgres-0   1/1       Running   0          25s       kubedb.com/role=primary,kubedb.com/kind=Postgres,kubedb.com/name=hot-postgres,statefulset.kubernetes.io/pod-name=hot-postgres-0,controller-revision-hash=hot-postgres-6799bc9d4
-hot-postgres-1   1/1       Running   1          24s       kubedb.com/role=replica,kubedb.com/kind=Postgres,kubedb.com/name=hot-postgres,statefulset.kubernetes.io/pod-name=hot-postgres-1,controller-revision-hash=hot-postgres-6799bc9d4
-hot-postgres-2   1/1       Running   0          23s       kubedb.com/role=replica,kubedb.com/kind=Postgres,kubedb.com/name=hot-postgres,statefulset.kubernetes.io/pod-name=hot-postgres-2,controller-revision-hash=hot-postgres-6799bc9d4
+hot-postgres-0   1/1       Running   0          1m        controller-revision-hash=hot-postgres-6c48cfb5bb,kubedb.com/kind=Postgres,kubedb.com/name=hot-postgres,kubedb.com/role=primary,statefulset.kubernetes.io/pod-name=hot-postgres-0
+hot-postgres-1   1/1       Running   0          1m        controller-revision-hash=hot-postgres-6c48cfb5bb,kubedb.com/kind=Postgres,kubedb.com/name=hot-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=hot-postgres-1
+hot-postgres-2   1/1       Running   0          48s       controller-revision-hash=hot-postgres-6c48cfb5bb,kubedb.com/kind=Postgres,kubedb.com/name=hot-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=hot-postgres-2
 ```
 
 Here,
@@ -287,16 +293,26 @@ That means, you can connect to both *primary* and *standby* sever. But these *ho
 
 Now connect to one of our *hot standby* servers Pod `hot-postgres-2` using pgAdmin installed in [quickstart](/docs/guides/postgres/quickstart/quickstart.md#before-you-begin) tutorial.
 
-Connection information:
+**Connection information:**
 
-- address: use Pod IP (`$ kubectl get pods hot-postgres-2 -n demo -o yaml | grep podIP`)
-- port: `5432`
-- database: `postgres`
-- username: `postgres`
+- Host name/address: you can use any of these
+  - Service: `hot-postgres-replicas.demo`
+  - Pod IP: (`$kubectl get pods hot-postgres-2 -n demo -o yaml | grep podIP`)
+- Port: `5432`
+- Maintenance database: `postgres`
+- Username: Run following command to get *username*,
 
-Run following command to get `postgres` superuser password
+  ```console
+  $ kubectl get secrets -n demo hot-postgres-auth -o jsonpath='{.data.\POSTGRES_USER}' | base64 -d
+  postgres
+  ```
 
-    $ kubectl get secrets -n demo hot-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
+- Password: Run the following command to get *password*,
+
+  ```console
+  $ kubectl get secrets -n demo hot-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
+  ZZgjjQMUdKJYy1W9
+  ```
 
 Try to create a database (write operation)
 
@@ -321,11 +337,8 @@ So, you can see here that you can connect to *hot standby* and it only accepts r
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/ha-postgres pg/hot-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo pg/ha-postgres pg/hot-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/ha-postgres pg/hot-postgres
-
-$ kubectl patch -n demo drmn/ha-postgres drmn/hot-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/ha-postgres drmn/hot-postgres
 
 $ kubectl delete ns demo
 ```

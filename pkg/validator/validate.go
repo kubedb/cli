@@ -6,7 +6,7 @@ import (
 	"github.com/ghodss/yaml"
 	tapi "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	"github.com/kubedb/cli/pkg/encoder"
-	"k8s.io/kubernetes/pkg/kubectl/genericclioptions/resource"
+	"k8s.io/cli-runtime/pkg/genericclioptions/resource"
 )
 
 func ValidateDeletion(info *resource.Info) error {

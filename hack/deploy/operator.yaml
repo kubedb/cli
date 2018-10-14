@@ -32,13 +32,20 @@ spec:
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
+        - --enable-mutating-webhook=${KUBEDB_ENABLE_MUTATING_WEBHOOK}
+        - --enable-validating-webhook=${KUBEDB_ENABLE_VALIDATING_WEBHOOK}
         - --enable-status-subresource=${KUBEDB_ENABLE_STATUS_SUBRESOURCE}
+        - --bypass-validating-webhook-xray=${KUBEDB_BYPASS_VALIDATING_WEBHOOK_XRAY}
+        - --use-kubeapiserver-fqdn-for-aks=${KUBEDB_USE_KUBEAPISERVER_FQDN_FOR_AKS}
         - --enable-analytics=${KUBEDB_ENABLE_ANALYTICS}
         env:
-        - name: OPERATOR_NAMESPACE
+        - name: MY_POD_NAME
           valueFrom:
             fieldRef:
-              apiVersion: v1
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
               fieldPath: metadata.namespace
         ports:
         - containerPort: 8443
@@ -63,6 +70,9 @@ spec:
         resources:
           requests:
             cpu: "100m"
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+        beta.kubernetes.io/arch: amd64
       volumes:
       - name: serving-cert
         secret:

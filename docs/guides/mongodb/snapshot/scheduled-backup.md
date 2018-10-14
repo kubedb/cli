@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of MongoDB
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: mg-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: mg-snapshot-mongodb
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 

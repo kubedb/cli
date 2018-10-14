@@ -6,13 +6,16 @@ metadata:
 spec:
   replicas: 3
   version: "1.5.4-v1"
-  doNotPause: true
-  resources:
-    requests:
-      memory: 64Mi
-      cpu: 250m
-    limits:
-      memory: 128Mi
-      cpu: 500m
-  imagePullSecrets:
-    - name: myregistrykey
+  podTemplate:
+    spec:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+  podTemplate:
+    spec:
+      imagePullSecrets:
+      - name: myregistrykey

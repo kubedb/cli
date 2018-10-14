@@ -1,26 +1,26 @@
 ---
 title: Setup Custom PostgresVersions
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-custom-versions-setup-postgres
     name: Overview
     parent: pg-custom-versions-postgres
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 ## Setting up Custom PostgresVersions
 
-PostgresVersions are KubeDB crds that define the docker images KubeDB will use when deploying a postgres database.
+PostgresVersions are KubeDB crds that define the docker images KubeDB will use when deploying a postgres database. For more details about PostgresVersion crd, please visit [here](/docs/concepts/catalog/postgres.md).
 
 ## Creating a Custom Postgres Database Image for KubeDB
 
 The best way to create a custom image is to build on top of the existing kubedb image.
 
 ```docker
-FROM kubedb/postgres:10.2
+FROM kubedb/postgres:10.2-v1
 
 ENV TIMESCALEDB_VERSION 0.9.1
 
@@ -54,10 +54,10 @@ RUN set -ex \
 RUN sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'(.*)'/\1 = 'timescaledb,\2'/;s/,'/'/" /scripts/primary/postgresql.conf
 ```
 
-From there we would define a PostgresVersion that contains this new image. Lets say we tagged it as `myco/postgres:timescale-0.9.1`
+From there, we would define a PostgresVersion that contains this new image. Lets say we tagged it as `myco/postgres:timescale-0.9.1`
 
 ```yaml
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: timescale-0.9.1
@@ -68,7 +68,7 @@ spec:
   exporter:
     image: "kubedb/operator:0.9.0-beta.1"
   tools:
-    image: "kubedb/postgres-tools:10.2"
+    image: "kubedb/postgres-tools:10.2-v1"
 ```
 
 Once we add this PostgresVersion we can use it in a new Postgres like:
@@ -81,7 +81,6 @@ metadata:
   namespace: demo
 spec:
   version: "timescale-0.9.1" # points to the name of our custom PostgresVersion
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:

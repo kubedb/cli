@@ -15,11 +15,16 @@ rules:
   - customresourcedefinitions
   verbs: ["*"]
 - apiGroups:
+  - apiregistration.k8s.io
+  resources:
+  - apiservices
+  verbs: ["get", "patch"]
+- apiGroups:
   - admissionregistration.k8s.io
   resources:
   - mutatingwebhookconfigurations
   - validatingwebhookconfigurations
-  verbs: ["delete", "list", "watch", "patch"]
+  verbs: ["delete", "get", "list", "watch", "patch"]
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -43,6 +48,11 @@ rules:
   - deployments
   - statefulsets
   verbs: ["create", "delete", "get", "patch", "update"]
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  verbs: ["get"]
 - apiGroups:
   - batch
   resources:
@@ -93,7 +103,7 @@ rules:
   - monitoring.coreos.com
   resources:
   - servicemonitors
-  verbs: ["create", "delete", "get", "list", "update"]
+  verbs: ["*"]
 - apiGroups:
   - ""
   resources:

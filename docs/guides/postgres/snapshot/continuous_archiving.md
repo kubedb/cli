@@ -1,12 +1,12 @@
 ---
 title: Continuous Archiving of PostgreSQL
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-continuous-archiving-snapshot
     name: WAL Archiving
     parent: pg-snapshot-postgres
     weight: 20
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -17,8 +17,7 @@ KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://gith
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -46,7 +45,7 @@ metadata:
   name: wal-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   replicas: 2
   storage:
     storageClassName: "standard"
@@ -68,12 +67,11 @@ Here,
   - `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
   - `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
 
-##### What is this Continuous Archiving
+**What is this Continuous Archiving**
 
-PostgreSQL maintains a write ahead log (WAL) in the pg_xlog/ subdirectory of the cluster's data directory.  The existence of the log makes it possible to use
-a third strategy for backing up databases and if recovery is needed, restore from the backed-up WAL files to bring the system to a current state.
+PostgreSQL maintains a write ahead log (WAL) in the `pg_xlog/` subdirectory of the cluster's data directory.  The existence of the log makes it possible to use a third strategy for backing up databases and if recovery is needed, restore from the backed-up WAL files to bring the system to a current state.
 
-##### Continuous Archiving setup
+**Continuous Archiving Setup**
 
 KubeDB PostgreSQL supports [wal-g](https://github.com/wal-g/wal-g) for this continuous archiving.
 
@@ -94,7 +92,7 @@ Here, these commands are used to push and pull WAL files respectively from cloud
 
 **wal-g** is used to handle this continuous archiving mechanism. For this we need storage Secret and need to provide storage backend information.
 
-#### Archiver Storage Secret
+**Archiver Storage Secret**
 
 Storage Secret should contain credentials that will be used to access storage destination.
 
@@ -131,7 +129,7 @@ metadata:
 type: Opaque
 ```
 
-#### Archiver Storage Backend
+**Archiver Storage Backend**
 
 **wal-g** supports only _S3_ cloud providers.
 
@@ -146,7 +144,7 @@ To configure this backend, following parameters are available:
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/wal-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/wal-postgres.yaml
 postgres "wal-postgres" created
 ```
 
@@ -169,12 +167,10 @@ From the above image, you can see that the archived data is stored in a folder `
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/wal-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo pg/wal-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/wal-postgres
 
-$ kubectl patch -n demo drmn/wal-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/wal-postgres
-
+$ kubectl delete -n demo secret/s3-secret
 $ kubectl delete ns demo
 ```
 

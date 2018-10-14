@@ -5,3 +5,4 @@ metadata:
   namespace: demo
 spec:
   version: "9.6-v1"
+  storageType: Ephemeral

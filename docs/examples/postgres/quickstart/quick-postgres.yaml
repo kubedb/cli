@@ -4,8 +4,8 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
-  doNotPause: true
+  version: "10.2-v1"
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -13,3 +13,4 @@ spec:
     resources:
       requests:
         storage: 50Mi
+  terminationPolicy: DoNotTerminate
