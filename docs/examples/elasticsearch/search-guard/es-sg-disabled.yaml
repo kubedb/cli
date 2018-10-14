@@ -1,13 +1,11 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  name: ssl-elasticsearch
+  name: es-sg-disabled
   namespace: demo
 spec:
   version: "6.3-v1"
-  replicas: 2
-  authPlugin: "SearchGuard"
-  enableSSL: true
+  authPlugin: "None"
   storage:
     storageClassName: "standard"
     accessModes:

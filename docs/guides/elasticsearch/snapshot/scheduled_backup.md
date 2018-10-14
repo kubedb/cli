@@ -36,9 +36,7 @@ demo    Active  5s
 
 ## Create Elasticsearch with BackupSchedule
 
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
-KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure,
-OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -67,7 +65,8 @@ metadata:
   name: scheduled-es
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -91,16 +90,16 @@ Here,
 > Note: Secret object must be in the same namespace as Elasticsearch, `scheduled-es`, in this case.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
-elasticsearch "scheduled-es" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
+elasticsearch.kubedb.com/scheduled-es created
 ```
 
 When Elasticsearch starts running successfully, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
 
 ```console
-$ kubedb get snap -n demo --selector="kubedb.com/kind=Elasticsearch,kubedb.com/name=scheduled-es"
-NAME                           DATABASE          STATUS      AGE
-scheduled-es-20180214-095019   es/scheduled-es   Succeeded   2m
+$ kubectl get snap -n demo --selector="kubedb.com/kind=Elasticsearch,kubedb.com/name=scheduled-es"
+NAME                           DATABASENAME   STATUS    AGE
+scheduled-es-20181005-120106   scheduled-es   Running   3s
 ```
 
 ## Update Elasticsearch to disable periodic backups
@@ -110,7 +109,7 @@ If you already have a running Elasticsearch that takes backup periodically, you 
 Edit your Elasticsearch object and remove BackupSchedule. This will stop taking future backups for this schedule.
 
 ```console
-$ kubedb edit es -n demo scheduled-es
+$ kubectl edit es -n demo scheduled-es
 spec:
 #  backupSchedule:
 #    cronExpression: '@every 6h'
@@ -126,7 +125,7 @@ If you already have a running Elasticsearch, you can enable periodic backups by 
 Edit the Elasticsearch `scheduled-es` to add following `spec.backupSchedule` section.
 
 ```yaml
-$ kubedb edit es scheduled-es -n demo
+$ kubectl edit es scheduled-es -n demo
   backupSchedule:
     cronExpression: "@every 6h"
     storageSecretName: gcs-secret
@@ -137,7 +136,7 @@ $ kubedb edit es scheduled-es -n demo
 Once the `spec.backupSchedule` is added, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
 
 ```console
-$ kubedb get snap -n demo --selector=kubedb.com/kind=Elasticsearch,kubedb.com/name=scheduled-es
+$ kubectl get snap -n demo --selector=kubedb.com/kind=Elasticsearch,kubedb.com/name=scheduled-es
 NAME                           DATABASE          STATUS      AGE
 scheduled-es-20180214-095019   es/scheduled-es   Succeeded   17m
 scheduled-es-20180214-100711   es/scheduled-es   Running     9s
@@ -148,11 +147,8 @@ scheduled-es-20180214-100711   es/scheduled-es   Running     9s
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/scheduled-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/scheduled-es -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/scheduled-es
-
-$ kubectl patch -n demo drmn/scheduled-es -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/scheduled-es
 
 $ kubectl delete ns demo
 ```

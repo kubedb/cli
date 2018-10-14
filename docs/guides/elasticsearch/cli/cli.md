@@ -24,14 +24,14 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f elasticsearch-demo.yaml
-elasticsearch "elasticsearch-demo" created
+elasticsearch.kubedb.com/elasticsearch-demo created
 ```
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
 ```console
 $ kubedb create -f elasticsearch-demo.yaml --namespace=kube-system
-elasticsearch "elasticsearch-demo" created
+elasticsearch.kubedb.com/elasticsearch-demo created
 ```
 
 `kubedb create` command also considers `stdin` as input.
@@ -48,11 +48,8 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get elasticsearch
-NAME                 STATUS    AGE
-elasticsearch-demo   Running   5h
-elasticsearch-dev    Running   4h
-elasticsearch-prod   Running   30m
-elasticsearch-qa     Running   2h
+NAME                 VERSION   STATUS    AGE
+elasticsearch-demo   5.6-v1    Running   1m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -62,22 +59,30 @@ $ kubedb get elasticsearch elasticsearch-demo --output=yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Elasticsearch
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-03-02T05:46:59Z
+  creationTimestamp: 2018-10-08T14:22:19Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 3
   name: elasticsearch-demo
   namespace: default
-  resourceVersion: "23697"
+  resourceVersion: "51660"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/elasticsearches/elasticsearch-demo
-  uid: 1fe8f422-1ddd-11e8-b65f-0800272b52b5
+  uid: 90a54c9e-cb05-11e8-8d51-9eed48c5e947
 spec:
+  authPlugin: SearchGuard
   certificateSecret:
     secretName: elasticsearch-demo-cert
   databaseSecret:
     secretName: elasticsearch-demo-auth
-  doNotPause: true
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 1
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -85,9 +90,13 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: "5.6"
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 5.6-v1
 status:
-  creationTime: 2018-03-02T05:46:59Z
+  observedGeneration: 3$4212299729528774793
   phase: Running
 ```
 
@@ -101,12 +110,36 @@ To list all KubeDB objects, use following command:
 
 ```console
 $ kubedb get all -o wide
-NAME                     VERSION     STATUS  AGE
-es/elasticsearch-demo    5.6         Running 3h
-es/elasticsearch-dev     5.6         Running 3h
-es/elasticsearch-prod    5.6         Running 3h
-es/elasticsearch-qa      5.6         Running 3h
+NAME                       READY     STATUS    RESTARTS   AGE       IP              NODE              NOMINATED NODE
+pod/elasticsearch-demo-0   1/1       Running   0          2m        192.168.1.105   4gb-pool-crtbqq   <none>
 
+NAME                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE       SELECTOR
+service/elasticsearch-demo          ClusterIP   10.98.224.23    <none>        9200/TCP   2m        kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo,node.role.client=set
+service/elasticsearch-demo-master   ClusterIP   10.100.87.240   <none>        9300/TCP   2m        kubedb.com/kind=Elasticsearch,kubedb.com/name=elasticsearch-demo,node.role.master=set
+service/kubedb                      ClusterIP   None            <none>        <none>     2m        <none>
+service/kubernetes                  ClusterIP   10.96.0.1       <none>        443/TCP    9h        <none>
+
+NAME                                  DESIRED   CURRENT   AGE       CONTAINERS      IMAGES
+statefulset.apps/elasticsearch-demo   1         1         2m        elasticsearch   kubedbci/elasticsearch:5.6-v1
+
+NAME                                               VERSION   DB_IMAGE                          DEPRECATED   AGE
+elasticsearchversion.catalog.kubedb.com/5.6        5.6       kubedbci/elasticsearch:5.6        true         5h
+elasticsearchversion.catalog.kubedb.com/5.6-v1     5.6       kubedbci/elasticsearch:5.6-v1                  5h
+elasticsearchversion.catalog.kubedb.com/5.6.4      5.6.4     kubedbci/elasticsearch:5.6.4      true         5h
+elasticsearchversion.catalog.kubedb.com/5.6.4-v1   5.6.4     kubedbci/elasticsearch:5.6.4-v1                5h
+elasticsearchversion.catalog.kubedb.com/6.2        6.2       kubedbci/elasticsearch:6.2        true         5h
+elasticsearchversion.catalog.kubedb.com/6.2-v1     6.2       kubedbci/elasticsearch:6.2-v1                  5h
+elasticsearchversion.catalog.kubedb.com/6.2.4      6.2.4     kubedbci/elasticsearch:6.2.4      true         5h
+elasticsearchversion.catalog.kubedb.com/6.2.4-v1   6.2.4     kubedbci/elasticsearch:6.2.4-v1                5h
+elasticsearchversion.catalog.kubedb.com/6.3        6.3       kubedbci/elasticsearch:6.3        true         5h
+elasticsearchversion.catalog.kubedb.com/6.3-v1     6.3       kubedbci/elasticsearch:6.3-v1                  5h
+elasticsearchversion.catalog.kubedb.com/6.3.0      6.3.0     kubedbci/elasticsearch:6.3.0      true         5h
+elasticsearchversion.catalog.kubedb.com/6.3.0-v1   6.3.0     kubedbci/elasticsearch:6.3.0-v1                5h
+elasticsearchversion.catalog.kubedb.com/6.4        6.4       kubedbci/elasticsearch:6.4                     5h
+elasticsearchversion.catalog.kubedb.com/6.4.0      6.4.0     kubedbci/elasticsearch:6.4.0                   5h
+
+NAME                                          VERSION   STATUS    AGE
+elasticsearch.kubedb.com/elasticsearch-demo   5.6-v1    Running   2m
 NAME                                     DATABASE                     BUCKET              STATUS      AGE
 snap/elasticsearch-demo-20170605-073557  es/elasticsearch-demo        gs:bucket-name      Succeeded   9m
 snap/snapshot-20171212-114700            es/elasticsearch-demo        gs:bucket-name      Succeeded   1h
@@ -142,13 +175,27 @@ To print only object name, run the following command:
 
 ```console
 $ kubedb get all -o name
-elasticsearch/elasticsearch-demo
-elasticsearch/elasticsearch-dev
-elasticsearch/elasticsearch-prod
-elasticsearch/elasticsearch-qa
-snapshot/elasticsearch-demo-20170605-073557
-snapshot/snapshot-20170505-114700
-snapshot/snapshot-xyz
+pod/elasticsearch-demo-0
+service/elasticsearch-demo
+service/elasticsearch-demo-master
+service/kubedb
+service/kubernetes
+statefulset.apps/elasticsearch-demo
+elasticsearchversion.catalog.kubedb.com/5.6
+elasticsearchversion.catalog.kubedb.com/5.6-v1
+elasticsearchversion.catalog.kubedb.com/5.6.4
+elasticsearchversion.catalog.kubedb.com/5.6.4-v1
+elasticsearchversion.catalog.kubedb.com/6.2
+elasticsearchversion.catalog.kubedb.com/6.2-v1
+elasticsearchversion.catalog.kubedb.com/6.2.4
+elasticsearchversion.catalog.kubedb.com/6.2.4-v1
+elasticsearchversion.catalog.kubedb.com/6.3
+elasticsearchversion.catalog.kubedb.com/6.3-v1
+elasticsearchversion.catalog.kubedb.com/6.3.0
+elasticsearchversion.catalog.kubedb.com/6.3.0-v1
+elasticsearchversion.catalog.kubedb.com/6.4
+elasticsearchversion.catalog.kubedb.com/6.4.0
+elasticsearch.kubedb.com/elasticsearch-demo
 ```
 
 To learn about various options of `get` command, please visit [here](/docs/reference/kubedb_get.md).
@@ -159,69 +206,106 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ```console
 $ kubedb describe es elasticsearch-demo
-Name:			elasticsearch-demo
-Namespace:		default
-CreationTimestamp:	Fri, 02 Mar 2018 11:46:59 +0600
-Status:			Running
+Name:               elasticsearch-demo
+Namespace:          default
+CreationTimestamp:  Mon, 08 Oct 2018 20:22:19 +0600
+Labels:             <none>
+Annotations:        <none>
+Status:             Running
+Replicas:           1  total
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
-StatefulSet:
-  Name:			elasticsearch-demo
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Fri, 02 Mar 2018 11:47:00 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+StatefulSet:          
+  Name:               elasticsearch-demo
+  CreationTimestamp:  Mon, 08 Oct 2018 20:22:22 +0600
+  Labels:               kubedb.com/kind=Elasticsearch
+                        kubedb.com/name=elasticsearch-demo
+                        node.role.client=set
+                        node.role.data=set
+                        node.role.master=set
+  Annotations:        <none>
+  Replicas:           824642046536 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:
-  Name:		elasticsearch-demo
-  Type:		ClusterIP
-  IP:		10.110.91.198
-  Port:		http	9200/TCP
+Service:        
+  Name:         elasticsearch-demo
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=elasticsearch-demo
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.98.224.23
+  Port:         http  9200/TCP
+  TargetPort:   http/TCP
+  Endpoints:    192.168.1.105:9200
 
-Service:
-  Name:		elasticsearch-demo-master
-  Type:		ClusterIP
-  IP:		10.100.126.132
-  Port:		transport	9300/TCP
-
-Database Secret:
-  Name:	elasticsearch-demo-auth
-  Type:	Opaque
-  Data
-  ====
-  sg_internal_users.yml:	156 bytes
-  sg_roles.yml:			312 bytes
-  sg_roles_mapping.yml:		73 bytes
-  ADMIN_PASSWORD:		8 bytes
-  READALL_PASSWORD:		8 bytes
-  sg_action_groups.yml:		430 bytes
-  sg_config.yml:		240 bytes
+Service:        
+  Name:         elasticsearch-demo-master
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=elasticsearch-demo
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.100.87.240
+  Port:         transport  9300/TCP
+  TargetPort:   transport/TCP
+  Endpoints:    192.168.1.105:9300
 
 Certificate Secret:
-  Name:	elasticsearch-demo-cert
-  Type:	Opaque
-  Data
-  ====
-  root.jks:	864 bytes
-  sgadmin.jks:	3010 bytes
-  key_pass:	6 bytes
-  node.jks:	3014 bytes
+  Name:         elasticsearch-demo-cert
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=elasticsearch-demo
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  key_pass:     6 bytes
+  node.jks:     3015 bytes
+  root.jks:     864 bytes
+  sgadmin.jks:  3011 bytes
+
+Database Secret:
+  Name:         elasticsearch-demo-auth
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=elasticsearch-demo
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  sg_roles.yml:           312 bytes
+  sg_roles_mapping.yml:   73 bytes
+  ADMIN_PASSWORD:         8 bytes
+  READALL_USERNAME:       7 bytes
+  sg_action_groups.yml:   430 bytes
+  sg_internal_users.yml:  156 bytes
+  ADMIN_USERNAME:         5 bytes
+  READALL_PASSWORD:       8 bytes
+  sg_config.yml:          242 bytes
 
 Topology:
-  Type                 Pod                    StartTime                       Phase
-  ----                 ---                    ---------                       -----
-  client|data|master   elasticsearch-demo-0   2018-03-02 11:47:00 +0600 +06   Running
+  Type                Pod                   StartTime                      Phase
+  ----                ---                   ---------                      -----
+  data|master|client  elasticsearch-demo-0  2018-10-08 20:22:23 +0600 +06  Running
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                     Type       Reason       Message
-  ---------   --------   -----     ----                     --------   ------       -------
-  3m          3m         1         Elasticsearch operator   Normal     Successful   Successfully patched Elasticsearch
-  3m          3m         1         Elasticsearch operator   Normal     Successful   Successfully patched StatefulSet
-  4m          4m         1         Elasticsearch operator   Normal     Successful   Successfully created StatefulSet
+  Type    Reason      Age   From                    Message
+  ----    ------      ----  ----                    -------
+  Normal  Successful  6m    Elasticsearch operator  Successfully created Service
+  Normal  Successful  6m    Elasticsearch operator  Successfully created Service
+  Normal  Successful  6m    Elasticsearch operator  Successfully created StatefulSet
+  Normal  Successful  5m    Elasticsearch operator  Successfully created Elasticsearch
+  Normal  Successful  5m    Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful  5m    Elasticsearch operator  Successfully patched Elasticsearch
+  Normal  Successful  5m    Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful  4m    Elasticsearch operator  Successfully patched Elasticsearch
 ```
 
 `kubedb describe` command provides following basic information about a database.
@@ -297,12 +381,13 @@ If StatefulSets or Deployments exists for a database, following fields can't be 
 
 Elasticsearch:
 
-- spec.version
-- spec.storage
-- spec.nodeSelector
 - spec.init
+- spec.storageType
+- spec.storage
+- spec.podTemplate.spec.nodeSelector
+- spec.podTemplate.spec.env
 
-For DormantDatabase, _spec.origin_ can't be edited using `kubedb edit`
+For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
 To learn about various options of `edit` command, please visit [here](/docs/reference/kubedb_edit.md).
 
@@ -311,15 +396,15 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 `kubedb delete` command will delete an object in `default` namespace by default unless namespace is provided. The following command will delete a Elasticsearch `elasticsearch-dev` in default namespace
 
 ```console
-$ kubedb delete elasticsearch elasticsearch-dev
-elasticsearch "elasticsearch-dev" deleted
+$ kubedb delete elasticsearch elasticsearch-demo
+elasticsearch.kubedb.com "elasticsearch-demo" deleted
 ```
 
 You can also use YAML files to delete objects. The following command will delete a elasticsearch using the type and name specified in `elasticsearch.yaml`.
 
 ```console
-$ kubedb delete -f elasticsearch.yaml
-elasticsearch "elasticsearch-dev" deleted
+$ kubedb delete -f elasticsearch-demo.yaml
+elasticsearch.kubedb.com "elasticsearch-demo" deleted
 ```
 
 `kubedb delete` command also takes input from `stdin`.

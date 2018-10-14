@@ -17,7 +17,7 @@ KubeDB supports providing custom configuration for an Elasticsearch cluster. Thi
 
 ## Overview
 
-Elasticsearch is configured using `elasticsearch.yml` file. In KubeDB this file is located in `/elasticsearch/config` directory of elasticsearch pods. To know more about configuring the Elasticsearch cluster see [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html).
+Elasticsearch is configured using `elasticsearch.yml` file. In KubeDB, this file is located in `/elasticsearch/config` directory of elasticsearch pods. To know more about configuring the Elasticsearch cluster see [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html).
 
 KubeDB allows users to provide 4 different configuration files. These are,
 
@@ -54,9 +54,9 @@ When users create an Elasticsearch cluster using KubeDB without specifying `spec
 
 ## How to Provide Configuration Files
 
-At first, you have to create configuration files with named specified earlier with your desired configuration. Then you have to put these files into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Elasticsearch crd. KubeDB will mount this volume into `/elasticsearch/custom-config` directory of the elasticsearch pod. Configurations from these files will be merged to `elasticsearch.yml` file according to cluster mode described earlier. Finally, Elasticsearch server will use this configuration file.
+At first, you have to create configuration files with name specified earlier with your desired configuration. Then you have to put these files into a [volume](https://kubernetes.io/docs/concepts/storage/volumes/). You have to specify this volume in `spec.configSource` section while creating Elasticsearch crd. KubeDB will mount this volume into `/elasticsearch/custom-config` directory of the elasticsearch pod. Configurations from these files will be merged to `elasticsearch.yml` file according to cluster mode described earlier. Finally, Elasticsearch server will use this configuration file.
 
 ## Next Steps
 
-- [Learn how to use custom configuration specifying topology](/docs/guides/elasticsearch/custom-config/with-topology.md).
-- [Learn how to use custom configuration without specifying topology](/docs/guides/elasticsearch/custom-config/without-topology.md).
+- Learn how to use custom configuration specifying topology from [here](/docs/guides/elasticsearch/custom-config/with-topology.md).
+- Learn how to use custom configuration without specifying topology from [here](/docs/guides/elasticsearch/custom-config/without-topology.md).

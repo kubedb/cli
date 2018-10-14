@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using Kibana with KubeDB Elasticsearch
 
-This tutorial will show you how to use Kibana in an Elasticsearch cluster in KubeDB.
+This tutorial will show you how to connect Kibana with an Elasticsearch cluster deployed with KubeDB.
 
 If you don't know how to use Kibana, please visit [here](https://www.elastic.co/guide/en/kibana/current/introduction.html).
 
@@ -46,7 +46,7 @@ Then, we will deploy Kibana with Search Guard plugin installed. We will configur
 
 Finally, we will perform some operation from Kibana UI to ensure that Kibana is working well with our Elasticsearch cluster.
 
-For this tutorial, we will use Elasticsearch 6.3.0 with Search Guard plugin 23.0 and Kibana 6.3.0 with Search Guard plugin 14 installed.
+For this tutorial, we will use Elasticsearch 6.3.0 with Search Guard plugin 23.1 and Kibana 6.3.0 with Search Guard plugin 14 installed.
 
 ## Deploy Elasticsearch Cluster
 
@@ -187,16 +187,18 @@ searchguard:
 Now, create a secret with these Search Guard configuration files.
 
 ```console
- $ kubectl create secret generic -n demo  es-auth \
-                        --from-file=./sg_action_groups.yml \
-                        --from-file=./sg_config.yml \
-                        --from-file=./sg_internal_users.yml \
-                        --from-file=./sg_roles_mapping.yml \
-                        --from-file=./sg_roles.yml 
+ $ kubectl create secret generic -n demo es-auth \
+	--from-literal=ADMIN_USERNAME=admin \
+	--from-literal=ADMIN_PASSWORD=admin@secret \
+	--from-file=./sg_action_groups.yml \
+	--from-file=./sg_config.yml \
+	--from-file=./sg_internal_users.yml \
+	--from-file=./sg_roles_mapping.yml \
+	--from-file=./sg_roles.yml
 secret/es-auth created
 ```
 
-Verify the secret has desired configuration files,
+Verify that the secret has desired configuration files,
 
 ```yaml
 $ kubectl get secret -n demo es-auth -o yaml
@@ -268,8 +270,7 @@ metadata:
   name: es-kibana-demo
   namespace: demo
 spec:
-  version: "6.3.0"
-  doNotPause: false
+  version: "6.3.0-v1"
   replicas: 1
   databaseSecret:
     secretName: es-auth
@@ -290,25 +291,24 @@ Now, wait for few minutes. KubeDB will create necessary secrets, services, and s
 Check resources created in demo namespace by KubeDB,
 
 ```console
-$ kubectl get all -n demo
+$ kubectl get all -n demo -l=kubedb.com/name=es-kibana-demo
 NAME                   READY     STATUS    RESTARTS   AGE
-pod/es-kibana-demo-0   1/1       Running   0          2m
+pod/es-kibana-demo-0   1/1       Running   0          39s
 
-NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-service/es-kibana-demo          ClusterIP   10.102.246.114   <none>        9200/TCP   2m
-service/es-kibana-demo-master   ClusterIP   10.108.18.157    <none>        9300/TCP   2m
-service/kubedb                  ClusterIP   None             <none>        <none>     2m
+NAME                            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/es-kibana-demo          ClusterIP   10.104.1.206    <none>        9200/TCP   44s
+service/es-kibana-demo-master   ClusterIP   10.111.58.230   <none>        9300/TCP   44s
 
 NAME                              DESIRED   CURRENT   AGE
-statefulset.apps/es-kibana-demo   1         1         2m
+statefulset.apps/es-kibana-demo   1         1         42s
 ```
 
 Once everything is created, Elasticsearch will go to Running state. Check that Elasticsearch is in running state.
 
 ```console
 $ kubectl get es -n demo es-kibana-demo
-NAME             VERSION   STATUS    AGE
-es-kibana-demo   6.3.0     Running   5m
+NAME             VERSION    STATUS    AGE
+es-kibana-demo   6.3.0-v1   Running   1m
 ```
 
 Now, check elasticsearch log to see if the cluster is ready to accept requests,
@@ -319,7 +319,7 @@ $ kubectl logs -n demo es-kibana-demo-0 -f
 Starting runit...
 ...
 Elasticsearch Version: 6.3.0
-Search Guard Version: 6.3.0-23.0
+Search Guard Version: 6.3.0-23.1
 Connected as CN=sgadmin,O=Elasticsearch Operator
 Contacting elasticsearch cluster 'elasticsearch' and wait for YELLOW clusterstate ...
 Clustername: es-kibana-demo
@@ -510,17 +510,11 @@ Once we have created an index_pattern, we can use the Discovery UI.
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/es-kibana-demo -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/es-kibana-demo -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 
 $ kubectl delete -n demo es/es-kibana-demo
 
-$ kubectl patch -n demo drmn/es-kibana-demo -p '{"spec":{"wipeOut":true}}' --type="merge"
-
-$ kubectl delete -n demo drmn/es-kibana-demo
-
 $ kubectl delete  -n demo configmap/es-custom-config
-
-$ kubectl delete -n demo secret/es-auth
 
 $ kubectl delete -n demo configmap/kibana-config
 

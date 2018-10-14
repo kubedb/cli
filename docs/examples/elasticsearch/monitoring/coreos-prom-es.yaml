@@ -4,7 +4,7 @@ metadata:
   name: coreos-prom-es
   namespace: demo
 spec:
-  version: "5.6-v1"
+  version: "6.3-v1"
   storage:
     storageClassName: "standard"
     accessModes:

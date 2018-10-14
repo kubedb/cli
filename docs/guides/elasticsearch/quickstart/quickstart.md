@@ -13,10 +13,10 @@ section_menu_id: guides
 
 # Elasticsearch QuickStart
 
-This tutorial will show you how to use KubeDB to run a Elasticsearch database.
+This tutorial will show you how to use KubeDB to run an Elasticsearch database.
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="600" height="660">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png">
 </p>
 
 ## Before You Begin
@@ -38,9 +38,49 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create a Elasticsearch database
+>We have designed this tutorial to demonstrate a production setup of KubeDB managed Elasticsearch. If you just want to try out KubeDB, you can bypass some of the safety features following the tips [here](/docs/guides/elasticsearch/quickstart/quickstart.md#tips-for-testing).
 
-KubeDB implements a Elasticsearch CRD to define the specification of a Elasticsearch database.
+## Find Available StorageClass
+
+We will have to provide `StorageClass` in Elasticsearch crd specification. Check available `StorageClass` in your cluster using the following command,
+
+```console
+$ kubectl get storageclass
+NAME       PROVISIONER        AGE
+standard   external/pharmer   1m
+
+```
+
+Here, we have `standard` StorageClass in our cluster.
+
+## Find Available ElasticsearchVersion
+
+When you have installed KubeDB, it has created `ElasticsearchVersion` crd for all supported Elasticsearch versions. Let's check available ElasticsearchVersions by,
+
+```console
+$ kubectl get elasticsearchversions
+NAME       VERSION   DB_IMAGE                        DEPRECATED   AGE
+5.6        5.6       kubedb/elasticsearch:5.6        true         21m
+5.6-v1     5.6       kubedb/elasticsearch:5.6-v1                  21m
+5.6.4      5.6.4     kubedb/elasticsearch:5.6.4      true         21m
+5.6.4-v1   5.6.4     kubedb/elasticsearch:5.6.4-v1                21m
+6.2        6.2       kubedb/elasticsearch:6.2        true         21m
+6.2-v1     6.2       kubedb/elasticsearch:6.2-v1                  21m
+6.2.4      6.2.4     kubedb/elasticsearch:6.2.4      true         21m
+6.2.4-v1   6.2.4     kubedb/elasticsearch:6.2.4-v1                21m
+6.3        6.3       kubedb/elasticsearch:6.3        true         21m
+6.3-v1     6.3       kubedb/elasticsearch:6.3-v1                  21m
+6.3.0      6.3.0     kubedb/elasticsearch:6.3.0      true         21m
+6.3.0-v1   6.3.0     kubedb/elasticsearch:6.3.0-v1                20m
+```
+
+Notice the `DEPRECATED` column. Here, `true` means that this ElasticsearchVersion is deprecated for current KubeDB version. KubeDB will not work for deprecated ElasticsearchVersion.
+
+In this tutorial, we will use `6.3-v1` ElasticsearchVersion crd to create Elasticsearch database. To know more about what is `ElasticsearchVersion` crd and why there is `6.3` and `6.3-v1` variation, please visit [here](/docs/concepts/catalog/elasticsearch.md). You can also see supported ElasticsearchVersion in KubeDB 0.9.0-beta.0 from [here](/docs/guides/elasticsearch/README.md#supported-elasticsearchversion-crd).
+
+## Create an Elasticsearch database
+
+KubeDB implements an Elasticsearch CRD to define the specification of an Elasticsearch database.
 
 Below is the Elasticsearch object created in this tutorial.
 
@@ -51,8 +91,8 @@ metadata:
   name: quick-elasticsearch
   namespace: demo
 spec:
-  version: "5.6"
-  doNotPause: true
+  version: "6.3-v1"
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -60,111 +100,148 @@ spec:
     resources:
       requests:
         storage: 50Mi
+  terminationPolicy: DoNotTerminate
 ```
 
 Here,
 
-- `spec.version` is the version of Elasticsearch database. In this tutorial, a Elasticsearch 5.6 database is created.
-- `spec.doNotPause` prevents user from deleting this object if admission webhook is enabled.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet
- created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
- If no storage spec is given, an `emptyDir` is used.
+- `spec.version` is name of the ElasticsearchVersion crd. In this tutorial, an Elasticsearch 6.3 database is created.
+- `spec.storageType` specifies the type of storage that will be used for Elasticsearch database. It can be `Durable` or `Ephemeral`. The default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Elasticsearch database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
+- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If you don't specify `spec.storageType: Ephemeral`, then this field is required.
+- `spec.terminationPolicy` specifies what KubeDB should do when user try to delete Elasticsearch crd. Termination policy `DoNotTerminate` prevents a user from deleting this object if admission webhook is enabled.
 
-Create example above with following command
+>Note: `spec.storage` section is used to create PVC for database pod. It will create PVC with storage size specified in`storage.resources.requests` field. Don't specify `limits` here. PVC does not get resized automatically.
+
+Let's create Elasticsearch crd that is shown above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
-elasticsearch "quick-elasticsearch" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
+elasticsearch.kubedb.com/quick-elasticsearch created
 ```
 
 KubeDB operator watches for Elasticsearch objects using Kubernetes api. When an Elasticsearch object is created, KubeDB operator creates a new StatefulSet and two ClusterIP Service with the matching name.
+
 KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
 
 ```console
-$ kubedb get es -n demo quick-elasticsearch -o wide
+$ kubectl get es -n demo quick-elasticsearch
 NAME                  VERSION   STATUS    AGE
-quick-elasticsearch   5.6       Running   33m
+quick-elasticsearch   6.3-v1    Running   3m
 ```
 
-Lets describe Elasticsearch object `quick-elasticsearch`
+Let's describe Elasticsearch object `quick-elasticsearch`
 
 ```console
 $ kubedb describe es -n demo quick-elasticsearch
 Name:               quick-elasticsearch
 Namespace:          demo
-CreationTimestamp:  Mon, 19 Feb 2018 16:10:45 +0600
+CreationTimestamp:  Fri, 28 Sep 2018 11:33:29 +0600
+Labels:             <none>
+Annotations:        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"kubedb.com/v1alpha1","kind":"Elasticsearch","metadata":{"annotations":{},"name":"quick-elasticsearch","namespace":"demo"},"spec":{"doNot...
 Status:             Running
+Replicas:           1  total
+  StorageType:      Durable
 Volume:
-  StorageClass: standard
-  Capacity:     50Mi
-  Access Modes: RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:                 quick-elasticsearch
-  Replicas:             1 current / 1 desired
-  CreationTimestamp:    Mon, 19 Feb 2018 16:10:55 +0600
-  Pods Status:          1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               quick-elasticsearch
+  CreationTimestamp:  Fri, 28 Sep 2018 11:33:36 +0600
+  Labels:               kubedb.com/kind=Elasticsearch
+                        kubedb.com/name=quick-elasticsearch
+                        node.role.client=set
+                        node.role.data=set
+                        node.role.master=set
+  Annotations:        <none>
+  Replicas:           824640716856 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		quick-elasticsearch
-  Type:		ClusterIP
-  IP:		10.11.255.214
-  Port:		http	9200/TCP
+  Name:         quick-elasticsearch
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=quick-elasticsearch
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.100.103.159
+  Port:         http  9200/TCP
+  TargetPort:   http/TCP
+  Endpoints:    192.168.1.5:9200
 
 Service:
-  Name:		quick-elasticsearch-master
-  Type:		ClusterIP
-  IP:		10.11.255.170
-  Port:		transport	9300/TCP
+  Name:         quick-elasticsearch-master
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=quick-elasticsearch
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.99.42.193
+  Port:         transport  9300/TCP
+  TargetPort:   transport/TCP
+  Endpoints:    192.168.1.5:9300
 
 Certificate Secret:
-  Name:	quick-elasticsearch-cert
-  Type:	Opaque
-  Data
-  ====
+  Name:         quick-elasticsearch-cert
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=quick-elasticsearch
+  Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
   key_pass:     6 bytes
-  node.jks:     3013 bytes
+  node.jks:     3014 bytes
   root.jks:     864 bytes
   sgadmin.jks:  3009 bytes
 
 Database Secret:
-  Name:	quick-elasticsearch-auth
-  Type:	Opaque
-  Data
-  ====
-  ADMIN_PASSWORD:           8 bytes
-  READALL_PASSWORD:         8 bytes
-  sg_action_groups.yml:     430 bytes
-  sg_config.yml:            240 bytes
-  sg_internal_users.yml:    156 bytes
-  sg_roles.yml:             312 bytes
-  sg_roles_mapping.yml:     73 bytes
+  Name:         quick-elasticsearch-auth
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=quick-elasticsearch
+  Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+  READALL_PASSWORD:       8 bytes
+  READALL_USERNAME:       7 bytes
+  sg_action_groups.yml:   430 bytes
+  sg_config.yml:          242 bytes
+  sg_internal_users.yml:  156 bytes
+  sg_roles_mapping.yml:   73 bytes
+  ADMIN_PASSWORD:         8 bytes
+  ADMIN_USERNAME:         5 bytes
+  sg_roles.yml:           312 bytes
 
 Topology:
-  Type                 Pod                     StartTime                       Phase
-  ----                 ---                     ---------                       -----
-  master|client|data   quick-elasticsearch-0   2018-02-19 16:11:02 +0600 +06   Running
+  Type                Pod                    StartTime                      Phase
+  ----                ---                    ---------                      -----
+  master|client|data  quick-elasticsearch-0  2018-09-28 11:33:42 +0600 +06  Running
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                     Type       Reason       Message
-  ---------   --------   -----     ----                     --------   ------       -------
-  10s         10s        1         Elasticsearch operator   Normal     Successful   Successfully patched Elasticsearch
-  40s         40s        1         Elasticsearch operator   Normal     Successful   Successfully patched StatefulSet
-  48s         48s        1         Elasticsearch operator   Normal     Successful   Successfully created Elasticsearch
-  1m          1m         1         Elasticsearch operator   Normal     Successful   Successfully created StatefulSet
-  1m          1m         1         Elasticsearch operator   Normal     Successful   Successfully created Service
-  1m          1m         1         Elasticsearch operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From                    Message
+  ----    ------      ----  ----                    -------
+  Normal  Successful  3m    Elasticsearch operator  Successfully created Service
+  Normal  Successful  3m    Elasticsearch operator  Successfully created Service
+  Normal  Successful  2m    Elasticsearch operator  Successfully created StatefulSet
+  Normal  Successful  2m    Elasticsearch operator  Successfully created Elasticsearch
+  Normal  Successful  2m    Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful  1m    Elasticsearch operator  Successfully patched Elasticsearch
+  Normal  Successful  1m    Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful  1m    Elasticsearch operator  Successfully patched Elasticsearch
 ```
 
 ```console
 $ kubectl get service -n demo --selector=kubedb.com/kind=Elasticsearch,kubedb.com/name=quick-elasticsearch
 NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-quick-elasticsearch          ClusterIP   10.97.171.52     <none>        9200/TCP   22m
-quick-elasticsearch-master   ClusterIP   10.105.209.152   <none>        9300/TCP   22m
+quick-elasticsearch          ClusterIP   10.100.103.159   <none>        9200/TCP   5m
+quick-elasticsearch-master   ClusterIP   10.99.42.193     <none>        9300/TCP   5m
 ```
 
 Two services for each Elasticsearch object.
@@ -172,27 +249,29 @@ Two services for each Elasticsearch object.
 - Service *`quick-elasticsearch`* targets all Pods which are acting as *client* node
 - Service *`quick-elasticsearch-master`* targets all Pods which are acting as *master* node
 
-KubeDB supports Elasticsearch clustering where pods can be any of these three role: *master*, *data* or *client*.
+KubeDB supports Elasticsearch clustering where pods can be any of these three roles: *master*, *data* or *client*.
 
 If you see `Topology` section in `kubedb describe` result, you will know role(s) of each Pod.
 
 ```console
 Topology:
-  Type                 Pod                     StartTime                       Phase
-  ----                 ---                     ---------                       -----
-  data|master|client   quick-elasticsearch-0   2018-02-12 11:56:47 +0600 +06   Running
+  Type                Pod                    StartTime                      Phase
+  ----                ---                    ---------                      -----
+  master|client|data  quick-elasticsearch-0  2018-09-28 11:33:42 +0600 +06  Running
 ```
 
-Here, we create a Elasticsearch database with single node. This single node will act as *master*, *data* and *client*.
+Here, we have created an Elasticsearch database with a single node. This single node is acting as *master*, *data* and *client*.
 
-To learn how to configure an Elasticsearch cluster, click [here](/docs/guides/elasticsearch/clustering/topology.md).
+To learn about how to configure an Elasticsearch cluster, please visit [here](/docs/guides/elasticsearch/clustering/topology.md).
 
 Please note that KubeDB operator has created two new Secrets for Elasticsearch object.
 
 1. `quick-elasticsearch-auth` for storing the passwords and [search-guard](https://github.com/floragunncom/search-guard) configuration.
 2. `quick-elasticsearch-cert` for storing certificates used for SSL connection.
 
-##### Secret for authentication & configuration
+#### Secret for authentication & configuration
+
+Auth secret is used to authenticate user for Elasticsearch database and configure Search Guard plugin.
 
 ```console
 $ kubectl get secret -n demo quick-elasticsearch-auth -o yaml
@@ -201,24 +280,24 @@ $ kubectl get secret -n demo quick-elasticsearch-auth -o yaml
 ```yaml
 apiVersion: v1
 data:
-  ADMIN_PASSWORD: MmJpaGQ1NGc=
-  READALL_PASSWORD: YTJkcDZjamc=
-  sg_action_groups.yml: ClVOTElNSVRFRDoKICAtICIqIgoKUk...AiaW5kaWNlczphZG1pbi9nZXQiCg==
-  sg_config.yml: CnNlYXJjaGd1YXJkOgogIGR5bmFtaW...AgICAgICAgICB0eXBlOiBpbnRlcm4K
-  sg_internal_users.yml: CmFkbWluOgogIGhhc2g6ICQyYSQxMC...JEdkxVSzZrUE1xT1hJVTZYbnN0OWEK
-  sg_roles.yml: CnNnX2FsbF9hY2Nlc3M6CiAgY2x1c3...5ESUNFU19LVUJFREJfU05BUFNIT1QK
-  sg_roles_mapping.yml: CnNnX2FsbF9hY2Nlc3M6CiAgdXNlcn...VzZXJzOgogICAgLSByZWFkYWxsCg==
+  ADMIN_PASSWORD: Y2JjaXdjZmg=
+  ADMIN_USERNAME: YWRtaW4=
+  READALL_PASSWORD: YW02b21zY2g=
+  READALL_USERNAME: cmVhZGFsbA==
+  sg_action_groups.yml: ClVOTElNSVRFRDoKICAtICIqIgoKUkVBRDoKICAtICJpbmRpY2VzOmRhdGEvcmVhZCoiCiAgLSAiaW5kaWNlczphZG1pbi9tYXBwaW5ncy9maWVsZHMvZ2V0KiIKCkNMVVNURVJfQ09NUE9TSVRFX09QU19STzoKICAtICJpbmRpY2VzOmRhdGEvcmVhZC9tZ2V0IgogIC0gImluZGljZXM6ZGF0YS9yZWFkL21zZWFyY2giCiAgLSAiaW5kaWNlczpkYXRhL3JlYWQvbXR2IgogIC0gImluZGljZXM6ZGF0YS9yZWFkL2Nvb3JkaW5hdGUtbXNlYXJjaCoiCiAgLSAiaW5kaWNlczphZG1pbi9hbGlhc2VzL2V4aXN0cyoiCiAgLSAiaW5kaWNlczphZG1pbi9hbGlhc2VzL2dldCoiCgpDTFVTVEVSX0tVQkVEQl9TTkFQU0hPVDoKICAtICJpbmRpY2VzOmRhdGEvcmVhZC9zY3JvbGwqIgoKSU5ESUNFU19LVUJFREJfU05BUFNIT1Q6CiAgLSAiaW5kaWNlczphZG1pbi9nZXQiCg==
+  sg_config.yml: CnNlYXJjaGd1YXJkOgogIGR5bmFtaWM6CiAgICBhdXRoYzoKICAgICAgYmFzaWNfaW50ZXJuYWxfYXV0aF9kb21haW46CiAgICAgICAgZW5hYmxlZDogdHJ1ZQogICAgICAgIG9yZGVyOiA0CiAgICAgICAgaHR0cF9hdXRoZW50aWNhdG9yOgogICAgICAgICAgdHlwZTogYmFzaWMKICAgICAgICAgIGNoYWxsZW5nZTogdHJ1ZQogICAgICAgIGF1dGhlbnRpY2F0aW9uX2JhY2tlbmQ6CiAgICAgICAgICB0eXBlOiBpbnRlcm5hbAo=
+  sg_internal_users.yml: CmFkbWluOgogIGhhc2g6ICQyYSQxMCRaQ0ROZVdyLjFiNGhJUVFCcno0TmpPaW9OTG9YVjZLRDJ4UFNEMTZ6di5IMHZFRUQvV0J3dQoKcmVhZGFsbDoKICBoYXNoOiAkMmEkMTAkSmpzUkkvVDBhb2dRb3hDcDlQZXV6dWd6Umw5UUZIMzg5aFJZUmQ0eUI5dU9lVFVGRlpiTzIK
+  sg_roles.yml: CnNnX2FsbF9hY2Nlc3M6CiAgY2x1c3RlcjoKICAgIC0gVU5MSU1JVEVECiAgaW5kaWNlczoKICAgICcqJzoKICAgICAgJyonOgogICAgICAgIC0gVU5MSU1JVEVECiAgdGVuYW50czoKICAgIGFkbV90ZW5hbnQ6IFJXCiAgICB0ZXN0X3RlbmFudF9ybzogUlcKCnNnX3JlYWRhbGw6CiAgY2x1c3RlcjoKICAgIC0gQ0xVU1RFUl9DT01QT1NJVEVfT1BTX1JPCiAgICAtIENMVVNURVJfS1VCRURCX1NOQVBTSE9UCiAgaW5kaWNlczoKICAgICcqJzoKICAgICAgJyonOgogICAgICAgIC0gUkVBRAogICAgICAgIC0gSU5ESUNFU19LVUJFREJfU05BUFNIT1QK
+  sg_roles_mapping.yml: CnNnX2FsbF9hY2Nlc3M6CiAgdXNlcnM6CiAgICAtIGFkbWluCgpzZ19yZWFkYWxsOgogIHVzZXJzOgogICAgLSByZWFkYWxsCg==
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-14T08:24:05Z
+  creationTimestamp: 2018-09-28T05:33:36Z
   labels:
     kubedb.com/kind: Elasticsearch
     kubedb.com/name: quick-elasticsearch
   name: quick-elasticsearch-auth
   namespace: demo
-  resourceVersion: "4376"
-  selfLink: /api/v1/namespaces/demo/secrets/quick-elasticsearch-auth
-  uid: 6baf55bd-1160-11e8-a344-08002716e6a0
+  ...
 type: Opaque
 ```
 
@@ -226,8 +305,10 @@ type: Opaque
 
 This Secret contains:
 
-- `ADMIN_PASSWORD` password for `admin` user used in search-guard configuration as internal user.
-- `READALL_PASSWORD` password for `readall` user with read-only permission only.
+- `ADMIN_USERNAME` *username* for superuser used in search-guard configuration as an internal user.
+- `ADMIN_PASSWORD` *password* for the superuser.
+- `READALL_USERNAME` *username* for `readall` user with read-only permission only.
+- `READALL_PASSWORD` *password* for the `readall` user.
 - Followings are used as search-guard configuration
   - `sg_action_groups.yml`
   - `sg_config.yml`
@@ -235,9 +316,11 @@ This Secret contains:
   - `sg_roles.yml`
   - `sg_roles_mapping.yml`
 
-See details about [search-guard configuration](/docs/guides/elasticsearch/search-guard/configuration.md)
+To know more about search-guard configuration, please visit [here](/docs/guides/elasticsearch/search-guard/configuration.md).
 
-##### Secret for certificates
+#### Secret for certificates
+
+Certificate secret contains SSL certificates that are used to secure communication with Elasticsearch database.
 
 ```console
 $ kubectl get secret -n demo quick-elasticsearch-cert -o yaml
@@ -246,69 +329,61 @@ $ kubectl get secret -n demo quick-elasticsearch-cert -o yaml
 ```yaml
 apiVersion: v1
 data:
-  key_pass: b2xxeHN1
-  node.jks: /u3+7QAAAAIAAAABAAAA...A0+i8Kj9XQUo1V/Qg==
-  root.jks: /u3+7QAAAAIAAAABAAAA...tBkRsCa+uTUYjiatf7j
-  sgadmin.jks: /u3+7QAAAAIAAAABAAAA...e5h2S9Y3e429E/9P1qw
+  key_pass: ZWR0aGd3
+  node.jks: <base64 encoded node certificate in jks format>
+  root.jks: <base64 encoded root CA in jks format>
+  sgadmin.jks: <base64 encoded admin certificate used to change the Search Guard configuration>
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-19T10:10:53Z
+  creationTimestamp: 2018-09-28T05:33:35Z
   labels:
     kubedb.com/kind: Elasticsearch
     kubedb.com/name: quick-elasticsearch
   name: quick-elasticsearch-cert
   namespace: demo
-  resourceVersion: "1778"
-  selfLink: /api/v1/namespaces/demo/secrets/quick-elasticsearch-cert
-  uid: 2b5abae5-155d-11e8-a001-42010a8000d5
+  ...
 type: Opaque
 ```
 
 > Note: Cert Secret name format: `{elasticsearch-name}-cert`
 
-This Secret contains SSL certificates. See details about [SSL certificates](/docs/guides/elasticsearch/search-guard/search_guard.md) needed for Elasticsearch.
+To know more about how to create TLS secure Elasticsearch database with KubeDB, please visit [here](/docs/guides/elasticsearch/search-guard/use-tls.md).
 
-#### Connect Elasticsearch
+## Connect with Elasticsearch Database
 
-In this tutorial, we will expose ClusterIP Service `quick-elasticsearch` to connect database from local.
+We will use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to connect with our Elasticsearch database. Then we will use `curl` to send `http` request to check cluster health to verify that our Elasticsearch database is working well.
+
+Let's forward `9200` port of our database pod. Run following command on a separate terminal,
 
 ```console
-$ kubectl expose svc -n demo quick-elasticsearch --name=quick-es-exposed --port=9200 --protocol=TCP --type=NodePort
-service "quick-es-exposed" exposed
+$ kubectl port-forward -n demo quick-elasticsearch-0 9200
+Forwarding from 127.0.0.1:9200 -> 9200
+Forwarding from [::1]:9200 -> 9200
 ```
 
-```console
-$ kubectl get svc -n demo quick-es-exposed
-NAME               TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-quick-es-exposed   NodePort   10.110.247.179   <none>        9200:32403/TCP   1m
-```
+Now, we can connect to the database at `localhost:9200`. Let's find out necessary connection information first.
 
-Following will provide URL for `quick-es-exposed` Service to access Elasticsearch database.
+**Connection information:**
 
-```console
-$ minikube service quick-es-exposed -n demo --url
-http://192.168.99.100:32403
-```
+- Address: `localhost:9200`
+- Username: Run following command to get *username*
 
-Now, you can connect to this database using curl.
+  ```console
+  $ kubectl get secrets -n demo quick-elasticsearch-auth -o jsonpath='{.data.\ADMIN_USERNAME}' | base64 -d
+  admin
+  ```
 
-Connection information:
+- Password: Run following command to get *password*
 
-- address: Use Service URL `$ minikube service quick-es-exposed -n demo --url`
+  ```console
+  $ kubectl get secrets -n demo quick-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
+  cbciwcfh
+  ```
 
-Run following command to get `admin` user password
-
-```console
-$ kubectl get secrets -n demo quick-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
-ud7cagcu⏎
-```
-
-Check health of the elasticsearch database
+Now let's check health of our Elasticsearch database.
 
 ```console
-export es_service=$(minikube service quick-es-exposed -n demo --url)
-export es_admin_pass=$(kubectl get secrets -n demo quick-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
-curl --user "admin:$es_admin_pass" "$es_service/_cluster/health?pretty"
+curl --user "admin:cbciwcfh" "localhost:9200/_cluster/health?pretty"
 ```
 
 ```json
@@ -331,70 +406,76 @@ curl --user "admin:$es_admin_pass" "$es_service/_cluster/health?pretty"
 }
 ```
 
+Requst format: `curl --user "$USERNAME:$PASSWORD" "$ADDRESS/_cluster/health?pretty"`
+
+From the health information above, we can see that our Elasticsearch cluster's status is `green`. That means everything is going well.
+
 ## Pause Elasticsearch
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled,
-It prevents user from deleting the database as long as the `spec.doNotPause` is set `true`.
+KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` termination policy. If admission webhook is enabled, it prevents user from deleting the database as long as the `spec.terminationPolicy` is set `DoNotTerminate`.
 
-In this tutorial, Elasticsearch `quick-elasticsearch` is created with `spec.doNotPause: true`. So, if you delete this Elasticsearch object,
-admission webhook will nullify the delete operation.
+In this tutorial, Elasticsearch `quick-elasticsearch` is created with `spec.terminationPolicy: DoNotTerminate`. So if you try to delete this Elasticsearch object, admission webhook will nullify the delete operation.
 
 ```console
-$ kubedb delete es -n demo quick-elasticsearch
-error: Elasticsearch "quick-elasticsearch " can't be paused. To continue delete, unset spec.doNotPause and retry.
+$ kubectl delete es -n demo quick-elasticsearch
+Error from server (BadRequest): admission webhook "elasticsearch.validators.kubedb.com" denied the request: elasticsearch "quick-elasticsearch" can't be paused. To delete, change spec.terminationPolicy
 ```
 
-To continue with this tutorial, unset `spec.doNotPause` by updating Elasticsearch object
+To pause the database, we have to set `spec.terminationPolicy:` to `Pause` by updating it,
 
 ```console
-$ kubedb edit es -n demo quick-elasticsearch
+$ kubectl edit es -n demo quick-elasticsearch
 spec:
-  doNotPause: false
+  terminationPolicy: Pause
 ```
 
-Now, if you delete the Elasticsearch object, KubeDB operator will create a matching DormantDatabase object.
-KubeDB operator watches for DormantDatabase objects and it will take necessary steps when a DormantDatabase object is created.
+Now, if you delete the Elasticsearch object, KubeDB operator will create a matching DormantDatabase object. KubeDB operator watches for DormantDatabase objects and it will take necessary steps when a DormantDatabase object is created.
 
 KubeDB operator will delete the StatefulSet and its Pods, but leaves the Secret, PVCs unchanged.
 
 ```console
-$ kubedb delete es -n demo quick-elasticsearch
-elasticsearch "quick-elasticsearch" deleted
+$ kubectl delete es -n demo quick-elasticsearch
+elasticsearch.kubedb.com "quick-elasticsearch" deleted
 ```
 
 Check DormantDatabase entry
 
 ```console
-$ kubedb get drmn -n demo quick-elasticsearch
+$ kubectl get drmn -n demo quick-elasticsearch
 NAME                  STATUS    AGE
-quick-elasticsearch   Paused    1m
+quick-elasticsearch   Paused    29s
 ```
 
 In KubeDB parlance, we say that Elasticsearch `quick-elasticsearch`  has entered into dormant state.
 
-Lets see, what we have in this DormantDatabase object
+Let's see, what we have in this DormantDatabase object
+
+```console
+$ kubectl get drmn -n demo quick-elasticsearch -o yaml
+```
 
 ```yaml
-$ kubedb get drmn -n demo quick-elasticsearch -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-13T05:41:49Z
+  creationTimestamp: 2018-09-28T08:56:15Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 1
   labels:
     kubedb.com/kind: Elasticsearch
   name: quick-elasticsearch
   namespace: demo
-  resourceVersion: "2072"
+  resourceVersion: "23969"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/quick-elasticsearch
-  uid: 9624f877-1080-11e8-9e42-0800271bdbb6
+  uid: 5b1a99dd-c2fc-11e8-aac4-8a5cc86ecf00
 spec:
   origin:
     metadata:
-      creationTimestamp: null
+      annotations:
+        kubectl.kubernetes.io/last-applied-configuration: |
+          {"apiVersion":"kubedb.com/v1alpha1","kind":"Elasticsearch","metadata":{"annotations":{},"name":"quick-elasticsearch","namespace":"demo"},"spec":{"terminationPolicy":true,"storage":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"50Mi"}},"storageClassName":"standard"},"storageType":"Durable","version":"6.3-v1"}}
+      creationTimestamp: 2018-09-28T05:33:29Z
       name: quick-elasticsearch
       namespace: demo
     spec:
@@ -403,7 +484,15 @@ spec:
           secretName: quick-elasticsearch-cert
         databaseSecret:
           secretName: quick-elasticsearch-auth
-        resources: {}
+        podTemplate:
+          controller: {}
+          metadata: {}
+          spec:
+            resources: {}
+        replicas: 1
+        serviceTemplate:
+          metadata: {}
+          spec: {}
         storage:
           accessModes:
           - ReadWriteOnce
@@ -411,11 +500,16 @@ spec:
             requests:
               storage: 50Mi
           storageClassName: standard
-        version: "5.6"
+        storageType: Durable
+        terminationPolicy: Pause
+        updateStrategy:
+          type: RollingUpdate
+        version: 6.3-v1
 status:
-  creationTime: 2018-02-13T05:41:49Z
-  pausingTime: 2018-02-13T05:42:12Z
+  observedGeneration: 1$10263513872796756591
+  pausingTime: 2018-09-28T08:56:24Z
   phase: Paused
+
 ```
 
 Here,
@@ -432,29 +526,35 @@ In this tutorial, the DormantDatabase `quick-elasticsearch` can be resumed by cr
 The below command will resume the DormantDatabase `quick-elasticsearch`
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
-elasticsearch "quick-elasticsearch" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
+elasticsearch.kubedb.com/quick-elasticsearch created
 ```
 
 ## WipeOut DormantDatabase
 
-You can wipe out a DormantDatabase while deleting the objet by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `Elasticsearch` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
+You can wipe out a DormantDatabase while deleting the object by setting `spec.wipeOut` to `true`. KubeDB operator will delete any relevant resources of this `Elasticsearch` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
 
 ```yaml
-$ kubedb edit drmn -n demo quick-elasticsearch
+$ kubectl edit drmn -n demo quick-elasticsearch
 spec:
   wipeOut: true
 ```
 
-If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
+You can also set `wipeOut: true` by patching the DormantDatabase,
+
+```console
+$ kubectl patch -n demo drmn/quick-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
+```
+
+If `spec.wipeOut` is not set to `true` while deleting the `dormantdatabase` object, then only this object will be deleted and KubeDB operator won't delete related Secrets, PVCs and Snapshots. So, user still can access the stored data in the cloud storage buckets as well as PVCs.
 
 ## Delete DormantDatabase
 
 As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
 
 ```console
-$ kubedb delete drmn -n demo quick-elasticsearch
-dormantdatabase "quick-elasticsearch" deleted
+$ kubectl delete drmn -n demo quick-elasticsearch
+dormantdatabase.kubedb.com "quick-elasticsearch" deleted
 ```
 
 ## Cleaning up
@@ -462,14 +562,17 @@ dormantdatabase "quick-elasticsearch" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/quick-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/quick-elasticsearch -p '{"spec":{"terminationPolicy": "WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/quick-elasticsearch
-
-$ kubectl patch -n demo drmn/quick-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/quick-elasticsearch
 
 $ kubectl delete ns demo
 ```
+## Tips for Testing
+
+If you are just testing some basic functionalities, you might want to avoid additional hassles due to some safety features that are great for production environment. You can follow these tips to avoid them.
+
+1. **Use `storageType: Ephemeral`**. Databases are precious. You might not want to lose your data in your production environment if database pod fail. So, we recommend to use `spec.storageType: Durable` and provide storage spec in `spec.storage` section. For testing purpose, you can just use `spec.storageType: Ephemeral`. KubeDB will use [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) for storage. You will not require to provide `spec.storage` section.
+2. **Use `terminationPolicy: WipeOut`**. It is nice to be able to resume database from previous one. So, we create `DormantDatabase` and preserve all your `PVCs`, `Secrets`, `Snapshots` etc. If you don't want to resume database, you can just use `spec.terminationPolicy: WipeOut`. It will not create `DormantDatabase` and it will delete everything created by KubeDB for a particular Elasticsearch crd when you delete the crd. For more details about termination policy, please visit [here](/docs/concepts/databases/elasticsearch.md#specterminationpolicy).
 
 ## Next Steps
 

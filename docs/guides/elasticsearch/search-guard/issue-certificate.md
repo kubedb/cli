@@ -2,16 +2,20 @@
 title: Search Guard Certificate
 menu:
   docs_0.8.0:
-    identifier: es-certificate-search-guard
+    identifier: es-issue-certificate-search-guard
     name: Issue Certificate
     parent: es-search-guard-elasticsearch
-    weight: 15
+    weight: 25
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# TLS certificates
+# Issue TLS Certificates
+
+Search Guard requires certificates to enable TLS. KubeDB creates necessary certificates automatically. However, if you want to use your own certificates, you can provide them through `spec.certificateSecret` field of Elasticsearch object.
+
+This tutorial will show you how to generate certificates for Search Guard and use them with Elasticsearch database.
 
 In KubeDB Elasticsearch, keystore and truststore files in JKS format are used instead of certificates and private keys in PEM format.
 
@@ -226,11 +230,11 @@ Here,
 Now run following commands
 
 ```console
-wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-node.ini
-openssl req -config openssl-node.ini -newkey rsa:4096 -sha256 -nodes -out node-csr.pem -keyout node-key.pem
-openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out node.pem -infiles node-csr.pem
-openssl pkcs12 -export -certfile root.pem -inkey node-key.pem -in node.pem -password "pass:$KEY_PASS" -out node.pkcs12
-keytool -importkeystore -srckeystore node.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore node.jks -deststoretype pkcs12
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-node.ini
+$ openssl req -config openssl-node.ini -newkey rsa:4096 -sha256 -nodes -out node-csr.pem -keyout node-key.pem
+$ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out node.pem -infiles node-csr.pem
+$ openssl pkcs12 -export -certfile root.pem -inkey node-key.pem -in node.pem -password "pass:$KEY_PASS" -out node.pkcs12
+$ keytool -importkeystore -srckeystore node.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore node.jks -deststoretype pkcs12
 ```
 
 Generated `node.jks` will be used as keystore for transport layer TLS.
@@ -267,11 +271,11 @@ Here,
 Now run following commands
 
 ```console
-wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-client.ini
-openssl req -config openssl-client.ini -newkey rsa:4096 -sha256 -nodes -out client-csr.pem -keyout client-key.pem
-openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out client.pem -infiles client-csr.pem
-openssl pkcs12 -export -certfile root.pem -inkey client-key.pem -in client.pem -password "pass:$KEY_PASS" -out client.pkcs12
-keytool -importkeystore -srckeystore client.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore client.jks -deststoretype pkcs12
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-client.ini
+$ openssl req -config openssl-client.ini -newkey rsa:4096 -sha256 -nodes -out client-csr.pem -keyout client-key.pem
+$ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out client.pem -infiles client-csr.pem
+$ openssl pkcs12 -export -certfile root.pem -inkey client-key.pem -in client.pem -password "pass:$KEY_PASS" -out client.pkcs12
+$ keytool -importkeystore -srckeystore client.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore client.jks -deststoretype pkcs12
 ```
 
 Generated `client.jks` will be used as keystore for http layer TLS.
@@ -307,11 +311,11 @@ Here,
 Now run following commands
 
 ```console
-wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-sgadmin.ini
-openssl req -config openssl-sgadmin.ini -newkey rsa:4096 -sha256 -nodes -out sgadmin-csr.pem -keyout sgadmin-key.pem
-openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out sgadmin.pem -infiles sgadmin-csr.pem
-openssl pkcs12 -export -certfile root.pem -inkey sgadmin-key.pem -in sgadmin.pem -password "pass:$KEY_PASS" -out sgadmin.pkcs12
-keytool -importkeystore -srckeystore sgadmin.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore sgadmin.jks -deststoretype pkcs12
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-sgadmin.ini
+$ openssl req -config openssl-sgadmin.ini -newkey rsa:4096 -sha256 -nodes -out sgadmin-csr.pem -keyout sgadmin-key.pem
+$ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out sgadmin.pem -infiles sgadmin-csr.pem
+$ openssl pkcs12 -export -certfile root.pem -inkey sgadmin-key.pem -in sgadmin.pem -password "pass:$KEY_PASS" -out sgadmin.pkcs12
+$ keytool -importkeystore -srckeystore sgadmin.pkcs12  -storepass $KEY_PASS  -srcstoretype pkcs12 -srcstorepass $KEY_PASS  -destkeystore sgadmin.jks -deststoretype pkcs12
 ```
 
 Generated `sgadmin.pkcs12` will be used as keystore for admin usage.
@@ -329,7 +333,7 @@ $ kubectl create secret -n demo generic sg-elasticsearch-cert \
                 --from-file=sgadmin.jks \
                 --from-literal=key_pass=$KEY_PASS
 
-secret "sg-elasticsearch-cert" created
+secret/sg-elasticsearch-cert created
 ```
 
 > Note: `root.pem` is added in Secret so that user can use these to connect Elasticsearch
@@ -347,7 +351,8 @@ metadata:
   name: sg-elasticsearch
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
+  authPlugin: "SearchGuard"
   enableSSL: true
   certificateSecret:
     secretName: sg-elasticsearch-cert
@@ -368,15 +373,15 @@ Create example above with following command
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
-elasticsearch "sg-elasticsearch" created
+elasticsearch.kubedb.com/sg-elasticsearch created
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
 
 ```console
-$ kubedb get es -n demo sg-elasticsearch -o wide
-NAME                VERSION   STATUS    AGE
-sg-elasticsearch    5.6       Running   33m
+$ kubectl get es -n demo sg-elasticsearch -o wide
+NAME               VERSION   STATUS    AGE
+sg-elasticsearch   6.3-v1    Running   1m
 ```
 
 ## Cleaning up
@@ -384,18 +389,15 @@ sg-elasticsearch    5.6       Running   33m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/sg-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/sg-elasticsearch -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/sg-elasticsearch
-
-$ kubectl patch -n demo drmn/sg-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/sg-elasticsearch
 
 $ kubectl delete ns demo
 ```
 
 ## Next Steps
 
-- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
+- Learn how to use TLS certificates to connect Elasticsearch from [here](/docs/guides/elasticsearch/search-guard/use-tls.md).
 - Learn how to generate [search-guard configuration](/docs/guides/elasticsearch/search-guard/configuration.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

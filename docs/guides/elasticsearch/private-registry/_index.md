@@ -5,6 +5,6 @@ menu:
     identifier: es-private-registry-elasticsearch
     name: Private Registry
     parent: es-elasticsearch-guides
-    weight: 40
+    weight: 35
 menu_name: docs_0.8.0
 ---

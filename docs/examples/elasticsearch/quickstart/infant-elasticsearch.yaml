@@ -4,4 +4,6 @@ metadata:
   name: infant-elasticsearch
   namespace: demo
 spec:
-  version: "5.6-v1"
+  version: "6.3-v1"
+  replicas: 1
+  storageType: Ephemeral

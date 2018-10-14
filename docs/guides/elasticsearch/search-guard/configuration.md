@@ -5,7 +5,7 @@ menu:
     identifier: es-configuration-search-guard
     name: Configuration
     parent: es-search-guard-elasticsearch
-    weight: 25
+    weight: 15
 menu_name: docs_0.8.0
 section_menu_id: guides
 ---
@@ -67,8 +67,7 @@ If you do not provide Secret for configuration, KubeDB will create one with defa
 
 ### sg_config.yml
 
-The main configuration file for authentication and authorization modules is `sg_config.yml`. It defines how Search Guard retrieves the user credentials,
-how it verifies these credentials, and how additional user roles are fetched from backend systems.
+The main configuration file for authentication and authorization modules is `sg_config.yml`. It defines how Search Guard retrieves the user credentials, how it verifies these credentials, and how additional user roles are fetched from backend systems.
 
 It has two main parts:
 
@@ -96,7 +95,7 @@ searchguard:
           type: basic
           challenge: true
         authentication_backend:
-          type: intern
+          type: internal
 ```
 
 ```console
@@ -149,10 +148,10 @@ readall:
 Run following command to write user information in `sg_internal_users.yml` file with password.
 
 ```console
-curl https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/sg-config/sg_internal_users.yml | envsubst > sg_internal_users.yml
+$ curl https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/sg-config/sg_internal_users.yml | envsubst > sg_internal_users.yml
 ```
 
-> Note: Random password is set if KubeDB creates Secret for Users.
+> Note: If user does not provide `spec.databaseSecret`, KubeDB will generate random password for both admin and readall user.
 
 ### sg_action_groups.yml
 
@@ -260,8 +259,7 @@ $ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/e
 
 ### sg_roles_mapping.yml
 
-Backend roles are roles that Search Guard retrieves during the authentication and authorization process. These roles are then mapped to the
-roles Search Guard uses to define which permissions a given user or host possesses.
+Backend roles are roles that Search Guard retrieves during the authentication and authorization process. These roles are then mapped to the roles Search Guard uses to define which permissions a given user or host possesses.
 
 In configuration, KubeDB sets for Search Guard, backend roles comes from:
 
@@ -325,25 +323,31 @@ $ kubectl create secret -n demo generic config-elasticsearch-auth \
                 --from-file=sg_action_groups.yml \
                 --from-file=sg_roles.yml \
                 --from-file=sg_roles_mapping.yml \
+                --from-literal=ADMIN_USERNAME=admin \
                 --from-literal=ADMIN_PASSWORD=$ADMIN_PASSWORD \
+                --from-literal=READALL_USERNAME=readall \
                 --from-literal=READALL_PASSWORD=$READALL_PASSWORD
 
-secret "config-elasticsearch-auth" created
+secret/config-elasticsearch-auth created
 ```
 
 Here,
 
-- *ADMIN_PASSWORD* password is used for restoration process. See [this](/docs/guides/elasticsearch/initialization/snapshot_source.md)
-- *READALL_PASSWORD* password is used for backup process. See [this](/docs/guides/elasticsearch/snapshot/instant_backup.md).
+- `ADMIN_USERNAME` and `ADMIN_PASSWORD` password is used for initializing database from previous Snapshot. For more details about initialization  from snapshot, please visit [here](/docs/guides/elasticsearch/initialization/snapshot_source.md).
+- `READALL_USERNAME` and `READALL_PASSWORD` password is used for taking backup. For more details about backup Elastisearch database, please visit [here](/docs/guides/elasticsearch/snapshot/instant_backup.md).
 
-If you do not use these two features of Snapshot, you can ignore adding this
+If you do not use these two features of Snapshot, you can ignore adding these.
 
 ```console
---from-literal=ADMIN_PASSWORD=$ADMIN_PASSWORD
+--from-literal=ADMIN_USERNAME=admin
+--from-literal=ADMIN_PASSWORD=$ADMIN_PASSWORD 
+--from-literal=READALL_USERNAME=readall
 --from-literal=READALL_PASSWORD=$READALL_PASSWORD
 ```
 
-Use this Secret `config-elasticsearch-auth` in your Elasticsearch object.
+>Note: `ADMIN_PASSWORD` and `READALL_PASSWORD` are the same password you have provided as hashed value in `sg_internal_users.yml`. It is not possible for KubeDB to figure out the password from the hashed value. So, you have to provide these password as a separate key in the secret. Otherwise, KubeDB will not able to perform backup or initialization.
+
+Use this Secret `config-elasticsearch-auth` in `spec.databaseSecret` field of your Elasticsearch object.
 
 ## Create a Elasticsearch database
 
@@ -356,7 +360,8 @@ metadata:
   name: config-elasticsearch
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
+  authPlugin: "SearchGuard"
   databaseSecret:
     secretName: config-elasticsearch-auth
   storage:
@@ -375,36 +380,32 @@ Here,
 Create example above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/config-elasticsearch.yaml
-elasticsearch "config-elasticsearch" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/config-elasticsearch.yaml
+elasticsearch.kubedb.com/config-elasticsearch created
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
 
 ```console
-$ kubedb get es -n demo config-elasticsearch -o wide
-NAME                   VERSION  STATUS    AGE
-config-elasticsearch   5.6      Running   57s
+$ kubectl get es -n demo config-elasticsearch -o wide
+NAME                   VERSION   STATUS    AGE
+config-elasticsearch   6.3-v1    Running   1m
 ```
 
-In this tutorial, we will expose ClusterIP Service `config-elasticsearch` to connect database from local.
+## Connect to Elasticsearch Database
+
+At first, forward port 9200 of `config-elasticsearch-0` pod. Run following command on a separate terminal,
 
 ```console
-$ kubectl expose svc -n demo config-elasticsearch --name=config-es-exposed --port=9200 --protocol=TCP --type=NodePort
-service "config-es-exposed" exposed
+$ kubectl port-forward -n demo config-elasticsearch-0 9200
+Forwarding from 127.0.0.1:9200 -> 9200
+Forwarding from [::1]:9200 -> 9200
 ```
 
-```console
-$ kubectl get svc -n demo config-es-exposed
-NAME                TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-config-es-exposed   NodePort   10.98.174.49   <none>        9200:31704/TCP   5s
-```
-
-Now, you can connect to this database using curl.
+Now, you can connect to this database at `localhost:9200`.
 
 ```console
-export es_service=$(minikube service config-es-exposed -n demo --url)
-curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
+$ curl --user "admin:$ADMIN_PASSWORD" "localhost:9200/_cluster/health?pretty"
 ```
 
 ```json
@@ -432,11 +433,8 @@ curl --user "admin:$ADMIN_PASSWORD" "$es_service/_cluster/health?pretty"
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/config-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/config-elasticsearch -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/config-elasticsearch
-
-$ kubectl patch -n demo drmn/config-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/config-elasticsearch
 
 $ kubectl delete ns demo
 ```
@@ -444,6 +442,6 @@ $ kubectl delete ns demo
 ## Next Steps
 
 - Learn how to [create TLS certificates](/docs/guides/elasticsearch/search-guard/certificate.md).
-- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use_certificate.md) to connect Elasticsearch.
+- Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use-tls.md) to connect Elasticsearch.
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -5,6 +5,6 @@ menu:
     identifier: es-snapshot-elasticsearch
     name: Snapshotting
     parent: es-elasticsearch-guides
-    weight: 30
+    weight: 25
 menu_name: docs_0.8.0
 ---

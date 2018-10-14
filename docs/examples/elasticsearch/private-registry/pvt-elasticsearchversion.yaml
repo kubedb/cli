@@ -1,0 +1,14 @@
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "pvt-6.3"
+  labels:
+    app: kubedb
+spec:
+  version: "6.3"
+  db:
+    image: "<YOUR_PRIVATE_REGISTRY>/elasticsearch:6.3-v1"
+  exporter:
+    image: "<YOUR_PRIVATE_REGISTRY>/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "<YOUR_PRIVATE_REGISTRY>/elasticsearch-tools:6.3-v1"

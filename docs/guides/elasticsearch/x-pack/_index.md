@@ -5,6 +5,6 @@ menu:
     identifier: es-x-pack
     name: X-Pack
     parent: es-elasticsearch-guides
-    weight: 70
+    weight: 60
 menu_name: docs_0.8.0
 ---

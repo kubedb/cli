@@ -35,50 +35,17 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-This tutorial will show you how to use KubeDB to initialize a Elasticsearch database with an existing Snapshot.
+## Prepare Snapshot
 
-So, we need a Snapshot object in `Succeeded` phase to perform this initialization .
+This tutorial will show you how to use KubeDB to initialize an Elasticsearch database with an existing Snapshot. So, we need a Snapshot to perform this initialization. If you don't have a Snapshot already, create one by following the tutorial [here](/docs/guides/elasticsearch/snapshot/instant_backup.md).
 
-Follow these steps to prepare this tutorial
-
-- Create Elasticsearch object `infant-elasticsearch`, if not exists.
-
-    ```console
-    $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-    elasticsearch "infant-elasticsearch" created
-    ```
-
-    ```console
-    $ kubedb get es -n demo infant-elasticsearch
-    NAME                   STATUS    AGE
-    infant-elasticsearch   Running   57s
-    ```
-
-- Populate database with some data. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#populate-database).
-- Create storage Secret.<br>In this tutorial, we need a storage Secret for backup process
-
-    ```console
-    $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
-    $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-    $ kubectl create secret -n demo generic gcs-secret \
-        --from-file=./GOOGLE_PROJECT_ID \
-        --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-    secret "gcs-secret" created
-    ```
-
-- Take an instant backup, if not available. Follow [this](https://github.com/kubedb/cli/blob/master/docs/guides/elasticsearch/snapshot/instant_backup.md#instant-backup).
-
-```console
-$ kubedb get snap -n demo --selector="kubedb.com/kind=Elasticsearch,kubedb.com/name=infant-elasticsearch"
-NAME               DATABASE                  STATUS      AGE
-instant-snapshot   es/infant-elasticsearch   Succeeded   39s
-```
+If you have changed either namespace or snapshot object name, please modify the YAMLs used in this tutorial accordingly.
 
 ## Initialize with Snapshot source
 
-Specify the Snapshot `name` and `namespace` in the `spec.init.snapshotSource` field of your new Elasticsearch object.
+You have to specify the Snapshot `name` and `namespace` in the `spec.init.snapshotSource` field of your new Elasticsearch object.
 
-See the example Elasticsearch object below
+Below is the YAML for Elasticsearch object that will be created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -87,9 +54,10 @@ metadata:
   name: recovered-es
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
   databaseSecret:
     secretName: infant-elasticsearch-auth
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -112,90 +80,170 @@ Here,
 Snapshot `instant-snapshot` in `demo` namespace belongs to Elasticsearch `infant-elasticsearch`:
 
 ```console
-$ kubedb get snap -n demo instant-snapshot
-NAME               DATABASE                  STATUS      AGE
-instant-snapshot   es/infant-elasticsearch   Succeeded   2m
+$ kubectl get snap -n demo instant-snapshot
+NAME               DATABASENAME           STATUS      AGE
+instant-snapshot   infant-elasticsearch   Succeeded   51m
 ```
 
-> Note: Elasticsearch `recovered-es` must have same `admin` user password as Elasticsearch `infant-elasticsearch`.
+> Note: Elasticsearch `recovered-es` must have same superuser credentials as Elasticsearch `infant-elasticsearch`.
 
 [//]: # (Describe authentication part. This should match with existing one)
 
 Now, create the Elasticsearch object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/initialization/recovered-es.yaml
-elasticsearch "recovered-es" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/initialization/recovered-es.yaml
+elasticsearch.kubedb.com/recovered-es created
 ```
 
 When Elasticsearch database is ready, KubeDB operator launches a Kubernetes Job to initialize this database using the data from Snapshot `instant-snapshot`.
 
-As a final step of initialization, KubeDB Job controller adds `kubedb.com/initialized` annotation in initialized Elasticsearch object.
-This prevents further invocation of initialization process.
+As a final step of initialization, KubeDB Job controller adds `kubedb.com/initialized` annotation in initialized Elasticsearch object. This prevents further invocation of initialization process.
 
 ```console
-$ kubedb describe es -n demo recovered-es -S=false -W=false
-Name:			    recovered-es
-Namespace:		    demo
-CreationTimestamp:  Wed, 14 Feb 2018 17:31:14 +0600
-Status:			    Running
-Annotations:		kubedb.com/initialized
+$ kubedb describe es -n demo recovered-es
+Name:               recovered-es
+Namespace:          demo
+CreationTimestamp:  Mon, 08 Oct 2018 12:37:19 +0600
+Labels:             <none>
+Annotations:        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"kubedb.com/v1alpha1","kind":"Elasticsearch","metadata":{"annotations":{},"name":"recovered-es","namespace":"demo"},"spec":{"databaseSecr...
+                    kubedb.com/initialized
+Status:             Running
+Replicas:           1  total
 Init:
   snapshotSource:
-    namespace:	demo
-    name:	    instant-snapshot
+    namespace:  demo
+    name:       instant-snapshot
+  StorageType:  Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	    50Mi
-  Access Modes:	RWO
-StatefulSet:	recovered-es
-Service:	    recovered-es, recovered-es-master
-Secrets:	    recovered-es-cert, infant-elasticsearch-auth
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
+
+StatefulSet:          
+  Name:               recovered-es
+  CreationTimestamp:  Mon, 08 Oct 2018 12:37:21 +0600
+  Labels:               kubedb.com/kind=Elasticsearch
+                        kubedb.com/name=recovered-es
+                        node.role.client=set
+                        node.role.data=set
+                        node.role.master=set
+  Annotations:        <none>
+  Replicas:           824638233976 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+Service:        
+  Name:         recovered-es
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=recovered-es
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.104.209.94
+  Port:         http  9200/TCP
+  TargetPort:   http/TCP
+  Endpoints:    192.168.1.14:9200
+
+Service:        
+  Name:         recovered-es-master
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=recovered-es
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.110.233.136
+  Port:         transport  9300/TCP
+  TargetPort:   transport/TCP
+  Endpoints:    192.168.1.14:9300
+
+Database Secret:
+  Name:         infant-elasticsearch-auth
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=infant-elasticsearch
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  ADMIN_PASSWORD:         8 bytes
+  ADMIN_USERNAME:         5 bytes
+  sg_action_groups.yml:   430 bytes
+  sg_internal_users.yml:  156 bytes
+  sg_roles.yml:           312 bytes
+  sg_roles_mapping.yml:   73 bytes
+  READALL_PASSWORD:       8 bytes
+  READALL_USERNAME:       7 bytes
+  sg_config.yml:          242 bytes
+
+Certificate Secret:
+  Name:         recovered-es-cert
+  Labels:         kubedb.com/kind=Elasticsearch
+                  kubedb.com/name=recovered-es
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  sgadmin.jks:  3011 bytes
+  key_pass:     6 bytes
+  node.jks:     3008 bytes
+  root.jks:     864 bytes
 
 Topology:
-  Type                 Pod              StartTime                       Phase
-  ----                 ---              ---------                       -----
-  master|client|data   recovered-es-0   2018-02-14 17:31:23 +0600 +06   Running
+  Type                Pod             StartTime                      Phase
+  ----                ---             ---------                      -----
+  master|client|data  recovered-es-0  2018-10-08 12:37:22 +0600 +06  Running
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                     Type       Reason               Message
-  ---------   --------   -----     ----                     --------   ------               -------
-  22m         22m        1         Job Controller           Normal     SuccessfulSnapshot   Successfully completed initialization
-  23m         23m        1         Elasticsearch operator   Normal     Successful           Successfully patched Elasticsearch
-  24m         24m        1         Elasticsearch operator   Normal     Successful           Successfully patched StatefulSet
-  24m         24m        1         Elasticsearch operator   Normal     Initializing         Initializing from Snapshot: "instant-snapshot"
-  24m         24m        1         Elasticsearch operator   Normal     Successful           Successfully created Elasticsearch
-  25m         25m        1         Elasticsearch operator   Normal     Successful           Successfully created StatefulSet
-  25m         25m        1         Elasticsearch operator   Normal     Successful           Successfully created Service
-  25m         25m        1         Elasticsearch operator   Normal     Successful           Successfully created Service
+  Type    Reason                Age   From                    Message
+  ----    ------                ----  ----                    -------
+  Normal  Successful            35m   Elasticsearch operator  Successfully created Service
+  Normal  Successful            35m   Elasticsearch operator  Successfully created Service
+  Normal  Successful            35m   Elasticsearch operator  Successfully created StatefulSet
+  Normal  Successful            34m   Elasticsearch operator  Successfully created Elasticsearch
+  Normal  Initializing          34m   Elasticsearch operator  Initializing from Snapshot: "instant-snapshot"
+  Normal  Successful            34m   Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful            34m   Elasticsearch operator  Successfully patched Elasticsearch
+  Normal  SuccessfulInitialize  33m   Job Controller          Successfully completed initialization
 ```
 
-In this tutorial, we will expose ClusterIP Service `recovered-es` to connect database from local.
+## Verify initialization
+
+Let's connect to our Elasticsearch `recovered-es` to verify that the database has been successfully initialized.
+
+At first, forward `9200` port of `recovered-es` pod. Run following command on a separate terminal,
 
 ```console
-$ kubectl expose svc -n demo recovered-es --name=recovered-es-exposed --port=9200 --protocol=TCP --type=NodePort
-service "recovered-es-exposed" exposed
+$ kubectl port-forward -n demo recovered-es-0 9200
+Forwarding from 127.0.0.1:9200 -> 9200
+Forwarding from [::1]:9200 -> 9200
 ```
 
-Now lets check data in Elasticsearch `recovered-es` using Service `recovered-es-exposed`
+Now, we can connect to the database at `localhost:9200`. Let's find out necessary connection information first.
 
-Connection information:
+**Connection information:**
 
-- address: Use Service URL `$ minikube service recovered-es-exposed -n demo --https --url`
+- Address: `localhost:9200`
+- Username: Run following command to get *username*
 
-Run following command to get `admin` user password
+  ```console
+  $ kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_USERNAME}' | base64 -d
+  admin
+  ```
+
+- Password: Run following command to get *password*
+
+  ```console
+  $ kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
+  cfgn547j
+  ```
+
+We had created an index `test` before taking snapshot of `infant-elasticsearch` database. Let's check this index is present in newly initialized database `recovered-es`.
 
 ```console
-$ kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d
-3pk6qxxo⏎
-```
-
-```console
-export es_service=$(minikube service recovered-es-exposed -n demo --https --url)
-export es_admin_pass=$(kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
-curl -XGET --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" --insecure
+$ curl -XGET --user "admin:cfgn547j" "localhost:9200/test/snapshot/1?pretty"
 ```
 
 ```json
@@ -203,7 +251,7 @@ curl -XGET --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" --
   "_index" : "test",
   "_type" : "snapshot",
   "_id" : "1",
-  "_version" : 1,
+  "_version" : 33,
   "found" : true,
   "_source" : {
     "title" : "Snapshot",
@@ -213,21 +261,17 @@ curl -XGET --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" --
 }
 ```
 
-Elasticsearch `recovered-es` is successfully initialized with Snapshot `instant-snapshot`
+We can see from above output that `test` index is present in `recovered-es` database. That's means our database has been initialized from snapshot successfully.
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/infant-elasticsearch es/recovered-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/infant-elasticsearch es/recovered-es -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/infant-elasticsearch es/recovered-es
 
-$ kubectl patch -n demo drmn/infant-elasticsearch drmn/recovered-es -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/infant-elasticsearch drmn/recovered-es
-
 $ kubectl delete ns demo
-namespace "demo" deleted
 ```
 
 ## Next Steps

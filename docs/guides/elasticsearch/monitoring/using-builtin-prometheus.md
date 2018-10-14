@@ -47,7 +47,7 @@ metadata:
   name: builtin-prom-es
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -66,32 +66,33 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
-elasticsearch "builtin-prom-es" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
+elasticsearch.kubedb.com/builtin-prom-es created
 ```
 
 KubeDB operator will configure its service once the Elasticsearch is successfully running.
 
 ```console
-$ kubedb get es -n demo builtin-prom-es
-NAME              STATUS    AGE
-builtin-prom-es   Running   5m
+$ kubectl get es -n demo builtin-prom-es
+NAME              VERSION   STATUS     AGE
+builtin-prom-es   6.3-v1    Creating   45s
 ```
 
-You can verify it running the following commands:
+KubeDB will create a separate stats service with name `{Elasticsearch name}-stats` for monitoring purpose.
 
 ```console
 $ kubectl get svc -n demo --selector="kubedb.com/name=builtin-prom-es"
-NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)              AGE
-builtin-prom-es          ClusterIP   10.101.27.83     <none>        9200/TCP,56790/TCP   41s
-builtin-prom-es-master   ClusterIP   10.111.170.101   <none>        9300/TCP             41s
+NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+builtin-prom-es          ClusterIP   10.107.102.243   <none>        9200/TCP    1m
+builtin-prom-es-master   ClusterIP   10.105.170.11    <none>        9300/TCP    1m
+builtin-prom-es-stats    ClusterIP   10.100.55.134    <none>        56790/TCP   49s
 ```
 
-Lets describe Service `builtin-prom-es`
+Let's describe Service `builtin-prom-es-stats`
 
 ```console
-$ kubectl describe svc -n demo builtin-prom-es
-Name:              builtin-prom-es
+$ kubectl describe svc -n demo builtin-prom-es-stats
+Name:              builtin-prom-es-stats
 Namespace:         demo
 Labels:            kubedb.com/kind=Elasticsearch
                    kubedb.com/name=builtin-prom-es
@@ -99,16 +100,14 @@ Annotations:       monitoring.appscode.com/agent=prometheus.io/builtin
                    prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/elasticsearches/builtin-prom-es/metrics
                    prometheus.io/port=56790
                    prometheus.io/scrape=true
-Selector:          kubedb.com/kind=Elasticsearch,kubedb.com/name=builtin-prom-es,node.role.client=set
+Selector:          kubedb.com/kind=Elasticsearch,kubedb.com/name=builtin-prom-es
 Type:              ClusterIP
-IP:                10.101.27.83
-Port:              http  9200/TCP
-TargetPort:        %!d(string=http)/TCP
-Endpoints:         172.17.0.8:9200
+IP:                10.100.55.134
 Port:              prom-http  56790/TCP
-TargetPort:        %!d(string=prom-http)/TCP
-Endpoints:         172.17.0.8:56790
+TargetPort:        prom-http/TCP
+Endpoints:         192.168.1.96:56790
 Session Affinity:  None
+Events:            <none>
 ```
 
 You can see that the service contains following annotations.
@@ -119,7 +118,7 @@ prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
 
-The prometheus server will discover the service endpoint aka `Elasticsearch Exporter` using these specifications and will scrap metrics from exporter.
+The prometheus server will discover the service endpoint using these specifications and will scrape metrics from exporter.
 
 ## Deploy and configure Prometheus server
 
@@ -180,7 +179,7 @@ Create above ConfigMap
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
-configmap "prometheus-server-conf" created
+configmap/prometheus-server-conf created
 ```
 
 Now, the below YAML is used to deploy Prometheus in kubernetes :
@@ -227,23 +226,22 @@ Run the following command to deploy prometheus-server
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-clusterrole "prometheus-server" created
-serviceaccount "prometheus-server" created
-clusterrolebinding "prometheus-server" created
-deployment "prometheus-server" created
-service "prometheus-service" created
+clusterrole.rbac.authorization.k8s.io/prometheus-server created
+serviceaccount/prometheus-server created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
+deployment.apps/prometheus-server created
+service/prometheus-service created
 ```
 
-Watch the Deployment’s Pods.
+Wait until pods of the Deployment is running.
 
 ```console
-$ kubectl get pods -n demo --selector=app=prometheus-server --watch
-NAME                                 READY     STATUS              RESTARTS   AGE
-prometheus-server-6b8476d6c5-kx78z   0/1       ContainerCreating   0          1m
-prometheus-server-6b8476d6c5-kx78z   1/1       Running   0         1m
+$ kubectl get pods -n demo --selector=app=prometheus-server
+NAME                                READY     STATUS    RESTARTS   AGE
+prometheus-server-9d7b799fd-pqzls   1/1       Running   0          1m
 ```
 
-And also verify RBAC stuffs
+Also verify RBAC stuffs
 
 ```console
 $ kubectl get clusterrole prometheus-server -n demo
@@ -268,7 +266,9 @@ $ minikube service prometheus-service -n demo --url
 http://192.168.99.100:30901
 ```
 
-Now, if you go to the Prometheus Dashboard, you will see this database endpoint in target list.
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
+
+Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
 <p align="center">
   <kbd>
@@ -281,11 +281,11 @@ Now, if you go to the Prometheus Dashboard, you will see this database endpoint 
 To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-$ kubectl patch -n demo es/builtin-prom-es -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/builtin-prom-es -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/builtin-prom-es
 
-$ kubectl patch -n demo drmn/builtin-prom-es -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/builtin-prom-es
+$ kubectl delete -n demo deployment/prometheus-server
+$ kubectl delete -n demo svc/prometheus-service
 
 $ kubectl delete clusterrole prometheus-server
 $ kubectl delete clusterrolebindings  prometheus-server

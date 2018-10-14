@@ -17,47 +17,69 @@ aliases:
 
 ## Supported Elasticsearch Features
 
-|Features                                               |Availability|
-|-------------------------------------------------------|:----------:|
-|Clustering                                             | &#10003;   |
-|Authentication (using [Search Guard](https://github.com/floragunncom/search-guard))   | &#10003;   |
-|Authorization (using [Search Guard](https://github.com/floragunncom/search-guard))    | &#10003;   |
-|TLS certificates (using [Search Guard](https://github.com/floragunncom/search-guard)) | &#10003;   |
-|Persistent Volume                                      | &#10003;   |
-|Instant Backup                                         | &#10003;   |
-|Scheduled Backup                                       | &#10003;   |
-|Initialization from Script                             | &#10007;   |
-|Initialization from Snapshot                           | &#10003;   |
-|Builtin Prometheus Discovery                           | &#10003;   |
-|Using CoreOS Prometheus Operator                       | &#10003;   |
+|                                       Features                                        | Availability |
+| ------------------------------------------------------------------------------------- | :----------: |
+| Clustering                                                                            |   &#10003;   |
+| Authentication (using [Search Guard](https://github.com/floragunncom/search-guard))   |   &#10003;   |
+| Authorization (using [Search Guard](https://github.com/floragunncom/search-guard))    |   &#10003;   |
+| TLS certificates (using [Search Guard](https://github.com/floragunncom/search-guard)) |   &#10003;   |
+| Persistent Volume                                                                     |   &#10003;   |
+| Instant Backup                                                                        |   &#10003;   |
+| Scheduled Backup                                                                      |   &#10003;   |
+| Initialization from Script                                                            |   &#10007;   |
+| Initialization from Snapshot                                                          |   &#10003;   |
+| Builtin Prometheus Discovery                                                          |   &#10003;   |
+| Using CoreOS Prometheus Operator                                                      |   &#10003;   |
+| Custom Configuration                                                                  |   &#10003;   |
+| Using Custom Docker Image                                                             |   &#10003;   |
 
 <br/>
 
 ## Life Cycle of an Elasticsearch Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png" width="600" height="660">
+  <img alt="lifecycle"  src="/docs/images/elasticsearch/lifecycle.png">
 </p>
 
 <br/>
 
 ## Supported Elasticsearch Version
 
-| KubeDB Version | Elasticsearch:2.3 | Elasticsearch:5.6 | Elasticsearch:6.2 | Elasticsearch:6.2 |
-|----------------|:-----------------:|:-----------------:|:-----------------:|:-----------------:|
-| 0.1.0 - 0.7.0  | &#10003;          | &#10007;          | &#10007;          | &#10007;          |
-| 0.8.0-beta.2   | &#10007;          | &#10003;          | &#10007;          | &#10007;          |
-| 0.8.0-rc.0     | &#10007;          | &#10003;          | &#10007;          | &#10007;          |
-| 0.8.0          | &#10007;          | &#10003;          | &#10003;          | &#10007;          |
-| 0.9.0-beta.1   | &#10007;          | &#10003;          | &#10003;          | &#10003;          |
+| KubeDB Version | Elasticsearch:2.3 | Elasticsearch:5.6 | Elasticsearch:6.2 | Elasticsearch:6.3 | Elasticsearch:6.4 |
+| -------------- | :---------------: | :---------------: | :---------------: | :---------------: | :---------------: |
+| 0.1.0 - 0.7.0  |     &#10003;      |     &#10007;      |     &#10007;      |     &#10007;      |     &#10007;      |
+| 0.8.0          |     &#10007;      |     &#10003;      |     &#10003;      |     &#10007;      |     &#10007;      |
+| 0.9.0-beta.1   |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
+
+## Supported ElasticsearchVersion CRD
+
+Here, &#10003; means supported and &#10007; means deprecated.
+
+| ElasticsearchVersion | KubeDB: 0.9.0-beta.1 |
+| -------------------- | :------------------: |
+| 5.6                  |       &#10007;       |
+| 5.6-v1               |       &#10003;       |
+| 5.6.4                |       &#10007;       |
+| 5.6.4-v1             |       &#10003;       |
+| 6.2                  |       &#10007;       |
+| 6.2-v1               |       &#10003;       |
+| 6.2.4                |       &#10007;       |
+| 6.2.4-v1             |       &#10003;       |
+| 6.3                  |       &#10007;       |
+| 6.3-v1               |       &#10003;       |
+| 6.3.0                |       &#10007;       |
+| 6.3.0-v1             |       &#10003;       |
+| 6.4-v1               |       &#10007;       |
+| 6.4.0-v1             |       &#10007;       |
 
 ## External tools dependency
 
-|Tool                                                               |Version   |
-|-------------------------------------------------------------------|:--------:|
-|[Search Guard](https://github.com/floragunncom/search-guard)       | `5.6.4-18` and `6.2.4-22.1` |
-|[Elasticdump](https://github.com/taskrabbit/elasticsearch-dump/)   | `3.3.1` and `3.3.14`    |
-|[osm](https://github.com/appscode/osm)                             | 0.7.0    |
+|                               Tool                               |           Version           |
+| ---------------------------------------------------------------- | :-------------------------: |
+| [Search Guard](https://github.com/floragunncom/search-guard)     | `5.6.4-18` and `6.2.4-22.1` |
+| [Elasticdump](https://github.com/taskrabbit/elasticsearch-dump/) |    `3.3.1` and `3.3.14`     |
+| [osm](https://github.com/appscode/osm)                           |            0.8.0            |
+| [yq](https://github.com/mikefarah/yq)                            |            2.1.1            |
 
 <br/>
 

@@ -29,45 +29,123 @@ metadata:
   name: e1
   namespace: demo
 spec:
-  version: 5.6.4
-  topology:
-    master:
-      replicas: 1
-      prefix: master
-    data:
-      replicas: 2
-      prefix: data
-    client:
-      replicas: 1
-      prefix: client
+  version: "6.3-v1"
+  replicas: 2
+  authPlugin: "SearchGuard"
+  enableSSL: true
+  certificateSecret:
+    secretName: e1-certs
   databaseSecret:
     secretName: e1-auth
-  certificateSecret:
-    secretName: e1-cert
-  configSource:
-    configMap:
-      name: es-custom-config
-  env:
-    - name:  CLUSTER_NAME
-      value: "my-elastic-cluster"
+  storageType: "Durable"
   storage:
-    storageClassName: "standard"
+    storageClassName: standard
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 50Mi
-  nodeSelector:
-    disktype: ssd
   init:
-    snapshotSource:
-      name: "snapshot-xyz"
+    scriptSource:
+      configMap:
+        name: es-init-script
   backupSchedule:
     cronExpression: "@every 6h"
-    storageSecretName: snap-secret
+    storageSecretName: gcs-secret
     gcs:
-      bucket: restic
+      bucket: kubedb
       prefix: demo
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
+  configSource:
+    configMap:
+      name: es-custom-config
+  podTemplate:
+    annotation:
+      passMe: ToDatabasePod
+    controller:
+      annotation:
+        passMe: ToStatefulSet
+    spec:
+      schedulerName: my-scheduler
+      nodeSelector:
+        disktype: ssd
+      imagePullSecrets:
+      - name: myregistrykey
+      env:
+      - name: ES_JAVA_OPTS
+        value: "-Xms128m -Xmx128m"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+  serviceTemplate:
+    annotation:
+      passMe: ToService
+    spec:
+      type: NodePort
+      ports:
+      - name:  http
+        port:  9200
+        targetPort: http
+  updateStrategy:
+    type: "RollingUpdate"
+  terminationPolicy: "DoNotTerminate"
+```
+
+### spec.version
+
+`spec.version` is a required field that specifies the name of the [ElasticsearchVersion](/docs/concepts/catalog/elasticsearch.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `ElasticsearchVersion` crd,
+
+- `5.6`, `5.6-v1`, `5.6.4`, `5.6.4-v1`
+- `6.2`, `6.2-v1`, `6.2.4`, `6.2.4-v1`, `6.3`, `6.3-v1`, `6.3.0`, `6.3.0-v1`
+
+### spec.topology
+
+`spec.topology` is an optional field that provides a way to configure different types of nodes for Elasticsearch cluster. This field enables you to specify how many nodes you want to act as master, data and client node. You can also specify how much storage and resources to use for each types of nodes independently.
+
+You can specify the following things in `spec.topology` field,
+
+- `spec.topology.master`
+    - `.replicas` is an optional field to specify how many pods we want as `master` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as the prefix of StatefulSet name.
+    - `.storage` is an optional field that specifies how much storage to use for `master` node.
+    - `.resources` is an optional field that specifies how much compute resources to request for `master` node.
+- `spec.topology.data`
+    - `.replicas` is an optional field to specify how many pods we want as `data` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as the prefix of StatefulSet name.
+    - `.storage` is an optional field that specifies how much storage to use for `data` node.
+    - `.resources` is an optional field that specifies how much compute resources to request for `data` node.
+- `spec.topology.client`
+    - `.replicas` is an optional field to specify how many pods we want as `client` node. If not set, this defaults to 1.
+    - `.prefix` is an optional field to be used as the prefix of StatefulSet name.
+    - `.storage` is an optional field that specifies how much storage to use for `client` node.
+    - `.resources` is an optional field that specifies how much compute resources to request for `client` node.
+
+> Note: Any two of them can't have the same prefix.
+
+A sample configuration for `spec.topology` field is shown below,
+
+```yaml
+topology:
+  master:
+    prefix: master
+    replicas: 1
+    storage:
+      storageClassName: "standard"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
     resources:
       requests:
         memory: "64Mi"
@@ -75,118 +153,237 @@ spec:
       limits:
         memory: "128Mi"
         cpu: "500m"
-  monitor:
-    agent: coreos-prometheus-operator
-    prometheus:
-      namespace: demo
-      labels:
-        app: kubedb
-      interval: 10s
-  doNotPause: true
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  data:
+    prefix: data
+    replicas: 3
+    storage:
+      storageClassName: "standard"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+  client:
+    prefix: client
+    replicas: 2
+    storage:
+      storageClassName: "standard"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 50Mi
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
 ```
 
-### spec.version
+If you specify `spec.topology` field then you are not allowed to specify following fields in Elasticsearch crd.
 
-`spec.version` is a required field specifying the version of Elasticsearch cluster. Currently, the supported value is `5.6.4`.
+- `spec.replicas`
+- `spec.storage`
+- `spec.podTemplate.spec.resources`
 
+> If you do not specify `spec.topology` field, all nodes of your Elasticsearch cluster will work as `master`, `data` and `client` node simultaneously.
 
-### spec.topology
+### spec.replicas
 
-`spec.topology` is an optional field that specifies to the number of pods we want as dedicated nodes and also specifies a prefix for their StatefulSet name
+`spec.replicas` is an optional field that can be used if `spec.topology` is not specified. This field specifies the number of pods in the Elasticsearch cluster. The default value of this field is 1.
 
-- `spec.topology.master`
-    - `.replicas` is an optional field to specify how many pods we want as `master` node. If not set, this defaults to 1.
-    - `.prefix` is an optional field to be used as the prefix of StatefulSet name.
-- `spec.topology.data`
-    - `.replicas` is an optional field to specify how many pods we want as `data` node. If not set, this defaults to 1.
-    - `.prefix` is an optional field to be used as the prefix of StatefulSet name.
-- `spec.topology.client`
-    - `.replicas` is an optional field to specify how many pods we want as `client` node. If not set, this defaults to 1.
-    - `.prefix` is an optional field to be used as the prefix of StatefulSet name.
+### spec.authPlugin
 
-> Note: Any two of them can't have the same prefix.
+`spec.authPlugin` is an optional field that specifies which plugin to use for authentication. Currently, this field accepts `None` or `SearchGuard`. By default, KubeDB uses [Search Guard](https://github.com/floragunncom/search-guard) for authentication. If you specify `None` in this field, KubeDB will disable Search Guard plugin and your database will not be protected anymore.
 
-#### spec.replicas
+### spec.enableSSL
 
-`spec.replicas` is an optional field that can be used if `spec.topology` is not specified. This field specifies the number of pods in the Elasticsearch cluster. If not set, this defaults to 1.
-
-
-### spec.databaseSecret
-
-`spec.databaseSecret` is an optional field that points to a Secret used to hold credential and [search guard](https://github.com/floragunncom/search-guard) configuration.
-
-  - `ADMIN_PASSWORD:` Password for `admin` user.
-  - `READALL_PASSWORD:` Password for `readall` user.
-
-Following keys are used for search-guard configuration
-
-  - `sg_config.yml:` Configure authenticators and authorization backends
-  - `sg_internal_users.yml:` user and hashed passwords (hash with hasher.sh)
-  - `sg_roles_mapping.yml:` map backend roles, hosts and users to roles
-  - `sg_action_groups.yml:` define permission groups
-  - `sg_roles.yml:` define the roles and the associated permissions
-
-If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` with generated credentials and default search-guard configuration. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.databaseSecret.secretName`.
+`spec.enableSSL` is an optional field that specifies whether to enable SSL for [Search Guard](https://github.com/floragunncom/search-guard). The default value of this field is `false`.
 
 ### spec.certificateSecret
 
 `spec.certificateSecret` is an optional field that points a Secret used to hold the following information for the certificate.
 
-  - `root.pem:` The root CA in `pem` format
-  - `root.jks:` The root CA in `jks` format
-  - `node.jks:` The node certificate used for transport layer
-  - `client.jks:` The client certificate used for http layer
-  - `sgadmin.jks:` The admin certificate used to change the Search Guard configuration.
-  - `key_pass:` The key password used to encrypt certificates.
+- `root.pem:` The root CA in `pem` format
+- `root.jks:` The root CA in `jks` format
+- `node.jks:` The node certificate used for the transport layer
+- `client.jks:` The client certificate used for http layer
+- `sgadmin.jks:` The admin certificate used to change the Search Guard configuration.
+- `key_pass:` The key password used to encrypt certificates.
 
 If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-cert` with generated certificates. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.certificateSecret.secretName`.
+
+### spec.databaseSecret
+
+`spec.databaseSecret` is an optional field that points to a Secret used to hold credentials and [search guard](https://github.com/floragunncom/search-guard) configuration.
+
+Following keys are used to hold credentials
+
+- `ADMIN_USERNAME:` Username for superuser.
+- `ADMIN_PASSWORD:` Password for superuser.
+- `READALL_USERNAME`  Username for `readall` user.
+- `READALL_PASSWORD:` Password for `readall` user.
+
+Following keys are used for search-guard configuration
+
+- `sg_config.yml:` Configure authenticators and authorization backends
+- `sg_internal_users.yml:` user and hashed passwords (hash with hasher.sh)
+- `sg_roles_mapping.yml:` map backend roles, hosts and users to roles
+- `sg_action_groups.yml:` define permission groups
+- `sg_roles.yml:` define the roles and the associated permissions
+
+If not set, KubeDB operator creates a new Secret `{Elasticsearch name}-auth` with generated credentials and default search-guard configuration. If you want to use an existing secret, please specify that when creating Elasticsearch using `spec.databaseSecret.secretName`.
+
+### spec.storageType
+
+`spec.storageType` is an optional field that specifies the type of storage to use for database. It can be either `Durable` or `Ephemeral`. The default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Elasticsearch database using [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) volume. In this case, you don't have to specify `spec.storage` field.
+
+### spec.storage
+
+If you don't set `spec.storageType:`  to `Ephemeral` and if you don't specify `spec.topology` filed then `spec.storage` field is required. This field specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
+
+ - `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
+ - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
+ - `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
+
+To learn how to configure `spec.storage`, please visit the links below:
+ - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+
+### spec.init
+
+`spec.init` is an optional section that can be used to initialize a newly created Elasticsearch cluster from prior snapshots. To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating an Elasticsearch object. In this case, SnapshotSource must have the following information:
+
+ - `name:` Name of the Snapshot
+ - `namespace:` Namespace of the Snapshot
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch-db
+spec:
+  version: "5.6-v1"
+  databaseSecret:
+    secretName: old-elasticsearch-auth
+  init:
+    snapshotSource:
+      name: "snapshot-xyz"
+      namespace: demo
+```
+
+In the above example, Elasticsearch cluster will be initialized from Snapshot `snapshot-xyz` in `demo` namespace. Here, KubeDB operator will launch a Job to initialize Elasticsearch, once StatefulSet pods are running. For details tutorial on how to initialize Elasticsearch from snapshot, please visit [here](/docs/guides/elasticsearch/initialization/snapshot_source.md).
+
+### spec.backupSchedule
+
+KubeDB supports taking periodic snapshots for Elasticsearch database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup.
+
+You have to specify following fields to take periodic backup of your Elasticsearch database:
+
+ - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
+ - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure, and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph, etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
+
+You can also specify a template for pod of backup job through `spec.backupSchedule.podTemplate`. KubeDB will use the information you have provided in `podTemplate` to create the backup job. KubeDB accept following fields to set in `spec.backupSchedule.podTemplate`:
+
+- annotations (pod's annotation)
+- controller.annotations (job's annotation)
+- spec:
+  - args
+  - env
+  - resources
+  - imagePullSecrets
+  - initContainers
+  - nodeSelector
+  - affinity
+  - schedulerName
+  - tolerations
+  - priorityClassName
+  - priority
+  - securityContext
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
+
+### spec.monitor
+
+Elasticsearch managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
+
+- [Monitor Elasticsearch with builtin Prometheus](/docs/guides/elasticsearch/monitoring/using-builtin-prometheus.md)
+- [Monitor Elasticsearch with CoreOS Prometheus operator](/docs/guides/elasticsearch/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.configSource
 
 `spec.configSource` is an optional field that allows users to provide custom configuration for Elasticsearch. This field accepts a [`VolumeSource`](https://github.com/kubernetes/api/blob/release-1.11/core/v1/types.go#L47). So you can use any kubernetes supported volume source such as `configMap`, `secret`, `azureDisk` etc. To learn more about how to use a custom configuration file see [here](/docs/guides/elasticsearch/custom-config/overview.md).
 
-### spec.env
+### spec.podTemplate
 
-`spec.env` is an optional field that specifies the environment variables to pass to the Elasticsearch docker image. To know about supported environment variables, please visit [here](https://github.com/pires/docker-elasticsearch#environment-variables).
+KubeDB allows providing a template for database pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the StatefulSet created for Elasticsearch database.
 
-A list of the supported environment variables, their permission to use in Kubedb and their default value is given below.
+KubeDB accept following fields to set in `spec.podTemplate:`
 
-| Environment variables           | Permission to use | Default value                                                                                      |
+- annotations (pod's annotation)
+- controller.annotations (statefulset's annotation)
+- spec:
+  - env
+  - resources
+  - initContainers
+  - imagePullSecrets
+  - nodeSelector
+  - affinity
+  - schedulerName
+  - tolerations
+  - priorityClassName
+  - priority
+  - securityContext
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
+
+Uses of some fields of `spec.podTemplate` are described below,
+
+#### spec.podTemplate.spec.env
+
+`spec.podTemplate.spec.env` is an optional field that specifies the environment variables to pass to the Elasticsearch docker image. To know about supported environment variables, please visit [here](https://github.com/pires/docker-elasticsearch#environment-variables).
+
+A list of the supported environment variables, their permission to use in KubeDB and their default value is given below.
+
+|      Environment variables      | Permission to use |                                           Default value                                            |
 | ------------------------------- | :---------------: | -------------------------------------------------------------------------------------------------- |
-| CLUSTER_NAME                    | `allowed`         | `metadata.name`                                                                                    |
-| NODE_NAME                       | `not allowed`     | Pod name                                                                                           |
-| NODE_MASTER                     | `not allowed`     | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
-| NODE_DATA                       | `not allowed`     | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
-| NETWORK_HOST                    | `allowed`         | `_site_`                                                                                           |
-| HTTP_ENABLE                     | `allowed`         | If `spec.topology` is not specified then `true`. Otherwise, `false` for Master node and Data node. |
-| HTTP_CORS_ENABLE                | `allowed`         | `true`                                                                                             |
-| HTTP_CORS_ALLOW_ORIGIN          | `allowed`         | `*`                                                                                                |
-| NUMBER_OF_MASTERS               | `allowed`         | `(replicas/2)+1`                                                                                   |
-| MAX_LOCAL_STORAGE_NODES         | `allowed`         | `1`                                                                                                |
-| ES_JAVA_OPTS                    | `allowed`         | `-Xms128m -Xmx128m`                                                                                |
-| ES_PLUGINS_INSTALL              | `allowed`         | Not set                                                                                            |
-| SHARD_ALLOCATION_AWARENESS      | `allowed`         | `""`                                                                                               |
-| SHARD_ALLOCATION_AWARENESS_ATTR | `allowed`         | `""`                                                                                               |
-| MEMORY_LOCK                     | `allowed`         | `true`                                                                                             |
-| REPO_LOCATIONS                  | `allowed`         | `""`                                                                                               |
-| PROCESSORS                      | `allowed`         | `1`                                                                                                |
+| CLUSTER_NAME                    |     `allowed`     | `metadata.name`                                                                                    |
+| NODE_NAME                       |   `not allowed`   | Pod name                                                                                           |
+| NODE_MASTER                     |   `not allowed`   | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
+| NODE_DATA                       |   `not allowed`   | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
+| NETWORK_HOST                    |     `allowed`     | `_site_`                                                                                           |
+| HTTP_ENABLE                     |     `allowed`     | If `spec.topology` is not specified then `true`. Otherwise, `false` for Master node and Data node. |
+| HTTP_CORS_ENABLE                |     `allowed`     | `true`                                                                                             |
+| HTTP_CORS_ALLOW_ORIGIN          |     `allowed`     | `*`                                                                                                |
+| NUMBER_OF_MASTERS               |     `allowed`     | `(replicas/2)+1`                                                                                   |
+| MAX_LOCAL_STORAGE_NODES         |     `allowed`     | `1`                                                                                                |
+| ES_JAVA_OPTS                    |     `allowed`     | `-Xms128m -Xmx128m`                                                                                |
+| ES_PLUGINS_INSTALL              |     `allowed`     | Not set                                                                                            |
+| SHARD_ALLOCATION_AWARENESS      |     `allowed`     | `""`                                                                                               |
+| SHARD_ALLOCATION_AWARENESS_ATTR |     `allowed`     | `""`                                                                                               |
+| MEMORY_LOCK                     |     `allowed`     | `true`                                                                                             |
+| REPO_LOCATIONS                  |     `allowed`     | `""`                                                                                               |
+| PROCESSORS                      |     `allowed`     | `1`                                                                                                |
 
-Note that, Kubedb does not allow `NODE_NAME`, `NODE_MASTER`, and `NODE_DATA` environment variables to set in`spec.env`. Kubedb operator set them based on Elasticsearch crd specification.
+Note that, KubeDB does not allow `NODE_NAME`, `NODE_MASTER`, and `NODE_DATA` environment variables to set in `spec.podTemplate.spec.env`. KubeDB operator set them based on Elasticsearch crd specification.
 
-If you try to set any these forbidden environment variable in Elasticsearch crd, Kubed operator will reject the request with following error,
+If you try to set any these forbidden environment variable in Elasticsearch crd, KubeDB operator will reject the request with following error,
 
 ```ini
 Error from server (Forbidden): error when creating "./elasticsearch.yaml": admission webhook "elasticsearch.validators.kubedb.com" denied the request: environment variable NODE_NAME is forbidden to use in Elasticsearch spec
 ```
 
-Also, note that Kubedb does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, Kubedb operator will reject the request with following error,
+Also, note that KubeDB does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, KubeDB operator will reject the request with following error,
 
 ```ini
 Error from server (BadRequest): error when applying patch:
@@ -204,76 +401,70 @@ At least one of the following was changed:
     spec.enableSSL
     spec.certificateSecret
     spec.databaseSecret
+    spec.storageType
     spec.storage
     spec.nodeSelector
     spec.init
     spec.env
 ```
 
-### spec.storage
+#### spec.podTemplate.spec.imagePullSecrets
 
-`spec.storage` is an optional field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
+`spec.podTemplate.spec.imagePullSecrets` is an optional field that points to secrets to be used for pulling docker image when you are using a private docker registry. For more details on how to use private docker registry, please visit [here](/docs/guides/elasticsearch/private-registry/using-private-registry.md).
 
- - `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
- - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
- - `spec.storage.resources` can be used to request specific quantities of storage. This follows the same resource model used by PVCs.
+#### spec.podTemplate.spec.nodeSelector
 
-To learn how to configure `spec.storage`, please visit the links below:
- - https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+`spec.podTemplate.spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
 
+#### spec.podTemplate.spec.resources
 
-### spec.nodeSelector
+`spec.podTemplate.spec.resources` is an optional field. If you didn't specify `spec.topology` field then this can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
 
-`spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
+### spec.serviceTemplate
 
+You can also provide a template for the services created by KubeDB operator for Elasticsearch database through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
 
-### spec.init
+KubeDB allows following fields to set in `spec.serviceTemplate`:
 
-`spec.init` is an optional section that can be used to initialize a newly created Elasticsearch cluster from prior snapshots. To initialize from prior snapshots, set the `spec.init.snapshotSource` section when creating an Elasticsearch object. In this case, SnapshotSource must have following information:
+- annotations
+- type
+- ports
+- clusterIP
+- externalIPs
+- loadBalancerIP
+- loadBalancerSourceRanges
+- externalTrafficPolicy
+- healthCheckNodePort
 
- - `name:` Name of the Snapshot
+### spec.updateStrategy
 
-```yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
-metadata:
-  name: elasticsearch-db
-spec:
-  version: 2.3.1
-  replicas: 1
-  init:
-    snapshotSource:
-      name: "snapshot-xyz"
-```
+You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) of StatefulSet created by KubeDB for Elasticsearch database thorough `spec.updateStrategy` field. The default value of this field is `RollingUpdate`. In future, we will use this field to determine how automatic migration from old KubeDB version to new one should behave.
 
-In the above example, Elasticsearch cluster will be initialized from Snapshot `snapshot-xyz` in `default` namespace. Here, KubeDB operator will launch a Job to initialize Elasticsearch, once StatefulSet pods are running.
+### spec.terminationPolicy
 
-### spec.backupSchedule
+`terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Elasticsearch` crd or which resources KubeDB should keep or delete when you delete `Elasticsearch` crd. KubeDB provides following four termination policies:
 
-KubeDB supports taking periodic snapshots for Elasticsearch database. This is an optional section in `.spec`. When `spec.backupSchedule` section is added, KubeDB operator immediately takes a backup to validate this information. After that, at each tick kubeDB operator creates a [Snapshot](/docs/concepts/snapshot.md) object. This triggers operator to create a Job to take backup. If used, set the various sub-fields accordingly.
+- DoNotTerminate
+- Pause (`Default`)
+- Delete
+- WipeOut
 
- - `spec.backupSchedule.cronExpression` is a required [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). This specifies the schedule for backup operations.
- - `spec.backupSchedule.{storage}` is a required field that is used as the destination for storing snapshot data. KubeDB supports cloud storage providers like S3, GCS, Azure and OpenStack Swift. It also supports any locally mounted Kubernetes volumes, like NFS, Ceph, etc. Only one backend can be used at a time. To learn how to configure this, please visit [here](/docs/concepts/snapshot.md).
- - `spec.backupSchedule.resources` is an optional field that can request compute resources required by Jobs used to take a snapshot or initialize databases from a snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to provide safety from accidental deletion of database. If admission webhook is enabled, KubeDB prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
 
+Following table show what KubeDB does when you delete Elasticsearch crd for different termination policies,
 
-### spec.doNotPause
+|              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
+| ----------------------------------- | :------------: | :------: | :------: | :------: |
+| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
+| 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 5. Delete PVCs                      |    &#10007;    | &#10007; | &#10003; | &#10003; |
+| 6. Delete Secrets                   |    &#10007;    | &#10007; | &#10007; | &#10003; |
+| 7. Delete Snapshots                 |    &#10007;    | &#10007; | &#10007; | &#10003; |
+| 8. Delete Snapshot data from bucket |    &#10007;    | &#10007; | &#10007; | &#10003; |
 
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this Elasticsearch object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting an Elasticsearch object put the database into a dormant state. THe StatefulSet for a DormantDatabase is deleted but the underlying PVCs are left intact. This allows users to resume the database later.
-
-
-### spec.monitor
-
-Elasticsearch managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
-
-- [Monitor Elasticsearch with builtin Prometheus](/docs/guides/elasticsearch/monitoring/using-builtin-prometheus.md)
-- [Monitor Elasticsearch with CoreOS Prometheus operator](/docs/guides/elasticsearch/monitoring/using-coreos-prometheus-operator.md)
-
-
-### spec.resources
-
-`spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
-
+If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination policy by default.
 
 ## Next Steps
 

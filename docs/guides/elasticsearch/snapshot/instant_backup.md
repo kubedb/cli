@@ -34,7 +34,16 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-We need an Elasticsearch object in `Running` phase to perform backup operation.
+## Prepare Database
+
+We need an Elasticsearch object in `Running` phase to perform backup operation. If you do not already have an Elasticsearch instance running, create one first.
+
+```console
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+elasticsearch "infant-elasticsearch" created
+```
+
+Below the YAML for the Elasticsearch crd we have created above.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -43,15 +52,13 @@ metadata:
   name: infant-elasticsearch
   namespace: demo
 spec:
-  version: "5.6"
+  version: "6.3-v1"
+  storageType: Ephemeral
 ```
 
-If Elasticsearch object `infant-elasticsearch` doesn't exists, create it first.
+Here, we have used `spec.storageType: Ephemeral`. So, we don't need to specify storage section. KubeDB will use [emptyDir]((https://kubernetes.io/docs/concepts/storage/volumes/#emptydir)) volume for this database.
 
-```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
-elasticsearch "infant-elasticsearch" created
-```
+Verify that the Elasticsearch is running,
 
 ```console
 $ kubedb get es -n demo infant-elasticsearch
@@ -59,23 +66,12 @@ NAME                   STATUS    AGE
 infant-elasticsearch   Running   11m
 ```
 
-#### Populate database
+### Populate database
 
-In this tutorial, we will expose ClusterIP Service `infant-elasticsearch` to connect database from local.
-
-```console
-$ kubectl expose svc -n demo infant-elasticsearch --name=infant-es-exposed --port=9200 --protocol=TCP --type=NodePort
-service "infant-es-exposed" exposed
-```
-
-Check [this tutorial](/docs/guides/elasticsearch/quickstart/quickstart.md#connect-elasticsearch) to see how to connect Elasticsearch.
-
-Before taking backup, insert some data into this Elasticsearch.
+Let's insert some data so that we can verify that the snapshot contains those data. Check how to connect with the database from [here](/docs/guides/elasticsearch/quickstart/quickstart.md#connect-with-elasticsearch-database).
 
 ```console
-export es_service=$(minikube service infant-es-exposed -n demo --url)
-export es_admin_pass=$(kubectl get secrets -n demo infant-elasticsearch-auth -o jsonpath='{.data.\ADMIN_PASSWORD}' | base64 -d)
-curl -XPUT --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" -H 'Content-Type: application/json' -d'
+$ curl -XPUT --user "admin:fqvzdvz3" "localhost:9200/test/snapshot/1?pretty" -H 'Content-Type: application/json' -d'
 {
     "title": "Snapshot",
     "text":  "Testing instand backup",
@@ -85,7 +81,7 @@ curl -XPUT --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty" -H
 ```
 
 ```console
-$ curl -XGET --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty"
+$ curl -XGET --user "admin:fqvzdvz3" "localhost:9200/test/snapshot/1?pretty"
 ```
 
 ```json
@@ -103,7 +99,7 @@ $ curl -XGET --user "admin:$es_admin_pass" "$es_service/test/snapshot/1?pretty"
 }
 ```
 
-Now take backup of this database `infant-elasticsearch`.
+Now, we are ready to take backup of this database `infant-elasticsearch`.
 
 ## Instant backup
 
@@ -133,12 +129,11 @@ Here,
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
-In this case, `kubedb.com/kind: Elasticsearch` tells KubeDB operator that this Snapshot belongs to a Elasticsearch object.
-Only Elasticsearch controller will handle this Snapshot object.
+In this case, `kubedb.com/kind: Elasticsearch` tells KubeDB operator that this Snapshot belongs to an Elasticsearch object. Only Elasticsearch controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Elasticsearch, `infant-elasticsearch`.
 
-#### Snapshot storage Secret
+#### Snapshot Storage Secret
 
 Storage Secret should contain credentials that will be used to access storage destination.
 In this tutorial, snapshot data will be stored in a Google Cloud Storage (GCS) bucket.
@@ -178,8 +173,7 @@ type: Opaque
 
 #### Snapshot storage backend
 
-KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes) as snapshot storage backend.
-In this tutorial, _GCS_ backend is used.
+KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes) as snapshot storage backend. In this tutorial, _GCS_ backend is used.
 
 To configure this backend, following parameters are available:
 
@@ -190,25 +184,24 @@ To configure this backend, following parameters are available:
 
 > An open source project [osm](https://github.com/appscode/osm) is used to store snapshot data into cloud.
 
-To lean how to configure other storage destinations for snapshot data, please visit [here](/docs/concepts/snapshot.md).
+To learn how to configure other storage destinations for snapshot data, please visit [here](/docs/concepts/snapshot.md).
 
 Now, create the Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
-snapshot "instant-snapshot" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
+snapshot.kubedb.com/instant-snapshot created
 ```
 
-Lets see Snapshot list of Elasticsearch `infant-elasticsearch`.
+Let's see Snapshot list of Elasticsearch `infant-elasticsearch`.
 
 ```console
-$ kubedb get snap -n demo --selector=kubedb.com/kind=Elasticsearch,kubedb.com/name=infant-elasticsearch
-NAME               DATABASE                  STATUS      AGE
-instant-snapshot   es/infant-elasticsearch   Succeeded   2m
+$ kubectl get snap -n demo --selector=kubedb.com/kind=Elasticsearch,kubedb.com/name=infant-elasticsearch
+NAME               DATABASENAME           STATUS      AGE
+instant-snapshot   infant-elasticsearch   Succeeded   47s
 ```
 
-KubeDB operator watches for Snapshot objects using Kubernetes API. When a Snapshot object is created, it will launch a Job that runs the [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and
-uploads the output files to cloud storage using [osm](https://github.com/appscode/osm).
+KubeDB operator watches for Snapshot objects using Kubernetes API. When a Snapshot object is created, it will launch a Job that runs the [elasticdump](https://github.com/taskrabbit/elasticsearch-dump) command and uploads the output files to cloud storage using [osm](https://github.com/appscode/osm).
 
 Snapshot data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{elasticsearch}/{snapshot}/`.
 
@@ -238,41 +231,60 @@ If you open this `test.data.json` file, you will see the data you have created p
 }
 ```
 
-Lets see the Snapshot list for Elasticsearch `infant-elasticsearch` by running `kubedb describe` command.
+Let's see the Snapshot list for Elasticsearch `infant-elasticsearch` by running `kubedb describe` command.
 
 ```console
-$ kubedb describe es -n demo infant-elasticsearch -S=false -W=false
-Name:			        infant-elasticsearch
-Namespace:		        demo
-CreationTimestamp:      Tue, 13 Feb 2018 12:08:36 +0600
-Status:			        Running
-No volumes.
-StatefulSet:	infant-elasticsearch
-Service:	    infant-elasticsearch, infant-elasticsearch-master, infant-es-exposed
-Secrets:	    infant-elasticsearch-auth, infant-elasticsearch-cert
+$ kubedb describe es -n demo infant-elasticsearch
+Name:               infant-elasticsearch
+Namespace:          demo
+CreationTimestamp:  Fri, 05 Oct 2018 16:45:56 +0600
+Labels:             <none>
+Annotations:        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"kubedb.com/v1alpha1","kind":"Elasticsearch","metadata":{"annotations":{},"name":"infant-elasticsearch","namespace":"demo"},"spec":{"repl...
+Status:             Running
+Replicas:           1  total
+  StorageType:      Ephemeral
+Volume:
+  Capacity:  0
 
+StatefulSet:          
+  Name:               infant-elasticsearch
+  CreationTimestamp:  Fri, 05 Oct 2018 16:45:58 +0600
+  Labels:               kubedb.com/kind=Elasticsearch
+                        kubedb.com/name=infant-elasticsearch
+                        node.role.client=set
+                        node.role.data=set
+                        node.role.master=set
+  Annotations:        <none>
+  Replicas:           824639991608 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+...
 Topology:
-  Type                 Pod                      StartTime                       Phase
-  ----                 ---                      ---------                       -----
-  client|data|master   infant-elasticsearch-0   2018-02-14 15:24:12 +0600 +06   Running
+  Type                Pod                     StartTime                      Phase
+  ----                ---                     ---------                      -----
+  master|client|data  infant-elasticsearch-0  2018-10-05 16:45:58 +0600 +06  Running
 
 Snapshots:
-  Name               Bucket      StartTime                         CompletionTime                    Phase
-  ----               ------      ---------                         --------------                    -----
-  instant-snapshot   gs:kubedb   Wed, 14 Feb 2018 15:33:11 +0600   Wed, 14 Feb 2018 15:35:17 +0600   Succeeded
+  Name              Bucket     StartTime                        CompletionTime                   Phase
+  ----              ------     ---------                        --------------                   -----
+  instant-snapshot  gs:kubedb  Fri, 05 Oct 2018 17:27:55 +0600  Fri, 05 Oct 2018 17:28:10 +0600  Succeeded
 
 Events:
-  FirstSeen   LastSeen   Count     From                     Type       Reason               Message
-  ---------   --------   -----     ----                     --------   ------               -------
-  2m          2m         1         Job Controller           Normal     SuccessfulSnapshot   Successfully completed snapshot
-  4m          4m         1         Snapshot Controller      Normal     Starting             Backup running
-  12m         12m        1         Elasticsearch operator   Normal     Successful           Successfully patched Elasticsearch
-  12m         12m        1         Elasticsearch operator   Normal     Successful           Successfully patched StatefulSet
-  12m         12m        1         Elasticsearch operator   Normal     Successful           Successfully created Elasticsearch
-  13m         13m        1         Elasticsearch operator   Normal     Successful           Successfully created StatefulSet
-  13m         13m        1         Elasticsearch operator   Normal     Successful           Successfully created Service
-  13m         13m        1         Elasticsearch operator   Normal     Successful           Successfully created Service
+  Type    Reason              Age   From                    Message
+  ----    ------              ----  ----                    -------
+  Normal  Successful          44m   Elasticsearch operator  Successfully created Service
+  Normal  Successful          44m   Elasticsearch operator  Successfully created Service
+  Normal  Successful          44m   Elasticsearch operator  Successfully created StatefulSet
+  Normal  Successful          44m   Elasticsearch operator  Successfully created Elasticsearch
+  Normal  Successful          44m   Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful          43m   Elasticsearch operator  Successfully patched Elasticsearch
+  Normal  Successful          43m   Elasticsearch operator  Successfully patched StatefulSet
+  Normal  Successful          43m   Elasticsearch operator  Successfully patched Elasticsearch
+  Normal  Starting            2m    Job Controller          Backup running
+  Normal  SuccessfulSnapshot  2m    Job Controller          Successfully completed snapshot
 ```
+
+From the above output, we can see in `Snapshots:` section that we have one successful snapshot.
 
 ## Delete Snapshot
 
@@ -290,11 +302,8 @@ Once Snapshot object is deleted, you can't revert this process and snapshot data
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo es/infant-elasticsearch -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo es/infant-elasticsearch -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo es/infant-elasticsearch
-
-$ kubectl patch -n demo drmn/infant-elasticsearch -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/infant-elasticsearch
 
 $ kubectl delete ns demo
 ```
