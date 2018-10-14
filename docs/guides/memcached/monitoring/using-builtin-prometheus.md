@@ -1,12 +1,12 @@
 ---
 title: Monitor Memcached using Builtin Prometheus Discovery
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: mc-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: mc-monitoring-memcached
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 

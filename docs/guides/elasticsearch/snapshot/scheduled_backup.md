@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of Elasticsearch
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: es-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: es-snapshot-elasticsearch
     weight: 15
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > Don't know how backup works?  Check [tutorial](/docs/guides/elasticsearch/snapshot/instant_backup.md) on Instant Backup.

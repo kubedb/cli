@@ -1,24 +1,25 @@
 ---
 title: Instant Backup of PostgreSQL
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-instant-backup-snapshot
     name: Instant Backup
     parent: pg-snapshot-postgres
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# KubeDB Snapshot
+# Database Snapshot
 
-KubeDB operator maintains another Custom Resource Definition (CRD) for database backups called Snapshot. Snapshot object is used to take backup or restore from a backup.
+KubeDB operator maintains another Custom Resource Definition (CRD) for database backups called Snapshot. Snapshot object is used to take backup or restore from a backup. For more details about Snapshot please visit [here](/docs/concepts/snapshot.md).
+
+This tutorial will show how to take instant backup of PostgreSQL database deployed with KubeDB.
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -35,50 +36,15 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-We need an Postgres object in Running phase to perform backup operation.
+## Prepare Database
 
-```yaml
-apiVersion: kubedb.com/v1alpha1
-kind: Postgres
-metadata:
-  name: script-postgres
-  namespace: demo
-spec:
-  version: "9.6"
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 50Mi
-  init:
-    scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/postgres-init-scripts.git"
-        directory: "."
-```
-
-If Postgres object `script-postgres` doesn't exists, create it first.
-
-```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/initialization/script-postgres.yaml
-postgres "script-postgres" created
-```
-
-```console
-$ kubedb get pg -n demo script-postgres
-NAME                STATUS      AGE
-script-postgres     Running     11m
-```
-
-We will take backup of this PostgreSQL database `script-postgres`.
+We need an Postgres database running to perform backup operation. If you don't have a Postgres instance running, create one and initialize it by following the tutorial [here](/docs/guides/postgres/initialization/script_source.md).
 
 ## Instant Backup
 
-Snapshot provides a declarative configuration for backup behavior in a Kubernetes native way.
+KubeDB operator watches for Snapshot objects using Kubernetes API. When a Snapshot object is created, it will launch a Job that runs the `pg_dumpall` command and uploads the output **sql** file to cloud storage using [osm](https://github.com/appscode/osm).
 
-Below is the Snapshot object created in this tutorial.
+Below the Snapshot object that will be created in this tutorial,
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -102,17 +68,15 @@ Here,
 - `spec.storageSecretName` points to the Secret containing the credentials for snapshot storage destination.
 - `spec.gcs.bucket` points to the bucket name used to store the snapshot data.
 
-In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object.
-Only PostgreSQL controller will handle this Snapshot object.
+In this case, `kubedb.com/kind: Postgres` tells KubeDB operator that this Snapshot belongs to a Postgres object. Only PostgreSQL controller will handle this Snapshot object.
 
 > Note: Snapshot and Secret objects must be in the same namespace as Postgres, `script-postgres`, in our case.
 
-#### Snapshot Storage Secret
+### Snapshot Storage Secret
 
-Storage Secret should contain credentials that will be used to access storage destination.
-In this tutorial, snapshot data will be stored in a Google Cloud Storage (GCS) bucket.
+Storage Secret should contain credentials that will be used to access storage destination. In this tutorial, snapshot data will be stored in a Google Cloud Storage (GCS) bucket.
 
-For that a storage Secret is needed with following 2 keys:
+For GCS bucket, a storage Secret require to have following 2 keys:
 
 | Key                               | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -129,26 +93,26 @@ secret "gcs-secret" created
 ```
 
 ```yaml
-$ kubectl get secret -n demo gcs-secret -o yaml
+$  kubectl get secret -n demo gcs-secret -o yaml
 apiVersion: v1
 data:
-  GOOGLE_PROJECT_ID: PHlvdXItcHJvamVjdC1pZD4=
-  GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
+  GOOGLE_PROJECT_ID: <base64 encoded project id>
+  GOOGLE_SERVICE_ACCOUNT_JSON_KEY: <base64 encoded service-account-json-key>
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-05T06:10:50Z
+  creationTimestamp: 2018-09-04T06:08:01Z
   name: gcs-secret
   namespace: demo
-  resourceVersion: "3869"
+  resourceVersion: "11716"
   selfLink: /api/v1/namespaces/demo/secrets/gcs-secret
-  uid: 5055ce8e-0a3b-11e8-b4de-42010a8000be
+  uid: e0aef5a7-b008-11e8-9990-0800279292a5
 type: Opaque
+
 ```
 
-#### Snapshot Storage Backend
+### Snapshot Storage Backend
 
-KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes) as snapshot storage backend.
-In this tutorial, _GCS_ backend is used.
+KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swift_ and/or locally mounted volumes) as snapshot storage backend. In this tutorial, _GCS_ backend is used.
 
 To configure this backend, following parameters are available:
 
@@ -157,31 +121,38 @@ To configure this backend, following parameters are available:
 | `spec.gcs.bucket`        | `Required`. Name of bucket                                                      |
 | `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot data will be stored          |
 
-> An open source project [osm](https://github.com/appscode/osm) is used to store snapshot data into cloud.
+To learn how to configure other storage destinations for snapshot data, please visit [here](/docs/concepts/snapshot.md).
 
-To lean how to configure other storage destinations for snapshot data, please visit [here](/docs/concepts/snapshot.md).
-
-Now, create the Snapshot object.
+Now, let's create a Snapshot object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/instant-snapshot.yaml
-snapshot "instant-snapshot" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/instant-snapshot.yaml
+snapshot.kubedb.com/instant-snapshot created
 ```
 
-Lets see Snapshot list of Postgres `script-postgres`.
+Verify that the Snapshot has been successfully created,
 
 ```console
-$ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
-NAME               DATABASE             STATUS    AGE
-instant-snapshot   pg/script-postgres   Running   42s
+$ kubectl get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
+NAME               DATABASENAME      STATUS    AGE
+instant-snapshot   script-postgres   Running   58s
 ```
 
-KubeDB operator watches for Snapshot objects using Kubernetes API. When a Snapshot object is created, it will launch a Job that runs the `pg_dumpall` command and
-uploads the output **sql** file to cloud storage using [osm](https://github.com/appscode/osm).
+Notice that the `STATUS` field is showing `Running`. It means the backup is running.
 
-Snapshot data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{PostgreSQL name}/{Snapshot name}/`.
+Snapshot data is stored in the backend in following directory `{bucket}/{prefix}/kubedb/{namespace}/{PostgreSQL name}/{Snapshot name}/`.
 
 Once the snapshot Job is completed, you can see the output of the `pg_dumpall` command stored in the GCS bucket.
+
+Verify that the backup has been completed successfully using following command,
+
+```console
+$ kubectl get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
+NAME               DATABASENAME      STATUS      AGE
+instant-snapshot   script-postgres   Succeeded   36s
+```
+
+Here, `STATUS` `Succeeded` means the backup has been completed successfully. Now, navigate to the bucket to see the backed up file.
 
 <p align="center">
   <kbd>
@@ -216,48 +187,94 @@ CREATE TABLE dashboard (
 ALTER TABLE dashboard OWNER TO postgres;
 ```
 
-Lets see the Snapshot list for Postgres `script-postgres` by running `kubedb describe` command.
+You can see the Snapshot list for Postgres `script-postgres` by running `kubedb describe` command.
 
 ```console
-$ kubedb describe pg -n demo script-postgres -S=false -W=false
-Name:           script-postgres
-Namespace:      demo
-StartTimestamp: Thu, 08 Feb 2018 15:55:11 +0600
-Status:         Running
+$ kubedb describe pg -n demo script-postgres
+Name:               script-postgres
+Namespace:          demo
+CreationTimestamp:  Tue, 04 Sep 2018 11:55:22 +0600
+Labels:             <none>
+Annotations:        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"kubedb.com/v1alpha1","kind":"Postgres","metadata":{"annotations":{},"name":"script-postgres","namespace":"demo"},"spec":{"init":{"script...
+Replicas:           1  total
+Status:             Running
 Init:
   scriptSource:
-    Type:       GitRepo (a volume that is pulled from git when the pod is created)
-    Repository: https://github.com/kubedb/postgres-init-scripts.git
-    Directory:  .
 Volume:
-  StorageClass: standard
-  Capacity:     50Mi
-  Access Modes: RWO
-StatefulSet:    script-postgres
-Service:        script-postgres, script-postgres-replicas
-Secrets:        script-postgres-auth
+    Type:       ConfigMap (a volume populated by a ConfigMap)
+    Name:       pg-init-script
+    Optional:   false
+  StorageType:  Durable
+Volume:
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
+
+StatefulSet:          
+  Name:               script-postgres
+  CreationTimestamp:  Tue, 04 Sep 2018 11:55:25 +0600
+  Labels:               kubedb.com/kind=Postgres
+                        kubedb.com/name=script-postgres
+  Annotations:        <none>
+  Replicas:           824640513680 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+Service:        
+  Name:         script-postgres
+  Labels:         kubedb.com/kind=Postgres
+                  kubedb.com/name=script-postgres
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.99.38.101
+  Port:         api  5432/TCP
+  TargetPort:   api/TCP
+  Endpoints:    172.17.0.6:5432
+
+Service:        
+  Name:         script-postgres-replicas
+  Labels:         kubedb.com/kind=Postgres
+                  kubedb.com/name=script-postgres
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.106.251.230
+  Port:         api  5432/TCP
+  TargetPort:   api/TCP
+  Endpoints:    172.17.0.6:5432
+
+Database Secret:
+  Name:         script-postgres-auth
+  Labels:         kubedb.com/kind=Postgres
+                  kubedb.com/name=script-postgres
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  POSTGRES_PASSWORD:  16 bytes
+  POSTGRES_USER:      8 bytes
 
 Topology:
-  Type      Pod                 StartTime                       Phase
-  ----      ---                 ---------                       -----
-  primary   script-postgres-0   2018-02-08 15:55:29 +0600 +06   Running
+  Type     Pod                StartTime                      Phase
+  ----     ---                ---------                      -----
+  primary  script-postgres-0  2018-09-04 11:55:32 +0600 +06  Running
 
 Snapshots:
-  Name               Bucket      StartTime                         CompletionTime                    Phase
-  ----               ------      ---------                         --------------                    -----
-  instant-snapshot   gs:kubedb   Thu, 08 Feb 2018 16:30:29 +0600   Thu, 08 Feb 2018 16:31:54 +0600   Succeeded
+  Name              Bucket     StartTime                        CompletionTime                   Phase
+  ----              ------     ---------                        --------------                   -----
+  instant-snapshot  gs:kubedb  Tue, 04 Sep 2018 12:10:54 +0600  Tue, 04 Sep 2018 12:11:45 +0600  Succeeded
 
 Events:
-  FirstSeen   LastSeen   Count     From                  Type       Reason               Message
-  ---------   --------   -----     ----                  --------   ------               -------
-  11m         11m        1         Job Controller        Normal     SuccessfulSnapshot   Successfully completed snapshot
-  12m         12m        1         Snapshot Controller   Normal     Starting             Backup running
-  48m         48m        1         Postgres operator     Normal     Successful           Successfully patched StatefulSet
-  48m         48m        1         Postgres operator     Normal     Successful           Successfully patched Postgres
-  48m         48m        1         Postgres operator     Normal     Successful           Successfully created StatefulSet
-  48m         48m        1         Postgres operator     Normal     Successful           Successfully created Postgres
-  48m         48m        1         Postgres operator     Normal     Successful           Successfully created Service
-  48m         48m        1         Postgres operator     Normal     Successful           Successfully created Service
+  Type    Reason              Age   From               Message
+  ----    ------              ----  ----               -------
+  Normal  Successful          33m   Postgres operator  Successfully created Service
+  Normal  Successful          33m   Postgres operator  Successfully created Service
+  Normal  Successful          31m   Postgres operator  Successfully created StatefulSet
+  Normal  Successful          31m   Postgres operator  Successfully created Postgres
+  Normal  Successful          31m   Postgres operator  Successfully patched StatefulSet
+  Normal  Successful          31m   Postgres operator  Successfully patched Postgres
+  Normal  Starting            17m   Job Controller     Backup running
+  Normal  SuccessfulSnapshot  16m   Job Controller     Successfully completed snapshot
 ```
 
 ## Cleanup Snapshot
@@ -274,11 +291,11 @@ snapshot "instant-snapshot" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/script-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo pg/script-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/script-postgres
 
-$ kubectl patch -n demo drmn/script-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/script-postgres
+$ kubectl delete -n demo configmap/pg-init-script
+$ kubectl delete -n demo secret/gcs-secret
 
 $ kubectl delete ns demo
 ```

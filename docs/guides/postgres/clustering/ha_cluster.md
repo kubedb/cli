@@ -1,12 +1,12 @@
 ---
 title: Setup HA Postgres Cluster
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-ha-cluster-clustering
     name: HA Setup
     parent: pg-clustering-postgres
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -14,7 +14,7 @@ section_menu_id: guides
 ## Configuring Highly Available PostgreSQL Cluster
 
 In PostgreSQL, multiple servers can work together to serve high availability and load balancing. These servers will be either in *Master* or *Standby* mode.
-``
+
 In *master* mode, server that can modify data. In *standby* mode, the server continuously applies WAL received from the master server. The standby server can read WAL from a WAL archive (see restore_command) or directly from the master over a TCP connection (streaming replication).
 
 Standby servers can be either *warm standby* or *hot standby* server.
@@ -33,9 +33,10 @@ metadata:
   name: warm-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   replicas: 3
-  standbyMode: warm
+  standbyMode: Warm
+  storageType: Ephemeral
 ```
 
 In this examples:
@@ -56,9 +57,10 @@ metadata:
   name: hot-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   replicas: 3
-  standbyMode: hot
+  standbyMode: Hot
+  storageType: Ephemeral
 ```
 
 In this examples:

@@ -1,12 +1,12 @@
 ---
 title: Elasticsearch
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: elasticsearch-db
     name: Elasticsearch
     parent: databases
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: concepts
 ---
 
@@ -293,8 +293,10 @@ You have to specify following fields to take periodic backup of your Elasticsear
 
 You can also specify a template for pod of backup job through `spec.backupSchedule.podTemplate`. KubeDB will use the information you have provided in `podTemplate` to create the backup job. KubeDB accept following fields to set in `spec.backupSchedule.podTemplate`:
 
-- annotations (pod's annotation)
-- controller.annotations (job's annotation)
+- metadata
+  - annotations (pod's annotation)
+- controller
+  - annotations (job's annotation)
 - spec:
   - args
   - env
@@ -329,8 +331,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata
+  - annotations (pod's annotation)
+- controller
+  - annotations (statefulset's annotation)
 - spec:
   - env
   - resources

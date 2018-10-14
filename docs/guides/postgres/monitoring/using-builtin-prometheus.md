@@ -1,12 +1,12 @@
 ---
 title: Monitor PostgreSQL using Builtin Prometheus Discovery
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: pg-monitoring-postgres
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 
@@ -18,8 +18,7 @@ This tutorial will show you how to monitor PostgreSQL database using [Prometheus
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -49,7 +48,7 @@ metadata:
   name: builtin-prom-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -68,37 +67,70 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
-postgres "builtin-prom-postgres" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/monitoring/builtin-prom-postgres.yaml
+postgres.kubedb.com/builtin-prom-postgres created
 ```
 
 KubeDB operator will configure its service once the PostgreSQL is successfully running.
 
 ```console
 $ kubedb get pg -n demo builtin-prom-postgres
-NAME                    STATUS    AGE
-builtin-prom-postgres   Running   5m
+NAME                    VERSION   STATUS    AGE
+builtin-prom-postgres   9.6-v1    Running   1m
 ```
 
-Lets describe Service `builtin-prom-postgres`
+KubeDB will create a separate stats service with name `{Postgres name}-stats` for monitoring purpose.
 
 ```console
-$ kubectl describe svc -n demo builtin-prom-postgres
-Name:              builtin-prom-postgres
-Namespace:         demo
-Labels:            kubedb.com/kind=Postgres
-                   kubedb.com/name=builtin-prom-postgres
-Annotations:       monitoring.appscode.com/agent=prometheus.io/builtin
-                   prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
-                   prometheus.io/port=56790
-                   prometheus.io/scrape=true
-Selector:          kubedb.com/kind=Postgres,kubedb.com/name=builtin-prom-postgres
-Type:              ClusterIP
-IP:                10.107.124.174
-Port:              prom-http  56790/TCP
-TargetPort:        %!d(string=prom-http)/TCP
-Endpoints:         172.17.0.8:56790
-Session Affinity:  None
+$ kubectl get svc -n demo
+NAME                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+builtin-prom-postgres            ClusterIP   10.101.93.0      <none>        5432/TCP    1m
+builtin-prom-postgres-replicas   ClusterIP   10.105.183.227   <none>        5432/TCP    1m
+builtin-prom-postgres-stats      ClusterIP   10.107.173.32    <none>        56790/TCP   46s
+kubedb                           ClusterIP   None             <none>        <none>      1h
+```
+
+Let's describe Service `builtin-prom-postgres-stats`
+
+```console
+$ kubedb describe svc -n demo builtin-prom-postgres-stats
+Name:         builtin-prom-postgres-stats
+Namespace:    demo
+Labels:       kubedb.com/kind=Postgres
+              kubedb.com/name=builtin-prom-postgres
+Annotations:  monitoring.appscode.com/agent=prometheus.io/builtin
+              prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
+              prometheus.io/port=56790
+              prometheus.io/scrape=true
+API Version:  v1
+Kind:         Service
+Metadata:
+  Creation Timestamp:  2018-09-24T11:56:38Z
+  Owner References:
+    API Version:           kubedb.com/v1alpha1
+    Block Owner Deletion:  false
+    Kind:                  Postgres
+    Name:                  builtin-prom-postgres
+    UID:                   c077d83a-bff0-11e8-ad46-e6638755530c
+  Resource Version:        47773
+  Self Link:               /api/v1/namespaces/demo/services/builtin-prom-postgres-stats
+  UID:                     e4f47ef9-bff0-11e8-ad46-e6638755530c
+Spec:
+  Cluster IP:  10.107.173.32
+  Ports:
+    Name:         prom-http
+    Port:         56790
+    Protocol:     TCP
+    Target Port:  prom-http
+  Selector:
+    Kubedb . Com / Kind:  Postgres
+    Kubedb . Com / Name:  builtin-prom-postgres
+  Session Affinity:       None
+  Type:                   ClusterIP
+Status:
+  Load Balancer:
+Events:  <none>
+
 ```
 
 You can see that the service contains following annotations.
@@ -109,12 +141,11 @@ prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
 
-The prometheus server will discover the service endpoint aka PostgreSQL Exporter using these specifications and will scrape metrics from exporter.
+The prometheus server will discover the service endpoint using these specifications and will scrape metrics from exporter.
 
 ## Deploy and configure Prometheus Server
 
-The prometheus server is needed to configure so that it can discover endpoints of services. If a Prometheus server is already running in cluster
-and if it is configured in a way that it can discover service endpoints, no extra configuration will be needed.
+The prometheus server is needed to configure so that it can discover endpoints of services. If a Prometheus server is already running in cluster and if it is configured in a way that it can discover service endpoints, no extra configuration will be needed.
 
 If there is no existing Prometheus server running, rest of this tutorial will create a Prometheus server with appropriate configuration.
 
@@ -169,8 +200,8 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
-configmap "prometheus-server-conf" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+configmap/prometheus-server-conf created
 ```
 
 Now, the below YAML is used to deploy Prometheus in kubernetes :
@@ -216,21 +247,20 @@ spec:
 Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-clusterrole "prometheus-server" created
-serviceaccount "prometheus-server" created
-clusterrolebinding "prometheus-server" created
-deployment "prometheus-server" created
-service "prometheus-service" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+clusterrole.rbac.authorization.k8s.io/prometheus-server created
+serviceaccount/prometheus-server created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
+deployment.apps/prometheus-server created
+service/prometheus-service created
 ```
 
-Watch the Deployment’s Pods.
+Wait until pods of the Deployment is running.
 
 ```console
-$ kubectl get pods -n demo --selector=app=prometheus-server --watch
-NAME                                 READY     STATUS              RESTARTS   AGE
-prometheus-server-6b8476d6c5-kx78z   0/1       ContainerCreating   0          1m
-prometheus-server-6b8476d6c5-kx78z   1/1       Running   0         1m
+$ kubectl get pods -n demo --selector=app=prometheus-server
+NAME                                READY     STATUS    RESTARTS   AGE
+prometheus-server-9d7b799fd-8x5wb   1/1       Running   0          1m
 ```
 
 And also verify RBAC stuffs
@@ -258,6 +288,8 @@ $ minikube service prometheus-service -n demo --url
 http://192.168.99.100:30901
 ```
 
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
+
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
 <p align="center">
@@ -271,15 +303,13 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/builtin-prom-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo pg/builtin-prom-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/builtin-prom-postgres
-
-$ kubectl patch -n demo drmn/builtin-prom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/builtin-prom-postgres
 
 $ kubectl delete clusterrole prometheus-server
 $ kubectl delete clusterrolebindings  prometheus-server
 $ kubectl delete serviceaccounts -n demo  prometheus-server
+$ kubectl delete configmap -n demo prometheus-server-conf
 
 $ kubectl delete ns demo
 ```

@@ -15,11 +15,6 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  archiver:
-    storage:
-      storageSecretName: s3-secret
-      s3:
-        bucket: kubedb
   init:
     postgresWAL:
       storageSecretName: s3-secret

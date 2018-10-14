@@ -1,12 +1,12 @@
 ---
 title: Using Custom Configuration in Elasticsearch without Topology
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: es-custom-config-without-topology
     name: Without Topology
     parent: es-custom-config
     weight: 30
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
