@@ -19,6 +19,7 @@ webhooks:
     resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: postgres.validators.kubedb.com
   clientConfig:
     service:
@@ -32,6 +33,7 @@ webhooks:
     resources: ["postgreses"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: mysql.validators.kubedb.com
   clientConfig:
     service:
@@ -45,6 +47,7 @@ webhooks:
     resources: ["mysqls"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: mongodb.validators.kubedb.com
   clientConfig:
     service:
@@ -58,6 +61,7 @@ webhooks:
     resources: ["mongodbs"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: redis.validators.kubedb.com
   clientConfig:
     service:
@@ -71,6 +75,7 @@ webhooks:
     resources: ["redises"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: memcached.validators.kubedb.com
   clientConfig:
     service:
@@ -84,6 +89,7 @@ webhooks:
     resources: ["memcacheds"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: etcd.validators.kubedb.com
   clientConfig:
     service:
@@ -97,6 +103,7 @@ webhooks:
     resources: ["etcds"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: snapshot.validators.kubedb.com
   clientConfig:
     service:
@@ -110,6 +117,7 @@ webhooks:
     resources: ["snapshots"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: dormantdatabase.validators.kubedb.com
   clientConfig:
     service:
@@ -123,7 +131,8 @@ webhooks:
     resources: ["dormantdatabases"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: namespaces.validators.kubedb.com
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
+- name: namespace.validators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -136,3 +145,4 @@ webhooks:
     resources: ["namespaces"]
     operations: ["DELETE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}

@@ -58,19 +58,22 @@ kubedb.sh - install kubedb operator
 kubedb.sh [options]
 
 options:
--h, --help                         show brief help
--n, --namespace=NAMESPACE          specify namespace (default: kube-system)
-    --rbac                         create RBAC roles and bindings (default: true)
-    --docker-registry              docker registry used to pull KubeDB images (default: appscode)
-    --image-pull-secret            name of secret used to pull KubeDB operator images
-    --run-on-master                run KubeDB operator on master
-    --enable-validating-webhook    enable/disable validating webhooks for KubeDB CRDs
-    --enable-mutating-webhook      enable/disable mutating webhooks for KubeDB CRDs
-    --enable-status-subresource    if enabled, uses status sub resource for KubeDB crds
-    --enable-analytics             send usage events to Google Analytics (default: true)
-    --install-catalog              installs KubeDB database version catalog (default: all)
-    --uninstall                    uninstall KubeDB
-    --purge                        purges KubeDB crd objects and crds
+-h, --help                             show brief help
+-n, --namespace=NAMESPACE              specify namespace (default: kube-system)
+    --rbac                             create RBAC roles and bindings (default: true)
+    --docker-registry                  docker registry used to pull KubeDB images (default: appscode)
+    --image-pull-secret                name of secret used to pull KubeDB operator images
+    --run-on-master                    run KubeDB operator on master
+    --enable-validating-webhook        enable/disable validating webhooks for KubeDB CRDs
+    --enable-mutating-webhook          enable/disable mutating webhooks for KubeDB CRDs
+    --bypass-validating-webhook-xray   if true, bypasses validating webhook xray checks
+    --enable-status-subresource        if enabled, uses status sub resource for KubeDB crds
+    --use-kubeapiserver-fqdn-for-aks   if true, uses kube-apiserver FQDN for AKS cluster to workaround https://github.com/Azure/AKS/issues/522 (default true)
+    --enable-analytics                 send usage events to Google Analytics (default: true)
+    --install-catalog                  installs KubeDB database version catalog (default: all)
+    --operator-name                    specify which KubeDB operator to deploy (default: operator)
+    --uninstall                        uninstall KubeDB
+    --purge                            purges KubeDB crd objects and crds
 ```
 
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
