@@ -19,6 +19,7 @@ webhooks:
     resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: postgres.mutators.kubedb.com
   clientConfig:
     service:
@@ -32,6 +33,7 @@ webhooks:
     resources: ["postgreses"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: mysql.mutators.kubedb.com
   clientConfig:
     service:
@@ -45,6 +47,7 @@ webhooks:
     resources: ["mysqls"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: mongodb.mutators.kubedb.com
   clientConfig:
     service:
@@ -58,6 +61,7 @@ webhooks:
     resources: ["mongodbs"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: redis.mutators.kubedb.com
   clientConfig:
     service:
@@ -71,6 +75,7 @@ webhooks:
     resources: ["redises"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: memcached.mutators.kubedb.com
   clientConfig:
     service:
@@ -84,6 +89,7 @@ webhooks:
     resources: ["memcacheds"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
 - name: etcd.mutators.kubedb.com
   clientConfig:
     service:
@@ -97,3 +103,4 @@ webhooks:
     resources: ["etcds"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+  ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
