@@ -8,11 +8,8 @@ spec:
   databaseName: postgres-db
   local:
     mountPath: /repo
-    hostPath:
-      # directory location on host
-      path: /var/postgres-snapshots
-      # this field is optional
-      type: DirectoryOrCreate
+    persistentVolumeClaim:
+      claimName: my-snap-pvc
   podTemplate:
     spec:
       resources:

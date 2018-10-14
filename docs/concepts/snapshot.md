@@ -75,7 +75,6 @@ To configure this backend, no secret is needed. Following parameters are availab
 | Parameter                 | Description |
 | ------------------------- | ----------- |
 | `spec.databaseName`       | `Required`. Name of database |
-| `spec.local.VolumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes). Can be specified inlined. Example: `hostPath` |
 | `spec.local.mountPath`    | `Required`. Path where this volume will be mounted in the snapshot job container. Example: `/repo` |
 | `spec.local.subPath`      | `Optional`. Sub-path inside the referenced volume instead of its root. |
 | `spec.podTemplate`        | `Optional`. KubeDB provides a template for database Backup pod through `spec.podTemplate`.|
@@ -85,25 +84,23 @@ $ kubectl create -f ./docs/examples/snapshot/local/local-snapshot.yaml
 snapshot "local-snapshot" created
 ```
 
+Here is the YAML for the snapshot we have created above. It uses `hostPath` volume as backend.
 ```yaml
-$ kubectl get snapshot local-snapshot -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2017-06-28T12:14:48Z
   name: local-snapshot
-  namespace: default
-  resourceVersion: "2000"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/local-snapshot
-  uid: 617e3487-5bfb-11e7-bb52-08002711f4aa
   labels:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
   local:
     mountPath: /repo
-    volumeSource:
-      emptyDir: {}
+    hostPath:
+      # directory location on host
+      path: /var/postgres-snapshots
+      # this field is optional
+      type: DirectoryOrCreate
   podTemplate:
     spec:
       resources:
@@ -114,6 +111,34 @@ spec:
           memory: "128Mi"
           cpu: "500m"
 ```
+
+Here is another example that uses PVC as backend,
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: local-snapshot
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: postgres-db
+  local:
+    mountPath: /repo
+    persistentVolumeClaim:
+      claimName: my-snap-pvc
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+```
+
+> Note: For local volume, if you delete the snapshot, your snapshot's data will not be removed. This happens only for local volume. For cloud bucket, if you delete snapshot, your snapshot's data will be removed from the bucket.
 
 ### AWS S3
 
