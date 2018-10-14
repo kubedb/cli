@@ -12,9 +12,9 @@ section_menu_id: guides
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Configuration Using CRD
+# Run MySQL with Custom Configuration
 
-KubeDB supports providing variation configuration for MySQL through [PodTemplate](/docs/concepts/databases/mysql.md#specpodtemplate). This tutorial will show you how to use KubeDB to run a MySQL database with custom configuration using PodTemplate.
+KubeDB supports providing custom configuration for MySQL through [PodTemplate](/docs/concepts/databases/mysql.md#specpodtemplate). This tutorial will show you how to use KubeDB to run a MySQL database with custom configuration using PodTemplate.
 
 ## Before You Begin
 
@@ -37,8 +37,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (statefulset's annotation)
 - spec:
   - env
   - resources

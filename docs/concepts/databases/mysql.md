@@ -215,8 +215,10 @@ KubeDB supports taking periodic snapshots for MySQL database. This is an optiona
 
 You can also specify a template for pod of backup job through `spec.backupSchedule.podTemplate`. KubeDB will use the information you have provided in `podTemplate` to create the backup job. KubeDB accept following fields to set in `spec.backupSchedule.podTemplate`:
 
-- annotations (pod's annotation)
-- controller.annotations (job's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (job's annotation)
 - spec:
   - args
   - env
@@ -251,8 +253,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (statefulset's annotation)
 - spec:
   - args
   - env
@@ -325,15 +329,17 @@ You can also provide a template for the services created by KubeDB operator for 
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
-- annotations
-- type
-- ports
-- clusterIP
-- externalIPs
-- loadBalancerIP
-- loadBalancerSourceRanges
-- externalTrafficPolicy
-- healthCheckNodePort
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
 
 ### spec.updateStrategy
 

@@ -37,8 +37,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (statefulset's annotation)
 - spec:
   - args
   - env
