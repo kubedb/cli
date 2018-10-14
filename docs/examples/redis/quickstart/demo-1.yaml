@@ -4,8 +4,8 @@ metadata:
   name: redis-quickstart
   namespace: demo
 spec:
-  version: "4-v1"
-  doNotPause: true
+  version: "4.0-v1"
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -13,3 +13,4 @@ spec:
     resources:
       requests:
         storage: 50Mi
+  terminationPolicy: DoNotTerminate

@@ -1,12 +1,12 @@
 ---
 title: Run PostgreSQL with Custom Configuration
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-custom-config-quickstart
     name: Quickstart
     parent: pg-custom-config
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -17,8 +17,7 @@ KubeDB supports providing custom configuration for PostgreSQL. This tutorial wil
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -58,8 +57,8 @@ shared_buffers=256MB
 Now, create a configMap with this configuration file.
 
 ```console
- $ kubectl create configmap -n demo pg-custom-config --from-file=./user.conf
-configmap "pg-custom-config" created
+ $ kubectl create configmap -n demo pg-custom-config --from-file=https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/custom-config/user.conf 
+configmap/pg-custom-config created
 ```
 
 Verify the config map has the configuration file.
@@ -82,8 +81,8 @@ metadata:
 Now, create Postgres crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/custom-config/pg-custom-config.yaml
-postgres.kubedb.com "custom-postgres" created
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/custom-config/pg-custom-config.yaml 
+postgres.kubedb.com/custom-postgres created
 ```
 
 Below is the YAML for the Postgres crd we just created.
@@ -95,11 +94,10 @@ metadata:
   name: custom-postgres
   namespace: demo
 spec:
-  version: "9.6"
-  configFile:
-      configMap:
-        name: pg-custom-config
-  doNotPause: true
+  version: "9.6-v1"
+  configSource:
+    configMap:
+      name: pg-custom-config
   storage:
     storageClassName: "standard"
     accessModes:
@@ -196,16 +194,10 @@ WHERE name='max_connections' OR name='shared_buffers';
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/custom-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
-
+$ kubectl patch -n demo pg/custom-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/custom-postgres
 
-$ kubectl patch -n demo drmn/custom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-
-$ kubectl delete -n demo drmn/custom-postgres
-
 $ kubectl delete -n demo configmap pg-custom-config
-
 $ kubectl delete ns demo
 ```
 

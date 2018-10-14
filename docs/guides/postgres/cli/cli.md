@@ -1,12 +1,12 @@
 ---
 title: CLI | KubeDB
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-cli-cli
     name: Quickstart
     parent: pg-cli-postgres
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 
@@ -280,6 +280,7 @@ Postgres:
 - _spec.streaming_
 - _spec.archiver_
 - _spec.databaseSecret_
+- _spec.storageType_
 - _spec.storage_
 - _spec.nodeSelector_
 - _spec.init_
@@ -287,6 +288,7 @@ Postgres:
 Elasticsearch:
 
 - _spec.version_
+- _spec.storageType_
 - _spec.storage_
 - _spec.nodeSelector_
 - _spec.init_

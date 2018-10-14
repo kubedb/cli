@@ -6,7 +6,6 @@ metadata:
 spec:
   version: "6.2.4-v1"
   replicas: 2
-  doNotPause: true
   configSource:
     configMap:
       name: es-custom-config

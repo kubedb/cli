@@ -1,12 +1,12 @@
 ---
 title: MongoDB ReplicaSet Concept
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: mg-clustering-replicaset-concept
     name: ReplicaSet Concept
     parent: mg-clustering-mongodb
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 
@@ -110,6 +110,7 @@ Starting in MongoDB 3.6, [change streams](https://docs.mongodb.com/manual/change
 
 - [Deploy MongoDB ReplicaSet](/docs/guides/mongodb/clustering/replicaset.md) using KubeDB.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
 

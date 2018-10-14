@@ -1,0 +1,76 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: e1
+  namespace: demo
+spec:
+  version: "6.3-v1"
+  replicas: 2
+  authPlugin: "SearchGuard"
+  enableSSL: true
+  certificateSecret:
+    secretName: e1-certs
+  databaseSecret:
+    secretName: e1-auth
+  storageType: "Durable"
+  storage:
+    storageClassName: standard
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  init:
+    scriptSource:
+      configMap:
+        name: es-init-script
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb
+      prefix: demo
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: demo
+      labels:
+        app: kubedb
+      interval: 10s
+  configSource:
+    configMap:
+      name: es-custom-config
+  podTemplate:
+    annotation:
+      passMe: ToDatabasePod
+    controller:
+      annotation:
+        passMe: ToStatefulSet
+    spec:
+      schedulerName: my-scheduler
+      nodeSelector:
+        disktype: ssd
+      imagePullSecrets:
+      - name: myregistrykey
+      env:
+      - name: ES_JAVA_OPTS
+        value: "-Xms128m -Xmx128m"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+  serviceTemplate:
+    annotation:
+      passMe: ToService
+    spec:
+      type: NodePort
+      ports:
+      - name:  http
+        port:  9200
+        targetPort: http
+  updateStrategy:
+    type: "RollingUpdate"
+  terminationPolicy: "DoNotTerminate"

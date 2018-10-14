@@ -1,3 +1,6 @@
+# GKE returns Major:"1", Minor:"10+"
+{{- $major := default "0" .Capabilities.KubeVersion.Major | trimSuffix "+" | int64 }}
+{{- $minor := default "0" .Capabilities.KubeVersion.Minor | trimSuffix "+" | int64 }}
 {{- if .Values.apiserver.enableValidatingWebhook }}
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
@@ -25,6 +28,9 @@ webhooks:
     resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: postgres.validators.kubedb.com
   clientConfig:
     service:
@@ -38,6 +44,9 @@ webhooks:
     resources: ["postgreses"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: mysql.validators.kubedb.com
   clientConfig:
     service:
@@ -51,6 +60,9 @@ webhooks:
     resources: ["mysqls"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: mongodb.validators.kubedb.com
   clientConfig:
     service:
@@ -64,6 +76,9 @@ webhooks:
     resources: ["mongodbs"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: redis.validators.kubedb.com
   clientConfig:
     service:
@@ -77,6 +92,9 @@ webhooks:
     resources: ["redises"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: memcached.validators.kubedb.com
   clientConfig:
     service:
@@ -90,6 +108,9 @@ webhooks:
     resources: ["memcacheds"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: etcd.validators.kubedb.com
   clientConfig:
     service:
@@ -103,6 +124,9 @@ webhooks:
     resources: ["etcds"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: snapshot.validators.kubedb.com
   clientConfig:
     service:
@@ -116,6 +140,9 @@ webhooks:
     resources: ["snapshots"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 - name: dormantdatabase.validators.kubedb.com
   clientConfig:
     service:
@@ -129,7 +156,10 @@ webhooks:
     resources: ["dormantdatabases"]
     operations: ["CREATE", "UPDATE", "DELETE"]
   failurePolicy: Fail
-- name: namespaces.validators.kubedb.com
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
+- name: namespace.validators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -142,4 +172,7 @@ webhooks:
     resources: ["namespaces"]
     operations: ["DELETE"]
   failurePolicy: Fail
+{{- if and (ge $major 1) (ge $minor 12) }}
+  sideEffects: None
+{{- end }}
 {{ end }}

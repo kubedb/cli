@@ -57,7 +57,7 @@ REQUIRED_DEPS = [
     },
     {
       "package": "github.com/spf13/pflag",
-      "version": "v1.0.1"
+      "version": "v1.0.3"
     },
     {
       "package": "golang.org/x/text",
@@ -72,118 +72,116 @@ REQUIRED_DEPS = [
       "version": "95c6576299259db960f6c5b9b69ea52422860fce"
     },
     {
-      "package": "k8s.io/kube-openapi",
-      "version": "91cfa479c814065e420cee7ed227db0f63a5854e"
+      "package": "golang.org/x/crypto",
+      "version": "de0752318171da717af4ce24d0a2e8626afaeb11"
     },
     {
       "package": "github.com/golang/protobuf",
       "version": "v1.1.0"
     },
     {
-      "package": "kmodules.xyz/custom-resources",
-      "repo": "https://github.com/kmodules/custom-resources.git",
-      "vcs": "git",
-      "version": "release-8.0"
+      "package": "github.com/davecgh/go-spew",
+      "version": "v1.1.1"
+    },
+    {
+      "package": "k8s.io/kube-openapi",
+      "version": "0cf8f7e6ed1d2e3d47d02e3b6e559369af24d803"
     }
 ]
 DEP_LIST = [
     {
-        "package": "github.com/cpuguy83/go-md2man",
-        "version": "v1.0.8"
+      "package": "github.com/cpuguy83/go-md2man",
+      "version": "v1.0.8"
     },
     {
-        "package": "github.com/json-iterator/go",
-        "version": "1.1.5"
+      "package": "github.com/json-iterator/go",
+      "version": "1.1.5"
     },
     {
-        "package": "github.com/coreos/prometheus-operator",
-        "version": "v0.23.2"
+      "package": "github.com/coreos/prometheus-operator",
+      "repo": "https://github.com/kmodules/prometheus-operator.git",
+      "vcs": "git",
+      "version": "k-1.12"
     },
     {
       "package": "k8s.io/api",
-      "version": "kubernetes-1.11.3"
+      "version": "kubernetes-1.12.0"
     },
     {
       "package": "k8s.io/apiextensions-apiserver",
-      "version": "kubernetes-1.11.3"
+      "version": "kubernetes-1.12.0"
     },
     {
       "package": "k8s.io/apimachinery",
-      "repo": "https://github.com/pharmer/apimachinery.git",
+      "repo": "https://github.com/kmodules/apimachinery.git",
       "vcs": "git",
-      "version": "release-1.11.3"
+      "version": "ac-1.12.0"
     },
     {
       "package": "k8s.io/apiserver",
-      "repo": "https://github.com/pharmer/apiserver.git",
+      "repo": "https://github.com/kmodules/apiserver.git",
       "vcs": "git",
-      "version": "release-1.11.3"
+      "version": "ac-1.12.0"
     },
     {
       "package": "k8s.io/client-go",
-      "repo": "https://github.com/pharmer/client-go.git",
-      "vcs": "git",
-      "version": "release-1.11.3"
+      "version": "v9.0.0"
+    },
+    {
+      "package": "k8s.io/cli-runtime",
+      "version": "kubernetes-1.12.0"
     },
     {
       "package": "k8s.io/kubernetes",
-      "version": "v1.11.3"
+      "version": "v1.12.0"
     },
     {
       "package": "k8s.io/kube-aggregator",
-      "version": "kubernetes-1.11.3"
+      "version": "kubernetes-1.12.0"
     },
     {
       "package": "k8s.io/metrics",
-      "version": "kubernetes-1.11.3"
+      "version": "kubernetes-1.12.0"
     },
     {
       "package": "github.com/appscode/kutil",
-      "version": "release-8.0"
+      "version": "release-9.0"
+    },
+    {
+      "package": "github.com/appscode/kubernetes-webhook-util",
+      "version": "release-9.0"
+    },
+    {
+      "package": "kmodules.xyz/custom-resources",
+      "repo": "https://github.com/kmodules/custom-resources.git",
+      "vcs": "git",
+      "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/monitoring-agent-api",
       "repo": "https://github.com/kmodules/monitoring-agent-api.git",
       "vcs": "git",
-      "version": "release-8.0"
+      "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/objectstore-api",
       "repo": "https://github.com/kmodules/objectstore-api.git",
       "vcs": "git",
-      "version": "release-8.0"
+      "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/offshoot-api",
       "repo": "https://github.com/kmodules/offshoot-api.git",
       "vcs": "git",
-      "version": "release-8.0"
+      "version": "release-9.0"
     },
     {
-      "package": "github.com/appscode/kubernetes-webhook-util",
-      "version": "release-8.0"
+      "package": "kmodules.xyz/openshift",
+      "repo": "https://github.com/kmodules/openshift.git",
+      "vcs": "git",
+      "version": "release-9.0"
     },
     {
-      "package": "github.com/openshift/api",
-      "version": "31a7bbd2266d178da3c12bb83f5274d387f775e6"
-    },
-    {
-      "package": "github.com/openshift/client-go",
-      "version": "4688ad28de2e88110c0ea30179c51b9b205f99be"
-    },
-    {
-      "package": "github.com/openshift/origin",
-      "version": "fecffb2fce100260088a1b9f268c0901a778cf2b"
-    },
-    {
-      "package": "github.com/spf13/cobra",
-      "version": "v0.0.3"
-    },
-    {
-      "package": "github.com/spf13/pflag",
-      "version": "v1.0.1"
-    },
-        {
       "package": "github.com/graymeta/stow",
       "repo": "https://github.com/appscode/stow.git",
       "vcs": "git",
@@ -191,23 +189,31 @@ DEP_LIST = [
     },
     {
       "package": "github.com/Azure/azure-sdk-for-go",
-      "version": "v14.6.0"
+      "version": "v19.0.0"
     },
     {
       "package": "github.com/Azure/go-autorest",
-      "version": "v10.6.2"
+      "version": "v10.14.0"
     },
     {
       "package": "github.com/aws/aws-sdk-go",
-      "version": "v1.12.7"
+      "version": "v1.14.12"
     },
     {
       "package": "google.golang.org/api/storage/v1",
-      "version": "master"
+      "version": "3639d6d93f377f39a1de765fa4ef37b3c7ca8bd9"
     },
     {
       "package": "cloud.google.com/go",
       "version": "v0.2.0"
+    },
+    {
+      "package": "github.com/spf13/afero",
+      "version": "v1.1.2"
+    },
+    {
+      "package": "github.com/appscode/osm",
+      "version": "0.9.0"
     }
 ]
 
@@ -297,6 +303,8 @@ class DepFixer(object):
         git_checkout('master', cwd=repo)
         call('git pull --rebase origin master', cwd=repo)
         git_checkout(revendor_branch, cwd=repo)
+        # https://stackoverflow.com/a/6759339/244009
+        call("find " + repo + "/apis -type f -exec sed -i -e 's/k8s.io\\/apimachinery\\/pkg\\/api\\/testing\\/roundtrip/k8s.io\\/apimachinery\\/pkg\\/api\\/apitesting\\/roundtrip/g' {} \;", eoe=False)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
             glide_mod(glide_config, self.master_deps)

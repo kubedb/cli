@@ -5,11 +5,12 @@ metadata:
   namespace: demo
 spec:
   version: "3.4-v1"
-  doNotPause: true
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
+  terminationPolicy: DoNotTerminate
