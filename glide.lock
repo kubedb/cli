@@ -1,5 +1,5 @@
-hash: cfc5cdba9ab0ce4ba240fd58402cdf494cc54cb1a243d95eea6ea1e2b4a429d4
-updated: 2018-10-13T14:49:52.619655025-07:00
+hash: bf6e31594783ad276ef60937fcf3809bc4130f8156dd516a443d1092e252b415
+updated: 2018-10-14T08:44:41.14388067-07:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -24,7 +24,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: 303298aa86dad096fed4c49ba117700e506eca2c
+  version: 25382b15981e816818803a66b6e1a1270efa89ab
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -104,7 +104,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: 94e38aa1586e8a6c8a75770bddf5ff84c48a106b
+  version: 36442dbdb585210f8d5a1b45e67aa323c197d5c4
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -204,9 +204,9 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 649a5b6876059640b05d399a8bad5bab18252681
+  version: de49d7de9667e925c4c5aad4f9dfa8289cb2785e
 - name: github.com/kubedb/etcd
-  version: d2774bdcada77c341ce718c60b812317582b5950
+  version: 8354b4ff99cc0529facab54dc9f2e528a667da50
 - name: github.com/kubedb/memcached
   version: f319545fe539b0e49b1ff240ed5142f171f88115
 - name: github.com/kubedb/mongodb
@@ -214,7 +214,7 @@ imports:
 - name: github.com/kubedb/mysql
   version: 7bcfbc48dcff2c378f06387ee3e1f0eb7f0e47ef
 - name: github.com/kubedb/postgres
-  version: 3d8881804af7d03a243948493557ebec7c7678ff
+  version: 65249080ec5d1241b406fe6393b75e36ca52a97b
 - name: github.com/kubedb/redis
   version: 1c2bcbd6d69cfe5d15be5e16a115cc81deab36f2
 - name: github.com/mailru/easyjson
@@ -263,7 +263,7 @@ imports:
   subpackages:
   - doc
 - name: github.com/spf13/pflag
-  version: 583c0c0531f06d5278b7d917446061adc344b5cd
+  version: 298182f68c66c05229eb03ac171abe6e309ee79a
 - name: github.com/yudai/gojsondiff
   version: 7b1b7adf999dab73a6eb02669c3d82dbb27a3dd6
   subpackages:
@@ -717,7 +717,7 @@ imports:
   - apis/appcatalog
   - apis/appcatalog/v1alpha1
 - name: kmodules.xyz/monitoring-agent-api
-  version: cb29a44ae61b9096ce83750c2b070d57daa8d953
+  version: 626ef00ec8baebe0d2b451cf8f06450c2588f237
   repo: https://github.com/kmodules/monitoring-agent-api.git
   vcs: git
   subpackages:
