@@ -231,8 +231,10 @@ f used, set the various sub-fields accordingly.
 
 You can also specify a template for pod of backup job through `spec.backupSchedule.podTemplate`. KubeDB will use the information you have provided in `podTemplate` to create the backup job. KubeDB accept following fields to set in `spec.backupSchedule.podTemplate`:
 
-- annotations (pod's annotation)
-- controller.annotations (job's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (job's annotation)
 - spec:
   - args
   - env
@@ -260,9 +262,9 @@ MongoDB managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Pr
 ### spec.configSource
 
 `spec.configSource` is an optional field that allows users to provide custom configuration for MongoDB. This field accepts a [`VolumeSource`](https://github.com/kubernetes/api/blob/release-1.11/core/v1/types.go#L47). You can use any kubernetes supported volume source such as `configMap`, `secret`, `azureDisk` etc.
- 
+
 > Please note that, the configfile name needs to be `mongod.conf` for mongodb.
- 
+
 To learn more about how to use a custom configuration file see [here](/docs/guides/mongodb/custom-config/using-custom-config.md).
 
 ### spec.podTemplate
@@ -271,8 +273,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (statefulset's annotation)
 - spec:
   - args
   - env
@@ -346,15 +350,17 @@ You can also provide a template for the services created by KubeDB operator for 
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
-- annotations
-- type
-- ports
-- clusterIP
-- externalIPs
-- loadBalancerIP
-- loadBalancerSourceRanges
-- externalTrafficPolicy
-- healthCheckNodePort
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
 
 ### spec.updateStrategy
 
