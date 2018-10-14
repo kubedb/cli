@@ -17,36 +17,46 @@ aliases:
 
 ## Supported MySQL Features
 
-|Features                                                | Availability |
-|--------------------------------------------------------|:------------:|
-|Clustering                                              | &#10007;     |
-|Persistent Volume                                       | &#10003;     |
-|Instant Backup                                          | &#10003;     |
-|Scheduled Backup                                        | &#10003;     |
-|Initialize using Snapshot                               | &#10003;     |
-|Initialize using Script (\*.sql, \*sql.gz and/or \*.sh) | &#10003;     |
-|Builtin Prometheus Discovery                            | &#10003;     |
-|Using CoreOS Prometheus Operator                        | &#10003;     |
+|                        Features                         | Availability |
+| ------------------------------------------------------- | :----------: |
+| Clustering                                              |   &#10007;   |
+| Persistent Volume                                       |   &#10003;   |
+| Instant Backup                                          |   &#10003;   |
+| Scheduled Backup                                        |   &#10003;   |
+| Initialize using Snapshot                               |   &#10003;   |
+| Initialize using Script (\*.sql, \*sql.gz and/or \*.sh) |   &#10003;   |
+| Custom Configuration                                    |   &#10003;   |
+| Using Custom docker image                               |   &#10003;   |
+| Builtin Prometheus Discovery                            |   &#10003;   |
+| Using CoreOS Prometheus Operator                        |   &#10003;   |
 
 <br/>
 
 ## Life Cycle of a MySQL Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" width="600" height="660">
+  <img alt="lifecycle"  src="/docs/images/mysql/mysql-lifecycle.png" >
 </p>
 
 <br/>
 
 ## Supported MySQL Versions
 
-| KubeDB Version | MySQL:8.0 | MySQL:5.7 |
-|:--------------:|:---------:|:---------:|
-| 0.1.0 - 0.7.0  | &#10007;  | &#10007;  |
-| 0.8.0-beta.2   | &#10003;  | &#10007;  |
-| 0.8.0-rc.0     | &#10003;  | &#10003;  |
-| 0.8.0          | &#10003;  | &#10003;  |
-| 0.9.0-beta.1   | &#10003;  | &#10003;  |
+| KubeDB Version | MySQL 8.0, 8 |  5.7, 5  | 8.0-v1, 8-v1 | 5.7-v1, 5-v1 |
+| :------------: | :----------: | :------: | :----------: | :----------: |
+| 0.1.0 - 0.7.0  |   &#10007;   | &#10007; |   &#10007;   |   &#10007;   |
+|     0.8.0      |   &#10003;   | &#10003; |   &#10007;   |   &#10007;   |
+|  0.9.0-beta.1  |   &#10007;   | &#10007; |   &#10003;   |   &#10003;   |
+
+<br/>
+
+## External tools dependency
+
+|                  Tool                  | Version |
+| -------------------------------------- | :-----: |
+| [osm](https://github.com/appscode/osm) |  0.8.0  |
+
+<br/>
 
 ## User Guide
 
@@ -60,6 +70,7 @@ aliases:
 - Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
 - Use [kubedb cli](/docs/guides/mysql/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

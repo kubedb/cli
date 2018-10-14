@@ -26,3 +26,4 @@ dist/
 .vscode/
 .markdownlint.json
 coverage.txt
+apiserver.local.config/

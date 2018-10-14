@@ -24,14 +24,14 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f mysql-demo.yaml
-mysql "mysql-demo" created
+mysql.kubedb.com/mysql-demo created
 ```
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
 ```console
 $ kubedb create -f mysql-demo.yaml --namespace=kube-system
-mysql "mysql-demo" created
+mysql.kubedb.com/mysql-demo created
 ```
 
 `kubedb create` command also considers `stdin` as input.
@@ -48,11 +48,11 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get mysql
-NAME          STATUS    AGE
-mysql-demo    Running   5h
-mysql-dev     Running   4h
-mysql-prod    Running   30m
-mysql-qa      Running   2h
+NAME         VERSION   STATUS    AGE
+mysql-demo   8.0-v1    Running   2m
+mysql-dev    8.0-v1    Running   1m
+mysql-prod   8.0-v1    Running   1m
+mysql-qa     8.0-v1    Running   1m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -62,19 +62,27 @@ $ kubedb get mysql mysql-demo --output=yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-03-01T07:02:10Z
+  creationTimestamp: 2018-09-27T13:07:23Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 2
   name: mysql-demo
   namespace: default
-  resourceVersion: "6910"
+  resourceVersion: "19279"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/mysqls/mysql-demo
-  uid: 76379db5-1d1e-11e8-8599-0800272b52b5
+  uid: 46034ac3-c256-11e8-b2cc-080027d9f35e
 spec:
   databaseSecret:
     secretName: mysql-demo-auth
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 1
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -82,27 +90,31 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: "8.0"
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 8.0-v1
 status:
-  creationTime: 2018-03-01T07:02:10Z
+  observedGeneration: 2$4213139756412538772
   phase: Running
 ```
 
 To get JSON of an object, use `--output=json` flag.
 
 ```console
-$ kubedb get mysql mysql-demo --output=json
+kubedb get mysql mysql-demo --output=json
 ```
 
 To list all KubeDB objects, use following command:
 
 ```console
 $ kubedb get all -o wide
-NAME                VERSION     STATUS   AGE
-my/mysql-demo       8.0         Running  3h
-my/mysql-dev        8.0         Running  3h
-my/mysql-prod       8.0         Running  3h
-my/mysql-qa         8.0         Running  3h
+NAME                          VERSION   STATUS    AGE
+mysql.kubedb.com/mysql-demo   8.0-v1    Running   3m
+mysql.kubedb.com/mysql-dev    8.0-v1    Running   2m
+mysql.kubedb.com/mysql-prod   8.0-v1    Running   2m
+mysql.kubedb.com/mysql-qa     8.0-v1    Running   2m
 
 NAME                                DATABASE              BUCKET              STATUS      AGE
 snap/mysql-demo-20170605-073557     my/mysql-demo         gs:bucket-name      Succeeded   9m
@@ -155,44 +167,64 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ```console
 $ kubedb describe my mysql-demo
-Name:		mysql-demo
-Namespace:	default
-StartTimestamp:	Thu, 01 Mar 2018 15:03:52 +0600
-Status:		Running
+Name:               mysql-demo
+Namespace:          default
+CreationTimestamp:  Thu, 27 Sep 2018 19:07:23 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mysql-demo
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Thu, 01 Mar 2018 13:02:12 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mysql-demo
+  CreationTimestamp:  Thu, 27 Sep 2018 19:07:25 +0600
+  Labels:               kubedb.com/kind=MySQL
+                        kubedb.com/name=mysql-demo
+  Annotations:        <none>
+  Replicas:           824638226772 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mysql-demo
-  Type:		ClusterIP
-  IP:		10.97.55.246
-  Port:		db	3306/TCP
+  Name:         mysql-demo
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-demo
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.102.105.123
+  Port:         db  3306/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:3306
 
 Database Secret:
-  Name:	mysql-demo-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mysql-demo-auth
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-demo
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason       Message
-  ---------   --------   -----     ----             --------   ------       -------
-  2m          2m         1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
-  2m          2m         1         MySQL operator   Normal     Successful   Successfully patched MySQL
-  2m          2m         1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
-  2m          2m         1         MySQL operator   Normal     Successful   Successfully patched MySQL
+  Type    Reason      Age   From            Message
+  ----    ------      ----  ----            -------
+  Normal  Successful  4m    MySQL operator  Successfully created Service
+  Normal  Successful  4m    MySQL operator  Successfully created StatefulSet
+  Normal  Successful  4m    MySQL operator  Successfully created MySQL
+  Normal  Successful  4m    MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  4m    MySQL operator  Successfully patched MySQL
+  Normal  Successful  3m    MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  3m    MySQL operator  Successfully patched MySQL
 ```
 
 `kubedb describe` command provides following basic information about a MySQL database.
@@ -204,32 +236,30 @@ Events:
 - Snapshots (If any)
 - Monitoring system (If available)
 
-To hide details about StatefulSet & Service, use flag `--show-workload=false`
-To hide details about Secret, use flag `--show-secret=false`
 To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all MySQL objects in `default` namespace, use following command
 
 ```console
-$ kubedb describe my
+kubedb describe my
 ```
 
 To describe all MySQL objects from every namespace, provide `--all-namespaces` flag.
 
 ```console
-$ kubedb describe my --all-namespaces
+kubedb describe my --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
 
 ```console
-$ kubedb describe all --all-namespaces
+kubedb describe all --all-namespaces
 ```
 
 You can also describe KubeDB objects with matching labels. The following command will describe all MySQL objects with specified labels from every namespace.
 
 ```console
-$ kubedb describe my --all-namespaces --selector='group=dev'
+kubedb describe my --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
@@ -265,11 +295,12 @@ Various fields of a KubeDB object can't be edited using `edit` command. The foll
 
 If StatefulSets exists for a MySQL database, following fields can't be modified as well.
 
-- spec.version
 - spec.databaseSecret
-- spec.storage
-- spec.nodeSelector
 - spec.init
+- spec.storageType
+- spec.storage
+- spec.podTemplate.spec.nodeSelector
+- spec.podTemplate.spec.env
 
 For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
@@ -281,14 +312,14 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 
 ```console
 $ kubedb delete mysql mysql-dev
-mysql "mysql-dev" deleted
+mysql.kubedb.com "mysql-dev" deleted
 ```
 
 You can also use YAML files to delete objects. The following command will delete a mysql using the type and name specified in `mysql.yaml`.
 
 ```console
 $ kubedb delete -f mysql-demo.yaml
-mysql "mysql-dev" deleted
+mysql.kubedb.com "mysql-dev" deleted
 ```
 
 `kubedb delete` command also takes input from `stdin`.
@@ -300,7 +331,7 @@ cat mysql-demo.yaml | kubedb delete -f -
 To delete database with matching labels, use `--selector` flag. The following command will delete mysql with label `mysql.kubedb.com/name=mysql-demo`.
 
 ```console
-$ kubedb delete mysql -l mysql.kubedb.com/name=mysql-demo
+kubedb delete mysql -l mysql.kubedb.com/name=mysql-demo
 ```
 
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).

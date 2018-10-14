@@ -9,6 +9,7 @@ menu:
 menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Database Scheduled Snapshots
@@ -17,29 +18,26 @@ This tutorial will show you how to use KubeDB to take scheduled snapshot of a My
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+  
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    1m
+  ```
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    1h
-demo          Active    1m
-kube-public   Active    1h
-kube-system   Active    1h
-```
-
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Scheduled Backups
 
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).  KubeDB operator will launch a Job periodically that runs the `mysql dump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). KubeDB operator will launch a Job periodically that runs the `mysql dump` command and uploads the output bson file to various cloud providers S3, GCS, Azure, OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
@@ -54,7 +52,7 @@ $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 $ kubectl create secret generic my-snap-secret -n demo \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "my-snap-secret" created
+secret/my-snap-secret created
 ```
 
 ```yaml
@@ -65,12 +63,9 @@ data:
   GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-12T03:42:31Z
   name: my-snap-secret
   namespace: demo
-  resourceVersion: "32253"
-  selfLink: /api/v1/namespaces/demo/secrets/my-snap-secret
-  uid: c12eaa77-0fa6-11e8-a2d6-08002751ae8c
+  ...
 type: Opaque
 ```
 
@@ -83,7 +78,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0"
+  version: "8.0-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -91,21 +86,16 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/mysql-init-scripts.git"
-        directory: .
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: my-snap-secret
     gcs:
-      bucket: restic
+      bucket: kubedb
 ```
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/snapshot/demo-4.yaml
-mysql "mysql-scheduled" created
+mysql.kubedb.com/mysql-scheduled created
 ```
 
 It is also possible to add  backup scheduler to an existing `MySQL`. You just have to edit the `MySQL` CRD and add below spec:
@@ -116,7 +106,7 @@ spec:
   backupSchedule:
     cronExpression: '@every 1m'
     gcs:
-      bucket: restic
+      bucket: kubedb
     storageSecretName: my-snap-secret
 ```
 
@@ -124,10 +114,11 @@ Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snaps
 
 ```console
 $ kubedb get snap -n demo
-NAME                              DATABASE             STATUS      AGE
-mysql-scheduled-20180212-034954   my/mysql-scheduled   Succeeded   2m
-mysql-scheduled-20180212-035054   my/mysql-scheduled   Succeeded   1m
-mysql-scheduled-20180212-035154   my/mysql-scheduled   Running     21s
+NAME                              DATABASENAME      STATUS      AGE
+mysql-scheduled-20180927-083539   mysql-scheduled   Succeeded   3m
+mysql-scheduled-20180927-083639   mysql-scheduled   Succeeded   2m
+mysql-scheduled-20180927-083739   mysql-scheduled   Succeeded   1m
+mysql-scheduled-20180927-083839   mysql-scheduled   Succeeded   39s
 ```
 
 you should see the output of the `mysql dump` command for each snapshot stored in the GCS bucket.
@@ -152,7 +143,7 @@ spec:
 #  backupSchedule:
 #    cronExpression: '@every 1m'
 #    gcs:
-#      bucket: restic
+#      bucket: kubedb
 #    storageSecretName: my-snap-secret
   databaseSecret:
     secretName: mysql-scheduled-auth
@@ -170,7 +161,6 @@ spec:
     storageClassName: standard
   version: 8
 status:
-  creationTime: 2018-02-12T03:44:23Z
   phase: Running
 ```
 
@@ -179,14 +169,13 @@ status:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mysql/mysql-scheduled -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mysql/mysql-scheduled
+kubectl patch -n demo mysql/mysql-scheduled -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mysql/mysql-scheduled
 
-$ kubectl patch -n demo drmn/mysql-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mysql-scheduled
+kubectl patch -n demo drmn/mysql-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mysql-scheduled
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -198,5 +187,6 @@ namespace "demo" deleted
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

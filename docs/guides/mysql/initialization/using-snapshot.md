@@ -17,13 +17,13 @@ This tutorial will show you how to use KubeDB to initialize a MySQL database wit
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-This tutorial assumes that you have created a namespace `demo` and a snapshot `snapshot-infant`. Follow the steps [here](/docs/guides/mysql/snapshot/backup-and-restore.md) to create a database and take [instant snapshot](/docs/guides/mysql/snapshot/backup-and-restore.md#instant-backups), if you have not done so already. If you have changed the name of either namespace or snapshot object, please modify the YAMLs used in this tutorial accordingly.
+- This tutorial assumes that you have created a namespace `demo` and a snapshot `snapshot-infant`. Follow the steps [here](/docs/guides/mysql/snapshot/backup-and-restore.md) to create a database and take [instant snapshot](/docs/guides/mysql/snapshot/backup-and-restore.md#instant-backups), if you have not done so already. If you have changed the name of either namespace or snapshot object, please modify the YAMLs used in this tutorial accordingly.
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create MySQL with Init-Snapshot
 
@@ -36,7 +36,9 @@ metadata:
   name: mysql-init-snapshot
   namespace: demo
 spec:
-  version: "8.0"
+  version: "8.0-v1"
+  databaseSecret:
+    secretName: mysql-infant-auth
   storage:
     storageClassName: "standard"
     accessModes:
@@ -52,7 +54,7 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/Initialization/demo-2.yaml
-mysql "mysql-init-snapshot" created
+mysql.kubedb.com/mysql-init-snapshot created
 ```
 
 Here,
@@ -63,56 +65,74 @@ Now, wait several seconds. KubeDB operator will create a new `StatefulSet`. Then
 
 ```console
 $ kubedb get my -n demo
-NAME                  STATUS         AGE
-mysql-infant          Running        15m
-mysql-init-snapshot   Initializing   11s
+NAME                  VERSION   STATUS         AGE
+mysql-infant          8.0-v1    Running        8m
+mysql-init-snapshot   8.0-v1    Initializing   1m
 
 $ kubedb get my -n demo
-NAME                  STATUS    AGE
-mysql-infant          Running   17m
-mysql-init-snapshot   Running   2m
+NAME                  VERSION   STATUS    AGE
+mysql-infant          8.0-v1    Running   20m
+mysql-init-snapshot   8.0-v1    Running   13m
 
 $ kubedb describe my -n demo mysql-init-snapshot
-Name:		mysql-init-snapshot
-Namespace:	demo
-StartTimestamp:	Mon, 12 Feb 2018 11:09:12 +0600
-Status:		Running
-Annotations:	kubedb.com/initialized=
+Name:               mysql-init-snapshot
+Namespace:          demo
+CreationTimestamp:  Thu, 27 Sep 2018 17:54:16 +0600
+Labels:             <none>
+Annotations:        kubedb.com/initialized=
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mysql-init-snapshot
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 12 Feb 2018 11:09:13 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mysql-init-snapshot
+  CreationTimestamp:  Thu, 27 Sep 2018 17:54:17 +0600
+  Labels:               kubedb.com/kind=MySQL
+                        kubedb.com/name=mysql-init-snapshot
+  Annotations:        <none>
+  Replicas:           824642013116 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mysql-init-snapshot
-  Type:		ClusterIP
-  IP:		10.105.136.174
-  Port:		db	3306/TCP
+  Name:         mysql-init-snapshot
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-init-snapshot
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.104.217.79
+  Port:         db  3306/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:3306
 
 Database Secret:
-  Name:	mysql-init-snapshot-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mysql-infant-auth
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-infant
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason               Message
-  ---------   --------   -----     ----             --------   ------               -------
-  19s         19s        1         Job Controller   Normal     SuccessfulSnapshot   Successfully completed initialization
-  2m          2m         1         MySQL operator   Normal     Successful           Successfully patched StatefulSet
-  2m          2m         1         MySQL operator   Normal     Successful           Successfully patched MySQL
-  2m          2m         1         MySQL operator   Normal     Successful           Successfully created StatefulSet
-  2m          2m         1         MySQL operator   Normal     Initializing         Initializing from Snapshot: "snap-mysql-infant"
+  Type    Reason                Age   From            Message
+  ----    ------                ----  ----            -------
+  Normal  Successful            13m   MySQL operator  Successfully created Service
+  Normal  Successful            12m   MySQL operator  Successfully created MySQL
+  Normal  Successful            12m   MySQL operator  Successfully created StatefulSet
+  Normal  Initializing          12m   MySQL operator  Initializing from Snapshot: "snap-mysql-infant"
+  Normal  Successful            12m   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful            12m   MySQL operator  Successfully patched MySQL
+  Normal  SuccessfulInitialize  6m    Job Controller  Successfully completed initialization
 ```
 
 ## Cleaning up
@@ -120,14 +140,13 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mysql/mysql-init-snapshot -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mysql/mysql-init-snapshot
+kubectl patch -n demo mysql/mysql-infant mysql/mysql-init-snapshot -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mysql/mysql-infant mysql/mysql-init-snapshot
 
-$ kubectl patch -n demo drmn/mysql-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mysql-init-snapshot
+kubectl patch -n demo drmn/mysql-infant drmn/mysql-init-snapshot -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mysql-infant drmn/mysql-init-snapshot
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -136,6 +155,7 @@ namespace "demo" deleted
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

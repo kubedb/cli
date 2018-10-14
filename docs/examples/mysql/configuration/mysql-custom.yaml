@@ -5,10 +5,9 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
-  doNotPause: true
   configSource:
-      configMap:
-        name: my-custom-config
+    configMap:
+      name: my-custom-config
   storage:
     storageClassName: "standard"
     accessModes:

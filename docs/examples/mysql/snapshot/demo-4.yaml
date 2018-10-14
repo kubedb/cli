@@ -12,13 +12,8 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/mysql-init-scripts.git"
-        directory: .
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: my-snap-secret
     gcs:
-      bucket: restic
+      bucket: kubedb

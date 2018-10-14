@@ -18,13 +18,22 @@ This tutorial will show you how to monitor KubeDB databases using Prometheus via
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
+
+> Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy CoreOS-Prometheus Operator
 
@@ -32,33 +41,43 @@ Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
-namespace "demo" created
-clusterrole "prometheus-operator" created
-serviceaccount "prometheus-operator" created
-clusterrolebinding "prometheus-operator" created
-deployment "prometheus-operator" created
+namespace/demo created
+clusterrole.rbac.authorization.k8s.io/prometheus-operator created
+serviceaccount/prometheus-operator created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created
+deployment.extensions/prometheus-operator created
+```
 
+Wait for running the Deployment’s Pods.
+
+```console
 $ kubectl get pods -n demo --watch
-NAME                                   READY     STATUS    RESTARTS   AGE
-prometheus-operator-79cb9dcd4b-2njgq   1/1       Running   0          2m
+NAME                                   READY     STATUS              RESTARTS   AGE
+prometheus-operator-857455484c-dg4qg   0/1       ContainerCreating   0          34s
+prometheus-operator-857455484c-dg4qg   1/1       Running             0         45s
+```
 
+This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
 
+```console
 $ kubectl get crd
-NAME                                    AGE
-alertmanagers.monitoring.coreos.com     11m
-prometheuses.monitoring.coreos.com      11m
-servicemonitors.monitoring.coreos.com   11m
+NAME                                          CREATED AT
+...
+alertmanagers.monitoring.coreos.com           2018-09-24T12:42:22Z
+prometheuses.monitoring.coreos.com            2018-09-24T12:42:22Z
+servicemonitors.monitoring.coreos.com         2018-09-24T12:42:22Z
+...
 ```
 
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
-clusterrole "prometheus" created
-serviceaccount "prometheus" created
-clusterrolebinding "prometheus" created
-prometheus "prometheus" created
-service "prometheus" created
+clusterrole.rbac.authorization.k8s.io/prometheus created
+serviceaccount/prometheus created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus created
+prometheus.monitoring.coreos.com/prometheus created
+service/prometheus created
 
 # Verify RBAC stuffs
 $ kubectl get clusterroles
@@ -66,18 +85,16 @@ NAME                  AGE
 prometheus            48s
 prometheus-operator   1m
 
-
 $ kubectl get clusterrolebindings
 NAME                  AGE
 prometheus            7s
 prometheus-operator   25s
 
-
 $ kubectl get serviceaccounts -n demo
 NAME                  SECRETS   AGE
-default               1         5m
-prometheus            1         4m
-prometheus-operator   1         5m
+default               1         3m
+prometheus            1         1m
+prometheus-operator   1         3m
 ```
 
 ### Prometheus Dashboard
@@ -86,10 +103,9 @@ Now to open prometheus dashboard on Browser:
 
 ```console
 $ kubectl get svc -n demo
-NAME                  TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
-prometheus            LoadBalancer   10.98.86.76   <pending>     9090:30900/TCP   16s
-prometheus-operated   ClusterIP      None          <none>        9090/TCP         16s
-
+NAME                  TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+prometheus            LoadBalancer   10.100.197.251   <pending>     9090:30900/TCP   1m
+prometheus-operated   ClusterIP      None             <none>        9090/TCP         1m
 
 $ minikube ip
 192.168.99.100
@@ -99,6 +115,8 @@ http://192.168.99.100:30900
 ```
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
+
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
 
 ## Create a MySQL database
 
@@ -111,7 +129,7 @@ metadata:
   name: mysql-mon-coreos
   namespace: demo
 spec:
-  version: "8.0"
+  version: "8.0-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -155,71 +173,99 @@ Run the following command to deploy the above `MySQL` CRD object.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/monitoring/coreos-operator/demo-1.yaml
-mysql "mysql-mon-coreos" created
+mysql.kubedb.com/mysql-mon-coreos created
 ```
 
 Here,
 
-- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If no storage spec is given, an `emptyDir` is used.
 - `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
 
-KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB will create a separate stats service with name `<mysql-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the MySQL is successfully running.
 
 ```console
 $ kubedb get my -n demo
-NAME               STATUS    AGE
-mysql-mon-coreos   Running   36s
-
+NAME               VERSION   STATUS     AGE
+mysql-mon-coreos   8.0-v1    Creating   22s
 
 $ kubedb describe my -n demo mysql-mon-coreos
-Name:		mysql-mon-coreos
-Namespace:	demo
-StartTimestamp:	Mon, 12 Feb 2018 11:26:56 +0600
-Status:		Running
+Name:               mysql-mon-coreos
+Namespace:          demo
+CreationTimestamp:  Thu, 27 Sep 2018 16:29:36 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
-StatefulSet:
-  Name:			mysql-mon-coreos
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 12 Feb 2018 11:26:58 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+StatefulSet:          
+  Name:               mysql-mon-coreos
+  CreationTimestamp:  Thu, 27 Sep 2018 16:29:39 +0600
+  Labels:               kubedb.com/kind=MySQL
+                        kubedb.com/name=mysql-mon-coreos
+  Annotations:        <none>
+  Replicas:           824640215820 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:
-  Name:		mysql-mon-coreos
-  Type:		ClusterIP
-  IP:		10.98.111.66
-  Port:		db		3306/TCP
-  Port:		prom-http	56790/TCP
+Service:        
+  Name:         mysql-mon-coreos
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-mon-coreos
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.97.243.29
+  Port:         db  3306/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.7:3306
+
+Service:        
+  Name:         mysql-mon-coreos-stats
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-mon-coreos
+  Annotations:    monitoring.appscode.com/agent=prometheus.io/coreos-operator
+  Type:         ClusterIP
+  IP:           10.109.38.68
+  Port:         prom-http  56790/TCP
+  TargetPort:   prom-http/TCP
+  Endpoints:    172.17.0.7:56790
 
 Database Secret:
-  Name:	mysql-mon-coreos-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mysql-mon-coreos-auth
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-mon-coreos
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 Monitoring System:
-  Agent:	prometheus.io/coreos-operator
+  Agent:  prometheus.io/coreos-operator
   Prometheus:
-    Namespace:	demo
-    Labels:	app=kubedb
-    Interval:	10s
+    Port:       56790
+    Namespace:  demo
+    Labels:     app=kubedb
+    Interval:   10s
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason       Message
-  ---------   --------   -----     ----             --------   ------       -------
-  31s         31s        1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
-  31s         31s        1         MySQL operator   Normal     Successful   Successfully patched MySQL
-  34s         34s        1         MySQL operator   Normal     Successful   Successfully created StatefulSet
-  34s         34s        1         MySQL operator   Normal     Successful   Successfully created MySQL
-  49s         49s        1         MySQL operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From            Message
+  ----    ------      ----  ----            -------
+  Normal  Successful  1m    MySQL operator  Successfully created Service
+  Normal  Successful  1m    MySQL operator  Successfully created StatefulSet
+  Normal  Successful  1m    MySQL operator  Successfully created MySQL
+  Normal  Successful  56s   MySQL operator  Successfully created stats service
+  Normal  Successful  52s   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  52s   MySQL operator  Successfully patched MySQL
+  Normal  Successful  51s   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  51s   MySQL operator  Successfully patched MySQL
 ```
 
 Since `spec.monitoring` was configured, a ServiceMonitor object is created accordingly. You can verify it running the following commands:
@@ -227,23 +273,22 @@ Since `spec.monitoring` was configured, a ServiceMonitor object is created accor
 ```yaml
 $ kubectl get servicemonitor -n demo
 NAME                           AGE
-kubedb-demo-mysql-mon-coreos   51s
-
+kubedb-demo-mysql-mon-coreos   1m
 
 $ kubectl get servicemonitor -n demo kubedb-demo-mysql-mon-coreos -o yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-12T05:27:13Z
+  creationTimestamp: 2018-09-27T10:30:20Z
+  generation: 1
   labels:
     app: kubedb
-    monitoring.appscode.com/service: mysql-mon-coreos.demo
+    monitoring.appscode.com/service: mysql-mon-coreos-stats.demo
   name: kubedb-demo-mysql-mon-coreos
   namespace: demo
-  resourceVersion: "37184"
+  resourceVersion: "6257"
   selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/servicemonitors/kubedb-demo-mysql-mon-coreos
-  uid: 61bc7bf4-0fb5-11e8-a2d6-08002751ae8c
+  uid: 55a3ae53-c240-11e8-b2cc-080027d9f35e
 spec:
   endpoints:
   - interval: 10s
@@ -267,23 +312,23 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mysql/mysql-mon-coreos -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mysql/mysql-mon-coreos
+kubectl patch -n demo mysql/mysql-mon-coreos -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mysql/mysql-mon-coreos
 
-$ kubectl patch -n demo drmn/mysql-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mysql-mon-coreos
+kubectl patch -n demo drmn/mysql-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mysql-mon-coreos
 
-$ kubectl delete clusterrolebindings prometheus-operator  prometheus
-$ kubectl delete clusterrole prometheus-operator prometheus
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
 
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
 - Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).

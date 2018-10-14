@@ -18,29 +18,26 @@ This tutorial will show you how to monitor KubeDB databases using [Prometheus](h
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    45m
-demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
-```
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create a MySQL database
+## Monitor with builtin Prometheus
 
-KubeDB implements a `MySQL` CRD to define the specification of a MySQL database. Below is the `MySQL` object created in this tutorial.
+User can define `spec.monitor` either while creating the CRD object, Or can update the spec of existing CRD object to add the `spec.monitor` part. Below is the `MySQL` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -49,7 +46,7 @@ metadata:
   name: mysql-mon-prometheus
   namespace: demo
 spec:
-  version: "8.0"
+  version: "8.0-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,82 +60,113 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/monitoring/builtin-prometheus/demo-1.yaml
-mysql "mysql-mon-prometheus" created
+mysql.kubedb.com/mysql-mon-prometheus created
 ```
 
 Here,
 
-- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MySQL.
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MySQL Exporter` and will receive metrics from exporter.
 
-KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB will create a separate stats service with name `<mysql-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the MySQL is successfully running.
 
 ```console
 $ kubedb get my -n demo
-NAME                   STATUS    AGE
-mysql-mon-prometheus   Running   19s
+NAME                   VERSION   STATUS    AGE
+mysql-mon-prometheus   8.0-v1    Running   13m
 
 $ kubedb describe my -n demo mysql-mon-prometheus
-Name:		mysql-mon-prometheus
-Namespace:	demo
-StartTimestamp:	Mon, 12 Feb 2018 11:52:27 +0600
-Status:		Running
+Name:               mysql-mon-prometheus
+Namespace:          demo
+CreationTimestamp:  Thu, 27 Sep 2018 16:02:43 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
-StatefulSet:
-  Name:			mysql-mon-prometheus
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 12 Feb 2018 11:52:29 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+StatefulSet:          
+  Name:               mysql-mon-prometheus
+  CreationTimestamp:  Thu, 27 Sep 2018 16:02:45 +0600
+  Labels:               kubedb.com/kind=MySQL
+                        kubedb.com/name=mysql-mon-prometheus
+  Annotations:        <none>
+  Replicas:           824639361756 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:
-  Name:		mysql-mon-prometheus
-  Type:		ClusterIP
-  IP:		10.101.55.20
-  Port:		db		3306/TCP
-  Port:		prom-http	56790/TCP
+Service:        
+  Name:         mysql-mon-prometheus
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-mon-prometheus
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.105.118.238
+  Port:         db  3306/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:3306
+
+Service:        
+  Name:         mysql-mon-prometheus-stats
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-mon-prometheus
+  Annotations:    monitoring.appscode.com/agent=prometheus.io/builtin
+                  prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-mon-prometheus/metrics
+                  prometheus.io/port=56790
+                  prometheus.io/scrape=true
+  Type:         ClusterIP
+  IP:           10.110.18.171
+  Port:         prom-http  56790/TCP
+  TargetPort:   prom-http/TCP
+  Endpoints:    172.17.0.5:56790
 
 Database Secret:
-  Name:	mysql-mon-prometheus-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mysql-mon-prometheus-auth
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-mon-prometheus
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 Monitoring System:
-  Agent:	prometheus.io/builtin
+  Agent:  prometheus.io/builtin
   Prometheus:
-    Namespace:
-    Interval:
+    Port:  56790
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason       Message
-  ---------   --------   -----     ----             --------   ------       -------
-  11s         11s        1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
-  11s         11s        1         MySQL operator   Normal     Successful   Successfully patched MySQL
-  14s         14s        1         MySQL operator   Normal     Successful   Successfully created StatefulSet
-  14s         14s        1         MySQL operator   Normal     Successful   Successfully created MySQL
-  30s         30s        1         MySQL operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From            Message
+  ----    ------      ----  ----            -------
+  Normal  Successful  13m   MySQL operator  Successfully created Service
+  Normal  Successful  13m   MySQL operator  Successfully created StatefulSet
+  Normal  Successful  13m   MySQL operator  Successfully created MySQL
+  Normal  Successful  13m   MySQL operator  Successfully created stats service
+  Normal  Successful  12m   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  12m   MySQL operator  Successfully patched MySQL
+  Normal  Successful  12m   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  12m   MySQL operator  Successfully patched MySQL
 ```
 
-Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
+Since `spec.monitoring` was configured, the database monitoring service object is configured accordingly. You can verify it running the following commands:
 
 ```console
 $ kubectl get services -n demo
-NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)              AGE
-kubedb                 ClusterIP   None           <none>        <none>               53s
-mysql-mon-prometheus   ClusterIP   10.101.55.20   <none>        3306/TCP,56790/TCP   52s
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+kubedb                       ClusterIP   None             <none>        <none>      31m
+mysql-mon-prometheus         ClusterIP   10.105.118.238   <none>        3306/TCP    14m
+mysql-mon-prometheus-stats   ClusterIP   10.110.18.171    <none>        56790/TCP   13m
 ```
 
 ```yaml
-$ kubectl get services mysql-mon-prometheus -n demo -o yaml
+$ kubectl get services mysql-mon-prometheus-stats -n demo -o yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -147,22 +175,24 @@ metadata:
     prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-mon-prometheus/metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
-  creationTimestamp: 2018-02-12T05:52:28Z
+  creationTimestamp: 2018-09-27T10:03:36Z
   labels:
     kubedb.com/kind: MySQL
     kubedb.com/name: mysql-mon-prometheus
-  name: mysql-mon-prometheus
+  name: mysql-mon-prometheus-stats
   namespace: demo
-  resourceVersion: "38255"
-  selfLink: /api/v1/namespaces/demo/services/mysql-mon-prometheus
-  uid: e86bb1a4-0fb8-11e8-a2d6-08002751ae8c
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: MySQL
+    name: mysql-mon-prometheus
+    uid: 7a30757a-c23c-11e8-b2cc-080027d9f35e
+  resourceVersion: "4015"
+  selfLink: /api/v1/namespaces/demo/services/mysql-mon-prometheus-stats
+  uid: 99cdcd40-c23c-11e8-b2cc-080027d9f35e
 spec:
-  clusterIP: 10.101.55.20
+  clusterIP: 10.110.18.171
   ports:
-  - name: db
-    port: 3306
-    protocol: TCP
-    targetPort: db
   - name: prom-http
     port: 56790
     protocol: TCP
@@ -236,9 +266,11 @@ data:
         target_label: kubernetes_name
 ```
 
+Create above ConfigMap
+
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
-configmap "prometheus-server-conf" created
+configmap/prometheus-server-conf created
 ```
 
 Now, the below yaml is used to deploy Prometheus in kubernetes :
@@ -285,25 +317,24 @@ Run the following command to deploy prometheus-server
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-clusterrole "prometheus-server" created
-serviceaccount "prometheus-server" created
-clusterrolebinding "prometheus-server" created
-deployment "prometheus-server" created
-service "prometheus-service" created
+clusterrole.rbac.authorization.k8s.io/prometheus-server created
+serviceaccount/prometheus-server created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
+deployment.apps/prometheus-server created
+service/prometheus-service created
 
 # Verify RBAC stuffs
-$ kubectl get clusterroles
+$ kubectl get clusterroles prometheus-server
 NAME                AGE
-prometheus-server   57s
+prometheus-server   28s
 
-$ kubectl get clusterrolebindings
+$ kubectl get clusterrolebindings prometheus-server
 NAME                AGE
-prometheus-server   1m
-
+prometheus-server   59s
 
 $ kubectl get serviceaccounts -n demo
 NAME                SECRETS   AGE
-default             1         48m
+default             1         52m
 prometheus-server   1         1m
 ```
 
@@ -313,11 +344,11 @@ Now to open prometheus dashboard on Browser:
 
 ```console
 $ kubectl get svc -n demo
-NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)              AGE
-kubedb                 ClusterIP      None            <none>        <none>               4m
-mysql-mon-prometheus   ClusterIP      10.101.55.20    <none>        3306/TCP,56790/TCP   4m
-prometheus-service     LoadBalancer   10.105.89.246   <pending>     9090:30901/TCP       2m
-
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+kubedb                       ClusterIP   None             <none>        <none>           34m
+mysql-mon-prometheus         ClusterIP   10.105.118.238   <none>        3306/TCP         17m
+mysql-mon-prometheus-stats   ClusterIP   10.110.18.171    <none>        56790/TCP        16m
+prometheus-service           NodePort    10.100.155.55    <none>        9090:30901/TCP   1m
 
 $ minikube ip
 192.168.99.100
@@ -328,6 +359,8 @@ http://192.168.99.100:30901
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
+
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 ![prometheus-builtin](/docs/images/mysql/mysql-builtin.png)
 
@@ -336,24 +369,22 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mysql/mysql-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mysql/mysql-mon-prometheus
+kubectl patch -n demo mysql/mysql-mon-prometheus -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mysql/mysql-mon-prometheus
 
-$ kubectl patch -n demo drmn/mysql-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mysql-mon-prometheus
+kubectl patch -n demo drmn/mysql-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mysql-mon-prometheus
 
-$ kubectl delete clusterrole prometheus-server
-$ kubectl delete clusterrolebindings  prometheus-server
-$ kubectl delete serviceaccounts -n demo  prometheus-server
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
 
 - Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - [Snapshot and Restore](/docs/guides/mysql/snapshot/backup-and-restore.md) process of MySQL databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mysql/snapshot/scheduled-backup.md) of MySQL databases using KubeDB.
 - Initialize [MySQL with Script](/docs/guides/mysql/initialization/using-script.md).

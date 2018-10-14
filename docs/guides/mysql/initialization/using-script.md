@@ -9,6 +9,7 @@ menu:
 menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Initialize MySQL using Script
@@ -16,46 +17,61 @@ section_menu_id: guides
 This tutorial will show you how to use KubeDB to initialize a MySQL database with \*.sql, \*.sh and/or \*.sql.gz script.
 In this tutorial we will use .sql script stored in GitHub repository [kubedb/mysql-init-scripts](https://github.com/kubedb/mysql-init-scripts).
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a phpMyAdmin to connect and test MySQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. This tutorial will also use a phpMyAdmin to connect and test MySQL database, once it is running. Run the following command to prepare your cluster for this tutorial:
+
+  ```console
+  $ kubectl create ns demo
+  namespace/demo created
+  
+  $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/quickstart/demo-1.yaml
+  deployment.extensions/myadmin created
+  service/myadmin created
+  
+  $ kubectl get pods -n demo
+  NAME                       READY     STATUS    RESTARTS   AGE
+  myadmin-584d845666-rtkzg   1/1       Running   0          9m
+  
+  $ kubectl get service -n demo
+  NAME      TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+  myadmin   LoadBalancer   10.108.49.82   <pending>     80:30192/TCP   9m
+  
+  $ minikube ip
+  192.168.99.100
+  ```
+
+  Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_.
+  You can also get this URl by running the following command:
+
+  ```console
+  $ minikube service myadmin -n demo --url
+  http://192.168.99.100:32673
+  ```
+
+  According to the above example, this URL will be [http://192.168.99.100:32673](http://192.168.99.100:32673). The login informations to phpMyAdmin _(host, username and password)_ will be retrieved later in this tutorial.
+  
+## Prepare Initialization Scripts
+
+MySQL supports initialization with `.sh`, `.sql` and `.sql.gz` files. In this tutorial, we will use `init.sql` script from [mysql-init-scripts](https://github.com/kubedb/mysql-init-scripts) git repository to create a TABLE `kubedb_table` in `mysql` database.
+
+As [gitRepo](https://kubernetes.io/docs/concepts/storage/volumes/#gitrepo) volume has been deprecated, we will use a ConfigMap as script source. You can use any Kubernetes supported [volume](https://kubernetes.io/docs/concepts/storage/volumes) as script source.
+
+At first, we will create a ConfigMap from `init.sql` file. Then, we will provide this ConfigMap as script source in `init.scriptSource` of MySQL crd spec.
+
+Let's create a ConfigMap with initialization script,
 
 ```console
-$ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/quickstart/demo-1.yaml
-deployment "myadmin" created
-service "myadmin" created
-
-$ kubectl get pods -n demo --watch
-NAME                      READY     STATUS              RESTARTS   AGE
-myadmin-c4db4df95-4tgkx   0/1       ContainerCreating   0          27s
-myadmin-c4db4df95-4tgkx   1/1       Running             0          1m
-
-$ kubectl get service -n demo
-NAME                TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
-myadmin             LoadBalancer   10.101.247.127   <pending>     80:32673/TCP   50s
-
-$ minikube ip
-192.168.99.100
+$ kubectl create configmap -n demo my-init-script \
+--from-literal=init.sql="$(curl -fsSL https://raw.githubusercontent.com/kubedb/mysql-init-scripts/master/init.sql)"
+configmap/my-init-script created
 ```
-
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_.
-You can also get this URl by running the following command:
-
-```console
-$ minikube service myadmin -n demo --url
-http://192.168.99.100:32673
-```
-
-According to the above example, this URL will be [http://192.168.99.100:32673](http://192.168.99.100:32673). The login informations to phpMyAdmin _(host, username and password)_ will be retrieved later in this tutorial.
 
 ## Create a MySQL database with Init-Script
 
@@ -68,8 +84,7 @@ metadata:
   name: mysql-init-script
   namespace: demo
 spec:
-  version: "8.0"
-  doNotPause: true
+  version: "8.0-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -79,88 +94,99 @@ spec:
         storage: 50Mi
   init:
     scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/mysql-init-scripts.git"
-        directory: .
-
+      configMap:
+        name: my-init-script
 ```
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/Initialization/demo-1.yaml
-mysql "mysql-init-script" created
+mysql.kubedb.com/mysql-init-script created
 ```
 
 Here,
 
-- `spec.version` is the version of MySQL database. In this tutorial, a MySQL 8.0 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MySQL.
-- `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.sql, \*sql.gz and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
+- `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .sql script from the git repository `https://github.com/kubedb/mysql-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.sql, \*sql.gz and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
 
 KubeDB operator watches for `MySQL` objects using Kubernetes api. When a `MySQL` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MySQL object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MySQL specific RBAC roles are required for [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
 ```console
 $ kubedb describe my -n demo mysql-init-script
-Name:		mysql-init-script
-Namespace:	demo
-StartTimestamp:	Fri, 09 Feb 2018 17:18:14 +0600
-Status:		Running
+Name:               mysql-init-script
+Namespace:          demo
+CreationTimestamp:  Thu, 27 Sep 2018 17:06:37 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mysql-init-script
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Fri, 09 Feb 2018 17:18:15 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mysql-init-script
+  CreationTimestamp:  Thu, 27 Sep 2018 17:06:39 +0600
+  Labels:               kubedb.com/kind=MySQL
+                        kubedb.com/name=mysql-init-script
+  Annotations:        <none>
+  Replicas:           824637787500 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mysql-init-script
-  Type:		ClusterIP
-  IP:		10.101.136.66
-  Port:		db	3306/TCP
+  Name:         mysql-init-script
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-init-script
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.102.60.242
+  Port:         db  3306/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.6:3306
 
 Database Secret:
-  Name:	mysql-init-script-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mysql-init-script-auth
+  Labels:         kubedb.com/kind=MySQL
+                  kubedb.com/name=mysql-init-script
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason       Message
-  ---------   --------   -----     ----             --------   ------       -------
-  9m          9m         1         MySQL operator   Normal     Successful   Successfully patched StatefulSet
-  9m          9m         1         MySQL operator   Normal     Successful   Successfully patched MySQL
-  9m          9m         1         MySQL operator   Normal     Successful   Successfully created StatefulSet
-  9m          9m         1         MySQL operator   Normal     Successful   Successfully created MySQL
-  9m          9m         1         MySQL operator   Normal     Successful   Successfully created Service
-
-
+  Type    Reason      Age   From            Message
+  ----    ------      ----  ----            -------
+  Normal  Successful  1m    MySQL operator  Successfully created Service
+  Normal  Successful  41s   MySQL operator  Successfully created StatefulSet
+  Normal  Successful  41s   MySQL operator  Successfully created MySQL
+  Normal  Successful  40s   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  40s   MySQL operator  Successfully patched MySQL
+  Normal  Successful  37s   MySQL operator  Successfully patched StatefulSet
+  Normal  Successful  37s   MySQL operator  Successfully patched MySQL
 
 $ kubectl get statefulset -n demo
 NAME                DESIRED   CURRENT   AGE
-mysql-init-script   1         1         10m
-
+mysql-init-script   1         1         1m
 
 $ kubectl get pvc -n demo
 NAME                       STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-data-mysql-init-script-0   Bound     pvc-ec9fd7b2-0d8a-11e8-9091-08002751ae8c   50Mi       RWO            standard       12m
-
+data-mysql-init-script-0   Bound     pvc-68e49ec6-c245-11e8-b2cc-080027d9f35e   50Mi       RWO            standard       1m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                           STORAGECLASS   REASON    AGE
-pvc-ec9fd7b2-0d8a-11e8-9091-08002751ae8c   50Mi       RWO            Delete           Bound     demo/data-mysql-init-script-0   standard                 12m
-
+pvc-68e49ec6-c245-11e8-b2cc-080027d9f35e   50Mi       RWO            Delete           Bound     demo/data-mysql-init-script-0   standard                 1m
 
 $ kubectl get service -n demo
-NAME                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-kubedb              ClusterIP   None            <none>        <none>     13m
-mysql-init-script   ClusterIP   10.101.136.66   <none>        3306/TCP   13m
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubedb              ClusterIP      None            <none>        <none>         2m
+myadmin             LoadBalancer   10.108.49.82    <pending>     80:30192/TCP   22m
+mysql-init-script   ClusterIP      10.102.60.242   <none>        3306/TCP       2m
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MySQL object:
@@ -170,26 +196,31 @@ $ kubedb get my -n demo mysql-init-script -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-09T11:18:14Z
+  creationTimestamp: 2018-09-27T11:06:37Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 2
   name: mysql-init-script
   namespace: demo
-  resourceVersion: "28624"
+  resourceVersion: "9070"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-init-script
-  uid: ebbcc002-0d8a-11e8-9091-08002751ae8c
+  uid: 677921ee-c245-11e8-b2cc-080027d9f35e
 spec:
-  replicas: 1
   databaseSecret:
     secretName: mysql-init-script-auth
-  doNotPause: true
   init:
     scriptSource:
-      gitRepo:
-        directory: .
-        repository: https://github.com/kubedb/mysql-init-scripts.git
+      configMap:
+        name: my-init-script
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 1
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -197,9 +228,13 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: "8.0"
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 8.0-v1
 status:
-  creationTime: 2018-02-09T11:18:14Z
+  observedGeneration: 2$4213139756412538772
   phase: Running
 ```
 
@@ -210,17 +245,17 @@ Now, you can connect to this database from the phpMyAdmin dashboard using the da
 
 ```console
 $ kubectl get pods mysql-init-script-0 -n demo -o yaml | grep IP
-  hostIP: 192.168.99.100
-  podIP: 172.17.0.5
+  hostIP: 10.0.2.15
+  podIP: 172.17.0.6
 
 $ kubectl get secrets -n demo mysql-init-script-auth -o jsonpath='{.data.\user}' | base64 -d
 root
 
 $ kubectl get secrets -n demo mysql-init-script-auth -o jsonpath='{.data.\password}' | base64 -d
-h1sPb6ZTHQmKC1ng
+1Pc7bwSygrv1MX1Q
 ```
 
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_. To log into the phpMyAdmin, use host __`172.17.0.5`__ , username __`root`__ and password __`h1sPb6ZTHQmKC1ng`__.
+Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_. To log into the phpMyAdmin, use host __`172.17.0.6`__ , username __`root`__ and password __`1Pc7bwSygrv1MX1Q`__.
 
 As you can see here, the initial script has successfully created a table named `kubedb_table` in `mysql` database and inserted three rows of data into that table successfully.
 
@@ -229,14 +264,13 @@ As you can see here, the initial script has successfully created a table named `
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mysql/mysql-init-script -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mysql/mysql-init-script
+kubectl patch -n demo mysql/mysql-init-script -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mysql/mysql-init-script
 
-$ kubectl patch -n demo drmn/mysql-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mysql-init-script
+kubectl patch -n demo drmn/mysql-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mysql-init-script
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -249,5 +283,6 @@ namespace "demo" deleted
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

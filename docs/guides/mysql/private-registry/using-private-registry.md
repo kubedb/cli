@@ -9,6 +9,7 @@ menu:
 menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Deploy MySQL from private Docker registry
@@ -17,23 +18,60 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- Read [concept of MySQL Version Catalog](/docs/concepts/catalog/mysql.md) to learn detail concepts of `MySQLVersion` object.
 
-You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
+- You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For mysql, push the following images to your private registry.
+- You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
-- [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
-- [kubedb/mysql](https://hub.docker.com/r/kubedb/mysql)
-- [kubedb/mysql-tools](https://hub.docker.com/r/kubedb/mysql-tools)
+- You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For mysql, push `DB_IMAGE`, `TOOLS_IMAGE`, `EXPORTER_IMAGE` of following MySQLVersions, where `deprecated` is not true, to your private registry.
 
-```console
-$ export DOCKER_REGISTRY=<your-registry>
+  ```console
+  $ kubectl get mysqlversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,TOOLS_IMAGE:.spec.tools.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated
+  NAME      VERSION   DB_IMAGE              TOOLS_IMAGE                 EXPORTER_IMAGE                   DEPRECATED
+  5         5         kubedb/mysql:5        kubedb/mysql-tools:5        kubedb/operator:0.8.0            true
+  5-v1      5         kubedb/mysql:5-v1     kubedb/mysql-tools:5-v1     kubedb/mysqld-exporter:v0.11.0   <none>
+  5.7       5.7       kubedb/mysql:5.7      kubedb/mysql-tools:5.7      kubedb/operator:0.8.0            true
+  5.7-v1    5.7       kubedb/mysql:5.7-v1   kubedb/mysql-tools:5.7-v1   kubedb/mysqld-exporter:v0.11.0   <none>
+  8         8         kubedb/mysql:8        kubedb/mysql-tools:8        kubedb/operator:0.8.0            true
+  8-v1      8         kubedb/mysql:8-v1     kubedb/mysql-tools:8-v1     kubedb/mysqld-exporter:v0.11.0   <none>
+  8.0       8.0       kubedb/mysql:8.0      kubedb/mysql-tools:8.0      kubedb/operator:0.8.0            true
+  8.0-v1    8.0       kubedb/mysql:8.0-v1   kubedb/mysql-tools:8.0-v1   kubedb/mysqld-exporter:v0.11.0   <none>
+  ```
 
-$ docker pull kubedb/operator:0.9.0-beta.1 ; docker tag kubedb/operator:0.9.0-beta.1 $DOCKER_REGISTRY/operator:0.9.0-beta.1 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.1
-$ docker pull kubedb/mysql:8.0 ; docker tag kubedb/mysql:8.0 $DOCKER_REGISTRY/mysql:8.0 ; docker push $DOCKER_REGISTRY/mysql:8.0
-$ docker pull kubedb/mysql-tools:8.0 ; docker tag kubedb/mysql-tools:8.0 $DOCKER_REGISTRY/mysql-tools:8.0 ; docker push $DOCKER_REGISTRY/mysql-tools:8.0
-```
+  Docker hub repositories:
+
+  - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
+  - [kubedb/mysql](https://hub.docker.com/r/kubedb/mysql)
+  - [kubedb/mysql-tools](https://hub.docker.com/r/kubedb/mysql-tools)
+  - [kubedb/mysqld-exporter](https://hub.docker.com/r/kubedb/mysqld-exporter)
+
+- Update KubeDB catalog for private Docker registry. Ex:
+
+  ```yaml
+  apiVersion: catalog.kubedb.com/v1alpha1
+  kind: MySQLVersion
+  metadata:
+    name: "8.0-v1"
+    labels:
+      app: kubedb
+  spec:
+    version: "8.0"
+    db:
+      image: "PRIVATE_DOCKER_REGISTRY/mysql:8.0-v1"
+    exporter:
+      image: "PRIVATE_DOCKER_REGISTRY/mysqld-exporter:v0.11.0"
+    tools:
+      image: "PRIVATE_DOCKER_REGISTRY/mysql-tools:8.0-v1"
+  
+  ```
+
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+   ```
 
 ## Create ImagePullSecret
 
@@ -42,13 +80,12 @@ ImagePullSecrets is a type of a Kubernete Secret whose sole purpose is to pull p
 Run the following command, substituting the appropriate uppercase values to create an image pull secret for your private Docker registry:
 
 ```console
-$ kubectl create secret docker-registry myregistrykey \
+$ kubectl create secret docker-registry -n demo myregistrykey \
   --docker-server=DOCKER_REGISTRY_SERVER \
   --docker-username=DOCKER_USER \
   --docker-email=DOCKER_EMAIL \
   --docker-password=DOCKER_PASSWORD
-
-secret "myregistrykey" created.
+secret/myregistrykey created
 ```
 
 If you wish to follow other ways to pull private images see [official docs](https://kubernetes.io/docs/concepts/containers/images/) of kubernetes.
@@ -58,22 +95,6 @@ NB: If you are using `kubectl` 1.9.0, update to 1.9.1 or later to avoid this [is
 ## Install KubeDB operator
 
 When installing KubeDB operator, set the flags `--docker-registry` and `--image-pull-secret` to appropriate value. Follow the steps to [install KubeDB operator](/docs/setup/install.md) properly in cluster so that to points to the DOCKER_REGISTRY you wish to pull images from.
-
-## Create Demo namespace
-
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
-
-```console
-$ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    45m
-demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
-```
 
 ## Deploy MySQL database from Private Registry
 
@@ -87,8 +108,7 @@ metadata:
   name: mysql-pvt-reg
   namespace: demo
 spec:
-  version: "8.0"
-  doNotPause: true
+  version: "8.0-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -96,51 +116,43 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  imagePullSecrets:
-    - name: myregistrykey
+  podTemplate:
+    spec:
+      imagePullSecrets:
+      - name: myregistrykey
 ```
 
 Now run the command to deploy this `MySQL` object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/private-registry/demo-2.yaml
-mysql "mysql-pvt-reg" created
+mysql.kubedb.com/mysql-pvt-reg created
 ```
 
 To check if the images pulled successfully from the repository, see if the `MySQL` is in running state:
 
 ```console
-$ kubectl get pods -n demo -w
-NAME              READY     STATUS              RESTARTS   AGE
-mysql-pvt-reg-0   0/1       Pending             0          0s
-mysql-pvt-reg-0   0/1       Pending             0          0s
-mysql-pvt-reg-0   0/1       ContainerCreating   0          1s
-mysql-pvt-reg-0   1/1       Running             0          8s
-
-
-$ kubedb get my -n demo
-NAME            STATUS    AGE
-mysql-pvt-reg   Running   26s
+$ kubectl get pods -n demo
+NAME              READY     STATUS    RESTARTS   AGE
+mysql-pvt-reg-0   1/1       Running   0          56s
 ```
 
 ## Snapshot
 
-We don't need to add `imagePullSecret` for `snapshot` objects.
-Just create [snapshot object](/docs/guides/mysql/snapshot/backup-and-restore.md) and KubeDB operator will reuse the `ImagePullSecret` from `MySQL` object.
+You can specify `imagePullSecret` for Snapshot objects in `spec.podTemplate.spec.imagePullSecrets` field of Snapshot object. If you are using scheduled backup, you can also provide `imagePullSecret` in `backupSchedule.podTemplate.spec.imagePullSecrets` field of MySQL crd. KubeDB also reuses `imagePullSecret` for Snapshot object from `spec.podTemplate.spec.imagePullSecrets` field of MySQL crd.
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mysql/mysql-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mysql/mysql-pvt-reg
+kubectl patch -n demo mysql/mysql-pvt-reg -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mysql/mysql-pvt-reg
 
-$ kubectl patch -n demo drmn/mysql-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mysql-pvt-reg
+kubectl patch -n demo drmn/mysql-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mysql-pvt-reg
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -152,6 +164,7 @@ namespace "demo" deleted
 - Monitor your MySQL database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mysql/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your MySQL database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mysql/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
+- Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -5,7 +5,7 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
-  doNotPause: true
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -13,4 +13,4 @@ spec:
     resources:
       requests:
         storage: 50Mi
-
+  terminationPolicy: DoNotTerminate

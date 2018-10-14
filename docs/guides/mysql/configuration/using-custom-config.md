@@ -1,14 +1,15 @@
 ---
 title: Run MySQL with Custom Configuration
 menu:
-  docs_0.9.0-beta.0:
-    identifier: my-custom-config-quickstart
-    name: Quickstart
-    parent: my-custom-config
+  docs_0.8.0:
+    identifier: my-custom-config-file
+    name: Using Config File
+    parent: my-configuration
     weight: 10
 menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using Custom Configuration File
@@ -17,21 +18,20 @@ KubeDB supports providing custom configuration for MySQL. This tutorial will sho
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
-```
+  ```console
+  $ kubectl create ns demo
+  namespace/demo created
+  
+  $ kubectl get ns demo
+  NAME    STATUS  AGE
+  demo    Active  5s
+  ```
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
@@ -47,8 +47,14 @@ In this tutorial, we will configure [max_connections](https://dev.mysql.com/doc/
 
 At first, let's create `my-config.cnf` file setting `max_connections` and `read_buffer_size` parameters.
 
-```ini
-cat > my-config.cnf
+```console
+cat <<EOF > my-config.cnf
+[mysqld]
+max_connections = 200
+read_buffer_size = 1048576
+EOF
+
+$ cat my-config.cnf
 [mysqld]
 max_connections = 200
 read_buffer_size = 1048576
@@ -60,13 +66,13 @@ Now, create a configMap with this configuration file.
 
 ```console
  $ kubectl create configmap -n demo my-custom-config --from-file=./my-config.cnf
-configmap "my-custom-config" created
+configmap/my-custom-config created
 ```
 
 Verify the config map has the configuration file.
 
 ```yaml
-$  kubectl get configmap -n demo my-custom-config -o yaml
+$ kubectl get configmap -n demo my-custom-config -o yaml
 apiVersion: v1
 data:
   my-config.cnf: |
@@ -75,7 +81,6 @@ data:
     read_buffer_size = 1048576
 kind: ConfigMap
 metadata:
-  ...
   name: my-custom-config
   namespace: demo
   ...
@@ -84,8 +89,8 @@ metadata:
 Now, create MySQL crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/custom-config//mysql-custom.yaml
-mysql.kubedb.com "custom-mysql" created
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/configuration/mysql-custom.yaml
+mysql.kubedb.com/custom-mysql created
 ```
 
 Below is the YAML for the MySQL crd we just created.
@@ -97,11 +102,10 @@ metadata:
   name: custom-mysql
   namespace: demo
 spec:
-  version: "8.0"
-  doNotPause: true
+  version: "8.0-v1"
   configSource:
-      configMap:
-        name: my-custom-config
+    configMap:
+      name: my-custom-config
   storage:
     storageClassName: "standard"
     accessModes:
@@ -116,9 +120,9 @@ Now, wait a few minutes. KubeDB operator will create necessary PVC, statefulset,
 Check that the statefulset's pod is running
 
 ```console
-$ kubectl get pod -n demo custom-mysql-0
+$ kubectl get pod -n demo
 NAME             READY     STATUS    RESTARTS   AGE
-custom-mysql-0   1/1       Running   0          7m
+custom-mysql-0   1/1       Running   0          44s
 ```
 
 Check the pod's log to see if the database is ready
@@ -147,11 +151,11 @@ First, deploy [phpMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) to c
 
 ```console
  $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/quickstart/demo-1.yaml
-deployment.extensions "myadmin" created
-service "myadmin" created
+deployment.extensions/myadmin created
+service/myadmin created
 ```
 
-Then, open your browser and go to the following URL: http://{cluster-ip}:{myadmin-svc-nodeport}. For minikube you can get this URL by running the following command:
+Then, open your browser and go to the following URL: _http://{cluster-ip}:{myadmin-svc-nodeport}_. For minikube you can get this URL by running the following command:
 
 ```console
 $ minikube service myadmin -n demo --url
@@ -173,30 +177,26 @@ MLO5_fPVKcqPiEu9
 ```
 
 Once, you have connected to the database with phpMyAdmin go to **Variables** tab and search for `max_connections` and `read_buffer_size`. Here are some screenshot showing those configured variables.
-![max_connections](./max_connection.png)
+![max_connections](/docs/images/mysql/max_connection.png)
 
-![read_buffer_size](./read_buffer_size.png)
+![read_buffer_size](/docs/images/mysql/read_buffer_size.png)
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo my/custom-mysql -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo my/custom-mysql -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo my/custom-mysql
 
-$ kubectl delete -n demo my/custom-mysql
+kubectl patch -n demo drmn/custom-mysql -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/custom-mysql
 
-$ kubectl patch -n demo drmn/custom-mysql -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo configmap my-custom-config
+kubectl delete deployment -n demo myadmin
+kubectl delete service -n demo myadmin
 
-$ kubectl delete -n demo drmn/custom-mysql
-
-$ kubectl delete -n demo configmap my-custom-config
-
-$ kubectl delete deployment -n demo myadmin
-
-$ kubectl delete service -n demo myadmin
-
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```
 
 If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
