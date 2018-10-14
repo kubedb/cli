@@ -18,13 +18,13 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
 ## Before You Begin
 
-- Read [concept of MySQL Version Catalog](/docs/concepts/catalog/memcached.md) to learn detail concepts of `MySQLVersion` object.
+- Read [concept of Memcached Version Catalog](/docs/concepts/catalog/memcached.md) to learn detail concepts of `MemcachedVersion` object.
 
 - You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
 - You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
-- You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For memcached, push `DB_IMAGE`, `EXPORTER_IMAGE` of following MySQLVersions, where `deprecated` is not true, to your private registry.
+- You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For memcached, push `DB_IMAGE`, `EXPORTER_IMAGE` of following MemcachedVersions, where `deprecated` is not true, to your private registry.
 
   ```console
   $ kubectl get memcachedversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated

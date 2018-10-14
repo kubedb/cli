@@ -106,8 +106,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata
+  - annotations (pod's annotation)
+- controller
+  - annotations (statefulset's annotation)
 - spec:
   - args
   - env
@@ -169,15 +171,17 @@ You can also provide a template for the services created by KubeDB operator for 
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
-- annotations
-- type
-- ports
-- clusterIP
-- externalIPs
-- loadBalancerIP
-- loadBalancerSourceRanges
-- externalTrafficPolicy
-- healthCheckNodePort
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
 
 ### spec.updateStrategy
 
