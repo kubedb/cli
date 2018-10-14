@@ -430,15 +430,17 @@ You can also provide a template for the services created by KubeDB operator for 
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
-- annotations
-- type
-- ports
-- clusterIP
-- externalIPs
-- loadBalancerIP
-- loadBalancerSourceRanges
-- externalTrafficPolicy
-- healthCheckNodePort
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
 
 ### spec.updateStrategy
 
@@ -459,7 +461,7 @@ Following table show what KubeDB does when you delete Elasticsearch crd for diff
 
 |              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
 | ----------------------------------- | :------------: | :------: | :------: | :------: |
-| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 1. Block Delete operation           |    &#10003;    | &#10007; | &#10007; | &#10007; |
 | 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
 | 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
 | 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |
