@@ -17,36 +17,36 @@ aliases:
 
 ## Supported Memcached Features
 
-|Features                                 | Availability |
-|-----------------------------------------|:------------:|
-|Clustering                               | &#10007;     |
-|Persistent Volume                        | &#10007;     |
-|Instant Backup                           | &#10007;     |
-|Scheduled Backup                         | &#10007;     |
-|Initialize using Snapshot                | &#10007;     |
-|Initialize using Script                  | &#10007;     |
-|Builtin Prometheus Discovery             | &#10003;     |
-|Using CoreOS Prometheus Operator         | &#10003;     |
+|             Features             | Availability |
+| -------------------------------- | :----------: |
+| Clustering                       |   &#10007;   |
+| Persistent Volume                |   &#10007;   |
+| Instant Backup                   |   &#10007;   |
+| Scheduled Backup                 |   &#10007;   |
+| Initialize using Snapshot        |   &#10007;   |
+| Initialize using Script          |   &#10007;   |
+| Custom Configuration             |   &#10003;   |
+| Using Custom docker image        |   &#10003;   |
+| Builtin Prometheus Discovery     |   &#10003;   |
+| Using CoreOS Prometheus Operator |   &#10003;   |
 
 <br/>
 
 ## Life Cycle of a Memcached Object
 
 <p align="center">
-  <img alt="lifecycle"  src="/docs/images/memcached/memcached-lifecycle.png" width="550" height="640">
+  <img alt="lifecycle"  src="/docs/images/memcached/memcached-lifecycle.png">
 </p>
 
 <br/>
 
 ## Supported Memcached Versions
 
-| KubeDB Version | Memcached:1.5.4 |
-|:--------------:|:---------------:|
-| 0.1.0 - 0.7.0  | &#10007;        |
-| 0.8.0-beta.2   | &#10003;        |
-| 0.8.0-rc.0     | &#10003;        |
-| 0.8.0          | &#10003;        |
-| 0.9.0-beta.1   | &#10003;        |
+| KubeDB Version | Memcached:1.5.4, 1.4 | 1.5.4-v1, 1.5-v1 |
+| :------------: | :------------------: | :--------------: |
+| 0.1.0 - 0.7.0  |       &#10007;       |     &#10003;     |
+|     0.8.0      |       &#10003;       |     &#10003;     |
+|  0.9.0-beta.1  |       &#10007;       |     &#10007;     |
 
 <br/>
 

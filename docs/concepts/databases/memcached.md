@@ -30,16 +30,7 @@ metadata:
   namespace: demo
 spec:
   replicas: 3
-  version: 1.5.3-alpine
-  nodeSelector:
-    disktype: ssd
-  doNotPause: true
-  configSource:
-    configMap:
-      name: mc-custom-config
-  env:
-    - name:  MY_ENV
-      value: "env-example"
+  version: 1.5.3-v1
   monitor:
     agent: coreos-prometheus-operator
     prometheus:
@@ -47,13 +38,45 @@ spec:
       labels:
         app: kubedb
       interval: 10s
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  configSource:
+    configMap:
+      name: mc-custom-config
+  podTemplate:
+    annotation:
+      passMe: ToDatabasePod
+    controller:
+      annotation:
+        passMe: ToDeployment
+    spec:
+      schedulerName: my-scheduler
+      nodeSelector:
+        disktype: ssd
+      imagePullSecrets:
+      - name: myregistrykey
+      args:
+      - "-u memcache"
+      env:
+      - name: TEST_ENV
+        value: "value"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+  serviceTemplate:
+    annotation:
+      passMe: ToService
+    spec:
+      type: NodePort
+      ports:
+      - name:  http
+        port:  9200
+        targetPort: http
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
 ```
 
 ### spec.replicas
@@ -62,25 +85,55 @@ spec:
 
 ### spec.version
 
-`spec.version` is a required field specifying the version of Memcached database. Here the database version is [`1.5.3-alpine`](https://hub.docker.com/r/library/memcached/tags/).
+`spec.version` is a required field specifying the name of the [MemcachedVersion](/docs/concepts/catalog/memcached.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `MemcachedVersion` crd,
 
-### spec.nodeSelector
+- `1.5.4`, `1.5.4-v1`, `1.5`, `1.5-v1`
 
-`spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
+### spec.monitor
 
-### spec.doNotPause
+Memcached managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
 
-`spec.doNotPause` is an optional field that tells KubeDB operator that if this Memcached object is deleted, whether it should be reverted automatically. This should be set to `true` for production databases to avoid accidental deletion. If not set or set to false, deleting a Memcached object put the database into a dormant state.
-
-### spec.imagePullSecret
-
-`KubeDB` provides the flexibility of deploying Memcached database from a private Docker registry. To learn how to deploym Memcached from a private registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
+- [Monitor Memcached with builtin Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md)
+- [Monitor Memcached with CoreOS Prometheus operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md)
 
 ### spec.configSource
 
 `spec.configSource` is an optional field that allows users to provide custom configuration for Memcached. This field accepts a [`VolumeSource`](https://github.com/kubernetes/api/blob/release-1.11/core/v1/types.go#L47). So you can use any kubernetes supported volume source such as `configMap`, `secret`, `azureDisk` etc. To learn more about how to use a custom configuration file see [here](/docs/guides/memcached/custom-config/using-custom-config.md).
 
-### spec.env
+### spec.podTemplate
+
+KubeDB allows providing a template for database pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the Deployment created for Memcached database.
+
+KubeDB accept following fields to set in `spec.podTemplate:`
+
+- metadata
+  - annotations (pod's annotation)
+- controller
+  - annotations (statefulset's annotation)
+- spec:
+  - args
+  - env
+  - resources
+  - initContainers
+  - imagePullSecrets
+  - nodeSelector
+  - affinity
+  - schedulerName
+  - tolerations
+  - priorityClassName
+  - priority
+  - securityContext
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
+
+Uses of some field of `spec.podTemplate` is described below,
+
+#### spec.podTemplate.spec.args
+
+`spec.podTemplate.spec.args` is an optional field. This can be used to provide additional arguments to database installation.
+
+#### spec.podTemplate.spec.env
 
 `spec.env` is an optional field that specifies the environment variables to pass to the Memcached docker image.
 
@@ -96,21 +149,65 @@ At least one of the following was changed:
 	kind
 	name
 	namespace
-	spec.version
-	spec.nodeSelector
-	spec.env
+	spec.podTemplate.spec.nodeSelector
+    spec.podTemplate.spec.env
 ```
 
-### spec.monitor
+#### spec.podTemplate.spec.imagePullSecrets
 
-Memcached managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prometheus operator out-of-the-box. To learn more,
+`KubeDB` provides the flexibility of deploying Memcached database from a private Docker registry. To learn how to deploym Memcached from a private registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
 
-- [Monitor Memcached with builtin Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md)
-- [Monitor Memcached with CoreOS Prometheus operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md)
+#### spec.podTemplate.spec.nodeSelector
 
-### spec.resources
+`spec.nodeSelector` is an optional field that specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). To learn more, see [here](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
+
+#### spec.podTemplate.spec.resources
 
 `spec.resources` is an optional field. This can be used to request compute resources required by the database pods. To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/).
+
+### spec.serviceTemplate
+
+You can also provide a template for the services created by KubeDB operator for Memcached database through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
+
+KubeDB allows following fields to set in `spec.serviceTemplate`:
+
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
+
+### spec.updateStrategy
+
+You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) of Deployment created by KubeDB for Memcached database thorough `spec.updateStrategy` field. The default value of this field is `RollingUpdate`. In future, we will use this field to determine how automatic migration from old KubeDB version to new one should behave.
+
+### spec.terminationPolicy
+
+`terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Memcached` crd or which resources KubeDB should keep or delete when you delete `Memcached` crd. KubeDB provides following four termination policies:
+
+- DoNotTerminate
+- Pause (`Default`)
+- Delete
+- WipeOut
+
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, `DoNotTerminate` prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
+
+Following table show what KubeDB does when you delete Memcached crd for different termination policies,
+
+|              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
+| ----------------------------------- | :------------: | :------: | :------: | :------: |
+| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
+| 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
+| 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |
+
+If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination policy by default.
 
 ## Next Steps
 

@@ -18,29 +18,26 @@ This tutorial will show you how to monitor KubeDB databases using [Prometheus](h
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    45m
-demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
-```
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create a Memcached database
+## Monitor with builtin Prometheus
 
-KubeDB implements a `Memcached` CRD to define the specification of a Memcached database. Below is the `Memcached` object created in this tutorial.
+User can define `spec.monitor` either while creating the CRD object, Or can update the spec of existing CRD object to add the `spec.monitor` part. Below is the `Memcached` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -50,83 +47,108 @@ metadata:
   namespace: demo
 spec:
   replicas: 3
-  version: "1.5.4"
-  doNotPause: true
-  resources:
-    requests:
-      memory: 64Mi
-      cpu: 250m
-    limits:
-      memory: 128Mi
-      cpu: 500m
+  version: "1.5.4-v1"
+  podTemplate:
+    spec:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
   monitor:
     agent: prometheus.io/builtin
 ```
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/memcached/monitoring/builtin-prometheus/demo-1.yaml
-memcached "memcd-mon-prometheus" created
+memcached.kubedb.com/memcd-mon-prometheus created
 ```
 
 Here,
 
-- `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
-- `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Memcached Exporter` and will receive metrics from exporter.
 
-KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching crd name.
+KubeDB will create a separate stats service with name `<memcached-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the Memcached is successfully running.
 
 ```console
 $ kubedb get mc -n demo
-NAME                   STATUS    AGE
-memcd-mon-prometheus   Running   50s
-
+NAME                   VERSION    STATUS    AGE
+memcd-mon-prometheus   1.5.4-v1   Running   4m
 
 $ kubedb describe mc -n demo memcd-mon-prometheus
-Name:		memcd-mon-prometheus
-Namespace:	demo
-StartTimestamp:	Tue, 13 Feb 2018 12:24:34 +0600
-Status:		Running
+Name:               memcd-mon-prometheus
+Namespace:          demo
+CreationTimestamp:  Wed, 03 Oct 2018 16:09:35 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           3  total
+Status:             Running
 
 Deployment:
-  Name:			memcd-mon-prometheus
-  Replicas:		3 current / 3 desired
-  CreationTimestamp:	Tue, 13 Feb 2018 12:24:35 +0600
-  Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               memcd-mon-prometheus
+  CreationTimestamp:  Wed, 03 Oct 2018 16:09:37 +0600
+  Labels:               kubedb.com/kind=Memcached
+                        kubedb.com/name=memcd-mon-prometheus
+  Annotations:          deployment.kubernetes.io/revision=1
+  Replicas:           3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		memcd-mon-prometheus
-  Type:		ClusterIP
-  IP:		10.99.92.24
-  Port:		db		11211/TCP
-  Port:		prom-http	56790/TCP
+  Name:         memcd-mon-prometheus
+  Labels:         kubedb.com/kind=Memcached
+                  kubedb.com/name=memcd-mon-prometheus
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.108.255.247
+  Port:         db  11211/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.4:11211,172.17.0.5:11211,172.17.0.6:11211
+
+Service:
+  Name:         memcd-mon-prometheus-stats
+  Labels:         kubedb.com/kind=Memcached
+                  kubedb.com/name=memcd-mon-prometheus
+  Annotations:    monitoring.appscode.com/agent=prometheus.io/builtin
+                  prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/memcacheds/memcd-mon-prometheus/metrics
+                  prometheus.io/port=56790
+                  prometheus.io/scrape=true
+  Type:         ClusterIP
+  IP:           10.98.82.87
+  Port:         prom-http  56790/TCP
+  TargetPort:   prom-http/TCP
+  Endpoints:    172.17.0.4:56790,172.17.0.5:56790,172.17.0.6:56790
 
 Monitoring System:
-  Agent:	prometheus.io/builtin
+  Agent:  prometheus.io/builtin
   Prometheus:
-    Namespace:
-    Interval:
+    Port:  56790
+
+No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                 Type       Reason       Message
-  ---------   --------   -----     ----                 --------   ------       -------
-  45s         45s        1         Memcached operator   Normal     Successful   Successfully patched Deployment
-  45s         45s        1         Memcached operator   Normal     Successful   Successfully patched Memcached
-  46s         46s        1         Memcached operator   Normal     Successful   Successfully created Deployment
-  46s         46s        1         Memcached operator   Normal     Successful   Successfully created Memcached
-  1m          1m         1         Memcached operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From                Message
+  ----    ------      ----  ----                -------
+  Normal  Successful  4m    Memcached operator  Successfully created Service
+  Normal  Successful  1m    Memcached operator  Successfully created StatefulSet
+  Normal  Successful  1m    Memcached operator  Successfully created Memcached
+  Normal  Successful  1m    Memcached operator  Successfully created stats service
+  Normal  Successful  1m    Memcached operator  Successfully patched StatefulSet
+  Normal  Successful  1m    Memcached operator  Successfully patched Memcached
 ```
 
-Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
+Since `spec.monitoring` was configured, the database monitoring service object is configured accordingly. You can verify it running the following commands:
 
 ```console
 $ kubectl get services -n demo
-NAME                   TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)               AGE
-memcd-mon-prometheus   ClusterIP   10.99.92.24   <none>        11211/TCP,56790/TCP   1m
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+memcd-mon-prometheus         ClusterIP   10.108.255.247   <none>        11211/TCP   4m
+memcd-mon-prometheus-stats   ClusterIP   10.98.82.87      <none>        56790/TCP   2m
 ```
 
 ```yaml
-$ kubectl get services memcd-mon-prometheus -n demo -o yaml
+$ kubectl get services memcd-mon-prometheus-stats -n demo -o yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -135,22 +157,24 @@ metadata:
     prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/memcacheds/memcd-mon-prometheus/metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
-  creationTimestamp: 2018-02-13T06:24:34Z
+  creationTimestamp: 2018-10-03T10:12:05Z
   labels:
     kubedb.com/kind: Memcached
     kubedb.com/name: memcd-mon-prometheus
-  name: memcd-mon-prometheus
+  name: memcd-mon-prometheus-stats
   namespace: demo
-  resourceVersion: "5191"
-  selfLink: /api/v1/namespaces/demo/services/memcd-mon-prometheus
-  uid: 8efa423f-1086-11e8-801e-080027e82bd4
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: Memcached
+    name: memcd-mon-prometheus
+    uid: 6e1dbc22-c6f4-11e8-8ebc-0800275bbbee
+  resourceVersion: "26130"
+  selfLink: /api/v1/namespaces/demo/services/memcd-mon-prometheus-stats
+  uid: c7629b9c-c6f4-11e8-8ebc-0800275bbbee
 spec:
-  clusterIP: 10.99.92.24
+  clusterIP: 10.98.82.87
   ports:
-  - name: db
-    port: 11211
-    protocol: TCP
-    targetPort: db
   - name: prom-http
     port: 56790
     protocol: TCP
@@ -224,9 +248,11 @@ data:
         target_label: kubernetes_name
 ```
 
+Create above ConfigMap
+
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
-configmap "prometheus-server-conf" created
+configmap/prometheus-server-conf created
 ```
 
 Now, the below yaml is used to deploy Prometheus in kubernetes :
@@ -273,18 +299,18 @@ Run the following command to deploy prometheus-server
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-clusterrole "prometheus-server" created
-serviceaccount "prometheus-server" created
-clusterrolebinding "prometheus-server" created
-deployment "prometheus-server" created
-service "prometheus-service" created
+clusterrole.rbac.authorization.k8s.io/prometheus-server created
+serviceaccount/prometheus-server created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
+deployment.apps/prometheus-server created
+service/prometheus-service created
 
 # Verify RBAC stuffs
-$ kubectl get clusterroles
+$ kubectl get clusterroles prometheus-server
 NAME                AGE
 prometheus-server   57s
 
-$ kubectl get clusterrolebindings
+$ kubectl get clusterrolebindings prometheus-server
 NAME                AGE
 prometheus-server   1m
 
@@ -300,9 +326,10 @@ Now to open prometheus dashboard on Browser:
 
 ```console
 $ kubectl get svc -n demo
-NAME                   TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)               AGE
-memcd-mon-prometheus   ClusterIP      10.99.92.24    <none>        11211/TCP,56790/TCP   4m
-prometheus-service     LoadBalancer   10.99.73.172   <pending>     9090:30901/TCP        1m
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+memcd-mon-prometheus         ClusterIP   10.108.255.247   <none>        11211/TCP        6m
+memcd-mon-prometheus-stats   ClusterIP   10.98.82.87      <none>        56790/TCP        3m
+prometheus-service           NodePort    10.106.89.105    <none>        9090:30901/TCP   16s
 
 $ minikube ip
 192.168.99.100
@@ -313,6 +340,8 @@ http://192.168.99.100:30901
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
+
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 ![prometheus-builtin](/docs/images/memcached/memcached-builtin.png)
 
@@ -321,18 +350,15 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mc/memcd-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mc/memcd-mon-prometheus
+kubectl patch -n demo mc/memcd-mon-prometheus -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mc/memcd-mon-prometheus
 
-$ kubectl patch -n demo drmn/memcd-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/memcd-mon-prometheus
+kubectl patch -n demo drmn/memcd-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/memcd-mon-prometheus
 
-$ kubectl delete clusterrole prometheus-server
-$ kubectl delete clusterrolebindings  prometheus-server
-$ kubectl delete serviceaccounts -n demo  prometheus-server
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps

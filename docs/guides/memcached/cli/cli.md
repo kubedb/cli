@@ -24,14 +24,14 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f memcached-demo.yaml
-memcached "memcached-demo" created
+memcached.kubedb.com/memcached-demo created
 ```
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
 ```console
 $ kubedb create -f memcached-demo.yaml --namespace=kube-system
-memcached "memcached-demo" created
+memcached.kubedb.com/memcached-demo created
 ```
 
 `kubedb create` command also considers `stdin` as input.
@@ -48,11 +48,11 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get memcached
-NAME              STATUS    AGE
-memcached-demo    Running   5h
-memcached-dev     Running   4h
-memcached-prod    Running   30m
-memcached-qa      Running   2h
+NAME             VERSION    STATUS    AGE
+memcached-demo   1.5.4-v1   Running   40s
+memcached-dev    1.5.4-v1   Running   40s
+memcached-prod   1.5.4-v1   Running   40s
+memcached-qa     1.5.4-v1   Running   40s
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -62,37 +62,46 @@ $ kubedb get memcached memcached-demo --output=yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Memcached
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-03-01T11:30:18Z
+  creationTimestamp: 2018-10-04T05:58:57Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 1
   labels:
     kubedb: cli-demo
   name: memcached-demo
   namespace: default
-  resourceVersion: "17038"
+  resourceVersion: "6883"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/memcacheds/memcached-demo
-  uid: eb84ab44-1d43-11e8-8599-0800272b52b5
+  uid: 953df4d1-c79a-11e8-bb11-0800272ad446
 spec:
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
   replicas: 3
-  resources:
-    limits:
-      cpu: 500m
-      memory: 128Mi
-    requests:
-      cpu: 250m
-      memory: 64Mi
-  version: "1.5.4"
+  serviceTemplate:
+    metadata: {}
+    spec: {}
+  strategy:
+    type: RollingUpdate
+  terminationPolicy: Pause
+  version: 1.5.4-v1
 status:
-  creationTime: 2018-03-01T11:30:18Z
+  observedGeneration: 1$7916315637361465932
   phase: Running
 ```
 
 To get JSON of an object, use `--output=json` flag.
 
 ```console
-$ kubedb get memcached memcached-demo --output=json
+kubedb get memcached memcached-demo --output=json
 ```
 
 To list all KubeDB objects, use following command:
@@ -100,10 +109,10 @@ To list all KubeDB objects, use following command:
 ```console
 $ kubedb get all -o wide
 NAME                    VERSION     STATUS   AGE
-mc/memcached-demo       1.5.4       Running  3h
-mc/memcached-dev        1.5.4       Running  3h
-mc/memcached-prod       1.5.4       Running  3h
-mc/memcached-qa         1.5.4       Running  3h
+mc/memcached-demo       1.5.4-v1    Running  3h
+mc/memcached-dev        1.5.4-v1    Running  3h
+mc/memcached-prod       1.5.4-v1    Running  3h
+mc/memcached-qa         1.5.4-v1    Running  3h
 ```
 
 Flag `--output=wide` is used to print additional information.
@@ -117,8 +126,8 @@ You can print labels with objects. The following command will list all Memcached
 
 ```console
 $ kubedb get mc --show-labels
-NAME             STATUS    AGE       LABELS
-memcached-demo   Running   2m        kubedb=cli-demo
+NAME             VERSION    STATUS    AGE       LABELS
+memcached-demo   1.5.4-v1   Running   2m        kubedb=cli-demo
 ```
 
 To print only object name, run the following command:
@@ -139,31 +148,46 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ```console
 $ kubedb describe mc memcached-demo
-Name:		memcached-demo
-Namespace:	default
-StartTimestamp:	Thu, 01 Mar 2018 17:30:18 +0600
-Labels:		kubedb=cli-demo
-Replicas:	3  total
-Status:		Running
+Name:               memcached-demo
+Namespace:          default
+CreationTimestamp:  Thu, 04 Oct 2018 11:58:57 +0600
+Labels:             kubedb=cli-demo
+Annotations:        <none>
+Replicas:           3  total
+Status:             Running
 
 Deployment:
-  Name:			memcached-demo
-  Replicas:		3 current / 3 desired
-  CreationTimestamp:	Thu, 01 Mar 2018 17:30:20 +0600
-  Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               memcached-demo
+  CreationTimestamp:  Thu, 04 Oct 2018 11:58:59 +0600
+  Labels:               kubedb=cli-demo
+                        kubedb.com/kind=Memcached
+                        kubedb.com/name=memcached-demo
+  Annotations:          deployment.kubernetes.io/revision=1
+  Replicas:           3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		memcached-demo
-  Type:		ClusterIP
-  IP:		10.100.158.166
-  Port:		db	11211/TCP
+  Name:         memcached-demo
+  Labels:         kubedb=cli-demo
+                  kubedb.com/kind=Memcached
+                  kubedb.com/name=memcached-demo
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.102.208.191
+  Port:         db  11211/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.4:11211,172.17.0.5:11211,172.17.0.6:11211
+
+No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From                 Type       Reason       Message
-  ---------   --------   -----     ----                 --------   ------       -------
-  2m          2m         1         Memcached operator   Normal     Successful   Successfully created Memcached
-  2m          2m         1         Memcached operator   Normal     Successful   Successfully created Deployment
-  2m          2m         1         Memcached operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From                Message
+  ----    ------      ----  ----                -------
+  Normal  Successful  2m    Memcached operator  Successfully created Service
+  Normal  Successful  2m    Memcached operator  Successfully created StatefulSet
+  Normal  Successful  2m    Memcached operator  Successfully created Memcached
+  Normal  Successful  2m    Memcached operator  Successfully patched StatefulSet
+  Normal  Successful  2m    Memcached operator  Successfully patched Memcached
 ```
 
 `kubedb describe` command provides following basic information about a Memcached database.
@@ -172,31 +196,30 @@ Events:
 - Service
 - Monitoring system (If available)
 
-To hide details about Deployment & Service, use flag `--show-workload=false`
 To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all Memcached objects in `default` namespace, use following command
 
 ```console
-$ kubedb describe mc
+kubedb describe mc
 ```
 
 To describe all Memcached objects from every namespace, provide `--all-namespaces` flag.
 
 ```console
-$ kubedb describe mc --all-namespaces
+kubedb describe mc --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
 
 ```console
-$ kubedb describe all --all-namespaces
+kubedb describe all --all-namespaces
 ```
 
 You can also describe KubeDB objects with matching labels. The following command will describe all Memcached objects with specified labels from every namespace.
 
 ```console
-$ kubedb describe mc --all-namespaces --selector='group=dev'
+kubedb describe mc --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
@@ -229,8 +252,9 @@ Various fields of a KubeDB object can't be edited using `edit` command. The foll
 
 If Deployment exists for a Memcached database, following fields can't be modified as well.
 
-- spec.version
 - spec.nodeSelector
+- spec.podTemplate.spec.nodeSelector
+- spec.podTemplate.spec.env
 
 For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
@@ -242,14 +266,14 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 
 ```console
 $ kubedb delete memcached memcached-dev
-memcached "memcached-dev" deleted
+memcached.kubedb.com "memcached-dev" deleted
 ```
 
 You can also use YAML files to delete objects. The following command will delete a memcached using the type and name specified in `memcached.yaml`.
 
 ```console
 $ kubedb delete -f memcached-demo.yaml
-memcached "memcached-dev" deleted
+memcached.kubedb.com "memcached-dev" deleted
 ```
 
 `kubedb delete` command also takes input from `stdin`.
@@ -261,7 +285,7 @@ cat memcached-demo.yaml | kubedb delete -f -
 To delete database with matching labels, use `--selector` flag. The following command will delete memcached with label `memcached.kubedb.com/name=memcached-demo`.
 
 ```console
-$ kubedb delete memcached -l memcached.kubedb.com/name=memcached-demo
+kubedb delete memcached -l memcached.kubedb.com/name=memcached-demo
 ```
 
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).

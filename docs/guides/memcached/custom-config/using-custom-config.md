@@ -17,20 +17,20 @@ KubeDB supports providing custom configuration for Memcached. This tutorial will
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
-```
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+  
+  $ kubectl get ns demo
+  NAME    STATUS  AGE
+  demo    Active  5s
+  ```
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/memcached](https://github.com/kubedb/cli/tree/master/docs/examples/memcached) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
@@ -75,7 +75,13 @@ memory-limit = 128
 At first, let's create `memcached.conf` file setting `max_connections` and `limit_maxbytes` parameters. Default value of `max_connections` is 1024 and `limit_maxbytes` is 64MB (68157440 bytes).
 
 ```ini
-$ cat > memcached.conf
+$ cat <<EOF >memcached.conf
+-c 500
+# maximum allowed memory in MB
+-m 128
+EOF
+
+$ cat memcached.conf
 -c 500
 # maximum allowed memory in MB
 -m 128
@@ -102,10 +108,12 @@ data:
     -m 128
 kind: ConfigMap
 metadata:
-  ...
+  creationTimestamp: 2018-10-04T05:29:37Z
   name: mc-custom-config
   namespace: demo
-  ...
+  resourceVersion: "4505"
+  selfLink: /api/v1/namespaces/demo/configmaps/mc-custom-config
+  uid: 7c38b5fd-c796-11e8-bb11-0800272ad446
 ```
 
 Now, create Memcached crd specifying `spec.configSource` field.
@@ -125,18 +133,19 @@ metadata:
   namespace: demo
 spec:
   replicas: 1
-  version: "1.5.4"
-  doNotPause: true
+  version: "1.5.4-v1"
   configSource:
     configMap:
       name: mc-custom-config
-  resources:
-    requests:
-      memory: 64Mi
-      cpu: 250m
-    limits:
-      memory: 128Mi
-      cpu: 500m
+  podTemplate:
+    spec:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
 ```
 
 Now, wait a few minutes. KubeDB operator will create the necessary deployment, services etc. If everything goes well, we will see that a deployment with the name `custom-memcached` has been created.
@@ -146,7 +155,7 @@ Check that the pods for the deployment is running:
 ```console
 $ kubectl get pods -n demo
 NAME                                READY     STATUS    RESTARTS   AGE
-custom-memcached-5b5866f5b8-cbc2d   1/1       Running   0          8m
+custom-memcached-747b866f4b-j6clt   1/1       Running   0          5m
 ```
 
 Now, we will check if the database has started with the custom configuration we have provided. We will use [stats](https://github.com/memcached/memcached/wiki/ConfiguringServer#inspecting-running-configuration) command to check the configuration.
@@ -182,17 +191,15 @@ Here, `limit_maxbytes` is represented in bytes.
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mc/custom-memcached -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo mc/custom-memcached -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mc/custom-memcached
 
-$ kubectl delete -n demo mc/custom-memcached
+kubectl patch -n demo drmn/custom-memcached -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/custom-memcached
 
-$ kubectl patch -n demo drmn/custom-memcached -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo configmap mc-custom-config
 
-$ kubectl delete -n demo drmn/custom-memcached
-
-$ kubectl delete -n demo configmap mc-custom-config
-
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```
 
 If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
