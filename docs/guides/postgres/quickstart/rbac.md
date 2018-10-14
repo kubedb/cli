@@ -1,21 +1,19 @@
 ---
 title: RBAC for PostgreSQL
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-rbac-quickstart
     name: RBAC
     parent: pg-quickstart-postgres
     weight: 15
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # RBAC Permissions for Postgres
 
-If RBAC is enabled in clusters, some PostgreSQL specific RBAC permissions are required.
-
-These permissions are required for Leader Election process of PostgreSQL clustering.
+If RBAC is enabled in clusters, some PostgreSQL specific RBAC permissions are required. These permissions are required for Leader Election process of PostgreSQL clustering.
 
 Here is the list of additional permissions required by StatefulSet of Postgres:
 
@@ -28,8 +26,7 @@ Here is the list of additional permissions required by StatefulSet of Postgres:
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -57,8 +54,9 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "10.2"
   doNotPause: true
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
@@ -71,14 +69,13 @@ spec:
 Create above Postgres object with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/quickstart/quick-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/quickstart/quick-postgres.yaml
 postgres "quick-postgres" created
 ```
 
-When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching PostgreSQL name
-and uses that ServiceAccount name in the corresponding StatefulSet.
+When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching PostgreSQL name and uses that ServiceAccount name in the corresponding StatefulSet.
 
-Lets see what KubeDB operator has created for additional RBAC permission
+Let's see what KubeDB operator has created for additional RBAC permission
 
 #### Role
 
@@ -92,12 +89,10 @@ $ kubectl get role -n demo quick-postgres -o yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  creationTimestamp: 2018-02-22T07:38:25Z
+  creationTimestamp: 2018-09-03T13:38:57Z
   name: quick-postgres
   namespace: demo
-  resourceVersion: "261"
-  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/demo/roles/quick-postgres
-  uid: 5e0418a4-17a3-11e8-8c13-08002723772b
+  ...
 rules:
 - apiGroups:
   - apps
@@ -143,14 +138,12 @@ $ kubectl get serviceaccount -n demo quick-postgres -o yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  creationTimestamp: 2018-02-22T07:38:25Z
+  creationTimestamp: 2018-09-03T13:38:57Z
   name: quick-postgres
   namespace: demo
-  resourceVersion: "265"
-  selfLink: /api/v1/namespaces/demo/serviceaccounts/quick-postgres
-  uid: 5e0b5c1c-17a3-11e8-8c13-08002723772b
+  ...
 secrets:
-- name: quick-postgres-token-s7c48
+- name: quick-postgres-token-hf8zn
 ```
 
 This ServiceAccount is used in StatefulSet created for Postgres object.
@@ -167,12 +160,10 @@ $ kubectl get rolebinding -n demo quick-postgres -o yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  creationTimestamp: 2018-02-22T07:38:26Z
+  creationTimestamp: 2018-09-03T13:38:58Z
   name: quick-postgres
   namespace: demo
-  resourceVersion: "264"
-  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/demo/rolebindings/quick-postgres
-  uid: 5e13ade9-17a3-11e8-8c13-08002723772b
+  ...
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -185,7 +176,7 @@ subjects:
 
 This  object binds Role `quick-postgres` with ServiceAccount `quick-postgres`.
 
-Leader Election process get access to Kubernetes API using this RBAC permissions.
+Leader Election process get access to Kubernetes API using these RBAC permissions.
 
 ## Cleaning up
 

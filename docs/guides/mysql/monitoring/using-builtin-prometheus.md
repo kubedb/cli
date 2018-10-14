@@ -1,12 +1,12 @@
 ---
 title: Monitor MySQL using Builtin Prometheus Discovery
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: my-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: my-monitoring-mysql
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 

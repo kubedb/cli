@@ -1,12 +1,12 @@
 ---
 title: Elasticsearch Cluster Topology
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: es-topology-clustering
     name: Topology
     parent: es-clustering-elasticsearch
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -68,7 +68,7 @@ Here,
 Create example above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/clustering/multi-node-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/clustering/multi-node-es.yaml
 elasticsearch.kubedb.com/multi-node-es created
 ```
 
@@ -237,7 +237,7 @@ Here,
 Let's create this Elasticsearch object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/clustering/topology-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/clustering/topology-es.yaml
 elasticsearch.kubedb.com/topology-es created
 ```
 

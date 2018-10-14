@@ -4,7 +4,7 @@ metadata:
   name: pvt-reg-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "pvt-9.6"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -12,5 +12,7 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  imagePullSecrets:
-    - name: myregistrykey
+  podTemplate:
+    spec:
+      imagePullSecrets:
+      - name: myregistrykey

@@ -7,6 +7,7 @@ spec:
   version: "9.6-v1"
   replicas: 3
   standbyMode: hot
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:

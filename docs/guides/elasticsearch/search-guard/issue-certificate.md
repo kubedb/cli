@@ -372,7 +372,7 @@ Here,
 Create example above with following command
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
 elasticsearch.kubedb.com/sg-elasticsearch created
 ```
 

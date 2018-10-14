@@ -1,12 +1,12 @@
 ---
 title: Redis
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: rd-readme-redis
     name: Redis
     parent: rd-redis-guides
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 url: /docs/0.8.0/guides/redis/
 aliases:

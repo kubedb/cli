@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of PostgreSQL
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: pg-snapshot-postgres
     weight: 15
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > Don't know how backup works?  Check [tutorial](/docs/guides/postgres/snapshot/instant_backup.md) on Instant Backup.
@@ -17,8 +17,7 @@ KubeDB supports taking periodic backups for PostgreSQL database.
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -37,8 +36,7 @@ demo    Active  5s
 
 ## Create Postgres with BackupSchedule
 
-KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26).
-KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure,
+KubeDB supports taking periodic backups for a database using a [cron expression](https://github.com/robfig/cron/blob/v2/doc.go#L26). KubeDB operator will launch a Job periodically that takes backup and uploads the output files to various cloud providers S3, GCS, Azure,
 OpenStack Swift and/or locally mounted volumes using [osm](https://github.com/appscode/osm).
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
@@ -68,7 +66,7 @@ metadata:
   name: scheduled-pg
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   replicas: 3
   storage:
     storageClassName: "standard"
@@ -92,27 +90,29 @@ Here,
 
 > Note: Secret object must be in the same namespace as Postgres, `scheduled-pg`, in this case.
 
+Let's create a Postgres crd with backupSchedule,
+
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/scheduled-pg.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/snapshot/scheduled-pg.yaml
 postgres "scheduled-pg" created
 ```
 
 When PostgreSQL is successfully created, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
 
 ```console
-$ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg"
-NAME                           DATABASE          STATUS      AGE
-scheduled-pg-20180208-105341   pg/scheduled-pg   Succeeded   32s
+$ kubectl get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg"
+NAME                           DATABASENAME   STATUS      AGE
+scheduled-pg-20180921-090932   scheduled-pg   Succeeded   32s
 ```
 
-## Update Postgres to disable periodic backups
+## Update Postgres to Disable Periodic Backup
 
 If you already have a running PostgreSQL that takes backup periodically, you can disable that by removing BackupSchedule field.
 
 Edit your Postgres object and remove BackupSchedule. This will stop taking future backups for this schedule.
 
 ```console
-$ kubedb edit pg -n demo scheduled-pg
+$ kubectl edit pg -n demo scheduled-pg
 spec:
 #  backupSchedule:
 #    cronExpression: '@every 6h'
@@ -121,14 +121,14 @@ spec:
 #      bucket: kubedb
 ```
 
-## Update Postgres to enable periodic backups
+## Update Postgres to Enable Periodic Backup
 
 If you already have a running Postgres, you can enable periodic backups by adding BackupSchedule.
 
 Edit the Postgres `scheduled-pg` to add following `spec.backupSchedule` section.
 
 ```console
-$ kubedb edit pg scheduled-pg -n demo
+$ kubectl edit pg scheduled-pg -n demo
   backupSchedule:
     cronExpression: "@every 6h"
     storageSecretName: gcs-secret
@@ -139,7 +139,7 @@ $ kubedb edit pg scheduled-pg -n demo
 Once the `spec.backupSchedule` is added, KubeDB operator creates a Snapshot object immediately and registers to create a new Snapshot object on each tick of the cron expression.
 
 ```console
-$ kubedb get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
+$ kubectl get snap -n demo --selector="kubedb.com/kind=Postgres,kubedb.com/name=script-postgres"
 NAME                              DATABASE             STATUS      AGE
 instant-snapshot                  pg/script-postgres   Succeeded   30m
 script-postgres-20180208-105625   pg/script-postgres   Succeeded   1m
@@ -150,12 +150,10 @@ script-postgres-20180208-105625   pg/script-postgres   Succeeded   1m
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/scheduled-pg -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo pg/scheduled-pg -p '{"spec":{terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/scheduled-pg
 
-$ kubectl patch -n demo drmn/scheduled-pg -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/scheduled-pg
-
+$ kubectl delete -n demo secret/gcs-secret
 $ kubectl delete ns demo
 ```
 

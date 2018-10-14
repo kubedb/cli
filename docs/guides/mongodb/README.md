@@ -1,12 +1,12 @@
 ---
 title: MongoDB
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: mg-readme-mongodb
     name: MongoDB
     parent: mg-mongodb-guides
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 url: /docs/0.8.0/guides/mongodb/
 aliases:

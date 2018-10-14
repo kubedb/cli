@@ -1,12 +1,12 @@
 ---
 title: Monitor PostgreSQL using Coreos Prometheus Operator
 menu:
-  docs_0.8.0:
+  docs_0.9.0-beta.0:
     identifier: pg-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: pg-monitoring-postgres
     weight: 15
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-beta.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -17,8 +17,7 @@ This tutorial will show you how to monitor PostgreSQL using Prometheus via [Core
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
-If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
 Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -27,10 +26,6 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 ```console
 $ kubectl create ns demo
 namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
 ```
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -42,61 +37,68 @@ This tutorial assumes that you are familiar with PostgreSQL concept.
 Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
-clusterrole "prometheus-operator" created
-serviceaccount "prometheus-operator" created
-clusterrolebinding "prometheus-operator" created
-deployment "prometheus-operator" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
+namespace/demo created
+clusterrole.rbac.authorization.k8s.io/prometheus-operator created
+serviceaccount/prometheus-operator created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created
+deployment.extensions/prometheus-operator created
 ```
 
-Watch the Deployment’s Pods.
+Wait for running the Deployment’s Pods.
 
 ```console
-$ kubectl get pods -n demo --watch
+$ kubectl get pods -n demo
 NAME                                   READY     STATUS    RESTARTS   AGE
-prometheus-operator-79cb9dcd4b-2njgq   1/1       Running   0          2m
+prometheus-operator-857455484c-7xwxt   1/1       Running   0          2m
 ```
 
 This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
 
 ```console
 $ kubectl get crd
-NAME                                    AGE
-alertmanagers.monitoring.coreos.com     11m
-prometheuses.monitoring.coreos.com      11m
-servicemonitors.monitoring.coreos.com   11m
+NAME                                          CREATED AT
+...
+alertmanagers.monitoring.coreos.com           2018-09-24T12:42:22Z
+prometheuses.monitoring.coreos.com            2018-09-24T12:42:22Z
+servicemonitors.monitoring.coreos.com         2018-09-24T12:42:22Z
+...
 ```
 
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
-clusterrole "prometheus" created
-serviceaccount "prometheus" created
-clusterrolebinding "prometheus" created
-prometheus "prometheus" created
-service "prometheus" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
+clusterrole.rbac.authorization.k8s.io/prometheus created
+serviceaccount/prometheus created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus created
+prometheus.monitoring.coreos.com/prometheus created
+service/prometheus created
 ```
 
 Verify RBAC stuffs
 
-```consolw
+```console
 $ kubectl get clusterroles
-NAME                  AGE
-prometheus            1m
-prometheus-operator   5m
+NAME                      AGE
+...
+prometheus                42s
+prometheus-operator       4m
+...
 ```
 
 ```console
 $ kubectl get clusterrolebindings
-NAME                  AGE
-prometheus            1m
-prometheus-operator   5m
+NAME                      AGE
+...
+prometheus                1m
+prometheus-operator       5m
+...
 ```
 
-#### Prometheus Dashboard
+### Prometheus Dashboard
 
-Now open prometheus dashboard on browser by running `minikube service prometheus-service -n demo`.
+Now open prometheus dashboard on browser by running `minikube service prometheus -n demo`.
 
 Or you can get the URL of `prometheus` Service by running following command
 
@@ -104,6 +106,8 @@ Or you can get the URL of `prometheus` Service by running following command
 $ minikube service prometheus -n demo --url
 http://192.168.99.100:30900
 ```
+
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
 
 ## Monitor PostgreSQL with CoreOS Prometheus
 
@@ -114,7 +118,7 @@ metadata:
   name: coreos-prom-postgres
   namespace: demo
 spec:
-  version: "9.6"
+  version: "9.6-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -143,16 +147,16 @@ Here,
 Now create PostgreSQL with monitoring spec
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
-postgres "coreos-prom-postgres" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/monitoring/coreos-prom-postgres.yaml
+postgres.kubedb.com/coreos-prom-postgres created
 ```
 
 KubeDB operator will create a ServiceMonitor object once the PostgreSQL is successfully running.
 
-```yaml
+```console
 $ kubectl get servicemonitor -n demo
 NAME                               AGE
-kubedb-demo-coreos-prom-postgres   1s
+kubedb-demo-coreos-prom-postgres   23s
 ```
 
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
@@ -168,11 +172,8 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/coreos-prom-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
+$ kubectl patch -n demo pg/coreos-prom-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 $ kubectl delete -n demo pg/coreos-prom-postgres
-
-$ kubectl patch -n demo drmn/coreos-prom-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/coreos-prom-postgres
 
 $ kubectl delete clusterrolebindings prometheus-operator  prometheus
 $ kubectl delete clusterrole prometheus-operator prometheus
