@@ -1,12 +1,12 @@
 ---
 title: MongoDBVersion
 menu:
-  docs_0.8.0:
+  docs_0.9.0-rc.0:
     identifier: mongodb-version
     name: MongoDBVersion
     parent: catalog
     weight: 30
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: concepts
 ---
 
@@ -50,7 +50,7 @@ We follow this convention for naming MongoDBVersion crd:
 
 - Name format: `{Original PosgreSQL image verion}-{modification tag}`
 
-We modify original MongoDB docker image to support MongoDB clustering and re-tag the image with v1,v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use MongoDBVersion crd with highest modification tag to enjoy the latest features.
+We modify original MongoDB docker image to support MongoDB clustering and re-tag the image with v1, v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use MongoDBVersion crd with highest modification tag to enjoy the latest features.
 
 ### spec.version
 
@@ -58,7 +58,7 @@ We modify original MongoDB docker image to support MongoDB clustering and re-tag
 
 ### spec.deprecated
 
-`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/mongo:3.6` docker image to support MongoDB clustering and re-tagged as `kubedb/mongo:3.6-v1`. So, we have marked `kubedb/mongo:3.6` as deprecated for KubeDB `0.9.0`.
+`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/mongo:3.6` docker image to support MongoDB clustering and re-tagged as `kubedb/mongo:3.6-v1`. So, we have marked `kubedb/mongo:3.6` as deprecated for KubeDB `0.9.0-rc.0`.
 
 The default value of this field is `false`. If `spec.depcrecated` is set to `true`, KubeDB operator will skip processing this CRD object and will add a event to the CRD object specifying that the DB version is deprecated.
 

@@ -1,12 +1,12 @@
 ---
 title: MySQLVersion
 menu:
-  docs_0.9.0-beta.1:
+  docs_0.9.0-rc.0:
     identifier: mysql-version
     name: MySQLVersion
     parent: catalog
     weight: 30
-menu_name: docs_0.9.0-beta.1
+menu_name: docs_0.9.0-rc.0
 section_menu_id: concepts
 ---
 
@@ -49,7 +49,7 @@ We follow this convention for naming MySQLVersion crd:
 
 - Name format: `{Original MySQL image version}-{modification tag}`
 
-We modify original MySQL docker image to support additional features. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use MySQLVersion crd with highest modification tag to enjoy latest features.
+We modify original MySQL docker image to support additional features. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use MySQLVersion crd with highest modification tag to take advantage of the latest features.
 
 ### spec.version
 
@@ -57,7 +57,7 @@ We modify original MySQL docker image to support additional features. An image w
 
 ### spec.deprecated
 
-`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/mysql:8.0` docker image to support custom configuration and re-tagged as `kubedb/mysql:8.0-v1`. Now, KubeDB `0.9.0` supports providing custom configuration which required `kubedb/mysql:8.0-v1` docker image. So, we have marked `kubedb/mysql:8.0` as deprecated for KubeDB `0.9.0`.
+`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/mysql:8.0` docker image to support custom configuration and re-tagged as `kubedb/mysql:8.0-v1`. Now, KubeDB `0.9.0-rc.0` supports providing custom configuration which required `kubedb/mysql:8.0-v1` docker image. So, we have marked `kubedb/mysql:8.0` as deprecated for KubeDB `0.9.0-rc.0`.
 
 The default value of this field is `false`. If `spec.depcrecated` is set `true`, KubeDB operator will not create the database and other respective resources for this version.
 

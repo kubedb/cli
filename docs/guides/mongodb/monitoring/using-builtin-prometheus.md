@@ -1,12 +1,12 @@
 ---
 title: Monitor MongoDB using Builtin Prometheus Discovery
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: mg-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: mg-monitoring-mongodb
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 
@@ -33,7 +33,7 @@ This tutorial will show you how to monitor MongoDB databases using [Prometheus](
   demo          Active    10s
   ```
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Monitor with builtin Prometheus
 
@@ -59,7 +59,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/monitoring/builtin-prometheus/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/monitoring/builtin-prometheus/demo-1.yaml
 mongodb.kubedb.com/mgo-mon-prometheus created
 ```
 
@@ -284,7 +284,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap/prometheus-server-conf created
 ```
 
@@ -331,7 +331,7 @@ spec:
 Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus-server created
 serviceaccount/prometheus-server created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
@@ -391,7 +391,7 @@ kubectl delete -n demo mg/mgo-mon-prometheus
 kubectl patch -n demo drmn/mgo-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
 kubectl delete -n demo drmn/mgo-mon-prometheus
 
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 
 kubectl delete ns demo
 ```

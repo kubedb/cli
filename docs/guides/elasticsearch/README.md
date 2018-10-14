@@ -1,16 +1,16 @@
 ---
 title: Elasticsearch
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: es-readme-elasticsearch
     name: Elasticsearch
     parent: es-elasticsearch-guides
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0/guides/elasticsearch/
+url: /docs/0.9.0-rc.0/guides/elasticsearch/
 aliases:
-  - /docs/0.8.0/guides/elasticsearch/README/
+  - /docs/0.9.0-rc.0/guides/elasticsearch/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -49,13 +49,13 @@ aliases:
 | -------------- | :---------------: | :---------------: | :---------------: | :---------------: | :---------------: |
 | 0.1.0 - 0.7.0  |     &#10003;      |     &#10007;      |     &#10007;      |     &#10007;      |     &#10007;      |
 | 0.8.0          |     &#10007;      |     &#10003;      |     &#10003;      |     &#10007;      |     &#10007;      |
-| 0.9.0-beta.1   |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
+| 0.9.0-rc.0   |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
 
 ## Supported ElasticsearchVersion CRD
 
 Here, &#10003; means supported and &#10007; means deprecated.
 
-| ElasticsearchVersion | KubeDB: 0.9.0-beta.1 |
+| ElasticsearchVersion | KubeDB: 0.9.0-rc.0 |
 | -------------------- | :------------------: |
 | 5.6                  |       &#10007;       |
 | 5.6-v1               |       &#10003;       |

@@ -1,12 +1,12 @@
 ---
 title: Run PostgreSQL using Private Registry
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: pg-using-private-registry-private-registry
     name: Quickstart
     parent: pg-private-registry-postgres
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -30,7 +30,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Prepare Private Docker Registry
 You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories). In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
@@ -47,7 +47,7 @@ For Postgres, push the following images to your private registry.
 ```console
 $ export DOCKER_REGISTRY=<your-registry>
 
-$ docker pull kubedb/operator:0.9.0-beta.0 ; docker tag kubedb/operator:0.9.0-beta.0 $DOCKER_REGISTRY/operator:0.9.0-beta.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.0
+$ docker pull kubedb/operator:0.9.0-rc.0 ; docker tag kubedb/operator:0.9.0-rc.0 $DOCKER_REGISTRY/operator:0.9.0-rc.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0-rc.0
 $ docker pull kubedb/postgres:9.6-v1 ; docker tag kubedb/postgres:9.6-v1 $DOCKER_REGISTRY/postgres:9.6-v1 ; docker push $DOCKER_REGISTRY/postgres:9.6-v1
 $ docker pull kubedb/postgres-tools:9.6-v1 ; docker tag kubedb/postgres-tools:9.6-v1 $DOCKER_REGISTRY/postgres-tools:9.6-v1 ; docker push $DOCKER_REGISTRY/postgres-tools:9.6-v1
 $ docker pull kubedb/postgres_exporter:v0.4.6 ; docker tag kubedb/postgres_exporter:v0.4.6 $DOCKER_REGISTRY/postgres_exporter:v0.4.6 ; docker push $DOCKER_REGISTRY/postgres_exporter:v0.4.6
@@ -138,7 +138,7 @@ spec:
 Now run the command to create this Postgres object:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
 postgres.kubedb.com/pvt-reg-postgres created
 ```
 

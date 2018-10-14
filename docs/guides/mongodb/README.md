@@ -1,16 +1,16 @@
 ---
 title: MongoDB
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: mg-readme-mongodb
     name: MongoDB
     parent: mg-mongodb-guides
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0/guides/mongodb/
+url: /docs/0.9.0-rc.0/guides/mongodb/
 aliases:
-  - /docs/0.8.0/guides/mongodb/README/
+  - /docs/0.9.0-rc.0/guides/mongodb/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -47,7 +47,7 @@ aliases:
 | :------------: | :-------: | :------: | :------: | :------: |
 | 0.1.0 - 0.7.0  | &#10007;  | &#10007; | &#10007; | &#10007; |
 |     0.8.0      | &#10003;  | &#10003; | &#10007; | &#10007; |
-|  0.9.0-beta.1  | &#10007;  | &#10007; | &#10003; | &#10003; |
+|  0.9.0-rc.0  | &#10007;  | &#10007; | &#10003; | &#10003; |
 
 <br/>
 

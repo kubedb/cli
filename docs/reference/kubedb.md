@@ -1,16 +1,16 @@
 ---
 title: Kubedb
 menu:
-  docs_0.9.0-beta.1:
+  docs_0.9.0-rc.0:
     identifier: kubedb
     name: Kubedb
     parent: reference
     weight: 0
 
-menu_name: docs_0.9.0-beta.1
+menu_name: docs_0.9.0-rc.0
 section_menu_id: reference
 aliases:
-  - /docs/0.9.0-beta.1/reference/
+  - /docs/0.9.0-rc.0/reference/
 
 ---
 ## kubedb

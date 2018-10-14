@@ -1,20 +1,20 @@
 ---
 title: Run MongoDB with Custom Configuration
 menu:
-  docs_0.8.0:
+  docs_0.9.0-rc.0:
     identifier: mg-crd-configuration
     name: Using CRD Config
     parent: mg-configuration
     weight: 15
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Configuration Using CRD
+# Run MongoDB with Custom Configuration
 
-KubeDB supports providing variation configuration for MongoDB through [PodTemplate](/docs/concepts/databases/mongodb.md#specpodtemplate). This tutorial will show you how to use KubeDB to run a MongoDB database with custom configuration using PodTemplate.
+KubeDB supports providing custom configuration for MongoDB via [PodTemplate](/docs/concepts/databases/mongodb.md#specpodtemplate). This tutorial will show you how to use KubeDB to run a MongoDB database with custom configuration using PodTemplate.
 
 ## Before You Begin
 
@@ -29,7 +29,7 @@ KubeDB supports providing variation configuration for MongoDB through [PodTempla
   namespace/demo created
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Overview
 
@@ -93,7 +93,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/configuration/mgo-misc-config.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/configuration/mgo-misc-config.yaml
 mongodb.kubedb.com/mgo-misc-config created
 ```
 
@@ -183,7 +183,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/configuration/snapshot-misc-conf.yaml 
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/configuration/snapshot-misc-conf.yaml 
 snapshot.kubedb.com/snap-mongodb-config created
 
 

@@ -1,12 +1,12 @@
 ---
 title: Disable Search Guard
 menu:
-  docs_0.9.0-beta.1:
+  docs_0.9.0-rc.0:
     identifier: es-disable-search-guard
     name: Disable Search Guard
     parent: es-search-guard-elasticsearch
     weight: 30
-menu_name: docs_0.9.0-beta.1
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 
@@ -35,7 +35,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create Elasticsearch
 
@@ -62,7 +62,7 @@ spec:
 Let's create the Elasticsearch object we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/search-guard/es-sg-disabled.yaml 
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/search-guard/es-sg-disabled.yaml 
 elasticsearch.kubedb.com/es-sg-disabled created
 ```
 

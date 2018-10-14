@@ -1,11 +1,11 @@
 ---
 title: Kubedb Edit
 menu:
-  docs_0.9.0-beta.1:
+  docs_0.9.0-rc.0:
     identifier: kubedb-edit
     name: Kubedb Edit
     parent: reference
-menu_name: docs_0.9.0-beta.1
+menu_name: docs_0.9.0-rc.0
 section_menu_id: reference
 ---
 ## kubedb edit
@@ -39,7 +39,7 @@ kubedb edit (RESOURCE/NAME | -f FILENAME)
   -f, --filename strings              Filename, directory, or URL to files to use to edit the resource
   -h, --help                          help for edit
       --include-uninitialized         If true, the kubectl command applies to uninitialized objects. If explicitly set to false, this flag overrides other flags that make the kubectl commands apply to uninitialized objects, e.g., "--all". Objects with empty metadata.initializers are regarded as initialized.
-  -o, --output string                 Output format. One of: json|yaml|name|template|go-template|go-template-file|templatefile|jsonpath-file|jsonpath.
+  -o, --output string                 Output format. One of: json|yaml|name|go-template|go-template-file|templatefile|template|jsonpath|jsonpath-file.
       --output-patch                  Output the patch if the resource is edited.
       --record                        Record current kubectl command in the resource annotation. If set to false, do not record the command. If set to true, record the command. If not set, default to updating the existing annotation value only if one already exists.
   -R, --recursive                     Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests organized within the same directory.

@@ -1,12 +1,12 @@
 ---
 title: Run MongoDB with Custom Configuration
 menu:
-  docs_0.8.0:
+  docs_0.9.0-rc.0:
     identifier: mg-custom-config-quickstart
     name: Quickstart
     parent: mg-configuration
     weight: 10
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 
@@ -33,7 +33,7 @@ KubeDB supports providing custom configuration for MongoDB. This tutorial will s
   demo          Active    10s
   ```
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Overview
 
@@ -107,7 +107,7 @@ spec:
 ```
 
 ```console
-$ kubectl create-f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/configuration/demo1.yaml
+$ kubectl create-f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/configuration/demo1.yaml
 mongodb.kubedb.com/mgo-custom-config created
 ```
 
