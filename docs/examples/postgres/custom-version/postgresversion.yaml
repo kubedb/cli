@@ -1,4 +1,4 @@
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: timescale-0.9.1

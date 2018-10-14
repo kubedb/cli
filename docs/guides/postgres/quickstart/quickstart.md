@@ -38,7 +38,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
->We have designed this tutorial to demonstrate the behaviours that are expected in production environment. If you are just testing some basic functionalities and want to avoid additional hassles due to some safety features of KubeDB, you can follow some tips from [here](/docs/guides/postgres/quickstart/quickstart.md#tips-for-testing).
+>We have designed this tutorial to demonstrate a production setup of KubeDB managed PostgreSQL. If you just want to try out KubeDB, you can bypass some of the safety features following the tips [here](/docs/guides/postgres/quickstart/quickstart.md#tips-for-testing).
 
 ## Install pgAdmin
 

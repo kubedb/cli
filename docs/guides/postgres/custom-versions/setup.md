@@ -57,7 +57,7 @@ RUN sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'(.*)'/\1 = 'timescaled
 From there, we would define a PostgresVersion that contains this new image. Lets say we tagged it as `myco/postgres:timescale-0.9.1`
 
 ```yaml
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: timescale-0.9.1

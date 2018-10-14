@@ -25,7 +25,7 @@ Using a separate crd for specifying respective docker images allows us to modify
 As with all other Kubernetes objects, a PostgresVersion needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section.
 
 ```yaml
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "10.2-v1"
@@ -49,7 +49,7 @@ spec:
 We follow this convention for naming PostgresVersion crd:
 - Name format: `{Original PostgreSQL image version}-{modification tag}`
 
-We modify original PostgreSQL docker image to support additional features like WAL archiving, clustering etc. and re-tag the image with v1,v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use PostgresVersion crd with highest modification tag to enjoy latest features.
+We modify original PostgreSQL docker image to support additional features like WAL archiving, clustering etc. and re-tag the image with v1, v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use PostgresVersion crd with highest modification tag to take advantage of the latest features.
 
 ### spec.version
 
@@ -57,7 +57,7 @@ We modify original PostgreSQL docker image to support additional features like W
 
 ### spec.deprecated
 
-`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/postgres:10.2` docker image to support custom configuration and re-tagged as `kubedb/postgres:10.2-v1`. Now, KubeDB `0.9.0` supports providing custom configuration which required `kubedb/postgres:10.2-v1` docker image. So, we have marked `kubedb/postgres:10.2` as deprecated for KubeDB `0.9.0`.
+`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/postgres:10.2` docker image to support custom configuration and re-tagged as `kubedb/postgres:10.2-v1`. Now, KubeDB `0.9.0` supports providing custom configuration which required `kubedb/postgres:10.2-v1` docker image. So, we have marked `kubedb/postgres:10.2` as deprecated in KubeDB `0.9.0`.
 
 The default value of this field is `false`. If `spec.depcrecated` is set `true`, KubeDB operator will not create the database and other respective resources for this version.
 

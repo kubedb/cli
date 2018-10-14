@@ -35,7 +35,7 @@ metadata:
 spec:
   version: "9.6-v1"
   replicas: 3
-  standbyMode: warm
+  standbyMode: Warm
   storageType: Ephemeral
 ```
 
@@ -59,7 +59,7 @@ metadata:
 spec:
   version: "9.6-v1"
   replicas: 3
-  standbyMode: hot
+  standbyMode: Hot
   storageType: Ephemeral
 ```
 

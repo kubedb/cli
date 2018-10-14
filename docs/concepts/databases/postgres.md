@@ -33,7 +33,7 @@ metadata:
 spec:
   version: "9.6-v1"
   replicas: 2
-  standbyMode: hot
+  standbyMode: Hot
   streamingMode: asynchronous
   archiver:
     storage:
@@ -119,7 +119,7 @@ spec:
 
 ### spec.standbyMode
 
-`spec.standby` is an optional field that specifies the standby mode (_warm / hot_) to use for standby replicas. In **hot standby** mode, standby replicas can accept connection and run read-only queries. In **warm standby** mode, standby replicas can't accept connection and only used for replication purpose.
+`spec.standby` is an optional field that specifies the standby mode (_Warm / Hot_) to use for standby replicas. In **hot standby** mode, standby replicas can accept connection and run read-only queries. In **warm standby** mode, standby replicas can't accept connection and only used for replication purpose.
 
 ### spec.streamingMode
 
@@ -283,8 +283,10 @@ You have to specify following fields to take periodic backup of your Postgres da
 
 You can also specify a template for pod of backup job through `spec.backupSchedule.podTemplate`. KubeDB will use the information you have provided in `podTemplate` to create the backup job. KubeDB accept following fields to set in `spec.backupSchedule.podTemplate`:
 
-- annotations (pod's annotation)
-- controller.annotations (job's annotation)
+- metadata
+  - annotations (pod's annotation)
+- controller
+  - annotations (job's annotation)
 - spec:
   - args
   - env
@@ -319,8 +321,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata
+  - annotations (pod's annotation)
+- controller
+  - annotations (statefulset's annotation)
 - spec:
   - env
   - resources

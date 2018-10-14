@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using private Docker registry
 
-KubeDB supports using private Docker registry. This tutorial will show you how to use KubeDB to run PostgreSQL database using private Docker images.
+KubeDB supports using private Docker registry. This tutorial will show you how to run KubeDB managed PostgreSQL database using private Docker images.
 
 ## Before You Begin
 
@@ -85,7 +85,7 @@ KubeDB uses images specified in PostgresVersion crd for database, backup and exp
 Here, is an example of PostgresVersion crd. Replace `<YOUR_PRIVATE_REGISTRY>` with your private registy.
 
 ```yaml
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
   name: "pvt-9.6"
@@ -138,7 +138,7 @@ spec:
 Now run the command to create this Postgres object:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml 
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
 postgres.kubedb.com/pvt-reg-postgres created
 ```
 
