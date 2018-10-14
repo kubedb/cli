@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Using private Docker registry
 
-KubeDB operator supports using private Docker registry. This tutorial will show you how to run Elasticsearch database in KubeDB using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to run KubeDB managed Elasticsearch database using private Docker images.
 
 ## Before You Begin
 
@@ -81,7 +81,7 @@ KubeDB uses images specified in ElasticsearchVersion crd for database, backup an
 Here, is an example of ElasticsearchVersion crd. Replace `<YOUR_PRIVATE_REGISTRY>` with your private registry.
 
 ```yaml
-apiVersion: kubedb.com/v1alpha1
+apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "pvt-6.3"
@@ -121,7 +121,7 @@ metadata:
   name: pvt-reg-elasticsearch
   namespace: demo
 spec:
-  version: "6.3-v1"
+  version: "pvt-6.3"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -147,7 +147,7 @@ To check if the images pulled successfully from the repository, see if the Elast
 ```console
 $ kubectl get es -n demo pvt-reg-elasticsearch -o wide
 NAME                    VERSION   STATUS       AGE
-pvt-reg-elasticsearch   6.3-v1    Running      33m
+pvt-reg-elasticsearch   pvt-6.3   Running      33m
 ```
 
 ## Snapshot

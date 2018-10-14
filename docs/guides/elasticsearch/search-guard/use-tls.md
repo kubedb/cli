@@ -167,8 +167,6 @@ $ curl --user "admin:uv2io5au" "localhost:9200/_cluster/health?pretty" --cacert 
 }
 ```
 
-> Note: You don't need to provide client certificate. Client is verified by valid host name.
-
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:

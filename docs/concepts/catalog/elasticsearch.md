@@ -49,7 +49,7 @@ spec:
 We follow this convention for naming ElasticsearchVersion crd:
 - Name format: `{Original Elasticsearch version}-{modification tag}`
 
-We modify original Elasticsearch docker image to support additional features like Search Guard plugin integration, custom configuration etc. and re-tag the image with v1,v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use ElasticsearchVersion crd with highest modification tag to enjoy latest features.
+We modify original Elasticsearch docker image to support additional features like Search Guard plugin integration, custom configuration etc. and re-tag the image with v1, v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use ElasticsearchVersion crd with highest modification tag to take advantage of the latest features.
 
 ### spec.version
 
@@ -57,7 +57,7 @@ We modify original Elasticsearch docker image to support additional features lik
 
 ### spec.deprecated
 
-`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/elasticsearch:6.2.4` docker image to support custom configuration and re-tagged as `kubedb/elasticsearch:6.2.4-v1`. Now, KubeDB `0.9.0` supports providing custom configuration which required `kubedb/elasticsearch:6.2.4-v1` docker image. So, we have marked `kubedb/elasticsearch:6.2.4` as deprecated for KubeDB `0.9.0`.
+`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/elasticsearch:6.2.4` docker image to support custom configuration and re-tagged as `kubedb/elasticsearch:6.2.4-v1`. Now, KubeDB `0.9.0` supports providing custom configuration which required `kubedb/elasticsearch:6.2.4-v1` docker image. So, we have marked `kubedb/elasticsearch:6.2.4` version has been marked deprecated in KubeDB `0.9.0`.
 
 The default value of this field is `false`. If `spec.depcrecated` is set `true`, KubeDB operator will not create the database and other respective resources for this version.
 

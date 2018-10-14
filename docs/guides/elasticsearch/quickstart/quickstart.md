@@ -38,7 +38,7 @@ demo    Active  5s
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
->We have designed this tutorial to demonstrate the behaviors that are expected in production environment. If you are just testing some basic functionalities and want to avoid additional hassles due to some safety features of KubeDB, you can follow some tips from [here](/docs/guides/elasticsearch/quickstart/quickstart.md#tips-for-testing).
+>We have designed this tutorial to demonstrate a production setup of KubeDB managed Elasticsearch. If you just want to try out KubeDB, you can bypass some of the safety features following the tips [here](/docs/guides/elasticsearch/quickstart/quickstart.md#tips-for-testing).
 
 ## Find Available StorageClass
 

@@ -109,7 +109,7 @@ prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
 
-The prometheus server will discover the service endpoint aka PostgreSQL Exporter using these specifications and will scrap metrics from exporter.
+The prometheus server will discover the service endpoint aka PostgreSQL Exporter using these specifications and will scrape metrics from exporter.
 
 ## Deploy and configure Prometheus Server
 
