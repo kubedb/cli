@@ -18,25 +18,49 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- Read [concept of MongoDB Version Catalog](/docs/concepts/catalog/mongodb.md) to learn detail concepts of `MongoDBVersion` object.
 
-You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
+- you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For mongodb, push the following images to your private registry.
+- You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
-- [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
-- [kubedb/mongo](https://hub.docker.com/r/kubedb/mongo)
-- [kubedb/mongo-tools](https://hub.docker.com/r/kubedb/mongo-tools)
+- You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For mongodb, push `DB_IMAGE`, `TOOLS_IMAGE`, `EXPORTER_IMAGE` of following MongoDBVersions, where `deprecated` is not true, to your private registry.
 
-```console
-$ export DOCKER_REGISTRY=<your-registry>
+  ```console
+  $ kubectl get mongodbversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,TOOLS_IMAGE:.spec.tools.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated
+  NAME      VERSION   DB_IMAGE              TOOLS_IMAGE                 EXPORTER_IMAGE                   DEPRECATED
+  3.4       3.4       kubedb/mongo:3.4      kubedb/mongo-tools:3.4      kubedb/operator:0.8.0            true
+  3.4-v1    3.4       kubedb/mongo:3.4-v1   kubedb/mongo-tools:3.4-v1   kubedb/mongodb_exporter:v1.0.0   <none>
+  3.6       3.6       kubedb/mongo:3.6      kubedb/mongo-tools:3.6      kubedb/operator:0.8.0            true
+  3.6-v1    3.6       kubedb/mongo:3.6-v1   kubedb/mongo-tools:3.6-v1   kubedb/mongodb_exporter:v1.0.0   <none>
+  ```
 
-$ docker pull kubedb/operator:0.9.0-beta.1 ; docker tag kubedb/operator:0.9.0-beta.1 $DOCKER_REGISTRY/operator:0.9.0-beta.1 ; docker push $DOCKER_REGISTRY/operator:0.9.0-beta.1
-$ docker pull kubedb/mongo:3.4 ; docker tag kubedb/mongo:3.4 $DOCKER_REGISTRY/mongo:3.4 ; docker push $DOCKER_REGISTRY/mongo:3.4
-$ docker pull kubedb/mongo:3.6 ; docker tag kubedb/mongo:3.6 $DOCKER_REGISTRY/mongo:3.6 ; docker push $DOCKER_REGISTRY/mongo:3.6
-$ docker pull kubedb/mongo-tools:3.4 ; docker tag kubedb/mongo-tools:3.4 $DOCKER_REGISTRY/mongo-tools:3.4 ; docker push $DOCKER_REGISTRY/mongo-tools:3.4
-$ docker pull kubedb/mongo-tools:3.6 ; docker tag kubedb/mongo-tools:3.6 $DOCKER_REGISTRY/mongo-tools:3.6 ; docker push $DOCKER_REGISTRY/mongo-tools:3.6
-```
+  Docker hub repositories:
+
+  - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
+  - [kubedb/mongo](https://hub.docker.com/r/kubedb/mongo)
+  - [kubedb/mongo-tools](https://hub.docker.com/r/kubedb/mongo-tools)
+  - [kubedb/mongodb_exporter](https://hub.docker.com/r/kubedb/mongodb_exporter)
+
+- Update KubeDB catalog for private Docker registry. Ex:
+
+  ```yaml
+  apiVersion: catalog.kubedb.com/v1alpha1
+  kind: MongoDBVersion
+  metadata:
+    name: "3.4-v1"
+    labels:
+      app: kubedb
+  spec:
+    version: "3.4"
+    db:
+      image: "PRIVATE_DOCKER_REGISTRY/mongo:3.4-v1"
+    exporter:
+      image: "PRIVATE_DOCKER_REGISTRY/mongodb_exporter:v1.0.0"
+    tools:
+      image: "PRIVATE_DOCKER_REGISTRY/mongo-tools:3.4-v1"
+  
+  ```
 
 ## Create ImagePullSecret
 
@@ -45,13 +69,12 @@ ImagePullSecrets is a type of a Kubernete Secret whose sole purpose is to pull p
 Run the following command, substituting the appropriate uppercase values to create an image pull secret for your private Docker registry:
 
 ```console
-$ kubectl create secret docker-registry myregistrykey \
+$ kubectl create secret docker-registry -n demo myregistrykey \
   --docker-server=DOCKER_REGISTRY_SERVER \
   --docker-username=DOCKER_USER \
   --docker-email=DOCKER_EMAIL \
   --docker-password=DOCKER_PASSWORD
-
-secret "myregistrykey" created.
+secret/myregistrykey created
 ```
 
 If you wish to follow other ways to pull private images see [official docs](https://kubernetes.io/docs/concepts/containers/images/) of kubernetes.
@@ -72,10 +95,7 @@ namespace "demo" created
 
 $ kubectl get ns
 NAME          STATUS    AGE
-default       Active    45m
 demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
 ```
 
 ## Deploy MongoDB database from Private Registry
@@ -90,8 +110,7 @@ metadata:
   name: mgo-pvt-reg
   namespace: demo
 spec:
-  version: "3.4"
-  doNotPause: true
+  version: "3.4-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -99,15 +118,17 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  imagePullSecrets:
-    - name: myregistrykey
+  podTemplate:
+    spec:
+      imagePullSecrets:
+      - name: myregistrykey
 ```
 
 Now run the command to deploy this `MongoDB` object:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/private-registry/demo-2.yaml
-mongodb "mgo-pvt-reg" created
+mongodb.kubedb.com/mgo-pvt-reg created
 ```
 
 To check if the images pulled successfully from the repository, see if the `MongoDB` is in running state:
@@ -128,22 +149,20 @@ mgo-pvt-reg   Running   1m
 
 ## Snapshot
 
-We don't need to add `imagePullSecret` for `snapshot` objects.
-Just create [snapshot object](/docs/guides/mongodb/snapshot/backup-and-restore.md) and KubeDB operator will reuse the `ImagePullSecret` from `MongoDB` object.
+You can specify `imagePullSecret` for Snapshot objects in `spec.podTemplate.spec.imagePullSecrets` field of Snapshot object. If you are using scheduled backup, you can also provide `imagePullSecret` in `backupSchedule.podTemplate.spec.imagePullSecrets` field of MongoDB crd. KubeDB also reuses `imagePullSecret` for Snapshot object from `spec.podTemplate.spec.imagePullSecrets` field of MongoDB crd.
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-pvt-reg -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mg/mgo-pvt-reg
+kubectl patch -n demo mg/mgo-pvt-reg -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mg/mgo-pvt-reg
 
-$ kubectl patch -n demo drmn/mgo-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mgo-pvt-reg
+kubectl patch -n demo drmn/mgo-pvt-reg -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mgo-pvt-reg
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -155,6 +174,7 @@ namespace "demo" deleted
 - Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

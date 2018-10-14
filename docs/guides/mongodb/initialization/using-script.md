@@ -18,27 +18,40 @@ This tutorial will show you how to use KubeDB to initialize a MongoDB database w
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
+
+  In this tutorial we will use .js script stored in GitHub repository [kubedb/mongodb-init-scripts](https://github.com/kubedb/mongodb-init-scripts).
+
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
+## Prepare Initialization Scripts
+
+MongoDB supports initialization with `.sh` and `.js` files. In this tutorial, we will use `init.js` script from [mongodb-init-scripts](https://github.com/kubedb/mongodb-init-scripts) git repository to insert data inside `kubedb` DB.
+
+As [gitRepo](https://kubernetes.io/docs/concepts/storage/volumes/#gitrepo) volume has been deprecated, we will use a ConfigMap as script source. You can use any Kubernetes supported [volume](https://kubernetes.io/docs/concepts/storage/volumes) as script source.
+
+At first, we will create a ConfigMap from `init.js` file. Then, we will provide this ConfigMap as script source in `init.scriptSource` of MongoDB crd spec.
+
+Let's create a ConfigMap with initialization script,
 
 ```console
-$ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    45m
-demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
+$ kubectl create configmap -n demo mg-init-script \
+--from-literal=init.js="$(curl -fsSL https://raw.githubusercontent.com/kubedb/mongodb-init-scripts/master/init.js)"
+configmap/mg-init-script created
 ```
-
-In this tutorial we will use .js script stored in GitHub repository [kubedb/mongodb-init-scripts](https://github.com/kubedb/mongodb-init-scripts).
-
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create a MongoDB database with Init-Script
 
@@ -51,8 +64,7 @@ metadata:
   name: mgo-init-script
   namespace: demo
 spec:
-  version: "3.4"
-  doNotPause: true
+  version: "3.4-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -62,88 +74,109 @@ spec:
         storage: 50Mi
   init:
     scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/mongodb-init-scripts.git"
-        directory: .
-
+      configMap:
+        name: mg-init-script
 ```
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/Initialization/demo-1.yaml
-mongodb "mgo-init-script" created
+mongodb.kubedb.com/mgo-init-script created
 ```
 
 Here,
 
-- `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MongoDB.
-- `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mongodb-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) instead of `gitrepo`.  The \*.js and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
+- `spec.init.scriptSource` specifies a script source used to initialize the database before database server starts. The scripts will be executed alphabatically. In this tutorial, a sample .js script from the git repository `https://github.com/kubedb/mongodb-init-scripts.git` is used to create a test database. You can use other [volume sources](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes).  The \*.js and/or \*.sh sripts that are stored inside the root folder will be executed alphabatically. The scripts inside child folders will be skipped.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present. No MongoDB specific RBAC roles are required for [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
+KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create a governing service for StatefulSets with the name `<mongodb-crd-name>-gvr`, if one is not already present. No MongoDB specific RBAC roles are required for [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
 ```console
 $ kubedb describe mg -n demo mgo-init-script
-Name:		mgo-init-script
-Namespace:	demo
-StartTimestamp:	Tue, 06 Feb 2018 09:56:07 +0600
-Status:		Running
+Name:               mgo-init-script
+Namespace:          demo
+CreationTimestamp:  Tue, 25 Sep 2018 12:40:16 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mgo-init-script
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Tue, 06 Feb 2018 09:56:12 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mgo-init-script
+  CreationTimestamp:  Tue, 25 Sep 2018 12:40:19 +0600
+  Labels:               kubedb.com/kind=MongoDB
+                        kubedb.com/name=mgo-init-script
+  Annotations:        <none>
+  Replicas:           824639914624 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mgo-init-script
-  Type:		ClusterIP
-  IP:		10.106.175.209
-  Port:		db	27017/TCP
+  Name:         mgo-init-script
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-init-script
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.98.251.80
+  Port:         db  27017/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:27017
+
+Service:
+  Name:         mgo-init-script-gvr
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-init-script
+  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
+  Type:         ClusterIP
+  IP:           None
+  Port:         db  27017/TCP
+  TargetPort:   27017/TCP
+  Endpoints:    172.17.0.5:27017
 
 Database Secret:
-  Name:	mgo-init-script-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mgo-init-script-auth
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-init-script
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  user:      4 bytes
+  password:  16 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From               Type       Reason       Message
-  ---------   --------   -----     ----               --------   ------       -------
-  6s          6s         1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  6s          6s         1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  9s          9s         1         MongoDB operator   Normal     Successful   Successfully created StatefulSet
-  9s          9s         1         MongoDB operator   Normal     Successful   Successfully created MongoDB
-  18s         18s        1         MongoDB operator   Normal     Successful   Successfully created Service
-
+  Type    Reason      Age   From              Message
+  ----    ------      ----  ----              -------
+  Normal  Successful  2m    MongoDB operator  Successfully created Service
+  Normal  Successful  1m    MongoDB operator  Successfully created StatefulSet
+  Normal  Successful  1m    MongoDB operator  Successfully created MongoDB
+  Normal  Successful  1m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful  1m    MongoDB operator  Successfully patched MongoDB
 
 
 $ kubectl get statefulset -n demo
 NAME              DESIRED   CURRENT   AGE
-mgo-init-script   1         1         46s
+mgo-init-script   1         1         2m
 
 
 $ kubectl get pvc -n demo
-NAME                     STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-data-mgo-init-script-0   Bound     pvc-ac84fbb9-0af1-11e8-a107-080027869227   50Mi       RWO            standard       1m
-
+NAME                        STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+datadir-mgo-init-script-0   Bound     pvc-a10d636b-c08c-11e8-b4a9-0800272618ed   50Mi       RWO            standard       11m
 
 $ kubectl get pv -n demo
-NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                         STORAGECLASS   REASON    AGE
-pvc-ac84fbb9-0af1-11e8-a107-080027869227   50Mi       RWO            Delete           Bound     demo/data-mgo-init-script-0   standard
-
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                            STORAGECLASS   REASON    AGE
+pvc-a10d636b-c08c-11e8-b4a9-0800272618ed   50Mi       RWO            Delete           Bound     demo/datadir-mgo-init-script-0   standard                 12m
 
 $ kubectl get service -n demo
-NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
-kubedb            ClusterIP   None             <none>        <none>      2m
-mgo-init-script   ClusterIP   10.106.175.209   <none>        27017/TCP   2m
+NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+mgo-init-script       ClusterIP   10.98.251.80   <none>        27017/TCP   3m
+mgo-init-script-gvr   ClusterIP   None           <none>        27017/TCP   3m
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
@@ -153,25 +186,31 @@ $ kubedb get mg -n demo mgo-init-script -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-06T03:56:07Z
+  creationTimestamp: 2018-09-25T06:40:16Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 1
   name: mgo-init-script
   namespace: demo
-  resourceVersion: "4827"
+  resourceVersion: "12500"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-init-script
-  uid: a9348cad-0af1-11e8-a107-080027869227
+  uid: dccef5e6-c08d-11e8-b4a9-0800272618ed
 spec:
   databaseSecret:
     secretName: mgo-init-script-auth
-  doNotPause: true
   init:
     scriptSource:
-      gitRepo:
-        directory: .
-        repository: https://github.com/kubedb/mongodb-init-scripts.git
+      configMap:
+        name: mg-init-script
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 1
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -179,9 +218,13 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: "3.4"
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 3.4-v1
 status:
-  creationTime: 2018-02-06T03:56:12Z
+  observedGeneration: 1$4210395375389091791
   phase: Running
 ```
 
@@ -189,22 +232,22 @@ Please note that KubeDB operator has created a new Secret called `mgo-init-scrip
 If you want to use an existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password`.
 
 ```console
-$ kubectl get secrets -n demo mgo-init-script-auth -o json
+$ kubectl get secrets -n demo mgo-init-script-auth -o yaml
 apiVersion: v1
 data:
-  password: STJ1YnNiU3BUNzFOZUhXSA==
+  password: eGtBaTRmRVpmSVFrNmczVw==
   user: cm9vdA==
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-06T03:56:12Z
+  creationTimestamp: 2018-09-25T06:31:17Z
   labels:
     kubedb.com/kind: MongoDB
     kubedb.com/name: mgo-init-script
   name: mgo-init-script-auth
   namespace: demo
-  resourceVersion: "4789"
+  resourceVersion: "11674"
   selfLink: /api/v1/namespaces/demo/secrets/mgo-init-script-auth
-  uid: ac33c72d-0af1-11e8-a107-080027869227
+  uid: 9b8f4031-c08c-11e8-b4a9-0800272618ed
 type: Opaque
 ```
 
@@ -234,15 +277,15 @@ Questions? Try the support group
 1
 
 > show dbs
-admin  0.000GB
-local  0.000GB
-mydb   0.000GB
+admin   0.000GB
+kubedb  0.000GB
+local   0.000GB
 
 > use mydb
 switched to db mydb
 
-> db.movie.find()
-{ "_id" : ObjectId("5a72b2b1e1a0770e3bdb56f1"), "name" : "batman" }
+> db.people.find()
+{ "_id" : ObjectId("5ba9d667981f02e927b6788e"), "firstname" : "kubernetes", "lastname" : "database" }
 
 > exit
 bye
@@ -255,14 +298,13 @@ As you can see here, the initial script has successfully created a database name
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-init-script -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mg/mgo-init-script
+kubectl patch -n demo mg/mgo-init-script -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mg/mgo-init-script
 
-$ kubectl patch -n demo drmn/mgo-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mgo-init-script
+kubectl patch -n demo drmn/mgo-init-script -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mgo-init-script
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -275,5 +317,6 @@ namespace "demo" deleted
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

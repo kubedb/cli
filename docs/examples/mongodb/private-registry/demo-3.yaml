@@ -6,7 +6,11 @@ metadata:
   labels:
     kubedb.com/kind: MongoDB
 spec:
-  databaseName: mgo-infant
+  databaseName: mgo-pvt-reg
   storageSecretName: mg-snap-secret
   gcs:
     bucket: kubedb
+  podTemplate:
+    spec:
+      imagePullSecrets:
+      - name: myregistrykey

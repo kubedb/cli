@@ -18,25 +18,24 @@ This tutorial will show you how to use KubeDB to take scheduled snapshot of a Mo
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) is required to run KubeDB. Check the available StorageClass in cluster.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    1h
-demo          Active    1m
-kube-public   Active    1h
-kube-system   Active    1h
-```
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    1m
+  ```
+
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Scheduled Backups
 
@@ -44,10 +43,10 @@ KubeDB supports taking periodic backups for a database using a [cron expression]
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
-| Key                               | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
-| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
+| Key  | Description  |
+| ---- | ------------ |
+| `GOOGLE_PROJECT_ID` | `Required`. Google Cloud project ID |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key |
 
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
@@ -84,7 +83,7 @@ metadata:
   name: mgo-scheduled
   namespace: demo
 spec:
-  version: "3.4"
+  version: "3.4-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -92,21 +91,16 @@ spec:
     resources:
       requests:
         storage: 50Mi
-  init:
-    scriptSource:
-      gitRepo:
-        repository: "https://github.com/kubedb/mongodb-init-scripts.git"
-        directory: .
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: mg-snap-secret
     gcs:
-      bucket: restic
+      bucket: kubedb
 ```
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-4.yaml
-mongodb "mgo-scheduled" created
+mongodb.kubedb.com/mgo-scheduled created
 ```
 
 It is also possible to add  backup scheduler to an existing `MongoDB`. You just have to edit the `MongoDB` CRD and add below spec:
@@ -117,7 +111,7 @@ spec:
   backupSchedule:
     cronExpression: '@every 1m'
     gcs:
-      bucket: restic
+      bucket: kubedb
     storageSecretName: mg-snap-secret
 ```
 
@@ -125,11 +119,11 @@ Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snaps
 
 ```console
 $ kubedb get snap -n demo
-NAME                            DATABASE           STATUS      AGE
-mgo-scheduled-20180202-104632   mg/mgo-scheduled   Succeeded   4m
-mgo-scheduled-20180202-104737   mg/mgo-scheduled   Succeeded   3m
-mgo-scheduled-20180202-104837   mg/mgo-scheduled   Succeeded   2m
-mgo-scheduled-20180202-104937   mg/mgo-scheduled   Running     10s
+NAME                            DATABASENAME    STATUS      AGE
+mgo-scheduled-20180924-112630   mgo-scheduled   Succeeded   3m
+mgo-scheduled-20180924-112741   mgo-scheduled   Succeeded   2m
+mgo-scheduled-20180924-112841   mgo-scheduled   Succeeded   1m
+mgo-scheduled-20180924-112941   mgo-scheduled   Running     8s
 ```
 
 you should see the output of the `mongodump` command for each snapshot stored in the GCS bucket.
@@ -154,15 +148,10 @@ spec:
 # backupSchedule:
 #   cronExpression: '@every 1m'
 #   gcs:
-#     bucket: restic
+#     bucket: kubedb
 #   storageSecretName: mg-snap-secret
   databaseSecret:
     secretName: mgo-scheduled-auth
-  init:
-    scriptSource:
-      gitRepo:
-        directory: .
-        repository: https://github.com/kubedb/mongodb-init-scripts.git
   storage:
     accessModes:
     - ReadWriteOnce
@@ -181,14 +170,13 @@ status:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-scheduled -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mg/mgo-scheduled
+kubectl patch -n demo mg/mgo-scheduled -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mg/mgo-scheduled
 
-$ kubectl patch -n demo drmn/mgo-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mgo-scheduled
+kubectl patch -n demo drmn/mgo-scheduled -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mgo-scheduled
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -200,5 +188,6 @@ namespace "demo" deleted
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

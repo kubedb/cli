@@ -14,33 +14,30 @@ section_menu_id: guides
 
 # Using Prometheus with KubeDB
 
-This tutorial will show you how to monitor KubeDB databases using [Prometheus](https://prometheus.io/).
+This tutorial will show you how to monitor MongoDB databases using [Prometheus](https://prometheus.io/).
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    45m
-demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
-```
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Create a MongoDB database
+## Monitor with builtin Prometheus
 
-KubeDB implements a `MongoDB` CRD to define the specification of a MongoDB database. Below is the `MongoDB` object created in this tutorial.
+User can define `spec.monitor` either while creating the CRD object, Or can update the spec of existing CRD object to add the `spec.monitor` part. Below is the `MongoDB` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -49,7 +46,7 @@ metadata:
   name: mgo-mon-prometheus
   namespace: demo
 spec:
-  version: "3.4"
+  version: "3.4-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,86 +60,128 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/monitoring/builtin-prometheus/demo-1.yaml
-mongodb "mgo-mon-prometheus" created
+mongodb.kubedb.com/mgo-mon-prometheus created
 ```
 
 Here,
 
-- `spec.version` is the version of MongoDB database. In this tutorial, a MongoDB 3.4 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for MongoDB.
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MongoDB Exporter` and will receive metrics from exporter.
 
-KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB will create a separate stats service with name `<mongodb-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the MongoDB is successfully running.
 
 ```console
 $ kubedb get mg -n demo
-NAME                 STATUS     AGE
-mgo-mon-prometheus   Creating   30s
+NAME                 VERSION   STATUS    AGE
+mgo-mon-prometheus   3.4-v1    Running   1m
 
-
-$ kubedb get mg -n demo
-NAME                 STATUS    AGE
-mgo-mon-prometheus   Running   10m
+$ kubectl get pod -n demo
+NAME                   READY     STATUS    RESTARTS   AGE
+mgo-mon-prometheus-0   2/2       Running   0          2m
 
 $ kubedb describe mg -n demo mgo-mon-prometheus
-Name:		mgo-mon-prometheus
-Namespace:	demo
-StartTimestamp:	Mon, 05 Feb 2018 17:38:29 +0600
-Status:		Running
+Name:               mgo-mon-prometheus
+Namespace:          demo
+CreationTimestamp:  Tue, 25 Sep 2018 11:14:24 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mgo-mon-prometheus
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 05 Feb 2018 17:37:54 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mgo-mon-prometheus
+  CreationTimestamp:  Tue, 25 Sep 2018 11:14:26 +0600
+  Labels:               kubedb.com/kind=MongoDB
+                        kubedb.com/name=mgo-mon-prometheus
+  Annotations:        <none>
+  Replicas:           824641422896 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mgo-mon-prometheus
-  Type:		ClusterIP
-  IP:		10.104.88.103
-  Port:		db		27017/TCP
-  Port:		prom-http	56790/TCP
+  Name:         mgo-mon-prometheus
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-mon-prometheus
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.99.136.42
+  Port:         db  27017/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:27017
+
+Service:
+  Name:         mgo-mon-prometheus-gvr
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-mon-prometheus
+  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
+  Type:         ClusterIP
+  IP:           None
+  Port:         db  27017/TCP
+  TargetPort:   27017/TCP
+  Endpoints:    172.17.0.5:27017
+
+Service:
+  Name:         mgo-mon-prometheus-stats
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-mon-prometheus
+  Annotations:    monitoring.appscode.com/agent=prometheus.io/builtin
+                  prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-mon-prometheus/metrics
+                  prometheus.io/port=56790
+                  prometheus.io/scrape=true
+  Type:         ClusterIP
+  IP:           10.105.239.241
+  Port:         prom-http  56790/TCP
+  TargetPort:   prom-http/TCP
+  Endpoints:    172.17.0.5:56790
 
 Database Secret:
-  Name:	mgo-mon-prometheus-auth
-  Type:	Opaque
-  Data
-  ====
-  user:		4 bytes
-  password:	16 bytes
+  Name:         mgo-mon-prometheus-auth
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-mon-prometheus
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 Monitoring System:
-  Agent:	prometheus.io/builtin
+  Agent:  prometheus.io/builtin
   Prometheus:
-    Namespace:
-    Interval:
+    Port:  56790
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From               Type       Reason       Message
-  ---------   --------   -----     ----               --------   ------       -------
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
+  Type    Reason      Age   From              Message
+  ----    ------      ----  ----              -------
+  Normal  Successful  2m    MongoDB operator  Successfully created Service
+  Normal  Successful  1m    MongoDB operator  Successfully created StatefulSet
+  Normal  Successful  1m    MongoDB operator  Successfully created MongoDB
+  Normal  Successful  1m    MongoDB operator  Successfully created stats service
+  Normal  Successful  1m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful  1m    MongoDB operator  Successfully patched MongoDB
+  Normal  Successful  1m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful  1m    MongoDB operator  Successfully patched MongoDB
 ```
 
-Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
+Since `spec.monitoring` was configured, the database monitoring service is configured accordingly. You can verify it running the following commands:
 
 ```console
 $ kubectl get services -n demo
-NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)               AGE
-kubedb               ClusterIP   None            <none>        <none>                22m
-mgo-mon-prometheus   ClusterIP   10.104.88.103   <none>        27017/TCP,56790/TCP   22m
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
+mgo-mon-prometheus         ClusterIP   10.99.136.42     <none>        27017/TCP   4m
+mgo-mon-prometheus-gvr     ClusterIP   None             <none>        27017/TCP   4m
+mgo-mon-prometheus-stats   ClusterIP   10.105.239.241   <none>        56790/TCP   3m
 ```
 
 ```yaml
-$ kubectl get services mgo-mon-prometheus -n demo -o yaml
+$ kubectl get services mgo-mon-prometheus-stats -n demo -o yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -151,22 +190,24 @@ metadata:
     prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-mon-prometheus/metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
-  creationTimestamp: 2018-02-05T11:37:53Z
+  creationTimestamp: 2018-09-25T05:15:15Z
   labels:
     kubedb.com/kind: MongoDB
     kubedb.com/name: mgo-mon-prometheus
-  name: mgo-mon-prometheus
+  name: mgo-mon-prometheus-stats
   namespace: demo
-  resourceVersion: "1709"
-  selfLink: /api/v1/namespaces/demo/services/mgo-mon-prometheus
-  uid: 00a3de77-0a69-11e8-9639-080027869227
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: MongoDB
+    name: mgo-mon-prometheus
+    uid: de41ba5a-c081-11e8-b4a9-0800272618ed
+  resourceVersion: "5754"
+  selfLink: /api/v1/namespaces/demo/services/mgo-mon-prometheus-stats
+  uid: fc4a57d8-c081-11e8-b4a9-0800272618ed
 spec:
-  clusterIP: 10.104.88.103
+  clusterIP: 10.105.239.241
   ports:
-  - name: db
-    port: 27017
-    protocol: TCP
-    targetPort: db
   - name: prom-http
     port: 56790
     protocol: TCP
@@ -240,12 +281,14 @@ data:
         target_label: kubernetes_name
 ```
 
+Create above ConfigMap
+
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
-configmap "prometheus-server-conf" created
+configmap/prometheus-server-conf created
 ```
 
-Now, the below yaml is used to deploy Prometheus in kubernetes :
+Now, the below YAML is used to deploy Prometheus in kubernetes :
 
 ```yaml
 apiVersion: apps/v1
@@ -289,11 +332,11 @@ Run the following command to deploy prometheus-server
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-clusterrole "prometheus-server" created
-serviceaccount "prometheus-server" created
-clusterrolebinding "prometheus-server" created
-deployment "prometheus-server" created
-service "prometheus-service" created
+clusterrole.rbac.authorization.k8s.io/prometheus-server created
+serviceaccount/prometheus-server created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
+deployment.apps/prometheus-server created
+service/prometheus-service created
 
 # Verify RBAC stuffs
 $ kubectl get clusterroles
@@ -332,6 +375,8 @@ http://192.168.99.100:30901
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
+
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 ![prometheus-builtin](/docs/images/mongodb/builtin-prometheus.png)
 
@@ -340,24 +385,22 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mg/mgo-mon-prometheus
+kubectl patch -n demo mg/mgo-mon-prometheus -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mg/mgo-mon-prometheus
 
-$ kubectl patch -n demo drmn/mgo-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mgo-mon-prometheus
+kubectl patch -n demo drmn/mgo-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mgo-mon-prometheus
 
-$ kubectl delete clusterrole prometheus-server
-$ kubectl delete clusterrolebindings  prometheus-server
-$ kubectl delete serviceaccounts -n demo  prometheus-server
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
 
 - Monitor your MongoDB database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/mongodb/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.
 - Initialize [MongoDB with Script](/docs/guides/mongodb/initialization/using-script.md).

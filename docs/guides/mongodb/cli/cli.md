@@ -24,14 +24,14 @@ KubeDB comes with its own cli. It is called `kubedb` cli. `kubedb` can be used t
 
 ```console
 $ kubedb create -f mongodb-demo.yaml
-mongodb "mongodb-demo" created
+mongodb.kubedb.com/mongodb-demo created
 ```
 
 You can provide namespace as a flag `--namespace`. Provided namespace should match with namespace specified in input file.
 
 ```console
 $ kubedb create -f mongodb-demo.yaml --namespace=kube-system
-mongodb "mongodb-demo" created
+mongodb.kubedb.com/mongodb-demo
 ```
 
 `kubedb create` command also considers `stdin` as input.
@@ -48,11 +48,11 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get mongodb
-NAME            STATUS    AGE
-mongodb-demo    Running   5h
-mongodb-dev     Running   4h
-mongodb-prod    Running   30m
-mongodb-qa      Running   2h
+NAME           VERSION   STATUS    AGE
+mongodb-demo   3.4-v1    Running   13m
+mongodb-dev    3.4-v1    Running   11m
+mongodb-prod   3.4-v1    Running   11m
+mongodb-qa     3.4-v1    Running   10m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -62,19 +62,27 @@ $ kubedb get mongodb mongodb-demo --output=yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-28T08:21:29Z
+  creationTimestamp: 2018-09-25T09:30:16Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 2
   name: mongodb-demo
   namespace: default
-  resourceVersion: "4592"
+  resourceVersion: "26192"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/mongodbs/mongodb-demo
-  uid: 60720f29-1c60-11e8-b698-080027585f96
+  uid: 9ce4c10e-c0a5-11e8-b4a9-0800272618ed
 spec:
   databaseSecret:
     secretName: mongodb-demo-auth
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 1
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -82,22 +90,26 @@ spec:
       requests:
         storage: 50Mi
     storageClassName: standard
-  version: 3.4
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 3.4-v1
 status:
-  creationTime: 2018-02-28T08:21:43Z
+  observedGeneration: 2$4213139756412538772
   phase: Running
 ```
 
 To get JSON of an object, use `--output=json` flag.
 
 ```console
-$ kubedb get mongodb mongodb-demo --output=json
+kubedb get mongodb mongodb-demo --output=json
 ```
 
 To list all KubeDB objects, use following command:
 
 ```console
-$ kubedb get all -o wide
+$ kubedb get kubedb -o wide
 NAME                VERSION     STATUS  AGE
 mg/mongodb-demo     3.4         Running 3h
 mg/mongodb-dev      3.4         Running 3h
@@ -155,47 +167,75 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ```console
 $ kubedb describe mg mongodb-demo
-Name:		mongodb-demo
-Namespace:	default
-StartTimestamp:	Wed, 28 Feb 2018 14:21:29 +0600
-Status:		Running
+Name:               mongodb-demo
+Namespace:          default
+CreationTimestamp:  Tue, 25 Sep 2018 16:04:23 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mongodb-demo
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Wed, 28 Feb 2018 14:21:46 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mongodb-demo
+  CreationTimestamp:  Tue, 25 Sep 2018 16:04:25 +0600
+  Labels:               kubedb.com/kind=MongoDB
+                        kubedb.com/name=mongodb-demo
+  Annotations:        <none>
+  Replicas:           824640299728 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mongodb-demo
-  Type:		ClusterIP
-  IP:		10.98.153.181
-  Port:		db	27017/TCP
+  Name:         mongodb-demo
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mongodb-demo
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.96.137.225
+  Port:         db  27017/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:27017
+
+Service:
+  Name:         mongodb-demo-gvr
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mongodb-demo
+  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
+  Type:         ClusterIP
+  IP:           None
+  Port:         db  27017/TCP
+  TargetPort:   27017/TCP
+  Endpoints:    172.17.0.5:27017
 
 Database Secret:
-  Name:	mongodb-demo-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mongodb-demo-auth
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mongodb-demo
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  user:      4 bytes
+  password:  16 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From               Type       Reason       Message
-  ---------   --------   -----     ----               --------   ------       -------
-  14m         14m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  14m         14m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully created StatefulSet
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully created MongoDB
-  15m         15m        1         MongoDB operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From              Message
+  ----    ------      ----  ----              -------
+  Normal  Successful  8m    MongoDB operator  Successfully created Service
+  Normal  Successful  4m    MongoDB operator  Successfully created StatefulSet
+  Normal  Successful  4m    MongoDB operator  Successfully created MongoDB
+  Normal  Successful  3m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful  3m    MongoDB operator  Successfully patched MongoDB
+  Normal  Successful  3m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful  3m    MongoDB operator  Successfully patched MongoDB
 ```
 
 `kubedb describe` command provides following basic information about a MongoDB database.
@@ -207,39 +247,37 @@ Events:
 - Snapshots (If any)
 - Monitoring system (If available)
 
-To hide details about StatefulSet & Service, use flag `--show-workload=false`
-To hide details about Secret, use flag `--show-secret=false`
 To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all MongoDB objects in `default` namespace, use following command
 
 ```console
-$ kubedb describe mg
+kubedb describe mg
 ```
 
 To describe all MongoDB objects from every namespace, provide `--all-namespaces` flag.
 
 ```console
-$ kubedb describe mg --all-namespaces
+kubedb describe mg --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
 
 ```console
-$ kubedb describe all --all-namespaces
+kubedb describe all --all-namespaces
 ```
 
 You can also describe KubeDb objects with matching labels. The following command will describe all MongoDB objects with specified labels from every namespace.
 
 ```console
-$ kubedb describe mg --all-namespaces --selector='group=dev'
+kubedb describe mg --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
 
 ### How to Edit Objects
 
-`kubedb edit` command allows users to directly edit any KubeDB object. It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `nano`.
+`kubedb edit` command allows users to directly edit any KubeDB object. It will open the editor defined by _KUBEDB_EDITOR_, or _EDITOR_ environment variables, or fall back to `vim`.
 
 Lets edit an existing running MongoDB object to setup [Scheduled Backup](/docs/guides/mongodb/snapshot/scheduled-backup.md). The following command will open MongoDB `mongodb-demo` in editor.
 
@@ -264,15 +302,16 @@ Various fields of a KubeDb object can't be edited using `edit` command. The foll
 - kind
 - metadata.name
 - metadata.namespace
-- status
 
 If StatefulSets exists for a MongoDB database, following fields can't be modified as well.
 
-- spec.version
+- spec.ReplicaSet
 - spec.databaseSecret
-- spec.storage
-- spec.nodeSelector
 - spec.init
+- spec.storageType
+- spec.storage
+- spec.podTemplate.spec.nodeSelector
+- spec.podTemplate.spec.env
 
 For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
@@ -284,14 +323,14 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 
 ```console
 $ kubedb delete mongodb mongodb-dev
-mongodb "mongodb-dev" deleted
+mongodb.kubedb.com "mongodb-dev" deleted
 ```
 
 You can also use YAML files to delete objects. The following command will delete a mongodb using the type and name specified in `mongodb.yaml`.
 
 ```console
 $ kubedb delete -f mongodb-demo.yaml
-mongodb "mongodb-dev" deleted
+mongodb.kubedb.com "mongodb-dev" deleted
 ```
 
 `kubedb delete` command also takes input from `stdin`.
@@ -303,7 +342,7 @@ cat mongodb-demo.yaml | kubedb delete -f -
 To delete database with matching labels, use `--selector` flag. The following command will delete mongodb with label `mongodb.kubedb.com/name=mongodb-demo`.
 
 ```console
-$ kubedb delete mongodb -l mongodb.kubedb.com/name=mongodb-demo
+kubedb delete mongodb -l mongodb.kubedb.com/name=mongodb-demo
 ```
 
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).

@@ -16,30 +16,35 @@ section_menu_id: guides
 
 This tutorial will show you how to take snapshots of a KubeDB managed MongoDB database.
 
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-A `MongoDB` database is needed to take snapshot for this tutorial. To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) is required to run KubeDB. Check the available StorageClass in cluster.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl get storageclasses
+  NAME                 PROVISIONER                AGE
+  standard (default)   k8s.io/minikube-hostpath   4h
+  ```
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    1h
-demo          Active    1m
-kube-public   Active    1h
-kube-system   Active    1h
+- A `MongoDB` database is needed to take snapshot for this tutorial. To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-1.yaml
-mongodb "mgo-infant" created
-```
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    1m
+
+  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-1.yaml
+  mongodb.kubedb.com/mgo-infant created
+  ```
 
 ## Instant Backups
 
@@ -47,10 +52,10 @@ You can easily take a snapshot of `MongoDB` database by creating a `Snapshot` ob
 
 In this tutorial, snapshots will be stored in a Google Cloud Storage (GCS) bucket. To do so, a secret is needed that has the following 2 keys:
 
-| Key                               | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
-| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
+| Key | Description |
+|---- | ----------- |
+| `GOOGLE_PROJECT_ID` | `Required`. Google Cloud project ID |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key |
 
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
@@ -58,7 +63,7 @@ $ mv downloaded-sa-json.key > GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 $ kubectl create secret generic mg-snap-secret -n demo \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
-secret "mg-snap-secret" created
+secret/mg-snap-secret created
 ```
 
 ```yaml
@@ -92,16 +97,16 @@ spec:
   databaseName: mgo-infant
   storageSecretName: mg-snap-secret
   gcs:
-    bucket: restic
+    bucket: kubedb
 ```
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-2.yaml
-snapshot "snapshot-infant" created
+snapshot.kubedb.com/snapshot-infant created
 
 $ kubedb get snap -n demo
-NAME              DATABASE        STATUS    AGE
-snapshot-infant   mg/mgo-infant   Running   47s
+NAME              DATABASENAME   STATUS    AGE
+snapshot-infant   mgo-infant     Running   23s
 ```
 
 ```yaml
@@ -109,28 +114,27 @@ $ kubedb get snap -n demo snapshot-infant -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  clusterName: ""
-  creationTimestamp: 2018-02-02T10:05:36Z
+  creationTimestamp: 2018-09-24T11:09:26Z
   finalizers:
   - kubedb.com
-  generation: 0
+  generation: 1
   labels:
     kubedb.com/kind: MongoDB
     kubedb.com/name: mgo-infant
+    snapshot.kubedb.com/status: Running
   name: snapshot-infant
   namespace: demo
-  resourceVersion: "48991"
+  resourceVersion: "27413"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/snapshot-infant
-  uid: 9d4f37a0-0800-11e8-946f-080027c05a6e
+  uid: 4ce85a07-bfea-11e8-93d2-080027e2cfdd
 spec:
   databaseName: mgo-infant
   gcs:
-    bucket: restic
+    bucket: kubedb
   storageSecretName: mg-snap-secret
 status:
-  completionTime: 2018-02-02T10:06:43Z
-  phase: Succeeded
-  startTime: 2018-02-02T10:05:37Z
+  phase: Running
+  startTime: 2018-09-24T11:09:27Z
 ```
 
 Here,
@@ -144,50 +148,80 @@ You can also run the `kubedb describe` command to see the recent snapshots taken
 
 ```console
 $ kubedb describe mg -n demo mgo-infant
-Name:		mgo-infant
-Namespace:	demo
-StartTimestamp:	Fri, 02 Feb 2018 16:04:50 +0600
-Status:		Running
+Name:               mgo-infant
+Namespace:          demo
+CreationTimestamp:  Mon, 24 Sep 2018 17:04:54 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mgo-infant
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Fri, 02 Feb 2018 16:04:56 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mgo-infant
+  CreationTimestamp:  Mon, 24 Sep 2018 17:04:59 +0600
+  Labels:               kubedb.com/kind=MongoDB
+                        kubedb.com/name=mgo-infant
+  Annotations:        <none>
+  Replicas:           824641944540 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mgo-infant
-  Type:		ClusterIP
-  IP:		10.99.34.23
-  Port:		db	27017/TCP
+  Name:         mgo-infant
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-infant
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.106.56.236
+  Port:         db  27017/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:27017
+
+Service:
+  Name:         mgo-infant-gvr
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-infant
+  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
+  Type:         ClusterIP
+  IP:           None
+  Port:         db  27017/TCP
+  TargetPort:   27017/TCP
+  Endpoints:    172.17.0.5:27017
 
 Database Secret:
-  Name:	mgo-infant-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mgo-infant-auth
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-infant
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  user:      4 bytes
+  password:  16 bytes
 
 Snapshots:
-  Name              Bucket      StartTime                         CompletionTime                    Phase
-  ----              ------      ---------                         --------------                    -----
-  snapshot-infant   gs:restic   Fri, 02 Feb 2018 16:05:37 +0600   Fri, 02 Feb 2018 16:06:43 +0600   Succeeded
+  Name             Bucket     StartTime                        CompletionTime                   Phase
+  ----             ------     ---------                        --------------                   -----
+  snapshot-infant  gs:kubedb  Mon, 24 Sep 2018 17:09:27 +0600  Mon, 24 Sep 2018 17:10:17 +0600  Succeeded
 
 Events:
-  FirstSeen   LastSeen   Count     From                  Type       Reason               Message
-  ---------   --------   -----     ----                  --------   ------               -------
-  8m          8m         1         Job Controller        Normal     SuccessfulSnapshot   Successfully completed snapshot
-  9m          9m         1         Snapshot Controller   Normal     Starting             Backup running
-  9m          9m         1         MongoDB operator      Normal     Successful           Successfully patched StatefulSet
-  9m          9m         1         MongoDB operator      Normal     Successful           Successfully patched MongoDB
-  9m          9m         1         MongoDB operator      Normal     Successful           Successfully created StatefulSet
-  9m          9m         1         MongoDB operator      Normal     Successful           Successfully created MongoDB
-  10m         10m        1         MongoDB operator      Normal     Successful           Successfully created Service
+  Type    Reason              Age   From              Message
+  ----    ------              ----  ----              -------
+  Normal  Successful          6m    MongoDB operator  Successfully created Service
+  Normal  Successful          5m    MongoDB operator  Successfully created StatefulSet
+  Normal  Successful          5m    MongoDB operator  Successfully created MongoDB
+  Normal  Successful          5m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful          5m    MongoDB operator  Successfully patched MongoDB
+  Normal  Successful          5m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful          5m    MongoDB operator  Successfully patched MongoDB
+  Normal  Starting            2m    Job Controller    Backup running
+  Normal  SuccessfulSnapshot  1m    Job Controller    Successfully completed snapshot
 ```
 
 Once the snapshot Job is complete, you should see the output of the `mongodump` command stored in the GCS bucket.
@@ -207,7 +241,7 @@ metadata:
   name: mgo-recovered
   namespace: demo
 spec:
-  version: "3.4"
+  version: "3.4-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -223,7 +257,7 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-3.yaml
-mongodb "mgo-recovered" created
+mongodb.kubedb.com/mgo-recovered created
 ```
 
 Here,
@@ -234,55 +268,93 @@ Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then K
 
 ```console
 $ kubedb get mg -n demo
-NAME            STATUS    AGE
-mgo-infant      Running   23m
-mgo-recovered   Running   4m
+NAME            VERSION   STATUS         AGE
+mgo-infant      3.4-v1    Running        13m
+mgo-recovered   3.4-v1    Initializing   57s
+
+$ kubedb get mg -n demo
+NAME            VERSION   STATUS    AGE
+mgo-infant      3.4-v1    Running   13m
+mgo-recovered   3.4-v1    Running   1m
 
 $ kubedb describe mg -n demo mgo-recovered
-Name:		mgo-recovered
-Namespace:	demo
-StartTimestamp:	Fri, 02 Feb 2018 16:24:23 +0600
-Status:		Running
-Annotations:	kubedb.com/initialized=
+Name:               mgo-recovered
+Namespace:          demo
+CreationTimestamp:  Mon, 24 Sep 2018 17:17:14 +0600
+Labels:             <none>
+Annotations:        kubedb.com/initialized=
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			mgo-recovered
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Fri, 02 Feb 2018 16:24:36 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               mgo-recovered
+  CreationTimestamp:  Mon, 24 Sep 2018 17:17:20 +0600
+  Labels:               kubedb.com/kind=MongoDB
+                        kubedb.com/name=mgo-recovered
+  Annotations:        <none>
+  Replicas:           824642112848 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		mgo-recovered
-  Type:		ClusterIP
-  IP:		10.107.157.253
-  Port:		db	27017/TCP
+  Name:         mgo-recovered
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-recovered
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.100.10.221
+  Port:         db  27017/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.6:27017
+
+Service:
+  Name:         mgo-recovered-gvr
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-recovered
+  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
+  Type:         ClusterIP
+  IP:           None
+  Port:         db  27017/TCP
+  TargetPort:   27017/TCP
+  Endpoints:    172.17.0.6:27017
 
 Database Secret:
-  Name:	mgo-recovered-auth
-  Type:	Opaque
-  Data
-  ====
-  user:		4 bytes
-  password:	16 bytes
+  Name:         mgo-recovered-auth
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-recovered
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From               Type       Reason                 Message
-  ---------   --------   -----     ----               --------   ------                 -------
-  3m          3m         1         MongoDB operator   Normal     Successful             Successfully patched StatefulSet
-  3m          3m         1         MongoDB operator   Normal     Successful             Successfully patched MongoDB
-  3m          3m         1         Job Controller     Normal     SuccessfulInitialize   Successfully completed initialization
-  4m          4m         1         MongoDB operator   Normal     Successful             Successfully patched StatefulSet
-  4m          4m         1         MongoDB operator   Normal     Successful             Successfully patched MongoDB
-  4m          4m         1         MongoDB operator   Normal     Initializing           Initializing from Snapshot: "snapshot-infant"
-  4m          4m         1         MongoDB operator   Normal     Successful             Successfully created StatefulSet
-  4m          4m         1         MongoDB operator   Normal     Successful             Successfully created MongoDB
-  4m          4m         1         MongoDB operator   Normal     Successful             Successfully created Service
+  Type    Reason                Age   From              Message
+  ----    ------                ----  ----              -------
+  Normal  Successful            2m    MongoDB operator  Successfully created Service
+  Normal  Successful            2m    MongoDB operator  Successfully created MongoDB
+  Normal  Successful            2m    MongoDB operator  Successfully created StatefulSet
+  Normal  Initializing          2m    MongoDB operator  Initializing from Snapshot: "snapshot-infant"
+  Normal  Successful            2m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful            2m    MongoDB operator  Successfully patched MongoDB
+  Normal  SuccessfulInitialize  1m    Job Controller    Successfully completed initialization
+  Normal  Successful            1m    MongoDB operator  Successfully patched MongoDB
+  Normal  Successful            1m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Initializing          1m    MongoDB operator  Initializing from Snapshot: "snapshot-infant"
+  Normal  Successful            1m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful            1m    MongoDB operator  Successfully patched MongoDB
+  Normal  Successful            1m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful            1m    MongoDB operator  Successfully patched MongoDB
+  Normal  SuccessfulInitialize  1m    Job Controller    Successfully completed initialization
 ```
 
 ## Cleaning up
@@ -290,14 +362,13 @@ Events:
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-infant mg/mgo-recovered -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mg/mgo-infant mg/mgo-recovered
+kubectl patch -n demo mg/mgo-infant mg/mgo-recovered -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mg/mgo-infant mg/mgo-recovered
 
-$ kubectl patch -n demo drmn/mgo-infant drmn/mgo-recovered -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mgo-infant drmn/mgo-recovered
+kubectl patch -n demo drmn/mgo-infant drmn/mgo-recovered -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mgo-infant drmn/mgo-recovered
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -310,5 +381,6 @@ namespace "demo" deleted
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

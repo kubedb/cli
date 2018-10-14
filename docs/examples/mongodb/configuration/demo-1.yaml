@@ -1,19 +1,19 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  name: mgo-init-script
+  name: mgo-custom-config
   namespace: demo
 spec:
   version: "3.4-v1"
   doNotPause: true
+  storageType: Durable
   storage:
     storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
-  init:
-    scriptSource:
+        storage: 1Gi
+  configSource:
       configMap:
-        name: mg-init-script
+        name: mg-custom-config

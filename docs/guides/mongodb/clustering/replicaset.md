@@ -28,16 +28,16 @@ Before proceeding:
 
 - To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
 
-$ kubectl get ns
-NAME          STATUS    AGE
-demo          Active    10s
-```
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy MongoDB ReplicaSet
 
@@ -52,7 +52,7 @@ metadata:
   name: mgo-replicaset
   namespace: demo
 spec:
-  version: "3.6"
+  version: "3.6-v1"
   replicas: 3
   replicaSet:
     name: rs0
@@ -67,7 +67,7 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/clustering/demo-1.yaml
-mongodb.kubedb.com "mgo-replicaset" created
+mongodb.kubedb.com/mgo-replicaset created
 ```
 
 Here,
@@ -82,73 +82,95 @@ KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `Mong
 
 ```console
 $ kubedb describe mg -n demo mgo-replicaset
-Name:		mgo-replicaset
-Namespace:	demo
-StartTimestamp:	Mon, 27 Aug 2018 15:21:18 +0600
-Replicas:	3  total
-Status:		Running
+Name:               mgo-replicaset
+Namespace:          demo
+CreationTimestamp:  Tue, 25 Sep 2018 15:12:11 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           3  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	1Gi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      1Gi
+  Access Modes:  RWO
 
-StatefulSet:		
-  Name:			mgo-replicaset
-  Replicas:		3 current / 3 desired
-  CreationTimestamp:	Mon, 27 Aug 2018 15:21:20 +0600
-  Pods Status:		3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+StatefulSet:
+  Name:               mgo-replicaset
+  CreationTimestamp:  Tue, 25 Sep 2018 15:12:18 +0600
+  Labels:               kubedb.com/kind=MongoDB
+                        kubedb.com/name=mgo-replicaset
+  Annotations:        <none>
+  Replicas:           824639179008 desired | 3 total
+  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:	
-  Name:		mgo-replicaset
-  Type:		ClusterIP
-  IP:		10.107.205.95
-  Port:		db	27017/TCP
+Service:
+  Name:         mgo-replicaset
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-replicaset
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.96.162.32
+  Port:         db  27017/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.5:27017,172.17.0.6:27017,172.17.0.7:27017
 
-Service:	
-  Name:		mgo-replicaset-gvr
-  Type:		ClusterIP
-  IP:		None
-  Port:		db	27017/TCP
+Service:
+  Name:         mgo-replicaset-gvr
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-replicaset
+  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
+  Type:         ClusterIP
+  IP:           None
+  Port:         db  27017/TCP
+  TargetPort:   27017/TCP
+  Endpoints:    172.17.0.5:27017,172.17.0.6:27017,172.17.0.7:27017
 
 Database Secret:
-  Name:	mgo-replicaset-auth
-  Type:	Opaque
-  Data
-  ====
-  password:	16 bytes
-  user:		4 bytes
+  Name:         mgo-replicaset-auth
+  Labels:         kubedb.com/kind=MongoDB
+                  kubedb.com/name=mgo-replicaset
+  Annotations:  <none>
+  
+Type:  Opaque
+  
+Data
+====
+  password:  16 bytes
+  user:      4 bytes
 
 No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From               Type       Reason       Message
-  ---------   --------   -----     ----               --------   ------       -------
-  1m          1m         1         MongoDB operator   Normal     Successful   Successfully patched StatefulSet
-  1m          1m         1         MongoDB operator   Normal     Successful   Successfully patched MongoDB
-  1m          1m         1         MongoDB operator   Normal     Successful   Successfully created StatefulSet
-  1m          1m         1         MongoDB operator   Normal     Successful   Successfully created MongoDB
-  8m          8m         1         MongoDB operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From              Message
+  ----    ------      ----  ----              -------
+  Normal  Successful  6m    MongoDB operator  Successfully created Service
+  Normal  Successful  3m    MongoDB operator  Successfully created StatefulSet
+  Normal  Successful  3m    MongoDB operator  Successfully created MongoDB
+  Normal  Successful  3m    MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful  3m    MongoDB operator  Successfully patched MongoDB
+
 
 $ kubectl get statefulset -n demo
 NAME             DESIRED   CURRENT   AGE
-mgo-replicaset   3         3         12m
+mgo-replicaset   3         3         6m
 
 $ kubectl get pvc -n demo
 NAME                       STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-datadir-mgo-replicaset-0   Bound     pvc-3b0cdf3a-93e7-11e8-b61b-0800275c4256   1Gi        RWO            standard       12m
-datadir-mgo-replicaset-1   Bound     pvc-e58ab7f7-93e7-11e8-b61b-0800275c4256   1Gi        RWO            standard       7m
-datadir-mgo-replicaset-2   Bound     pvc-0d439426-93e8-11e8-b61b-0800275c4256   1Gi        RWO            standard       6m
+datadir-mgo-replicaset-0   Bound     pvc-597784c9-c093-11e8-b4a9-0800272618ed   1Gi        RWO            standard       1h
+datadir-mgo-replicaset-1   Bound     pvc-8ca7a9d9-c093-11e8-b4a9-0800272618ed   1Gi        RWO            standard       1h
+datadir-mgo-replicaset-2   Bound     pvc-b7d8a624-c093-11e8-b4a9-0800272618ed   1Gi        RWO            standard       1h
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                           STORAGECLASS   REASON    AGE
-pvc-0d439426-93e8-11e8-b61b-0800275c4256   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-2   standard                 6m
-pvc-3b0cdf3a-93e7-11e8-b61b-0800275c4256   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-0   standard                 12m
-pvc-e58ab7f7-93e7-11e8-b61b-0800275c4256   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-1   standard                 7m
+pvc-597784c9-c093-11e8-b4a9-0800272618ed   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-0   standard                 1h
+pvc-8ca7a9d9-c093-11e8-b4a9-0800272618ed   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-1   standard                 1h
+pvc-b7d8a624-c093-11e8-b4a9-0800272618ed   1Gi        RWO            Delete           Bound     demo/datadir-mgo-replicaset-2   standard                 1h
 
 $ kubectl get service -n demo
-NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
-mgo-replicaset       ClusterIP   10.107.205.95   <none>        27017/TCP   9m
-mgo-replicaset-gvr   ClusterIP   None            <none>        27017/TCP   9m
+NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+mgo-replicaset       ClusterIP   10.96.162.32   <none>        27017/TCP   7m
+mgo-replicaset-gvr   ClusterIP   None           <none>        27017/TCP   7m
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
@@ -158,23 +180,31 @@ $ kubedb get mg -n demo mgo-replicaset -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  creationTimestamp: 2018-08-27T09:21:18Z
+  creationTimestamp: 2018-09-25T09:12:11Z
   finalizers:
   - kubedb.com
-  generation: 3
+  generation: 1
   name: mgo-replicaset
   namespace: demo
-  resourceVersion: "16747"
+  resourceVersion: "24658"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-replicaset
-  uid: 8e0654e9-a9da-11e8-bb0b-08002727b231
+  uid: 15be8406-c0a3-11e8-b4a9-0800272618ed
 spec:
   databaseSecret:
     secretName: mgo-replicaset-auth
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
   replicaSet:
     keyFile:
       secretName: mgo-replicaset-keyfile
     name: rs0
   replicas: 3
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
     accessModes:
     - ReadWriteOnce
@@ -183,9 +213,12 @@ spec:
         storage: 1Gi
     storageClassName: standard
   storageType: Durable
-  version: "3.6"
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 3.6-v1
 status:
-  observedGeneration: 3
+  observedGeneration: 1$4210395375389091791
   phase: Running
 ```
 
@@ -213,6 +246,9 @@ MongoDB shell version v3.6.6
 connecting to: mongodb://127.0.0.1:27017/admin
 MongoDB server version: 3.6.6
 Welcome to the MongoDB shell.
+
+rs0:PRIMARY> > rs.isMaster().primary
+mgo-replicaset-0.mgo-replicaset-gvr.demo.svc.cluster.local:27017
 
 rs0:PRIMARY> show dbs
 admin   0.000GB
@@ -326,19 +362,18 @@ mgo-replicaset-2.mgo-replicaset-gvr.demo.svc.cluster.local:27017
 
 ## Pause Database
 
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `doNotPause` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.doNotPause` is set to true.
+When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` feature. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`.
 
-Since the MongoDB object created in this tutorial has `spec.doNotPause` set to `false`, if you delete the MongoDB object, KubeDB operator will delete the StatefulSet and its pods but leaves the PVCs unchanged.
 
-Note that, It is recommended to set `spec.doNotPause` to `true` for production usage.
+Since the MongoDB object created in this tutorial has `spec.terminationPolicy` set to `Resume` (default), if you delete the MongoDB object, KubeDB operator will create a dormant database while deleting the StatefulSet and its pods but leaves the PVCs unchanged.
 
 ```console
 $ kubedb delete mg mgo-replicaset -n demo
-mongodb "mgo-replicaset" deleted
+mongodb.kubedb.com "mgo-replicaset" deleted
 
 $ kubedb get drmn -n demo mgo-replicaset
 NAME             STATUS    AGE
-mgo-replicaset   Pausing   39s
+mgo-replicaset   Pausing   25s
 
 $ kubedb get drmn -n demo mgo-replicaset
 NAME             STATUS    AGE
@@ -350,19 +385,21 @@ $ kubedb get drmn -n demo mgo-replicaset -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: 2018-08-27T09:42:04Z
+  creationTimestamp: 2018-09-25T09:23:11Z
+  finalizers:
+  - kubedb.com
   generation: 1
   labels:
     kubedb.com/kind: MongoDB
   name: mgo-replicaset
   namespace: demo
-  resourceVersion: "17796"
+  resourceVersion: "25333"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mgo-replicaset
-  uid: 74b34f29-a9dd-11e8-bb0b-08002727b231
+  uid: 9f75a04c-c0a4-11e8-b4a9-0800272618ed
 spec:
   origin:
     metadata:
-      creationTimestamp: 2018-08-27T09:21:18Z
+      creationTimestamp: 2018-09-25T09:12:11Z
       name: mgo-replicaset
       namespace: demo
     spec:
@@ -390,10 +427,13 @@ spec:
               storage: 1Gi
           storageClassName: standard
         storageType: Durable
-        version: "3.6"
+        terminationPolicy: Pause
+        updateStrategy:
+          type: RollingUpdate
+        version: 3.6-v1
 status:
-  observedGeneration: 1
-  pausingTime: 2018-08-27T09:42:34Z
+  observedGeneration: 1$16440556888999634490
+  pausingTime: 2018-09-25T09:23:42Z
   phase: Paused
 ```
 
@@ -412,7 +452,7 @@ The below command will resume the DormantDatabase `mgo-replicaset`.
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/clustering/demo-1.yaml
-mongodb "mgo-replicaset" created
+mongodb.kubedb.com/mgo-replicaset created
 ```
 
 Now, If you again exec into `pod` and look for previous data, you will see that, all the data persists.
@@ -453,14 +493,13 @@ dormantdatabase "mgo-replicaset" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo mg/mgo-replicaset -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo mg/mgo-replicaset
+kubectl patch -n demo mg/mgo-replicaset -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo mg/mgo-replicaset
 
-$ kubectl patch -n demo drmn/mgo-replicaset -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/mgo-replicaset
+kubectl patch -n demo drmn/mgo-replicaset -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/mgo-replicaset
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
@@ -473,5 +512,6 @@ namespace "demo" deleted
 - Monitor your MongoDB database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/mongodb/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/mongodb/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
+- Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

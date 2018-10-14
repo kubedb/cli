@@ -1,12 +1,16 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  name: snapshot-infant
+  name: snap-mgo-config
   namespace: demo
   labels:
     kubedb.com/kind: MongoDB
 spec:
-  databaseName: mgo-infant
+  databaseName: mgo-misc-config
   storageSecretName: mg-snap-secret
   gcs:
     bucket: kubedb
+  podTemplate:
+    spec:
+      args:
+      - --gzip
