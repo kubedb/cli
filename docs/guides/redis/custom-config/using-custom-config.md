@@ -17,20 +17,20 @@ KubeDB supports providing custom configuration for Redis. This tutorial will sho
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
-```
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+  
+  $ kubectl get ns demo
+  NAME    STATUS  AGE
+  demo    Active  5s
+  ```
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
@@ -46,8 +46,13 @@ In this tutorial, we will configure `databases` and `maxclients` via a custom co
 
 At first, let's create `redis.conf` file setting `databases` and `maxclients` parameters. Default value of `databases` is 16 and `maxclients` is 10000.
 
-```ini
-$ cat > redis.conf
+```console
+$ cat <<EOF >redis.conf
+databases 10
+maxclients 500
+EOF
+
+$ cat redis.conf
 databases 10
 maxclients 500
 ```
@@ -57,8 +62,8 @@ maxclients 500
 Now, create a configMap with this configuration file.
 
 ```console
- $ kubectl create configmap -n demo rd-custom-config --from-file=./redis.conf
-configmap "rd-custom-config" created
+$ kubectl create configmap -n demo rd-custom-config --from-file=./redis.conf
+configmap/rd-custom-config created
 ```
 
 Verify the config map has the configuration file.
@@ -72,10 +77,8 @@ data:
     maxclients 500
 kind: ConfigMap
 metadata:
-  ...
   name: rd-custom-config
   namespace: demo
-  ...
 ```
 
 Now, create Redis crd specifying `spec.configSource` field.
@@ -94,8 +97,7 @@ metadata:
   name: custom-redis
   namespace: demo
 spec:
-  version: "4"
-  doNotPause: true
+  version: "4.0-v1"
   configSource:
       configMap:
         name: rd-custom-config
@@ -115,20 +117,20 @@ Check that the statefulset's pod is running
 ```console
 $ kubectl get pod -n demo custom-redis-0
 NAME             READY     STATUS    RESTARTS   AGE
-custom-redis-0   1/1       Running   0          2m
+custom-redis-0   1/1       Running   0          25s
 ```
 
 Check the pod's log to see if the database is ready
 
 ```console
 $ kubectl logs -f -n demo custom-redis-0
-1:C 11 Jul 13:32:39.397 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
-1:C 11 Jul 13:32:39.397 # Redis version=4.0.6, bits=64, commit=00000000, modified=0, pid=1, just started
-1:C 11 Jul 13:32:39.397 # Configuration loaded
-1:M 11 Jul 13:32:39.398 * Running mode=standalone, port=6379.
-1:M 11 Jul 13:32:39.398 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
-1:M 11 Jul 13:32:39.398 # Server initialized
-1:M 11 Jul 13:32:39.398 * Ready to accept connections
+1:C 01 Oct 08:07:45.274 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 01 Oct 08:07:45.274 # Redis version=4.0.6, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 01 Oct 08:07:45.274 # Configuration loaded
+1:M 01 Oct 08:07:45.275 * Running mode=standalone, port=6379.
+1:M 01 Oct 08:07:45.275 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+1:M 01 Oct 08:07:45.275 # Server initialized
+1:M 01 Oct 08:07:45.275 * Ready to accept connections
 ```
 
 Once we see `Ready to accept connections` in the log, the database is ready.
@@ -155,20 +157,16 @@ PONG
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo rd/custom-redis -p '{"spec":{"doNotPause":false}}' --type="merge"
+kubectl patch -n demo rd/custom-redis -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo rd/custom-redis
 
-$ kubectl delete -n demo rd/custom-redis
+kubectl patch -n demo drmn/custom-redis -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/custom-redis
 
-$ kubectl patch -n demo drmn/custom-redis -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo configmap rd-custom-config
 
-$ kubectl delete -n demo drmn/custom-redis
-
-$ kubectl delete -n demo configmap rd-custom-config
-
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```
-
-If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).
 
 ## Next Steps
 

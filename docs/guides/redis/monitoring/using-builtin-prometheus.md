@@ -18,29 +18,26 @@ This tutorial will show you how to monitor KubeDB databases using [Prometheus](h
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:
+- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns demo
+  namespace "demo" created
+  
+  $ kubectl get ns
+  NAME          STATUS    AGE
+  demo          Active    10s
+  ```
 
-$ kubectl get ns
-NAME          STATUS    AGE
-default       Active    45m
-demo          Active    10s
-kube-public   Active    45m
-kube-system   Active    45m
-```
+> Note: The yaml files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
-Note that the yaml files that are used in this tutorial, stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+## Monitor with builtin Prometheus
 
-## Create a Redis database
-
-KubeDB implements a `Redis` CRD to define the specification of a Redis database. Below is the `Redis` object created in this tutorial.
+User can define `spec.monitor` either while creating the CRD object, Or can update the spec of existing CRD object to add the `spec.monitor` part. Below is the `Redis` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -49,7 +46,7 @@ metadata:
   name: redis-mon-prometheus
   namespace: demo
 spec:
-  version: "4"
+  version: "4.0-v1"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -63,72 +60,98 @@ spec:
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml
-redis "redis-mon-prometheus" created
+redis.kubedb.com/redis-mon-prometheus created
 ```
 
 Here,
 
-- `spec.version` is the version of Redis database. In this tutorial, a Redis 3.4 database is going to be created.
-- `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. Since release 0.8.0, a storage spec is required for Redis.
 - `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Redis Exporter` and will receive metrics from exporter.
 
-KubeDB operator watches for `Redis` objects using Kubernetes api. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching crd name. KubeDB operator will also create a governing service for StatefulSets with the name `kubedb`, if one is not already present.
+KubeDB will create a separate stats service with name `<redis-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the Redis is successfully running.
 
 ```console
 $ kubedb get rd -n demo
-NAME                   STATUS    AGE
-redis-mon-prometheus   Running   3m
+NAME                   VERSION   STATUS    AGE
+redis-mon-prometheus   4.0-v1    Running   2m
 
 $ kubedb describe rd -n demo redis-mon-prometheus
-Name:		redis-mon-prometheus
-Namespace:	demo
-StartTimestamp:	Mon, 12 Feb 2018 17:21:08 +0600
-Status:		Running
+Name:               redis-mon-prometheus
+Namespace:          demo
+CreationTimestamp:  Mon, 01 Oct 2018 12:34:20 +0600
+Labels:             <none>
+Annotations:        <none>
+Replicas:           1  total
+Status:             Running
+  StorageType:      Durable
 Volume:
-  StorageClass:	standard
-  Capacity:	50Mi
-  Access Modes:	RWO
+  StorageClass:  standard
+  Capacity:      50Mi
+  Access Modes:  RWO
 
 StatefulSet:
-  Name:			redis-mon-prometheus
-  Replicas:		1 current / 1 desired
-  CreationTimestamp:	Mon, 12 Feb 2018 17:21:10 +0600
-  Pods Status:		1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+  Name:               redis-mon-prometheus
+  CreationTimestamp:  Mon, 01 Oct 2018 12:34:22 +0600
+  Labels:               kubedb.com/kind=Redis
+                        kubedb.com/name=redis-mon-prometheus
+  Annotations:        <none>
+  Replicas:           824641421356 desired | 1 total
+  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
-  Name:		redis-mon-prometheus
-  Type:		ClusterIP
-  IP:		10.108.237.53
-  Port:		db		6379/TCP
-  Port:		prom-http	56790/TCP
+  Name:         redis-mon-prometheus
+  Labels:         kubedb.com/kind=Redis
+                  kubedb.com/name=redis-mon-prometheus
+  Annotations:  <none>
+  Type:         ClusterIP
+  IP:           10.98.125.255
+  Port:         db  6379/TCP
+  TargetPort:   db/TCP
+  Endpoints:    172.17.0.4:6379
+
+Service:
+  Name:         redis-mon-prometheus-stats
+  Labels:         kubedb.com/kind=Redis
+                  kubedb.com/name=redis-mon-prometheus
+  Annotations:    monitoring.appscode.com/agent=prometheus.io/builtin
+                  prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/redises/redis-mon-prometheus/metrics
+                  prometheus.io/port=56790
+                  prometheus.io/scrape=true
+  Type:         ClusterIP
+  IP:           10.104.85.239
+  Port:         prom-http  56790/TCP
+  TargetPort:   prom-http/TCP
+  Endpoints:    172.17.0.4:56790
 
 Monitoring System:
-  Agent:	prometheus.io/builtin
+  Agent:  prometheus.io/builtin
   Prometheus:
-    Namespace:
-    Interval:
+    Port:  56790
+
+No Snapshots.
 
 Events:
-  FirstSeen   LastSeen   Count     From             Type       Reason       Message
-  ---------   --------   -----     ----             --------   ------       -------
-  3m          3m         1         Redis operator   Normal     Successful   Successfully patched StatefulSet
-  3m          3m         1         Redis operator   Normal     Successful   Successfully patched Redis
-  3m          3m         1         Redis operator   Normal     Successful   Successfully created StatefulSet
-  3m          3m         1         Redis operator   Normal     Successful   Successfully created Redis
-  4m          4m         1         Redis operator   Normal     Successful   Successfully created Service
+  Type    Reason      Age   From            Message
+  ----    ------      ----  ----            -------
+  Normal  Successful  2m    Redis operator  Successfully created Service
+  Normal  Successful  1m    Redis operator  Successfully created StatefulSet
+  Normal  Successful  1m    Redis operator  Successfully created Redis
+  Normal  Successful  1m    Redis operator  Successfully created stats service
+  Normal  Successful  1m    Redis operator  Successfully patched StatefulSet
+  Normal  Successful  1m    Redis operator  Successfully patched Redis
 ```
 
-Since `spec.monitoring` was configured, the database service object is configured accordingly. You can verify it running the following commands:
+Since `spec.monitoring` was configured, the database monitoring service is configured accordingly. You can verify it running the following commands:
 
 ```console
 $ kubectl get services -n demo
-NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)              AGE
-kubedb                 ClusterIP   None            <none>        <none>               12m
-redis-mon-prometheus   ClusterIP   10.108.237.53   <none>        6379/TCP,56790/TCP   12m
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
+kubedb                       ClusterIP   None            <none>        <none>      2m
+redis-mon-prometheus         ClusterIP   10.98.125.255   <none>        6379/TCP    2m
+redis-mon-prometheus-stats   ClusterIP   10.104.85.239   <none>        56790/TCP   1m
 ```
 
 ```yaml
-$ kubectl get services redis-mon-prometheus -n demo -o yaml
+$ kubectl get services redis-mon-prometheus-stats -n demo -o yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -137,22 +160,24 @@ metadata:
     prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/redises/redis-mon-prometheus/metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
-  creationTimestamp: 2018-02-12T11:21:09Z
+  creationTimestamp: 2018-10-01T06:35:03Z
   labels:
     kubedb.com/kind: Redis
     kubedb.com/name: redis-mon-prometheus
-  name: redis-mon-prometheus
+  name: redis-mon-prometheus-stats
   namespace: demo
-  resourceVersion: "48437"
-  selfLink: /api/v1/namespaces/demo/services/redis-mon-prometheus
-  uid: d337a61e-0fe6-11e8-a2d6-08002751ae8c
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: Redis
+    name: redis-mon-prometheus
+    uid: 076b13b3-c544-11e8-9ba7-0800274bef12
+  resourceVersion: "10495"
+  selfLink: /api/v1/namespaces/demo/services/redis-mon-prometheus-stats
+  uid: 211f339b-c544-11e8-9ba7-0800274bef12
 spec:
-  clusterIP: 10.108.237.53
+  clusterIP: 10.104.85.239
   ports:
-  - name: db
-    port: 6379
-    protocol: TCP
-    targetPort: db
   - name: prom-http
     port: 56790
     protocol: TCP
@@ -226,9 +251,11 @@ data:
         target_label: kubernetes_name
 ```
 
+Create above ConfigMap
+
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
-configmap "prometheus-server-conf" created
+configmap/prometheus-server-conf created
 ```
 
 Now, the below yaml is used to deploy Prometheus in kubernetes:
@@ -275,11 +302,11 @@ Run the following command to deploy prometheus-server
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
-clusterrole "prometheus-server" created
-serviceaccount "prometheus-server" created
-clusterrolebinding "prometheus-server" created
-deployment "prometheus-server" created
-service "prometheus-service" created
+clusterrole.rbac.authorization.k8s.io/prometheus-server created
+serviceaccount/prometheus-server created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
+deployment.apps/prometheus-server created
+service/prometheus-service created
 
 # Verify RBAC stuffs
 $ kubectl get clusterroles
@@ -303,11 +330,11 @@ Now to open prometheus dashboard on Browser:
 
 ```console
 $ kubectl get svc -n demo
-NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)              AGE
-kubedb                 ClusterIP      None             <none>        <none>               14m
-prometheus-service     LoadBalancer   10.103.108.241   <pending>     9090:30901/TCP       51s
-redis-mon-prometheus   ClusterIP      10.108.237.53    <none>        6379/TCP,56790/TCP   14m
-
+NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+kubedb                       ClusterIP   None             <none>        <none>           5m
+prometheus-service           NodePort    10.108.252.226   <none>        9090:30901/TCP   37s
+redis-mon-prometheus         ClusterIP   10.98.125.255    <none>        6379/TCP         5m
+redis-mon-prometheus-stats   ClusterIP   10.104.85.239    <none>        56790/TCP        5m
 
 $ minikube ip
 192.168.99.100
@@ -318,6 +345,8 @@ http://192.168.99.100:30901
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30901](http://192.168.99.100:30901).
 
+If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
+
 Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
 
 ![prometheus-builtin](/docs/images/redis/redis-builtin.png)
@@ -327,18 +356,15 @@ Now, if you go the Prometheus Dashboard, you should see that this database endpo
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo rd/redis-mon-prometheus -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo rd/redis-mon-prometheus
+kubectl patch -n demo rd/redis-mon-prometheus -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo rd/redis-mon-prometheus
 
-$ kubectl patch -n demo drmn/redis-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/redis-mon-prometheus
+kubectl patch -n demo drmn/redis-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
+kubectl delete -n demo drmn/redis-mon-prometheus
 
-$ kubectl delete clusterrole prometheus-server
-$ kubectl delete clusterrolebindings  prometheus-server
-$ kubectl delete serviceaccounts -n demo  prometheus-server
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+kubectl delete ns demo
 ```
 
 ## Next Steps
