@@ -1,15 +1,15 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  name: snapshot-xyz
+  name: local-snapshot
   labels:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
-  storageSecretName: gcs-secret
-  gcs:
-    bucket: bucket-for-snapshot
-    prefix: demo
+  local:
+    mountPath: /repo
+    persistentVolumeClaim:
+      claimName: my-snap-pvc
   podTemplate:
     spec:
       resources:

@@ -31,7 +31,7 @@ kind: Snapshot
 metadata:
   name: snapshot-xyz
   labels:
-    kubedb.com/kind: Postgres|Elasticsearch
+    kubedb.com/kind: Postgres
 spec:
   databaseName: database-name
   storageSecretName: s3-secret
@@ -39,13 +39,30 @@ spec:
     endpoint: 's3.amazonaws.com'
     bucket: kubedb-qa
     prefix: demo
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  podTemplate:
+    annotation:
+      passMe: ToBackupJobPod
+    controller:
+      annotation:
+        passMe: ToBackupJob
+    spec:
+      schedulerName: my-scheduler
+      nodeSelector:
+        disktype: ssd
+      imagePullSecrets:
+      - name: myregistrykey
+      args:
+      - --extra-args-to-backup-command
+      env:
+      - name: BACKUP_POD_ENV
+        value: "value"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
 ```
 
 The `.spec` section supports the following different storage providers for storing snapshot data:
@@ -55,55 +72,82 @@ The `.spec` section supports the following different storage providers for stori
 `Local` backend refers to a local path inside snapshot job container. Any Kubernetes supported [persistent volume](https://kubernetes.io/docs/concepts/storage/volumes/) can be used here. Some examples are: `emptyDir` for testing, NFS, Ceph, GlusterFS, etc.
 To configure this backend, no secret is needed. Following parameters are available for `Local` backend.
 
-| Parameter                 | Description                                                                                        |
-|---------------------------|----------------------------------------------------------------------------------------------------|
-| `spec.databaseName`       | `Required`. Name of database                                                                       |
-| `spec.local.VolumeSource` | `Required`. Any Kubernetes [volume](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes). Can be specified inlined. Example: `hostPath`              |
+| Parameter                 | Description |
+| ------------------------- | ----------- |
+| `spec.databaseName`       | `Required`. Name of database |
 | `spec.local.mountPath`    | `Required`. Path where this volume will be mounted in the snapshot job container. Example: `/repo` |
-| `spec.local.subPath`      | `Optional`. Sub-path inside the referenced volume instead of its root.                             |
-| `spec.resources`          | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
+| `spec.local.subPath`      | `Optional`. Sub-path inside the referenced volume instead of its root. |
+| `spec.podTemplate`        | `Optional`. KubeDB provides a template for database Backup pod through `spec.podTemplate`.|
 
 ```console
 $ kubectl create -f ./docs/examples/snapshot/local/local-snapshot.yaml
 snapshot "local-snapshot" created
 ```
 
+Here is the YAML for the snapshot we have created above. It uses `hostPath` volume as backend.
 ```yaml
-$ kubectl get snapshot local-snapshot -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2017-06-28T12:14:48Z
   name: local-snapshot
-  namespace: default
-  resourceVersion: "2000"
-  selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/snapshots/local-snapshot
-  uid: 617e3487-5bfb-11e7-bb52-08002711f4aa
   labels:
     kubedb.com/kind: Postgres
 spec:
   databaseName: postgres-db
   local:
-    path: /repo
-    volumeSource:
-      emptyDir: {}
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+    mountPath: /repo
+    hostPath:
+      # directory location on host
+      path: /var/postgres-snapshots
+      # this field is optional
+      type: DirectoryOrCreate
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
 ```
+
+Here is another example that uses PVC as backend,
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: local-snapshot
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: postgres-db
+  local:
+    mountPath: /repo
+    persistentVolumeClaim:
+      claimName: my-snap-pvc
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+```
+
+> Note: For local volume, if you delete the snapshot, your snapshot's data will not be removed. This happens only for local volume. For cloud bucket, if you delete snapshot, your snapshot's data will be removed from the bucket.
 
 ### AWS S3
 
 KubeDB supports AWS S3 service or [Minio](https://minio.io/) servers as snapshot storage backend. To configure this backend, following secret keys are needed:
 
-| Key                     | Description                                                |
-|-------------------------|------------------------------------------------------------|
-| `AWS_ACCESS_KEY_ID`     | `Required`. AWS / Minio access key ID                      |
-| `AWS_SECRET_ACCESS_KEY` | `Required`. AWS / Minio secret access key                  |
+|           Key           |                Description                |
+| ----------------------- | ----------------------------------------- |
+| `AWS_ACCESS_KEY_ID`     | `Required`. AWS / Minio access key ID     |
+| `AWS_SECRET_ACCESS_KEY` | `Required`. AWS / Minio secret access key |
 
 ```console
 $ echo -n '<your-aws-access-key-id-here>' > AWS_ACCESS_KEY_ID
@@ -116,7 +160,6 @@ secret "s3-secret" created
 
 ```yaml
 $ kubectl get secret s3-secret -o yaml
-
 apiVersion: v1
 data:
   AWS_ACCESS_KEY_ID: PHlvdXItYXdzLWFjY2Vzcy1rZXktaWQtaGVyZT4=
@@ -134,14 +177,14 @@ type: Opaque
 
 Now, you can create a Snapshot object using this secret. Following parameters are available for `S3` backend.
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.databaseName`      | `Required`. Name of database                                                    |
-| `spec.storageSecretName` | `Required`. Name of storage secret                                              |
+| Parameter                | Description |
+| ------------------------ | ----------- |
+| `spec.databaseName`      | `Required`. Name of database |
+| `spec.storageSecretName` | `Required`. Name of storage secret |
 | `spec.s3.endpoint`       | `Required`. For S3, use `s3.amazonaws.com`. If your bucket is in a different location, S3 server (s3.amazonaws.com) will redirect snapshot to the correct endpoint. For an S3-compatible server that is not Amazon (like Minio), or is only available via HTTP, you can specify the endpoint like this: `http://server:port`. |
-| `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
-| `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store                |
-| `spec.resources`         | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
+| `spec.s3.bucket`         | `Required`. Name of Bucket  |
+| `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store |
+| `spec.podTemplate`       | `Optional`. KubeDB provides a template for database Backup pod through `spec.podTemplate`. |
 
 ```console
 $ kubectl create -f ./docs/examples/snapshot/s3/s3-snapshot.yaml
@@ -150,7 +193,6 @@ snapshot "s3-snapshot" created
 
 ```yaml
 $ kubectl get snapshot s3-snapshot -o yaml
-
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
@@ -169,23 +211,25 @@ spec:
     endpoint: 's3.amazonaws.com'
     bucket: kubedb-qa
     prefix: demo
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
 ```
 
 ### Google Cloud Storage (GCS)
 
 KubeDB supports Google Cloud Storage(GCS) as snapshot storage backend. To configure this backend, following secret keys are needed:
 
-| Key                               | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
-| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
+|                Key                | Description |
+| --------------------------------- | ----------- |
+| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key |
 
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
@@ -216,13 +260,13 @@ type: Opaque
 
 Now, you can create a Snapshot object using this secret. Following parameters are available for `gcs` backend.
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.databaseName`      | `Required`. Name of database                                                    |
-| `spec.storageSecretName` | `Required`. Name of storage secret                                              |
-| `spec.gcs.bucket`        | `Required`. Name of Bucket                                                      |
-| `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot will be stored               |
-| `spec.resources`         | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
+| Parameter                | Description |
+| ------------------------ | ----------- |
+| `spec.databaseName`      | `Required`. Name of database |
+| `spec.storageSecretName` | `Required`. Name of storage secret |
+| `spec.gcs.bucket`        | `Required`. Name of Bucket |
+| `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot will be stored |
+| `spec.podTemplate`          | `Optional`. KubeDB provides a template for database Backup pod through `spec.podTemplate`.|
 
 ```console
 $ kubectl create -f ./docs/examples/snapshot/gcs/gcs-snapshot.yaml
@@ -231,7 +275,6 @@ snapshot "gcs-snapshot" created
 
 ```yaml
 $ kubectl get snapshot gcs-snapshot -o yaml
-
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
@@ -249,23 +292,25 @@ spec:
   gcs:
     bucket: bucket-for-snapshot
     prefix: demo
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
 ```
 
 ### Microsoft Azure Storage
 
 KubeDB supports Microsoft Azure Storage as snapshot storage backend. To configure this backend, following secret keys are needed:
 
-| Key                     | Description                                                |
-|-------------------------|------------------------------------------------------------|
-| `AZURE_ACCOUNT_NAME`    | `Required`. Azure Storage account name                     |
-| `AZURE_ACCOUNT_KEY`     | `Required`. Azure Storage account key                      |
+|         Key          |              Description               |
+| -------------------- | -------------------------------------- |
+| `AZURE_ACCOUNT_NAME` | `Required`. Azure Storage account name |
+| `AZURE_ACCOUNT_KEY`  | `Required`. Azure Storage account key  |
 
 ```console
 $ echo -n '<your-azure-storage-account-name>' > AZURE_ACCOUNT_NAME
@@ -278,7 +323,6 @@ secret "azure-secret" created
 
 ```yaml
 $ kubectl get secret azure-secret -o yaml
-
 apiVersion: v1
 data:
   AZURE_ACCOUNT_KEY: PHlvdXItYXp1cmUtc3RvcmFnZS1hY2NvdW50LWtleT4=
@@ -296,13 +340,13 @@ type: Opaque
 
 Now, you can create a Snapshot  using this secret. Following parameters are available for `Azure` backend.
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.databaseName`      | `Required`. Name of database                                                    |
-| `spec.storageSecretName` | `Required`. Name of storage secret                                              |
-| `spec.azure.container`   | `Required`. Name of Storage container                                           |
-| `spec.azure.prefix`      | `Optional`. Path prefix into container where snapshot will be stored            |
-| `spec.resources`         | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
+| Parameter                | Description |
+| ------------------------ | ----------- |
+| `spec.databaseName`      | `Required`. Name of database |
+| `spec.storageSecretName` | `Required`. Name of storage secret |
+| `spec.azure.container`   | `Required`. Name of Storage container |
+| `spec.azure.prefix`      | `Optional`. Path prefix into container where snapshot will be stored |
+| `spec.podTemplate`       | `Optional`. KubeDB provides a template for database Backup pod through `spec.podTemplate`. |
 
 ```console
 $ kubectl create -f ./docs/examples/snapshot/azure/azure-snapshot.yaml
@@ -311,7 +355,6 @@ snapshot "azure-snapshot" created
 
 ```yaml
 $ kubectl get snapshot azure-snapshot -o yaml
-
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
@@ -329,39 +372,41 @@ spec:
   azure:
     container: bucket-for-snapshot
     prefix: demo
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
 ```
 
 ### OpenStack Swift
 
 KubeDB supports OpenStack Swift as snapshot storage backend. To configure this backend, following secret keys are needed:
 
-| Key                      | Description                                                |
-|--------------------------|------------------------------------------------------------|
-| `ST_AUTH`                | For keystone v1 authentication                             |
-| `ST_USER`                | For keystone v1 authentication                             |
-| `ST_KEY`                 | For keystone v1 authentication                             |
-| `OS_AUTH_URL`            | For keystone v2 authentication                             |
-| `OS_REGION_NAME`         | For keystone v2 authentication                             |
-| `OS_USERNAME`            | For keystone v2 authentication                             |
-| `OS_PASSWORD`            | For keystone v2 authentication                             |
-| `OS_TENANT_ID`           | For keystone v2 authentication                             |
-| `OS_TENANT_NAME`         | For keystone v2 authentication                             |
-| `OS_AUTH_URL`            | For keystone v3 authentication                             |
-| `OS_REGION_NAME`         | For keystone v3 authentication                             |
-| `OS_USERNAME`            | For keystone v3 authentication                             |
-| `OS_PASSWORD`            | For keystone v3 authentication                             |
-| `OS_USER_DOMAIN_NAME`    | For keystone v3 authentication                             |
-| `OS_PROJECT_NAME`        | For keystone v3 authentication                             |
-| `OS_PROJECT_DOMAIN_NAME` | For keystone v3 authentication                             |
-| `OS_STORAGE_URL`         | For authentication based on tokens                         |
-| `OS_AUTH_TOKEN`          | For authentication based on tokens                         |
+|           Key            |            Description             |
+| ------------------------ | ---------------------------------- |
+| `ST_AUTH`                | For keystone v1 authentication     |
+| `ST_USER`                | For keystone v1 authentication     |
+| `ST_KEY`                 | For keystone v1 authentication     |
+| `OS_AUTH_URL`            | For keystone v2 authentication     |
+| `OS_REGION_NAME`         | For keystone v2 authentication     |
+| `OS_USERNAME`            | For keystone v2 authentication     |
+| `OS_PASSWORD`            | For keystone v2 authentication     |
+| `OS_TENANT_ID`           | For keystone v2 authentication     |
+| `OS_TENANT_NAME`         | For keystone v2 authentication     |
+| `OS_AUTH_URL`            | For keystone v3 authentication     |
+| `OS_REGION_NAME`         | For keystone v3 authentication     |
+| `OS_USERNAME`            | For keystone v3 authentication     |
+| `OS_PASSWORD`            | For keystone v3 authentication     |
+| `OS_USER_DOMAIN_NAME`    | For keystone v3 authentication     |
+| `OS_PROJECT_NAME`        | For keystone v3 authentication     |
+| `OS_PROJECT_DOMAIN_NAME` | For keystone v3 authentication     |
+| `OS_STORAGE_URL`         | For authentication based on tokens |
+| `OS_AUTH_TOKEN`          | For authentication based on tokens |
 
 ```console
 $ echo -n '<your-auth-url>' > OS_AUTH_URL
@@ -382,7 +427,6 @@ secret "swift-secret" created
 
 ```yaml
 $ kubectl get secret azure-secret -o yaml
-
 apiVersion: v1
 data:
   OS_AUTH_URL: PHlvdXItYXV0aC11cmw+
@@ -404,13 +448,13 @@ type: Opaque
 
 Now, you can create a Snapshot object using this secret. Following parameters are available for `Swift` backend.
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.databaseName`      | `Required`. Name of database                                                    |
-| `spec.storageSecretName` | `Required`. Name of storage secret                                              |
-| `spec.swift.container`   | `Required`. Name of Storage container                                           |
-| `spec.swift.prefix`      | `Optional`. Path prefix into container where snapshot will be stored            |
-| `spec.resources`         | `Optional`. Compute resources required by Jobs used to take snapshot or initialize databases from snapshot.  To learn more, visit [here](http://kubernetes.io/docs/user-guide/compute-resources/). |
+| Parameter                | Description |
+| ------------------------ | ----------- |
+| `spec.databaseName`      | `Required`. Name of database |
+| `spec.storageSecretName` | `Required`. Name of storage secret |
+| `spec.swift.container`   | `Required`. Name of Storage container |
+| `spec.swift.prefix`      | `Optional`. Path prefix into container where snapshot will be stored |
+| `spec.podTemplate`       | `Optional`. KubeDB provides a template for database Backup pod through `spec.podTemplate`. |
 
 ```console
 $ kubectl create -f ./docs/examples/snapshot/swift/swift-snapshot.yaml
@@ -437,14 +481,42 @@ spec:
   swift:
     container: bucket-for-snapshot
     prefix: demo
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
 ```
+
+### spec.podTemplate
+
+KubeDB allows providing a template for database Backup pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the Job created for database backup.
+
+KubeDB accept following fields to set in `spec.podTemplate:`
+
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (statefulset's annotation)
+- spec:
+  - args
+  - env
+  - resources
+  - livenessProbe
+  - readinessProbe
+  - lifecycle
+  - imagePullSecrets
+  - nodeSelector
+  - affinity
+  - schedulerName
+  - tolerations
+  - priorityClassName
+  - priority
+  - securityContext
 
 ## Next Steps
 
