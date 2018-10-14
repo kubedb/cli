@@ -33,11 +33,11 @@ This tutorial will show you how to monitor KubeDB databases using [Prometheus](h
   demo          Active    10s
   ```
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Monitor with builtin Prometheus
 
-User can define `spec.monitor` either while creating the CRD object, Or can update the spec of existing CRD object to add the `spec.monitor` part. Below is the `MongoDB` object created in this tutorial.
+User can define `spec.monitor` either while creating the CRD object, Or can update the spec of existing CRD object to add the `spec.monitor` part. Below is the `Redis` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -65,9 +65,9 @@ redis.kubedb.com/redis-mon-prometheus created
 
 Here,
 
-- `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `MongoDB Exporter` and will receive metrics from exporter.
+- `spec.monitor` specifies that built-in [Prometheus](https://github.com/prometheus/prometheus) is used to monitor this database instance. KubeDB operator will configure the service of this database in a way that the Prometheus server will automatically find out the service endpoint aka `Redis Exporter` and will receive metrics from exporter.
 
-KubeDB will create a separate stats service with name `<mongodb-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the MongoDB is successfully running.
+KubeDB will create a separate stats service with name `<redis-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the Redis is successfully running.
 
 ```console
 $ kubedb get rd -n demo

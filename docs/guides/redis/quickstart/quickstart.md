@@ -354,7 +354,7 @@ status:
   ...
 ```
 
-If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets and PVCs. So, users still can access the stored data in the cloud storage buckets (if there is any) as well as PVCs.
+If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets and PVCs. So, users can still access the stored data in the cloud storage buckets (if there is any) as well as PVCs.
 
 ## Delete DormantDatabase
 

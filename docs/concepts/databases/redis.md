@@ -120,8 +120,10 @@ KubeDB allows providing a template for database pod through `spec.podTemplate`. 
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
-- annotations (pod's annotation)
-- controller.annotations (statefulset's annotation)
+- metadata:
+  - annotations (pod's annotation)
+- controller:
+  - annotations (statefulset's annotation)
 - spec:
   - args
   - env
@@ -142,7 +144,7 @@ KubeDB accept following fields to set in `spec.podTemplate:`
 Uses of some field of `spec.podTemplate` is described below,
 
 #### spec.podTemplate.spec.args
- `spec.podTemplate.spec.args` is an optional field. This can be used to provide additional arguments to database installation. To learn about available args of `mongod`, visit [here](https://docs.mongodb.com/manual/reference/program/mongod/).
+ `spec.podTemplate.spec.args` is an optional field. This can be used to provide additional arguments to database installation.
 
 ### spec.podTemplate.spec.env
 
@@ -183,15 +185,17 @@ You can also provide a template for the services created by KubeDB operator for 
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
-- annotations
-- type
-- ports
-- clusterIP
-- externalIPs
-- loadBalancerIP
-- loadBalancerSourceRanges
-- externalTrafficPolicy
-- healthCheckNodePort
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
 
 ### spec.updateStrategy
 
@@ -212,7 +216,7 @@ Following table show what KubeDB does when you delete Redis crd for different te
 
 |          Behaviour          | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
 | --------------------------- | :------------: | :------: | :------: | :------: |
-| 1. Nullify Delete operation |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 1. Block Delete operation   |    &#10003;    | &#10007; | &#10007; | &#10007; |
 | 2. Create Dormant Database  |    &#10007;    | &#10003; | &#10007; | &#10007; |
 | 3. Delete StatefulSet       |    &#10007;    | &#10003; | &#10003; | &#10003; |
 | 4. Delete Services          |    &#10007;    | &#10003; | &#10003; | &#10003; |
