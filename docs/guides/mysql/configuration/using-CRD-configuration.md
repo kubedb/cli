@@ -4,7 +4,7 @@ menu:
   docs_0.9.0-rc.0:
     identifier: my-crd-configuration
     name: Using CRD Config
-    parent: my-configuration
+    parent: my-custom-config
     weight: 15
 menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
