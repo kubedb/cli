@@ -1,12 +1,12 @@
 ---
 title: Initialize MongoDB from Snapshot
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: mg-using-snapshot-initialization
     name: From Snapshot
     parent: mg-initialization-mongodb
     weight: 15
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -23,7 +23,7 @@ This tutorial will show you how to use KubeDB to initialize a MongoDB database w
 
 - This tutorial assumes that you have created a namespace `demo` and a snapshot `snapshot-infant`. Follow the steps [here](/docs/guides/mongodb/snapshot/backup-and-restore.md) to create a database and take [instant snapshot](/docs/guides/mongodb/snapshot/backup-and-restore.md#instant-backups), if you have not done so already. If you have changed the name of either namespace or snapshot object, please modify the YAMLs used in this tutorial accordingly.
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Create MongoDB with Init-Snapshot
 
@@ -51,7 +51,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/Initialization/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/Initialization/demo-2.yaml
 mongodb.kubedb.com/mgo-init-snapshot created
 ```
 

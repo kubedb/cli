@@ -1,11 +1,11 @@
 ---
 title: Kubedb Get
 menu:
-  docs_0.9.0-beta.1:
+  docs_0.9.0-rc.0:
     identifier: kubedb-get
     name: Kubedb Get
     parent: reference
-menu_name: docs_0.9.0-beta.1
+menu_name: docs_0.9.0-rc.0
 section_menu_id: reference
 ---
 ## kubedb get
@@ -79,7 +79,6 @@ kubedb get [(-o|--output=)json|yaml|wide|custom-columns=...|custom-columns-file=
       --show-labels                   When printing, show all labels as the last column (default hide labels column)
       --sort-by string                If non-empty, sort list types using this field specification.  The field specification is expressed as a JSONPath expression (e.g. '{.metadata.name}'). The field in the API resource specified by this JSONPath expression must be an integer or a string.
       --template string               Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
-      --use-openapi-print-columns     If true, use x-kubernetes-print-column metadata (if present) from the OpenAPI schema for displaying a resource.
   -w, --watch                         After listing/getting the requested object, watch for changes. Uninitialized objects are excluded if no object name is provided.
       --watch-only                    Watch for changes to the requested object(s), without listing/getting first.
 ```

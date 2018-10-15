@@ -1,12 +1,12 @@
 ---
 title: RedisVersion
 menu:
-  docs_0.8.0:
+  docs_0.9.0-rc.0:
     identifier: redis-version
     name: RedisVersion
     parent: catalog
     weight: 30
-menu_name: docs_0.8.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: concepts
 ---
 
@@ -47,7 +47,7 @@ We follow this convention for naming RedisVersion crd:
 
 - Name format: `{Original PosgreSQL image verion}-{modification tag}`
 
-We modify original Redis docker image to support Redis clustering and re-tag the image with v1,v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use RedisVersion crd with highest modification tag to enjoy the latest features.
+We modify original Redis docker image to support Redis clustering and re-tag the image with v1, v2 etc. modification tag. An image with higher modification tag will have more feature than the images with lower modification tag. Hence, it is recommended to use RedisVersion crd with highest modification tag to enjoy the latest features.
 
 ### spec.version
 

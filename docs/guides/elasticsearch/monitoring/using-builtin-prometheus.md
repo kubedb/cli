@@ -1,12 +1,12 @@
 ---
 title: Monitor Elasticsearch using Builtin Prometheus Discovery
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: es-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: es-monitoring-elasticsearch
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -32,7 +32,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 This tutorial assumes that you are familiar with Elasticsearch concept.
 
@@ -66,7 +66,7 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
 elasticsearch.kubedb.com/builtin-prom-es created
 ```
 
@@ -178,7 +178,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap/prometheus-server-conf created
 ```
 
@@ -225,7 +225,7 @@ spec:
 Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus-server created
 serviceaccount/prometheus-server created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created

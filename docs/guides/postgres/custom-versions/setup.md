@@ -1,12 +1,12 @@
 ---
 title: Setup Custom PostgresVersions
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: pg-custom-versions-setup-postgres
     name: Overview
     parent: pg-custom-versions-postgres
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -66,7 +66,7 @@ spec:
   db:
     image: "myco/postgres:timescale-0.9.1"
   exporter:
-    image: "kubedb/operator:0.9.0-beta.1"
+    image: "kubedb/postgres_exporter:v0.4.6"
   tools:
     image: "kubedb/postgres-tools:10.2-v1"
 ```

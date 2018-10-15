@@ -1,12 +1,12 @@
 ---
 title: Instant Backup of MongoDB
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: mg-backup-and-restore-snapshot
     name: Instant Backup
     parent: mg-snapshot-mongodb
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 
@@ -16,7 +16,7 @@ section_menu_id: guides
 
 This tutorial will show you how to take snapshots of a KubeDB managed MongoDB database.
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Before You Begin
 
@@ -42,7 +42,7 @@ This tutorial will show you how to take snapshots of a KubeDB managed MongoDB da
   NAME          STATUS    AGE
   demo          Active    1m
 
-  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-1.yaml
+  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/snapshot/demo-1.yaml
   mongodb.kubedb.com/mgo-infant created
   ```
 
@@ -101,7 +101,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/snapshot/demo-2.yaml
 snapshot.kubedb.com/snapshot-infant created
 
 $ kubedb get snap -n demo
@@ -256,7 +256,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mongodb/snapshot/demo-3.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mongodb/snapshot/demo-3.yaml
 mongodb.kubedb.com/mgo-recovered created
 ```
 

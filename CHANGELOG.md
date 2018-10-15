@@ -1,5 +1,35 @@
 # Change Log
 
+## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
+
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-beta.1...HEAD)
+
+**Merged pull requests:**
+
+- Cleanup postgres and elasticsearch docs [\#336](https://github.com/kubedb/cli/pull/336) ([tamalsaha](https://github.com/tamalsaha))
+- Update chart and installer for webhook xray [\#335](https://github.com/kubedb/cli/pull/335) ([tamalsaha](https://github.com/tamalsaha))
+- Update kubernetes client libraries to 1.12.0 [\#334](https://github.com/kubedb/cli/pull/334) ([tamalsaha](https://github.com/tamalsaha))
+- Update dependencies to kubernetes 1.12.0 [\#333](https://github.com/kubedb/cli/pull/333) ([tamalsaha](https://github.com/tamalsaha))
+- Fix addition expression on installer script [\#332](https://github.com/kubedb/cli/pull/332) ([the-redback](https://github.com/the-redback))
+-  Updated Snapshot concept for 0.9.0 [\#331](https://github.com/kubedb/cli/pull/331) ([the-redback](https://github.com/the-redback))
+- Updated Memcached docs for 0.9.0 [\#330](https://github.com/kubedb/cli/pull/330) ([the-redback](https://github.com/the-redback))
+- Add appdatalog to forced dep list [\#329](https://github.com/kubedb/cli/pull/329) ([tamalsaha](https://github.com/tamalsaha))
+- Add Support for Elasticsearch 6.4 [\#328](https://github.com/kubedb/cli/pull/328) ([hossainemruz](https://github.com/hossainemruz))
+- Add RBAC permission for appcatalog [\#327](https://github.com/kubedb/cli/pull/327) ([tamalsaha](https://github.com/tamalsaha))
+- Add validation webhook for Namespace deletion [\#326](https://github.com/kubedb/cli/pull/326) ([tamalsaha](https://github.com/tamalsaha))
+- Support LogLevel in chart [\#325](https://github.com/kubedb/cli/pull/325) ([tamalsaha](https://github.com/tamalsaha))
+- Added missing chart of mysql:8-v1 catalog [\#324](https://github.com/kubedb/cli/pull/324) ([the-redback](https://github.com/the-redback))
+- Update dep list [\#323](https://github.com/kubedb/cli/pull/323) ([tamalsaha](https://github.com/tamalsaha))
+- Fix small typo in docs/README.md [\#322](https://github.com/kubedb/cli/pull/322) ([CemalUnal](https://github.com/CemalUnal))
+- Updated Redis doc for 0.9.0 [\#321](https://github.com/kubedb/cli/pull/321) ([the-redback](https://github.com/the-redback))
+- Format user roles [\#320](https://github.com/kubedb/cli/pull/320) ([tamalsaha](https://github.com/tamalsaha))
+- Always use json syntax for verbs in installers [\#319](https://github.com/kubedb/cli/pull/319) ([tamalsaha](https://github.com/tamalsaha))
+- Start next dev cycle [\#317](https://github.com/kubedb/cli/pull/317) ([tamalsaha](https://github.com/tamalsaha))
+- Updated MySQL doc for 0.9.0 [\#310](https://github.com/kubedb/cli/pull/310) ([the-redback](https://github.com/the-redback))
+- MongoDB docs updated for 0.9.0 [\#304](https://github.com/kubedb/cli/pull/304) ([the-redback](https://github.com/the-redback))
+- Update docs for release 0.9.0 \(Elasticsearch\) [\#303](https://github.com/kubedb/cli/pull/303) ([hossainemruz](https://github.com/hossainemruz))
+- Update docs for release 0.9.0 \(Postgres\) [\#280](https://github.com/kubedb/cli/pull/280) ([hossainemruz](https://github.com/hossainemruz))
+
 ## [0.9.0-beta.1](https://github.com/kubedb/cli/tree/0.9.0-beta.1) (2018-09-30)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-beta.0...0.9.0-beta.1)
 

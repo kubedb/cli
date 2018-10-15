@@ -1,12 +1,12 @@
 ---
 title: ElasticsearchVersion
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: elasticsearh-version
     name: ElasticsearchVersion
     parent: catalog
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: concepts
 ---
 
@@ -57,7 +57,7 @@ We modify original Elasticsearch docker image to support additional features lik
 
 ### spec.deprecated
 
-`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/elasticsearch:6.2.4` docker image to support custom configuration and re-tagged as `kubedb/elasticsearch:6.2.4-v1`. Now, KubeDB `0.9.0` supports providing custom configuration which required `kubedb/elasticsearch:6.2.4-v1` docker image. So, we have marked `kubedb/elasticsearch:6.2.4` as deprecated in KubeDB `0.9.0`.
+`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/elasticsearch:6.2.4` docker image to support custom configuration and re-tagged as `kubedb/elasticsearch:6.2.4-v1`. Now, KubeDB `0.9.0-rc.0` supports providing custom configuration which required `kubedb/elasticsearch:6.2.4-v1` docker image. So, we have marked `kubedb/elasticsearch:6.2.4` as deprecated in KubeDB `0.9.0-rc.0`.
 
 The default value of this field is `false`. If `spec.depcrecated` is set `true`, KubeDB operator will not create the database and other respective resources for this version.
 

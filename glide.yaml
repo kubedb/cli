@@ -25,7 +25,7 @@ import:
 - package: github.com/spf13/cobra
   version: v0.0.3
 - package: github.com/spf13/pflag
-  version: v1.0.1
+  version: v1.0.3
 - package: github.com/yudai/gojsondiff
   version: 1.0.0
 - package: k8s.io/api

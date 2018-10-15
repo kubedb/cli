@@ -1,12 +1,12 @@
 ---
 title: Monitoring Elasticsearch using Coreos Prometheus Operator
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: es-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: es-monitoring-elasticsearch
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -32,7 +32,7 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 This tutorial assumes that you are familiar with Elasticsearch concept.
 
@@ -41,7 +41,7 @@ This tutorial assumes that you are familiar with Elasticsearch concept.
 Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
 namespace/demo configured
 clusterrole.rbac.authorization.k8s.io/prometheus-operator created
 serviceaccount/prometheus-operator created
@@ -72,7 +72,7 @@ servicemonitors.monitoring.coreos.com         2018-10-08T12:53:47Z
 Once the Prometheus CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus created
 serviceaccount/prometheus created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus created
@@ -155,7 +155,7 @@ Here,
 Now create this Elasticsearch object with monitoring spec
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
 elasticsearch.kubedb.com/coreos-prom-es created
 ```
 

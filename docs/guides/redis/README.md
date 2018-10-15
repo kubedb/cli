@@ -1,16 +1,16 @@
 ---
 title: Redis
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: rd-readme-redis
     name: Redis
     parent: rd-redis-guides
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0/guides/redis/
+url: /docs/0.9.0-rc.0/guides/redis/
 aliases:
-  - /docs/0.8.0/guides/redis/README/
+  - /docs/0.9.0-rc.0/guides/redis/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -42,13 +42,24 @@ aliases:
 
 ## Supported Redis Versions
 
-| KubeDB Version | Redis:4, 4.0, 4.0.6 | 4-v1, 4.0-v1, 4.0.6-v1 |
-| :------------: | :-----------------: | :--------------------: |
-| 0.1.0 - 0.7.0  |      &#10007;       |        &#10007;        |
-|     0.8.0      |      &#10003;       |        &#10007;        |
-|  0.9.0-beta.1  |      &#10007;       |        &#10003;        |
+| KubeDB Version | Redis:4.0.6 |
+|:--------------:|:-----------:|
+| 0.1.0 - 0.7.0  | &#10007;    |
+| 0.8.0          | &#10003;    |
+| 0.9.0-rc.0     | &#10003;    |
 
-<br/>
+## Supported RedisVersion CRD
+
+Here, &#10003; means supported and &#10007; means deprecated.
+
+| NAME     | VERSION | KubeDB: 0.9.0-rc.0 |
+|----------|---------|--------------------|
+| 4        | 4       | &#10007;           |
+| 4-v1     | 4       | &#10003;           |
+| 4.0      | 4.0     | &#10007;           |
+| 4.0-v1   | 4.0     | &#10003;           |
+| 4.0.6    | 4.0.6   | &#10007;           |
+| 4.0.6-v1 | 4.0.6   | &#10003;           |
 
 ## User Guide
 

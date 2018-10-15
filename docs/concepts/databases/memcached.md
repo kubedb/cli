@@ -1,12 +1,12 @@
 ---
 title: Memcached
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: memcached-db
     name: Memcached
     parent: databases
     weight: 15
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: concepts
 ---
 
@@ -202,7 +202,7 @@ Following table show what KubeDB does when you delete Memcached crd for differen
 
 |              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
 | ----------------------------------- | :------------: | :------: | :------: | :------: |
-| 1. Nullify Delete operation         |    &#10003;    | &#10007; | &#10007; | &#10007; |
+| 1. Block Delete operation           |    &#10003;    | &#10007; | &#10007; | &#10007; |
 | 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |
 | 3. Delete StatefulSet               |    &#10007;    | &#10003; | &#10003; | &#10003; |
 | 4. Delete Services                  |    &#10007;    | &#10003; | &#10003; | &#10003; |

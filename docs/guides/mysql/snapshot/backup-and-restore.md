@@ -1,12 +1,12 @@
 ---
 title: Instant Backup of MySQL
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: my-backup-and-restore-snapshot
     name: Instant Backup
     parent: my-snapshot-mysql
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -15,7 +15,7 @@ section_menu_id: guides
 
 This tutorial will show you how to take snapshots of a KubeDB managed MySQL database.
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in github repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: The yaml files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Before You Begin
 
@@ -41,7 +41,7 @@ This tutorial will show you how to take snapshots of a KubeDB managed MySQL data
   NAME          STATUS    AGE
   demo          Active    1m
   
-  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/snapshot/demo-1.yaml
+  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mysql/snapshot/demo-1.yaml
   mysql.kubedb.com/mysql-infant created
   ```
 
@@ -100,7 +100,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/snapshot/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mysql/snapshot/demo-2.yaml
 snapshot.kubedb.com/snap-mysql-infant created
 
 $ kubedb get snap -n demo
@@ -248,7 +248,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/docs/examples/mysql/snapshot/demo-3.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/mysql/snapshot/demo-3.yaml
 mysql.kubedb.com/mysql-recovered created
 ```
 

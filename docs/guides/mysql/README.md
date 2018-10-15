@@ -1,16 +1,16 @@
 ---
 title: MySQL
 menu:
-  docs_0.9.0-beta.0:
+  docs_0.9.0-rc.0:
     identifier: my-readme-mysql
     name: MySQL
     parent: my-mysql-guides
     weight: 10
-menu_name: docs_0.9.0-beta.0
+menu_name: docs_0.9.0-rc.0
 section_menu_id: guides
-url: /docs/0.8.0/guides/mysql/
+url: /docs/0.9.0-rc.0/guides/mysql/
 aliases:
-  - /docs/0.8.0/guides/mysql/README/
+  - /docs/0.9.0-rc.0/guides/mysql/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -42,13 +42,27 @@ aliases:
 
 ## Supported MySQL Versions
 
-| KubeDB Version | MySQL 8.0, 8 |  5.7, 5  | 8.0-v1, 8-v1 | 5.7-v1, 5-v1 |
-| :------------: | :----------: | :------: | :----------: | :----------: |
-| 0.1.0 - 0.7.0  |   &#10007;   | &#10007; |   &#10007;   |   &#10007;   |
-|     0.8.0      |   &#10003;   | &#10003; |   &#10007;   |   &#10007;   |
-|  0.9.0-beta.1  |   &#10007;   | &#10007; |   &#10003;   |   &#10003;   |
+| KubeDB Version | MySQL:8.0 | MySQL:5.7 |
+|:--------------:|:---------:|:---------:|
+| 0.1.0 - 0.7.0  | &#10007;  | &#10007;  |
+| 0.8.0          | &#10003;  | &#10003;  |
+| 0.9.0-rc.0     | &#10003;  | &#10003;  |
 
-<br/>
+## Supported MySQLVersion CRD
+
+Here, &#10003; means supported and &#10007; means deprecated.
+
+| NAME     | VERSION | KubeDB: 0.9.0-rc.0 |
+|----------|---------|--------------------|
+| 5        | 5       | &#10007;           |
+| 5-v1     | 5       | &#10003;           |
+| 5.7      | 5.7     | &#10007;           |
+| 5.7-v1   | 5.7     | &#10003;           |
+| 8        | 8       | &#10007;           |
+| 8-v1     | 8       | &#10003;           |
+| 8.0      | 8.0     | &#10007;           |
+| 8.0-v1   | 8.0     | &#10003;           |
+
 
 ## External tools dependency
 

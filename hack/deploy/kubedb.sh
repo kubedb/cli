@@ -129,7 +129,7 @@ export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
 export KUBEDB_CATALOG=${KUBEDB_CATALOG:-all}
 export KUBEDB_DOCKER_REGISTRY=kubedb
-export KUBEDB_OPERATOR_TAG=0.9.0-beta.1
+export KUBEDB_OPERATOR_TAG=0.9.0-rc.0
 export KUBEDB_OPERATOR_NAME=operator
 export KUBEDB_IMAGE_PULL_SECRET=
 export KUBEDB_IMAGE_PULL_POLICY=IfNotPresent
@@ -141,7 +141,7 @@ export KUBEDB_BYPASS_VALIDATING_WEBHOOK_XRAY=false
 export KUBEDB_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
-export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0-beta.1/"
+export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/"
 if [ "$APPSCODE_ENV" = "dev" ]; then
   detect_tag
   export SCRIPT_LOCATION="cat "
