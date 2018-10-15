@@ -115,8 +115,6 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8-v1"
-  {{ end }}
-
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
