@@ -213,5 +213,4 @@ namespace "demo" deleted
 - Detail concepts of [Elasticsearch object](/docs/concepts/databases/elasticsearch.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Use [private Docker registry](/docs/guides/elasticsearch/private-registry/using-private-registry.md) to deploy Elasticsearch with KubeDB.
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

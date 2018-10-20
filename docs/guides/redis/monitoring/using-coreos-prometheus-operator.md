@@ -314,5 +314,4 @@ kubectl delete ns demo
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

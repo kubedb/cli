@@ -175,5 +175,4 @@ $ kubectl delete ns demo
 - Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/elasticsearch/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [Elasticsearch object](/docs/concepts/databases/elasticsearch.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

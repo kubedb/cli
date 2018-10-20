@@ -259,5 +259,4 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 - Use [kubedb cli](/docs/guides/mongodb/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

@@ -284,5 +284,4 @@ kubectl delete ns demo
 - Use [private Docker registry](/docs/guides/mysql/private-registry/using-private-registry.md) to deploy MySQL with KubeDB.
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
 - Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
