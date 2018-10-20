@@ -375,5 +375,4 @@ If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination po
 
 - Learn how to use KubeDB to run a MySQL database [here](/docs/guides/mysql/README.md).
 - See the list of supported storage providers for snapshots [here](/docs/concepts/snapshot.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

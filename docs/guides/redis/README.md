@@ -70,5 +70,4 @@ Here, &#10003; means supported and &#10007; means deprecated.
 - Use [kubedb cli](/docs/guides/redis/cli/cli.md) to manage databases like kubectl for Kubernetes.
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

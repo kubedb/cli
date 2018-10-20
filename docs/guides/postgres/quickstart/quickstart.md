@@ -480,5 +480,4 @@ If you are just testing some basic functionalities, you might want to avoid addi
 - Detail concepts of [Postgres object](/docs/concepts/databases/postgres.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy PostgreSQL with KubeDB.
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

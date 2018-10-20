@@ -176,5 +176,4 @@ kubectl delete ns demo
 - Detail concepts of [MongoDB object](/docs/concepts/databases/mongodb.md).
 - Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

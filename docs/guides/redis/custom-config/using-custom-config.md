@@ -171,5 +171,4 @@ kubectl delete ns demo
 ## Next Steps
 
 - Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/README.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

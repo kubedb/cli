@@ -157,5 +157,4 @@ kubectl delete ns demo
 - Detail concepts of [MySQL object](/docs/concepts/databases/mysql.md).
 - Detail concepts of [MySQLVersion object](/docs/concepts/catalog/mysql.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Wondering what features are coming next? Please visit [here](/docs/roadmap.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
