@@ -99,9 +99,7 @@ DEP_LIST = [
     },
     {
       "package": "github.com/coreos/prometheus-operator",
-      "repo": "https://github.com/kmodules/prometheus-operator.git",
-      "vcs": "git",
-      "version": "k-1.12"
+      "version": "v0.25.0"
     },
     {
       "package": "k8s.io/api",
