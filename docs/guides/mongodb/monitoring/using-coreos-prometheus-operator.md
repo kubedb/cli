@@ -158,13 +158,13 @@ spec:
       interval: 10s
 ```
 
-|  Keys  |  Value |  Description |
-|--|--|--|
-| `spec.monitor.agent` | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator` |
+| Keys                                | Value  | Description                                                                                                  |
+|-------------------------------------|--------|--------------------------------------------------------------------------------------------------------------|
+| `spec.monitor.agent`                | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator`  |
 | `spec.monitor.prometheus.namespace` | string | `Required`. Indicates namespace where service monitors are created. This must be the same namespace of the Prometheus instance. |
-| `spec.monitor.prometheus.labels` | map | `Required`. Indicates labels applied to service monitor.                                                    |
-| `spec.monitor.prometheus.interval` | string | `Optional`. Indicates the scrape interval for database exporter endpoint (eg, '10s')                        |
-| `spec.monitor.prometheus.port` | int |`Optional`. Indicates the port for database exporter endpoint (default is `56790`)|
+| `spec.monitor.prometheus.labels`    | map    | `Required`. Indicates labels applied to service monitor.                                                     |
+| `spec.monitor.prometheus.interval`  | string | `Optional`. Indicates the scrape interval for database exporter endpoint (eg, '10s')                         |
+| `spec.monitor.prometheus.port`      | int    | `Optional`. Indicates the port for database exporter endpoint (default is `56790`)                           |
 
 __Known Limitations:__ If the database password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/kubedb/project/issues/53).
 
