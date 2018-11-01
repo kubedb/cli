@@ -93,7 +93,7 @@ Here,
 - `spec.version` is name of the RedisVersion crd where the docker images are specified. In this tutorial, a Redis 4.0-v1 database is created.
 - `spec.storageType` specifies the type of storage that will be used for Redis database. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Redis database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
 - `spec.storage` specifies PVC spec that will be dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
-- `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Redis` crd or which resources KubeDB should keep or delete when you delete `Redis` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](docs/concepts/databases/redis.md#specterminationpolicy)
+- `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Redis` crd or which resources KubeDB should keep or delete when you delete `Redis` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/redis.md#specterminationpolicy)
 
 > Note: spec.storage section is used to create PVC for database pod. It will create PVC with storage size specified instorage.resources.requests field. Don't specify limits here. PVC does not get resized automatically.
 
@@ -243,7 +243,7 @@ Error from server (BadRequest): admission webhook "redis.validators.kubedb.com" 
 
 Now, run `kubedb edit rd redis-quickstart -n demo` to set `spec.terminationPolicy` to `Resume` (which creates `domantdatabase` when redis is deleted and keeps PVCs intact) or remove this field (which default to `Resume`). Then you will be able to delete/pause the database. 
 
-Learn details of all `TerminationPolicy` [here](docs/concepts/databases/redis.md#specterminationpolicy)
+Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/redis.md#specterminationpolicy)
 
 ## Pause Database
 

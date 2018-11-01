@@ -86,7 +86,7 @@ Here,
 - `spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. It defaults to 1.
 - `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
 - `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
-- `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Memcached` crd or which resources KubeDB should keep or delete when you delete `Memcached` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](docs/concepts/databases/memcached.md#specterminationpolicy)
+- `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Memcached` crd or which resources KubeDB should keep or delete when you delete `Memcached` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/memcached.md#specterminationpolicy)
 
 KubeDB operator watches for `Memcached` objects using Kubernetes api. When a `Memcached` object is created, KubeDB operator will create a new Deployment and a ClusterIP Service with the matching Memcached object name. No Memcached specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
@@ -230,7 +230,7 @@ Error from server (BadRequest): admission webhook "memcached.validators.kubedb.c
 
 Now, run `kubedb edit mc memcd-quickstart -n demo` to set `spec.terminationPolicy` to `Resume` (which creates `domantdatabase` when memcached is deleted and keeps PVC, snapshots, Secrets intact) or remove this field (which default to `Resume`). Then you will be able to delete/pause the database. 
 
-Learn details of all `TerminationPolicy` [here](docs/concepts/databases/memcached.md#specterminationpolicy)
+Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/memcached.md#specterminationpolicy)
 
 ## Pause Database
 
