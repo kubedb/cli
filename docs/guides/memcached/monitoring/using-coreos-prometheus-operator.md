@@ -148,7 +148,7 @@ spec:
 ```
 
 |  Keys  |  Value |  Description |
-|--|--|--|
+|--------|--------|--------------|
 | `spec.monitor.agent` | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator` |
 | `spec.monitor.prometheus.namespace` | string | `Required`. Indicates namespace where service monitors are created. This must be the same namespace of the Prometheus instance. |
 | `spec.monitor.prometheus.labels` | map | `Required`. Indicates labels applied to service monitor.                                                    |
