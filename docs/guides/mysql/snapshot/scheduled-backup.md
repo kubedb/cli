@@ -147,11 +147,6 @@ spec:
 #    storageSecretName: my-snap-secret
   databaseSecret:
     secretName: mysql-scheduled-auth
-  init:
-    scriptSource:
-      gitRepo:
-        directory: .
-        repository: https://github.com/kubedb/mysql-init-scripts.git
   storage:
     accessModes:
     - ReadWriteOnce
