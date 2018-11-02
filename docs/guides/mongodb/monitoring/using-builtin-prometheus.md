@@ -128,7 +128,7 @@ Service:
   Labels:         kubedb.com/kind=MongoDB
                   kubedb.com/name=mgo-mon-prometheus
   Annotations:    monitoring.appscode.com/agent=prometheus.io/builtin
-                  prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-mon-prometheus/metrics
+                  prometheus.io/path=/metrics
                   prometheus.io/port=56790
                   prometheus.io/scrape=true
   Type:         ClusterIP
@@ -187,7 +187,7 @@ kind: Service
 metadata:
   annotations:
     monitoring.appscode.com/agent: prometheus.io/builtin
-    prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-mon-prometheus/metrics
+    prometheus.io/path: /metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
   creationTimestamp: 2018-09-25T05:15:15Z

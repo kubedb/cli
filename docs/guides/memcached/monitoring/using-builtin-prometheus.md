@@ -111,7 +111,7 @@ Service:
   Labels:         kubedb.com/kind=Memcached
                   kubedb.com/name=memcd-mon-prometheus
   Annotations:    monitoring.appscode.com/agent=prometheus.io/builtin
-                  prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/memcacheds/memcd-mon-prometheus/metrics
+                  prometheus.io/path=/metrics
                   prometheus.io/port=56790
                   prometheus.io/scrape=true
   Type:         ClusterIP
@@ -154,7 +154,7 @@ kind: Service
 metadata:
   annotations:
     monitoring.appscode.com/agent: prometheus.io/builtin
-    prometheus.io/path: /kubedb.com/v1alpha1/namespaces/demo/memcacheds/memcd-mon-prometheus/metrics
+    prometheus.io/path: /metrics
     prometheus.io/port: "56790"
     prometheus.io/scrape: "true"
   creationTimestamp: 2018-10-03T10:12:05Z

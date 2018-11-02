@@ -292,7 +292,7 @@ metadata:
 spec:
   endpoints:
   - interval: 10s
-    path: /kubedb.com/v1alpha1/namespaces/demo/mysqls/mysql-mon-coreos/metrics
+    path: /metrics
     port: prom-http
     targetPort: 0
   namespaceSelector:

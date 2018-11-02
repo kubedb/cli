@@ -97,7 +97,7 @@ Namespace:         demo
 Labels:            kubedb.com/kind=Elasticsearch
                    kubedb.com/name=builtin-prom-es
 Annotations:       monitoring.appscode.com/agent=prometheus.io/builtin
-                   prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/elasticsearches/builtin-prom-es/metrics
+                   prometheus.io/path=/metrics
                    prometheus.io/port=56790
                    prometheus.io/scrape=true
 Selector:          kubedb.com/kind=Elasticsearch,kubedb.com/name=builtin-prom-es
@@ -113,7 +113,7 @@ Events:            <none>
 You can see that the service contains following annotations.
 
 ```console
-prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/elasticsearches/builtin-prom-es/metrics
+prometheus.io/path=/metrics
 prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
