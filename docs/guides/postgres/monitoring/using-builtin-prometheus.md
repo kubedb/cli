@@ -99,7 +99,7 @@ Namespace:    demo
 Labels:       kubedb.com/kind=Postgres
               kubedb.com/name=builtin-prom-postgres
 Annotations:  monitoring.appscode.com/agent=prometheus.io/builtin
-              prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
+              prometheus.io/path=/metrics
               prometheus.io/port=56790
               prometheus.io/scrape=true
 API Version:  v1
@@ -136,7 +136,7 @@ Events:  <none>
 You can see that the service contains following annotations.
 
 ```console
-prometheus.io/path=/kubedb.com/v1alpha1/namespaces/demo/postgreses/builtin-prom-postgres/metrics
+prometheus.io/path=/metrics
 prometheus.io/port=56790
 prometheus.io/scrape=true
 ```
