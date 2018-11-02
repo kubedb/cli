@@ -441,6 +441,6 @@ $ kubectl delete ns demo
 
 ## Next Steps
 
-- Learn how to [create TLS certificates](/docs/guides/elasticsearch/search-guard/certificate.md).
+- Learn how to [create TLS certificates](/docs/guides/elasticsearch/search-guard/issue-certificate.md).
 - Learn how to [use TLS certificates](/docs/guides/elasticsearch/search-guard/use-tls.md) to connect Elasticsearch.
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
