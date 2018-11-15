@@ -144,7 +144,7 @@ Now, we can connect with the database at `localhost:9200`.
 Now, let's check health of our Elasticsearch database.
 
 ```console
-$ curl --user "admin:uv2io5au" "localhost:9200/_cluster/health?pretty" --cacert root.pem
+$ curl --user "admin:uv2io5au" "https://localhost:9200/_cluster/health?pretty" --cacert root.pem
 ```
 
 ```json
