@@ -115,6 +115,43 @@ If you are not using minikube, browse prometheus dashboard using following addre
 
 Now, if you go to the Prometheus Dashboard, you will see that target list is now empty.
 
+## Find out required label for ServiceMonitor
+
+First, check created objects of `Prometheus` kind.
+
+```console
+$ kubectl get prometheus --all-namespaces
+NAMESPACE   NAME         AGE
+demo        prometheus   20m
+```
+
+Now if we see the full spec of `prometheus` of `Prometheus` kind, we will see a field called `serviceMonitorSelector`. The value of `matchLabels` under `serviceMonitorSelector` part, is the required label for `KubeDB` monitoring spec `monitor.prometheus.labels`.
+
+```yaml
+ $ kubectl get prometheus -n demo prometheus -o yaml
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  creationTimestamp: 2018-11-15T10:40:57Z
+  generation: 1
+  name: prometheus
+  namespace: demo
+  resourceVersion: "1661"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/prometheuses/prometheus
+  uid: ef59e6e6-e8c2-11e8-8e44-08002771fd7b
+spec:
+  resources:
+    requests:
+      memory: 400Mi
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      app: kubedb
+  version: v1.7.0
+```
+
+In this tutorial, the required label is `app: kubedb`.
+
 ## Monitor Elasticsearch with CoreOS Prometheus
 
 Below is the Elasticsearch object created in this tutorial.

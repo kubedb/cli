@@ -118,7 +118,44 @@ Now, open your browser and go to the following URL: _http://{minikube-ip}:{prome
 
 If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
 
-## Create a MySQL database
+## Find out required label for ServiceMonitor
+
+First, check created objects of `Prometheus` kind.
+
+```console
+$ kubectl get prometheus --all-namespaces
+NAMESPACE   NAME         AGE
+demo        prometheus   20m
+```
+
+Now if we see the full spec of `prometheus` of `Prometheus` kind, we will see a field called `serviceMonitorSelector`. The value of `matchLabels` under `serviceMonitorSelector` part, is the required label for `KubeDB` monitoring spec `monitor.prometheus.labels`.
+
+```yaml
+ $ kubectl get prometheus -n demo prometheus -o yaml
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  creationTimestamp: 2018-11-15T10:40:57Z
+  generation: 1
+  name: prometheus
+  namespace: demo
+  resourceVersion: "1661"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/prometheuses/prometheus
+  uid: ef59e6e6-e8c2-11e8-8e44-08002771fd7b
+spec:
+  resources:
+    requests:
+      memory: 400Mi
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      app: kubedb
+  version: v1.7.0
+```
+
+In this tutorial, the required label is `app: kubedb`.
+
+## Monitor MySQL with CoreOS Prometheus
 
 KubeDB implements a `MySQL` CRD to define the specification of a MySQL database. Below is the `MySQL` object created in this tutorial.
 
@@ -147,6 +184,8 @@ spec:
 ```
 
 The `MySQL` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `MySQL` database by adding the below part in it's `spec` field.
+
+Here, `spec.monitor.prometheus.labels` is the `serviceMonitorSelector` that we found earlier.
 
 ```yaml
 spec:
