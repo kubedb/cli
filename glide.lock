@@ -1,5 +1,5 @@
-hash: 2e95f00e21ce06e4c10010e1d133fd07ed8ee52ddc646a8fae07548118e8ac5d
-updated: 2018-10-15T03:20:29.397347601-07:00
+hash: 9aa0a6e1f408d1283dc10718a024cdebe108cbbca846db25e632c108bddaf34e
+updated: 2018-12-02T09:21:28.988970329-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,7 +7,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 0499c350ad263174dc8c1e3006b2d3300ff398e6
+  version: a6d58457b39324ead2ffb1f24be7a0a638c9f112
   subpackages:
   - analytics
   - context
@@ -24,7 +24,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: 25382b15981e816818803a66b6e1a1270efa89ab
+  version: 239838b6231b8a27a66426e25678351ce50c4cfd
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -104,7 +104,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: 36442dbdb585210f8d5a1b45e67aa323c197d5c4
+  version: 72bf35d0ff611848c1dc9df0f976c81192392fa5
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -145,7 +145,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 2248b49eaa8e1c8c0963ee77b40841adbc19d4ca
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -191,7 +191,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: ca4c5b415bee4ce837f3bb19f5602f215e18c48a
+  version: edf77e9609ff15a2ad16582deda49eef5a0b80f4
   subpackages:
   - apis
   - apis/authorization
@@ -204,19 +204,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 4db10c38dc6f5683134a31cfce010e7db0b6b68a
+  version: cddfa21f66691aabdebe19e9b01436bf61fe6461
 - name: github.com/kubedb/etcd
-  version: 50fb61b8b282eb71552c8c71027d9b0dbc3550e7
+  version: 3689dfb00aa881ad482508d250c9fb2f4fd10a13
 - name: github.com/kubedb/memcached
-  version: 2f506d025bc7d9ba099899b2b4dadf6eb21c64da
+  version: 275ce5b6e44e26f45ef1d289bb513deecf07eef0
 - name: github.com/kubedb/mongodb
-  version: b179470851d37bae975f646e9e7c7892c37b715b
+  version: 2d46eaddfa6853ee288f7f52191556fe12e15511
 - name: github.com/kubedb/mysql
-  version: 0d467ccb2be0aa9e9c261d7ab198bd3b82c80a1b
+  version: 9d33c1a0f6a0cf66474d4b1bdba39679a13106c9
 - name: github.com/kubedb/postgres
-  version: d8834b61e4447b03e576630140d6ce20c3ed67ff
+  version: 37ce0c405fc94b02a93793090fe6eb894c8ab91a
 - name: github.com/kubedb/redis
-  version: 86dbd1d93738ffc6c477eca85abe96c8c6bd3365
+  version: 5baf1011555f79350521cfeb628957d382e73f25
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -232,7 +232,7 @@ imports:
 - name: github.com/modern-go/reflect2
   version: 05fbef0ca5da472bbf96c9322b84a53edc03c9fd
 - name: github.com/ncw/swift
-  version: 6f907bcc698fc1d24fa918255b18c6c5668b8b2b
+  version: 6f342da371d063863f2f354f183e4ab0ef72d287
 - name: github.com/opencontainers/go-digest
   version: a6d0ee40d4207ea02364bd3b9e8e77b9159ba1eb
 - name: github.com/opencontainers/image-spec
@@ -325,7 +325,7 @@ imports:
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
-  version: ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06
+  version: 4a4468ece617fc8205e99368fa2200e9d1fad421
   subpackages:
   - internal
   - internal/app_identity
@@ -391,7 +391,7 @@ imports:
   - pkg/client/clientset/clientset/typed/apiextensions/v1beta1
   - pkg/features
 - name: k8s.io/apimachinery
-  version: 8d7a0c3d7f0948197f384288363dfe20cd1f00e4
+  version: 00edbc532482e56a75224c794deaa1366dd292cb
   repo: https://github.com/kmodules/apimachinery.git
   vcs: git
   subpackages:
@@ -710,14 +710,14 @@ imports:
   - exec
   - pointer
 - name: kmodules.xyz/custom-resources
-  version: 043b10a889fd23491f5f4ed5f91a3220f83dd96e
+  version: 6d398bd2d81b1d6a811ad026c1dd24f1564a1f3c
   repo: https://github.com/kmodules/custom-resources.git
   vcs: git
   subpackages:
   - apis/appcatalog
   - apis/appcatalog/v1alpha1
 - name: kmodules.xyz/monitoring-agent-api
-  version: 626ef00ec8baebe0d2b451cf8f06450c2588f237
+  version: c68fa034fbbaeb8c930c17d1ec0790a4ea46bad3
   repo: https://github.com/kmodules/monitoring-agent-api.git
   vcs: git
   subpackages:
@@ -729,7 +729,7 @@ imports:
   subpackages:
   - api/v1
 - name: kmodules.xyz/offshoot-api
-  version: 5fe79fb4d96949b8d85410ca8af200226a676aac
+  version: 2ab6d9decb219e8465875d80be5d6bc754052bd9
   repo: https://github.com/kmodules/offshoot-api.git
   vcs: git
   subpackages:
