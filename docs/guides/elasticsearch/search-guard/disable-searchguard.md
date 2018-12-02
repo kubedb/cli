@@ -1,12 +1,12 @@
 ---
 title: Disable Search Guard
 menu:
-  docs_0.9.0-rc.0:
+  docs_0.9.0-rc.1:
     identifier: es-disable-search-guard
     name: Disable Search Guard
     parent: es-search-guard-elasticsearch
     weight: 30
-menu_name: docs_0.9.0-rc.0
+menu_name: docs_0.9.0-rc.1
 section_menu_id: guides
 ---
 
@@ -62,7 +62,7 @@ spec:
 Let's create the Elasticsearch object we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/search-guard/es-sg-disabled.yaml 
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/es-sg-disabled.yaml 
 elasticsearch.kubedb.com/es-sg-disabled created
 ```
 

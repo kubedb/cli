@@ -1,12 +1,12 @@
 ---
 title: Instant Backup of Elasticsearch
 menu:
-  docs_0.9.0-rc.0:
+  docs_0.9.0-rc.1:
     identifier: es-instant-backup-snapshot
     name: Instant Backup
     parent: es-snapshot-elasticsearch
     weight: 10
-menu_name: docs_0.9.0-rc.0
+menu_name: docs_0.9.0-rc.1
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -39,7 +39,7 @@ demo    Active  5s
 We need an Elasticsearch object in `Running` phase to perform backup operation. If you do not already have an Elasticsearch instance running, create one first.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/quickstart/infant-elasticsearch.yaml
 elasticsearch "infant-elasticsearch" created
 ```
 
@@ -189,7 +189,7 @@ To learn how to configure other storage destinations for snapshot data, please v
 Now, create the Snapshot object.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/snapshot/instant-snapshot.yaml
 snapshot.kubedb.com/instant-snapshot created
 ```
 

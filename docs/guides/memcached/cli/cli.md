@@ -1,12 +1,12 @@
 ---
 title: CLI | KubeDB
 menu:
-  docs_0.9.0-rc.0:
+  docs_0.9.0-rc.1:
     identifier: mc-cli-cli
     name: Quickstart
     parent: mc-cli-memcached
     weight: 10
-menu_name: docs_0.9.0-rc.0
+menu_name: docs_0.9.0-rc.1
 section_menu_id: guides
 ---
 

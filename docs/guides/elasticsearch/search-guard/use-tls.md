@@ -1,12 +1,12 @@
 ---
 title: Run TLS Secured Elasticsearch
 menu:
-  docs_0.9.0-rc.0:
+  docs_0.9.0-rc.1:
     identifier: es-use-tls-search-guard
     name: Use TLS
     parent: es-search-guard-elasticsearch
     weight: 20
-menu_name: docs_0.9.0-rc.0
+menu_name: docs_0.9.0-rc.1
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -63,7 +63,7 @@ spec:
 Let's create the Elasticsearch object we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/ssl-elasticsearch.yaml
 elasticsearch.kubedb.com/ssl-elasticsearch created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Redis
 menu:
-  docs_0.9.0-rc.0:
+  docs_0.9.0-rc.1:
     identifier: redis-db
     name: Redis
     parent: databases
     weight: 35
-menu_name: docs_0.9.0-rc.0
+menu_name: docs_0.9.0-rc.1
 section_menu_id: concepts
 ---
 
