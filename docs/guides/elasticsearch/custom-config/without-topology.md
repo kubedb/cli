@@ -1,12 +1,12 @@
 ---
 title: Using Custom Configuration in Elasticsearch without Topology
 menu:
-  docs_0.9.0-rc.0:
+  docs_0.9.0-rc.1:
     identifier: es-custom-config-without-topology
     name: Without Topology
     parent: es-custom-config
     weight: 30
-menu_name: docs_0.9.0-rc.0
+menu_name: docs_0.9.0-rc.1
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -111,7 +111,7 @@ metadata:
 Now, create an Elasticsearch crd without topology,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.0/docs/examples/elasticsearch/custom-config/es-custom.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/custom-config/es-custom.yaml
 elasticsearch.kubedb.com/custom-elasticsearch created
 ```
 
