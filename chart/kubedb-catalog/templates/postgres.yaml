@@ -32,7 +32,7 @@ metadata:
 spec:
   version: "9.6"
   db:
-    image: "{{ .Values.dockerRegistry }}/postgres:9.6-v1"
+    image: "{{ .Values.dockerRegistry }}/postgres:9.6-v2"
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:
@@ -71,7 +71,7 @@ metadata:
 spec:
   version: "9.6.7"
   db:
-    image: "{{ .Values.dockerRegistry }}/postgres:9.6.7-v1"
+    image: "{{ .Values.dockerRegistry }}/postgres:9.6.7-v2"
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:
@@ -110,7 +110,7 @@ metadata:
 spec:
   version: "10.2"
   db:
-    image: "{{ .Values.dockerRegistry }}/postgres:10.2-v1"
+    image: "{{ .Values.dockerRegistry }}/postgres:10.2-v2"
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:

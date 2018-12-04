@@ -25,7 +25,7 @@ metadata:
 spec:
   version: "9.6"
   db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6-v2"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
@@ -58,7 +58,7 @@ metadata:
 spec:
   version: "9.6.7"
   db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7-v2"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
@@ -91,7 +91,7 @@ metadata:
 spec:
   version: "10.2"
   db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2-v2"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
