@@ -1,11 +1,32 @@
 # Change Log
 
-## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
-
-[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-beta.1...HEAD)
+## [0.9.0-rc.1](https://github.com/kubedb/cli/tree/0.9.0-rc.1) (2018-12-03)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.0...0.9.0-rc.1)
 
 **Merged pull requests:**
 
+- Prepare 0.9.0-rc.1 release [\#352](https://github.com/kubedb/cli/pull/352) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare docs for 0.9.0-rc.1 release [\#351](https://github.com/kubedb/cli/pull/351) ([tamalsaha](https://github.com/tamalsaha))
+- Update dep list in hack/revendor.py [\#350](https://github.com/kubedb/cli/pull/350) ([tamalsaha](https://github.com/tamalsaha))
+- Add `https://` prefix in connection url [\#349](https://github.com/kubedb/cli/pull/349) ([shudipta](https://github.com/shudipta))
+- Details doc about label selector for monitoring [\#348](https://github.com/kubedb/cli/pull/348) ([the-redback](https://github.com/the-redback))
+- Removed leftover gitrepo from documentation [\#347](https://github.com/kubedb/cli/pull/347) ([the-redback](https://github.com/the-redback))
+- Fix metric paths in documentation [\#346](https://github.com/kubedb/cli/pull/346) ([the-redback](https://github.com/the-redback))
+- Fixed various doc issues [\#345](https://github.com/kubedb/cli/pull/345) ([the-redback](https://github.com/the-redback))
+- Fixed postgres docs spec.standbyMode references [\#344](https://github.com/kubedb/cli/pull/344) ([endrec](https://github.com/endrec))
+- Fix table formatting [\#343](https://github.com/kubedb/cli/pull/343) ([tamalsaha](https://github.com/tamalsaha))
+- Elasticsearch: Remove -v1 suffix from exporter image [\#342](https://github.com/kubedb/cli/pull/342) ([hossainemruz](https://github.com/hossainemruz))
+- Use prometheus-operator v0.25.0 [\#341](https://github.com/kubedb/cli/pull/341) ([tamalsaha](https://github.com/tamalsaha))
+- Rename roadmap.md to status.md [\#340](https://github.com/kubedb/cli/pull/340) ([tamalsaha](https://github.com/tamalsaha))
+- Fix frontmatter [\#339](https://github.com/kubedb/cli/pull/339) ([tamalsaha](https://github.com/tamalsaha))
+
+## [0.9.0-rc.0](https://github.com/kubedb/cli/tree/0.9.0-rc.0) (2018-10-15)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-beta.1...0.9.0-rc.0)
+
+**Merged pull requests:**
+
+- Fix chart template [\#338](https://github.com/kubedb/cli/pull/338) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare docs for 0.9.0-rc.0 release [\#337](https://github.com/kubedb/cli/pull/337) ([tamalsaha](https://github.com/tamalsaha))
 - Cleanup postgres and elasticsearch docs [\#336](https://github.com/kubedb/cli/pull/336) ([tamalsaha](https://github.com/tamalsaha))
 - Update chart and installer for webhook xray [\#335](https://github.com/kubedb/cli/pull/335) ([tamalsaha](https://github.com/tamalsaha))
 - Update kubernetes client libraries to 1.12.0 [\#334](https://github.com/kubedb/cli/pull/334) ([tamalsaha](https://github.com/tamalsaha))
