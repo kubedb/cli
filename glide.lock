@@ -1,5 +1,5 @@
-hash: 9aa0a6e1f408d1283dc10718a024cdebe108cbbca846db25e632c108bddaf34e
-updated: 2018-12-02T09:21:28.988970329-08:00
+hash: 7e100f17c777961bdfdfdabf81e7118563c6f0b3fb56417dff919f65de27c630
+updated: 2018-12-05T11:31:07.591810739-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -7,13 +7,14 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: a6d58457b39324ead2ffb1f24be7a0a638c9f112
+  version: aa0a55d74dac66f9b9bec9c0e7b67944115a3f44
   subpackages:
   - analytics
   - context
   - encoding/json/types
   - homedir
   - log
+  - log/golog
   - net
   - runtime
   - sets
@@ -29,6 +30,7 @@ imports:
   - apiextensions/v1beta1
   - meta
   - tools/analytics
+  - tools/cli
 - name: github.com/aws/aws-sdk-go
   version: fde4ded7becdeae4d26bf1212916aabba79349b4
 - name: github.com/Azure/azure-sdk-for-go
@@ -74,17 +76,30 @@ imports:
 - name: github.com/docker/docker
   version: a9fbbdc8dd8794b20af358382ab780559bca589d
   subpackages:
+  - api
   - api/types
   - api/types/blkiodev
   - api/types/container
+  - api/types/events
   - api/types/filters
+  - api/types/image
   - api/types/mount
   - api/types/network
   - api/types/registry
   - api/types/strslice
   - api/types/swarm
   - api/types/swarm/runtime
+  - api/types/time
   - api/types/versions
+  - api/types/volume
+  - client
+  - daemon/logger/jsonfilelog/jsonlog
+  - pkg/jsonmessage
+  - pkg/mount
+  - pkg/parsers
+  - pkg/parsers/operatingsystem
+  - pkg/stdcopy
+  - pkg/sysinfo
   - pkg/term
   - pkg/term/windows
 - name: github.com/docker/go-connections
@@ -204,19 +219,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: cddfa21f66691aabdebe19e9b01436bf61fe6461
+  version: 9fc4a4f0a5f3f78026dbe0f343f086de0374f266
 - name: github.com/kubedb/etcd
-  version: 3689dfb00aa881ad482508d250c9fb2f4fd10a13
+  version: a59194eead94b4fec9f6304a656ea8408d9d89e2
 - name: github.com/kubedb/memcached
-  version: 275ce5b6e44e26f45ef1d289bb513deecf07eef0
+  version: e5fe192c7970d94a38252108ae1c5295584f07a9
 - name: github.com/kubedb/mongodb
-  version: 2d46eaddfa6853ee288f7f52191556fe12e15511
+  version: 9016cc7ae0b85f9a01f0f5d759f4c4bce3a080eb
 - name: github.com/kubedb/mysql
-  version: 9d33c1a0f6a0cf66474d4b1bdba39679a13106c9
+  version: dd7c3f443aa997949934e0fad20e546bc8104319
 - name: github.com/kubedb/postgres
-  version: 37ce0c405fc94b02a93793090fe6eb894c8ab91a
+  version: 9558f2e504436c3e0105da3c24ba785bcba7a25a
 - name: github.com/kubedb/redis
-  version: 5baf1011555f79350521cfeb628957d382e73f25
+  version: 4016f3f724ff5fb4242524bfb8656ff1decd4d39
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -275,6 +290,7 @@ imports:
   subpackages:
   - ed25519
   - ed25519/internal/edwards25519
+  - pbkdf2
   - ssh/terminal
 - name: golang.org/x/net
   version: 1c05540f6879653db88113bc4a2b70aec4bd491f
@@ -325,7 +341,7 @@ imports:
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
-  version: 4a4468ece617fc8205e99368fa2200e9d1fad421
+  version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
   subpackages:
   - internal
   - internal/app_identity
@@ -339,7 +355,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/square/go-jose.v2
-  version: 89060dee6a84df9a4dae49f676f0c755037834f1
+  version: f61ac651e23224d43848a8dc387dee016d7eacf9
   subpackages:
   - cipher
   - json
@@ -707,7 +723,9 @@ imports:
 - name: k8s.io/utils
   version: 66066c83e385e385ccc3c964b44fd7dcd413d0ed
   subpackages:
+  - clock
   - exec
+  - exec/testing
   - pointer
 - name: kmodules.xyz/custom-resources
   version: 6d398bd2d81b1d6a811ad026c1dd24f1564a1f3c
