@@ -18,6 +18,7 @@ crds=(
   mysqlversions.catalog.kubedb.com
   postgresversions.catalog.kubedb.com
   redisversions.catalog.kubedb.com
+  appbindings.appcatalog.appscode.com
 )
 apiServices=(v1alpha1.validators v1alpha1.mutators)
 
