@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	cmd := cmds.NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr, Version)
+	cmd := cmds.NewKubedbCommand(os.Stdin, os.Stdout, os.Stderr)
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
