@@ -1,12 +1,12 @@
 ---
 title: CLI | KubeDB
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: mg-cli-cli
     name: Quickstart
     parent: mg-cli-mongodb
     weight: 10
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 

@@ -1,12 +1,12 @@
 ---
 title: Run MySQL with Custom Configuration
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: my-custom-config-file
     name: Using Config File
     parent: my-custom-config
     weight: 10
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 
@@ -89,7 +89,7 @@ metadata:
 Now, create MySQL crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/configuration/mysql-custom.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/configuration/mysql-custom.yaml
 mysql.kubedb.com/custom-mysql created
 ```
 
@@ -150,7 +150,7 @@ Now, we will check if the database has started with the custom configuration we 
 First, deploy [phpMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) to connect with the MySQL database we have just created.
 
 ```console
- $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/quickstart/demo-1.yaml
+ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/quickstart/demo-1.yaml
 deployment.extensions/myadmin created
 service/myadmin created
 ```

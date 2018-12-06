@@ -1,12 +1,12 @@
 ---
 title: Run MongoDB with Custom Configuration
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: mg-custom-config-quickstart
     name: Quickstart
     parent: mg-configuration
     weight: 10
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 
@@ -107,7 +107,7 @@ spec:
 ```
 
 ```console
-$ kubectl create-f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mongodb/configuration/demo1.yaml
+$ kubectl create-f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mongodb/configuration/demo1.yaml
 mongodb.kubedb.com/mgo-custom-config created
 ```
 

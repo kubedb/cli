@@ -1,10 +1,10 @@
 ---
 title: Run Redis with Custom Configuration
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: rd-custom-config
     name: Custom Configuration
     parent: rd-redis-guides
     weight: 50
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 ---
