@@ -1,12 +1,12 @@
 ---
 title: Search Guard Certificate
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: es-issue-certificate-search-guard
     name: Issue Certificate
     parent: es-search-guard-elasticsearch
     weight: 25
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -81,7 +81,7 @@ You need to follow these steps
 1. Get root certificate configuration file
 
     ```console
-    $ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-ca.ini
+    $ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/search-guard/openssl-config/openssl-ca.ini
     ```
 
     ```ini
@@ -148,7 +148,7 @@ You need to follow these steps to generate three keystore.
 To sign certificate, we need another configuration file.
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-sign.ini
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/search-guard/openssl-config/openssl-sign.ini
 ```
 
 ```ini
@@ -230,7 +230,7 @@ Here,
 Now run following commands
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-node.ini
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/search-guard/openssl-config/openssl-node.ini
 $ openssl req -config openssl-node.ini -newkey rsa:4096 -sha256 -nodes -out node-csr.pem -keyout node-key.pem
 $ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out node.pem -infiles node-csr.pem
 $ openssl pkcs12 -export -certfile root.pem -inkey node-key.pem -in node.pem -password "pass:$KEY_PASS" -out node.pkcs12
@@ -271,7 +271,7 @@ Here,
 Now run following commands
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-client.ini
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/search-guard/openssl-config/openssl-client.ini
 $ openssl req -config openssl-client.ini -newkey rsa:4096 -sha256 -nodes -out client-csr.pem -keyout client-key.pem
 $ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out client.pem -infiles client-csr.pem
 $ openssl pkcs12 -export -certfile root.pem -inkey client-key.pem -in client.pem -password "pass:$KEY_PASS" -out client.pkcs12
@@ -311,7 +311,7 @@ Here,
 Now run following commands
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/openssl-config/openssl-sgadmin.ini
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/search-guard/openssl-config/openssl-sgadmin.ini
 $ openssl req -config openssl-sgadmin.ini -newkey rsa:4096 -sha256 -nodes -out sgadmin-csr.pem -keyout sgadmin-key.pem
 $ openssl ca -config openssl-sign.ini -batch -policy signing_policy -extensions signing_req -out sgadmin.pem -infiles sgadmin-csr.pem
 $ openssl pkcs12 -export -certfile root.pem -inkey sgadmin-key.pem -in sgadmin.pem -password "pass:$KEY_PASS" -out sgadmin.pkcs12
@@ -372,7 +372,7 @@ Here,
 Create example above with following command
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/search-guard/sg-elasticsearch.yaml
 elasticsearch.kubedb.com/sg-elasticsearch created
 ```
 

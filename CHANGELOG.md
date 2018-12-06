@@ -1,10 +1,22 @@
 # Change Log
 
-## [0.9.0-rc.1](https://github.com/kubedb/cli/tree/0.9.0-rc.1) (2018-12-03)
+## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
+
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.1...HEAD)
+
+**Merged pull requests:**
+
+- Prepase for 0.9.0-rc.2 release [\#357](https://github.com/kubedb/cli/pull/357) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare docs for 0.9.0 release [\#356](https://github.com/kubedb/cli/pull/356) ([tamalsaha](https://github.com/tamalsaha))
+- Use kutil/tool/cli to send analytics [\#355](https://github.com/kubedb/cli/pull/355) ([tamalsaha](https://github.com/tamalsaha))
+- Added appbinding in CRD list of deploy script [\#354](https://github.com/kubedb/cli/pull/354) ([the-redback](https://github.com/the-redback))
+
+## [0.9.0-rc.1](https://github.com/kubedb/cli/tree/0.9.0-rc.1) (2018-12-04)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.0...0.9.0-rc.1)
 
 **Merged pull requests:**
 
+- Updated postgres catalogs [\#353](https://github.com/kubedb/cli/pull/353) ([the-redback](https://github.com/the-redback))
 - Prepare 0.9.0-rc.1 release [\#352](https://github.com/kubedb/cli/pull/352) ([tamalsaha](https://github.com/tamalsaha))
 - Prepare docs for 0.9.0-rc.1 release [\#351](https://github.com/kubedb/cli/pull/351) ([tamalsaha](https://github.com/tamalsaha))
 - Update dep list in hack/revendor.py [\#350](https://github.com/kubedb/cli/pull/350) ([tamalsaha](https://github.com/tamalsaha))

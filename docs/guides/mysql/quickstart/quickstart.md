@@ -1,12 +1,12 @@
 ---
 title: MySQL Quickstart
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: my-quickstart-quickstart
     name: Overview
     parent: my-quickstart-mysql
     weight: 10
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -41,7 +41,7 @@ This tutorial will show you how to use KubeDB to run a MySQL database.
   $ kubectl create ns demo
   namespace "demo" created
   
-  $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/quickstart/demo-1.yaml
+  $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/quickstart/demo-1.yaml
   deployment.extensions/myadmin created
   service/myadmin created
   
@@ -109,7 +109,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/quickstart/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/quickstart/demo-2.yaml
 mysql.kubedb.com/mysql-quickstart created
 ```
 
@@ -366,7 +366,7 @@ In this tutorial, the dormant database can be resumed by creating original `MySQ
 The below command will resume the DormantDatabase `mysql-quickstart` that was created before.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/quickstart/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/quickstart/demo-2.yaml
 mysql "mysql-quickstart" created
 ```
 

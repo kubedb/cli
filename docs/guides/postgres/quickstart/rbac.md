@@ -1,12 +1,12 @@
 ---
 title: RBAC for PostgreSQL
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: pg-rbac-quickstart
     name: RBAC
     parent: pg-quickstart-postgres
     weight: 15
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -69,7 +69,7 @@ spec:
 Create above Postgres object with following command
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/postgres/quickstart/quick-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/postgres/quickstart/quick-postgres.yaml
 postgres "quick-postgres" created
 ```
 

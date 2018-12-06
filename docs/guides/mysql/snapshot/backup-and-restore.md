@@ -1,12 +1,12 @@
 ---
 title: Instant Backup of MySQL
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: my-backup-and-restore-snapshot
     name: Instant Backup
     parent: my-snapshot-mysql
     weight: 10
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -41,7 +41,7 @@ This tutorial will show you how to take snapshots of a KubeDB managed MySQL data
   NAME          STATUS    AGE
   demo          Active    1m
   
-  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/snapshot/demo-1.yaml
+  $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/snapshot/demo-1.yaml
   mysql.kubedb.com/mysql-infant created
   ```
 
@@ -100,7 +100,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/snapshot/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/snapshot/demo-2.yaml
 snapshot.kubedb.com/snap-mysql-infant created
 
 $ kubedb get snap -n demo
@@ -248,7 +248,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mysql/snapshot/demo-3.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mysql/snapshot/demo-3.yaml
 mysql.kubedb.com/mysql-recovered created
 ```
 

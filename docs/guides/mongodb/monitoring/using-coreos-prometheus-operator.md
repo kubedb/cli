@@ -1,12 +1,12 @@
 ---
 title: Monitor MongoDB using Coreos Prometheus Operator
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: mg-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: mg-monitoring-mongodb
     weight: 15
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 
@@ -40,7 +40,7 @@ This tutorial will show you how to monitor KubeDB databases using Prometheus via
 Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-0.yaml
 namespace/demo created
 clusterrole.rbac.authorization.k8s.io/prometheus-operator created
 serviceaccount/prometheus-operator created
@@ -71,7 +71,7 @@ servicemonitors.monitoring.coreos.com         2018-09-24T12:42:22Z
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-1.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus created
 serviceaccount/prometheus created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus created
@@ -210,7 +210,7 @@ __Known Limitations:__ If the database password is updated, exporter must be res
 Run the following command to deploy the above `MongoDB` CRD object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/mongodb/monitoring/coreos-operator/demo-1.yaml
 mongodb.kubedb.com/mgo-mon-coreos created
 ```
 
@@ -366,8 +366,8 @@ kubectl delete -n demo mg/mgo-mon-coreos
 kubectl patch -n demo drmn/mgo-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
 kubectl delete -n demo drmn/mgo-mon-coreos
 
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/monitoring/coreos-operator/demo-1.yaml
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.1/docs/examples/monitoring/coreos-operator/demo-0.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-1.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-0.yaml
 
 kubectl delete ns demo
 ```

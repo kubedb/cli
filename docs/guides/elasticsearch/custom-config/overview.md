@@ -1,12 +1,12 @@
 ---
 title: Run Elasticsearch with Custom Configuration
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: es-custom-config-overview
     name: Overview
     parent: es-custom-config
     weight: 10
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).

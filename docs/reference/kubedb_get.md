@@ -1,11 +1,11 @@
 ---
 title: Kubedb Get
 menu:
-  docs_0.9.0-rc.1:
+  docs_0.9.0-rc.2:
     identifier: kubedb-get
     name: Kubedb Get
     parent: reference
-menu_name: docs_0.9.0-rc.1
+menu_name: docs_0.9.0-rc.2
 section_menu_id: reference
 ---
 ## kubedb get
