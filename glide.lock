@@ -1,5 +1,5 @@
-hash: 7e100f17c777961bdfdfdabf81e7118563c6f0b3fb56417dff919f65de27c630
-updated: 2018-12-05T11:31:07.591810739-08:00
+hash: 3ccdbdde6a6179db865aa66ff208aa25abb1f96ecd59f1375cf1538a912290d0
+updated: 2018-12-06T13:13:11.135892884-08:00
 imports:
 - name: cloud.google.com/go
   version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
@@ -25,7 +25,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: 239838b6231b8a27a66426e25678351ce50c4cfd
+  version: 72dd199d4e2019a69a7929245f7e17823d753381
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -206,7 +206,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: edf77e9609ff15a2ad16582deda49eef5a0b80f4
+  version: bd45ce0b7b20bea3aa4029fcbfef4e15350c7bc6
   subpackages:
   - apis
   - apis/authorization
@@ -219,19 +219,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 9fc4a4f0a5f3f78026dbe0f343f086de0374f266
+  version: b091bf10968a6e2e240c087d653ce3b6f342ec95
 - name: github.com/kubedb/etcd
-  version: a59194eead94b4fec9f6304a656ea8408d9d89e2
+  version: f6abd0aa8d388618cb9f2fe024124bf8c1b6d75e
 - name: github.com/kubedb/memcached
-  version: e5fe192c7970d94a38252108ae1c5295584f07a9
+  version: 08e6c82e3fda32a23707e4b641e3bf0f44f9dab4
 - name: github.com/kubedb/mongodb
-  version: 9016cc7ae0b85f9a01f0f5d759f4c4bce3a080eb
+  version: 1c95edab5aca9a876ed8b9931c0b881b941d7c43
 - name: github.com/kubedb/mysql
-  version: dd7c3f443aa997949934e0fad20e546bc8104319
+  version: 8a4f3b13738789d8c0f4cc825a643ee102abdd3e
 - name: github.com/kubedb/postgres
-  version: 9558f2e504436c3e0105da3c24ba785bcba7a25a
+  version: ac35509e480250df8988af900ee4f70e5be9d83d
 - name: github.com/kubedb/redis
-  version: 4016f3f724ff5fb4242524bfb8656ff1decd4d39
+  version: fe32d272cc366b2f11439c09cb8218ea5bcec6a9
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -735,7 +735,7 @@ imports:
   - apis/appcatalog
   - apis/appcatalog/v1alpha1
 - name: kmodules.xyz/monitoring-agent-api
-  version: c68fa034fbbaeb8c930c17d1ec0790a4ea46bad3
+  version: d12289267b3d7510feb9fac1f5e451d476f23a38
   repo: https://github.com/kmodules/monitoring-agent-api.git
   vcs: git
   subpackages:
