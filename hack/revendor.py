@@ -81,7 +81,7 @@ REQUIRED_DEPS = [
     },
     {
       "package": "github.com/golang/protobuf",
-      "version": "v1.1.0"
+      "version": "v1.0.0"
     },
     {
       "package": "github.com/davecgh/go-spew",
@@ -101,7 +101,11 @@ REQUIRED_DEPS = [
     },
     {
       "package": "gopkg.in/square/go-jose.v2",
-      "version": "v2.2.0"
+      "version": "v2.2.1"
+    },
+    {
+    "package": "github.com/imdario/mergo",
+    "version": "v0.3.5"
     }
 ]
 DEP_LIST = [
