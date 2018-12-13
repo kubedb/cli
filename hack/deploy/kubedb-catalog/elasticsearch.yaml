@@ -29,7 +29,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -62,7 +62,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -95,7 +95,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -128,7 +128,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -161,7 +161,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -194,7 +194,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -210,7 +210,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4-v1"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -226,4 +226,4 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4.0"
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4.0-v1"
