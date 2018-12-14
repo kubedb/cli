@@ -29,7 +29,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -62,7 +62,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -95,4 +95,4 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v2"

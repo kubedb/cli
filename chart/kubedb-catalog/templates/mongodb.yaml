@@ -36,7 +36,7 @@ spec:
   exporter:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
-    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v1"
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -75,5 +75,5 @@ spec:
   exporter:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
-    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v1"
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
 {{ end }}

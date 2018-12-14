@@ -29,7 +29,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4-v2"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -62,5 +62,5 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6-v1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6-v2"
 
