@@ -223,7 +223,7 @@ DEP_LIST = [
     },
     {
       "package": "cloud.google.com/go",
-      "version": "v0.2.0"
+      "version": "v0.23.0"
     },
     {
       "package": "github.com/spf13/afero",
@@ -231,12 +231,18 @@ DEP_LIST = [
     },
     {
       "package": "github.com/appscode/osm",
-      "version": "0.9.0"
+      "version": "0.9.1"
     },
     {
       "package": "github.com/kubepack/onessl",
       "version": "0.9.0"
     }
+]
+DELETE_LIST=[
+    "github.com/openshift/api",
+    "github.com/openshift/client-go",
+    "github.com/openshift/origin",
+    "github.com/appscode/ocutil"
 ]
 
 
@@ -277,6 +283,10 @@ def git_requires_commit(cwd=libbuild.REPO_ROOT):
     return Counter(changed_files) != Counter(['glide.lock'])
 
 
+def sortDep(val):
+    return val['package']
+
+
 def glide_mod(glide_config, changes):
     for dep in glide_config['import']:
         if dep['package'] in changes:
@@ -295,6 +305,12 @@ def glide_mod(glide_config, changes):
             if dep['package'] == x['package']:
                 glide_config['import'][idx] = x
                 break
+    for package in DELETE_LIST:
+        for idx, dep in enumerate(glide_config['import']):
+            if dep['package'] == package:
+                del glide_config['import'][idx]
+                break
+    glide_config['import'].sort(key=sortDep)
 
 
 def glide_write(f, glide_config):
@@ -334,7 +350,7 @@ class DepFixer(object):
             call('glide slow', cwd=repo)
             if git_requires_commit(cwd=repo):
                 call('git add --all', cwd=repo)
-                call('git commit -s -a -m "Revendor api"', cwd=repo, eoe=False)
+                call('git commit -s -a -m "Revendor dependencies"', cwd=repo, eoe=False)
                 call('git push origin {0}'.format(revendor_branch), cwd=repo)
             else:
                 call('git reset HEAD --hard', cwd=repo)
