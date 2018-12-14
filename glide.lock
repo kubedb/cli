@@ -1,13 +1,12 @@
-hash: 3ccdbdde6a6179db865aa66ff208aa25abb1f96ecd59f1375cf1538a912290d0
-updated: 2018-12-06T13:13:11.135892884-08:00
+hash: 5f8f9d58275eadc4f0c1c6f696cd206df154339bc8e43e4e954813367f6ca569
+updated: 2018-12-14T13:32:06.529462822-08:00
 imports:
 - name: cloud.google.com/go
-  version: fe3d41e1ecb2ce36ad3a979037c9b9a2b726226f
+  version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
   subpackages:
   - compute/metadata
-  - internal
 - name: github.com/appscode/go
-  version: aa0a55d74dac66f9b9bec9c0e7b67944115a3f44
+  version: 584aaa73af837f112c0a471be398ea837341c330
   subpackages:
   - analytics
   - context
@@ -25,7 +24,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: 72dd199d4e2019a69a7929245f7e17823d753381
+  version: d9fb2e606bf2c196a8cd8cff13097f531d686a44
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -55,9 +54,7 @@ imports:
   - gettext/plural
   - gettext/po
 - name: github.com/coreos/prometheus-operator
-  version: b9bfccafc646c76bd9b1ebf209ea528fde37f2e3
-  repo: https://github.com/kmodules/prometheus-operator.git
-  vcs: git
+  version: 82a6ad2071ff653e38b3b4719ecb789d73f3ab05
 - name: github.com/cpuguy83/go-md2man
   version: 20f5889cbdc3c73dbd2862796665e7c465ade7d1
   subpackages:
@@ -148,7 +145,7 @@ imports:
   subpackages:
   - lru
 - name: github.com/golang/protobuf
-  version: b4deda0973fb4c70b50d226b1af49f3da59f5265
+  version: 925541529c1fa6821df4e44ce2723319eb2be768
   subpackages:
   - jsonpb
   - proto
@@ -185,8 +182,10 @@ imports:
   - openstack/identity/v3/tokens
   - openstack/utils
   - pagination
+- name: github.com/gorilla/websocket
+  version: 66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d
 - name: github.com/graymeta/stow
-  version: 1849a82ac7fbd3e5cb144bcc711544e90903eac4
+  version: 8020e152292b2cdbdca30274fec24e18905f254d
   repo: https://github.com/appscode/stow.git
   vcs: git
 - name: github.com/gregjones/httpcache
@@ -206,7 +205,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: bd45ce0b7b20bea3aa4029fcbfef4e15350c7bc6
+  version: fd9e0e9b506f0b67e90621203db5ee2f865aacc0
   subpackages:
   - apis
   - apis/authorization
@@ -219,19 +218,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: b091bf10968a6e2e240c087d653ce3b6f342ec95
+  version: 36e001fe5638a5b0f3da3fcf349fc6cb7556ba63
 - name: github.com/kubedb/etcd
-  version: f6abd0aa8d388618cb9f2fe024124bf8c1b6d75e
+  version: 2164b14747cf552d159f8887c17892afbc46075e
 - name: github.com/kubedb/memcached
-  version: 08e6c82e3fda32a23707e4b641e3bf0f44f9dab4
+  version: 2314fc6520307f8e369bdd4511c4b128373d18ff
 - name: github.com/kubedb/mongodb
-  version: 1c95edab5aca9a876ed8b9931c0b881b941d7c43
+  version: 18e583d21856cb6cec5ad2834d68c1dccbc997ba
 - name: github.com/kubedb/mysql
-  version: 8a4f3b13738789d8c0f4cc825a643ee102abdd3e
+  version: b77e66c460bfea8dd7a90adbc18a343ec5cc29a1
 - name: github.com/kubedb/postgres
-  version: ac35509e480250df8988af900ee4f70e5be9d83d
+  version: e7d0e32a2c41e8092372d822e41174db7f754a3b
 - name: github.com/kubedb/redis
-  version: fe32d272cc366b2f11439c09cb8218ea5bcec6a9
+  version: dda025f7fd5f359ef1d7d9eaa32b8452ef03e5e0
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -242,6 +241,8 @@ imports:
   version: bb23615498cded5e105af4ce27de75b089cbe851
 - name: github.com/mitchellh/go-wordwrap
   version: ad45545899c7b13c020ea92b2072220eefad42b8
+- name: github.com/mitchellh/mapstructure
+  version: 53818660ed4955e899c0bcafa97299a388bd7c8e
 - name: github.com/modern-go/concurrent
   version: bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94
 - name: github.com/modern-go/reflect2
@@ -264,13 +265,11 @@ imports:
 - name: github.com/PuerkitoBio/urlesc
   version: 5bd2802263f21d8788851d5305584c82a5c75d7e
 - name: github.com/russross/blackfriday
-  version: 300106c228d52c8941d4b3de6054a6062a86dda3
+  version: 05f3235734ad95d0016f6a23902f06461fcf567a
 - name: github.com/sergi/go-diff
   version: 97b2266dfe4bd4ea1b81a463322f04f8b724801e
   subpackages:
   - diffmatchpatch
-- name: github.com/shurcooL/sanitized_anchor_name
-  version: 10ef21a441db47d8b13ebcc5fd2310f636973c77
 - name: github.com/sirupsen/logrus
   version: 89742aefa4b206dcf400792f3bd35b542998eb3b
 - name: github.com/spf13/cobra
@@ -355,13 +354,13 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/square/go-jose.v2
-  version: f61ac651e23224d43848a8dc387dee016d7eacf9
+  version: 72415094398e2f013bf50b76fd6de36df47938ea
   subpackages:
   - cipher
   - json
   - jwt
 - name: gopkg.in/yaml.v2
-  version: 670d4cfef0544295bc27a114dbac37980d83185a
+  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 - name: k8s.io/api
   version: fd83cbc87e7632ccd8bbab63d2b673d4e0c631cc
   subpackages:
@@ -752,6 +751,8 @@ imports:
   vcs: git
   subpackages:
   - api/v1
+- name: sigs.k8s.io/yaml
+  version: fd68e9863619f6ec2fdd8625fe1f02e7c877e480
 - name: vbom.ml/util
   version: db5cfe13f5cc80a4990d98e2e1b0707a4d1a5394
   subpackages:
