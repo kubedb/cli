@@ -1,5 +1,5 @@
-hash: 5f8f9d58275eadc4f0c1c6f696cd206df154339bc8e43e4e954813367f6ca569
-updated: 2018-12-14T13:32:06.529462822-08:00
+hash: 7af47cb400f3e749594d750b30a38f1206bc3870e02463afd00fc02531b3fe7e
+updated: 2018-12-16T19:13:20.47550939-08:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -157,7 +157,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 2248b49eaa8e1c8c0963ee77b40841adbc19d4ca
+  version: 3af367b6b30c263d47e8895973edcca9a49cf029
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -205,7 +205,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: fd9e0e9b506f0b67e90621203db5ee2f865aacc0
+  version: 6319e29148b40f1ac9a7ea312394754e83feba8e
   subpackages:
   - apis
   - apis/authorization
@@ -218,19 +218,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 36e001fe5638a5b0f3da3fcf349fc6cb7556ba63
+  version: c5a111c571e43c0ee1d5500f1dbd2f10ba1558c7
 - name: github.com/kubedb/etcd
-  version: 2164b14747cf552d159f8887c17892afbc46075e
+  version: b5ec91574a9bcab6f149bc1baa68f6f9dd019ece
 - name: github.com/kubedb/memcached
-  version: 2314fc6520307f8e369bdd4511c4b128373d18ff
+  version: eba806840bd35dfabcbbb72c7723b3ece4dc3b55
 - name: github.com/kubedb/mongodb
-  version: 18e583d21856cb6cec5ad2834d68c1dccbc997ba
+  version: 75cde1b9e633f064290e6e1fc0be9bec78b6937f
 - name: github.com/kubedb/mysql
-  version: b77e66c460bfea8dd7a90adbc18a343ec5cc29a1
+  version: 2d4540435b17ffee144238b1c7d01bbf6d112996
 - name: github.com/kubedb/postgres
-  version: e7d0e32a2c41e8092372d822e41174db7f754a3b
+  version: aab5e5ba779b97e5b586cb9f407de8aa25ea9717
 - name: github.com/kubedb/redis
-  version: dda025f7fd5f359ef1d7d9eaa32b8452ef03e5e0
+  version: 0f4e2d875841ec8e1db6ae5b2e25b831ffd8118c
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
