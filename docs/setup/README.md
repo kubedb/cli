@@ -19,7 +19,7 @@ aliases:
 Setup contains instructions for installing the KubeDB to work with database objects.
 
 - [Install KubeDB](/docs/setup/install.md). Installation instructions for KubeDB.
-- [Uninstall KubeDB](/docs/setup/uninstall.md). Instructions for uninstallating KubeDB.
+- [Uninstall KubeDB](/docs/setup/uninstall.md). Instructions for uninstalling KubeDB.
 - Developer Guide
   - [Overview](/docs/setup/developer-guide/overview.md). Outlines everything you need to know from setting up your dev environment to how to build and test KubeDB.
   - [Release process](/docs/setup/developer-guide/release.md). Steps for releasing a new version of KubeDB.
