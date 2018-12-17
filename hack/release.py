@@ -130,8 +130,9 @@ class Kitten(object):
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
+        call('git reset --hard HEAD', cwd=repo)
         git_checkout('master', cwd=repo)
-        call('git pull --rebase origin master', cwd=repo)
+        call('git reset --hard origin/master', cwd=repo)
         call('glide slow', cwd=repo)
         if git_requires_commit(tag, cwd=repo):
             call('./hack/make.py', cwd=repo)
@@ -154,8 +155,9 @@ class Kitten(object):
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
+        call('git reset --hard HEAD', cwd=repo)
         git_checkout('master', cwd=repo)
-        call('git pull --rebase origin master', cwd=repo)
+        call('git reset --hard origin/master', cwd=repo)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
             glide_mod(glide_config, self.rel_deps)
@@ -189,8 +191,9 @@ class Kitten(object):
         print(repo)
         print('----------------------------------------------------------------------------------------')
         call('git clean -xfd', cwd=repo)
+        call('git reset --hard HEAD', cwd=repo)
         git_checkout('master', cwd=repo)
-        call('git pull --rebase origin master', cwd=repo)
+        call('git reset --hard origin/master', cwd=repo)
         with open(repo + '/glide.yaml', 'r+') as glide_file:
             glide_config = yaml.load(glide_file)
             glide_mod(glide_config, self.rel_deps)
