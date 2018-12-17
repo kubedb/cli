@@ -257,7 +257,7 @@ class Kitten(object):
 def release(comp=None):
     cat = Kitten()
     if comp is None:
-        # cat.release_apimachinery()
+        cat.release_apimachinery()
         for name in DATABASES:
             cat.release_db(name)
         cat.release_server_binary('operator')
