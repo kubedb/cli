@@ -1,12 +1,12 @@
 ---
 title: Monitoring Redis using Coreos Prometheus Operator
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: rd-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: rd-monitoring-redis
     weight: 15
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -39,7 +39,7 @@ This tutorial will show you how to monitor KubeDB databases using Prometheus via
 Run the following command to deploy CoreOS-Prometheus operator.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-0.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
 namespace/demo created
 clusterrole.rbac.authorization.k8s.io/prometheus-operator created
 serviceaccount/prometheus-operator created
@@ -70,7 +70,7 @@ servicemonitors.monitoring.coreos.com         2018-09-24T12:42:22Z
 Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus created
 serviceaccount/prometheus created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus created
@@ -209,7 +209,7 @@ __Known Limitations:__ If the database password is updated, exporter must be res
 Run the following command to deploy the above `Redis` CRD object.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/redis/monitoring/coreos-operator/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/redis/monitoring/coreos-operator/demo-1.yaml
 redis.kubedb.com/redis-mon-coreos created
 ```
 
@@ -341,8 +341,8 @@ kubectl delete -n demo rd/redis-mon-coreos
 kubectl patch -n demo drmn/redis-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
 kubectl delete -n demo drmn/redis-mon-coreos
 
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-1.yaml
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/coreos-operator/demo-0.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
 
 kubectl delete ns demo
 ```

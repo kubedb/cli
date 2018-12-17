@@ -1,12 +1,12 @@
 ---
 title: Monitor Elasticsearch using Builtin Prometheus Discovery
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: es-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: es-monitoring-elasticsearch
     weight: 10
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -66,7 +66,7 @@ Here,
 Run following command to create example above.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/monitoring/builtin-prom-es.yaml
 elasticsearch.kubedb.com/builtin-prom-es created
 ```
 
@@ -178,7 +178,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap/prometheus-server-conf created
 ```
 
@@ -225,7 +225,7 @@ spec:
 Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus-server created
 serviceaccount/prometheus-server created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created

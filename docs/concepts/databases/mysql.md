@@ -1,12 +1,12 @@
 ---
 title: MySQL
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: mysql-db
     name: MySQL
     parent: databases
     weight: 25
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: concepts
 ---
 

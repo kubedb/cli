@@ -1,12 +1,12 @@
 ---
 title: MongoDBVersion
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: mongodb-version
     name: MongoDBVersion
     parent: catalog
     weight: 30
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: concepts
 ---
 
