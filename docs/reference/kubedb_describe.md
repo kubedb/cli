@@ -1,11 +1,11 @@
 ---
 title: Kubedb Describe
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: kubedb-describe
     name: Kubedb Describe
     parent: reference
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: reference
 ---
 ## kubedb describe

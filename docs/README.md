@@ -2,17 +2,17 @@
 title: Welcome | KubeDB
 description: Welcome to KubeDB
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: readme-cli
     name: Readme
     parent: welcome
     weight: -1
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: welcome
-url: /docs/0.9.0-rc.2/welcome/
+url: /docs/0.9.0/welcome/
 aliases:
-  - /docs/0.9.0-rc.2/
-  - /docs/0.9.0-rc.2/README/
+  - /docs/0.9.0/
+  - /docs/0.9.0/README/
 ---
 
 # Welcome

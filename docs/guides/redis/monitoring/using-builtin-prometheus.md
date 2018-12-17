@@ -1,12 +1,12 @@
 ---
 title: Monitoring Redis Using Builtin Prometheus Discovery
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: rd-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: rd-monitoring-redis
     weight: 10
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: guides
 ---
 
@@ -59,7 +59,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/redis/monitoring/builtin-prometheus/demo-1.yaml
 redis.kubedb.com/redis-mon-prometheus created
 ```
 
@@ -254,7 +254,7 @@ data:
 Create above ConfigMap
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/demo-1.yaml
 configmap/prometheus-server-conf created
 ```
 
@@ -301,7 +301,7 @@ spec:
 Run the following command to deploy prometheus-server
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 clusterrole.rbac.authorization.k8s.io/prometheus-server created
 serviceaccount/prometheus-server created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus-server created
@@ -362,7 +362,7 @@ kubectl delete -n demo rd/redis-mon-prometheus
 kubectl patch -n demo drmn/redis-mon-prometheus -p '{"spec":{"wipeOut":true}}' --type="merge"
 kubectl delete -n demo drmn/redis-mon-prometheus
 
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/demo-2.yaml
 
 kubectl delete ns demo
 ```

@@ -1,12 +1,12 @@
 ---
 title: Elasticsearch Quickstart
 menu:
-  docs_0.9.0-rc.2:
+  docs_0.9.0:
     identifier: es-quickstart-quickstart
     name: Overview
     parent: es-quickstart-elasticsearch
     weight: 10
-menu_name: docs_0.9.0-rc.2
+menu_name: docs_0.9.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -76,7 +76,7 @@ NAME       VERSION   DB_IMAGE                        DEPRECATED   AGE
 
 Notice the `DEPRECATED` column. Here, `true` means that this ElasticsearchVersion is deprecated for current KubeDB version. KubeDB will not work for deprecated ElasticsearchVersion.
 
-In this tutorial, we will use `6.3-v1` ElasticsearchVersion crd to create Elasticsearch database. To know more about what is `ElasticsearchVersion` crd and why there is `6.3` and `6.3-v1` variation, please visit [here](/docs/concepts/catalog/elasticsearch.md). You can also see supported ElasticsearchVersion in KubeDB 0.9.0-rc.2 from [here](/docs/guides/elasticsearch/README.md#supported-elasticsearchversion-crd).
+In this tutorial, we will use `6.3-v1` ElasticsearchVersion crd to create Elasticsearch database. To know more about what is `ElasticsearchVersion` crd and why there is `6.3` and `6.3-v1` variation, please visit [here](/docs/concepts/catalog/elasticsearch.md). You can also see supported ElasticsearchVersion in KubeDB 0.9.0 from [here](/docs/guides/elasticsearch/README.md#supported-elasticsearchversion-crd).
 
 ## Create an Elasticsearch database
 
@@ -115,7 +115,7 @@ Here,
 Let's create Elasticsearch crd that is shown above with following command
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
 elasticsearch.kubedb.com/quick-elasticsearch created
 ```
 
@@ -526,7 +526,7 @@ In this tutorial, the DormantDatabase `quick-elasticsearch` can be resumed by cr
 The below command will resume the DormantDatabase `quick-elasticsearch`
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0-rc.2/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/quickstart/quick-elasticsearch.yaml
 elasticsearch.kubedb.com/quick-elasticsearch created
 ```
 

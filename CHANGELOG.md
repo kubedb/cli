@@ -2,10 +2,28 @@
 
 ## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
 
-[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.1...HEAD)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0...HEAD)
 
 **Merged pull requests:**
 
+- Use git reset in release script. [\#363](https://github.com/kubedb/cli/pull/363) ([tamalsaha](https://github.com/tamalsaha))
+
+## [0.9.0](https://github.com/kubedb/cli/tree/0.9.0) (2018-12-17)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.2...0.9.0)
+
+**Merged pull requests:**
+
+- Prepare 0.9.0 release [\#362](https://github.com/kubedb/cli/pull/362) ([tamalsaha](https://github.com/tamalsaha))
+- Revendor dependencies [\#361](https://github.com/kubedb/cli/pull/361) ([tamalsaha](https://github.com/tamalsaha))
+- Add delete list for revendor.py [\#360](https://github.com/kubedb/cli/pull/360) ([tamalsaha](https://github.com/tamalsaha))
+- Upgraded DB-Tools versions [\#359](https://github.com/kubedb/cli/pull/359) ([the-redback](https://github.com/the-redback))
+
+## [0.9.0-rc.2](https://github.com/kubedb/cli/tree/0.9.0-rc.2) (2018-12-06)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.1...0.9.0-rc.2)
+
+**Merged pull requests:**
+
+- Prepare docs for 0.9.0-rc.2 release [\#358](https://github.com/kubedb/cli/pull/358) ([tamalsaha](https://github.com/tamalsaha))
 - Prepase for 0.9.0-rc.2 release [\#357](https://github.com/kubedb/cli/pull/357) ([tamalsaha](https://github.com/tamalsaha))
 - Prepare docs for 0.9.0 release [\#356](https://github.com/kubedb/cli/pull/356) ([tamalsaha](https://github.com/tamalsaha))
 - Use kutil/tool/cli to send analytics [\#355](https://github.com/kubedb/cli/pull/355) ([tamalsaha](https://github.com/tamalsaha))
