@@ -1,11 +1,11 @@
 ---
-title: PostgreSQL Quickstart
+title: Upgrade Manual
 menu:
   docs_0.9.0:
-    identifier: pg-quickstart-quickstart
+    identifier: pg-upgrade-manual
     name: Overview
-    parent: pg-quickstart-postgres
-    weight: 10
+    parent: pg-postgres-guides
+    weight: 15
 menu_name: docs_0.9.0
 section_menu_id: guides
 ---
@@ -117,11 +117,11 @@ scheduled-pg-20181219-094847   scheduled-pg   Succeeded   1h
 scheduled-pg-20181219-094947   scheduled-pg   Succeeded   1h
 ```
 
-Some [other fields](https://github.com/kubedb/apimachinery/blob/6319e29148b40f1ac9a7ea312394754e83feba8e/apis/kubedb/v1alpha1/postgres_types.go#L90-L127) also got deprecated and added. The good thing is, kubedb operator will handle those changes in it's mutating webhook. (So, always try to run kubedb with webhooks enabled). But, user has to update the db-version on it's own.
+Some [other fields](https://github.com/kubedb/apimachinery/blob/6319e29148b40f1ac9a7ea312394754e83feba8e/apis/kubedb/v1alpha1/postgres_types.go#L90-L127) in CRD also got deprecated and some are added. The good thing is, kubedb operator will handle those changes in it's mutating webhook. (So, always try to run kubedb with webhooks enabled). But, user has to update the db-version on his own.
 
 ## Upgrade CRD objects
 
-Note that, Once the DB version is updated, kubedb-operator will update the statefulsets too. This update strategy can be modified by `spec.updateStrategy`. Read [here](https://kubedb.com/docs/0.9.0/concepts/databases/postgres/#spec-updatestrategy) for details.
+Note that, Once the DB version is updated, kubedb-operator will update the statefulsets too. This update strategy can be modified by `spec.updateStrategy`. Read [here](https://kubedb.com/docs/0.9.0/concepts/databases/postgres/#spec-updatestrategy) for details about updateStrategy.
 
 Now, Before updating CRD, find Available PostgresVersion.
 
