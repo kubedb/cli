@@ -21,7 +21,7 @@ At first, you need to have a Kubernetes cluster, and the kubectl command-line to
 
 Now, install KubeDB 0.8.0 cli on your workstation and KubeDB operator in your cluster following the steps [here](https://kubedb.com/docs/0.8.0/setup/install/).
 
-## Previous operator and sample database (CRD) object
+## Previous operator and sample database
 
 In this tutorial we are using helm to install kubedb 0.8.0 release. But, user can install kubedb operator from script too.
 Follow [Install instructions](https://github.com/kubedb/project/issues/262) to install kubedb-operator 0.8.0.
@@ -86,6 +86,8 @@ scheduled-pg-20181219-094847   pg/scheduled-pg   Succeeded   29s
 
 ## Upgrade kubedb-operator
 
+For helm, `upgrade` command works fine.
+
 ```console
 $ helm upgrade --install kubedb-operator appscode/kubedb --version 0.9.0
 $ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.9.0 --namespace default
@@ -95,6 +97,8 @@ NAME               REVISION    UPDATED                     STATUS      CHART    
 kubedb-catalog     1           Wed Dec 19 15:50:40 2018    DEPLOYED    kubedb-catalog-0.9.0    0.9.0          default  
 kubedb-operator    2           Wed Dec 19 15:49:55 2018    DEPLOYED    kubedb-0.9.0            0.9.0          default  
 ```
+
+For Bash script installation, uninstall first, then install again with 0.9.0 script. See [0.9.0 installation guide](https://kubedb.com/docs/0.9.0/setup/install/).
 
 ## Stale CRD objects
 
@@ -278,24 +282,10 @@ kubectl delete -n demo pg/scheduled-pg
 kubectl delete ns demo
 ```
 
-## Tips for Testing
-
-If you are just testing some basic functionalities, you might want to avoid additional hassles due to some safety features that are great for production environment. You can follow these tips to avoid them.
-
-1. **Use `storageType: Ephemeral`**. Databases are precious. You might not want to lose your data in your production environment if database pod fail. So, we recommend to use `spec.storageType: Durable` and provide storage spec in `spec.storage` section. For testing purpose, you can just use `spec.storageType: Ephemeral`. KubeDB will use [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) for storage. You will not require to provide `spec.storage` section.
-2. **Use `terminationPolicy: WipeOut`**. It is nice to be able to resume database from previous one. So, we create `DormantDatabase` and preserve all your `PVCs`, `Secrets`, `Snapshots` etc. If you don't want to resume database, you can just use `spec.terminationPolicy: WipeOut`. It will not create `DormantDatabase` and it will delete everything created by KubeDB for a particular Postgres crd when you delete the crd. For more details about termination policy, please visit [here](/docs/concepts/databases/postgres.md#specterminationpolicy).
-
 ## Next Steps
 
-- Learn about [taking instant backup](/docs/guides/postgres/snapshot/instant_backup.md) of PostgreSQL database using KubeDB Snapshot.
-- Learn how to [schedule backup](/docs/guides/postgres/snapshot/scheduled_backup.md)  of PostgreSQL database.
-- Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
-- Learn about initializing [PostgreSQL from KubeDB Snapshot](/docs/guides/postgres/initialization/snapshot_source.md).
 - Learn about [custom PostgresVersions](/docs/guides/postgres/custom-versions/setup.md).
 - Want to setup PostgreSQL cluster? Check how to [configure Highly Available PostgreSQL Cluster](/docs/guides/postgres/clustering/ha_cluster.md)
-- Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
-- Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [Postgres object](/docs/concepts/databases/postgres.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
-- Use [private Docker registry](/docs/guides/postgres/private-registry/using-private-registry.md) to deploy PostgreSQL with KubeDB.
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
