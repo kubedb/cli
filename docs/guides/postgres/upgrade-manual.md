@@ -21,18 +21,15 @@ At first, you need to have a Kubernetes cluster, and the kubectl command-line to
 
 Now, install KubeDB 0.8.0 cli on your workstation and KubeDB operator in your cluster following the steps [here](https://kubedb.com/docs/0.8.0/setup/install/).
 
-## Prevous operator and sample database
+## Previous operator and sample database (CRD) object
 
 In this tutorial we are using helm to install kubedb 0.8.0 release. But, user can install kubedb operator from script too.
 Follow [Install instructions](https://github.com/kubedb/project/issues/262) to install kubedb-operator 0.8.0.
 
 ```console
-$ helm repo add appscode https://charts.appscode.com/stable/
-$ helm repo update
-$ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
-  --set apiserver.ca="$(onessl get kube-ca)" \
-  --set apiserver.enableValidatingWebhook=true \
-  --set apiserver.enableMutatingWebhook=true
+$ helm ls
+NAME               REVISION    UPDATED                     STATUS      CHART           APP VERSION    NAMESPACE
+kubedb-operator    1           Wed Dec 19 15:42:37 2018    DEPLOYED    kubedb-0.8.0    0.8.0          default  
 ```
 
 Also a sample Postgres database (with scheduled backups) to examine successful upgrade. Read the guide [here](https://kubedb.com/docs/0.8.0/guides/postgres/snapshot/scheduled_backup/#create-postgres-with-backupschedule) to learn about scheduled backup in details.
@@ -75,384 +72,199 @@ $ kubectl create -f scheduled-pg.yaml
 postgres.kubedb.com/scheduled-pg created
 ```
 
-## Find Available StorageClass
-
-We will have to provide `StorageClass` in Postgres crd specification. Check available `StorageClass` in your cluster using following command,
+See running scheduled snapshots,
 
 ```console
-$ kubectl get storageclass
-NAME                 PROVISIONER                AGE
-standard (default)   k8s.io/minikube-hostpath   5h
+NAME                           DATABASE          STATUS      AGE
+scheduled-pg-20181219-094347   pg/scheduled-pg   Succeeded   5m
+scheduled-pg-20181219-094447   pg/scheduled-pg   Succeeded   4m
+scheduled-pg-20181219-094547   pg/scheduled-pg   Succeeded   3m
+scheduled-pg-20181219-094647   pg/scheduled-pg   Succeeded   2m
+scheduled-pg-20181219-094747   pg/scheduled-pg   Succeeded   1m
+scheduled-pg-20181219-094847   pg/scheduled-pg   Succeeded   29s
 ```
 
-Here, we have `standard` StorageClass in our cluster.
+## Upgrade kubedb-operator
 
-## Find Available PostgresVersion
+```console
+$ helm upgrade --install kubedb-operator appscode/kubedb --version 0.9.0
+$ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.9.0 --namespace default
 
-When you have installed KubeDB, it has created `PostgresVersion` crd for all supported PostgreSQL versions. Let's check available PostgresVersions by,
+$ helm ls
+NAME               REVISION    UPDATED                     STATUS      CHART                   APP VERSION    NAMESPACE
+kubedb-catalog     1           Wed Dec 19 15:50:40 2018    DEPLOYED    kubedb-catalog-0.9.0    0.9.0          default  
+kubedb-operator    2           Wed Dec 19 15:49:55 2018    DEPLOYED    kubedb-0.9.0            0.9.0          default  
+```
+
+## Stale CRD objects
+
+At this state, the operator is skipping this `scheduled-pg` Postgres. Because, Postgres version `9.6` is deprecated in `kubedb 0.9.0`.
+The scheduled snapshot also in paused state.
+
+```concole
+$ kubectl get snap -n demo
+NAME                           DATABASENAME   STATUS      AGE
+scheduled-pg-20181219-094347   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094447   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094547   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094647   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094747   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094847   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094947   scheduled-pg   Succeeded   1h
+```
+
+Some [other fields](https://github.com/kubedb/apimachinery/blob/6319e29148b40f1ac9a7ea312394754e83feba8e/apis/kubedb/v1alpha1/postgres_types.go#L90-L127) also got deprecated and added. The good thing is, kubedb operator will handle those changes in it's mutating webhook. (So, always try to run kubedb with webhooks enabled). But, user has to update the db-version on it's own.
+
+## Upgrade CRD objects
+
+Note that, Once the DB version is updated, kubedb-operator will update the statefulsets too. This update strategy can be modified by `spec.updateStrategy`. Read [here](https://kubedb.com/docs/0.9.0/concepts/databases/postgres/#spec-updatestrategy) for details.
+
+Now, Before updating CRD, find Available PostgresVersion.
 
 ```console
 $ kubectl get postgresversions
 NAME       VERSION   DB_IMAGE                   DEPRECATED   AGE
-10.2       10.2      kubedb/postgres:10.2       true         16s
-10.2-v1    10.2      kubedb/postgres:10.2-v1                 16s
-9.6        9.6       kubedb/postgres:9.6        true         19s
-9.6-v1     9.6       kubedb/postgres:9.6-v1                  18s
-9.6.7      9.6.7     kubedb/postgres:9.6.7      true         18s
-9.6.7-v1   9.6.7     kubedb/postgres:9.6.7-v1                17s
+10.2       10.2      kubedb/postgres:10.2       true         1h
+10.2-v1    10.2      kubedb/postgres:10.2-v2                 1h
+9.6        9.6       kubedb/postgres:9.6        true         1h
+9.6-v1     9.6       kubedb/postgres:9.6-v2                  1h
+9.6.7      9.6.7     kubedb/postgres:9.6.7      true         1h
+9.6.7-v1   9.6.7     kubedb/postgres:9.6.7-v2                1h
 ```
 
-Notice the `DEPRECATED` column. Here, `true` means that this PostgresVersion is deprecated for current KubeDB version. KubeDB will not work for deprecated PostgresVersion.
+Notice the `DEPRECATED` column. Here, `true` means that this PostgresVersion is deprecated for current KubeDB version. KubeDB will not work for deprecated PostgresVersion. To know more about what is `PostgresVersion` crd and why there is `10.2` and `10.2-v1` variation, please visit [here](/docs/concepts/catalog/postgres.md).
 
-In this tutorial, we will use `10.2-v1` PostgresVersion crd to create PostgreSQL database. To know more about what is `PostgresVersion` crd and why there is `10.2` and `10.2-v1` variation, please visit [here](/docs/concepts/catalog/postgres.md). You can also see supported PostgresVersion [here](/docs/guides/postgres/README.md#supported-postgresversion-crd).
+Now, Update the CRD and set `Spec.version` to `9.6-v1`.
 
-## Create a PostgreSQL database
+```console
+kubectl edit pg -n demo scheduled-pg
+```
 
-KubeDB implements a Postgres CRD to define the specification of a PostgreSQL database.
-
-Below is the Postgres object created in this tutorial.
+See the changed object (defaulted).
 
 ```yaml
+$ kubectl get pg -n demo scheduled-pg -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: quick-postgres
+  creationTimestamp: "2018-12-19T09:25:52Z"
+  finalizers:
+  - kubedb.com
+  generation: 5
+  name: scheduled-pg
   namespace: demo
+  resourceVersion: "27252"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/scheduled-pg
+  uid: 144abd0f-0370-11e9-8ff4-080027860845
 spec:
-  version: "10.2-v1"
-  storageType: Durable
+  backupSchedule:
+    cronExpression: '@every 1m'
+    gcs:
+      bucket: kubedb
+    podTemplate:
+      controller: {}
+      metadata: {}
+      spec:
+        resources: {}
+    storageSecretName: gcs-secret
+  databaseSecret:
+    secretName: scheduled-pg-auth
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 3
+  serviceTemplate:
+    metadata: {}
+    spec: {}
   storage:
-    storageClassName: "standard"
     accessModes:
     - ReadWriteOnce
+    dataSource: null
     resources:
       requests:
-        storage: 50Mi
-  terminationPolicy: DoNotTerminate
-```
-
-Here,
-
-- `spec.version` is name of the PostgresVersion crd where the docker images are specified. In this tutorial, a PostgreSQL 10.2 database is created.
-- `spec.storageType` specifies the type of storage that will be used for Postgres database. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Postgres database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
-- `spec.storage` specifies the size and StorageClass of PVC that will be dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests. If you don't specify `spec.storageType: Ephemeral`, then this field is required.
-- `spec.terminationPolicy` specifies what KubeDB should do when user try to delete Postgres crd. Termination policy `DoNotTerminate` prevents a user from deleting this object if admission webhook is enabled.
-
->Note: `spec.storage` section is used to create PVC for database pod. It will create PVC with storage size specified in`storage.resources.requests` field. Don't specify `limits` here. PVC does not get resized automatically.
-
-Let's create Postgres crd,
-
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/quick-postgres.yaml
-postgres "quick-postgres" created
-```
-
-KubeDB operator watches for Postgres objects using Kubernetes api. When a Postgres object is created, KubeDB operator will create a new StatefulSet and two ClusterIP Service with the matching name. KubeDB operator will also create a governing service for StatefulSet with the name `kubedb`, if one is not already present.
-
-If you are using RBAC enabled cluster, PostgreSQL specific RBAC permission is required. For details, please visit [here](/docs/guides/postgres/quickstart/rbac.md).
-
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created.
-
-```console
-$  kubectl get pg -n demo quick-postgres -o wide
-NAME             VERSION   STATUS    AGE
-quick-postgres   10.2-v1      Running   1m
-```
-
-Let's describe Postgres object `quick-postgres`
-
-```console
-$ kubedb describe pg -n demo quick-postgres
-Name:               quick-postgres
-Namespace:          demo
-CreationTimestamp:  Mon, 03 Sep 2018 17:25:36 +0600
-Labels:             <none>
-Annotations:        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"kubedb.com/v1alpha1","kind":"Postgres","metadata":{"annotations":{},"name":"quick-postgres","namespace":"demo"},"spec":{"doNotPause":tru...
-Replicas:           1  total
-Status:             Running
-  StorageType:      Durable
-Volume:
-  StorageClass:  standard
-  Capacity:      50Mi
-  Access Modes:  RWO
-
-StatefulSet:          
-  Name:               quick-postgres
-  CreationTimestamp:  Mon, 03 Sep 2018 17:25:40 +0600
-  Labels:               kubedb.com/kind=Postgres
-                        kubedb.com/name=quick-postgres
-  Annotations:        <none>
-  Replicas:           824640348832 desired | 1 total
-  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-Service:        
-  Name:         quick-postgres
-  Labels:         kubedb.com/kind=Postgres
-                  kubedb.com/name=quick-postgres
-  Annotations:  <none>
-  Type:         ClusterIP
-  IP:           10.108.152.107
-  Port:         api  5432/TCP
-  TargetPort:   api/TCP
-  Endpoints:    172.17.0.6:5432
-
-Service:        
-  Name:         quick-postgres-replicas
-  Labels:         kubedb.com/kind=Postgres
-                  kubedb.com/name=quick-postgres
-  Annotations:  <none>
-  Type:         ClusterIP
-  IP:           10.105.175.166
-  Port:         api  5432/TCP
-  TargetPort:   api/TCP
-  Endpoints:    172.17.0.6:5432
-
-Database Secret:
-  Name:         quick-postgres-auth
-  Labels:         kubedb.com/kind=Postgres
-                  kubedb.com/name=quick-postgres
-  Annotations:  <none>
-  
-Type:  Opaque
-  
-Data
-====
-  POSTGRES_PASSWORD:  16 bytes
-  POSTGRES_USER:      8 bytes
-
-Topology:
-  Type     Pod               StartTime                      Phase
-  ----     ---               ---------                      -----
-  primary  quick-postgres-0  2018-09-03 17:25:43 +0600 +06  Running
-
-No Snapshots.
-
-Events:
-  Type    Reason      Age   From               Message
-  ----    ------      ----  ----               -------
-  Normal  Successful  2m    Postgres operator  Successfully created Service
-  Normal  Successful  2m    Postgres operator  Successfully created Service
-  Normal  Successful  1m    Postgres operator  Successfully created StatefulSet
-  Normal  Successful  1m    Postgres operator  Successfully created Postgres
-  Normal  Successful  1m    Postgres operator  Successfully patched StatefulSet
-  Normal  Successful  1m    Postgres operator  Successfully patched Postgres
-```
-
-KubeDB has created two services for the Postgres object.
-
-```console
-$ kubectl get service -n demo --selector=kubedb.com/kind=Postgres,kubedb.com/name=quick-postgres
-NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-quick-postgres            ClusterIP   10.108.152.107   <none>        5432/TCP   3m
-quick-postgres-replicas   ClusterIP   10.105.175.166   <none>        5432/TCP   3m
-```
-
-Here,
-- Service *`quick-postgres`* targets only one Pod which is acting as *primary* server
-- Service *`quick-postgres-replicas`* targets all Pods created by StatefulSet
-
-KubeDB supports PostgreSQL clustering where Pod can be either *primary* or *standby*. To learn how to configure highly available PostgreSQL cluster, click [here](/docs/guides/postgres/clustering/ha_cluster.md).
-
-Here, we have created a PostgreSQL database with single node, *primary* only.
-
-## Connect with PostgreSQL database
-
-KubeDB operator has created a new Secret called `quick-postgres-auth` for storing the *username* and *password* for `postgres` database.
-
-```yaml
- $ kubectl get secret -n demo quick-postgres-auth -o yaml
-apiVersion: v1
-data:
-  POSTGRES_PASSWORD: REQ4aTU2VUJJY3M2M1BWTw==
-  POSTGRES_USER: cG9zdGdyZXM=
-kind: Secret
-metadata:
-  creationTimestamp: 2018-09-03T11:25:39Z
-  labels:
-    kubedb.com/kind: Postgres
-    kubedb.com/name: quick-postgres
-  name: quick-postgres-auth
-  namespace: demo
-  resourceVersion: "1677"
-  selfLink: /api/v1/namespaces/demo/secrets/quick-postgres-auth
-  uid: 15b3e8a1-af6c-11e8-996d-0800270d7bae
-type: Opaque
-```
-
-This secret contains superuser name for `postgres` database as `POSTGRES_USER` key and
-password as `POSTGRES_PASSWORD` key. By default, superuser name is `postgres` and password is randomly generated.
-
-If you want to use custom password, please create the secret manually and specify that when creating the Postgres object using `spec.databaseSecret.secretName`. For more details see [here](/docs/concepts/databases/postgres.md#specdatabasesecret).
-
-> Note: Auth Secret name format: `{postgres-name}-auth`
-
-Now, you can connect to this database from the pgAdmin dashboard using `quick-postgres.demo` service and *username* and *password* created in `quick-postgres-auth` secret.
-
-**Connection information:**
-
-- Host name/address: you can use any of these
-  - Service: `quick-postgres.demo`
-  - Pod IP: (`$ kubectl get pods quick-postgres-0 -n demo -o yaml | grep podIP`)
-- Port: `5432`
-- Maintenance database: `postgres`
-
-- Username: Run following command to get *username*,
-
-  ```console
-  $ kubectl get secrets -n demo quick-postgres-auth -o jsonpath='{.data.\POSTGRES_USER}' | base64 -d
-  postgres
-  ```
-
-- Password: Run the following command to get *password*,
-
-  ```console
-  $ kubectl get secrets -n demo quick-postgres-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
-  DD8i56UBIcs63PVO
-  ```
-
-Now, go to pgAdmin dashboard and connect to the database using the connection information as shown below,
-
-<p align="center">
-  <kbd>
-    <img alt="quick-postgres"  src="/docs/images/postgres/quick-postgres.gif">
-  </kbd>
-</p>
-
-## Pause Database
-
-KubeDB takes advantage of `ValidationWebhook` feature in Kubernetes 1.9.0 or later clusters to implement `DoNotTerminate` termination policy. If admission webhook is enabled, it prevents user from deleting the database as long as the `spec.terminationPolicy` is set `DoNotTerminate`.
-
-In this tutorial, Postgres `quick-postgres` is created with `spec.terminationPolicy: DoNotTerminate`. So if you try to delete this Postgres object, admission webhook will nullify the delete operation.
-
-```console
-$  kubedb delete pg -n demo quick-postgres
-Error from server (BadRequest): admission webhook "postgres.validators.kubedb.com" denied the request: postgres "quick-postgres" can't be paused. To delete, change spec.terminationPolicy
-```
-
-To pause the database, we have to set `spec.terminationPolicy:` to `Pause` by updating it,
-
-```console
-$ kubectl edit pg -n demo quick-postgres
-spec:
+        storage: 1Gi
+    storageClassName: standard
+  storageType: Durable
   terminationPolicy: Pause
-```
-
-Now, if you delete the Postgres object, KubeDB operator will create a matching DormantDatabase object. This DormantDatabase object can be used to resume the database. KubeDB operator will delete the StatefulSet and its Pods but leaves the Secret, PVCs unchanged.
-
-Let's delete the Postgres object,
-
-```console
-$ kubectl delete pg -n demo quick-postgres
-postgres.kubedb.com "quick-postgres" deleted
-```
-
-Check DormantDatabase has been created successfully,
-
-```console
-$ kubectl get drmn -n demo quick-postgres
-NAME             STATUS    AGE
-quick-postgres   Paused    5m
-```
-
-In KubeDB parlance, we say that Postgres `quick-postgres`  has entered into the dormant state.
-
-Let's see, what we have in this DormantDatabase object
-
-```yaml
-$ kubectl get drmn -n demo quick-postgres -o yaml
-apiVersion: kubedb.com/v1alpha1
-kind: DormantDatabase
-metadata:
-  creationTimestamp: 2018-09-03T12:13:25Z
-  generation: 1
-  labels:
-    kubedb.com/kind: Postgres
-  name: quick-postgres
-  namespace: demo
-  ...
-spec:
-  origin:
-    metadata:
-      annotations:
-        ...
-      creationTimestamp: 2018-09-03T11:25:36Z
-      name: quick-postgres
-      namespace: demo
-    spec:
-      postgres:
-        databaseSecret:
-          secretName: quick-postgres-auth
-        podTemplate:
-          controller: {}
-          metadata: {}
-          spec:
-            resources: {}
-        replicas: 1
-        serviceTemplate:
-          metadata: {}
-          spec: {}
-        storage:
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 50Mi
-          storageClassName: standard
-        storageType: Durable
-        version: "10.2-v1"
+  updateStrategy:
+    type: RollingUpdate
+  version: 9.6-v1
 status:
-  observedGeneration: 1
-  observedGenerationHash: "8378748355133368567"
-  pausingTime: 2018-09-03T12:13:37Z
-  phase: Paused
+  observedGeneration: 5$4214054550087021099
+  phase: Running
 ```
 
-Here,
-
-- `spec.origin` contains original Postgres object.
-- `status.phase` points to the current database state `Paused`.
-
-## Resume DormantDatabase
-
-To resume the database from the dormant state, create same Postgres object with same Spec.
-
-In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creating original Postgres object.
-
-Let's create the original Postgres object,
+Watch for pod updates in `RollingUpdate` UpdateStrategy.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/kubectl apply -f ./quickstart/quick-postgres.yaml
-postgres.kubedb.com/quick-postgres created
+$ kubectl get po -n demo -w
+NAMESPACE     NAME     READY   STATUS    RESTARTS   AGE
+...
+demo   scheduled-pg-2   1/1   Terminating   0     107m
+demo   scheduled-pg-2   0/1   Terminating   0     107m
+demo   scheduled-pg-2   0/1   Terminating   0     107m
+demo   scheduled-pg-2   0/1   Terminating   0     107m
+demo   scheduled-pg-2   0/1   Pending   0     0s
+demo   scheduled-pg-2   0/1   Pending   0     0s
+demo   scheduled-pg-2   0/1   ContainerCreating   0     0s
+demo   scheduled-pg-2   0/1   ContainerCreating   0     19s
+demo   scheduled-pg-2   1/1   Running   0     19s
+demo   scheduled-pg-1   1/1   Terminating   0     108m
+demo   scheduled-pg-1   0/1   Terminating   0     108m
+demo   scheduled-pg-1   0/1   Terminating   0     108m
+demo   scheduled-pg-1   0/1   Terminating   0     108m
+demo   scheduled-pg-1   0/1   Pending   0     0s
+demo   scheduled-pg-1   0/1   Pending   0     0s
+demo   scheduled-pg-1   0/1   ContainerCreating   0     0s
+demo   scheduled-pg-1   0/1   ContainerCreating   0     1s
+demo   scheduled-pg-1   1/1   Running   0     2s
+demo   scheduled-pg-0   1/1   Terminating   0     108m
+demo   scheduled-pg-0   0/1   Terminating   0     109m
+demo   scheduled-pg-0   0/1   Terminating   0     109m
+demo   scheduled-pg-0   0/1   Terminating   0     109m
+demo   scheduled-pg-0   0/1   Pending   0     0s
+demo   scheduled-pg-0   0/1   Pending   0     0s
+demo   scheduled-pg-0   0/1   ContainerCreating   0     0s
+demo   scheduled-pg-0   0/1   ContainerCreating   0     1s
+demo   scheduled-pg-0   1/1   Running   0     2s
 ```
 
-This will resume the previous database. All data that was inserted in previous database will be available again.
-
-When the database is resumed, respective DormantDatabase object will be removed. Verify that the DormantDatabase object has been removed,
+Watch for statefulset states.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/quick-postgres.yaml
-postgres "quick-postgres" created
+$ kubectl get statefulset -n demo -w
+NAME           READY   AGE
+scheduled-pg   3/3     105m
+scheduled-pg   3/3   107m
+scheduled-pg   3/3   107m
+scheduled-pg   2/3   107m
+scheduled-pg   2/3   107m
+scheduled-pg   3/3   108m
+scheduled-pg   2/3   108m
+scheduled-pg   2/3   108m
+scheduled-pg   3/3   108m
+scheduled-pg   2/3   109m
+scheduled-pg   2/3   109m
+scheduled-pg   3/3   109m
 ```
 
-## WipeOut DormantDatabase
-
-You can wipe out a DormantDatabase while deleting the object by setting `spec.wipeOut` to true. KubeDB operator will delete any relevant resources of this `PostgresSQL` database (i.e, PVCs, Secrets, Snapshots). It will also delete snapshot data stored in the Cloud Storage buckets.
-
-```yaml
-$ kubectl edit drmn -n demo quick-postgres
-spec:
-  wipeOut: true
-```
-
-If `spec.wipeOut` is not set to true while deleting the `dormantdatabase` object, then only this object will be deleted and `kubedb-operator` won't delete related Secrets, PVCs, and Snapshots. So, users still can access the stored data in the cloud storage buckets as well as PVCs.
-
-## Delete DormantDatabase
-
-As it is already discussed above, `DormantDatabase` can be deleted with or without wiping out the resources. To delete the `dormantdatabase`,
+The scheduled snapshot is in working state now.
 
 ```console
-$ kubectl delete drmn -n demo quick-postgres
-dormantdatabase.kubedb.com "quick-postgres" deleted
+$ kubectl get snap -n demo
+NAME                           DATABASENAME   STATUS      AGE
+scheduled-pg-20181219-094347   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094447   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094547   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094647   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094747   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094847   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-094947   scheduled-pg   Succeeded   1h
+scheduled-pg-20181219-111319   scheduled-pg   Succeeded   2m
+scheduled-pg-20181219-111419   scheduled-pg   Succeeded   1m
+scheduled-pg-20181219-111519   scheduled-pg   Running     4s
 ```
 
 ## Cleaning up
@@ -460,10 +272,10 @@ dormantdatabase.kubedb.com "quick-postgres" deleted
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/quick-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/quick-postgres
+kubectl patch -n demo pg/scheduled-pg -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/scheduled-pg
 
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```
 
 ## Tips for Testing
