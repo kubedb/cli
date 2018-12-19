@@ -24,6 +24,7 @@ Now, install KubeDB 0.8.0 cli on your workstation and KubeDB operator in your cl
 ## Prevous operator and sample database
 
 In this tutorial we are using helm to install kubedb 0.8.0 release. But, user can install kubedb operator from script too.
+Follow [Install instructions](https://github.com/kubedb/project/issues/262) to install kubedb-operator 0.8.0.
 
 ```console
 $ helm repo add appscode https://charts.appscode.com/stable/
@@ -34,7 +35,7 @@ $ helm install appscode/kubedb --name kubedb-operator --version 0.8.0 \
   --set apiserver.enableMutatingWebhook=true
 ```
 
-Also a sample Postgres database (with scheduled backups) to examine successful upgrade.
+Also a sample Postgres database (with scheduled backups) to examine successful upgrade. Read the guide [here](https://kubedb.com/docs/0.8.0/guides/postgres/snapshot/scheduled_backup/#create-postgres-with-backupschedule) to learn about scheduled backup in details.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -53,40 +54,26 @@ spec:
       requests:
         storage: 1Gi
   backupSchedule:
-    cronExpression: "@every 6h"
+    cronExpression: "@every 1m"
     storageSecretName: gcs-secret
     gcs:
       bucket: kubedb
 ```
 
-## Install pgAdmin
-
-This tutorial will also use a pgAdmin to connect and test PostgreSQL database, once it is running.
-
-Run the following command to install pgAdmin,
+Now create secret and deploy database.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/pgadmin.yaml
-deployment.apps/pgadmin created
-service/pgadmin created
+$ kubectl create ns demo
+namespace/demo created
 
-$ kubectl get pods -n demo --watch
-NAME                      READY     STATUS              RESTARTS   AGE
-pgadmin-5b4b96779-lfpfh   0/1       ContainerCreating   0          1m
-pgadmin-5b4b96779-lfpfh   1/1       Running   0         2m
-^C⏎
+$ kubectl create secret -n demo generic gcs-secret \
+    --from-file=./GOOGLE_PROJECT_ID \
+    --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+secret/gcs-secret created
+
+$ kubectl create -f scheduled-pg.yaml
+postgres.kubedb.com/scheduled-pg created
 ```
-
-Now, you can open pgAdmin on your browser using following address `http://<cluster ip>:<NodePort of pgadmin service>`.
-
-If you are using minikube then open pgAdmin in your browser by running `minikube service pgadmin -n demo`. Or you can get the URL of Service `pgadmin` by running following command
-
-```console
-$ minikube service pgadmin -n demo --url
-http://192.168.99.100:31983
-```
-
-To log into the pgAdmin, use username __`admin`__ and password __`admin`__.
 
 ## Find Available StorageClass
 
