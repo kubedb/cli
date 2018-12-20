@@ -96,3 +96,37 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v2"
+
+---
+# After 0.9.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "10.6"
+  labels:
+    app: kubedb
+spec:
+  version: "10.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.6"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.6"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "11.1"
+  labels:
+    app: kubedb
+spec:
+  version: "11.1"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:11.1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:11.1"
