@@ -158,7 +158,7 @@ StartTimestamp: Tue, 12 Dec 2017 11:46:16 +0600
 Status:         Running
 Volume:
   StorageClass: standard
-  Capacity:     50Mi
+  Capacity:     1Gi
   Access Modes: RWO
 
 StatefulSet:

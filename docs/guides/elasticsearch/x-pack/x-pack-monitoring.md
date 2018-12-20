@@ -312,7 +312,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
 ```
 
 Now, wait for few minutes. KubeDB will create necessary secrets, services, and statefulsets.

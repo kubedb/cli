@@ -63,7 +63,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
 ```
 
 Create above Postgres object with following command

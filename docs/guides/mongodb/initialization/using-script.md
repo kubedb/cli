@@ -71,7 +71,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   init:
     scriptSource:
       configMap:
@@ -101,7 +101,7 @@ Status:             Running
   StorageType:      Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:
@@ -167,11 +167,11 @@ mgo-init-script   1         1         2m
 
 $ kubectl get pvc -n demo
 NAME                        STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-datadir-mgo-init-script-0   Bound     pvc-a10d636b-c08c-11e8-b4a9-0800272618ed   50Mi       RWO            standard       11m
+datadir-mgo-init-script-0   Bound     pvc-a10d636b-c08c-11e8-b4a9-0800272618ed   1Gi       RWO            standard       11m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                            STORAGECLASS   REASON    AGE
-pvc-a10d636b-c08c-11e8-b4a9-0800272618ed   50Mi       RWO            Delete           Bound     demo/datadir-mgo-init-script-0   standard                 12m
+pvc-a10d636b-c08c-11e8-b4a9-0800272618ed   1Gi        RWO            Delete           Bound     demo/datadir-mgo-init-script-0   standard                 12m
 
 $ kubectl get service -n demo
 NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
@@ -216,7 +216,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
     storageClassName: standard
   storageType: Durable
   terminationPolicy: Pause

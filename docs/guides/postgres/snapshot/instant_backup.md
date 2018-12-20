@@ -207,7 +207,7 @@ Volume:
   StorageType:  Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:          

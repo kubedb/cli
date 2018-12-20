@@ -88,7 +88,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
     storageClassName: standard
   storageType: Durable
   terminationPolicy: Pause
@@ -177,7 +177,7 @@ Status:             Running
   StorageType:      Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:
