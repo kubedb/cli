@@ -270,5 +270,42 @@ spec:
     image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
   tools:
     image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.4-v1"
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.5.3"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "6.5.3"
+  db:
+    image: "{{ .Values.dockerRegistry }}/elasticsearch:6.5.3"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.5.3"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.5"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "6.5.3"
+  db:
+    image: "{{ .Values.dockerRegistry }}/elasticsearch:6.5"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/elasticsearch-tools:6.5"
 
 {{ end }}
