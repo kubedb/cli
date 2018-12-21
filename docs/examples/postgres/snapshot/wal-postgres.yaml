@@ -12,7 +12,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   archiver:
     storage:
       storageSecretName: s3-secret

@@ -64,7 +64,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   init:
     snapshotSource:
       name: instant-snapshot
@@ -117,7 +117,7 @@ Init:
   StorageType:  Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:          

@@ -44,7 +44,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   init:
     scriptSource:
       configMap:
@@ -179,7 +179,7 @@ topology:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 50Mi
+          storage: 1Gi
     resources:
       requests:
         memory: "64Mi"

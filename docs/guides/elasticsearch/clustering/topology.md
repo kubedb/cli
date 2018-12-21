@@ -56,7 +56,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
 ```
 
 Here,
@@ -86,7 +86,7 @@ Replicas:           3  total
   StorageType:      Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:          
@@ -227,7 +227,7 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Mi
+            storage: 1Gi
 ```
 
 Here,
@@ -267,14 +267,14 @@ Three StatefulSets are created for *client*, *data* and *master* node respective
             - ReadWriteOnce
             resources:
               requests:
-                storage: 50Mi
+                storage: 1Gi
     ```
 
     This configuration creates a StatefulSet named `client-topology-es` for client node
 
   - `spec.replicas` is set to `2`. Two dedicated nodes is created as client.
   - Label `node.role.client: set` is added in Pods
-  - Each Pod will receive a single PersistentVolume with a StorageClass of **standard** and **50Mi** of provisioned storage.
+  - Each Pod will receive a single PersistentVolume with a StorageClass of **standard** and **1Gi** of provisioned storage.
 
 - data-topology-es
 

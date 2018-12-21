@@ -78,7 +78,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   terminationPolicy: DoNotTerminate
 ```
 
@@ -110,7 +110,7 @@ Status:             Running
   StorageType:      Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:
@@ -177,11 +177,11 @@ mgo-quickstart   1         1         20m
 
 $ kubectl get pvc -n demo
 NAME                       STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-datadir-mgo-quickstart-0   Bound     pvc-081fb321-bfdb-11e8-93d2-080027e2cfdd   50Mi       RWO            standard       23m
+datadir-mgo-quickstart-0   Bound     pvc-081fb321-bfdb-11e8-93d2-080027e2cfdd   1Gi        RWO            standard       23m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                           STORAGECLASS   REASON    AGE
-pvc-081fb321-bfdb-11e8-93d2-080027e2cfdd   50Mi       RWO            Delete           Bound     demo/datadir-mgo-quickstart-0   standard                 23m
+pvc-081fb321-bfdb-11e8-93d2-080027e2cfdd   1Gi        RWO            Delete           Bound     demo/datadir-mgo-quickstart-0   standard                 23m
 
 $ kubectl get service -n demo
 NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
@@ -214,7 +214,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
     storageClassName: standard
   storageType: Durable
   terminationPolicy: Pause
@@ -347,7 +347,7 @@ spec:
           - ReadWriteOnce
           resources:
             requests:
-              storage: 50Mi
+              storage: 1Gi
           storageClassName: standard
         storageType: Durable
         terminationPolicy: Pause
