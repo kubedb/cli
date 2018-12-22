@@ -104,8 +104,12 @@ REQUIRED_DEPS = [
       "version": "v2.2.1"
     },
     {
-    "package": "github.com/imdario/mergo",
-    "version": "v0.3.5"
+      "package": "github.com/imdario/mergo",
+      "version": "v0.3.5"
+    },
+    {
+      "package": "github.com/mitchellh/mapstructure",
+      "version": "v1.1.2"
     }
 ]
 DEP_LIST = [
