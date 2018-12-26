@@ -1,5 +1,5 @@
-hash: 7af47cb400f3e749594d750b30a38f1206bc3870e02463afd00fc02531b3fe7e
-updated: 2018-12-17T04:49:13.093908712-08:00
+hash: 50fabbfd91a2429b934e1f27e674db22406467efa58a6483a29b38fe690036f9
+updated: 2018-12-26T11:18:32.063926189-08:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -103,7 +103,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: 36442dbdb585210f8d5a1b45e67aa323c197d5c4
+  version: 72bf35d0ff611848c1dc9df0f976c81192392fa5
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -112,6 +112,8 @@ imports:
   version: 878a968ab22548362a09bdb3322f98b00f470d46
 - name: github.com/ghodss/yaml
   version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
+- name: github.com/go-ini/ini
+  version: a9da9309fb4822643ceebb765f80025c35ac19a1
 - name: github.com/go-openapi/jsonpointer
   version: 46af16f9f7b149af66e5d1bd010e3574dc06de98
 - name: github.com/go-openapi/jsonreference
@@ -192,7 +194,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 6319e29148b40f1ac9a7ea312394754e83feba8e
+  version: 4c42014d5745345e56a41261142b9ae4b977d696
   subpackages:
   - apis
   - apis/authorization
@@ -205,19 +207,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: c5a111c571e43c0ee1d5500f1dbd2f10ba1558c7
+  version: d1ab23029099dcfbc1bb28db9184bcb51e641225
 - name: github.com/kubedb/etcd
-  version: b5ec91574a9bcab6f149bc1baa68f6f9dd019ece
+  version: e12e05cee05d1bf87fa5039d49fda896af4a161b
 - name: github.com/kubedb/memcached
-  version: eba806840bd35dfabcbbb72c7723b3ece4dc3b55
+  version: 49f218bc825f0762369f334544cbe8a98fbaa51d
 - name: github.com/kubedb/mongodb
-  version: 75cde1b9e633f064290e6e1fc0be9bec78b6937f
+  version: 94e2e99ee48938ff5859508521e588d09e8bb0d0
 - name: github.com/kubedb/mysql
-  version: 2d4540435b17ffee144238b1c7d01bbf6d112996
+  version: 7eafe08852e17e16577ef9db808db6a7676797ab
 - name: github.com/kubedb/postgres
-  version: aab5e5ba779b97e5b586cb9f407de8aa25ea9717
+  version: f6e55779f005fee71444f5cdcf4d489272cdff95
 - name: github.com/kubedb/redis
-  version: 0f4e2d875841ec8e1db6ae5b2e25b831ffd8118c
+  version: 90968e50c0ffcfda8c2b30795a09378688791809
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -229,13 +231,13 @@ imports:
 - name: github.com/mitchellh/go-wordwrap
   version: ad45545899c7b13c020ea92b2072220eefad42b8
 - name: github.com/mitchellh/mapstructure
-  version: 53818660ed4955e899c0bcafa97299a388bd7c8e
+  version: 3536a929edddb9a5b34bd6861dc4a9647cb459fe
 - name: github.com/modern-go/concurrent
   version: bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94
 - name: github.com/modern-go/reflect2
   version: 05fbef0ca5da472bbf96c9322b84a53edc03c9fd
 - name: github.com/ncw/swift
-  version: 6f342da371d063863f2f354f183e4ab0ef72d287
+  version: 3d63426e3fec66c303577c2257565bd19a5ca3bc
 - name: github.com/opencontainers/go-digest
   version: a6d0ee40d4207ea02364bd3b9e8e77b9159ba1eb
 - name: github.com/opencontainers/image-spec
@@ -340,6 +342,8 @@ imports:
   - urlfetch
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
+- name: gopkg.in/ini.v1
+  version: a9da9309fb4822643ceebb765f80025c35ac19a1
 - name: gopkg.in/square/go-jose.v2
   version: 72415094398e2f013bf50b76fd6de36df47938ea
   subpackages:
@@ -451,7 +455,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 70f523ccd088c9dca12de68b719d9b29f8e8c7d2
+  version: 419ab4faf457be27411fc8125ed110a03be373e8
   repo: https://github.com/kmodules/apiserver.git
   vcs: git
   subpackages:
@@ -712,7 +716,7 @@ imports:
   - exec
   - pointer
 - name: kmodules.xyz/custom-resources
-  version: 6d398bd2d81b1d6a811ad026c1dd24f1564a1f3c
+  version: b4ef1fe08b7a09681a676c1b697cf66fd74b7ed4
   repo: https://github.com/kmodules/custom-resources.git
   vcs: git
   subpackages:
