@@ -8,6 +8,13 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- if and (eq .Values.monitoring.agent "prometheus.io/builtin") .Values.monitoring.enable }}
+  annotations:
+    prometheus.io/scrap: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8443"
+    prometheus.io/scheme: "https"
+  {{- end }}
 spec:
   ports:
   - name: api
