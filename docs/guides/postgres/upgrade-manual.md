@@ -43,7 +43,7 @@ metadata:
 spec:
   version: "9.6"
   replicas: 3
-  standbyMode: Hot
+  standbyMode: hot
   storage:
     storageClassName: "standard"
     accessModes:
@@ -93,6 +93,16 @@ scheduled-pg-20181219-094747   pg/scheduled-pg   Succeeded   1m
 scheduled-pg-20181219-094847   pg/scheduled-pg   Succeeded   29s
 ```
 
+Node status:
+
+```console
+$ kubectl get pods -n demo --show-labels
+NAME             READY   STATUS    RESTARTS   AGE     LABELS
+scheduled-pg-0   1/1     Running   0          6m12s   controller-revision-hash=scheduled-pg-598d87f567,kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg,kubedb.com/role=primary,statefulset.kubernetes.io/pod-name=scheduled-pg-0
+scheduled-pg-1   1/1     Running   0          5m48s   controller-revision-hash=scheduled-pg-598d87f567,kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=scheduled-pg-1
+scheduled-pg-2   1/1     Running   0          5m47s   controller-revision-hash=scheduled-pg-598d87f567,kubedb.com/kind=Postgres,kubedb.com/name=scheduled-pg,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=scheduled-pg-2
+```
+
 ### Connect with PostgreSQL database
 
 Now, you can connect to this database using `scheduled-pg.demo` service and *password* created in `scheduled-pg-auth` secret.
@@ -102,6 +112,8 @@ Now, you can connect to this database using `scheduled-pg.demo` service and *pas
 - Host name/address: you can use any of these
   - Service: `scheduled-pg.demo`
   - Pod IP: (`$ kubectl get pods scheduled-pg-0 -n demo -o yaml | grep podIP`)
+
+  But, In this tutorial we will exec into each pod to insert data and see data availability in replica nodes. So, `localhost` as host is fine.
 - Port: `5432`
 - Maintenance database: `postgres`
 - Username: `postgres`
@@ -109,8 +121,10 @@ Now, you can connect to this database using `scheduled-pg.demo` service and *pas
 
   ```console
   $ kubectl get secrets -n demo scheduled-pg-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
-  KMR3FwI981ofLGg3
+  NhgND-3u4VYgqVyN
   ```
+
+Connect to master through cli:
 
 ```console
 $ kubectl run -it -n demo --rm --restart=Never postgres-cli --image=postgres:9.6 --command -- bash
