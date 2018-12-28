@@ -50,6 +50,10 @@ spec:
     resources:
       requests:
         storage: 1Gi
+  init:
+    scriptSource:
+      configMap:
+        name: pg-init-script
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: gcs-secret
@@ -67,6 +71,10 @@ $ kubectl create secret -n demo generic gcs-secret \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 secret/gcs-secret created
+
+$ kubectl create configmap -n demo pg-init-script \
+--from-literal=data.sql="$(curl -fsSL https://raw.githubusercontent.com/kubedb/postgres-init-scripts/master/data.sql)"
+configmap/pg-init-script created
 
 $ kubectl create -f scheduled-pg.yaml
 postgres.kubedb.com/scheduled-pg created
@@ -124,15 +132,81 @@ postgres=# \l
 
 ```
 
-### connect to pgadmin
+Verify initialization
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/quickstart/pgadmin.yaml
-deployment.apps/pgadmin created
-service/pgadmin created
+postgres=# select * from pg_catalog.pg_tables where schemaname = 'data';
+ schemaname | tablename | tableowner | tablespace | hasindexes | hasrules | hastriggers | rowsecurity
+ 
+------------+-----------+------------+------------+------------+----------+-------------+------------
+-
+ data       | dashboard | postgres   |            | t          | f        | f           | f
+(1 row)
+```
 
-$ minikube service pgadmin -n demo --url
-http://192.168.99.100:31746
+Insert data
+
+```console
+postgres=# CREATE DATABASE testdb;
+CREATE DATABASE
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+
+postgres=# \c testdb
+psql (9.6.11, server 9.6.7)
+You are now connected to database "testdb" as user "postgres".
+
+testdb=# \d
+No relations found.
+
+testdb=# CREATE TABLE COMPANY(
+   ID INT PRIMARY KEY     NOT NULL,
+   NAME           TEXT    NOT NULL,
+   AGE            INT     NOT NULL,
+   ADDRESS        CHAR(50),
+   SALARY         REAL,
+   JOIN_DATE	  DATE
+);
+CREATE TABLE
+
+testdb=# \d
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | company | table | postgres
+(1 row)
+
+testdb=# INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (1, 'Paul', 32, 'California', 20000.00,'2001-07-13'), (2, 'Allen', 25, 'Texas', 20000.00, '2007-12-13'),(3, 'Teddy', 23, 'Norway', 20000.00, '2007-12-13' ), (4, 'Mark', 25, 'Rich-Mond ', 65000.00, '2007-12-13' ), (5, 'David', 27, 'Texas', 85000.00, '2007-12-13');
+INSERT 0 5
+
+testdb=# SELECT * FROM company;
+ id | name  | age |                      address                       | salary | join_date  
+----+-------+-----+----------------------------------------------------+--------+------------
+  1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
+  2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
+  3 | Teddy |  23 | Norway                                             |  20000 | 2007-12-13
+  4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
+  5 | David |  27 | Texas                                              |  85000 | 2007-12-13
+(5 rows)
+
+```
+
+Exit from postgres cli
+
+```console
+testdb-# \q
+root@postgres-cli:/# exit
+exit
 ```
 
 ## Upgrade kubedb-operator
@@ -320,6 +394,51 @@ scheduled-pg-20181219-094947   scheduled-pg   Succeeded   1h
 scheduled-pg-20181219-111319   scheduled-pg   Succeeded   2m
 scheduled-pg-20181219-111419   scheduled-pg   Succeeded   1m
 scheduled-pg-20181219-111519   scheduled-pg   Running     4s
+```
+
+## Varify Data persistence
+
+```console
+$ kubectl run -it -n demo --rm --restart=Never postgres-cli --image=postgres:9.6 --command -- bash
+If you don't see a command prompt, try pressing enter.
+root@postgres-cli:/# psql -h scheduled-pg.demo -U postgres
+Password for user postgres: 
+psql (9.6.11, server 9.6.7)
+Type "help" for help.
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+
+postgres=# \c testdb
+psql (9.6.11, server 9.6.7)
+You are now connected to database "testdb" as user "postgres".
+
+testdb=# \d
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | company | table | postgres
+(1 row)
+
+testdb=# SELECT * FROM company;
+ id | name  | age |                      address                       | salary | join_date  
+----+-------+-----+----------------------------------------------------+--------+------------
+  1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
+  2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
+  3 | Teddy |  23 | Norway                                             |  20000 | 2007-12-13
+  4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
+  5 | David |  27 | Texas                                              |  85000 | 2007-12-13
+(5 rows)
+
 ```
 
 ## Cleaning up
