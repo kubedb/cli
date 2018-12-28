@@ -10,7 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
   {{- if and (eq .Values.monitoring.agent "prometheus.io/builtin") .Values.monitoring.enable }}
   annotations:
-    prometheus.io/scrap: "true"
+    prometheus.io/scrape: "true"
     prometheus.io/path: "/metrics"
     prometheus.io/port: "8443"
     prometheus.io/scheme: "https"

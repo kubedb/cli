@@ -568,7 +568,7 @@ fi
    case "$MONITORING_AGENT" in
      "$MONITORING_AGENT_BUILTIN")
         kubectl annotate service kubedb-${KUBEDB_OPERATOR_NAME} -n "$KUBEDB_NAMESPACE" --overwrite \
-          prometheus.io/scrap="true" \
+          prometheus.io/scrape="true" \
           prometheus.io/path="/metrics" \
           prometheus.io/port="8443" \
           prometheus.io/scheme="https"

@@ -5,9 +5,9 @@
 replicaCount: 1
 # Docker registry containing Kubedb images
 kubedb:
-  registry: kubedb
+  registry: kubedbci
   repository: operator
-  tag: 0.9.0
+  tag: healthz
 cleaner:
   registry: appscode
   repository: kubectl
@@ -83,7 +83,9 @@ apiserver:
   bypassValidatingWebhookXray: false
   # If true, uses kube-apiserver FQDN for AKS cluster to workaround https://github.com/Azure/AKS/issues/522 (default true)
   useKubeapiserverFqdnForAks: true
-
+  # healthcheck configures the readiness and liveliness probes for the operator pod.
+  healthcheck:
+    enabled: true
 
 # Send usage events to Google Analytics
 enableAnalytics: true
