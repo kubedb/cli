@@ -32,7 +32,7 @@ NAME               REVISION    UPDATED                     STATUS      CHART    
 kubedb-operator    1           Wed Dec 19 15:42:37 2018    DEPLOYED    kubedb-0.8.0    0.8.0          default  
 ```
 
-Also a sample Postgres database (with scheduled backups) to examine successful upgrade. Read the guide [here](https://kubedb.com/docs/0.8.0/guides/postgres/snapshot/scheduled_backup/#create-postgres-with-backupschedule) to learn about scheduled backup in details.
+Also a sample Postgres database (with scheduled backups) compatible with kubedb-0.8.0 to examine successful upgrade. Read the guide [here](https://kubedb.com/docs/0.8.0/guides/postgres/snapshot/scheduled_backup/#create-postgres-with-backupschedule) to learn about scheduled backup in details.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -82,6 +82,57 @@ scheduled-pg-20181219-094547   pg/scheduled-pg   Succeeded   3m
 scheduled-pg-20181219-094647   pg/scheduled-pg   Succeeded   2m
 scheduled-pg-20181219-094747   pg/scheduled-pg   Succeeded   1m
 scheduled-pg-20181219-094847   pg/scheduled-pg   Succeeded   29s
+```
+
+### Connect with PostgreSQL database
+
+Now, you can connect to this database using `scheduled-pg.demo` service and *password* created in `scheduled-pg-auth` secret.
+
+**Connection information:**
+
+- Host name/address: you can use any of these
+  - Service: `scheduled-pg.demo`
+  - Pod IP: (`$ kubectl get pods scheduled-pg-0 -n demo -o yaml | grep podIP`)
+- Port: `5432`
+- Maintenance database: `postgres`
+- Username: `postgres`
+- Password: Run the following command to get *password*,
+
+  ```console
+  $ kubectl get secrets -n demo scheduled-pg-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
+  KMR3FwI981ofLGg3
+  ```
+
+```console
+$ kubectl run -it -n demo --rm --restart=Never postgres-cli --image=postgres:9.6 --command -- bash
+If you don't see a command prompt, try pressing enter.
+root@postgres-cli:/# psql -h scheduled-pg.demo -U postgres
+Password for user postgres: 
+psql (9.6.11, server 9.6.7)
+Type "help" for help.
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+(3 rows)
+
+```
+
+### connect to pgadmin
+
+```console
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.8.0/docs/examples/postgres/quickstart/pgadmin.yaml
+deployment.apps/pgadmin created
+service/pgadmin created
+
+$ minikube service pgadmin -n demo --url
+http://192.168.99.100:31746
 ```
 
 ## Upgrade kubedb-operator
