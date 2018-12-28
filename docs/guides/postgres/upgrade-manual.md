@@ -51,15 +51,11 @@ spec:
     resources:
       requests:
         storage: 1Gi
-  init:
-    scriptSource:
-      configMap:
-        name: pg-init-script
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: gcs-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-dev
 ```
 
 Now create secret and deploy database.
@@ -72,10 +68,6 @@ $ kubectl create secret -n demo generic gcs-secret \
     --from-file=./GOOGLE_PROJECT_ID \
     --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 secret/gcs-secret created
-
-$ kubectl create configmap -n demo pg-init-script \
---from-literal=data.sql="$(curl -fsSL https://raw.githubusercontent.com/kubedb/postgres-init-scripts/master/data.sql)"
-configmap/pg-init-script created
 
 $ kubectl create -f scheduled-pg.yaml
 postgres.kubedb.com/scheduled-pg created
@@ -121,18 +113,15 @@ Now, you can connect to this database using `scheduled-pg.demo` service and *pas
 
   ```console
   $ kubectl get secrets -n demo scheduled-pg-auth -o jsonpath='{.data.\POSTGRES_PASSWORD}' | base64 -d
-  NhgND-3u4VYgqVyN
+  9HQ1iTll9IzM7AkL
   ```
 
-Connect to master through cli:
+### Connect to master-node through cli
 
 ```console
-$ kubectl run -it -n demo --rm --restart=Never postgres-cli --image=postgres:9.6 --command -- bash
-If you don't see a command prompt, try pressing enter.
-root@postgres-cli:/# psql -h scheduled-pg.demo -U postgres
-Password for user postgres: 
-psql (9.6.11, server 9.6.7)
-Type "help" for help.
+$ kubectl exec -it -n demo scheduled-pg-0 bash
+
+bash-4.3# psql -h localhost -U postgres
 
 postgres=# \l
                                  List of databases
@@ -144,19 +133,17 @@ postgres=# \l
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
 (3 rows)
-
 ```
 
-Verify initialization
+Postgres replication state
 
 ```console
-postgres=# select * from pg_catalog.pg_tables where schemaname = 'data';
- schemaname | tablename | tableowner | tablespace | hasindexes | hasrules | hastriggers | rowsecurity
- 
-------------+-----------+------------+------------+------------+----------+-------------+------------
--
- data       | dashboard | postgres   |            | t          | f        | f           | f
-(1 row)
+postgres=# SELECT * FROM pg_stat_replication;
+ pid | usesysid | usename  | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state 
+-----+----------+----------+------------------+-------------+-----------------+-------------+-------------------------------+--------------+-----------+---------------+----------------+----------------+-----------------+---------------+------------
+  58 |       10 | postgres | scheduled-pg-2   | 172.17.0.11 |                 |       41610 | 2018-12-28 12:42:33.979832+00 |              | streaming | 0/4000060     | 0/4000060      | 0/4000060      | 0/4000060       |             0 | async
+  61 |       10 | postgres | scheduled-pg-1   | 172.17.0.10 |                 |       58026 | 2018-12-28 12:42:34.495538+00 |              | streaming | 0/4000060     | 0/4000060      | 0/4000060      | 0/4000060       |             0 | async
+(2 rows)
 ```
 
 Insert data
@@ -178,7 +165,6 @@ postgres=# \l
 (4 rows)
 
 postgres=# \c testdb
-psql (9.6.11, server 9.6.7)
 You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
@@ -213,14 +199,104 @@ testdb=# SELECT * FROM company;
   4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
   5 | David |  27 | Texas                                              |  85000 | 2007-12-13
 (5 rows)
-
 ```
 
 Exit from postgres cli
 
 ```console
-testdb-# \q
-root@postgres-cli:/# exit
+testdb=# \q
+bash-4.3# exit
+exit
+```
+
+### Connect to replica-node-1 through cli
+
+Connect to `scheduled-pg-1` and see availability of data
+
+```console
+$ kubectl exec -it -n demo scheduled-pg-1 bash
+
+bash-4.3# psql -h localhost -U postgres
+psql (9.6.7)
+Type "help" for help.
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+
+postgres=# \c testdb
+You are now connected to database "testdb" as user "postgres".
+
+testdb=# \d
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | company | table | postgres
+(1 row)
+
+testdb=# SELECT * FROM company;
+ id | name  | age |                      address                       | salary | join_date  
+----+-------+-----+----------------------------------------------------+--------+------------
+  1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
+  2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
+  3 | Teddy |  23 | Norway                                             |  20000 | 2007-12-13
+  4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
+  5 | David |  27 | Texas                                              |  85000 | 2007-12-13
+(5 rows)
+```
+
+### Connect to replica-node-2 through cli
+
+Connect to `scheduled-pg-2` and see availability of data
+
+```console
+$ kubectl exec -it -n demo scheduled-pg-2 bash
+bash-4.3# psql -h localhost -U postgres
+psql (9.6.7)
+Type "help" for help.
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+
+postgres=# \c testdb
+You are now connected to database "testdb" as user "postgres".
+
+testdb=# \d
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | company | table | postgres
+(1 row)
+
+testdb=# SELECT * FROM company;
+ id | name  | age |                      address                       | salary | join_date  
+----+-------+-----+----------------------------------------------------+--------+------------
+  1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
+  2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
+  3 | Teddy |  23 | Norway                                             |  20000 | 2007-12-13
+  4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
+  5 | David |  27 | Texas                                              |  85000 | 2007-12-13
+(5 rows)
+
+testdb=# \q
+bash-4.3# exit
 exit
 ```
 
@@ -291,20 +367,20 @@ $ kubectl get pg -n demo scheduled-pg -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  creationTimestamp: "2018-12-19T09:25:52Z"
+  creationTimestamp: "2018-12-28T12:42:21Z"
   finalizers:
   - kubedb.com
   generation: 5
   name: scheduled-pg
   namespace: demo
-  resourceVersion: "27252"
+  resourceVersion: "6080"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/scheduled-pg
-  uid: 144abd0f-0370-11e9-8ff4-080027860845
+  uid: 04d98e2c-0a9e-11e9-a1ef-0800270037ae
 spec:
   backupSchedule:
-    cronExpression: '@every 1m'
+    cronExpression: '@every 5m'
     gcs:
-      bucket: kubedb
+      bucket: kubedb-dev
     podTemplate:
       controller: {}
       metadata: {}
@@ -322,6 +398,7 @@ spec:
   serviceTemplate:
     metadata: {}
     spec: {}
+  standbyMode: hot
   storage:
     accessModes:
     - ReadWriteOnce
@@ -413,13 +490,12 @@ scheduled-pg-20181219-111519   scheduled-pg   Running     4s
 
 ## Varify Data persistence
 
+### Connect to master-node
+
 ```console
-$ kubectl run -it -n demo --rm --restart=Never postgres-cli --image=postgres:9.6 --command -- bash
-If you don't see a command prompt, try pressing enter.
-root@postgres-cli:/# psql -h scheduled-pg.demo -U postgres
-Password for user postgres: 
-psql (9.6.11, server 9.6.7)
-Type "help" for help.
+$ kubectl exec -it -n demo scheduled-pg-0 bash
+
+bash-4.3# psql -h localhost -U postgres
 
 postgres=# \l
                                  List of databases
@@ -432,9 +508,19 @@ postgres=# \l
            |          |          |            |            | postgres=CTc/postgres
  testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
 (4 rows)
+```
+
+Postgres replication state
+
+```console
+postgres=# SELECT * FROM pg_stat_replication;
+ pid | usesysid | usename  | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state 
+-----+----------+----------+------------------+-------------+-----------------+-------------+-------------------------------+--------------+-----------+---------------+----------------+----------------+-----------------+---------------+------------
+  24 |       10 | postgres | scheduled-pg-1   | 172.17.0.10 |                 |       35058 | 2018-12-28 12:55:35.811518+00 |              | streaming | 0/8000060     | 0/8000060      | 0/8000060      | 0/8000060       |             0 | async
+  36 |       10 | postgres | scheduled-pg-2   | 172.17.0.8  |                 |       33610 | 2018-12-28 12:57:31.013411+00 |              | streaming | 0/8000060     | 0/8000060      | 0/8000060      | 0/8000060       |             0 | async
+(2 rows)
 
 postgres=# \c testdb
-psql (9.6.11, server 9.6.7)
 You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
@@ -454,6 +540,99 @@ testdb=# SELECT * FROM company;
   5 | David |  27 | Texas                                              |  85000 | 2007-12-13
 (5 rows)
 
+
+testdb=# \q
+bash-4.3# exit
+exit
+```
+
+### Connect to replica-node-1
+
+Connect to `scheduled-pg-1` and see availability of data
+
+```console
+$ kubectl exec -it -n demo scheduled-pg-1 bash
+
+bash-4.3# psql -h localhost -U postgres
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+
+postgres=# \c testdb
+You are now connected to database "testdb" as user "postgres".
+
+testdb=# \d
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | company | table | postgres
+(1 row)
+
+testdb=# SELECT * FROM company;
+ id | name  | age |                      address                       | salary | join_date  
+----+-------+-----+----------------------------------------------------+--------+------------
+  1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
+  2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
+  3 | Teddy |  23 | Norway                                             |  20000 | 2007-12-13
+  4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
+  5 | David |  27 | Texas                                              |  85000 | 2007-12-13
+(5 rows)
+```
+
+### Connect to replica-node-2
+
+Connect to `scheduled-pg-2` and see availability of data
+
+```console
+$ kubectl exec -it -n demo scheduled-pg-2 bash
+
+bash-4.3# psql -h localhost -U postgres
+
+
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
+
+postgres=# \c testdb
+You are now connected to database "testdb" as user "postgres".
+
+testdb=# \d
+          List of relations
+ Schema |  Name   | Type  |  Owner   
+--------+---------+-------+----------
+ public | company | table | postgres
+(1 row)
+
+testdb=# SELECT * FROM company;
+ id | name  | age |                      address                       | salary | join_date  
+----+-------+-----+----------------------------------------------------+--------+------------
+  1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
+  2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
+  3 | Teddy |  23 | Norway                                             |  20000 | 2007-12-13
+  4 | Mark  |  25 | Rich-Mond                                          |  65000 | 2007-12-13
+  5 | David |  27 | Texas                                              |  85000 | 2007-12-13
+(5 rows)
+
+testdb=# \q
+bash-4.3# exit
+exit
 ```
 
 ## Cleaning up
