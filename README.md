@@ -57,7 +57,7 @@ Want to help improve KubeDB? Please start [here](https://kubedb.com/docs/latest/
 
 ---
 
-**KubeDB binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--analytics=false`.
+**KubeDB binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--enable-analytics=false`.
 
 ---
 

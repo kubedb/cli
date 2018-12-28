@@ -115,4 +115,44 @@ spec:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.6"
   tools:
     image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2-v2"
+
+---
+# After 0.9.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "10.6"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "10.6"
+  db:
+    image: "{{ .Values.dockerRegistry }}/postgres:10.6"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.7"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:10.6"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "11.1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "11.1"
+  db:
+    image: "{{ .Values.dockerRegistry }}/postgres:11.1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.7"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:11.1"
 {{ end }}

@@ -43,7 +43,7 @@ func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	flags.AddGoFlagSet(flag.CommandLine)
 	// ref: https://github.com/kubernetes/kubernetes/issues/17162#issuecomment-225596212
 	flag.CommandLine.Parse([]string{})
-	flags.BoolVar(&cli.EnableAnalytics, "analytics", cli.EnableAnalytics, "Send analytical events to Google Analytics")
+	flags.BoolVar(&cli.EnableAnalytics, "enable-analytics", cli.EnableAnalytics, "Send analytical events to Google Analytics")
 
 	f := cmdutil.NewFactory(matchVersionKubeConfigFlags)
 

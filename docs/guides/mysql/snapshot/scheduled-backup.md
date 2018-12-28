@@ -85,7 +85,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   backupSchedule:
     cronExpression: "@every 1m"
     storageSecretName: my-snap-secret
@@ -152,7 +152,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
     storageClassName: standard
   version: 8
 status:

@@ -56,7 +56,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
 ```
 
 Let's create the Elasticsearch object we have shown above,

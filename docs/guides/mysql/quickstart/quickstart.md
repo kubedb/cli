@@ -104,7 +104,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   terminationPolicy: DoNotTerminate
 ```
 
@@ -136,7 +136,7 @@ Status:             Running
   StorageType:      Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:          
@@ -170,7 +170,7 @@ Type:  Opaque
 Data
 ====
   password:  16 bytes
-  user:      4 bytes
+  username:  4 bytes
 
 No Snapshots.
 
@@ -191,11 +191,11 @@ mysql-quickstart   1         1         10m
 
 $ kubectl get pvc -n demo
 NAME                      STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-data-mysql-quickstart-0   Bound     pvc-652e02c7-0d7f-11e8-9091-08002751ae8c   50Mi       RWO            standard       10m
+data-mysql-quickstart-0   Bound     pvc-652e02c7-0d7f-11e8-9091-08002751ae8c   1Gi        RWO            standard       10m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                          STORAGECLASS   REASON    AGE
-pvc-652e02c7-0d7f-11e8-9091-08002751ae8c   50Mi       RWO            Delete           Bound     demo/data-mysql-quickstart-0   standard                 11m
+pvc-652e02c7-0d7f-11e8-9091-08002751ae8c   1Gi        RWO            Delete           Bound     demo/data-mysql-quickstart-0   standard                 11m
 
 $ kubectl get service -n demo
 NAME               TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
@@ -237,7 +237,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
     storageClassName: standard
   storageType: Durable
   terminationPolicy: Pause
@@ -249,9 +249,9 @@ status:
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `mysql-quickstart-auth` *(format: {mysql-object-name}-auth)* for storing the password for `mysql` superuser. This secret contains a `user` key which contains the *username* for MySQL superuser and a `password` key which contains the *password* for MySQL superuser.
+Please note that KubeDB operator has created a new Secret called `mysql-quickstart-auth` *(format: {mysql-object-name}-auth)* for storing the password for `mysql` superuser. This secret contains a `username` key which contains the *username* for MySQL superuser and a `password` key which contains the *password* for MySQL superuser.
 
-If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password` and also make sure of using `root` as value of `user`. For more details see [here](/docs/concepts/databases/mysql.md#specdatabasesecret).
+If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `username` and `password` and also make sure of using `root` as value of `username`. For more details see [here](/docs/concepts/databases/mysql.md#specdatabasesecret).
 
 Now, you can connect to this database from the phpMyAdmin dashboard using the database pod IP and and `mysql` user password.
 
@@ -260,7 +260,7 @@ $ kubectl get pods mysql-quickstart-0 -n demo -o yaml | grep IP
   hostIP: 10.0.2.15
   podIP: 172.17.0.6
 
-$ kubectl get secrets -n demo mysql-quickstart-auth -o jsonpath='{.data.\user}' | base64 -d
+$ kubectl get secrets -n demo mysql-quickstart-auth -o jsonpath='{.data.\username}' | base64 -d
 root
 
 $ kubectl get secrets -n demo mysql-quickstart-auth -o jsonpath='{.data.\password}' | base64 -d
@@ -339,7 +339,7 @@ spec:
           - ReadWriteOnce
           resources:
             requests:
-              storage: 50Mi
+              storage: 1Gi
           storageClassName: standard
         storageType: Durable
         terminationPolicy: Pause

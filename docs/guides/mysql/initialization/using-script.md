@@ -91,7 +91,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   init:
     scriptSource:
       configMap:
@@ -121,7 +121,7 @@ Status:             Running
   StorageType:      Durable
 Volume:
   StorageClass:  standard
-  Capacity:      50Mi
+  Capacity:      1Gi
   Access Modes:  RWO
 
 StatefulSet:
@@ -176,11 +176,11 @@ mysql-init-script   1         1         1m
 
 $ kubectl get pvc -n demo
 NAME                       STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-data-mysql-init-script-0   Bound     pvc-68e49ec6-c245-11e8-b2cc-080027d9f35e   50Mi       RWO            standard       1m
+data-mysql-init-script-0   Bound     pvc-68e49ec6-c245-11e8-b2cc-080027d9f35e   1Gi        RWO            standard       1m
 
 $ kubectl get pv -n demo
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS    CLAIM                           STORAGECLASS   REASON    AGE
-pvc-68e49ec6-c245-11e8-b2cc-080027d9f35e   50Mi       RWO            Delete           Bound     demo/data-mysql-init-script-0   standard                 1m
+pvc-68e49ec6-c245-11e8-b2cc-080027d9f35e   1Gi        RWO            Delete           Bound     demo/data-mysql-init-script-0   standard                 1m
 
 $ kubectl get service -n demo
 NAME                TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
@@ -226,7 +226,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
     storageClassName: standard
   storageType: Durable
   terminationPolicy: Pause

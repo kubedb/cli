@@ -12,7 +12,7 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 50Mi
+        storage: 1Gi
   backupSchedule:
     cronExpression: "@every 6h"
     storageSecretName: gcs-secret

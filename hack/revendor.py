@@ -104,8 +104,20 @@ REQUIRED_DEPS = [
       "version": "v2.2.1"
     },
     {
-    "package": "github.com/imdario/mergo",
-    "version": "v0.3.5"
+      "package": "github.com/imdario/mergo",
+      "version": "v0.3.5"
+    },
+    {
+      "package": "github.com/mitchellh/mapstructure",
+      "version": "v1.1.2"
+    },
+    {
+      "package": "github.com/go-ini/ini",
+      "version": "v1.40.0"
+    },
+    {
+      "package": "gopkg.in/ini.v1",
+      "version": "v1.40.0"
     }
 ]
 DEP_LIST = [
