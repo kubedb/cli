@@ -497,17 +497,6 @@ $ kubectl exec -it -n demo scheduled-pg-0 bash
 
 bash-4.3# psql -h localhost -U postgres
 
-postgres=# \l
-                                 List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
------------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
- template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
-           |          |          |            |            | postgres=CTc/postgres
- template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
-           |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
-(4 rows)
 ```
 
 Postgres replication state
@@ -519,6 +508,22 @@ postgres=# SELECT * FROM pg_stat_replication;
   24 |       10 | postgres | scheduled-pg-1   | 172.17.0.10 |                 |       35058 | 2018-12-28 12:55:35.811518+00 |              | streaming | 0/8000060     | 0/8000060      | 0/8000060      | 0/8000060       |             0 | async
   36 |       10 | postgres | scheduled-pg-2   | 172.17.0.8  |                 |       33610 | 2018-12-28 12:57:31.013411+00 |              | streaming | 0/8000060     | 0/8000060      | 0/8000060      | 0/8000060       |             0 | async
 (2 rows)
+```
+
+Data availability
+
+```console
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+(4 rows)
 
 postgres=# \c testdb
 You are now connected to database "testdb" as user "postgres".
