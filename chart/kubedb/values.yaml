@@ -5,9 +5,9 @@
 replicaCount: 1
 # Docker registry containing Kubedb images
 kubedb:
-  registry: kubedbci
+  registry: kubedb
   repository: operator
-  tag: healthz
+  tag: 0.9.0
 cleaner:
   registry: appscode
   repository: kubectl
