@@ -5,6 +5,6 @@ menu:
     identifier: developer-guide
     name: Developer Guide
     parent: setup
-    weight: 40
+    weight: 50
 menu_name: docs_0.9.0
 ---
