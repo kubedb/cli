@@ -101,7 +101,7 @@ KubeDB operator exports following metrics.
 
 ## How to Enable Monitoring
 
-You can enable operator monitoring through some flags while installing or upgrading or updating KubeDB via both [script](/docs/setup/install.md#using-script) and [Helm](/docs/setup/install.md#using-helm). You can also chose which monitoring agent to use for monitoring. KubeDB will configure respective resources accordingly. Here, are the list of available flags and their uses,
+You can enable operator monitoring through some flags while installing or upgrading or updating KubeDB via both [script](/docs/setup/install.md#using-script) and [Helm](/docs/setup/install.md#using-helm). You can also choose which monitoring agent to use for monitoring. KubeDB will configure respective resources accordingly. Here, are the list of available flags and their uses,
 
 |       Script Flag        |            Helm Values             |                     Acceptable Values                      |                                                         Default                                                          |                                                                                    Uses                                                                                    |
 | ------------------------ | ---------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

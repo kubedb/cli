@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.4.3
+        args:
+        - "--config.file=/etc/prometheus/prometheus.yml"
+        - "--storage.tsdb.path=/prometheus/"
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: prometheus-config-volume
+          mountPath: /etc/prometheus/
+        - name: prometheus-storage-volume
+          mountPath: /prometheus/
+        - name: kubedb-operator-apiserver-cert # mount the secret volume with public certificate of the kubedb extension apiserver
+          mountPath: /etc/prometheus/secret/kubedb-operator-apiserver-cert
+      volumes:
+      - name: prometheus-config-volume
+        configMap:
+          defaultMode: 420
+          name: kubedb-operator-prom-conf
+      - name: prometheus-storage-volume
+        emptyDir: {}
+      - name: kubedb-operator-apiserver-cert
+        secret:
+          defaultMode: 420
+          secretName: kubedb-operator-apiserver-cert
+          items: # avoid mounting private key
+          - key: tls.crt
+            path: tls.crt

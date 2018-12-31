@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubedb-operator-prom-config
+  labels:
+    app: kubedb
+  namespace: monitoring
+data:
+  prometheus.yml: |-
+    global:
+      scrape_interval: 30s
+      scrape_timeout: 10s
+      evaluation_interval: 30s
+    scrape_configs:
+    - job_name: kubedb-operator
+      kubernetes_sd_configs:
+      - role: endpoints
+      # we have to provide certificate to establish tls secure connection
+      tls_config:
+        # public certificate of the extension apiserver that has been mounted in "/etc/prometheus/secret/<tls secret name>" directory of prometheus server
+        ca_file: /etc/prometheus/secret/kubedb-operator-apiserver-cert/tls.crt
+        # dns name for which the certificate is valid
+        server_name: kubedb-operator.kube-system.svc
+      # bearer_token_file is required for authorizing prometheus server to extension apiserver
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      # by default Prometheus server select all kubernetes services as possible target.
+      # relabel_config is used to filter only desired endpoints
+      relabel_configs:
+      # keep only those services that has "prometheus.io/scrape: true" anootation.
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+        regex: true
+        action: keep
+      # keep only those services that has "app: kubedb" label
+      - source_labels: [__meta_kubernetes_service_label_app]
+        regex: kubedb
+        action: keep
+      # keep only those services that has endpoint named "api"
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        regex: api
+        action: keep
+      # read the metric path from "prometheus.io/path: <path>" annotation
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+        regex: (.+)
+        target_label: __metrics_path__
+        action: replace
+      # read the scrapping scheme from "prometheus.io/scheme: <scheme>" annotation
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+        action: replace
+        target_label: __scheme__
+        regex: (https?)
+      # read the port from "prometheus.io/port: <port>" annotation and update scrapping address accordingly
+      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+      # add service namespace as label to the scrapped metrics
+      - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
+        action: replace
+      # add service name as label to the scrapped metrics
+      - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
+        action: replace
