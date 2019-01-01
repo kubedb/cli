@@ -18,11 +18,11 @@ This tutorial will show you how to configure builtin [Prometheus](https://github
 
 ## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-If you don't know how to configure Prometheus to scrape metrics from various Kubernetes resources, please read the tutorial from [here](https://github.com/appscode/third-party-tools/tree/master/monitoring/prometheus/builtin).
+- If you don't know how to configure Prometheus to scrape metrics from various Kubernetes resources, please read the tutorial from [here](https://github.com/appscode/third-party-tools/tree/master/monitoring/prometheus/builtin).
 
-To keep Prometheus resources isolated, we are going to use a separate namespace called `monitoring` to deploy respective monitoring resources.
+- To keep Prometheus resources isolated, we are going to use a separate namespace called `monitoring` to deploy respective monitoring resources.
 
   ```console
   $ kubectl create ns monitoring
@@ -183,9 +183,9 @@ Let's configure a Prometheus scrapping job to collect the operator metrics.
     action: replace
 ```
 
-Note that `bearer_token_file` denotes the `ServiceAccount` token of the Prometheus server. Kubernetes automatically mount it in `/var/run/secrets/kubernetes.io/serviceaccount/token` directory of Prometheus pod. For, an RBAC enabled cluster, we have to grand some permissions to this `ServiceAccount`.
+Note that, `bearer_token_file` denotes the `ServiceAccount` token of the Prometheus server. Kubernetes automatically mount it in `/var/run/secrets/kubernetes.io/serviceaccount/token` directory of Prometheus pod. For, an RBAC enabled cluster, we have to grand some permissions to this `ServiceAccount`.
 
-**Configure Existing Prometheus Server:**
+### Configure Existing Prometheus Server
 
 If you already have a Prometheus server running, update the respective `ConfigMap` and add above scrapping job.
 
@@ -212,7 +212,11 @@ volumeMounts:
 
 >Warning: Updating deployment will cause restart of your Prometheus server. If you don't use a persistent volume for Prometheus storage, you will lost your previously scrapped data.
 
-**Deploy New Prometheus Server:**
+### Deploy New Prometheus Server
+
+If you don't have any existing Prometheus server running, you have to deploy one. In this section, we are going to deploy a Prometheus server to collect metrics from KubeDB operator.
+
+**Create ConfigMap:**
 
 At first, create a ConfigMap with the scrapping configuration. Bellow, the YAML of ConfigMap that we are going to create in this tutorial.
 
@@ -307,7 +311,7 @@ serviceaccount/prometheus created
 clusterrolebinding.rbac.authorization.k8s.io/prometheus created
 ```
 
-> YAML for the RBAC resources can be found [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/builtin/artifacts/rbac.yaml)
+> YAML for the RBAC resources created above can be found [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/builtin/artifacts/rbac.yaml).
 
 **Deploy Prometheus:**
 
@@ -374,7 +378,7 @@ deployment.apps/prometheus created
 
 ### Verify Monitoring Metrics
 
-Prometheus server is running on port `9090`. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard. Run following command on a separate terminal,
+Prometheus server is running on port `9090`. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
 
 At first, let's check if the Prometheus pod is in `Running` state.
 
@@ -385,7 +389,6 @@ prometheus-5bcb9678c-kh8vt   1/1     Running   0          149m
 ```
 
 Now, run following command on a separate terminal to forward 9090 port of `prometheus-5bcb9678c-kh8vt` pod,
-
 
 ```console
 $  kubectl port-forward -n monitoring prometheus-5bcb9678c-kh8vt 9090

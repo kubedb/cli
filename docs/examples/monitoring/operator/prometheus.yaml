@@ -10,7 +10,7 @@ spec:
   serviceAccountName: prometheus
   serviceMonitorSelector:
     matchLabels:
-      app: kubedb # change this according to your setup
+      k8s-app: prometheus # change this according to your setup
   secrets:
     - kubedb-operator-apiserver-cert
   resources:
