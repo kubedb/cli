@@ -164,6 +164,15 @@ $ONESSL semver --check='<1.11.0' $KUBE_APISERVER_VERSION || { export KUBEDB_ENAB
 export KUBEDB_WEBHOOK_SIDE_EFFECTS=
 $ONESSL semver --check='<1.12.0' $KUBE_APISERVER_VERSION || { export KUBEDB_WEBHOOK_SIDE_EFFECTS='sideEffects: None'; }
 
+MONITORING_AGENT_NONE="none"
+MONITORING_AGENT_BUILTIN="prometheus.io/builtin"
+MONITORING_AGENT_COREOS_OPERATOR="prometheus.io/coreos-operator"
+
+export MONITORING_ENABLE=${MONITORING_ENABLE:-false}
+export MONITORING_AGENT=${MONITORING_AGENT:-$MONITORING_AGENT_NONE}
+export SERVICE_MONITOR_LABEL_KEY="app"
+export SERVICE_MONITOR_LABEL_VALUE="kubedb"
+
 show_help() {
   echo "kubedb.sh - install kubedb operator"
   echo " "
@@ -186,6 +195,10 @@ show_help() {
   echo "    --operator-name                    specify which KubeDB operator to deploy (default: operator)"
   echo "    --uninstall                        uninstall KubeDB"
   echo "    --purge                            purges KubeDB crd objects and crds"
+  echo "    --monitoring-enable                specify whether to monitor KubeDB operator (default: false)"
+  echo "    --monitoring-agent                 specify which monitoring agent to use (default: none)"
+  echo "    --prometheus-namespace             specify the namespace where Prometheus server is running or will be deployed (default: same namespace as kubedb-operator)"
+  echo "    --servicemonitor-label             specify the label for ServiceMonitor crd. Prometheus crd will use this label to select the ServiceMonitor. (default: 'app: kubedb')"
 }
 
 while test $# -gt 0; do
@@ -294,6 +307,42 @@ while test $# -gt 0; do
       export KUBEDB_PURGE=1
       shift
       ;;
+    --monitoring-enable*)
+      val=$(echo $1 | sed -e 's/^[^=]*=//g')
+      if [ "$val" = "true" ]; then
+        export MONITORING_ENABLE="$val"
+      fi
+      shift
+      ;;
+    --monitoring-agent*)
+      val=$(echo $1 | sed -e 's/^[^=]*=//g')
+      if [ "$val" != "$MONITORING_AGENT_BUILTIN" ] && [ "$val" != "$MONITORING_AGENT_COREOS_OPERATOR" ]; then
+        echo 'Invalid monitoring agent. Use "builtin" or "coreos-operator"'
+        exit 1
+      else
+        export MONITORING_AGENT="$val"
+      fi
+      shift
+      ;;
+    --prometheus-namespace*)
+      export PROMETHEUS_NAMESPACE=$(echo $1 | sed -e 's/^[^=]*=//g')
+      shift
+      ;;
+    --servicemonitor-label*)
+      label=$(echo $1 | sed -e 's/^[^=]*=//g')
+      # split label into key value pair
+      IFS='='
+      pair=($label)
+      unset IFS
+      # check if the label is valid
+      if [ ! ${#pair[@]} = 2 ]; then
+        echo "Invalid ServiceMonitor label format. Use '--servicemonitor-label=key=value'"
+        exit 1
+      fi
+      export SERVICE_MONITOR_LABEL_KEY="${pair[0]}"
+      export SERVICE_MONITOR_LABEL_VALUE="${pair[1]}"
+      shift
+      ;;
     *)
       echo "Error: unknown flag:" $1
       show_help
@@ -301,6 +350,8 @@ while test $# -gt 0; do
       ;;
   esac
 done
+
+export PROMETHEUS_NAMESPACE=${PROMETHEUS_NAMESPACE:-$KUBEDB_NAMESPACE}
 
 if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices
@@ -317,6 +368,10 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   kubectl delete clusterrole -l app=kubedb
   kubectl delete rolebindings -l app=kubedb --namespace $KUBEDB_NAMESPACE
   kubectl delete role -l app=kubedb --namespace $KUBEDB_NAMESPACE
+
+  # delete servicemonitor and kubedb-operator-apiserver-cert secret. ignore error as they might not exist
+  kubectl delete servicemonitor kubedb-${KUBEDB_OPERATOR_NAME}-servicemonitor --namespace $PROMETHEUS_NAMESPACE || true
+  kubectl delete secret kubedb-${KUBEDB_OPERATOR_NAME}-apiserver-cert --namespace $PROMETHEUS_NAMESPACE || true
 
   echo "waiting for kubedb operator pod to stop running"
   for (( ; ; )); do
@@ -507,6 +562,28 @@ if [ "$KUBEDB_ENABLE_VALIDATING_WEBHOOK" = true ]; then
     exit 1
   fi
 fi
+
+# configure prometheus monitoring
+ if [ "$MONITORING_ENABLE" = "true" ] && [ "$MONITORING_AGENT" != "$MONITORING_AGENT_NONE" ]; then
+   case "$MONITORING_AGENT" in
+     "$MONITORING_AGENT_BUILTIN")
+        kubectl annotate service kubedb-${KUBEDB_OPERATOR_NAME} -n "$KUBEDB_NAMESPACE" --overwrite \
+          prometheus.io/scrape="true" \
+          prometheus.io/path="/metrics" \
+          prometheus.io/port="8443" \
+          prometheus.io/scheme="https"
+       ;;
+     "$MONITORING_AGENT_COREOS_OPERATOR")
+       ${SCRIPT_LOCATION}hack/deploy/monitoring/servicemonitor.yaml | $ONESSL envsubst | kubectl apply -f -
+       ;;
+   esac
+
+    # if operator monitoring is enabled and prometheus-namespace is provided,
+   # create kubedb-operator-apiserver-cert there. this will be mounted on prometheus pod.
+   if [ "$PROMETHEUS_NAMESPACE" != "$KUBEDB_NAMESPACE" ]; then
+     ${SCRIPT_LOCATION}hack/deploy/monitoring/apiserver-cert.yaml | $ONESSL envsubst | kubectl apply -f -
+   fi
+ fi
 
 echo
 echo "Successfully installed KubeDB operator in $KUBEDB_NAMESPACE namespace!"

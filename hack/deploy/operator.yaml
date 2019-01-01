@@ -57,15 +57,13 @@ spec:
             path: /healthz
             port: 8443
             scheme: HTTPS
+          initialDelaySeconds: 5
         livenessProbe:
-          failureThreshold: 8
           httpGet:
             path: /healthz
             port: 8443
             scheme: HTTPS
           initialDelaySeconds: 15
-          periodSeconds: 10
-          successThreshold: 1
           timeoutSeconds: 15
         resources:
           requests:
@@ -77,7 +75,7 @@ spec:
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: kubedb-server-cert
+          secretName: kubedb-${KUBEDB_OPERATOR_NAME}-apiserver-cert
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -87,7 +85,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kubedb-server-cert
+  name: kubedb-${KUBEDB_OPERATOR_NAME}-apiserver-cert
   namespace: ${KUBEDB_NAMESPACE}
   labels:
     app: kubedb

@@ -7,10 +7,7 @@ metadata:
   name: {{ template "kubedb.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb.labels" . | nindent 4 }}
 {{- if .Values.annotations }}
   annotations:
 {{ toYaml .Values.annotations | indent 4 }}
@@ -24,8 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ template "kubedb.name" . }}"
-        release: "{{ .Release.Name }}"
+        {{- include "kubedb.labels" . | nindent 8 }}
 {{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
@@ -71,21 +67,21 @@ spec:
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
+        {{- if .Values.apiserver.healthcheck.enabled }}
         readinessProbe:
           httpGet:
             path: /healthz
             port: 8443
             scheme: HTTPS
+          initialDelaySeconds: 5
         livenessProbe:
-          failureThreshold: 8
           httpGet:
             path: /healthz
             port: 8443
             scheme: HTTPS
           initialDelaySeconds: 15
-          periodSeconds: 10
-          successThreshold: 1
           timeoutSeconds: 15
+          {{- end }}
         resources:
           requests:
             cpu: "100m"

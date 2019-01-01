@@ -4,10 +4,14 @@ metadata:
   name: {{ template "kubedb.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: "{{ template "kubedb.name" . }}"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    {{- include "kubedb.labels" . | nindent 4 }}
+  {{- if and (eq .Values.monitoring.agent "prometheus.io/builtin") .Values.monitoring.enabled }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "8443"
+    prometheus.io/scheme: "https"
+  {{- end }}
 spec:
   ports:
   - name: api
