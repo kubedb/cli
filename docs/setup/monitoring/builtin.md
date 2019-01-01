@@ -49,7 +49,7 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kube
 
 ```console
 $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0 --namespace kube-system \
-  --set monitoring.enable=true \
+  --set monitoring.enabled=true \
   --set monitoring.agent=prometheus.io/builtin \
   --set monitoring.prometheus.namespace=monitoring \
   --set monitoring.serviceMonitor.labels.k8s-app=prometheus

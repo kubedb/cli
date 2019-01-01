@@ -92,7 +92,7 @@ enableAnalytics: true
 
 monitoring:
   # specify whether to monitor KubeDB operator
-  enable: false
+  enabled: false
   # specify monitoring agent (either "prometheus.io/builtin" or "prometheus.io/coreos-operator")
   agent: "none"
   # specify where ServiceMonitor crd will be created

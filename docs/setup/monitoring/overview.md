@@ -34,20 +34,7 @@ KubeDB operator exports following metrics.
 | apiserver_request_count                                      | Counter of apiserver requests broken out for each verb, API resource, client, and HTTP response contentType and code. |
 | apiserver_request_latencies                                  | Response latency distribution in microseconds for each verb, resource and subresource.                                |
 | apiserver_request_latencies_summary                          | Response latency summary in microseconds for each verb, resource and subresource.                                     |
-| apiserver_storage_data_key_generation_failures_total         | Total number of failed data encryption key(DEK) generation operations.                                                |
-| apiserver_storage_data_key_generation_latencies_microseconds | Latencies in microseconds of data encryption key(DEK) generation operations.                                          |
-| apiserver_storage_envelope_transformation_cache_misses_total | Total number of cache misses while accessing key decryption key(KEK).                                                 |
 | authenticated_user_requests                                  | Counter of authenticated requests broken out by username.                                                             |
-
-**Etcd Metrics:**
-
-|               Metric Name                |                                                                                        Uses                                                                                        |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| etcd_helper_cache_entry_count            | Counter of etcd helper cache entries. This can be different from etcd_helper_cache_miss_count because two concurrent threads can miss the cache and generate the same entry twice. |
-| etcd_helper_cache_hit_count              | Counter of etcd helper cache hits.                                                                                                                                                 |
-| etcd_helper_cache_miss_count             | Counter of etcd helper cache miss.                                                                                                                                                 |
-| etcd_request_cache_add_latencies_summary | Latency in microseconds of adding an object to etcd cache.                                                                                                                         |
-| etcd_request_cache_get_latencies_summary | Latency in microseconds of getting an object from etcd cache.                                                                                                                      |
 
 **Go Metrics:**
 
@@ -105,7 +92,7 @@ You can enable operator monitoring through some flags while installing or upgrad
 
 |       Script Flag        |            Helm Values             |                     Acceptable Values                      |                                                         Default                                                          |                                                                                    Uses                                                                                    |
 | ------------------------ | ---------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--monitoring-enable`    | `monitoring.enable`                | `true` or `false`                                          | `false`                                                                                                                  | Specify whether to monitor KubeDB operator.                                                                                                                                |
+| `--monitoring-enable`    | `monitoring.enabled`               | `true` or `false`                                          | `false`                                                                                                                  | Specify whether to monitor KubeDB operator.                                                                                                                                |
 | `--monitoring-agent`     | `monitoring.agent`                 | `prometheus.io/builtin` or `prometheus.io/coreos-operator` | `none`                                                                                                                   | Specify which monitoring agent to use for monitoring KubeDB operator.                                                                                                      |
 | `--prometheus-namespace` | `monitoring.prometheus.namespace`  | any namespace                                              | same namespace as KubeDB operator                                                                                        | Specify the namespace where Prometheus server is running or will be deployed                                                                                               |
 | `--servicemonitor-label` | `monitoring.serviceMonitor.labels` | any label                                                  | For Helm installation, `app: <generated app name>` and `release: <release name>`. For script installation, `app: kubedb` | Specify the labels for ServiceMonitor. Prometheus crd will select ServiceMonitor using these labels. Only usable when monitoring agent is `prometheus.io/coreos-operator`. |
@@ -116,7 +103,7 @@ You have to provides these flags while installing or upgrading or updating KubeD
 
 ```console
 $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0 --namespace kube-system \
-  --set monitoring.enable=true \
+  --set monitoring.enabled=true \
   --set monitoring.agent=prometheus.io/coreos-operator \
   --set monitoring.prometheus.namespace=monitoring \
   --set monitoring.serviceMonitor.labels.k8s-app=prometheus

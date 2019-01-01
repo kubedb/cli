@@ -1,4 +1,4 @@
-{{- if and (eq .Values.monitoring.agent "prometheus.io/coreos-operator") .Values.monitoring.enable }}
+{{- if and (eq .Values.monitoring.agent "prometheus.io/coreos-operator") .Values.monitoring.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
