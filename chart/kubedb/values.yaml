@@ -11,7 +11,7 @@ kubedb:
 cleaner:
   registry: appscode
   repository: kubectl
-  tag: v1.11
+  tag: v1.12
 ## Optionally specify an array of imagePullSecrets.
 ## Secrets must be manually created in the namespace.
 ## ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
