@@ -41,16 +41,16 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
-    'cli': '0.9.0',
-    'operator': '0.9.0',
-    'apimachinery': '0.9.0',
-    'postgres': '0.9.0',
-    'elasticsearch': '0.9.0',
-    'etcd': '0.1.0',
-    'mysql': '0.2.0',
-    'mongodb': '0.2.0',
-    'memcached': '0.2.0',
-    'redis': '0.2.0'
+    'cli': '0.10.0',
+    'operator': '0.10.0',
+    'apimachinery': '0.10.0',
+    'postgres': '0.10.0',
+    'elasticsearch': '0.10.0',
+    'etcd': '0.2.0',
+    'mysql': '0.3.0',
+    'mongodb': '0.3.0',
+    'memcached': '0.3.0',
+    'redis': '0.3.0'
 }
 
 
