@@ -1,5 +1,5 @@
-hash: 50fabbfd91a2429b934e1f27e674db22406467efa58a6483a29b38fe690036f9
-updated: 2018-12-26T11:18:32.063926189-08:00
+hash: aec4d82a6f9dd6430c0f9f147897767dbdd419e3f0ab99721025d3e615281c9a
+updated: 2019-01-02T02:23:46.092894618-08:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -24,7 +24,7 @@ imports:
 - name: github.com/appscode/jsonpatch
   version: 5af499cf01c842bfdd7761a433fc90525ccd6836
 - name: github.com/appscode/kutil
-  version: d9fb2e606bf2c196a8cd8cff13097f531d686a44
+  version: 6546fe6e8bde14cda08b0415f926cbed47d66e6a
   subpackages:
   - apiextensions/v1beta1
   - meta
@@ -146,7 +146,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 2248b49eaa8e1c8c0963ee77b40841adbc19d4ca
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -194,7 +194,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 4c42014d5745345e56a41261142b9ae4b977d696
+  version: 56cf0f33ae071dec979db480e0e9e20c9c22ef2e
   subpackages:
   - apis
   - apis/authorization
@@ -207,19 +207,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: d1ab23029099dcfbc1bb28db9184bcb51e641225
+  version: 2b1b323a180002b3d8bc19736003b59e1b686bc0
 - name: github.com/kubedb/etcd
-  version: e12e05cee05d1bf87fa5039d49fda896af4a161b
+  version: f9cfe6fce0afca67c4aed3f5d66f90726e46c6d6
 - name: github.com/kubedb/memcached
-  version: 49f218bc825f0762369f334544cbe8a98fbaa51d
+  version: 1a90d05f46af213e52c617e2007b96ce208b3476
 - name: github.com/kubedb/mongodb
-  version: 94e2e99ee48938ff5859508521e588d09e8bb0d0
+  version: 71d74c16260db5967818a09a7016d34ddead4c93
 - name: github.com/kubedb/mysql
-  version: 7eafe08852e17e16577ef9db808db6a7676797ab
+  version: 4d910593996656bf406e75c6856af8a405597028
 - name: github.com/kubedb/postgres
-  version: f6e55779f005fee71444f5cdcf4d489272cdff95
+  version: 340b65406dcdf619475fa3ad1165fd57b1ae929e
 - name: github.com/kubedb/redis
-  version: 90968e50c0ffcfda8c2b30795a09378688791809
+  version: e81dcadf03cddfb3f62a0d18c8e0a37a8f5109ac
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -455,7 +455,7 @@ imports:
   - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 419ab4faf457be27411fc8125ed110a03be373e8
+  version: 2aa1408a8c0a98b7d52911b63a98cbb7c9fd5e7c
   repo: https://github.com/kmodules/apiserver.git
   vcs: git
   subpackages:

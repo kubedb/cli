@@ -39,21 +39,21 @@ import:
 - package: github.com/json-iterator/go
   version: 1.1.5
 - package: github.com/kubedb/apimachinery
-  version: master
+  version: 0.10.0
 - package: github.com/kubedb/elasticsearch
-  version: master
+  version: 0.10.0
 - package: github.com/kubedb/etcd
-  version: master
+  version: 0.2.0
 - package: github.com/kubedb/memcached
-  version: master
+  version: 0.3.0
 - package: github.com/kubedb/mongodb
-  version: master
+  version: 0.3.0
 - package: github.com/kubedb/mysql
-  version: master
+  version: 0.3.0
 - package: github.com/kubedb/postgres
-  version: master
+  version: 0.10.0
 - package: github.com/kubedb/redis
-  version: master
+  version: 0.3.0
 - package: github.com/mitchellh/mapstructure
   version: v1.1.2
 - package: github.com/ncw/swift
@@ -88,6 +88,10 @@ import:
   version: kubernetes-1.12.0
 - package: k8s.io/apimachinery
   repo: https://github.com/kmodules/apimachinery.git
+  vcs: git
+  version: ac-1.12.0
+- package: k8s.io/apiserver
+  repo: https://github.com/kmodules/apiserver.git
   vcs: git
   version: ac-1.12.0
 - package: k8s.io/cli-runtime
