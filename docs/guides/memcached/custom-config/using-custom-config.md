@@ -206,5 +206,5 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/README.md).
+- Learn how to use KubeDB to run a Memcached server [here](/docs/guides/memcached/README.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

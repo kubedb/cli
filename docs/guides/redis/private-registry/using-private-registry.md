@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Using private Docker registry
 
-KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Redis database using private Docker images.
+KubeDB operator supports using private Docker registry. This tutorial will show you how to use KubeDB to run Redis server using private Docker images.
 
 ## Before You Begin
 
@@ -90,7 +90,7 @@ NB: If you are using `kubectl` 1.9.0, update to 1.9.1 or later to avoid this [is
 
 When installing KubeDB operator, set the flags `--docker-registry` and `--image-pull-secret` to appropriate value. Follow the steps to [install KubeDB operator](/docs/setup/install.md) properly in cluster so that to points to the DOCKER_REGISTRY you wish to pull images from.
 
-## Deploy Redis database from Private Registry
+## Deploy Redis server from Private Registry
 
 While deploying `Redis` from private repository, you have to add `myregistrykey` secret in `Redis` `spec.imagePullSecrets`.
 Below is the Redis CRD object we will create.
@@ -155,8 +155,8 @@ kubectl delete ns demo
 
 ## Next Steps
 
-- Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
-- Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

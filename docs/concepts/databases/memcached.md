@@ -81,7 +81,7 @@ spec:
 
 ### spec.replicas
 
-`spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. If you do not specify .spec.replicas, then it defaults to 1.
+`spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached server. If you do not specify .spec.replicas, then it defaults to 1.
 
 ### spec.version
 
@@ -102,7 +102,7 @@ Memcached managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-
 
 ### spec.podTemplate
 
-KubeDB allows providing a template for database pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the Deployment created for Memcached database.
+KubeDB allows providing a template for database pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the Deployment created for Memcached server.
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
@@ -155,7 +155,7 @@ At least one of the following was changed:
 
 #### spec.podTemplate.spec.imagePullSecrets
 
-`KubeDB` provides the flexibility of deploying Memcached database from a private Docker registry. To learn how to deploym Memcached from a private registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying Memcached server from a private Docker registry. To learn how to deploym Memcached from a private registry, please visit [here](/docs/guides/memcached/private-registry/using-private-registry.md).
 
 #### spec.podTemplate.spec.nodeSelector
 
@@ -167,7 +167,7 @@ At least one of the following was changed:
 
 ### spec.serviceTemplate
 
-You can also provide a template for the services created by KubeDB operator for Memcached database through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
+You can also provide a template for the services created by KubeDB operator for Memcached server through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
@@ -185,7 +185,7 @@ KubeDB allows following fields to set in `spec.serviceTemplate`:
 
 ### spec.updateStrategy
 
-You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) of Deployment created by KubeDB for Memcached database thorough `spec.updateStrategy` field. The default value of this field is `RollingUpdate`. In future, we will use this field to determine how automatic migration from old KubeDB version to new one should behave.
+You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) of Deployment created by KubeDB for Memcached server thorough `spec.updateStrategy` field. The default value of this field is `RollingUpdate`. In future, we will use this field to determine how automatic migration from old KubeDB version to new one should behave.
 
 ### spec.terminationPolicy
 
@@ -211,5 +211,5 @@ If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination po
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/README.md).
+- Learn how to use KubeDB to run a Memcached server [here](/docs/guides/memcached/README.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

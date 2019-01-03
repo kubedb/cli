@@ -147,7 +147,7 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ### How to Describe Objects
 
-`kubedb describe` command allows users to describe any KubeDB object. The following command will describe Redis database `redis-demo` with relevant information.
+`kubedb describe` command allows users to describe any KubeDB object. The following command will describe Redis server `redis-demo` with relevant information.
 
 ```console
 $ kubedb describe rd redis-demo
@@ -197,7 +197,7 @@ Events:
   Normal  Successful  5m    Redis operator  Successfully patched Redis
 ```
 
-`kubedb describe` command provides following basic information about a Redis database.
+`kubedb describe` command provides following basic information about a Redis server.
 
 - StatefulSet
 - Storage (Persistent Volume)
@@ -256,7 +256,7 @@ Various fields of a KubeDB object can't be edited using `edit` command. The foll
 - metadata.name
 - metadata.namespace
 
-If StatefulSets exists for a Redis database, following fields can't be modified as well.
+If StatefulSets exists for a Redis server, following fields can't be modified as well.
 
 - spec.storageType
 - spec.storage
@@ -312,6 +312,6 @@ $ kubectl delete redis <name>
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/README.md).
+- Learn how to use KubeDB to run a Redis server [here](/docs/guides/redis/README.md).
 - Learn how to use custom configuration in Redis with KubeDB [here](/docs/guides/redis/custom-config/using-custom-config.md)
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

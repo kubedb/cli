@@ -144,7 +144,7 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 
 ### How to Describe Objects
 
-`kubedb describe` command allows users to describe any KubeDB object. The following command will describe Memcached database `memcached-demo` with relevant information.
+`kubedb describe` command allows users to describe any KubeDB object. The following command will describe Memcached server `memcached-demo` with relevant information.
 
 ```console
 $ kubedb describe mc memcached-demo
@@ -190,7 +190,7 @@ Events:
   Normal  Successful  2m    Memcached operator  Successfully patched Memcached
 ```
 
-`kubedb describe` command provides following basic information about a Memcached database.
+`kubedb describe` command provides following basic information about a Memcached server.
 
 - Deployment
 - Service
@@ -250,7 +250,7 @@ Various fields of a KubeDB object can't be edited using `edit` command. The foll
 - metadata.namespace
 - status
 
-If Deployment exists for a Memcached database, following fields can't be modified as well.
+If Deployment exists for a Memcached server, following fields can't be modified as well.
 
 - spec.nodeSelector
 - spec.podTemplate.spec.nodeSelector
@@ -305,5 +305,5 @@ $ kubectl delete memcached <name>
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/README.md).
+- Learn how to use KubeDB to run a Memcached server [here](/docs/guides/memcached/README.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

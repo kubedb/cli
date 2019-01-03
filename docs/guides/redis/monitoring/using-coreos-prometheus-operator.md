@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Monitoring Redis Using CoreOS Prometheus Operator
 
-CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) provides simple and Kubernetes native way to deploy and configure Prometheus server. This tutorial will show you how to use CoreOS Prometheus operator to monitor Redis database deployed with KubeDB.
+CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) provides simple and Kubernetes native way to deploy and configure Prometheus server. This tutorial will show you how to use CoreOS Prometheus operator to monitor Redis server deployed with KubeDB.
 
 ## Before You Begin
 
@@ -39,7 +39,7 @@ CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) prov
 
 ## Find out required labels for ServiceMonitor
 
-We need know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of Redis crd so that KubeDB creates respective `ServiceMonitor` with these labels.
+We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of Redis crd so that KubeDB creates respective `ServiceMonitor` with these labels.
 
 At first, let's find out the available Prometheus server in our cluster.
 
@@ -85,7 +85,7 @@ Notice the `spec.serviceMonitorSelector` section. Here, `k8s-app: prometheus` la
 
 ## Deploy Redis with Monitoring Enabled
 
-At first, let's deploy an Redis database with monitoring enabled. Below is the Redis object that we are going to create.
+At first, let's deploy an Redis server with monitoring enabled. Below is the Redis object that we are going to create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -267,7 +267,7 @@ kubectl delete ns demo
 
 ## Next Steps
 
-- Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.

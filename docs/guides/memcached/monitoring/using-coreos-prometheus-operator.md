@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Monitoring Memcached Using CoreOS Prometheus Operator
 
-CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) provides simple and Kubernetes native way to deploy and configure Prometheus server. This tutorial will show you how to use CoreOS Prometheus operator to monitor Memcached database deployed with KubeDB.
+CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) provides simple and Kubernetes native way to deploy and configure Prometheus server. This tutorial will show you how to use CoreOS Prometheus operator to monitor Memcached server deployed with KubeDB.
 
 ## Before You Begin
 
@@ -39,7 +39,7 @@ CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) prov
 
 ## Find out required labels for ServiceMonitor
 
-We need know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of Memcached crd so that KubeDB creates respective `ServiceMonitor` with these labels.
+We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of Memcached crd so that KubeDB creates respective `ServiceMonitor` with these labels.
 
 At first, let's find out the available Prometheus server in our cluster.
 
@@ -85,7 +85,7 @@ Notice the `spec.serviceMonitorSelector` section. Here, `k8s-app: prometheus` la
 
 ## Deploy Memcached with Monitoring Enabled
 
-At first, let's deploy an Memcached database with monitoring enabled. Below is the Memcached object that we are going to create.
+At first, let's deploy an Memcached server with monitoring enabled. Below is the Memcached object that we are going to create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -270,7 +270,7 @@ kubectl delete ns demo
 
 ## Next Steps
 
-- Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
+- Monitor your Memcached server with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
 - Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

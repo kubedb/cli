@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Monitoring Redis with builtin Prometheus
 
-This tutorial will show you how to monitor Redis database using builtin [Prometheus](https://github.com/prometheus/prometheus) scrapper.
+This tutorial will show you how to monitor Redis server using builtin [Prometheus](https://github.com/prometheus/prometheus) scrapper.
 
 ## Before You Begin
 
@@ -40,7 +40,7 @@ This tutorial will show you how to monitor Redis database using builtin [Prometh
 
 ## Deploy Redis with Monitoring Enabled
 
-At first, let's deploy an Redis database with monitoring enabled. Below is the Redis object that we are going to create.
+At first, let's deploy an Redis server with monitoring enabled. Below is the Redis object that we are going to create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -312,7 +312,7 @@ $ kubectl delete ns monitoring
 
 ## Next Steps
 
-- Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

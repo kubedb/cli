@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Monitoring Memcached with builtin Prometheus
 
-This tutorial will show you how to monitor Memcached database using builtin [Prometheus](https://github.com/prometheus/prometheus) scrapper.
+This tutorial will show you how to monitor Memcached server using builtin [Prometheus](https://github.com/prometheus/prometheus) scrapper.
 
 ## Before You Begin
 
@@ -38,9 +38,9 @@ This tutorial will show you how to monitor Memcached database using builtin [Pro
 
 > Note: Yaml files used in this tutorial are stored in [docs/examples/memcached](https://github.com/kubedb/cli/tree/master/docs/examples/memcached) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Deploy Memcached database with Monitoring Enabled
+## Deploy Memcached server with Monitoring Enabled
 
-At first, let's deploy a Memcached database with monitoring enabled. Below is the Memcached object that we are going to create.
+At first, let's deploy a Memcached server with monitoring enabled. Below is the Memcached object that we are going to create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -315,6 +315,6 @@ $ kubectl delete ns monitoring
 
 ## Next Steps
 
-- Monitor your Memcached database with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
+- Monitor your Memcached server with KubeDB using [`out-of-the-box` CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
 - Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

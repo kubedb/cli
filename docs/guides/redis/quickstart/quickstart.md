@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Redis QuickStart
 
-This tutorial will show you how to use KubeDB to run a Redis database.
+This tutorial will show you how to use KubeDB to run a Redis server.
 
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/redis/redis-lifecycle.png">
@@ -61,9 +61,9 @@ NAME       VERSION   DB_IMAGE                DEPRECATED   AGE
 4.0.6-v1   4.0.6     kubedb/redis:4.0.6-v1                30m
 ```
 
-## Create a Redis database
+## Create a Redis server
 
-KubeDB implements a `Redis` CRD to define the specification of a Redis database. Below is the `Redis` object created in this tutorial.
+KubeDB implements a `Redis` CRD to define the specification of a Redis server. Below is the `Redis` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -91,7 +91,7 @@ redis.kubedb.com/redis-quickstart created
 Here,
 
 - `spec.version` is name of the RedisVersion crd where the docker images are specified. In this tutorial, a Redis 4.0-v1 database is created.
-- `spec.storageType` specifies the type of storage that will be used for Redis database. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Redis database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
+- `spec.storageType` specifies the type of storage that will be used for Redis server. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create Redis server using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
 - `spec.storage` specifies PVC spec that will be dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
 - `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Redis` crd or which resources KubeDB should keep or delete when you delete `Redis` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/redis.md#specterminationpolicy)
 
@@ -247,7 +247,7 @@ Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/redis.m
 
 ## Pause Database
 
-When [TerminationPolicy](/docs/concepts/databases/redis.md#specterminationpolicy) is set to `Pause`, it will pause the Redis database instead of deleting it. Here, If you delete the Redis object, KubeDB operator will delete the StatefulSet and its pods but leaves the PVCs unchanged. In KubeDB parlance, we say that `redis-quickstart` Redis database has entered into the dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
+When [TerminationPolicy](/docs/concepts/databases/redis.md#specterminationpolicy) is set to `Pause`, it will pause the Redis server instead of deleting it. Here, If you delete the Redis object, KubeDB operator will delete the StatefulSet and its pods but leaves the PVCs unchanged. In KubeDB parlance, we say that `redis-quickstart` Redis server has entered into the dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
 ```console
 $ kubedb delete rd redis-quickstart -n demo
@@ -388,8 +388,8 @@ If you are just testing some basic functionalities, you might want to avoid addi
 
 ## Next Steps
 
-- Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
-- Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).

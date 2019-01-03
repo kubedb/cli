@@ -40,7 +40,7 @@ CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) prov
 
 ## Find out required labels for ServiceMonitor
 
-We need know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of MySQL crd so that KubeDB creates respective `ServiceMonitor` with these labels.
+We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of MySQL crd so that KubeDB creates respective `ServiceMonitor` with these labels.
 
 At first, let's find out the available Prometheus server in our cluster.
 

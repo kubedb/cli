@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Memcached QuickStart
 
-This tutorial will show you how to use KubeDB to run a Memcached database.
+This tutorial will show you how to use KubeDB to run a Memcached server.
 
 <p align="center">
   <img alt="lifecycle"  src="/docs/images/memcached/memcached-lifecycle.png">
@@ -51,9 +51,9 @@ NAME       VERSION   DB_IMAGE                    DEPRECATED   AGE
 1.5.4-v1   1.5.4     kubedb/memcached:1.5.4-v1                2h
 ```
 
-## Create a Memcached database
+## Create a Memcached server
 
-KubeDB implements a `Memcached` CRD to define the specification of a Memcached database. Below is the `Memcached` object created in this tutorial.
+KubeDB implements a `Memcached` CRD to define the specification of a Memcached server. Below is the `Memcached` object created in this tutorial.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -83,8 +83,8 @@ memcached.kubedb.com/memcd-quickstart created
 
 Here,
 
-- `spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached database. It defaults to 1.
-- `spec.version` is the version of Memcached database. In this tutorial, a Memcached 1.5.4 database is going to be created.
+- `spec.replicas` is an optional field that specifies the number of desired Instances/Replicas of Memcached server. It defaults to 1.
+- `spec.version` is the version of Memcached server. In this tutorial, a Memcached 1.5.4 database is going to be created.
 - `spec.resource` is an optional field that specifies how much CPU and memory (RAM) each Container needs. To learn details about Managing Compute Resources for Containers, please visit [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
 - `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `Memcached` crd or which resources KubeDB should keep or delete when you delete `Memcached` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/memcached.md#specterminationpolicy)
 
@@ -178,7 +178,7 @@ status:
 ```
 
 Now, you can connect to this Memcached cluster using `telnet`.
-Here, we will connect to Memcached database from local-machine through port-forwarding.
+Here, we will connect to Memcached server from local-machine through port-forwarding.
 
 ```console
 $ kubectl get pods -n demo
@@ -234,7 +234,7 @@ Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/memcach
 
 ## Pause Database
 
-When [TerminationPolicy](/docs/concepts/databases/memcached.md#specterminationpolicy) is set to `Pause`, it will pause the Memcached database instead of deleting it. Here, you delete the Memcached object, KubeDB operator will delete the Deployment and its pods. In KubeDB parlance, we say that `memcd-quickstart` Memcached database has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
+When [TerminationPolicy](/docs/concepts/databases/memcached.md#specterminationpolicy) is set to `Pause`, it will pause the Memcached server instead of deleting it. Here, you delete the Memcached object, KubeDB operator will delete the Deployment and its pods. In KubeDB parlance, we say that `memcd-quickstart` Memcached server has entered into dormant state. This is represented by KubeDB operator by creating a matching DormantDatabase object.
 
 ```console
 $ kubedb delete mc memcd-quickstart -n demo
@@ -366,8 +366,8 @@ kubectl delete ns demo
 
 ## Next Steps
 
-- Monitor your Memcached database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
-- Monitor your Memcached database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
+- Monitor your Memcached server with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/memcached/monitoring/using-coreos-prometheus-operator.md).
+- Monitor your Memcached server with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/memcached/monitoring/using-builtin-prometheus.md).
 - Use [private Docker registry](/docs/guides/memcached/private-registry/using-private-registry.md) to deploy Memcached with KubeDB.
 - Detail concepts of [Memcached object](/docs/concepts/databases/memcached.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
