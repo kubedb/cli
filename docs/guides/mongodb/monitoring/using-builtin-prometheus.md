@@ -72,7 +72,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examp
 mongodb.kubedb.com/builtin-prom-mgo created
 ```
 
-Now, wait for the database to go in `Running` state.
+Now, wait for the database to go into `Running` state.
 
 ```console
 $ kubectl get mg -n demo builtin-prom-mgo

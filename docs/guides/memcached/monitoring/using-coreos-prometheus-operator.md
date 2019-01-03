@@ -130,7 +130,7 @@ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/exam
 memcached.kubedb.com/coreos-prom-memcd created
 ```
 
-Now, wait for the database to go in `Running` state.
+Now, wait for the database to go into `Running` state.
 
 ```console
 $ kubectl get mc -n demo coreos-prom-memcd

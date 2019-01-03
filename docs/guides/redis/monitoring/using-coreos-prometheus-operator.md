@@ -127,7 +127,7 @@ $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/exam
 redis.kubedb.com/coreos-prom-redis created
 ```
 
-Now, wait for the database to go in `Running` state.
+Now, wait for the database to go into `Running` state.
 
 ```console
 $ kubectl get rd -n demo coreos-prom-redis

@@ -71,7 +71,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examp
 elasticsearch.kubedb.com/builtin-prom-es created
 ```
 
-Now, wait for the database to go in `Running` state.
+Now, wait for the database to go into `Running` state.
 
 ```console
 $ kubectl get es -n demo builtin-prom-es
