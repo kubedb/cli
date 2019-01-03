@@ -36,7 +36,7 @@ This tutorial will show you how to monitor MySQL database using builtin [Prometh
   namespace "demo" created
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy MySQL with Monitoring Enabled
 

@@ -36,7 +36,7 @@ This tutorial will show you how to monitor PostgreSQL database using builtin [Pr
   namespace "demo" created
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy PostgreSQL with Monitoring Enabled
 

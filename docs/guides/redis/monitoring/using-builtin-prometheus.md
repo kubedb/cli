@@ -36,7 +36,7 @@ This tutorial will show you how to monitor Redis server using builtin [Prometheu
   namespace "demo" created
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Deploy Redis with Monitoring Enabled
 
