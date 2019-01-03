@@ -72,7 +72,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examp
 redis.kubedb.com/builtin-prom-redis created
 ```
 
-Now, wait for the database to goes in `Running` state.
+Now, wait for the database to go in `Running` state.
 
 ```console
 $ kubectl get rd -n demo builtin-prom-redis
