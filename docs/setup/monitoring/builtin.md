@@ -210,7 +210,7 @@ volumeMounts:
   mountPath: /etc/prometheus/secret/kubedb-operator-apiserver-cert
 ```
 
->Warning: Updating deployment will cause restart of your Prometheus server. If you don't use a persistent volume for Prometheus storage, you will lost your previously scrapped data.
+>Warning: Updating deployment will cause restart of your Prometheus server. If you don't use a persistent volume for Prometheus storage, you will lose your previously scrapped data.
 
 ### Deploy New Prometheus Server
 
@@ -302,7 +302,7 @@ configmap/kubedb-operator-prom-config created
 
 **Create RBAC:**
 
-If you are using a RBAC enabled cluster, you have to give necessary RBAC permissions for Prometheus. Let's create necessary RBAC stuffs for Prometheus,
+If you are using an RBAC enabled cluster, you have to give necessary RBAC permissions for Prometheus. Let's create necessary RBAC stuffs for Prometheus,
 
 ```console
 $ kubectl apply -f https://raw.githubusercontent.com/appscode/third-party-tools/master/monitoring/prometheus/builtin/artifacts/rbac.yaml
@@ -391,7 +391,7 @@ prometheus-5bcb9678c-kh8vt   1/1     Running   0          149m
 Now, run following command on a separate terminal to forward 9090 port of `prometheus-5bcb9678c-kh8vt` pod,
 
 ```console
-$  kubectl port-forward -n monitoring prometheus-5bcb9678c-kh8vt 9090
+$ kubectl port-forward -n monitoring prometheus-5bcb9678c-kh8vt 9090
 Forwarding from 127.0.0.1:9090 -> 9090
 Forwarding from [::1]:9090 -> 9090
 ```
