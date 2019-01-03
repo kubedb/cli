@@ -93,7 +93,7 @@ spec:
 
 Assume that above Redis is configured to use basic authentication. So, exporter image also need to provide password to collect metrics. We have provided it through `spec.monitor.args` field.
 
-Here, we have specified that we are going to monitor this database using CoreOS prometheus-operator through `spec.monitor.agent: prometheus.io/coreos-operator`. KubeDB will create a `ServiceMonitor` crd in `monitoring` namespace and this `ServiceMonitor` will have `k8s-app: prometheus` label.
+Here, we have specified that we are going to monitor this server using CoreOS prometheus-operator through `spec.monitor.agent: prometheus.io/coreos-operator`. KubeDB will create a `ServiceMonitor` crd in `monitoring` namespace and this `ServiceMonitor` will have `k8s-app: prometheus` label.
 
 ## Next Steps
 

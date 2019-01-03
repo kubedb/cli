@@ -66,7 +66,7 @@ spec:
 
 Here,
 
-- `spec.monitor.agent: prometheus.io/builtin` specifies that we are going to monitor this database using builtin Prometheus scrapper.
+- `spec.monitor.agent: prometheus.io/builtin` specifies that we are going to monitor this server using builtin Prometheus scrapper.
 
 Let's create the Memcached crd we have shown above.
 

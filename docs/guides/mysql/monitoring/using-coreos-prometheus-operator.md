@@ -114,7 +114,7 @@ spec:
 
 Here,
 
-- `monitor.agent:  prometheus.io/coreos-operator` indicates that we are going to monitor this database using CoreOS prometheus operator.
+- `monitor.agent:  prometheus.io/coreos-operator` indicates that we are going to monitor this server using CoreOS prometheus operator.
 - `monitor.prometheus.namespace: monitoring` specifies that KubeDB should create `ServiceMonitor` in `monitoring` namespace.
 
 - `monitor.prometheus.labels` specifies that KubeDB should create `ServiceMonitor` with these labels.
