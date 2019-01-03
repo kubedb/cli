@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Memcached
 metadata:
-  name: memcd-mon-coreos
+  name: coreos-prom-memcd
   namespace: demo
 spec:
   replicas: 3
@@ -18,8 +18,7 @@ spec:
   monitor:
     agent: prometheus.io/coreos-operator
     prometheus:
-      namespace: demo
+      namespace: monitoring
       labels:
-        app: kubedb
+        k8s-app: prometheus
       interval: 10s
-
