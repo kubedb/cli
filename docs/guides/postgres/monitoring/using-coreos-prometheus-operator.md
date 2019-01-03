@@ -31,7 +31,7 @@ CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) prov
   namespace "demo" created
   ```
 
-- We need a CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) instance running. If you already don't have a running instance, deploy one following the docs from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md).
+- We need a CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) instance running. If you don't already have a running instance, deploy one following the docs from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md).
 
 - If you already don't have a Prometheus server running, deploy one following tutorial from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md#deploy-prometheus-server).
 
@@ -39,7 +39,7 @@ CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) prov
 
 ## Find out required labels for ServiceMonitor
 
-We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of PostgreSQL crd so that KubeDB creates respective `ServiceMonitor` with these labels.
+We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of PostgreSQL crd so that KubeDB creates `ServiceMonitor` object accordingly.
 
 At first, let's find out the available Prometheus server in our cluster.
 
@@ -222,9 +222,9 @@ NAME                      READY   STATUS    RESTARTS   AGE
 prometheus-prometheus-0   3/3     Running   1          63m
 ```
 
-Prometheus server is running on port `9090` of `prometheus-prometheus-0` pod. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
+Prometheus server is listening to port `9090` of `prometheus-prometheus-0` pod. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
 
-Run following command on a separate terminal to forward 9090 port of `prometheus-prometheus-0` pod,
+Run following command on a separate terminal to forward the port 9090 of `prometheus-prometheus-0` pod,
 
 ```console
 $ kubectl port-forward -n monitoring prometheus-prometheus-0 9090

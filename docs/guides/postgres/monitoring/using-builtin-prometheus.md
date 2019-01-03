@@ -120,7 +120,7 @@ prometheus.io/port: 56790
 prometheus.io/scrape: true
 ```
 
-The Prometheus server will discover the service endpoint using these specifications and will scrape metrics from exporter.
+The Prometheus server will discover the service endpoint using these specifications and will scrape metrics from the exporter.
 
 ## Configure Prometheus Server
 
@@ -268,7 +268,7 @@ deployment.apps/prometheus created
 
 ### Verify Monitoring Metrics
 
-Prometheus server is running on port `9090`. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
+Prometheus server is listening to port `9090`. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
 
 At first, let's check if the Prometheus pod is in `Running` state.
 
