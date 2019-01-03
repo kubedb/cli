@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
-  name: mysql-mon-coreos
+  name: builtin-prom-mysql
   namespace: demo
 spec:
   version: "8.0-v1"
@@ -13,10 +13,4 @@ spec:
       requests:
         storage: 1Gi
   monitor:
-    agent: prometheus.io/coreos-operator
-    prometheus:
-      namespace: demo
-      labels:
-        app: kubedb
-      interval: 10s
-
+    agent: prometheus.io/builtin
