@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha1
 kind: Memcached
 metadata:
-  name: memcd-mon-prometheus
+  name: builtin-prom-memcd
   namespace: demo
 spec:
   replicas: 3

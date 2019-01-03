@@ -114,9 +114,9 @@ Events:            <none>
 You can see that the service contains following annotations.
 
 ```console
-prometheus.io/path=/metrics
-prometheus.io/port=56790
-prometheus.io/scrape=true
+prometheus.io/path: /metrics
+prometheus.io/port: 56790
+prometheus.io/scrape: true
 ```
 
 The Prometheus server will discover the service endpoint using these specifications and will scrape metrics from exporter.
@@ -238,7 +238,7 @@ Let's create above `ConfigMap`,
 
 ```console
 $ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/prom-config.yaml
-configmap/prometheus-server-conf created
+configmap/prometheus-config created
 ```
 
 **Create RBAC:**
@@ -285,7 +285,7 @@ Forwarding from 127.0.0.1:9090 -> 9090
 Forwarding from [::1]:9090 -> 9090
 ```
 
-Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:9090](http://localhost:9090) in your browser. You should see endpoint of `builtin-prom-es-stats` service as one of the targets.
+Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:9090](http://localhost:9090) in your browser. You should see the endpoint of `builtin-prom-es-stats` service as one of the targets.
 
 <p align="center">
   <img alt="Prometheus Target" src="/docs/images/elasticsearch/monitoring/es-builtin-prom-target.png" style="padding:10px">
