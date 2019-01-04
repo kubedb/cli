@@ -50,6 +50,7 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
+  terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
     accessModes:
@@ -128,7 +129,9 @@ Now, we have to configure a Prometheus scrapping job to scrape the metrics using
 Let's configure a Prometheus scrapping job to collect metrics from this service.
 
 ```yaml
-- job_name: 'kubernetes-service-endpoints'
+- job_name: 'kubedb-databases'
+  honor_labels: true
+  scheme: http
   kubernetes_sd_configs:
   - role: endpoints
   # by default Prometheus server select all kubernetes services as possible target.
@@ -164,16 +167,23 @@ Let's configure a Prometheus scrapping job to collect metrics from this service.
     target_label: __address__
     regex: ([^:]+)(?::\d+)?;(\d+)
     replacement: $1:$2
-  - action: labelmap
-    regex: __meta_kubernetes_service_label_(.+)
   # add service namespace as label to the scrapped metrics
   - source_labels: [__meta_kubernetes_namespace]
+    separator: ;
+    regex: (.*)
+    target_label: namespace
+    replacement: $1
     action: replace
-    target_label: kubernetes_namespace
-  # add service name as label to the scrapped metrics
+  # add service name as a label to the scrapped metrics
   - source_labels: [__meta_kubernetes_service_name]
+    separator: ;
+    regex: (.*)
+    target_label: service
+    replacement: $1
     action: replace
-    target_label: kubernetes_name
+  # add stats service's labels to the scrapped metrics
+  - action: labelmap
+    regex: __meta_kubernetes_service_label_(.+)
 ```
 
 ### Configure Existing Prometheus Server
@@ -204,7 +214,9 @@ data:
       scrape_interval: 5s
       evaluation_interval: 5s
     scrape_configs:
-    - job_name: 'kubernetes-service-endpoints'
+    - job_name: 'kubedb-databases'
+      honor_labels: true
+      scheme: http
       kubernetes_sd_configs:
       - role: endpoints
       # by default Prometheus server select all kubernetes services as possible target.
@@ -240,16 +252,23 @@ data:
         target_label: __address__
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
-      - action: labelmap
-        regex: __meta_kubernetes_service_label_(.+)
       # add service namespace as label to the scrapped metrics
       - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
         action: replace
-        target_label: kubernetes_namespace
-      # add service name as label to the scrapped metrics
+      # add service name as a label to the scrapped metrics
       - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
         action: replace
-        target_label: kubernetes_name
+      # add stats service's labels to the scrapped metrics
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
 ```
 
 Let's create above `ConfigMap`,
@@ -306,10 +325,12 @@ Forwarding from [::1]:9090 -> 9090
 Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:9090](http://localhost:9090) in your browser. You should see the endpoint of `builtin-prom-mysql-stats` service as one of the targets.
 
 <p align="center">
-  <img alt="Prometheus Target" src="/docs/images/mysql/monitoring/mysql-builtin-prom-target.png" style="padding:10px">
+  <img alt="Prometheus Target" height="100%" src="/docs/images/mysql/monitoring/mysql-builtin-prom-target.png" style="padding:10px">
 </p>
 
-Here, we have marked our expected target with a red rectangle. Now, you can view the collected metrics and create graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
+Check the labels marked with red rectangle. These labels verifies that the metrics are coming from `MySQL` database `builtin-prom-mysql` through stats service `builtin-prom-mysql-stats`.
+
+Now, you can view the collected metrics and create graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
 
 ## Cleaning up
 

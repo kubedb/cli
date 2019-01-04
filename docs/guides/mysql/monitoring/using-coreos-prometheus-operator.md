@@ -96,6 +96,7 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v1"
+  terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
     accessModes:

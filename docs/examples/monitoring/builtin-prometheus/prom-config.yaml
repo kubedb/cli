@@ -11,7 +11,9 @@ data:
       scrape_interval: 5s
       evaluation_interval: 5s
     scrape_configs:
-    - job_name: 'kubernetes-service-endpoints'
+    - job_name: 'kubedb-databases'
+      honor_labels: true
+      scheme: http
       kubernetes_sd_configs:
       - role: endpoints
       # by default Prometheus server select all kubernetes services as possible target.
@@ -47,13 +49,20 @@ data:
         target_label: __address__
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: $1:$2
-      - action: labelmap
-        regex: __meta_kubernetes_service_label_(.+)
       # add service namespace as label to the scrapped metrics
       - source_labels: [__meta_kubernetes_namespace]
+        separator: ;
+        regex: (.*)
+        target_label: namespace
+        replacement: $1
         action: replace
-        target_label: kubernetes_namespace
-      # add service name as label to the scrapped metrics
+      # add service name as a label to the scrapped metrics
       - source_labels: [__meta_kubernetes_service_name]
+        separator: ;
+        regex: (.*)
+        target_label: service
+        replacement: $1
         action: replace
-        target_label: kubernetes_name
+      # add stats service's labels to the scrapped metrics
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)

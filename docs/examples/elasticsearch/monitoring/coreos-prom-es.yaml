@@ -5,6 +5,7 @@ metadata:
   namespace: demo
 spec:
   version: "6.3-v1"
+  terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
     accessModes:
