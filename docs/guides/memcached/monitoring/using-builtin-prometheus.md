@@ -139,9 +139,9 @@ Let's configure a Prometheus scrapping job to collect metrics from this service.
   # relabel_config is used to filter only desired endpoints
   relabel_configs:
   # keep only those services that has "prometheus.io/scrape","prometheus.io/path" and "prometheus.io/port" anootations
-  - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape, __meta_kubernetes_service_annotation_prometheus_io_path, __meta_kubernetes_service_annotation_prometheus_io_port]
+  - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape, __meta_kubernetes_service_annotation_prometheus_io_port]
     separator: ;
-    regex: true;(.*);(.*)
+    regex: true;(.*)
     action: keep
   # currently KubeDB supported databases uses only "http" scheme to export metrics. so, drop any service that uses "https" scheme.
   - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
@@ -153,9 +153,9 @@ Let's configure a Prometheus scrapping job to collect metrics from this service.
     regex: (.*-stats)
     action: keep
   # service created by KubeDB will have "kubedb.com/kind" and "kubedb.com/name" annotations. keep only those services that have these annotations.
-  - source_labels: [__meta_kubernetes_service_label_kubedb_com_kind, __meta_kubernetes_service_label_kubedb_com_name]
+  - source_labels: [__meta_kubernetes_service_label_kubedb_com_kind]
     separator: ;
-    regex: \b(Elasticsearch|Postgres|MySQL|MongoDB|Redis|Memcached)\b;(.*)
+    regex: (.*)
     action: keep
   # read the metric path from "prometheus.io/path: <path>" annotation
   - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
@@ -217,9 +217,9 @@ data:
       # relabel_config is used to filter only desired endpoints
       relabel_configs:
       # keep only those services that has "prometheus.io/scrape","prometheus.io/path" and "prometheus.io/port" anootations
-      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape, __meta_kubernetes_service_annotation_prometheus_io_path, __meta_kubernetes_service_annotation_prometheus_io_port]
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape, __meta_kubernetes_service_annotation_prometheus_io_port]
         separator: ;
-        regex: true;(.*);(.*)
+        regex: true;(.*)
         action: keep
       # currently KubeDB supported databases uses only "http" scheme to export metrics. so, drop any service that uses "https" scheme.
       - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
@@ -231,9 +231,9 @@ data:
         regex: (.*-stats)
         action: keep
       # service created by KubeDB will have "kubedb.com/kind" and "kubedb.com/name" annotations. keep only those services that have these annotations.
-      - source_labels: [__meta_kubernetes_service_label_kubedb_com_kind, __meta_kubernetes_service_label_kubedb_com_name]
+      - source_labels: [__meta_kubernetes_service_label_kubedb_com_kind]
         separator: ;
-        regex: \b(Elasticsearch|Postgres|MySQL|MongoDB|Redis|Memcached)\b;(.*)
+        regex: (.*)
         action: keep
       # read the metric path from "prometheus.io/path: <path>" annotation
       - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
