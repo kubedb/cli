@@ -1,0 +1,21 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: pg-original
+  namespace: demo
+spec:
+  version: "10.2-v1"
+  replicas: 1
+  terminationPolicy: Delete
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  archiver:
+    storage:
+      storageSecretName: s3-secret
+      s3:
+        bucket: kubedb

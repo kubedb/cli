@@ -1,0 +1,24 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: pitr-2
+  namespace: demo
+spec:
+  version: "10.2-v1"
+  replicas: 1
+  terminationPolicy: Delete
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  init:
+    postgresWAL:
+      storageSecretName: s3-secret
+      s3:
+        bucket: kubedb
+        prefix: 'kubedb/demo/pg-original/archive'
+      pitr:
+        targetTime: "2019-01-07 08:40:00+00"
