@@ -11,150 +11,81 @@ section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Using Prometheus (CoreOS operator) with KubeDB
+# Monitoring Elasticsearch Using CoreOS Prometheus Operator
 
-This tutorial will show you how to monitor Elasticsearch database using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
+CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) provides simple and Kubernetes native way to deploy and configure Prometheus server. This tutorial will show you how to use CoreOS Prometheus operator to monitor Elasticsearch database deployed with KubeDB.
 
-## Before You begin
+## Before You Begin
 
-At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
+- At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- To learn how Prometheus monitoring works with KubeDB in general, please visit [here](/docs/concepts/database-monitoring/overview.md).
 
-To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+- To keep Prometheus resources isolated, we are going to use a separate namespace called `monitoring` to deploy respective monitoring resources. We are going to deploy database in `demo` namespace.
 
-```console
-$ kubectl create ns demo
-namespace "demo" created
+  ```console
+  $ kubectl create ns monitoring
+  namespace/monitoring created
 
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
-```
+  $ kubectl create ns demo
+  namespace "demo" created
+  ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+- We need a CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) instance running. If you don't already have a running instance, deploy one following the docs from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md).
 
-This tutorial assumes that you are familiar with Elasticsearch concept.
+- If you already don't have a Prometheus server running, deploy one following tutorial from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md#deploy-prometheus-server).
 
-## Deploy CoreOS-Prometheus Operator
+> Note: YAML files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-Run the following command to deploy CoreOS-Prometheus operator.
+## Find out required labels for ServiceMonitor
 
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
-namespace/demo configured
-clusterrole.rbac.authorization.k8s.io/prometheus-operator created
-serviceaccount/prometheus-operator created
-clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created
-deployment.extensions/prometheus-operator created
-```
+We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of Elasticsearch crd so that KubeDB creates `ServiceMonitor` object accordingly.
 
-Wait for running the Deployment’s Pods.
-
-```console
-$ kubectl get pods -n demo --selector=operator=prometheus
-NAME                                   READY     STATUS    RESTARTS   AGE
-prometheus-operator-857455484c-mbzsp   1/1       Running   0          57s
-```
-
-This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
-
-```console
-$ kubectl get crd
-NAME                                          CREATED AT
-...
-alertmanagers.monitoring.coreos.com           2018-10-08T12:53:46Z
-prometheuses.monitoring.coreos.com            2018-10-08T12:53:46Z
-servicemonitors.monitoring.coreos.com         2018-10-08T12:53:47Z
-...
-```
-
-Once the Prometheus CRDs are registered, run the following command to create a Prometheus.
-
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
-clusterrole.rbac.authorization.k8s.io/prometheus created
-serviceaccount/prometheus created
-clusterrolebinding.rbac.authorization.k8s.io/prometheus created
-prometheus.monitoring.coreos.com/prometheus created
-service/prometheus created
-```
-
-Verify RBAC stuffs
-
-```console
-$ kubectl get clusterroles
-NAME                             AGE
-...
-prometheus                       28s
-prometheus-operator              10m
-...
-```
-
-```console
-$ kubectl get clusterrolebindings
-NAME                  AGE
-...
-prometheus            2m
-prometheus-operator   11m
-...
-```
-
-### Prometheus Dashboard
-
-Now open prometheus dashboard on browser by running `minikube service prometheus -n demo`.
-
-Or you can get the URL of `prometheus` Service by running following command
-
-```console
-$ minikube service prometheus -n demo --url
-http://192.168.99.100:30900
-```
-
-If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
-
-Now, if you go to the Prometheus Dashboard, you will see that target list is now empty.
-
-## Find out required label for ServiceMonitor
-
-First, check created objects of `Prometheus` kind.
+At first, let's find out the available Prometheus server in our cluster.
 
 ```console
 $ kubectl get prometheus --all-namespaces
-NAMESPACE   NAME         AGE
-demo        prometheus   20m
+NAMESPACE    NAME         AGE
+monitoring   prometheus   18m
 ```
 
-Now if we see the full spec of `prometheus` of `Prometheus` kind, we will see a field called `serviceMonitorSelector`. The value of `matchLabels` under `serviceMonitorSelector` part, is the required label for `KubeDB` monitoring spec `monitor.prometheus.labels`.
+> If you don't have any Prometheus server running in your cluster, deploy one following the guide specified in **Before You Begin** section.
+
+Now, let's view the YAML of the available Prometheus server `prometheus` in `monitoring` namespace.
 
 ```yaml
- $ kubectl get prometheus -n demo prometheus -o yaml
+$ kubectl get prometheus -n monitoring prometheus -o yaml
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  creationTimestamp: 2018-11-15T10:40:57Z
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"monitoring.coreos.com/v1","kind":"Prometheus","metadata":{"annotations":{},"labels":{"prometheus":"prometheus"},"name":"prometheus","namespace":"monitoring"},"spec":{"replicas":1,"resources":{"requests":{"memory":"400Mi"}},"serviceAccountName":"prometheus","serviceMonitorSelector":{"matchLabels":{"k8s-app":"prometheus"}}}}
+  creationTimestamp: 2019-01-03T13:41:51Z
   generation: 1
+  labels:
+    prometheus: prometheus
   name: prometheus
-  namespace: demo
-  resourceVersion: "1661"
-  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/prometheuses/prometheus
-  uid: ef59e6e6-e8c2-11e8-8e44-08002771fd7b
+  namespace: monitoring
+  resourceVersion: "44402"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/monitoring/prometheuses/prometheus
+  uid: 5324ad98-0f5d-11e9-b230-080027f306f3
 spec:
+  replicas: 1
   resources:
     requests:
       memory: 400Mi
   serviceAccountName: prometheus
   serviceMonitorSelector:
     matchLabels:
-      app: kubedb
-  version: v1.7.0
+      k8s-app: prometheus
 ```
 
-In this tutorial, the required label is `app: kubedb`.
+Notice the `spec.serviceMonitorSelector` section. Here, `k8s-app: prometheus` label is used to select `ServiceMonitor` crd. So, we are going to use this label in `spec.monitor.prometheus.labels` field of Elasticsearch crd.
 
-## Monitor Elasticsearch with CoreOS Prometheus
+## Deploy Elasticsearch with Monitoring Enabled
 
-Below is the Elasticsearch object created in this tutorial.
+At first, let's deploy an Elasticsearch database with monitoring enabled. Below is the Elasticsearch object that we are going to create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -164,6 +95,7 @@ metadata:
   namespace: demo
 spec:
   version: "6.3-v1"
+  terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
     accessModes:
@@ -174,70 +106,165 @@ spec:
   monitor:
     agent: prometheus.io/coreos-operator
     prometheus:
-      namespace: demo
+      namespace: monitoring
       labels:
-        app: kubedb
+        k8s-app: prometheus
       interval: 10s
 ```
 
 Here,
 
-- `monitor.agent` indicates the monitoring agent. Currently only valid value currently is `coreos-prometheus-operator`
-- `monitor.prometheus` specifies the information for monitoring by prometheus
-  - `prometheus.namespace` specifies the namespace where ServiceMonitor is created.
-  - `prometheus.labels` specifies the labels applied to ServiceMonitor.
-  - `prometheus.port` indicates the port for Elasticsearch exporter endpoint (default is `56790`)
-  - `prometheus.interval` indicates the scraping interval (eg, '10s')
+- `monitor.agent:  prometheus.io/coreos-operator` indicates that we are going to monitor this server using CoreOS prometheus operator.
+- `monitor.prometheus.namespace: monitoring` specifies that KubeDB should create `ServiceMonitor` in `monitoring` namespace.
 
-Now create this Elasticsearch object with monitoring spec
+- `monitor.prometheus.labels` specifies that KubeDB should create `ServiceMonitor` with these labels.
+
+- `monitor.prometheus.interval` indicates that the Prometheus server should scrape metrics from this database with 10 seconds interval.
+
+Let's create the Elasticsearch object that we have shown above,
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/monitoring/coreos-prom-es.yaml
 elasticsearch.kubedb.com/coreos-prom-es created
 ```
 
-KubeDB operator will create a ServiceMonitor object once the Elasticsearch is successfully running.
+Now, wait for the database to go into `Running` state.
 
 ```console
 $ kubectl get es -n demo coreos-prom-es
 NAME             VERSION   STATUS    AGE
-coreos-prom-es   6.3-v1    Running   1m
+coreos-prom-es   6.3-v1    Running   5m
 ```
 
-You can verify it running the following commands
+KubeDB will create a separate stats service with name `{Elasticsearch crd name}-stats` for monitoring purpose.
 
 ```console
-$ kubectl get servicemonitor -n demo --selector="app=kubedb"
-NAME                         AGE
-kubedb-demo-coreos-prom-es   1m
+$ kubectl get svc -n demo --selector="kubedb.com/name=coreos-prom-es"
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE
+coreos-prom-es          ClusterIP   10.98.20.18     <none>        9200/TCP    10m
+coreos-prom-es-master   ClusterIP   10.106.65.154   <none>        9300/TCP    10m
+coreos-prom-es-stats    ClusterIP   10.103.197.7    <none>        56790/TCP   9m35s
 ```
 
-Now, if you go the Prometheus Dashboard, you will see this database endpoint in target list.
+Here, `coreos-prom-es-stats` service has been created for monitoring purpose.
+
+Let's describe this stats service.
+
+```yaml
+$ kubectl describe svc -n demo coreos-prom-es-stats
+Name:              coreos-prom-es-stats
+Namespace:         demo
+Labels:            kubedb.com/kind=Elasticsearch
+                   kubedb.com/name=coreos-prom-es
+Annotations:       monitoring.appscode.com/agent: prometheus.io/coreos-operator
+Selector:          kubedb.com/kind=Elasticsearch,kubedb.com/name=coreos-prom-es
+Type:              ClusterIP
+IP:                10.103.197.7
+Port:              prom-http  56790/TCP
+TargetPort:        prom-http/TCP
+Endpoints:         172.17.0.7:56790
+Session Affinity:  None
+Events:            <none>
+```
+
+Notice the `Labels` and `Port` fields. `ServiceMonitor` will use these information to target its endpoints.
+
+KubeDB will also create a `ServiceMonitor` crd in `monitoring` namespace that select the endpoints of `coreos-prom-es-stats` service. Verify that the `ServiceMonitor` crd has been created.
+
+```console
+$ kubectl get servicemonitor -n monitoring
+NAME                         AGE
+kubedb-demo-coreos-prom-es   6m
+```
+
+Let's verify that the `ServiceMonitor` has the label that we had specified in `spec.monitor` section of Elasticsearch crd.
+
+```yaml
+$ kubectl get servicemonitor -n monitoring kubedb-demo-coreos-prom-es -o yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  creationTimestamp: 2019-01-03T14:19:50Z
+  generation: 1
+  labels:
+    k8s-app: prometheus
+    monitoring.appscode.com/service: coreos-prom-es-stats.demo
+  name: kubedb-demo-coreos-prom-es
+  namespace: monitoring
+  resourceVersion: "47254"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/monitoring/servicemonitors/kubedb-demo-coreos-prom-es
+  uid: a1be4c48-0f62-11e9-b230-080027f306f3
+spec:
+  endpoints:
+  - honorLabels: true
+    interval: 10s
+    path: /metrics
+    port: prom-http
+  namespaceSelector:
+    matchNames:
+    - demo
+  selector:
+    matchLabels:
+      kubedb.com/kind: Elasticsearch
+      kubedb.com/name: coreos-prom-es
+```
+
+Notice that the `ServiceMonitor` has label `k8s-app: prometheus` that we had specified in Elasticsearch crd.
+
+Also notice that the `ServiceMonitor` has selector which match the labels we have seen in the `coreos-prom-es-stats` service. It also, target the `prom-http` port that we have seen in the stats service.
+
+## Verify Monitoring Metrics
+
+At first, let's find out the respective Prometheus pod for `prometheus` Prometheus server.
+
+```console
+$ kubectl get pod -n monitoring -l=app=prometheus
+NAME                      READY   STATUS    RESTARTS   AGE
+prometheus-prometheus-0   3/3     Running   1          63m
+```
+
+Prometheus server is listening to port `9090` of `prometheus-prometheus-0` pod. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
+
+Run following command on a separate terminal to forward the port 9090 of `prometheus-prometheus-0` pod,
+
+```console
+$ kubectl port-forward -n monitoring prometheus-prometheus-0 9090
+Forwarding from 127.0.0.1:9090 -> 9090
+Forwarding from [::1]:9090 -> 9090
+```
+
+Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:9090](http://localhost:9090) in your browser. You should see `prom-http` endpoint of `coreos-prom-es-stats` service as one of the targets.
 
 <p align="center">
-  <kbd>
-    <img alt="prometheus-builtin"  src="/docs/images/elasticsearch/coreos-prom-es.png">
-  </kbd>
+  <img alt="Prometheus Target" src="/docs/images/elasticsearch/monitoring/es-coreos-prom-target.png" style="padding:10px">
 </p>
+
+Check the `endpoint` and `service` labels marked by red rectangle. It verifies that the target is our expected database. Now, you can view the collected metrics and create a graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
 
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-$ kubectl patch -n demo es/coreos-prom-es -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo es/coreos-prom-es
+# cleanup database
+kubectl delete -n demo es/coreos-prom-es
 
-$ kubectl delete -n demo deployment/prometheus-operator
-$ kubectl delete -n demo service/prometheus
-$ kubectl delete -n demo service/prometheus-operated
-$ kubectl delete -n demo statefulset.apps/prometheus-prometheus
+# cleanup prometheus resources
+kubectl delete -n monitoring prometheus prometheus
+kubectl delete -n monitoring clusterrolebinding prometheus
+kubectl delete -n monitoring clusterrole prometheus
+kubectl delete -n monitoring serviceaccount prometheus
+kubectl delete -n monitoring service prometheus-operated
 
-$ kubectl delete clusterrolebindings prometheus-operator  prometheus
-$ kubectl delete clusterrole prometheus-operator prometheus
+# cleanup prometheus operator resources
+kubectl delete -n monitoring deployment prometheus-operator
+kubectl delete -n dmeo serviceaccount prometheus-operator
+kubectl delete clusterrolebinding prometheus-operator
+kubectl delete clusterrole prometheus-operator
 
-$ kubectl delete ns demo
-namespace "demo" deleted
+# delete namespace
+kubectl delete ns monitoring
+kubectl delete ns demo
 ```
 
 ## Next Steps

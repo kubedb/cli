@@ -51,7 +51,7 @@ We modify original Redis docker image to support Redis clustering and re-tag the
 
 ### spec.version
 
-`spec.version` is a required field that specifies the original version of Redis database that has been used to build the docker image specified in `spec.db.image` field.
+`spec.version` is a required field that specifies the original version of Redis server that has been used to build the docker image specified in `spec.db.image` field.
 
 ### spec.deprecated
 
@@ -61,7 +61,7 @@ The default value of this field is `false`. If `spec.depcrecated` is set to `tru
 
 ### spec.db.image
 
-`spec.db.image` is a required field that specifies the docker image which will be used to create Statefulset by KubeDB operator to create expected Redis database.
+`spec.db.image` is a required field that specifies the docker image which will be used to create Statefulset by KubeDB operator to create expected Redis server.
 
 ### spec.exporter.image
 
@@ -70,4 +70,4 @@ The default value of this field is `false`. If `spec.depcrecated` is set to `tru
 ## Next Steps
 
 - Learn about Redis crd [here](/docs/concepts/databases/redis.md).
-- Deploy your first Redis database with KubeDB by following the guide [here](/docs/guides/redis/quickstart/quickstart.md).
+- Deploy your first Redis server with KubeDB by following the guide [here](/docs/guides/redis/quickstart/quickstart.md).

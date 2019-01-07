@@ -116,7 +116,7 @@ Redis managed by KubeDB can be monitored with builtin-Prometheus and CoreOS-Prom
 
 ### spec.podTemplate
 
-KubeDB allows providing a template for database pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the StatefulSet created for Redis database.
+KubeDB allows providing a template for database pod through `spec.podTemplate`. KubeDB operator will pass the information provided in `spec.podTemplate` to the StatefulSet created for Redis server.
 
 KubeDB accept following fields to set in `spec.podTemplate:`
 
@@ -169,7 +169,7 @@ spec.podTemplate.spec.env
 
 #### spec.podTemplate.spec.imagePullSecret
 
-`KubeDB` provides the flexibility of deploying Redis database from a private Docker registry. To learn how to deploy Redis from a private registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
+`KubeDB` provides the flexibility of deploying Redis server from a private Docker registry. To learn how to deploy Redis from a private registry, please visit [here](/docs/guides/redis/private-registry/using-private-registry.md).
 
 #### spec.podTemplate.spec.nodeSelector
 
@@ -181,7 +181,7 @@ spec.podTemplate.spec.env
 
 ### spec.serviceTemplate
 
-You can also provide a template for the services created by KubeDB operator for Redis database through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
+You can also provide a template for the services created by KubeDB operator for Redis server through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
@@ -199,7 +199,7 @@ KubeDB allows following fields to set in `spec.serviceTemplate`:
 
 ### spec.updateStrategy
 
-You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) of StatefulSet created by KubeDB for Redis database thorough `spec.updateStrategy` field. The default value of this field is `RollingUpdate`. In future, we will use this field to determine how automatic migration from old KubeDB version to new one should behave.
+You can specify [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies) of StatefulSet created by KubeDB for Redis server thorough `spec.updateStrategy` field. The default value of this field is `RollingUpdate`. In future, we will use this field to determine how automatic migration from old KubeDB version to new one should behave.
 
 ### spec.terminationPolicy
 
@@ -227,5 +227,5 @@ If you don't specify `spec.terminationPolicy` KubeDB uses `Pause` termination po
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/README.md).
+- Learn how to use KubeDB to run a Redis server [here](/docs/guides/redis/README.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

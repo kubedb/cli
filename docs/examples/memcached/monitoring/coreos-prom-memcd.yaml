@@ -1,0 +1,25 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Memcached
+metadata:
+  name: coreos-prom-memcd
+  namespace: demo
+spec:
+  replicas: 3
+  version: "1.5.4-v1"
+  terminationPolicy: WipeOut
+  podTemplate:
+    spec:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+  monitor:
+    agent: prometheus.io/coreos-operator
+    prometheus:
+      namespace: monitoring
+      labels:
+        k8s-app: prometheus
+      interval: 10s

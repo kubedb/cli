@@ -1,0 +1,17 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Redis
+metadata:
+  name: builtin-prom-redis
+  namespace: demo
+spec:
+  version: "4.0-v1"
+  terminationPolicy: WipeOut
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  monitor:
+    agent: prometheus.io/builtin

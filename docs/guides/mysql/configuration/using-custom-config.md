@@ -33,7 +33,7 @@ KubeDB supports providing custom configuration for MySQL. This tutorial will sho
   demo    Active  5s
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Overview
 

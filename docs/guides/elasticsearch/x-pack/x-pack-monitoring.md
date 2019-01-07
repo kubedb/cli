@@ -34,11 +34,11 @@ NAME    STATUS  AGE
 demo    Active  5s
 ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/elasticsearch](https://github.com/kubedb/cli/tree/master/docs/examples/elasticsearch) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Overview
 
-At first, we will create some necessary Search Guard configuration and roles to give an user permission to monitor an Elasticsearch cluster from Kibana. We will create a secret with this configuration files. Then we will provide this secret in `spec.databaseSecret` field of Elasticsearch crd so that our Elasticsearch cluster start with this configuration. We are going to configure Elasticsearch cluster to collect and send x-pack monitoring data over [HTTP Exporters](https://www.elastic.co/guide/en/elasticsearch/reference/current/http-exporter.html) using a [custom configuration](/docs/guides/elasticsearch/custom-config/overview.md) file.
+At first, we will create some necessary Search Guard configuration and roles to give a user permission to monitor an Elasticsearch cluster from Kibana. We will create a secret with this configuration files. Then we will provide this secret in `spec.databaseSecret` field of Elasticsearch crd so that our Elasticsearch cluster start with this configuration. We are going to configure Elasticsearch cluster to collect and send x-pack monitoring data over [HTTP Exporters](https://www.elastic.co/guide/en/elasticsearch/reference/current/http-exporter.html) using a [custom configuration](/docs/guides/elasticsearch/custom-config/overview.md) file.
 
 Then, we will deploy Kibana with Search Guard plugin installed. We will configure Kibana to connect with our Elasticsearch cluster and view monitoring data from it.
 

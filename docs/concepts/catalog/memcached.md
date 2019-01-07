@@ -51,7 +51,7 @@ We modify original Memcached docker image to support additional features. An ima
 
 ### spec.version
 
-`spec.version` is a required field that specifies the original version of Memcached database that has been used to build the docker image specified in `spec.db.image` field.
+`spec.version` is a required field that specifies the original version of Memcached server that has been used to build the docker image specified in `spec.db.image` field.
 
 ### spec.deprecated
 
@@ -61,7 +61,7 @@ The default value of this field is `false`. If `spec.depcrecated` is set `true`,
 
 ### spec.db.image
 
-`spec.db.image` is a required field that specifies the docker image which will be used to create Statefulset by KubeDB operator to create expected Memcached database.
+`spec.db.image` is a required field that specifies the docker image which will be used to create Statefulset by KubeDB operator to create expected Memcached server.
 
 ### spec.exporter.image
 
@@ -70,4 +70,4 @@ The default value of this field is `false`. If `spec.depcrecated` is set `true`,
 ## Next Steps
 
 - Learn about Memcached crd [here](/docs/concepts/databases/memcached.md).
-- Deploy your first Memcached database with KubeDB by following the guide [here](/docs/guides/memcached/quickstart/quickstart.md).
+- Deploy your first Memcached server with KubeDB by following the guide [here](/docs/guides/memcached/quickstart/quickstart.md).

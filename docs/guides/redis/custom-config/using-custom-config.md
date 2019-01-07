@@ -32,7 +32,7 @@ KubeDB supports providing custom configuration for Redis. This tutorial will sho
   demo    Active  5s
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Overview
 
@@ -170,5 +170,5 @@ kubectl delete ns demo
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Redis database [here](/docs/guides/redis/README.md).
+- Learn how to use KubeDB to run a Redis server [here](/docs/guides/redis/README.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

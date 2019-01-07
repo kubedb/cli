@@ -11,160 +11,91 @@ section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Using Prometheus (CoreOS operator) with KubeDB
+# Monitoring Redis Using CoreOS Prometheus Operator
 
-This tutorial will show you how to monitor KubeDB databases using Prometheus via [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator).
+CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) provides simple and Kubernetes native way to deploy and configure Prometheus server. This tutorial will show you how to use CoreOS Prometheus operator to monitor Redis server deployed with KubeDB.
 
 ## Before You Begin
 
 - At first, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
-- Now, install KubeDB cli on your workstation and KubeDB operator in your cluster following the steps [here](/docs/setup/install.md).
+- To learn how Prometheus monitoring works with KubeDB in general, please visit [here](/docs/concepts/database-monitoring/overview.md).
 
-- To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
+- To keep Prometheus resources isolated, we are going to use a separate namespace called `monitoring` to deploy respective monitoring resources. We are going to deploy database in `demo` namespace.
 
   ```console
+  $ kubectl create ns monitoring
+  namespace/monitoring created
+
   $ kubectl create ns demo
   namespace "demo" created
-
-  $ kubectl get ns
-  NAME          STATUS    AGE
-  demo          Active    10s
   ```
 
-> Note: The yaml files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+- We need a CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) instance running. If you don't already have a running instance, deploy one following the docs from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md).
 
-## Deploy CoreOS-Prometheus Operator
+- If you already don't have a Prometheus server running, deploy one following tutorial from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md#deploy-prometheus-server).
 
-Run the following command to deploy CoreOS-Prometheus operator.
+> Note: YAML files used in this tutorial are stored in [docs/examples/redis](https://github.com/kubedb/cli/tree/master/docs/examples/redis) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
-namespace/demo created
-clusterrole.rbac.authorization.k8s.io/prometheus-operator created
-serviceaccount/prometheus-operator created
-clusterrolebinding.rbac.authorization.k8s.io/prometheus-operator created
-deployment.extensions/prometheus-operator created
-```
+## Find out required labels for ServiceMonitor
 
-Wait for running the Deployment’s Pods.
+We need to know the labels used to select `ServiceMonitor` by a `Prometheus` crd. We are going to provide these labels in `spec.monitor.prometheus.labels` field of Redis crd so that KubeDB creates `ServiceMonitor` object accordingly.
 
-```console
-$ kubectl get pods -n demo
-NAME                                   READY     STATUS    RESTARTS   AGE
-prometheus-operator-857455484c-45clv   1/1       Running   0          5m
-```
-
-This CoreOS-Prometheus operator will create some supported Custom Resource Definition (CRD).
-
-```console
-$ kubectl get crd
-NAME                                          CREATED AT
-...
-alertmanagers.monitoring.coreos.com           2018-09-24T12:42:22Z
-prometheuses.monitoring.coreos.com            2018-09-24T12:42:22Z
-servicemonitors.monitoring.coreos.com         2018-09-24T12:42:22Z
-...
-```
-
-Once the Prometheus operator CRDs are registered, run the following command to create a Prometheus.
-
-```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
-clusterrole.rbac.authorization.k8s.io/prometheus created
-serviceaccount/prometheus created
-clusterrolebinding.rbac.authorization.k8s.io/prometheus created
-prometheus.monitoring.coreos.com/prometheus created
-service/prometheus created
-
-# Verify RBAC stuffs
-$ kubectl get clusterroles
-NAME                  AGE
-prometheus            48s
-prometheus-operator   1m
-
-$ kubectl get clusterrolebindings
-NAME                  AGE
-prometheus            7s
-prometheus-operator   25s
-
-$ kubectl get serviceaccounts -n demo
-NAME                  SECRETS   AGE
-default               1         5m
-prometheus            1         4m
-prometheus-operator   1         5m
-```
-
-### Prometheus Dashboard
-
-Now to open prometheus dashboard on Browser:
-
-```console
-$ kubectl get svc -n demo
-NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-prometheus            LoadBalancer   10.101.136.37   <pending>     9090:30900/TCP   7s
-prometheus-operated   ClusterIP      None            <none>        9090/TCP         6s
-
-$ minikube ip
-192.168.99.100
-
-$ minikube service prometheus -n demo --url
-http://192.168.99.100:30900
-```
-
-Now, open your browser and go to the following URL: _http://{minikube-ip}:{prometheus-svc-nodeport}_ to visit Prometheus Dashboard. According to the above example, this URL will be [http://192.168.99.100:30900](http://192.168.99.100:30900).
-
-If you are not using minikube, browse prometheus dashboard using following address `http://{Node's ExternalIP}:{NodePort of prometheus-service}`.
-
-## Find out required label for ServiceMonitor
-
-First, check created objects of `Prometheus` kind.
+At first, let's find out the available Prometheus server in our cluster.
 
 ```console
 $ kubectl get prometheus --all-namespaces
-NAMESPACE   NAME         AGE
-demo        prometheus   20m
+NAMESPACE    NAME         AGE
+monitoring   prometheus   18m
 ```
 
-Now if we see the full spec of `prometheus` of `Prometheus` kind, we will see a field called `serviceMonitorSelector`. The value of `matchLabels` under `serviceMonitorSelector` part, is the required label for `KubeDB` monitoring spec `monitor.prometheus.labels`.
+> If you don't have any Prometheus server running in your cluster, deploy one following the guide specified in **Before You Begin** section.
+
+Now, let's view the YAML of the available Prometheus server `prometheus` in `monitoring` namespace.
 
 ```yaml
- $ kubectl get prometheus -n demo prometheus -o yaml
+$ kubectl get prometheus -n monitoring prometheus -o yaml
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  creationTimestamp: 2018-11-15T10:40:57Z
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"monitoring.coreos.com/v1","kind":"Prometheus","metadata":{"annotations":{},"labels":{"prometheus":"prometheus"},"name":"prometheus","namespace":"monitoring"},"spec":{"replicas":1,"resources":{"requests":{"memory":"400Mi"}},"serviceAccountName":"prometheus","serviceMonitorSelector":{"matchLabels":{"k8s-app":"prometheus"}}}}
+  creationTimestamp: 2019-01-03T13:41:51Z
   generation: 1
+  labels:
+    prometheus: prometheus
   name: prometheus
-  namespace: demo
-  resourceVersion: "1661"
-  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/prometheuses/prometheus
-  uid: ef59e6e6-e8c2-11e8-8e44-08002771fd7b
+  namespace: monitoring
+  resourceVersion: "44402"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/monitoring/prometheuses/prometheus
+  uid: 5324ad98-0f5d-11e9-b230-080027f306f3
 spec:
+  replicas: 1
   resources:
     requests:
       memory: 400Mi
   serviceAccountName: prometheus
   serviceMonitorSelector:
     matchLabels:
-      app: kubedb
-  version: v1.7.0
+      k8s-app: prometheus
 ```
 
-In this tutorial, the required label is `app: kubedb`.
+Notice the `spec.serviceMonitorSelector` section. Here, `k8s-app: prometheus` label is used to select `ServiceMonitor` crd. So, we are going to use this label in `spec.monitor.prometheus.labels` field of Redis crd.
 
-## Monitor Redis with CoreOS Prometheus
+## Deploy Redis with Monitoring Enabled
 
-KubeDB implements a `Redis` CRD to define the specification of a Redis database. Below is the `Redis` object created in this tutorial.
+At first, let's deploy an Redis server with monitoring enabled. Below is the Redis object that we are going to create.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Redis
 metadata:
-  name: redis-mon-coreos
+  name: coreos-prom-redis
   namespace: demo
 spec:
   version: "4.0-v1"
+  terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
     accessModes:
@@ -175,181 +106,169 @@ spec:
   monitor:
     agent: prometheus.io/coreos-operator
     prometheus:
-      namespace: demo
+      namespace: monitoring
       labels:
-        app: kubedb
+        k8s-app: prometheus
       interval: 10s
-```
-
-The `Redis` CRD object contains `monitor` field in it's `spec`.  It is also possible to add CoreOS-Prometheus monitor to an existing `Redis` database by adding the below part in it's `spec` field.
-
-Here, `spec.monitor.prometheus.labels` is the `serviceMonitorSelector` that we found earlier.
-
-```yaml
-spec:
-  monitor:
-    agent: prometheus.io/coreos-operator
-    prometheus:
-      namespace: demo
-      labels:
-        app: kubedb
-      interval: 10s
-```
-
-|  Keys  |  Value |  Description |
-|--------|--------|--------------|
-| `spec.monitor.agent` | string | `Required`. Indicates the monitoring agent used. Only valid value currently is `coreos-prometheus-operator` |
-| `spec.monitor.prometheus.namespace` | string | `Required`. Indicates namespace where service monitors are created. This must be the same namespace of the Prometheus instance. |
-| `spec.monitor.prometheus.labels` | map | `Required`. Indicates labels applied to service monitor.                                                    |
-| `spec.monitor.prometheus.interval` | string | `Optional`. Indicates the scrape interval for database exporter endpoint (eg, '10s')                        |
-| `spec.monitor.prometheus.port` | int |`Optional`. Indicates the port for database exporter endpoint (default is `56790`)|
-
-__Known Limitations:__ If the database password is updated, exporter must be restarted to use the new credentials. This issue is tracked [here](https://github.com/kubedb/project/issues/53).
-
-Run the following command to deploy the above `Redis` CRD object.
-
-```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/redis/monitoring/coreos-operator/demo-1.yaml
-redis.kubedb.com/redis-mon-coreos created
 ```
 
 Here,
 
-- `spec.monitor` specifies that CoreOS Prometheus operator is used to monitor this database instance. A ServiceMonitor should be created in the `demo` namespace with label `app=kubedb`. The exporter endpoint should be scrapped every 10 seconds.
+- `monitor.agent:  prometheus.io/coreos-operator` indicates that we are going to monitor this server using CoreOS prometheus operator.
+- `monitor.prometheus.namespace: monitoring` specifies that KubeDB should create `ServiceMonitor` in `monitoring` namespace.
 
-KubeDB will create a separate stats service with name `<redis-crd-name>-stats` for monitoring purpose. KubeDB operator will configure this monitoring service once the Redis is successfully running.
+- `monitor.prometheus.labels` specifies that KubeDB should create `ServiceMonitor` with these labels.
+
+- `monitor.prometheus.interval` indicates that the Prometheus server should scrape metrics from this database with 10 seconds interval.
+
+Let's create the Redis object that we have shown above,
 
 ```console
-$ kubedb get rd -n demo
-NAME               VERSION   STATUS     AGE
-redis-mon-coreos   4.0-v1    Creating   24s
-
-$ kubedb describe rd -n demo redis-mon-coreos
-Name:               redis-mon-coreos
-Namespace:          demo
-CreationTimestamp:  Mon, 01 Oct 2018 13:05:15 +0600
-Labels:             <none>
-Annotations:        <none>
-Replicas:           1  total
-Status:             Running
-  StorageType:      Durable
-Volume:
-  StorageClass:  standard
-  Capacity:      1Gi
-  Access Modes:  RWO
-
-StatefulSet:
-  Name:               redis-mon-coreos
-  CreationTimestamp:  Mon, 01 Oct 2018 13:05:18 +0600
-  Labels:               kubedb.com/kind=Redis
-                        kubedb.com/name=redis-mon-coreos
-  Annotations:        <none>
-  Replicas:           824637984636 desired | 1 total
-  Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-Service:
-  Name:         redis-mon-coreos
-  Labels:         kubedb.com/kind=Redis
-                  kubedb.com/name=redis-mon-coreos
-  Annotations:  <none>
-  Type:         ClusterIP
-  IP:           10.106.208.162
-  Port:         db  6379/TCP
-  TargetPort:   db/TCP
-  Endpoints:    172.17.0.6:6379
-
-Service:
-  Name:         redis-mon-coreos-stats
-  Labels:         kubedb.com/kind=Redis
-                  kubedb.com/name=redis-mon-coreos
-  Annotations:    monitoring.appscode.com/agent=prometheus.io/coreos-operator
-  Type:         ClusterIP
-  IP:           10.105.233.27
-  Port:         prom-http  56790/TCP
-  TargetPort:   prom-http/TCP
-  Endpoints:    172.17.0.6:56790
-
-Monitoring System:
-  Agent:  prometheus.io/coreos-operator
-  Prometheus:
-    Port:       56790
-    Namespace:  demo
-    Labels:     app=kubedb
-    Interval:   10s
-
-No Snapshots.
-
-Events:
-  Type    Reason      Age   From            Message
-  ----    ------      ----  ----            -------
-  Normal  Successful  42s   Redis operator  Successfully created Service
-  Normal  Successful  9s    Redis operator  Successfully created StatefulSet
-  Normal  Successful  9s    Redis operator  Successfully created Redis
-  Normal  Successful  7s    Redis operator  Successfully created stats service
-  Normal  Successful  5s    Redis operator  Successfully patched StatefulSet
-  Normal  Successful  5s    Redis operator  Successfully patched Redis
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/redis/monitoring/coreos-prom-redis.yaml
+redis.kubedb.com/coreos-prom-redis created
 ```
 
-Since `spec.monitoring` was configured, a ServiceMonitor object is created accordingly. You can verify it running the following commands:
+Now, wait for the database to go into `Running` state.
+
+```console
+$ kubectl get rd -n demo coreos-prom-redis
+NAME                VERSION   STATUS    AGE
+coreos-prom-redis   4.0-v1    Running   15s
+```
+
+KubeDB will create a separate stats service with name `{Redis crd name}-stats` for monitoring purpose.
+
+```console
+$ kubectl get svc -n demo --selector="kubedb.com/name=coreos-prom-redis"
+NAME                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+coreos-prom-redis         ClusterIP   10.110.70.53   <none>        6379/TCP    35s
+coreos-prom-redis-stats   ClusterIP   10.99.161.76   <none>        56790/TCP   31s
+```
+
+Here, `coreos-prom-redis-stats` service has been created for monitoring purpose.
+
+Let's describe this stats service.
 
 ```yaml
-$ kubectl get servicemonitor -n demo
-NAME                           AGE
-kubedb-demo-redis-mon-coreos   25s
+$ kubectl describe svc -n demo coreos-prom-redis-stats
+Name:              coreos-prom-redis-stats
+Namespace:         demo
+Labels:            kubedb.com/kind=Redis
+                   kubedb.com/name=coreos-prom-redis
+Annotations:       monitoring.appscode.com/agent: prometheus.io/coreos-operator
+Selector:          kubedb.com/kind=Redis,kubedb.com/name=coreos-prom-redis
+Type:              ClusterIP
+IP:                10.99.161.76
+Port:              prom-http  56790/TCP
+TargetPort:        prom-http/TCP
+Endpoints:         172.17.0.7:56790
+Session Affinity:  None
+Events:            <none>
+```
 
-$ kubectl get servicemonitor -n demo kubedb-demo-redis-mon-coreos -o yaml
+Notice the `Labels` and `Port` fields. `ServiceMonitor` will use these information to target its endpoints.
+
+KubeDB will also create a `ServiceMonitor` crd in `monitoring` namespace that select the endpoints of `coreos-prom-redis-stats` service. Verify that the `ServiceMonitor` crd has been created.
+
+```console
+$ kubectl get servicemonitor -n monitoring
+NAME                            AGE
+kubedb-demo-coreos-prom-redis   1m
+```
+
+Let's verify that the `ServiceMonitor` has the label that we had specified in `spec.monitor` section of Redis crd.
+
+```yaml
+$ kubectl get servicemonitor -n monitoring kubedb-demo-coreos-prom-redis -o yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  creationTimestamp: 2018-10-01T07:05:54Z
+  creationTimestamp: 2019-01-03T15:55:23Z
   generation: 1
   labels:
-    app: kubedb
-    monitoring.appscode.com/service: redis-mon-coreos-stats.demo
-  name: kubedb-demo-redis-mon-coreos
-  namespace: demo
-  resourceVersion: "12902"
-  selfLink: /apis/monitoring.coreos.com/v1/namespaces/demo/servicemonitors/kubedb-demo-redis-mon-coreos
-  uid: 70100729-c548-11e8-9ba7-0800274bef12
+    k8s-app: prometheus
+    monitoring.appscode.com/service: coreos-prom-redis-stats.demo
+  name: kubedb-demo-coreos-prom-redis
+  namespace: monitoring
+  resourceVersion: "54802"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/monitoring/servicemonitors/kubedb-demo-coreos-prom-redis
+  uid: fafceb49-0f6f-11e9-b230-080027f306f3
 spec:
   endpoints:
-  - interval: 10s
+  - honorLabels: true
+    interval: 10s
     path: /metrics
     port: prom-http
-    targetPort: 0
   namespaceSelector:
     matchNames:
     - demo
   selector:
     matchLabels:
       kubedb.com/kind: Redis
-      kubedb.com/name: redis-mon-coreos
+      kubedb.com/name: coreos-prom-redis
 ```
 
-Now, if you go the Prometheus Dashboard, you should see that this database endpoint as one of the targets.
+Notice that the `ServiceMonitor` has label `k8s-app: prometheus` that we had specified in Redis crd.
 
-![prometheus-coreos](/docs/images/redis/redis-coreos.png)
+Also notice that the `ServiceMonitor` has selector which match the labels we have seen in the `coreos-prom-redis-stats` service. It also, target the `prom-http` port that we have seen in the stats service.
+
+## Verify Monitoring Metrics
+
+At first, let's find out the respective Prometheus pod for `prometheus` Prometheus server.
+
+```console
+$ kubectl get pod -n monitoring -l=app=prometheus
+NAME                      READY   STATUS    RESTARTS   AGE
+prometheus-prometheus-0   3/3     Running   1          63m
+```
+
+Prometheus server is listening to port `9090` of `prometheus-prometheus-0` pod. We are going to use [port forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to access Prometheus dashboard.
+
+Run following command on a separate terminal to forward the port 9090 of `prometheus-prometheus-0` pod,
+
+```console
+$ kubectl port-forward -n monitoring prometheus-prometheus-0 9090
+Forwarding from 127.0.0.1:9090 -> 9090
+Forwarding from [::1]:9090 -> 9090
+```
+
+Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:9090](http://localhost:9090) in your browser. You should see `prom-http` endpoint of `coreos-prom-redis-stats` service as one of the targets.
+
+<p align="center">
+  <img alt="Prometheus Target" src="/docs/images/redis/monitoring/redis-coreos-prom-target.png" style="padding:10px">
+</p>
+
+Check the `endpoint` and `service` labels marked by red rectangle. It verifies that the target is our expected database. Now, you can view the collected metrics and create a graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
 
 ## Cleaning up
 
-To cleanup the Kubernetes resources created by this tutorial, run:
+To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-kubectl patch -n demo rd/redis-mon-coreos -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-kubectl delete -n demo rd/redis-mon-coreos
+# cleanup database
+kubectl delete -n demo rd/coreos-prom-redis
 
-kubectl patch -n demo drmn/redis-mon-coreos -p '{"spec":{"wipeOut":true}}' --type="merge"
-kubectl delete -n demo drmn/redis-mon-coreos
+# cleanup prometheus resources
+kubectl delete -n monitoring prometheus prometheus
+kubectl delete -n monitoring clusterrolebinding prometheus
+kubectl delete -n monitoring clusterrole prometheus
+kubectl delete -n monitoring serviceaccount prometheus
+kubectl delete -n monitoring service prometheus-operated
 
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-1.yaml
-kubectl delete -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/coreos-operator/demo-0.yaml
+# cleanup prometheus operator resources
+kubectl delete -n monitoring deployment prometheus-operator
+kubectl delete -n dmeo serviceaccount prometheus-operator
+kubectl delete clusterrolebinding prometheus-operator
+kubectl delete clusterrole prometheus-operator
 
+# delete namespace
+kubectl delete ns monitoring
 kubectl delete ns demo
 ```
 
 ## Next Steps
 
-- Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
+- Monitor your Redis server with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.

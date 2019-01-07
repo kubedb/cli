@@ -5,6 +5,7 @@ metadata:
   namespace: demo
 spec:
   version: "9.6-v1"
+  terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
     accessModes:
@@ -15,7 +16,7 @@ spec:
   monitor:
     agent: prometheus.io/coreos-operator
     prometheus:
-      namespace: demo
+      namespace: monitoring
       labels:
-        app: kubedb
+        k8s-app: prometheus
       interval: 10s

@@ -32,7 +32,7 @@ KubeDB supports providing custom configuration for Memcached. This tutorial will
   demo    Active  5s
   ```
 
-> Note: Yaml files used in this tutorial are stored in [docs/examples/memcached](https://github.com/kubedb/cli/tree/master/docs/examples/memcached) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
+> Note: YAML files used in this tutorial are stored in [docs/examples/memcached](https://github.com/kubedb/cli/tree/master/docs/examples/memcached) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Overview
 
@@ -206,5 +206,5 @@ If you would like to uninstall KubeDB operator, please follow the steps [here](/
 
 ## Next Steps
 
-- Learn how to use KubeDB to run a Memcached database [here](/docs/guides/memcached/README.md).
+- Learn how to use KubeDB to run a Memcached server [here](/docs/guides/memcached/README.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
