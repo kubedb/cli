@@ -328,9 +328,9 @@ Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:909
   <img alt="Prometheus Target" height="100%" src="/docs/images/elasticsearch/monitoring/es-builtin-prom-target.png" style="padding:10px">
 </p>
 
-Check the labels marked with red rectangle. These labels verifies that the metrics are coming from `Elasticsearch` database `builtin-prom-es` through stats service `builtin-prom-es-stats`.
+Check the labels marked with red rectangle. These labels confirm that the metrics are coming from `Elasticsearch` database `builtin-prom-es` through stats service `builtin-prom-es-stats`.
 
-Now, you can view the collected metrics and create graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
+Now, you can view the collected metrics and create a graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
 
 ## Cleaning up
 

@@ -13,17 +13,17 @@ section_menu_id: concepts
 
 # Monitoring Database with KubeDB
 
-KubeDB has native support for monitoring via [Prometheus](https://prometheus.io/). You can use builtin [Prometheus](https://github.com/prometheus/prometheus) scrapper or [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator) to monitor KubeDB supported databases. This tutorial will show you how database monitoring works with KubeDB and how to configure Database crd to enable monitoring.
+KubeDB has native support for monitoring via [Prometheus](https://prometheus.io/). You can use builtin [Prometheus](https://github.com/prometheus/prometheus) scrapper or [CoreOS Prometheus Operator](https://github.com/coreos/prometheus-operator) to monitor KubeDB managed databases. This tutorial will show you how database monitoring works with KubeDB and how to configure Database crd to enable monitoring.
 
 ## Overview
 
-KubeDB uses Prometheus [exporter](https://prometheus.io/docs/instrumenting/exporters/#databases) image to exports Prometheus metrics for respective databases. Following diagram shows the logical flow of database monitoring with KubeDB.
+KubeDB uses Prometheus [exporter](https://prometheus.io/docs/instrumenting/exporters/#databases) images to export Prometheus metrics for respective databases. Following diagram shows the logical flow of database monitoring with KubeDB.
 
 <p align="center">
   <img alt="Database Monitoring Flow"  src="/docs/images/concepts/monitoring/database-monitoring-overview.svg">
 </p>
 
-When an user creates a database crd with `spec.monitor` section configured, KubeDB operator creates the respective database and inject an exporter image as sidecar to the database pod. It also creates a dedicated stats service with name `{database-crd-name}-stats` for monitoring. Prometheus server can scrape metrics using this stats service.
+When a user creates a database crd with `spec.monitor` section configured, KubeDB operator provisions the respective database and injects an exporter image as sidecar to the database pod. It also creates a dedicated stats service with name `{database-crd-name}-stats` for monitoring. Prometheus server can scrape metrics using this stats service.
 
 ## Configure Monitoring
 
@@ -38,7 +38,7 @@ In order to enable monitoring for a database, you have to configure `spec.monito
 | `spec.monitor.prometheus.interval`  | `Optional` | Interval at which metrics should be scraped.                                                                                                                                  |
 | `spec.monitor.args`                 | `Optional` | Arguments to pass to the exporter sidecar.                                                                                                                                    |
 | `spec.monitor.env`                  | `Optional` | List of environment variables to set in the exporter sidecar container.                                                                                                       |
-| `spec.monitor.resources`            | `Optional` | Compute Resources required by exporter container.                                                                                                                             |
+| `spec.monitor.resources`            | `Optional` | Resources required by exporter sidecar container.                                                                                                                             |
 | `spec.monitor.securityContext`      | `Optional` | Security options the exporter should run with.                                                                                                                                |
 
 ## Sample Configuration

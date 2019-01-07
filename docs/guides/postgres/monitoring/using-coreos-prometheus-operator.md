@@ -239,7 +239,7 @@ Now, we can access the dashboard at `localhost:9090`. Open [http://localhost:909
   <img alt="Prometheus Target" src="/docs/images/postgres/monitoring/pg-coreos-prom-target.png" style="padding:10px">
 </p>
 
-Check the `endpoint` and `service` labels marked by red rectangle. It verifies that the target is our expected database. Now, you can view the collected metrics and create graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
+Check the `endpoint` and `service` labels marked by red rectangle. It verifies that the target is our expected database. Now, you can view the collected metrics and create a graph from homepage of this Prometheus dashboard. You can also use this Prometheus server as data source for [Grafana](https://grafana.com/) and create beautiful dashboard with collected metrics.
 
 ## Cleaning up
 
