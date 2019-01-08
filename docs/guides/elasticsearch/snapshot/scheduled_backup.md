@@ -142,6 +142,146 @@ scheduled-es-20180214-095019   es/scheduled-es   Succeeded   17m
 scheduled-es-20180214-100711   es/scheduled-es   Running     9s
 ```
 
+## Customizing `backupSchedule`
+
+You can customize pod template spec and volume claim spec for the backup jobs by customizing `backupSchedule` section.
+
+Some common customization sample is shown below.
+
+**Specify PVC Template:**
+
+Backup job needs a temporary storage to hold `dump` files before it can be uploaded to cloud backend. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC with similar specification for backup job. However, if you want to specify custom PVC template, you can do it through `spec.backupSchedule.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup job than the database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: scheduled-es
+  namespace: demo
+spec:
+  version: "6.3-v1"
+  storageType: Durable
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb-dev
+    podVolumeClaimSpec:
+      storageClassName: "standard"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi # make sure size is larger or equal than your database size
+```
+
+**Specify Resources for Backup Job:**
+
+You can specify resources for backup job through `spec.backupSchedule.podTemplate.spec.resources` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: scheduled-es
+  namespace: demo
+spec:
+  version: "6.3-v1"
+  storageType: Durable
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb-dev
+    podTemplate:
+      spec:
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+**Provide Annotation for Backup Job:**
+
+If you need to add some annotations to backup job, you can specify this in `spec.backupSchedule.podTemplate.controller.annotations`. You can also specify annotation for the pod created by backup job through `spec.backupSchedule.podTemplate.annotations` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: scheduled-es
+  namespace: demo
+spec:
+  version: "6.3-v1"
+  storageType: Durable
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb-dev
+    podTemplate:
+      annotations:
+        passMe: ToBackupJobPod
+      controller:
+        annotations:
+          passMe: ToBackupJob
+```
+
+**Pass Arguments to Backup Job:**
+
+KubeDB also allows to pass extra arguments for backup job. You can provide these arguments through `spec.backupSchedule.podTemplate.spec.args` field of Snapshot crd.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: scheduled-es
+  namespace: demo
+spec:
+  version: "6.3-v1"
+  storageType: Durable
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb-dev
+    podTemplate:
+      spec:
+        args:
+        - --extra-args-to-backup-command
+```
+
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:

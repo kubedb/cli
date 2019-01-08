@@ -39,6 +39,13 @@ spec:
     endpoint: 's3.amazonaws.com'
     bucket: kubedb-qa
     prefix: demo
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
   podTemplate:
     annotation:
       passMe: ToBackupJobPod
@@ -491,6 +498,10 @@ spec:
           memory: "128Mi"
           cpu: "500m"
 ```
+
+### spec.podVolumeClaimSpec
+
+Backup and recovery job needs a temporary storage to hold `dump` files before it can be uploaded to backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC with similar specification for backup or recovery job. However, if you want to specify custom PVC template, you can do it through `spec.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup or recovery job than the database.
 
 ### spec.podTemplate
 

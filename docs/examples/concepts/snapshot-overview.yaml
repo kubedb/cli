@@ -1,0 +1,44 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-xyz
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: database-name
+  storageSecretName: s3-secret
+  s3:
+    endpoint: 's3.amazonaws.com'
+    bucket: kubedb-qa
+    prefix: demo
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
+  podTemplate:
+    annotation:
+      passMe: ToBackupJobPod
+    controller:
+      annotation:
+        passMe: ToBackupJob
+    spec:
+      schedulerName: my-scheduler
+      nodeSelector:
+        disktype: ssd
+      imagePullSecrets:
+      - name: myregistrykey
+      args:
+      - --extra-args-to-backup-command
+      env:
+      - name: BACKUP_POD_ENV
+        value: "value"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
