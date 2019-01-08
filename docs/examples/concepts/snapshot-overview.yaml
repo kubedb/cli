@@ -19,10 +19,10 @@ spec:
       requests:
         storage: 1Gi # make sure size is larger or equal than your database size
   podTemplate:
-    annotation:
+    annotations:
       passMe: ToBackupJobPod
     controller:
-      annotation:
+      annotations:
         passMe: ToBackupJob
     spec:
       schedulerName: my-scheduler
