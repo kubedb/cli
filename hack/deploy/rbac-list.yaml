@@ -87,6 +87,7 @@ rules:
 - apiGroups:
   - kubedb.com
   - catalog.kubedb.com
+  - authorization.kubedb.com
   resources:
   - "*"
   verbs: ["*"]
