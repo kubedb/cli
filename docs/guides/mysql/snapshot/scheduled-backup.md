@@ -94,14 +94,14 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/snapshot/demo-4.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/snapshot/demo-4.yaml
 mysql.kubedb.com/mysql-scheduled created
 ```
 
 It is also possible to add  backup scheduler to an existing `MySQL`. You just have to edit the `MySQL` CRD and add below spec:
 
 ```yaml
-$ kubedb edit my {db-name} -n demo
+$ kubectl edit my {db-name} -n demo
 spec:
   backupSchedule:
     cronExpression: '@every 1m'
@@ -113,7 +113,7 @@ spec:
 Once the `spec.backupSchedule` is added, KubeDB operator will create a new Snapshot object on each tick of the cron expression. This triggers KubeDB operator to create a Job as it would for any regular instant backup process. You can see the snapshots as they are created using `kubedb get snap` command.
 
 ```console
-$ kubedb get snap -n demo
+$ kubectl get snap -n demo
 NAME                              DATABASENAME      STATUS      AGE
 mysql-scheduled-20180927-083539   mysql-scheduled   Succeeded   3m
 mysql-scheduled-20180927-083639   mysql-scheduled   Succeeded   2m
@@ -132,7 +132,7 @@ From the above image, you can see that the snapshot output is stored in a folder
 To remove scheduler, edit the MySQL object  to remove `spec.backupSchedule` section.
 
 ```yaml
-$ kubedb edit my mysql-scheduled -n demo
+$ kubectl edit my mysql-scheduled -n demo
 apiVersion: kubedb.com/v1alpha1
 kind: MySQL
 metadata:
