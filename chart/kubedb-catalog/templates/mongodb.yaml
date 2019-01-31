@@ -118,4 +118,61 @@ spec:
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
 
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "4.0.5"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "4.0.5"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mongo:4.0.5"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0.5"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "4.0"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "4.0.5"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mongo:4.0"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "4.1.7"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "4.1.7"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mongo:4.1.7"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mongo-tools:4.1.7"
+
 {{ end }}
