@@ -107,7 +107,7 @@ onessl_found || {
       export ONESSL=./onessl
       ;;
 
-    CYGWIN* | MINGW32* | MSYS*)
+    CYGWIN* | MINGW* | MSYS*)
       curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.8.0/onessl-windows-amd64.exe
       chmod +x onessl.exe
       export ONESSL=./onessl.exe
@@ -130,19 +130,26 @@ export KUBEDB_ENABLE_VALIDATING_WEBHOOK=false
 export KUBEDB_ENABLE_MUTATING_WEBHOOK=false
 export KUBEDB_CATALOG=${KUBEDB_CATALOG:-all}
 export KUBEDB_DOCKER_REGISTRY=kubedb
-export KUBEDB_OPERATOR_TAG=0.9.0
+export KUBEDB_OPERATOR_TAG=0.10.0
 export KUBEDB_OPERATOR_NAME=operator
 export KUBEDB_IMAGE_PULL_SECRET=
-export KUBEDB_IMAGE_PULL_POLICY=IfNotPresent
-export KUBEDB_ENABLE_ANALYTICS=true
+export KUBEDB_IMAGE_PULL_POLICY=Always
+export KUBEDB_ENABLE_ANALYTICS=false
 export KUBEDB_UNINSTALL=0
 export KUBEDB_PURGE=0
 export KUBEDB_ENABLE_STATUS_SUBRESOURCE=false
 export KUBEDB_BYPASS_VALIDATING_WEBHOOK_XRAY=false
 export KUBEDB_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
 
+MONITORING_AGENT_NONE="none"
+MONITORING_AGENT_BUILTIN="prometheus.io/builtin"
+MONITORING_AGENT_COREOS_OPERATOR="prometheus.io/coreos-operator"
+export MONITORING_ENABLE=true
+export MONITORING_AGENT=$MONITORING_AGENT_COREOS_OPERATOR
+export PROMETHEUS_NAMESPACE="monitoring"
+
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
-export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/"
+export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/master/"
 if [ "$APPSCODE_ENV" = "dev" ]; then
   detect_tag
   export SCRIPT_LOCATION="cat "
@@ -163,10 +170,6 @@ $ONESSL semver --check='<1.11.0' $KUBE_APISERVER_VERSION || { export KUBEDB_ENAB
 
 export KUBEDB_WEBHOOK_SIDE_EFFECTS=
 $ONESSL semver --check='<1.12.0' $KUBE_APISERVER_VERSION || { export KUBEDB_WEBHOOK_SIDE_EFFECTS='sideEffects: None'; }
-
-MONITORING_AGENT_NONE="none"
-MONITORING_AGENT_BUILTIN="prometheus.io/builtin"
-MONITORING_AGENT_COREOS_OPERATOR="prometheus.io/coreos-operator"
 
 export MONITORING_ENABLE=${MONITORING_ENABLE:-false}
 export MONITORING_AGENT=${MONITORING_AGENT:-$MONITORING_AGENT_NONE}
@@ -578,11 +581,6 @@ fi
        ;;
    esac
 
-    # if operator monitoring is enabled and prometheus-namespace is provided,
-   # create kubedb-operator-apiserver-cert there. this will be mounted on prometheus pod.
-   if [ "$PROMETHEUS_NAMESPACE" != "$KUBEDB_NAMESPACE" ]; then
-     ${SCRIPT_LOCATION}hack/deploy/monitoring/apiserver-cert.yaml | $ONESSL envsubst | kubectl apply -f -
-   fi
  fi
 
 echo

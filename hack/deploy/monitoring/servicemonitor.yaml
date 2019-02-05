@@ -17,5 +17,4 @@ spec:
     bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
     scheme: https
     tlsConfig:
-      caFile: /etc/prometheus/secrets/kubedb-${KUBEDB_OPERATOR_NAME}-apiserver-cert/tls.crt
-      serverName: "kubedb-${KUBEDB_OPERATOR_NAME}.${KUBEDB_NAMESPACE}.svc"
+      insecureSkipVerify: true
