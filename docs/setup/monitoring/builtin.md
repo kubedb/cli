@@ -296,7 +296,7 @@ data:
 Let's create the ConfigMap we have shown above,
 
 ```console
-$ kubectl apply -f curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/operator/prom-config.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/operator/prom-config.yaml
 configmap/kubedb-operator-prom-config created
 ```
 
@@ -372,7 +372,7 @@ Notice that, we have mounted `kubedb-operator-apiserver-cert` secret as a volume
 Now, let's create the deployment,
 
 ```console
-$ kubectl apply -f curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/operator/prom-deploy.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/operator/prom-deploy.yaml
 deployment.apps/prometheus created
 ```
 
