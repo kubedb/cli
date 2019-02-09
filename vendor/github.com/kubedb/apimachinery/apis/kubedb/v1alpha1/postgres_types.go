@@ -45,6 +45,10 @@ type PostgresSpec struct {
 	// Archive for wal files
 	Archiver *PostgresArchiverSpec `json:"archiver,omitempty"`
 
+	// Leader election configuration
+	// +optional
+	LeaderElection *LeaderElectionConfig `json:"leaderElection,omitempty"`
+
 	// Database authentication secret
 	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
 
