@@ -55,6 +55,14 @@ func (r Redis) ConfigMapName() string {
 	return r.OffshootName()
 }
 
+func (r Redis) BaseNameForShard() string {
+	return fmt.Sprintf("%s-shard", r.OffshootName())
+}
+
+func (r Redis) StatefulSetNameWithShard(i int) string {
+	return fmt.Sprintf("%s%d", r.BaseNameForShard(), i)
+}
+
 type redisApp struct {
 	*Redis
 }
