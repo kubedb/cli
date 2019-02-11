@@ -4,7 +4,7 @@ metadata:
   name: pg-original
   namespace: demo
 spec:
-  version: "10.2-v1"
+  version: "10.2-v2"
   replicas: 1
   terminationPolicy: Delete
   storage:

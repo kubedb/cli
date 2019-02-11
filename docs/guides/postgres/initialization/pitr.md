@@ -77,7 +77,7 @@ metadata:
   name: pg-original
   namespace: demo
 spec:
-  version: "10.2-v1"
+  version: "10.2-v2"
   replicas: 1
   terminationPolicy: Delete
   storage:
@@ -108,7 +108,7 @@ Now, wait for the database to go into `Running` state.
 ```console
 $ kubectl get pg -n demo pg-original
 NAME          VERSION   STATUS    AGE
-pg-original   10.2-v1    Running   1m
+pg-original   10.2-v2    Running   1m
 ```
 
 **Insert Sample Data:**
@@ -197,7 +197,7 @@ metadata:
   name: pitr-1
   namespace: demo
 spec:
-  version: "10.2-v1"
+  version: "10.2-v2"
   replicas: 1
   terminationPolicy: Delete
   storage:
@@ -220,7 +220,7 @@ spec:
 Let's create the above Postgres crd,
 
 ```console
-$ kubectl apply -f ./docs/examples/postgres/initialization/pitr/pitr-1.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/initialization/pitr/pitr-1.yaml
 postgres.kubedb.com/pitr-1 created
 ```
 
@@ -229,7 +229,7 @@ Now, wait for the Postgres crd `pitr-1` to go into `Running` state.
 ```console
 $ kubectl get pg -n demo pitr-1
 NAME     VERSION   STATUS    AGE
-pitr-1   10.2-v1    Running   2m
+pitr-1   10.2-v2    Running   2m
 ```
 
 Once, the database is running, `exec` into the database pod and check if the recovered database contains only first sample data.
@@ -264,7 +264,7 @@ metadata:
   name: pitr-2
   namespace: demo
 spec:
-  version: "10.2-v1"
+  version: "10.2-v2"
   replicas: 1
   terminationPolicy: Delete
   storage:
@@ -287,7 +287,7 @@ spec:
 Let's create the above Postgres crd,
 
 ```console
-$ kubectl apply -f ./docs/examples/postgres/initialization/pitr/pitr-2.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/initialization/pitr/pitr-2.yaml
 postgres.kubedb.com/pitr-2 created
 ```
 
@@ -296,7 +296,7 @@ Now, wait for the Postgres crd `pitr-2` to go into `Running` state.
 ```console
 $ kubectl get pg -n demo pitr-2
 NAME     VERSION   STATUS    AGE
-pitr-2   10.2-v1    Running   2m
+pitr-2   10.2-v2    Running   2m
 ```
 
 Once, the database is running, `exec` into the database pod and check if the recovered database contains only the first two sample data.
@@ -322,12 +322,12 @@ So, we can see that the PostgreSQL database has been recovered to a state where 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/pitr-1 -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/pitr-1
+kubectl patch -n demo pg/pitr-1 -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/pitr-1
 
-$ kubectl patch -n demo pg/pitr-2 -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/pitr-2
+kubectl patch -n demo pg/pitr-2 -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/pitr-2
 
-$ kubectl delete -n demo secret s3-secret
-$ kubectl delete ns demo
+kubectl delete -n demo secret s3-secret
+kubectl delete ns demo
 ```
