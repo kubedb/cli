@@ -10,6 +10,10 @@
 
 [![Throughput Graph](https://graphs.waffle.io/kubedb/project/throughput.svg)](https://waffle.io/kubedb/project/metrics/throughput)
 
+
+**Folks, as we continue to develop KubeDB, we value your feedback highly. Please consider taking a few minutes to complete this questionnaire. https://goo.gl/forms/ddcNVjmDlti9fNFE3. Thank you! :pray:**
+
+
 > Making running production-grade databases easy on Kubernetes
 
 Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
@@ -36,7 +40,7 @@ Please pick a version of KubeDB that matches your Kubernetes installation.
 
 | KubeDB Version                                                                     | Docs                                                                | Kubernetes Version |
 |------------------------------------------------------------------------------------|---------------------------------------------------------------------|--------------------|
-| [0.9.0](https://github.com/kubedb/cli/releases/tag/0.9.0) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.9.0/docs)  | 1.9.x + (for qa)   |
+| [0.9.0](https://github.com/kubedb/cli/releases/tag/0.9.0) (uses CRD) | [User Guide](https://github.com/kubedb/cli/tree/0.9.0/docs)  | 1.9.x +      |
 | [0.8.0](https://github.com/kubedb/cli/releases/tag/0.8.0) (uses CRD)               | [User Guide](https://kubedb.com/docs/0.8.0/)                        | 1.9.x +            |
 | [0.6.0](https://github.com/kubedb/cli/releases/tag/0.6.0) (uses TPR)               | [User Guide](https://github.com/kubedb/cli/tree/0.6.0/docs)         | 1.5.x - 1.7.x      |
 
