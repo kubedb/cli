@@ -1,0 +1,21 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mysql-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MySQL
+spec:
+  databaseName: mysql-infant
+  storageSecretName: my-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"

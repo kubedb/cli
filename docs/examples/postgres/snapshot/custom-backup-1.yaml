@@ -1,0 +1,27 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: scheduled-pg
+  namespace: demo
+spec:
+  version: "9.6-v1"
+  replicas: 3
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb-dev
+    podVolumeClaimSpec:
+      storageClassName: "standard"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi # make sure size is larger or equal than your database size

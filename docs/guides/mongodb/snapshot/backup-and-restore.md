@@ -357,6 +357,114 @@ Events:
   Normal  SuccessfulInitialize  1m    Job Controller    Successfully completed initialization
 ```
 
+## Customizing Snapshot
+
+You can customize pod template spec and volume claim spec for backup and restore jobs. For details options read [this doc](/docs/concepts/snapshot.md).
+
+Some common customization examples are shown below:
+
+**Specify PVC Template:**
+
+Backup and recovery jobs use temporary storage to hold `dump` files before it can be uploaded to cloud backend or restored into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates a PVC with similar specification for backup or recovery job. However, if you want to specify a custom PVC template, you can do it via `spec.podVolumeClaimSpec` field of Snapshot crd. This is particularly helpful when you want to use different `storageclass` for backup or recovery jobs and the database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
+```
+
+**Specify Resources for Backup/Recovery Jobs:**
+
+You can specify resources for backup or recovery jobs using `spec.podTemplate.spec.resources` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+```
+
+**Provide Annotations for Backup/Recovery Jobs:**
+
+If you need to add some annotations to backup or recovery jobs, you can specify those in `spec.podTemplate.controller.annotations`. You can also specify annotations for the pod created by backup or recovery jobs through `spec.podTemplate.annotations` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    annotations:
+      passMe: ToBackupJobPod
+    controller:
+      annotations:
+        passMe: ToBackupJob
+```
+
+**Pass Arguments to Backup/Recovery Job:**
+
+KubeDB allows users to pass extra arguments for backup or recovery jobs. You can provide these arguments through `spec.podTemplate.spec.args` field of Snapshot crd.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      args:
+      - --extra-args-to-backup-command
+```
+
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:

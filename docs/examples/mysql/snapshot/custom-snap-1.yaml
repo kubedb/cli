@@ -1,0 +1,20 @@
+
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mysql-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MySQL
+spec:
+  databaseName: mysql-infant
+  storageSecretName: my-snap-secret
+  gcs:
+    bucket: kubedb
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
