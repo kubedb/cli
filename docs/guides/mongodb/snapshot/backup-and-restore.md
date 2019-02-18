@@ -359,13 +359,13 @@ Events:
 
 ## Customizing Snapshot
 
-You can customize pod template spec and volume claim spec for the backup and restore jobs. For details options read [this doc](/docs/concepts/snapshot.md).
+You can customize pod template spec and volume claim spec for backup and restore jobs. For details options read [this doc](/docs/concepts/snapshot.md).
 
-Some common customization sample is shown below.
+Some common customization examples are shown below:
 
 **Specify PVC Template:**
 
-Backup and recovery job needs a temporary storage to hold `dump` files before it can be uploaded to cloud backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC with similar specification for backup or recovery job. However, if you want to specify custom PVC template, you can do it through `spec.podVolumeClaimSpec` field of Snapshot crd. This is particularly helpful when you want to use different `storageclass` for backup or recovery job than the database.
+Backup and recovery jobs use temporary storage to hold `dump` files before it can be uploaded to cloud backend or restored into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates a PVC with similar specification for backup or recovery job. However, if you want to specify a custom PVC template, you can do it via `spec.podVolumeClaimSpec` field of Snapshot crd. This is particularly helpful when you want to use different `storageclass` for backup or recovery jobs and the database.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -389,9 +389,9 @@ spec:
         storage: 1Gi # make sure size is larger or equal than your database size
 ```
 
-**Specify Resources for Backup/Recovery Job:**
+**Specify Resources for Backup/Recovery Jobs:**
 
-You can specify resources for backup or recovery job through `spec.podTemplate.spec.resources` field.
+You can specify resources for backup or recovery jobs using `spec.podTemplate.spec.resources` field.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -417,9 +417,9 @@ spec:
           cpu: "500m"
 ```
 
-**Provide Annotation for Backup/Recovery Job:**
+**Provide Annotations for Backup/Recovery Jobs:**
 
-If you need to add some annotations to backup or recovery job, you can specify this in `spec.podTemplate.controller.annotations`. You can also specify annotation for the pod created by backup or recovery job through `spec.podTemplate.annotations` field.
+If you need to add some annotations to backup or recovery jobs, you can specify those in `spec.podTemplate.controller.annotations`. You can also specify annotations for the pod created by backup or recovery jobs through `spec.podTemplate.annotations` field.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -444,7 +444,7 @@ spec:
 
 **Pass Arguments to Backup/Recovery Job:**
 
-KubeDB also allows to pass extra arguments for backup or recovery job. You can provide these arguments through `spec.podTemplate.spec.args` field of Snapshot crd.
+KubeDB allows users to pass extra arguments for backup or recovery jobs. You can provide these arguments through `spec.podTemplate.spec.args` field of Snapshot crd.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1

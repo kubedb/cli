@@ -501,7 +501,7 @@ spec:
 
 ### spec.podVolumeClaimSpec
 
-Backup and recovery job needs a temporary storage to hold `dump` files before it can be uploaded to backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC with similar specification for backup or recovery job. However, if you want to specify custom PVC template, you can do it through `spec.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup or recovery job than the database.
+Backup and recovery jobs use temporary storage to hold `dump` files before it can be uploaded to backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates a PVC with similar specification for backup or recovery job. However, if you want to specify a custom PVC template, you can do it via `spec.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup or recovery jobs and the database.
 
 ### spec.podTemplate
 
