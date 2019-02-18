@@ -66,10 +66,10 @@ spec:
     configMap:
       name: mg-custom-config
   podTemplate:
-    annotation:
+    annotations:
       passMe: ToDatabasePod
     controller:
-      annotation:
+      annotations:
         passMe: ToStatefulSet
     spec:
       schedulerName: my-scheduler
@@ -90,7 +90,7 @@ spec:
           memory: "128Mi"
           cpu: "500m"
   serviceTemplate:
-    annotation:
+    annotations:
       passMe: ToService
     spec:
       type: NodePort
