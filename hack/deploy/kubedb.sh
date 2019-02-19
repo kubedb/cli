@@ -140,6 +140,7 @@ export KUBEDB_PURGE=0
 export KUBEDB_ENABLE_STATUS_SUBRESOURCE=false
 export KUBEDB_BYPASS_VALIDATING_WEBHOOK_XRAY=false
 export KUBEDB_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
+export KUBEDB_PRIORITY_CLASS=system-cluster-critical
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
 export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/"
@@ -352,6 +353,10 @@ while test $# -gt 0; do
 done
 
 export PROMETHEUS_NAMESPACE=${PROMETHEUS_NAMESPACE:-$KUBEDB_NAMESPACE}
+
+if [ "$KUBEDB_NAMESPACE" != "kube-system" ]; then
+    export KUBEDB_PRIORITY_CLASS=""
+fi
 
 if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices
