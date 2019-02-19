@@ -9,4 +9,4 @@ spec:
   databaseName: mysql-infant
   storageSecretName: my-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa

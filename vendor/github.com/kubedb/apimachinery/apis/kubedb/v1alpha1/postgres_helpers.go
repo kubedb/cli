@@ -51,6 +51,11 @@ func (p Postgres) ServiceName() string {
 	return p.OffshootName()
 }
 
+// Snapshot service account name.
+func (p Postgres) SnapshotSAName() string {
+	return fmt.Sprintf("%v-snapshot", p.OffshootName())
+}
+
 type postgresApp struct {
 	*Postgres
 }
@@ -63,8 +68,8 @@ func (r postgresApp) Type() appcat.AppType {
 	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularPostgres))
 }
 
-func (r Postgres) AppBindingMeta() appcat.AppBindingMeta {
-	return &postgresApp{&r}
+func (p Postgres) AppBindingMeta() appcat.AppBindingMeta {
+	return &postgresApp{&p}
 }
 
 type postgresStatsService struct {

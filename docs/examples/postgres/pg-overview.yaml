@@ -4,7 +4,7 @@ metadata:
   name: p1
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   replicas: 2
   standbyMode: Hot
   streamingMode: asynchronous
@@ -28,10 +28,10 @@ spec:
       configMap:
         name: pg-init-script
   backupSchedule:
-    cronExpression: "@every 6h"
+    cronExpression: "@every 2m"
     storageSecretName: gcs-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
       prefix: demo
   monitor:
     agent: prometheus.io/coreos-operator

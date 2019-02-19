@@ -84,7 +84,7 @@ metadata:
   name: mysql-init-script
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -232,14 +232,14 @@ spec:
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
-  version: 8.0-v1
+  version: 8.0-v2
 status:
   observedGeneration: 2$4213139756412538772
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `mysql-init-script-auth` *(format: {mysql-object-name}-auth)* for storing the password for MySQL superuser. This secret contains a `user` key which contains the *username* for MySQL superuser and a `password` key which contains the *password* for MySQL superuser.
-If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `user` and `password` and also make sure of using `root` as value of `user`.
+KubeDB operator has created a new Secret called `mysql-init-script-auth` *(format: {mysql-object-name}-auth)* for storing the password for MySQL superuser. This secret contains a `username` key which contains the *username* for MySQL superuser and a `password` key which contains the *password* for MySQL superuser.
+If you want to use an existing secret please specify that when creating the MySQL object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `username` and `password` and also make sure of using `root` as value of `username`.
 
 Now, you can connect to this database from the phpMyAdmin dashboard using the database pod IP and and `mysql` user password.
 
@@ -254,6 +254,15 @@ root
 $ kubectl get secrets -n demo mysql-init-script-auth -o jsonpath='{.data.\password}' | base64 -d
 1Pc7bwSygrv1MX1Q
 ```
+
+---
+Note: In MySQL:8.0-v2 (ie, 8.0.14), connection to phpMyAdmin may give error as it is using `caching_sha2_password` and `sha256_password` authentication plugins over `mysql_native_password`. If the error happens do the following for work around. But, It's not recommended to change authentication plugins. See [here](https://stackoverflow.com/questions/49948350/phpmyadmin-on-mysql-8-0) for alternative solutions.
+
+```console
+kubectl exec -it -n demo mysql-quickstart-0 -- mysql -u root --password=1Pc7bwSygrv1MX1Q -e "ALTER USER root IDENTIFIED WITH mysql_native_password BY '1Pc7bwSygrv1MX1Q';"
+```
+
+---
 
 Now, open your browser and go to the following URL: _http://{minikube-ip}:{myadmin-svc-nodeport}_. To log into the phpMyAdmin, use host __`172.17.0.6`__ , username __`root`__ and password __`1Pc7bwSygrv1MX1Q`__.
 

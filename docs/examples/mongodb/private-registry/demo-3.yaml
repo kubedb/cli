@@ -9,7 +9,7 @@ spec:
   databaseName: mgo-pvt-reg
   storageSecretName: mg-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
   podTemplate:
     spec:
       imagePullSecrets:

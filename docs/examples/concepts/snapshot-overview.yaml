@@ -11,6 +11,7 @@ spec:
     endpoint: 's3.amazonaws.com'
     bucket: kubedb-qa
     prefix: demo
+  storageType: "Durable"
   podVolumeClaimSpec:
     storageClassName: "standard"
     accessModes:

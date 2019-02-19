@@ -33,7 +33,7 @@ This tutorial will show you how to monitor MongoDB database using builtin [Prome
   namespace/monitoring created
 
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
   ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -49,7 +49,7 @@ metadata:
   name: builtin-prom-mgo
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
@@ -78,17 +78,17 @@ Now, wait for the database to go into `Running` state.
 ```console
 $ kubectl get mg -n demo builtin-prom-mgo
 NAME               VERSION   STATUS    AGE
-builtin-prom-mgo   3.4-v1    Running   1m
+builtin-prom-mgo   3.4-v2    Running   1m
 ```
 
 KubeDB will create a separate stats service with name `{MongoDB crd name}-stats` for monitoring purpose.
 
 ```console
 $ kubectl get svc -n demo --selector="kubedb.com/name=builtin-prom-mgo"
-NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
-builtin-prom-mgo         ClusterIP   10.109.168.59    <none>        27017/TCP   105s
-builtin-prom-mgo-gvr     ClusterIP   None             <none>        27017/TCP   105s
-builtin-prom-mgo-stats   ClusterIP   10.109.197.177   <none>        56790/TCP   28s
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+builtin-prom-mgo         ClusterIP   10.99.28.40    <none>        27017/TCP   55s
+builtin-prom-mgo-gvr     ClusterIP   None           <none>        27017/TCP   55s
+builtin-prom-mgo-stats   ClusterIP   10.98.202.26   <none>        56790/TCP   36s
 ```
 
 Here, `builtin-prom-mgo-stats` service has been created for monitoring purpose. Let's describe the service.
@@ -105,10 +105,10 @@ Annotations:       monitoring.appscode.com/agent: prometheus.io/builtin
                    prometheus.io/scrape: true
 Selector:          kubedb.com/kind=MongoDB,kubedb.com/name=builtin-prom-mgo
 Type:              ClusterIP
-IP:                10.109.197.177
+IP:                10.98.202.26
 Port:              prom-http  56790/TCP
 TargetPort:        prom-http/TCP
-Endpoints:         172.17.0.5:56790
+Endpoints:         172.17.0.7:56790
 Session Affinity:  None
 Events:            <none>
 ```
@@ -312,13 +312,13 @@ At first, let's check if the Prometheus pod is in `Running` state.
 ```console
 $ kubectl get pod -n monitoring -l=app=prometheus
 NAME                          READY   STATUS    RESTARTS   AGE
-prometheus-8568c86d86-95zhn   1/1     Running   0          77s
+prometheus-7bd56c6865-8dlpv   1/1     Running   0          28s
 ```
 
-Now, run following command on a separate terminal to forward 9090 port of `prometheus-8568c86d86-95zhn` pod,
+Now, run following command on a separate terminal to forward 9090 port of `prometheus-7bd56c6865-8dlpv` pod,
 
 ```console
-$ kubectl port-forward -n monitoring prometheus-8568c86d86-95zhn 9090
+$ kubectl port-forward -n monitoring prometheus-7bd56c6865-8dlpv 9090
 Forwarding from 127.0.0.1:9090 -> 9090
 Forwarding from [::1]:9090 -> 9090
 ```
@@ -338,16 +338,16 @@ Now, you can view the collected metrics and create a graph from homepage of this
 To cleanup the Kubernetes resources created by this tutorial, run following commands
 
 ```console
-$ kubectl delete -n demo mg/builtin-prom-mgo
+kubectl delete -n demo mg/builtin-prom-mgo
 
-$ kubectl delete -n monitoring deployment.apps/prometheus
+kubectl delete -n monitoring deployment.apps/prometheus
 
-$ kubectl delete -n monitoring clusterrole.rbac.authorization.k8s.io/prometheus
-$ kubectl delete -n monitoring serviceaccount/prometheus
-$ kubectl delete -n monitoring clusterrolebinding.rbac.authorization.k8s.io/prometheus
+kubectl delete -n monitoring clusterrole.rbac.authorization.k8s.io/prometheus
+kubectl delete -n monitoring serviceaccount/prometheus
+kubectl delete -n monitoring clusterrolebinding.rbac.authorization.k8s.io/prometheus
 
-$ kubectl delete ns demo
-$ kubectl delete ns monitoring
+kubectl delete ns demo
+kubectl delete ns monitoring
 ```
 
 ## Next Steps

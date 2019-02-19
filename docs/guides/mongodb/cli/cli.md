@@ -49,10 +49,10 @@ To learn about various options of `create` command, please visit [here](/docs/re
 ```console
 $ kubedb get mongodb
 NAME           VERSION   STATUS    AGE
-mongodb-demo   3.4-v1    Running   13m
-mongodb-dev    3.4-v1    Running   11m
-mongodb-prod   3.4-v1    Running   11m
-mongodb-qa     3.4-v1    Running   10m
+mongodb-demo   3.4-v2    Running   13m
+mongodb-dev    3.4-v2    Running   11m
+mongodb-prod   3.4-v2    Running   11m
+mongodb-qa     3.4-v2    Running   10m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -62,15 +62,15 @@ $ kubedb get mongodb mongodb-demo --output=yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  creationTimestamp: 2018-09-25T09:30:16Z
+  creationTimestamp: "2019-02-06T10:31:04Z"
   finalizers:
   - kubedb.com
   generation: 2
   name: mongodb-demo
   namespace: default
-  resourceVersion: "26192"
+  resourceVersion: "94703"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/default/mongodbs/mongodb-demo
-  uid: 9ce4c10e-c0a5-11e8-b4a9-0800272618ed
+  uid: 4eaaba0e-29fa-11e9-aebf-080027875192
 spec:
   databaseSecret:
     secretName: mongodb-demo-auth
@@ -78,6 +78,26 @@ spec:
     controller: {}
     metadata: {}
     spec:
+      livenessProbe:
+        exec:
+          command:
+          - mongo
+          - --eval
+          - db.adminCommand('ping')
+        failureThreshold: 3
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command:
+          - mongo
+          - --eval
+          - db.adminCommand('ping')
+        failureThreshold: 3
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
       resources: {}
   replicas: 1
   serviceTemplate:
@@ -86,6 +106,7 @@ spec:
   storage:
     accessModes:
     - ReadWriteOnce
+    dataSource: null
     resources:
       requests:
         storage: 1Gi
@@ -94,7 +115,7 @@ spec:
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
-  version: 3.4-v1
+  version: 3.4-v2
 status:
   observedGeneration: 2$4213139756412538772
   phase: Running
@@ -169,7 +190,7 @@ To learn about various options of `get` command, please visit [here](/docs/refer
 $ kubedb describe mg mongodb-demo
 Name:               mongodb-demo
 Namespace:          default
-CreationTimestamp:  Tue, 25 Sep 2018 16:04:23 +0600
+CreationTimestamp:  Wed, 06 Feb 2019 16:31:04 +0600
 Labels:             <none>
 Annotations:        <none>
 Replicas:           1  total
@@ -182,11 +203,11 @@ Volume:
 
 StatefulSet:
   Name:               mongodb-demo
-  CreationTimestamp:  Tue, 25 Sep 2018 16:04:25 +0600
+  CreationTimestamp:  Wed, 06 Feb 2019 16:31:05 +0600
   Labels:               kubedb.com/kind=MongoDB
                         kubedb.com/name=mongodb-demo
   Annotations:        <none>
-  Replicas:           824640299728 desired | 1 total
+  Replicas:           824639727120 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
@@ -195,10 +216,10 @@ Service:
                   kubedb.com/name=mongodb-demo
   Annotations:  <none>
   Type:         ClusterIP
-  IP:           10.96.137.225
+  IP:           10.96.245.200
   Port:         db  27017/TCP
   TargetPort:   db/TCP
-  Endpoints:    172.17.0.5:27017
+  Endpoints:    172.17.0.8:27017
 
 Service:
   Name:         mongodb-demo-gvr
@@ -209,7 +230,7 @@ Service:
   IP:           None
   Port:         db  27017/TCP
   TargetPort:   27017/TCP
-  Endpoints:    172.17.0.5:27017
+  Endpoints:    172.17.0.8:27017
 
 Database Secret:
   Name:         mongodb-demo-auth
@@ -221,21 +242,20 @@ Type:  Opaque
   
 Data
 ====
-  user:      4 bytes
   password:  16 bytes
+  username:  4 bytes
 
 No Snapshots.
 
 Events:
-  Type    Reason      Age   From              Message
-  ----    ------      ----  ----              -------
-  Normal  Successful  8m    MongoDB operator  Successfully created Service
-  Normal  Successful  4m    MongoDB operator  Successfully created StatefulSet
-  Normal  Successful  4m    MongoDB operator  Successfully created MongoDB
-  Normal  Successful  3m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful  3m    MongoDB operator  Successfully patched MongoDB
-  Normal  Successful  3m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful  3m    MongoDB operator  Successfully patched MongoDB
+  Type    Reason      Age   From             Message
+  ----    ------      ----  ----             -------
+  Normal  Successful  2m    KubeDB operator  Successfully created Service
+  Normal  Successful  2m    KubeDB operator  Successfully created StatefulSet
+  Normal  Successful  2m    KubeDB operator  Successfully created MongoDB
+  Normal  Successful  2m    KubeDB operator  Successfully created appbinding
+  Normal  Successful  2m    KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful  2m    KubeDB operator  Successfully patched MongoDB
 ```
 
 `kubedb describe` command provides following basic information about a MongoDB database.
@@ -285,11 +305,11 @@ Lets edit an existing running MongoDB object to setup [Scheduled Backup](/docs/g
 $ kubedb edit mg mongodb-demo
 
 # Add following under Spec to configure periodic backups
-# backupSchedule:
-#   cronExpression: '@every 1m'
-#   storageSecretName: mg-snap-secret
-#   gcs:
-#     bucket: bucket-name
+#  backupSchedule:
+#    cronExpression: '@every 1m'
+#    storageSecretName: mg-snap-secret
+#    gcs:
+#      bucket: bucket-name
 
 mongodb "mongodb-demo" edited
 ```
@@ -311,7 +331,6 @@ If StatefulSets exists for a MongoDB database, following fields can't be modifie
 - spec.storageType
 - spec.storage
 - spec.podTemplate.spec.nodeSelector
-- spec.podTemplate.spec.env
 
 For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
@@ -352,6 +371,9 @@ To learn about various options of `delete` command, please visit [here](/docs/re
 You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
+# Create objects
+$ kubectl create -f
+
 # List objects
 $ kubectl get mongodb
 $ kubectl get mongodb.kubedb.com

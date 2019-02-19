@@ -50,6 +50,11 @@ func (m MySQL) ServiceName() string {
 	return m.OffshootName()
 }
 
+// Snapshot service account name.
+func (m MySQL) SnapshotSAName() string {
+	return fmt.Sprintf("%v-snapshot", m.OffshootName())
+}
+
 type mysqlApp struct {
 	*MySQL
 }

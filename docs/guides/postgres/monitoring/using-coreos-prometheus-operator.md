@@ -28,7 +28,7 @@ CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) prov
   namespace/monitoring created
 
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
   ```
 
 - We need a CoreOS [prometheus-operator](https://github.com/coreos/prometheus-operator) instance running. If you don't already have a running instance, deploy one following the docs from [here](https://github.com/appscode/third-party-tools/blob/master/monitoring/prometheus/coreos-operator/README.md).
@@ -94,7 +94,7 @@ metadata:
   name: coreos-prom-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
@@ -133,7 +133,7 @@ Now, wait for the database to go into `Running` state.
 ```console
 $ kubectl get pg -n demo coreos-prom-postgres
 NAME                   VERSION   STATUS    AGE
-coreos-prom-postgres   9.6-v1    Running   38s
+coreos-prom-postgres   9.6-v2    Running   38s
 ```
 
 KubeDB will create a separate stats service with name `{PostgreSQL crd name}-stats` for monitoring purpose.

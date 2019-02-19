@@ -27,7 +27,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
+namespace/demo created
 
 $ kubectl get ns demo
 NAME    STATUS  AGE
@@ -58,7 +58,7 @@ spec:
   databaseName: script-postgres
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
 ```
 
 Here,
@@ -78,10 +78,10 @@ Storage Secret should contain credentials that will be used to access storage de
 
 For GCS bucket, a storage Secret require to have following 2 keys:
 
-| Key                               | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
-| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
+|                Key                |                    Description                    |
+| --------------------------------- | ------------------------------------------------- |
+| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID               |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key |
 
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
@@ -116,10 +116,10 @@ KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swif
 
 To configure this backend, following parameters are available:
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.gcs.bucket`        | `Required`. Name of bucket                                                      |
-| `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot data will be stored          |
+|     Parameter     |                              Description                               |
+| ----------------- | ---------------------------------------------------------------------- |
+| `spec.gcs.bucket` | `Required`. Name of bucket                                             |
+| `spec.gcs.prefix` | `Optional`. Path prefix into bucket where snapshot data will be stored |
 
 To learn how to configure other storage destinations for snapshot data, please visit [here](/docs/concepts/snapshot.md).
 
@@ -260,9 +260,9 @@ Topology:
   primary  script-postgres-0  2018-09-04 11:55:32 +0600 +06  Running
 
 Snapshots:
-  Name              Bucket     StartTime                        CompletionTime                   Phase
-  ----              ------     ---------                        --------------                   -----
-  instant-snapshot  gs:kubedb  Tue, 04 Sep 2018 12:10:54 +0600  Tue, 04 Sep 2018 12:11:45 +0600  Succeeded
+  Name              Bucket        StartTime                        CompletionTime                   Phase
+  ----              ------        ---------                        --------------                   -----
+  instant-snapshot  gs:kubedb-qa  Tue, 04 Sep 2018 12:10:54 +0600  Tue, 04 Sep 2018 12:11:45 +0600  Succeeded
 
 Events:
   Type    Reason              Age   From               Message
@@ -308,7 +308,7 @@ spec:
   databaseName: script-postgres
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb-dev
+    bucket: kubedb-qa
   podVolumeClaimSpec:
     storageClassName: "standard"
     accessModes:
@@ -334,7 +334,7 @@ spec:
   databaseName: script-postgres
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb-dev
+    bucket: kubedb-qa
   podTemplate:
     spec:
       resources:
@@ -362,7 +362,7 @@ spec:
   databaseName: script-postgres
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb-dev
+    bucket: kubedb-qa
   podTemplate:
     annotations:
       passMe: ToBackupJobPod
@@ -387,7 +387,7 @@ spec:
   databaseName: script-postgres
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb-dev
+    bucket: kubedb-qa
   podTemplate:
     spec:
       args:

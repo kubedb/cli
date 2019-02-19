@@ -26,7 +26,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
+namespace/demo created
 
 $ kubectl get ns demo
 NAME    STATUS  AGE
@@ -62,7 +62,7 @@ metadata:
   name: script-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -94,7 +94,7 @@ Now, wait until Postgres goes in `Running` state. Verify that the database is in
 ```console
  $ kubectl get pg -n demo script-postgres
 NAME              VERSION   STATUS    AGE
-script-postgres   9.6-v1    Running   39s
+script-postgres   9.6-v2    Running   39s
 ```
 
 You can use `kubedb describe` command to view which resources has been created by KubeDB for this Postgres object.

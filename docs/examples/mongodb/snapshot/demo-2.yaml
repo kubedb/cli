@@ -9,4 +9,4 @@ spec:
   databaseName: mgo-infant
   storageSecretName: mg-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa

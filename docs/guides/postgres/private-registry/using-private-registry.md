@@ -9,6 +9,7 @@ menu:
 menu_name: docs_0.9.0
 section_menu_id: guides
 ---
+
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # Using private Docker registry
@@ -23,21 +24,34 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
+namespace/demo created
 ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
 ## Prepare Private Docker Registry
-You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories). In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
-You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry.
+- You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories). In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).
 
-For Postgres, push the following images to your private registry.
+- You have to push the required images from KubeDB's [Docker hub account](https://hub.docker.com/r/kubedb/) into your private registry. For postgres, push `DB_IMAGE`, `TOOLS_IMAGE`, `EXPORTER_IMAGE` of following PostgresVersions, where `deprecated` is not true, to your private registry.
+
+  ```console
+  $ kubectl get postgresversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,TOOLS_IMAGE:.spec.tools.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated
+  NAME       VERSION   DB_IMAGE                   TOOLS_IMAGE                      EXPORTER_IMAGE                    DEPRECATED
+  10.2       10.2      kubedb/postgres:10.2       kubedb/postgres-tools:10.2       kubedb/operator:0.8.0             true
+  10.2-v1    10.2      kubedb/postgres:10.2-v2    kubedb/postgres-tools:10.2-v2    kubedb/postgres_exporter:v0.4.6   true
+  10.2-v2    10.2      kubedb/postgres:10.2-v3    kubedb/postgres-tools:10.2-v2    kubedb/postgres_exporter:v0.4.7   <none>
+  10.6       10.6      kubedb/postgres:10.6       kubedb/postgres-tools:10.6       kubedb/postgres_exporter:v0.4.7   <none>
+  11.1       11.1      kubedb/postgres:11.1       kubedb/postgres-tools:11.1       kubedb/postgres_exporter:v0.4.7   <none>
+  9.6        9.6       kubedb/postgres:9.6        kubedb/postgres-tools:9.6        kubedb/operator:0.8.0             true
+  9.6-v1     9.6       kubedb/postgres:9.6-v2     kubedb/postgres-tools:9.6-v2     kubedb/postgres_exporter:v0.4.6   true
+  9.6-v2     9.6       kubedb/postgres:9.6-v3     kubedb/postgres-tools:9.6-v2     kubedb/postgres_exporter:v0.4.7   <none>
+  9.6.7      9.6.7     kubedb/postgres:9.6.7      kubedb/postgres-tools:9.6.7      kubedb/operator:0.8.0             true
+  9.6.7-v1   9.6.7     kubedb/postgres:9.6.7-v2   kubedb/postgres-tools:9.6.7-v2   kubedb/postgres_exporter:v0.4.6   true
+  9.6.7-v2   9.6.7     kubedb/postgres:9.6.7-v3   kubedb/postgres-tools:9.6.7-v2   kubedb/postgres_exporter:v0.4.7   <none>
+  ```
+
+  Docker hub repositories:
 
 - [kubedb/operator](https://hub.docker.com/r/kubedb/operator)
 - [kubedb/postgres](https://hub.docker.com/r/kubedb/postgres)
@@ -45,12 +59,6 @@ For Postgres, push the following images to your private registry.
 - [kubedb/postgres_exporter](https://hub.docker.com/r/kubedb/postgres_exporter)
 
 ```console
-$ export DOCKER_REGISTRY=<your-registry>
-
-$ docker pull kubedb/operator:0.9.0 ; docker tag kubedb/operator:0.9.0 $DOCKER_REGISTRY/operator:0.9.0 ; docker push $DOCKER_REGISTRY/operator:0.9.0
-$ docker pull kubedb/postgres:9.6-v1 ; docker tag kubedb/postgres:9.6-v1 $DOCKER_REGISTRY/postgres:9.6-v1 ; docker push $DOCKER_REGISTRY/postgres:9.6-v1
-$ docker pull kubedb/postgres-tools:9.6-v1 ; docker tag kubedb/postgres-tools:9.6-v1 $DOCKER_REGISTRY/postgres-tools:9.6-v1 ; docker push $DOCKER_REGISTRY/postgres-tools:9.6-v1
-$ docker pull kubedb/postgres_exporter:v0.4.6 ; docker tag kubedb/postgres_exporter:v0.4.6 $DOCKER_REGISTRY/postgres_exporter:v0.4.6 ; docker push $DOCKER_REGISTRY/postgres_exporter:v0.4.6
 ```
 
 ## Create ImagePullSecret
@@ -65,8 +73,7 @@ $ kubectl create secret -n demo docker-registry myregistrykey \
   --docker-username=DOCKER_USER \
   --docker-email=DOCKER_EMAIL \
   --docker-password=DOCKER_PASSWORD
-
-secret "myregistrykey" created.
+secret/myregistrykey created
 ```
 
 If you wish to follow other ways to pull private images see [official docs](https://kubernetes.io/docs/concepts/containers/images/) of kubernetes.
@@ -94,11 +101,11 @@ metadata:
 spec:
   version: "9.6"
   db:
-    image: "<YOUR_PRIVATE_REGISTRY>/postgres:9.6-v1"
+    image: "<YOUR_PRIVATE_REGISTRY>/postgres:9.6-v3"
   exporter:
     image: "<YOUR_PRIVATE_REGISTRY>/postgres_exporter:v0.4.6"
   tools:
-    image: "<YOUR_PRIVATE_REGISTRY>/postgres-tools:9.6-v1"
+    image: "<YOUR_PRIVATE_REGISTRY>/postgres-tools:9.6-v2"
 ```
 
 Now, create the PostgresVersion crd,
@@ -159,10 +166,10 @@ You can specify `imagePullSecret` for Snapshot objects in `spec.podTemplate.spec
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/pvt-reg-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/pvt-reg-postgres
+kubectl patch -n demo pg/pvt-reg-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/pvt-reg-postgres
 
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```
 
 If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).

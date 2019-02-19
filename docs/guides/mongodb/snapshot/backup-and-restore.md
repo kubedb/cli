@@ -36,11 +36,7 @@ This tutorial will show you how to take snapshots of a KubeDB managed MongoDB da
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
-
-  $ kubectl get ns
-  NAME          STATUS    AGE
-  demo          Active    1m
+  namespace/demo created
 
   $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mongodb/snapshot/demo-1.yaml
   mongodb.kubedb.com/mgo-infant created
@@ -74,16 +70,16 @@ data:
   GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-02T10:02:09Z
+  creationTimestamp: "2019-02-06T06:27:36Z"
   name: mg-snap-secret
   namespace: demo
-  resourceVersion: "48679"
+  resourceVersion: "73604"
   selfLink: /api/v1/namespaces/demo/secrets/mg-snap-secret
-  uid: 220a7c60-0800-11e8-946f-080027c05a6e
+  uid: 4b9d647b-29d8-11e9-aebf-080027875192
 type: Opaque
 ```
 
-To lean how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
+To learn how to configure other storage destinations for Snapshots, please visit [here](/docs/concepts/snapshot.md). Now, create the Snapshot object.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -97,7 +93,7 @@ spec:
   databaseName: mgo-infant
   storageSecretName: mg-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
 ```
 
 ```console
@@ -106,7 +102,11 @@ snapshot.kubedb.com/snapshot-infant created
 
 $ kubedb get snap -n demo
 NAME              DATABASENAME   STATUS    AGE
-snapshot-infant   mgo-infant     Running   23s
+snapshot-infant   mgo-infant     Running   10s
+
+$ kubedb get snap -n demo
+NAME              DATABASENAME   STATUS      AGE
+snapshot-infant   mgo-infant     Succeeded   20s
 ```
 
 ```yaml
@@ -114,27 +114,27 @@ $ kubedb get snap -n demo snapshot-infant -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2018-09-24T11:09:26Z
+  creationTimestamp: "2019-02-06T06:40:07Z"
   finalizers:
   - kubedb.com
   generation: 1
   labels:
     kubedb.com/kind: MongoDB
     kubedb.com/name: mgo-infant
-    snapshot.kubedb.com/status: Running
   name: snapshot-infant
   namespace: demo
-  resourceVersion: "27413"
+  resourceVersion: "74570"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/snapshot-infant
-  uid: 4ce85a07-bfea-11e8-93d2-080027e2cfdd
+  uid: 0b20a530-29da-11e9-aebf-080027875192
 spec:
   databaseName: mgo-infant
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
   storageSecretName: mg-snap-secret
 status:
-  phase: Running
-  startTime: 2018-09-24T11:09:27Z
+  completionTime: "2019-02-06T06:40:14Z"
+  phase: Succeeded
+  startTime: "2019-02-06T06:40:07Z"
 ```
 
 Here,
@@ -150,7 +150,7 @@ You can also run the `kubedb describe` command to see the recent snapshots taken
 $ kubedb describe mg -n demo mgo-infant
 Name:               mgo-infant
 Namespace:          demo
-CreationTimestamp:  Mon, 24 Sep 2018 17:04:54 +0600
+CreationTimestamp:  Wed, 06 Feb 2019 12:27:01 +0600
 Labels:             <none>
 Annotations:        <none>
 Replicas:           1  total
@@ -163,11 +163,11 @@ Volume:
 
 StatefulSet:
   Name:               mgo-infant
-  CreationTimestamp:  Mon, 24 Sep 2018 17:04:59 +0600
+  CreationTimestamp:  Wed, 06 Feb 2019 12:27:01 +0600
   Labels:               kubedb.com/kind=MongoDB
                         kubedb.com/name=mgo-infant
   Annotations:        <none>
-  Replicas:           824641944540 desired | 1 total
+  Replicas:           824638132588 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
@@ -176,10 +176,10 @@ Service:
                   kubedb.com/name=mgo-infant
   Annotations:  <none>
   Type:         ClusterIP
-  IP:           10.106.56.236
+  IP:           10.96.65.189
   Port:         db  27017/TCP
   TargetPort:   db/TCP
-  Endpoints:    172.17.0.5:27017
+  Endpoints:    172.17.0.7:27017
 
 Service:
   Name:         mgo-infant-gvr
@@ -190,7 +190,7 @@ Service:
   IP:           None
   Port:         db  27017/TCP
   TargetPort:   27017/TCP
-  Endpoints:    172.17.0.5:27017
+  Endpoints:    172.17.0.7:27017
 
 Database Secret:
   Name:         mgo-infant-auth
@@ -202,26 +202,25 @@ Type:  Opaque
   
 Data
 ====
-  user:      4 bytes
   password:  16 bytes
+  username:  4 bytes
 
 Snapshots:
-  Name             Bucket     StartTime                        CompletionTime                   Phase
-  ----             ------     ---------                        --------------                   -----
-  snapshot-infant  gs:kubedb  Mon, 24 Sep 2018 17:09:27 +0600  Mon, 24 Sep 2018 17:10:17 +0600  Succeeded
+  Name             Bucket        StartTime                        CompletionTime                   Phase
+  ----             ------        ---------                        --------------                   -----
+  snapshot-infant  gs:kubedb-qa  Wed, 06 Feb 2019 12:40:07 +0600  Wed, 06 Feb 2019 12:40:14 +0600  Succeeded
 
 Events:
-  Type    Reason              Age   From              Message
-  ----    ------              ----  ----              -------
-  Normal  Successful          6m    MongoDB operator  Successfully created Service
-  Normal  Successful          5m    MongoDB operator  Successfully created StatefulSet
-  Normal  Successful          5m    MongoDB operator  Successfully created MongoDB
-  Normal  Successful          5m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful          5m    MongoDB operator  Successfully patched MongoDB
-  Normal  Successful          5m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful          5m    MongoDB operator  Successfully patched MongoDB
-  Normal  Starting            2m    Job Controller    Backup running
-  Normal  SuccessfulSnapshot  1m    Job Controller    Successfully completed snapshot
+  Type     Reason              Age   From              Message
+  ----     ------              ----  ----              -------
+  Normal   Successful          15m   MongoDB operator  Successfully created Service
+  Normal   Successful          14m   MongoDB operator  Successfully created StatefulSet
+  Normal   Successful          14m   MongoDB operator  Successfully created MongoDB
+  Normal   Successful          14m   MongoDB operator  Successfully created appbinding
+  Normal   Successful          14m   MongoDB operator  Successfully patched StatefulSet
+  Normal   Successful          14m   MongoDB operator  Successfully patched MongoDB
+  Normal   Starting            1m    MongoDB operator  Backup running
+  Normal   SuccessfulSnapshot  1m    MongoDB operator  Successfully completed snapshot
 ```
 
 Once the snapshot Job is complete, you should see the output of the `mongodump` command stored in the GCS bucket.
@@ -241,7 +240,7 @@ metadata:
   name: mgo-recovered
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -269,18 +268,18 @@ Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then K
 ```console
 $ kubedb get mg -n demo
 NAME            VERSION   STATUS         AGE
-mgo-infant      3.4-v1    Running        13m
-mgo-recovered   3.4-v1    Initializing   57s
+mgo-infant      3.4-v2    Running        13m
+mgo-recovered   3.4-v2    Initializing   57s
 
 $ kubedb get mg -n demo
 NAME            VERSION   STATUS    AGE
-mgo-infant      3.4-v1    Running   13m
-mgo-recovered   3.4-v1    Running   1m
+mgo-infant      3.4-v2    Running   16m
+mgo-recovered   3.4-v2    Running   45s
 
 $ kubedb describe mg -n demo mgo-recovered
 Name:               mgo-recovered
 Namespace:          demo
-CreationTimestamp:  Mon, 24 Sep 2018 17:17:14 +0600
+CreationTimestamp:  Wed, 06 Feb 2019 12:43:00 +0600
 Labels:             <none>
 Annotations:        kubedb.com/initialized=
 Replicas:           1  total
@@ -293,11 +292,11 @@ Volume:
 
 StatefulSet:
   Name:               mgo-recovered
-  CreationTimestamp:  Mon, 24 Sep 2018 17:17:20 +0600
+  CreationTimestamp:  Wed, 06 Feb 2019 12:43:00 +0600
   Labels:               kubedb.com/kind=MongoDB
                         kubedb.com/name=mgo-recovered
   Annotations:        <none>
-  Replicas:           824642112848 desired | 1 total
+  Replicas:           824640777328 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
@@ -306,10 +305,10 @@ Service:
                   kubedb.com/name=mgo-recovered
   Annotations:  <none>
   Type:         ClusterIP
-  IP:           10.100.10.221
+  IP:           10.111.0.62
   Port:         db  27017/TCP
   TargetPort:   db/TCP
-  Endpoints:    172.17.0.6:27017
+  Endpoints:    172.17.0.8:27017
 
 Service:
   Name:         mgo-recovered-gvr
@@ -320,7 +319,7 @@ Service:
   IP:           None
   Port:         db  27017/TCP
   TargetPort:   27017/TCP
-  Endpoints:    172.17.0.6:27017
+  Endpoints:    172.17.0.8:27017
 
 Database Secret:
   Name:         mgo-recovered-auth
@@ -333,28 +332,133 @@ Type:  Opaque
 Data
 ====
   password:  16 bytes
-  user:      4 bytes
+  username:  4 bytes
 
 No Snapshots.
 
 Events:
   Type    Reason                Age   From              Message
   ----    ------                ----  ----              -------
-  Normal  Successful            2m    MongoDB operator  Successfully created Service
-  Normal  Successful            2m    MongoDB operator  Successfully created MongoDB
-  Normal  Successful            2m    MongoDB operator  Successfully created StatefulSet
-  Normal  Initializing          2m    MongoDB operator  Initializing from Snapshot: "snapshot-infant"
-  Normal  Successful            2m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful            2m    MongoDB operator  Successfully patched MongoDB
-  Normal  SuccessfulInitialize  1m    Job Controller    Successfully completed initialization
-  Normal  Successful            1m    MongoDB operator  Successfully patched MongoDB
-  Normal  Successful            1m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Initializing          1m    MongoDB operator  Initializing from Snapshot: "snapshot-infant"
-  Normal  Successful            1m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful            1m    MongoDB operator  Successfully patched MongoDB
-  Normal  Successful            1m    MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful            1m    MongoDB operator  Successfully patched MongoDB
-  Normal  SuccessfulInitialize  1m    Job Controller    Successfully completed initialization
+  Normal  Successful            56s   MongoDB operator  Successfully created Service
+  Normal  Successful            47s   MongoDB operator  Successfully created StatefulSet
+  Normal  Successful            47s   MongoDB operator  Successfully created MongoDB
+  Normal  Initializing          46s   MongoDB operator  Initializing from Snapshot: "snapshot-infant"
+  Normal  Successful            46s   MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful            46s   MongoDB operator  Successfully patched MongoDB
+  Normal  SuccessfulInitialize  39s   MongoDB operator  Successfully completed initialization
+  Normal  Successful            39s   MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful            39s   MongoDB operator  Successfully patched MongoDB
+  Normal  Successful            39s   MongoDB operator  Successfully created appbinding
+  Normal  Successful            39s   MongoDB operator  Successfully patched StatefulSet
+  Normal  Successful            39s   MongoDB operator  Successfully patched MongoDB
+```
+
+## Customizing Snapshot
+
+You can customize pod template spec and volume claim spec for the backup and restore jobs. For details options read [this doc](/docs/concepts/snapshot.md).
+
+Some common customization sample is shown below.
+
+**Specify PVC Template:**
+
+Backup and recovery job needs a temporary storage to hold `dump` files before it can be uploaded to cloud backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC with similar specification for backup or recovery job. However, if you want to specify custom PVC template, you can do it through `spec.podVolumeClaimSpec` field of Snapshot crd. This is particularly helpful when you want to use different `storageclass` for backup or recovery job than the database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
+```
+
+**Specify Resources for Backup/Recovery Job:**
+
+You can specify resources for backup or recovery job through `spec.podTemplate.spec.resources` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+```
+
+**Provide Annotation for Backup/Recovery Job:**
+
+If you need to add some annotations to backup or recovery job, you can specify this in `spec.podTemplate.controller.annotations`. You can also specify annotation for the pod created by backup or recovery job through `spec.podTemplate.annotations` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    annotations:
+      passMe: ToBackupJobPod
+    controller:
+      annotations:
+        passMe: ToBackupJob
+```
+
+**Pass Arguments to Backup/Recovery Job:**
+
+KubeDB also allows to pass extra arguments for backup or recovery job. You can provide these arguments through `spec.podTemplate.spec.args` field of Snapshot crd.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      args:
+      - --extra-args-to-backup-command
 ```
 
 ## Customizing Snapshot

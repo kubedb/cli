@@ -185,7 +185,7 @@ spec:
   databaseName: mysql-misc-config
   storageSecretName: my-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
   podTemplate:
     spec:
       args:
@@ -220,7 +220,7 @@ spec:
     cronExpression: '@every 1m'
     storageSecretName: my-snap-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
     podTemplate:
       controller: {}
       metadata: {}

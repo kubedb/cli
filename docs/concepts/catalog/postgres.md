@@ -28,18 +28,18 @@ As with all other Kubernetes objects, a PostgresVersion needs `apiVersion`, `kin
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: PostgresVersion
 metadata:
-  name: "10.2-v1"
+  name: "10.2-v2"
   labels:
     app: kubedb
 spec:
   version: "10.2"
   deprecated: false
   db:
-    image: "kubedb/postgres:10.2-v1"
+    image: "kubedb/postgres:10.2-v2"
   exporter:
     image: "kubedb/postgres_exporter:v0.4.6"
   tools:
-    image: "kubedb/postgres-tools:10.2-v1"
+    image: "kubedb/postgres-tools:10.2-v2"
 ```
 
 ### metadata.name
@@ -57,7 +57,7 @@ We modify original PostgreSQL docker image to support additional features like W
 
 ### spec.deprecated
 
-`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/postgres:10.2` docker image to support custom configuration and re-tagged as `kubedb/postgres:10.2-v1`. Now, KubeDB `0.9.0-rc.0` supports providing custom configuration which required `kubedb/postgres:10.2-v1` docker image. So, we have marked `kubedb/postgres:10.2` as deprecated in KubeDB `0.9.0-rc.0`.
+`spec.deprecated` is an optional field that specifies whether the docker images specified here is supported by the current KubeDB operator. For example, we have modified `kubedb/postgres:10.2` docker image to support custom configuration and re-tagged as `kubedb/postgres:10.2-v2`. Now, KubeDB `0.9.0-rc.0` supports providing custom configuration which required `kubedb/postgres:10.2-v2` docker image. So, we have marked `kubedb/postgres:10.2` as deprecated in KubeDB `0.9.0-rc.0`.
 
 The default value of this field is `false`. If `spec.depcrecated` is set `true`, KubeDB operator will not create the database and other respective resources for this version.
 

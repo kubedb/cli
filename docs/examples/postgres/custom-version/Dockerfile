@@ -1,4 +1,4 @@
-FROM kubedb/postgres:10.2-v1
+FROM kubedb/postgres:10.2-v2
 
 ENV TIMESCALEDB_VERSION 0.9.1
 

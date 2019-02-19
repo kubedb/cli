@@ -25,11 +25,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
+namespace/demo created
 ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -47,7 +43,7 @@ In this tutorial, we will configure `max_connections` and `shared_buffers` via a
 At first, let's create `user.conf` file setting `max_connections` and `shared_buffers` parameters.
 
 ```ini
-cat > user.conf
+$ cat user.conf
 max_connections=300
 shared_buffers=256MB
 ```
@@ -57,7 +53,7 @@ shared_buffers=256MB
 Now, create a configMap with this configuration file.
 
 ```console
- $ kubectl create configmap -n demo pg-custom-config --from-file=https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/custom-config/user.conf 
+$ kubectl create configmap -n demo pg-custom-config --from-literal=user.conf="$(curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/custom-config/user.conf)"
 configmap/pg-custom-config created
 ```
 
@@ -67,15 +63,17 @@ Verify the config map has the configuration file.
 $ kubectl get configmap -n demo pg-custom-config -o yaml
 apiVersion: v1
 data:
-  user.conf: |
+  user.conf: |-
     max_connections=300
     shared_buffers=256MB
 kind: ConfigMap
 metadata:
-  ...
+  creationTimestamp: "2019-02-07T12:08:26Z"
   name: pg-custom-config
   namespace: demo
-  ...
+  resourceVersion: "44214"
+  selfLink: /api/v1/namespaces/demo/configmaps/pg-custom-config
+  uid: 131b321f-2ad1-11e9-9d44-080027154f61
 ```
 
 Now, create Postgres crd specifying `spec.configSource` field.
@@ -94,7 +92,7 @@ metadata:
   name: custom-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   configSource:
     configMap:
       name: pg-custom-config
@@ -194,11 +192,11 @@ WHERE name='max_connections' OR name='shared_buffers';
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/custom-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/custom-postgres
+kubectl patch -n demo pg/custom-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/custom-postgres
 
-$ kubectl delete -n demo configmap pg-custom-config
-$ kubectl delete ns demo
+kubectl delete -n demo configmap pg-custom-config
+kubectl delete ns demo
 ```
 
 If you would like to uninstall KubeDB operator, please follow the steps [here](/docs/setup/uninstall.md).

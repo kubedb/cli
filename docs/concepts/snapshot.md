@@ -39,6 +39,7 @@ spec:
     endpoint: 's3.amazonaws.com'
     bucket: kubedb-qa
     prefix: demo
+  storageType: "Durable"
   podVolumeClaimSpec:
     storageClassName: "standard"
     accessModes:
@@ -499,9 +500,17 @@ spec:
           cpu: "500m"
 ```
 
+### spec.storageType
+
+`spec.storageType` is an optional field that specifies the type of storage to use for backup and restore. It can be either `Durable` or `Ephemeral`. If `StorageType` is not given, then databases's `storageType` will be taken.
+
+If `Ephemeral` is used then KubeDB will create Job using [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) volume. If `Durable` is used then a PVC will be created either using `Snapshot.spec.podVolumeClaimSpec` or `db.spec.storage`.
+
 ### spec.podVolumeClaimSpec
 
-Backup and recovery jobs use temporary storage to hold `dump` files before it can be uploaded to backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates a PVC with similar specification for backup or recovery job. However, if you want to specify a custom PVC template, you can do it via `spec.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup or recovery jobs and the database.
+Backup and recovery job needs a temporary storage to hold `dump` files before it can be uploaded to backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC(depending on `storageType`) with similar specification for backup or recovery job. However, if you want to specify custom PVC template, you can do it through `spec.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup or recovery job than the database.
+
+If `storageType` is durable, then a PVC be will created using this podVolumeClaimSpec.If `storageType` is ephemeral, then an empty directory will be created of size `podVolumeClaimSpec.Resources.Requests[core.ResourceStorage]`.
 
 ### spec.podTemplate
 

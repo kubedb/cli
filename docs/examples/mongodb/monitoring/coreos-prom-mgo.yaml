@@ -4,7 +4,7 @@ metadata:
   name: coreos-prom-mgo
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"

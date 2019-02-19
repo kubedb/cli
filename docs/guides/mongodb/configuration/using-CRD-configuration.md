@@ -59,7 +59,7 @@ Read about the fields in details in [PodTemplate concept](/docs/concepts/databas
 
 ## CRD Configuration
 
-Below is the YAML for the MongoDB created in this example. Here, [`spec.podTemplate.spec.env`](/docs/concepts/databases/mongodb.md#specpodtemplatespecenv) specifies environment variables and [`spec.podTemplate.spec.args`](/docs/concepts/databases/mongodb.md#specpodtemplatespecargs) provides extra arguments for [MongoDB Docker Image](https://hub.docker.com/_/mongodb/). 
+Below is the YAML for the MongoDB created in this example. Here, [`spec.podTemplate.spec.env`](/docs/concepts/databases/mongodb.md#specpodtemplatespecenv) specifies environment variables and [`spec.podTemplate.spec.args`](/docs/concepts/databases/mongodb.md#specpodtemplatespecargs) provides extra arguments for [MongoDB Docker Image](https://hub.docker.com/_/mongodb/).
 
 In this tutorial, `maxIncomingConnections` is set to `100` (default, 65536) through args `--maxConns=100`.
 
@@ -70,7 +70,7 @@ metadata:
   name: mgo-misc-config
   namespace: demo
 spec:
-  version: "3.6-v1"
+  version: "3.6-v2"
   storageType: "Durable"
   storage:
     storageClassName: "standard"
@@ -112,17 +112,17 @@ Now, check if the database has started with the custom configuration we have pro
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside the pod.
 
 ```console
-$ kubectl get secrets -n demo mgo-misc-config-auth -o jsonpath='{.data.\user}' | base64 -d
+$ kubectl get secrets -n demo mgo-misc-config-auth -o jsonpath='{.data.\username}' | base64 -d
 root
 
 $ kubectl get secrets -n demo mgo-misc-config-auth -o jsonpath='{.data.\password}' | base64 -d
-TxDWYECTRXaWWueP
+zyp5hDfRlVOWOyk9
 
 $ kubectl exec -it mgo-misc-config-0 -n demo sh
 
 > mongo admin
 
-> db.auth("root","TxDWYECTRXaWWueP")
+> db.auth("root","zyp5hDfRlVOWOyk9")
 1
 
 > db._adminCommand( {getCmdLineOpts: 1})
@@ -175,7 +175,7 @@ spec:
   databaseName: mgo-misc-config
   storageSecretName: mg-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
   podTemplate:
     spec:
       args:
@@ -183,7 +183,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mongodb/configuration/snapshot-misc-conf.yaml 
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mongodb/configuration/snapshot-misc-conf.yaml
 snapshot.kubedb.com/snap-mongodb-config created
 
 
@@ -209,7 +209,7 @@ spec:
     cronExpression: '@every 1m'
     storageSecretName: mg-snap-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
     podTemplate:
       spec:
         args:

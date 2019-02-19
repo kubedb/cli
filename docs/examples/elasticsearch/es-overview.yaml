@@ -25,10 +25,10 @@ spec:
       configMap:
         name: es-init-script
   backupSchedule:
-    cronExpression: "@every 6h"
+    cronExpression: "@every 2m"
     storageSecretName: gcs-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
       prefix: demo
   monitor:
     agent: prometheus.io/coreos-operator
