@@ -21,6 +21,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4-v1"
@@ -50,6 +51,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "4.0"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0-v1"
@@ -79,6 +81,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "4.0.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0.6-v1"
@@ -91,13 +94,41 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
-  name: "5"
+  name: "4.0-v2"
   labels:
     app: kubedb
 spec:
-  version: "5"
+  version: "4.0"
   db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/redis:5"
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0-v2"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4.0.6-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "4.0.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0.6-v2"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "4.0.11"
+  labels:
+    app: kubedb
+spec:
+  version: "4.0.11"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0.11"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
 
