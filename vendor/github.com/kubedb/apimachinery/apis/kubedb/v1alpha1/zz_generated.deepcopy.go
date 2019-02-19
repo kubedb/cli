@@ -1319,6 +1319,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
+	in.ReplicaServiceTemplate.DeepCopyInto(&out.ReplicaServiceTemplate)
 	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.NodeSelector != nil {
 		in, out := &in.NodeSelector, &out.NodeSelector

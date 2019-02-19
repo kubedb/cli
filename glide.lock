@@ -1,5 +1,5 @@
 hash: 24fe3fe2920fad7b6f7aa859e55f0dfa58660dec76ecfc6f8164b88d9c5c9507
-updated: 2019-02-09T16:03:42.941018748-08:00
+updated: 2019-02-18T21:26:29.841117964-08:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -103,7 +103,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: 72bf35d0ff611848c1dc9df0f976c81192392fa5
+  version: afac545df32f2287a079e2dfb7ba2745a643747e
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -115,13 +115,13 @@ imports:
 - name: github.com/go-ini/ini
   version: a9da9309fb4822643ceebb765f80025c35ac19a1
 - name: github.com/go-openapi/jsonpointer
-  version: ef5f0afec364d3b9396b7b77b43dbe26bf1f8004
+  version: 46af16f9f7b149af66e5d1bd010e3574dc06de98
 - name: github.com/go-openapi/jsonreference
-  version: 8483a886a90412cd6858df4ea3483dce9c8e35a3
+  version: 13c6e3589ad90f49bd3e3bbe2c2cb3d7a4142272
 - name: github.com/go-openapi/spec
-  version: 5bae59e25b21498baea7f9d46e9c147ec106a42e
+  version: 1de3e0542de65ad8d75452a595886fdd0befb363
 - name: github.com/go-openapi/swag
-  version: 5899d5c5e619fda5fa86e14795a835f473ca284c
+  version: f3f9494671f93fcff853e3c6e9e948b3eb71e590
 - name: github.com/gogo/protobuf
   version: c0656edd0d9eab7c66d1eb0c568f9039345796f7
   subpackages:
@@ -194,7 +194,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 926dc4ab0c581af56298a5d51cb2a7a37d0c2516
+  version: a307434ffe887287826f1197ca7221213905900b
   subpackages:
   - apis
   - apis/authorization
@@ -207,19 +207,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: daa9ed4d5c4367d8ba9e5c23c6e14b36ac8d940d
+  version: 1a7c239cbe568694b3aa3dfe4fe557347fb484fd
 - name: github.com/kubedb/etcd
   version: 92a9bb0164211566feefc2488b9601458fbc9079
 - name: github.com/kubedb/memcached
-  version: c2520ba5f7536e09fa080d7ee8ad02ea0b788c5d
+  version: 9438d67034143287fc67b7bd5d86e31ec06d96fe
 - name: github.com/kubedb/mongodb
-  version: adff569e2e32499f625562883d315808aed7c230
+  version: f4235d2f3745e02d19225f0dcdca229a3808d02b
 - name: github.com/kubedb/mysql
-  version: 98f03387fd8a0ada275316368cbdf21f3358d5fb
+  version: 40ad7a23f0ae79f82764ff900c3cd8e04bbbefa8
 - name: github.com/kubedb/postgres
-  version: 00125a854bf5c48ccc51357dfb9471c2045925aa
+  version: 148e1042add3426d6c013a63c769774cfce2de2f
 - name: github.com/kubedb/redis
-  version: 67af1c718a6e209d5772adcaceb2f7bc13126302
+  version: cf31c4cc69ec96aff6ed8e08c7ed9891c95dac2a
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -556,8 +556,6 @@ imports:
   - util/integer
   - util/jsonpath
   - util/retry
-- name: k8s.io/klog
-  version: 8139d8cb77af419532b33dfa7dd09fbc5f1d344f
 - name: k8s.io/kube-openapi
   version: 0cf8f7e6ed1d2e3d47d02e3b6e559369af24d803
   subpackages:
@@ -713,7 +711,7 @@ imports:
 - name: k8s.io/metrics
   version: 8b490d15bb195cf81eee7794949ac36f2fef36ee
 - name: k8s.io/utils
-  version: 8e7ff06bf0e2d3289061230af203e430a15b6dcc
+  version: 66066c83e385e385ccc3c964b44fd7dcd413d0ed
   subpackages:
   - exec
   - pointer

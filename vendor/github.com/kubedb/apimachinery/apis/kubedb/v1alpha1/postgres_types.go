@@ -82,6 +82,10 @@ type PostgresSpec struct {
 	// +optional
 	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty"`
 
+	// ReplicaServiceTemplate is an optional configuration for service used to expose postgres replicas
+	// +optional
+	ReplicaServiceTemplate ofst.ServiceTemplateSpec `json:"replicaServiceTemplate,omitempty"`
+
 	// updateStrategy indicates the StatefulSetUpdateStrategy that will be
 	// employed to update Pods in the StatefulSet when a revision is made to
 	// Template.
