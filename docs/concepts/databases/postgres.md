@@ -101,6 +101,15 @@ spec:
       - name:  http
         port:  5432
         targetPort: http
+  replicaServiceTemplate:
+    annotations:
+      passMe: ToReplicaService
+    spec:
+      type: NodePort
+      ports:
+      - name:  http
+        port:  5432
+        targetPort: http
   updateStrategy:
     type: RollingUpdate
   terminationPolicy: "DoNotTerminate"
@@ -396,7 +405,11 @@ At least one of the following was changed:
 
 ### spec.serviceTemplate
 
-You can also provide a template for the services created by KubeDB operator for Postgres database through `spec.serviceTemplate`. This will allow you to set the type and other properties of the services.
+Kubedb creates two different services for each Postgres. One is `master service` named `<postgres-name>`, to connect the Postgres `Primary` Pod/Node. Another is `replica service` named `<postgres-name>-replicas`, to connect Postgres `replica` Pods/Nodes.
+
+These `master` and `replica` services can be customized using [spec.serviceTemplate](#spec.servicetemplate) and [spec.replicaServiceTemplate](#specreplicaservicetemplate)
+
+You can provide template for the `master` service using `spec.serviceTemplate`. This will allow you to set the type and other properties of the service. If `spec.serviceTemplate` is not provided, Kubedb will create a `master` service of `ClusterIP` type with minimal settings.
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
@@ -411,6 +424,28 @@ KubeDB allows following fields to set in `spec.serviceTemplate`:
   - loadBalancerSourceRanges
   - externalTrafficPolicy
   - healthCheckNodePort
+
+See [official v1.13 API documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#servicespec-v1-core) to understand these fields in detail.
+
+### spec.replicaServiceTemplate
+
+You can provide template for the `replica` service using `spec.replicaServiceTemplate`. If `spec.replicaServiceTemplate` is not provided, Kubedb will create a `replica Service` of `ClusterIP` type with minimal settings.
+
+The fileds of `spec.replicaServiceTemplate` is similar to `spec.serviceTemplate`, that is:
+
+- metadata:
+  - annotations
+- spec:
+  - type
+  - ports
+  - clusterIP
+  - externalIPs
+  - loadBalancerIP
+  - loadBalancerSourceRanges
+  - externalTrafficPolicy
+  - healthCheckNodePort
+
+See [official v1.13 API documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#servicespec-v1-core) to understand these fields in detail.
 
 ### spec.updateStrategy
 
