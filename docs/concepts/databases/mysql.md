@@ -29,7 +29,7 @@ metadata:
   name: m1
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   databaseSecret:
     secretName: m1-auth
   storageType: "Durable"
@@ -45,10 +45,10 @@ spec:
       configMap:
         name: mg-init-script
   backupSchedule:
-    cronExpression: "@every 6h"
+    cronExpression: "@every 2m"
     storageSecretName: ms-snap-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
       prefix: demo
   monitor:
     agent: prometheus.io/coreos-operator
@@ -102,7 +102,7 @@ spec:
 
 `spec.version` is a required field specifying the name of the [MySQLVersion](/docs/concepts/catalog/mysql.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `MySQLVersion` crd,
 
-- `8.0-v1`, `8.0`, `8-v1`, `8`
+- `8.0-v2`, `8.0`, `8-v1`, `8`
 - `5.7-v1`, `5.7`, `5-v1`, `5`
 
 ### spec.databaseSecret
@@ -171,7 +171,7 @@ kind: MySQL
 metadata:
   name: m1
 spec:
-  version: 8.0-v1
+  version: 8.0-v2
   init:
     scriptSource:
       configMap:
@@ -193,7 +193,7 @@ kind: MySQL
 metadata:
   name: m1
 spec:
-  version: 8.0-v1
+  version: 8.0-v2
   init:
     snapshotSource:
       name: "snapshot-xyz"

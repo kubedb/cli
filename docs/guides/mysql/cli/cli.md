@@ -49,10 +49,10 @@ To learn about various options of `create` command, please visit [here](/docs/re
 ```console
 $ kubedb get mysql
 NAME         VERSION   STATUS    AGE
-mysql-demo   8.0-v1    Running   2m
-mysql-dev    8.0-v1    Running   1m
-mysql-prod   8.0-v1    Running   1m
-mysql-qa     8.0-v1    Running   1m
+mysql-demo   8.0-v2    Running   2m
+mysql-dev    8.0-v2    Running   1m
+mysql-prod   8.0-v2    Running   1m
+mysql-qa     8.0-v2    Running   1m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -94,7 +94,7 @@ spec:
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
-  version: 8.0-v1
+  version: 8.0-v2
 status:
   observedGeneration: 2$4213139756412538772
   phase: Running
@@ -111,10 +111,10 @@ To list all KubeDB objects, use following command:
 ```console
 $ kubedb get all -o wide
 NAME                          VERSION   STATUS    AGE
-mysql.kubedb.com/mysql-demo   8.0-v1    Running   3m
-mysql.kubedb.com/mysql-dev    8.0-v1    Running   2m
-mysql.kubedb.com/mysql-prod   8.0-v1    Running   2m
-mysql.kubedb.com/mysql-qa     8.0-v1    Running   2m
+mysql.kubedb.com/mysql-demo   8.0-v2    Running   3m
+mysql.kubedb.com/mysql-dev    8.0-v2    Running   2m
+mysql.kubedb.com/mysql-prod   8.0-v2    Running   2m
+mysql.kubedb.com/mysql-qa     8.0-v2    Running   2m
 
 NAME                                DATABASE              BUCKET              STATUS      AGE
 snap/mysql-demo-20170605-073557     my/mysql-demo         gs:bucket-name      Succeeded   9m
@@ -291,7 +291,6 @@ Various fields of a KubeDB object can't be edited using `edit` command. The foll
 - kind
 - metadata.name
 - metadata.namespace
-- status
 
 If StatefulSets exists for a MySQL database, following fields can't be modified as well.
 
@@ -300,7 +299,6 @@ If StatefulSets exists for a MySQL database, following fields can't be modified 
 - spec.storageType
 - spec.storage
 - spec.podTemplate.spec.nodeSelector
-- spec.podTemplate.spec.env
 
 For DormantDatabase, `spec.origin` can't be edited using `kubedb edit`
 
@@ -341,6 +339,9 @@ To learn about various options of `delete` command, please visit [here](/docs/re
 You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
+# Create objects
+$ kubectl create -f
+
 # List objects
 $ kubectl get mysql
 $ kubectl get mysql.kubedb.com

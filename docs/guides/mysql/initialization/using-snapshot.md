@@ -36,7 +36,7 @@ metadata:
   name: mysql-init-snapshot
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   databaseSecret:
     secretName: mysql-infant-auth
   storage:
@@ -66,13 +66,13 @@ Now, wait several seconds. KubeDB operator will create a new `StatefulSet`. Then
 ```console
 $ kubedb get my -n demo
 NAME                  VERSION   STATUS         AGE
-mysql-infant          8.0-v1    Running        8m
-mysql-init-snapshot   8.0-v1    Initializing   1m
+mysql-infant          8.0-v2    Running        8m
+mysql-init-snapshot   8.0-v2    Initializing   1m
 
 $ kubedb get my -n demo
 NAME                  VERSION   STATUS    AGE
-mysql-infant          8.0-v1    Running   20m
-mysql-init-snapshot   8.0-v1    Running   13m
+mysql-infant          8.0-v2    Running   20m
+mysql-init-snapshot   8.0-v2    Running   13m
 
 $ kubedb describe my -n demo mysql-init-snapshot
 Name:               mysql-init-snapshot

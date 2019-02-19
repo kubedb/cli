@@ -31,7 +31,7 @@ This tutorial will show you how to use KubeDB to run a Memcached server.
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
+namespace/demo created
 
 $ kubectl get ns demo
 NAME      STATUS    AGE
@@ -228,7 +228,7 @@ $ kubedb delete mc memcd-quickstart -n demo
 Error from server (BadRequest): admission webhook "memcached.validators.kubedb.com" denied the request: memcached "memcd-quickstart" can't be paused. To delete, change spec.terminationPolicy
 ```
 
-Now, run `kubedb edit mc memcd-quickstart -n demo` to set `spec.terminationPolicy` to `Resume` (which creates `domantdatabase` when memcached is deleted and keeps PVC, snapshots, Secrets intact) or remove this field (which default to `Resume`). Then you will be able to delete/pause the database. 
+Now, run `kubedb edit mc memcd-quickstart -n demo` to set `spec.terminationPolicy` to `Pause` (which creates `domantdatabase` when memcached is deleted and keeps PVC, snapshots, Secrets intact) or remove this field (which default to `Pause`). Then you will be able to delete/pause the database. 
 
 Learn details of all `TerminationPolicy` [here](/docs/concepts/databases/memcached.md#specterminationpolicy)
 

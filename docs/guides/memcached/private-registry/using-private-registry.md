@@ -65,7 +65,7 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
    ```
 
 ## Create ImagePullSecret

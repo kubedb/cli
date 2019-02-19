@@ -9,7 +9,7 @@ spec:
   databaseName: infant-elasticsearch
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb-dev
+    bucket: kubedb-qa
   podVolumeClaimSpec:
     storageClassName: "standard"
     accessModes:

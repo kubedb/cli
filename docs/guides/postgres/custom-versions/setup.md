@@ -20,7 +20,7 @@ PostgresVersions are KubeDB crds that define the docker images KubeDB will use w
 The best way to create a custom image is to build on top of the existing kubedb image.
 
 ```docker
-FROM kubedb/postgres:10.2-v1
+FROM kubedb/postgres:10.2-v3
 
 ENV TIMESCALEDB_VERSION 0.9.1
 
@@ -68,7 +68,7 @@ spec:
   exporter:
     image: "kubedb/postgres_exporter:v0.4.6"
   tools:
-    image: "kubedb/postgres-tools:10.2-v1"
+    image: "kubedb/postgres-tools:10.2-v2"
 ```
 
 Once we add this PostgresVersion we can use it in a new Postgres like:

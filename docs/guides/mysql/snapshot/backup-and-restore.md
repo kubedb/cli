@@ -35,11 +35,7 @@ This tutorial will show you how to take snapshots of a KubeDB managed MySQL data
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
-  
-  $ kubectl get ns
-  NAME          STATUS    AGE
-  demo          Active    1m
+  namespace/demo created
   
   $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/snapshot/demo-1.yaml
   mysql.kubedb.com/mysql-infant created
@@ -96,7 +92,7 @@ spec:
   databaseName: mysql-infant
   storageSecretName: my-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
 ```
 
 ```console
@@ -113,7 +109,7 @@ $ kubedb get snap -n demo snap-mysql-infant -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Snapshot
 metadata:
-  creationTimestamp: 2018-09-27T06:12:37Z
+  creationTimestamp: "2019-02-07T10:03:04Z"
   finalizers:
   - kubedb.com
   generation: 1
@@ -122,18 +118,18 @@ metadata:
     kubedb.com/name: mysql-infant
   name: snap-mysql-infant
   namespace: demo
-  resourceVersion: "1754"
+  resourceVersion: "33763"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/snapshots/snap-mysql-infant
-  uid: 54efc1fe-c21c-11e8-850e-080027517bbf
+  uid: 8f6d99b6-2abf-11e9-9d44-080027154f61
 spec:
   databaseName: mysql-infant
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
   storageSecretName: my-snap-secret
 status:
-  completionTime: 2018-09-27T06:18:41Z
+  completionTime: "2019-02-07T10:03:15Z"
   phase: Succeeded
-  startTime: 2018-09-27T06:12:38Z
+  startTime: "2019-02-07T10:03:04Z"
 ```
 
 Here,
@@ -149,7 +145,7 @@ You can also run the `kubedb describe` command to see the recent snapshots taken
 $ kubedb describe my -n demo mysql-infant
 Name:               mysql-infant
 Namespace:          demo
-CreationTimestamp:  Thu, 27 Sep 2018 12:12:10 +0600
+CreationTimestamp:  Thu, 07 Feb 2019 16:02:40 +0600
 Labels:             <none>
 Annotations:        <none>
 Replicas:           1  total
@@ -162,11 +158,11 @@ Volume:
 
 StatefulSet:          
   Name:               mysql-infant
-  CreationTimestamp:  Thu, 27 Sep 2018 12:12:11 +0600
+  CreationTimestamp:  Thu, 07 Feb 2019 16:02:40 +0600
   Labels:               kubedb.com/kind=MySQL
                         kubedb.com/name=mysql-infant
   Annotations:        <none>
-  Replicas:           824641842156 desired | 1 total
+  Replicas:           824639341548 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:        
@@ -175,10 +171,10 @@ Service:
                   kubedb.com/name=mysql-infant
   Annotations:  <none>
   Type:         ClusterIP
-  IP:           10.109.47.223
+  IP:           10.96.188.33
   Port:         db  3306/TCP
   TargetPort:   db/TCP
-  Endpoints:    172.17.0.5:3306
+  Endpoints:    172.17.0.7:3306
 
 Database Secret:
   Name:         mysql-infant-auth
@@ -191,25 +187,24 @@ Type:  Opaque
 Data
 ====
   password:  16 bytes
-  user:      4 bytes
+  username:  4 bytes
 
 Snapshots:
-  Name               Bucket     StartTime                        CompletionTime                   Phase
-  ----               ------     ---------                        --------------                   -----
-  snap-mysql-infant  gs:kubedb  Thu, 27 Sep 2018 12:12:38 +0600  Thu, 27 Sep 2018 12:18:41 +0600  Succeeded
+  Name               Bucket        StartTime                        CompletionTime                   Phase
+  ----               ------        ---------                        --------------                   -----
+  snap-mysql-infant  gs:kubedb-qa  Thu, 07 Feb 2019 16:03:04 +0600  Thu, 07 Feb 2019 16:03:15 +0600  Succeeded
 
 Events:
-  Type    Reason              Age   From            Message
-  ----    ------              ----  ----            -------
-  Normal  Successful          17m   MySQL operator  Successfully created Service
-  Normal  Starting            17m   Job Controller  Backup running
-  Normal  Successful          14m   MySQL operator  Successfully created StatefulSet
-  Normal  Successful          14m   MySQL operator  Successfully created MySQL
-  Normal  Successful          14m   MySQL operator  Successfully patched StatefulSet
-  Normal  Successful          14m   MySQL operator  Successfully patched MySQL
-  Normal  Successful          14m   MySQL operator  Successfully patched StatefulSet
-  Normal  Successful          14m   MySQL operator  Successfully patched MySQL
-  Normal  SuccessfulSnapshot  11m   Job Controller  Successfully completed snapshot
+  Type    Reason              Age   From             Message
+  ----    ------              ----  ----             -------
+  Normal  Successful          57s   KubeDB operator  Successfully created Service
+  Normal  Successful          50s   KubeDB operator  Successfully created StatefulSet
+  Normal  Successful          50s   KubeDB operator  Successfully created MySQL
+  Normal  Successful          50s   KubeDB operator  Successfully created appbinding
+  Normal  Successful          50s   KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful          50s   KubeDB operator  Successfully patched MySQL
+  Normal  Starting            31s   KubeDB operator  Backup running
+  Normal  SuccessfulSnapshot  22s   KubeDB operator  Successfully completed snapshot
 ```
 
 Once the snapshot Job is complete, you should see the output of the `mysql dump` command stored in the GCS bucket.
@@ -231,7 +226,7 @@ metadata:
   name: mysql-recovered
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   databaseSecret:
     secretName: mysql-infant-auth
   storage:
@@ -261,18 +256,18 @@ Now, wait several seconds. KubeDB operator will create a new StatefulSet. Then K
 ```console
 $ kubedb get my -n demo
 NAME              VERSION   STATUS         AGE
-mysql-infant      8.0-v1    Running        27m
-mysql-recovered   8.0-v1    Initializing   5m
+mysql-infant      8.0-v2    Running        27m
+mysql-recovered   8.0-v2    Initializing   5m
 
 $ kubedb get my -n demo
 NAME              VERSION   STATUS    AGE
-mysql-infant      8.0-v1    Running   31m
-mysql-recovered   8.0-v1    Running   9m
+mysql-infant      8.0-v2    Running   31m
+mysql-recovered   8.0-v2    Running   9m
 
 $ kubedb describe my -n demo mysql-recovered
 Name:               mysql-recovered
 Namespace:          demo
-CreationTimestamp:  Thu, 27 Sep 2018 12:34:07 +0600
+CreationTimestamp:  Thu, 07 Feb 2019 16:04:04 +0600
 Labels:             <none>
 Annotations:        kubedb.com/initialized=
 Replicas:           1  total
@@ -285,11 +280,11 @@ Volume:
 
 StatefulSet:          
   Name:               mysql-recovered
-  CreationTimestamp:  Thu, 27 Sep 2018 12:34:09 +0600
+  CreationTimestamp:  Thu, 07 Feb 2019 16:04:05 +0600
   Labels:               kubedb.com/kind=MySQL
                         kubedb.com/name=mysql-recovered
   Annotations:        <none>
-  Replicas:           824640109500 desired | 1 total
+  Replicas:           824639093276 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:        
@@ -298,10 +293,10 @@ Service:
                   kubedb.com/name=mysql-recovered
   Annotations:  <none>
   Type:         ClusterIP
-  IP:           10.99.66.59
+  IP:           10.99.68.200
   Port:         db  3306/TCP
   TargetPort:   db/TCP
-  Endpoints:    172.17.0.6:3306
+  Endpoints:    172.17.0.8:3306
 
 Database Secret:
   Name:         mysql-infant-auth
@@ -314,20 +309,133 @@ Type:  Opaque
 Data
 ====
   password:  16 bytes
-  user:      4 bytes
+  username:  4 bytes
 
 No Snapshots.
 
 Events:
-  Type    Reason                Age   From            Message
-  ----    ------                ----  ----            -------
-  Normal  Successful            9m    MySQL operator  Successfully created Service
-  Normal  Successful            9m    MySQL operator  Successfully created MySQL
-  Normal  Successful            9m    MySQL operator  Successfully created StatefulSet
-  Normal  Initializing          9m    MySQL operator  Initializing from Snapshot: "snap-mysql-infant"
-  Normal  Successful            8m    MySQL operator  Successfully patched StatefulSet
-  Normal  Successful            8m    MySQL operator  Successfully patched MySQL
-  Normal  SuccessfulInitialize  3m    Job Controller  Successfully completed initialization
+  Type    Reason                Age   From             Message
+  ----    ------                ----  ----             -------
+  Normal  Successful            30s   KubeDB operator  Successfully created Service
+  Normal  Successful            27s   KubeDB operator  Successfully created StatefulSet
+  Normal  Successful            27s   KubeDB operator  Successfully created MySQL
+  Normal  Initializing          26s   KubeDB operator  Initializing from Snapshot: "snap-mysql-infant"
+  Normal  Successful            26s   KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful            26s   KubeDB operator  Successfully patched MySQL
+  Normal  SuccessfulInitialize  6s    KubeDB operator  Successfully completed initialization
+  Normal  Successful            6s    KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful            6s    KubeDB operator  Successfully patched MySQL
+  Normal  Successful            6s    KubeDB operator  Successfully created appbinding
+  Normal  Successful            6s    KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful            6s    KubeDB operator  Successfully patched MySQL
+```
+
+## Customizing Snapshot
+
+You can customize pod template spec and volume claim spec for the backup and restore jobs. For details options read [this doc](/docs/concepts/snapshot.md).
+
+Some common customization sample is shown below.
+
+**Specify PVC Template:**
+
+Backup and recovery job needs a temporary storage to hold `dump` files before it can be uploaded to cloud backend or inserted into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates PVC with similar specification for backup or recovery job. However, if you want to specify custom PVC template, you can do it through `spec.podVolumeClaimSpec` field of Snapshot crd. This is particularly helpful when you want to use different `storageclass` for backup or recovery job than the database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mysql-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MySQL
+spec:
+  databaseName: mysql-infant
+  storageSecretName: my-snap-secret
+  gcs:
+    bucket: kubedb
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
+```
+
+**Specify Resources for Backup/Recovery Job:**
+
+You can specify resources for backup or recovery job through `spec.podTemplate.spec.resources` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mysql-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MySQL
+spec:
+  databaseName: mysql-infant
+  storageSecretName: my-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+```
+
+**Provide Annotation for Backup/Recovery Job:**
+
+If you need to add some annotations to backup or recovery job, you can specify this in `spec.podTemplate.controller.annotations`. You can also specify annotation for the pod created by backup or recovery job through `spec.podTemplate.annotations` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mysql-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MySQL
+spec:
+  databaseName: mysql-infant
+  storageSecretName: my-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    annotations:
+      passMe: ToBackupJobPod
+    controller:
+      annotations:
+        passMe: ToBackupJob
+```
+
+**Pass Arguments to Backup/Recovery Job:**
+
+KubeDB also allows to pass extra arguments for backup or recovery job. You can provide these arguments through `spec.podTemplate.spec.args` field of Snapshot crd.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snap-mysql-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MySQL
+spec:
+  databaseName: mysql-infant
+  storageSecretName: my-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      args:
+      - --extra-args-to-backup-command
 ```
 
 ## Customizing Snapshot

@@ -22,7 +22,6 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	kapierrors "k8s.io/apimachinery/pkg/api/errors"

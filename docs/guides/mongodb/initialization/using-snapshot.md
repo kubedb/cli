@@ -36,7 +36,7 @@ metadata:
   name: mgo-init-snapshot
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -64,13 +64,13 @@ Now, wait several seconds. KubeDB operator will create a new `StatefulSet`. Then
 ```console
 $ kubedb get mg -n demo
 NAME                VERSION   STATUS         AGE
-mgo-infant          3.4-v1    Running        4m
-mgo-init-snapshot   3.4-v1    Initializing   53s
+mgo-infant          3.4-v2    Running        4m
+mgo-init-snapshot   3.4-v2    Initializing   53s
 
 $ kubedb describe mg -n demo mgo-init-snapshot
 Name:               mgo-init-snapshot
 Namespace:          demo
-CreationTimestamp:  Tue, 25 Sep 2018 13:06:41 +0600
+CreationTimestamp:  Wed, 06 Feb 2019 15:51:44 +0600
 Labels:             <none>
 Annotations:        kubedb.com/initialized=
 Replicas:           1  total
@@ -83,11 +83,11 @@ Volume:
 
 StatefulSet:
   Name:               mgo-init-snapshot
-  CreationTimestamp:  Tue, 25 Sep 2018 13:06:42 +0600
+  CreationTimestamp:  Wed, 06 Feb 2019 15:51:44 +0600
   Labels:               kubedb.com/kind=MongoDB
                         kubedb.com/name=mgo-init-snapshot
   Annotations:        <none>
-  Replicas:           824641931152 desired | 1 total
+  Replicas:           824637966784 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
 Service:
@@ -96,10 +96,10 @@ Service:
                   kubedb.com/name=mgo-init-snapshot
   Annotations:  <none>
   Type:         ClusterIP
-  IP:           10.109.118.234
+  IP:           10.100.3.243
   Port:         db  27017/TCP
   TargetPort:   db/TCP
-  Endpoints:    172.17.0.6:27017
+  Endpoints:    172.17.0.8:27017
 
 Service:
   Name:         mgo-init-snapshot-gvr
@@ -110,7 +110,7 @@ Service:
   IP:           None
   Port:         db  27017/TCP
   TargetPort:   27017/TCP
-  Endpoints:    172.17.0.6:27017
+  Endpoints:    172.17.0.8:27017
 
 Database Secret:
   Name:         mgo-init-snapshot-auth
@@ -123,22 +123,25 @@ Type:  Opaque
 Data
 ====
   password:  16 bytes
-  user:      4 bytes
+  username:  4 bytes
 
 No Snapshots.
 
 Events:
-  Type    Reason                Age   From              Message
-  ----    ------                ----  ----              -------
-  Normal  Successful            1m    MongoDB operator  Successfully created Service
-  Normal  Successful            46s   MongoDB operator  Successfully created StatefulSet
-  Normal  Successful            46s   MongoDB operator  Successfully created MongoDB
-  Normal  Initializing          45s   MongoDB operator  Initializing from Snapshot: "snapshot-infant"
-  Normal  Successful            41s   MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful            41s   MongoDB operator  Successfully patched MongoDB
-  Normal  SuccessfulInitialize  13s   Job Controller    Successfully completed initialization
-  Normal  Successful            11s   MongoDB operator  Successfully patched StatefulSet
-  Normal  Successful            11s   MongoDB operator  Successfully patched MongoDB
+  Type    Reason                Age   From             Message
+  ----    ------                ----  ----             -------
+  Normal  Successful            20s   KubeDB operator  Successfully created Service
+  Normal  Successful            12s   KubeDB operator  Successfully created StatefulSet
+  Normal  Successful            12s   KubeDB operator  Successfully created MongoDB
+  Normal  Initializing          12s   KubeDB operator  Initializing from Snapshot: "snapshot-infant"
+  Normal  Successful            12s   KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful            12s   KubeDB operator  Successfully patched MongoDB
+  Normal  Successful            4s    KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful            4s    KubeDB operator  Successfully patched MongoDB
+  Normal  SuccessfulInitialize  4s    KubeDB operator  Successfully completed initialization
+  Normal  Successful            4s    KubeDB operator  Successfully created appbinding
+  Normal  Successful            4s    KubeDB operator  Successfully patched StatefulSet
+  Normal  Successful            4s    KubeDB operator  Successfully patched MongoDB
 ```
 
 ## Cleaning up

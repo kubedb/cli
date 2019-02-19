@@ -9,7 +9,7 @@ spec:
   databaseName: mgo-misc-config
   storageSecretName: mg-snap-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
   podTemplate:
     spec:
       args:

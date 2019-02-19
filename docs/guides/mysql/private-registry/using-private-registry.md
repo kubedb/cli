@@ -28,15 +28,18 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
   ```console
   $ kubectl get mysqlversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,TOOLS_IMAGE:.spec.tools.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated
-  NAME      VERSION   DB_IMAGE              TOOLS_IMAGE                 EXPORTER_IMAGE                   DEPRECATED
-  5         5         kubedb/mysql:5        kubedb/mysql-tools:5        kubedb/operator:0.8.0            true
-  5-v1      5         kubedb/mysql:5-v1     kubedb/mysql-tools:5-v1     kubedb/mysqld-exporter:v0.11.0   <none>
-  5.7       5.7       kubedb/mysql:5.7      kubedb/mysql-tools:5.7      kubedb/operator:0.8.0            true
-  5.7-v1    5.7       kubedb/mysql:5.7-v1   kubedb/mysql-tools:5.7-v1   kubedb/mysqld-exporter:v0.11.0   <none>
-  8         8         kubedb/mysql:8        kubedb/mysql-tools:8        kubedb/operator:0.8.0            true
-  8-v1      8         kubedb/mysql:8-v1     kubedb/mysql-tools:8-v1     kubedb/mysqld-exporter:v0.11.0   <none>
-  8.0       8.0       kubedb/mysql:8.0      kubedb/mysql-tools:8.0      kubedb/operator:0.8.0            true
-  8.0-v1    8.0       kubedb/mysql:8.0-v1   kubedb/mysql-tools:8.0-v1   kubedb/mysqld-exporter:v0.11.0   <none>
+  NAME     VERSION   DB_IMAGE              TOOLS_IMAGE                 EXPORTER_IMAGE                   DEPRECATED
+  5        5         kubedb/mysql:5        kubedb/mysql-tools:5        kubedb/operator:0.8.0            true
+  5-v1     5         kubedb/mysql:5-v1     kubedb/mysql-tools:5-v2     kubedb/mysqld-exporter:v0.11.0   true
+  5.7      5.7       kubedb/mysql:5.7      kubedb/mysql-tools:5.7      kubedb/operator:0.8.0            true
+  5.7-v1   5.7       kubedb/mysql:5.7-v1   kubedb/mysql-tools:5.7-v2   kubedb/mysqld-exporter:v0.11.0   <none>
+  8        8         kubedb/mysql:8        kubedb/mysql-tools:8        kubedb/operator:0.8.0            true
+  8-v1     8         kubedb/mysql:8-v1     kubedb/mysql-tools:8-v2     kubedb/mysqld-exporter:v0.11.0   true
+  8.0      8.0       kubedb/mysql:8.0      kubedb/mysql-tools:8.0      kubedb/operator:0.8.0            true
+  8.0-v1   8.0       kubedb/mysql:8.0-v1   kubedb/mysql-tools:8.0-v2   kubedb/mysqld-exporter:v0.11.0   <none>
+  8.0-v2   8.0       kubedb/mysql:8.0-v2   kubedb/mysql-tools:8.0-v3   kubedb/mysqld-exporter:v0.11.0   <none>
+  8.0.14   8.0.14    kubedb/mysql:8.0.14   kubedb/mysql-tools:8.0.14   kubedb/mysqld-exporter:v0.11.0   <none>
+  8.0.3    8.0.3     kubedb/mysql:8.0.3    kubedb/mysql-tools:8.0.3    kubedb/mysqld-exporter:v0.11.0   <none>
   ```
 
   Docker hub repositories:
@@ -52,17 +55,17 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
   apiVersion: catalog.kubedb.com/v1alpha1
   kind: MySQLVersion
   metadata:
-    name: "8.0-v1"
+    name: "8.0-v2"
     labels:
       app: kubedb
   spec:
     version: "8.0"
     db:
-      image: "PRIVATE_DOCKER_REGISTRY/mysql:8.0-v1"
+      image: "PRIVATE_DOCKER_REGISTRY/mysql:8.0-v2"
     exporter:
       image: "PRIVATE_DOCKER_REGISTRY/mysqld-exporter:v0.11.0"
     tools:
-      image: "PRIVATE_DOCKER_REGISTRY/mysql-tools:8.0-v1"
+      image: "PRIVATE_DOCKER_REGISTRY/mysql-tools:8.0-v3"
   
   ```
 
@@ -70,7 +73,7 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
    ```
 
 ## Create ImagePullSecret
@@ -108,7 +111,7 @@ metadata:
   name: mysql-pvt-reg
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:

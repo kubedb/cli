@@ -4,7 +4,7 @@ metadata:
   name: scheduled-pg
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   replicas: 3
   storage:
     storageClassName: "standard"
@@ -17,7 +17,7 @@ spec:
     cronExpression: "@every 6h"
     storageSecretName: gcs-secret
     gcs:
-      bucket: kubedb-dev
+      bucket: kubedb-qa
     podTemplate:
       spec:
         args:

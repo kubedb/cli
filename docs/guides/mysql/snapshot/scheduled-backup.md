@@ -26,11 +26,7 @@ This tutorial will show you how to use KubeDB to take scheduled snapshot of a My
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
-  
-  $ kubectl get ns
-  NAME          STATUS    AGE
-  demo          Active    1m
+  namespace/demo created
   ```
 
 > Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -78,7 +74,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -90,7 +86,7 @@ spec:
     cronExpression: "@every 1m"
     storageSecretName: my-snap-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
 ```
 
 ```console
@@ -106,7 +102,7 @@ spec:
   backupSchedule:
     cronExpression: '@every 1m'
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
     storageSecretName: my-snap-secret
 ```
 
@@ -143,7 +139,7 @@ spec:
 #  backupSchedule:
 #    cronExpression: '@every 1m'
 #    gcs:
-#      bucket: kubedb
+#      bucket: kubedb-qa
 #    storageSecretName: my-snap-secret
   databaseSecret:
     secretName: mysql-scheduled-auth
@@ -176,7 +172,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -209,7 +205,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -244,7 +240,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -277,7 +273,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:

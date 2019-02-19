@@ -19,7 +19,6 @@ package cmds
 import (
 	"fmt"
 	"strings"
-
 	"github.com/kubedb/cli/pkg/describer"
 	"github.com/spf13/cobra"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"

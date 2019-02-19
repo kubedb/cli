@@ -25,7 +25,7 @@ KubeDB supports providing custom configuration for Memcached. This tutorial will
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
   
   $ kubectl get ns demo
   NAME    STATUS  AGE

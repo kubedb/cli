@@ -29,7 +29,7 @@ metadata:
   name: mgo1
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   replicas: 3
     replicaSet:
       name: rs0
@@ -50,10 +50,10 @@ spec:
       configMap:
         name: mg-init-script
   backupSchedule:
-    cronExpression: "@every 6h"
+    cronExpression: "@every 2m"
     storageSecretName: mg-snap-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
       prefix: demo
   monitor:
     agent: prometheus.io/coreos-operator
@@ -107,8 +107,10 @@ spec:
 
 `spec.version` is a required field specifying the name of the [MongoDBVersion](/docs/concepts/catalog/mongodb.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `MongoDBVersion` crd,
 
-- `3.4-v1`, `3.4`
-- `3.6-v1`, `3.6`
+- `3.4-v2`, `3.4-v1`, `3.4`
+- `3.6-v2`, `3.6-v1`, `3.6`
+- `4.0.5`, `4.0`
+- `4.1.7`
 
 ### spec.replicas
 
@@ -188,7 +190,7 @@ kind: MongoDB
 metadata:
   name: mgo1
 spec:
-  version: 3.4
+  version: 3.4-v2
   init:
     scriptSource:
       configMap:
@@ -210,7 +212,7 @@ kind: MongoDB
 metadata:
   name: mgo1
 spec:
-  version: 3.4
+  version: 3.4-v2
   init:
     snapshotSource:
       name: "snapshot-xyz"

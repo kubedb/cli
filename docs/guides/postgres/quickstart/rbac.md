@@ -34,11 +34,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
+namespace/demo created
 ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -54,8 +50,7 @@ metadata:
   name: quick-postgres
   namespace: demo
 spec:
-  version: "10.2"
-  doNotPause: true
+  version: "10.2-v2"
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -64,35 +59,41 @@ spec:
     resources:
       requests:
         storage: 1Gi
+  terminationPolicy: DoNotTerminate
 ```
 
 Create above Postgres object with following command
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/quick-postgres.yaml
-postgres "quick-postgres" created
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/doc-upd-mrf/docs/examples/postgres/quickstart/quick-postgres.yaml
+postgres.kubedb.com/quick-postgres created
 ```
 
 When this Postgres object is created, KubeDB operator creates Role, ServiceAccount and RoleBinding with the matching PostgreSQL name and uses that ServiceAccount name in the corresponding StatefulSet.
 
 Let's see what KubeDB operator has created for additional RBAC permission
 
-#### Role
+### Role
 
 KubeDB operator create a Role object `quick-postgres` in same namespace as Postgres object.
 
-```console
-$ kubectl get role -n demo quick-postgres -o yaml
-```
-
 ```yaml
+$ kubectl get role -n demo quick-postgres -o yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  creationTimestamp: 2018-09-03T13:38:57Z
+  creationTimestamp: "2019-02-07T11:08:56Z"
   name: quick-postgres
   namespace: demo
-  ...
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: Postgres
+    name: quick-postgres
+    uid: c2f4d63c-2ac8-11e9-9d44-080027154f61
+  resourceVersion: "39422"
+  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/demo/roles/quick-postgres
+  uid: c31e7f33-2ac8-11e9-9d44-080027154f61
 rules:
 - apiGroups:
   - apps
@@ -126,44 +127,54 @@ rules:
   - update
 ```
 
-#### ServiceAccount
+### ServiceAccount
 
 KubeDB operator create a ServiceAccount object `quick-postgres` in same namespace as Postgres object.
 
-```console
-$ kubectl get serviceaccount -n demo quick-postgres -o yaml
-```
-
 ```yaml
+$ kubectl get serviceaccount -n demo quick-postgres -o yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  creationTimestamp: 2018-09-03T13:38:57Z
+  creationTimestamp: "2019-02-07T11:08:56Z"
   name: quick-postgres
   namespace: demo
-  ...
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: Postgres
+    name: quick-postgres
+    uid: c2f4d63c-2ac8-11e9-9d44-080027154f61
+  resourceVersion: "39425"
+  selfLink: /api/v1/namespaces/demo/serviceaccounts/quick-postgres
+  uid: c31fd2b1-2ac8-11e9-9d44-080027154f61
 secrets:
-- name: quick-postgres-token-hf8zn
+- name: quick-postgres-token-b6zk2
 ```
 
 This ServiceAccount is used in StatefulSet created for Postgres object.
 
-#### RoleBinding
+### RoleBinding
 
 KubeDB operator create a RoleBinding object `quick-postgres` in same namespace as Postgres object.
 
-```console
-$ kubectl get rolebinding -n demo quick-postgres -o yaml
-```
-
 ```yaml
+$ kubectl get rolebinding -n demo quick-postgres -o yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  creationTimestamp: 2018-09-03T13:38:58Z
+  creationTimestamp: "2019-02-07T11:08:56Z"
   name: quick-postgres
   namespace: demo
-  ...
+  ownerReferences:
+  - apiVersion: kubedb.com/v1alpha1
+    blockOwnerDeletion: false
+    kind: Postgres
+    name: quick-postgres
+    uid: c2f4d63c-2ac8-11e9-9d44-080027154f61
+  resourceVersion: "39426"
+  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/demo/rolebindings/quick-postgres
+  uid: c3231382-2ac8-11e9-9d44-080027154f61
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -183,11 +194,8 @@ Leader Election process get access to Kubernetes API using these RBAC permission
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/quick-postgres -p '{"spec":{"doNotPause":false}}' --type="merge"
-$ kubectl delete -n demo pg/quick-postgres
+kubectl patch -n demo pg/quick-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/quick-postgres
 
-$ kubectl patch -n demo drmn/quick-postgres -p '{"spec":{"wipeOut":true}}' --type="merge"
-$ kubectl delete -n demo drmn/quick-postgres
-
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```

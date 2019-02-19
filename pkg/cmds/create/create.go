@@ -23,7 +23,6 @@ import (
 	"os"
 	"runtime"
 	"strings"
-
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	kruntime "k8s.io/apimachinery/pkg/runtime"

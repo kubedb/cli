@@ -28,11 +28,16 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
   ```console
   $ kubectl get mongodbversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,TOOLS_IMAGE:.spec.tools.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated
-  NAME      VERSION   DB_IMAGE              TOOLS_IMAGE                 EXPORTER_IMAGE                   DEPRECATED
-  3.4       3.4       kubedb/mongo:3.4      kubedb/mongo-tools:3.4      kubedb/operator:0.8.0            true
-  3.4-v1    3.4       kubedb/mongo:3.4-v1   kubedb/mongo-tools:3.4-v1   kubedb/mongodb_exporter:v1.0.0   <none>
-  3.6       3.6       kubedb/mongo:3.6      kubedb/mongo-tools:3.6      kubedb/operator:0.8.0            true
-  3.6-v1    3.6       kubedb/mongo:3.6-v1   kubedb/mongo-tools:3.6-v1   kubedb/mongodb_exporter:v1.0.0   <none>
+  NAME     VERSION   DB_IMAGE              TOOLS_IMAGE                 EXPORTER_IMAGE                   DEPRECATED
+  3.4      3.4       kubedb/mongo:3.4      kubedb/mongo-tools:3.4      kubedb/operator:0.8.0            true
+  3.4-v1   3.4       kubedb/mongo:3.4-v1   kubedb/mongo-tools:3.4-v2   kubedb/mongodb_exporter:v1.0.0   true
+  3.4-v2   3.4       kubedb/mongo:3.4-v2   kubedb/mongo-tools:3.4-v2   kubedb/mongodb_exporter:v1.0.0   <none>
+  3.6      3.6       kubedb/mongo:3.6      kubedb/mongo-tools:3.6      kubedb/operator:0.8.0            true
+  3.6-v1   3.6       kubedb/mongo:3.6-v1   kubedb/mongo-tools:3.6-v2   kubedb/mongodb_exporter:v1.0.0   true
+  3.6-v2   3.6       kubedb/mongo:3.6-v2   kubedb/mongo-tools:3.6-v2   kubedb/mongodb_exporter:v1.0.0   <none>
+  4.0      4.0.5     kubedb/mongo:4.0      kubedb/mongo-tools:4.0      kubedb/mongodb_exporter:v1.0.0   <none>
+  4.0.5    4.0.5     kubedb/mongo:4.0.5    kubedb/mongo-tools:4.0.5    kubedb/mongodb_exporter:v1.0.0   <none>
+  4.1.7    4.1.7     kubedb/mongo:4.1.7    kubedb/mongo-tools:4.1.7    kubedb/mongodb_exporter:v1.0.0   <none>
   ```
 
   Docker hub repositories:
@@ -48,17 +53,17 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
   apiVersion: catalog.kubedb.com/v1alpha1
   kind: MongoDBVersion
   metadata:
-    name: "3.4-v1"
+    name: "3.4-v2"
     labels:
       app: kubedb
   spec:
     version: "3.4"
     db:
-      image: "PRIVATE_DOCKER_REGISTRY/mongo:3.4-v1"
+      image: "PRIVATE_DOCKER_REGISTRY/mongo:3.4-v2"
     exporter:
       image: "PRIVATE_DOCKER_REGISTRY/mongodb_exporter:v1.0.0"
     tools:
-      image: "PRIVATE_DOCKER_REGISTRY/mongo-tools:3.4-v1"
+      image: "PRIVATE_DOCKER_REGISTRY/mongo-tools:3.4-v2"
   
   ```
 
@@ -91,11 +96,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns
-NAME          STATUS    AGE
-demo          Active    10s
+namespace/demo created
 ```
 
 ## Deploy MongoDB database from Private Registry
@@ -110,7 +111,7 @@ metadata:
   name: mgo-pvt-reg
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -143,8 +144,8 @@ mgo-pvt-reg-0   1/1       Running             0          5m
 
 
 $ kubedb get mg -n demo
-NAME          STATUS    AGE
-mgo-pvt-reg   Running   1m
+NAME          VERSION   STATUS    AGE
+mgo-pvt-reg   3.4-v2    Running   38s
 ```
 
 ## Snapshot

@@ -26,7 +26,7 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
   ```
 
 - You will also need a docker private [registry](https://docs.docker.com/registry/) or [private repository](https://docs.docker.com/docker-hub/repos/#private-repositories).  In this tutorial we will use private repository of [docker hub](https://hub.docker.com/).

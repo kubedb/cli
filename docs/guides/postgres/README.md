@@ -49,31 +49,37 @@ aliases:
 
 ## Supported PostgreSQL Versions
 
-| KubeDB Version | Postgres:9.5 | Postgres:9.6 | Postgres:10.2 |
-| -------------- | :----------: | :----------: | :-----------: |
-| 0.1.0 - 0.7.0  |   &#10003;   |   &#10007;   |   &#10007;    |
-| 0.8.0          |   &#10007;   |   &#10003;   |   &#10003;    |
-| 0.9.0     |   &#10007;   |   &#10003;   |   &#10003;    |
+| KubeDB Version | Postgres:9.5 | Postgres:9.6 | Postgres:10.2 | Postgres:10.6 | Postgres:11.1 |
+| -------------- | :----------: | :----------: | :-----------: | :-----------: | :-----------: |
+| 0.1.0 - 0.7.0  |   &#10003;   |   &#10007;   |   &#10007;    |   &#10007;    |   &#10007;    |
+| 0.8.0          |   &#10007;   |   &#10003;   |   &#10003;    |   &#10007;    |   &#10007;    |
+| 0.9.0          |   &#10007;   |   &#10003;   |   &#10003;    |   &#10007;    |   &#10007;    |
+| 0.10.0         |   &#10007;   |   &#10003;   |   &#10003;    |   &#10003;    |   &#10003;    |
 
 ## Supported PostgresVersion CRD
 
 Here, &#10003; means supported and &#10007; means deprecated.
 
-| NAME     | VERSION | KubeDB: 0.9.0 |
-|----------|---------|--------------------|
-| 10.2     | 10.2    | &#10007;           |
-| 10.2-v1  | 10.2    | &#10003;           |
-| 9.6      | 9.6     | &#10007;           |
-| 9.6-v1   | 9.6     | &#10003;           |
-| 9.6.7    | 9.6.7   | &#10007;           |
-| 9.6.7-v1 | 9.6.7   | &#10003;           |
+|   NAME   | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 |
+| :------: | :-----: | :-----------: | :------------: |
+|   9.6    |   9.6   |   &#10007;    |    &#10007;    |
+|  9.6.7   |  9.6.7  |   &#10007;    |    &#10007;    |
+|   10.2   |  10.2   |   &#10007;    |    &#10007;    |
+|  9.6-v1  |   9.6   |   &#10003;    |    &#10007;    |
+| 9.6.7-v1 |  9.6.7  |   &#10003;    |    &#10007;    |
+| 10.2-v1  |  10.2   |   &#10003;    |    &#10007;    |
+|  9.6-v2  |   9.6   |   &#10007;    |    &#10003;    |
+| 9.6.7-v2 |  9.6.7  |   &#10007;    |    &#10003;    |
+| 10.2-v2  |  10.2   |   &#10007;    |    &#10003;    |
+|   10.6   |  10.6   |   &#10007;    |    &#10003;    |
+|   11.1   |  11.1   |   &#10007;    |    &#10003;    |
 
 ## External tools dependency
 
-|Tool                                      |Version  |
-|------------------------------------------|:-------:|
-|[wal-g](https://github.com/wal-g/wal-g)   | v0.1.7  |
-|[osm](https://github.com/appscode/osm)    | 0.8.0   |
+|                  Tool                   | Version |
+| --------------------------------------- | :-----: |
+| [wal-g](https://github.com/wal-g/wal-g) | v0.1.7  |
+| [osm](https://github.com/appscode/osm)  |  0.9.1  |
 
 ## User Guide
 
@@ -91,4 +97,3 @@ Here, &#10003; means supported and &#10007; means deprecated.
 - Detail concepts of [Postgres object](/docs/concepts/databases/postgres.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

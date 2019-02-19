@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/errors"
