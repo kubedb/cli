@@ -35,6 +35,10 @@ spec:
   replicas: 2
   standbyMode: Hot
   streamingMode: asynchronous
+  leaderElection:
+    leaseDurationSeconds: 3
+    renewDeadlineSeconds: 2
+    retryPeriodSeconds: 1
   archiver:
     storage:
       storageSecretName: s3-secret
@@ -135,6 +139,16 @@ spec:
 ### spec.streamingMode
 
 `spec.streamingMode` is an optional field that specifies the streaming mode (_synchronous / asynchronous_) of the standby replicas. KubeDB currently supports only **asynchronous** streaming mode.
+
+### spec.leaderElection
+
+There are three fields in Postgres CRD's `spec.LeaderElection`. These values defines how fast the leader election can happen.
+
+- `leaseDurationSeconds`: `LeaseDuration` is the duration in second that non-leader candidates will wait to force acquire leadership. This is measured against time of last observed ack. Default 15
+- `renewDeadlineSeconds`: `RenewDeadline` is the duration in second that the acting master will retry refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3. Default 10
+- `retryPeriodSeconds`: `RetryPeriod` is the duration in second the LeaderElector clients should wait between tries of actions. Normally, LeaseDuration / 3. Default 2
+
+If the Cluster machine is powerful, user can reduce the times. But, Do not make it so little, in that case Postgres will restarts very often.
 
 ### spec.archiver
 
