@@ -30,6 +30,10 @@ metadata:
   namespace: demo
 spec:
   version: 4
+  mode: Cluster
+  cluster:
+    master: 3
+    replicas: 1
   storage:
     storageClassName: "standard"
     accessModes:
@@ -89,7 +93,24 @@ spec:
 
 `spec.version` is a required field specifying the name of the [RedisVersion](/docs/concepts/catalog/redis.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `RedisVersion` crd,
 
-- `4.0.6-v1`, `4.0.6`, `4.0-v1`, `4.0`, `4-v1`, `4`
+- `4.0.11`, `4.0.6-v2`, `4.0.6-v1`, `4.0.6`, `4.0-v2`, `4.0-v1`, `4.0`, `4-v1`, `4`, `5.0.3`, `5.0`
+
+### spec.mode
+
+`spec.mode` specifies the mode in which Redis server instance(s) will be deployed. The possible values are either `"Standalone"` or `"Cluster"`. The default value is `"Standalone"`.
+
+- ***Standalone***: In this mode, the operator to starts a standalone Redis server.
+
+- ***Cluster***: In this mode, the operator will deploy Redis cluster.
+
+### spec.cluster
+
+If `spec.mode` is set to `"Cluster"`, users can optionally provide a cluster specification. Currently, the following two parameters can be configured:
+
+- `spec.cluster.master`: specifies the number of Redis master nodes. It must be greater or equal to 3. If not set, the operator set it to 3.
+- `spec.cluster.replicas`: specifies the number of replica nodes per master. It must be greater than 0. If not set, the operator set it to 1.
+
+> If `spec.mode` is set to `"Cluster"`, then `spec.replicas` field is ignored.
 
 ### spec.storage
 
