@@ -138,7 +138,7 @@ Here,
 Let's create Postgres crd,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/doc-upd-mrf/docs/examples/postgres/quickstart/quick-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/quick-postgres.yaml
 postgres.kubedb.com/quick-postgres created
 ```
 
@@ -427,7 +427,7 @@ In this tutorial, the DormantDatabase `quick-postgres` can be resumed by creatin
 Let's create the original Postgres object,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/doc-upd-mrf/docs/examples/postgres/quickstart/quick-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/quick-postgres.yaml
 postgres.kubedb.com/quick-postgres created
 ```
 
@@ -436,7 +436,7 @@ This will resume the previous database. All data that was inserted in previous d
 When the database is resumed, respective DormantDatabase object will be removed. Verify that the DormantDatabase object has been removed,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/doc-upd-mrf/docs/examples/postgres/quickstart/quick-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/quickstart/quick-postgres.yaml
 postgres "quick-postgres" created
 ```
 

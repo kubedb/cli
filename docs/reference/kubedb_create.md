@@ -40,7 +40,7 @@ kubedb create -f FILENAME
       --edit                          Edit the API resource before creating
   -f, --filename strings              Filename, directory, or URL to files to use to create the resource
   -h, --help                          help for create
-  -o, --output string                 Output format. One of: json|yaml|name|templatefile|template|go-template|go-template-file|jsonpath|jsonpath-file.
+  -o, --output string                 Output format. One of: json|yaml|name|template|go-template|go-template-file|templatefile|jsonpath|jsonpath-file.
       --raw string                    Raw URI to POST to the server.  Uses the transport specified by the kubeconfig file.
       --record                        Record current kubectl command in the resource annotation. If set to false, do not record the command. If set to true, record the command. If not set, default to updating the existing annotation value only if one already exists.
   -R, --recursive                     Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests organized within the same directory.

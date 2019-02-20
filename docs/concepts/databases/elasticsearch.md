@@ -363,8 +363,8 @@ A list of the supported environment variables, their permission to use in KubeDB
 | ------------------------------- | :---------------: | -------------------------------------------------------------------------------------------------- |
 | CLUSTER_NAME                    |     `allowed`     | `metadata.name`                                                                                    |
 | NODE_NAME                       |   `not allowed`   | Pod name                                                                                           |
-| NODE_MASTER                     |   `not allowed`   | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
-| NODE_DATA                       |   `not allowed`   | Kubedb set it based on `Elasticsearch` crd sepcification                                           |
+| NODE_MASTER                     |   `not allowed`   | KubeDB sets it based on `Elasticsearch` crd sepcification                                           |
+| NODE_DATA                       |   `not allowed`   | KubeDB sets it based on `Elasticsearch` crd sepcification                                           |
 | NETWORK_HOST                    |     `allowed`     | `_site_`                                                                                           |
 | HTTP_ENABLE                     |     `allowed`     | If `spec.topology` is not specified then `true`. Otherwise, `false` for Master node and Data node. |
 | HTTP_CORS_ENABLE                |     `allowed`     | `true`                                                                                             |

@@ -76,7 +76,7 @@ metadata:
   name: scheduled-pg
   namespace: demo
 spec:
-  version: "9.6-v2"
+  version: "9.6-v1"
   replicas: 3
   standbyMode: Hot
   storage:
@@ -342,8 +342,8 @@ exit
 For helm, `upgrade` command works fine.
 
 ```console
-$ helm upgrade --install kubedb-operator appscode/kubedb --version 0.10.0
-$ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.10.0 --namespace default
+$ helm upgrade --install kubedb-operator appscode/kubedb --version 0.10.0 --namespace kube-system
+$ helm upgrade --install kubedb-catalog appscode/kubedb-catalog --version 0.10.0 --namespace kube-system
 
 $ helm ls
 NAME           	REVISION	UPDATED                 	STATUS  	CHART               	APP VERSION	NAMESPACE  
