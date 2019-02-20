@@ -183,32 +183,22 @@ DEP_LIST = [
     },
     {
       "package": "kmodules.xyz/custom-resources",
-      "repo": "https://github.com/kmodules/custom-resources.git",
-      "vcs": "git",
       "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/monitoring-agent-api",
-      "repo": "https://github.com/kmodules/monitoring-agent-api.git",
-      "vcs": "git",
       "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/objectstore-api",
-      "repo": "https://github.com/kmodules/objectstore-api.git",
-      "vcs": "git",
       "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/offshoot-api",
-      "repo": "https://github.com/kmodules/offshoot-api.git",
-      "vcs": "git",
       "version": "release-9.0"
     },
     {
       "package": "kmodules.xyz/openshift",
-      "repo": "https://github.com/kmodules/openshift.git",
-      "vcs": "git",
       "version": "release-9.0"
     },
     {
@@ -374,6 +364,7 @@ def revendor(comp=None):
         for name in DATABASES:
             cat.revendor_repo(name)
     elif comp == 'all':
+        cat.revendor_repo('apimachinery')
         for name in DATABASES:
             cat.revendor_repo(name)
         cat.revendor_repo('operator')

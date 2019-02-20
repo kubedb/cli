@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Continuous Archiving with wal-g
 
-KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports only amazon _S3_ as cloud storage.
+KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports _S3_ and _GCP_ as cloud storage.
 
 ## Before You Begin
 
@@ -25,11 +25,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
+namespace/demo created
 ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -45,7 +41,7 @@ metadata:
   name: wal-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   replicas: 2
   storage:
     storageClassName: "standard"
@@ -65,7 +61,12 @@ Here,
 
 - `spec.archiver.storage` specifies storage information that will be used by `wal-g`
   - `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+  - `storage.s3` points to s3 storage configuration.
   - `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
+  - `storage.gcs` points to GCS storage configuration.
+  - `storage.gcs.bucket` points to the bucket name used to store continuous archiving data.
+
+User can use either s3 or gcs. In this tutorial, s3 is used for wal-g archiving. `gcs` is similar to this tutorial. Follow [this link](/docs/concepts/snapshot/#google-cloud-storage-gcs) to know how to create secret for `gcs` storage. 
 
 **What is this Continuous Archiving**
 
@@ -82,12 +83,6 @@ archive_command = 'wal-g wal-push %p'
 archive_timeout = 60
 ```
 
-And following additional is set in `recovery.conf` for *standby* server
-
-```console
-restore_command = 'wal-g wal-fetch %f %p'
-```
-
 Here, these commands are used to push and pull WAL files respectively from cloud.
 
 **wal-g** is used to handle this continuous archiving mechanism. For this we need storage Secret and need to provide storage backend information.
@@ -98,10 +93,10 @@ Storage Secret should contain credentials that will be used to access storage de
 
 Storage Secret for **wal-g** is needed with following 2 keys:
 
-| Key                     | Description                                                |
-|-------------------------|------------------------------------------------------------|
-| `AWS_ACCESS_KEY_ID`     | `Required`. AWS / Minio access key ID                      |
-| `AWS_SECRET_ACCESS_KEY` | `Required`. AWS / Minio secret access key                  |
+|           Key           |                Description                |
+| ----------------------- | ----------------------------------------- |
+| `AWS_ACCESS_KEY_ID`     | `Required`. AWS / Minio access key ID     |
+| `AWS_SECRET_ACCESS_KEY` | `Required`. AWS / Minio secret access key |
 
 ```console
 $ echo -n '<your-aws-access-key-id-here>' > AWS_ACCESS_KEY_ID
@@ -131,21 +126,21 @@ type: Opaque
 
 **Archiver Storage Backend**
 
-**wal-g** supports only _S3_ cloud providers.
+**wal-g** supports both _S3_ and __GCS__ cloud providers.
 
-To configure this backend, following parameters are available:
+To configure s3 backend, following parameters are available:
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.s3.endpoint`       | `Required`. For S3, use `s3.amazonaws.com`                                      |
-| `spec.s3.bucket`         | `Required`. Name of Bucket                                                      |
-| `spec.s3.prefix`         | `Optional`. Path prefix into bucket where snapshot will be store                |
+|     Parameter      |                           Description                            |
+| ------------------ | ---------------------------------------------------------------- |
+| `spec.s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`                       |
+| `spec.s3.bucket`   | `Required`. Name of Bucket                                       |
+| `spec.s3.prefix`   | `Optional`. Path prefix into bucket where snapshot will be store |
 
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/snapshot/wal-postgres.yaml
-postgres "wal-postgres" created
+postgres.kubedb.com/wal-postgres created
 ```
 
 When database is ready, **wal-g** takes a base backup and uploads it to cloud storage defined by storage backend.
@@ -162,16 +157,22 @@ you can see continuous archiving data stored in S3 bucket.
 
 From the above image, you can see that the archived data is stored in a folder `kubedb/kubedb/demo/wal-postgres/archive`.
 
+## Termination Policy
+
+If termination policy of this `wal-postgres` is set to `WipeOut` or, If `Spec.WipeOut` of dormant database is set to `true`, then the data in cloud backend will be deleted.
+
+Other than that, the data will be intact in other scenarios.
+
 ## Cleaning up
 
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/wal-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/wal-postgres
+kubectl patch -n demo pg/wal-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/wal-postgres
 
-$ kubectl delete -n demo secret/s3-secret
-$ kubectl delete ns demo
+kubectl delete -n demo secret/s3-secret
+kubectl delete ns demo
 ```
 
 ## Next Steps

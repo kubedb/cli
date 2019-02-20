@@ -9,4 +9,4 @@ spec:
   exporter:
     image: "kubedb/operator:0.9.0"
   tools:
-    image: "kubedb/postgres-tools:10.2-v1"
+    image: "kubedb/postgres-tools:10.2-v2"

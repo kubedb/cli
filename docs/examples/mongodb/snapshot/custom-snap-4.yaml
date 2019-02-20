@@ -1,0 +1,16 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: snapshot-infant
+  namespace: demo
+  labels:
+    kubedb.com/kind: MongoDB
+spec:
+  databaseName: mgo-infant
+  storageSecretName: mg-snap-secret
+  gcs:
+    bucket: kubedb
+  podTemplate:
+    spec:
+      args:
+      - --extra-args-to-backup-command

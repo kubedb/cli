@@ -26,11 +26,7 @@ KubeDB supports providing custom configuration for MongoDB. This tutorial will s
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
-
-  $ kubectl get ns
-  NAME          STATUS    AGE
-  demo          Active    10s
+  namespace/demo created
   ```
 
 > Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -70,17 +66,17 @@ Verify the config map has the configuration file.
 $  kubectl get configmap -n demo mg-custom-config -o yaml
 apiVersion: v1
 data:
-  mongod.conf: |
+  mongod.conf: |+
     net:
        maxIncomingConnections: 10000
 kind: ConfigMap
 metadata:
-  creationTimestamp: 2018-09-25T11:06:50Z
+  creationTimestamp: "2019-02-06T10:03:45Z"
   name: mg-custom-config
   namespace: demo
-  resourceVersion: "5802"
+  resourceVersion: "91905"
   selfLink: /api/v1/namespaces/demo/configmaps/mg-custom-config
-  uid: 19dc504a-c0b3-11e8-b685-08002731a681
+  uid: 7da0467c-29f6-11e9-aebf-080027875192
 ```
 
 Now, create MongoDB crd specifying `spec.configSource` field.
@@ -92,7 +88,7 @@ metadata:
   name: mgo-custom-config
   namespace: demo
 spec:
-  version: "3.4-v1"
+  version: "3.4-v2"
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -107,7 +103,7 @@ spec:
 ```
 
 ```console
-$ kubectl create-f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mongodb/configuration/demo1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mongodb/configuration/demo-1.yaml
 mongodb.kubedb.com/mgo-custom-config created
 ```
 
@@ -126,17 +122,17 @@ Now, we will check if the database has started with the custom configuration we 
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.4/mongo/). In this tutorial, we are connecting to the MongoDB server from inside the pod.
 
 ```console
-$ kubectl get secrets -n demo mgo-custom-config-auth -o jsonpath='{.data.\user}' | base64 -d
+$ kubectl get secrets -n demo mgo-custom-config-auth -o jsonpath='{.data.\username}' | base64 -d
 root
 
 $ kubectl get secrets -n demo mgo-custom-config-auth -o jsonpath='{.data.\password}' | base64 -d
-TxDWYECTRXaWWueP
+ErialNojWParBFoP
 
 $ kubectl exec -it mgo-custom-config-0 -n demo sh
 
 > mongo admin
 
-> db.auth("root","TxDWYECTRXaWWueP")
+> db.auth("root","ErialNojWParBFoP")
 1
 
 > db._adminCommand( {getCmdLineOpts: 1})

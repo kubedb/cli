@@ -5,7 +5,6 @@ metadata:
   namespace: demo
 spec:
   version: 9.5
-  doNotPause: true
   storage:
     storageClassName: "standard"
     accessModes:

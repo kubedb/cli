@@ -28,7 +28,7 @@ As with all other Kubernetes objects, a MongoDBVersion needs `apiVersion`, `kind
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: MongoDBVersion
 metadata:
-  name: "3.6-v1"
+  name: "3.6-v2"
   labels:
     app: kubedb
 spec:

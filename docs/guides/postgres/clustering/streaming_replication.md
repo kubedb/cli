@@ -27,11 +27,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
+namespace/demo created
 ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -47,7 +43,7 @@ metadata:
   name: ha-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   replicas: 3
   storageType: Durable
   storage:
@@ -103,17 +99,17 @@ Now create this Postgres object with Streaming Replication support
 
 ```console
 $ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/clustering/ha-postgres.yaml
-postgres "ha-postgres" created
+postgres.kubedb.com/ha-postgres created
 ```
 
 KubeDB operator creates three Pod as PostgreSQL server.
 
 ```console
 $ kubectl get pods -n demo --selector="kubedb.com/name=ha-postgres" --show-labels
-NAME            READY     STATUS    RESTARTS   AGE       LABELS
-ha-postgres-0   1/1       Running   0          2m        controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary,statefulset.kubernetes.io/pod-name=ha-postgres-0
-ha-postgres-1   1/1       Running   0          1m        controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-1
-ha-postgres-2   1/1       Running   0          1m        controller-revision-hash=ha-postgres-b8b4b5fc4,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-2
+NAME            READY   STATUS    RESTARTS   AGE   LABELS
+ha-postgres-0   1/1     Running   0          20s   controller-revision-hash=ha-postgres-6b7998ccfd,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=primary,statefulset.kubernetes.io/pod-name=ha-postgres-0
+ha-postgres-1   1/1     Running   0          16s   controller-revision-hash=ha-postgres-6b7998ccfd,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-1
+ha-postgres-2   1/1     Running   0          10s   controller-revision-hash=ha-postgres-6b7998ccfd,kubedb.com/kind=Postgres,kubedb.com/name=ha-postgres,kubedb.com/role=replica,statefulset.kubernetes.io/pod-name=ha-postgres-2
 ```
 
 Here,
@@ -133,7 +129,7 @@ ha-postgres-replicas   ClusterIP   10.97.36.117   <none>        5432/TCP   4m
 ```console
 $ kubectl get svc -n demo --selector="kubedb.com/name=ha-postgres" -o=custom-columns=NAME:.metadata.name,SELECTOR:.spec.selector
 NAME                   SELECTOR
-ha-postgres            map[kubedb.com/role:primary kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
+ha-postgres            map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres kubedb.com/role:primary]
 ha-postgres-replicas   map[kubedb.com/kind:Postgres kubedb.com/name:ha-postgres]
 ```
 
@@ -180,6 +176,66 @@ postgres=# select * from pg_stat_replication;
 
 Here, both `ha-postgres-1` and `ha-postgres-2` are streaming asynchronously from *primary* server.
 
+### Lease Duration
+
+Get the postgres CRD at this point.
+
+```yaml
+$ kubectl get pg -n demo   ha-postgres -o yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  creationTimestamp: "2019-02-07T12:14:05Z"
+  finalizers:
+  - kubedb.com
+  generation: 2
+  name: ha-postgres
+  namespace: demo
+  resourceVersion: "44966"
+  selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/postgreses/ha-postgres
+  uid: dcf6d96a-2ad1-11e9-9d44-080027154f61
+spec:
+  databaseSecret:
+    secretName: ha-postgres-auth
+  leaderElection:
+    leaseDurationSeconds: 15
+    renewDeadlineSeconds: 10
+    retryPeriodSeconds: 2
+  podTemplate:
+    controller: {}
+    metadata: {}
+    spec:
+      resources: {}
+  replicas: 3
+  serviceTemplate:
+    metadata: {}
+    spec: {}
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    dataSource: null
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: standard
+  storageType: Durable
+  terminationPolicy: Pause
+  updateStrategy:
+    type: RollingUpdate
+  version: 9.6-v2
+status:
+  observedGeneration: 2$4213139756412538772
+  phase: Running
+```
+
+There are three fields in Postgres CRD's `spec.LeaderElection`. These values defines how fast the leader election can happen.
+
+- leaseDurationSeconds: LeaseDuration is the duration in second that non-leader candidates will wait to force acquire leadership. This is measured against time of last observed ack. Default 15
+- renewDeadlineSeconds: RenewDeadline is the duration in second that the acting master will retry refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3. Default 10
+- retryPeriodSeconds: RetryPeriod is the duration in second the LeaderElector clients should wait between tries of actions. Normally, LeaseDuration / 3. Default 2
+
+If the Cluster machine is powerful, user can reduce the times. But, Do not make it so little, in that case Postgres will restarts very often. 
+
 ### Automatic failover
 
 If *primary* server fails, another *standby* server will take over and serve as *primary*.
@@ -187,7 +243,7 @@ If *primary* server fails, another *standby* server will take over and serve as 
 Delete Pod `ha-postgres-0` to see the failover behavior.
 
 ```console
-$ kubectl delete pod -n demo ha-postgres-0
+kubectl delete pod -n demo ha-postgres-0
 ```
 
 ```console
@@ -235,7 +291,7 @@ metadata:
   name: hot-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   replicas: 3
   standbyMode: Hot
   storageType: Durable

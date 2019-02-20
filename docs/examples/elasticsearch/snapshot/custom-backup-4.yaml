@@ -1,0 +1,24 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: scheduled-es
+  namespace: demo
+spec:
+  version: "6.3-v1"
+  storageType: Durable
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 6h"
+    storageSecretName: gcs-secret
+    gcs:
+      bucket: kubedb-qa
+    podTemplate:
+      spec:
+        args:
+        - --extra-args-to-backup-command

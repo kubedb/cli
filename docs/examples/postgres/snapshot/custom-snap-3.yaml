@@ -1,0 +1,18 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: script-postgres
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podTemplate:
+    annotations:
+      passMe: ToBackupJobPod
+    controller:
+      annotations:
+        passMe: ToBackupJob

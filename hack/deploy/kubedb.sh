@@ -96,19 +96,19 @@ onessl_found || {
   # ref: https://stackoverflow.com/a/27776822/244009
   case "$(uname -s)" in
     Darwin)
-      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.8.0/onessl-darwin-amd64
+      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.10.0/onessl-darwin-amd64
       chmod +x onessl
       export ONESSL=./onessl
       ;;
 
     Linux)
-      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.8.0/onessl-linux-amd64
+      curl -fsSL -o onessl https://github.com/kubepack/onessl/releases/download/0.10.0/onessl-linux-amd64
       chmod +x onessl
       export ONESSL=./onessl
       ;;
 
     CYGWIN* | MINGW* | MSYS*)
-      curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.8.0/onessl-windows-amd64.exe
+      curl -fsSL -o onessl.exe https://github.com/kubepack/onessl/releases/download/0.10.0/onessl-windows-amd64.exe
       chmod +x onessl.exe
       export ONESSL=./onessl.exe
       ;;
@@ -140,6 +140,7 @@ export KUBEDB_PURGE=0
 export KUBEDB_ENABLE_STATUS_SUBRESOURCE=false
 export KUBEDB_BYPASS_VALIDATING_WEBHOOK_XRAY=false
 export KUBEDB_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
+export KUBEDB_PRIORITY_CLASS=system-cluster-critical
 
 MONITORING_AGENT_NONE="none"
 MONITORING_AGENT_BUILTIN="prometheus.io/builtin"
@@ -355,6 +356,10 @@ while test $# -gt 0; do
 done
 
 export PROMETHEUS_NAMESPACE=${PROMETHEUS_NAMESPACE:-$KUBEDB_NAMESPACE}
+
+if [ "$KUBEDB_NAMESPACE" != "kube-system" ]; then
+    export KUBEDB_PRIORITY_CLASS=""
+fi
 
 if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices

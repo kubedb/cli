@@ -7,8 +7,8 @@ metadata:
 spec:
   version: "9.6"
   db:
-    image: "<YOUR_PRIVATE_REGISTRY>/postgres:9.6-v1"
+    image: "<YOUR_PRIVATE_REGISTRY>/postgres:9.6-v2"
   exporter:
     image: "<YOUR_PRIVATE_REGISTRY>/postgres_exporter:v0.4.6"
   tools:
-    image: "<YOUR_PRIVATE_REGISTRY>/postgres-tools:9.6-v1"
+    image: "<YOUR_PRIVATE_REGISTRY>/postgres-tools:9.6-v2"

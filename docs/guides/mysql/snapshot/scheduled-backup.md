@@ -26,11 +26,7 @@ This tutorial will show you how to use KubeDB to take scheduled snapshot of a My
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
-  
-  $ kubectl get ns
-  NAME          STATUS    AGE
-  demo          Active    1m
+  namespace/demo created
   ```
 
 > Note: The yaml files that are used in this tutorial are stored in [docs/examples](https://github.com/kubedb/cli/tree/master/docs/examples) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -78,7 +74,7 @@ metadata:
   name: mysql-scheduled
   namespace: demo
 spec:
-  version: "8.0-v1"
+  version: "8.0-v2"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -90,7 +86,7 @@ spec:
     cronExpression: "@every 1m"
     storageSecretName: my-snap-secret
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
 ```
 
 ```console
@@ -106,7 +102,7 @@ spec:
   backupSchedule:
     cronExpression: '@every 1m'
     gcs:
-      bucket: kubedb
+      bucket: kubedb-qa
     storageSecretName: my-snap-secret
 ```
 
@@ -143,7 +139,7 @@ spec:
 #  backupSchedule:
 #    cronExpression: '@every 1m'
 #    gcs:
-#      bucket: kubedb
+#      bucket: kubedb-qa
 #    storageSecretName: my-snap-secret
   databaseSecret:
     secretName: mysql-scheduled-auth
@@ -157,6 +153,143 @@ spec:
   version: 8
 status:
   phase: Running
+```
+
+## Customizing `backupSchedule`
+
+You can customize pod template spec and volume claim spec for the backup jobs by customizing `backupSchedule` section.
+
+Some common customization examples are shown below:
+
+**Specify PVC Template:**
+
+Backup jobs use temporary storage to hold `dump` files before it can be uploaded to cloud backend. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates a PVC with similar specification for backup job. However, if you want to specify a custom PVC template, you can do it through `spec.backupSchedule.podVolumeClaimSpec` field. This is particularly helpful when you want to use different `storageclass` for backup jobs and the database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: mysql-scheduled
+  namespace: demo
+spec:
+  version: "8.0-v2"
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: my-snap-secret
+    gcs:
+      bucket: kubedb
+    podVolumeClaimSpec:
+      storageClassName: "standard"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi # make sure size is larger or equal than your database size
+```
+
+**Specify Resources for Backup Jobs:**
+
+You can specify resources for backup jobs through `spec.backupSchedule.podTemplate.spec.resources` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: mysql-scheduled
+  namespace: demo
+spec:
+  version: "8.0-v2"
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: my-snap-secret
+    gcs:
+      bucket: kubedb
+    podTemplate:
+      spec:
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+```
+
+**Provide Annotations for Backup Jobs:**
+
+If you need to add some annotations to backup jobs, you can specify those in `spec.backupSchedule.podTemplate.controller.annotations`. You can also specify annotations for the pod created by backup jobs in `spec.backupSchedule.podTemplate.annotations` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: mysql-scheduled
+  namespace: demo
+spec:
+  version: "8.0-v2"
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: my-snap-secret
+    gcs:
+      bucket: kubedb
+    podTemplate:
+      annotations:
+        passMe: ToBackupJobPod
+      controller:
+        annotations:
+          passMe: ToBackupJob
+```
+
+**Pass Arguments to Backup Jobs:**
+
+KubeDB allows users to pass extra arguments for backup jobs. You can provide these arguments via `spec.backupSchedule.podTemplate.spec.args` field of a Snapshot crd.
+
+```yaml
+
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  name: mysql-scheduled
+  namespace: demo
+spec:
+  version: "8.0-v2"
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  backupSchedule:
+    cronExpression: "@every 1m"
+    storageSecretName: my-snap-secret
+    gcs:
+      bucket: kubedb
+    podTemplate:
+      spec:
+        args:
+        - --extra-args-to-backup-command
 ```
 
 ## Cleaning up

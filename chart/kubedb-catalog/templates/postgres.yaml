@@ -138,7 +138,7 @@ spec:
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.7"
   tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6-v2"
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6-v3"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -157,7 +157,7 @@ spec:
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.7"
   tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7-v2"
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:9.6.7-v3"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -176,7 +176,7 @@ spec:
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.7"
   tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2-v2"
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:10.2-v3"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1

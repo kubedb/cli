@@ -9,8 +9,8 @@ menu:
 menu_name: docs_0.9.0
 section_menu_id: guides
 ---
-> New to KubeDB? Please start [here](/docs/concepts/README.md).
 
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
 > Don't know how to take continuous backup?  Check [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
 # PostgreSQL Initialization from WAL files
@@ -28,11 +28,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
-
-$ kubectl get ns demo
-NAME    STATUS  AGE
-demo    Active  5s
+namespace/demo created
 ```
 
 ## Prepare WAL Archive
@@ -109,7 +105,7 @@ metadata:
   name: replay-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   replicas: 2
   databaseSecret:
     secretName: wal-postgres-auth
@@ -132,8 +128,14 @@ Here,
 
 - `spec.init.postgresWAL` specifies storage information that will be used by `wal-g`
   - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-  - `s3.bucket` points to the bucket name used to store continuous archiving data.
-  - `s3.prefix` points to the path where archived WAL data is stored.
+  - `s3` points to s3 storage configuration.
+  - `s3.bucket` points to the bucket name where archived WAL data is stored.
+  - `s3.prefix` points to the path of archived WAL data.
+  - `gcs` points to GCS storage configuration.
+  - `gcs.bucket` points to the bucket name where archived WAL data is stored.
+  - `gcs.prefix` points to the path of archived WAL data..
+
+User can use either s3 or gcs WAL archiver for init.
 
 **wal-g** receives archived WAL data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
 
@@ -201,10 +203,10 @@ So, we can see that our new database `replay-postgres` has been initialized succ
 To cleanup the Kubernetes resources created by this tutorial, run:
 
 ```console
-$ kubectl patch -n demo pg/replay-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
-$ kubectl delete -n demo pg/replay-postgres
+kubectl patch -n demo pg/replay-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+kubectl delete -n demo pg/replay-postgres
 
-$ kubectl delete ns demo
+kubectl delete ns demo
 ```
 
 Also cleanup the resources created for `wal-postgres` following the guide [here](/docs/guides/postgres/snapshot/continuous_archiving.md#cleaning-up).

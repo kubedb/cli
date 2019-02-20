@@ -1,0 +1,19 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Elasticsearch
+spec:
+  databaseName: infant-elasticsearch
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size

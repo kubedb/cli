@@ -1,0 +1,21 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Elasticsearch
+spec:
+  databaseName: infant-elasticsearch
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"

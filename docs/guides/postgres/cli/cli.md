@@ -48,11 +48,11 @@ To learn about various options of `create` command, please visit [here](/docs/re
 
 ```console
 $ kubedb get postgres
-NAME            STATUS    AGE
-postgres-demo   Running   5h
-postgres-dev    Running   4h
-postgres-prod   Running   30m
-postgres-qa     Running   2h
+NAME            VERSION   STATUS    AGE
+postgres-demo   9.6-v2    Running   13m
+postgres-dev    9.6-v2    Running   11m
+postgres-prod   9.6-v2    Running   11m
+postgres-qa     9.6-v2    Running   10m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -67,7 +67,7 @@ metadata:
 spec:
   databaseSecret:
     secretName: postgres-demo-auth
-  version: "9.6"
+  version: "9.6-v2"
 status:
   creationTime: 2017-12-12T05:46:16Z
   phase: Running
@@ -76,7 +76,7 @@ status:
 To get JSON of an object, use `--output=json` flag.
 
 ```console
-$ kubedb get postgres postgres-demo --output=json
+kubedb get postgres postgres-demo --output=json
 ```
 
 To list all KubeDB objects, use following command:
@@ -104,7 +104,6 @@ Flag `--output=wide` is used to print additional information.
 List command supports short names for each object types. You can use it like `kubedb get <short-name>`. Below are the short name for KubeDB objects:
 
 - Postgres: `pg`
-- Elasticsearch: `es`
 - Snapshot: `snap`
 - DormantDatabase: `drmn`
 
@@ -112,7 +111,6 @@ You can print labels with objects. The following command will list all Snapshots
 
 ```console
 $ kubedb get snap --show-labels
-
 NAME                            DATABASE                STATUS      AGE       LABELS
 postgres-demo-20170605-073557   pg/postgres-demo        Succeeded   11m       kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 snapshot-20171212-114700        pg/postgres-demo        Succeeded   1h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
@@ -123,7 +121,6 @@ You can also filter list using `--selector` flag.
 
 ```console
 $ kubedb get snap --selector='kubedb.com/kind=Postgres' --show-labels
-
 NAME                            DATABASE           STATUS      AGE       LABELS
 postgres-demo-20171212-073557   pg/postgres-demo   Succeeded   14m       kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
 snapshot-20171212-114700        pg/postgres-demo   Succeeded   2h        kubedb.com/kind=Postgres,kubedb.com/name=postgres-demo
@@ -133,8 +130,6 @@ To print only object name, run the following command:
 
 ```console
 $ kubedb get all -o name
-
-elasticsearch/elasticsearch-demo
 postgres/postgres-demo
 postgres/postgres-dev
 postgres/postgres-prod
@@ -212,32 +207,30 @@ Events:
 - Snapshots (If any)
 - Monitoring system (If available)
 
-To hide details about StatefulSet & Service, use flag `--show-workload=false`
-To hide details about Secret, use flag `--show-secret=false`
 To hide events on KubeDB object, use flag `--show-events=false`
 
 To describe all Postgres objects in `default` namespace, use following command
 
 ```console
-$ kubedb describe pg
+kubedb describe pg
 ```
 
 To describe all Postgres objects from every namespace, provide `--all-namespaces` flag.
 
 ```console
-$ kubedb describe pg --all-namespaces
+kubedb describe pg --all-namespaces
 ```
 
 To describe all KubeDB objects from every namespace, use the following command:
 
 ```console
-$ kubedb describe all --all-namespaces
+kubedb describe all --all-namespaces
 ```
 
 You can also describe KubeDb objects with matching labels. The following command will describe all Elasticsearch & Postgres objects with specified labels from every namespace.
 
 ```console
-$ kubedb describe pg,es --all-namespaces --selector='group=dev'
+kubedb describe pg,es --all-namespaces --selector='group=dev'
 ```
 
 To learn about various options of `describe` command, please visit [here](/docs/reference/kubedb_describe.md).
@@ -252,8 +245,8 @@ Lets edit an existing running Postgres object to setup [Scheduled Backup](/docs/
 $ kubedb edit pg postgres-demo
 
 # Add following under Spec to configure periodic backups
-#  backupSchedule:
-#    cronExpression: "@every 6h"
+# backupSchedule:
+#    cronExpression: "@every 2m"
 #    storageSecretName: "secret-name"
 #   gcs:
 #      bucket: "bucket-name"
@@ -269,28 +262,16 @@ Various fields of a KubeDb object can't be edited using `edit` command. The foll
 - _kind_
 - _metadata.name_
 - _metadata.namespace_
-- _status_
 
 If StatefulSets or Deployments exists for a database, following fields can't be modified as well.
 
-Postgres:
-
-- _spec.version_
 - _spec.standby_
 - _spec.streaming_
 - _spec.archiver_
 - _spec.databaseSecret_
 - _spec.storageType_
 - _spec.storage_
-- _spec.nodeSelector_
-- _spec.init_
-
-Elasticsearch:
-
-- _spec.version_
-- _spec.storageType_
-- _spec.storage_
-- _spec.nodeSelector_
+- _spec.podTemplate.spec.nodeSelector_
 - _spec.init_
 
 For DormantDatabase, _spec.origin_ can't be edited using `kubedb edit`
@@ -303,7 +284,6 @@ To learn about various options of `edit` command, please visit [here](/docs/refe
 
 ```console
 $ kubedb delete postgres postgres-dev
-
 postgres "postgres-dev" deleted
 ```
 
@@ -311,7 +291,6 @@ You can also use YAML files to delete objects. The following command will delete
 
 ```console
 $ kubedb delete -f postgres.yaml
-
 postgres "postgres-dev" deleted
 ```
 
@@ -324,7 +303,7 @@ cat postgres.yaml | kubedb delete -f -
 To delete database with matching labels, use `--selector` flag. The following command will delete postgres with label `postgres.kubedb.com/name=postgres-demo`.
 
 ```console
-$ kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
+kubedb delete postgres -l postgres.kubedb.com/name=postgres-demo
 ```
 
 To learn about various options of `delete` command, please visit [here](/docs/reference/kubedb_delete.md).
@@ -334,6 +313,9 @@ To learn about various options of `delete` command, please visit [here](/docs/re
 You can use Kubectl with KubeDB objects like any other CRDs. Below are some common examples of using Kubectl with KubeDB objects.
 
 ```console
+# Create objects
+$ kubectl create -f
+
 # List objects
 $ kubectl get postgres
 $ kubectl get postgres.kubedb.com

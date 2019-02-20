@@ -57,6 +57,11 @@ func (m MongoDB) GoverningServiceName() string {
 	return m.OffshootName() + "-gvr"
 }
 
+// Snapshot service account name.
+func (m MongoDB) SnapshotSAName() string {
+	return fmt.Sprintf("%v-snapshot", m.OffshootName())
+}
+
 // HostAddress returns serviceName for standalone mongodb.
 // and, for replica set = <replName>/<host1>,<host2>,<host3>
 // Here, host1 = <pod-name>.<governing-serviceName>
@@ -86,8 +91,8 @@ func (r mongoDBApp) Type() appcat.AppType {
 	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularMongoDB))
 }
 
-func (r MongoDB) AppBindingMeta() appcat.AppBindingMeta {
-	return &mongoDBApp{&r}
+func (m MongoDB) AppBindingMeta() appcat.AppBindingMeta {
+	return &mongoDBApp{&m}
 }
 
 type mongoDBStatsService struct {

@@ -27,7 +27,7 @@ To keep things isolated, this tutorial uses a separate namespace called `demo` t
 
 ```console
 $ kubectl create ns demo
-namespace "demo" created
+namespace/demo created
 
 $ kubectl get ns demo
 NAME    STATUS  AGE
@@ -58,7 +58,7 @@ spec:
   databaseName: script-postgres
   storageSecretName: gcs-secret
   gcs:
-    bucket: kubedb
+    bucket: kubedb-qa
 ```
 
 Here,
@@ -78,10 +78,10 @@ Storage Secret should contain credentials that will be used to access storage de
 
 For GCS bucket, a storage Secret require to have following 2 keys:
 
-| Key                               | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID                        |
-| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key          |
+|                Key                |                    Description                    |
+| --------------------------------- | ------------------------------------------------- |
+| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID               |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key |
 
 ```console
 $ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
@@ -116,10 +116,10 @@ KubeDB supports various cloud providers (_S3_, _GCS_, _Azure_, _OpenStack_ _Swif
 
 To configure this backend, following parameters are available:
 
-| Parameter                | Description                                                                     |
-|--------------------------|---------------------------------------------------------------------------------|
-| `spec.gcs.bucket`        | `Required`. Name of bucket                                                      |
-| `spec.gcs.prefix`        | `Optional`. Path prefix into bucket where snapshot data will be stored          |
+|     Parameter     |                              Description                               |
+| ----------------- | ---------------------------------------------------------------------- |
+| `spec.gcs.bucket` | `Required`. Name of bucket                                             |
+| `spec.gcs.prefix` | `Optional`. Path prefix into bucket where snapshot data will be stored |
 
 To learn how to configure other storage destinations for snapshot data, please visit [here](/docs/concepts/snapshot.md).
 
@@ -260,9 +260,9 @@ Topology:
   primary  script-postgres-0  2018-09-04 11:55:32 +0600 +06  Running
 
 Snapshots:
-  Name              Bucket     StartTime                        CompletionTime                   Phase
-  ----              ------     ---------                        --------------                   -----
-  instant-snapshot  gs:kubedb  Tue, 04 Sep 2018 12:10:54 +0600  Tue, 04 Sep 2018 12:11:45 +0600  Succeeded
+  Name              Bucket        StartTime                        CompletionTime                   Phase
+  ----              ------        ---------                        --------------                   -----
+  instant-snapshot  gs:kubedb-qa  Tue, 04 Sep 2018 12:10:54 +0600  Tue, 04 Sep 2018 12:11:45 +0600  Succeeded
 
 Events:
   Type    Reason              Age   From               Message
@@ -284,6 +284,114 @@ If you want to delete snapshot data from storage, you can delete Snapshot object
 ```console
 $ kubectl delete snap -n demo instant-snapshot
 snapshot "instant-snapshot" deleted
+```
+
+## Customizing Snapshot
+
+You can customize pod template spec and volume claim spec for backup and restore jobs. For details options read [this doc](/docs/concepts/snapshot.md).
+
+Some common customization examples are shown below:
+
+**Specify PVC Template:**
+
+Backup and recovery jobs use temporary storage to hold `dump` files before it can be uploaded to cloud backend or restored into database. By default, KubeDB reads storage specification from `spec.storage` section of database crd and creates a PVC with similar specification for backup or recovery job. However, if you want to specify a custom PVC template, you can do it via `spec.podVolumeClaimSpec` field of Snapshot crd. This is particularly helpful when you want to use different `storageclass` for backup or recovery jobs and the database.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: script-postgres
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podVolumeClaimSpec:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi # make sure size is larger or equal than your database size
+```
+
+**Specify Resources for Backup/Recovery Jobs:**
+
+You can specify resources for backup or recovery jobs using `spec.podTemplate.spec.resources` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: script-postgres
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podTemplate:
+    spec:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+```
+
+**Provide Annotations for Backup/Recovery Jobs:**
+
+If you need to add some annotations to backup or recovery jobs, you can specify those in `spec.podTemplate.controller.annotations`. You can also specify annotations for the pod created by backup or recovery jobs through `spec.podTemplate.annotations` field.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: script-postgres
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podTemplate:
+    annotations:
+      passMe: ToBackupJobPod
+    controller:
+      annotations:
+        passMe: ToBackupJob
+```
+
+**Pass Arguments to Backup/Recovery Job:**
+
+KubeDB allows users to pass extra arguments for backup or recovery jobs. You can provide these arguments through `spec.podTemplate.spec.args` field of Snapshot crd.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Snapshot
+metadata:
+  name: instant-snapshot
+  namespace: demo
+  labels:
+    kubedb.com/kind: Postgres
+spec:
+  databaseName: script-postgres
+  storageSecretName: gcs-secret
+  gcs:
+    bucket: kubedb-qa
+  podTemplate:
+    spec:
+      args:
+      - --extra-args-to-backup-command
 ```
 
 ## Cleaning up

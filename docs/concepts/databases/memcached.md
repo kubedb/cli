@@ -42,10 +42,10 @@ spec:
     configMap:
       name: mc-custom-config
   podTemplate:
-    annotation:
+    annotations:
       passMe: ToDatabasePod
     controller:
-      annotation:
+      annotations:
         passMe: ToDeployment
     spec:
       schedulerName: my-scheduler
@@ -66,7 +66,7 @@ spec:
           memory: "128Mi"
           cpu: "500m"
   serviceTemplate:
-    annotation:
+    annotations:
       passMe: ToService
     spec:
       type: NodePort

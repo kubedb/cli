@@ -25,7 +25,7 @@ KubeDB supports providing custom configuration for Redis. This tutorial will sho
 
   ```console
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
   
   $ kubectl get ns demo
   NAME    STATUS  AGE

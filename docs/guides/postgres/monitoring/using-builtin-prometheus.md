@@ -33,7 +33,7 @@ This tutorial will show you how to monitor PostgreSQL database using builtin [Pr
   namespace/monitoring created
 
   $ kubectl create ns demo
-  namespace "demo" created
+  namespace/demo created
   ```
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
@@ -49,7 +49,7 @@ metadata:
   name: builtin-prom-postgres
   namespace: demo
 spec:
-  version: "9.6-v1"
+  version: "9.6-v2"
   terminationPolicy: WipeOut
   storage:
     storageClassName: "standard"
@@ -78,7 +78,7 @@ Now, wait for the database to go into `Running` state.
 ```console
 $ kubectl get pg -n demo builtin-prom-postgres
 NAME                    VERSION   STATUS    AGE
-builtin-prom-postgres   9.6-v1    Running   1m
+builtin-prom-postgres   9.6-v2    Running   1m
 ```
 
 KubeDB will create a separate stats service with name `{PostgreSQL crd name}-stats` for monitoring purpose.
