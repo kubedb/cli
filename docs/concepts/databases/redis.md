@@ -97,22 +97,20 @@ spec:
 
 ### spec.mode
 
-`spec.mode` specifies the mode in which Redis server instance(s) will be deployed. The value of `mode` is either `"Standalone"` or `"Cluster"`. If it is used by the user, it must be one of these two values. The default value is `"Standalone"`.
+`spec.mode` specifies the mode in which Redis server instance(s) will be deployed. The possible values are either `"Standalone"` or `"Cluster"`. The default value is `"Standalone"`.
 
-- ***Standalone***: This field tells the operator to start Redis server in standalone mode. That means a single server is deployed.
+- ***Standalone***: In this mode, the operator to starts a standalone Redis server.
 
-- ***Cluster***: If the value is `"Cluster"`, the operator will deploy Redis server instances in cluster mode.
+- ***Cluster***: In this mode, the operator will deploy Redis cluster.
 
 ### spec.cluster
 
-If `spec.mode` is set to `"Cluster"`, a cluster specification is needed. If `spec.cluster` is not set but `spec.mode` is set to `"Cluster"`, then the operator will set default cluster specifications. Currently, it has the following two fields:
+If `spec.mode` is set to `"Cluster"`, users can optionally provide a cluster specification. Currently, the following two parameters can be configured:
 
-- `spec.cluster.master`: Specifies the number of Redis master nodes. It must be greater or equal to 3. If not set, the operator set it to 3.
-- `spec.cluster.replicas`: Specifies the number of slave nodes per master. It must be greater than 0. If not set, the operator set it to 1.
+- `spec.cluster.master`: specifies the number of Redis master nodes. It must be greater or equal to 3. If not set, the operator set it to 3.
+- `spec.cluster.replicas`: specifies the number of replica nodes per master. It must be greater than 0. If not set, the operator set it to 1.
 
-So, after filling this field, the operator will deploy a cluster with `spec.cluster.master` masters and each of the masters has exactly `spec.cluster.replicas` replica(s).
-
-> If `spec.mode` is set to `"Cluster"`, then `spec.replicas` has no significance.
+> If `spec.mode` is set to `"Cluster"`, then `spec.replicas` field is ignored.
 
 ### spec.storage
 

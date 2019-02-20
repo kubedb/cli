@@ -1,6 +1,4 @@
 ---
-
-
 title: Redis Cluster Guide
 menu:
   docs_0.9.0:
@@ -16,13 +14,13 @@ section_menu_id: guides
 
 # KubeDB - Redis Cluster
 
-This tutorial will show you how to use KubeDB to run a Redis cluster.
+This tutorial will show you how to use KubeDB to provision a Redis cluster.
 
 ## Before You Begin
 
 Before proceeding:
 
-- Read [redis clustering concept](/docs/guides/redis/clustering/redis_clustering_concept.md) to learn about Redis clustering.
+- Read [redis clustering concept](/docs/guides/redis/clustering/overview.md) to learn about Redis clustering.
 
 - You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -39,9 +37,9 @@ Before proceeding:
 
 ## Deploy Redis Cluster
 
-To deploy a Redis Cluster, user has to specify `spec.mode` and `spec.cluster` options in `Redis` CRD.
+To deploy a Redis Cluster, specify `spec.mode` and `spec.cluster` fields in `Redis` CRD.
 
-The following is an example `Redis` object which creates a Redis cluster of three master nodes each of which has one slave node.
+The following is an example `Redis` object which creates a Redis cluster with three master nodes each of which has one replica node.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -75,10 +73,10 @@ redis.kubedb.com/redis-cluster created
 
 Here,
 
-- `spec.mode` specifies the mode for Redis. Here we have used `Cluster` as value to tell the operator that we want to deploy Redis in cluster mode.
+- `spec.mode` specifies the mode for Redis. Here we have used `Cluster` to tell the operator that we want to deploy Redis in cluster mode.
 - `spec.cluster` represents the cluster configuration.
   - `master` denotes the number of master nodes.
-  - `replicas` denotes the number of slave nodes per master.
+  - `replicas` denotes the number of replica nodes per master.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. So, each members will have a pod of this storage configuration. You can specify any StorageClass available in your cluster with appropriate resource requests.
 
 KubeDB operator watches for `Redis` objects using Kubernetes API. When a `Redis` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching Redis object name. KubeDB operator will also create a governing service for StatefulSets with the name `<redis-name>-gvr`. No Redis specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
@@ -237,7 +235,7 @@ status:
 
 ## Check Cluster Scenario
 
-The operator creates a cluster according to the newly created Redis` object. This cluster has 3 masters and one slave per master. And every node in the cluster is responsible for a subset of a total of **16384** hash slots. Check:
+The operator creates a cluster according to the newly created `Redis` object. This cluster has 3 masters and one replica per master. And every node in the cluster is responsible for a subset of the total **16384** hash slots.
 
 ```console
 # first list the redis pods list
@@ -254,14 +252,14 @@ $ kubectl exec -it redis-cluster-shard0-0 -n demo -c redis -- sh
 /data #
 
 # now inside this container, see which ones are the masters
-# which ones are the slaves
+# which ones are the replicas
 /data # redis-cli -c cluster nodes
 e49d748b815db355f29e670ba62b669627384273 172.17.0.10:6379@16379 master - 0 1550585018746 2 connected 5461-10922
 0cfa026b921bd07c36a95734edf5ccd73cda5d50 172.17.0.12:6379@16379 master - 0 1550585019750 3 connected 10923-16383
-e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 slave e49d748b815db355f29e670ba62b669627384273 0 1550585018540 2 connected
+e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 replica e49d748b815db355f29e670ba62b669627384273 0 1550585018540 2 connected
 37ae24f6f2442cefc34fc5d3c678b2aff8f13d26 172.17.0.4:6379@16379 myself,master - 0 1550585019000 1 connected 0-5460
-4136ea1a767fd26d76ad7f8066d7eab994850048 172.17.0.8:6379@16379 slave 37ae24f6f2442cefc34fc5d3c678b2aff8f13d26 0 1550585018540 1 connected
-981f26c1e2d16f56109ca74ee79aaa5cd5e62a79 172.17.0.13:6379@16379 slave 0cfa026b921bd07c36a95734edf5ccd73cda5d50 0 1550585019000 3 connected
+4136ea1a767fd26d76ad7f8066d7eab994850048 172.17.0.8:6379@16379 replica 37ae24f6f2442cefc34fc5d3c678b2aff8f13d26 0 1550585018540 1 connected
+981f26c1e2d16f56109ca74ee79aaa5cd5e62a79 172.17.0.13:6379@16379 replica 0cfa026b921bd07c36a95734edf5ccd73cda5d50 0 1550585019000 3 connected
 ```
 
 - redis-cluster-shard0-0
@@ -271,7 +269,7 @@ e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 slave e49d748b81
   - `slot` 0-5460
 - redis-cluster-shard0-1
   - `ip` 172.17.0.8:6379
-  - `role` slave
+  - `role` replica
   - `node-id` 4136ea1a767fd26d76ad7f8066d7eab994850048
 - redis-cluster-shard1-0
   - `ip` 172.17.0.10:6379
@@ -280,7 +278,7 @@ e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 slave e49d748b81
   - `slot` 5461-10922
 - redis-cluster-shard1-1
   - `ip` 172.17.0.11:6379
-  - `role` slave
+  - `role` replica
   - `node-id` e425958b07698cc69e62e0f2c94f5951155cbe71
 - redis-cluster-shard2-0
   - `ip` 172.17.0.12:6379
@@ -289,14 +287,14 @@ e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 slave e49d748b81
   - `slot` 5461-10922
 - redis-cluster-shard2-1
   - `ip` 172.17.0.13:6379
-  - `role` slave
+  - `role` replica
   - `node-id` 981f26c1e2d16f56109ca74ee79aaa5cd5e62a79
 
-Every slave node will serve for the same hash slot as its master.
+Every replica node will serve for the same hash slot as its master.
 
 ## Data Availability
 
-Now, you can connect to this database through [redis-cli](https://redis.io/topics/rediscli). In this tutorial, we will insert data, and we will see whether we can get the data from any other node (any master or slave) or not.
+Now, you can connect to this database through [redis-cli](https://redis.io/topics/rediscli). In this tutorial, we will insert data, and we will see whether we can get the data from any other node (any master or replica) or not.
 
 > Read the comment written for the following commands. They contain the instructions and explanations of the commands.
 
@@ -319,7 +317,7 @@ kubectl exec -it redis-cluster-shard0-0 -n demo -c redis -- sh
 OK
 172.17.0.4:6379> exit
 
-# switch the connection to the slave of the current master and get the data
+# switch the connection to the replica of the current master and get the data
 /data # redis-cli -c -h 172.17.0.8
 172.17.0.8:6379> get hello
 -> Redirected to slot [866] located at 172.17.0.4:6379
@@ -337,7 +335,7 @@ OK
 
 ## Automatic Failover
 
-To test automatic failover, we will force a master node to restart. Since the master node (`pod`) becomes unavailable, its slave (one of its slave in case of more than one slave under this master) the rest of the members will elect a slave of this master node as the new master. When the old master comes back, it will join the cluster as the new slave of the new master.
+To test automatic failover, we will force a master node to restart. Since the master node (`pod`) becomes unavailable, the rest of the members will elect a replica (one of its replica in case of more than one replica under this master) of this master node as the new master. When the old master comes back, it will join the cluster as the new replica of the new master.
 
 > Read the comment written for the following commands. They contain the instructions and explanations of the commands.
 
@@ -361,17 +359,17 @@ e49d748b815db355f29e670ba62b669627384273 172.17.0.10:6379@16379 master - 0 15505
 0cfa026b921bd07c36a95734edf5ccd73cda5d50 172.17.0.12:6379@16379 master - 0 1550589881000 3 connected 10923-16383
 
 /data # redis-cli -c cluster nodes
-e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 slave e49d748b815db355f29e670ba62b669627384273 0 1550590186590 2 connected
+e425958b07698cc69e62e0f2c94f5951155cbe71 172.17.0.11:6379@16379 replica e49d748b815db355f29e670ba62b669627384273 0 1550590186590 2 connected
 e49d748b815db355f29e670ba62b669627384273 172.17.0.10:6379@16379 master - 0 1550590186990 2 connected 5461-10922
-981f26c1e2d16f56109ca74ee79aaa5cd5e62a79 172.17.0.13:6379@16379 slave 0cfa026b921bd07c36a95734edf5ccd73cda5d50 0 1550590186000 3 connected
-37ae24f6f2442cefc34fc5d3c678b2aff8f13d26 172.17.0.4:6379@16379 myself,slave 4136ea1a767fd26d76ad7f8066d7eab994850048 0 1550590185000 1 connected
+981f26c1e2d16f56109ca74ee79aaa5cd5e62a79 172.17.0.13:6379@16379 replica 0cfa026b921bd07c36a95734edf5ccd73cda5d50 0 1550590186000 3 connected
+37ae24f6f2442cefc34fc5d3c678b2aff8f13d26 172.17.0.4:6379@16379 myself,replica 4136ea1a767fd26d76ad7f8066d7eab994850048 0 1550590185000 1 connected
 4136ea1a767fd26d76ad7f8066d7eab994850048 172.17.0.8:6379@16379 master - 0 1550590184585 4 connected 0-5460
 0cfa026b921bd07c36a95734edf5ccd73cda5d50 172.17.0.12:6379@16379 master - 0 1550590186000 3 connected 10923-16383
 
 /data # exit
 ```
 
-Notice that 172.17.0.8 is the new master and  172.17.0.4 is the slave of  172.17.0.8.
+Notice that 172.17.0.8 is the new master and  172.17.0.4 is the replica of  172.17.0.8.
 
 ## Cleaning up
 
@@ -400,7 +398,7 @@ redis.kubedb.com "redis-cluster" deleted
 
 - Monitor your Redis database with KubeDB using [out-of-the-box CoreOS Prometheus Operator](/docs/guides/redis/monitoring/using-coreos-prometheus-operator.md).
 - Monitor your Redis database with KubeDB using [out-of-the-box builtin-Prometheus](/docs/guides/redis/monitoring/using-builtin-prometheus.md).
-- Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy MongoDB with KubeDB.
+- Use [private Docker registry](/docs/guides/redis/private-registry/using-private-registry.md) to deploy Redis with KubeDB.
 - Detail concepts of [Redis object](/docs/concepts/databases/redis.md).
 - Detail concepts of [RedisVersion object](/docs/concepts/catalog/redis.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).

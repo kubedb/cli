@@ -1,9 +1,9 @@
 ---
-title: Redis Cluster Concept
+title: Redis Cluster Overview
 menu:
   docs_0.9.0:
-    identifier: rd-clustering-concept
-    name: Clustering Concept
+    identifier: rd-clustering-overview
+    name: Overview
     parent: rd-clustering-redis
     weight: 10
 menu_name: docs_0.9.0
@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Redis Cluster
 
-Redis Cluster provides a way to partition data among multiple master nodes (data sharding) and ensures data availability. Each of the master nodes may have its own replicas. The cluster member nodes (both masters and slaves) detect failures via internal interconnection among themselves. When a majority of nodes agree with the failure of a master node, one of the slaves of the failed master node is promoted to the new master.
+Redis Cluster provides a way to partition data among multiple master nodes (data sharding) and ensures data availability. Each of the master nodes may have its own replicas. The cluster member nodes (both masters and replicas) detect failures via internal interconnection among themselves. When a majority of nodes agree with the failure of a master node, one of the replicas of the failed master node is promoted to the new master.
 
 So basically it is a group of multiple Redis nodes where data is **automatically sharded across multiple Redis nodes**. And it also provides **some degree of availability during partitions**, that is in practical terms the ability to continue the operations when some nodes fail or are not able to communicate. However, the cluster stops to operate in the event of larger failures (for example when the majority of masters are unavailable).
 
@@ -23,7 +23,7 @@ So in practical terms, what do you get with Redis Cluster?
 - The ability to **automatically split your dataset among multiple nodes**.
 - The ability to **continue operations when a subset of the nodes are experiencing failures** or are unable to communicate with the rest of the cluster. See the [reference](https://redis.io/topics/cluster-tutorial#redis-cluster-101).
 
-![redis-cluster](../../../images/redis/redis-cluster.png)
+![redis-cluster](/docs/images/redis/redis-cluster.png)
 
 > Image reference [here](https://redislabs.com/redis-features/redis-cluster).
 
@@ -66,7 +66,7 @@ Reference: https://redis.io/topics/cluster-tutorial#redis-cluster-data-sharding
 
 ## Redis Cluster master-slave model
 
-In order to ensure availability when a subset of master nodes are failing or are not able to communicate with the majority of nodes, Redis Cluster uses a master-slave model where every hash slot has from 1 (the master itself) to N replicas (N-1 additional slaves nodes).
+In order to ensure availability when a subset of master nodes are failing or are not able to communicate with the majority of nodes, Redis Cluster uses a master-slave model where every hash slot has from 1 (the master itself) to N replicas (N-1 additional replicas nodes).
 
 In our example cluster with nodes A, B, C, if node B fails the cluster is not able to continue since we no longer have a way to serve hash slots in the range 5501-11000.
 
@@ -86,9 +86,9 @@ The first reason why Redis Cluster can lose writes because it uses asynchronous 
 
 - Your client writes to the master B.
 - The master B replies OK to your client.
-- The master B propagates the write to its slaves B1, B2, and B3.
+- The master B propagates the write to its replicas B1, B2, and B3.
 
-As you can see B does not wait for an acknowledge from B1, B2, B3 before replying to the client, since this would be a prohibitive latency penalty for Redis, so if your client writes something, B acknowledges the write, but crashes before being able to send the write to its slaves, one of the slaves (that did not receive the write) can be promoted to master, losing the write forever.
+As you can see B does not wait for an acknowledge from B1, B2, B3 before replying to the client, since this would be a prohibitive latency penalty for Redis, so if your client writes something, B acknowledges the write, but crashes before being able to send the write to its replicas, one of the replicas (that did not receive the write) can be promoted to master, losing the write forever.
 
 This is **very similar to what happens** with most databases that are configured to flush data to disk every second, so it is a scenario you are already able to reason about because of past experiences with traditional database systems not involving distributed systems. Similarly, you can improve consistency by forcing the database to flush data on disk before replying to the client, but this usually results in prohibitively low performance. That would be the equivalent of synchronous replication in the case of Redis Cluster.
 
@@ -98,7 +98,7 @@ Redis Cluster has support for synchronous writes when absolutely needed, impleme
 
 There is another notable scenario where Redis Cluster will lose writes, that happens during a network partition where a client is isolated with a minority of instances including at least a master.
 
-Take as an example our 6 nodes cluster composed of A, B, C, A1, B1, C1, with 3 masters and 3 slaves. There is also a client, that we will call Z1.
+Take as an example our 6 nodes cluster composed of A, B, C, A1, B1, C1, with 3 masters and 3 replicas. There is also a client, that we will call Z1.
 
 After a partition occurs, it is possible that on one side of the partition we have A, C, A1, B1, C1, and on the other side, we have B and Z1.
 
@@ -112,9 +112,9 @@ We are about to create an example cluster deployment. Before we continue, let's 
 
 - **cluster-enabled <yes/no>**: If yes enables Redis Cluster support in a specific Redis instance. Otherwise the instance starts as a stand alone instance as usual.
 - **cluster-config-file <filename>**: Note that despite the name of this option, this is not an user editable configuration file, but the file where a Redis Cluster node automatically persists the cluster configuration (the state, basically) every time there is a change, in order to be able to re-read it at startup. The file lists things like the other nodes in the cluster, their state, persistent variables, and so forth. Often this file is rewritten and flushed on disk as a result of some message reception.
-- **cluster-node-timeout <milliseconds>**: The maximum amount of time a Redis Cluster node can be unavailable, without it being considered as failing. If a master node is not reachable for more than the specified amount of time, it will be failed over by its slaves. This parameter controls other important things in Redis Cluster. Notably, every node that can't reach the majority of master nodes for the specified amount of time, will stop accepting queries.
+- **cluster-node-timeout <milliseconds>**: The maximum amount of time a Redis Cluster node can be unavailable, without it being considered as failing. If a master node is not reachable for more than the specified amount of time, it will be failed over by its replicas. This parameter controls other important things in Redis Cluster. Notably, every node that can't reach the majority of master nodes for the specified amount of time, will stop accepting queries.
 - **cluster-slave-validity-factor <factor>**: If set to zero, a slave will always try to failover a master, regardless of the amount of time the link between the master and the slave remained disconnected. If the value is positive, a maximum disconnection time is calculated as the *node timeout* value multiplied by the factor provided with this option, and if the node is a slave, it will not try to start a failover if the master link was disconnected for more than the specified amount of time. For example if the node timeout is set to 5 seconds, and the validity factor is set to 10, a slave disconnected from the master for more than 50 seconds will not try to failover its master. Note that any value different than zero may result in Redis Cluster to be unavailable after a master failure if there is no slave able to failover it. In that case the cluster will return back available only when the original master rejoins the cluster.
-- **cluster-migration-barrier <count>**: Minimum number of slaves a master will remain connected with, for another slave to migrate to a master which is no longer covered by any slave. See the appropriate section about replica migration in this tutorial for more information.
+- **cluster-migration-barrier <count>**: Minimum number of replicas a master will remain connected with, for another slave to migrate to a master which is no longer covered by any slave. See the appropriate section about replica migration in this tutorial for more information.
 - **cluster-require-full-coverage <yes/no>**: If this is set to yes, as it is by default, the cluster stops accepting writes if some percentage of the key space is not covered by any node. If the option is set to no, the cluster will still serve queries even if only requests about a subset of keys can be processed.
 
 Reference: https://redis.io/topics/cluster-tutorial#redis-cluster-configuration-parameters
@@ -125,7 +125,7 @@ For more parameters, see [here](http://download.redis.io/redis-stable/redis.conf
 
 - **Keys distribution model**: The key space is split into 16384 slots, effectively setting an upper limit for the cluster size of 16384 master nodes (however the suggested max size of nodes is in the order of ~ 1000 nodes).
 
-  Each master node in a cluster handles a subset of the 16384 hash slots. The cluster is **stable** when there is no cluster reconfiguration in progress (i.e. where hash slots are being moved from one node to another). When the cluster is stable, a single hash slot will be served by a single node (however the serving node can have one or more slaves that will replace it in the case of net splits or failures, and that can be used in order to scale read operations where reading stale data is acceptable).
+  Each master node in a cluster handles a subset of the 16384 hash slots. The cluster is **stable** when there is no cluster reconfiguration in progress (i.e. where hash slots are being moved from one node to another). When the cluster is stable, a single hash slot will be served by a single node (however the serving node can have one or more replicas that will replace it in the case of net splits or failures, and that can be used in order to scale read operations where reading stale data is acceptable).
 
   Reference: https://redis.io/topics/cluster-spec#keys-distribution-model
 
@@ -160,7 +160,7 @@ For more parameters, see [here](http://download.redis.io/redis-stable/redis.conf
 
   Reference: https://redis.io/topics/cluster-spec#cluster-topology
 
-- Nodes handshake**: Nodes always accept connections on the cluster bus port, and even reply to pings when received, even if the pinging node is not trusted. However, all other packets will be discarded by the receiving node if the sending node is not considered part of the cluster.
+- **Nodes handshake**: Nodes always accept connections on the cluster bus port, and even reply to pings when received, even if the pinging node is not trusted. However, all other packets will be discarded by the receiving node if the sending node is not considered part of the cluster.
 
   A node will accept another node as part of the cluster only in two ways:
 
