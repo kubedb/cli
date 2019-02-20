@@ -15,8 +15,8 @@ import (
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
-// NewKubedbCommand creates the `kubedb` command and its nested children.
-func NewKubedbCommand(in io.Reader, out, err io.Writer) *cobra.Command {
+// NewKubeDBCommand creates the `kubedb` command and its nested children.
+func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	cmds := &cobra.Command{
 		Use:   "kubedb",
 		Short: "Command line interface for KubeDB",

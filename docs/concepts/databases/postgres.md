@@ -142,11 +142,11 @@ spec:
 
 ### spec.leaderElection
 
-There are three fields in Postgres CRD's `spec.LeaderElection`. These values defines how fast the leader election can happen.
+There are three fields under Postgres CRD's `spec.leaderElection`. These values defines how fast the leader election can happen.
 
-- `leaseDurationSeconds`: `LeaseDuration` is the duration in second that non-leader candidates will wait to force acquire leadership. This is measured against time of last observed ack. Default 15
-- `renewDeadlineSeconds`: `RenewDeadline` is the duration in second that the acting master will retry refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3. Default 10
-- `retryPeriodSeconds`: `RetryPeriod` is the duration in second the LeaderElector clients should wait between tries of actions. Normally, LeaseDuration / 3. Default 2
+- `leaseDurationSeconds`: This is the duration in seconds that non-leader candidates will wait to force acquire leadership. This is measured against time of last observed ack. Default 15 sec.
+- `renewDeadlineSeconds`: This is the duration in seconds that the acting master will retry refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3. Default 10 sec.
+- `retryPeriodSeconds`: This is the duration in seconds the LeaderElector clients should wait between tries of actions. Normally, LeaseDuration / 3. Default 2 sec.
 
 If the Cluster machine is powerful, user can reduce the times. But, Do not make it so little, in that case Postgres will restarts very often.
 
@@ -218,7 +218,7 @@ To learn how to configure `spec.storage`, please visit the links below:
   1. Initialize from Script
   2. Initialize from Snapshot
   3. Initialize from WAL archive
-  
+
 #### Initialize via Script
 
 To initialize a PostgreSQL database using a script (shell script, db migrator, etc.), set the `spec.init.scriptSource` section when creating a Postgres object. `scriptSource` must have the following information:
@@ -419,11 +419,11 @@ At least one of the following was changed:
 
 ### spec.serviceTemplate
 
-Kubedb creates two different services for each Postgres. One is `master service` named `<postgres-name>`, to connect the Postgres `Primary` Pod/Node. Another is `replica service` named `<postgres-name>-replicas`, to connect Postgres `replica` Pods/Nodes.
+KubeDB creates two different services for each Postgres instance. One of them is a master service named `<postgres-name>` and points to the Postgres `Primary` pod/node. Another one is a replica service named `<postgres-name>-replicas` and points to Postgres `replica` pods/nodes.
 
-These `master` and `replica` services can be customized using [spec.serviceTemplate](#spec.servicetemplate) and [spec.replicaServiceTemplate](#specreplicaservicetemplate)
+These `master` and `replica` services can be customized using [spec.serviceTemplate](#spec.servicetemplate) and [spec.replicaServiceTemplate](#specreplicaservicetemplate) respectively.
 
-You can provide template for the `master` service using `spec.serviceTemplate`. This will allow you to set the type and other properties of the service. If `spec.serviceTemplate` is not provided, Kubedb will create a `master` service of `ClusterIP` type with minimal settings.
+You can provide template for the `master` service using `spec.serviceTemplate`. This will allow you to set the type and other properties of the service. If `spec.serviceTemplate` is not provided, KubeDB will create a `master` service of type `ClusterIP` with minimal settings.
 
 KubeDB allows following fields to set in `spec.serviceTemplate`:
 
@@ -443,7 +443,7 @@ See [official v1.13 API documentation](https://kubernetes.io/docs/reference/gene
 
 ### spec.replicaServiceTemplate
 
-You can provide template for the `replica` service using `spec.replicaServiceTemplate`. If `spec.replicaServiceTemplate` is not provided, Kubedb will create a `replica Service` of `ClusterIP` type with minimal settings.
+You can provide template for the `replica` service using `spec.replicaServiceTemplate`. If `spec.replicaServiceTemplate` is not provided, KubeDB will create a `replica` service of type `ClusterIP` with minimal settings.
 
 The fileds of `spec.replicaServiceTemplate` is similar to `spec.serviceTemplate`, that is:
 

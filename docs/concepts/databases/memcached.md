@@ -137,7 +137,7 @@ Uses of some field of `spec.podTemplate` is described below,
 
 `spec.env` is an optional field that specifies the environment variables to pass to the Memcached docker image.
 
-Note that, Kubedb does not allow to update the environment variables. If you try to update environment variables, Kubedb operator will reject the request with following error,
+Note that, KubeDB does not allow to update the environment variables. If you try to update environment variables, KubeDB operator will reject the request with following error,
 
 ```ini
 Error from server (BadRequest): error when applying patch:
