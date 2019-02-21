@@ -1,12 +1,12 @@
 ---
 title: Monitor MongoDB using Builtin Prometheus Discovery
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: mg-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: mg-monitoring-mongodb
     weight: 10
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 
@@ -69,7 +69,7 @@ Here,
 Let's create the MongoDB crd we have shown above.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mongodb/monitoring/builtin-prom-mgo.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mongodb/monitoring/builtin-prom-mgo.yaml
 mongodb.kubedb.com/builtin-prom-mgo created
 ```
 
@@ -275,7 +275,7 @@ data:
 Let's create above `ConfigMap`,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/monitoring/builtin-prometheus/prom-config.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/monitoring/builtin-prometheus/prom-config.yaml
 configmap/prometheus-config created
 ```
 

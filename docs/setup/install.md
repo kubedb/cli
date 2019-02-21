@@ -1,12 +1,12 @@
 ---
 title: Install
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: install-kubedb
     name: Install
     parent: setup
     weight: 10
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: setup
 ---
 
@@ -37,7 +37,7 @@ To use `kubedb`, you will need to install KubeDB [operator](https://github.com/k
 To install KubeDB in your Kubernetes cluster, run the following command:
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh | bash
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh | bash
 ```
 
 After successful installation, you should have a `kubedb-operator-***` pod running in the `kube-system` namespace.
@@ -49,10 +49,10 @@ kubedb-operator-65d97f8cf9-8c9tj        2/2       Running   0          1m
 
 #### Customizing Installer
 
-The installer script and associated yaml files can be found in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.9.0/hack/deploy) folder. You can see the full list of flags available to installer using `-h` flag.
+The installer script and associated yaml files can be found in the [/hack/deploy](https://github.com/kubedb/cli/tree/0.10.0/hack/deploy) folder. You can see the full list of flags available to installer using `-h` flag.
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh | bash -s -- -h
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh | bash -s -- -h
 kubedb.sh - install kubedb operator
 
 kubedb.sh [options]
@@ -79,7 +79,7 @@ options:
 If you would like to run KubeDB operator pod in `master` instances, pass the `--run-on-master` flag:
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh \
     | bash -s -- --run-on-master [--rbac]
 ```
 
@@ -87,7 +87,7 @@ KubeDB operator will be installed in a `kube-system` namespace by default. If yo
 
 ```console
 $ kubectl create namespace kubedb
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh \
     | bash -s -- --namespace=kubedb [--run-on-master] [--rbac]
 ```
 
@@ -97,23 +97,23 @@ To pass the address of your private registry and optionally a image pull secret 
 
 ```console
 $ kubectl create namespace kubedb
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh \
     | bash -s -- --docker-registry=MY_REGISTRY [--image-pull-secret=SECRET_NAME] [--rbac]
 ```
 
 KubeDB implements [validating and mutating admission webhooks](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) for KubeDB CRDs. This is enabled by default for Kubernetes 1.9.0 or later releases. To disable this feature, pass the `--enable-validating-webhook=false` and `--enable-mutating-webhook=false` flag respectively.
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh \
     | bash -s -- --enable-validating-webhook=false --enable-mutating-webhook=false [--rbac]
 ```
 
-KubeDB 0.9.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
+KubeDB 0.10.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
 
-KubeDB 0.9.0 or later installs a catalog of database versions. To disable this pass the `--install-catalog=none` flag.
+KubeDB 0.10.0 or later installs a catalog of database versions. To disable this pass the `--install-catalog=none` flag.
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh \
     | bash -s -- --install-catalog=none [--rbac]
 ```
 
@@ -128,12 +128,12 @@ KubeDB can be installed via [Helm](https://helm.sh/) using the [chart](https://g
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
 $ helm search appscode/kubedb
-NAME                   	CHART VERSION	APP VERSION 	DESCRIPTION                                                 
-appscode/kubedb        	0.9.0 	0.9.0	KubeDB by AppsCode - Production ready databases on Kubern...
-appscode/kubedb-catalog	0.9.0 	0.9.0	KubeDB Catalog by AppsCode - Catalog for database versions  
+NAME                   	CHART VERSION	APP VERSION 	DESCRIPTION
+appscode/kubedb        	0.10.0 	0.10.0	KubeDB by AppsCode - Production ready databases on Kubern...
+appscode/kubedb-catalog	0.10.0 	0.10.0	KubeDB Catalog by AppsCode - Catalog for database versions
 
 # Step 1: Install kubedb operator chart
-$ helm install appscode/kubedb --name kubedb-operator --version 0.9.0 \
+$ helm install appscode/kubedb --name kubedb-operator --version 0.10.0 \
   --namespace kube-system
 
 # Step 2: wait until crds are registered
@@ -157,11 +157,11 @@ redisversions.kubedb.com           6s
 snapshots.kubedb.com               6s
 
 # Step 3(a): Install KubeDB catalog of database versions
-$ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.9.0 \
+$ helm install appscode/kubedb-catalog --name kubedb-catalog --version 0.10.0 \
   --namespace kube-system
 
 # Step 3(b): Or, if previously installed, upgrade KubeDB catalog of database versions
-$ helm upgrade kubedb-catalog appscode/kubedb-catalog --version 0.9.0 \
+$ helm upgrade kubedb-catalog appscode/kubedb-catalog --version 0.10.0 \
   --namespace kube-system
 ```
 
@@ -205,12 +205,12 @@ KubeDB provides a CLI to work with database objects. Download pre-built binaries
 
 ```console
 # Linux amd 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.9.0/kubedb-linux-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.10.0/kubedb-linux-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 
 # Mac 64-bit
-wget -O kubedb https://github.com/kubedb/cli/releases/download/0.9.0/kubedb-darwin-amd64 \
+wget -O kubedb https://github.com/kubedb/cli/releases/download/0.10.0/kubedb-darwin-amd64 \
   && chmod +x kubedb \
   && sudo mv kubedb /usr/local/bin/
 ```

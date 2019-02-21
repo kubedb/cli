@@ -1,15 +1,15 @@
 ---
 title: Monitoring KubeDB Operator
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: operator-monitoring-overview
     name: Overview
     parent: operator-monitoring
     weight: 10
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: setup
 aliases:
-  - /docs/0.9.0/setup/operator-monitoring/
+  - /docs/0.10.0/setup/operator-monitoring/
 ---
 
 # Monitoring KubeDB Operator
@@ -102,7 +102,7 @@ You have to provides these flags while installing or upgrading or updating KubeD
 **Helm:**
 
 ```console
-$ helm install appscode/kubedb --name kubedb-operator --version 0.9.0 --namespace kube-system \
+$ helm install appscode/kubedb --name kubedb-operator --version 0.10.0 --namespace kube-system \
   --set monitoring.enabled=true \
   --set monitoring.agent=prometheus.io/coreos-operator \
   --set monitoring.prometheus.namespace=monitoring \
@@ -112,7 +112,7 @@ $ helm install appscode/kubedb --name kubedb-operator --version 0.9.0 --namespac
 **Script:**
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.9.0/hack/deploy/kubedb.sh | bash -s -- \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh | bash -s -- \
   --monitoring-enable=true \
   --monitoring-agent=prometheus.io/coreos-operator \
   --prometheus-namespace=monitoring \

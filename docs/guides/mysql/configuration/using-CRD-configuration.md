@@ -1,12 +1,12 @@
 ---
 title: Run MySQL with Custom Configuration
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: my-crd-configuration
     name: Using CRD Config
     parent: my-custom-config
     weight: 15
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 
@@ -58,7 +58,7 @@ Read about the fields in details in [PodTemplate concept](/docs/concepts/databas
 
 ## CRD Configuration
 
-Below is the YAML for the MySQL created in this example. Here, [`spec.podTemplate.spec.env`](/docs/concepts/databases/mysql.md#specpodtemplatespecenv) specifies environment variables and [`spec.podTemplate.spec.args`](/docs/concepts/databases/mysql.md#specpodtemplatespecargs) provides extra arguments for [MySQL Docker Image](https://hub.docker.com/_/mysql/). 
+Below is the YAML for the MySQL created in this example. Here, [`spec.podTemplate.spec.env`](/docs/concepts/databases/mysql.md#specpodtemplatespecenv) specifies environment variables and [`spec.podTemplate.spec.args`](/docs/concepts/databases/mysql.md#specpodtemplatespecargs) provides extra arguments for [MySQL Docker Image](https://hub.docker.com/_/mysql/).
 
 In this tutorial, an initial database `myDB` will be created by providing `env` `MYSQL_DATABASE` while the server character set will be set to `utf8mb4` by adding extra `args`. Note that, `character-set-server` in `MySQL 5.7` is `latin1`.
 
@@ -95,7 +95,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/configuration/mysql-misc-config.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/configuration/mysql-misc-config.yaml
 mysql.kubedb.com/mysql-misc-config created
 ```
 
@@ -135,7 +135,7 @@ Now, we will check if the database has started with the custom configuration we 
 First, deploy [phpMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/) to connect with the MySQL database we have just created.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/quickstart/demo-1.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/quickstart/demo-1.yaml
 deployment.extensions/myadmin created
 service/myadmin created
 ```
@@ -171,7 +171,7 @@ Once, you have connected to the database with phpMyAdmin go to **SQL** tab and r
 
 `Snapshot` also has the scope to be configured through `spec.podTemplate`. In this tutorial, an extra argument is passed to snapshot crd so that the backup job uses `--default-character-set=utf8mb4` while taking backup.
 
-Below is the Snapshot CRD that is deployed in this tutorial. Create a secret `my-snap-secret` from [here](/docs/guides/mysql/snapshot/backup-and-restore.md#instant-backups) for snapshot. 
+Below is the Snapshot CRD that is deployed in this tutorial. Create a secret `my-snap-secret` from [here](/docs/guides/mysql/snapshot/backup-and-restore.md#instant-backups) for snapshot.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -194,7 +194,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/configuration/snapshot-misc-conf.yaml 
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/configuration/snapshot-misc-conf.yaml
 snapshot.kubedb.com/snap-mysql-config created
 
 

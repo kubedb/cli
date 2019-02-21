@@ -1,12 +1,12 @@
 ---
 title: Search Guard Configuration
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: es-configuration-search-guard
     name: Configuration
     parent: es-search-guard-elasticsearch
     weight: 15
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -99,7 +99,7 @@ searchguard:
 ```
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/search-guard/sg-config/sg_config.yml
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/search-guard/sg-config/sg_config.yml
 ```
 
 ### sg_internal_users.yml
@@ -148,7 +148,7 @@ readall:
 Run following command to write user information in `sg_internal_users.yml` file with password.
 
 ```console
-$ curl https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/search-guard/sg-config/sg_internal_users.yml | envsubst > sg_internal_users.yml
+$ curl https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/search-guard/sg-config/sg_internal_users.yml | envsubst > sg_internal_users.yml
 ```
 
 > Note: If user does not provide `spec.databaseSecret`, KubeDB will generate random password for both admin and readall user.
@@ -172,7 +172,7 @@ See details about [action groups](http://docs.search-guard.com/v5/action-groups)
 Run following command to get action groups we will use in this tutorial
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/search-guard/sg-config/sg_action_groups.yml
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/search-guard/sg-config/sg_action_groups.yml
 ```
 
 ```yml
@@ -254,7 +254,7 @@ sg_readall:
 ```
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/search-guard/sg-config/sg_roles.yml
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/search-guard/sg-config/sg_roles.yml
 ```
 
 ### sg_roles_mapping.yml
@@ -291,7 +291,7 @@ See details about [backend roles mapping](http://docs.search-guard.com/v5/mappin
 Get roles mapping by running
 
 ```console
-$ wget https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/search-guard/sg-config/sg_roles_mapping.yml
+$ wget https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/search-guard/sg-config/sg_roles_mapping.yml
 ```
 
 ```yml
@@ -380,7 +380,7 @@ Here,
 Create example above with following command
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/elasticsearch/search-guard/config-elasticsearch.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/search-guard/config-elasticsearch.yaml
 elasticsearch.kubedb.com/config-elasticsearch created
 ```
 

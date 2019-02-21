@@ -1,12 +1,12 @@
 ---
 title: Initialize Postgres from WAL
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: pg-wal-source-initialization
     name: From WAL
     parent: pg-initialization-postgres
     weight: 20
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 
@@ -57,9 +57,9 @@ Type "help" for help.
 # list available databases
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
@@ -77,7 +77,7 @@ CREATE TABLE
 # list tables
 postgres=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 
@@ -146,7 +146,7 @@ Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL arch
 Now, let's create the Postgres object that's YAML has shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/initialization/replay-postgres.yaml 
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/initialization/replay-postgres.yaml
 postgres.kubedb.com/replay-postgres created
 ```
 
@@ -168,9 +168,9 @@ Type "help" for help.
 # list available databases
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
@@ -184,7 +184,7 @@ You are now connected to database "postgres" as user "postgres".
 # list tables
 postgres=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)

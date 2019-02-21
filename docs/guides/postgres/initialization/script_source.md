@@ -1,12 +1,12 @@
 ---
 title: Initialize Postgres using Script Source
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: pg-script-source-initialization
     name: Using Script
     parent: pg-initialization-postgres
     weight: 10
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 
@@ -85,7 +85,7 @@ VolumeSource provided in `init.scriptSource` will be mounted in Pod and will be 
 Now, let's create the Postgres crd which YAML we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/initialization/script-postgres.yaml 
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/initialization/script-postgres.yaml
 postgres.kubedb.com/script-postgres created
 ```
 
@@ -120,7 +120,7 @@ Volume:
   Capacity:      1Gi
   Access Modes:  RWO
 
-StatefulSet:          
+StatefulSet:
   Name:               script-postgres
   CreationTimestamp:  Fri, 21 Sep 2018 15:53:28 +0600
   Labels:               kubedb.com/kind=Postgres
@@ -129,7 +129,7 @@ StatefulSet:
   Replicas:           824638467136 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:        
+Service:
   Name:         script-postgres
   Labels:         kubedb.com/kind=Postgres
                   kubedb.com/name=script-postgres
@@ -140,7 +140,7 @@ Service:
   TargetPort:   api/TCP
   Endpoints:    192.168.1.31:5432
 
-Service:        
+Service:
   Name:         script-postgres-replicas
   Labels:         kubedb.com/kind=Postgres
                   kubedb.com/name=script-postgres
@@ -156,9 +156,9 @@ Database Secret:
   Labels:         kubedb.com/kind=Postgres
                   kubedb.com/name=script-postgres
   Annotations:  <none>
-  
+
 Type:  Opaque
-  
+
 Data
 ====
   POSTGRES_PASSWORD:  16 bytes

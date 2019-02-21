@@ -1,12 +1,12 @@
 ---
 title: Redis Cluster Guide
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: rd-cluster
     name: Clustering Guide
     parent: rd-clustering-redis
     weight: 15
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 
@@ -67,7 +67,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/redis/clustering/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/redis/clustering/demo-1.yaml
 redis.kubedb.com/redis-cluster created
 ```
 
