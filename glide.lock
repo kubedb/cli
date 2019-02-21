@@ -1,5 +1,5 @@
-hash: 24fe3fe2920fad7b6f7aa859e55f0dfa58660dec76ecfc6f8164b88d9c5c9507
-updated: 2019-02-18T21:26:29.841117964-08:00
+hash: 8bdde23759745fab2c7f882eec059cb9f2bc0dc7f4765a3e1549438683c08ec0
+updated: 2019-02-20T16:08:03.186585354-08:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -103,7 +103,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: afac545df32f2287a079e2dfb7ba2745a643747e
+  version: 72bf35d0ff611848c1dc9df0f976c81192392fa5
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -207,19 +207,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 1a7c239cbe568694b3aa3dfe4fe557347fb484fd
+  version: b565a02edb4570ab40edda5810d2e2de7ecbdfbb
 - name: github.com/kubedb/etcd
-  version: 92a9bb0164211566feefc2488b9601458fbc9079
+  version: f91ff54d3663b5c8b7d53b6db476eb987ad478e4
 - name: github.com/kubedb/memcached
-  version: 9438d67034143287fc67b7bd5d86e31ec06d96fe
+  version: d81d581ed68c7a9e4270c3b30b6bc28a177f5a8c
 - name: github.com/kubedb/mongodb
-  version: f4235d2f3745e02d19225f0dcdca229a3808d02b
+  version: 7f66413272c0d6a69ba36b1e9a732a1eb490b771
 - name: github.com/kubedb/mysql
-  version: 40ad7a23f0ae79f82764ff900c3cd8e04bbbefa8
+  version: 678b26aa9a8c90970cf5d4e9ac6e79ca60d30725
 - name: github.com/kubedb/postgres
-  version: 148e1042add3426d6c013a63c769774cfce2de2f
+  version: 2f4c2f2b99eccb69a135d9482c067528ff1e3dbf
 - name: github.com/kubedb/redis
-  version: cf31c4cc69ec96aff6ed8e08c7ed9891c95dac2a
+  version: cdbb6ea0e7f61fbdc1bf605556654b05fcdf1396
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
