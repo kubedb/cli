@@ -11,7 +11,7 @@
 [![Throughput Graph](https://graphs.waffle.io/kubedb/project/throughput.svg)](https://waffle.io/kubedb/project/metrics/throughput)
 
 
-**Folks, as we continue to develop KubeDB, we value your feedback highly. Please consider taking a few minutes to complete this questionnaire. https://goo.gl/forms/ddcNVjmDlti9fNFE3. Thank you! :pray:**
+**Folks, as we continue to develop KubeDB, we value your feedback highly. Please consider taking a few minutes to complete this questionnaire: https://appsco.de/kubedb-survey-201902. Thank you! :pray:**
 
 
 > Making running production-grade databases easy on Kubernetes
