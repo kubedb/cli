@@ -1,12 +1,12 @@
 ---
 title: Using Postgres Streaming Replication
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: pg-streaming-replication-clustering
     name: Streaming Replication
     parent: pg-clustering-postgres
     weight: 15
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 
@@ -98,7 +98,7 @@ Here,
 Now create this Postgres object with Streaming Replication support
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/clustering/ha-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/clustering/ha-postgres.yaml
 postgres.kubedb.com/ha-postgres created
 ```
 
@@ -324,7 +324,7 @@ Here,
 Now create this Postgres object
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/postgres/clustering/hot-postgres.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/clustering/hot-postgres.yaml
 postgres "hot-postgres" created
 ```
 

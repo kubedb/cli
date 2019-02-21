@@ -1,12 +1,12 @@
 ---
 title: Postgres
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: postgres-db
     name: Postgres
     parent: databases
     weight: 30
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: concepts
 ---
 

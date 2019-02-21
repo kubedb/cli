@@ -1,12 +1,12 @@
 ---
 title: Initialize MySQL from Snapshot
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: my-using-snapshot-initialization
     name: From Snapshot
     parent: my-initialization-mysql
     weight: 15
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -53,7 +53,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.9.0/docs/examples/mysql/Initialization/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/Initialization/demo-2.yaml
 mysql.kubedb.com/mysql-init-snapshot created
 ```
 

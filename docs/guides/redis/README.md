@@ -1,16 +1,16 @@
 ---
 title: Redis
 menu:
-  docs_0.9.0:
+  docs_0.10.0:
     identifier: rd-readme-redis
     name: Redis
     parent: rd-redis-guides
     weight: 10
-menu_name: docs_0.9.0
+menu_name: docs_0.10.0
 section_menu_id: guides
-url: /docs/0.9.0/guides/redis/
+url: /docs/0.10.0/guides/redis/
 aliases:
-  - /docs/0.9.0/guides/redis/README/
+  - /docs/0.10.0/guides/redis/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
