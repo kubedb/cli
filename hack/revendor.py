@@ -69,7 +69,7 @@ REQUIRED_DEPS = [
     },
     {
       "package": "golang.org/x/net",
-      "version": "1c05540f6879653db88113bc4a2b70aec4bd491f"
+      "version": "0ed95abb35c445290478a5348a7b38bb154135fd"
     },
     {
       "package": "golang.org/x/sys",
@@ -81,7 +81,7 @@ REQUIRED_DEPS = [
     },
     {
       "package": "github.com/golang/protobuf",
-      "version": "v1.0.0"
+      "version": "v1.1.0"
     },
     {
       "package": "github.com/davecgh/go-spew",
@@ -131,75 +131,75 @@ DEP_LIST = [
     },
     {
       "package": "github.com/coreos/prometheus-operator",
-      "version": "v0.25.0"
+      "version": "v0.29.0"
     },
     {
       "package": "k8s.io/api",
-      "version": "kubernetes-1.12.0"
+      "version": "kubernetes-1.13.0"
     },
     {
       "package": "k8s.io/apiextensions-apiserver",
-      "version": "kubernetes-1.12.0"
+      "version": "kubernetes-1.13.0"
     },
     {
       "package": "k8s.io/apimachinery",
       "repo": "https://github.com/kmodules/apimachinery.git",
       "vcs": "git",
-      "version": "ac-1.12.0"
+      "version": "ac-1.13.0"
     },
     {
       "package": "k8s.io/apiserver",
       "repo": "https://github.com/kmodules/apiserver.git",
       "vcs": "git",
-      "version": "ac-1.12.0"
+      "version": "ac-1.13.0"
     },
     {
       "package": "k8s.io/client-go",
-      "version": "v9.0.0"
+      "version": "v10.0.0"
     },
     {
       "package": "k8s.io/cli-runtime",
-      "version": "kubernetes-1.12.0"
+      "version": "kubernetes-1.13.0"
     },
     {
       "package": "k8s.io/kubernetes",
-      "version": "v1.12.0"
+      "version": "v1.13.0"
     },
     {
       "package": "k8s.io/kube-aggregator",
-      "version": "kubernetes-1.12.0"
+      "version": "kubernetes-1.13.0"
     },
     {
       "package": "k8s.io/metrics",
-      "version": "kubernetes-1.12.0"
+      "version": "kubernetes-1.13.0"
     },
     {
-      "package": "github.com/appscode/kutil",
-      "version": "release-9.0"
+      "package": "kmodules.xyz/client-go",
+      "version": "release-10.0"
     },
     {
-      "package": "github.com/appscode/kubernetes-webhook-util",
-      "version": "release-9.0"
+      "package": "kmodules.xyz/webhook-runtime",
+      "version": "release-10.0"
     },
     {
       "package": "kmodules.xyz/custom-resources",
-      "version": "release-9.0"
+      "version": "release-10.0"
     },
     {
       "package": "kmodules.xyz/monitoring-agent-api",
-      "version": "release-9.0"
+      "version": "release-10.0"
     },
     {
       "package": "kmodules.xyz/objectstore-api",
-      "version": "release-9.0"
+      "version": "release-10.0"
     },
     {
       "package": "kmodules.xyz/offshoot-api",
-      "version": "release-9.0"
+      "version": "release-10.0"
     },
     {
       "package": "kmodules.xyz/openshift",
-      "version": "release-9.0"
+      "version": "release-10.0"
     },
     {
       "package": "github.com/graymeta/stow",
@@ -209,11 +209,11 @@ DEP_LIST = [
     },
     {
       "package": "github.com/Azure/azure-sdk-for-go",
-      "version": "v19.0.0"
+      "version": "v21.3.0"
     },
     {
       "package": "github.com/Azure/go-autorest",
-      "version": "v10.14.0"
+      "version": "v11.1.0"
     },
     {
       "package": "github.com/aws/aws-sdk-go",
@@ -233,11 +233,11 @@ DEP_LIST = [
     },
     {
       "package": "github.com/appscode/osm",
-      "version": "0.9.1"
+      "version": "0.10.0"
     },
     {
       "package": "github.com/kubepack/onessl",
-      "version": "0.9.0"
+      "version": "0.11.0"
     }
 ]
 DELETE_LIST=[
