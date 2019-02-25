@@ -89,7 +89,7 @@ REQUIRED_DEPS = [
     },
     {
       "package": "k8s.io/kube-openapi",
-      "version": "0cf8f7e6ed1d2e3d47d02e3b6e559369af24d803"
+      "version": "c59034cc13d587f5ef4e85ca0ade0c1866ae8e1d"
     },
     {
       "package": "gopkg.in/yaml.v2",
