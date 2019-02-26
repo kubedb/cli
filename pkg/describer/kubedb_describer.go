@@ -12,8 +12,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/pkg/printers"
-	printersinternal "k8s.io/kubernetes/pkg/printers/internalversion"
+	"k8s.io/kubernetes/pkg/kubectl/describe"
+	"k8s.io/kubernetes/pkg/kubectl/describe/versioned"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	store "kmodules.xyz/objectstore-api/api/v1"
 )
@@ -23,7 +23,7 @@ type EtcdDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *EtcdDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *EtcdDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.Etcds(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -53,7 +53,7 @@ func (d *EtcdDescriber) Describe(namespace, name string, describerSettings print
 
 func (d *EtcdDescriber) describeEtcd(item *api.Etcd, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -99,7 +99,7 @@ type ElasticsearchDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *ElasticsearchDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *ElasticsearchDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.Elasticsearches(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -129,7 +129,7 @@ func (d *ElasticsearchDescriber) Describe(namespace, name string, describerSetti
 
 func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -187,7 +187,7 @@ type PostgresDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *PostgresDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *PostgresDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.Postgreses(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -217,7 +217,7 @@ func (d *PostgresDescriber) Describe(namespace, name string, describerSettings p
 
 func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -273,7 +273,7 @@ type MySQLDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *MySQLDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *MySQLDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.MySQLs(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -303,7 +303,7 @@ func (d *MySQLDescriber) Describe(namespace, name string, describerSettings prin
 
 func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -349,7 +349,7 @@ type MongoDBDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *MongoDBDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *MongoDBDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.MongoDBs(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -379,7 +379,7 @@ func (d *MongoDBDescriber) Describe(namespace, name string, describerSettings pr
 
 func (d *MongoDBDescriber) describeMongoDB(item *api.MongoDB, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -425,7 +425,7 @@ type RedisDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *RedisDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *RedisDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.Redises(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -455,7 +455,7 @@ func (d *RedisDescriber) Describe(namespace, name string, describerSettings prin
 
 func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -495,7 +495,7 @@ type MemcachedDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *MemcachedDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *MemcachedDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.Memcacheds(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -525,7 +525,7 @@ func (d *MemcachedDescriber) Describe(namespace, name string, describerSettings 
 
 func (d *MemcachedDescriber) describeMemcached(item *api.Memcached, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -563,7 +563,7 @@ type SnapshotDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *SnapshotDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *SnapshotDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.Snapshots(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -582,7 +582,7 @@ func (d *SnapshotDescriber) Describe(namespace, name string, describerSettings p
 
 func (d *SnapshotDescriber) describeSnapshot(item *api.Snapshot, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -619,7 +619,7 @@ type DormantDatabaseDescriber struct {
 	kubedb cs.KubedbV1alpha1Interface
 }
 
-func (d *DormantDatabaseDescriber) Describe(namespace, name string, describerSettings printers.DescriberSettings) (string, error) {
+func (d *DormantDatabaseDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
 	item, err := d.kubedb.DormantDatabases(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
@@ -649,7 +649,7 @@ func (d *DormantDatabaseDescriber) Describe(namespace, name string, describerSet
 
 func (d *DormantDatabaseDescriber) describeDormantDatabase(item *api.DormantDatabase, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := printersinternal.NewPrefixWriter(out)
+		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -681,7 +681,7 @@ func (d *DormantDatabaseDescriber) describeDormantDatabase(item *api.DormantData
 	})
 }
 
-func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w printersinternal.PrefixWriter) {
+func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w versioned.PrefixWriter) {
 	if st == api.StorageTypeEphemeral {
 		w.Write(LEVEL_0, "  StorageType:\t%s\n", api.StorageTypeEphemeral)
 	} else {
@@ -705,7 +705,7 @@ func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec
 	}
 }
 
-func describeArchiver(archiver *api.PostgresArchiverSpec, w printersinternal.PrefixWriter) {
+func describeArchiver(archiver *api.PostgresArchiverSpec, w versioned.PrefixWriter) {
 	if archiver == nil {
 		return
 	}
@@ -715,7 +715,7 @@ func describeArchiver(archiver *api.PostgresArchiverSpec, w printersinternal.Pre
 	}
 }
 
-func describeInitialization(init *api.InitSpec, w printersinternal.PrefixWriter) {
+func describeInitialization(init *api.InitSpec, w versioned.PrefixWriter) {
 	if init == nil {
 		return
 	}
@@ -736,7 +736,7 @@ func describeInitialization(init *api.InitSpec, w printersinternal.PrefixWriter)
 	}
 }
 
-func describeSnapshotStorage(snapshot store.Backend, w printersinternal.PrefixWriter) {
+func describeSnapshotStorage(snapshot store.Backend, w versioned.PrefixWriter) {
 	switch {
 	case snapshot.Local != nil:
 		describeVolume(snapshot.Local.VolumeSource, w)
@@ -762,7 +762,7 @@ func describeSnapshotStorage(snapshot store.Backend, w printersinternal.PrefixWr
 	}
 }
 
-func describeMonitor(monitor *mona.AgentSpec, w printersinternal.PrefixWriter) {
+func describeMonitor(monitor *mona.AgentSpec, w versioned.PrefixWriter) {
 	if monitor == nil {
 		return
 	}
@@ -789,7 +789,7 @@ func describeMonitor(monitor *mona.AgentSpec, w printersinternal.PrefixWriter) {
 	}
 }
 
-func listSnapshots(snapshotList *api.SnapshotList, w printersinternal.PrefixWriter) {
+func listSnapshots(snapshotList *api.SnapshotList, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 
 	if len(snapshotList.Items) == 0 {
@@ -817,7 +817,7 @@ func listSnapshots(snapshotList *api.SnapshotList, w printersinternal.PrefixWrit
 	w.Flush()
 }
 
-func describeOrigin(origin api.Origin, w printersinternal.PrefixWriter) {
+func describeOrigin(origin api.Origin, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Origin:\n")
 	w.Write(LEVEL_0, "  Name:\t%s\n", origin.Name)
@@ -826,7 +826,7 @@ func describeOrigin(origin api.Origin, w printersinternal.PrefixWriter) {
 	printAnnotationsMultiline(LEVEL_0, w, "Annotations", origin.Annotations)
 }
 
-func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w printersinternal.PrefixWriter) {
+func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w versioned.PrefixWriter) {
 	pc := client.Core().Pods(namespace)
 	opts := metav1.ListOptions{LabelSelector: selector.String()}
 
@@ -870,7 +870,7 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 	}
 }
 
-func showSecret(client kubernetes.Interface, namespace string, secretVolumes map[string]*core.SecretVolumeSource, w printersinternal.PrefixWriter) {
+func showSecret(client kubernetes.Interface, namespace string, secretVolumes map[string]*core.SecretVolumeSource, w versioned.PrefixWriter) {
 	sc := client.Core().Secrets(namespace)
 
 	for key, sv := range secretVolumes {
@@ -882,7 +882,7 @@ func showSecret(client kubernetes.Interface, namespace string, secretVolumes map
 	}
 }
 
-func showTopology(client kubernetes.Interface, namespace string, selector labels.Selector, specific map[string]labels.Selector, w printersinternal.PrefixWriter) {
+func showTopology(client kubernetes.Interface, namespace string, selector labels.Selector, specific map[string]labels.Selector, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Topology:\n")
 	w.Write(LEVEL_0, "  Type\tPod\tStartTime\tPhase\n")
