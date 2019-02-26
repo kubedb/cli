@@ -3,7 +3,7 @@ title: Upgrade Manual
 menu:
   docs_0.10.0:
     identifier: pg-upgrade-manual
-    name: Overview
+    name: Postgres Upgrade Manual
     parent: pg-postgres-guides
     weight: 15
 menu_name: docs_0.10.0
