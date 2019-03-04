@@ -382,7 +382,7 @@ def revendor(comp=None):
         cat.revendor_repo('operator')
         cat.revendor_repo('cli')
     elif comp in DATABASES:
-        cat.revendor_db(comp)
+        cat.revendor_repo(comp)
     elif comp == 'operator':
         cat.revendor_repo(comp)
     elif comp == 'cli':
