@@ -118,6 +118,18 @@ REQUIRED_DEPS = [
     {
       "package": "gopkg.in/ini.v1",
       "version": "v1.40.0"
+    },
+    {
+      "package": "sigs.k8s.io/yaml",
+      "version": "v1.1.0"
+    },
+    {
+      "package": "github.com/prometheus/client_golang",
+      "version": "v0.9.2"
+    },
+    {
+      "package": "k8s.io/utils",
+      "version": "66066c83e385e385ccc3c964b44fd7dcd413d0ed"
     }
 ]
 DEP_LIST = [

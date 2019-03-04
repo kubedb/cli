@@ -41,10 +41,10 @@ import (
 	watchtools "k8s.io/client-go/tools/watch"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
 	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
+	getflags "k8s.io/kubernetes/pkg/kubectl/cmd/get"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 	"k8s.io/kubernetes/pkg/printers"
 	"k8s.io/kubernetes/pkg/util/interrupt"
 )
@@ -324,7 +324,7 @@ func (r *RuntimeSorter) Sort() error {
 		case *metav1beta1.Table:
 			includesTable = true
 
-			if err := kubectl.NewTableSorter(t, r.field).Sort(); err != nil {
+			if err := getflags.NewTableSorter(t, r.field).Sort(); err != nil {
 				continue
 			}
 		default:
@@ -347,7 +347,7 @@ func (r *RuntimeSorter) Sort() error {
 	// if not dealing with a Table response from the server, assume
 	// all objects are runtime.Object as usual, and sort using old method.
 	var err error
-	if r.positioner, err = kubectl.SortObjects(r.decoder, r.objects, r.field); err != nil {
+	if r.positioner, err = getflags.SortObjects(r.decoder, r.objects, r.field); err != nil {
 		return err
 	}
 	return nil
@@ -367,14 +367,14 @@ func (r *RuntimeSorter) WithDecoder(decoder runtime.Decoder) *RuntimeSorter {
 }
 
 func NewRuntimeSorter(objects []runtime.Object, sortBy string) *RuntimeSorter {
-	parsedField, err := printers.RelaxedJSONPathExpression(sortBy)
+	parsedField, err := getflags.RelaxedJSONPathExpression(sortBy)
 	if err != nil {
 		parsedField = sortBy
 	}
 
 	return &RuntimeSorter{
 		field:   parsedField,
-		decoder: cmdutil.InternalVersionDecoder(),
+		decoder: legacyscheme.Codecs.UniversalDecoder(),
 		objects: objects,
 	}
 }
@@ -845,7 +845,7 @@ func cmdSpecifiesOutputFmt(cmd *cobra.Command) bool {
 
 func maybeWrapSortingPrinter(printer printers.ResourcePrinter, sortBy string) printers.ResourcePrinter {
 	if len(sortBy) != 0 {
-		return &kubectl.SortingPrinter{
+		return &getflags.SortingPrinter{
 			Delegate:  printer,
 			SortField: fmt.Sprintf("%s", sortBy),
 		}

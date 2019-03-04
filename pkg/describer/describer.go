@@ -25,7 +25,6 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	meta_util "github.com/appscode/kutil/meta"
 	"github.com/golang/glog"
 	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
 	cs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
@@ -39,14 +38,12 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
-	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	coreclient "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
-	"k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
-	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
-	"k8s.io/kubernetes/pkg/printers"
-	printersinternal "k8s.io/kubernetes/pkg/printers/internalversion"
+	"k8s.io/kubernetes/pkg/kubectl/describe"
+	"k8s.io/kubernetes/pkg/kubectl/describe/versioned"
+	meta_util "kmodules.xyz/client-go/meta"
 )
 
 // Each level has 2 spaces for PrefixWriter
@@ -58,10 +55,10 @@ const (
 )
 
 // DescriberFn gives a way to easily override the function for unit testing if needed
-var DescriberFn cmdutil.DescriberFunc = describer
+var DescriberFn describe.DescriberFunc = describer
 
 // Returns a Describer for displaying the specified RESTMapping type or an error.
-func describer(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping) (printers.Describer, error) {
+func describer(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping) (describe.Describer, error) {
 	clientConfig, err := restClientGetter.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -71,37 +68,14 @@ func describer(restClientGetter genericclioptions.RESTClientGetter, mapping *met
 		return describer, nil
 	}
 	// if this is a kind we don't have a describer for yet, go generic if possible
-	if genericDescriber, genericErr := genericDescriber(restClientGetter, mapping); genericErr == nil {
+	if genericDescriber, ok := versioned.GenericDescriberFor(mapping, clientConfig); ok {
 		return genericDescriber, nil
 	}
 	// otherwise return an unregistered error
 	return nil, fmt.Errorf("no description has been implemented for %s", mapping.GroupVersionKind.String())
 }
 
-// helper function to make a generic describer, or return an error
-func genericDescriber(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping) (printers.Describer, error) {
-	clientConfig, err := restClientGetter.ToRESTConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	// used to fetch the resource
-	dynamicClient, err := dynamic.NewForConfig(clientConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	// used to get events for the resource
-	clientSet, err := internalclientset.NewForConfig(clientConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	eventsClient := clientSet.Core()
-	return printersinternal.GenericDescriberFor(mapping, dynamicClient, eventsClient), nil
-}
-
-func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]printers.Describer, error) {
+func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]describe.Describer, error) {
 	c, err := kubernetes.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
@@ -111,7 +85,7 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]printers.Desc
 		return nil, err
 	}
 
-	m := map[schema.GroupKind]printers.Describer{
+	m := map[schema.GroupKind]describe.Describer{
 		api.Kind(api.ResourceKindEtcd):          &EtcdDescriber{c, k},
 		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{c, k},
 		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{c, k},
@@ -126,7 +100,7 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]printers.Desc
 
 // DescriberFor returns the default describe functions for each of the standard
 // Kubernetes types.
-func DescriberFor(kind schema.GroupKind, clientConfig *rest.Config) (printers.Describer, bool) {
+func DescriberFor(kind schema.GroupKind, clientConfig *rest.Config) (describe.Describer, bool) {
 	describers, err := describerMap(clientConfig)
 	if err != nil {
 		glog.V(1).Info(err)
@@ -137,7 +111,7 @@ func DescriberFor(kind schema.GroupKind, clientConfig *rest.Config) (printers.De
 	return f, ok
 }
 
-func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, failed int, w printersinternal.PrefixWriter) {
+func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, failed int, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "StatefulSet:\t\n")
 	w.Write(LEVEL_1, "Name:\t%s\n", ps.ObjectMeta.Name)
@@ -148,7 +122,7 @@ func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, fa
 	w.Write(LEVEL_1, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
-func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, failed int, w printersinternal.PrefixWriter) {
+func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, failed int, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Deployment:\t\n")
 	w.Write(LEVEL_1, "Name:\t%s\n", d.ObjectMeta.Name)
@@ -196,7 +170,7 @@ func buildIngressString(ingress []core.LoadBalancerIngress) string {
 	return buffer.String()
 }
 
-func describeService(service *core.Service, endpoints *core.Endpoints, w printersinternal.PrefixWriter) {
+func describeService(service *core.Service, endpoints *core.Endpoints, w versioned.PrefixWriter) {
 	if endpoints == nil {
 		endpoints = &core.Endpoints{}
 	}
@@ -241,7 +215,7 @@ func describeService(service *core.Service, endpoints *core.Endpoints, w printer
 }
 
 // describeSecret generates information about a secret
-func describeSecret(secret *core.Secret, prefix string, w printersinternal.PrefixWriter) {
+func describeSecret(secret *core.Secret, prefix string, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	if prefix == "" {
 		w.Write(LEVEL_0, "Secret:\n")
@@ -266,7 +240,7 @@ func describeSecret(secret *core.Secret, prefix string, w printersinternal.Prefi
 	}
 }
 
-func describeVolume(volume core.VolumeSource, w printersinternal.PrefixWriter) {
+func describeVolume(volume core.VolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "Volume:\n")
 	switch {
 	case volume.HostPath != nil:
@@ -326,7 +300,7 @@ func describeVolume(volume core.VolumeSource, w printersinternal.PrefixWriter) {
 	}
 }
 
-func printHostPathVolumeSource(hostPath *core.HostPathVolumeSource, w printersinternal.PrefixWriter) {
+func printHostPathVolumeSource(hostPath *core.HostPathVolumeSource, w versioned.PrefixWriter) {
 	hostPathType := "<none>"
 	if hostPath.Type != nil {
 		hostPathType = string(*hostPath.Type)
@@ -337,12 +311,12 @@ func printHostPathVolumeSource(hostPath *core.HostPathVolumeSource, w printersin
 		hostPath.Path, hostPathType)
 }
 
-func printEmptyDirVolumeSource(emptyDir *core.EmptyDirVolumeSource, w printersinternal.PrefixWriter) {
+func printEmptyDirVolumeSource(emptyDir *core.EmptyDirVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tEmptyDir (a temporary directory that shares a pod's lifetime)\n"+
 		"    Medium:\t%v\n", emptyDir.Medium)
 }
 
-func printGCEPersistentDiskVolumeSource(gce *core.GCEPersistentDiskVolumeSource, w printersinternal.PrefixWriter) {
+func printGCEPersistentDiskVolumeSource(gce *core.GCEPersistentDiskVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tGCEPersistentDisk (a Persistent Disk resource in Google Compute Engine)\n"+
 		"    PDName:\t%v\n"+
 		"    FSType:\t%v\n"+
@@ -351,7 +325,7 @@ func printGCEPersistentDiskVolumeSource(gce *core.GCEPersistentDiskVolumeSource,
 		gce.PDName, gce.FSType, gce.Partition, gce.ReadOnly)
 }
 
-func printAWSElasticBlockStoreVolumeSource(aws *core.AWSElasticBlockStoreVolumeSource, w printersinternal.PrefixWriter) {
+func printAWSElasticBlockStoreVolumeSource(aws *core.AWSElasticBlockStoreVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tAWSElasticBlockStore (a Persistent Disk resource in AWS)\n"+
 		"    VolumeID:\t%v\n"+
 		"    FSType:\t%v\n"+
@@ -360,14 +334,14 @@ func printAWSElasticBlockStoreVolumeSource(aws *core.AWSElasticBlockStoreVolumeS
 		aws.VolumeID, aws.FSType, aws.Partition, aws.ReadOnly)
 }
 
-func printGitRepoVolumeSource(git *core.GitRepoVolumeSource, w printersinternal.PrefixWriter) {
+func printGitRepoVolumeSource(git *core.GitRepoVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tGitRepo (a volume that is pulled from git when the pod is created)\n"+
 		"    Repository:\t%v\n"+
 		"    Revision:\t%v\n",
 		git.Repository, git.Revision)
 }
 
-func printSecretVolumeSource(secret *core.SecretVolumeSource, w printersinternal.PrefixWriter) {
+func printSecretVolumeSource(secret *core.SecretVolumeSource, w versioned.PrefixWriter) {
 	optional := secret.Optional != nil && *secret.Optional
 	w.Write(LEVEL_2, "Type:\tSecret (a volume populated by a Secret)\n"+
 		"    SecretName:\t%v\n"+
@@ -375,7 +349,7 @@ func printSecretVolumeSource(secret *core.SecretVolumeSource, w printersinternal
 		secret.SecretName, optional)
 }
 
-func printConfigMapVolumeSource(configMap *core.ConfigMapVolumeSource, w printersinternal.PrefixWriter) {
+func printConfigMapVolumeSource(configMap *core.ConfigMapVolumeSource, w versioned.PrefixWriter) {
 	optional := configMap.Optional != nil && *configMap.Optional
 	w.Write(LEVEL_2, "Type:\tConfigMap (a volume populated by a ConfigMap)\n"+
 		"    Name:\t%v\n"+
@@ -383,7 +357,7 @@ func printConfigMapVolumeSource(configMap *core.ConfigMapVolumeSource, w printer
 		configMap.Name, optional)
 }
 
-func printNFSVolumeSource(nfs *core.NFSVolumeSource, w printersinternal.PrefixWriter) {
+func printNFSVolumeSource(nfs *core.NFSVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tNFS (an NFS mount that lasts the lifetime of a pod)\n"+
 		"    Server:\t%v\n"+
 		"    Path:\t%v\n"+
@@ -391,7 +365,7 @@ func printNFSVolumeSource(nfs *core.NFSVolumeSource, w printersinternal.PrefixWr
 		nfs.Server, nfs.Path, nfs.ReadOnly)
 }
 
-func printQuobyteVolumeSource(quobyte *core.QuobyteVolumeSource, w printersinternal.PrefixWriter) {
+func printQuobyteVolumeSource(quobyte *core.QuobyteVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tQuobyte (a Quobyte mount on the host that shares a pod's lifetime)\n"+
 		"    Registry:\t%v\n"+
 		"    Volume:\t%v\n"+
@@ -399,13 +373,13 @@ func printQuobyteVolumeSource(quobyte *core.QuobyteVolumeSource, w printersinter
 		quobyte.Registry, quobyte.Volume, quobyte.ReadOnly)
 }
 
-func printPortworxVolumeSource(pwxVolume *core.PortworxVolumeSource, w printersinternal.PrefixWriter) {
+func printPortworxVolumeSource(pwxVolume *core.PortworxVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tPortworxVolume (a Portworx Volume resource)\n"+
 		"    VolumeID:\t%v\n",
 		pwxVolume.VolumeID)
 }
 
-func printISCSIVolumeSource(iscsi *core.ISCSIVolumeSource, w printersinternal.PrefixWriter) {
+func printISCSIVolumeSource(iscsi *core.ISCSIVolumeSource, w versioned.PrefixWriter) {
 	initiator := "<none>"
 	if iscsi.InitiatorName != nil {
 		initiator = *iscsi.InitiatorName
@@ -425,7 +399,7 @@ func printISCSIVolumeSource(iscsi *core.ISCSIVolumeSource, w printersinternal.Pr
 		iscsi.TargetPortal, iscsi.IQN, iscsi.Lun, iscsi.ISCSIInterface, iscsi.FSType, iscsi.ReadOnly, iscsi.Portals, iscsi.DiscoveryCHAPAuth, iscsi.SessionCHAPAuth, iscsi.SecretRef, initiator)
 }
 
-func printGlusterfsVolumeSource(glusterfs *core.GlusterfsVolumeSource, w printersinternal.PrefixWriter) {
+func printGlusterfsVolumeSource(glusterfs *core.GlusterfsVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tGlusterfs (a Glusterfs mount on the host that shares a pod's lifetime)\n"+
 		"    EndpointsName:\t%v\n"+
 		"    Path:\t%v\n"+
@@ -433,14 +407,14 @@ func printGlusterfsVolumeSource(glusterfs *core.GlusterfsVolumeSource, w printer
 		glusterfs.EndpointsName, glusterfs.Path, glusterfs.ReadOnly)
 }
 
-func printPersistentVolumeClaimVolumeSource(claim *core.PersistentVolumeClaimVolumeSource, w printersinternal.PrefixWriter) {
+func printPersistentVolumeClaimVolumeSource(claim *core.PersistentVolumeClaimVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tPersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)\n"+
 		"    ClaimName:\t%v\n"+
 		"    ReadOnly:\t%v\n",
 		claim.ClaimName, claim.ReadOnly)
 }
 
-func printRBDVolumeSource(rbd *core.RBDVolumeSource, w printersinternal.PrefixWriter) {
+func printRBDVolumeSource(rbd *core.RBDVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tRBD (a Rados Block Device mount on the host that shares a pod's lifetime)\n"+
 		"    CephMonitors:\t%v\n"+
 		"    RBDImage:\t%v\n"+
@@ -453,7 +427,7 @@ func printRBDVolumeSource(rbd *core.RBDVolumeSource, w printersinternal.PrefixWr
 		rbd.CephMonitors, rbd.RBDImage, rbd.FSType, rbd.RBDPool, rbd.RadosUser, rbd.Keyring, rbd.SecretRef, rbd.ReadOnly)
 }
 
-func printDownwardAPIVolumeSource(d *core.DownwardAPIVolumeSource, w printersinternal.PrefixWriter) {
+func printDownwardAPIVolumeSource(d *core.DownwardAPIVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tDownwardAPI (a volume populated by information about the pod)\n    Items:\n")
 	for _, mapping := range d.Items {
 		if mapping.FieldRef != nil {
@@ -465,7 +439,7 @@ func printDownwardAPIVolumeSource(d *core.DownwardAPIVolumeSource, w printersint
 	}
 }
 
-func printAzureDiskVolumeSource(d *core.AzureDiskVolumeSource, w printersinternal.PrefixWriter) {
+func printAzureDiskVolumeSource(d *core.AzureDiskVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tAzureDisk (an Azure Data Disk mount on the host and bind mount to the pod)\n"+
 		"    DiskName:\t%v\n"+
 		"    DiskURI:\t%v\n"+
@@ -476,7 +450,7 @@ func printAzureDiskVolumeSource(d *core.AzureDiskVolumeSource, w printersinterna
 		d.DiskName, d.DataDiskURI, *d.Kind, *d.FSType, *d.CachingMode, *d.ReadOnly)
 }
 
-func printVsphereVolumeSource(vsphere *core.VsphereVirtualDiskVolumeSource, w printersinternal.PrefixWriter) {
+func printVsphereVolumeSource(vsphere *core.VsphereVirtualDiskVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tvSphereVolume (a Persistent Disk resource in vSphere)\n"+
 		"    VolumePath:\t%v\n"+
 		"    FSType:\t%v\n"+
@@ -484,14 +458,14 @@ func printVsphereVolumeSource(vsphere *core.VsphereVirtualDiskVolumeSource, w pr
 		vsphere.VolumePath, vsphere.FSType, vsphere.StoragePolicyName)
 }
 
-func printPhotonPersistentDiskVolumeSource(photon *core.PhotonPersistentDiskVolumeSource, w printersinternal.PrefixWriter) {
+func printPhotonPersistentDiskVolumeSource(photon *core.PhotonPersistentDiskVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tPhotonPersistentDisk (a Persistent Disk resource in photon platform)\n"+
 		"    PdID:\t%v\n"+
 		"    FSType:\t%v\n",
 		photon.PdID, photon.FSType)
 }
 
-func printCinderVolumeSource(cinder *core.CinderVolumeSource, w printersinternal.PrefixWriter) {
+func printCinderVolumeSource(cinder *core.CinderVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tCinder (a Persistent Disk resource in OpenStack)\n"+
 		"    VolumeID:\t%v\n"+
 		"    FSType:\t%v\n"+
@@ -500,7 +474,7 @@ func printCinderVolumeSource(cinder *core.CinderVolumeSource, w printersinternal
 			cinder.VolumeID, cinder.FSType, cinder.ReadOnly, cinder.SecretRef)
 }
 
-func printScaleIOVolumeSource(sio *core.ScaleIOVolumeSource, w printersinternal.PrefixWriter) {
+func printScaleIOVolumeSource(sio *core.ScaleIOVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tScaleIO (a persistent volume backed by a block device in ScaleIO)\n"+
 		"    Gateway:\t%v\n"+
 		"    System:\t%v\n"+
@@ -513,7 +487,7 @@ func printScaleIOVolumeSource(sio *core.ScaleIOVolumeSource, w printersinternal.
 		sio.Gateway, sio.System, sio.ProtectionDomain, sio.StoragePool, sio.StorageMode, sio.VolumeName, sio.FSType, sio.ReadOnly)
 }
 
-func printCephFSVolumeSource(cephfs *core.CephFSVolumeSource, w printersinternal.PrefixWriter) {
+func printCephFSVolumeSource(cephfs *core.CephFSVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tCephFS (a CephFS mount on the host that shares a pod's lifetime)\n"+
 		"    Monitors:\t%v\n"+
 		"    Path:\t%v\n"+
@@ -524,7 +498,7 @@ func printCephFSVolumeSource(cephfs *core.CephFSVolumeSource, w printersinternal
 		cephfs.Monitors, cephfs.Path, cephfs.User, cephfs.SecretFile, cephfs.SecretRef, cephfs.ReadOnly)
 }
 
-func printStorageOSVolumeSource(storageos *core.StorageOSVolumeSource, w printersinternal.PrefixWriter) {
+func printStorageOSVolumeSource(storageos *core.StorageOSVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tStorageOS (a StorageOS Persistent Disk resource)\n"+
 		"    VolumeName:\t%v\n"+
 		"    VolumeNamespace:\t%v\n"+
@@ -533,7 +507,7 @@ func printStorageOSVolumeSource(storageos *core.StorageOSVolumeSource, w printer
 		storageos.VolumeName, storageos.VolumeNamespace, storageos.FSType, storageos.ReadOnly)
 }
 
-func printFCVolumeSource(fc *core.FCVolumeSource, w printersinternal.PrefixWriter) {
+func printFCVolumeSource(fc *core.FCVolumeSource, w versioned.PrefixWriter) {
 	lun := "<none>"
 	if fc.Lun != nil {
 		lun = strconv.Itoa(int(*fc.Lun))
@@ -546,7 +520,7 @@ func printFCVolumeSource(fc *core.FCVolumeSource, w printersinternal.PrefixWrite
 		strings.Join(fc.TargetWWNs, ", "), lun, fc.FSType, fc.ReadOnly)
 }
 
-func printAzureFileVolumeSource(azureFile *core.AzureFileVolumeSource, w printersinternal.PrefixWriter) {
+func printAzureFileVolumeSource(azureFile *core.AzureFileVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tAzureFile (an Azure File Service mount on the host and bind mount to the pod)\n"+
 		"    SecretName:\t%v\n"+
 		"    ShareName:\t%v\n"+
@@ -554,7 +528,7 @@ func printAzureFileVolumeSource(azureFile *core.AzureFileVolumeSource, w printer
 		azureFile.SecretName, azureFile.ShareName, azureFile.ReadOnly)
 }
 
-func printFlexVolumeSource(flex *core.FlexVolumeSource, w printersinternal.PrefixWriter) {
+func printFlexVolumeSource(flex *core.FlexVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tFlexVolume (a generic volume resource that is provisioned/attached using an exec based plugin)\n"+
 		"    Driver:\t%v\n"+
 		"    FSType:\t%v\n"+
@@ -564,14 +538,14 @@ func printFlexVolumeSource(flex *core.FlexVolumeSource, w printersinternal.Prefi
 		flex.Driver, flex.FSType, flex.SecretRef, flex.ReadOnly, flex.Options)
 }
 
-func printFlockerVolumeSource(flocker *core.FlockerVolumeSource, w printersinternal.PrefixWriter) {
+func printFlockerVolumeSource(flocker *core.FlockerVolumeSource, w versioned.PrefixWriter) {
 	w.Write(LEVEL_2, "Type:\tFlocker (a Flocker volume mounted by the Flocker agent)\n"+
 		"    DatasetName:\t%v\n"+
 		"    DatasetUUID:\t%v\n",
 		flocker.DatasetName, flocker.DatasetUUID)
 }
 
-func DescribeEvents(el *core.EventList, w printersinternal.PrefixWriter) {
+func DescribeEvents(el *core.EventList, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	if len(el.Items) == 0 {
 		w.Write(LEVEL_0, "Events:\t<none>\n")
@@ -601,12 +575,12 @@ func DescribeEvents(el *core.EventList, w printersinternal.PrefixWriter) {
 var maxAnnotationLen = 200
 
 // printLabelsMultiline prints multiple labels with a proper alignment.
-func printLabelsMultiline(level int, w printersinternal.PrefixWriter, title string, labels map[string]string) {
+func printLabelsMultiline(level int, w versioned.PrefixWriter, title string, labels map[string]string) {
 	printLabelsMultilineWithIndent(level, w, "", title, "\t", labels, sets.NewString())
 }
 
 // printLabelsMultiline prints multiple labels with a user-defined alignment.
-func printLabelsMultilineWithIndent(level int, w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.String) {
+func printLabelsMultilineWithIndent(level int, w versioned.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.String) {
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
 	if labels == nil || len(labels) == 0 {
@@ -654,18 +628,18 @@ func tabbedString(f func(io.Writer) error) (string, error) {
 }
 
 // printAnnotationsMultilineWithFilter prints filtered multiple annotations with a proper alignment.
-func printAnnotationsMultilineWithFilter(level int, w printersinternal.PrefixWriter, title string, annotations map[string]string, skip sets.String) {
+func printAnnotationsMultilineWithFilter(level int, w versioned.PrefixWriter, title string, annotations map[string]string, skip sets.String) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, skip)
 }
 
 // printAnnotationsMultiline prints multiple annotations with a proper alignment.
-func printAnnotationsMultiline(level int, w printersinternal.PrefixWriter, title string, annotations map[string]string) {
+func printAnnotationsMultiline(level int, w versioned.PrefixWriter, title string, annotations map[string]string) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, sets.NewString())
 }
 
 // printAnnotationsMultilineWithIndent prints multiple annotations with a user-defined alignment.
 // If annotation string is too long, we omit chars more than 200 length.
-func printAnnotationsMultilineWithIndent(level int, w printersinternal.PrefixWriter, initialIndent, title, innerIndent string, annotations map[string]string, skip sets.String) {
+func printAnnotationsMultilineWithIndent(level int, w versioned.PrefixWriter, initialIndent, title, innerIndent string, annotations map[string]string, skip sets.String) {
 
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 

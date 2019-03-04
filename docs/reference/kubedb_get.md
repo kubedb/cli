@@ -100,6 +100,7 @@ kubedb get [(-o|--output=)json|yaml|wide|custom-columns=...|custom-columns-file=
       --kubeconfig string                Path to the kubeconfig file to use for CLI requests.
       --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)
       --log-dir string                   If non-empty, write log files in this directory
+      --log-flush-frequency duration     Maximum number of seconds between log flushes (default 5s)
       --logtostderr                      log to standard error instead of files
       --match-server-version             Require server version to match client version
   -n, --namespace string                 If present, the namespace scope for this CLI request

@@ -28,10 +28,10 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/cli-runtime/pkg/genericclioptions/resource"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/kubectl/describe"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
-	"k8s.io/kubernetes/pkg/printers"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 )
 
 var (
@@ -70,7 +70,7 @@ type DescribeOptions struct {
 	Selector  string
 	Namespace string
 
-	Describer  func(*meta.RESTMapping) (printers.Describer, error)
+	Describer  func(*meta.RESTMapping) (describe.Describer, error)
 	NewBuilder func() *resource.Builder
 
 	BuilderArgs []string
@@ -79,7 +79,7 @@ type DescribeOptions struct {
 	AllNamespaces        bool
 	IncludeUninitialized bool
 
-	DescriberSettings *printers.DescriberSettings
+	DescriberSettings *describe.DescriberSettings
 	FilenameOptions   *resource.FilenameOptions
 
 	genericclioptions.IOStreams
@@ -88,7 +88,7 @@ type DescribeOptions struct {
 func NewCmdDescribe(parent string, f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
 	o := &DescribeOptions{
 		FilenameOptions: &resource.FilenameOptions{},
-		DescriberSettings: &printers.DescriberSettings{
+		DescriberSettings: &describe.DescriberSettings{
 			ShowEvents: true,
 		},
 
@@ -135,7 +135,7 @@ func (o *DescribeOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args [
 
 	o.BuilderArgs = args
 
-	o.Describer = func(mapping *meta.RESTMapping) (printers.Describer, error) {
+	o.Describer = func(mapping *meta.RESTMapping) (describe.Describer, error) {
 		return describer.DescriberFn(f, mapping)
 	}
 

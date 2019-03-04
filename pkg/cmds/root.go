@@ -5,14 +5,15 @@ import (
 	"io"
 
 	v "github.com/appscode/go/version"
-	"github.com/appscode/kutil/tools/cli"
 	"github.com/kubedb/cli/pkg/cmds/create"
 	"github.com/kubedb/cli/pkg/cmds/get"
 	"github.com/spf13/cobra"
 	utilflag "k8s.io/apiserver/pkg/util/flag"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
+	"kmodules.xyz/client-go/logs"
+	"kmodules.xyz/client-go/tools/cli"
 )
 
 // NewKubeDBCommand creates the `kubedb` command and its nested children.
@@ -41,8 +42,7 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	matchVersionKubeConfigFlags.AddFlags(flags)
 
 	flags.AddGoFlagSet(flag.CommandLine)
-	// ref: https://github.com/kubernetes/kubernetes/issues/17162#issuecomment-225596212
-	flag.CommandLine.Parse([]string{})
+	logs.ParseFlags()
 	flags.BoolVar(&cli.EnableAnalytics, "enable-analytics", cli.EnableAnalytics, "Send analytical events to Google Analytics")
 
 	f := cmdutil.NewFactory(matchVersionKubeConfigFlags)

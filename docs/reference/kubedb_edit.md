@@ -39,7 +39,7 @@ kubedb edit (RESOURCE/NAME | -f FILENAME)
   -f, --filename strings              Filename, directory, or URL to files to use to edit the resource
   -h, --help                          help for edit
       --include-uninitialized         If true, the kubectl command applies to uninitialized objects. If explicitly set to false, this flag overrides other flags that make the kubectl commands apply to uninitialized objects, e.g., "--all". Objects with empty metadata.initializers are regarded as initialized.
-  -o, --output string                 Output format. One of: json|yaml|name|go-template-file|templatefile|template|go-template|jsonpath|jsonpath-file.
+  -o, --output string                 Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
       --output-patch                  Output the patch if the resource is edited.
       --record                        Record current kubectl command in the resource annotation. If set to false, do not record the command. If set to true, record the command. If not set, default to updating the existing annotation value only if one already exists.
   -R, --recursive                     Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests organized within the same directory.
@@ -66,6 +66,7 @@ kubedb edit (RESOURCE/NAME | -f FILENAME)
       --kubeconfig string                Path to the kubeconfig file to use for CLI requests.
       --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)
       --log-dir string                   If non-empty, write log files in this directory
+      --log-flush-frequency duration     Maximum number of seconds between log flushes (default 5s)
       --logtostderr                      log to standard error instead of files
       --match-server-version             Require server version to match client version
   -n, --namespace string                 If present, the namespace scope for this CLI request
