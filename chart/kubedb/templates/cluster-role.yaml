@@ -44,7 +44,7 @@ rules:
   resources:
   - deployments
   - statefulsets
-  verbs: ["create", "delete", "get", "patch", "update"]
+  verbs: ["create", "delete", "get", "list", "patch", "update"]
 - apiGroups:
   - apps
   resources:
