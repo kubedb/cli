@@ -2,17 +2,62 @@
 
 ## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
 
-[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0...HEAD)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.10.0...HEAD)
 
 **Merged pull requests:**
 
-- Use git reset in release script. [\#363](https://github.com/kubedb/cli/pull/363) ([tamalsaha](https://github.com/tamalsaha))
+- Add missing ClusterRole to list StatefulSets [\#404](https://github.com/kubedb/cli/pull/404) ([shudipta](https://github.com/shudipta))
+- Update Kubernetes client libraries to 1.13.0 [\#403](https://github.com/kubedb/cli/pull/403) ([tamalsaha](https://github.com/tamalsaha))
+- Update name of 'Postgres upgrade manual' doc  [\#402](https://github.com/kubedb/cli/pull/402) ([the-redback](https://github.com/the-redback))
+- Update dep list to Kubernetes 1.13 release [\#401](https://github.com/kubedb/cli/pull/401) ([tamalsaha](https://github.com/tamalsaha))
+
+## [0.10.0](https://github.com/kubedb/cli/tree/0.10.0) (2019-02-21)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.9.0...0.10.0)
+
+**Merged pull requests:**
+
+- Prepare docs for 0.10.0 release [\#400](https://github.com/kubedb/cli/pull/400) ([tamalsaha](https://github.com/tamalsaha))
+- Redis cluster doc [\#399](https://github.com/kubedb/cli/pull/399) ([shudipta](https://github.com/shudipta))
+- Concept doc updated for Postgres replicaservicetemplate and LeaderElection [\#398](https://github.com/kubedb/cli/pull/398) ([the-redback](https://github.com/the-redback))
+- Update KubeDB catalog for Redis [\#397](https://github.com/kubedb/cli/pull/397) ([shudipta](https://github.com/shudipta))
+- Use onessl 0.10.0 [\#396](https://github.com/kubedb/cli/pull/396) ([tamalsaha](https://github.com/tamalsaha))
+- Fixed the case for deploying using MINGW64 for windows [\#395](https://github.com/kubedb/cli/pull/395) ([tamalsaha](https://github.com/tamalsaha))
+- Don't use priority class when operator namespace is not kube-system [\#394](https://github.com/kubedb/cli/pull/394) ([tamalsaha](https://github.com/tamalsaha))
+- Upgrade postgres-tools tag to v3 [\#393](https://github.com/kubedb/cli/pull/393) ([the-redback](https://github.com/the-redback))
+- Use kmodules.xyz pkg paths directly [\#392](https://github.com/kubedb/cli/pull/392) ([tamalsaha](https://github.com/tamalsaha))
+- Docs updated [\#391](https://github.com/kubedb/cli/pull/391) ([the-redback](https://github.com/the-redback))
+- Fix link in operator monitoring doc [\#389](https://github.com/kubedb/cli/pull/389) ([hossainemruz](https://github.com/hossainemruz))
+- Update postgres Catalog [\#388](https://github.com/kubedb/cli/pull/388) ([the-redback](https://github.com/the-redback))
+- Catalog Added for MongoDB 4.x [\#387](https://github.com/kubedb/cli/pull/387) ([the-redback](https://github.com/the-redback))
+- update documentation: fix typo [\#386](https://github.com/kubedb/cli/pull/386) ([abhishekjiitr](https://github.com/abhishekjiitr))
+- Pass Annotations to Operator PodTemplate [\#385](https://github.com/kubedb/cli/pull/385) ([the-redback](https://github.com/the-redback))
+- Mysql 8.0.14 Catalog Added [\#384](https://github.com/kubedb/cli/pull/384) ([the-redback](https://github.com/the-redback))
+- Fix: Missing rbac role for 'authorization.kubedb.com' api group [\#382](https://github.com/kubedb/cli/pull/382) ([the-redback](https://github.com/the-redback))
+- Update Snapshot docs to include `podVolumeClaimSpec` [\#381](https://github.com/kubedb/cli/pull/381) ([hossainemruz](https://github.com/hossainemruz))
+- Postgres: Add Point-in-Time Recovery \(PITR\) doc [\#380](https://github.com/kubedb/cli/pull/380) ([hossainemruz](https://github.com/hossainemruz))
+- Update Monitoring doc [\#379](https://github.com/kubedb/cli/pull/379) ([hossainemruz](https://github.com/hossainemruz))
+- Prepare release 0.10.0 [\#378](https://github.com/kubedb/cli/pull/378) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare 0.10.0 release [\#377](https://github.com/kubedb/cli/pull/377) ([tamalsaha](https://github.com/tamalsaha))
+- chart: Mongodb catalog updated [\#376](https://github.com/kubedb/cli/pull/376) ([the-redback](https://github.com/the-redback))
+- MongoDB Catalog updated [\#375](https://github.com/kubedb/cli/pull/375) ([the-redback](https://github.com/the-redback))
+- Support KubeDB operator monitoring [\#374](https://github.com/kubedb/cli/pull/374) ([hossainemruz](https://github.com/hossainemruz))
+- Rename --analytics flag to --enable-analytics [\#373](https://github.com/kubedb/cli/pull/373) ([tamalsaha](https://github.com/tamalsaha))
+- Add go ini pkg to forced dep list [\#372](https://github.com/kubedb/cli/pull/372) ([tamalsaha](https://github.com/tamalsaha))
+- Redis 5.0.3, 5.0 Catalog added [\#371](https://github.com/kubedb/cli/pull/371) ([the-redback](https://github.com/the-redback))
+- user -\> username in the mysql secret and references to it [\#370](https://github.com/kubedb/cli/pull/370) ([mauritsvdvijgh](https://github.com/mauritsvdvijgh))
+- Catalog for postgres 10.6 and 11.1 [\#369](https://github.com/kubedb/cli/pull/369) ([the-redback](https://github.com/the-redback))
+- Use reasonable storage size \(1Gi\) in User Guide [\#368](https://github.com/kubedb/cli/pull/368) ([the-redback](https://github.com/the-redback))
+- Kubedb operator upgrade manual for postgres [\#367](https://github.com/kubedb/cli/pull/367) ([the-redback](https://github.com/the-redback))
+- Update catalog to support Elasticsearch 6.5.3 [\#366](https://github.com/kubedb/cli/pull/366) ([hossainemruz](https://github.com/hossainemruz))
+- Docs typo fix [\#365](https://github.com/kubedb/cli/pull/365) ([mauritsvdvijgh](https://github.com/mauritsvdvijgh))
 
 ## [0.9.0](https://github.com/kubedb/cli/tree/0.9.0) (2018-12-17)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.9.0-rc.2...0.9.0)
 
 **Merged pull requests:**
 
+- Prepare docs for 0.9.0 release [\#364](https://github.com/kubedb/cli/pull/364) ([tamalsaha](https://github.com/tamalsaha))
+- Use git reset in release script. [\#363](https://github.com/kubedb/cli/pull/363) ([tamalsaha](https://github.com/tamalsaha))
 - Prepare 0.9.0 release [\#362](https://github.com/kubedb/cli/pull/362) ([tamalsaha](https://github.com/tamalsaha))
 - Revendor dependencies [\#361](https://github.com/kubedb/cli/pull/361) ([tamalsaha](https://github.com/tamalsaha))
 - Add delete list for revendor.py [\#360](https://github.com/kubedb/cli/pull/360) ([tamalsaha](https://github.com/tamalsaha))
