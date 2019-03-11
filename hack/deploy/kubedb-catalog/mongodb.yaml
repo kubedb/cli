@@ -76,6 +76,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "3.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.4-v2"
@@ -92,6 +93,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "3.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.6-v2"
@@ -108,6 +110,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "4.0.5"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:4.0.5"
@@ -124,6 +127,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "4.0.5"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:4.0"
@@ -140,6 +144,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "4.1.7"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo:4.1.7"
@@ -147,3 +152,95 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:4.1.7"
+
+---
+# After 0.10.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.4-v3"
+  labels:
+    app: kubedb
+spec:
+  version: "3.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.4-v2"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.4-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "3.6-v3"
+  labels:
+    app: kubedb
+spec:
+  version: "3.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:3.6-v2"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "4.0.5-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "4.0.5"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:4.0.5"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:4.0.5"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "4.0-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "4.0.5"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:4.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:4.0"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MongoDBVersion
+metadata:
+  name: "4.1.7-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "4.1.7"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo:4.1.7"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:4.1.7"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
