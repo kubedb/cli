@@ -53,22 +53,6 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
-  name: "5.7-v1"
-  labels:
-    app: kubedb
-spec:
-  version: "5.7"
-  db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5.7-v1"
-  exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
-  tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7-v2"
-
----
-apiVersion: catalog.kubedb.com/v1alpha1
-kind: MySQLVersion
-metadata:
   name: "8"
   labels:
     app: kubedb
@@ -120,6 +104,24 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
 metadata:
+  name: "5.7-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "5.7"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql:5.7-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:5.7-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
   name: "8.0-v1"
   labels:
     app: kubedb
@@ -131,6 +133,8 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 # After 0.9.0
@@ -149,6 +153,8 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0-v3"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -165,6 +171,8 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0.3"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -181,3 +189,5 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysqld-exporter:v0.11.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mysql-tools:8.0.14"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
