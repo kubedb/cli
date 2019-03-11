@@ -23,6 +23,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6-v1"
@@ -30,6 +31,24 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v2"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "5.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -56,6 +75,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.6.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4-v1"
@@ -63,6 +83,24 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v2"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "5.6.4-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "5.6.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:5.6.4-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -89,6 +127,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.2"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2-v1"
@@ -96,6 +135,24 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v2"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "6.2"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -122,6 +179,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.2.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4-v1"
@@ -129,6 +187,24 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v2"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.2.4-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "6.2.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.2.4-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -155,6 +231,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.3"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3-v1"
@@ -162,6 +239,24 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v2"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.3-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "6.3"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -188,6 +283,7 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.3.0"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0-v1"
@@ -200,10 +296,29 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
+  name: "6.3.0-v2"
+  labels:
+    app: kubedb
+spec:
+  version: "6.3.0"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.3.0-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0-v2"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
   name: "6.4"
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "6.4"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.4"
@@ -216,7 +331,42 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
+  name: "6.4-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "6.4"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4-v1"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
   name: "6.4.0"
+  labels:
+    app: kubedb
+spec:
+  deprecated: true
+  version: "6.4.0"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.4.0"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4.0-v1"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.4.0-v1"
   labels:
     app: kubedb
 spec:
@@ -227,11 +377,31 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4.0-v1"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
 metadata:
   name: "6.5.3"
+  labels:
+    app: kubedb
+spec:
+  deprecated: true
+  version: "6.5.3"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.5.3"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.5.3"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.5.3-v1"
   labels:
     app: kubedb
 spec:
@@ -242,6 +412,25 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.5.3"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: ElasticsearchVersion
+metadata:
+  name: "6.5"
+  labels:
+    app: kubedb
+spec:
+  deprecated: true
+  version: "6.5.3"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch:6.5"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.5"\
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -258,3 +447,5 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch_exporter:1.0.2"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.5"
+  initContainer:
+    image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
