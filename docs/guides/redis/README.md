@@ -19,7 +19,7 @@ aliases:
 
 |             Features             | Availability |
 | -------------------------------- | :----------: |
-| Clustering                       |   &#10007;   |
+| Clustering                       |   &#10003;   |
 | Instant Backup                   |   &#10007;   |
 | Scheduled Backup                 |   &#10007;   |
 | Persistent Volume                |   &#10003;   |
