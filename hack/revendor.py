@@ -130,6 +130,14 @@ REQUIRED_DEPS = [
     {
       "package": "k8s.io/utils",
       "version": "66066c83e385e385ccc3c964b44fd7dcd413d0ed"
+    },
+    {
+      "package": "github.com/evanphx/json-patch",
+      "version": "5858425f75500d40c52783dce87d085a483ce135"
+    },
+    {
+      "package": "github.com/google/go-cmp",
+      "version": "6f77996f0c42f7b84e5a2b252227263f93432e9b"
     }
 ]
 DEP_LIST = [
