@@ -181,6 +181,23 @@ spec:
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: RedisVersion
 metadata:
+  name: "5.0-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "5.0"
+  db:
+    image: "{{ .Values.dockerRegistry }}/redis:5.0-v1"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
   name: "5.0.3"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -191,6 +208,23 @@ spec:
   version: "5.0.3"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0.3"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "5.0.3-v1"
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubedb-catalog.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  version: "5.0.3"
+  db:
+    image: "{{ .Values.dockerRegistry }}/redis:5.0.3-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
 {{ end }}
