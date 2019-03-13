@@ -18,6 +18,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -38,6 +40,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -58,6 +62,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -77,6 +83,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -97,6 +105,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -117,6 +127,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
+
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: MySQLVersion
@@ -136,6 +149,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -155,6 +170,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 # After 0.9.0
@@ -176,6 +193,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0-v3"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -195,6 +214,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0.3"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -214,5 +235,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0.14"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 {{ end }}
