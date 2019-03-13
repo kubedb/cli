@@ -98,6 +98,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -117,6 +119,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -136,6 +140,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0.5"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -155,6 +161,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -174,5 +182,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongodb_exporter:v1.0.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.1.7"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
 
 {{ end }}
