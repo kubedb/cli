@@ -1,3 +1,4 @@
+{{ if .Values.rbac.create }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -275,3 +276,5 @@ spec: #same spec as db
     rule: 'RunAsAny'
 
 ---
+
+{{ end }}
