@@ -5,10 +5,7 @@ kind: RedisVersion
 metadata:
   name: "4"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4"
@@ -16,6 +13,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/redis:4"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -23,10 +22,7 @@ kind: RedisVersion
 metadata:
   name: "4-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4"
@@ -34,6 +30,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/redis:4-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -41,10 +39,7 @@ kind: RedisVersion
 metadata:
   name: "4.0"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0"
@@ -52,6 +47,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/redis:4.0"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -59,10 +56,7 @@ kind: RedisVersion
 metadata:
   name: "4.0-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0"
@@ -70,6 +64,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/redis:4.0-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -77,10 +73,7 @@ kind: RedisVersion
 metadata:
   name: "4.0.6"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0.6"
@@ -88,6 +81,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/redis:4.0.6"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -95,10 +90,7 @@ kind: RedisVersion
 metadata:
   name: "4.0.6-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0.6"
@@ -106,6 +98,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/redis:4.0.6-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 # After 0.9.0
@@ -115,16 +109,15 @@ kind: RedisVersion
 metadata:
   name: "4.0-v2"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:4.0-v2"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -132,16 +125,15 @@ kind: RedisVersion
 metadata:
   name: "4.0.6-v2"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0.6"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:4.0.6-v2"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -149,16 +141,15 @@ kind: RedisVersion
 metadata:
   name: "4.0.11"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0.11"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:4.0.11"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -166,16 +157,15 @@ kind: RedisVersion
 metadata:
   name: "5.0"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -183,16 +173,15 @@ kind: RedisVersion
 metadata:
   name: "5.0-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -200,16 +189,15 @@ kind: RedisVersion
 metadata:
   name: "5.0.3"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0.3"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0.3"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -217,14 +205,14 @@ kind: RedisVersion
 metadata:
   name: "5.0.3-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0.3"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0.3-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
+
 {{ end }}

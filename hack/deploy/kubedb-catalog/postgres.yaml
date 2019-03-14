@@ -14,6 +14,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -31,6 +34,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6-v2"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -48,6 +54,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -65,6 +74,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7-v2"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -82,6 +94,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/operator:0.8.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -99,6 +114,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.6"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v2"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 # After 0.9.0
@@ -117,6 +135,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6-v3"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -133,6 +154,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7-v3"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -149,6 +173,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v3"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -165,6 +192,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.6"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -181,3 +211,6 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:11.1"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot

@@ -1,5 +1,5 @@
-hash: 5ae66845ff56b315c54c037e7cdf08eaa0c462309317f56c7a6818c3efff5f33
-updated: 2019-03-03T22:27:05.250687126-08:00
+hash: 29a444c6c8649458368200363dbbc21f580badf7df0e74df2fd100b583315e0e
+updated: 2019-03-14T10:32:31.244322688-07:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -78,7 +78,7 @@ imports:
   subpackages:
   - log
 - name: github.com/evanphx/json-patch
-  version: 36442dbdb585210f8d5a1b45e67aa323c197d5c4
+  version: 5858425f75500d40c52783dce87d085a483ce135
 - name: github.com/exponent-io/jsonpath
   version: d6023ce2651d8eafb5c75bb0c7167536102ec9f5
 - name: github.com/fatih/camelcase
@@ -117,10 +117,11 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 6f77996f0c42f7b84e5a2b252227263f93432e9b
   subpackages:
   - cmp
   - cmp/internal/diff
+  - cmp/internal/flags
   - cmp/internal/function
   - cmp/internal/value
 - name: github.com/google/gofuzz
@@ -165,7 +166,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 492c6d520a33091da6ececa5846fd11cabf8fc6f
+  version: 334b49d77d819d1e3a8d90c7a4ea526bbb71f8b4
   subpackages:
   - apis
   - apis/authorization
@@ -178,19 +179,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 50374386935fdcf6111dc31ac8f7f1bbba2a4100
+  version: 4395762a97c4743a0b6b533d235ca70d8a2c9108
 - name: github.com/kubedb/etcd
-  version: 5ae5c1c34353d46a1fab972df5da6291e6acca38
+  version: 919ffaec0ded720590f921729adf1459f75c208a
 - name: github.com/kubedb/memcached
-  version: 8b8de648a0a9460212cc8eaf1d9e398ce840d366
+  version: cbf868e73b95ba5b0eab4b3add9dfc2a7cb6de04
 - name: github.com/kubedb/mongodb
-  version: 163911b0b17348c5dfa2408b136ae9c2a4c87c5f
+  version: 086fc8149767567c2a0db3310415ca876d42d3d6
 - name: github.com/kubedb/mysql
-  version: 978f1139514aff881231bd9bc428c904ad9e60e0
+  version: 7b76665775ef237ec0e660b5f8719666eb405062
 - name: github.com/kubedb/postgres
-  version: 0264a3c31525889f23c3ac1374f70d18cc0bf2ac
+  version: 638c60919890613f7e92a3e056f328942cc00b03
 - name: github.com/kubedb/redis
-  version: 598eb51c5d6f306804b41e4fe732f42295bc3c9e
+  version: 964036f4a6e4262173eb17ebdb7b617a30d6a34a
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -215,6 +216,8 @@ imports:
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: github.com/prometheus/client_golang
+  version: 505eaef017263e299324067d40ca2c48f6a2cf50
 - name: github.com/PuerkitoBio/purell
   version: 8a290539e2e8629dbc4e6bad948158f790ec31f4
 - name: github.com/PuerkitoBio/urlesc
@@ -292,7 +295,7 @@ imports:
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
-  version: 54a98f90d1c46b7731eb8fb305d2a321c30ef610
+  version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
   subpackages:
   - internal
   - internal/app_identity
@@ -625,7 +628,7 @@ imports:
   - exec
   - pointer
 - name: kmodules.xyz/client-go
-  version: 8e7590427751a4d2512094be0144780dc7ec860a
+  version: 348709ae06aa951e2e3e9c31bae48d704ace2d5d
   subpackages:
   - apiextensions/v1beta1
   - logs

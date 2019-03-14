@@ -373,6 +373,7 @@ if [ "$KUBEDB_UNINSTALL" -eq 1 ]; then
   kubectl delete clusterrole -l app=kubedb
   kubectl delete rolebindings -l app=kubedb --namespace $KUBEDB_NAMESPACE
   kubectl delete role -l app=kubedb --namespace $KUBEDB_NAMESPACE
+  kubectl delete psp -l app=kubedb
 
   # delete servicemonitor and kubedb-operator-apiserver-cert secret. ignore error as they might not exist
   kubectl delete servicemonitor kubedb-${KUBEDB_OPERATOR_NAME}-servicemonitor --namespace $PROMETHEUS_NAMESPACE || true
@@ -466,6 +467,14 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
   ${SCRIPT_LOCATION}hack/deploy/appcatalog-user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
 fi
+
+echo "Applying Pod Sucurity Policies"
+${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/redis.yaml | $ONESSL envsubst | kubectl apply -f -
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
   kubectl patch deploy kubedb-$KUBEDB_OPERATOR_NAME -n $KUBEDB_NAMESPACE \

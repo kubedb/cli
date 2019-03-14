@@ -5,10 +5,7 @@ kind: MemcachedVersion
 metadata:
   name: "1.5"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "1.5"
@@ -16,6 +13,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  podSecurityPolicies:
+    databasePolicyName: memcached-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -23,16 +22,15 @@ kind: MemcachedVersion
 metadata:
   name: "1.5-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "1.5"
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
+  podSecurityPolicies:
+    databasePolicyName: memcached-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -40,10 +38,7 @@ kind: MemcachedVersion
 metadata:
   name: "1.5.4"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "1.5.4"
@@ -51,6 +46,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5.4"
   exporter:
     image: "{{ .Values.dockerRegistry }}/operator:0.8.0"
+  podSecurityPolicies:
+    databasePolicyName: memcached-db
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -58,14 +55,14 @@ kind: MemcachedVersion
 metadata:
   name: "1.5.4-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "1.5.4"
   db:
     image: "{{ .Values.dockerRegistry }}/memcached:1.5.4-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/memcached-exporter:v0.4.1"
+  podSecurityPolicies:
+    databasePolicyName: memcached-db
+
 {{ end }}

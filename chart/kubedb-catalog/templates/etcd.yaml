@@ -5,10 +5,7 @@ kind: EtcdVersion
 metadata:
   name: "3.2.13"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "3.2.13"
   db:
@@ -17,4 +14,7 @@ spec:
     image: "{{ .Values.dockerRegistry }}/etcd:v3.2.13"
   tools:
     image: "{{ .Values.dockerRegistry }}/etcd-tools:3.2.13"
+  podSecurityPolicies:
+    databasePolicyName: etcd-db
+    snapshotterPolicyName: etcd-snapshot
 {{ end }}

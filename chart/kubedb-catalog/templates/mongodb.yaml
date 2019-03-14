@@ -5,10 +5,7 @@ kind: MongoDBVersion
 metadata:
   name: "3.4"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "3.4"
@@ -20,6 +17,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -27,10 +27,7 @@ kind: MongoDBVersion
 metadata:
   name: "3.4-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "3.4"
@@ -42,6 +39,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -49,10 +49,7 @@ kind: MongoDBVersion
 metadata:
   name: "3.6"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "3.6"
@@ -64,6 +61,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -71,10 +71,7 @@ kind: MongoDBVersion
 metadata:
   name: "3.6-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "3.6"
@@ -86,6 +83,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 # After 0.9.0
@@ -94,10 +94,7 @@ kind: MongoDBVersion
 metadata:
   name: "3.4-v2"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "3.4"
   db:
@@ -108,6 +105,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -115,10 +115,7 @@ kind: MongoDBVersion
 metadata:
   name: "3.6-v2"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "3.6"
   db:
@@ -129,6 +126,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -136,10 +136,7 @@ kind: MongoDBVersion
 metadata:
   name: "4.0.5"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0.5"
   db:
@@ -150,6 +147,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0.5"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -157,10 +157,7 @@ kind: MongoDBVersion
 metadata:
   name: "4.0"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0.5"
   db:
@@ -171,6 +168,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -178,10 +178,7 @@ kind: MongoDBVersion
 metadata:
   name: "4.1.7"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.1.7"
   db:
@@ -192,5 +189,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.1.7"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 {{ end }}
