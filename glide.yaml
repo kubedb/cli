@@ -18,6 +18,8 @@ import:
   version: v1.0.8
 - package: github.com/davecgh/go-spew
   version: v1.1.1
+- package: github.com/evanphx/json-patch
+  version: 5858425f75500d40c52783dce87d085a483ce135
 - package: github.com/ghodss/yaml
   version: v1.0.0
 - package: github.com/go-ini/ini
@@ -25,6 +27,8 @@ import:
 - package: github.com/golang/glog
 - package: github.com/golang/protobuf
   version: v1.1.0
+- package: github.com/google/go-cmp
+  version: 6f77996f0c42f7b84e5a2b252227263f93432e9b
 - package: github.com/gorilla/websocket
   version: v1.4.0
 - package: github.com/graymeta/stow
@@ -56,6 +60,8 @@ import:
   version: v1.1.2
 - package: github.com/ncw/swift
   version: master
+- package: github.com/prometheus/client_golang
+  version: v0.9.2
 - package: github.com/russross/blackfriday
   version: v1.5.2
 - package: github.com/spf13/cobra
@@ -112,3 +118,5 @@ import:
   version: release-10.0
 - package: kmodules.xyz/offshoot-api
   version: release-10.0
+- package: sigs.k8s.io/yaml
+  version: v1.1.0

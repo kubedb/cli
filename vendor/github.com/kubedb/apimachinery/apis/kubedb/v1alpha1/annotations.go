@@ -7,6 +7,7 @@ const (
 
 	LabelDatabaseKind = GenericKey + "/kind"
 	LabelDatabaseName = GenericKey + "/name"
+	LabelRole         = GenericKey + "/role"
 
 	PostgresKey         = ResourceSingularPostgres + "." + GenericKey
 	ElasticsearchKey    = ResourceSingularElasticsearch + "." + GenericKey

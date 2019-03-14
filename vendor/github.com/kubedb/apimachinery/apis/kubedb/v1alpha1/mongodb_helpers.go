@@ -30,7 +30,13 @@ func (m MongoDB) OffshootSelectors() map[string]string {
 }
 
 func (m MongoDB) OffshootLabels() map[string]string {
-	return meta_util.FilterKeys(GenericKey, m.OffshootSelectors(), m.Labels)
+	out := m.OffshootSelectors()
+	out[meta_util.NameLabelKey] = ResourceSingularMongoDB
+	out[meta_util.VersionLabelKey] = string(m.Spec.Version)
+	out[meta_util.InstanceLabelKey] = m.Name
+	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ManagedByLabelKey] = GenericKey
+	return meta_util.FilterKeys(GenericKey, out, m.Labels)
 }
 
 func (m MongoDB) ResourceShortCode() string {
@@ -121,6 +127,12 @@ func (m mongoDBStatsService) Scheme() string {
 
 func (m MongoDB) StatsService() mona.StatsAccessor {
 	return &mongoDBStatsService{&m}
+}
+
+func (m MongoDB) StatsServiceLabels() map[string]string {
+	lbl := meta_util.FilterKeys(GenericKey, m.OffshootSelectors(), m.Labels)
+	lbl[LabelRole] = "stats"
+	return lbl
 }
 
 func (m *MongoDB) GetMonitoringVendor() string {

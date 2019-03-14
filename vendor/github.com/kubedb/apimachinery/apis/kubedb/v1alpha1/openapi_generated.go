@@ -482,15 +482,22 @@ func schema_apimachinery_apis_kubedb_v1alpha1_BackupScheduleSpec(ref common.Refe
 							Ref: ref("kmodules.xyz/objectstore-api/api/v1.B2Spec"),
 						},
 					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable or ephemeral. If not given, database storage type will be used.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
-							Description: "PodTemplate is an optional configuration for pods used for backup and recovery",
+							Description: "PodTemplate is an optional configuration for pods used to take database snapshots",
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
 					"podVolumeClaimSpec": {
 						SchemaProps: spec.SchemaProps{
-							Description: "PodVolumeClaimSpec is used to specify temporary storage for backup/restore Job",
+							Description: "PodVolumeClaimSpec is used to specify temporary storage for backup/restore Job. If not given, database's PvcSpec will be used. If storageType is durable, then a PVC will be created using this PVCSpec. If storageType is ephemeral, then an empty directory will be created of size PvcSpec.Resources.Requests[core.ResourceStorage].",
 							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
 						},
 					},
@@ -3592,7 +3599,7 @@ func schema_apimachinery_apis_kubedb_v1alpha1_SnapshotSpec(ref common.ReferenceC
 					},
 					"podVolumeClaimSpec": {
 						SchemaProps: spec.SchemaProps{
-							Description: "PodVolumeClaimSpec is used to specify temporary storage for backup/restore Job. If not given, database's PvcSpec will be used. If storageType is durable, then a PVC be will created using this PVCSpec. If storageType is ephemeral, then an empty directory will be created of size PvcSpec.Resources.Requests[core.ResourceStorage].",
+							Description: "PodVolumeClaimSpec is used to specify temporary storage for backup/restore Job. If not given, database's PvcSpec will be used. If storageType is durable, then a PVC will be created using this PVCSpec. If storageType is ephemeral, then an empty directory will be created of size PvcSpec.Resources.Requests[core.ResourceStorage].",
 							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
 						},
 					},
