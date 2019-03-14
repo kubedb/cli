@@ -2,6 +2,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: elasticsearch-db
+  labels:
+    app: kubedb
 spec:
   privileged: true  #Allowing privileged pods is necessary for ES db only!
   allowPrivilegeEscalation: true #Allowing privilege escalation is necessary for ES db only!
@@ -27,6 +29,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: postgres-db
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -52,6 +56,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: mongodb-db
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -74,6 +80,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: mysql-db
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -91,12 +99,13 @@ spec:
   fsGroup:
     rule: 'RunAsAny'
 
----
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: redis-db
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -114,12 +123,13 @@ spec:
   fsGroup:
     rule: 'RunAsAny'
 
----
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: memcached-db
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -138,10 +148,13 @@ spec:
     rule: 'RunAsAny'
 
 ---
+# Snapshot YAMls
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: elasticsearch-snapshot
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -164,6 +177,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: postgres-snapshot
+  labels:
+    app: kubedb
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -186,6 +201,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: mongodb-snapshot
+  labels:
+    app: kubedb
 spec: #same spec as db
   privileged: false
   allowPrivilegeEscalation: false
@@ -208,6 +225,8 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: mysql-snapshot
+  labels:
+    app: kubedb
 spec: #same spec as db
   privileged: false
   allowPrivilegeEscalation: false
