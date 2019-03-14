@@ -20,6 +20,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -42,6 +45,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -64,6 +70,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -86,6 +95,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 # After 0.9.0
@@ -108,6 +120,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.4-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -129,6 +144,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:3.6-v2"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -150,6 +168,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0.5"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -171,6 +192,9 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.0"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -192,5 +216,8 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mongo-tools:4.1.7"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mongodb-db
+    snapshotterPolicyName: mongodb-snapshot
 
 {{ end }}
