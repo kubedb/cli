@@ -5,10 +5,7 @@ kind: RedisVersion
 metadata:
   name: "4"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4"
@@ -25,10 +22,7 @@ kind: RedisVersion
 metadata:
   name: "4-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4"
@@ -45,10 +39,7 @@ kind: RedisVersion
 metadata:
   name: "4.0"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0"
@@ -65,10 +56,7 @@ kind: RedisVersion
 metadata:
   name: "4.0-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0"
@@ -85,10 +73,7 @@ kind: RedisVersion
 metadata:
   name: "4.0.6"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0.6"
@@ -105,10 +90,7 @@ kind: RedisVersion
 metadata:
   name: "4.0.6-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   deprecated: true
   version: "4.0.6"
@@ -127,10 +109,7 @@ kind: RedisVersion
 metadata:
   name: "4.0-v2"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0"
   db:
@@ -146,10 +125,7 @@ kind: RedisVersion
 metadata:
   name: "4.0.6-v2"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0.6"
   db:
@@ -165,10 +141,7 @@ kind: RedisVersion
 metadata:
   name: "4.0.11"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "4.0.11"
   db:
@@ -184,10 +157,7 @@ kind: RedisVersion
 metadata:
   name: "5.0"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0"
   db:
@@ -203,10 +173,7 @@ kind: RedisVersion
 metadata:
   name: "5.0-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0"
   db:
@@ -222,10 +189,7 @@ kind: RedisVersion
 metadata:
   name: "5.0.3"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0.3"
   db:
@@ -241,10 +205,7 @@ kind: RedisVersion
 metadata:
   name: "5.0.3-v1"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   version: "5.0.3"
   db:

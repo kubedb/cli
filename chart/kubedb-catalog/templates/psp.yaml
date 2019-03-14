@@ -4,10 +4,7 @@ kind: PodSecurityPolicy
 metadata:
   name: elasticsearch-db
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: true  #Allowing privileged pods is necessary for ES db only!
   allowPrivilegeEscalation: true #Allowing privilege escalation is necessary for ES db only!
@@ -34,10 +31,7 @@ kind: PodSecurityPolicy
 metadata:
   name: postgres-db
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -64,10 +58,7 @@ kind: PodSecurityPolicy
 metadata:
   name: mongodb-db
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -91,10 +82,7 @@ kind: PodSecurityPolicy
 metadata:
   name: mysql-db
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -118,10 +106,7 @@ kind: PodSecurityPolicy
 metadata:
   name: redis-db
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -145,10 +130,7 @@ kind: PodSecurityPolicy
 metadata:
   name: memcached-db
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -173,10 +155,7 @@ kind: PodSecurityPolicy
 metadata:
   name: elasticsearch-snapshot
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -200,10 +179,7 @@ kind: PodSecurityPolicy
 metadata:
   name: postgres-snapshot
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
@@ -227,10 +203,7 @@ kind: PodSecurityPolicy
 metadata:
   name: mongodb-snapshot
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec: #same spec as db
   privileged: false
   allowPrivilegeEscalation: false
@@ -254,10 +227,7 @@ kind: PodSecurityPolicy
 metadata:
   name: mysql-snapshot
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubedb-catalog.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec: #same spec as db
   privileged: false
   allowPrivilegeEscalation: false
