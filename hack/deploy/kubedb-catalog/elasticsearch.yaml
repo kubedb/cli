@@ -16,6 +16,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -34,6 +37,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6-v2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -53,6 +59,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -71,6 +80,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:5.6.4-v2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -90,6 +102,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -108,6 +123,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2-v2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -127,6 +145,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -145,6 +166,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.2.4-v2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -164,6 +188,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -182,6 +209,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3-v2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -201,6 +231,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -219,6 +252,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.3.0-v2"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -237,6 +273,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4-v1"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -255,6 +294,10 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.4.0-v1"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
+
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
 kind: ElasticsearchVersion
@@ -272,6 +315,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.5.3"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot
 
 ---
 apiVersion: catalog.kubedb.com/v1alpha1
@@ -290,3 +336,6 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/elasticsearch-tools:6.5"
   initContainer:
     image: "${KUBEDB_DOCKER_REGISTRY}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: elasticsearch-db
+    snapshotterPolicyName: elasticsearch-snapshot

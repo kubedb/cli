@@ -13,5 +13,8 @@ spec:
     image: "quay.io/coreos/etcd:v3.2.13"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/etcd-tools:3.2.13"
+  podSecurityPolicies:
+    databasePolicyName: etcd-db
+    snapshotterPolicyName: etcd-snapshot
 
 ---
