@@ -1,7 +1,7 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: kubedb-operator
+  name: kubedb-psp
   labels:
     app: kubedb
 spec:
