@@ -469,12 +469,12 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
 fi
 
 echo "Applying Pod Sucurity Policies"
-${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
-${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
-${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
-${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
-${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
-${SCRIPT_LOCATION}hack/deploy/kubedb-catalog/redis.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/psp/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/psp/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/psp/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/psp/mysql.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/psp/postgres.yaml | $ONESSL envsubst | kubectl apply -f -
+${SCRIPT_LOCATION}hack/deploy/psp/redis.yaml | $ONESSL envsubst | kubectl apply -f -
 
 if [ "$KUBEDB_RUN_ON_MASTER" -eq 1 ]; then
   kubectl patch deploy kubedb-$KUBEDB_OPERATOR_NAME -n $KUBEDB_NAMESPACE \
