@@ -111,6 +111,9 @@ rules:
   verbs:     ['use']
   resourceNames:
     - kubedb-psp
+    - elasticsearch-db
+    - elasticsearch-snapshot
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
