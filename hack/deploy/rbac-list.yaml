@@ -126,9 +126,6 @@ subjects:
 - kind: ServiceAccount
   name: ${KUBEDB_SERVICE_ACCOUNT}
   namespace: ${KUBEDB_NAMESPACE}
-- kind: User
-  apiGroup: rbac.authorization.k8s.io
-  name: system:serviceaccount:kube-system:kubedb-operator
 
 ---
 # to read the config for terminating authentication

@@ -9,9 +9,9 @@ spec:
   allowPrivilegeEscalation: true #Allowing privilege escalation is necessary for ES db only!
   volumes:
     - '*'
-  hostNetwork: false
-  hostIPC: false
-  hostPID: false
+  hostNetwork: true
+  hostIPC: true
+  hostPID: true
   runAsUser:
     rule: 'RunAsAny'
   seLinux:
@@ -23,3 +23,4 @@ spec:
   allowedCapabilities:
     - IPC_LOCK
     - SYS_RESOURCE
+    - *
