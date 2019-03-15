@@ -112,7 +112,16 @@ rules:
   resourceNames:
     - kubedb-psp
     - elasticsearch-db
+    - memcached-db
+    - mongodb-db
+    - mysql-db
+    - postgres-db
     - elasticsearch-snapshot
+    - memcached-snapshot
+    - mongodb-snapshot
+    - mysql-snapshot
+    - postgres-snapshot
+    # -array for custom PSPs
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1

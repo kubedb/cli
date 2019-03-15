@@ -23,4 +23,3 @@ spec:
   allowedCapabilities:
     - IPC_LOCK
     - SYS_RESOURCE
-    - *
