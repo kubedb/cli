@@ -112,12 +112,13 @@ rules:
   resourceNames:
     - kubedb-psp
     - elasticsearch-db
+    - etcd-db
     - memcached-db
     - mongodb-db
     - mysql-db
     - postgres-db
+    - redis-db
     - elasticsearch-snapshot
-    - memcached-snapshot
     - mongodb-snapshot
     - mysql-snapshot
     - postgres-snapshot
