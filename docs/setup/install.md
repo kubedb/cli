@@ -37,7 +37,7 @@ To use `kubedb`, you will need to install KubeDB [operator](https://github.com/k
 To install KubeDB in your Kubernetes cluster, run the following command:
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/hack/deploy/kubedb.sh | bash
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/master/hack/deploy/kubedb.sh | bash
 ```
 
 After successful installation, you should have a `kubedb-operator-***` pod running in the `kube-system` namespace.

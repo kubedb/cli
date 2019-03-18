@@ -67,7 +67,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/redis/clustering/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/redis/clustering/demo-1.yaml
 redis.kubedb.com/redis-cluster created
 ```
 
