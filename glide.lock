@@ -1,5 +1,5 @@
-hash: 29a444c6c8649458368200363dbbc21f580badf7df0e74df2fd100b583315e0e
-updated: 2019-03-14T10:32:31.244322688-07:00
+hash: 51a7027b340b461296a1183fc3ba4825825dfc811ee87f3890aaf9c9f83b191f
+updated: 2019-03-18T15:56:52.835970077-07:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
@@ -166,7 +166,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 334b49d77d819d1e3a8d90c7a4ea526bbb71f8b4
+  version: fb8b2533cc4f81f8c39214d943b3951206be0a2b
   subpackages:
   - apis
   - apis/authorization
@@ -179,19 +179,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 4395762a97c4743a0b6b533d235ca70d8a2c9108
+  version: 94857418f936c660402c04dab7900cce49c5eee5
 - name: github.com/kubedb/etcd
-  version: 919ffaec0ded720590f921729adf1459f75c208a
+  version: 78803c0fae89338449e61960bdd15311a5b35981
 - name: github.com/kubedb/memcached
-  version: cbf868e73b95ba5b0eab4b3add9dfc2a7cb6de04
+  version: 6098c5e63cd3b906341cceaa26e92872e4fbcecf
 - name: github.com/kubedb/mongodb
-  version: 086fc8149767567c2a0db3310415ca876d42d3d6
+  version: 38000f549d5f2a8fcb59103bf0f9a51be3174aeb
 - name: github.com/kubedb/mysql
-  version: 7b76665775ef237ec0e660b5f8719666eb405062
+  version: 838d9459881febfe3e5007738db85372cb397d93
 - name: github.com/kubedb/postgres
-  version: 638c60919890613f7e92a3e056f328942cc00b03
+  version: f7ba306786ae351a4a0a1864e8385abe8f21fa43
 - name: github.com/kubedb/redis
-  version: 964036f4a6e4262173eb17ebdb7b617a30d6a34a
+  version: 6deb30df86a0bf2ed0ee8f65e0be7e4e4b19812e
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -628,7 +628,7 @@ imports:
   - exec
   - pointer
 - name: kmodules.xyz/client-go
-  version: 348709ae06aa951e2e3e9c31bae48d704ace2d5d
+  version: fd7cc05edf46bb8d630fa6a84b875162f321e778
   subpackages:
   - apiextensions/v1beta1
   - logs

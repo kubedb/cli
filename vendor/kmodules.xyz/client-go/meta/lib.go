@@ -29,8 +29,8 @@ var labelKeyBlacklist = []string{
 	ManagedByLabelKey,
 }
 
-// InitFlags is for explicitly initializing the flags
-func InitFlags(fs *pflag.FlagSet) {
+// AddLabelBlacklistFlag is for explicitly initializing the flags
+func AddLabelBlacklistFlag(fs *pflag.FlagSet) {
 	if fs == nil {
 		fs = pflag.CommandLine
 	}
