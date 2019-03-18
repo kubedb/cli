@@ -8,15 +8,15 @@ spec:
   privileged: false
   allowPrivilegeEscalation: false
   volumes:
-    - '*'
+  - "*"
   hostNetwork: false
   hostIPC: false
   hostPID: false
   runAsUser:
-    rule: 'RunAsAny'
+    rule: RunAsAny
   seLinux:
-    rule: 'RunAsAny'
+    rule: RunAsAny
   supplementalGroups:
-    rule: 'RunAsAny'
+    rule: RunAsAny
   fsGroup:
-    rule: 'RunAsAny'
+    rule: RunAsAny

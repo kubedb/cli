@@ -111,19 +111,21 @@ rules:
   - policy
   resources:
   - podsecuritypolicies
-  verbs:     ['use']
+  verbs: ["use"]
   resourceNames:
-    - kubedb-psp
-    - elasticsearch-db
-    - etcd-db
-    - memcached-db
-    - mongodb-db
-    - mysql-db
-    - postgres-db
-    - redis-db
-    - elasticsearch-snapshot
-    - mongodb-snapshot
-    - mysql-snapshot
-    - postgres-snapshot
-    # -array for custom PSPs
+  - {{ template "kubedb.fullname" . }}
+  - elasticsearch-db
+  - etcd-db
+  - memcached-db
+  - mongodb-db
+  - mysql-db
+  - postgres-db
+  - redis-db
+  - elasticsearch-snapshot
+  - mongodb-snapshot
+  - mysql-snapshot
+  - postgres-snapshot
+  {{- range $x := .Values.additionalPodSecurityPolicies }}
+  - {{ $x }}
+  {{- end }}
 {{ end }}
