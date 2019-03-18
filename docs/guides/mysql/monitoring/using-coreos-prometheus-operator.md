@@ -1,12 +1,12 @@
 ---
 title: Monitor MySQL using Coreos Prometheus Operator
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: my-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: my-monitoring-mysql
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -125,7 +125,7 @@ Here,
 Let's create the MySQL object that we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/monitoring/coreos-prom-mysql.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mysql/monitoring/coreos-prom-mysql.yaml
 mysql.kubedb.com/coreos-prom-mysql created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: MemcachedVersion
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: memcached-version
     name: MemcachedVersion
     parent: catalog
     weight: 30
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: concepts
 ---
 

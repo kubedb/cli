@@ -1,12 +1,12 @@
 ---
 title: Using Custom Configuration in Elasticsearch with Topology
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: es-custom-config-with-topology
     name: With Topology
     parent: es-custom-config
     weight: 20
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -120,7 +120,7 @@ metadata:
 Now, create an Elasticsearch crd with topology specified,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/custom-config/es-custom-with-topology.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/elasticsearch/custom-config/es-custom-with-topology.yaml
 elasticsearch.kubedb.com/custom-elasticsearch created
 ```
 

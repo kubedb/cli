@@ -1,19 +1,19 @@
 ---
-title: Upgrade Manual
+title: Upgrading Operator
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: pg-upgrade-manual
-    name: Postgres Upgrade Manual
-    parent: pg-postgres-guides
-    weight: 15
-menu_name: docs_0.10.0
+    name: Manual
+    parent: pg-upgrading-postgres
+    weight: 10
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 # KubeDB Upgrade Manual
 
-This tutorial will show you how to upgrade KubeDB from previous version to 0.10.0.
+This tutorial will show you how to upgrade KubeDB from previous version to 0.11.0.
 
 ## Before You Begin
 
@@ -62,7 +62,7 @@ $ helm upgrade kubedb-catalog appscode/kubedb-catalog --version 0.9.0 \
   --namespace kube-system
 
 $ helm ls
-NAME           	REVISION	UPDATED                 	STATUS  	CHART               	APP VERSION	NAMESPACE  
+NAME           	REVISION	UPDATED                 	STATUS  	CHART               	APP VERSION	NAMESPACE
 kubedb-catalog 	1       	Fri Feb  8 11:21:34 2019	DEPLOYED	kubedb-catalog-0.9.0	0.9.0      	kube-system
 kubedb-operator	1       	Fri Feb  8 11:18:46 2019	DEPLOYED	kubedb-0.9.0        	0.9.0      	kube-system
 ```
@@ -142,7 +142,7 @@ Now, you can connect to this database using `scheduled-pg.demo` service and *pas
   - Pod IP: (`$ kubectl get pods scheduled-pg-0 -n demo -o yaml | grep podIP`)
 
   But, In this tutorial we will exec into each pod to insert data and see data availability in replica nodes. So, `localhost` as host is fine.
-  
+
 - Port: `5432`
 - Maintenance database: `postgres`
 - Username: `postgres`
@@ -162,9 +162,9 @@ bash-4.3# psql -h localhost -U postgres
 
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
@@ -176,7 +176,7 @@ Postgres replication state
 
 ```console
 postgres=# SELECT * FROM pg_stat_replication;
- pid | usesysid | usename  | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state 
+ pid | usesysid | usename  | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state
 -----+----------+----------+------------------+-------------+-----------------+-------------+-------------------------------+--------------+-----------+---------------+----------------+----------------+-----------------+---------------+------------
   59 |       10 | postgres | scheduled-pg-1   | 172.17.0.10 |                 |       38916 | 2019-02-08 05:24:47.575398+00 |              | streaming | 0/4000300     | 0/4000300      | 0/4000300      | 0/4000300       |             0 | async
   63 |       10 | postgres | scheduled-pg-2   | 172.17.0.11 |                 |       59954 | 2019-02-08 05:24:51.028714+00 |              | streaming | 0/4000300     | 0/4000300      | 0/4000300      | 0/4000300       |             0 | async
@@ -191,14 +191,14 @@ CREATE DATABASE
 
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
 
 postgres=# \c testdb
@@ -219,7 +219,7 @@ CREATE TABLE
 
 testdb=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)
@@ -228,7 +228,7 @@ testdb=# INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (1, '
 INSERT 0 5
 
 testdb=# SELECT * FROM company;
- id | name  | age |                      address                       | salary | join_date  
+ id | name  | age |                      address                       | salary | join_date
 ----+-------+-----+----------------------------------------------------+--------+------------
   1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
   2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
@@ -259,14 +259,14 @@ Type "help" for help.
 
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
 
 postgres=# \c testdb
@@ -274,13 +274,13 @@ You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)
 
 testdb=# SELECT * FROM company;
- id | name  | age |                      address                       | salary | join_date  
+ id | name  | age |                      address                       | salary | join_date
 ----+-------+-----+----------------------------------------------------+--------+------------
   1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
   2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
@@ -302,14 +302,14 @@ Type "help" for help.
 
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
 
 postgres=# \c testdb
@@ -317,13 +317,13 @@ You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)
 
 testdb=# SELECT * FROM company;
- id | name  | age |                      address                       | salary | join_date  
+ id | name  | age |                      address                       | salary | join_date
 ----+-------+-----+----------------------------------------------------+--------+------------
   1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
   2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
@@ -342,20 +342,20 @@ exit
 For helm, `upgrade` command works fine.
 
 ```console
-$ helm upgrade --install kubedb-operator appscode/kubedb --version 0.10.0 --namespace kube-system
-$ helm upgrade --install kubedb-catalog appscode/kubedb-catalog --version 0.10.0 --namespace kube-system
+$ helm upgrade --install kubedb-operator appscode/kubedb --version 0.11.0 --namespace kube-system
+$ helm upgrade --install kubedb-catalog appscode/kubedb-catalog --version 0.11.0 --namespace kube-system
 
 $ helm ls
-NAME           	REVISION	UPDATED                 	STATUS  	CHART               	APP VERSION	NAMESPACE  
-kubedb-catalog 	2       	Fri Feb  8 12:12:45 2019	DEPLOYED	kubedb-catalog-0.10.0	0.10.0      	kube-system
-kubedb-operator	2       	Fri Feb  8 12:11:57 2019	DEPLOYED	kubedb-0.10.0        	0.10.0      	kube-system
+NAME           	REVISION	UPDATED                 	STATUS  	CHART               	APP VERSION	NAMESPACE
+kubedb-catalog 	2       	Fri Feb  8 12:12:45 2019	DEPLOYED	kubedb-catalog-0.11.0	0.11.0      	kube-system
+kubedb-operator	2       	Fri Feb  8 12:11:57 2019	DEPLOYED	kubedb-0.11.0        	0.11.0      	kube-system
 ```
 
-For Bash script installation, uninstall first, then install again with 0.10.0 script. See [0.9.0 installation guide](https://kubedb.com/docs/0.9.0/setup/install/).
+For Bash script installation, uninstall first, then install again with 0.11.0 script. See [0.9.0 installation guide](https://kubedb.com/docs/0.9.0/setup/install/).
 
 ## Stale CRD objects
 
-At this state, the operator is skipping this `scheduled-pg` Postgres. Because, Postgres version `9.6-v1` is deprecated in `kubedb 0.10.0`. You can see the skipped event message in postgres database event. 
+At this state, the operator is skipping this `scheduled-pg` Postgres. Because, Postgres version `9.6-v1` is deprecated in `kubedb 0.11.0`. You can see the skipped event message in postgres database event.
 
 ```console
 $ kubedb describe pg -n demo scheduled-pg
@@ -573,7 +573,7 @@ Postgres replication state
 
 ```console
 postgres=# SELECT * FROM pg_stat_replication;
- pid | usesysid | usename  | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state 
+ pid | usesysid | usename  | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   | sent_location | write_location | flush_location | replay_location | sync_priority | sync_state
 -----+----------+----------+------------------+-------------+-----------------+-------------+-------------------------------+--------------+-----------+---------------+----------------+----------------+-----------------+---------------+------------
   27 |       10 | postgres | scheduled-pg-1   | 172.17.0.10 |                 |       40084 | 2019-02-08 06:39:16.160849+00 |              | streaming | 0/C000108     | 0/C000108      | 0/C000108      | 0/C000108       |             0 | async
   42 |       10 | postgres | scheduled-pg-2   | 172.17.0.11 |                 |       33624 | 2019-02-08 06:41:12.778783+00 |              | streaming | 0/C000108     | 0/C000108      | 0/C000108      | 0/C000108       |             0 | async
@@ -585,14 +585,14 @@ Data availability
 ```console
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
 
 postgres=# \c testdb
@@ -600,13 +600,13 @@ You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)
 
 testdb=# SELECT * FROM company;
- id | name  | age |                      address                       | salary | join_date  
+ id | name  | age |                      address                       | salary | join_date
 ----+-------+-----+----------------------------------------------------+--------+------------
   1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
   2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
@@ -632,14 +632,14 @@ bash-4.3# psql -h localhost -U postgres
 
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
 
 postgres=# \c testdb
@@ -647,13 +647,13 @@ You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)
 
 testdb=# SELECT * FROM company;
- id | name  | age |                      address                       | salary | join_date  
+ id | name  | age |                      address                       | salary | join_date
 ----+-------+-----+----------------------------------------------------+--------+------------
   1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
   2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13
@@ -675,14 +675,14 @@ bash-4.3# psql -h localhost -U postgres
 
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
- testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ testdb    | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
 
 postgres=# \c testdb
@@ -690,13 +690,13 @@ You are now connected to database "testdb" as user "postgres".
 
 testdb=# \d
           List of relations
- Schema |  Name   | Type  |  Owner   
+ Schema |  Name   | Type  |  Owner
 --------+---------+-------+----------
  public | company | table | postgres
 (1 row)
 
 testdb=# SELECT * FROM company;
- id | name  | age |                      address                       | salary | join_date  
+ id | name  | age |                      address                       | salary | join_date
 ----+-------+-----+----------------------------------------------------+--------+------------
   1 | Paul  |  32 | California                                         |  20000 | 2001-07-13
   2 | Allen |  25 | Texas                                              |  20000 | 2007-12-13

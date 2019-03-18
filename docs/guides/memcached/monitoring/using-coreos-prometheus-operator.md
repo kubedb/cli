@@ -1,12 +1,12 @@
 ---
 title: Monitor Memcached using Coreos Prometheus Operator
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mc-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: mc-monitoring-memcached
     weight: 15
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -127,7 +127,7 @@ Here,
 Let's create the Memcached object that we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/memcached/monitoring/coreos-prom-memcd.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/memcached/monitoring/coreos-prom-memcd.yaml
 memcached.kubedb.com/coreos-prom-memcd created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Initialize Elasticsearch from Snapshot
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: es-snapshot-source-initialization
     name: Using Snapshot
     parent: es-initialization-elasticsearch
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -92,7 +92,7 @@ instant-snapshot   infant-elasticsearch   Succeeded   51m
 Now, create the Elasticsearch object.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/elasticsearch/initialization/recovered-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/elasticsearch/initialization/recovered-es.yaml
 elasticsearch.kubedb.com/recovered-es created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Point-in-Time Recovery (PITR) | Postgres
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: pg-pitr
     name: Point-in-Time Recovery
     parent: pg-initialization-postgres
     weight: 25
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -99,7 +99,7 @@ We have configured the above database to continuously backup WAL logs into `kube
 Let's create the database we have shown above,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/initialization/pitr/pg-original.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/initialization/pitr/pg-original.yaml
 postgres.kubedb.com/pg-original created
 ```
 
@@ -220,7 +220,7 @@ spec:
 Let's create the above Postgres crd,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/initialization/pitr/pitr-1.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/initialization/pitr/pitr-1.yaml
 postgres.kubedb.com/pitr-1 created
 ```
 
@@ -287,7 +287,7 @@ spec:
 Let's create the above Postgres crd,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/initialization/pitr/pitr-2.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/initialization/pitr/pitr-2.yaml
 postgres.kubedb.com/pitr-2 created
 ```
 

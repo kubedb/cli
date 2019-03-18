@@ -1,12 +1,12 @@
 ---
 title: Run PostgreSQL with Custom Configuration
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: pg-custom-config-quickstart
     name: Quickstart
     parent: pg-custom-config
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -53,7 +53,7 @@ shared_buffers=256MB
 Now, create a configMap with this configuration file.
 
 ```console
-$ kubectl create configmap -n demo pg-custom-config --from-literal=user.conf="$(curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/custom-config/user.conf)"
+$ kubectl create configmap -n demo pg-custom-config --from-literal=user.conf="$(curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/custom-config/user.conf)"
 configmap/pg-custom-config created
 ```
 
@@ -79,7 +79,7 @@ metadata:
 Now, create Postgres crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/postgres/custom-config/pg-custom-config.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/custom-config/pg-custom-config.yaml
 postgres.kubedb.com/custom-postgres created
 ```
 
