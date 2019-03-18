@@ -1,11 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/kubedb/cli/tree/HEAD)
-
-[Full Changelog](https://github.com/kubedb/cli/compare/0.10.0...HEAD)
+## [0.11.0](https://github.com/kubedb/cli/tree/0.11.0) (2019-03-18)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.10.0...0.11.0)
 
 **Merged pull requests:**
 
+- Prepare docs for 0.11.0 release [\#413](https://github.com/kubedb/cli/pull/413) ([tamalsaha](https://github.com/tamalsaha))
+- PSP for kubedb operator [\#411](https://github.com/kubedb/cli/pull/411) ([iamrz1](https://github.com/iamrz1))
+- psp source path update [\#410](https://github.com/kubedb/cli/pull/410) ([iamrz1](https://github.com/iamrz1))
+- Add MySQL upgrade docs [\#409](https://github.com/kubedb/cli/pull/409) ([dennisameling](https://github.com/dennisameling))
+- Update catalog for Redis 5 [\#408](https://github.com/kubedb/cli/pull/408) ([shudipta](https://github.com/shudipta))
+- Global PSP support  [\#407](https://github.com/kubedb/cli/pull/407) ([iamrz1](https://github.com/iamrz1))
+- docs: Update clustering note to state that it is supported [\#406](https://github.com/kubedb/cli/pull/406) ([josegonzalez](https://github.com/josegonzalez))
+- Support for init container  [\#405](https://github.com/kubedb/cli/pull/405) ([iamrz1](https://github.com/iamrz1))
 - Add missing ClusterRole to list StatefulSets [\#404](https://github.com/kubedb/cli/pull/404) ([shudipta](https://github.com/shudipta))
 - Update Kubernetes client libraries to 1.13.0 [\#403](https://github.com/kubedb/cli/pull/403) ([tamalsaha](https://github.com/tamalsaha))
 - Update name of 'Postgres upgrade manual' doc  [\#402](https://github.com/kubedb/cli/pull/402) ([the-redback](https://github.com/the-redback))
