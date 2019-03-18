@@ -100,3 +100,9 @@ monitoring:
     namespace: ""
   serviceMonitor:
     labels: {}
+
+# Additional psp names passed to operator
+# example: helm template ./chart/kubedb \
+#            --set additionalPodSecurityPolicies[0]=abc \
+#            --set additionalPodSecurityPolicies[1]=xyz
+additionalPodSecurityPolicies: []

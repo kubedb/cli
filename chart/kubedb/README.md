@@ -76,6 +76,7 @@ The following table lists the configurable parameters of the KubeDB chart and th
 | `monitoring.agent`                      | Specify which monitoring agent to use for monitoring KubeDB operator. It accepts either `prometheus.io/builtin` or `prometheus.io/coreos-operator`.                        | `none`                                                    |
 | `monitoring.prometheus.namespace`       | Specify the namespace where Prometheus server is running or will be deployed.                                                                                              | Release namespace                                         |
 | `monitoring.serviceMonitor.labels`      | Specify the labels for ServiceMonitor. Prometheus crd will select ServiceMonitor using these labels. Only usable when monitoring agent is `prometheus.io/coreos-operator`. | `app: <generated app name>` and `release: <release name>` |
+| `additionalPodSecurityPolicies`         | Additional psp names passed to operator                                                                                                                                    | `[]`                                                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 

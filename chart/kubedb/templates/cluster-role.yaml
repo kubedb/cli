@@ -107,4 +107,25 @@ rules:
   resources:
   - "pods/exec"
   verbs: ["create"]
+- apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies
+  verbs: ["use"]
+  resourceNames:
+  - {{ template "kubedb.fullname" . }}
+  - elasticsearch-db
+  - etcd-db
+  - memcached-db
+  - mongodb-db
+  - mysql-db
+  - postgres-db
+  - redis-db
+  - elasticsearch-snapshot
+  - mongodb-snapshot
+  - mysql-snapshot
+  - postgres-snapshot
+  {{- range $x := .Values.additionalPodSecurityPolicies }}
+  - {{ $x }}
+  {{- end }}
 {{ end }}

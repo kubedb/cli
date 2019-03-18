@@ -469,6 +469,7 @@ if [ "$KUBEDB_ENABLE_RBAC" = true ]; then
 fi
 
 echo "Applying Pod Sucurity Policies"
+${SCRIPT_LOCATION}hack/deploy/psp/operator.yaml | $ONESSL envsubst | kubectl apply -f -
 ${SCRIPT_LOCATION}hack/deploy/psp/elasticsearch.yaml | $ONESSL envsubst | kubectl apply -f -
 ${SCRIPT_LOCATION}hack/deploy/psp/memcached.yaml | $ONESSL envsubst | kubectl apply -f -
 ${SCRIPT_LOCATION}hack/deploy/psp/mongodb.yaml | $ONESSL envsubst | kubectl apply -f -
