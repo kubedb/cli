@@ -1,12 +1,12 @@
 ---
 title: Run MongoDB with Custom Configuration
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mg-crd-configuration
     name: Using CRD Config
     parent: mg-configuration
     weight: 15
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -93,7 +93,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mongodb/configuration/mgo-misc-config.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/configuration/mgo-misc-config.yaml
 mongodb.kubedb.com/mgo-misc-config created
 ```
 
@@ -183,7 +183,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mongodb/configuration/snapshot-misc-conf.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/configuration/snapshot-misc-conf.yaml
 snapshot.kubedb.com/snap-mongodb-config created
 
 

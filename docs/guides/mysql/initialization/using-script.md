@@ -1,12 +1,12 @@
 ---
 title: Initialize MySQL using Script
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: my-using-script-initialization
     name: Using Script
     parent: my-initialization-mysql
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -31,7 +31,7 @@ In this tutorial we will use .sql script stored in GitHub repository [kubedb/mys
   $ kubectl create ns demo
   namespace/demo created
   
-  $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/quickstart/demo-1.yaml
+  $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mysql/quickstart/demo-1.yaml
   deployment.extensions/myadmin created
   service/myadmin created
   
@@ -99,7 +99,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/Initialization/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mysql/Initialization/demo-1.yaml
 mysql.kubedb.com/mysql-init-script created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of MySQL
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: my-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: my-snapshot-mysql
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -90,7 +90,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/mysql/snapshot/demo-4.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mysql/snapshot/demo-4.yaml
 mysql.kubedb.com/mysql-scheduled created
 ```
 

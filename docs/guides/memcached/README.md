@@ -1,16 +1,16 @@
 ---
 title: Memcached
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mc-readme-memcached
     name: Memcached
     parent: mc-memcached-guides
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
-url: /docs/0.10.0/guides/memcached/
+url: /docs/0.11.0/guides/memcached/
 aliases:
-  - /docs/0.10.0/guides/memcached/README/
+  - /docs/0.11.0/guides/memcached/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -48,17 +48,18 @@ aliases:
 |     0.8.0      |    &#10003;     |
 |     0.9.0      |    &#10003;     |
 |     0.10.0     |    &#10003;     |
+|     0.11.0     |    &#10003;     |
 
 ## Supported MemcachedVersion CRD
 
 Here, &#10003; means supported and &#10007; means deprecated.
 
-|   NAME   | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 |
-| :------: | :-----: | :-----------: | :------------: |
-|   1.5    |   1.5   |   &#10007;    |    &#10007;    |
-|  1.5-v1  |   1.5   |   &#10003;    |    &#10003;    |
-|  1.5.4   |  1.5.4  |   &#10007;    |    &#10007;    |
-| 1.5.4-v1 |  1.5.4  |   &#10003;    |    &#10003;    |
+|   NAME   | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 | KubeDB: 0.11.0 |
+| :------: | :-----: | :-----------: | :------------: | :------------: |
+|   1.5    |   1.5   |   &#10007;    |    &#10007;    |    &#10007;    |
+|  1.5-v1  |   1.5   |   &#10003;    |    &#10003;    |    &#10003;    |
+|  1.5.4   |  1.5.4  |   &#10007;    |    &#10007;    |    &#10007;    |
+| 1.5.4-v1 |  1.5.4  |   &#10003;    |    &#10003;    |    &#10003;    |
 
 ## User Guide
 

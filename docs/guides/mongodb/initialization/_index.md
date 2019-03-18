@@ -1,10 +1,10 @@
 ---
 title: MongoDB Initialization
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mg-initialization-mongodb
     name: Initialization
     parent: mg-mongodb-guides
     weight: 25
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 ---

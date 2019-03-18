@@ -1,12 +1,12 @@
 ---
 title: Monitor Memcached using Builtin Prometheus Discovery
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mc-using-builtin-prometheus-monitoring
     name: Builtin Prometheus Discovery
     parent: mc-monitoring-memcached
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -72,7 +72,7 @@ Here,
 Let's create the Memcached crd we have shown above.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/memcached/monitoring/builtin-prom-memcd.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/memcached/monitoring/builtin-prom-memcd.yaml
 memcached.kubedb.com/builtin-prom-memcd created
 ```
 
@@ -268,7 +268,7 @@ data:
 Let's create above `ConfigMap`,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/monitoring/builtin-prometheus/prom-config.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/monitoring/builtin-prometheus/prom-config.yaml
 configmap/prometheus-config created
 ```
 

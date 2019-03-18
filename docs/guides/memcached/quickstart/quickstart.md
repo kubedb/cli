@@ -1,12 +1,12 @@
 ---
 title: Memcached Quickstart
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mc-quickstart-quickstart
     name: Overview
     parent: mc-quickstart-memcached
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -77,7 +77,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/memcached/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/memcached/quickstart/demo-1.yaml
 memcached.kubedb.com/memcd-quickstart created
 ```
 
@@ -312,7 +312,7 @@ In this tutorial, the dormant database can be resumed by creating `Memcached` da
 The below command resumes the dormant database `memcd-quickstart`.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/memcached/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/memcached/quickstart/demo-1.yaml
 memcached.kubedb.com/memcd-quickstart created
 ```
 

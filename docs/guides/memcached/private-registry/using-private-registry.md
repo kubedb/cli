@@ -1,12 +1,12 @@
 ---
 title: Run Memcached using Private Registry
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: mc-using-private-registry-private-registry
     name: Quickstart
     parent: mc-private-registry-memcached
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -121,7 +121,7 @@ spec:
 Now run the command to deploy this `Memcached` object:
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.10.0/docs/examples/memcached/private-registry/demo-2.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/memcached/private-registry/demo-2.yaml
 memcached.kubedb.com/memcd-pvt-reg created
 ```
 

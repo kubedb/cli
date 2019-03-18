@@ -1,12 +1,12 @@
 ---
 title: Upgrading MySQL
 menu:
-  docs_0.10.0:
+  docs_0.11.0:
     identifier: my-upgrade-manul
     name: Manual
     parent: my-upgrading-mysql
     weight: 10
-menu_name: docs_0.10.0
+menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
@@ -28,10 +28,10 @@ ns2         database-ns2    5.7-v1    Running        38d
 
 ## Make a backup!
 
-Before you start the upgrade, it's highly recommended that you make a backup. In case something goes wrong, you can [recreate a database from the snapshot](https://kubedb.com/docs/0.10.0/guides/mysql/initialization/using-snapshot/). You have two options here:
+Before you start the upgrade, it's highly recommended that you make a backup. In case something goes wrong, you can [recreate a database from the snapshot](https://kubedb.com/docs/0.11.0/guides/mysql/initialization/using-snapshot/). You have two options here:
 
-- [Instant Backup](https://kubedb.com/docs/0.10.0/guides/mysql/snapshot/backup-and-restore/)
-- [Scheduled Backup](https://kubedb.com/docs/0.10.0/guides/mysql/snapshot/scheduled-backup/)
+- [Instant Backup](https://kubedb.com/docs/0.11.0/guides/mysql/snapshot/backup-and-restore/)
+- [Scheduled Backup](https://kubedb.com/docs/0.11.0/guides/mysql/snapshot/scheduled-backup/)
 
 ## Check MySQL upgrade paths
 
@@ -69,7 +69,7 @@ The reason for this is that 8.0.3 is a [non-GA release](https://mysqlserverteam.
 The best option you have in this case is to:
 
 1. Export only the tables you need (**not** the built-in MySQL tables) with [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump-sql-format.html). Export the users you need as well (note: exporting the root user will overwrite its password on your new installation!).
-2. Create a completely new MySQL database with the [regular KubeDB procedure](https://kubedb.com/docs/0.10.0/guides/mysql/initialization/using-script/).
+2. Create a completely new MySQL database with the [regular KubeDB procedure](https://kubedb.com/docs/0.11.0/guides/mysql/initialization/using-script/).
 3. Restore the tables & users you exported. You might run into issues like `ERROR 3723 (HY000) at line 821: The table 'events' may not be created in the reserved tablespace 'mysql'`. You will have to fix these manually in the dumpfile, as this is a non-supported upgrade path.
 4. Verify if everything is working properly.
 5. Delete the old 8.0.3 database.
