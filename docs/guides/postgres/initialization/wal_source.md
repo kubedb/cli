@@ -33,7 +33,7 @@ namespace/demo created
 
 ## Prepare WAL Archive
 
-We need a WAL archive to perform initialization. If you already don't have a WAL archive ready, create one by following the tutorial [here](/docs/guides/postgres/snapshot/continuous_archiving.md).
+We need a WAL archive to perform initialization. If you don't have a WAL archive ready, create one by following the tutorial [here](/docs/guides/postgres/snapshot/continuous_archiving.md).
 
 Let's populate the database so that we can verify that the initialized database has the same data. We will `exec` into the database pod and use `psql` command-line tool to create a table.
 
@@ -128,16 +128,22 @@ Here,
 
 - `spec.init.postgresWAL` specifies storage information that will be used by `wal-g`
   - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-  - `s3` points to s3 storage configuration.
+  - `s3` points to S3 storage configuration.
   - `s3.bucket` points to the bucket name where archived WAL data is stored.
   - `s3.prefix` points to the path of archived WAL data.
   - `gcs` points to GCS storage configuration.
   - `gcs.bucket` points to the bucket name where archived WAL data is stored.
-  - `gcs.prefix` points to the path of archived WAL data..
+  - `gcs.prefix` points to the path of archived WAL data.
+  - `azure` points to Azure storage configuration.
+  - `azure.container` points to the container/bucket name where archived WAL data is stored.
+  - `azure.prefix` points to the path of archived WAL data.
+  - `swift` points to Swift storage configuration.
+  - `swift.container` points to the container/bucket name where archived WAL data is stored.
+  - `swift.prefix` points to the path of archived WAL data.
 
-User can use either s3 or gcs WAL archiver for init.
+User can use any one of `s3`,` gcs`, `azure`, or `swift` WAL archiver for init.
 
-**wal-g** receives archived WAL data from a folder called `/kubedb/{namespace}/{postgres-name}/archive/`.
+**wal-g** receives archived WAL data from a directory inside the bucket/container called `/kubedb/{namespace}/{postgres-name}/archive/`.
 
 Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL archived data will be replayed.
 
