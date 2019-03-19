@@ -18,7 +18,7 @@ section_menu_id: concepts
 
 When you install KubeDB, `MongoDBVersion` crd will be created automatically for every supported MongoDB versions. You have to specify the name of `MongoDBVersion` crd in `spec.version` field of [MongoDB](/docs/concepts/databases/mongodb.md) crd. Then, KubeDB will use the docker images specified in the `MongoDBVersion` crd to create your expected database.
 
-Using a separate crd for specifying respective docker images allows us to modify the images independent of KubeDB operator. This will also allow the users to use a custom image for the database.
+Using a separate crd for specifying respective docker images, and pod security policy names allow us to modify the images, and policies independent of KubeDB operator.This will also allow the users to use a custom image for the database.
 
 ## MongoDBVersion Specification
 
@@ -47,7 +47,7 @@ spec:
 
 ### metadata.name
 
-`metadata.name` is a required field that specify the name of the `MongoDBVersion` crd. You have to specify this name in `spec.version` field of [MongoDB](/docs/concepts/databases/mongodb.md) crd.
+`metadata.name` is a required field that specifies the name of the `MongoDBVersion` crd. You have to specify this name in `spec.version` field of [MongoDB](/docs/concepts/databases/mongodb.md) crd.
 
 We follow this convention for naming MongoDBVersion crd:
 
