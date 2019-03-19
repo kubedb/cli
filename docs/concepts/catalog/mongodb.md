@@ -41,8 +41,8 @@ spec:
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6-v1"
   podSecurityPolicies:
-    databasePolicyName: "postgres-db"
-    snapshotterPolicyName: "postgres-snapshot"
+    databasePolicyName: "mongodb-db"
+    snapshotterPolicyName: "mongodb-snapshot"
 ```
 
 ### metadata.name
