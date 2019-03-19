@@ -40,6 +40,9 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongodb_exporter:v1.0.0"
   tools:
     image: "${KUBEDB_DOCKER_REGISTRY}/mongo-tools:3.6-v1"
+  podSecurityPolicies:
+    databasePolicyName: "postgres-db"
+    snapshotterPolicyName: "postgres-snapshot"
 ```
 
 ### metadata.name
@@ -68,11 +71,26 @@ The default value of this field is `false`. If `spec.depcrecated` is set to `tru
 
 ### spec.exporter.image
 
-`spec.exporter.image` is required field that specifies the image which will be used to export Prometheus metrics.
+`spec.exporter.image` is a required field that specifies the image which will be used to export Prometheus metrics.
 
 ### spec.tools.image
 
 `spec.tools.image` is a required field that specifies the image which will be used to take backup and initialize database from a snapshot.
+
+### spec.podSecurityPolicies.databasePolicyName
+
+`spec.podSecurityPolicies.databasePolicyName` is a required field that specifies the name of the pod security policy required to get the database server pod(s) running.
+
+### spec.podSecurityPolicies.snapshotterPolicyName
+
+`spec.podSecurityPolicies.snapshotterPolicyName` is a required field that specifies the name of the pod security policy required to get the snapshotter pod(s) running.
+
+To use a user-defined policies, names of the policies have to be added here in spec.podSecurityPolicies and in the list of allowed policy names during kubeDB operator installation like this:
+```bash
+helm template ./chart/kubedb \
+           --set additionalPodSecurityPolicies[0]=custom-db-policy \
+           --set additionalPodSecurityPolicies[1]=custom-snapshotter-policy
+```
 
 ## Next Steps
 

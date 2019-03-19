@@ -47,7 +47,7 @@ spec:
 
 ### metadata.name
 
-`metadata.name` is a required field that specifie the name of the `PostgresVersion` crd. You have to specify this name in `spec.version` field of [Postgres](/docs/concepts/databases/postgres.md) crd.
+`metadata.name` is a required field that specifies the name of the `PostgresVersion` crd. You have to specify this name in `spec.version` field of [Postgres](/docs/concepts/databases/postgres.md) crd.
 
 We follow this convention for naming PostgresVersion crd:
 - Name format: `{Original PostgreSQL image version}-{modification tag}`
@@ -84,7 +84,7 @@ The default value of this field is `false`. If `spec.depcrecated` is set `true`,
 
 `spec.podSecurityPolicies.snapshotterPolicyName` is a required field that specifies the name of the pod security policy required to get the snapshotter pod(s) running.
 
-To use a user-defined policies, names of the policies have to be added here in spec.podSecurityPolicies and in the list of allowed policy names during kubedb operator installation like this:
+To use a user-defined policies, names of the policies have to be added here in spec.podSecurityPolicies and in the list of allowed policy names during kubeDB operator installation like this:
 ```bash
 helm template ./chart/kubedb \
            --set additionalPodSecurityPolicies[0]=custom-db-policy \

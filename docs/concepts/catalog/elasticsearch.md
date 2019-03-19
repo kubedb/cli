@@ -47,7 +47,7 @@ spec:
 
 ### metadata.name
 
-`metadata.name` is a required field that specify the name of the `ElasticsearchVersion` crd. You have to specify this name in `spec.version` field of [Elasticsearch](/docs/concepts/databases/elasticsearch.md) crd.
+`metadata.name` is a required field that specifies the name of the `ElasticsearchVersion` crd. You have to specify this name in `spec.version` field of [Elasticsearch](/docs/concepts/databases/elasticsearch.md) crd.
 
 We follow this convention for naming ElasticsearchVersion crd:
 - Name format: `{Original Elasticsearch version}-{modification tag}`
@@ -84,7 +84,7 @@ The default value of this field is `false`. If `spec.depcrecated` is set `true`,
 
 `spec.podSecurityPolicies.snapshotterPolicyName` is a required field that specifies the name of the pod security policy required to get the snapshotter pod(s) running.
 
-To use a user-defined policies, names of the policies have to be added here in spec.podSecurityPolicies and in the list of allowed policy names during kubedb operator installation like this:
+To use a user-defined policies, names of the policies have to be added here in spec.podSecurityPolicies and in the list of allowed policy names during kubeDB operator installation like this:
 ```bash
 helm template ./chart/kubedb \
            --set additionalPodSecurityPolicies[0]=custom-db-policy \
