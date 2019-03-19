@@ -13,7 +13,7 @@ section_menu_id: guides
 
 # Continuous Archiving with wal-g
 
-KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports _S3_ and _GCP_ as cloud storage.
+KubeDB PostgreSQL also supports continuous archiving using [wal-g ](https://github.com/wal-g/wal-g). Now **wal-g** supports _S3_, _GCS, Azure, and Swift_ as cloud storage.
 
 ## Before You Begin
 
@@ -65,8 +65,12 @@ Here,
   - `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
   - `storage.gcs` points to GCS storage configuration.
   - `storage.gcs.bucket` points to the bucket name used to store continuous archiving data.
+  - `storage.azure` points to Azure storage configuration.
+  - `storage.azure.container` points to the container/bucket name used to store continuous archiving data.
+  - `storage.swift` points to Swift storage configuration.
+  - `storage.swift.container` points to the container/bucket name used to store continuous archiving data.
 
-User can use either s3 or gcs. In this tutorial, s3 is used for wal-g archiving. `gcs` is similar to this tutorial. Follow [this link](/docs/concepts/snapshot/#google-cloud-storage-gcs) to know how to create secret for `gcs` storage. 
+User can use any one of `s3`, `gcs`, `azure`, or `swift` as cloud storage destination. In this tutorial, `s3` is used for wal-g archiving. `gcs`, `azure`, and `swift` are also similar to this tutorial. Please note that `s3`, and `gcs` use `storage.bucket`, whereas `azure`, and `swift` use `storage.container` to point to the base directory of their respective cloud storages. To create secret for these storages, follow [this link](/docs/concepts/snapshot/#google-cloud-storage-gcs) for `gcs`,  [this link](/docs/concepts/snapshot/#microsoft-azure-storage) for `azure`, and [this link]( [this link](/docs/concepts/snapshot/#microsoft-azure-storage)) for `swift`.
 
 **What is this Continuous Archiving**
 
@@ -126,7 +130,7 @@ type: Opaque
 
 **Archiver Storage Backend**
 
-**wal-g** supports both _S3_ and __GCS__ cloud providers.
+**wal-g** supports _S3_, _GCS_, __Azure__, and __Swift__  as cloud providers.
 
 To configure s3 backend, following parameters are available:
 
@@ -147,7 +151,7 @@ When database is ready, **wal-g** takes a base backup and uploads it to cloud st
 
 Archived data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{postgres-name}/archive/`.
 
-you can see continuous archiving data stored in S3 bucket.
+You can see continuous archiving data stored in S3 bucket.
 
 <p align="center">
   <kbd>
