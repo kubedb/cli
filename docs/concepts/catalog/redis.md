@@ -71,7 +71,7 @@ The default value of this field is `false`. If `spec.depcrecated` is set to `tru
 
 ### spec.podSecurityPolicies.databasePolicyName
 
-`spec.podSecurityPolicies.databasePolicyName` is a required field that specifies the name of the pod security policy required to get the database server pod(s) running. To use a user-defined policy, name of the policy has to be added here and in the list of allowed policy names during kubeDB operator installation like this: 
+`spec.podSecurityPolicies.databasePolicyName` is a required field that specifies the name of the pod security policy required to get the database server pod(s) running. To use a user-defined policy, name of the policy has to be added here and in the list of allowed policy names in kubeDB operator like this: 
 ```bash
 helm template ./chart/kubedb \
            --set additionalPodSecurityPolicies[0]=custom-db-policy
