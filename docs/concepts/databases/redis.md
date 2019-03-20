@@ -93,7 +93,7 @@ spec:
 
 `spec.version` is a required field specifying the name of the [RedisVersion](/docs/concepts/catalog/redis.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `RedisVersion` crd,
 
-- `4.0.11`, `4.0.6-v2`, `4.0.6-v1`, `4.0.6`, `4.0-v2`, `4.0-v1`, `4.0`, `4-v1`, `4`, `5.0.3`, `5.0`
+- `4.0.11`, `4.0.6-v2`, `4.0.6-v1`, `4.0.6`, `4.0-v2`, `4.0-v1`, `4.0`, `4-v1`, `4`, `5.0.3-v1`, `5.0.3`, `5.0-v1`, `5.0`
 
 ### spec.mode
 

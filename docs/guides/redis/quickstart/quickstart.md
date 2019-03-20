@@ -48,17 +48,24 @@ This tutorial will show you how to use KubeDB to run a Redis server.
 
 ## Find Available RedisVersion
 
-When you have installed KubeDB, it has created `RedisVersion` crd for all supported Redis versions. Check 0
+When you have installed KubeDB, it has created `RedisVersion` crd for all supported Redis versions. Check:
 
 ```console
 $ kubectl get redisversions
-NAME       VERSION   DB_IMAGE                DEPRECATED   AGE
-4          4         kubedb/redis:4          true         30m
-4-v1       4         kubedb/redis:4-v1                    30m
-4.0        4.0       kubedb/redis:4.0        true         30m
-4.0-v1     4.0       kubedb/redis:4.0-v1                  30m
-4.0.6      4.0.6     kubedb/redis:4.0.6-v1   true         30m
-4.0.6-v1   4.0.6     kubedb/redis:4.0.6-v1                30m
+  NAME       VERSION   DB_IMAGE                DEPRECATED   AGE
+  4          4         kubedb/redis:4          true         31s
+  4-v1       4         kubedb/redis:4-v1       true         31s
+  4.0        4.0       kubedb/redis:4.0        true         31s
+  4.0-v1     4.0       kubedb/redis:4.0-v1     true         31s
+  4.0-v2     4.0       kubedb/redis:4.0-v2                  31s
+  4.0.11     4.0.11    kubedb/redis:4.0.11                  31s
+  4.0.6      4.0.6     kubedb/redis:4.0.6-v1   true         31s
+  4.0.6-v1   4.0.6     kubedb/redis:4.0.6-v1   true         31s
+  4.0.6-v2   4.0.6     kubedb/redis:4.0.6-v2                31s
+  5.0        5.0       kubedb/redis:5.0                     31s
+  5.0-v1     5.0       kubedb/redis:5.0-v1                  31s
+  5.0.3      5.0.3     kubedb/redis:5.0.3                   31s
+  5.0.3-v1   5.0.3     kubedb/redis:5.0.3-v1                31s
 ```
 
 ## Create a Redis server
