@@ -35,13 +35,20 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
 
   ```console
   $ kubectl get redisversions -n kube-system  -o=custom-columns=NAME:.metadata.name,VERSION:.spec.version,DB_IMAGE:.spec.db.image,TOOLS_IMAGE:.spec.tools.image,EXPORTER_IMAGE:.spec.exporter.image,DEPRECATED:.spec.deprecated
-    NAME       VERSION   DB_IMAGE                TOOLS_IMAGE   EXPORTER_IMAGE                  DEPRECATED
-    4          4         kubedb/redis:4          <none>        kubedb/operator:0.8.0           true
-    4-v1       4         kubedb/redis:4-v1       <none>        kubedb/redis_exporter:v0.21.1   <none>
-    4.0        4.0       kubedb/redis:4.0        <none>        kubedb/operator:0.8.0           true
-    4.0-v1     4.0       kubedb/redis:4.0-v1     <none>        kubedb/redis_exporter:v0.21.1   <none>
-    4.0.6      4.0.6     kubedb/redis:4.0.6-v1   <none>        kubedb/operator:0.8.0           true
-    4.0.6-v1   4.0.6     kubedb/redis:4.0.6-v1   <none>        kubedb/redis_exporter:v0.21.1   <none>
+  NAME       VERSION   DB_IMAGE                TOOLS_IMAGE   EXPORTER_IMAGE                  DEPRECATED
+  4          4         kubedb/redis:4          <none>        kubedb/operator:0.8.0           true
+  4-v1       4         kubedb/redis:4-v1       <none>        kubedb/redis_exporter:v0.21.1   true
+  4.0        4.0       kubedb/redis:4.0        <none>        kubedb/operator:0.8.0           true
+  4.0-v1     4.0       kubedb/redis:4.0-v1     <none>        kubedb/redis_exporter:v0.21.1   true
+  4.0-v2     4.0       kubedb/redis:4.0-v2     <none>        kubedb/redis_exporter:v0.21.1   <none>
+  4.0.11     4.0.11    kubedb/redis:4.0.11     <none>        kubedb/redis_exporter:v0.21.1   <none>
+  4.0.6      4.0.6     kubedb/redis:4.0.6-v1   <none>        kubedb/operator:0.8.0           true
+  4.0.6-v1   4.0.6     kubedb/redis:4.0.6-v1   <none>        kubedb/redis_exporter:v0.21.1   true
+  4.0.6-v2   4.0.6     kubedb/redis:4.0.6-v2   <none>        kubedb/redis_exporter:v0.21.1   <none>
+  5.0        5.0       kubedb/redis:5.0        <none>        kubedb/redis_exporter:v0.21.1   <none>
+  5.0-v1     5.0       kubedb/redis:5.0-v1     <none>        kubedb/redis_exporter:v0.21.1   <none>
+  5.0.3      5.0.3     kubedb/redis:5.0.3      <none>        kubedb/redis_exporter:v0.21.1   <none>
+  5.0.3-v1   5.0.3     kubedb/redis:5.0.3-v1   <none>        kubedb/redis_exporter:v0.21.1   <none>
   ```
 
   Docker hub repositories:
