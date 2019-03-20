@@ -75,8 +75,9 @@ spec:
     configMap:
       name: pg-custom-config
   podTemplate:
-    annotations:
-      passMe: ToDatabasePod
+    metadata:
+      annotations:
+        passMe: ToDatabasePod
     controller:
       annotations:
         passMe: ToStatefulSet
@@ -97,8 +98,9 @@ spec:
           memory: "128Mi"
           cpu: "500m"
   serviceTemplate:
-    annotations:
-      passMe: ToService
+    metadata:
+      annotations:
+        passMe: ToService
     spec:
       type: NodePort
       ports:
