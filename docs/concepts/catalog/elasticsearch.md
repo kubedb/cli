@@ -18,7 +18,7 @@ section_menu_id: concepts
 
 When you install KubeDB, `ElasticsearchVersion` crd will be created automatically for every supported Elasticsearch versions. You have to specify the name of `ElasticsearchVersion` crd in `spec.version` field of [Elasticsearch](/docs/concepts/databases/elasticsearch.md) crd. Then, KubeDB will use the docker images specified in the `ElasticsearchVersion` crd to create your expected database.
 
-Using a separate crd for specifying respective docker images allows us to modify the images independent of KubeDB operator. This will also allow the users to use a custom image for database.
+Using a separate crd for specifying respective docker images, and pod security policy names allow us to modify the images, and policies independent of KubeDB operator. This will also allow the users to use a custom image for database.
 
 ## ElasticsearchVersion Specification
 
@@ -40,11 +40,14 @@ spec:
     image: "kubedb/elasticsearch_exporter:1.0.2"
   tools:
     image: "kubedb/elasticsearch-tools:6.2.4-v1"
+  podSecurityPolicies:
+    databasePolicyName: "elasticsearch-db"
+    snapshotterPolicyName: "elasticsearch-snapshot"
 ```
 
 ### metadata.name
 
-`metadata.name` is a required field that specify the name of the `ElasticsearchVersion` crd. You have to specify this name in `spec.version` field of [Elasticsearch](/docs/concepts/databases/elasticsearch.md) crd.
+`metadata.name` is a required field that specifies the name of the `ElasticsearchVersion` crd. You have to specify this name in `spec.version` field of [Elasticsearch](/docs/concepts/databases/elasticsearch.md) crd.
 
 We follow this convention for naming ElasticsearchVersion crd:
 - Name format: `{Original Elasticsearch version}-{modification tag}`
@@ -67,11 +70,25 @@ The default value of this field is `false`. If `spec.depcrecated` is set `true`,
 
 ### spec.exporter.image
 
-`spec.exporter.image` is required field that specifies the image which will be used to export Prometheus metrics.
+`spec.exporter.image` is a required field that specifies the image which will be used to export Prometheus metrics.
 
 ### spec.tools.image
 
 `spec.tools.image` is a required field that specifies the image which will be used to take backup and initialize database from snapshot.
+
+### spec.podSecurityPolicies.databasePolicyName
+
+`spec.podSecurityPolicies.databasePolicyName` is a required field that specifies the name of the pod security policy required to get the database server pod(s) running.
+
+### spec.podSecurityPolicies.snapshotterPolicyName
+
+`spec.podSecurityPolicies.snapshotterPolicyName` is a required field that specifies the name of the pod security policy required to get the snapshotter pod(s) running. To use user-defined policies, names of the policies have to be set in `spec.podSecurityPolicies` and in the list of allowed policy names in KubeDB operator like below:
+
+```console
+helm upgrade kubedb-operator appscode/kubedb --namespace kube-system \
+  --set additionalPodSecurityPolicies[0]=custom-db-policy \
+  --set additionalPodSecurityPolicies[1]=custom-snapshotter-policy
+```
 
 ## Next Steps
 

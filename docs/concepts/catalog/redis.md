@@ -18,7 +18,7 @@ section_menu_id: concepts
 
 When you install KubeDB, `RedisVersion` crd will be created automatically for every supported Redis versions. You have to specify the name of `RedisVersion` crd in `spec.version` field of [Redis](/docs/concepts/databases/redis.md) crd. Then, KubeDB will use the docker images specified in the `RedisVersion` crd to create your expected database.
 
-Using a separate crd for specifying respective docker images allows us to modify the images independent of KubeDB operator. This will also allow the users to use a custom image for the database.
+Using a separate crd for specifying respective docker images, and pod security policy names allow us to modify the images, and policies independent of KubeDB operator. This will also allow the users to use a custom image for the database.
 
 ## RedisVersion Specification
 
@@ -37,11 +37,13 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:4.0-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: "redis-db"
 ```
 
 ### metadata.name
 
-`metadata.name` is a required field that specify the name of the `RedisVersion` crd. You have to specify this name in `spec.version` field of [Redis](/docs/concepts/databases/redis.md) crd.
+`metadata.name` is a required field that specifies the name of the `RedisVersion` crd. You have to specify this name in `spec.version` field of [Redis](/docs/concepts/databases/redis.md) crd.
 
 We follow this convention for naming RedisVersion crd:
 
@@ -65,7 +67,16 @@ The default value of this field is `false`. If `spec.depcrecated` is set to `tru
 
 ### spec.exporter.image
 
-`spec.exporter.image` is required field that specifies the image which will be used to export Prometheus metrics.
+`spec.exporter.image` is a required field that specifies the image which will be used to export Prometheus metrics.
+
+### spec.podSecurityPolicies.databasePolicyName
+
+`spec.podSecurityPolicies.databasePolicyName` is a required field that specifies the name of the pod security policy required to get the database server pod(s) running. To use a user-defined policy, the name of the polict has to be set in `spec.podSecurityPolicies` and in the list of allowed policy names in KubeDB operator like below:
+
+```console
+helm upgrade kubedb-operator appscode/kubedb --namespace kube-system \
+  --set additionalPodSecurityPolicies[0]=custom-db-policy
+```
 
 ## Next Steps
 

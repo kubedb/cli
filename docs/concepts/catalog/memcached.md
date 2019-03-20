@@ -18,7 +18,7 @@ section_menu_id: concepts
 
 When you install KubeDB, `MemcachedVersion` crd will be created automatically for every supported Memcached versions. You have to specify the name of `MemcachedVersion` crd in `spec.version` field of [Memcached](/docs/concepts/databases/memcached.md) crd. Then, KubeDB will use the docker images specified in the `MemcachedVersion` crd to create your expected database.
 
-Using a separate crd for specifying respective docker images allows us to modify the images independent of KubeDB operator. This will also allow the users to use a custom image for the database.
+Using a separate crd for specifying respective docker images, and pod security policy names allow us to modify the images, and policies independent of KubeDB operator. This will also allow the users to use a custom image for the database.
 
 ## MemcachedVersion Specification
 
@@ -37,11 +37,13 @@ spec:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached:1.5.4-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/memcached-exporter:v0.4.1"
+  podSecurityPolicies:
+    databasePolicyName: "memcached-db"
 ```
 
 ### metadata.name
 
-`metadata.name` is a required field that specify the name of the `MemcachedVersion` crd. You have to specify this name in `spec.version` field of [Memcached](/docs/concepts/databases/memcached.md) crd.
+`metadata.name` is a required field that specifies the name of the `MemcachedVersion` crd. You have to specify this name in `spec.version` field of [Memcached](/docs/concepts/databases/memcached.md) crd.
 
 We follow this convention for naming MemcachedVersion crd:
 
@@ -65,7 +67,16 @@ The default value of this field is `false`. If `spec.depcrecated` is set `true`,
 
 ### spec.exporter.image
 
-`spec.exporter.image` is required field that specifies the image which will be used to export Prometheus metrics.
+`spec.exporter.image` is a required field that specifies the image which will be used to export Prometheus metrics.
+
+### spec.podSecurityPolicies.databasePolicyName
+
+`spec.podSecurityPolicies.databasePolicyName` is a required field that specifies the name of the pod security policy required to get the database server pod(s) running. To use a user-defined policy, the name of the polict has to be set in `spec.podSecurityPolicies` and in the list of allowed policy names in KubeDB operator like below:
+
+```console
+helm upgrade kubedb-operator appscode/kubedb --namespace kube-system \
+  --set additionalPodSecurityPolicies[0]=custom-db-policy
+```
 
 ## Next Steps
 
