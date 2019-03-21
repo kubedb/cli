@@ -94,9 +94,9 @@ Now, we are ready to proceed for rest of the tutorial.
 
 ## Create Postgres with WAL source
 
-We can initialize a new database from this archived WAL files. We have to specify the archive backend in the `spec.init.postgresWAL` field of Postgres object.
+We can initialize a new database from this archived WAL files. We have to specify the archive backend in the `spec.init.postgresWAL` field of Postgres object. User can use any of S3, GCS, Azure, or Swift WAL archiver for init.
 
-Here, the YAML of Postgres object that we are going to create in this tutorial,
+Here, the YAML of Postgres object that we are going to create in this tutorial, uses S3 as the cloud backup provider.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -105,7 +105,7 @@ metadata:
   name: replay-postgres
   namespace: demo
 spec:
-  version: "9.6-v2"
+  version: "11.1-v1"
   replicas: 2
   databaseSecret:
     secretName: wal-postgres-auth
@@ -126,22 +126,121 @@ spec:
 
 Here,
 
-- `spec.init.postgresWAL` specifies storage information that will be used by `wal-g`
+- `spec.init.postgresWAL` specifies storage information that will be used by `WAL-G`
   - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
   - `s3` points to S3 storage configuration.
   - `s3.bucket` points to the bucket name where archived WAL data is stored.
   - `s3.prefix` points to the path of archived WAL data.
-  - `gcs` points to GCS storage configuration.
+
+Here is a YAML of Postgres object that uses GCS as the cloud backup provider.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: replay-postgres
+  namespace: demo
+spec:
+  version: "11.1-v1"
+  replicas: 2
+  databaseSecret:
+    secretName: wal-postgres-auth
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  init:
+    postgresWAL:
+      storageSecretName: azure-secret
+      azure:
+        bucket: kubedb
+        prefix: 'kubedb/demo/wal-postgres/archive'
+```
+
+Here,
+
+- `spec.init.postgresWAL` specifies storage information that will be used by `WAL-G`
+  - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
+  - `gcs` points to storage configuration of GCS.
   - `gcs.bucket` points to the bucket name where archived WAL data is stored.
   - `gcs.prefix` points to the path of archived WAL data.
+
+Here is another YAML of Postgres object that uses Azure as the cloud backup provider.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: replay-postgres
+  namespace: demo
+spec:
+  version: "11.1-v1"
+  replicas: 2
+  databaseSecret:
+    secretName: wal-postgres-auth
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  init:
+    postgresWAL:
+      storageSecretName: azure-secret
+      azure:
+        container: kubedb
+        prefix: 'kubedb/demo/wal-postgres/archive'
+```
+
+Here,
+
+- `spec.init.postgresWAL` specifies storage information that will be used by`WAL-G`
+  - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
   - `azure` points to Azure storage configuration.
   - `azure.container` points to the container/bucket name where archived WAL data is stored.
   - `azure.prefix` points to the path of archived WAL data.
+
+And this yet another YAML of Postgres object that uses Swift as it's cloud backup provider.
+
+```yaml
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: replay-postgres
+  namespace: demo
+spec:
+  version: "11.1-v1"
+  replicas: 2
+  databaseSecret:
+    secretName: wal-postgres-auth
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  init:
+    postgresWAL:
+      storageSecretName: swift-secret
+      swift:
+        container: kubedb
+        prefix: 'kubedb/demo/wal-postgres/archive'
+```
+
+Here,
+
+- `spec.init.postgresWAL` specifies storage information that will be used by `WAL-G`
+  - `storageSecretName` points to the Secret containing the credentials for cloud storage destination.
   - `swift` points to Swift storage configuration.
   - `swift.container` points to the container/bucket name where archived WAL data is stored.
   - `swift.prefix` points to the path of archived WAL data.
 
-User can use any one of `s3`,` gcs`, `azure`, or `swift` WAL archiver for init.
+
 
 **wal-g** receives archived WAL data from a directory inside the bucket/container called `/kubedb/{namespace}/{postgres-name}/archive/`.
 
