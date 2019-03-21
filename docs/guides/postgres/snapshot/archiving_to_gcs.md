@@ -1,4 +1,4 @@
-# Continuous Archiving  to S3
+# Continuous Archiving  to GCS
 
 **WAL-G** is used to handle continuous archiving mechanism. Please refer to [continuous archiving in kubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to know more about it.
 
@@ -13,13 +13,13 @@ namespace/demo created
 
 ## Create PostgreSQL with Continuous Archiving
 
-For archiving, we need storage Secret, and storage backend information. Below is a Postgres object created with Continuous Archiving support to backup WAL files to Amazon S3.
+For archiving, we need storage Secret, and storage backend information. Below is a Postgres object created with Continuous Archiving support to backup WAL files to Google Cloud Storage.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: wal-postgres
+  name: wal-postgres-gcs
   namespace: demo
 spec:
   version: "11.1"
@@ -33,8 +33,8 @@ spec:
         storage: 1Gi
   archiver:
     storage:
-      storageSecretName: s3-secret
-      s3:
+      storageSecretName: gcs-secret
+      gcs:
         bucket: kubedb
 ```
 
@@ -42,8 +42,8 @@ Here,
 
 - `spec.archiver.storage` specifies storage information that will be used by `WAL-G`
   - `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-  - `storage.s3` points to s3 storage configuration.
-  - `storage.s3.bucket` points to the bucket name used to store continuous archiving data.
+  - `storage.gcs` points to GCS storage configuration.
+  - `storage.gcs.bucket` points to the bucket name used to store continuous archiving data.
 
 **Archiver Storage Secret**
 
@@ -51,51 +51,50 @@ Storage Secret should contain credentials that will be used to access storage de
 
 Storage Secret for **WAL-G** is needed with the following 2 keys:
 
-| Key                     | Description                               |
-| ----------------------- | ----------------------------------------- |
-| `AWS_ACCESS_KEY_ID`     | `Required`. AWS / Minio access key ID     |
-| `AWS_SECRET_ACCESS_KEY` | `Required`. AWS / Minio secret access key |
+| Key                               | Description                                       |
+| --------------------------------- | ------------------------------------------------- |
+| `GOOGLE_PROJECT_ID`               | `Required`. Google Cloud project ID               |
+| `GOOGLE_SERVICE_ACCOUNT_JSON_KEY` | `Required`. Google Cloud service account json key |
 
 ```console
-$ echo -n '<your-aws-access-key-id-here>' > AWS_ACCESS_KEY_ID
-$ echo -n '<your-aws-secret-access-key-here>' > AWS_SECRET_ACCESS_KEY
-$ kubectl create secret -n demo generic s3-secret \
-    --from-file=./AWS_ACCESS_KEY_ID \
-    --from-file=./AWS_SECRET_ACCESS_KEY
-secret "s3-secret" created
+$ echo -n '<your-project-id>' > GOOGLE_PROJECT_ID
+$ mv downloaded-sa-json.key GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+$ kubectl create secret generic gcs-secret \
+    --from-file=./GOOGLE_PROJECT_ID \
+    --from-file=./GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+secret "gcs-secret" created
 ```
 
 ```yaml
-$ kubectl get secret -n demo s3-secret -o yaml
+$ kubectl get secret gcs-secret -o yaml
 apiVersion: v1
 data:
-  AWS_ACCESS_KEY_ID: PHlvdXItYXdzLWFjY2Vzcy1rZXktaWQtaGVyZT4=
-  AWS_SECRET_ACCESS_KEY: PHlvdXItYXdzLXNlY3JldC1hY2Nlc3Mta2V5LWhlcmU+
+  GOOGLE_PROJECT_ID: PHlvdXItcHJvamVjdC1pZD4=
+  GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3V...9tIgp9Cg==
 kind: Secret
 metadata:
-  creationTimestamp: 2018-02-06T09:12:37Z
-  name: s3-secret
-  namespace: demo
-  resourceVersion: "59225"
-  selfLink: /api/v1/namespaces/demo/secrets/s3-secret
-  uid: dfbe6b06-0b1d-11e8-9fb9-42010a800064
+  creationTimestamp: 2017-06-28T13:06:51Z
+  name: gcs-secret
+  namespace: default
+  resourceVersion: "5461"
+  selfLink: /api/v1/namespaces/default/secrets/gcs-secret
+  uid: a6983b00-5c02-11e7-bb52-08002711f4aa
 type: Opaque
 ```
 
 **Archiver Storage Backend**
 
-To configure s3 backend, following parameters are available:
+To configure GCS backend, following parameters are available:
 
-| Parameter          | Description                                                  |
-| ------------------ | ------------------------------------------------------------ |
-| `spec.s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`                   |
-| `spec.s3.bucket`   | `Required`. Name of Bucket                                   |
-| `spec.s3.prefix`   | `Optional`. Path prefix into bucket where snapshot will be stores |
+| Parameter         | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| `spec.gcs.bucket` | `Required`. Name of Bucket                                   |
+| `spec.gcs.prefix` | `Optional`. Path prefix into bucket where snapshot will be stored |
 
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-s3.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-gcs.yaml
 postgres.kubedb.com/wal-postgres created
 ```
 
@@ -103,13 +102,14 @@ When database is ready, **WAL-G** takes a base backup and uploads it to the clou
 
 Archived data is stored in a folder called `{bucket}/{prefix}/kubedb/{namespace}/{postgres-name}/archive/`.
 
-You can see continuous archiving data stored in S3 bucket.
+You can see continuous archiving data stored in GCS bucket.
 
 <p align="center">
   <kbd>
-    <img alt="continuous-archiving"  src="/docs/images/postgres/wal-postgres.png">
+    <img alt="continuous-archiving"  src="/docs/images/postgres/wal-postgres-gcs.png">
   </kbd>
 </p>
+
 
 From the above image, you can see that the archived data is stored in a folder `kubedb/kubedb/demo/wal-postgres/archive`.
 
@@ -127,7 +127,7 @@ To cleanup the Kubernetes resources created by this tutorial, run:
 kubectl patch -n demo pg/wal-postgres -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
 kubectl delete -n demo pg/wal-postgres
 
-kubectl delete -n demo secret/s3-secret
+kubectl delete -n demo secret/gcs-secret
 kubectl delete ns demo
 ```
 
