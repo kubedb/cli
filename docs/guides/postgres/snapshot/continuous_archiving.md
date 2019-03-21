@@ -13,11 +13,13 @@ section_menu_id: guides
 
 # Continuous Archiving with WAL-G
 
-KubeDB also supports continuous archiving of PostgreSQL using [WAL-G ](https://github.com/wal-g/wal-g). Users can use any one of `s3`, `gcs`, `azure`, or `swift` as cloud storage destination. 
+KubeDB also supports continuous archiving of PostgreSQL using [WAL-G ](https://github.com/wal-g/wal-g). Users can now use any one of `s3`, `gcs`, `azure`, or `swift` as cloud storage destination. 
 
 **What is this Continuous Archiving**
 
 PostgreSQL maintains a write ahead log (WAL) in the `pg_xlog/` subdirectory of the cluster's data directory.  The existence of the log makes it possible to use a third strategy for backing up databases and if recovery is needed, restore from the backed-up WAL files to bring the system back to last known state.
+
+To know more about continuous archiving, please refer to the [ofiicial postgres document](https://www.postgresql.org/docs/10/continuous-archiving.html) on this topic.
 
 **Continuous Archiving Setup**
 
