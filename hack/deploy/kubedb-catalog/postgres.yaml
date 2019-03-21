@@ -214,3 +214,100 @@ spec:
   podSecurityPolicies:
     databasePolicyName: postgres-db
     snapshotterPolicyName: postgres-snapshot
+
+---
+# After 0.10.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "9.6-v3"
+  labels:
+    app: kubedb
+spec:
+  version: "9.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6-v4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6-v3"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "9.6.7-v3"
+  labels:
+    app: kubedb
+spec:
+  version: "9.6.7"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7-v4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:9.6.7-v3"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "10.2-v3"
+  labels:
+    app: kubedb
+spec:
+  version: "10.2"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2-v4"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.2-v3"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "10.6-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "10.6"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.6-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:10.6"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: PostgresVersion
+metadata:
+  name: "11.1-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "11.1"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres:11.1-v1"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
+  tools:
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:11.1"
+  podSecurityPolicies:
+    databasePolicyName: postgres-db
+    snapshotterPolicyName: postgres-snapshot
