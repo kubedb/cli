@@ -434,7 +434,7 @@ secret "swift-secret" created
 ```
 
 ```yaml
-$ kubectl get secret azure-secret -o yaml
+$ kubectl get secret swift-secret -o yaml
 apiVersion: v1
 data:
   OS_AUTH_URL: PHlvdXItYXV0aC11cmw+
