@@ -134,3 +134,4 @@ kubectl delete ns demo
 ## Next Steps
 
 - Learn about initializing [PostgreSQL from WAL](/docs/guides/postgres/initialization/script_source.md) files stored in cloud.
+

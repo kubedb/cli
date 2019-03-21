@@ -19,7 +19,7 @@ For archiving, we need storage Secret, and storage backend information. Below is
 apiVersion: kubedb.com/v1alpha1
 kind: Postgres
 metadata:
-  name: wal-postgres-gcs
+  name: wal-postgres
   namespace: demo
 spec:
   version: "11.1"
@@ -42,7 +42,7 @@ Here,
 
 - `spec.archiver.storage` specifies storage information that will be used by `WAL-G`
   - `storage.storageSecretName` points to the Secret containing the credentials for cloud storage destination.
-  - `storage.gcs` points to GCS storage configuration.
+  - `storage.gcs` points to GCS configuration.
   - `storage.gcs.bucket` points to the bucket name used to store continuous archiving data.
 
 **Archiver Storage Secret**
@@ -134,3 +134,4 @@ kubectl delete ns demo
 ## Next Steps
 
 - Learn about initializing [PostgreSQL from WAL](/docs/guides/postgres/initialization/script_source.md) files stored in cloud.
+
