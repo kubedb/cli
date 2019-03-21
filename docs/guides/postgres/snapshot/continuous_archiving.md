@@ -70,7 +70,7 @@ Here,
   - `storage.swift` points to Swift storage configuration.
   - `storage.swift.container` points to the container/bucket name used to store continuous archiving data.
 
-User can use any one of `s3`, `gcs`, `azure`, or `swift` as cloud storage destination. In this tutorial, `s3` is used for wal-g archiving. `gcs`, `azure`, and `swift` are also similar to this tutorial. Please note that `s3`, and `gcs` use `storage.bucket`, whereas `azure`, and `swift` use `storage.container` to point to the base directory of their respective cloud storages. To create secret for these storages, follow [this link](/docs/concepts/snapshot/#google-cloud-storage-gcs) for `gcs`,  [this link](/docs/concepts/snapshot/#microsoft-azure-storage) for `azure`, and [this link]( [this link](/docs/concepts/snapshot/#microsoft-azure-storage)) for `swift`.
+User can use any one of `s3`, `gcs`, `azure`, or `swift` as cloud storage destination. In this tutorial, `s3` is used for wal-g archiving. `gcs`, `azure`, and `swift` are also similar to this tutorial. Please note that `s3`, and `gcs` use `storage.bucket`, whereas `azure`, and `swift` use `storage.container` to point to the base directory of their respective cloud storages. To create secret for these storages, follow [this link](/docs/concepts/snapshot/#google-cloud-storage-gcs) for `gcs`,  [this link](/docs/concepts/snapshot/#microsoft-azure-storage) for `azure`, and [this link](/docs/concepts/snapshot/#microsoft-azure-storage) for `swift`.
 
 **What is this Continuous Archiving**
 
