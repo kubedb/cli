@@ -1,6 +1,8 @@
-## Archiving to S3: 
+# Continuous Archiving  to S3
 
-**WAL-G** is used to handle continuous archiving mechanism. For this we need storage Secret and need to provide storage backend information.
+**WAL-G** is used to handle continuous archiving mechanism. Please refer to [continuous archiving in kubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to know more about it.
+
+## Before You Begin
 
 To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial.
 
@@ -9,7 +11,9 @@ $ kubectl create ns demo
 namespace/demo created
 ```
 
-Below is the Postgres object created with Continuous Archiving to backup WAL files to Amazon S3.
+## Create PostgreSQL with Continuous Archiving
+
+For archiving, we need storage Secret, and storage backend information. Below is a Postgres object created with Continuous Archiving support to backup WAL files to Amazon S3.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
