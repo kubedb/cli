@@ -1,0 +1,20 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: wal-postgres
+  namespace: demo
+spec:
+  version: "11.1-v1"
+  replicas: 2
+  storage:
+    storageClassName: "standard"
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  archiver:
+    storage:
+      storageSecretName: swift-secret
+      swift:
+        container: kubedb
