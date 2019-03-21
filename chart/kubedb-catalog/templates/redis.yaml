@@ -159,25 +159,10 @@ metadata:
   labels:
     {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
+  deprecated: true
   version: "5.0"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0"
-  exporter:
-    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
-  podSecurityPolicies:
-    databasePolicyName: redis-db
-
----
-apiVersion: catalog.kubedb.com/v1alpha1
-kind: RedisVersion
-metadata:
-  name: "5.0-v1"
-  labels:
-    {{- include "kubedb-catalog.labels" . | nindent 4 }}
-spec:
-  version: "5.0"
-  db:
-    image: "{{ .Values.dockerRegistry }}/redis:5.0-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
   podSecurityPolicies:
@@ -191,9 +176,28 @@ metadata:
   labels:
     {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
+  deprecated: true
   version: "5.0.3"
   db:
     image: "{{ .Values.dockerRegistry }}/redis:5.0.3"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
+
+---
+# After 0.10.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "5.0-v1"
+  labels:
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
+spec:
+  version: "5.0"
+  db:
+    image: "{{ .Values.dockerRegistry }}/redis:5.0-v1"
   exporter:
     image: "{{ .Values.dockerRegistry }}/redis_exporter:v0.21.1"
   podSecurityPolicies:

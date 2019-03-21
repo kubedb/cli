@@ -158,25 +158,10 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.0"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:5.0"
-  exporter:
-    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
-  podSecurityPolicies:
-    databasePolicyName: redis-db
-
----
-apiVersion: catalog.kubedb.com/v1alpha1
-kind: RedisVersion
-metadata:
-  name: "5.0-v1"
-  labels:
-    app: kubedb
-spec:
-  version: "5.0"
-  db:
-    image: "${KUBEDB_DOCKER_REGISTRY}/redis:5.0-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
   podSecurityPolicies:
@@ -190,9 +175,28 @@ metadata:
   labels:
     app: kubedb
 spec:
+  deprecated: true
   version: "5.0.3"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis:5.0.3"
+  exporter:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
+  podSecurityPolicies:
+    databasePolicyName: redis-db
+
+---
+# After 0.10.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: RedisVersion
+metadata:
+  name: "5.0-v1"
+  labels:
+    app: kubedb
+spec:
+  version: "5.0"
+  db:
+    image: "${KUBEDB_DOCKER_REGISTRY}/redis:5.0-v1"
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/redis_exporter:v0.21.1"
   podSecurityPolicies:
