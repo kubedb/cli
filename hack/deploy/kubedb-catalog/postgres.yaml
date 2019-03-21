@@ -128,7 +128,6 @@ metadata:
   labels:
     app: kubedb
 spec:
-  deprecated: true
   version: "9.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6-v3"
@@ -148,7 +147,6 @@ metadata:
   labels:
     app: kubedb
 spec:
-  deprecated: true
   version: "9.6.7"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:9.6.7-v3"
@@ -168,7 +166,6 @@ metadata:
   labels:
     app: kubedb
 spec:
-  deprecated: true
   version: "10.2"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.2-v3"
@@ -188,7 +185,6 @@ metadata:
   labels:
     app: kubedb
 spec:
-  deprecated: true
   version: "10.6"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:10.6"
@@ -208,7 +204,6 @@ metadata:
   labels:
     app: kubedb
 spec:
-  deprecated: true
   version: "11.1"
   db:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres:11.1"
