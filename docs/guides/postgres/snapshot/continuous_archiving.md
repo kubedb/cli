@@ -40,6 +40,21 @@ Now, install KubeDB cli on your workstation and KubeDB operator in your cluster 
 
 > Note: YAML files used in this tutorial are stored in [docs/examples/postgres](https://github.com/kubedb/cli/tree/master/docs/examples/postgres) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
+**List of supported Cloud Providers for PostgresVersion CRDs**
+
+|   Name   | Version |  S3  | GCS  | Azure | Swift |
+| :------: | :-----: | :--: | :--: | :---: | :---: |
+|  9.6-v2  |   9.6   |  ✓   |  ✓   |   ✗   |   ✗   |
+| 9.6.7-v2 |  9.6.7  |  ✓   |  ✓   |   ✗   |   ✗   |
+| 10.2-v2  |  10.2   |  ✓   |  ✓   |   ✗   |   ✗   |
+|   10.6   |  10.6   |  ✓   |  ✓   |   ✗   |   ✗   |
+|   11.1   |  11.1   |  ✓   |  ✓   |   ✗   |   ✗   |
+|  9.6-v3  |   9.6   |  ✓   |  ✓   |   ✓   |   ✓   |
+| 9.6.7-v3 |  9.6.7  |  ✓   |  ✓   |   ✓   |   ✓   |
+| 10.2-v3  |  10.2   |  ✓   |  ✓   |   ✓   |   ✓   |
+| 10.6-v1  |  10.6   |  ✓   |  ✓   |   ✓   |   ✓   |
+| 11.1-v1  |  11.1   |  ✓   |  ✓   |   ✓   |   ✓   |
+
 ## Next Steps
 
 - Learn about archiving to [Amazon S3](/docs/guides/postgres/snapshot/archiving_to_s3.md).
