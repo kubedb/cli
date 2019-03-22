@@ -34,7 +34,7 @@ Here, these commands are used to push files to the cloud.
 
 
 
-**List of supported Cloud Providers for PostgresVersion CRDs**
+**List of supported Cloud Destination for PostgresVersion CRDs**
 
 |   Name   | Version |  S3  | GCS  | Azure | Swift |
 | :------: | :-----: | :--: | :--: | :---: | :---: |
@@ -48,6 +48,8 @@ Here, these commands are used to push files to the cloud.
 | 10.2-v3  |  10.2   |  ✓   |  ✓   |   ✓   |   ✓   |
 | 10.6-v1  |  10.6   |  ✓   |  ✓   |   ✓   |   ✓   |
 | 11.1-v1  |  11.1   |  ✓   |  ✓   |   ✓   |   ✓   |
+
+Users can use supported cloud destinations to backup  WAL files to restore whaen needed. KubeDB currently supports *archiving to* [Amazon S3](/docs/guides/postgres/snapshot/archiving_to_s3.md), [Google Cloud Storage](/docs/guides/postgres/snapshot/archiving_to_gcs.md), [Azure Storage](/docs/guides/postgres/snapshot/archiving_to_azure.md), and [OpenStack Object Storage (Swift)](/docs/guides/postgres/snapshot/archiving_to_swift.md).
 
 ## Next Steps
 
