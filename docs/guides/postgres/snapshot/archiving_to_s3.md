@@ -1,3 +1,18 @@
+---
+title: Continuous Archiving to S3
+menu:
+  docs_0.11.0:
+    identifier: pg-continuous-archiving-snapshot
+    name: WAL Archiving
+    parent: pg-snapshot-postgres
+    weight: 20
+menu_name: docs_0.11.0
+section_menu_id: guides
+
+---
+
+> New to KubeDB? Please start [here](/docs/concepts/README.md).
+
 # Continuous Archiving  to S3
 
 **WAL-G** is used to handle continuous archiving mechanism. Please refer to [continuous archiving in kubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to know more about it.
@@ -22,7 +37,7 @@ metadata:
   name: wal-postgres
   namespace: demo
 spec:
-  version: "11.1"
+  version: "11.1-v1"
   replicas: 2
   storage:
     storageClassName: "standard"
@@ -95,7 +110,7 @@ To configure s3 backend, following parameters are available:
 Now create this Postgres object with Continuous Archiving support.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-s3.yaml
 postgres.kubedb.com/wal-postgres created
 ```
 
