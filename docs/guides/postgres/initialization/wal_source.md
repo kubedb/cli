@@ -154,8 +154,8 @@ spec:
         storage: 1Gi
   init:
     postgresWAL:
-      storageSecretName: azure-secret
-      azure:
+      storageSecretName: gcs-secret
+      gcs:
         bucket: kubedb
         prefix: 'kubedb/demo/wal-postgres/archive'
 ```
