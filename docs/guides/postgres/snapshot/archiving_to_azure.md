@@ -50,7 +50,7 @@ spec:
     storage:
       storageSecretName: azure-secret
       azure:
-        bucket: kubedb
+        container: kubedb
 ```
 
 Here,
