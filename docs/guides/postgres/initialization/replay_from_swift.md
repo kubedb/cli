@@ -2,13 +2,12 @@
 title: Initialize Postgres from Swift
 menu:
   docs_0.11.0:
-    identifier: pg-wal-source-initialization
+    identifier: pg-wal-source-initialization-swift
     name: Postgres from Swift
     parent: pg-initialization-postgres
     weight: 40
 menu_name: docs_0.11.0
 section_menu_id: guides
-
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
