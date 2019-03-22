@@ -3,9 +3,9 @@ title: Continuous Archiving to S3
 menu:
   docs_0.11.0:
     identifier: pg-continuous-archiving-snapshot
-    name: WAL Archiving
+    name: Archiving to S3
     parent: pg-snapshot-postgres
-    weight: 20
+    weight: 25
 menu_name: docs_0.11.0
 section_menu_id: guides
 
