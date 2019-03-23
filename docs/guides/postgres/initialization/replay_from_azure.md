@@ -3,7 +3,7 @@ title: Initialize Postgres from Azure
 menu:
   docs_0.11.0:
     identifier: pg-wal-source-initialization-azure
-    name: Postgres from Azure
+    name: From WAL(Azure)
     parent: pg-initialization-postgres
     weight: 35
 menu_name: docs_0.11.0

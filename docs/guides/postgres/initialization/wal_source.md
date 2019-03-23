@@ -5,7 +5,7 @@ menu:
     identifier: pg-wal-source-initialization
     name: From WAL
     parent: pg-initialization-postgres
-    weight: 20
+    weight: 25
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---

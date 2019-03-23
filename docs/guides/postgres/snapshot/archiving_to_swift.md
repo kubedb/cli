@@ -2,8 +2,8 @@
 title: Continuous Archiving to Swift
 menu:
   docs_0.11.0:
-    identifier: pg-continuous-archiving-snapshot
-    name: Archiving to Swift
+    identifier: pg-continuous-archiving-swift
+    name: WAL Archiving to Swift
     parent: pg-snapshot-postgres
     weight: 40
 menu_name: docs_0.11.0

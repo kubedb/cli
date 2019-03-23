@@ -2,10 +2,10 @@
 title: Continuous Archiving to GCS
 menu:
   docs_0.11.0:
-    identifier: pg-continuous-archiving-snapshot
-    name: Archiving to GCS
+    identifier: pg-continuous-archiving-gcs
+    name: WAL Archiving to GCS
     parent: pg-snapshot-postgres
-    weight: 30
+    weight: 35
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---

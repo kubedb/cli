@@ -3,9 +3,9 @@ title: Initialize Postgres from GCS
 menu:
   docs_0.11.0:
     identifier: pg-wal-source-initialization-gcs
-    name: Postgres from GCS
+    name: From WAL(GCS)
     parent: pg-initialization-postgres
-    weight: 30
+    weight: 40
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---

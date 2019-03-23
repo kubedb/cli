@@ -1,10 +1,16 @@
 # Change Log
 
-## [0.11.0](https://github.com/kubedb/cli/tree/0.11.0) (2019-03-18)
+## [0.11.0](https://github.com/kubedb/cli/tree/0.11.0) (2019-03-23)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.10.0...0.11.0)
 
 **Merged pull requests:**
 
+- Updated postgres catalog [\#419](https://github.com/kubedb/cli/pull/419) ([the-redback](https://github.com/the-redback))
+- Deprecate redisversion crd for redis version 5.0 and 5.0.3 [\#418](https://github.com/kubedb/cli/pull/418) ([shudipta](https://github.com/shudipta))
+- Update postgres docs with correct podTemplate and serviceTemplate spe… [\#417](https://github.com/kubedb/cli/pull/417) ([harbesc](https://github.com/harbesc))
+- Add missing Redis version crd info in docs [\#416](https://github.com/kubedb/cli/pull/416) ([shudipta](https://github.com/shudipta))
+- PSP related docs [\#415](https://github.com/kubedb/cli/pull/415) ([iamrz1](https://github.com/iamrz1))
+- Updated WAL-G related docs [\#414](https://github.com/kubedb/cli/pull/414) ([iamrz1](https://github.com/iamrz1))
 - Prepare docs for 0.11.0 release [\#413](https://github.com/kubedb/cli/pull/413) ([tamalsaha](https://github.com/tamalsaha))
 - PSP for kubedb operator [\#411](https://github.com/kubedb/cli/pull/411) ([iamrz1](https://github.com/iamrz1))
 - psp source path update [\#410](https://github.com/kubedb/cli/pull/410) ([iamrz1](https://github.com/iamrz1))

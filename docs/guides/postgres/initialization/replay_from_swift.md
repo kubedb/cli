@@ -3,9 +3,9 @@ title: Initialize Postgres from Swift
 menu:
   docs_0.11.0:
     identifier: pg-wal-source-initialization-swift
-    name: Postgres from Swift
+    name: From WAL(Swift)
     parent: pg-initialization-postgres
-    weight: 40
+    weight: 45
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---
