@@ -125,9 +125,9 @@ Type "help" for help.
 # list available databases
 postgres=# \l
                                  List of databases
-   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
- postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
            |          |          |            |            | postgres=CTc/postgres
  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
@@ -157,7 +157,7 @@ INSERT 0 1
 # let's view the inserted data. check "created_at" column.
 # we are going to use this timestamp for point-in-time recovery.
 postgres=# select * from pitrDemo;
- id |    message    |          created_at           
+ id |    message    |          created_at
 ----+---------------+-------------------------------
   1 | row 1 created | 2019-01-07 08:28:58.752729+00
   2 | row 2 created | 2019-01-07 08:39:36.77533+00
@@ -241,7 +241,7 @@ psql (10.2)
 Type "help" for help.
 
 postgres=# select * from pitrDemo;
- id |    message    |          created_at           
+ id |    message    |          created_at
 ----+---------------+-------------------------------
   1 | row 1 created | 2019-01-07 08:28:58.752729+00
 (1 row)
@@ -308,7 +308,7 @@ psql (10.2)
 Type "help" for help.
 
 postgres=# select * from pitrDemo;
- id |    message    |          created_at           
+ id |    message    |          created_at
 ----+---------------+-------------------------------
   1 | row 1 created | 2019-01-07 08:28:58.752729+00
   2 | row 2 created | 2019-01-07 08:39:36.77533+00
