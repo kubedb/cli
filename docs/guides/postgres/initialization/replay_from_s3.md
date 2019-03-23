@@ -3,9 +3,9 @@ title: Initialize Postgres from S3
 menu:
   docs_0.11.0:
     identifier: pg-wal-source-initialization-s3
-    name: Postgres from S3
+    name: From WAL(S3)
     parent: pg-initialization-postgres
-    weight: 25
+    weight: 30
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---

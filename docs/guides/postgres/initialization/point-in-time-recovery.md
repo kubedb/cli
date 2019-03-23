@@ -5,7 +5,7 @@ menu:
     identifier: pg-pitr
     name: Point-in-Time Recovery
     parent: pg-initialization-postgres
-    weight: 25
+    weight: 20
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---

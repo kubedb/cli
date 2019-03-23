@@ -2,10 +2,10 @@
 title: Continuous Archiving to Azure
 menu:
   docs_0.11.0:
-    identifier: pg-continuous-archiving-snapshot
-    name: Archiving to Azure
+    identifier: pg-continuous-archiving-azure
+    name: WAL Archiving to Azure
     parent: pg-snapshot-postgres
-    weight: 35
+    weight: 30
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---
