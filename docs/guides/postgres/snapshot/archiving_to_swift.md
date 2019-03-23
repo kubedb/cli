@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Continuous Archiving  to Swift
 
-**WAL-G** is used to handle continuous archiving mechanism. Please refer to [continuous archiving in kubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to know more about it.
+**WAL-G** is used to continuously archive PostgreSQL WAL files. Please refer to [continuous archiving in KubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to learn more about it.
 
 ## Before You Begin
 
@@ -50,12 +50,12 @@ spec:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
+        storage: 50Mi
   archiver:
     storage:
       storageSecretName: swift-secret
-      gcs:
-        bucket: kubedb
+      swift:
+        container: kubedb
 ```
 
 Here,
@@ -93,11 +93,19 @@ Storage Secret for **WAL-G** is needed with the full set of v1, v2 or v3 authent
 | `OS_AUTH_TOKEN`          | For authentication based on tokens |
 
 ```console
-$ echo -n '<your-swift-storage-account-name>' > AZURE_ACCOUNT_NAME
-$ echo -n '<your-swift-storage-account-key>' > AZURE_ACCOUNT_KEY
+$ echo -n '<your-auth-url>' > OS_AUTH_URL
+$ echo -n '<your-tenant-id>' > OS_TENANT_ID
+$ echo -n '<your-tenant-name>' > OS_TENANT_NAME
+$ echo -n '<your-username>' > OS_USERNAME
+$ echo -n '<your-password>' > OS_PASSWORD
+$ echo -n '<your-region>' > OS_REGION_NAME
 $ kubectl create secret generic swift-secret \
-    --from-file=./AZURE_ACCOUNT_NAME \
-    --from-file=./AZURE_ACCOUNT_KEY
+    --from-file=./OS_AUTH_URL \
+    --from-file=./OS_TENANT_ID \
+    --from-file=./OS_TENANT_NAME \
+    --from-file=./OS_USERNAME \
+    --from-file=./OS_PASSWORD \
+    --from-file=./OS_REGION_NAME
 secret "swift-secret" created
 ```
 
@@ -124,14 +132,14 @@ type: Opaqu
 
 **Archiver Storage Backend**
 
-To configure GCS backend, following parameters are available:
+To configure Swift backend, following parameters are available:
 
-| Parameter              | Description                                                  |
-| ---------------------- | ------------------------------------------------------------ |
-| `spec.azure.container` | `Required`. Name of Storage container                        |
-| `spec.azure.prefix`    | `Optional`. Path prefix into bucket where snapshot will be stored |
+| Parameter                               | Description                                                  |
+| --------------------------------------- | ------------------------------------------------------------ |
+| `spec.archiver.storage.swift.container` | `Required`. Name of Storage container                        |
+| `spec.archiver.storage.swift.prefix`    | `Optional`. Path prefix into container where snapshot will be stored |
 
-Now create this Postgres object with Continuous Archiving support.
+Now create this Postgres object with continuous archiving support.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-swift.yaml

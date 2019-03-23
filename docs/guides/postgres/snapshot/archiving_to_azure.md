@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Continuous Archiving  to Azure
 
-**WAL-G** is used to handle continuous archiving mechanism. Please refer to [continuous archiving in kubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to know more about it.
+**WAL-G** is used to continuously archive PostgreSQL WAL files. Please refer to [continuous archiving in KubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to learn more about it.
 
 ## Before You Begin
 
@@ -104,14 +104,14 @@ type: Opaque
 
 **Archiver Storage Backend**
 
-To configure GCS backend, following parameters are available:
+To configure Azure backend, following parameters are available:
 
-| Parameter              | Description                                                  |
-| ---------------------- | ------------------------------------------------------------ |
-| `spec.azure.container` | `Required`. Name of Storage container                        |
-| `spec.azure.prefix`    | `Optional`. Path prefix into bucket where snapshot will be stored |
+| Parameter                               | Description                                                  |
+| --------------------------------------- | ------------------------------------------------------------ |
+| `spec.archiver.storage.azure.container` | `Required`. Name of Storage container                        |
+| `spec.archiver.storage.azure.prefix`    | `Optional`. Path prefix into bucket where snapshot will be stored |
 
-Now create this Postgres object with Continuous Archiving support.
+Now create this Postgres object with continuous archiving support.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-azure.yaml
@@ -129,8 +129,6 @@ You can see continuous archiving data stored in azure container.
     <img alt="continuous-archiving"  src="/docs/images/postgres/wal-postgres-azure.png">
   </kbd>
 </p>
-
-
 
 From the above image, you can see that the archived data is stored in a folder `kubedb/kubedb/demo/wal-postgres/archive`.
 
@@ -155,4 +153,3 @@ kubectl delete ns demo
 ## Next Steps
 
 - Learn about initializing [PostgreSQL from WAL](/docs/guides/postgres/initialization/script_source.md) files stored in cloud.
-

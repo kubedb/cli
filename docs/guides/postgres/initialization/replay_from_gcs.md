@@ -11,11 +11,11 @@ section_menu_id: guides
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
-> Don't know how to take continuous backup?  Check [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
+> Don't know how to take continuous backup?  Check this [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
 # PostgreSQL Initialization from GCS
 
-**WAL-G** is used to handle replay, and restoration mechanism. Please refer to [Initialization from WAL files in kubeDB](/docs/guides/postgres/initialization/wal_source.md) to know more about it.
+**WAL-G** is used to handle replay, and restoration mechanism. Please refer to [Initialization from WAL files in KubeDB](/docs/guides/postgres/initialization/wal_source.md) to know more about it.
 
 ## Before You Begin
 
@@ -94,7 +94,7 @@ Now, we are ready to proceed for rest of the tutorial.
 
 ## Create Postgres with WAL source
 
-User can initialize a new database from this archived WAL files. We have to specify the archive backend in the `spec.init.postgresWAL` field of Postgres object. 
+User can initialize a new database from this archived WAL files. We have to specify the archive backend in the `spec.init.postgresWAL` field of Postgres object.
 
 The YAML file  in this tutorial creates a Postgres object using WAL files from Google Cloud Storage.
 

@@ -14,7 +14,7 @@ section_menu_id: guides
 
 # Continuous Archiving  to S3
 
-**WAL-G** is used to handle continuous archiving mechanism. Please refer to [continuous archiving in kubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to know more about it.
+**WAL-G** is used to continuously archive PostgreSQL WAL files. Please refer to [continuous archiving in KubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to learn more about it.
 
 ## Before You Begin
 
@@ -106,13 +106,13 @@ type: Opaque
 
 To configure s3 backend, following parameters are available:
 
-| Parameter          | Description                                                  |
-| ------------------ | ------------------------------------------------------------ |
-| `spec.s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`                   |
-| `spec.s3.bucket`   | `Required`. Name of Bucket                                   |
-| `spec.s3.prefix`   | `Optional`. Path prefix into bucket where snapshot will be stores |
+| Parameter                           | Description                                                  |
+| ----------------------------------- | ------------------------------------------------------------ |
+| `spec.archiver.storage.s3.endpoint` | `Required`. For S3, use `s3.amazonaws.com`                   |
+| `spec.archiver.storage.s3.bucket`   | `Required`. Name of Bucket                                   |
+| `spec.archiver.storage.s3.prefix`   | `Optional`. Path prefix into bucket where snapshot will be stores |
 
-Now create this Postgres object with Continuous Archiving support.
+Now create this Postgres object with continuous archiving support.
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-s3.yaml
