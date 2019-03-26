@@ -436,8 +436,8 @@ This will resume the previous database. All data that was inserted in previous d
 When the database is resumed, respective DormantDatabase object will be removed. Verify that the DormantDatabase object has been removed,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/quickstart/quick-postgres.yaml
-postgres "quick-postgres" created
+$ kubectl get drmn -n demo quick-postgres
+Error from server (NotFound): dormantdatabases.kubedb.com "quick-postgres" not found
 ```
 
 ## WipeOut DormantDatabase
