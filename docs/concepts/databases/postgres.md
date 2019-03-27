@@ -36,9 +36,9 @@ spec:
   standbyMode: Hot
   streamingMode: asynchronous
   leaderElection:
-    leaseDurationSeconds: 3
-    renewDeadlineSeconds: 2
-    retryPeriodSeconds: 1
+    leaseDurationSeconds: 15
+    renewDeadlineSeconds: 10
+    retryPeriodSeconds: 2
   archiver:
     storage:
       storageSecretName: s3-secret
@@ -118,7 +118,7 @@ spec:
         targetPort: http
   updateStrategy:
     type: RollingUpdate
-  terminationPolicy: "DoNotTerminate"
+  terminationPolicy: "Pause"
 ```
 
 ### spec.version
