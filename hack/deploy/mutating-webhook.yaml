@@ -11,7 +11,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearches
+      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearchmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -25,7 +25,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/postgreses
+      path: /apis/mutators.kubedb.com/v1alpha1/postgresmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -39,7 +39,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/mysqls
+      path: /apis/mutators.kubedb.com/v1alpha1/mysqlmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -53,7 +53,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/mongodbs
+      path: /apis/mutators.kubedb.com/v1alpha1/mongodbmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -67,7 +67,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/redises
+      path: /apis/mutators.kubedb.com/v1alpha1/redismutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -81,7 +81,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/memcacheds
+      path: /apis/mutators.kubedb.com/v1alpha1/memcachedmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -95,7 +95,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/etcds
+      path: /apis/mutators.kubedb.com/v1alpha1/etcdmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]

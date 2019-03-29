@@ -17,7 +17,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/elasticsearches
+      path: /apis/validators.kubedb.com/v1alpha1/elasticsearchvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -33,7 +33,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/postgreses
+      path: /apis/validators.kubedb.com/v1alpha1/postgresvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -49,7 +49,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/mysqls
+      path: /apis/validators.kubedb.com/v1alpha1/mysqlvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -65,7 +65,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/mongodbs
+      path: /apis/validators.kubedb.com/v1alpha1/mongodbvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -81,7 +81,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/redises
+      path: /apis/validators.kubedb.com/v1alpha1/redisvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -97,7 +97,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/memcacheds
+      path: /apis/validators.kubedb.com/v1alpha1/memcachedvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -113,7 +113,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/etcds
+      path: /apis/validators.kubedb.com/v1alpha1/etcdvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -129,7 +129,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/snapshots
+      path: /apis/validators.kubedb.com/v1alpha1/snapshotvalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -145,7 +145,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/dormantdatabases
+      path: /apis/validators.kubedb.com/v1alpha1/dormantdatabasevalidators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]

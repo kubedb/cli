@@ -11,7 +11,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/elasticsearches
+      path: /apis/validators.kubedb.com/v1alpha1/elasticsearchvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -25,7 +25,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/postgreses
+      path: /apis/validators.kubedb.com/v1alpha1/postgresvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -39,7 +39,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/mysqls
+      path: /apis/validators.kubedb.com/v1alpha1/mysqlvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -53,7 +53,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/mongodbs
+      path: /apis/validators.kubedb.com/v1alpha1/mongodbvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -67,7 +67,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/redises
+      path: /apis/validators.kubedb.com/v1alpha1/redisvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -81,7 +81,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/memcacheds
+      path: /apis/validators.kubedb.com/v1alpha1/memcachedvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -95,7 +95,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/etcds
+      path: /apis/validators.kubedb.com/v1alpha1/etcdvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -109,7 +109,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/snapshots
+      path: /apis/validators.kubedb.com/v1alpha1/snapshotvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -123,7 +123,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/dormantdatabases
+      path: /apis/validators.kubedb.com/v1alpha1/dormantdatabasevalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
