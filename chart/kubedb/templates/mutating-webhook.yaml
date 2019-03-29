@@ -12,7 +12,7 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
 webhooks:
-- name: elasticsearchmutator.mutators.kubedb.com
+- name: elasticsearch.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -28,7 +28,7 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: postgresmutator.mutators.kubedb.com
+- name: postgres.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -44,7 +44,7 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: mysqlmutator.mutators.kubedb.com
+- name: mysql.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -60,7 +60,7 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: mongodbmutator.mutators.kubedb.com
+- name: mongodb.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -76,7 +76,7 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: redismutator.mutators.kubedb.com
+- name: redis.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -92,7 +92,7 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: memcachedmutator.mutators.kubedb.com
+- name: memcached.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -108,7 +108,7 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: etcdmutator.mutators.kubedb.com
+- name: etcd.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
