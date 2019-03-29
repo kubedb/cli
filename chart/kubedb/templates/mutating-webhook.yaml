@@ -44,12 +44,12 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: mysql.mutators.kubedb.com
+- name: mysqlmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/mysqls
+      path: /apis/mutators.kubedb.com/v1alpha1/mysqlmutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -60,12 +60,12 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: mongodb.mutators.kubedb.com
+- name: mongodbmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/mongodbs
+      path: /apis/mutators.kubedb.com/v1alpha1/mongodbmutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -76,12 +76,12 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: redis.mutators.kubedb.com
+- name: redismutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/redises
+      path: /apis/mutators.kubedb.com/v1alpha1/redisemutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -92,12 +92,12 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: memcached.mutators.kubedb.com
+- name: memcachedmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/memcacheds
+      path: /apis/mutators.kubedb.com/v1alpha1/memcachedmutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -108,12 +108,12 @@ webhooks:
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: etcd.mutators.kubedb.com
+- name: etcdmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/etcds
+      path: /apis/mutators.kubedb.com/v1alpha1/etcdmutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
