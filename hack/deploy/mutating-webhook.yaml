@@ -6,7 +6,7 @@ metadata:
   labels:
     app: kubedb
 webhooks:
-- name: elasticsearchmutator.mutators.kubedb.com
+- name: elasticsearch.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -16,11 +16,11 @@ webhooks:
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["elasticsearchmutators"]
+    resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
   ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
-- name: postgresmutator.mutators.kubedb.com
+- name: postgres.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
@@ -30,7 +30,7 @@ webhooks:
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["postgresmutators"]
+    resources: ["postgreses"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
   ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
@@ -39,7 +39,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/mysqls
+      path: /apis/mutators.kubedb.com/v1alpha1/mysqlmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -53,7 +53,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/mongodbs
+      path: /apis/mutators.kubedb.com/v1alpha1/mongodbmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -67,7 +67,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/redises
+      path: /apis/mutators.kubedb.com/v1alpha1/redismutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -81,7 +81,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/memcacheds
+      path: /apis/mutators.kubedb.com/v1alpha1/memcachedmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -95,7 +95,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/etcds
+      path: /apis/mutators.kubedb.com/v1alpha1/etcdmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]

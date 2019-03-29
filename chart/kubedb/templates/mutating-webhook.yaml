@@ -81,7 +81,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/redisemutators
+      path: /apis/mutators.kubedb.com/v1alpha1/redismutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
