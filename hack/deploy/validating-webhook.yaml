@@ -109,7 +109,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/snapshots
+      path: /apis/validators.kubedb.com/v1alpha1/snapshotvalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
@@ -123,7 +123,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.kubedb.com/v1alpha1/dormantdatabases
+      path: /apis/validators.kubedb.com/v1alpha1/dormantdatabasevalidators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
