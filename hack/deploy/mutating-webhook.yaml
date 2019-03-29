@@ -6,31 +6,31 @@ metadata:
   labels:
     app: kubedb
 webhooks:
-- name: elasticsearch.mutators.kubedb.com
+- name: elasticsearchmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearches
+      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearchmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["elasticsearches"]
+    resources: ["elasticsearchmutators"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
   ${KUBEDB_WEBHOOK_SIDE_EFFECTS}
-- name: postgres.mutators.kubedb.com
+- name: postgresmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/postgreses
+      path: /apis/mutators.kubedb.com/v1alpha1/postgresmutators
     caBundle: ${KUBE_CA}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["postgreses"]
+    resources: ["postgresmutators"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
   ${KUBEDB_WEBHOOK_SIDE_EFFECTS}

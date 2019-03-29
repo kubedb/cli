@@ -12,33 +12,33 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
 webhooks:
-- name: elasticsearch.mutators.kubedb.com
+- name: elasticsearchmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearches
+      path: /apis/mutators.kubedb.com/v1alpha1/elasticsearchmutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["elasticsearches"]
+    resources: ["elasticsearchmutators"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 {{- if and (ge $major 1) (ge $minor 12) }}
   sideEffects: None
 {{- end }}
-- name: postgres.mutators.kubedb.com
+- name: postgresmutator.mutators.kubedb.com
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/mutators.kubedb.com/v1alpha1/postgreses
+      path: /apis/mutators.kubedb.com/v1alpha1/postgresmutators
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["postgreses"]
+    resources: ["postgresmutators"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 {{- if and (ge $major 1) (ge $minor 12) }}
