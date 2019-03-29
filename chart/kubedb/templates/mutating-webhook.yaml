@@ -22,7 +22,7 @@ webhooks:
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["elasticsearchmutators"]
+    resources: ["elasticsearches"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 {{- if and (ge $major 1) (ge $minor 12) }}
@@ -38,7 +38,7 @@ webhooks:
   rules:
   - apiGroups: ["kubedb.com"]
     apiVersions: ["*"]
-    resources: ["postgresmutators"]
+    resources: ["postgreses"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 {{- if and (ge $major 1) (ge $minor 12) }}
