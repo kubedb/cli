@@ -1,16 +1,20 @@
+--- 
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
-metadata:
+metadata: 
   name: mgo-quickstart
   namespace: demo
-spec:
-  version: "3.4-v2"
-  storageType: Durable
-  storage:
-    storageClassName: "standard"
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
+spec: 
+  replicas: 1
+  storage: 
+    accessModes: 
+      - ReadWriteOnce
+    resources: 
+      requests: 
         storage: 1Gi
+    storageClassName: hostpath
+  storageType: Durable
   terminationPolicy: DoNotTerminate
+  updateStrategy: 
+    type: RollingUpdate
+  version: 3.4-v2
