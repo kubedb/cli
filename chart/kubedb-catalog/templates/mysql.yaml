@@ -73,6 +73,7 @@ metadata:
   labels:
     {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
+  deprecated: true
   version: "5.7"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:5.7-v1"
@@ -160,7 +161,7 @@ metadata:
   labels:
     {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
-  version: "8.0"
+  version: "8.0.3"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:8.0-v1"
   exporter:
@@ -183,7 +184,7 @@ metadata:
   labels:
     {{- include "kubedb-catalog.labels" . | nindent 4 }}
 spec:
-  version: "8.0"
+  version: "8.0.14"
   db:
     image: "{{ .Values.dockerRegistry }}/mysql:8.0-v2"
   exporter:
@@ -232,6 +233,50 @@ spec:
     image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
   tools:
     image: "{{ .Values.dockerRegistry }}/mysql-tools:8.0.14"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mysql-db
+    snapshotterPolicyName: mysql-snapshot
+
+---
+# After 0.11.0
+
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5.7-v2"
+  labels:
+        {{- include "kubedb-catalog.labels" . | nindent 4 }}
+spec:
+  version: "5.7.25"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:5.7-v2"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7-v2"
+  initContainer:
+    image: "{{ .Values.dockerRegistry }}/busybox"
+  podSecurityPolicies:
+    databasePolicyName: mysql-db
+    snapshotterPolicyName: mysql-snapshot
+
+---
+apiVersion: catalog.kubedb.com/v1alpha1
+kind: MySQLVersion
+metadata:
+  name: "5.7.25"
+  labels:
+    {{- include "kubedb-catalog.labels" . | nindent 4 }}
+spec:
+  version: "5.7.25"
+  db:
+    image: "{{ .Values.dockerRegistry }}/mysql:5.7.25"
+  exporter:
+    image: "{{ .Values.dockerRegistry }}/mysqld-exporter:v0.11.0"
+  tools:
+    image: "{{ .Values.dockerRegistry }}/mysql-tools:5.7.25"
   initContainer:
     image: "{{ .Values.dockerRegistry }}/busybox"
   podSecurityPolicies:
