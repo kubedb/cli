@@ -24,6 +24,10 @@ import:
   version: v1.0.0
 - package: github.com/go-ini/ini
   version: v1.40.0
+- package: github.com/go-openapi/spec
+  version: v0.17.2
+- package: github.com/go-openapi/swag
+  version: v0.17.2
 - package: github.com/golang/glog
 - package: github.com/golang/protobuf
   version: v1.1.0
@@ -41,21 +45,21 @@ import:
 - package: github.com/json-iterator/go
   version: 1.1.5
 - package: github.com/kubedb/apimachinery
-  version: 0.11.0
+  version: master
 - package: github.com/kubedb/elasticsearch
-  version: 0.11.0
+  version: master
 - package: github.com/kubedb/etcd
-  version: 0.3.0
+  version: master
 - package: github.com/kubedb/memcached
-  version: 0.4.0
+  version: master
 - package: github.com/kubedb/mongodb
-  version: 0.4.0
+  version: master
 - package: github.com/kubedb/mysql
-  version: 0.4.0
+  version: master
 - package: github.com/kubedb/postgres
-  version: 0.11.0
+  version: master
 - package: github.com/kubedb/redis
-  version: 0.4.0
+  version: master
 - package: github.com/mitchellh/mapstructure
   version: v1.1.2
 - package: github.com/ncw/swift
@@ -87,27 +91,27 @@ import:
 - package: gopkg.in/yaml.v2
   version: v2.2.1
 - package: k8s.io/api
-  version: kubernetes-1.13.0
+  version: kubernetes-1.13.5
 - package: k8s.io/apiextensions-apiserver
-  version: kubernetes-1.13.0
+  version: kubernetes-1.13.5
 - package: k8s.io/apimachinery
   repo: https://github.com/kmodules/apimachinery.git
   vcs: git
-  version: ac-1.13.0
+  version: ac-1.13.5
 - package: k8s.io/apiserver
   repo: https://github.com/kmodules/apiserver.git
   vcs: git
-  version: ac-1.13.0
+  version: ac-1.13.5
 - package: k8s.io/cli-runtime
-  version: kubernetes-1.13.0
+  version: kubernetes-1.13.5
 - package: k8s.io/client-go
-  version: v10.0.0
+  version: kubernetes-1.13.5
 - package: k8s.io/kube-openapi
   version: c59034cc13d587f5ef4e85ca0ade0c1866ae8e1d
 - package: k8s.io/kubernetes
-  version: v1.13.0
+  version: v1.13.5
 - package: k8s.io/metrics
-  version: kubernetes-1.13.0
+  version: kubernetes-1.13.5
 - package: k8s.io/utils
   version: 66066c83e385e385ccc3c964b44fd7dcd413d0ed
 - package: kmodules.xyz/client-go

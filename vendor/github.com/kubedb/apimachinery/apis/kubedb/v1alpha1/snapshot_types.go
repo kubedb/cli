@@ -48,12 +48,6 @@ type SnapshotSpec struct {
 	// If storageType is ephemeral, then an empty directory will be created of size PvcSpec.Resources.Requests[core.ResourceStorage].
 	// +optional
 	PodVolumeClaimSpec *core.PersistentVolumeClaimSpec `json:"podVolumeClaimSpec,omitempty"`
-
-	// -------------------------------------------------------------------------
-
-	// Compute Resources required by the pod used to take database snapshots
-	// Deprecated: Use podTemplate.spec.resources
-	Resources *core.ResourceRequirements `json:"resources,omitempty"`
 }
 
 type SnapshotPhase string
