@@ -138,6 +138,14 @@ REQUIRED_DEPS = [
     {
       "package": "github.com/google/go-cmp",
       "version": "6f77996f0c42f7b84e5a2b252227263f93432e9b"
+    },
+    {
+        "package": "github.com/go-openapi/spec",
+        "version": "v0.17.2"
+    },
+    {
+        "package": "github.com/go-openapi/swag",
+        "version": "v0.17.2"
     }
 ]
 DEP_LIST = [
@@ -155,43 +163,43 @@ DEP_LIST = [
     },
     {
       "package": "k8s.io/api",
-      "version": "kubernetes-1.13.0"
+      "version": "kubernetes-1.13.5"
     },
     {
       "package": "k8s.io/apiextensions-apiserver",
-      "version": "kubernetes-1.13.0"
+      "version": "kubernetes-1.13.5"
     },
     {
       "package": "k8s.io/apimachinery",
       "repo": "https://github.com/kmodules/apimachinery.git",
       "vcs": "git",
-      "version": "ac-1.13.0"
+      "version": "ac-1.13.5"
     },
     {
       "package": "k8s.io/apiserver",
       "repo": "https://github.com/kmodules/apiserver.git",
       "vcs": "git",
-      "version": "ac-1.13.0"
+      "version": "ac-1.13.5"
     },
     {
       "package": "k8s.io/client-go",
-      "version": "v10.0.0"
+      "version": "kubernetes-1.13.5"
     },
     {
       "package": "k8s.io/cli-runtime",
-      "version": "kubernetes-1.13.0"
+      "version": "kubernetes-1.13.5"
     },
     {
       "package": "k8s.io/kubernetes",
-      "version": "v1.13.0"
+      "version": "v1.13.5"
     },
     {
       "package": "k8s.io/kube-aggregator",
-      "version": "kubernetes-1.13.0"
+      "version": "kubernetes-1.13.5"
     },
     {
       "package": "k8s.io/metrics",
-      "version": "kubernetes-1.13.0"
+      "version": "kubernetes-1.13.5"
     },
     {
       "package": "kmodules.xyz/client-go",
