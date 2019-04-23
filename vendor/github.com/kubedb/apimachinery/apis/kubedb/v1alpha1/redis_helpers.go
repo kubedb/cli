@@ -181,36 +181,6 @@ func (r *RedisSpec) SetDefaults() {
 		return
 	}
 
-	// migrate first to avoid incorrect defaulting
-	if r.DoNotPause {
-		r.TerminationPolicy = TerminationPolicyDoNotTerminate
-		r.DoNotPause = false
-	}
-	if len(r.NodeSelector) > 0 {
-		r.PodTemplate.Spec.NodeSelector = r.NodeSelector
-		r.NodeSelector = nil
-	}
-	if r.Resources != nil {
-		r.PodTemplate.Spec.Resources = *r.Resources
-		r.Resources = nil
-	}
-	if r.Affinity != nil {
-		r.PodTemplate.Spec.Affinity = r.Affinity
-		r.Affinity = nil
-	}
-	if len(r.SchedulerName) > 0 {
-		r.PodTemplate.Spec.SchedulerName = r.SchedulerName
-		r.SchedulerName = ""
-	}
-	if len(r.Tolerations) > 0 {
-		r.PodTemplate.Spec.Tolerations = r.Tolerations
-		r.Tolerations = nil
-	}
-	if len(r.ImagePullSecrets) > 0 {
-		r.PodTemplate.Spec.ImagePullSecrets = r.ImagePullSecrets
-		r.ImagePullSecrets = nil
-	}
-
 	// perform defaulting
 	if r.Mode == "" {
 		r.Mode = RedisModeStandalone

@@ -45,11 +45,6 @@ type BackupScheduleSpec struct {
 	// If storageType is ephemeral, then an empty directory will be created of size PvcSpec.Resources.Requests[core.ResourceStorage].
 	// +optional
 	PodVolumeClaimSpec *core.PersistentVolumeClaimSpec `json:"podVolumeClaimSpec,omitempty"`
-
-	// -------------------------------------------------------------------------
-
-	// Deprecated: Use podTemplate.spec.resources
-	Resources *core.ResourceRequirements `json:"resources,omitempty"`
 }
 
 // LeaderElectionConfig contains essential attributes of leader election.

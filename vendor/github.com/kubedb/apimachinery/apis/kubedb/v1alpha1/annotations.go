@@ -33,6 +33,10 @@ const (
 	ElasticsearchNodePort     = 9300
 	ElasticsearchNodePortName = "transport"
 
+	MongoDBShardPort    = 27017
+	MongoDBConfigdbPort = 27017
+	MongoDBMongosPort   = 27017
+
 	RedisShardKey   = RedisKey + "/shard"
 	RedisNodePort   = 6379
 	RedisGossipPort = 16379

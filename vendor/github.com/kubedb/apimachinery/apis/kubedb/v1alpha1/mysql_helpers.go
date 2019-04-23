@@ -173,38 +173,9 @@ func (m *MySQLSpec) SetDefaults() {
 		return
 	}
 
-	// migrate first to avoid incorrect defaulting
-	m.BackupSchedule.SetDefaults()
-	if m.DoNotPause {
-		m.TerminationPolicy = TerminationPolicyDoNotTerminate
-		m.DoNotPause = false
-	}
-	if len(m.NodeSelector) > 0 {
-		m.PodTemplate.Spec.NodeSelector = m.NodeSelector
-		m.NodeSelector = nil
-	}
-	if m.Resources != nil {
-		m.PodTemplate.Spec.Resources = *m.Resources
-		m.Resources = nil
-	}
-	if m.Affinity != nil {
-		m.PodTemplate.Spec.Affinity = m.Affinity
-		m.Affinity = nil
-	}
-	if len(m.SchedulerName) > 0 {
-		m.PodTemplate.Spec.SchedulerName = m.SchedulerName
-		m.SchedulerName = ""
-	}
-	if len(m.Tolerations) > 0 {
-		m.PodTemplate.Spec.Tolerations = m.Tolerations
-		m.Tolerations = nil
-	}
-	if len(m.ImagePullSecrets) > 0 {
-		m.PodTemplate.Spec.ImagePullSecrets = m.ImagePullSecrets
-		m.ImagePullSecrets = nil
-	}
-
 	// perform defaulting
+	m.BackupSchedule.SetDefaults()
+
 	if m.StorageType == "" {
 		m.StorageType = StorageTypeDurable
 	}

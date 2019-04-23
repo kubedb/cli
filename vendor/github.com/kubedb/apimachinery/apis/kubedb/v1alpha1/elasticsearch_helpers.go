@@ -189,38 +189,9 @@ func (e *ElasticsearchSpec) SetDefaults() {
 		return
 	}
 
-	// migrate first to avoid incorrect defaulting
-	e.BackupSchedule.SetDefaults()
-	if e.DoNotPause {
-		e.TerminationPolicy = TerminationPolicyDoNotTerminate
-		e.DoNotPause = false
-	}
-	if len(e.NodeSelector) > 0 {
-		e.PodTemplate.Spec.NodeSelector = e.NodeSelector
-		e.NodeSelector = nil
-	}
-	if e.Resources != nil {
-		e.PodTemplate.Spec.Resources = *e.Resources
-		e.Resources = nil
-	}
-	if e.Affinity != nil {
-		e.PodTemplate.Spec.Affinity = e.Affinity
-		e.Affinity = nil
-	}
-	if len(e.SchedulerName) > 0 {
-		e.PodTemplate.Spec.SchedulerName = e.SchedulerName
-		e.SchedulerName = ""
-	}
-	if len(e.Tolerations) > 0 {
-		e.PodTemplate.Spec.Tolerations = e.Tolerations
-		e.Tolerations = nil
-	}
-	if len(e.ImagePullSecrets) > 0 {
-		e.PodTemplate.Spec.ImagePullSecrets = e.ImagePullSecrets
-		e.ImagePullSecrets = nil
-	}
-
 	// perform defaulting
+	e.BackupSchedule.SetDefaults()
+
 	if e.AuthPlugin == "" {
 		e.AuthPlugin = ElasticsearchAuthPluginSearchGuard
 	}
