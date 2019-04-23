@@ -8,12 +8,6 @@
 [![mailing list](https://img.shields.io/badge/mailing_list-join-blue.svg)](https://groups.google.com/forum/#!forum/kubedb)
 [![Twitter](https://img.shields.io/twitter/follow/kubedb.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/intent/follow?screen_name=kubedb)
 
-[![Throughput Graph](https://graphs.waffle.io/kubedb/project/throughput.svg)](https://waffle.io/kubedb/project/metrics/throughput)
-
-
-**Folks, as we continue to develop KubeDB, we value your feedback highly. Please consider taking a few minutes to complete this questionnaire: https://appsco.de/kubedb-survey-201902. Thank you! :pray:**
-
-
 > Making running production-grade databases easy on Kubernetes
 
 Running production quality database in Kubernetes can be tricky to say the least. In the early days of Kubernetes, replication controllers were used to run a single pod for a database. With the introduction of StatefulSet, it became easy to run a docker container for any database. But what about monitoring, taking periodic backups, restoring from backups or cloning from an existing database? KubeDB is a framework for writing operators for any database that support the following operational requirements:
