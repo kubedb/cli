@@ -1,0 +1,27 @@
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDB
+metadata:
+  name: mongo-sh
+  namespace: demo
+spec:
+  version: 3.6-v3
+  shardTopology:
+    configServer:
+      replicas: 3
+      storage:
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: standard
+    mongos:
+      replicas: 2
+      strategy:
+        type: RollingUpdate
+    shard:
+      replicas: 3
+      shards: 3
+      storage:
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: standard
