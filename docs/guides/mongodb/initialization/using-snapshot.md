@@ -36,7 +36,7 @@ metadata:
   name: mgo-init-snapshot
   namespace: demo
 spec:
-  version: "3.4-v2"
+  version: "3.4-v3"
   storage:
     storageClassName: "standard"
     accessModes:
@@ -64,8 +64,8 @@ Now, wait several seconds. KubeDB operator will create a new `StatefulSet`. Then
 ```console
 $ kubedb get mg -n demo
 NAME                VERSION   STATUS         AGE
-mgo-infant          3.4-v2    Running        4m
-mgo-init-snapshot   3.4-v2    Initializing   53s
+mgo-infant          3.4-v3    Running        4m
+mgo-init-snapshot   3.4-v3    Initializing   53s
 
 $ kubedb describe mg -n demo mgo-init-snapshot
 Name:               mgo-init-snapshot

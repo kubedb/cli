@@ -51,10 +51,10 @@ $ kubectl get mongodbversions
 NAME     VERSION   DB_IMAGE              DEPRECATED   AGE
 3.4      3.4       kubedb/mongo:3.4      true         19h
 3.4-v1   3.4       kubedb/mongo:3.4-v1   true         19h
-3.4-v2   3.4       kubedb/mongo:3.4-v2                19h
+3.4-v3   3.4       kubedb/mongo:3.4-v3                19h
 3.6      3.6       kubedb/mongo:3.6      true         19h
 3.6-v1   3.6       kubedb/mongo:3.6-v1   true         19h
-3.6-v2   3.6       kubedb/mongo:3.6-v2                19h
+3.6-v3   3.6       kubedb/mongo:3.6-v3                19h
 4.0      4.0.5     kubedb/mongo:4.0                   19h
 4.0.5    4.0.5     kubedb/mongo:4.0.5                 19h
 4.1.7    4.1.7     kubedb/mongo:4.1.7                 19h
@@ -71,7 +71,7 @@ metadata:
   name: mgo-quickstart
   namespace: demo
 spec:
-  version: "3.4-v2"
+  version: "3.4-v3"
   storageType: Durable
   storage:
     storageClassName: "standard"
@@ -90,7 +90,7 @@ mongodb.kubedb.com/mgo-quickstart created
 
 Here,
 
-- `spec.version` is name of the MongoDBVersion crd where the docker images are specified. In this tutorial, a MongoDB 3.4-v2 database is created.
+- `spec.version` is name of the MongoDBVersion crd where the docker images are specified. In this tutorial, a MongoDB 3.4-v3 database is created.
 - `spec.storageType` specifies the type of storage that will be used for MongoDB database. It can be `Durable` or `Ephemeral`. Default value of this field is `Durable`. If `Ephemeral` is used then KubeDB will create MongoDB database using `EmptyDir` volume. In this case, you don't have to specify `spec.storage` field. This is useful for testing purpose.
 - `spec.storage` specifies PVC spec that will be dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
 - `spec.terminationPolicy` gives flexibility whether to `nullify`(reject) the delete operation of `MongoDB` crd or which resources KubeDB should keep or delete when you delete `MongoDB` crd. If admission webhook is enabled, It prevents users from deleting the database as long as the `spec.terminationPolicy` is set to `DoNotTerminate`. Learn details of all `TerminationPolicy` [here]
@@ -249,7 +249,7 @@ spec:
   terminationPolicy: DoNotTerminate
   updateStrategy:
     type: RollingUpdate
-  version: 3.4-v2
+  version: 3.4-v3
 status:
   observedGeneration: 2$4213139756412538772
   phase: Running
@@ -403,7 +403,7 @@ spec:
         terminationPolicy: Pause
         updateStrategy:
           type: RollingUpdate
-        version: 3.4-v2
+        version: 3.4-v3
 status:
   observedGeneration: 1$16440556888999634490
   pausingTime: "2019-02-06T06:22:37Z"

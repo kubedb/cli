@@ -4,7 +4,7 @@ metadata:
   name: mgo-misc-config
   namespace: demo
 spec:
-  version: "3.6-v2"
+  version: "3.6-v3"
   storageType: "Durable"
   storage:
     storageClassName: "standard"
