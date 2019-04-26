@@ -1,20 +1,20 @@
 ---
-title: MongoDB Sharding Concept
+title: MongoDB ReplicaSet Concept
 menu:
   docs_0.11.0:
-    identifier: mg-clustering-sharding-concept
+    identifier: mg-clustering-replicaset-concept
     name: ReplicaSet Concept
     parent: mg-clustering-mongodb
-    weight: 20
+    weight: 10
 menu_name: docs_0.11.0
 section_menu_id: guides
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# MongoDB Sharding
+# MongoDB Replication
 
-Sharding is a method for distributing data across multiple machines. MongoDB uses sharding to support deployments with very large data sets and high throughput operations. This section introduces sharding in MongoDB as well as the components and architecture of sharding.
+A replica set in MongoDB is a group of mongod processes that maintain the same data set. Replica sets provide redundancy and high availability, and are the basis for all production deployments. This section introduces replication in MongoDB as well as the components and architecture of replica sets.
 
 ## Redundancy and Data Availability
 
