@@ -20,9 +20,9 @@ Sharding is a method for distributing data across multiple machines. MongoDB use
 
 A MongoDB sharded cluster consists of the following components:
 
-- shard: Each shard contains a subset of the sharded data. As of MongoDB 3.6, shards must be deployed as a replica set.
-- mongos: The mongos acts as a query router, providing an interface between client applications and the sharded cluster.
-- config servers: Config servers store metadata and configuration settings for the cluster. As of MongoDB 3.4, config servers must be deployed as a replica set (CSRS).
+- ***shard:*** Each shard contains a subset of the sharded data. As of MongoDB 3.6, shards must be deployed as a replica set.
+- ***mongos:*** The mongos acts as a query router, providing an interface between client applications and the sharded cluster.
+- ***config servers:*** Config servers store metadata and configuration settings for the cluster. As of MongoDB 3.4, config servers must be deployed as a replica set (CSRS).
 
 <p align="center">
   <img alt="sharded-cluster"  src="/docs/images/mongodb/sharded-cluster.png" width="620" height="440">
@@ -122,4 +122,4 @@ You can connect to a mongos the same way you connect to a mongod, such as via th
 - Detail concepts of [MongoDBVersion object](/docs/concepts/catalog/mongodb.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
 
-NB: The images in this page are taken from [MongoDB website](https://docs.mongodb.com/manual/replication/).
+NB: The images in this page are taken from [MongoDB website](https://docs.mongodb.com/manual/sharding/).
