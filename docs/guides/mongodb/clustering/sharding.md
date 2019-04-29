@@ -100,7 +100,7 @@ Here,
     - `resources` represents resources for each container of mongos deployment.
     - `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
-- `spec.certificateSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod replica set instances in the topology uses the contents of the keyfile as the shared password for authenticating other members in the replicaset. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `KeyFileSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `KeyFileSecret`._ If `KeyFileSecret` is not given, KubeDB operator will generate a `KeyFileSecret` itself.
+- `spec.certificateSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod replica set instances in the topology uses the contents of the keyfile as the shared password for authenticating other members in the replicaset. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `CertificateSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `CertificateSecret`._ If `CertificateSecret` is not given, KubeDB operator will generate a `CertificateSecret` itself.
 
 KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create governing services for StatefulSets with the name `<mongodb-name>-<node-type>-gvr`. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
@@ -169,215 +169,13 @@ pvc-c5bb265f-6a5f-11e9-a871-080027a851ba   1Gi        RWO            Delete     
 Services created for MongoDB `mongo-sh`
 
 ```console
+$ kubectl get svc -n demo
 NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)     AGE
 mongo-sh                 ClusterIP   10.108.188.201   <none>        27017/TCP   18m
 mongo-sh-configsvr-gvr   ClusterIP   None             <none>        27017/TCP   18m
 mongo-sh-shard0-gvr      ClusterIP   None             <none>        27017/TCP   18m
 mongo-sh-shard1-gvr      ClusterIP   None             <none>        27017/TCP   18m
 mongo-sh-shard2-gvr      ClusterIP   None             <none>        27017/TCP   18m
-```
-
-```console
-$ kubedb describe mg -n demo mongo-sh
-Name:               mongo-sh
-Namespace:          demo
-CreationTimestamp:  Mon, 29 Apr 2019 15:13:56 +0600
-Labels:             <none>
-Annotations:        <none>
-Status:             Running
-  StorageType:      Durable
-No volumes.
-
-StatefulSet:          
-  Name:               mongo-sh-configsvr
-  CreationTimestamp:  Mon, 29 Apr 2019 15:13:56 +0600
-  Labels:               app.kubernetes.io/component=database
-                        app.kubernetes.io/instance=mongo-sh
-                        app.kubernetes.io/managed-by=kubedb.com
-                        app.kubernetes.io/name=mongodb
-                        app.kubernetes.io/version=3.6-v3
-                        kubedb.com/kind=MongoDB
-                        kubedb.com/name=mongo-sh
-  Annotations:        <none>
-  Replicas:           824641337524 desired | 3 total
-  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-StatefulSet:          
-  Name:               mongo-sh-shard0
-  CreationTimestamp:  Mon, 29 Apr 2019 15:15:10 +0600
-  Labels:               app.kubernetes.io/component=database
-                        app.kubernetes.io/instance=mongo-sh
-                        app.kubernetes.io/managed-by=kubedb.com
-                        app.kubernetes.io/name=mongodb
-                        app.kubernetes.io/version=3.6-v3
-                        kubedb.com/kind=MongoDB
-                        kubedb.com/name=mongo-sh
-  Annotations:        <none>
-  Replicas:           824641339204 desired | 3 total
-  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-StatefulSet:          
-  Name:               mongo-sh-shard1
-  CreationTimestamp:  Mon, 29 Apr 2019 15:16:24 +0600
-  Labels:               app.kubernetes.io/component=database
-                        app.kubernetes.io/instance=mongo-sh
-                        app.kubernetes.io/managed-by=kubedb.com
-                        app.kubernetes.io/name=mongodb
-                        app.kubernetes.io/version=3.6-v3
-                        kubedb.com/kind=MongoDB
-                        kubedb.com/name=mongo-sh
-  Annotations:        <none>
-  Replicas:           824633894436 desired | 3 total
-  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-StatefulSet:          
-  Name:               mongo-sh-shard2
-  CreationTimestamp:  Mon, 29 Apr 2019 15:17:38 +0600
-  Labels:               app.kubernetes.io/component=database
-                        app.kubernetes.io/instance=mongo-sh
-                        app.kubernetes.io/managed-by=kubedb.com
-                        app.kubernetes.io/name=mongodb
-                        app.kubernetes.io/version=3.6-v3
-                        kubedb.com/kind=MongoDB
-                        kubedb.com/name=mongo-sh
-  Annotations:        <none>
-  Replicas:           824633896116 desired | 3 total
-  Pods Status:        3 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-Deployment:           
-  Name:               mongo-sh-mongos
-  CreationTimestamp:  Mon, 29 Apr 2019 15:19:03 +0600
-  Labels:               app.kubernetes.io/component=database
-                        app.kubernetes.io/instance=mongo-sh
-                        app.kubernetes.io/managed-by=kubedb.com
-                        app.kubernetes.io/name=mongodb
-                        app.kubernetes.io/version=3.6-v3
-                        kubedb.com/kind=MongoDB
-                        kubedb.com/name=mongo-sh
-  Annotations:          deployment.kubernetes.io/revision=1
-  Replicas:           2 desired | 2 updated | 2 total | 2 available | 0 unavailable
-  Pods Status:        2 Running / 0 Waiting / 0 Succeeded / 0 Failed
-
-Service:        
-  Name:         mongo-sh
-  Labels:         app.kubernetes.io/component=database
-                  app.kubernetes.io/instance=mongo-sh
-                  app.kubernetes.io/managed-by=kubedb.com
-                  app.kubernetes.io/name=mongodb
-                  app.kubernetes.io/version=3.6-v3
-                  kubedb.com/kind=MongoDB
-                  kubedb.com/name=mongo-sh
-  Annotations:  <none>
-  Type:         ClusterIP
-  IP:           10.108.188.201
-  Port:         db  27017/TCP
-  TargetPort:   db/TCP
-  Endpoints:    172.17.0.18:27017,172.17.0.19:27017
-
-Service:        
-  Name:         mongo-sh-configsvr-gvr
-  Labels:         app.kubernetes.io/component=database
-                  app.kubernetes.io/instance=mongo-sh
-                  app.kubernetes.io/managed-by=kubedb.com
-                  app.kubernetes.io/name=mongodb
-                  app.kubernetes.io/version=3.6-v3
-                  kubedb.com/kind=MongoDB
-                  kubedb.com/name=mongo-sh
-  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
-  Type:         ClusterIP
-  IP:           None
-  Port:         db  27017/TCP
-  TargetPort:   27017/TCP
-  Endpoints:    172.17.0.6:27017,172.17.0.7:27017,172.17.0.8:27017
-
-Service:        
-  Name:         mongo-sh-shard0-gvr
-  Labels:         app.kubernetes.io/component=database
-                  app.kubernetes.io/instance=mongo-sh
-                  app.kubernetes.io/managed-by=kubedb.com
-                  app.kubernetes.io/name=mongodb
-                  app.kubernetes.io/version=3.6-v3
-                  kubedb.com/kind=MongoDB
-                  kubedb.com/name=mongo-sh
-  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
-  Type:         ClusterIP
-  IP:           None
-  Port:         db  27017/TCP
-  TargetPort:   27017/TCP
-  Endpoints:    172.17.0.10:27017,172.17.0.11:27017,172.17.0.9:27017
-
-Service:        
-  Name:         mongo-sh-shard1-gvr
-  Labels:         app.kubernetes.io/component=database
-                  app.kubernetes.io/instance=mongo-sh
-                  app.kubernetes.io/managed-by=kubedb.com
-                  app.kubernetes.io/name=mongodb
-                  app.kubernetes.io/version=3.6-v3
-                  kubedb.com/kind=MongoDB
-                  kubedb.com/name=mongo-sh
-  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
-  Type:         ClusterIP
-  IP:           None
-  Port:         db  27017/TCP
-  TargetPort:   27017/TCP
-  Endpoints:    172.17.0.12:27017,172.17.0.13:27017,172.17.0.14:27017
-
-Service:        
-  Name:         mongo-sh-shard2-gvr
-  Labels:         app.kubernetes.io/component=database
-                  app.kubernetes.io/instance=mongo-sh
-                  app.kubernetes.io/managed-by=kubedb.com
-                  app.kubernetes.io/name=mongodb
-                  app.kubernetes.io/version=3.6-v3
-                  kubedb.com/kind=MongoDB
-                  kubedb.com/name=mongo-sh
-  Annotations:    service.alpha.kubernetes.io/tolerate-unready-endpoints=true
-  Type:         ClusterIP
-  IP:           None
-  Port:         db  27017/TCP
-  TargetPort:   27017/TCP
-  Endpoints:    172.17.0.15:27017,172.17.0.16:27017,172.17.0.17:27017
-
-Database Secret:
-  Name:         mongo-sh-auth
-  Labels:         kubedb.com/kind=MongoDB
-                  kubedb.com/name=mongo-sh
-  Annotations:  <none>
-  
-Type:  Opaque
-  
-Data
-====
-  password:  16 bytes
-  username:  4 bytes
-
-No Snapshots.
-
-Events:
-  Type    Reason      Age   From             Message
-  ----    ------      ----  ----             -------
-  Normal  Successful  20m   KubeDB operator  Successfully created stats service
-  Normal  Successful  20m   KubeDB operator  Successfully created stats service
-  Normal  Successful  20m   KubeDB operator  Successfully created stats service
-  Normal  Successful  20m   KubeDB operator  Successfully created stats service
-  Normal  Successful  20m   KubeDB operator  Successfully created Service
-  Normal  Successful  19m   KubeDB operator  Successfully created StatefulSet demo/mongo-sh-configsvr
-  Normal  Successful  18m   KubeDB operator  Successfully created StatefulSet demo/mongo-sh-shard0
-  Normal  Successful  17m   KubeDB operator  Successfully created StatefulSet demo/mongo-sh-shard1
-  Normal  Successful  15m   KubeDB operator  Successfully created StatefulSet demo/mongo-sh-shard2
-  Normal  Successful  15m   KubeDB operator  Successfully created appbinding
-  Normal  Successful  15m   KubeDB operator  Successfully patched MongoDB
-  Normal  Successful  15m   KubeDB operator  Successfully created Deployment demo/mongo-sh-mongos
-  Normal  Successful  15m   KubeDB operator  Successfully patched stats service
-  Normal  Successful  15m   KubeDB operator  Successfully patched stats service
-  Normal  Successful  15m   KubeDB operator  Successfully patched stats service
-  Normal  Successful  15m   KubeDB operator  Successfully patched stats service
-  Normal  Successful  15m   KubeDB operator  Successfully patched StatefulSet demo/mongo-sh-configsvr
-  Normal  Successful  15m   KubeDB operator  Successfully patched StatefulSet demo/mongo-sh-shard0
-  Normal  Successful  15m   KubeDB operator  Successfully patched StatefulSet demo/mongo-sh-shard1
-  Normal  Successful  15m   KubeDB operator  Successfully patched StatefulSet demo/mongo-sh-shard2
-  Normal  Successful  15m   KubeDB operator  Successfully patched Deployment demo/mongo-sh-mongos
-  Normal  Successful  15m   KubeDB operator  Successfully patched MongoDB
 ```
 
 KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
@@ -1021,12 +819,6 @@ switched to db test
 mongos> db.testcoll.find();
 { "_id" : ObjectId("5cc6d6f656a9ddd30be2c12a"), "myfield" : "a", "otherfield" : "b" }
 { "_id" : ObjectId("5cc6d71e56a9ddd30be2c12b"), "myfield" : "c", "otherfield" : "d", "kube" : "db" }
-{ "_id" : ObjectId("5cc6da2d1b6d9b3cddc947e5"), "myfield" : "ccc", "otherfield" : "d", "kube" : "db" }
-{ "_id" : ObjectId("5cc6dab71b6d9b3cddc947e6"), "myfield" : "ccc", "otherfield" : "d", "kube" : "db" }
-{ "_id" : ObjectId("5cc6dab81b6d9b3cddc947e7"), "myfield" : "ccc", "otherfield" : "d", "kube" : "db" }
-{ "_id" : ObjectId("5cc6dab91b6d9b3cddc947e8"), "myfield" : "ccc", "otherfield" : "d", "kube" : "db" }
-{ "_id" : ObjectId("5cc6dab91b6d9b3cddc947e9"), "myfield" : "ccc", "otherfield" : "d", "kube" : "db" }
-{ "_id" : ObjectId("5cc6daba1b6d9b3cddc947ea"), "myfield" : "ccc", "otherfield" : "d", "kube" : "db" }
 
 mongos> sh.status()
 --- Sharding Status --- 
