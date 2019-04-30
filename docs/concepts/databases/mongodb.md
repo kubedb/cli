@@ -198,6 +198,13 @@ Available configurable fields:
 - configServer
 - mongos
 
+When `spec.shardTopology` is set, the following fields needs to be empty, otherwise validating webhook will gibe error.
+
+- `spec.replicas`
+- `spec.podTemplate`
+- `spec.configSource`
+- `spec.storage`
+
 #### spec.shardTopology.shard
 
 `shard` represents configuration for Shard component of mongodb.
