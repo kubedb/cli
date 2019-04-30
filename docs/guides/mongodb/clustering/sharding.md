@@ -178,7 +178,7 @@ mongo-sh-shard1-gvr      ClusterIP   None             <none>        27017/TCP   
 mongo-sh-shard2-gvr      ClusterIP   None             <none>        27017/TCP   18m
 ```
 
-KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. Run the following command to see the modified MongoDB object:
+KubeDB operator sets the `status.phase` to `Running` once the database is successfully created. It has also defaulted some field of crd object. Run the following command to see the modified MongoDB object:
 
 ```yaml
 $ kubedb get mg -n demo mongo-sh -o yaml
@@ -345,7 +345,7 @@ If you want to use custom or existing secret please specify that when creating t
 
   ```console
   $ kubectl get secrets -n demo mongo-sh-auth -o jsonpath='{.data.\password}' | base64 -d
-  zGQlj_v3D7wQQvvy
+  Ji8f_hGXS4z88QlF
   ```
 
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.6/mongo/).
@@ -362,7 +362,7 @@ mongo-sh-mongos-69b557f9f5-5hvh2   1/1     Running   0          49m
 
 $ kubectl exec -it mongo-sh-mongos-69b557f9f5-2kz68 -n demo bash
 
-mongodb@mongo-sh-mongos-69b557f9f5-2kz68:/$ mongo admin -u root -p zGQlj_v3D7wQQvvy
+mongodb@mongo-sh-mongos-69b557f9f5-2kz68:/$ mongo admin -u root -p Ji8f_hGXS4z88QlF
 MongoDB shell version v3.6.12
 connecting to: mongodb://127.0.0.1:27017/admin?gssapiServiceName=mongodb
 Implicit session: session { "id" : UUID("8b7abf57-09e4-4e30-b4a0-a37ebf065e8f") }
@@ -811,7 +811,7 @@ mongo-sh-mongos-69b557f9f5-tdn69   1/1     Running   0          3m52s
 
 $ kubectl exec -it mongo-sh-mongos-69b557f9f5-62j76 -n demo bash
 
-mongodb@mongo-sh-mongos-69b557f9f5-62j76:/$ mongo admin -u root -p
+mongodb@mongo-sh-mongos-69b557f9f5-62j76:/$ mongo admin -u root -p Ji8f_hGXS4z88QlF
 
 mongos> use test;
 switched to db test
@@ -863,9 +863,20 @@ mongos> sh.status()
                                 shard1	1
                         { "myfield" : { "$minKey" : 1 } } -->> { "myfield" : { "$maxKey" : 1 } } on : shard1 Timestamp(1, 0) 
 
-mongos> 
-
 ```
+
+## Update number of ShardTopology Instances
+
+Currently decreasing number of shards `spec.shardTopology.shard.shards` is not handled from KubeDB end.
+
+|                                 Instances                                  | Increase | Decrease |
+| :------------------------------------------------------------------------: | :------: | :------: |
+|               # of Shards `spec.shardTopology.shard.shards`                | &#10003; | &#10007; |
+|     # of replicaset of each Shard `spec.shardTopology.shard.replicas`      | &#10003; | &#10003; |
+| # of replicaset of ConfigServer `spec.shardTopology.configServer.replicas` | &#10003; | &#10003; |
+|        # of replicas of Mongos `spec.shardTopology.mongos.replicas`        | &#10003; | &#10003; |
+
+
 
 ## WipeOut DormantDatabase
 
