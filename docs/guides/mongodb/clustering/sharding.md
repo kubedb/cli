@@ -100,6 +100,7 @@ Here,
     - `resources` represents resources for each container of mongos deployment.
     - `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
+    - `strategy` is the deployment strategy to use to replace existing pods with new ones. This is optional. If not provided, kubernetes's default deploymentstrategy will be used. See more about [DeploymentStrategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
 - `spec.certificateSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod replica set instances in the topology uses the contents of the keyfile as the shared password for authenticating other members in the replicaset. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `CertificateSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `CertificateSecret`._ If `CertificateSecret` is not given, KubeDB operator will generate a `CertificateSecret` itself.
 
 KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create governing services for StatefulSets with the name `<mongodb-name>-<node-type>-gvr`. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
@@ -345,7 +346,7 @@ If you want to use custom or existing secret please specify that when creating t
 
   ```console
   $ kubectl get secrets -n demo mongo-sh-auth -o jsonpath='{.data.\password}' | base64 -d
-  Ji8f_hGXS4z88QlF
+  7QiqLcuSCmZ8PU5a
   ```
 
 Now, you can connect to this database through [mongo-shell](https://docs.mongodb.com/v3.6/mongo/).
@@ -362,7 +363,7 @@ mongo-sh-mongos-69b557f9f5-5hvh2   1/1     Running   0          49m
 
 $ kubectl exec -it mongo-sh-mongos-69b557f9f5-2kz68 -n demo bash
 
-mongodb@mongo-sh-mongos-69b557f9f5-2kz68:/$ mongo admin -u root -p Ji8f_hGXS4z88QlF
+mongodb@mongo-sh-mongos-69b557f9f5-2kz68:/$ mongo admin -u root -p 7QiqLcuSCmZ8PU5a
 MongoDB shell version v3.6.12
 connecting to: mongodb://127.0.0.1:27017/admin?gssapiServiceName=mongodb
 Implicit session: session { "id" : UUID("8b7abf57-09e4-4e30-b4a0-a37ebf065e8f") }
@@ -811,7 +812,7 @@ mongo-sh-mongos-69b557f9f5-tdn69   1/1     Running   0          3m52s
 
 $ kubectl exec -it mongo-sh-mongos-69b557f9f5-62j76 -n demo bash
 
-mongodb@mongo-sh-mongos-69b557f9f5-62j76:/$ mongo admin -u root -p Ji8f_hGXS4z88QlF
+mongodb@mongo-sh-mongos-69b557f9f5-62j76:/$ mongo admin -u root -p 7QiqLcuSCmZ8PU5a
 
 mongos> use test;
 switched to db test
@@ -867,16 +868,195 @@ mongos> sh.status()
 
 ## Update number of ShardTopology Instances
 
-Currently decreasing number of shards `spec.shardTopology.shard.shards` is not handled from KubeDB end.
+User can increase or decrease the number of router/mongos `spec.shardTopology.mongos.replicas`. 
+
+At this moment, decreasing the number of shards and replicasets is not handled from KubeDB end. But, User can increase the number of instances if needed.
+
+Here a table of allowed actions are given for mongodb `ShardTopology`,
 
 |                                 Instances                                  | Increase | Decrease |
 | :------------------------------------------------------------------------: | :------: | :------: |
-|               # of Shards `spec.shardTopology.shard.shards`                | &#10003; | &#10007; |
-|     # of replicaset of each Shard `spec.shardTopology.shard.replicas`      | &#10003; | &#10003; |
-| # of replicaset of ConfigServer `spec.shardTopology.configServer.replicas` | &#10003; | &#10003; |
 |        # of replicas of Mongos `spec.shardTopology.mongos.replicas`        | &#10003; | &#10003; |
+|               # of Shards `spec.shardTopology.shard.shards`                | &#10003; | &#10007; |
+|     # of replicaset of each Shard `spec.shardTopology.shard.replicas`      | &#10003; | &#10007; |
+| # of replicaset of ConfigServer `spec.shardTopology.configServer.replicas` | &#10003; | &#10007; |
+
+Now edit MongoDB `mongo-sh` to increase `spec.shardTopology.shard.shards` to 4 and increase `spec.shardTopology.mongos` to 3.
+
+Watch for pod changes,
+
+```console
+$ kubectl get po --all-namespaces -w
+NAMESPACE     NAME                                    READY   STATUS    RESTARTS   AGE
+demo          mongo-sh-configsvr-0                    1/1     Running   0          8m12s
+demo          mongo-sh-configsvr-1                    1/1     Running   0          7m41s
+demo          mongo-sh-configsvr-2                    1/1     Running   0          7m17s
+demo          mongo-sh-mongos-69b557f9f5-2qvb7        1/1     Running   0          3m44s
+demo          mongo-sh-mongos-69b557f9f5-6z2s4        1/1     Running   0          3m44s
+demo          mongo-sh-shard0-0                       1/1     Running   0          7m4s
+demo          mongo-sh-shard0-1                       1/1     Running   0          6m37s
+demo          mongo-sh-shard0-2                       1/1     Running   0          6m20s
+demo          mongo-sh-shard1-0                       1/1     Running   0          5m55s
+demo          mongo-sh-shard1-1                       1/1     Running   0          5m29s
+demo          mongo-sh-shard1-2                       1/1     Running   0          5m14s
+demo          mongo-sh-shard2-0                       1/1     Running   0          4m59s
+demo          mongo-sh-shard2-1                       1/1     Running   0          4m32s
+demo          mongo-sh-shard2-2                       1/1     Running   0          4m11s
+kube-system   coredns-fb8b8dccf-nzb5q                 1/1     Running   1          165m
+kube-system   coredns-fb8b8dccf-tqldv                 1/1     Running   1          165m
+kube-system   etcd-minikube                           1/1     Running   0          164m
+kube-system   kube-addon-manager-minikube             1/1     Running   0          164m
+kube-system   kube-apiserver-minikube                 1/1     Running   0          163m
+kube-system   kube-controller-manager-minikube        1/1     Running   0          164m
+kube-system   kube-proxy-qznbv                        1/1     Running   0          165m
+kube-system   kube-scheduler-minikube                 1/1     Running   0          163m
+kube-system   kubedb-operator-c8cd5c69-c5nkc          1/1     Running   0          44m
+kube-system   kubernetes-dashboard-79dd6bfc48-l88rk   1/1     Running   4          165m
+kube-system   storage-provisioner                     1/1     Running   0          164m
+demo          mongo-sh-shard3-0                       0/1     Pending   0          0s
+demo          mongo-sh-shard3-0                       0/1     Pending   0          0s
+demo          mongo-sh-shard3-0                       0/1     Pending   0          9s
+demo          mongo-sh-shard3-0                       0/1     Init:0/2   0          9s
+demo          mongo-sh-shard3-0                       0/1     Init:1/2   0          10s
+demo          mongo-sh-shard3-0                       0/1     Init:1/2   0          11s
+demo          mongo-sh-shard3-0                       0/1     PodInitializing   0          30s
+demo          mongo-sh-shard3-0                       0/1     Running           0          31s
+demo          mongo-sh-shard3-0                       1/1     Running           0          41s
+demo          mongo-sh-shard3-1                       0/1     Pending           0          0s
+demo          mongo-sh-shard3-1                       0/1     Pending           0          0s
+demo          mongo-sh-shard3-1                       0/1     Pending           0          5s
+demo          mongo-sh-shard3-1                       0/1     Init:0/2          0          5s
+demo          mongo-sh-shard3-1                       0/1     Init:1/2          0          6s
+demo          mongo-sh-shard3-1                       0/1     Init:1/2          0          7s
+demo          mongo-sh-shard3-1                       0/1     PodInitializing   0          15s
+demo          mongo-sh-shard3-1                       0/1     Running           0          16s
+demo          mongo-sh-shard3-1                       1/1     Running           0          23s
+demo          mongo-sh-shard3-2                       0/1     Pending           0          0s
+demo          mongo-sh-shard3-2                       0/1     Pending           0          0s
+demo          mongo-sh-shard3-2                       0/1     Pending           0          2s
+demo          mongo-sh-shard3-2                       0/1     Init:0/2          0          2s
+demo          mongo-sh-shard3-2                       0/1     Init:1/2          0          4s
+demo          mongo-sh-shard3-2                       0/1     Init:1/2          0          5s
+demo          mongo-sh-shard3-2                       0/1     PodInitializing   0          14s
+demo          mongo-sh-shard3-2                       0/1     Running           0          15s
+demo          mongo-sh-shard3-2                       1/1     Running           0          22s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Pending           0          0s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Pending           0          0s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Init:0/2          0          0s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     Pending           0          0s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     Pending           0          0s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     Init:0/2          0          0s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Init:0/2          0          1s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Init:1/2          0          3s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     Init:1/2          0          3s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     Init:1/2          0          4s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Init:1/2          0          4s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     PodInitializing   0          7s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Running           0          8s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     PodInitializing   0          8s
+demo          mongo-sh-mongos-598658d8f9-6j544        0/1     Running           0          9s
+demo          mongo-sh-mongos-598658d8f9-6j544        1/1     Running           0          12s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Terminating       0          12s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     Pending           0          0s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     Pending           0          1s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     Init:0/2          0          1s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     Init:1/2          0          3s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Terminating       0          15s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     Init:1/2          0          4s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Terminating       0          19s
+demo          mongo-sh-mongos-69b557f9f5-w77cs        0/1     Terminating       0          19s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     PodInitializing   0          7s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        0/1     Running           0          8s
+demo          mongo-sh-mongos-598658d8f9-tmwvb        1/1     Running           0          10s
+demo          mongo-sh-mongos-69b557f9f5-6z2s4        1/1     Terminating       0          6m6s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     Pending           0          0s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     Pending           0          0s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     Init:0/2          0          0s
+demo          mongo-sh-mongos-69b557f9f5-6z2s4        0/1     Terminating       0          6m7s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     Init:1/2          0          2s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     Init:1/2          0          3s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     PodInitializing   0          6s
+demo          mongo-sh-mongos-69b557f9f5-6z2s4        0/1     Terminating       0          6m13s
+demo          mongo-sh-mongos-69b557f9f5-6z2s4        0/1     Terminating       0          6m13s
+demo          mongo-sh-mongos-598658d8f9-464xr        0/1     Running           0          7s
+demo          mongo-sh-mongos-598658d8f9-464xr        1/1     Running           0          14s
+demo          mongo-sh-mongos-69b557f9f5-2qvb7        1/1     Terminating       0          6m21s
+demo          mongo-sh-mongos-69b557f9f5-2qvb7        0/1     Terminating       0          6m22s
+demo          mongo-sh-mongos-69b557f9f5-2qvb7        0/1     Terminating       0          6m23s
+demo          mongo-sh-mongos-69b557f9f5-2qvb7        0/1     Terminating       0          6m23s
+```
+
+You can see that an extra statefulset `mongo-sh-shard3` is created as 4th shard and one extra mongos instance also came up.
+
+Notice that, all new mongos instances came up replacing old instances because of some changes in `shard` config. This update strategy follows `spec.shardTopology.mongos.strategy`, which is optional. If not provided, kubernetes will use default deploymentStrategy, ie. `RollingUpdate`. See more about [Deployment Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
+
+```console
+$ kubectl get deploy -n demo -w
+NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+mongo-sh-mongos   2/2     2            2           12m
+mongo-sh-mongos   2/3     2            2           13m
+mongo-sh-mongos   2/3     2            2           13m
+mongo-sh-mongos   2/3     2            2           13m
+mongo-sh-mongos   2/3     3            2           13m
+mongo-sh-mongos   3/3     3            3           13m
+```
+
+Now check `sh.status()` in `mongos`,
+
+```console
+$ kubectl get po -n demo -l mongodb.kubedb.com/node.mongos=mongo-sh-mongos
+NAME                               READY   STATUS    RESTARTS   AGE
+mongo-sh-mongos-598658d8f9-6j544   1/1     Running   0          17m
+mongo-sh-mongos-598658d8f9-s8gn4   1/1     Running   0          9m54s
+mongo-sh-mongos-598658d8f9-tmwvb   1/1     Running   0          16m
 
 
+$ kubectl exec -it mongo-sh-mongos-598658d8f9-6j544 -n demo bash
+
+mongodb@mongo-sh-mongos-598658d8f9-6j544:/$ mongo admin -u root -p 7QiqLcuSCmZ8PU5a
+
+mongos> sh.status()
+--- Sharding Status --- 
+  sharding version: {
+  	"_id" : 1,
+  	"minCompatibleVersion" : 5,
+  	"currentVersion" : 6,
+  	"clusterId" : ObjectId("5cc7ed91d06f28b1b3c64c66")
+  }
+  shards:
+        {  "_id" : "shard0",  "host" : "shard0/mongo-sh-shard0-0.mongo-sh-shard0-gvr.demo.svc.cluster.local:27017,mongo-sh-shard0-1.mongo-sh-shard0-gvr.demo.svc.cluster.local:27017,mongo-sh-shard0-2.mongo-sh-shard0-gvr.demo.svc.cluster.local:27017",  "state" : 1 }
+        {  "_id" : "shard1",  "host" : "shard1/mongo-sh-shard1-0.mongo-sh-shard1-gvr.demo.svc.cluster.local:27017,mongo-sh-shard1-1.mongo-sh-shard1-gvr.demo.svc.cluster.local:27017,mongo-sh-shard1-2.mongo-sh-shard1-gvr.demo.svc.cluster.local:27017",  "state" : 1 }
+        {  "_id" : "shard2",  "host" : "shard2/mongo-sh-shard2-0.mongo-sh-shard2-gvr.demo.svc.cluster.local:27017,mongo-sh-shard2-1.mongo-sh-shard2-gvr.demo.svc.cluster.local:27017,mongo-sh-shard2-2.mongo-sh-shard2-gvr.demo.svc.cluster.local:27017",  "state" : 1 }
+        {  "_id" : "shard3",  "host" : "shard3/mongo-sh-shard3-0.mongo-sh-shard3-gvr.demo.svc.cluster.local:27017,mongo-sh-shard3-1.mongo-sh-shard3-gvr.demo.svc.cluster.local:27017,mongo-sh-shard3-2.mongo-sh-shard3-gvr.demo.svc.cluster.local:27017",  "state" : 1 }
+  active mongoses:
+        "3.6.12" : 3
+  autosplit:
+        Currently enabled: yes
+  balancer:
+        Currently enabled:  yes
+        Currently running:  no
+        Failed balancer rounds in last 5 attempts:  0
+        Migration Results for the last 24 hours: 
+                No recent migrations
+  databases:
+        {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
+                config.system.sessions
+                        shard key: { "_id" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard0	1
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0) 
+        {  "_id" : "demo",  "primary" : "shard2",  "partitioned" : false }
+        {  "_id" : "test",  "primary" : "shard1",  "partitioned" : true }
+                test.testcoll
+                        shard key: { "myfield" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard1	1
+                        { "myfield" : { "$minKey" : 1 } } -->> { "myfield" : { "$maxKey" : 1 } } on : shard1 Timestamp(1, 0)
+```
 
 ## WipeOut DormantDatabase
 
