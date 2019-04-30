@@ -78,26 +78,23 @@ mongodb.kubedb.com/mongo-sh created
 
 Here,
 
-- `spec.shardTopology` represents the topology for sharding.
+- `spec.shardTopology` represents the topology configuration for sharding.
   - `shard` represents configuration for Shard component of mongodb.
     - `shards` represents number of shards for a mongodb deployment. Each shard is deployed as a [replicaset](/docs/guides/mongodb/clustering/replication_concept.md).
     - `replicas` represents number of replicas of each shard replicaset.
     - `prefix` represents the prefix of each shard node.
-    - `resources` represents resources for each container of sharding statefulsets.
     - `configSource` is an optional field to provide custom configuration file for shards (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
     - `storage` to specify pvcSpec for each node of sharding. You can specify any StorageClass available in your cluster with appropriate resource requests.
   - `configServer` represents configuration for ConfigServer component of mongodb.
     - `replicas` represents number of replicas for configServer replicaset. Here, configServer is deployed as a replicaset of mongodb.
     - `prefix` represents the prefix of configServer nodes.
-    - `resources` represents resources for each container of configServer statefulsets.
     - `configSource` is an optional field to provide custom configuration file for configSource (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
     - `storage` to specify pvcSpec for each node of configServer. You can specify any StorageClass available in your cluster with appropriate resource requests.
   - `mongos` represents configuration for Mongos component of mongodb. `Mongos` instances run as stateless components (deployment).
     - `replicas` represents number of replicas of `Mongos` instance. Here, Mongos is not deployed as replicaset.
     - `prefix` represents the prefix of mongos nodes.
-    - `resources` represents resources for each container of mongos deployment.
     - `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
     - `strategy` is the deployment strategy to use to replace existing pods with new ones. This is optional. If not provided, kubernetes's default deploymentstrategy will be used. See more about [DeploymentStrategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
@@ -235,7 +232,6 @@ spec:
             runAsNonRoot: true
             runAsUser: 999
       replicas: 3
-      resources: {}
       storage:
         dataSource: null
         resources:
@@ -273,7 +269,6 @@ spec:
             runAsNonRoot: true
             runAsUser: 999
       replicas: 2
-      resources: {}
       strategy:
         type: RollingUpdate
     shard:
@@ -307,7 +302,6 @@ spec:
             runAsNonRoot: true
             runAsUser: 999
       replicas: 3
-      resources: {}
       shards: 3
       storage:
         dataSource: null
@@ -686,7 +680,6 @@ spec:
                   runAsNonRoot: true
                   runAsUser: 999
             replicas: 3
-            resources: {}
             storage:
               dataSource: null
               resources:
@@ -724,7 +717,6 @@ spec:
                   runAsNonRoot: true
                   runAsUser: 999
             replicas: 2
-            resources: {}
             strategy:
               type: RollingUpdate
           shard:
@@ -758,7 +750,6 @@ spec:
                   runAsNonRoot: true
                   runAsUser: 999
             replicas: 3
-            resources: {}
             shards: 3
             storage:
               dataSource: null
