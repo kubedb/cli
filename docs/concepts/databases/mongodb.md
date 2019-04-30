@@ -233,7 +233,7 @@ Available configurable fields:
 - `prefix` represents the prefix of mongos nodes.
 - `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
 - `podTemplate` is an optional configuration for pods. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-podtemplate) in details.
-- `strategy` is the deployment strategy to use to replace existing pods with new ones. This is optional. If not provided, kubernetes's default deploymentstrategy will be used. See more about [DeploymentStrategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+- `strategy` is the deployment strategy to use to replace existing pods with new ones. This is optional. If not provided, kubernetes will use default deploymentStrategy, ie. `RollingUpdate`. See more about [Deployment Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
 
 ### spec.storageType
 
