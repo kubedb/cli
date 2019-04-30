@@ -72,7 +72,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0//docs/examples/mongodb/clustering/mongo-sharding.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0//docs/examples/mongodb/clustering/mongo-sharding.yaml
 mongodb.kubedb.com/mongo-sh created
 ```
 
@@ -615,6 +615,25 @@ Here a table of allowed actions are given for mongodb `ShardTopology`,
 
 Now edit MongoDB `mongo-sh` to increase `spec.shardTopology.shard.shards` to 4 and increase `spec.shardTopology.mongos` to 3.
 
+```console
+$ kubectl edit mg -n demo mongo-sh
+apiVersion: kubedb.com/v1alpha1
+kind: MongoDB
+metadata:
+  name: mongo-sh
+  namespace: demo
+  ...
+spec:
+  shardTopology:
+    mongos:
+      replicas: 3 # set 3
+      ...
+    shard:
+      shards: 4 # set 4
+      ...
+  ...
+```
+
 Watch for pod changes,
 
 ```console
@@ -974,7 +993,7 @@ In this tutorial, the dormant database can be resumed by creating original Mongo
 The below command will resume the DormantDatabase `mongo-sh`.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/clustering/mongo-sh.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/clustering/mongo-sh.yaml
 mongodb.kubedb.com/mongo-sh created
 ```
 
