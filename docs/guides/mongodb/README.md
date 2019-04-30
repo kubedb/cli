@@ -19,7 +19,7 @@ aliases:
 
 |                   Features                   | Availability |
 | -------------------------------------------- | :----------: |
-| Clustering - Sharding                        |   &#10007;   |
+| Clustering - Sharding                        |   &#10003;   |
 | Clustering - Replication                     |   &#10003;   |
 | Persistent Volume                            |   &#10003;   |
 | Instant Backup                               |   &#10003;   |
@@ -50,21 +50,26 @@ aliases:
 |     0.9.0      | &#10003;  | &#10003;  |     &#10007;     |  &#10007;   |
 |     0.10.0     | &#10003;  | &#10003;  |     &#10003;     |  &#10003;   |
 |     0.11.0     | &#10003;  | &#10003;  |     &#10003;     |  &#10003;   |
+|     0.12.0     | &#10003;  | &#10003;  |     &#10003;     |  &#10003;   |
 
 ## Supported MongoDBVersion CRD
 
 Here, &#10003; means supported and &#10007; means deprecated.
 
-|    NAME    | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 | KubeDB: 0.11.0 |
-| ---------- | ------- | ------------- | -------------- | -------------- |
-| 3.4        | 3.4     | &#10007;      | &#10007;       | &#10007;       |
-| 3.4-v1     | 3.4     | &#10003;      | &#10007;       | &#10007;       |
-| 3.4-v3     | 3.4     | &#10007;      | &#10003;       | &#10003;       |
-| 3.6        | 3.6     | &#10007;      | &#10007;       | &#10007;       |
-| 3.6-v1     | 3.6     | &#10003;      | &#10007;       | &#10007;       |
-| 3.6-v3     | 3.6     | &#10007;      | &#10003;       | &#10003;       |
-| 4.0.5, 4.0 | 4.0.5   | &#10007;      | &#10003;       | &#10003;       |
-| 4.1.7      | 4.1.7   | &#10007;      | &#10003;       | &#10003;       |
+|       NAME       | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 | KubeDB: 0.11.0 | KubeDB: 0.12.0 |
+| :--------------: | :-----: | :-----------: | :------------: | :------------: | :------------: |
+|       3.4        |   3.4   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|      3.4-v1      |   3.4   |   &#10003;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|      3.4-v2      |   3.4   |   &#10007;    |    &#10003;    |    &#10003;    |    &#10007;    |
+|      3.4-v3      |   3.4   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10003;    |
+|       3.6        |   3.6   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|      3.6-v1      |   3.6   |   &#10003;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|      3.6-v2      |   3.6   |   &#10007;    |    &#10003;    |    &#10003;    |    &#10007;    |
+|      3.6-v3      |   3.6   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10003;    |
+|    4.0.5, 4.0    |  4.0.5  |   &#10007;    |    &#10003;    |    &#10003;    |    &#10007;    |
+| 4.0.5-v1, 4.0-v1 |  4.0.5  |   &#10007;    |    &#10007;    |    &#10007;    |    &#10003;    |
+|      4.1.7       |  4.1.7  |   &#10007;    |    &#10003;    |    &#10003;    |    &#10007;    |
+|     4.1.7-v1     |  4.1.7  |   &#10007;    |    &#10007;    |    &#10007;    |    &#10003;    |
 
 ## External tools dependency
 
@@ -78,6 +83,8 @@ Here, &#10003; means supported and &#10007; means deprecated.
 ## User Guide
 
 - [Quickstart MongoDB](/docs/guides/mongodb/quickstart/quickstart.md) with KubeDB Operator.
+- [MongoDB Replicaset](/docs/guides/mongodb/clustering/replicaset.md) with KubeDB Operator.
+- [MongoDB Sharding](/docs/guides/mongodb/clustering/sharding.md) with KubeDB Operator.
 - [Snapshot and Restore](/docs/guides/mongodb/snapshot/backup-and-restore.md) process of MongoDB databases using KubeDB.
 - Take [Scheduled Snapshot](/docs/guides/mongodb/snapshot/scheduled-backup.md) of MongoDB databases using KubeDB.
 - Initialize [MongoDB with Script](/docs/guides/mongodb/initialization/using-script.md).
