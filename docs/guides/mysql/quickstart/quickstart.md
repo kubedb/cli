@@ -40,20 +40,20 @@ This tutorial will show you how to use KubeDB to run a MySQL database.
   ```console
   $ kubectl create ns demo
   namespace/demo created
-  
+
   $ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mysql/quickstart/demo-1.yaml
   deployment.extensions/myadmin created
   service/myadmin created
-  
+
   $ kubectl get pods -n demo --watch
   NAME                      READY     STATUS              RESTARTS   AGE
   myadmin-c4db4df95-8lk74   0/1       ContainerCreating   0          27s
   myadmin-c4db4df95-8lk74   1/1       Running             0          1m
-  
+
   $ kubectl get service -n demo
   NAME      TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
   myadmin   LoadBalancer   10.105.73.16   <pending>     80:30158/TCP   23m
-  
+
   $ minikube ip
   192.168.99.100
   ```
@@ -74,11 +74,13 @@ When you have installed KubeDB, it has created `MySQLVersion` crd for all suppor
 
 ```console
 $ kubectl get mysqlversions
-NAME     VERSION   DB_IMAGE                  DEPRECATED   AGE
+NAME     VERSION   DB_IMAGE              DEPRECATED   AGE
 5        5         kubedb/mysql:5        true         29s
 5-v1     5         kubedb/mysql:5-v1     true         29s
 5.7      5.7       kubedb/mysql:5.7      true         29s
 5.7-v1   5.7       kubedb/mysql:5.7-v1                29s
+5.7-v2   5.7.25    kubedb/mysql:5.7-v2                29s
+5.7.25   5.7.25    kubedb/mysql:5.7.25                29s
 8        8         kubedb/mysql:8        true         29s
 8-v1     8         kubedb/mysql:8-v1     true         29s
 8.0      8.0       kubedb/mysql:8.0      true         29s
@@ -142,7 +144,7 @@ Volume:
   Capacity:      1Gi
   Access Modes:  RWO
 
-StatefulSet:          
+StatefulSet:
   Name:               mysql-quickstart
   CreationTimestamp:  Wed, 06 Feb 2019 17:17:55 +0600
   Labels:               kubedb.com/kind=MySQL
@@ -151,7 +153,7 @@ StatefulSet:
   Replicas:           824641282668 desired | 1 total
   Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
 
-Service:        
+Service:
   Name:         mysql-quickstart
   Labels:         kubedb.com/kind=MySQL
                   kubedb.com/name=mysql-quickstart
@@ -167,9 +169,9 @@ Database Secret:
   Labels:         kubedb.com/kind=MySQL
                   kubedb.com/name=mysql-quickstart
   Annotations:  <none>
-  
+
 Type:  Opaque
-  
+
 Data
 ====
   password:  16 bytes
