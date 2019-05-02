@@ -21,7 +21,7 @@ This tutorial will show you how to use KubeDB to provision a MySQL replication g
 
 Before proceeding:
 
-- Read [mysql group replication concept](/docs/guides/mysql/clustering/group-replication/overview.md) to learn about MySQL Group Replication.
+- Read [mysql group replication concept](/docs/guides/mysql/clustering/overview.md) to learn about MySQL Group Replication.
 
 - You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube).
 
@@ -68,7 +68,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/mysql/clustering/group-replication/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/master/docs/examples/mysql/clustering/demo-1.yaml
 mysql.kubedb.com/my-group created
 ```
 
@@ -389,7 +389,7 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------+-------+-------+
 ```
 
-## Write on Secondary
+## Write on Secondary Should Fail
 
 Only, primary member preserves the write permission. No secondary can write data.
 
@@ -441,7 +441,7 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 +---------------------------+--------------------------------------+------------------------------+-------------+--------------+
 
 # read data from new primary my-group-1.my-group-gvr.demo
-$ ubectl exec -it -n demo my-group-0 -- mysql -u root --password=dlNiQpjULZvEqo3B --host=my-group-1.my-group-gvr.demo -e "SELECT * FROM playground.equipment;"
+$ kubectl exec -it -n demo my-group-0 -- mysql -u root --password=dlNiQpjULZvEqo3B --host=my-group-1.my-group-gvr.demo -e "SELECT * FROM playground.equipment;"
 mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------+-------+-------+
 | id | type  | quant | color |
@@ -450,7 +450,7 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------+-------+-------+
 
 # read data from secondary-1 my-group-0.my-group-gvr.demo
-$ ubectl exec -it -n demo my-group-0 -- mysql -u root --password=dlNiQpjULZvEqo3B --host=my-group-0.my-group-gvr.demo -e "SELECT * FROM playground.equipment;"
+$ kubectl exec -it -n demo my-group-0 -- mysql -u root --password=dlNiQpjULZvEqo3B --host=my-group-0.my-group-gvr.demo -e "SELECT * FROM playground.equipment;"
 mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------+-------+-------+
 | id | type  | quant | color |
@@ -459,7 +459,7 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------+-------+-------+
 
 # read data from secondary-2 my-group-2.my-group-gvr.demo
-$ ubectl exec -it -n demo my-group-0 -- mysql -u root --password=dlNiQpjULZvEqo3B --host=my-group-2.my-group-gvr.demo -e "SELECT * FROM playground.equipment;"
+$ kubectl exec -it -n demo my-group-0 -- mysql -u root --password=dlNiQpjULZvEqo3B --host=my-group-2.my-group-gvr.demo -e "SELECT * FROM playground.equipment;"
 mysql: [Warning] Using a password on the command line interface can be insecure.
 +----+-------+-------+-------+
 | id | type  | quant | color |
@@ -473,19 +473,13 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 Clean what you created in this tutorial.
 
 ```console
-$ kubectl patch -n demo my my-group -p '{"metadata":{"finalizers":[]}}' --type=merge
-mysql.kubedb.com/my-group patched
+$ kubectl patch -n demo my/my-group -p '{"spec":{"terminationPolicy":"WipeOut"}}' --type="merge"
+$ kubectl delete -n demo my/my-group
 
-$ kubectl delete my my-group -n demo
-mysql.kubedb.com "my-group" deleted
+$ kubectl patch -n demo drmn/my-group -p '{"spec":{"wipeOut":true}}' --type="merge"
+$ kubectl delete -n demo drmn/my-group
 
-$ kubectl get pvc -n demo | grep my-group | awk '{print $1}' | xargs kubectl delete pvc -n demo
-persistentvolumeclaim "data-my-group-0" deleted
-persistentvolumeclaim "data-my-group-1" deleted
-persistentvolumeclaim "data-my-group-2" deleted
-
-$ kubectl delete secret my-group-auth -n demo
-secret "my-group-auth" deleted
+$ kubectl delete ns demo
 ```
 
 ## Next Steps
