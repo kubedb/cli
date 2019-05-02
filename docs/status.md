@@ -4,7 +4,7 @@ description: KubeDB Project Status
 menu:
   docs_0.11.0:
     identifier: roadmap-cli
-    name: status
+    name: Status
     parent: welcome
     weight: 15
 menu_name: docs_0.11.0
