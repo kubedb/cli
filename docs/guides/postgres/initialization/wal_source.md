@@ -42,6 +42,7 @@ To know more about continuous archiving, please refer to the [ofiicial postgres 
 | 10.2-v4  |  10.2   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
 | 10.6-v2  |  10.6   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
 | 11.1-v2  |  11.1   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
+|   11.2   |  11.2   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
 
 ## Next Steps
 
