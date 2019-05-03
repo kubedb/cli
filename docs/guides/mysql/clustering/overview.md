@@ -158,6 +158,10 @@ The following is a small table illustrating the formula above.
 
 Ref: [group-replication-fault-tolerance](https://dev.mysql.com/doc/refman/5.7/en/group-replication-fault-tolerance.html)
 
+### Limitations
+
+There are some limitations in MySQL Group Replication that are listed [here](https://dev.mysql.com/doc/refman/5.7/en/group-replication-limitations.html). On top of that, though MySQL group can operate in both single-primary and multi-primary modes, we have implemented only single-primary mode. The multi-primary mode will be added in the future. See the issue [MySQL Cluster](https://github.com/kubedb/project/issues/18).
+
 ## Next Steps
 
 - [Deploy MySQL Group Replication](/docs/guides/mysql/clustering/group_replication_single_primary.md) using KubeDB.
