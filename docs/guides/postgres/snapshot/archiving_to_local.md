@@ -42,7 +42,7 @@ metadata:
   name: wal-postgres
   namespace: demo
 spec:
-  version: "10.2-v3"
+  version: "11.1-v2"
   storageType: Durable
   replicas: 2
   updateStrategy:

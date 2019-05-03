@@ -4,7 +4,7 @@ metadata:
   name: replay-postgres
   namespace: demo
 spec:
-  version: "10.2-v3"
+  version: "11.1-v2"
   replicas: 2
   databaseSecret:
     secretName: wal-postgres-auth
