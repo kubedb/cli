@@ -66,7 +66,7 @@ spec:
   storage:
     storageClassName: "standard"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     resources:
       requests:
         storage: 1Gi
@@ -101,12 +101,12 @@ spec:
       nodeSelector:
         disktype: ssd
       imagePullSecrets:
-      - name: myregistrykey
+        - name: myregistrykey
       args:
-      - --maxConns=100
+        - --maxConns=100
       env:
-      - name: MONGO_INITDB_DATABASE
-        value: myDB
+        - name: MONGO_INITDB_DATABASE
+          value: myDB
       resources:
         requests:
           memory: "64Mi"
@@ -120,9 +120,9 @@ spec:
     spec:
       type: NodePort
       ports:
-      - name:  http
-        port:  9200
-        targetPort: http
+        - name: http
+          port: 9200
+          targetPort: http
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
@@ -198,7 +198,7 @@ Available configurable fields:
 - configServer
 - mongos
 
-When `spec.shardTopology` is set, the following fields needs to be empty, otherwise validating webhook will gibe error.
+When `spec.shardTopology` is set, the following fields needs to be empty, otherwise validating webhook will throw error.
 
 - `spec.replicas`
 - `spec.podTemplate`
@@ -214,9 +214,9 @@ Available configurable fields:
 - `shards` represents number of shards for a mongodb deployment. Each shard is deployed as a [replicaset](/docs/guides/mongodb/clustering/replication_concept.md).
 - `replicas` represents number of replicas of each shard replicaset.
 - `prefix` represents the prefix of each shard node.
-- `configSource` is an optional field to provide custom configuration file for shards (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
+- `configSource` is an optional field to provide custom configuration file for shards (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise a default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
 - `podTemplate` is an optional configuration for pods. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-podtemplate) in details.
-- `storage` to specify pvcSpec for each node of sharding. You can specify any StorageClass available in your cluster with appropriate resource requests. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-storage) in details.
+- `storage` to specify pvc spec for each node of sharding. You can specify any StorageClass available in your cluster with appropriate resource requests. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-storage) in details.
 
 #### spec.shardTopology.configServer
 
@@ -226,9 +226,9 @@ Available configurable fields:
 
 - `replicas` represents number of replicas for configServer replicaset. Here, configServer is deployed as a replicaset of mongodb.
 - `prefix` represents the prefix of configServer nodes.
-- `configSource` is an optional field to provide custom configuration file for configSource (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
+- `configSource` is an optional field to provide custom configuration file for configSource (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise a default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
 - `podTemplate` is an optional configuration for pods. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-podtemplate) in details.
-- `storage` to specify pvcSpec for each node of configServer. You can specify any StorageClass available in your cluster with appropriate resource requests. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-storage) in details.
+- `storage` to specify pvc spec for each node of configServer. You can specify any StorageClass available in your cluster with appropriate resource requests. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-storage) in details.
 
 #### spec.shardTopology.mongos
 
@@ -238,7 +238,7 @@ Available configurable fields:
 
 - `replicas` represents number of replicas of `Mongos` instance. Here, Mongos is deployed as stateless (deployment) instance.
 - `prefix` represents the prefix of mongos nodes.
-- `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
+- `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise a default configuration file will be used. See below to know about [spec.configSource](/docs/concepts/databases/mongodb/#spec-configsource) in details.
 - `podTemplate` is an optional configuration for pods. See below to know about [spec.podTemplate](/docs/concepts/databases/mongodb/#spec-podtemplate) in details.
 - `strategy` is the deployment strategy to use to replace existing pods with new ones. This is optional. If not provided, kubernetes will use default deploymentStrategy, ie. `RollingUpdate`. See more about [Deployment Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
 
@@ -248,7 +248,7 @@ Available configurable fields:
 
 ### spec.storage
 
-Since 0.9.0-rc.0, If you set `spec.storageType:` to `Durable`, then  `spec.storage` is a required field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
+Since 0.9.0-rc.0, If you set `spec.storageType:` to `Durable`, then `spec.storage` is a required field that specifies the StorageClass of PVCs dynamically allocated to store data for the database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. You can specify any StorageClass available in your cluster with appropriate resource requests.
 
 - `spec.storage.storageClassName` is the name of the StorageClass used to provision PVCs. PVCs don’t necessarily have to request a class. A PVC with its storageClassName set equal to "" is always interpreted to be requesting a PV with no class, so it can only be bound to PVs with no class (no annotation or one set equal to ""). A PVC with no storageClassName is not quite the same and is treated differently by the cluster depending on whether the DefaultStorageClass admission plugin is turned on.
 - `spec.storage.accessModes` uses the same conventions as Kubernetes PVCs when requesting storage with specific access modes.
@@ -264,12 +264,12 @@ NB. If `spec.shardTopology` is set, then `spec.storage` needs to be empty. Inste
 
 `spec.init` is an optional section that can be used to initialize a newly created MongoDB database. MongoDB databases can be initialized in one of two ways:
 
-  1. Initialize from Script
-  2. Initialize from Snapshot
+1. Initialize from Script
+2. Initialize from Snapshot
 
 #### Initialize via Script
 
-To initialize a MongoDB database using a script (shell script, js script), set the `spec.init.scriptSource` section when creating a MongoDB object. It will execute files alphabetically with extensions `.sh`  and `.js` that are found in the repository. ScriptSource must have following information:
+To initialize a MongoDB database using a script (shell script, js script), set the `spec.init.scriptSource` section when creating a MongoDB object. It will execute files alphabetically with extensions `.sh` and `.js` that are found in the repository. ScriptSource must have following information:
 
 - [VolumeSource](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes): Where your script is loaded from.
 
@@ -409,7 +409,7 @@ If you try to set `MONGO_INITDB_ROOT_USERNAME` or `MONGO_INITDB_ROOT_PASSWORD` e
 Error from server (Forbidden): error when creating "./mongodb.yaml": admission webhook "mongodb.validators.kubedb.com" denied the request: environment variable MONGO_INITDB_ROOT_USERNAME is forbidden to use in MongoDB spec
 ```
 
-Also, note that KubeDB does not allow to update the environment variables as updating them does not have any effect once the database is created.  If you try to update environment variables, KubeDB operator will reject the request with following error,
+Also, note that KubeDB does not allow updating the environment variables as updating them does not have any effect once the database is created. If you try to update environment variables, KubeDB operator will reject the request with following error,
 
 ```ini
 Error from server (BadRequest): error when applying patch:
@@ -476,7 +476,7 @@ When, `terminationPolicy` is `DoNotTerminate`, KubeDB takes advantage of `Valida
 
 Following table show what KubeDB does when you delete MongoDB crd for different termination policies,
 
-|              Behaviour              | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
+| Behaviour                           | DoNotTerminate |  Pause   |  Delete  | WipeOut  |
 | ----------------------------------- | :------------: | :------: | :------: | :------: |
 | 1. Block Delete operation           |    &#10003;    | &#10007; | &#10007; | &#10007; |
 | 2. Create Dormant Database          |    &#10007;    | &#10003; | &#10007; | &#10007; |

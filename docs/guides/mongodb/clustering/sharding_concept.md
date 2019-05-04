@@ -20,9 +20,9 @@ Sharding is a method for distributing data across multiple machines. MongoDB use
 
 A MongoDB sharded cluster consists of the following components:
 
-- ***shard:*** Each shard contains a subset of the sharded data. As of MongoDB 3.6, shards must be deployed as a replica set.
-- ***mongos:*** The mongos acts as a query router, providing an interface between client applications and the sharded cluster.
-- ***config servers:*** Config servers store metadata and configuration settings for the cluster. As of MongoDB 3.4, config servers must be deployed as a replica set (CSRS).
+- **_shard:_** Each shard contains a subset of the sharded data. As of MongoDB 3.6, shards must be deployed as a replica set.
+- **_mongos:_** The mongos acts as a query router, providing an interface between client applications and the sharded cluster.
+- **_config servers:_** Config servers store metadata and configuration settings for the cluster. As of MongoDB 3.4, config servers must be deployed as a replica set (CSRS).
 
 <p align="center">
   <img alt="sharded-cluster"  src="/docs/images/mongodb/sharded-cluster.png" width="620" height="440">
@@ -30,7 +30,7 @@ A MongoDB sharded cluster consists of the following components:
 
 ### Shards
 
-A shard contains a subset of sharded data for a sharded cluster. Together, the cluster’s shards hold the entire data set for the cluster.
+A shard contains a subset of data for a sharded cluster. Together, the shards of a cluster hold the entire data set for the cluster.
 
 As of MongoDB 3.6, shards must be deployed as a replica set to provide redundancy and high availability.
 
@@ -40,9 +40,9 @@ Performing queries on a single shard only returns a subset of data. Connect to t
 
 Each database in a sharded cluster has a primary shard that holds all the un-sharded collections for that database. Each database has its own primary shard. The primary shard has no relation to the primary in a replica set.
 
-The mongos selects the primary shard when creating a new database by picking the shard in the cluster that has the least amount of data. mongos uses the totalSize field returned by the listDatabase command as a part of the selection criteria.
+The mongos selects the primary shard when creating a new database by picking the shard in the cluster that has the least amount of data. `mongos` uses the totalSize field returned by the listDatabase command as a part of the selection criteria.
 
-Diagram of a primary shard. A primary shard contains non-sharded collections as well as chunks of documents from sharded collections. Shard A is the primary shard.
+A primary shard contains non-sharded collections as well as chunks of documents from sharded collections. Shard A is the primary shard.
 
 #### Shard Status
 
@@ -56,7 +56,7 @@ To distribute the documents in a collection, MongoDB partitions the collection u
 
 You choose the shard key when sharding a collection. The choice of shard key cannot be changed after sharding. A sharded collection can have only one shard key. See [Shard Key Specification](https://docs.mongodb.com/manual/core/sharding-shard-key/#sharding-shard-key-creation).
 
-To shard a non-empty collection, the collection must have an index that starts with the shard key. For empty collections, MongoDB creates the index if the collection does not already have an appropriate index for the specified shard key. See Shard Key Indexes.
+To shard a non-empty collection, the collection must have an index that starts with the shard key. For empty collections, MongoDB creates the index if the collection does not already have an appropriate index for the specified shard key.
 
 The choice of shard key affects the performance, efficiency, and scalability of a sharded cluster. A cluster with the best possible hardware and infrastructure can be bottlenecked by the choice of shard key. The choice of shard key and its backing index can also affect the sharding strategy that your cluster can use.
 
@@ -72,7 +72,7 @@ The config servers also store Authentication configuration information such as R
 
 MongoDB also uses the config servers to manage distributed locks.
 
-Read more about shard from [official document](https://docs.mongodb.com/manual/core/sharded-cluster-config-servers/)
+Read more about config servers from [official document](https://docs.mongodb.com/manual/core/sharded-cluster-config-servers/)
 
 ### Mongos
 
@@ -100,9 +100,9 @@ If the application is instead connected to a mongod, the returned document does 
 
 In a production cluster, ensure that data is redundant and that your systems are highly available. Consider the following for a production sharded cluster deployment:
 
-- Deploy Config Servers as a ***3 member replica set***
-- Deploy each Shard as a ***3 member replica set***
-- Deploy ***one or more*** mongos routers
+- Deploy Config Servers as a **_3 member replica set_**
+- Deploy each Shard as a **_3 member replica set_**
+- Deploy **_one or more_** mongos routers
 
 ## Connecting to a Sharded Cluster
 

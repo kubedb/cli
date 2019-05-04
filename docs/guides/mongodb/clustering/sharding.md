@@ -12,9 +12,9 @@ section_menu_id: guides
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# KubeDB - MongoDB Sharding
+# MongoDB Sharding
 
-This tutorial will show you how to use KubeDB to run a MongoDB Sharding.
+This tutorial will show you how to use KubeDB to run a sharded MongoDB cluster.
 
 ## Before You Begin
 
@@ -35,7 +35,7 @@ Before proceeding:
 
 > Note: The yaml files used in this tutorial are stored in [docs/examples/mongodb](https://github.com/kubedb/cli/tree/master/docs/examples/mongodb) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Deploy MongoDB Sharding
+## Deploy Sharded MongoDB Cluster
 
 To deploy a MongoDB Sharding, user have to specify `spec.replicaSet` option in `Mongodb` CRD.
 
@@ -83,22 +83,22 @@ Here,
     - `shards` represents number of shards for a mongodb deployment. Each shard is deployed as a [replicaset](/docs/guides/mongodb/clustering/replication_concept.md).
     - `replicas` represents number of replicas of each shard replicaset.
     - `prefix` represents the prefix of each shard node.
-    - `configSource` is an optional field to provide custom configuration file for shards (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
+    - `configSource` is an optional field to provide custom configuration file for shards (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise a default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
-    - `storage` to specify pvcSpec for each node of sharding. You can specify any StorageClass available in your cluster with appropriate resource requests.
+    - `storage` to specify pvc spec for each node of sharding. You can specify any StorageClass available in your cluster with appropriate resource requests.
   - `configServer` represents configuration for ConfigServer component of mongodb.
     - `replicas` represents number of replicas for configServer replicaset. Here, configServer is deployed as a replicaset of mongodb.
     - `prefix` represents the prefix of configServer nodes.
-    - `configSource` is an optional field to provide custom configuration file for configSource (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
+    - `configSource` is an optional field to provide custom configuration file for configSource (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise a default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
-    - `storage` to specify pvcSpec for each node of configServer. You can specify any StorageClass available in your cluster with appropriate resource requests.
+    - `storage` to specify pvc spec for each node of configServer. You can specify any StorageClass available in your cluster with appropriate resource requests.
   - `mongos` represents configuration for Mongos component of mongodb. `Mongos` instances run as stateless components (deployment).
     - `replicas` represents number of replicas of `Mongos` instance. Here, Mongos is not deployed as replicaset.
     - `prefix` represents the prefix of mongos nodes.
-    - `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.
+    - `configSource` is an optional field to provide custom configuration file for mongos (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise a default configuration file will be used.
     - `podTemplate` is an optional configuration for pods.
     - `strategy` is the deployment strategy to use to replace existing pods with new ones. This is optional. If not provided, kubernetes will use default deploymentStrategy, ie. `RollingUpdate`. See more about [Deployment Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
-- `spec.certificateSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod replica set instances in the topology uses the contents of the keyfile as the shared password for authenticating other members in the replicaset. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `CertificateSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `CertificateSecret`._ If `CertificateSecret` is not given, KubeDB operator will generate a `CertificateSecret` itself.
+- `spec.certificateSecret` (optional) is a secret name that contains keyfile(a random string) against `key.txt` key. Each mongod replica set instances in the topology uses the contents of the keyfile as the shared password for authenticating other members in the replicaset. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `CertificateSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `CertificateSecret`._ If `CertificateSecret` is not given, KubeDB operator will generate a `CertificateSecret` itself.
 
 KubeDB operator watches for `MongoDB` objects using Kubernetes api. When a `MongoDB` object is created, KubeDB operator will create a new StatefulSet and a ClusterIP Service with the matching MongoDB object name. KubeDB operator will also create governing services for StatefulSets with the name `<mongodb-name>-<node-type>-gvr`. No MongoDB specific RBAC permission is required in [RBAC enabled clusters](/docs/setup/install.md#using-yaml).
 
@@ -319,7 +319,7 @@ status:
   phase: Running
 ```
 
-Please note that KubeDB operator has created a new Secret called `mongo-sh-auth` *(format: {mongodb-object-name}-auth)* for storing the password for `mongodb` superuser. This secret contains a `username` key which contains the *username* for MongoDB superuser and a `password` key which contains the *password* for MongoDB superuser.
+Please note that KubeDB operator has created a new Secret called `mongo-sh-auth` _(format: {mongodb-object-name}-auth)_ for storing the password for `mongodb` superuser. This secret contains a `username` key which contains the _username_ for MongoDB superuser and a `password` key which contains the _password_ for MongoDB superuser.
 
 If you want to use custom or existing secret please specify that when creating the MongoDB object using `spec.databaseSecret.secretName`. While creating this secret manually, make sure the secret contains these two keys containing data `username` and `password`. For more details, please see [here](/docs/concepts/databases/mongodb.md#specdatabasesecret).
 
@@ -329,14 +329,14 @@ If you want to use custom or existing secret please specify that when creating t
   - Service: `mongo-sh.demo`
   - Pod IP: (`$ kubectl get po -n demo -l mongodb.kubedb.com/node.mongos=mongo-sh-mongos -o yaml | grep podIP`)
 - Port: `27017`
-- Username: Run following command to get *username*,
+- Username: Run following command to get _username_,
 
   ```console
   $ kubectl get secrets -n demo mongo-sh-auth -o jsonpath='{.data.\username}' | base64 -d
   root
   ```
 
-- Password: Run the following command to get *password*,
+- Password: Run the following command to get _password_,
 
   ```console
   $ kubectl get secrets -n demo mongo-sh-auth -o jsonpath='{.data.\password}' | base64 -d
@@ -409,7 +409,7 @@ mongos> rs.isMaster()
 
 ```console
 mongos> sh.status()
---- Sharding Status --- 
+--- Sharding Status ---
   sharding version: {
   	"_id" : 1,
   	"minCompatibleVersion" : 5,
@@ -428,7 +428,7 @@ mongos> sh.status()
         Currently enabled:  yes
         Currently running:  no
         Failed balancer rounds in last 5 attempts:  0
-        Migration Results for the last 24 hours: 
+        Migration Results for the last 24 hours:
                 No recent migrations
   databases:
         {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
@@ -493,7 +493,7 @@ The Sharded Collection section `sh.status.databases.<collection>` provides infor
 
 ```console
 mongos> sh.status();
---- Sharding Status --- 
+--- Sharding Status ---
   sharding version: {
   	"_id" : 1,
   	"minCompatibleVersion" : 5,
@@ -512,7 +512,7 @@ mongos> sh.status();
         Currently enabled:  yes
         Currently running:  no
         Failed balancer rounds in last 5 attempts:  0
-        Migration Results for the last 24 hours: 
+        Migration Results for the last 24 hours:
                 No recent migrations
   databases:
         {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
@@ -522,7 +522,7 @@ mongos> sh.status();
                         balancing: true
                         chunks:
                                 shard0	1
-                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0) 
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0)
         {  "_id" : "test",  "primary" : "shard1",  "partitioned" : true }
                 test.testcoll
                         shard key: { "myfield" : 1 }
@@ -555,7 +555,7 @@ Now, eventually `sh.status()`
 
 ```
 mongos> sh.status()
---- Sharding Status --- 
+--- Sharding Status ---
   sharding version: {
   	"_id" : 1,
   	"minCompatibleVersion" : 5,
@@ -574,7 +574,7 @@ mongos> sh.status()
         Currently enabled:  yes
         Currently running:  no
         Failed balancer rounds in last 5 attempts:  0
-        Migration Results for the last 24 hours: 
+        Migration Results for the last 24 hours:
                 No recent migrations
   databases:
         {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
@@ -584,7 +584,7 @@ mongos> sh.status()
                         balancing: true
                         chunks:
                                 shard0	1
-                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0) 
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0)
         {  "_id" : "demo",  "primary" : "shard2",  "partitioned" : false }
         {  "_id" : "test",  "primary" : "shard1",  "partitioned" : true }
                 test.testcoll
@@ -600,7 +600,7 @@ Here, `demo` database is not partitioned and all collections under `demo` databa
 
 ## Update number of ShardTopology Instances
 
-User can increase or decrease the number of router/mongos `spec.shardTopology.mongos.replicas`. 
+User can increase or decrease the number of router/mongos `spec.shardTopology.mongos.replicas`.
 
 At this moment, decreasing the number of shards and replicasets is not handled from KubeDB end. But, User can increase the number of instances if needed.
 
@@ -767,7 +767,7 @@ $ kubectl exec -it mongo-sh-mongos-598658d8f9-6j544 -n demo bash
 mongodb@mongo-sh-mongos-598658d8f9-6j544:/$ mongo admin -u root -p 7QiqLcuSCmZ8PU5a
 
 mongos> sh.status()
---- Sharding Status --- 
+--- Sharding Status ---
   sharding version: {
   	"_id" : 1,
   	"minCompatibleVersion" : 5,
@@ -787,7 +787,7 @@ mongos> sh.status()
         Currently enabled:  yes
         Currently running:  no
         Failed balancer rounds in last 5 attempts:  0
-        Migration Results for the last 24 hours: 
+        Migration Results for the last 24 hours:
                 No recent migrations
   databases:
         {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
@@ -797,7 +797,7 @@ mongos> sh.status()
                         balancing: true
                         chunks:
                                 shard0	1
-                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0) 
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0)
         {  "_id" : "demo",  "primary" : "shard2",  "partitioned" : false }
         {  "_id" : "test",  "primary" : "shard1",  "partitioned" : true }
                 test.testcoll
@@ -1024,7 +1024,7 @@ mongos> db.testcoll.find();
 { "_id" : ObjectId("5cc6d71e56a9ddd30be2c12b"), "myfield" : "c", "otherfield" : "d", "kube" : "db" }
 
 mongos> sh.status()
---- Sharding Status --- 
+--- Sharding Status ---
   sharding version: {
   	"_id" : 1,
   	"minCompatibleVersion" : 5,
@@ -1045,7 +1045,7 @@ mongos> sh.status()
         Failed balancer rounds in last 5 attempts:  5
         Last reported error:  Could not find host matching read preference { mode: "primary" } for set shard2
         Time of Reported error:  Mon Apr 29 2019 11:30:33 GMT+0000 (UTC)
-        Migration Results for the last 24 hours: 
+        Migration Results for the last 24 hours:
                 No recent migrations
   databases:
         {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
@@ -1055,7 +1055,7 @@ mongos> sh.status()
                         balancing: true
                         chunks:
                                 shard0	1
-                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0) 
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0 Timestamp(1, 0)
         {  "_id" : "demo",  "primary" : "shard2",  "partitioned" : false }
         {  "_id" : "test",  "primary" : "shard1",  "partitioned" : true }
                 test.testcoll
@@ -1064,7 +1064,7 @@ mongos> sh.status()
                         balancing: true
                         chunks:
                                 shard1	1
-                        { "myfield" : { "$minKey" : 1 } } -->> { "myfield" : { "$maxKey" : 1 } } on : shard1 Timestamp(1, 0) 
+                        { "myfield" : { "$minKey" : 1 } } -->> { "myfield" : { "$maxKey" : 1 } } on : shard1 Timestamp(1, 0)
 
 ```
 
