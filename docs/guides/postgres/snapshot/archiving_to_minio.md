@@ -12,7 +12,7 @@ section_menu_id: guides
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Continuous Archiving  to MinIO
+# Continuous Archiving to MinIO
 
 [MinIO](https://docs.min.io/) is an open source object storage server compatible with Amazon S3 APIs. **WAL-G** is used to continuously archive PostgreSQL WAL files to MinIO. Please refer to [continuous archiving in KubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to learn more.
 
@@ -50,7 +50,7 @@ spec:
   storage:
     storageClassName: "standard"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     resources:
       requests:
         storage: 1Gi
@@ -60,7 +60,6 @@ spec:
       s3:
         bucket: kubedb
         endpoint: https://minio-service.demo.svc:443/
-
 ```
 
 Here,
@@ -85,6 +84,7 @@ Storage Secret for **WAL-G** is needed with the following 2 keys:
 
 for MinIO server secured with custom CA,
 necessary certificates have to provided in the storage secret as `CA_CERT_DATA` to establish secure connection.
+
 ```console
 $ echo -n '<your-aws-access-key-id-here>' > AWS_ACCESS_KEY_ID
 $ echo -n '<your-aws-secret-access-key-here>' > AWS_SECRET_ACCESS_KEY
@@ -110,7 +110,9 @@ metadata:
   uid: dfbe6b06-0b1d-11e8-9fb9-42010a800064
 type: Opaque
 ```
+
 To create secret using custom CA:
+
 ```console
 $ echo -n '<your-aws-access-key-id-here>' > AWS_ACCESS_KEY_ID
 $ echo -n '<your-aws-secret-access-key-here>' > AWS_SECRET_ACCESS_KEY
@@ -120,6 +122,7 @@ $ kubectl create secret -n demo generic s3-secret \
     --from-file=./CA_CERT_DATA
 secret "s3-secret" created
 ```
+
 ```yaml
 $ kubectl get secret -n demo s3-secret -o yaml
 apiVersion: v1
@@ -136,7 +139,6 @@ metadata:
   selfLink: /api/v1/namespaces/storage/secrets/s3-secret
   uid: b6a58c8e-6689-11e9-9a61-0800275cdf2b
 type: Opaque
-
 ```
 
 **Archiver Storage Backend**
@@ -144,7 +146,7 @@ type: Opaque
 To configure s3 backend, following parameters are available:
 
 | Parameter                           | Description                                                        |
-| ----------------------------------- | -------------------------------------------------------------------|
+| ----------------------------------- | ------------------------------------------------------------------ |
 | `spec.archiver.storage.s3.endpoint` | `Required`. For MinIO, use the URL to your server                  |
 | `spec.archiver.storage.s3.bucket`   | `Required`. Name of Bucket                                         |
 | `spec.archiver.storage.s3.prefix`   | `Optional`. Path prefix into bucket where WAL files will be stored |
@@ -180,4 +182,3 @@ kubectl delete ns demo
 ## Next Steps
 
 - Learn about initializing [PostgreSQL from WAL](/docs/guides/postgres/initialization/script_source.md) files stored in backup servers.
-

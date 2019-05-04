@@ -11,7 +11,7 @@ section_menu_id: guides
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
-> Don't know how to take continuous backup?  Check this [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
+> Don't know how to take continuous backup? Check this [tutorial](/docs/guides/postgres/snapshot/continuous_archiving.md) on Continuous Archiving.
 
 # PostgreSQL Initialization from MinIO
 
@@ -34,7 +34,7 @@ namespace/demo created
 ## Prepare WAL Archive
 
 We need a WAL archive to perform initialization. If you don't have a WAL archive ready, get started by following the tutorial [here](/docs/guides/postgres/snapshot/continuous_archiving.md).
-MinIO specific archiving guides can be found [here](/docs/guides/postgres/snapshot/archiving_to_minio.md)
+MinIO specific archiving guides can be found [here](/docs/guides/postgres/snapshot/archiving_to_minio.md).
 
 Let's populate the database so that we can verify that the initialized database has the same data. We will `exec` into the database pod and use `psql` command-line tool to create a table.
 
@@ -97,7 +97,7 @@ Now, we are ready to proceed to the rest of the tutorial.
 
 User can initialize a new database from this archived WAL files. We have to specify the archive backend in the `spec.init.postgresWAL` field of Postgres object.
 
-The YAML file  in this tutorial creates a Postgres object using WAL files from Amazon S3.
+The YAML file in this tutorial creates a Postgres object using WAL files from Amazon S3.
 
 ```yaml
 apiVersion: kubedb.com/v1alpha1
@@ -113,7 +113,7 @@ spec:
   storage:
     storageClassName: "standard"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     resources:
       requests:
         storage: 1Gi
@@ -122,7 +122,7 @@ spec:
       storageSecretName: s3-secret
       s3:
         bucket: kubedb
-        prefix: 'kubedb/demo/wal-postgres-minio/archive'
+        prefix: "kubedb/demo/wal-postgres-minio/archive"
         endpoint: https://minio-service.storage.svc:443/
 ```
 
@@ -134,7 +134,7 @@ Here,
   - `s3.bucket` points to the bucket name where archived WAL data is stored.
   - `s3.prefix` points to the path of archived WAL data.
   - `storage.s3.endpoint` points to the storage location where the bucket can be found.
-  
+
 **Archiver Storage Secret**
 
 Storage Secret should contain credentials that were used to create the archive.
@@ -219,4 +219,3 @@ Also cleanup the resources created for `wal-postgres-minio` following the guide 
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-
