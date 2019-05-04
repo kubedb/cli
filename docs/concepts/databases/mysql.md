@@ -114,9 +114,9 @@ spec:
 
 `spec.topology` is an optional field that provides a way to configure HA, fault-tolerant MySQL cluster. This field enables you to specify the clustering mode. Currently, we support only MySQL Group Replication.
 
-You can specify the following things in `spec.topology` field,
+You can specify the following fields in `spec.topology` field,
 
-- `mode` specifies the clustering mode for MySQL. For now, the supported value is `"GroupReplicatoin"` for MySQL Group Replication. This field is required if you want to deploy MySQL cluster.
+- `mode` specifies the clustering mode for MySQL. For now, the supported value is `"GroupReplication"` for MySQL Group Replication. This field is required if you want to deploy MySQL cluster.
 
 - `group` is an optional field to configure a group replication. It contains the following fields:
   - `name` is an optional field to specify the name for the group. It must be a version 4 UUID if specified.

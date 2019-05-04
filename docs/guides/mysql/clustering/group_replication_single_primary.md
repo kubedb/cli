@@ -8,7 +8,6 @@ menu:
     weight: 20
 menu_name: docs_0.11.0
 section_menu_id: guides
-
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -36,7 +35,7 @@ Before proceeding:
 
 > Note: The yaml files used in this tutorial are stored in [docs/examples/mysql](https://github.com/kubedb/cli/tree/master/docs/examples/mysql) folder in GitHub repository [kubedb/cli](https://github.com/kubedb/cli).
 
-## Deploy MySQL Group
+## Deploy MySQL Cluster
 
 To deploy a single primary MySQL replication group , specify `spec.topology` field in `MySQL` CRD.
 
@@ -74,10 +73,10 @@ mysql.kubedb.com/my-group created
 
 Here,
 
-- `spec.topology`  tells about the clustering configuration for MySQL.
+- `spec.topology` tells about the clustering configuration for MySQL.
 - `spec.topology.mode` specifies the mode for MySQL cluster. Here we have used `GroupReplication` to tell the operator that we want to deploy a MySQL replication group.
 - `spec.topology.group` contains group replication info.
-- `spec.topology.group.name` the name for the group. It is a valid uuid.
+- `spec.topology.group.name` the name for the group. It is a valid version 4 UUID.
 - `spec.topology.group.baseServerID` the id of primary member.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. So, each members will have a pod of this storage configuration. You can specify any StorageClass available in your cluster with appropriate resource requests.
 
@@ -406,8 +405,6 @@ mysql: [Warning] Using a password on the command line interface can be insecure.
 ERROR 1290 (HY000) at line 1: The MySQL server is running with the --super-read-only option so it cannot execute this statement
 command terminated with exit code 1
 ```
-
-
 
 ## Automatic Failover
 
