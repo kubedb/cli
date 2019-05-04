@@ -4,7 +4,7 @@ metadata:
   name: script-postgres
   namespace: demo
 spec:
-  version: "9.6-v2"
+  version: "9.6-v4"
   storage:
     storageClassName: "standard"
     accessModes:

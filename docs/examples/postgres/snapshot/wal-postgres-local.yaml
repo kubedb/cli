@@ -1,0 +1,38 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: demo
+  name: pgbackup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+---
+
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: postgres-db
+  namespace: demo
+spec:
+  version: "11.1-v2"
+  storageType: Durable
+  replicas: 2
+  updateStrategy:
+    type: RollingUpdate
+  storage:
+    storageClassName: "standard"
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Mi
+  archiver:
+    storage:
+      local:
+        mountPath: /data
+        persistentVolumeClaim:
+          claimName: pgbackup

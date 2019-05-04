@@ -11,13 +11,14 @@ spec:
   storage:
     storageClassName: "standard"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
+        storage: 50Mi
   init:
     postgresWAL:
-      storageSecretName: s3-secret
-      s3:
-        bucket: kubedb
-        prefix: 'kubedb/demo/wal-postgres/archive'
+      local:
+        mountPath: /tmp/replay-postgres
+        subPath: wal-postgres-0
+        persistentVolumeClaim:
+          claimName: pgbackup
