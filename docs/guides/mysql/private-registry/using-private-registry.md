@@ -33,6 +33,8 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
   5-v1     5         kubedb/mysql:5-v1     kubedb/mysql-tools:5-v2     kubedb/mysqld-exporter:v0.11.0   true
   5.7      5.7       kubedb/mysql:5.7      kubedb/mysql-tools:5.7      kubedb/operator:0.8.0            true
   5.7-v1   5.7       kubedb/mysql:5.7-v1   kubedb/mysql-tools:5.7-v2   kubedb/mysqld-exporter:v0.11.0   <none>
+  5.7-v2   5.7.25    kubedb/mysql:5.7-v2   kubedb/mysql-tools:5.7-v2   kubedb/mysqld-exporter:v0.11.0   <none>
+  5.7.25   5.7.25    kubedb/mysql:5.7.25   kubedb/mysql-tools:5.7.25   kubedb/mysqld-exporter:v0.11.0   <none>
   8        8         kubedb/mysql:8        kubedb/mysql-tools:8        kubedb/operator:0.8.0            true
   8-v1     8         kubedb/mysql:8-v1     kubedb/mysql-tools:8-v2     kubedb/mysqld-exporter:v0.11.0   true
   8.0      8.0       kubedb/mysql:8.0      kubedb/mysql-tools:8.0      kubedb/operator:0.8.0            true
@@ -66,7 +68,7 @@ KubeDB operator supports using private Docker registry. This tutorial will show 
       image: "PRIVATE_DOCKER_REGISTRY/mysqld-exporter:v0.11.0"
     tools:
       image: "PRIVATE_DOCKER_REGISTRY/mysql-tools:8.0-v3"
-  
+
   ```
 
 - To keep things isolated, this tutorial uses a separate namespace called `demo` throughout this tutorial. Run the following command to prepare your cluster for this tutorial:

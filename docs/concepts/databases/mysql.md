@@ -30,6 +30,11 @@ metadata:
   namespace: demo
 spec:
   version: "8.0-v2"
+  topology:
+    mode: GroupReplication
+    group:
+      name: "dc002fc3-c412-4d18-b1d4-66c1fbfbbc9b"
+      baseServerID: 100
   databaseSecret:
     secretName: m1-auth
   storageType: "Durable"
@@ -102,8 +107,21 @@ spec:
 
 `spec.version` is a required field specifying the name of the [MySQLVersion](/docs/concepts/catalog/mysql.md) crd where the docker images are specified. Currently, when you install KubeDB, it creates the following `MySQLVersion` crd,
 
-- `8.0-v2`, `8.0`, `8-v1`, `8`
-- `5.7-v1`, `5.7`, `5-v1`, `5`
+- `8.0.14`, `8.0.3`, `8.0-v2`, `8.0-v1`, `8.0`, `8-v1`, `8`
+- `5.7.25`, `5.7-v2`, `5.7-v1`, `5.7`, `5-v1`, `5`
+
+### spec.topology
+
+`spec.topology` is an optional field that provides a way to configure HA, fault-tolerant MySQL cluster. This field enables you to specify the clustering mode. Currently, we support only MySQL Group Replication.
+
+You can specify the following fields in `spec.topology` field,
+
+- `mode` specifies the clustering mode for MySQL. For now, the supported value is `"GroupReplication"` for MySQL Group Replication. This field is required if you want to deploy MySQL cluster.
+
+- `group` is an optional field to configure a group replication. It contains the following fields:
+  - `name` is an optional field to specify the name for the group. It must be a version 4 UUID if specified.
+
+  - `baseServerID` is also an optional field. On a replication master and each replication slave, the `--server-id`option must be specified to establish a unique replication ID in the range from `1` to `2^32 − 1`. Here, “Unique” means that each ID must be different from every other ID in use by any other replication master or slave. So, `baseServerID` is needed to calculate a unique server_id for each member.
 
 ### spec.databaseSecret
 
