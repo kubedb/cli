@@ -25,25 +25,33 @@ To know more about continuous archiving, please refer to the [ofiicial postgres 
 
 **List of supported Cloud Providers for PostgresVersion CRDs**
 
-|   Name   | Version |  S3  | GCS  | Azure | Swift |
-| :------: | :-----: | :--: | :--: | :---: | :---: |
-|  9.6-v2  |   9.6   |  ✓   |  ✓   |   ✗   |   ✗   |
-| 9.6.7-v2 |  9.6.7  |  ✓   |  ✓   |   ✗   |   ✗   |
-| 10.2-v2  |  10.2   |  ✓   |  ✓   |   ✗   |   ✗   |
-|   10.6   |  10.6   |  ✓   |  ✓   |   ✗   |   ✗   |
-|   11.1   |  11.1   |  ✓   |  ✓   |   ✗   |   ✗   |
-|  9.6-v3  |   9.6   |  ✓   |  ✓   |   ✓   |   ✓   |
-| 9.6.7-v3 |  9.6.7  |  ✓   |  ✓   |   ✓   |   ✓   |
-| 10.2-v3  |  10.2   |  ✓   |  ✓   |   ✓   |   ✓   |
-| 10.6-v1  |  10.6   |  ✓   |  ✓   |   ✓   |   ✓   |
-| 11.1-v1  |  11.1   |  ✓   |  ✓   |   ✓   |   ✓   |
+|   Name   | Version |  S3  | MinIO |  GCS  | Azure | Swift | Local |
+| :------: | :-----: | :--: | :---: | :---: | :---: | :---: | :---: |
+|  9.6-v2  |   9.6   |  ✓   |   ✗   |   ✓   |   ✗   |   ✗   |   ✗   |
+| 9.6.7-v2 |  9.6.7  |  ✓   |   ✗   |   ✓   |   ✗   |   ✗   |   ✗   |
+| 10.2-v2  |  10.2   |  ✓   |   ✗   |   ✓   |   ✗   |   ✗   |   ✗   |
+|   10.6   |  10.6   |  ✓   |   ✗   |   ✓   |   ✗   |   ✗   |   ✗   |
+|   11.1   |  11.1   |  ✓   |   ✗   |   ✓   |   ✗   |   ✗   |   ✗   |
+|  9.6-v3  |   9.6   |  ✓   |   ✗   |   ✓   |   ✓   |   ✓   |   ✗   |
+| 9.6.7-v3 |  9.6.7  |  ✓   |   ✗   |   ✓   |   ✓   |   ✓   |   ✗   |
+| 10.2-v3  |  10.2   |  ✓   |   ✗   |   ✓   |   ✓   |   ✓   |   ✗   |
+| 10.6-v1  |  10.6   |  ✓   |   ✗   |   ✓   |   ✓   |   ✓   |   ✗   |
+| 11.1-v1  |  11.1   |  ✓   |   ✗   |   ✓   |   ✓   |   ✓   |   ✗   |
+|  9.6-v4  |   9.6   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
+| 9.6.7-v4 |  9.6.7  |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
+| 10.2-v4  |  10.2   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
+| 10.6-v2  |  10.6   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
+| 11.1-v2  |  11.1   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
+|   11.2   |  11.2   |  ✓   |   ✓   |   ✓   |   ✓   |   ✓   |   ✓   |
 
 ## Next Steps
 
 - Learn about restoring from [Amazon S3](/docs/guides/postgres/initialization/replay_from_s3.md).
+- Learn about restoring from [S3 MinIO](/docs/guides/postgres/initialization/replay_from_minio.md).
 - Learn about restoring from [Google Cloud Storage](/docs/guides/postgres/initialization/replay_from_gcs.md).
 - Learn about restoring from [Azure Storage](/docs/guides/postgres/initialization/replay_from_azure.md).
 - Learn about restoring from [OpenStack Object Storage (Swift)](/docs/guides/postgres/initialization/replay_from_swift.md).
+- Learn about restoring from [Local Storage](/docs/guides/postgres/initialization/replay_from_local.md).
 - Learn about initializing [PostgreSQL with Script](/docs/guides/postgres/initialization/script_source.md).
 - Monitor your PostgreSQL database with KubeDB using [built-in Prometheus](/docs/guides/postgres/monitoring/using-builtin-prometheus.md).
 - Monitor your PostgreSQL database with KubeDB using [CoreOS Prometheus Operator](/docs/guides/postgres/monitoring/using-coreos-prometheus-operator.md).
