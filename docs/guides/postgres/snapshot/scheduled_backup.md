@@ -229,7 +229,7 @@ metadata:
   name: scheduled-pg
   namespace: demo
 spec:
-  version: "9.6-v2"
+  version: "9.6-v4"
   replicas: 3
   storage:
     storageClassName: "standard"
@@ -262,7 +262,7 @@ metadata:
   name: scheduled-pg
   namespace: demo
 spec:
-  version: "9.6-v2"
+  version: "9.6-v4"
   replicas: 3
   storage:
     storageClassName: "standard"

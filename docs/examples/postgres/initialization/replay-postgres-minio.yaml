@@ -1,0 +1,24 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: replay-postgres
+  namespace: demo
+spec:
+  version: "11.1-v2"
+  replicas: 2
+  databaseSecret:
+    secretName: wal-postgres-minio-auth
+  storage:
+    storageClassName: "standard"
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  init:
+    postgresWAL:
+      storageSecretName: s3-secret
+      s3:
+        bucket: kubedb
+        prefix: 'kubedb/demo/wal-postgres-minio/archive'
+        endpoint: https://minio-service.storage.svc:443/

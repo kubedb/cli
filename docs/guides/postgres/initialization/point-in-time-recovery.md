@@ -77,7 +77,7 @@ metadata:
   name: pg-original
   namespace: demo
 spec:
-  version: "10.2-v2"
+  version: "10.2-v4"
   replicas: 1
   terminationPolicy: Delete
   storage:
@@ -197,7 +197,7 @@ metadata:
   name: pitr-1
   namespace: demo
 spec:
-  version: "10.2-v2"
+  version: "10.2-v4"
   replicas: 1
   terminationPolicy: Delete
   storage:
@@ -264,7 +264,7 @@ metadata:
   name: pitr-2
   namespace: demo
 spec:
-  version: "10.2-v2"
+  version: "10.2-v4"
   replicas: 1
   terminationPolicy: Delete
   storage:

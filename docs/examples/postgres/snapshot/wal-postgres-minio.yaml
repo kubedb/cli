@@ -1,0 +1,23 @@
+apiVersion: kubedb.com/v1alpha1
+kind: Postgres
+metadata:
+  name: wal-postgres-minio
+  namespace: demo
+spec:
+  version: "9.6.7-v3"
+  replicas: 2
+  updateStrategy:
+    type: RollingUpdate
+  storage:
+    storageClassName: "standard"
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  archiver:
+    storage:
+      storageSecretName: s3-secret
+      s3:
+        bucket: kubedb
+        endpoint: https://minio-service.demo.svc:443/
