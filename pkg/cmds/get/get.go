@@ -324,8 +324,10 @@ func (r *RuntimeSorter) Sort() error {
 		case *metav1beta1.Table:
 			includesTable = true
 
-			if err := getflags.NewTableSorter(t, r.field).Sort(); err != nil {
-				continue
+			if sorter, err := getflags.NewTableSorter(t, r.field); err != nil {
+				return err
+			} else if err := sorter.Sort(); err != nil {
+				return err
 			}
 		default:
 			includesRuntimeObjs = true
