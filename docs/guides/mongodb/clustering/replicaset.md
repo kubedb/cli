@@ -48,7 +48,7 @@ metadata:
   name: mgo-replicaset
   namespace: demo
 spec:
-  version: "3.6-v2"
+  version: "3.6-v3"
   replicas: 3
   replicaSet:
     name: rs0
@@ -70,7 +70,8 @@ Here,
 
 - `spec.replicaSet` represents the configuration for replicaset.
   - `name` denotes the name of mongodb replicaset.
-  - `KeyFileSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod instances in the replica set uses the contents of the keyfile as the shared password for authenticating other members in the deployment. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `KeyFileSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `KeyFileSecret`._ If `KeyFileSecret` is not given, KubeDB operator will generate a `KeyFileSecret` itself.
+  - `keyFileSecret` is deprecated now. Use `spec.certificateSecret` instead. For existing MongoDB instances, KubeDB operator will handle the migration by itself. `keyFileSecret` field will be removed in future.
+- `spec.certificateSecret` (optional) is a secret name that contains keyfile (a random string)against `key.txt` key. Each mongod instances in the replica set and `shardTopology` uses the contents of the keyfile as the shared password for authenticating other members in the replicaset. Only mongod instances with the correct keyfile can join the replica set. _User can provide the `certificateSecret` by creating a secret with key `key.txt`. See [here](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/#create-a-keyfile) to create the string for `certificateSecret`._ If `certificateSecret` is not given, KubeDB operator will generate a `certificateSecret` itself.
 - `spec.replicas` denotes the number of members in `rs0` mongodb replicaset.
 - `spec.storage` specifies the StorageClass of PVC dynamically allocated to store data for this database. This storage spec will be passed to the StatefulSet created by KubeDB operator to run database pods. So, each members will have a pod of this storage configuration. You can specify any StorageClass available in your cluster with appropriate resource requests.
 
@@ -177,16 +178,18 @@ $ kubedb get mg -n demo mgo-replicaset -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: MongoDB
 metadata:
-  creationTimestamp: "2019-02-06T10:08:15Z"
+  creationTimestamp: "2019-04-30T09:45:14Z"
   finalizers:
   - kubedb.com
   generation: 3
   name: mgo-replicaset
   namespace: demo
-  resourceVersion: "92643"
+  resourceVersion: "30485"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/mongodbs/mgo-replicaset
-  uid: 1e8cd706-29f7-11e9-aebf-080027875192
+  uid: a7aa351c-6b2c-11e9-97a6-0800278b6754
 spec:
+  certificateSecret:
+    secretName: mgo-replicaset-keyfile
   databaseSecret:
     secretName: mgo-replicaset-auth
   podTemplate:
@@ -214,9 +217,11 @@ spec:
         successThreshold: 1
         timeoutSeconds: 1
       resources: {}
+      securityContext:
+        fsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
   replicaSet:
-    keyFile:
-      secretName: mgo-replicaset-keyfile
     name: rs0
   replicas: 3
   serviceTemplate:
@@ -234,7 +239,7 @@ spec:
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
-  version: 3.6-v2
+  version: 3.6-v3
 status:
   observedGeneration: 3$4212299729528774793
   phase: Running
@@ -429,7 +434,7 @@ $ kubedb get drmn -n demo mgo-replicaset -o yaml
 apiVersion: kubedb.com/v1alpha1
 kind: DormantDatabase
 metadata:
-  creationTimestamp: "2019-02-06T10:20:21Z"
+  creationTimestamp: "2019-04-30T09:48:12Z"
   finalizers:
   - kubedb.com
   generation: 1
@@ -437,17 +442,19 @@ metadata:
     kubedb.com/kind: MongoDB
   name: mgo-replicaset
   namespace: demo
-  resourceVersion: "93530"
+  resourceVersion: "30679"
   selfLink: /apis/kubedb.com/v1alpha1/namespaces/demo/dormantdatabases/mgo-replicaset
-  uid: cf0829ce-29f8-11e9-aebf-080027875192
+  uid: 11b04c13-6b2d-11e9-97a6-0800278b6754
 spec:
   origin:
     metadata:
-      creationTimestamp: "2019-02-06T10:08:15Z"
+      creationTimestamp: "2019-04-30T09:45:14Z"
       name: mgo-replicaset
       namespace: demo
     spec:
       mongodb:
+        certificateSecret:
+          secretName: mgo-replicaset-keyfile
         databaseSecret:
           secretName: mgo-replicaset-auth
         podTemplate:
@@ -475,9 +482,11 @@ spec:
               successThreshold: 1
               timeoutSeconds: 1
             resources: {}
+            securityContext:
+              fsGroup: 999
+              runAsNonRoot: true
+              runAsUser: 999
         replicaSet:
-          keyFile:
-            secretName: mgo-replicaset-keyfile
           name: rs0
         replicas: 3
         serviceTemplate:
@@ -495,10 +504,10 @@ spec:
         terminationPolicy: Pause
         updateStrategy:
           type: RollingUpdate
-        version: 3.6-v2
+        version: 3.6-v3
 status:
   observedGeneration: 1$16440556888999634490
-  pausingTime: "2019-02-06T10:20:27Z"
+  pausingTime: "2019-04-30T09:48:24Z"
   phase: Paused
 ```
 

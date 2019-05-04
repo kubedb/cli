@@ -49,10 +49,10 @@ To learn about various options of `create` command, please visit [here](/docs/re
 ```console
 $ kubedb get mongodb
 NAME           VERSION   STATUS    AGE
-mongodb-demo   3.4-v2    Running   13m
-mongodb-dev    3.4-v2    Running   11m
-mongodb-prod   3.4-v2    Running   11m
-mongodb-qa     3.4-v2    Running   10m
+mongodb-demo   3.4-v3    Running   13m
+mongodb-dev    3.4-v3    Running   11m
+mongodb-prod   3.4-v3    Running   11m
+mongodb-qa     3.4-v3    Running   10m
 ```
 
 To get YAML of an object, use `--output=yaml` flag.
@@ -115,7 +115,7 @@ spec:
   terminationPolicy: Pause
   updateStrategy:
     type: RollingUpdate
-  version: 3.4-v2
+  version: 3.4-v3
 status:
   observedGeneration: 2$4213139756412538772
   phase: Running

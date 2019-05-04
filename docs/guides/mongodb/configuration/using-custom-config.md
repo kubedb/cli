@@ -88,7 +88,7 @@ metadata:
   name: mgo-custom-config
   namespace: demo
 spec:
-  version: "3.4-v2"
+  version: "3.4-v3"
   storageType: Durable
   storage:
     storageClassName: "standard"
