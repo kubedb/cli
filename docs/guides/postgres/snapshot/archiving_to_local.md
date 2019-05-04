@@ -12,7 +12,7 @@ section_menu_id: guides
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
-# Continuous Archiving  to Local Storage
+# Continuous Archiving to Local Storage
 
 **WAL-G** is used to continuously archive PostgreSQL WAL files. Please refer to [continuous archiving in KubeDB](/docs/guides/postgres/snapshot/continuous_archiving.md) to learn more.
 
@@ -50,14 +50,14 @@ spec:
   storage:
     storageClassName: "standard"
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     resources:
       requests:
         storage: 50Mi
   archiver:
     storage:
       local:
-        mountPath: tempdir/sub0
+        mountPath: /tmp/sub0
         persistentVolumeClaim:
           claimName: pgbackup
 ```
@@ -68,13 +68,12 @@ Here,
   - `storage.local` points to Local Storage configuration.
   - `storage.local.mountPath` points to the directory inside the pod where the local storage will be mounted.
   - `storage.local.persistentVolumeClaim` points to a local volume that can be mounted to store WAL files.
-  
 
 **Archiver Storage Setup**
 
 Users can use any supported local volume as storage destination.
 To keep things simple, persistent volume will be used as local storage destination throughout this tutorial.
-Persistent volumes can be created automatically by creating a claim.  
+Persistent volumes can be created automatically by creating a claim.
 
 ```yaml
 kind: PersistentVolumeClaim
@@ -89,9 +88,9 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: standard
-  
 ```
-Additionally users can manually create persistent volume to use a specific directory and create claims to use that volume. 
+
+Additionally users can manually create persistent volume to use a specific directory and create claims to use that volume.
 
 ```yaml
 #first Create PV storage
@@ -107,7 +106,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
-  storageClassName:  "standard"
+  storageClassName: "standard"
   hostPath:
     path: "/data"
 ---
@@ -123,23 +122,22 @@ spec:
   resources:
     requests:
       storage: 20Mi
-  storageClassName:  "standard"
+  storageClassName: "standard"
   selector:
     matchLabels:
       release: stable
-  
 ```
-Users need to make sure that the specified directory is accessible by pods using the Persistent Volume. Access permissions of file system objects can be altered by commands, such as `chmod -R 777 data`.
 
+Users need to make sure that the specified directory is accessible by pods using the Persistent Volume. Access permissions of file system objects can be altered by commands, such as `chmod -R 777 data`.
 
 **Archiver Storage Backend**
 
 To configure Local backend, following parameters are available:
 
-| Parameter                               | Description                                                  |
-| --------------------------------------- | ------------------------------------------------------------ |
-| `spec.archiver.storage.local.mountPath` | `Required`. Path inside the pod where local volume will be mounted                        |
-| `spec.archiver.storage.local.persistentVolumeClaim.claimName`    | `Required`. Name of the persistent volume claim that provides local directory where archives will be stored |
+| Parameter                                                     | Description                                                                                                 |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `spec.archiver.storage.local.mountPath`                       | `Required`. Path inside the pod where local volume will be mounted                                          |
+| `spec.archiver.storage.local.persistentVolumeClaim.claimName` | `Required`. Name of the persistent volume claim that provides local directory where archives will be stored |
 
 Now create this Postgres object with continuous archiving support.
 
@@ -172,4 +170,3 @@ kubectl delete ns demo
 ## Next Steps
 
 - Learn about initializing [PostgreSQL from WAL](/docs/guides/postgres/initialization/script_source.md) files stored in cloud.
-
