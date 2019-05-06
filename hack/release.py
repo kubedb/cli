@@ -145,6 +145,10 @@ class Kitten(object):
         call('git merge master', cwd=repo)
         call('git tag -fa {0} -m "Release {0}"'.format(tag), cwd=repo)
         call('git push origin {0} --tags --force'.format(release_branch), cwd=repo)
+        git_checkout('master', cwd=repo)
+        call('github_changelog_generator -u kubedb -p apimachinery', cwd=repo, eoe=False)
+        call('git commit -a -m "Update changelog"', cwd=repo, eoe=False)
+        call('git push origin master', cwd=repo)
 
     def release_db(self, repo_name):
         tag = RELEASE_TAGS[repo_name]
@@ -179,6 +183,7 @@ class Kitten(object):
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
+            call('github_changelog_generator -u kubedb -p {0}'.format(repo_name), cwd=repo, eoe=False)
             call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
@@ -215,6 +220,7 @@ class Kitten(object):
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
+            call('github_changelog_generator -u kubedb -p {0}'.format(repo_name), cwd=repo, eoe=False)
             call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
@@ -250,6 +256,7 @@ class Kitten(object):
             git_checkout('master', cwd=repo)
             glide_mod(glide_config, self.master_deps)
             glide_write(glide_file, glide_config)
+            call('github_changelog_generator -u kubedb -p cli', cwd=repo, eoe=False)
             call('git commit -a -m "Start next dev cycle"', cwd=repo, eoe=False)
             call('git push origin master', cwd=repo)
 
