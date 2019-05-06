@@ -1,12 +1,12 @@
 ---
 title: Scheduled Backup of Elasticsearch
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: es-scheduled-backup-snapshot
     name: Scheduled Backup
     parent: es-snapshot-elasticsearch
     weight: 15
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 > Don't know how backup works?  Check [tutorial](/docs/guides/elasticsearch/snapshot/instant_backup.md) on Instant Backup.
@@ -90,7 +90,7 @@ Here,
 > Note: Secret object must be in the same namespace as Elasticsearch, `scheduled-es`, in this case.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/elasticsearch/snapshot/scheduled-es.yaml
 elasticsearch.kubedb.com/scheduled-es created
 ```
 

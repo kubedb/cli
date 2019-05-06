@@ -1,15 +1,15 @@
 ---
 title: Monitoring KubeDB Operator with builtin Prometheus
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: operator-monitoring-builtin
     name: Builtin Prometheus
     parent: operator-monitoring
     weight: 20
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: setup
 aliases:
-  - /docs/0.11.0/setup/operator-monitoring/
+  - /docs/0.12.0/setup/operator-monitoring/
 ---
 
 # Monitoring KubeDB Operator with builtin Prometheus
@@ -38,7 +38,7 @@ Let's install KubeDB with operator monitoring enabled.
 **Script:**
 
 ```console
-$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.11.0/hack/deploy/kubedb.sh | bash -s -- \
+$ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.12.0/hack/deploy/kubedb.sh | bash -s -- \
   --monitoring-enable=true \
   --monitoring-agent=prometheus.io/builtin \
   --prometheus-namespace=monitoring \
@@ -48,7 +48,7 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.11.0/hack/deploy/kub
 **Helm:**
 
 ```console
-$ helm install appscode/kubedb --name kubedb-operator --version 0.11.0 --namespace kube-system \
+$ helm install appscode/kubedb --name kubedb-operator --version 0.12.0 --namespace kube-system \
   --set monitoring.enabled=true \
   --set monitoring.agent=prometheus.io/builtin \
   --set monitoring.prometheus.namespace=monitoring \
@@ -296,7 +296,7 @@ data:
 Let's create the ConfigMap we have shown above,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/monitoring/operator/prom-config.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/monitoring/operator/prom-config.yaml
 configmap/kubedb-operator-prom-config created
 ```
 
@@ -372,7 +372,7 @@ Notice that, we have mounted `kubedb-operator-apiserver-cert` secret as a volume
 Now, let's create the deployment,
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/monitoring/operator/prom-deploy.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/monitoring/operator/prom-deploy.yaml
 deployment.apps/prometheus created
 ```
 

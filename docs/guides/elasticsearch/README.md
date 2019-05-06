@@ -1,23 +1,23 @@
 ---
 title: Elasticsearch
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: es-readme-elasticsearch
     name: Elasticsearch
     parent: es-elasticsearch-guides
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
-url: /docs/0.11.0/guides/elasticsearch/
+url: /docs/0.12.0/guides/elasticsearch/
 aliases:
-  - /docs/0.11.0/guides/elasticsearch/README/
+  - /docs/0.12.0/guides/elasticsearch/README/
 ---
 
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
 
 ## Supported Elasticsearch Features
 
-|                                       Features                                        | Availability |
+| Features                                                                              | Availability |
 | ------------------------------------------------------------------------------------- | :----------: |
 | Clustering                                                                            |   &#10003;   |
 | Authentication (using [Search Guard](https://github.com/floragunncom/search-guard))   |   &#10003;   |
@@ -52,27 +52,28 @@ aliases:
 |     0.9.0      |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
 |     0.10.0     |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
 |     0.11.0     |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
+|     0.12.0     |     &#10007;      |     &#10003;      |     &#10003;      |     &#10003;      |     &#10003;      |
 
 ## Supported ElasticsearchVersion CRD
 
 Here, &#10003; means supported and &#10007; means deprecated.
 
-|   NAME   | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 | KubeDB: 0.11.0 |
-| :------: | :-----: | :-----------: | :------------: | :------------: |
-|   5.6    |   5.6   |   &#10007;    |    &#10007;    |    &#10007;    |
-|  5.6-v1  |   5.6   |   &#10003;    |    &#10003;    |    &#10003;    |
-|  5.6.4   |  5.6.4  |   &#10007;    |    &#10007;    |    &#10007;    |
-| 5.6.4-v1 |  5.6.4  |   &#10003;    |    &#10003;    |    &#10003;    |
-|   6.2    |   6.2   |   &#10007;    |    &#10007;    |    &#10007;    |
-|  6.2-v1  |   6.2   |   &#10003;    |    &#10003;    |    &#10003;    |
-|  6.2.4   |  6.2.4  |   &#10007;    |    &#10007;    |    &#10007;    |
-| 6.2.4-v1 |  6.2.4  |   &#10003;    |    &#10003;    |    &#10003;    |
-|   6.3    |   6.3   |   &#10007;    |    &#10007;    |    &#10007;    |
-|  6.3-v1  |   6.3   |   &#10003;    |    &#10003;    |    &#10003;    |
-|  6.3.0   |  6.3.0  |   &#10007;    |    &#10007;    |    &#10007;    |
-| 6.3.0-v1 |  6.3.0  |   &#10003;    |    &#10003;    |    &#10003;    |
-|   6.4    |   6.4   |   &#10003;    |    &#10003;    |    &#10003;    |
-|  6.4.0   |  6.4.0  |   &#10003;    |    &#10003;    |    &#10003;    |
+|   NAME   | VERSION | KubeDB: 0.9.0 | KubeDB: 0.10.0 | KubeDB: 0.11.0 | KubeDB: 0.12.0 |
+| :------: | :-----: | :-----------: | :------------: | :------------: | :------------: |
+|   5.6    |   5.6   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|  5.6-v1  |   5.6   |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|  5.6.4   |  5.6.4  |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+| 5.6.4-v1 |  5.6.4  |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|   6.2    |   6.2   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|  6.2-v1  |   6.2   |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|  6.2.4   |  6.2.4  |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+| 6.2.4-v1 |  6.2.4  |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|   6.3    |   6.3   |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+|  6.3-v1  |   6.3   |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|  6.3.0   |  6.3.0  |   &#10007;    |    &#10007;    |    &#10007;    |    &#10007;    |
+| 6.3.0-v1 |  6.3.0  |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|   6.4    |   6.4   |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
+|  6.4.0   |  6.4.0  |   &#10003;    |    &#10003;    |    &#10003;    |    &#10003;    |
 
 ## External tools dependency
 
@@ -89,7 +90,7 @@ Here, &#10003; means supported and &#10007; means deprecated.
 
 - [Quickstart Elasticsearch](/docs/guides/elasticsearch/quickstart/quickstart.md) with KubeDB Operator.
 - [Take instant backup](/docs/guides/elasticsearch/snapshot/instant_backup.md) of Elasticsearch database using KubeDB.
-- [Schedule backup](/docs/guides/elasticsearch/snapshot/scheduled_backup.md)  of Elasticsearch database.
+- [Schedule backup](/docs/guides/elasticsearch/snapshot/scheduled_backup.md) of Elasticsearch database.
 - Initialize [Elasticsearch with Snapshot](/docs/guides/elasticsearch/initialization/snapshot_source.md).
 - [Elasticsearch Topology](/docs/guides/elasticsearch/clustering/topology.md) supported by KubeDB
 - Monitor your Elasticsearch database with KubeDB using [`out-of-the-box` builtin-Prometheus](/docs/guides/elasticsearch/monitoring/using-builtin-prometheus.md).
@@ -99,4 +100,3 @@ Here, &#10003; means supported and &#10007; means deprecated.
 - Detail concepts of [Elasticsearch object](/docs/concepts/databases/elasticsearch.md).
 - Detail concepts of [Snapshot object](/docs/concepts/snapshot.md).
 - Want to hack on KubeDB? Check our [contribution guidelines](/docs/CONTRIBUTING.md).
-

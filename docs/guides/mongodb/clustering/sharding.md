@@ -1,12 +1,12 @@
 ---
 title: MongoDB Sharding Guide
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: mg-clustering-sharding
     name: Sharding Guide
     parent: mg-clustering-mongodb
     weight: 25
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -72,7 +72,7 @@ spec:
 ```
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0//docs/examples/mongodb/clustering/mongo-sharding.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0//docs/examples/mongodb/clustering/mongo-sharding.yaml
 mongodb.kubedb.com/mongo-sh created
 ```
 
@@ -993,7 +993,7 @@ In this tutorial, the dormant database can be resumed by creating original Mongo
 The below command will resume the DormantDatabase `mongo-sh`.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/clustering/mongo-sh.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/mongodb/clustering/mongo-sh.yaml
 mongodb.kubedb.com/mongo-sh created
 ```
 

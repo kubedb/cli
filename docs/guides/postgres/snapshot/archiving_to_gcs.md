@@ -1,12 +1,12 @@
 ---
 title: Continuous Archiving to GCS
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: pg-continuous-archiving-gcs
     name: WAL Archiving to GCS
     parent: pg-snapshot-postgres
     weight: 35
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -114,7 +114,7 @@ To configure GCS backend, following parameters are available:
 Now create this Postgres object with continuous archiving support.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-gcs.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/postgres/snapshot/wal-postgres-gcs.yaml
 postgres.kubedb.com/wal-postgres created
 ```
 

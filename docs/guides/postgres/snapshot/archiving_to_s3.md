@@ -1,12 +1,12 @@
 ---
 title: Continuous Archiving to S3
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: pg-continuous-archiving-s3
     name: WAL Archiving to S3
     parent: pg-snapshot-postgres
     weight: 25
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -115,7 +115,7 @@ To configure s3 backend, following parameters are available:
 Now create this Postgres object with continuous archiving support.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-s3.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/postgres/snapshot/wal-postgres-s3.yaml
 postgres.kubedb.com/wal-postgres created
 ```
 

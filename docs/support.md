@@ -2,16 +2,16 @@
 title: Support | KubeDB
 description: Support
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: support-cli
     name: Support
     parent: welcome
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: welcome
-url: /docs/0.11.0/welcome/support/
+url: /docs/0.12.0/welcome/support/
 aliases:
-  - /docs/0.11.0/support/
+  - /docs/0.12.0/support/
 ---
 
 # Support

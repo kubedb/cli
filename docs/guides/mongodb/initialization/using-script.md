@@ -1,12 +1,12 @@
 ---
 title: Initialize MongoDB using Script
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: mg-using-script-initialization
     name: Using Script
     parent: mg-initialization-mongodb
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -75,7 +75,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/Initialization/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/mongodb/Initialization/demo-1.yaml
 mongodb.kubedb.com/mgo-init-script created
 ```
 

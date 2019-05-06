@@ -1,12 +1,12 @@
 ---
 title: Continuous Archiving to Swift
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: pg-continuous-archiving-swift
     name: WAL Archiving to Swift
     parent: pg-snapshot-postgres
     weight: 40
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -142,7 +142,7 @@ To configure Swift backend, following parameters are available:
 Now create this Postgres object with continuous archiving support.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-swift.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/postgres/snapshot/wal-postgres-swift.yaml
 postgres.kubedb.com/wal-postgres created
 ```
 

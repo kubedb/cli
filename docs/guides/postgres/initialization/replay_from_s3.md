@@ -1,12 +1,12 @@
 ---
 title: Initialize Postgres from S3
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: pg-wal-source-initialization-s3
     name: From WAL(S3)
     parent: pg-initialization-postgres
     weight: 30
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -141,7 +141,7 @@ Here, `{namespace}` & `{postgres-name}` indicates Postgres object whose WAL arch
 Now, let's create the Postgres object that's YAML has shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/initialization/replay-postgres-s3.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/postgres/initialization/replay-postgres-s3.yaml
 postgres.kubedb.com/replay-postgres created
 ```
 
