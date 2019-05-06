@@ -424,7 +424,7 @@ spec:
   exporter:
     image: "{{ .Values.dockerRegistry }}/postgres_exporter:v0.4.7"
   tools:
-    image: "{{ .Values.dockerRegistry }}/postgres-tools:11.1"
+    image: "{{ .Values.dockerRegistry }}/postgres-tools:11.2"
   podSecurityPolicies:
     databasePolicyName: postgres-db
     snapshotterPolicyName: postgres-snapshot

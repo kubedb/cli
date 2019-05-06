@@ -422,7 +422,7 @@ spec:
   exporter:
     image: "${KUBEDB_DOCKER_REGISTRY}/postgres_exporter:v0.4.7"
   tools:
-    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:11.1"
+    image: "${KUBEDB_DOCKER_REGISTRY}/postgres-tools:11.2"
   podSecurityPolicies:
     databasePolicyName: postgres-db
     snapshotterPolicyName: postgres-snapshot
