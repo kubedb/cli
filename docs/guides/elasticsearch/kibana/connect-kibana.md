@@ -1,12 +1,12 @@
 ---
 title: Using Kibana with KubeDB Elasticsearch
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: es-kibana-connect
     name: Use Kibana
     parent: es-kibana
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -257,7 +257,7 @@ metadata:
 Now, create Elasticsearch crd specifying  `spec.databaseSecret` and `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/elasticsearch/kibana/es-kibana-demo.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/elasticsearch/kibana/es-kibana-demo.yaml
 elasticsearch.kubedb.com/es-kibana-demo created
 ```
 
@@ -366,7 +366,7 @@ configmap/kibana-config created
 
 Finally, deploy Kibana deployment,
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/elasticsearch/kibana/kibana-deployment.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/elasticsearch/kibana/kibana-deployment.yaml
 deployment.apps/kibana created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Continuous Archiving to MinIO
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: pg-continuous-archiving-minio
     name: WAL Archiving to MinIO
     parent: pg-snapshot-postgres
     weight: 50
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -154,7 +154,7 @@ To configure s3 backend, following parameters are available:
 Now create this Postgres object with continuous archiving support.
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/snapshot/wal-postgres-minio.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/postgres/snapshot/wal-postgres-minio.yaml
 postgres.kubedb.com/wal-postgres created
 ```
 

@@ -1,12 +1,12 @@
 ---
 title: Monitoring Redis using Coreos Prometheus Operator
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: rd-using-coreos-prometheus-operator-monitoring
     name: Coreos Prometheus Operator
     parent: rd-monitoring-redis
     weight: 15
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -124,7 +124,7 @@ Here,
 Let's create the Redis object that we have shown above,
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/redis/monitoring/coreos-prom-redis.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/redis/monitoring/coreos-prom-redis.yaml
 redis.kubedb.com/coreos-prom-redis created
 ```
 

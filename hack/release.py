@@ -41,16 +41,16 @@ from collections import Counter
 libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
 DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
-    'cli': '0.11.0',
-    'operator': '0.11.0',
-    'apimachinery': '0.11.0',
-    'postgres': '0.11.0',
-    'elasticsearch': '0.11.0',
-    'etcd': '0.3.0',
-    'mysql': '0.4.0',
-    'mongodb': '0.4.0',
-    'memcached': '0.4.0',
-    'redis': '0.4.0'
+    'cli': '0.12.0',
+    'operator': '0.12.0',
+    'apimachinery': '0.12.0',
+    'postgres': '0.12.0',
+    'elasticsearch': '0.12.0',
+    'etcd': '0.4.0',
+    'mysql': '0.5.0',
+    'mongodb': '0.5.0',
+    'memcached': '0.5.0',
+    'redis': '0.5.0'
 }
 
 
@@ -261,7 +261,7 @@ def release(comp=None):
         for name in DATABASES:
             cat.release_db(name)
         cat.release_server_binary('operator')
-        cat.release_cli()
+        # cat.release_cli()
     elif comp == 'apimachinery':
         cat.release_apimachinery()
     elif comp in DATABASES:

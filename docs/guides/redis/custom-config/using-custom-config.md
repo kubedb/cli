@@ -1,12 +1,12 @@
 ---
 title: Run Redis with Custom Configuration
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: rd-custom-config-quickstart
     name: Quickstart
     parent: rd-custom-config
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -84,7 +84,7 @@ metadata:
 Now, create Redis crd specifying `spec.configSource` field.
 
 ```console
-$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/redis/custom-config/redis-custom.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/redis/custom-config/redis-custom.yaml
 redis.kubedb.com "custom-redis" created
 ```
 

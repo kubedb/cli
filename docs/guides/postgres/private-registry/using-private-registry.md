@@ -1,12 +1,12 @@
 ---
 title: Run PostgreSQL using Private Registry
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: pg-using-private-registry-private-registry
     name: Quickstart
     parent: pg-private-registry-postgres
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 
@@ -145,7 +145,7 @@ spec:
 Now run the command to create this Postgres object:
 
 ```console
-$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
+$ kubectl create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/postgres/private-registry/pvt-reg-postgres.yaml
 postgres.kubedb.com/pvt-reg-postgres created
 ```
 

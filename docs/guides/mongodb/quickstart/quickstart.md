@@ -1,12 +1,12 @@
 ---
 title: MongoDB Quickstart
 menu:
-  docs_0.11.0:
+  docs_0.12.0:
     identifier: mg-quickstart-quickstart
     name: Overview
     parent: mg-quickstart-mongodb
     weight: 10
-menu_name: docs_0.11.0
+menu_name: docs_0.12.0
 section_menu_id: guides
 ---
 > New to KubeDB? Please start [here](/docs/concepts/README.md).
@@ -89,7 +89,7 @@ spec:
 ```
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/mongodb/quickstart/demo-1.yaml
 mongodb.kubedb.com/mgo-quickstart created
 ```
 
@@ -437,7 +437,7 @@ In this tutorial, the dormant database can be resumed by creating original Mongo
 The below command will resume the DormantDatabase `mgo-quickstart`.
 
 ```console
-$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.11.0/docs/examples/mongodb/quickstart/demo-1.yaml
+$ kubedb create -f https://raw.githubusercontent.com/kubedb/cli/0.12.0/docs/examples/mongodb/quickstart/demo-1.yaml
 mongodb.kubedb.com/mgo-quickstart created
 ```
 
