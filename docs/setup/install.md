@@ -108,13 +108,13 @@ $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.12.0/hack/deploy/kub
     | bash -s -- --enable-validating-webhook=false --enable-mutating-webhook=false [--rbac]
 ```
 
-KubeDB 0.12.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
+KubeDB 0.11.0 or later releases can use status sub resource for CustomResourceDefintions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
 
-KubeDB 0.12.0 or later installs a catalog of database versions. To disable this pass the `--install-catalog=none` flag.
+KubeDB 0.11.0 or later installs a catalog of database versions. To disable this pass the `--install-catalog=false` flag.
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kubedb/cli/0.12.0/hack/deploy/kubedb.sh \
-    | bash -s -- --install-catalog=none [--rbac]
+    | bash -s -- --install-catalog=false [--rbac]
 ```
 
 </div>
