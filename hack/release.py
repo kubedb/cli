@@ -268,7 +268,7 @@ def release(comp=None):
         for name in DATABASES:
             cat.release_db(name)
         cat.release_server_binary('operator')
-        # cat.release_cli()
+        cat.release_cli()
     elif comp == 'apimachinery':
         cat.release_apimachinery()
     elif comp in DATABASES:
