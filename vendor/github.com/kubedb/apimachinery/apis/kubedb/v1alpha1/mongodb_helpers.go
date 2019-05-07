@@ -203,7 +203,7 @@ func (m MongoDB) ConfigSvrDSN() string {
 	}
 	//	host := m.ConfigSvrRepSetName() + "/" + m.ConfigSvrNodeName() + "-0." + m.GvrSvcName(m.ConfigSvrNodeName()) + "." + m.Namespace + ".svc"
 	host := fmt.Sprintf("%v/", m.ConfigSvrRepSetName())
-	for i := 0; i < int(m.Spec.ShardTopology.Shard.Replicas); i++ {
+	for i := 0; i < int(m.Spec.ShardTopology.ConfigServer.Replicas); i++ {
 		if i != 0 {
 			host += ","
 		}

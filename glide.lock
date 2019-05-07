@@ -1,12 +1,12 @@
-hash: ac98aaf675f169fcc52b8689a3c138e1c1c27410849f8e49ce5e556eae1dc27e
-updated: 2019-04-23T02:42:24.225193755-07:00
+hash: 9a1c435f0cc1eacf7738c599065c1544fba67a2a42a8e67a25fbe68b35d70be9
+updated: 2019-05-07T04:57:27.315956162-07:00
 imports:
 - name: cloud.google.com/go
   version: 0fd7230b2a7505833d5f69b75cbd6c9582401479
   subpackages:
   - compute/metadata
 - name: github.com/appscode/go
-  version: 50c98d5fbcddac827713a481a7e34a26df5e4b57
+  version: 60025f1135c977fecd189c12dbfa259d837d7a18
   subpackages:
   - analytics
   - context
@@ -103,7 +103,7 @@ imports:
   - proto
   - sortkeys
 - name: github.com/golang/glog
-  version: 44145f04b68cf362d9c4df2182967c2275eaefed
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf
   version: b4deda0973fb4c70b50d226b1af49f3da59f5265
   subpackages:
@@ -146,7 +146,7 @@ imports:
 - name: github.com/gorilla/websocket
   version: 66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d
 - name: github.com/graymeta/stow
-  version: 8020e152292b2cdbdca30274fec24e18905f254d
+  version: ca5baa008ea321ea84980da11752f2590b485e87
   repo: https://github.com/appscode/stow.git
   vcs: git
 - name: github.com/gregjones/httpcache
@@ -166,7 +166,7 @@ imports:
 - name: github.com/json-iterator/go
   version: 1624edc4454b8682399def8740d46db5e4362ba4
 - name: github.com/kubedb/apimachinery
-  version: 7e230a60c038ce1e9ba4571899a37d4667a2daa0
+  version: 871d6b5d30ee7d47a531ec7dd30790c701e67ff2
   subpackages:
   - apis
   - apis/authorization
@@ -179,19 +179,19 @@ imports:
   - client/clientset/versioned/scheme
   - client/clientset/versioned/typed/kubedb/v1alpha1
 - name: github.com/kubedb/elasticsearch
-  version: 40b2bf996e2a48ea9ec244c5757753ed2ac1cb88
+  version: 47161f044c81f728aaae3248a455b2e0848e4976
 - name: github.com/kubedb/etcd
-  version: feb088fcff42b4cef71193a203adc46705512cb5
+  version: 611c70ef93332c841d7decba9a13f9f321939d1c
 - name: github.com/kubedb/memcached
-  version: 391f0d55b1615979f1de45df91cc47d6812c0a03
+  version: 222a7df05583f602cef6a025f97f09faa896d090
 - name: github.com/kubedb/mongodb
-  version: 2bf4512820b539f869d211ae3f02c19fc089eb72
+  version: 0e9ca018102487d0cf8d02feb502b0c4aa7eea75
 - name: github.com/kubedb/mysql
-  version: 9c538460864b7b247660b8b3b982a8829c6cb850
+  version: a3fa468a88ff7106d99d44abe9911aced0872f45
 - name: github.com/kubedb/postgres
-  version: e9f7f10fcfa3453d8a18936d6e4e1b132bc770e2
+  version: 8e8dd4bbca71594b1e336b6d5248a4ade18db282
 - name: github.com/kubedb/redis
-  version: 9f785d6bd0bf95343f037ba984f42ad93d338667
+  version: 71bdd4b28d50ec732d777d5c2f1d23a98421b0bf
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -295,7 +295,7 @@ imports:
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
-  version: 12d5545dc1cfa6047a286d5e853841b6471f4c19
+  version: 54a98f90d1c46b7731eb8fb305d2a321c30ef610
   subpackages:
   - internal
   - internal/app_identity
@@ -628,7 +628,7 @@ imports:
   - exec
   - pointer
 - name: kmodules.xyz/client-go
-  version: 5dcc4cecf4c96d58e0624cd41311f3a4663db7d7
+  version: 85881479d87957cf3eab9424ec86bcc67dbfbac6
   subpackages:
   - apiextensions/v1beta1
   - core/v1
@@ -646,7 +646,7 @@ imports:
   subpackages:
   - api/v1
 - name: kmodules.xyz/objectstore-api
-  version: 2558fb903e3d0756f974ed4e5769ffcf27ffea30
+  version: 94c81c8acca95bee96c5c250925da955ac67be18
   subpackages:
   - api/v1
 - name: kmodules.xyz/offshoot-api

@@ -147,9 +147,6 @@ type MongoDBNode struct {
 	// Prefix is the name prefix of this node.
 	Prefix string `json:"prefix,omitempty"`
 
-	// Compute Resources required by the sidecar container.
-	Resources core.ResourceRequirements `json:"resources,omitempty"`
-
 	// ConfigSource is an optional field to provide custom configuration file for database (i.e mongod.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	ConfigSource *core.VolumeSource `json:"configSource,omitempty"`
