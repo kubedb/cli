@@ -1,10 +1,32 @@
 # Change Log
 
+## [0.12.0](https://github.com/kubedb/cli/tree/0.12.0) (2019-05-07)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.11.0...0.12.0)
+
+**Merged pull requests:**
+
+- Fix installer doc for --install-catalog=false [\#437](https://github.com/kubedb/cli/pull/437) ([tamalsaha](https://github.com/tamalsaha))
+- Prepare 0.12.0 release [\#436](https://github.com/kubedb/cli/pull/436) ([tamalsaha](https://github.com/tamalsaha))
+- Fix build [\#435](https://github.com/kubedb/cli/pull/435) ([tamalsaha](https://github.com/tamalsaha))
+- \[DOC\] Updates for Archiving front page [\#433](https://github.com/kubedb/cli/pull/433) ([iamrz1](https://github.com/iamrz1))
+- DB-name updates for kubedb-catalog [\#432](https://github.com/kubedb/cli/pull/432) ([iamrz1](https://github.com/iamrz1))
+- Update documentation for MySQL Group Replication [\#431](https://github.com/kubedb/cli/pull/431) ([shudipta](https://github.com/shudipta))
+- MongoDB Sharding document [\#430](https://github.com/kubedb/cli/pull/430) ([the-redback](https://github.com/the-redback))
+- Docs for wal-g support for local storage [\#429](https://github.com/kubedb/cli/pull/429) ([iamrz1](https://github.com/iamrz1))
+- Docs for MinIO support in wal-g [\#428](https://github.com/kubedb/cli/pull/428) ([iamrz1](https://github.com/iamrz1))
+- Revendor dependencies [\#427](https://github.com/kubedb/cli/pull/427) ([tamalsaha](https://github.com/tamalsaha))
+- Update catalog for mysql group replication [\#426](https://github.com/kubedb/cli/pull/426) ([shudipta](https://github.com/shudipta))
+- Update MongoDBVersion in Catalog [\#425](https://github.com/kubedb/cli/pull/425) ([the-redback](https://github.com/the-redback))
+- Modify mutator and validator names for all DBs [\#423](https://github.com/kubedb/cli/pull/423) ([iamrz1](https://github.com/iamrz1))
+- use default values for postgres leaderelection and termination [\#422](https://github.com/kubedb/cli/pull/422) ([bodewig](https://github.com/bodewig))
+- Postgres Quickstart DormantDatabase docs [\#421](https://github.com/kubedb/cli/pull/421) ([alistairjmcintyre](https://github.com/alistairjmcintyre))
+
 ## [0.11.0](https://github.com/kubedb/cli/tree/0.11.0) (2019-03-23)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.10.0...0.11.0)
 
 **Merged pull requests:**
 
+- Update Hugo frontmatter for WAL-G docs [\#420](https://github.com/kubedb/cli/pull/420) ([tamalsaha](https://github.com/tamalsaha))
 - Updated postgres catalog [\#419](https://github.com/kubedb/cli/pull/419) ([the-redback](https://github.com/the-redback))
 - Deprecate redisversion crd for redis version 5.0 and 5.0.3 [\#418](https://github.com/kubedb/cli/pull/418) ([shudipta](https://github.com/shudipta))
 - Update postgres docs with correct podTemplate and serviceTemplate spe… [\#417](https://github.com/kubedb/cli/pull/417) ([harbesc](https://github.com/harbesc))

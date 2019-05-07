@@ -45,21 +45,21 @@ import:
 - package: github.com/json-iterator/go
   version: 1.1.5
 - package: github.com/kubedb/apimachinery
-  version: 0.12.0
+  version: master
 - package: github.com/kubedb/elasticsearch
-  version: 0.12.0
+  version: master
 - package: github.com/kubedb/etcd
-  version: 0.4.0
+  version: master
 - package: github.com/kubedb/memcached
-  version: 0.5.0
+  version: master
 - package: github.com/kubedb/mongodb
-  version: 0.5.0
+  version: master
 - package: github.com/kubedb/mysql
-  version: 0.5.0
+  version: master
 - package: github.com/kubedb/postgres
-  version: 0.12.0
+  version: master
 - package: github.com/kubedb/redis
-  version: 0.5.0
+  version: master
 - package: github.com/mitchellh/mapstructure
   version: v1.1.2
 - package: github.com/ncw/swift
