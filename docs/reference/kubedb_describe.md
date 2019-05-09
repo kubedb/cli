@@ -50,13 +50,13 @@ kubedb describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)
 ### Options
 
 ```
-      --all-namespaces          If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even if specified with --namespace.
-  -f, --filename strings        Filename, directory, or URL to files containing the resource to describe
-  -h, --help                    help for describe
-      --include-uninitialized   If true, the kubectl command applies to uninitialized objects. If explicitly set to false, this flag overrides other flags that make the kubectl commands apply to uninitialized objects, e.g., "--all". Objects with empty metadata.initializers are regarded as initialized.
-  -R, --recursive               Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests organized within the same directory.
-  -l, --selector string         Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)
-      --show-events             If true, display events related to the described object. (default true)
+      --all-namespaces     If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even if specified with --namespace.
+  -f, --filename strings   Filename, directory, or URL to files containing the resource to describe
+  -h, --help               help for describe
+  -k, --kustomize string   Process the kustomization directory. This flag can't be used together with -f or -R.
+  -R, --recursive          Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests organized within the same directory.
+  -l, --selector string    Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2)
+      --show-events        If true, display events related to the described object. (default true)
 ```
 
 ### Options inherited from parent commands

@@ -14,9 +14,9 @@ Delete resources by filenames, stdin, resources and names, or by resources and l
 
 ### Synopsis
 
-Delete resources by filenames, stdin, resources and names, or by resources and label selector. JSON and YAML formats are accepted. 
+Delete resources by filenames, stdin, resources and names, or by resources and label selector. JSON and YAML formats are accepted.
 
-Note that the delete command does NOT do resource version checks
+ Note that the delete command does NOT do resource version checks
 
 ```
 kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)])
@@ -49,7 +49,6 @@ kubedb delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)])
       --grace-period int        Period of time in seconds given to the resource to terminate gracefully. Ignored if negative. Set to 1 for immediate shutdown. Can only be set to 0 when --force is true (force deletion). (default -1)
   -h, --help                    help for delete
       --ignore-not-found        Treat "resource not found" as a successful delete. Defaults to "true" when --all is specified.
-      --include-uninitialized   If true, the kubectl command applies to uninitialized objects. If explicitly set to false, this flag overrides other flags that make the kubectl commands apply to uninitialized objects, e.g., "--all". Objects with empty metadata.initializers are regarded as initialized.
       --now                     If true, resources are signaled for immediate shutdown (same as --grace-period=1).
   -o, --output string           Output mode. Use "-o name" for shorter output (resource/name).
   -R, --recursive               Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests organized within the same directory.

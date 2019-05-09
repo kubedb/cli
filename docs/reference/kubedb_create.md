@@ -14,9 +14,9 @@ Create a resource from a file or from stdin.
 
 ### Synopsis
 
-Create a resource from a file or from stdin. 
+Create a resource from a file or from stdin.
 
-JSON and YAML formats are accepted.
+ JSON and YAML formats are accepted.
 
 ```
 kubedb create -f FILENAME
@@ -40,6 +40,7 @@ kubedb create -f FILENAME
       --edit                          Edit the API resource before creating
   -f, --filename strings              Filename, directory, or URL to files to use to create the resource
   -h, --help                          help for create
+  -k, --kustomize string              Process the kustomization directory. This flag can't be used together with -f or -R.
   -o, --output string                 Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
       --raw string                    Raw URI to POST to the server.  Uses the transport specified by the kubeconfig file.
       --record                        Record current kubectl command in the resource annotation. If set to false, do not record the command. If set to true, record the command. If not set, default to updating the existing annotation value only if one already exists.
