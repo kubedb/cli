@@ -14,9 +14,9 @@ Edit a resource on the server
 
 ### Synopsis
 
-Edit a resource from the default editor. 
+Edit a resource from the default editor.
 
-The edit command allows you to directly edit any API resource you can retrieve via the command line tools. It will open the editor defined by your KUBEDB _EDITOR, or EDITOR environment variables, or fall back to 'nano'
+ The edit command allows you to directly edit any API resource you can retrieve via the command line tools. It will open the editor defined by your KUBEDB_EDITOR, or EDITOR environment variables, or fall back to 'nano'
 
 ```
 kubedb edit (RESOURCE/NAME | -f FILENAME)
@@ -38,7 +38,7 @@ kubedb edit (RESOURCE/NAME | -f FILENAME)
       --allow-missing-template-keys   If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to golang and jsonpath output formats. (default true)
   -f, --filename strings              Filename, directory, or URL to files to use to edit the resource
   -h, --help                          help for edit
-      --include-uninitialized         If true, the kubectl command applies to uninitialized objects. If explicitly set to false, this flag overrides other flags that make the kubectl commands apply to uninitialized objects, e.g., "--all". Objects with empty metadata.initializers are regarded as initialized.
+  -k, --kustomize string              Process the kustomization directory. This flag can't be used together with -f or -R.
   -o, --output string                 Output format. One of: json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-file.
       --output-patch                  Output the patch if the resource is edited.
       --record                        Record current kubectl command in the resource annotation. If set to false, do not record the command. If set to true, record the command. If not set, default to updating the existing annotation value only if one already exists.

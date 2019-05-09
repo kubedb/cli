@@ -8,8 +8,8 @@ import (
 	"github.com/kubedb/cli/pkg/cmds/create"
 	"github.com/kubedb/cli/pkg/cmds/get"
 	"github.com/spf13/cobra"
-	utilflag "k8s.io/apiserver/pkg/util/flag"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	cliflag "k8s.io/component-base/cli/flag"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 	"kmodules.xyz/client-go/logs"
@@ -34,9 +34,9 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	flags := cmds.PersistentFlags()
 	// Normalize all flags that are coming from other packages or pre-configurations
 	// a.k.a. change all "_" to "-". e.g. glog package
-	flags.SetNormalizeFunc(utilflag.WordSepNormalizeFunc)
+	flags.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 
-	kubeConfigFlags := genericclioptions.NewConfigFlags()
+	kubeConfigFlags := genericclioptions.NewConfigFlags(true)
 	kubeConfigFlags.AddFlags(flags)
 	matchVersionKubeConfigFlags := cmdutil.NewMatchVersionFlags(kubeConfigFlags)
 	matchVersionKubeConfigFlags.AddFlags(flags)

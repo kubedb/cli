@@ -1,0 +1,580 @@
+# cloud.google.com/go v0.38.0
+cloud.google.com/go/compute/metadata
+# github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78
+github.com/Azure/go-ansiterm/winterm
+github.com/Azure/go-ansiterm
+# github.com/Azure/go-autorest v11.1.0+incompatible
+github.com/Azure/go-autorest/autorest
+github.com/Azure/go-autorest/autorest/adal
+github.com/Azure/go-autorest/autorest/azure
+github.com/Azure/go-autorest/logger
+github.com/Azure/go-autorest/version
+github.com/Azure/go-autorest/autorest/date
+# github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e
+github.com/MakeNowJust/heredoc
+# github.com/PuerkitoBio/purell v1.1.1
+github.com/PuerkitoBio/purell
+# github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
+github.com/PuerkitoBio/urlesc
+# github.com/appscode/go v0.0.0-20190424183524-60025f1135c9
+github.com/appscode/go/version
+github.com/appscode/go/runtime
+github.com/appscode/go/types
+github.com/appscode/go/log/golog
+github.com/appscode/go/encoding/json/types
+github.com/appscode/go/log
+github.com/appscode/go/analytics
+github.com/appscode/go/net
+github.com/appscode/go/sets
+github.com/appscode/go/context
+github.com/appscode/go/homedir
+# github.com/appscode/jsonpatch v0.0.0-20190108182946-7c0e3b262f30
+github.com/appscode/jsonpatch
+# github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5
+github.com/chai2010/gettext-go/gettext
+github.com/chai2010/gettext-go/gettext/mo
+github.com/chai2010/gettext-go/gettext/plural
+github.com/chai2010/gettext-go/gettext/po
+# github.com/cpuguy83/go-md2man v1.0.10
+github.com/cpuguy83/go-md2man/md2man
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+github.com/dgrijalva/jwt-go
+# github.com/docker/distribution v2.7.1+incompatible
+github.com/docker/distribution/reference
+github.com/docker/distribution/digestset
+# github.com/docker/docker v0.7.3-0.20190327010347-be7ac8be2ae0
+github.com/docker/docker/pkg/term
+github.com/docker/docker/pkg/term/windows
+# github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c
+github.com/docker/spdystream
+github.com/docker/spdystream/spdy
+# github.com/emicklei/go-restful v2.9.3+incompatible
+github.com/emicklei/go-restful
+github.com/emicklei/go-restful/log
+# github.com/evanphx/json-patch v4.2.0+incompatible
+github.com/evanphx/json-patch
+# github.com/exponent-io/jsonpath v0.0.0-20151013193312-d6023ce2651d
+github.com/exponent-io/jsonpath
+# github.com/fatih/camelcase v0.0.0-20160318181535-f6a740d52f96
+github.com/fatih/camelcase
+# github.com/fatih/structs v1.1.0
+github.com/fatih/structs
+# github.com/ghodss/yaml v1.0.0
+github.com/ghodss/yaml
+# github.com/go-openapi/jsonpointer v0.19.0
+github.com/go-openapi/jsonpointer
+# github.com/go-openapi/jsonreference v0.19.0
+github.com/go-openapi/jsonreference
+# github.com/go-openapi/spec v0.19.0
+github.com/go-openapi/spec
+# github.com/go-openapi/swag v0.19.0
+github.com/go-openapi/swag
+# github.com/gogo/protobuf v1.2.1
+github.com/gogo/protobuf/proto
+github.com/gogo/protobuf/sortkeys
+# github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
+github.com/golang/glog
+# github.com/golang/protobuf v1.3.1
+github.com/golang/protobuf/jsonpb
+github.com/golang/protobuf/proto
+github.com/golang/protobuf/ptypes/struct
+github.com/golang/protobuf/ptypes/any
+github.com/golang/protobuf/ptypes
+github.com/golang/protobuf/ptypes/duration
+github.com/golang/protobuf/ptypes/timestamp
+# github.com/google/btree v1.0.0
+github.com/google/btree
+# github.com/google/go-cmp v0.3.0
+github.com/google/go-cmp/cmp
+github.com/google/go-cmp/cmp/internal/diff
+github.com/google/go-cmp/cmp/internal/flags
+github.com/google/go-cmp/cmp/internal/function
+github.com/google/go-cmp/cmp/internal/value
+# github.com/google/gofuzz v1.0.0
+github.com/google/gofuzz
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
+# github.com/googleapis/gnostic v0.2.0
+github.com/googleapis/gnostic/OpenAPIv2
+github.com/googleapis/gnostic/compiler
+github.com/googleapis/gnostic/extensions
+# github.com/gophercloud/gophercloud v0.0.0-20190504011306-6f9faf57fddc
+github.com/gophercloud/gophercloud
+github.com/gophercloud/gophercloud/openstack
+github.com/gophercloud/gophercloud/openstack/identity/v2/tokens
+github.com/gophercloud/gophercloud/openstack/identity/v3/tokens
+github.com/gophercloud/gophercloud/openstack/utils
+github.com/gophercloud/gophercloud/openstack/identity/v2/tenants
+github.com/gophercloud/gophercloud/pagination
+# github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc
+github.com/gregjones/httpcache
+github.com/gregjones/httpcache/diskcache
+# github.com/hashicorp/golang-lru v0.5.1
+github.com/hashicorp/golang-lru
+github.com/hashicorp/golang-lru/simplelru
+# github.com/imdario/mergo v0.3.7
+github.com/imdario/mergo
+# github.com/inconshreveable/mousetrap v1.0.0
+github.com/inconshreveable/mousetrap
+# github.com/jpillora/go-ogle-analytics v0.0.0-20161213085824-14b04e0594ef
+github.com/jpillora/go-ogle-analytics
+# github.com/json-iterator/go v1.1.6
+github.com/json-iterator/go
+# github.com/konsorten/go-windows-terminal-sequences v1.0.2
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/kubedb/apimachinery v0.0.0-20190508221312-5ba915343400
+github.com/kubedb/apimachinery/apis/kubedb/v1alpha1
+github.com/kubedb/apimachinery/client/clientset/versioned/scheme
+github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1
+github.com/kubedb/apimachinery/apis
+github.com/kubedb/apimachinery/apis/kubedb
+github.com/kubedb/apimachinery/apis/authorization/v1alpha1
+github.com/kubedb/apimachinery/apis/catalog/v1alpha1
+github.com/kubedb/apimachinery/apis/config/v1alpha1
+github.com/kubedb/apimachinery/apis/authorization
+github.com/kubedb/apimachinery/apis/catalog
+# github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de
+github.com/liggitt/tabwriter
+# github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
+github.com/mailru/easyjson/jlexer
+github.com/mailru/easyjson/jwriter
+github.com/mailru/easyjson/buffer
+# github.com/mitchellh/go-wordwrap v1.0.0
+github.com/mitchellh/go-wordwrap
+# github.com/mitchellh/mapstructure v1.1.2
+github.com/mitchellh/mapstructure
+# github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
+github.com/modern-go/concurrent
+# github.com/modern-go/reflect2 v1.0.1
+github.com/modern-go/reflect2
+# github.com/opencontainers/go-digest v1.0.0-rc1
+github.com/opencontainers/go-digest
+# github.com/peterbourgon/diskv v2.0.1+incompatible
+github.com/peterbourgon/diskv
+# github.com/pkg/errors v0.8.1
+github.com/pkg/errors
+# github.com/russross/blackfriday v1.5.2
+github.com/russross/blackfriday
+# github.com/sergi/go-diff v1.0.0
+github.com/sergi/go-diff/diffmatchpatch
+# github.com/sirupsen/logrus v1.4.1
+github.com/sirupsen/logrus
+# github.com/spf13/cobra v0.0.3
+github.com/spf13/cobra/doc
+github.com/spf13/cobra
+# github.com/spf13/pflag v1.0.3
+github.com/spf13/pflag
+# github.com/yudai/gojsondiff v0.0.0-20180504020246-0525c875b75c
+github.com/yudai/gojsondiff
+github.com/yudai/gojsondiff/formatter
+# github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82
+github.com/yudai/golcs
+# golang.org/x/crypto v0.0.0-20190506204251-e1dfcc566284
+golang.org/x/crypto/ssh/terminal
+# golang.org/x/net v0.0.0-20190503192946-f4e77d36d62c
+golang.org/x/net/http2
+golang.org/x/net/http/httpguts
+golang.org/x/net/http2/hpack
+golang.org/x/net/idna
+golang.org/x/net/context/ctxhttp
+golang.org/x/net/context
+# golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
+golang.org/x/oauth2
+golang.org/x/oauth2/google
+golang.org/x/oauth2/internal
+golang.org/x/oauth2/jws
+golang.org/x/oauth2/jwt
+# golang.org/x/sys v0.0.0-20190508220229-2d0786266e9c
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/text v0.3.2
+golang.org/x/text/encoding/unicode
+golang.org/x/text/transform
+golang.org/x/text/encoding
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/runes
+golang.org/x/text/secure/bidirule
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
+golang.org/x/text/width
+# golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
+golang.org/x/time/rate
+# google.golang.org/appengine v1.5.0
+google.golang.org/appengine
+google.golang.org/appengine/urlfetch
+google.golang.org/appengine/internal
+google.golang.org/appengine/internal/app_identity
+google.golang.org/appengine/internal/modules
+google.golang.org/appengine/internal/urlfetch
+google.golang.org/appengine/internal/base
+google.golang.org/appengine/internal/datastore
+google.golang.org/appengine/internal/log
+google.golang.org/appengine/internal/remote_api
+# gopkg.in/inf.v0 v0.9.1
+gopkg.in/inf.v0
+# gopkg.in/yaml.v2 v2.2.2
+gopkg.in/yaml.v2
+# k8s.io/api v0.0.0-20190503110853-61630f889b3c => k8s.io/api v0.0.0-20190313235455-40a48860b5ab
+k8s.io/api/apps/v1
+k8s.io/api/core/v1
+k8s.io/api/autoscaling/v1
+k8s.io/api/extensions/v1beta1
+k8s.io/api/admission/v1beta1
+k8s.io/api/admissionregistration/v1beta1
+k8s.io/api/apps/v1beta1
+k8s.io/api/apps/v1beta2
+k8s.io/api/authentication/v1
+k8s.io/api/authentication/v1beta1
+k8s.io/api/authorization/v1
+k8s.io/api/authorization/v1beta1
+k8s.io/api/autoscaling/v2beta1
+k8s.io/api/batch/v1
+k8s.io/api/batch/v1beta1
+k8s.io/api/batch/v2alpha1
+k8s.io/api/certificates/v1beta1
+k8s.io/api/imagepolicy/v1alpha1
+k8s.io/api/networking/v1
+k8s.io/api/policy/v1beta1
+k8s.io/api/rbac/v1
+k8s.io/api/rbac/v1alpha1
+k8s.io/api/rbac/v1beta1
+k8s.io/api/scheduling/v1alpha1
+k8s.io/api/settings/v1alpha1
+k8s.io/api/storage/v1
+k8s.io/api/storage/v1beta1
+k8s.io/api/coordination/v1
+k8s.io/api/scheduling/v1beta1
+k8s.io/api/autoscaling/v2beta2
+k8s.io/api/networking/v1beta1
+k8s.io/api/auditregistration/v1alpha1
+k8s.io/api/coordination/v1beta1
+k8s.io/api/events/v1beta1
+k8s.io/api/node/v1alpha1
+k8s.io/api/node/v1beta1
+k8s.io/api/scheduling/v1
+k8s.io/api/storage/v1alpha1
+# k8s.io/apiextensions-apiserver v0.0.0-20190508224317-421cff06bf05 => k8s.io/apiextensions-apiserver v0.0.0-20190315093550-53c4693659ed
+k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1
+k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
+k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
+k8s.io/apiextensions-apiserver/pkg/features
+k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
+# k8s.io/apimachinery v0.0.0-20190508063446-a3da69d3723c => github.com/kmodules/apimachinery v0.0.0-20190508045248-a52a97a7a2bf
+k8s.io/apimachinery/pkg/api/errors
+k8s.io/apimachinery/pkg/api/meta
+k8s.io/apimachinery/pkg/apis/meta/v1
+k8s.io/apimachinery/pkg/runtime
+k8s.io/apimachinery/pkg/runtime/schema
+k8s.io/apimachinery/pkg/util/errors
+k8s.io/apimachinery/pkg/util/sets
+k8s.io/apimachinery/pkg/apis/meta/v1/unstructured
+k8s.io/apimachinery/pkg/apis/meta/v1beta1
+k8s.io/apimachinery/pkg/watch
+k8s.io/apimachinery/pkg/labels
+k8s.io/apimachinery/pkg/util/duration
+k8s.io/apimachinery/pkg/util/intstr
+k8s.io/apimachinery/pkg/util/wait
+k8s.io/apimachinery/pkg/util/validation/field
+k8s.io/apimachinery/pkg/conversion
+k8s.io/apimachinery/pkg/types
+k8s.io/apimachinery/pkg/api/resource
+k8s.io/apimachinery/pkg/fields
+k8s.io/apimachinery/pkg/selection
+k8s.io/apimachinery/pkg/util/runtime
+k8s.io/apimachinery/pkg/conversion/queryparams
+k8s.io/apimachinery/pkg/util/json
+k8s.io/apimachinery/pkg/util/naming
+k8s.io/apimachinery/pkg/apis/meta/v1/unstructured/unstructuredscheme
+k8s.io/apimachinery/pkg/runtime/serializer
+k8s.io/apimachinery/pkg/util/yaml
+k8s.io/apimachinery/pkg/runtime/serializer/json
+k8s.io/apimachinery/pkg/runtime/serializer/streaming
+k8s.io/apimachinery/pkg/runtime/serializer/versioning
+k8s.io/apimachinery/pkg/util/mergepatch
+k8s.io/apimachinery/pkg/util/strategicpatch
+k8s.io/apimachinery/pkg/api/equality
+k8s.io/apimachinery/pkg/util/net
+k8s.io/apimachinery/pkg/apis/meta/internalversion
+k8s.io/apimachinery/pkg/util/validation
+k8s.io/apimachinery/third_party/forked/golang/reflect
+k8s.io/apimachinery/pkg/version
+k8s.io/apimachinery/pkg/runtime/serializer/protobuf
+k8s.io/apimachinery/pkg/runtime/serializer/recognizer
+k8s.io/apimachinery/pkg/util/framer
+k8s.io/apimachinery/third_party/forked/golang/json
+k8s.io/apimachinery/pkg/util/clock
+k8s.io/apimachinery/pkg/util/cache
+k8s.io/apimachinery/pkg/util/diff
+k8s.io/apimachinery/pkg/util/httpstream
+k8s.io/apimachinery/pkg/util/remotecommand
+k8s.io/apimachinery/pkg/api/validation
+k8s.io/apimachinery/pkg/apis/meta/v1/validation
+k8s.io/apimachinery/pkg/util/httpstream/spdy
+k8s.io/apimachinery/third_party/forked/golang/netutil
+# k8s.io/apiserver v0.0.0-20190508223931-4756b09d7af2 => github.com/kmodules/apiserver v0.0.0-20190508082252-8397d761d4b5
+k8s.io/apiserver/pkg/util/feature
+k8s.io/apiserver/pkg/features
+# k8s.io/cli-runtime v0.0.0-20190508184404-b26560c459bd => k8s.io/cli-runtime v0.0.0-20190314001948-2899ed30580f
+k8s.io/cli-runtime/pkg/genericclioptions
+k8s.io/cli-runtime/pkg/printers
+k8s.io/cli-runtime/pkg/resource
+k8s.io/cli-runtime/pkg/kustomize
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/kunstruct
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/transformer
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/validator
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/configmapandsecret
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/transformer/hash
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/transformer/patch
+k8s.io/cli-runtime/pkg/kustomize/k8sdeps/kv
+# k8s.io/client-go v11.0.0+incompatible
+k8s.io/client-go/plugin/pkg/client/auth
+k8s.io/client-go/dynamic
+k8s.io/client-go/rest
+k8s.io/client-go/tools/watch
+k8s.io/client-go/kubernetes
+k8s.io/client-go/kubernetes/typed/core/v1
+k8s.io/client-go/plugin/pkg/client/auth/azure
+k8s.io/client-go/plugin/pkg/client/auth/gcp
+k8s.io/client-go/plugin/pkg/client/auth/oidc
+k8s.io/client-go/plugin/pkg/client/auth/openstack
+k8s.io/client-go/discovery
+k8s.io/client-go/discovery/cached/disk
+k8s.io/client-go/restmapper
+k8s.io/client-go/tools/clientcmd
+k8s.io/client-go/tools/clientcmd/api
+k8s.io/client-go/util/homedir
+k8s.io/client-go/util/jsonpath
+k8s.io/client-go/kubernetes/scheme
+k8s.io/client-go/scale
+k8s.io/client-go/kubernetes/typed/apps/v1
+k8s.io/client-go/util/retry
+k8s.io/client-go/pkg/version
+k8s.io/client-go/plugin/pkg/client/auth/exec
+k8s.io/client-go/rest/watch
+k8s.io/client-go/tools/metrics
+k8s.io/client-go/transport
+k8s.io/client-go/util/cert
+k8s.io/client-go/util/flowcontrol
+k8s.io/client-go/tools/cache
+k8s.io/client-go/kubernetes/typed/admissionregistration/v1beta1
+k8s.io/client-go/kubernetes/typed/apps/v1beta1
+k8s.io/client-go/kubernetes/typed/apps/v1beta2
+k8s.io/client-go/kubernetes/typed/auditregistration/v1alpha1
+k8s.io/client-go/kubernetes/typed/authentication/v1
+k8s.io/client-go/kubernetes/typed/authentication/v1beta1
+k8s.io/client-go/kubernetes/typed/authorization/v1
+k8s.io/client-go/kubernetes/typed/authorization/v1beta1
+k8s.io/client-go/kubernetes/typed/autoscaling/v1
+k8s.io/client-go/kubernetes/typed/autoscaling/v2beta1
+k8s.io/client-go/kubernetes/typed/autoscaling/v2beta2
+k8s.io/client-go/kubernetes/typed/batch/v1
+k8s.io/client-go/kubernetes/typed/batch/v1beta1
+k8s.io/client-go/kubernetes/typed/batch/v2alpha1
+k8s.io/client-go/kubernetes/typed/certificates/v1beta1
+k8s.io/client-go/kubernetes/typed/coordination/v1
+k8s.io/client-go/kubernetes/typed/coordination/v1beta1
+k8s.io/client-go/kubernetes/typed/events/v1beta1
+k8s.io/client-go/kubernetes/typed/extensions/v1beta1
+k8s.io/client-go/kubernetes/typed/networking/v1
+k8s.io/client-go/kubernetes/typed/networking/v1beta1
+k8s.io/client-go/kubernetes/typed/node/v1alpha1
+k8s.io/client-go/kubernetes/typed/node/v1beta1
+k8s.io/client-go/kubernetes/typed/policy/v1beta1
+k8s.io/client-go/kubernetes/typed/rbac/v1
+k8s.io/client-go/kubernetes/typed/rbac/v1alpha1
+k8s.io/client-go/kubernetes/typed/rbac/v1beta1
+k8s.io/client-go/kubernetes/typed/scheduling/v1
+k8s.io/client-go/kubernetes/typed/scheduling/v1alpha1
+k8s.io/client-go/kubernetes/typed/scheduling/v1beta1
+k8s.io/client-go/kubernetes/typed/settings/v1alpha1
+k8s.io/client-go/kubernetes/typed/storage/v1
+k8s.io/client-go/kubernetes/typed/storage/v1alpha1
+k8s.io/client-go/kubernetes/typed/storage/v1beta1
+k8s.io/client-go/tools/reference
+k8s.io/client-go/tools/auth
+k8s.io/client-go/tools/clientcmd/api/latest
+k8s.io/client-go/third_party/forked/golang/template
+k8s.io/client-go/scale/scheme
+k8s.io/client-go/scale/scheme/appsint
+k8s.io/client-go/scale/scheme/appsv1beta1
+k8s.io/client-go/scale/scheme/appsv1beta2
+k8s.io/client-go/scale/scheme/autoscalingv1
+k8s.io/client-go/scale/scheme/extensionsint
+k8s.io/client-go/scale/scheme/extensionsv1beta1
+k8s.io/client-go/tools/remotecommand
+k8s.io/client-go/pkg/apis/clientauthentication
+k8s.io/client-go/pkg/apis/clientauthentication/v1alpha1
+k8s.io/client-go/pkg/apis/clientauthentication/v1beta1
+k8s.io/client-go/util/connrotation
+k8s.io/client-go/util/keyutil
+k8s.io/client-go/tools/pager
+k8s.io/client-go/tools/clientcmd/api/v1
+k8s.io/client-go/transport/spdy
+k8s.io/client-go/util/exec
+# k8s.io/cloud-provider v0.0.0-20190508104637-039924654234 => k8s.io/cloud-provider v0.0.0-20190314002645-c892ea32361a
+k8s.io/cloud-provider/features
+# k8s.io/component-base v0.0.0-20190424053038-9fe063da3132 => k8s.io/component-base v0.0.0-20190314000054-4a91899592f4
+k8s.io/component-base/cli/flag
+# k8s.io/klog v0.3.0 => k8s.io/klog v0.3.0
+k8s.io/klog
+# k8s.io/kube-openapi v0.0.0-20190502190224-411b2483e503 => k8s.io/kube-openapi v0.0.0-20190228160746-b3a7cee44a30
+k8s.io/kube-openapi/pkg/util/proto
+k8s.io/kube-openapi/pkg/common
+k8s.io/kube-openapi/pkg/util/proto/validation
+# k8s.io/kubernetes v1.14.1
+k8s.io/kubernetes/pkg/kubectl/cmd/util
+k8s.io/kubernetes/pkg/kubectl/cmd/util/editor
+k8s.io/kubernetes/pkg/kubectl/cmd/wait
+k8s.io/kubernetes/pkg/kubectl/describe
+k8s.io/kubernetes/pkg/kubectl/util/i18n
+k8s.io/kubernetes/pkg/kubectl/util/templates
+k8s.io/kubernetes/pkg/printers
+k8s.io/kubernetes/pkg/kubectl
+k8s.io/kubernetes/pkg/kubectl/scheme
+k8s.io/kubernetes/pkg/api/legacyscheme
+k8s.io/kubernetes/pkg/apis/core
+k8s.io/kubernetes/pkg/kubectl/cmd/get
+k8s.io/kubernetes/pkg/kubectl/cmd/util/openapi
+k8s.io/kubernetes/pkg/printers/internalversion
+k8s.io/kubernetes/pkg/util/interrupt
+k8s.io/kubernetes/pkg/kubectl/describe/versioned
+k8s.io/kubernetes/pkg/kubectl/cmd/util/openapi/validation
+k8s.io/kubernetes/pkg/kubectl/validation
+k8s.io/kubernetes/pkg/version
+k8s.io/kubernetes/pkg/kubectl/cmd/util/editor/crlf
+k8s.io/kubernetes/pkg/kubectl/util/term
+k8s.io/kubernetes/pkg/kubectl/generated
+k8s.io/kubernetes/pkg/kubectl/apps
+k8s.io/kubernetes/pkg/kubectl/util
+k8s.io/kubernetes/pkg/kubectl/util/deployment
+k8s.io/kubernetes/pkg/kubectl/util/podutils
+k8s.io/kubernetes/pkg/kubectl/util/slice
+k8s.io/kubernetes/pkg/kubectl/util/printers
+k8s.io/kubernetes/pkg/apis/apps
+k8s.io/kubernetes/pkg/apis/apps/install
+k8s.io/kubernetes/pkg/apis/authentication/install
+k8s.io/kubernetes/pkg/apis/authorization/install
+k8s.io/kubernetes/pkg/apis/autoscaling
+k8s.io/kubernetes/pkg/apis/autoscaling/install
+k8s.io/kubernetes/pkg/apis/batch
+k8s.io/kubernetes/pkg/apis/batch/install
+k8s.io/kubernetes/pkg/apis/certificates
+k8s.io/kubernetes/pkg/apis/certificates/install
+k8s.io/kubernetes/pkg/apis/coordination
+k8s.io/kubernetes/pkg/apis/coordination/install
+k8s.io/kubernetes/pkg/apis/core/helper
+k8s.io/kubernetes/pkg/apis/core/install
+k8s.io/kubernetes/pkg/apis/events/install
+k8s.io/kubernetes/pkg/apis/extensions/install
+k8s.io/kubernetes/pkg/apis/networking
+k8s.io/kubernetes/pkg/apis/node
+k8s.io/kubernetes/pkg/apis/policy
+k8s.io/kubernetes/pkg/apis/policy/install
+k8s.io/kubernetes/pkg/apis/rbac
+k8s.io/kubernetes/pkg/apis/rbac/install
+k8s.io/kubernetes/pkg/apis/scheduling
+k8s.io/kubernetes/pkg/apis/scheduling/install
+k8s.io/kubernetes/pkg/apis/settings/install
+k8s.io/kubernetes/pkg/apis/storage
+k8s.io/kubernetes/pkg/apis/storage/install
+k8s.io/kubernetes/pkg/apis/storage/util
+k8s.io/kubernetes/pkg/util/node
+k8s.io/kubernetes/pkg/kubectl/util/certificate
+k8s.io/kubernetes/pkg/kubectl/util/event
+k8s.io/kubernetes/pkg/kubectl/util/fieldpath
+k8s.io/kubernetes/pkg/kubectl/util/qos
+k8s.io/kubernetes/pkg/kubectl/util/rbac
+k8s.io/kubernetes/pkg/kubectl/util/resource
+k8s.io/kubernetes/pkg/kubectl/util/storage
+k8s.io/kubernetes/pkg/apis/apps/v1
+k8s.io/kubernetes/pkg/apis/apps/v1beta1
+k8s.io/kubernetes/pkg/apis/apps/v1beta2
+k8s.io/kubernetes/pkg/apis/authentication
+k8s.io/kubernetes/pkg/apis/authentication/v1
+k8s.io/kubernetes/pkg/apis/authentication/v1beta1
+k8s.io/kubernetes/pkg/apis/authorization
+k8s.io/kubernetes/pkg/apis/authorization/v1
+k8s.io/kubernetes/pkg/apis/authorization/v1beta1
+k8s.io/kubernetes/pkg/apis/autoscaling/v1
+k8s.io/kubernetes/pkg/apis/autoscaling/v2beta1
+k8s.io/kubernetes/pkg/apis/autoscaling/v2beta2
+k8s.io/kubernetes/pkg/apis/batch/v1
+k8s.io/kubernetes/pkg/apis/batch/v1beta1
+k8s.io/kubernetes/pkg/apis/batch/v2alpha1
+k8s.io/kubernetes/pkg/apis/certificates/v1beta1
+k8s.io/kubernetes/pkg/apis/coordination/v1
+k8s.io/kubernetes/pkg/apis/coordination/v1beta1
+k8s.io/kubernetes/pkg/apis/core/v1
+k8s.io/kubernetes/pkg/apis/events
+k8s.io/kubernetes/pkg/apis/events/v1beta1
+k8s.io/kubernetes/pkg/apis/extensions
+k8s.io/kubernetes/pkg/apis/extensions/v1beta1
+k8s.io/kubernetes/pkg/apis/policy/v1beta1
+k8s.io/kubernetes/pkg/apis/rbac/v1
+k8s.io/kubernetes/pkg/apis/rbac/v1alpha1
+k8s.io/kubernetes/pkg/apis/rbac/v1beta1
+k8s.io/kubernetes/pkg/apis/scheduling/v1
+k8s.io/kubernetes/pkg/apis/scheduling/v1alpha1
+k8s.io/kubernetes/pkg/apis/scheduling/v1beta1
+k8s.io/kubernetes/pkg/apis/settings
+k8s.io/kubernetes/pkg/apis/settings/v1alpha1
+k8s.io/kubernetes/pkg/apis/storage/v1
+k8s.io/kubernetes/pkg/apis/storage/v1alpha1
+k8s.io/kubernetes/pkg/apis/storage/v1beta1
+k8s.io/kubernetes/pkg/features
+k8s.io/kubernetes/pkg/util/parsers
+# k8s.io/utils v0.0.0-20190506122338-8fab8cb257d5 => k8s.io/utils v0.0.0-20190221042446-c2654d5206da
+k8s.io/utils/exec
+k8s.io/utils/integer
+k8s.io/utils/buffer
+k8s.io/utils/trace
+k8s.io/utils/pointer
+# kmodules.xyz/client-go v0.0.0-20190508091620-0d215c04352f
+kmodules.xyz/client-go/logs
+kmodules.xyz/client-go/tools/cli
+kmodules.xyz/client-go/meta
+kmodules.xyz/client-go/tools/analytics
+kmodules.xyz/client-go/apiextensions/v1beta1
+kmodules.xyz/client-go/core/v1
+kmodules.xyz/client-go
+# kmodules.xyz/custom-resources v0.0.0-20190508103408-464e8324c3ec
+kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
+kmodules.xyz/custom-resources/apis/appcatalog
+# kmodules.xyz/monitoring-agent-api v0.0.0-20190508125842-489150794b9b
+kmodules.xyz/monitoring-agent-api/api/v1
+# kmodules.xyz/objectstore-api v0.0.0-20190506085934-94c81c8acca9
+kmodules.xyz/objectstore-api/api/v1
+# kmodules.xyz/offshoot-api v0.0.0-20190508142450-1c69d50f3c1c
+kmodules.xyz/offshoot-api/api/v1
+# sigs.k8s.io/kustomize v2.0.3+incompatible
+sigs.k8s.io/kustomize/pkg/fs
+sigs.k8s.io/kustomize/pkg/commands/build
+sigs.k8s.io/kustomize/pkg/constants
+sigs.k8s.io/kustomize/pkg/factory
+sigs.k8s.io/kustomize/pkg/ifc/transformer
+sigs.k8s.io/kustomize/pkg/loader
+sigs.k8s.io/kustomize/pkg/resmap
+sigs.k8s.io/kustomize/pkg/target
+sigs.k8s.io/kustomize/pkg/gvk
+sigs.k8s.io/kustomize/pkg/ifc
+sigs.k8s.io/kustomize/pkg/types
+sigs.k8s.io/kustomize/pkg/resource
+sigs.k8s.io/kustomize/pkg/transformers
+sigs.k8s.io/kustomize/pkg/git
+sigs.k8s.io/kustomize/pkg/internal/error
+sigs.k8s.io/kustomize/pkg/resid
+sigs.k8s.io/kustomize/pkg/patch/transformer
+sigs.k8s.io/kustomize/pkg/transformers/config
+sigs.k8s.io/kustomize/pkg/image
+sigs.k8s.io/kustomize/pkg/patch
+sigs.k8s.io/kustomize/pkg/expansion
+sigs.k8s.io/kustomize/pkg/transformers/config/defaultconfig
+# sigs.k8s.io/yaml v1.1.0
+sigs.k8s.io/yaml
+# vbom.ml/util v0.0.0-20160121211510-db5cfe13f5cc
+vbom.ml/util/sortorder

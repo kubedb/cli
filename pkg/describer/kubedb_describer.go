@@ -42,7 +42,7 @@ func (d *EtcdDescriber) Describe(namespace, name string, describerSettings descr
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -118,7 +118,7 @@ func (d *ElasticsearchDescriber) Describe(namespace, name string, describerSetti
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -292,7 +292,7 @@ func (d *MySQLDescriber) Describe(namespace, name string, describerSettings desc
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -368,7 +368,7 @@ func (d *MongoDBDescriber) Describe(namespace, name string, describerSettings de
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -444,7 +444,7 @@ func (d *RedisDescriber) Describe(namespace, name string, describerSettings desc
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -514,7 +514,7 @@ func (d *MemcachedDescriber) Describe(namespace, name string, describerSettings 
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -571,7 +571,7 @@ func (d *SnapshotDescriber) Describe(namespace, name string, describerSettings d
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -638,7 +638,7 @@ func (d *DormantDatabaseDescriber) Describe(namespace, name string, describerSet
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.Core().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}
@@ -827,7 +827,7 @@ func describeOrigin(origin api.Origin, w versioned.PrefixWriter) {
 }
 
 func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w versioned.PrefixWriter) {
-	pc := client.Core().Pods(namespace)
+	pc := client.CoreV1().Pods(namespace)
 	opts := metav1.ListOptions{LabelSelector: selector.String()}
 
 	if statefulSets, err := client.AppsV1().StatefulSets(namespace).List(opts); err == nil {
@@ -862,16 +862,16 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 		}
 	}
 
-	if services, err := client.Core().Services(namespace).List(opts); err == nil {
+	if services, err := client.CoreV1().Services(namespace).List(opts); err == nil {
 		for _, s := range services.Items {
-			endpoints, _ := client.Core().Endpoints(namespace).Get(s.Name, metav1.GetOptions{})
+			endpoints, _ := client.CoreV1().Endpoints(namespace).Get(s.Name, metav1.GetOptions{})
 			describeService(&s, endpoints, w)
 		}
 	}
 }
 
 func showSecret(client kubernetes.Interface, namespace string, secretVolumes map[string]*core.SecretVolumeSource, w versioned.PrefixWriter) {
-	sc := client.Core().Secrets(namespace)
+	sc := client.CoreV1().Secrets(namespace)
 
 	for key, sv := range secretVolumes {
 		secret, err := sc.Get(sv.SecretName, metav1.GetOptions{})
@@ -888,7 +888,7 @@ func showTopology(client kubernetes.Interface, namespace string, selector labels
 	w.Write(LEVEL_0, "  Type\tPod\tStartTime\tPhase\n")
 	w.Write(LEVEL_0, "  ----\t---\t---------\t-----\n")
 
-	pods, _ := client.Core().Pods(namespace).List(metav1.ListOptions{
+	pods, _ := client.CoreV1().Pods(namespace).List(metav1.ListOptions{
 		LabelSelector: selector.String(),
 	})
 
