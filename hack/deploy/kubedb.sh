@@ -278,11 +278,11 @@ while test $# -gt 0; do
       shift
       ;;
     --install-catalog*)
-      shift
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
         export KUBEDB_CATALOG=false
       fi
+      shift
       ;;
     --rbac*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
