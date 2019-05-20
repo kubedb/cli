@@ -121,7 +121,7 @@ You need to follow these steps
     Here,
 
     - `root-key.pem` holds Private Key
-    - `root.key`holds CA Certificate
+    - `root.pem`holds CA Certificate
 
 4. Finally, import certificate as keystore
 
