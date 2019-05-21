@@ -112,8 +112,6 @@ According to Ramesh Sivaraman, QA Engineer and Kenny Gryp, MySQL Practice Manage
 
 Groups can operate in a single-primary mode, where only one server accepts updates at a time. Groups can be deployed in multi-primary mode, where all servers can accept updates. Currently, we only provide the single-primary mode support for MySQL Group Replication.
 
-Groups can operate in a single-primary mode, where only one server accepts updates at a time. Groups can be deployed in multi-primary mode, where all servers can accept updates. Currently, we only provide the single-primary mode support for MySQL Group Replication.
-
 A simple group architecture where three servers s1, s2, and s3 are deployed as an interconnected group and clients communicate with each of the servers has been shown below:
 
 ![3 Server Group](/docs/images/mysql/clustering/gr-3-server-group.png)
