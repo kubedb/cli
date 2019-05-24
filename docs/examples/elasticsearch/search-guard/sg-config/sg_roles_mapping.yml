@@ -1,7 +1,0 @@
-sg_all_access:
-  users:
-    - admin
-
-sg_readall:
-  users:
-    - readall
