@@ -1,9 +1,0 @@
-apiVersion: kubedb.com/v1alpha1
-kind: Elasticsearch
-metadata:
-  name: infant-elasticsearch
-  namespace: demo
-spec:
-  version: "6.3-v1"
-  replicas: 1
-  storageType: Ephemeral

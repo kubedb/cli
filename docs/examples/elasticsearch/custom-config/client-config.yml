@@ -1,4 +1,0 @@
-node:
-  name:  es-node-client
-path:
-  data: ["/data/elasticsearch/client-datadir"]
