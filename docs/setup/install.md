@@ -168,6 +168,7 @@ $ helm upgrade kubedb-catalog appscode/kubedb-catalog --version 0.12.0 \
 To see the detailed configuration options, visit [here](https://github.com/kubedb/cli/tree/master/chart/kubedb).
 
 </div>
+</div>
 
 ### Installing in GKE Cluster
 
