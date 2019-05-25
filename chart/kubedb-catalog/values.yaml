@@ -1,9 +1,0 @@
-dockerRegistry: "kubedb"
-catalog:
-  elasticsearch: true
-  etcd: true
-  memcached: true
-  mongo: true
-  mysql: true
-  postgres: true
-  redis: true
