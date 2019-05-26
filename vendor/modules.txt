@@ -16,7 +16,7 @@ github.com/MakeNowJust/heredoc
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/appscode/go v0.0.0-20190424183524-60025f1135c9
+# github.com/appscode/go v0.0.0-20190523031839-1468ee3a76e8
 github.com/appscode/go/version
 github.com/appscode/go/runtime
 github.com/appscode/go/types
@@ -50,7 +50,7 @@ github.com/docker/docker/pkg/term/windows
 # github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c
 github.com/docker/spdystream
 github.com/docker/spdystream/spdy
-# github.com/emicklei/go-restful v2.9.3+incompatible
+# github.com/emicklei/go-restful v2.9.5+incompatible
 github.com/emicklei/go-restful
 github.com/emicklei/go-restful/log
 # github.com/evanphx/json-patch v4.2.0+incompatible
@@ -124,7 +124,7 @@ github.com/jpillora/go-ogle-analytics
 github.com/json-iterator/go
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
-# github.com/kubedb/apimachinery v0.0.0-20190508221312-5ba915343400
+# github.com/kubedb/apimachinery v0.0.0-20190526014453-48e4bab67179
 github.com/kubedb/apimachinery/apis/kubedb/v1alpha1
 github.com/kubedb/apimachinery/client/clientset/versioned/scheme
 github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1
@@ -159,9 +159,9 @@ github.com/pkg/errors
 github.com/russross/blackfriday
 # github.com/sergi/go-diff v1.0.0
 github.com/sergi/go-diff/diffmatchpatch
-# github.com/sirupsen/logrus v1.4.1
+# github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
-# github.com/spf13/cobra v0.0.3
+# github.com/spf13/cobra v0.0.4
 github.com/spf13/cobra/doc
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.3
@@ -420,13 +420,13 @@ k8s.io/client-go/util/exec
 k8s.io/cloud-provider/features
 # k8s.io/component-base v0.0.0-20190424053038-9fe063da3132 => k8s.io/component-base v0.0.0-20190314000054-4a91899592f4
 k8s.io/component-base/cli/flag
-# k8s.io/klog v0.3.0 => k8s.io/klog v0.3.0
+# k8s.io/klog v0.3.1 => k8s.io/klog v0.3.0
 k8s.io/klog
 # k8s.io/kube-openapi v0.0.0-20190502190224-411b2483e503 => k8s.io/kube-openapi v0.0.0-20190228160746-b3a7cee44a30
 k8s.io/kube-openapi/pkg/util/proto
 k8s.io/kube-openapi/pkg/common
 k8s.io/kube-openapi/pkg/util/proto/validation
-# k8s.io/kubernetes v1.14.1
+# k8s.io/kubernetes v1.14.2
 k8s.io/kubernetes/pkg/kubectl/cmd/util
 k8s.io/kubernetes/pkg/kubectl/cmd/util/editor
 k8s.io/kubernetes/pkg/kubectl/cmd/wait
@@ -534,7 +534,7 @@ k8s.io/utils/integer
 k8s.io/utils/buffer
 k8s.io/utils/trace
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20190508091620-0d215c04352f
+# kmodules.xyz/client-go v0.0.0-20190524133821-9c8a87771aea
 kmodules.xyz/client-go/logs
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/meta

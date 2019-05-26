@@ -317,6 +317,24 @@ func (m *MongoDB) SetDefaults() {
 		return
 	}
 	m.Spec.SetDefaults()
+	if m.Spec.ShardTopology != nil {
+		if m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.ServiceAccountName == "" {
+			m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
+		}
+		if m.Spec.ShardTopology.Mongos.PodTemplate.Spec.ServiceAccountName == "" {
+			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
+		}
+		if m.Spec.ShardTopology.Shard.PodTemplate.Spec.ServiceAccountName == "" {
+			m.Spec.ShardTopology.Shard.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
+		}
+	} else {
+		if m.Spec.PodTemplate == nil {
+			m.Spec.PodTemplate = new(ofst.PodTemplateSpec)
+		}
+		if m.Spec.PodTemplate.Spec.ServiceAccountName == "" {
+			m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
+		}
+	}
 }
 
 func (m *MongoDBSpec) SetDefaults() {
