@@ -5,17 +5,16 @@ go 1.12
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e // indirect
-	github.com/appscode/go v0.0.0-20190424183524-60025f1135c9
+	github.com/appscode/go v0.0.0-20190523031839-1468ee3a76e8
 	github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5 // indirect
-	github.com/cpuguy83/go-md2man v1.0.10 // indirect
 	github.com/docker/docker v0.7.3-0.20190327010347-be7ac8be2ae0 // indirect
 	github.com/exponent-io/jsonpath v0.0.0-20151013193312-d6023ce2651d // indirect
 	github.com/fatih/camelcase v0.0.0-20160318181535-f6a740d52f96 // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/kubedb/apimachinery v0.0.0-20190508221312-5ba915343400
+	github.com/kubedb/apimachinery v0.0.0-20190526014453-48e4bab67179
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
-	github.com/spf13/cobra v0.0.3
+	github.com/spf13/cobra v0.0.4
 	github.com/xlab/handysort v0.0.0-20150421192137-fb3537ed64a1 // indirect
 	golang.org/x/sys v0.0.0-20190508220229-2d0786266e9c // indirect
 	k8s.io/api v0.0.0-20190503110853-61630f889b3c
@@ -26,9 +25,8 @@ require (
 	k8s.io/client-go v11.0.0+incompatible
 	k8s.io/cloud-provider v0.0.0-20190508104637-039924654234 // indirect
 	k8s.io/component-base v0.0.0-20190424053038-9fe063da3132
-	k8s.io/kubernetes v1.14.1
-	kmodules.xyz/client-go v0.0.0-20190508091620-0d215c04352f
-	kmodules.xyz/custom-resources v0.0.0-20190508103408-464e8324c3ec // indirect
+	k8s.io/kubernetes v1.14.2
+	kmodules.xyz/client-go v0.0.0-20190524133821-9c8a87771aea
 	kmodules.xyz/monitoring-agent-api v0.0.0-20190508125842-489150794b9b
 	kmodules.xyz/objectstore-api v0.0.0-20190506085934-94c81c8acca9
 	vbom.ml/util v0.0.0-20160121211510-db5cfe13f5cc // indirect

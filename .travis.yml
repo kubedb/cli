@@ -2,6 +2,11 @@ language: go
 go:
  - 1.x
 
+cache:
+  directories:
+  - $HOME/.cache/go-build
+  - $GOPATH/pkg/mod
+
 install: true
 
 script:
