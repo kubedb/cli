@@ -182,6 +182,21 @@ lint: $(BUILD_DIRS)
 $(BUILD_DIRS):
 	@mkdir -p $@
 
+.PHONY: install
+install:
+	@cd ../installer; \
+	APPSCODE_ENV=dev KUBEDB_DOCKER_REGISTRY=$(REGISTRY) KUBEDB_OPERATOR_TAG=$(TAG) ./deploy/stash.sh
+
+.PHONY: uninstall
+uninstall:
+	@cd ../installer; \
+	./deploy/stash.sh --uninstall
+
+.PHONY: purge
+purge:
+	@cd ../installer; \
+	./deploy/stash.sh --uninstall --purge
+
 .PHONY: dev
 dev: gen fmt build
 
