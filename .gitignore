@@ -29,6 +29,6 @@ _testmain.go
 /apiserver.local.config
 /coverage.txt
 /dist
-/hack/configs/.env
+/hack/config/.env
 /test/e2e/junit.xml
 /test/e2e/report.xml
