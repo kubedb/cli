@@ -26,9 +26,6 @@ import (
 	"text/tabwriter"
 
 	"github.com/golang/glog"
-	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	cs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
-	"github.com/kubedb/cli/pkg/events"
 	appsv1 "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -44,6 +41,9 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/describe"
 	"k8s.io/kubernetes/pkg/kubectl/describe/versioned"
 	meta_util "kmodules.xyz/client-go/meta"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
+	"kubedb.dev/cli/pkg/events"
 )
 
 // Each level has 2 spaces for PrefixWriter
