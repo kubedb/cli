@@ -38,7 +38,7 @@ from os.path import expandvars
 import yaml
 from collections import Counter
 
-libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/github.com/kubedb/cli'
+libbuild.REPO_ROOT = expandvars('$GOPATH') + '/src/kubedb.dev/cli'
 DATABASES = ['postgres', 'elasticsearch', 'etcd', 'mysql', 'mongodb', 'memcached', 'redis']
 RELEASE_TAGS = {
     'cli': '0.12.0',

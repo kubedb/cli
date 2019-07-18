@@ -5,9 +5,6 @@ import (
 	"strings"
 
 	"github.com/appscode/go/types"
-	api "github.com/kubedb/apimachinery/apis/kubedb/v1alpha1"
-	"github.com/kubedb/apimachinery/client/clientset/versioned/scheme"
-	cs "github.com/kubedb/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -16,6 +13,9 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/describe/versioned"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	store "kmodules.xyz/objectstore-api/api/v1"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
+	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 )
 
 type EtcdDescriber struct {
