@@ -9,13 +9,20 @@ const (
 	ResourcePluralMongoDBVersion   = "mongodbversions"
 )
 
+// MongoDBVersion defines a MongoDB database version.
+
 // +genclient
 // +genclient:nonNamespaced
 // +genclient:skipVerbs=updateStatus
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// MongoDBVersion defines a MongoDB database version.
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=mongodbversions,singular=mongodbversion,scope=Cluster,shortName=mgversion,categories={datastore,kubedb,appscode}
+// +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
+// +kubebuilder:printcolumn:name="DB_IMAGE",type="string",JSONPath=".spec.db.image"
+// +kubebuilder:printcolumn:name="Deprecated",type="boolean",JSONPath=".spec.deprecated"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MongoDBVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

@@ -23,11 +23,18 @@ const (
 	RedisModeCluster    RedisMode = "Cluster"
 )
 
+// Redis defines a Redis database.
+
 // +genclient
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Redis defines a Redis database.
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=redises,singular=redis,shortName=rd,categories={datastore,kubedb,appscode,all}
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
+// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type Redis struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

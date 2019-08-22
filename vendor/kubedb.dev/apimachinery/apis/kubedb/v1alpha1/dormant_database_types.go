@@ -16,6 +16,11 @@ const (
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=dormantdatabases,singular=dormantdatabase,shortName=drmn,categories={datastore,kubedb,appscode,all}
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type DormantDatabase struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -47,9 +52,9 @@ type OriginSpec struct {
 	// MySQL Spec
 	// +optional
 	MySQL *MySQLSpec `json:"mysql,omitempty"`
-	// Percona Spec
+	// PerconaXtraDB Spec
 	// +optional
-	Percona *PerconaSpec `json:"percona,omitempty"`
+	PerconaXtraDB *PerconaXtraDBSpec `json:"perconaxtradb,omitempty"`
 	// MariaDB Spec
 	// +optional
 	MariaDB *MariaDBSpec `json:"mariadb,omitempty"`
