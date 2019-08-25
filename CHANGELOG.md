@@ -1,10 +1,27 @@
 # Change Log
 
-## [0.12.0](https://github.com/kubedb/cli/tree/0.12.0) (2019-05-07)
+## [v0.13.0-rc.0](https://github.com/kubedb/cli/tree/v0.13.0-rc.0) (2019-08-22)
+[Full Changelog](https://github.com/kubedb/cli/compare/0.12.0...v0.13.0-rc.0)
+
+**Merged pull requests:**
+
+- Change package path to kubedb.dev/cli [\#449](https://github.com/kubedb/cli/pull/449) ([tamalsaha](https://github.com/tamalsaha))
+- Add license header to Makefiles [\#448](https://github.com/kubedb/cli/pull/448) ([tamalsaha](https://github.com/tamalsaha))
+- Add make install, uninstall, purge commands [\#446](https://github.com/kubedb/cli/pull/446) ([tamalsaha](https://github.com/tamalsaha))
+- Add Makefile [\#445](https://github.com/kubedb/cli/pull/445) ([tamalsaha](https://github.com/tamalsaha))
+- Move chart and deploy script to github.com/kubedb/installer [\#444](https://github.com/kubedb/cli/pull/444) ([tamalsaha](https://github.com/tamalsaha))
+- Move docs to kubedb/docs repo [\#443](https://github.com/kubedb/cli/pull/443) ([tamalsaha](https://github.com/tamalsaha))
+- Add mising \</div\> [\#442](https://github.com/kubedb/cli/pull/442) ([tamalsaha](https://github.com/tamalsaha))
+- Remove duplicate paragraph [\#441](https://github.com/kubedb/cli/pull/441) ([tamalsaha](https://github.com/tamalsaha))
+- Update issue-certificate.md. Minor correction in name of generated CA certificate [\#440](https://github.com/kubedb/cli/pull/440) ([prakashmishra1598](https://github.com/prakashmishra1598))
+
+## [0.12.0](https://github.com/kubedb/cli/tree/0.12.0) (2019-05-15)
 [Full Changelog](https://github.com/kubedb/cli/compare/0.11.0...0.12.0)
 
 **Merged pull requests:**
 
+- Fix --install-catalog flag in deployment script [\#439](https://github.com/kubedb/cli/pull/439) ([tamalsaha](https://github.com/tamalsaha))
+- Update to k8s 1.14.0 client libraries using go.mod [\#438](https://github.com/kubedb/cli/pull/438) ([tamalsaha](https://github.com/tamalsaha))
 - Fix installer doc for --install-catalog=false [\#437](https://github.com/kubedb/cli/pull/437) ([tamalsaha](https://github.com/tamalsaha))
 - Prepare 0.12.0 release [\#436](https://github.com/kubedb/cli/pull/436) ([tamalsaha](https://github.com/tamalsaha))
 - Fix build [\#435](https://github.com/kubedb/cli/pull/435) ([tamalsaha](https://github.com/tamalsaha))
