@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*'
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+
+    - name: Print version info
+      id: semver
+      run: |
+        make version
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@master
+      with:
+        version: latest
+
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
+
+    - name: Build
+      env:
+        APPSCODE_ENV: prod
+      run: |
+        make release
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: kubedb-cli-binaries
+        path:  bin

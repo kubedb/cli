@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -8,23 +10,23 @@ import (
 
 var _ apis.ResourceInfo = &MongoDBVersion{}
 
-func (p MongoDBVersion) ResourceShortCode() string {
+func (m MongoDBVersion) ResourceShortCode() string {
 	return ResourceCodeMongoDBVersion
 }
 
-func (p MongoDBVersion) ResourceKind() string {
+func (m MongoDBVersion) ResourceKind() string {
 	return ResourceKindMongoDBVersion
 }
 
-func (p MongoDBVersion) ResourceSingular() string {
+func (m MongoDBVersion) ResourceSingular() string {
 	return ResourceSingularMongoDBVersion
 }
 
-func (p MongoDBVersion) ResourcePlural() string {
+func (m MongoDBVersion) ResourcePlural() string {
 	return ResourcePluralMongoDBVersion
 }
 
-func (p MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
 		Plural:        ResourcePluralMongoDBVersion,
@@ -70,4 +72,20 @@ func (p MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResource
 			},
 		},
 	})
+}
+
+func (m MongoDBVersion) ValidateSpecs() error {
+	if m.Spec.Version == "" ||
+		m.Spec.DB.Image == "" ||
+		m.Spec.Tools.Image == "" ||
+		m.Spec.Exporter.Image == "" ||
+		m.Spec.InitContainer.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for mongodbVersion "%v":
+spec.version,
+spec.db.image,
+spec.tools.image,
+spec.exporter.image,
+spec.initContainer.image.`, m.Name)
+	}
+	return nil
 }

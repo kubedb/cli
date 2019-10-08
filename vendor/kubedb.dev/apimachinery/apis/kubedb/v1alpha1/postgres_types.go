@@ -126,21 +126,6 @@ type PostgresList struct {
 	Items []Postgres `json:"items,omitempty"`
 }
 
-// Following structures are used for audit summary report
-type PostgresTableInfo struct {
-	TotalRow int64 `json:"totalRow"`
-	MaxID    int64 `json:"maxId"`
-	NextID   int64 `json:"nextId"`
-}
-
-type PostgresSchemaInfo struct {
-	Table map[string]*PostgresTableInfo `json:"table"`
-}
-
-type PostgresSummary struct {
-	Schema map[string]*PostgresSchemaInfo `json:"schema"`
-}
-
 type PostgresWALSourceSpec struct {
 	BackupName    string          `json:"backupName,omitempty"`
 	PITR          *RecoveryTarget `json:"pitr,omitempty"`

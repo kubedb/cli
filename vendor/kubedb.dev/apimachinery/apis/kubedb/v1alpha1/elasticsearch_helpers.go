@@ -10,6 +10,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 )
 
@@ -31,7 +32,7 @@ func (e Elasticsearch) OffshootLabels() map[string]string {
 	out[meta_util.NameLabelKey] = ResourceSingularElasticsearch
 	out[meta_util.VersionLabelKey] = string(e.Spec.Version)
 	out[meta_util.InstanceLabelKey] = e.Name
-	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = GenericKey
 	return meta_util.FilterKeys(GenericKey, out, e.Labels)
 }
@@ -110,7 +111,7 @@ func (e elasticsearchStatsService) ServiceMonitorName() string {
 }
 
 func (e elasticsearchStatsService) Path() string {
-	return "/metrics"
+	return DefaultStatsPath
 }
 
 func (e elasticsearchStatsService) Scheme() string {
@@ -123,7 +124,7 @@ func (e Elasticsearch) StatsService() mona.StatsAccessor {
 
 func (e Elasticsearch) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(GenericKey, e.OffshootSelectors(), e.Labels)
-	lbl[LabelRole] = "stats"
+	lbl[LabelRole] = RoleStats
 	return lbl
 }
 
@@ -196,9 +197,10 @@ func (e *ElasticsearchSpec) SetDefaults() {
 	// perform defaulting
 	e.BackupSchedule.SetDefaults()
 
-	if e.AuthPlugin == "" {
-		e.AuthPlugin = ElasticsearchAuthPluginSearchGuard
+	if !e.DisableSecurity && e.AuthPlugin == v1alpha1.ElasticsearchAuthPluginNone {
+		e.DisableSecurity = true
 	}
+	e.AuthPlugin = ""
 	if e.StorageType == "" {
 		e.StorageType = StorageTypeDurable
 	}
@@ -206,11 +208,7 @@ func (e *ElasticsearchSpec) SetDefaults() {
 		e.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if e.TerminationPolicy == "" {
-		if e.StorageType == StorageTypeEphemeral {
-			e.TerminationPolicy = TerminationPolicyDelete
-		} else {
-			e.TerminationPolicy = TerminationPolicyPause
-		}
+		e.TerminationPolicy = TerminationPolicyDelete
 	}
 }
 

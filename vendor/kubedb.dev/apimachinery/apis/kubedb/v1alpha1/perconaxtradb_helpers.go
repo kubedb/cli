@@ -5,9 +5,9 @@ import (
 
 	"github.com/appscode/go/types"
 	apps "k8s.io/api/apps/v1"
+	core "k8s.io/api/core/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
-	v1 "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
@@ -33,7 +33,7 @@ func (p PerconaXtraDB) OffshootLabels() map[string]string {
 	out[meta_util.NameLabelKey] = ResourceSingularPerconaXtraDB
 	out[meta_util.VersionLabelKey] = string(p.Spec.Version)
 	out[meta_util.InstanceLabelKey] = p.Name
-	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = GenericKey
 	return meta_util.FilterKeys(GenericKey, out, p.Labels)
 }
@@ -58,6 +58,10 @@ func (p PerconaXtraDB) ServiceName() string {
 	return p.OffshootName()
 }
 
+func (p PerconaXtraDB) IsCluster() bool {
+	return types.Int32(p.Spec.Replicas) > 1
+}
+
 func (p PerconaXtraDB) GoverningServiceName() string {
 	return p.OffshootName() + "-gvr"
 }
@@ -66,54 +70,12 @@ func (p PerconaXtraDB) PeerName(idx int) string {
 	return fmt.Sprintf("%s-%d.%s.%s", p.OffshootName(), idx, p.GoverningServiceName(), p.Namespace)
 }
 
+func (p PerconaXtraDB) GetDatabaseSecretName() string {
+	return p.Spec.DatabaseSecret.SecretName
+}
+
 func (p PerconaXtraDB) ClusterName() string {
-	return p.Spec.PXC.ClusterName
-}
-
-func (p PerconaXtraDB) ClusterLabels() map[string]string {
-	return v1.UpsertMap(p.OffshootLabels(), map[string]string{
-		PerconaXtraDBClusterLabelKey: p.ClusterName(),
-	})
-}
-
-func (p PerconaXtraDB) ClusterSelectors() map[string]string {
-	return v1.UpsertMap(p.OffshootSelectors(), map[string]string{
-		PerconaXtraDBClusterLabelKey: p.ClusterName(),
-	})
-}
-
-func (p PerconaXtraDB) XtraDBLabels() map[string]string {
-	if p.Spec.PXC != nil {
-		return p.ClusterLabels()
-	}
-	return p.OffshootLabels()
-}
-
-func (p PerconaXtraDB) XtraDBSelectors() map[string]string {
-	if p.Spec.PXC != nil {
-		return p.ClusterSelectors()
-	}
-	return p.OffshootSelectors()
-}
-
-func (p PerconaXtraDB) ProxysqlName() string {
-	return fmt.Sprintf("%s-proxysql", p.OffshootName())
-}
-
-func (p PerconaXtraDB) ProxysqlServiceName() string {
-	return p.ProxysqlName()
-}
-
-func (p PerconaXtraDB) ProxysqlLabels() map[string]string {
-	return v1.UpsertMap(p.OffshootLabels(), map[string]string{
-		PerconaXtraDBProxysqlLabelKey: p.ProxysqlName(),
-	})
-}
-
-func (p PerconaXtraDB) ProxysqlSelectors() map[string]string {
-	return v1.UpsertMap(p.OffshootSelectors(), map[string]string{
-		PerconaXtraDBProxysqlLabelKey: p.ProxysqlName(),
-	})
+	return p.OffshootName()
 }
 
 type perconaXtraDBApp struct {
@@ -149,7 +111,7 @@ func (p perconaXtraDBStatsService) ServiceMonitorName() string {
 }
 
 func (p perconaXtraDBStatsService) Path() string {
-	return "/metrics"
+	return DefaultStatsPath
 }
 
 func (p perconaXtraDBStatsService) Scheme() string {
@@ -162,7 +124,7 @@ func (p PerconaXtraDB) StatsService() mona.StatsAccessor {
 
 func (p PerconaXtraDB) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(GenericKey, p.OffshootSelectors(), p.Labels)
-	lbl[LabelRole] = "stats"
+	lbl[LabelRole] = RoleStats
 	return lbl
 }
 
@@ -232,16 +194,6 @@ func (p *PerconaXtraDBSpec) SetDefaults() {
 		p.Replicas = types.Int32P(1)
 	}
 
-	if p.PXC != nil {
-		if *p.Replicas < 3 {
-			p.Replicas = types.Int32P(PerconaXtraDBDefaultClusterSize)
-		}
-
-		if p.PXC.Proxysql.Replicas == nil {
-			p.PXC.Proxysql.Replicas = types.Int32P(1)
-		}
-	}
-
 	if p.StorageType == "" {
 		p.StorageType = StorageTypeDurable
 	}
@@ -249,11 +201,50 @@ func (p *PerconaXtraDBSpec) SetDefaults() {
 		p.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if p.TerminationPolicy == "" {
-		if p.StorageType == StorageTypeEphemeral {
-			p.TerminationPolicy = TerminationPolicyDelete
-		} else {
-			p.TerminationPolicy = TerminationPolicyPause
+		p.TerminationPolicy = TerminationPolicyDelete
+	}
+	p.setDefaultProbes()
+}
+
+// setDefaultProbes sets defaults only when probe fields are nil.
+// In operator, check if the value of probe fields is "{}".
+// For "{}", ignore readinessprobe or livenessprobe in statefulset.
+// Ref: https://github.com/mattlord/Docker-InnoDB-Cluster/blob/master/healthcheck.sh#L10
+func (p *PerconaXtraDBSpec) setDefaultProbes() {
+	if p == nil {
+		return
+	}
+
+	var readynessProbeCmd []string
+	if types.Int32(p.Replicas) > 1 {
+		readynessProbeCmd = []string{
+			"/cluster-check.sh",
 		}
+	} else {
+		readynessProbeCmd = []string{
+			"bash",
+			"-c",
+			`export MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
+ping_resp=$(mysqladmin -uroot ping)
+if [[ "$ping_resp" != "mysqld is alive" ]]; then
+    echo "[ERROR] server is not ready. PING_RESPONSE: $ping_resp"
+    exit 1
+fi
+`,
+		}
+	}
+
+	readinessProbe := &core.Probe{
+		Handler: core.Handler{
+			Exec: &core.ExecAction{
+				Command: readynessProbeCmd,
+			},
+		},
+		InitialDelaySeconds: 30,
+		PeriodSeconds:       10,
+	}
+	if p.PodTemplate.Spec.ReadinessProbe == nil {
+		p.PodTemplate.Spec.ReadinessProbe = readinessProbe
 	}
 }
 

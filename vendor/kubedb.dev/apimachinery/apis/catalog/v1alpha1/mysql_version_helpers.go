@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -8,23 +10,23 @@ import (
 
 var _ apis.ResourceInfo = &MySQLVersion{}
 
-func (p MySQLVersion) ResourceShortCode() string {
+func (m MySQLVersion) ResourceShortCode() string {
 	return ResourceCodeMySQLVersion
 }
 
-func (p MySQLVersion) ResourceKind() string {
+func (m MySQLVersion) ResourceKind() string {
 	return ResourceKindMySQLVersion
 }
 
-func (p MySQLVersion) ResourceSingular() string {
+func (m MySQLVersion) ResourceSingular() string {
 	return ResourceSingularMySQLVersion
 }
 
-func (p MySQLVersion) ResourcePlural() string {
+func (m MySQLVersion) ResourcePlural() string {
 	return ResourcePluralMySQLVersion
 }
 
-func (p MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
 		Plural:        ResourcePluralMySQLVersion,
@@ -70,4 +72,20 @@ func (p MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDe
 			},
 		},
 	})
+}
+
+func (m MySQLVersion) ValidateSpecs() error {
+	if m.Spec.Version == "" ||
+		m.Spec.DB.Image == "" ||
+		m.Spec.Tools.Image == "" ||
+		m.Spec.Exporter.Image == "" ||
+		m.Spec.InitContainer.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for mysqlVersion "%v":
+spec.version,
+spec.db.image,
+spec.tools.image,
+spec.exporter.image,
+spec.initContainer.image.`, m.Name)
+	}
+	return nil
 }

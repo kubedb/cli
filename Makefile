@@ -52,7 +52,7 @@ BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
 OS   := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 
-GO_VERSION       ?= 1.12.9
+GO_VERSION       ?= 1.12.10
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)-stretch
 
 OUTBIN = bin/$(OS)_$(ARCH)/$(BIN)
@@ -82,12 +82,12 @@ build-%:
 all-build: $(addprefix build-, $(subst /,_, $(BIN_PLATFORMS)))
 
 version:
-	@echo version=$(VERSION)
-	@echo version_strategy=$(version_strategy)
-	@echo git_tag=$(git_tag)
-	@echo git_branch=$(git_branch)
-	@echo commit_hash=$(commit_hash)
-	@echo commit_timestamp=$(commit_timestamp)
+	@echo ::set-output name=version::$(VERSION)
+	@echo ::set-output name=version_strategy::$(version_strategy)
+	@echo ::set-output name=git_tag::$(git_tag)
+	@echo ::set-output name=git_branch::$(git_branch)
+	@echo ::set-output name=commit_hash::$(commit_hash)
+	@echo ::set-output name=commit_timestamp::$(commit_timestamp)
 
 gen:
 	@true
@@ -145,7 +145,7 @@ $(OUTBIN): .go/$(OUTBIN).stamp
 	    "
 	@if [ $(COMPRESS) = yes ] && [ $(OS) != darwin ]; then          \
 		echo "compressing $(OUTBIN)";                               \
-		docker run                                                  \
+		@docker run                                                 \
 		    -i                                                      \
 		    --rm                                                    \
 		    -u $$(id -u):$$(id -g)                                  \
@@ -204,7 +204,7 @@ lint: $(BUILD_DIRS)
 	    --env GO111MODULE=on                                    \
 	    --env GOFLAGS="-mod=vendor"                             \
 	    $(BUILD_IMAGE)                                          \
-	    golangci-lint run --enable $(ADDTL_LINTERS)
+	    golangci-lint run --enable $(ADDTL_LINTERS) --skip-dirs-use-default --deadline=10m
 
 $(BUILD_DIRS):
 	@mkdir -p $@

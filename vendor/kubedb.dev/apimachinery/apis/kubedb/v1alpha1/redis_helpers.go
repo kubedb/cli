@@ -32,7 +32,7 @@ func (r Redis) OffshootLabels() map[string]string {
 	out[meta_util.NameLabelKey] = ResourceSingularRedis
 	out[meta_util.VersionLabelKey] = string(r.Spec.Version)
 	out[meta_util.InstanceLabelKey] = r.Name
-	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = GenericKey
 	return meta_util.FilterKeys(GenericKey, out, r.Labels)
 }
@@ -102,7 +102,7 @@ func (r redisStatsService) ServiceMonitorName() string {
 }
 
 func (r redisStatsService) Path() string {
-	return "/metrics"
+	return DefaultStatsPath
 }
 
 func (r redisStatsService) Scheme() string {
@@ -115,7 +115,7 @@ func (r Redis) StatsService() mona.StatsAccessor {
 
 func (r Redis) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(GenericKey, r.OffshootSelectors(), r.Labels)
-	lbl[LabelRole] = "stats"
+	lbl[LabelRole] = RoleStats
 	return lbl
 }
 
@@ -206,11 +206,7 @@ func (r *RedisSpec) SetDefaults() {
 		r.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if r.TerminationPolicy == "" {
-		if r.StorageType == StorageTypeEphemeral {
-			r.TerminationPolicy = TerminationPolicyDelete
-		} else {
-			r.TerminationPolicy = TerminationPolicyPause
-		}
+		r.TerminationPolicy = TerminationPolicyDelete
 	}
 }
 

@@ -32,7 +32,7 @@ func (p Postgres) OffshootLabels() map[string]string {
 	out[meta_util.NameLabelKey] = ResourceSingularPostgres
 	out[meta_util.VersionLabelKey] = string(p.Spec.Version)
 	out[meta_util.InstanceLabelKey] = p.Name
-	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = GenericKey
 	return meta_util.FilterKeys(GenericKey, out, p.Labels)
 }
@@ -95,7 +95,7 @@ func (p postgresStatsService) ServiceMonitorName() string {
 }
 
 func (p postgresStatsService) Path() string {
-	return "/metrics"
+	return DefaultStatsPath
 }
 
 func (p postgresStatsService) Scheme() string {
@@ -108,7 +108,7 @@ func (p Postgres) StatsService() mona.StatsAccessor {
 
 func (p Postgres) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(GenericKey, p.OffshootSelectors(), p.Labels)
-	lbl[LabelRole] = "stats"
+	lbl[LabelRole] = RoleStats
 	return lbl
 }
 
@@ -192,11 +192,7 @@ func (p *PostgresSpec) SetDefaults() {
 		p.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if p.TerminationPolicy == "" {
-		if p.StorageType == StorageTypeEphemeral {
-			p.TerminationPolicy = TerminationPolicyDelete
-		} else {
-			p.TerminationPolicy = TerminationPolicyPause
-		}
+		p.TerminationPolicy = TerminationPolicyDelete
 	}
 	if p.Init != nil && p.Init.PostgresWAL != nil && p.Init.PostgresWAL.PITR != nil {
 		pitr := p.Init.PostgresWAL.PITR

@@ -35,8 +35,6 @@ type PerconaXtraDBVersionSpec struct {
 	Version string `json:"version"`
 	// Database Image
 	DB PerconaXtraDBVersionDatabase `json:"db"`
-	// Proxysql Image
-	Proxysql PerconaXtraDBVersionProxysql `json:"proxysql"`
 	// Exporter Image
 	Exporter PerconaXtraDBVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
@@ -51,11 +49,6 @@ type PerconaXtraDBVersionSpec struct {
 
 // PerconaXtraDBVersionDatabase is the perconaxtradb image
 type PerconaXtraDBVersionDatabase struct {
-	Image string `json:"image"`
-}
-
-// PerconaXtraDBVersionProxysql is the proxysql image
-type PerconaXtraDBVersionProxysql struct {
 	Image string `json:"image"`
 }
 

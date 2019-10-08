@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -8,23 +10,23 @@ import (
 
 var _ apis.ResourceInfo = &EtcdVersion{}
 
-func (p EtcdVersion) ResourceShortCode() string {
+func (e EtcdVersion) ResourceShortCode() string {
 	return ResourceCodeEtcdVersion
 }
 
-func (p EtcdVersion) ResourceKind() string {
+func (e EtcdVersion) ResourceKind() string {
 	return ResourceKindEtcdVersion
 }
 
-func (p EtcdVersion) ResourceSingular() string {
+func (e EtcdVersion) ResourceSingular() string {
 	return ResourceSingularEtcdVersion
 }
 
-func (p EtcdVersion) ResourcePlural() string {
+func (e EtcdVersion) ResourcePlural() string {
 	return ResourcePluralEtcdVersion
 }
 
-func (p EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (e EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
 		Plural:        ResourcePluralEtcdVersion,
@@ -70,4 +72,18 @@ func (p EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDef
 			},
 		},
 	})
+}
+
+func (e EtcdVersion) ValidateSpecs() error {
+	if e.Spec.Version == "" ||
+		e.Spec.DB.Image == "" ||
+		e.Spec.Tools.Image == "" ||
+		e.Spec.Exporter.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for etcdVersion "%v":
+spec.version,
+spec.db.image,
+spec.tools.image,
+spec.exporter.image.`, e.Name)
+	}
+	return nil
 }
