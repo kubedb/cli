@@ -1,5 +1,12 @@
-name: Go
-on: [push]
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - 'release-*'
+    tags-ignore:
+      - '*.*'
+
 jobs:
 
   build:

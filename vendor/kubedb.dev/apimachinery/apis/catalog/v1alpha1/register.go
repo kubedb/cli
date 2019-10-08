@@ -37,10 +37,10 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
-		&PostgresVersion{},
-		&PostgresVersionList{},
 		&ElasticsearchVersion{},
 		&ElasticsearchVersionList{},
+		&EtcdVersion{},
+		&EtcdVersionList{},
 		&MemcachedVersion{},
 		&MemcachedVersionList{},
 		&MongoDBVersion{},
@@ -49,10 +49,12 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MySQLVersionList{},
 		&PerconaXtraDBVersion{},
 		&PerconaXtraDBVersionList{},
+		&PostgresVersion{},
+		&PostgresVersionList{},
+		&ProxySQLVersion{},
+		&ProxySQLVersionList{},
 		&RedisVersion{},
 		&RedisVersionList{},
-		&EtcdVersion{},
-		&EtcdVersionList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

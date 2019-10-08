@@ -32,7 +32,7 @@ func (m MariaDB) OffshootLabels() map[string]string {
 	out[meta_util.NameLabelKey] = ResourceSingularMariaDB
 	out[meta_util.VersionLabelKey] = string(m.Spec.Version)
 	out[meta_util.InstanceLabelKey] = m.Name
-	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = GenericKey
 	return meta_util.FilterKeys(GenericKey, out, m.Labels)
 }
@@ -94,7 +94,7 @@ func (m mariadbStatsService) ServiceMonitorName() string {
 }
 
 func (m mariadbStatsService) Path() string {
-	return "/metrics"
+	return DefaultStatsPath
 }
 
 func (m mariadbStatsService) Scheme() string {
@@ -107,7 +107,7 @@ func (m MariaDB) StatsService() mona.StatsAccessor {
 
 func (m MariaDB) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(GenericKey, m.OffshootSelectors(), m.Labels)
-	lbl[LabelRole] = "stats"
+	lbl[LabelRole] = RoleStats
 	return lbl
 }
 
@@ -186,11 +186,7 @@ func (m *MariaDBSpec) SetDefaults() {
 		m.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if m.TerminationPolicy == "" {
-		if m.StorageType == StorageTypeEphemeral {
-			m.TerminationPolicy = TerminationPolicyDelete
-		} else {
-			m.TerminationPolicy = TerminationPolicyPause
-		}
+		m.TerminationPolicy = TerminationPolicyDelete
 	}
 }
 

@@ -18,17 +18,18 @@ github.com/Azure/go-autorest/logger
 github.com/Azure/go-autorest/tracing
 # github.com/MakeNowJust/heredoc v0.0.0-20171113091838-e9091a26100e
 github.com/MakeNowJust/heredoc
-# github.com/PuerkitoBio/purell v1.1.0
+# github.com/PuerkitoBio/purell v1.1.1
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/appscode/go v0.0.0-20190808133642-1d4ef1f1c1e0
+# github.com/appscode/go v0.0.0-20191006073906-e3d193d493fc
 github.com/appscode/go/version
 github.com/appscode/go/runtime
 github.com/appscode/go/types
 github.com/appscode/go/log/golog
 github.com/appscode/go/encoding/json/types
 github.com/appscode/go/log
+github.com/appscode/go/os
 github.com/appscode/go/analytics
 github.com/appscode/go/net
 github.com/appscode/go/sets
@@ -134,7 +135,7 @@ github.com/inconshreveable/mousetrap
 github.com/jpillora/go-ogle-analytics
 # github.com/json-iterator/go v1.1.6
 github.com/json-iterator/go
-# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+# github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de
 github.com/liggitt/tabwriter
@@ -160,7 +161,7 @@ github.com/pkg/errors
 github.com/russross/blackfriday
 # github.com/sergi/go-diff v1.0.0
 github.com/sergi/go-diff/diffmatchpatch
-# github.com/sirupsen/logrus v1.2.0
+# github.com/sirupsen/logrus v1.4.1
 github.com/sirupsen/logrus
 # github.com/spf13/cobra v0.0.5
 github.com/spf13/cobra/doc
@@ -227,6 +228,8 @@ golang.org/x/text/width
 golang.org/x/time/rate
 # gomodules.xyz/jsonpatch/v2 v2.0.0
 gomodules.xyz/jsonpatch/v2
+# gomodules.xyz/version v0.1.0
+gomodules.xyz/version
 # google.golang.org/api v0.2.0
 google.golang.org/api/support/bundler
 # google.golang.org/appengine v1.4.0
@@ -378,7 +381,7 @@ k8s.io/apimachinery/third_party/forked/golang/netutil
 # k8s.io/apiserver v0.0.0-20190516230822-f89599b3f645 => github.com/kmodules/apiserver v0.0.0-20190811223248-5a95b2df4348
 k8s.io/apiserver/pkg/util/feature
 k8s.io/apiserver/pkg/features
-# k8s.io/cli-runtime v0.0.0-20190314001948-2899ed30580f => k8s.io/cli-runtime v0.0.0-20190314001948-2899ed30580f
+# k8s.io/cli-runtime v0.0.0-20190516231937-17bc0b7fcef5 => k8s.io/cli-runtime v0.0.0-20190314001948-2899ed30580f
 k8s.io/cli-runtime/pkg/genericclioptions
 k8s.io/cli-runtime/pkg/printers
 k8s.io/cli-runtime/pkg/resource
@@ -478,7 +481,7 @@ k8s.io/client-go/transport/spdy
 k8s.io/client-go/util/exec
 # k8s.io/cloud-provider v0.0.0-20190314002645-c892ea32361a => k8s.io/cloud-provider v0.0.0-20190314002645-c892ea32361a
 k8s.io/cloud-provider/features
-# k8s.io/component-base v0.0.0-20190314000054-4a91899592f4 => k8s.io/component-base v0.0.0-20190314000054-4a91899592f4
+# k8s.io/component-base v0.0.0-20190424053038-9fe063da3132 => k8s.io/component-base v0.0.0-20190314000054-4a91899592f4
 k8s.io/component-base/cli/flag
 # k8s.io/klog v0.3.1 => k8s.io/klog v0.3.0
 k8s.io/klog
@@ -594,7 +597,7 @@ k8s.io/utils/integer
 k8s.io/utils/buffer
 k8s.io/utils/trace
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20190808141354-bbb9e14f60ab
+# kmodules.xyz/client-go v0.0.0-20191006173540-91f8ee6b6b4b
 kmodules.xyz/client-go/logs
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/meta
@@ -602,22 +605,22 @@ kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go
 kmodules.xyz/client-go/apiextensions/v1beta1
 kmodules.xyz/client-go/core/v1
-# kmodules.xyz/custom-resources v0.0.0-20190808144301-114abf10dfe2
+# kmodules.xyz/custom-resources v0.0.0-20190927035424-65fe358bb045
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/apis/appcatalog
 # kmodules.xyz/monitoring-agent-api v0.0.0-20190808150221-601a4005b7f7
 kmodules.xyz/monitoring-agent-api/api/v1
-# kmodules.xyz/objectstore-api v0.0.0-20190808153322-733e8798e8de
+# kmodules.xyz/objectstore-api v0.0.0-20191006080053-fc8b57fadcf0
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20190808152534-e3dc715f844b
+# kmodules.xyz/offshoot-api v0.0.0-20190901210649-de049192326c
 kmodules.xyz/offshoot-api/api/v1
-# kubedb.dev/apimachinery v0.13.0-rc.0
+# kubedb.dev/apimachinery v0.13.0-rc.1
 kubedb.dev/apimachinery/apis/kubedb/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned/scheme
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1
 kubedb.dev/apimachinery/apis
-kubedb.dev/apimachinery/apis/kubedb
 kubedb.dev/apimachinery/apis/catalog/v1alpha1
+kubedb.dev/apimachinery/apis/kubedb
 kubedb.dev/apimachinery/apis/config/v1alpha1
 kubedb.dev/apimachinery/apis/catalog
 kubedb.dev/apimachinery/apis/config

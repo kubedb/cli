@@ -113,7 +113,7 @@ func (m MongoDB) OffshootLabels() map[string]string {
 	out[meta_util.NameLabelKey] = ResourceSingularMongoDB
 	out[meta_util.VersionLabelKey] = string(m.Spec.Version)
 	out[meta_util.InstanceLabelKey] = m.Name
-	out[meta_util.ComponentLabelKey] = "database"
+	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = GenericKey
 	return meta_util.FilterKeys(GenericKey, out, m.Labels)
 }
@@ -250,7 +250,7 @@ func (m mongoDBStatsService) ServiceMonitorName() string {
 }
 
 func (m mongoDBStatsService) Path() string {
-	return "/metrics"
+	return DefaultStatsPath
 }
 
 func (m mongoDBStatsService) Scheme() string {
@@ -263,7 +263,7 @@ func (m MongoDB) StatsService() mona.StatsAccessor {
 
 func (m MongoDB) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(GenericKey, m.OffshootSelectors(), m.Labels)
-	lbl[LabelRole] = "stats"
+	lbl[LabelRole] = RoleStats
 	return lbl
 }
 
@@ -357,11 +357,7 @@ func (m *MongoDBSpec) SetDefaults() {
 		m.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if m.TerminationPolicy == "" {
-		if m.StorageType == StorageTypeEphemeral {
-			m.TerminationPolicy = TerminationPolicyDelete
-		} else {
-			m.TerminationPolicy = TerminationPolicyPause
-		}
+		m.TerminationPolicy = TerminationPolicyDelete
 	}
 
 	if m.SSLMode == "" {
@@ -416,19 +412,18 @@ func (m *MongoDBSpec) setDefaultProbes(podTemplate *ofst.PodTemplateSpec) {
 		return
 	}
 
-	cmd := []string{
-		"mongo",
-		"--host=localhost",
-		"--eval",
-		"db.adminCommand('ping')",
+	var sslArgs string
+	if m.SSLMode == SSLModeRequireSSL {
+		sslArgs = fmt.Sprintf("--ssl --sslCAFile=/data/configdb/%v --sslPEMKeyFile=/data/configdb/%v", MongoTLSCertFileName, MongoClientPemFileName)
 	}
 
-	if m.SSLMode == SSLModeRequireSSL {
-		cmd = append(cmd, []string{
-			"--ssl",
-			fmt.Sprintf("--sslCAFile=/data/configdb/%v", MongoTLSCertFileName),
-			fmt.Sprintf("--sslPEMKeyFile=/data/configdb/%v", MongoClientPemFileName),
-		}...)
+	cmd := []string{
+		"bash",
+		"-c",
+		fmt.Sprintf(`if [[ $(mongo admin --host=localhost %v --username=$MONGO_INITDB_ROOT_USERNAME --password=$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase=admin --quiet --eval "db.adminCommand('ping').ok" ) -eq "1" ]]; then 
+          exit 0
+        fi
+        exit 1`, sslArgs),
 	}
 
 	if podTemplate.Spec.LivenessProbe == nil {

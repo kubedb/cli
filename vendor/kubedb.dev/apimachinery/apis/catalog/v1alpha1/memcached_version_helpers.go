@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -8,23 +10,23 @@ import (
 
 var _ apis.ResourceInfo = &MemcachedVersion{}
 
-func (p MemcachedVersion) ResourceShortCode() string {
+func (m MemcachedVersion) ResourceShortCode() string {
 	return ResourceCodeMemcachedVersion
 }
 
-func (p MemcachedVersion) ResourceKind() string {
+func (m MemcachedVersion) ResourceKind() string {
 	return ResourceKindMemcachedVersion
 }
 
-func (p MemcachedVersion) ResourceSingular() string {
+func (m MemcachedVersion) ResourceSingular() string {
 	return ResourceSingularMemcachedVersion
 }
 
-func (p MemcachedVersion) ResourcePlural() string {
+func (m MemcachedVersion) ResourcePlural() string {
 	return ResourcePluralMemcachedVersion
 }
 
-func (p MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
 		Plural:        ResourcePluralMemcachedVersion,
@@ -70,4 +72,16 @@ func (p MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResour
 			},
 		},
 	})
+}
+
+func (m MemcachedVersion) ValidateSpecs() error {
+	if m.Spec.Version == "" ||
+		m.Spec.DB.Image == "" ||
+		m.Spec.Exporter.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for memcachedVersion "%v":
+spec.version,
+spec.db.image,
+spec.exporter.image,`, m.Name)
+	}
+	return nil
 }

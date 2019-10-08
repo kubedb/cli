@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -70,4 +72,18 @@ func (p PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourc
 			},
 		},
 	})
+}
+
+func (p PostgresVersion) ValidateSpecs() error {
+	if p.Spec.Version == "" ||
+		p.Spec.DB.Image == "" ||
+		p.Spec.Tools.Image == "" ||
+		p.Spec.Exporter.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for postgresVersion "%v":
+spec.version,
+spec.db.image,
+spec.tools.image,
+spec.exporter.image.`, p.Name)
+	}
+	return nil
 }

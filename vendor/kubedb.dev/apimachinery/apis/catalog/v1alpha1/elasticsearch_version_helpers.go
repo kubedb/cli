@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -8,23 +10,23 @@ import (
 
 var _ apis.ResourceInfo = &ElasticsearchVersion{}
 
-func (p ElasticsearchVersion) ResourceShortCode() string {
+func (e ElasticsearchVersion) ResourceShortCode() string {
 	return ResourceCodeElasticsearchVersion
 }
 
-func (p ElasticsearchVersion) ResourceKind() string {
+func (e ElasticsearchVersion) ResourceKind() string {
 	return ResourceKindElasticsearchVersion
 }
 
-func (p ElasticsearchVersion) ResourceSingular() string {
+func (e ElasticsearchVersion) ResourceSingular() string {
 	return ResourceSingularElasticsearchVersion
 }
 
-func (p ElasticsearchVersion) ResourcePlural() string {
+func (e ElasticsearchVersion) ResourcePlural() string {
 	return ResourcePluralElasticsearchVersion
 }
 
-func (p ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (e ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
 		Plural:        ResourcePluralElasticsearchVersion,
@@ -70,4 +72,24 @@ func (p ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomRe
 			},
 		},
 	})
+}
+
+func (e ElasticsearchVersion) ValidateSpecs() error {
+	if e.Spec.AuthPlugin == "" ||
+		e.Spec.Version == "" ||
+		e.Spec.DB.Image == "" ||
+		e.Spec.Tools.Image == "" ||
+		e.Spec.Exporter.Image == "" ||
+		e.Spec.InitContainer.YQImage == "" ||
+		e.Spec.InitContainer.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for elasticsearchVersion "%v":
+spec.authPlugin,
+spec.version,
+spec.db.image,
+spec.tools.image,
+spec.exporter.image,
+spec.initContainer.yqImage,
+spec.initContainer.image.`, e.Name)
+	}
+	return nil
 }

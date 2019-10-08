@@ -32,5 +32,5 @@ type GaleraArbitratorConfiguration struct {
 	// This method is needed to form the SST request string that contains SST request to
 	// trigger state snapshot dump (state backup) on one of the other nodes.
 	// Ref: https://galeracluster.com/library/documentation/mysql-wsrep-options.html#wsrep-sst-method
-	SSTMethod string `json:"sstMethod, omitempty"`
+	SSTMethod string `json:"sstMethod,omitempty"`
 }

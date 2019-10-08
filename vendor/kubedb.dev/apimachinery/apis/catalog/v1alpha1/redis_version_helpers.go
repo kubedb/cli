@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	"kubedb.dev/apimachinery/apis"
@@ -8,23 +10,23 @@ import (
 
 var _ apis.ResourceInfo = &RedisVersion{}
 
-func (p RedisVersion) ResourceShortCode() string {
+func (r RedisVersion) ResourceShortCode() string {
 	return ResourceCodeRedisVersion
 }
 
-func (p RedisVersion) ResourceKind() string {
+func (r RedisVersion) ResourceKind() string {
 	return ResourceKindRedisVersion
 }
 
-func (p RedisVersion) ResourceSingular() string {
+func (r RedisVersion) ResourceSingular() string {
 	return ResourceSingularRedisVersion
 }
 
-func (p RedisVersion) ResourcePlural() string {
+func (r RedisVersion) ResourcePlural() string {
 	return ResourcePluralRedisVersion
 }
 
-func (p RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (r RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crdutils.NewCustomResourceDefinition(crdutils.Config{
 		Group:         SchemeGroupVersion.Group,
 		Plural:        ResourcePluralRedisVersion,
@@ -70,4 +72,16 @@ func (p RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDe
 			},
 		},
 	})
+}
+
+func (r RedisVersion) ValidateSpecs() error {
+	if r.Spec.Version == "" ||
+		r.Spec.DB.Image == "" ||
+		r.Spec.Exporter.Image == "" {
+		return fmt.Errorf(`atleast one of the following specs is not set for redisVersion "%v":
+spec.version,
+spec.db.image,
+spec.exporter.image.`, r.Name)
+	}
+	return nil
 }
