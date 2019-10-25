@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+
 	"github.com/appscode/go/encoding/json/types"
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
@@ -8,7 +10,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
-	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 )
 
 const (

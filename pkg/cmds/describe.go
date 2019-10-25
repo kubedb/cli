@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"strings"
 
+	"kubedb.dev/cli/pkg/describer"
+
 	"github.com/spf13/cobra"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -31,7 +33,6 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/describe"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
 	"k8s.io/kubernetes/pkg/kubectl/util/templates"
-	"kubedb.dev/cli/pkg/describer"
 )
 
 var (

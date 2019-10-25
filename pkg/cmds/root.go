@@ -4,6 +4,9 @@ import (
 	"flag"
 	"io"
 
+	"kubedb.dev/cli/pkg/cmds/create"
+	"kubedb.dev/cli/pkg/cmds/get"
+
 	v "github.com/appscode/go/version"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -12,8 +15,6 @@ import (
 	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 	"kmodules.xyz/client-go/logs"
 	"kmodules.xyz/client-go/tools/cli"
-	"kubedb.dev/cli/pkg/cmds/create"
-	"kubedb.dev/cli/pkg/cmds/get"
 )
 
 // NewKubeDBCommand creates the `kubedb` command and its nested children.

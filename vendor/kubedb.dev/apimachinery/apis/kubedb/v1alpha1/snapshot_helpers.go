@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"kubedb.dev/apimachinery/apis"
+
 	"github.com/pkg/errors"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
-	"kubedb.dev/apimachinery/apis"
 )
 
 var _ apis.ResourceInfo = &Snapshot{}
@@ -74,7 +75,7 @@ func (s Snapshot) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 		SpecDefinitionName:      "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.Snapshot",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
-		EnableStatusSubresource: apis.EnableStatusSubresource,
+		EnableStatusSubresource: true,
 		AdditionalPrinterColumns: []apiextensions.CustomResourceColumnDefinition{
 			{
 				Name:     "DatabaseName",
