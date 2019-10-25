@@ -3,13 +3,14 @@ package v1alpha1
 import (
 	"fmt"
 
+	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/kubedb"
+
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
-	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/kubedb"
 )
 
 var _ apis.ResourceInfo = &PgBouncer{}
@@ -143,7 +144,7 @@ func (p PgBouncer) CustomResourceDefinition() *apiextensions.CustomResourceDefin
 		SpecDefinitionName:      "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.PgBouncer",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
-		EnableStatusSubresource: apis.EnableStatusSubresource,
+		EnableStatusSubresource: true,
 		AdditionalPrinterColumns: []apiextensions.CustomResourceColumnDefinition{
 			{
 				Name:     "Version",

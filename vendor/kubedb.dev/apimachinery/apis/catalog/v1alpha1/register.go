@@ -1,10 +1,11 @@
 package v1alpha1
 
 import (
+	"kubedb.dev/apimachinery/apis/catalog"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"kubedb.dev/apimachinery/apis/catalog"
 )
 
 var SchemeGroupVersion = schema.GroupVersion{Group: catalog.GroupName, Version: "v1alpha1"}

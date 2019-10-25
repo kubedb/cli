@@ -3,6 +3,9 @@ package v1alpha1
 import (
 	"fmt"
 
+	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/kubedb"
+
 	"github.com/appscode/go/types"
 	apps "k8s.io/api/apps/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
@@ -10,8 +13,6 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
-	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/kubedb"
 )
 
 var _ apis.ResourceInfo = &MariaDB{}
@@ -140,7 +141,7 @@ func (m MariaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinit
 		SpecDefinitionName:      "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.MariaDB",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
-		EnableStatusSubresource: apis.EnableStatusSubresource,
+		EnableStatusSubresource: true,
 		AdditionalPrinterColumns: []apiextensions.CustomResourceColumnDefinition{
 			{
 				Name:     "Version",

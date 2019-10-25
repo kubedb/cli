@@ -3,6 +3,9 @@ package v1alpha1
 import (
 	"fmt"
 
+	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/kubedb"
+
 	"github.com/appscode/go/types"
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
@@ -11,8 +14,6 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
-	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/kubedb"
 )
 
 var _ apis.ResourceInfo = &PerconaXtraDB{}
@@ -157,7 +158,7 @@ func (p PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceD
 		SpecDefinitionName:      "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.PerconaXtraDB",
 		EnableValidation:        true,
 		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
-		EnableStatusSubresource: apis.EnableStatusSubresource,
+		EnableStatusSubresource: true,
 		AdditionalPrinterColumns: []apiextensions.CustomResourceColumnDefinition{
 			{
 				Name:     "Version",

@@ -22,14 +22,13 @@ github.com/MakeNowJust/heredoc
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/appscode/go v0.0.0-20191006073906-e3d193d493fc
+# github.com/appscode/go v0.0.0-20191025021232-311ac347b3ef
 github.com/appscode/go/version
 github.com/appscode/go/runtime
 github.com/appscode/go/types
 github.com/appscode/go/log/golog
 github.com/appscode/go/encoding/json/types
 github.com/appscode/go/log
-github.com/appscode/go/os
 github.com/appscode/go/analytics
 github.com/appscode/go/net
 github.com/appscode/go/sets
@@ -281,7 +280,7 @@ google.golang.org/grpc/internal/syscall
 gopkg.in/inf.v0
 # gopkg.in/yaml.v2 v2.2.2
 gopkg.in/yaml.v2
-# k8s.io/api v0.0.0-20190503110853-61630f889b3c => k8s.io/api v0.0.0-20190313235455-40a48860b5ab
+# k8s.io/api v0.0.0-20190515023547-db5a9d1c40eb => k8s.io/api v0.0.0-20190313235455-40a48860b5ab
 k8s.io/api/apps/v1
 k8s.io/api/core/v1
 k8s.io/api/autoscaling/v1
@@ -326,7 +325,7 @@ k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
 k8s.io/apiextensions-apiserver/pkg/features
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
-# k8s.io/apimachinery v0.0.0-20190508063446-a3da69d3723c => github.com/kmodules/apimachinery v0.0.0-20190508045248-a52a97a7a2bf
+# k8s.io/apimachinery v0.0.0-20190515023456-b74e4c97951f => github.com/kmodules/apimachinery v0.0.0-20190508045248-a52a97a7a2bf
 k8s.io/apimachinery/pkg/api/errors
 k8s.io/apimachinery/pkg/api/meta
 k8s.io/apimachinery/pkg/apis/meta/v1
@@ -340,6 +339,7 @@ k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/pkg/labels
 k8s.io/apimachinery/pkg/util/duration
 k8s.io/apimachinery/pkg/util/intstr
+k8s.io/apimachinery/pkg/util/runtime
 k8s.io/apimachinery/pkg/util/wait
 k8s.io/apimachinery/pkg/util/validation/field
 k8s.io/apimachinery/pkg/conversion
@@ -347,7 +347,6 @@ k8s.io/apimachinery/pkg/types
 k8s.io/apimachinery/pkg/api/resource
 k8s.io/apimachinery/pkg/fields
 k8s.io/apimachinery/pkg/selection
-k8s.io/apimachinery/pkg/util/runtime
 k8s.io/apimachinery/pkg/conversion/queryparams
 k8s.io/apimachinery/pkg/util/json
 k8s.io/apimachinery/pkg/util/naming
@@ -485,11 +484,11 @@ k8s.io/cloud-provider/features
 k8s.io/component-base/cli/flag
 # k8s.io/klog v0.3.1 => k8s.io/klog v0.3.0
 k8s.io/klog
-# k8s.io/kube-openapi v0.0.0-20190502190224-411b2483e503 => k8s.io/kube-openapi v0.0.0-20190228160746-b3a7cee44a30
+# k8s.io/kube-openapi v0.0.0-20190510232812-a01b7d5d6c22 => k8s.io/kube-openapi v0.0.0-20190228160746-b3a7cee44a30
 k8s.io/kube-openapi/pkg/util/proto
 k8s.io/kube-openapi/pkg/common
 k8s.io/kube-openapi/pkg/util/proto/validation
-# k8s.io/kubernetes v1.14.0
+# k8s.io/kubernetes v1.14.2
 k8s.io/kubernetes/pkg/kubectl/cmd/util
 k8s.io/kubernetes/pkg/kubectl/cmd/util/editor
 k8s.io/kubernetes/pkg/kubectl/cmd/wait
@@ -591,13 +590,13 @@ k8s.io/kubernetes/pkg/apis/storage/v1alpha1
 k8s.io/kubernetes/pkg/apis/storage/v1beta1
 k8s.io/kubernetes/pkg/features
 k8s.io/kubernetes/pkg/util/parsers
-# k8s.io/utils v0.0.0-20190506122338-8fab8cb257d5 => k8s.io/utils v0.0.0-20190221042446-c2654d5206da
+# k8s.io/utils v0.0.0-20190520173318-324c5df7d3f0 => k8s.io/utils v0.0.0-20190514214443-0a167cbac756
 k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/buffer
 k8s.io/utils/trace
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20191006173540-91f8ee6b6b4b
+# kmodules.xyz/client-go v0.0.0-20191023042933-b12d1ccfaf57
 kmodules.xyz/client-go/logs
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/meta
@@ -610,11 +609,11 @@ kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/apis/appcatalog
 # kmodules.xyz/monitoring-agent-api v0.0.0-20190808150221-601a4005b7f7
 kmodules.xyz/monitoring-agent-api/api/v1
-# kmodules.xyz/objectstore-api v0.0.0-20191006080053-fc8b57fadcf0
+# kmodules.xyz/objectstore-api v0.0.0-20191014210450-ac380fa650a3
 kmodules.xyz/objectstore-api/api/v1
 # kmodules.xyz/offshoot-api v0.0.0-20190901210649-de049192326c
 kmodules.xyz/offshoot-api/api/v1
-# kubedb.dev/apimachinery v0.13.0-rc.1
+# kubedb.dev/apimachinery v0.13.0-rc.2
 kubedb.dev/apimachinery/apis/kubedb/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned/scheme
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1

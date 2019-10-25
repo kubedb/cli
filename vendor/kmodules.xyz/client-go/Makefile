@@ -15,10 +15,9 @@
 
 SHELL=/bin/bash -o pipefail
 
-GO_PKG   := kubedb.dev
+GO_PKG   := kmodules.xyz
 REPO     := $(notdir $(shell pwd))
-BIN      := kubedb
-COMPRESS ?= no
+BIN      := client-go
 
 # This version-strategy uses git tags to set the version string
 git_branch       := $(shell git rev-parse --abbrev-ref HEAD)
@@ -44,15 +43,17 @@ endif
 ### These variables should not need tweaking.
 ###
 
-SRC_PKGS := cmd pkg
-SRC_DIRS := $(SRC_PKGS) hack/gendocs # directories which hold app source (not vendored)
+SRC_DIRS := *.go admissionregistration apiextensions apiregistration apps batch bin certificates core discovery dynamic extensions logs meta openapi policy rbac storage tools 
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
-BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
+BIN_PLATFORMS    := $(DOCKER_PLATFORMS)
 
 # Used internally.  Users should pass GOOS and/or GOARCH.
 OS   := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
+
+BASEIMAGE_PROD   ?= gcr.io/distroless/static
+BASEIMAGE_DBG    ?= debian:stretch
 
 GO_VERSION       ?= 1.12.12
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)-stretch
@@ -88,13 +89,14 @@ build-%:
 all-build: $(addprefix build-, $(subst /,_, $(BIN_PLATFORMS)))
 
 version:
-	@echo ::set-output name=version::$(VERSION)
-	@echo ::set-output name=version_strategy::$(version_strategy)
-	@echo ::set-output name=git_tag::$(git_tag)
-	@echo ::set-output name=git_branch::$(git_branch)
-	@echo ::set-output name=commit_hash::$(commit_hash)
-	@echo ::set-output name=commit_timestamp::$(commit_timestamp)
+	@echo version=$(VERSION)
+	@echo version_strategy=$(version_strategy)
+	@echo git_tag=$(git_tag)
+	@echo git_branch=$(git_branch)
+	@echo commit_hash=$(commit_hash)
+	@echo commit_timestamp=$(commit_timestamp)
 
+.PHONY: gen
 gen:
 	@true
 
@@ -112,22 +114,14 @@ fmt: $(BUILD_DIRS)
 	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
 	    $(BUILD_IMAGE)                                          \
 	    /bin/bash -c "                                          \
-	        REPO_PKG=$(GO_PKG)                                  \
+	        REPO_PKG=$(GO_PKG)/$(REPO)                          \
 	        ./hack/fmt.sh $(SRC_DIRS)                           \
 	    "
 
 build: $(OUTBIN)
 
-# The following structure defeats Go's (intentional) behavior to always touch
-# result files, even if they have not changed.  This will still run `go` but
-# will not trigger further work if nothing has actually changed.
-
-$(OUTBIN): .go/$(OUTBIN).stamp
-	@true
-
-# This will build the binary under ./.go and update the real binary iff needed.
-.PHONY: .go/$(OUTBIN).stamp
-.go/$(OUTBIN).stamp: $(BUILD_DIRS)
+.PHONY: .go/$(OUTBIN)
+$(OUTBIN): $(BUILD_DIRS)
 	@echo "making $(OUTBIN)"
 	@docker run                                                 \
 	    -i                                                      \
@@ -152,32 +146,9 @@ $(OUTBIN): .go/$(OUTBIN).stamp
 	        commit_timestamp=$(commit_timestamp)                \
 	        ./hack/build.sh                                     \
 	    "
-	@if [ $(COMPRESS) = yes ] && [ $(OS) != darwin ]; then          \
-		echo "compressing $(OUTBIN)";                               \
-		docker run                                                  \
-		    -i                                                      \
-		    --rm                                                    \
-		    -u $$(id -u):$$(id -g)                                  \
-		    -v $$(pwd):/src                                         \
-		    -w /src                                                 \
-		    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin                \
-		    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin/$(OS)_$(ARCH)  \
-		    -v $$(pwd)/.go/cache:/.cache                            \
-		    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-		    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-		    $(BUILD_IMAGE)                                          \
-		    upx --brute /go/$(OUTBIN);                              \
-	fi
-	@if ! cmp -s .go/$(OUTBIN) $(OUTBIN); then \
-	    mv .go/$(OUTBIN) $(OUTBIN);            \
-	    date >$@;                              \
-	fi
 	@echo
 
-.PHONY: test
-test: unit-tests
-
-unit-tests: $(BUILD_DIRS)
+test: $(BUILD_DIRS)
 	@docker run                                                 \
 	    -i                                                      \
 	    --rm                                                    \
@@ -216,13 +187,13 @@ lint: $(BUILD_DIRS)
 	    --env GO111MODULE=on                                    \
 	    --env GOFLAGS="-mod=vendor"                             \
 	    $(BUILD_IMAGE)                                          \
-	    golangci-lint run --enable $(ADDTL_LINTERS) --deadline=10m --skip-files="generated.*\.go$\" --skip-dirs-use-default
+	    golangci-lint run --enable $(ADDTL_LINTERS) --timeout=10m --skip-files="generated.*\.go$\" --skip-dirs-use-default
 
 $(BUILD_DIRS):
 	@mkdir -p $@
 
 .PHONY: dev
-dev: gen fmt build
+dev: gen fmt push
 
 .PHONY: verify
 verify: verify-modules verify-gen
@@ -238,35 +209,11 @@ verify-modules:
 .PHONY: verify-gen
 verify-gen: gen fmt
 	@if !(git diff --exit-code HEAD); then \
-		echo "files are out of date, run make gen fmt"; exit 1; \
+		echo "file formatting is out of date, run make gen fmt"; exit 1; \
 	fi
 
 .PHONY: ci
-ci: verify build unit-tests #lint cover
-
-.PHONY: qa
-qa:
-	@if [ "$$APPSCODE_ENV" = "prod" ]; then                                              \
-		echo "Nothing to do in prod env. Are you trying to 'release' binaries to prod?"; \
-		exit 1;                                                                          \
-	fi
-	@if [ "$(version_strategy)" = "tag" ]; then               \
-		echo "Are you trying to 'release' binaries to prod?"; \
-		exit 1;                                               \
-	fi
-	@$(MAKE) clean all-build --no-print-directory
-
-.PHONY: release
-release:
-	@if [ "$$APPSCODE_ENV" != "prod" ]; then      \
-		echo "'release' only works in PROD env."; \
-		exit 1;                                   \
-	fi
-	@if [ "$(version_strategy)" != "tag" ]; then                    \
-		echo "apply tag to release binaries and/or docker images."; \
-		exit 1;                                                     \
-	fi
-	@$(MAKE) clean all-build --no-print-directory
+ci: verify lint build test #cover
 
 .PHONY: clean
 clean:

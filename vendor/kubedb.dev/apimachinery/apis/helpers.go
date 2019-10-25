@@ -9,10 +9,6 @@ const (
 	Finalizer = "kubedb.com"
 )
 
-var (
-	EnableStatusSubresource bool
-)
-
 type ResourceInfo interface {
 	ResourceShortCode() string
 	ResourceKind() string
