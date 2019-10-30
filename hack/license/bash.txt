@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # Copyright The KubeDB Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +12,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-pushd $GOPATH/src/kubedb.dev/cli/hack/gendocs
-go run main.go
-
-cd $GOPATH/src/kubedb.dev/cli/docs/reference
-sed -i 's/######\ Auto\ generated\ by.*//g' *
-popd
