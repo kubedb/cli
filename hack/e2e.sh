@@ -14,10 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -eou pipefail
 
-pushd $GOPATH/src/kubedb.dev/cli/hack/gendocs
-go run main.go
+export CGO_ENABLED=0
+export GO111MODULE=on
+export GOFLAGS="-mod=vendor"
 
-cd $GOPATH/src/kubedb.dev/cli/docs/reference
-sed -i 's/######\ Auto\ generated\ by.*//g' *
-popd
+GINKGO_ARGS=${GINKGO_ARGS:-}
+TEST_ARGS=${TEST_ARGS:-}
+DOCKER_REGISTRY=${DOCKER_REGISTRY:-}
+
+echo "Running e2e tests:"
+cmd="ginkgo -r --v --progress --trace ${GINKGO_ARGS} test -- --docker-registry=${DOCKER_REGISTRY} ${TEST_ARGS}"
+echo $cmd; $cmd
