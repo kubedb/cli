@@ -1,7 +1,7 @@
 # KubeDB
 
 [![Go Report Card](https://goreportcard.com/badge/kubedb.dev/cli)](https://goreportcard.com/report/kubedb.dev/cli)
-[![Build Status](https://travis-ci.org/kubedb/cli.svg?branch=master)](https://travis-ci.org/kubedb/cli)
+[![Build Status](https://github.com/kubedb/cli/workflows/CI/badge.svg)](https://github.com/kubedb/cli/actions?workflow=CI)
 [![codecov](https://codecov.io/gh/kubedb/cli/branch/master/graph/badge.svg)](https://codecov.io/gh/kubedb/cli)
 [![Docker Pulls](https://img.shields.io/docker/pulls/kubedb/operator.svg)](https://hub.docker.com/r/kubedb/operator/)
 [![Slack](http://slack.kubernetes.io/badge.svg)](http://slack.kubernetes.io/#kubedb)
