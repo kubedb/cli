@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The KubeDB Authors.
+Copyright The KubeDB Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package scheme
 import (
 	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/apis/config/v1alpha1"
+	dbav1alpha1 "kubedb.dev/apimachinery/apis/dba/v1alpha1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -36,6 +37,7 @@ var ParameterCodec = runtime.NewParameterCodec(Scheme)
 var localSchemeBuilder = runtime.SchemeBuilder{
 	catalogv1alpha1.AddToScheme,
 	configv1alpha1.AddToScheme,
+	dbav1alpha1.AddToScheme,
 	kubedbv1alpha1.AddToScheme,
 }
 

@@ -41,8 +41,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 	coreclient "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
-	"k8s.io/kubernetes/pkg/kubectl/describe"
-	"k8s.io/kubernetes/pkg/kubectl/describe/versioned"
+	"k8s.io/kubectl/pkg/describe"
+	"k8s.io/kubectl/pkg/describe/versioned"
 	meta_util "kmodules.xyz/client-go/meta"
 )
 

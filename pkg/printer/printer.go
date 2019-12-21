@@ -15,7 +15,7 @@ limitations under the License.
 */
 package printer
 
-// ref: k8s.io/kubernetes/pkg/kubectl/resource_printer.go
+// ref: k8s.io/kubectl/pkg/resource_printer.go
 
 // DescriberSettings holds display configuration for each object
 // describer to control what is printed.
