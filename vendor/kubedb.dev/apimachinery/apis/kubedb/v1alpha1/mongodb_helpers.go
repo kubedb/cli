@@ -1,23 +1,45 @@
+/*
+Copyright The KubeDB Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package v1alpha1
 
 import (
 	"fmt"
 	"strconv"
 
+	"kubedb.dev/apimachinery/api/crds"
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 
 	"github.com/appscode/go/types"
+	"gomodules.xyz/version"
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
-	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	v1 "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
+
+func (_ MongoDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMongoDB))
+}
 
 var _ apis.ResourceInfo = &MongoDB{}
 
@@ -275,54 +297,11 @@ func (m *MongoDB) GetMonitoringVendor() string {
 	return ""
 }
 
-func (m MongoDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
-	return crdutils.NewCustomResourceDefinition(crdutils.Config{
-		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralMongoDB,
-		Singular:      ResourceSingularMongoDB,
-		Kind:          ResourceKindMongoDB,
-		ShortNames:    []string{ResourceCodeMongoDB},
-		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
-		ResourceScope: string(apiextensions.NamespaceScoped),
-		Versions: []apiextensions.CustomResourceDefinitionVersion{
-			{
-				Name:    SchemeGroupVersion.Version,
-				Served:  true,
-				Storage: true,
-			},
-		},
-		Labels: crdutils.Labels{
-			LabelsMap: map[string]string{"app": "kubedb"},
-		},
-		SpecDefinitionName:      "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.MongoDB",
-		EnableValidation:        true,
-		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
-		EnableStatusSubresource: true,
-		AdditionalPrinterColumns: []apiextensions.CustomResourceColumnDefinition{
-			{
-				Name:     "Version",
-				Type:     "string",
-				JSONPath: ".spec.version",
-			},
-			{
-				Name:     "Status",
-				Type:     "string",
-				JSONPath: ".status.phase",
-			},
-			{
-				Name:     "Age",
-				Type:     "date",
-				JSONPath: ".metadata.creationTimestamp",
-			},
-		},
-	}, apis.SetNameSchema)
-}
-
-func (m *MongoDB) SetDefaults() {
+func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 	if m == nil {
 		return
 	}
-	m.Spec.SetDefaults()
+	m.Spec.SetDefaults(mgVersion)
 	if m.Spec.ShardTopology != nil {
 		if m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.ServiceAccountName == "" {
 			m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
@@ -343,7 +322,7 @@ func (m *MongoDB) SetDefaults() {
 	}
 }
 
-func (m *MongoDBSpec) SetDefaults() {
+func (m *MongoDBSpec) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 	if m == nil {
 		return
 	}
@@ -387,9 +366,9 @@ func (m *MongoDBSpec) SetDefaults() {
 		}
 
 		// set default probes
-		m.setDefaultProbes(&m.ShardTopology.Shard.PodTemplate)
-		m.setDefaultProbes(&m.ShardTopology.ConfigServer.PodTemplate)
-		m.setDefaultProbes(&m.ShardTopology.Mongos.PodTemplate)
+		m.setDefaultProbes(&m.ShardTopology.Shard.PodTemplate, mgVersion)
+		m.setDefaultProbes(&m.ShardTopology.ConfigServer.PodTemplate, mgVersion)
+		m.setDefaultProbes(&m.ShardTopology.Mongos.PodTemplate, mgVersion)
 	} else {
 		if m.Replicas == nil {
 			m.Replicas = types.Int32P(1)
@@ -399,7 +378,7 @@ func (m *MongoDBSpec) SetDefaults() {
 			m.PodTemplate = new(ofst.PodTemplateSpec)
 		}
 		// set default probes
-		m.setDefaultProbes(m.PodTemplate)
+		m.setDefaultProbes(m.PodTemplate, mgVersion)
 	}
 
 }
@@ -408,14 +387,32 @@ func (m *MongoDBSpec) SetDefaults() {
 // In operator, check if the value of probe fields is "{}".
 // For "{}", ignore readinessprobe or livenessprobe in statefulset.
 // ref: https://github.com/helm/charts/blob/345ba987722350ffde56ec34d2928c0b383940aa/stable/mongodb/templates/deployment-standalone.yaml#L93
-func (m *MongoDBSpec) setDefaultProbes(podTemplate *ofst.PodTemplateSpec) {
+func (m *MongoDBSpec) setDefaultProbes(podTemplate *ofst.PodTemplateSpec, mgVersion *v1alpha1.MongoDBVersion) {
 	if podTemplate == nil {
 		return
 	}
 
 	var sslArgs string
 	if m.SSLMode == SSLModeRequireSSL {
-		sslArgs = fmt.Sprintf("--ssl --sslCAFile=/data/configdb/%v --sslPEMKeyFile=/data/configdb/%v", MongoTLSCertFileName, MongoClientPemFileName)
+		sslArgs = fmt.Sprintf("--tls --tlsCAFile=/data/configdb/%v --tlsCertificateKeyFile=/data/configdb/%v", MongoTLSCertFileName, MongoClientPemFileName)
+
+		breakingVer, err := version.NewVersion("4.1")
+		if err != nil {
+			return
+		}
+		exceptionVer, err := version.NewVersion("4.1.4")
+		if err != nil {
+			return
+		}
+		currentVer, err := version.NewVersion(mgVersion.Spec.Version)
+		if err != nil {
+			return
+		}
+		if currentVer.Equal(exceptionVer) {
+			sslArgs = fmt.Sprintf("--tls --tlsCAFile=/data/configdb/%v --tlsPEMKeyFile=/data/configdb/%v", MongoTLSCertFileName, MongoClientPemFileName)
+		} else if currentVer.LessThan(breakingVer) {
+			sslArgs = fmt.Sprintf("--ssl --sslCAFile=/data/configdb/%v --sslPEMKeyFile=/data/configdb/%v", MongoTLSCertFileName, MongoClientPemFileName)
+		}
 	}
 
 	cmd := []string{

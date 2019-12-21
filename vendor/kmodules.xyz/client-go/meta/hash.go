@@ -1,3 +1,19 @@
+/*
+Copyright The Kmodules Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package meta
 
 import (
@@ -8,10 +24,8 @@ import (
 	"strconv"
 
 	"github.com/appscode/go/encoding/json/types"
-	"github.com/appscode/go/log"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/fatih/structs"
-	"github.com/golang/glog"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
@@ -106,65 +120,4 @@ func AlreadyReconciled(o interface{}) bool {
 		panic("failed to extract status.observedGeneration field due to err:" + err.Error())
 	}
 	return observedGeneration.MatchGeneration(generation)
-}
-
-// Deprecated, should not be used after we drop support for Kubernetes 1.10. Use AlreadyReconciled
-func AlreadyObserved(o interface{}, enableStatusSubresource bool) bool {
-	if !enableStatusSubresource {
-		return false
-	}
-
-	obj := o.(metav1.Object)
-	st := structs.New(o)
-
-	cur := types.NewIntHash(obj.GetGeneration(), GenerationHash(obj))
-	observed, err := types.ParseIntHash(st.Field("Status").Field("ObservedGeneration").Value())
-	if err != nil {
-		panic(err)
-	}
-	return observed.Equal(cur)
-}
-
-// Deprecated, should not be used after we drop support for Kubernetes 1.10. Use AlreadyReconciled
-func AlreadyObserved2(old, nu interface{}, enableStatusSubresource bool) bool {
-	if old == nil {
-		return nu == nil
-	}
-	if nu == nil { // && old != nil
-		return false
-	}
-	if old == nu {
-		return true
-	}
-
-	oldObj := old.(metav1.Object)
-	nuObj := nu.(metav1.Object)
-
-	oldStruct := structs.New(old)
-	nuStruct := structs.New(nu)
-
-	var match bool
-
-	if enableStatusSubresource {
-		observed, err := types.ParseIntHash(nuStruct.Field("Status").Field("ObservedGeneration").Value())
-		if err != nil {
-			panic(err)
-		}
-		gen := types.NewIntHash(nuObj.GetGeneration(), GenerationHash(nuObj))
-		match = gen.Equal(observed)
-	} else {
-		match = Equal(oldStruct.Field("Spec").Value(), nuStruct.Field("Spec").Value())
-		if match {
-			match = reflect.DeepEqual(oldObj.GetLabels(), nuObj.GetLabels())
-		}
-		if match {
-			match = EqualAnnotation(oldObj.GetAnnotations(), nuObj.GetAnnotations())
-		}
-	}
-
-	if !match && bool(glog.V(log.LevelDebug)) {
-		diff := Diff(old, nu)
-		glog.V(log.LevelDebug).Infof("%s %s/%s has changed. Diff: %s", GetKind(old), oldObj.GetNamespace(), oldObj.GetName(), diff)
-	}
-	return match
 }

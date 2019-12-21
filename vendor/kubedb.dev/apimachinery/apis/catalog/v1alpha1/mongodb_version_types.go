@@ -1,3 +1,19 @@
+/*
+Copyright The KubeDB Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package v1alpha1
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -25,53 +41,53 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MongoDBVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MongoDBVersionSpec `json:"spec,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	Spec              MongoDBVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
 }
 
 // MongoDBVersionSpec is the spec for mongodb version
 type MongoDBVersionSpec struct {
 	// Version
-	Version string `json:"version"`
+	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
 	// Database Image
-	DB MongoDBVersionDatabase `json:"db"`
+	DB MongoDBVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
 	// Exporter Image
-	Exporter MongoDBVersionExporter `json:"exporter"`
+	Exporter MongoDBVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
 	// Tools Image
-	Tools MongoDBVersionTools `json:"tools"`
+	Tools MongoDBVersionTools `json:"tools" protobuf:"bytes,4,opt,name=tools"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty"`
+	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,5,opt,name=deprecated"`
 	// Init container Image
-	InitContainer MongoDBVersionInitContainer `json:"initContainer"`
+	InitContainer MongoDBVersionInitContainer `json:"initContainer" protobuf:"bytes,6,opt,name=initContainer"`
 	// PSP names
-	PodSecurityPolicies MongoDBVersionPodSecurityPolicy `json:"podSecurityPolicies"`
+	PodSecurityPolicies MongoDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
 }
 
 // MongoDBVersionDatabase is the MongoDB Database image
 type MongoDBVersionDatabase struct {
-	Image string `json:"image"`
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // MongoDBVersionExporter is the image for the MongoDB exporter
 type MongoDBVersionExporter struct {
-	Image string `json:"image"`
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // MongoDBVersionTools is the image for the mongodb tools
 type MongoDBVersionTools struct {
-	Image string `json:"image"`
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // MongoDBVersionInitContainer is the Elasticsearch Container initializer
 type MongoDBVersionInitContainer struct {
-	Image string `json:"image"`
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // MongoDBVersionPodSecurityPolicy is the MongoDB pod security policies
 type MongoDBVersionPodSecurityPolicy struct {
-	DatabasePolicyName    string `json:"databasePolicyName"`
-	SnapshotterPolicyName string `json:"snapshotterPolicyName"`
+	DatabasePolicyName    string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	SnapshotterPolicyName string `json:"snapshotterPolicyName" protobuf:"bytes,2,opt,name=snapshotterPolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -79,7 +95,7 @@ type MongoDBVersionPodSecurityPolicy struct {
 // MongoDBVersionList is a list of MongoDBVersions
 type MongoDBVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 	// Items is a list of MongoDBVersion CRD objects
-	Items []MongoDBVersion `json:"items,omitempty"`
+	Items []MongoDBVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }

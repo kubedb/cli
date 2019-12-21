@@ -1,3 +1,19 @@
+/*
+Copyright The KubeDB Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package v1alpha1
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -25,38 +41,38 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type RedisVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              RedisVersionSpec `json:"spec,omitempty"`
+	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	Spec              RedisVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
 }
 
 // RedisVersionSpec is the spec for redis version
 type RedisVersionSpec struct {
 	// Version
-	Version string `json:"version"`
+	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
 	// Database Image
-	DB RedisVersionDatabase `json:"db"`
+	DB RedisVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
 	// Exporter Image
-	Exporter RedisVersionExporter `json:"exporter"`
+	Exporter RedisVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty"`
+	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
 	// PSP names
-	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies"`
+	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,5,opt,name=podSecurityPolicies"`
 }
 
 // RedisVersionDatabase is the Redis Database image
 type RedisVersionDatabase struct {
-	Image string `json:"image"`
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // RedisVersionExporter is the image for the Redis exporter
 type RedisVersionExporter struct {
-	Image string `json:"image"`
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // RedisVersionPodSecurityPolicy is the Redis pod security policies
 type RedisVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -64,7 +80,7 @@ type RedisVersionPodSecurityPolicy struct {
 // RedisVersionList is a list of RedisVersions
 type RedisVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 	// Items is a list of RedisVersion CRD objects
-	Items []RedisVersion `json:"items,omitempty"`
+	Items []RedisVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }

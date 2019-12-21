@@ -1,12 +1,33 @@
+/*
+Copyright The KubeDB Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package v1alpha1
 
 import (
+	"kubedb.dev/apimachinery/api/crds"
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
-	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
 	meta_util "kmodules.xyz/client-go/meta"
 )
+
+func (_ DormantDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralDormantDatabase))
+}
 
 var _ apis.ResourceInfo = &DormantDatabase{}
 
@@ -61,44 +82,6 @@ func (d DormantDatabase) ResourcePlural() string {
 	return ResourcePluralDormantDatabase
 }
 
-func (d DormantDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
-	return crdutils.NewCustomResourceDefinition(crdutils.Config{
-		Group:         SchemeGroupVersion.Group,
-		Plural:        ResourcePluralDormantDatabase,
-		Singular:      ResourceSingularDormantDatabase,
-		Kind:          ResourceKindDormantDatabase,
-		ShortNames:    []string{ResourceCodeDormantDatabase},
-		Categories:    []string{"datastore", "kubedb", "appscode", "all"},
-		ResourceScope: string(apiextensions.NamespaceScoped),
-		Versions: []apiextensions.CustomResourceDefinitionVersion{
-			{
-				Name:    SchemeGroupVersion.Version,
-				Served:  true,
-				Storage: true,
-			},
-		},
-		Labels: crdutils.Labels{
-			LabelsMap: map[string]string{"app": "kubedb"},
-		},
-		SpecDefinitionName:      "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.DormantDatabase",
-		EnableValidation:        false,
-		GetOpenAPIDefinitions:   GetOpenAPIDefinitions,
-		EnableStatusSubresource: true,
-		AdditionalPrinterColumns: []apiextensions.CustomResourceColumnDefinition{
-			{
-				Name:     "Status",
-				Type:     "string",
-				JSONPath: ".status.phase",
-			},
-			{
-				Name:     "Age",
-				Type:     "date",
-				JSONPath: ".metadata.creationTimestamp",
-			},
-		},
-	}, apis.SetNameSchema)
-}
-
 func (d *DormantDatabase) SetDefaults() {
 	if d == nil {
 		return
@@ -108,7 +91,7 @@ func (d *DormantDatabase) SetDefaults() {
 	d.Spec.Origin.Spec.MySQL.SetDefaults()
 	d.Spec.Origin.Spec.PerconaXtraDB.SetDefaults()
 	d.Spec.Origin.Spec.MariaDB.SetDefaults()
-	d.Spec.Origin.Spec.MongoDB.SetDefaults()
+	d.Spec.Origin.Spec.MongoDB.SetDefaults(&v1alpha1.MongoDBVersion{})
 	d.Spec.Origin.Spec.Redis.SetDefaults()
 	d.Spec.Origin.Spec.Memcached.SetDefaults()
 	d.Spec.Origin.Spec.Etcd.SetDefaults()
