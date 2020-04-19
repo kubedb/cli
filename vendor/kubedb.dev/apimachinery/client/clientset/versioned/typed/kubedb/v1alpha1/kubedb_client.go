@@ -27,7 +27,6 @@ import (
 
 type KubedbV1alpha1Interface interface {
 	RESTClient() rest.Interface
-	DormantDatabasesGetter
 	ElasticsearchesGetter
 	EtcdsGetter
 	MariaDBsGetter
@@ -39,16 +38,11 @@ type KubedbV1alpha1Interface interface {
 	PostgresesGetter
 	ProxySQLsGetter
 	RedisesGetter
-	SnapshotsGetter
 }
 
 // KubedbV1alpha1Client is used to interact with features provided by the kubedb.com group.
 type KubedbV1alpha1Client struct {
 	restClient rest.Interface
-}
-
-func (c *KubedbV1alpha1Client) DormantDatabases(namespace string) DormantDatabaseInterface {
-	return newDormantDatabases(c, namespace)
 }
 
 func (c *KubedbV1alpha1Client) Elasticsearches(namespace string) ElasticsearchInterface {
@@ -93,10 +87,6 @@ func (c *KubedbV1alpha1Client) ProxySQLs(namespace string) ProxySQLInterface {
 
 func (c *KubedbV1alpha1Client) Redises(namespace string) RedisInterface {
 	return newRedises(c, namespace)
-}
-
-func (c *KubedbV1alpha1Client) Snapshots(namespace string) SnapshotInterface {
-	return newSnapshots(c, namespace)
 }
 
 // NewForConfig creates a new KubedbV1alpha1Client for the given config.

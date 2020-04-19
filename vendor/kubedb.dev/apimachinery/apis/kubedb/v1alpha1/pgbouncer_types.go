@@ -22,7 +22,6 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
-	v1 "kmodules.xyz/offshoot-api/api/v1"
 )
 
 const (
@@ -57,110 +56,106 @@ type PgBouncerSpec struct {
 	// Number of instances to deploy for a PgBouncer instance.
 	// +optional
 	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
-	// ServiceTemplate is an optional configuration for service used to expose database
+	// ServiceTemplate is an optional configuration for service used to expose database.
 	// +optional
-	ServiceTemplate v1.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,3,opt,name=serviceTemplate"`
-	// PodTemplate is an optional configuration for pods
+	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,3,opt,name=serviceTemplate"`
+	// PodTemplate is an optional configuration for pods.
 	// +optional
 	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,4,opt,name=podTemplate"`
-	// Databases to proxy by connection pooling
+	// Databases to proxy by connection pooling.
 	// +optional
 	Databases []Databases `json:"databases,omitempty" protobuf:"bytes,5,rep,name=databases"`
-	// ConnectionPoolConfig defines Connection pool configuration
+	// ConnectionPoolConfig defines Connection pool configuration.
 	// +optional
 	ConnectionPool *ConnectionPoolConfig `json:"connectionPool,omitempty" protobuf:"bytes,6,opt,name=connectionPool"`
-	// UserListSecretRef is a secret with a list of PgBouncer user and passwords
+	// UserListSecretRef is a secret with a list of PgBouncer user and passwords.
 	// +optional
 	UserListSecretRef *core.LocalObjectReference `json:"userListSecretRef,omitempty" protobuf:"bytes,7,opt,name=userListSecretRef"`
-	// Monitor is used monitor database instance
+	// Monitor is used monitor database instance.
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,8,opt,name=monitor"`
+	// TLS contains tls configurations for client and server.
+	// +optional
+	TLS *TLSConfig `json:"tls,omitempty" protobuf:"bytes,9,opt,name=tls"`
+	// Indicates that the database is paused and controller will not sync any changes made to this spec.
+	// +optional
+	Paused bool `json:"paused,omitempty" protobuf:"varint,10,opt,name=paused"`
 }
 
 type Databases struct {
-	//Alias to uniquely identify a target database running inside a specific Postgres instance
+	// Alias to uniquely identify a target database running inside a specific Postgres instance.
 	Alias string `json:"alias" protobuf:"bytes,1,opt,name=alias"`
-	// DatabaseRef specifies the database appbinding reference in any namespace
+	// DatabaseRef specifies the database appbinding reference in any namespace.
 	DatabaseRef appcat.AppReference `json:"databaseRef" protobuf:"bytes,2,opt,name=databaseRef"`
-	// DatabaseName is the name of the target database inside a Postgres instance
+	// DatabaseName is the name of the target database inside a Postgres instance.
 	DatabaseName string `json:"databaseName" protobuf:"bytes,3,opt,name=databaseName"`
-	//UserName is used to bind a single user to a specific database connection
+	// DatabaseSecretRef points to a secret that contains the credentials
+	// (username and password) of an existing user of this database.
+	// It is used to bind a single user to this specific database connection.
 	// +optional
-	UserName string `json:"username,omitempty" protobuf:"bytes,4,opt,name=username"`
-	//Password is to authenticate the user specified in Username field
-	// +optional
-	Password string `json:"password,omitempty" protobuf:"bytes,5,opt,name=password"`
+	DatabaseSecretRef *core.LocalObjectReference `json:"databaseSecretRef,omitempty" protobuf:"bytes,4,opt,name=databaseSecretRef"`
 }
 
 type ConnectionPoolConfig struct {
-	//Port is the port number on which PgBouncer listens to clients. Default: 5432.
+	// Port is the port number on which PgBouncer listens to clients. Default: 5432.
 	// +optional
 	Port *int32 `json:"port,omitempty" protobuf:"varint,1,opt,name=port"`
-	//PoolMode is the pooling mechanism type. Default: session.
+	// PoolMode is the pooling mechanism type. Default: session.
 	// +optional
 	PoolMode string `json:"poolMode,omitempty" protobuf:"bytes,2,opt,name=poolMode"`
-	//MaxClientConnections is the maximum number of allowed client connections. Default: 100.
+	// MaxClientConnections is the maximum number of allowed client connections. Default: 100.
 	// +optional
 	MaxClientConnections *int64 `json:"maxClientConnections,omitempty" protobuf:"varint,3,opt,name=maxClientConnections"`
-	//DefaultPoolSize specifies how many server connections to allow per user/database pair. Default: 20.
+	// DefaultPoolSize specifies how many server connections to allow per user/database pair. Default: 20.
 	// +optional
 	DefaultPoolSize *int64 `json:"defaultPoolSize,omitempty" protobuf:"varint,4,opt,name=defaultPoolSize"`
-	//MinPoolSize is used to add more server connections to pool if below this number. Default: 0 (disabled).
+	// MinPoolSize is used to add more server connections to pool if below this number. Default: 0 (disabled).
 	// +optional
 	MinPoolSize *int64 `json:"minPoolSize,omitempty" protobuf:"varint,5,opt,name=minPoolSize"`
-	//ReservePoolSize specifies how many additional connections to allow to a pool. 0 disables. Default: 0 (disabled)
+	// ReservePoolSize specifies how many additional connections to allow to a pool. 0 disables. Default: 0 (disabled).
 	// +optional
 	ReservePoolSize *int64 `json:"reservePoolSize,omitempty" protobuf:"varint,6,opt,name=reservePoolSize"`
-	//ReservePoolTimeoutSeconds is the number of seconds in which if a client has not been serviced,
-	//pgbouncer enables use of additional connections from reserve pool. 0 disables. Default: 5.0
+	// ReservePoolTimeoutSeconds is the number of seconds in which if a client has not been serviced,
+	// pgbouncer enables use of additional connections from reserve pool. 0 disables. Default: 5.0.
 	// +optional
 	ReservePoolTimeoutSeconds *int64 `json:"reservePoolTimeoutSeconds,omitempty" protobuf:"varint,7,opt,name=reservePoolTimeoutSeconds"`
-	//MaxDBConnections is the maximum number of connections allowed per-database. Default: unlimited.
+	// MaxDBConnections is the maximum number of connections allowed per-database. Default: unlimited.
 	// +optional
 	MaxDBConnections *int64 `json:"maxDBConnections,omitempty" protobuf:"varint,8,opt,name=maxDBConnections"`
-	//MaxUserConnections is the maximum number of users allowed per-database. Default: unlimited.
+	// MaxUserConnections is the maximum number of users allowed per-database. Default: unlimited.
 	// +optional
 	MaxUserConnections *int64 `json:"maxUserConnections,omitempty" protobuf:"varint,9,opt,name=maxUserConnections"`
-	//StatsPeriodSeconds sets how often the averages shown in various SHOW commands are updated
-	//and how often aggregated statistics are written to the log
+	// StatsPeriodSeconds sets how often the averages shown in various SHOW commands are updated
+	// and how often aggregated statistics are written to the log.
 	// +optional
 	StatsPeriodSeconds *int64 `json:"statsPeriodSeconds,omitempty" protobuf:"varint,10,opt,name=statsPeriodSeconds"`
-	//AdminUsers specifies an array of users who can act as PgBouncer administrators
+	// AdminUsers specifies an array of users who can act as PgBouncer administrators.
 	// +optional
 	AdminUsers []string `json:"adminUsers,omitempty" protobuf:"bytes,11,rep,name=adminUsers"`
-	//AuthType specifies how to authenticate users. Default: md5 (md5+plain text)
+	// AuthType specifies how to authenticate users. Default: md5 (md5+plain text).
 	// +optional
 	AuthType string `json:"authType,omitempty" protobuf:"bytes,12,opt,name=authType"`
-	//AuthUser looks up any user not specified in auth_file from pg_shadow. Default: not set.
+	// AuthUser looks up any user not specified in auth_file from pg_shadow. Default: not set.
 	// +optional
 	AuthUser string `json:"authUser,omitempty" protobuf:"bytes,13,opt,name=authUser"`
-	//IgnoreStartupParameters specifies comma-separated startup parameters that
-	//pgbouncer knows are handled by admin and it can ignore them
+	// IgnoreStartupParameters specifies comma-separated startup parameters that
+	// pgbouncer knows are handled by admin and it can ignore them.
 	// +optional
 	IgnoreStartupParameters string `json:"ignoreStartupParameters,omitempty" protobuf:"bytes,14,opt,name=ignoreStartupParameters"`
-}
-
-type UserList struct {
-	//SecretName points to a secret that holds a file containing list of users
-	SecretName string `json:"secretName" protobuf:"bytes,1,opt,name=secretName"`
-	//SecretNamespace specifies the namespace of specified secret.
-	//By default, uses the same namespace as pgbouncer if left empty, not default namespace.
-	// +optional
-	SecretNamespace string `json:"secretNamespace,omitempty" protobuf:"bytes,2,opt,name=secretNamespace"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	// Items is a list of PgBouncer CRD objects
+	// Items is a list of PgBouncer CRD objects.
 	Items []PgBouncer `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
 
 type PgBouncerStatus struct {
-	//Phase specifies the current state of PgBouncer server
+	// Phase specifies the current state of PgBouncer server.
 	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
-	//Reason is used to explain phases of interest of the server.
+	// Reason is used to explain phases of interest of the server.
 	Reason string `json:"reason,omitempty" protobuf:"bytes,2,opt,name=reason"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.

@@ -83,11 +83,6 @@ func (m MySQL) GoverningServiceName() string {
 	return m.OffshootName() + "-gvr"
 }
 
-// Snapshot service account name.
-func (m MySQL) SnapshotSAName() string {
-	return fmt.Sprintf("%v-snapshot", m.OffshootName())
-}
-
 func (m MySQL) PeerName(idx int) string {
 	return fmt.Sprintf("%s-%d.%s.%s", m.OffshootName(), idx, m.GoverningServiceName(), m.Namespace)
 }
@@ -157,41 +152,34 @@ func (m *MySQL) SetDefaults() {
 	if m == nil {
 		return
 	}
-	m.Spec.SetDefaults()
+	if m.Spec.StorageType == "" {
+		m.Spec.StorageType = StorageTypeDurable
+	}
+	if m.Spec.UpdateStrategy.Type == "" {
+		m.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	}
+	if m.Spec.TerminationPolicy == "" {
+		m.Spec.TerminationPolicy = TerminationPolicyDelete
+	} else if m.Spec.TerminationPolicy == TerminationPolicyPause {
+		m.Spec.TerminationPolicy = TerminationPolicyHalt
+	}
+
+	if m.Spec.Topology != nil && m.Spec.Topology.Mode != nil && *m.Spec.Topology.Mode == MySQLClusterModeGroup {
+		if m.Spec.Replicas == nil {
+			m.Spec.Replicas = types.Int32P(MySQLDefaultGroupSize)
+		}
+		m.Spec.setDefaultProbes()
+	} else {
+		if m.Spec.Replicas == nil {
+			m.Spec.Replicas = types.Int32P(1)
+		}
+	}
 
 	if m.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
 	}
-}
 
-func (m *MySQLSpec) SetDefaults() {
-	if m == nil {
-		return
-	}
-
-	// perform defaulting
-	m.BackupSchedule.SetDefaults()
-
-	if m.StorageType == "" {
-		m.StorageType = StorageTypeDurable
-	}
-	if m.UpdateStrategy.Type == "" {
-		m.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
-	}
-	if m.TerminationPolicy == "" {
-		m.TerminationPolicy = TerminationPolicyDelete
-	}
-
-	if m.Topology != nil && m.Topology.Mode != nil && *m.Topology.Mode == MySQLClusterModeGroup {
-		if m.Replicas == nil {
-			m.Replicas = types.Int32P(MySQLDefaultGroupSize)
-		}
-		m.setDefaultProbes()
-	} else {
-		if m.Replicas == nil {
-			m.Replicas = types.Int32P(1)
-		}
-	}
+	m.Spec.Monitor.SetDefaults()
 }
 
 // setDefaultProbes sets defaults only when probe fields are nil.

@@ -143,29 +143,25 @@ func (m *MariaDB) SetDefaults() {
 	if m == nil {
 		return
 	}
-	m.Spec.SetDefaults()
-}
-
-func (m *MariaDBSpec) SetDefaults() {
-	if m == nil {
-		return
-	}
-
-	if m.Replicas == nil {
-		m.Replicas = types.Int32P(1)
+	if m.Spec.Replicas == nil {
+		m.Spec.Replicas = types.Int32P(1)
 	}
 
 	// perform defaulting
 
-	if m.StorageType == "" {
-		m.StorageType = StorageTypeDurable
+	if m.Spec.StorageType == "" {
+		m.Spec.StorageType = StorageTypeDurable
 	}
-	if m.UpdateStrategy.Type == "" {
-		m.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	if m.Spec.UpdateStrategy.Type == "" {
+		m.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
-	if m.TerminationPolicy == "" {
-		m.TerminationPolicy = TerminationPolicyDelete
+	if m.Spec.TerminationPolicy == "" {
+		m.Spec.TerminationPolicy = TerminationPolicyDelete
+	} else if m.Spec.TerminationPolicy == TerminationPolicyPause {
+		m.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
+
+	m.Spec.Monitor.SetDefaults()
 }
 
 func (m *MariaDBSpec) GetSecrets() []string {

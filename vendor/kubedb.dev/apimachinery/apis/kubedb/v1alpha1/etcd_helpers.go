@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/kubedb"
 
+	"github.com/appscode/go/types"
 	apps "k8s.io/api/apps/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -79,11 +80,6 @@ func (e Etcd) ClientServiceName() string {
 
 func (e Etcd) PeerServiceName() string {
 	return e.OffshootName()
-}
-
-// Snapshot service account name.
-func (e Etcd) SnapshotSAName() string {
-	return fmt.Sprintf("%v-snapshot", e.OffshootName())
 }
 
 type etcdApp struct {
@@ -147,24 +143,24 @@ func (e *Etcd) SetDefaults() {
 	if e == nil {
 		return
 	}
-	e.Spec.SetDefaults()
-}
-
-func (e *EtcdSpec) SetDefaults() {
-	if e == nil {
-		return
-	}
 
 	// perform defaulting
-	if e.StorageType == "" {
-		e.StorageType = StorageTypeDurable
+	if e.Spec.Replicas == nil {
+		e.Spec.Replicas = types.Int32P(1)
 	}
-	if e.UpdateStrategy.Type == "" {
-		e.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	if e.Spec.StorageType == "" {
+		e.Spec.StorageType = StorageTypeDurable
 	}
-	if e.TerminationPolicy == "" {
-		e.TerminationPolicy = TerminationPolicyDelete
+	if e.Spec.UpdateStrategy.Type == "" {
+		e.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
+	if e.Spec.TerminationPolicy == "" {
+		e.Spec.TerminationPolicy = TerminationPolicyDelete
+	} else if e.Spec.TerminationPolicy == TerminationPolicyPause {
+		e.Spec.TerminationPolicy = TerminationPolicyHalt
+	}
+
+	e.Spec.Monitor.SetDefaults()
 }
 
 func (e *EtcdSpec) GetSecrets() []string {

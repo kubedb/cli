@@ -41,16 +41,25 @@ spec:
     openAPIV3Schema:
       properties:
         apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
           type: string
         kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
           type: string
         metadata:
           type: object
         spec:
+          description: ElasticsearchVersionSpec is the spec for elasticsearch version
           properties:
             authPlugin:
+              description: Authentication plugin used by Elasticsearch cluster.
               type: string
             db:
+              description: Database Image
               properties:
                 image:
                   type: string
@@ -58,8 +67,11 @@ spec:
               - image
               type: object
             deprecated:
+              description: Deprecated versions usable but regarded as obsolete and
+                best avoided, typically due to having been superseded.
               type: boolean
             exporter:
+              description: Exporter Image
               properties:
                 image:
                   type: string
@@ -67,6 +79,7 @@ spec:
               - image
               type: object
             initContainer:
+              description: Init container Image
               properties:
                 image:
                   type: string
@@ -77,16 +90,15 @@ spec:
               - yqImage
               type: object
             podSecurityPolicies:
+              description: PSP names
               properties:
                 databasePolicyName:
                   type: string
-                snapshotterPolicyName:
-                  type: string
               required:
               - databasePolicyName
-              - snapshotterPolicyName
               type: object
             tools:
+              description: Tools Image
               properties:
                 image:
                   type: string
@@ -94,6 +106,7 @@ spec:
               - image
               type: object
             version:
+              description: Version
               type: string
           required:
           - authPlugin

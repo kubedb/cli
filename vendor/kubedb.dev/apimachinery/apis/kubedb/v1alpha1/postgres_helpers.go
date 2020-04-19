@@ -78,11 +78,6 @@ func (p Postgres) ServiceName() string {
 	return p.OffshootName()
 }
 
-// Snapshot service account name.
-func (p Postgres) SnapshotSAName() string {
-	return fmt.Sprintf("%v-snapshot", p.OffshootName())
-}
-
 type postgresApp struct {
 	*Postgres
 }
@@ -148,48 +143,42 @@ func (p *Postgres) SetDefaults() {
 	if p == nil {
 		return
 	}
-	p.Spec.SetDefaults()
 
-	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
-		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
+	if p.Spec.StorageType == "" {
+		p.Spec.StorageType = StorageTypeDurable
 	}
-}
-
-func (p *PostgresSpec) SetDefaults() {
-	if p == nil {
-		return
+	if p.Spec.UpdateStrategy.Type == "" {
+		p.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
-
-	// perform defaulting
-	p.BackupSchedule.SetDefaults()
-
-	if p.StorageType == "" {
-		p.StorageType = StorageTypeDurable
+	if p.Spec.TerminationPolicy == "" {
+		p.Spec.TerminationPolicy = TerminationPolicyDelete
+	} else if p.Spec.TerminationPolicy == TerminationPolicyPause {
+		p.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
-	if p.UpdateStrategy.Type == "" {
-		p.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
-	}
-	if p.TerminationPolicy == "" {
-		p.TerminationPolicy = TerminationPolicyDelete
-	}
-	if p.Init != nil && p.Init.PostgresWAL != nil && p.Init.PostgresWAL.PITR != nil {
-		pitr := p.Init.PostgresWAL.PITR
+	if p.Spec.Init != nil && p.Spec.Init.PostgresWAL != nil && p.Spec.Init.PostgresWAL.PITR != nil {
+		pitr := p.Spec.Init.PostgresWAL.PITR
 
 		if pitr.TargetInclusive == nil {
 			pitr.TargetInclusive = types.BoolP(true)
 		}
 
-		p.Init.PostgresWAL.PITR = pitr
+		p.Spec.Init.PostgresWAL.PITR = pitr
 	}
 
-	if p.LeaderElection == nil {
+	if p.Spec.LeaderElection == nil {
 		// Default values: https://github.com/kubernetes/apiserver/blob/e85ad7b666fef0476185731329f4cff1536efff8/pkg/apis/config/v1alpha1/defaults.go#L26-L52
-		p.LeaderElection = &LeaderElectionConfig{
+		p.Spec.LeaderElection = &LeaderElectionConfig{
 			LeaseDurationSeconds: 15,
 			RenewDeadlineSeconds: 10,
 			RetryPeriodSeconds:   2,
 		}
 	}
+
+	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
+		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
+	}
+
+	p.Spec.Monitor.SetDefaults()
 }
 
 func (e *PostgresSpec) GetSecrets() []string {

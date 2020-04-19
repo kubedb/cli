@@ -25,10 +25,18 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 
 	apps "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
+)
+
+const (
+	ElasticsearchNodeAffinityTemplateVar = "NODE_ROLE"
 )
 
 func (_ Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -82,9 +90,9 @@ func (e *Elasticsearch) MasterServiceName() string {
 	return fmt.Sprintf("%v-master", e.ServiceName())
 }
 
-// Snapshot service account name.
-func (e Elasticsearch) SnapshotSAName() string {
-	return fmt.Sprintf("%v-snapshot", e.OffshootName())
+// Governing Service Name
+func (e Elasticsearch) GvrSvcName() string {
+	return e.OffshootName() + "-gvr"
 }
 
 func (e *Elasticsearch) GetConnectionScheme() string {
@@ -111,8 +119,8 @@ func (r elasticsearchApp) Type() appcat.AppType {
 	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularElasticsearch))
 }
 
-func (r Elasticsearch) AppBindingMeta() appcat.AppBindingMeta {
-	return &elasticsearchApp{&r}
+func (e Elasticsearch) AppBindingMeta() appcat.AppBindingMeta {
+	return &elasticsearchApp{&e}
 }
 
 type elasticsearchStatsService struct {
@@ -156,37 +164,88 @@ func (e *Elasticsearch) GetMonitoringVendor() string {
 	return ""
 }
 
-func (e *Elasticsearch) SetDefaults() {
+func (e *Elasticsearch) SetDefaults(topology *core_util.Topology) {
 	if e == nil {
 		return
 	}
-	e.Spec.SetDefaults()
+	if !e.Spec.DisableSecurity && e.Spec.AuthPlugin == v1alpha1.ElasticsearchAuthPluginNone {
+		e.Spec.DisableSecurity = true
+	}
+	e.Spec.AuthPlugin = ""
+	if e.Spec.StorageType == "" {
+		e.Spec.StorageType = StorageTypeDurable
+	}
+	if e.Spec.UpdateStrategy.Type == "" {
+		e.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	}
+	if e.Spec.TerminationPolicy == "" {
+		e.Spec.TerminationPolicy = TerminationPolicyDelete
+	} else if e.Spec.TerminationPolicy == TerminationPolicyPause {
+		e.Spec.TerminationPolicy = TerminationPolicyHalt
+	}
 
 	if e.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		e.Spec.PodTemplate.Spec.ServiceAccountName = e.OffshootName()
 	}
+
+	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
+
+	e.Spec.Monitor.SetDefaults()
 }
 
-func (e *ElasticsearchSpec) SetDefaults() {
-	if e == nil {
+// setDefaultAffinity
+func (e *Elasticsearch) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels map[string]string, topology *core_util.Topology) {
+	if podTemplate == nil {
+		return
+	} else if podTemplate.Spec.Affinity != nil {
+		// Update topologyKey fields according to Kubernetes version
+		topology.ConvertAffinity(podTemplate.Spec.Affinity)
 		return
 	}
 
-	// perform defaulting
-	e.BackupSchedule.SetDefaults()
+	podTemplate.Spec.Affinity = &corev1.Affinity{
+		PodAntiAffinity: &corev1.PodAntiAffinity{
+			PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{
+				// Prefer to not schedule multiple pods on the same node
+				{
+					Weight: 100,
+					PodAffinityTerm: corev1.PodAffinityTerm{
+						Namespaces: []string{e.Namespace},
+						LabelSelector: &metav1.LabelSelector{
+							MatchLabels:      labels,
+							MatchExpressions: e.GetMatchExpressions(),
+						},
 
-	if !e.DisableSecurity && e.AuthPlugin == v1alpha1.ElasticsearchAuthPluginNone {
-		e.DisableSecurity = true
+						TopologyKey: corev1.LabelHostname,
+					},
+				},
+				// Prefer to not schedule multiple pods on the node with same zone
+				{
+					Weight: 50,
+					PodAffinityTerm: corev1.PodAffinityTerm{
+						Namespaces: []string{e.Namespace},
+						LabelSelector: &metav1.LabelSelector{
+							MatchLabels:      labels,
+							MatchExpressions: e.GetMatchExpressions(),
+						},
+						TopologyKey: topology.LabelZone,
+					},
+				},
+			},
+		},
 	}
-	e.AuthPlugin = ""
-	if e.StorageType == "" {
-		e.StorageType = StorageTypeDurable
+}
+
+func (e *Elasticsearch) GetMatchExpressions() []metav1.LabelSelectorRequirement {
+	if e.Spec.Topology == nil {
+		return nil
 	}
-	if e.UpdateStrategy.Type == "" {
-		e.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
-	}
-	if e.TerminationPolicy == "" {
-		e.TerminationPolicy = TerminationPolicyDelete
+
+	return []metav1.LabelSelectorRequirement{
+		{
+			Key:      fmt.Sprintf("${%s}", ElasticsearchNodeAffinityTemplateVar),
+			Operator: metav1.LabelSelectorOpExists,
+		},
 	}
 }
 

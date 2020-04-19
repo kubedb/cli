@@ -19,9 +19,6 @@ import (
 	"flag"
 	"io"
 
-	"kubedb.dev/cli/pkg/cmds/create"
-	"kubedb.dev/cli/pkg/cmds/get"
-
 	v "github.com/appscode/go/version"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -67,24 +64,9 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 
 	groups := templates.CommandGroups{
 		{
-			Message: "Basic Commands (Beginner):",
-			Commands: []*cobra.Command{
-				create.NewCmdCreate(f, ioStreams),
-			},
-		},
-		{
-			Message: "Basic Commands (Intermediate):",
-			Commands: []*cobra.Command{
-				get.NewCmdGet("kubedb", f, ioStreams),
-				NewCmdEdit(f, ioStreams),
-				NewCmdDelete(f, ioStreams),
-			},
-		},
-		{
 			Message: "Troubleshooting and Debugging Commands:",
 			Commands: []*cobra.Command{
 				NewCmdDescribe("kubedb", f, ioStreams),
-				NewCmdApiResources(f, ioStreams),
 				v.NewCmdVersion(),
 			},
 		},

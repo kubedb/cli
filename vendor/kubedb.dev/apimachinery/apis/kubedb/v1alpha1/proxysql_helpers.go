@@ -140,21 +140,20 @@ func (p *ProxySQL) SetDefaults() {
 	if p == nil {
 		return
 	}
-	p.Spec.SetDefaults()
-}
 
-func (p *ProxySQLSpec) SetDefaults() {
-	if p == nil || p.Mode == nil || p.Backend == nil {
+	if p == nil || p.Spec.Mode == nil || p.Spec.Backend == nil {
 		return
 	}
 
-	if p.Replicas == nil {
-		p.Replicas = types.Int32P(1)
+	if p.Spec.Replicas == nil {
+		p.Spec.Replicas = types.Int32P(1)
 	}
 
-	if p.UpdateStrategy.Type == "" {
-		p.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	if p.Spec.UpdateStrategy.Type == "" {
+		p.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
+
+	p.Spec.Monitor.SetDefaults()
 }
 
 func (p *ProxySQLSpec) GetSecrets() []string {

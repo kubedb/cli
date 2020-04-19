@@ -1,5 +1,5 @@
 /*
-Copyright 2017 The Kubernetes Authors.
+Copyright The Kmodules Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package printers
-
-import (
-	"io"
-
-	"github.com/liggitt/tabwriter"
-)
+package v1
 
 const (
-	tabwriterMinWidth = 6
-	tabwriterWidth    = 4
-	tabwriterPadding  = 3
-	tabwriterPadChar  = ' '
-	tabwriterFlags    = tabwriter.RememberWidths
+	NiceAdjustment  = "NICE_ADJUSTMENT"
+	IONiceClass     = "IONICE_CLASS"
+	IONiceClassData = "IONICE_CLASS_DATA"
 )
-
-// GetNewTabWriter returns a tabwriter that translates tabbed columns in input into properly aligned text.
-func GetNewTabWriter(output io.Writer) *tabwriter.Writer {
-	return tabwriter.NewWriter(output, tabwriterMinWidth, tabwriterWidth, tabwriterPadding, tabwriterPadChar, tabwriterFlags)
-}

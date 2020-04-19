@@ -48,8 +48,8 @@ var (
 		# Describe a postgres
 		kubedb describe pg/postgres-demo
 
-		# Describe all dormantdatabases
-		kubedb describe drmn
+		# Describe all postgreses
+		kubedb describe pg
 
  		Valid resource types include:
     		* all
@@ -60,8 +60,6 @@ var (
     		* mongodbs
     		* redises
     		* memcacheds
-    		* snapshots
-    		* dormantdatabases
 `)
 )
 
@@ -97,7 +95,7 @@ func NewCmdDescribe(parent string, f cmdutil.Factory, streams genericclioptions.
 	}
 
 	cmd := &cobra.Command{
-		Use:                   "describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)",
+		Use:                   "describe:db (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)",
 		DisableFlagsInUseLine: true,
 		Short:                 i18n.T("Show details of a specific resource or group of resources"),
 		Long:                  describeLong + "\n\n" + cmdutil.SuggestAPIResources(parent),

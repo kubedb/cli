@@ -29,17 +29,15 @@ const (
 	RoleStats         = "stats"
 	DefaultStatsPath  = "/metrics"
 
-	PostgresKey         = ResourceSingularPostgres + "." + GenericKey
-	ElasticsearchKey    = ResourceSingularElasticsearch + "." + GenericKey
-	MySQLKey            = ResourceSingularMySQL + "." + GenericKey
-	PerconaXtraDBKey    = ResourceSingularPerconaXtraDB + "." + GenericKey
-	MongoDBKey          = ResourceSingularMongoDB + "." + GenericKey
-	RedisKey            = ResourceSingularRedis + "." + GenericKey
-	MemcachedKey        = ResourceSingularMemcached + "." + GenericKey
-	EtcdKey             = ResourceSingularEtcd + "." + GenericKey
-	ProxySQLKey         = ResourceSingularProxySQL + "." + GenericKey
-	SnapshotKey         = ResourceSingularSnapshot + "." + GenericKey
-	LabelSnapshotStatus = SnapshotKey + "/status"
+	PostgresKey      = ResourceSingularPostgres + "." + GenericKey
+	ElasticsearchKey = ResourceSingularElasticsearch + "." + GenericKey
+	MySQLKey         = ResourceSingularMySQL + "." + GenericKey
+	PerconaXtraDBKey = ResourceSingularPerconaXtraDB + "." + GenericKey
+	MongoDBKey       = ResourceSingularMongoDB + "." + GenericKey
+	RedisKey         = ResourceSingularRedis + "." + GenericKey
+	MemcachedKey     = ResourceSingularMemcached + "." + GenericKey
+	EtcdKey          = ResourceSingularEtcd + "." + GenericKey
+	ProxySQLKey      = ResourceSingularProxySQL + "." + GenericKey
 
 	AnnotationInitialized = GenericKey + "/initialized"
 	AnnotationJobType     = GenericKey + "/job-type"
@@ -55,9 +53,16 @@ const (
 	ElasticsearchNodePort     = 9300
 	ElasticsearchNodePortName = "transport"
 
-	MongoDBShardPort    = 27017
-	MongoDBConfigdbPort = 27017
-	MongoDBMongosPort   = 27017
+	MongoDBShardPort                  = 27017
+	MongoDBConfigdbPort               = 27017
+	MongoDBMongosPort                 = 27017
+	MongoDBKeyFileSecretSuffix        = "-key"
+	MongoDBExternalClientSecretSuffix = "-client-cert"
+	MongoDBExporterClientSecretSuffix = "-exporter-cert"
+	MongoDBServerSecretSuffix         = "-server-cert"
+	MongoDBPEMSecretSuffix            = "-pem"
+	MongoDBClientCertOrganization     = DatabaseNamePrefix + ":client"
+	MongoDBCertificateCN              = "root"
 
 	MySQLUserKey         = "username"
 	MySQLPasswordKey     = "password"
@@ -72,7 +77,7 @@ const (
 	// And the maximum group size is 9. So MySQLMaxBaseServerID is the maximum safe value
 	// for BaseServerID calculated as max MySQL server_id value - max Replication Group size.
 	// xref: https://dev.mysql.com/doc/refman/5.7/en/replication-options.html
-	MySQLMaxBaseServerID int64 = 2 ^ 32 - 1 - 9
+	MySQLMaxBaseServerID int64 = ((1 << 32) - 1) - 9
 
 	PerconaXtraDBClusterRecommendedVersion    = "5.7"
 	PerconaXtraDBMaxClusterNameLength         = 32
@@ -82,7 +87,7 @@ const (
 	PerconaXtraDBDataLostFoundPath            = PerconaXtraDBDataMountPath + "lost+found"
 	PerconaXtraDBInitDBMountPath              = "/docker-entrypoint-initdb.d"
 	PerconaXtraDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
-	PerconaXtraDBClusterCustomConfigMountPath = "/etc/mysql/percona-xtradb-cluster.conf.d/"
+	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
 
 	LabelProxySQLName        = ProxySQLKey + "/name"
 	LabelProxySQLLoadBalance = ProxySQLKey + "/load-balance"
@@ -93,9 +98,21 @@ const (
 	ProxySQLAdminPort             = 6032
 	ProxySQLAdminPortName         = "proxyadm"
 	ProxySQLDataMountPath         = "/var/lib/proxysql"
-	ProxySQLCustomConfigMountPath = "/etc/custom-proxysql.cnf"
+	ProxySQLCustomConfigMountPath = "/etc/custom-config"
 
 	RedisShardKey   = RedisKey + "/shard"
 	RedisNodePort   = 6379
 	RedisGossipPort = 16379
+
+	PgBouncerServingClientSuffix      = "-serving-client-cert"
+	PgBouncerExporterClientCertSuffix = "-exporter-cert"
+	PgBouncerServingServerSuffix      = "-serving-server-cert"
+	PgBouncerUpstreamServerCA         = "upstream-server-ca.crt"
+
+	MySQLClientCertSuffix         = "client-cert"
+	MySQLExporterClientCertSuffix = "exporter-cert"
+	MySQLServerCertSuffix         = "server-cert"
+
+	LocalHost   = "localhost"
+	LocalHostIP = "127.0.0.1"
 )
