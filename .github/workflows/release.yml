@@ -35,6 +35,20 @@ jobs:
       run: |
         make release
 
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        draft: true
+        files: |
+          bin/kubectl-dba-linux-amd64
+          bin/kubectl-dba-linux-arm
+          bin/kubectl-dba-linux-arm64
+          bin/kubectl-dba-windows-amd64.exe
+          bin/kubectl-dba-darwin-amd64
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - uses: actions/upload-artifact@master
       with:
         name: kubedb-cli-binaries
