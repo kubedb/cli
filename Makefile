@@ -17,7 +17,7 @@ SHELL=/bin/bash -o pipefail
 
 GO_PKG   := kubedb.dev
 REPO     := $(notdir $(shell pwd))
-BIN      := kubedb
+BIN      := kubectl-dba
 COMPRESS ?= no
 
 # This version-strategy uses git tags to set the version string
@@ -54,7 +54,7 @@ BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
 OS   := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 
-GO_VERSION       ?= 1.13.4
+GO_VERSION       ?= 1.14.2
 BUILD_IMAGE      ?= appscode/golang-dev:$(GO_VERSION)
 
 OUTBIN = bin/$(OS)_$(ARCH)/$(BIN)

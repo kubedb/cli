@@ -35,12 +35,12 @@ import (
 // NewKubeDBCommand creates the `kubedb` command and its nested children.
 func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	cmds := &cobra.Command{
-		Use:   "kubedb",
-		Short: "Command line interface for KubeDB",
+		Use:   "kubectl-dba",
+		Short: "kubectl plugin for KubeDB",
 		Long: templates.LongDesc(`
       KubeDB by AppsCode - Kubernetes ready production-grade Databases
 
-      Find more information at https://github.com/kubedb/cli.`),
+      Find more information at https://kubedb.com`),
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			cli.SendAnalytics(cmd, v.Version.Version)
 		},
