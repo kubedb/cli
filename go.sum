@@ -336,6 +336,7 @@ github.com/klauspost/cpuid v1.2.0/go.mod h1:Pj4uuM528wm8OyEC2QMXAi2YiTZ96dNQPGgo
 github.com/kmodules/apimachinery v0.0.0-20191119091232-0553326db082 h1:Fut+qzge/i2FCCAKBgrHLLMnTpze53tb5KUz2IZq4dA=
 github.com/kmodules/apimachinery v0.0.0-20191119091232-0553326db082/go.mod h1:llRdnznGEAqC3DcNm6yEj472xaFVfLM7hnYofMb12tQ=
 github.com/kmodules/apiserver v0.0.0-20191119111000-36ac3646ae82/go.mod h1:Idob8Va6/sMX5SmwPLsU0pdvFlkwxuJ5x+fXMG8NbKE=
+github.com/kmodules/kubernetes v1.17.0-alpha.0.0.20191127022853-9d027e3886fd h1:6YA0k2t8FcyWw8kqHpv5clX73LjBfsi5I2oELS0r43s=
 github.com/kmodules/kubernetes v1.17.0-alpha.0.0.20191127022853-9d027e3886fd/go.mod h1:SJfd/nrBVxpEiliWZ8PhAdyREKhxmcuOV8m2hn2WsqY=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
@@ -462,8 +463,10 @@ github.com/prometheus/prometheus v2.3.2+incompatible/go.mod h1:oAIUtOny2rjMX0OWN
 github.com/prometheus/tsdb v0.8.0/go.mod h1:fSI0j+IUQrDd7+ZtR9WKIGtoYAYAJUKcKhYLG25tN4g=
 github.com/quobyte/api v0.1.2/go.mod h1:jL7lIHrmqQ7yh05OJ+eEEdHr0u/kmT1Ff9iHd+4H6VI=
 github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446/go.mod h1:uYEyJGbgTkfkS4+E/PavXkNJcbFIpEtjt2B0KDQ5+9M=
+github.com/robfig/cron v1.1.0 h1:jk4/Hud3TTdcrJgUOBgsqrZBarcxl6ADIjSC2iniwLY=
 github.com/robfig/cron v1.1.0/go.mod h1:JGuDeoQd7Z6yL4zQhZ3OPEVHB7fL6Ka6skscFHfmt2k=
 github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
+github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rubiojr/go-vhd v0.0.0-20160810183302-0bfd3b39853c/go.mod h1:DM5xW0nvfNNm2uytzsvhI3OnX8uzaRAg8UX/CnDqbto=
@@ -748,6 +751,7 @@ kmodules.xyz/offshoot-api v0.0.0-20200207061254-705ac16690ec/go.mod h1:k1M+OOFHb
 kmodules.xyz/offshoot-api v0.0.0-20200216080509-45ee6418d1c1 h1:4ZXeBIppt2MlDPrFayUx1KIgBHJT+bHTP2FJrUhLEWI=
 kmodules.xyz/offshoot-api v0.0.0-20200216080509-45ee6418d1c1/go.mod h1:k1M+OOFHbMeS6N6OB2j9smKfMCyQOEQjZ3SLZ/KSe+w=
 kmodules.xyz/openshift v0.0.0-20191127054841-113eeb13704f/go.mod h1:de9+Zk2+wtGhRmGFBZ9T4+0lJZr4rHXW0dHffCaeO+g=
+kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2 h1:wxHidC0FZfaHTRG8ADG9qdxTBHXGUJylWEsTV/m/6Rg=
 kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2/go.mod h1:YdapXw+AMO1U/yYZloDA0dTiha89Rv1iqK05Jh7qQQY=
 kmodules.xyz/webhook-runtime v0.0.0-20191127075323-d4bfdee6974d/go.mod h1:aaaxyAmKOpw0ey3LrpBkqWq0LTl35f9PW6mhwVDBMow=
 kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd h1:LCwUsh3c4tx7XESt8falAatauiFgvAxJ4IsKWKDt+Cc=
@@ -767,5 +771,6 @@ sigs.k8s.io/testing_frameworks v0.1.1/go.mod h1:VVBKrHmJ6Ekkfz284YKhQePcdycOzNH9
 sigs.k8s.io/yaml v1.1.0 h1:4A07+ZFc2wgJwo8YNlQpr1rVlgUDlxXHhPJciaPY5gs=
 sigs.k8s.io/yaml v1.1.0/go.mod h1:UJmg0vDUVViEyp3mgSv9WPwZCDxu4rQW1olrI1uml+o=
 software.sslmate.com/src/go-pkcs12 v0.0.0-20180114231543-2291e8f0f237/go.mod h1:/xvNRWUqm0+/ZMiF4EX00vrSCMsE4/NHb+Pt3freEeQ=
+stash.appscode.dev/apimachinery v0.9.0-rc.6 h1:rYp77PiYd05HwAtqbhVJFvmeGRZzcbOOMr6Pmh3zKKw=
 stash.appscode.dev/apimachinery v0.9.0-rc.6/go.mod h1:jLzf4kBtDJ1VeMuHm6PGPCR6is2cCfMO62FMrOwcig4=
 vbom.ml/util v0.0.0-20160121211510-db5cfe13f5cc/go.mod h1:so/NYdZXCz+E3ZpW0uAoCj6uzU2+8OWDFv/HxUSs7kI=

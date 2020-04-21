@@ -134,6 +134,8 @@ github.com/modern-go/reflect2
 github.com/peterbourgon/diskv
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
+# github.com/robfig/cron/v3 v3.0.1
+github.com/robfig/cron/v3
 # github.com/russross/blackfriday v1.5.2
 github.com/russross/blackfriday
 # github.com/sergi/go-diff v1.0.0
@@ -424,6 +426,8 @@ k8s.io/kubectl/pkg/util/templates
 k8s.io/kubectl/pkg/util/term
 k8s.io/kubectl/pkg/validation
 k8s.io/kubectl/pkg/version
+# k8s.io/kubernetes v1.16.3 => github.com/kmodules/kubernetes v1.17.0-alpha.0.0.20191127022853-9d027e3886fd
+k8s.io/kubernetes/pkg/util/hash
 # k8s.io/utils v0.0.0-20190801114015-581e00157fb1 => k8s.io/utils v0.0.0-20190801114015-581e00157fb1
 k8s.io/utils/exec
 k8s.io/utils/integer
@@ -445,6 +449,8 @@ kmodules.xyz/monitoring-agent-api/api/v1
 kmodules.xyz/objectstore-api/api/v1
 # kmodules.xyz/offshoot-api v0.0.0-20200216080509-45ee6418d1c1
 kmodules.xyz/offshoot-api/api/v1
+# kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2
+kmodules.xyz/prober/api/v1
 # kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd
 kubedb.dev/apimachinery/api/crds
 kubedb.dev/apimachinery/apis
@@ -483,3 +489,15 @@ sigs.k8s.io/kustomize/pkg/transformers/config/defaultconfig
 sigs.k8s.io/kustomize/pkg/types
 # sigs.k8s.io/yaml v1.1.0 => sigs.k8s.io/yaml v1.1.0
 sigs.k8s.io/yaml
+# stash.appscode.dev/apimachinery v0.9.0-rc.6
+stash.appscode.dev/apimachinery/api/crds
+stash.appscode.dev/apimachinery/apis/repositories
+stash.appscode.dev/apimachinery/apis/repositories/v1alpha1
+stash.appscode.dev/apimachinery/apis/stash
+stash.appscode.dev/apimachinery/apis/stash/v1alpha1
+stash.appscode.dev/apimachinery/apis/stash/v1beta1
+stash.appscode.dev/apimachinery/client/clientset/versioned
+stash.appscode.dev/apimachinery/client/clientset/versioned/scheme
+stash.appscode.dev/apimachinery/client/clientset/versioned/typed/repositories/v1alpha1
+stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1alpha1
+stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1

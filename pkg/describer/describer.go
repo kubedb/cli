@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package describer
 
 import (
@@ -44,6 +45,7 @@ import (
 	"k8s.io/kubectl/pkg/describe"
 	"k8s.io/kubectl/pkg/describe/versioned"
 	meta_util "kmodules.xyz/client-go/meta"
+	stash "stash.appscode.dev/apimachinery/client/clientset/versioned"
 )
 
 // Each level has 2 spaces for PrefixWriter
@@ -84,15 +86,18 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]describe.Desc
 	if err != nil {
 		return nil, err
 	}
+	s, err := stash.NewForConfig(clientConfig)
+	if err != nil {
+		return nil, err
+	}
 
 	m := map[schema.GroupKind]describe.Describer{
-		api.Kind(api.ResourceKindEtcd):          &EtcdDescriber{c, k},
-		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{c, k},
-		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{c, k},
-		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{c, k},
-		api.Kind(api.ResourceKindMySQL):         &MySQLDescriber{c, k},
-		api.Kind(api.ResourceKindPostgres):      &PostgresDescriber{c, k},
-		api.Kind(api.ResourceKindRedis):         &RedisDescriber{c, k},
+		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindMySQL):         &MySQLDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindPostgres):      &PostgresDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindRedis):         &RedisDescriber{client: c, kubedb: k, stash: s},
 	}
 
 	return m, nil

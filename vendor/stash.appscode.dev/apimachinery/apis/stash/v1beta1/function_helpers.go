@@ -1,5 +1,5 @@
 /*
-Copyright The KubeDB Authors.
+Copyright The Stash Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,24 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package encoder
+
+package v1beta1
 
 import (
-	"bytes"
-	"encoding/json"
-	"io"
+	"stash.appscode.dev/apimachinery/api/crds"
 
-	"k8s.io/apimachinery/pkg/runtime"
+	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 )
 
-func Encode(obj runtime.Object) ([]byte, error) {
-	buf := &bytes.Buffer{}
-	if err := encode(obj, buf); err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
-}
-
-func encode(obj runtime.Object, w io.Writer) error {
-	return json.NewEncoder(w).Encode(obj)
+func (_ Function) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralFunction))
 }

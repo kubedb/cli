@@ -16,6 +16,7 @@ require (
 	kmodules.xyz/monitoring-agent-api v0.0.0-20200125202117-d3b3e33ce41f
 	kmodules.xyz/objectstore-api v0.0.0-20200214040336-fe8f39a4210d
 	kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd
+	stash.appscode.dev/apimachinery v0.9.0-rc.6
 )
 
 replace (
