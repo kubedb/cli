@@ -31,7 +31,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe"
 	"k8s.io/kubectl/pkg/describe/versioned"
+	"kmodules.xyz/client-go/discovery"
 	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
+	stashV1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	stash "stash.appscode.dev/apimachinery/client/clientset/versioned"
 )
 
@@ -105,9 +107,11 @@ func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector
 		}
 
 		// Show Backup information
-		err = showBackups(d.stash, ab, w)
-		if err != nil {
-			return err
+		if discovery.ExistsGroupKind(d.client.Discovery(), stashV1beta1.SchemeGroupVersion.Group, stashV1beta1.ResourceKindBackupBlueprint) {
+			err = showBackups(d.stash, ab, w)
+			if err != nil {
+				return err
+			}
 		}
 
 		// Show AppBinding
