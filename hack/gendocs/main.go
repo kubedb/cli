@@ -71,7 +71,7 @@ aliases:
 // ref: https://github.com/spf13/cobra/blob/master/doc/md_docs.md
 func main() {
 	rootCmd := cmds.NewKubeDBCommand(os.Stdin, os.Stdout, os.Stderr)
-	dir := runtime.GOPath() + "/src/kubedb.dev/cli/docs/reference"
+	dir := runtime.GOPath() + "/src/kubedb.dev/docs/docs/reference"
 	fmt.Printf("Generating cli markdown tree in: %v\n", dir)
 	err := os.RemoveAll(dir)
 	if err != nil {
