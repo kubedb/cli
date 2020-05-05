@@ -443,6 +443,9 @@ kmodules.xyz/client-go/tools/cli
 kmodules.xyz/custom-resources/api/crds
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
+kmodules.xyz/custom-resources/client/clientset/versioned
+kmodules.xyz/custom-resources/client/clientset/versioned/scheme
+kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
 # kmodules.xyz/monitoring-agent-api v0.0.0-20200125202117-d3b3e33ce41f
 kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.0.0-20200214040336-fe8f39a4210d

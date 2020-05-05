@@ -25,11 +25,13 @@ import (
 
 	"github.com/appscode/go/types"
 	core "k8s.io/api/core/v1"
+	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe"
 	"k8s.io/kubectl/pkg/describe/versioned"
+	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	stash "stash.appscode.dev/apimachinery/client/clientset/versioned"
 )
 
@@ -37,6 +39,7 @@ type MySQLDescriber struct {
 	client kubernetes.Interface
 	kubedb cs.KubedbV1alpha1Interface
 	stash  stash.Interface
+	appcat appcat_cs.Interface
 }
 
 func (d *MySQLDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
@@ -47,15 +50,6 @@ func (d *MySQLDescriber) Describe(namespace, name string, describerSettings desc
 
 	selector := labels.SelectorFromSet(item.OffshootSelectors())
 
-	snapshots, err := d.kubedb.Snapshots(item.Namespace).List(
-		metav1.ListOptions{
-			LabelSelector: selector.String(),
-		},
-	)
-	if err != nil {
-		return "", err
-	}
-
 	var events *core.EventList
 	if describerSettings.ShowEvents {
 		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
@@ -64,10 +58,10 @@ func (d *MySQLDescriber) Describe(namespace, name string, describerSettings desc
 		}
 	}
 
-	return d.describeMySQL(item, selector, snapshots, events)
+	return d.describeMySQL(item, selector, events)
 }
 
-func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector, snapshots *api.SnapshotList, events *core.EventList) (string, error) {
+func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
 		w := versioned.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
@@ -86,6 +80,10 @@ func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector
 
 		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
+		w.Write(LEVEL_0, "Paused:\t%v\n", item.Spec.Paused)
+		w.Write(LEVEL_0, "Halted:\t%v\n", item.Spec.Halted)
+		w.Write(LEVEL_0, "Termination Policy:\t%v\n", item.Spec.TerminationPolicy)
+
 		showWorkload(d.client, item.Namespace, selector, w)
 
 		secretVolumes := make(map[string]*core.SecretVolumeSource)
@@ -98,8 +96,26 @@ func (d *MySQLDescriber) describeMySQL(item *api.MySQL, selector labels.Selector
 			describeMonitor(item.Spec.Monitor, w)
 		}
 
-		if snapshots != nil {
-			listSnapshots(snapshots, w)
+		// Show initialization information
+		describeInitialization(item.Spec.Init, w)
+
+		ab, err := d.appcat.AppcatalogV1alpha1().AppBindings(item.Namespace).Get(item.Name, metav1.GetOptions{})
+		if err != nil && !kerr.IsNotFound(err) {
+			return err
+		}
+
+		// Show Backup information
+		err = showBackups(d.stash, ab, w)
+		if err != nil {
+			return err
+		}
+
+		// Show AppBinding
+		if ab != nil {
+			err = showAppBinding(ab, w)
+			if err != nil {
+				return err
+			}
 		}
 
 		if events != nil {

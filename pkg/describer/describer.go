@@ -45,6 +45,7 @@ import (
 	"k8s.io/kubectl/pkg/describe"
 	"k8s.io/kubectl/pkg/describe/versioned"
 	meta_util "kmodules.xyz/client-go/meta"
+	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	stash "stash.appscode.dev/apimachinery/client/clientset/versioned"
 )
 
@@ -54,6 +55,10 @@ const (
 	LEVEL_1
 	LEVEL_2
 	LEVEL_3
+)
+
+const (
+	ValueNone string = "<none>"
 )
 
 // DescriberFn gives a way to easily override the function for unit testing if needed
@@ -90,12 +95,16 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]describe.Desc
 	if err != nil {
 		return nil, err
 	}
+	appcat, err := appcat_cs.NewForConfig(clientConfig)
+	if err != nil {
+		return nil, err
+	}
 
 	m := map[schema.GroupKind]describe.Describer{
 		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{client: c, kubedb: k, stash: s},
 		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{client: c, kubedb: k, stash: s},
 		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{client: c, kubedb: k, stash: s},
-		api.Kind(api.ResourceKindMySQL):         &MySQLDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindMySQL):         &MySQLDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
 		api.Kind(api.ResourceKindPostgres):      &PostgresDescriber{client: c, kubedb: k, stash: s},
 		api.Kind(api.ResourceKindRedis):         &RedisDescriber{client: c, kubedb: k, stash: s},
 	}
@@ -232,21 +241,21 @@ func describeSecret(secret *core.Secret, prefix string, w versioned.PrefixWriter
 	skipAnnotations := sets.NewString(meta_util.LastAppliedConfigAnnotation)
 	printAnnotationsMultilineWithFilter(LEVEL_1, w, "Annotations", secret.Annotations, skipAnnotations)
 
-	w.Write(LEVEL_1, "\nType:\t%s\n", secret.Type)
+	w.Write(LEVEL_1, "Type:\t%s\n", secret.Type)
 
-	w.Write(LEVEL_1, "\nData\n====\n")
+	w.Write(LEVEL_1, "Data:\n")
 	for k, v := range secret.Data {
 		switch {
 		case k == core.ServiceAccountTokenKey && secret.Type == core.SecretTypeServiceAccountToken:
-			w.Write(LEVEL_1, "%s:\t%s\n", k, string(v))
+			w.Write(LEVEL_2, "%s:\t%s\n", k, string(v))
 		default:
-			w.Write(LEVEL_1, "%s:\t%d bytes\n", k, len(v))
+			w.Write(LEVEL_2, "%s:\t%d bytes\n", k, len(v))
 		}
 	}
 }
 
-func describeVolume(volume core.VolumeSource, w versioned.PrefixWriter) {
-	w.Write(LEVEL_0, "Volume:\n")
+func describeVolume(level int, volume core.VolumeSource, w versioned.PrefixWriter) {
+	w.Write(level, "Volume:\n")
 	switch {
 	case volume.HostPath != nil:
 		printHostPathVolumeSource(volume.HostPath, w)
@@ -301,12 +310,12 @@ func describeVolume(volume core.VolumeSource, w versioned.PrefixWriter) {
 	case volume.Flocker != nil:
 		printFlockerVolumeSource(volume.Flocker, w)
 	default:
-		w.Write(LEVEL_1, "<unknown>\n")
+		w.Write(level+1, "<unknown>\n")
 	}
 }
 
 func printHostPathVolumeSource(hostPath *core.HostPathVolumeSource, w versioned.PrefixWriter) {
-	hostPathType := "<none>"
+	hostPathType := ValueNone
 	if hostPath.Type != nil {
 		hostPathType = string(*hostPath.Type)
 	}
@@ -385,7 +394,7 @@ func printPortworxVolumeSource(pwxVolume *core.PortworxVolumeSource, w versioned
 }
 
 func printISCSIVolumeSource(iscsi *core.ISCSIVolumeSource, w versioned.PrefixWriter) {
-	initiator := "<none>"
+	initiator := ValueNone
 	if iscsi.InitiatorName != nil {
 		initiator = *iscsi.InitiatorName
 	}
@@ -513,7 +522,7 @@ func printStorageOSVolumeSource(storageos *core.StorageOSVolumeSource, w version
 }
 
 func printFCVolumeSource(fc *core.FCVolumeSource, w versioned.PrefixWriter) {
-	lun := "<none>"
+	lun := ValueNone
 	if fc.Lun != nil {
 		lun = strconv.Itoa(int(*fc.Lun))
 	}
@@ -553,7 +562,7 @@ func printFlockerVolumeSource(flocker *core.FlockerVolumeSource, w versioned.Pre
 func DescribeEvents(el *core.EventList, w versioned.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	if len(el.Items) == 0 {
-		w.Write(LEVEL_0, "Events:\t<none>\n")
+		w.Write(LEVEL_0, "Events:\t%s\n", ValueNone)
 		return
 	}
 	w.Flush()
@@ -588,8 +597,8 @@ func printLabelsMultiline(level int, w versioned.PrefixWriter, title string, lab
 func printLabelsMultilineWithIndent(level int, w versioned.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.String) {
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
-	if labels == nil || len(labels) == 0 {
-		w.WriteLine("<none>")
+	if len(labels) == 0 {
+		w.WriteLine(ValueNone)
 		return
 	}
 
@@ -602,7 +611,7 @@ func printLabelsMultilineWithIndent(level int, w versioned.PrefixWriter, initial
 		keys = append(keys, key)
 	}
 	if len(keys) == 0 {
-		w.WriteLine("<none>")
+		w.WriteLine(ValueNone)
 		return
 	}
 	sort.Strings(keys)
@@ -613,7 +622,6 @@ func printLabelsMultilineWithIndent(level int, w versioned.PrefixWriter, initial
 			w.Write(level, "%s", innerIndent)
 		}
 		w.Write(level, "%s=%s\n", key, labels[key])
-		i++
 	}
 }
 
@@ -633,11 +641,13 @@ func tabbedString(f func(io.Writer) error) (string, error) {
 }
 
 // printAnnotationsMultilineWithFilter prints filtered multiple annotations with a proper alignment.
+//nolint:unparam
 func printAnnotationsMultilineWithFilter(level int, w versioned.PrefixWriter, title string, annotations map[string]string, skip sets.String) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, skip)
 }
 
 // printAnnotationsMultiline prints multiple annotations with a proper alignment.
+//nolint:unparam
 func printAnnotationsMultiline(level int, w versioned.PrefixWriter, title string, annotations map[string]string) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, sets.NewString())
 }
@@ -649,7 +659,7 @@ func printAnnotationsMultilineWithIndent(level int, w versioned.PrefixWriter, in
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
 	if len(annotations) == 0 {
-		w.WriteLine("<none>")
+		w.WriteLine(ValueNone)
 		return
 	}
 
@@ -662,7 +672,7 @@ func printAnnotationsMultilineWithIndent(level int, w versioned.PrefixWriter, in
 		keys = append(keys, key)
 	}
 	if len(annotations) == 0 {
-		w.WriteLine("<none>")
+		w.WriteLine(ValueNone)
 		return
 	}
 	sort.Strings(keys)
@@ -678,6 +688,5 @@ func printAnnotationsMultilineWithIndent(level int, w versioned.PrefixWriter, in
 		} else {
 			w.Write(level, "%s\n", line)
 		}
-		i++
 	}
 }

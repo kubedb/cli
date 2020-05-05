@@ -13,6 +13,7 @@ require (
 	k8s.io/component-base v0.0.0-20191114102325-35a9586014f7
 	k8s.io/kubectl v0.0.0-20191114113550-6123e1c827f7
 	kmodules.xyz/client-go v0.0.0-20200216080917-08714f78f885
+	kmodules.xyz/custom-resources v0.0.0-20191130062942-f41b54f62419
 	kmodules.xyz/monitoring-agent-api v0.0.0-20200125202117-d3b3e33ce41f
 	kmodules.xyz/objectstore-api v0.0.0-20200214040336-fe8f39a4210d
 	kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd

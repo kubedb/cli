@@ -17,24 +17,31 @@ limitations under the License.
 package describer
 
 import (
+	"fmt"
+	"sort"
 	"strings"
+	"unicode"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
 
+	"github.com/fatih/camelcase"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe/versioned"
+	"k8s.io/kubectl/pkg/util/slice"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	store "kmodules.xyz/objectstore-api/api/v1"
 )
 
 func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w versioned.PrefixWriter) {
 	if st == api.StorageTypeEphemeral {
-		w.Write(LEVEL_0, "  StorageType:\t%s\n", api.StorageTypeEphemeral)
+		w.Write(LEVEL_0, "StorageType:\t%s\n", api.StorageTypeEphemeral)
 	} else {
-		w.Write(LEVEL_0, "  StorageType:\t%s\n", api.StorageTypeDurable)
+		w.Write(LEVEL_0, "StorageType:\t%s\n", api.StorageTypeDurable)
 	}
 	if pvcSpec == nil {
 		w.Write(LEVEL_0, "No volumes.\n")
@@ -42,15 +49,15 @@ func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec
 	}
 
 	accessModes := getAccessModesAsString(pvcSpec.AccessModes)
-	val, _ := pvcSpec.Resources.Requests[core.ResourceStorage]
+	val := pvcSpec.Resources.Requests[core.ResourceStorage]
 	capacity := val.String()
 	w.Write(LEVEL_0, "Volume:\n")
 	if pvcSpec.StorageClassName != nil {
-		w.Write(LEVEL_0, "  StorageClass:\t%s\n", *pvcSpec.StorageClassName)
+		w.Write(LEVEL_1, "StorageClass:\t%s\n", *pvcSpec.StorageClassName)
 	}
-	w.Write(LEVEL_0, "  Capacity:\t%s\n", capacity)
+	w.Write(LEVEL_1, "Capacity:\t%s\n", capacity)
 	if accessModes != "" {
-		w.Write(LEVEL_0, "  Access Modes:\t%s\n", accessModes)
+		w.Write(LEVEL_1, "Access Modes:\t%s\n", accessModes)
 	}
 }
 
@@ -60,7 +67,7 @@ func describeArchiver(archiver *api.PostgresArchiverSpec, w versioned.PrefixWrit
 	}
 	w.WriteLine("Archiver:")
 	if archiver.Storage != nil {
-		describeSnapshotStorage(*archiver.Storage, w)
+		describeSnapshotStorage(LEVEL_1, *archiver.Storage, w)
 	}
 }
 
@@ -69,45 +76,44 @@ func describeInitialization(init *api.InitSpec, w versioned.PrefixWriter) {
 		return
 	}
 
-	w.WriteLine("Init:")
+	w.WriteLine("\nInit:")
 	if init.ScriptSource != nil {
-		w.WriteLine("  scriptSource:")
-		describeVolume(init.ScriptSource.VolumeSource, w)
+		w.Write(LEVEL_1, "Script Source:\n")
+		describeVolume(LEVEL_2, init.ScriptSource.VolumeSource, w)
 	}
-	if init.SnapshotSource != nil {
-		w.WriteLine("  snapshotSource:")
-		w.Write(LEVEL_0, "    namespace:\t%s\n", init.SnapshotSource.Namespace)
-		w.Write(LEVEL_0, "    name:\t%s\n", init.SnapshotSource.Name)
+	if init.StashRestoreSession != nil {
+		w.Write(LEVEL_1, "Stash RestoreSession:\n")
+		w.Write(LEVEL_2, "Name:\t%s\n", init.StashRestoreSession.Name)
 	}
 	if init.PostgresWAL != nil {
-		w.WriteLine("  postgresWAL:")
-		describeSnapshotStorage(init.PostgresWAL.Backend, w)
+		w.Write(LEVEL_1, "Postgres WAL:\n")
+		describeSnapshotStorage(LEVEL_2, init.PostgresWAL.Backend, w)
 	}
 }
 
-func describeSnapshotStorage(snapshot store.Backend, w versioned.PrefixWriter) {
+func describeSnapshotStorage(level int, snapshot store.Backend, w versioned.PrefixWriter) {
 	switch {
 	case snapshot.Local != nil:
-		describeVolume(snapshot.Local.VolumeSource, w)
-		w.Write(LEVEL_0, "Type:\tLocal\n")
-		w.Write(LEVEL_0, "path:\t%v\n", snapshot.Local.MountPath)
+		describeVolume(level, snapshot.Local.VolumeSource, w)
+		w.Write(level, "Type:\tLocal\n")
+		w.Write(level, "path:\t%v\n", snapshot.Local.MountPath)
 	case snapshot.S3 != nil:
-		w.Write(LEVEL_0, "Type:\tS3\n")
-		w.Write(LEVEL_0, "endpoint:\t%v\n", snapshot.S3.Endpoint)
-		w.Write(LEVEL_0, "bucket:\t%v\n", snapshot.S3.Bucket)
-		w.Write(LEVEL_0, "prefix:\t%v\n", snapshot.S3.Prefix)
+		w.Write(level, "Type:\tS3\n")
+		w.Write(level, "endpoint:\t%v\n", snapshot.S3.Endpoint)
+		w.Write(level, "bucket:\t%v\n", snapshot.S3.Bucket)
+		w.Write(level, "prefix:\t%v\n", snapshot.S3.Prefix)
 	case snapshot.GCS != nil:
-		w.Write(LEVEL_0, "Type:\tGCS\n")
-		w.Write(LEVEL_0, "bucket:\t%v\n", snapshot.GCS.Bucket)
-		w.Write(LEVEL_0, "prefix:\t%v\n", snapshot.GCS.Prefix)
+		w.Write(level, "Type:\tGCS\n")
+		w.Write(level, "bucket:\t%v\n", snapshot.GCS.Bucket)
+		w.Write(level, "prefix:\t%v\n", snapshot.GCS.Prefix)
 	case snapshot.Azure != nil:
-		w.Write(LEVEL_0, "Type:\tAzure\n")
-		w.Write(LEVEL_0, "container:\t%v\n", snapshot.Azure.Container)
-		w.Write(LEVEL_0, "prefix:\t%v\n", snapshot.Azure.Prefix)
+		w.Write(level, "Type:\tAzure\n")
+		w.Write(level, "container:\t%v\n", snapshot.Azure.Container)
+		w.Write(level, "prefix:\t%v\n", snapshot.Azure.Prefix)
 	case snapshot.Swift != nil:
-		w.Write(LEVEL_0, "Type:\tSwift\n")
-		w.Write(LEVEL_0, "container:\t%v\n", snapshot.Swift.Container)
-		w.Write(LEVEL_0, "prefix:\t%v\n", snapshot.Swift.Prefix)
+		w.Write(level, "Type:\tSwift\n")
+		w.Write(level, "container:\t%v\n", snapshot.Swift.Container)
+		w.Write(level, "prefix:\t%v\n", snapshot.Swift.Prefix)
 	}
 }
 
@@ -138,41 +144,97 @@ func describeMonitor(monitor *mona.AgentSpec, w versioned.PrefixWriter) {
 	}
 }
 
-func listSnapshots(snapshotList *api.SnapshotList, w versioned.PrefixWriter) {
+func showAppBinding(ab *appcat.AppBinding, w versioned.PrefixWriter) error {
 	w.Write(LEVEL_0, "\n")
-
-	if len(snapshotList.Items) == 0 {
-		w.Write(LEVEL_0, "No Snapshots.\n")
-		return
+	w.Write(LEVEL_0, "AppBinding:\n")
+	if ab == nil || ab.Name == "" {
+		w.Write(LEVEL_1, "AppBinding has not been created yet.\n")
+		return nil
 	}
-
-	w.Write(LEVEL_0, "Snapshots:\n")
-
-	w.Write(LEVEL_0, "  Name\tBucket\tStartTime\tCompletionTime\tPhase\n")
-	w.Write(LEVEL_0, "  ----\t------\t---------\t--------------\t-----\n")
-	for _, e := range snapshotList.Items {
-		location, err := e.Spec.Backend.Location()
-		if err != nil {
-			location = "<invalid>"
-		}
-		w.Write(LEVEL_0, "  %s\t%s\t%s\t%s\t%s\n",
-			e.Name,
-			location,
-			timeToString(e.Status.StartTime),
-			timeToString(e.Status.CompletionTime),
-			e.Status.Phase,
-		)
+	obj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(ab)
+	if err != nil {
+		return err
 	}
-	w.Flush()
+	printUnstructuredContent(w, LEVEL_1, obj, "",
+		".metadata.managedFields",
+		".metadata.finalizers",
+		".metadata.generation",
+		".metadata.resourceVersion",
+		".metadata.selfLink",
+		".metadata.uid",
+		".metadata.ownerReferences")
+	return nil
 }
 
-func describeOrigin(origin api.Origin, w versioned.PrefixWriter) {
-	w.Write(LEVEL_0, "\n")
-	w.Write(LEVEL_0, "Origin:\n")
-	w.Write(LEVEL_0, "  Name:\t%s\n", origin.Name)
-	w.Write(LEVEL_0, "  Namespace:\t%s\n", origin.Namespace)
-	printLabelsMultiline(LEVEL_0, w, "Labels", origin.Labels)
-	printAnnotationsMultiline(LEVEL_0, w, "Annotations", origin.Annotations)
+func printUnstructuredContent(w versioned.PrefixWriter, level int, content map[string]interface{}, skipPrefix string, skip ...string) {
+	fields := []string{}
+	for field := range content {
+		fields = append(fields, field)
+	}
+	sort.Strings(fields)
+
+	for _, field := range fields {
+		value := content[field]
+		switch typedValue := value.(type) {
+		case map[string]interface{}:
+			skipExpr := fmt.Sprintf("%s.%s", skipPrefix, field)
+			if slice.ContainsString(skip, skipExpr, nil) {
+				continue
+			}
+			w.Write(level, "%s:\n", smartLabelFor(field))
+			printUnstructuredContent(w, level+1, typedValue, skipExpr, skip...)
+
+		case []interface{}:
+			skipExpr := fmt.Sprintf("%s.%s", skipPrefix, field)
+			if slice.ContainsString(skip, skipExpr, nil) {
+				continue
+			}
+			w.Write(level, "%s:\n", smartLabelFor(field))
+			for _, child := range typedValue {
+				switch typedChild := child.(type) {
+				case map[string]interface{}:
+					printUnstructuredContent(w, level+1, typedChild, skipExpr, skip...)
+				default:
+					w.Write(level+1, "%v\n", typedChild)
+				}
+			}
+
+		default:
+			skipExpr := fmt.Sprintf("%s.%s", skipPrefix, field)
+			if slice.ContainsString(skip, skipExpr, nil) {
+				continue
+			}
+			w.Write(level, "%s:\t%v\n", smartLabelFor(field), typedValue)
+		}
+	}
+}
+
+func smartLabelFor(field string) string {
+	// skip creating smart label if field name contains
+	// special characters other than '-'
+	if strings.IndexFunc(field, func(r rune) bool {
+		return !unicode.IsLetter(r) && r != '-'
+	}) != -1 {
+		return field
+	}
+
+	commonAcronyms := []string{"API", "URL", "UID", "OSB", "GUID"}
+	parts := camelcase.Split(field)
+	result := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if part == "_" {
+			continue
+		}
+
+		if slice.ContainsString(commonAcronyms, strings.ToUpper(part), nil) {
+			part = strings.ToUpper(part)
+		} else {
+			part = strings.Title(part)
+		}
+		result = append(result, part)
+	}
+
+	return strings.Join(result, " ")
 }
 
 func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w versioned.PrefixWriter) {

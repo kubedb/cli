@@ -18,6 +18,7 @@ package cmds
 
 import (
 	"flag"
+	"fmt"
 	"io"
 
 	v "github.com/appscode/go/version"
@@ -79,5 +80,8 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 }
 
 func runHelp(cmd *cobra.Command, args []string) {
-	cmd.Help()
+	err := cmd.Help()
+	if err != nil {
+		fmt.Println("Failed to execute 'help' command. Reason:", err)
+	}
 }
