@@ -160,28 +160,25 @@ func (p *PerconaXtraDB) SetDefaults() {
 	if p == nil {
 		return
 	}
-	p.Spec.SetDefaults()
-}
 
-func (p *PerconaXtraDBSpec) SetDefaults() {
-	if p == nil {
-		return
+	if p.Spec.Replicas == nil {
+		p.Spec.Replicas = types.Int32P(1)
 	}
 
-	if p.Replicas == nil {
-		p.Replicas = types.Int32P(1)
+	if p.Spec.StorageType == "" {
+		p.Spec.StorageType = StorageTypeDurable
+	}
+	if p.Spec.UpdateStrategy.Type == "" {
+		p.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
+	}
+	if p.Spec.TerminationPolicy == "" {
+		p.Spec.TerminationPolicy = TerminationPolicyDelete
+	} else if p.Spec.TerminationPolicy == TerminationPolicyPause {
+		p.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
 
-	if p.StorageType == "" {
-		p.StorageType = StorageTypeDurable
-	}
-	if p.UpdateStrategy.Type == "" {
-		p.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
-	}
-	if p.TerminationPolicy == "" {
-		p.TerminationPolicy = TerminationPolicyDelete
-	}
-	p.setDefaultProbes()
+	p.Spec.setDefaultProbes()
+	p.Spec.Monitor.SetDefaults()
 }
 
 // setDefaultProbes sets defaults only when probe fields are nil.

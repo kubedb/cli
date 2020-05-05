@@ -24,26 +24,43 @@ spec:
     openAPIV3Schema:
       properties:
         apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
           type: string
         kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
           type: string
         metadata:
           type: object
         spec:
+          description: PostgresModificationRequestSpec is the spec for elasticsearch
+            version
           type: object
         status:
+          description: PostgresModificationRequestStatus is the status for elasticsearch
+            version
           properties:
             conditions:
+              description: Conditions applied to the request, such as approval or
+                denial.
               items:
                 properties:
                   lastUpdateTime:
+                    description: timestamp for the last update to this condition
                     format: date-time
                     type: string
                   message:
+                    description: human readable message with details about the request
+                      state
                     type: string
                   reason:
+                    description: brief reason for the request state
                     type: string
                   type:
+                    description: request approval state, currently Approved or Denied.
                     type: string
                 required:
                 - type

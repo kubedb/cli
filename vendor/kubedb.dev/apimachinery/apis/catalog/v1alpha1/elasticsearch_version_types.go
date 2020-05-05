@@ -90,8 +90,7 @@ type ElasticsearchVersionInitContainer struct {
 
 // ElasticsearchVersionPodSecurityPolicy is the Elasticsearch pod security policies
 type ElasticsearchVersionPodSecurityPolicy struct {
-	DatabasePolicyName    string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
-	SnapshotterPolicyName string `json:"snapshotterPolicyName" protobuf:"bytes,2,opt,name=snapshotterPolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

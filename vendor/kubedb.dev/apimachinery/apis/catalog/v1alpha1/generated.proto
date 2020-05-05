@@ -69,8 +69,6 @@ message ElasticsearchVersionList {
 // ElasticsearchVersionPodSecurityPolicy is the Elasticsearch pod security policies
 message ElasticsearchVersionPodSecurityPolicy {
   optional string databasePolicyName = 1;
-
-  optional string snapshotterPolicyName = 2;
 }
 
 // ElasticsearchVersionSpec is the spec for elasticsearch version
@@ -252,8 +250,6 @@ message MongoDBVersionList {
 // MongoDBVersionPodSecurityPolicy is the MongoDB pod security policies
 message MongoDBVersionPodSecurityPolicy {
   optional string databasePolicyName = 1;
-
-  optional string snapshotterPolicyName = 2;
 }
 
 // MongoDBVersionSpec is the spec for mongodb version
@@ -324,8 +320,11 @@ message MySQLVersionList {
 // MySQLVersionPodSecurityPolicy is the MySQL pod security policies
 message MySQLVersionPodSecurityPolicy {
   optional string databasePolicyName = 1;
+}
 
-  optional string snapshotterPolicyName = 2;
+// MySQLVersionReplicationModeDetector is the image for the MySQL replication mode detector
+message MySQLVersionReplicationModeDetector {
+  optional string image = 1;
 }
 
 // MySQLVersionSpec is the spec for postgres version
@@ -342,15 +341,18 @@ message MySQLVersionSpec {
   // Tools Image
   optional MySQLVersionTools tools = 4;
 
+  // ReplicationModeDetector Image
+  optional MySQLVersionReplicationModeDetector replicationModeDetector = 5;
+
   // Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
   // +optional
-  optional bool deprecated = 5;
+  optional bool deprecated = 6;
 
   // Init container Image
-  optional MySQLVersionInitContainer initContainer = 6;
+  optional MySQLVersionInitContainer initContainer = 7;
 
   // PSP names
-  optional MySQLVersionPodSecurityPolicy podSecurityPolicies = 7;
+  optional MySQLVersionPodSecurityPolicy podSecurityPolicies = 8;
 }
 
 // MySQLVersionTools is the image for the postgres tools
@@ -500,8 +502,6 @@ message PostgresVersionList {
 // PostgresVersionPodSecurityPolicy is the Postgres pod security policies
 message PostgresVersionPodSecurityPolicy {
   optional string databasePolicyName = 1;
-
-  optional string snapshotterPolicyName = 2;
 }
 
 // PostgresVersionSpec is the spec for postgres version

@@ -18,8 +18,6 @@ limitations under the License.
 
 package v1alpha1
 
-type DormantDatabaseExpansion interface{}
-
 type ElasticsearchExpansion interface{}
 
 type EtcdExpansion interface{}
@@ -41,5 +39,3 @@ type PostgresExpansion interface{}
 type ProxySQLExpansion interface{}
 
 type RedisExpansion interface{}
-
-type SnapshotExpansion interface{}
