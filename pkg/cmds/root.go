@@ -33,11 +33,11 @@ import (
 
 // NewKubeDBCommand creates the `kubedb` command and its nested children.
 func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
-	cmds := &cobra.Command{
+	rootCmd := &cobra.Command{
 		Use:   "kubectl-dba",
 		Short: "kubectl plugin for KubeDB",
 		Long: templates.LongDesc(`
-      KubeDB by AppsCode - Kubernetes ready production-grade Databases
+      kubectl plugin for KubeDB by AppsCode - Kubernetes ready production-grade Databases
 
       Find more information at https://kubedb.com`),
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
@@ -46,7 +46,7 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		Run: runHelp,
 	}
 
-	flags := cmds.PersistentFlags()
+	flags := rootCmd.PersistentFlags()
 	// Normalize all flags that are coming from other packages or pre-configurations
 	// a.k.a. change all "_" to "-". e.g. glog package
 	flags.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
@@ -73,10 +73,10 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 	}
-	groups.Add(cmds)
-	templates.ActsAsRootCommand(cmds, nil, groups...)
+	groups.Add(rootCmd)
+	templates.ActsAsRootCommand(rootCmd, nil, groups...)
 
-	return cmds
+	return rootCmd
 }
 
 func runHelp(cmd *cobra.Command, args []string) {
