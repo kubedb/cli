@@ -103,6 +103,7 @@ type ElasticsearchVersionList struct {
 	Items []ElasticsearchVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
 
+// +kubebuilder:validation:Enum=SearchGuard;None;X-Pack
 type ElasticsearchAuthPlugin string
 
 const (

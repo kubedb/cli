@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: proxysqls.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -1242,6 +1242,9 @@ spec:
               description: Mode specifies the type of MySQL/Percona-XtraDB/MariaDB
                 cluster for which proxysql will be configured. It must be either "Galera"
                 or "GroupReplication"
+              enum:
+              - Galera
+              - GroupReplication
               type: string
             monitor:
               description: Monitor is used monitor proxysql instance
@@ -4692,6 +4695,13 @@ spec:
               format: int64
               type: integer
             phase:
+              enum:
+              - Running
+              - Creating
+              - Initializing
+              - Paused
+              - Halted
+              - Failed
               type: string
             reason:
               type: string

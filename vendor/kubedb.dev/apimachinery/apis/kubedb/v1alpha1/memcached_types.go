@@ -65,29 +65,47 @@ type MemcachedSpec struct {
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,8,opt,name=configSource"`
 
+	// DataVolume is an optional field to add one volume to each
+	// memcached pod.  The volume will be made available under
+	// /data and owned by the memcached user.
+	//
+	// While not mandated by the API and not configured
+	// automatically, the intended purpose is to use that volume
+	// for memcached's persistent memory support
+	// (https://memcached.org/blog/persistent-memory/) by adding
+	// the memory-file and memory-limit options to the config
+	// (https://github.com/memcached/memcached/wiki/WarmRestart).
+	//
+	// For that purpose, a CSI inline volume provided by PMEM-CSI
+	// can be used, in which case each pod will get its own, empty
+	// volume. Warm restarts are not supported.
+	//
+	// For testing, an empty dir can be used instead.
+	DataVolume *core.VolumeSource `json:"dataVolume,omitempty" protobuf:"bytes,9,opt,name=dataVolume"`
+
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,9,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,10,opt,name=podTemplate"`
 
 	// ServiceTemplate is an optional configuration for service used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,10,opt,name=serviceTemplate"`
+	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,11,opt,name=serviceTemplate"`
 
 	// The deployment strategy to use to replace existing pods with new ones.
 	// +optional
-	UpdateStrategy apps.DeploymentStrategy `json:"strategy,omitempty" protobuf:"bytes,4,opt,name=strategy"`
+	UpdateStrategy apps.DeploymentStrategy `json:"strategy,omitempty" protobuf:"bytes,12,opt,name=strategy"`
 
 	// Indicates that the database is paused and controller will not sync any changes made to this spec.
 	// +optional
-	Paused bool `json:"paused,omitempty" protobuf:"varint,11,opt,name=paused"`
+	Paused bool `json:"paused,omitempty" protobuf:"varint,13,opt,name=paused"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,12,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,14,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,13,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,15,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
 
 type MemcachedStatus struct {

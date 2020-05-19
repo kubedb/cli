@@ -23,7 +23,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	types "github.com/appscode/go/encoding/json/types"
 	spec "github.com/go-openapi/spec"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,7 +33,6 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/appscode/go/encoding/json/types.IntHash":                          schema_go_encoding_json_types_IntHash(ref),
 		"k8s.io/api/apps/v1.ControllerRevision":                                       schema_k8sio_api_apps_v1_ControllerRevision(ref),
 		"k8s.io/api/apps/v1.ControllerRevisionList":                                   schema_k8sio_api_apps_v1_ControllerRevisionList(ref),
 		"k8s.io/api/apps/v1.DaemonSet":                                                schema_k8sio_api_apps_v1_DaemonSet(ref),
@@ -332,6 +330,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                                     schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                             schema_apimachinery_pkg_util_intstr_IntOrString(ref),
 		"k8s.io/apimachinery/pkg/version.Info":                                        schema_k8sio_apimachinery_pkg_version_Info(ref),
+		"kmodules.xyz/client-go/api/v1.Condition":                                     schema_kmodulesxyz_client_go_api_v1_Condition(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AddKeyTransform":      schema_custom_resources_apis_appcatalog_v1alpha1_AddKeyTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AddKeysFromTransform": schema_custom_resources_apis_appcatalog_v1alpha1_AddKeysFromTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AppBinding":           schema_custom_resources_apis_appcatalog_v1alpha1_AppBinding(ref),
@@ -371,18 +370,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                        schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.GaleraArbitratorConfiguration":  schema_apimachinery_apis_config_v1alpha1_GaleraArbitratorConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.MongoDBConfiguration":           schema_apimachinery_apis_config_v1alpha1_MongoDBConfiguration(ref),
-	}
-}
-
-func schema_go_encoding_json_types_IntHash(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "IntHash represents as int64 Generation and string Hash. It is json serialized into <int64>$<hash_string>.",
-				Type:        types.IntHash{}.OpenAPISchemaType(),
-				Format:      types.IntHash{}.OpenAPISchemaFormat(),
-			},
-		},
 	}
 }
 
@@ -15510,6 +15497,62 @@ func schema_k8sio_apimachinery_pkg_version_Info(ref common.ReferenceCallback) co
 				Required: []string{"major", "minor", "gitVersion", "gitCommit", "gitTreeState", "buildDate", "goVersion", "compiler", "platform"},
 			},
 		},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_Condition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type of condition in CamelCase or in foo.example.com/CamelCase. Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Status of the condition, one of True, False, Unknown.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If set, this represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.condition[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"lastTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"reason": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The reason for the condition's last transition in CamelCase. The specific API may choose whether or not this field is considered a guaranteed API. This field may not be empty.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"message": {
+						SchemaProps: spec.SchemaProps{
+							Description: "A human readable message indicating details about the transition. This field may be empty.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"type", "status", "lastTransitionTime", "reason", "message"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 

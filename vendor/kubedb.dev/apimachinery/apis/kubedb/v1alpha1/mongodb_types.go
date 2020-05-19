@@ -127,6 +127,7 @@ type MongoDBSpec struct {
 
 // ClusterAuthMode represents the clusterAuthMode of mongodb clusters ( replicaset or sharding)
 // ref: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-clusterauthmode
+// +kubebuilder:validation:Enum=keyFile;sendKeyFile;sendX509;x509
 type ClusterAuthMode string
 
 const (
@@ -149,6 +150,7 @@ const (
 
 // SSLMode represents available sslmodes of mongodb.
 // ref: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-sslmode
+// +kubebuilder:validation:Enum=disabled;allowSSL;preferSSL;requireSSL
 type SSLMode string
 
 const (

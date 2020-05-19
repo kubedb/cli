@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: pgbouncers.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -3564,6 +3564,13 @@ spec:
               type: integer
             phase:
               description: Phase specifies the current state of PgBouncer server.
+              enum:
+              - Running
+              - Creating
+              - Initializing
+              - Paused
+              - Halted
+              - Failed
               type: string
             reason:
               description: Reason is used to explain phases of interest of the server.

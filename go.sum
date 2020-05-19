@@ -49,6 +49,8 @@ github.com/ant31/crd-validation v0.0.0-20180702145049-30f8a35d0ac2/go.mod h1:X0n
 github.com/appscode/docker-registry-client v0.0.0-20180426150142-1bb02bb202b0/go.mod h1:W9bsWfSbgJXUXzBZ+tSBV2g+zzT7ANPHQFsSXRHYKsA=
 github.com/appscode/go v0.0.0-20191119085241-0887d8ec2ecc h1:Q5jwbRq/a1Tien+Is8Zn6HMBRgE13+UOQ9mTvrIuvuE=
 github.com/appscode/go v0.0.0-20191119085241-0887d8ec2ecc/go.mod h1:OawnOmAL4ZX3YaPdN+8HTNwBveT1jMsqP74moa9XUbE=
+github.com/appscode/go v0.0.0-20200323182826-54e98e09185a h1:cZ80NKoLRaW1PVCWXAJE+YFkBAmLZ8BnrJmH0ClY1Gs=
+github.com/appscode/go v0.0.0-20200323182826-54e98e09185a/go.mod h1:lIcm8Z6VPuvcw/a3EeOWcG6R3I13iHMLYbtVP7TKufY=
 github.com/appscode/osm v0.13.0/go.mod h1:4UxQXV4+RFLd0r6olIFLwsZnCcevBFIzsE88w1+9SOk=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=
@@ -736,10 +738,8 @@ k8s.io/utils v0.0.0-20190801114015-581e00157fb1/go.mod h1:sZAwmy6armz5eXlNoLmJcl
 kmodules.xyz/client-go v0.0.0-20191127054604-26981530831d/go.mod h1:OFxuKCiVR+MYlR2a08FkfaF+IbXkLe0xBetu2LTUuGI=
 kmodules.xyz/client-go v0.0.0-20191211192817-f1dcd02124ba/go.mod h1:OFxuKCiVR+MYlR2a08FkfaF+IbXkLe0xBetu2LTUuGI=
 kmodules.xyz/client-go v0.0.0-20200116162153-e083ae16abca/go.mod h1:OFxuKCiVR+MYlR2a08FkfaF+IbXkLe0xBetu2LTUuGI=
-kmodules.xyz/client-go v0.0.0-20200216080917-08714f78f885 h1:1v803gTRPSfjMYwW3YXoxs36gQ9YVe/1qWixPfLZ6bM=
-kmodules.xyz/client-go v0.0.0-20200216080917-08714f78f885/go.mod h1:OFxuKCiVR+MYlR2a08FkfaF+IbXkLe0xBetu2LTUuGI=
-kmodules.xyz/client-go v0.0.0-20200505205933-69b83d1c0ab2 h1:C0TdZJ5jvgoOT3jEcTx91wTbdkCNRFv3sEsp6lOYcK0=
-kmodules.xyz/client-go v0.0.0-20200505205933-69b83d1c0ab2/go.mod h1:OFxuKCiVR+MYlR2a08FkfaF+IbXkLe0xBetu2LTUuGI=
+kmodules.xyz/client-go v0.0.0-20200518125232-435dcc370844 h1:+g4XBo2szMo3/uPlUrEJjOwyEgv4NRAu0YSlDQOLFDw=
+kmodules.xyz/client-go v0.0.0-20200518125232-435dcc370844/go.mod h1:z/AkrES60XR+jeKGg5zJyPd13NdG/Di0BptbG1gnS60=
 kmodules.xyz/constants v0.0.0-20191024095500-cd4313df4aa6/go.mod h1:DbiFk1bJ1KEO94t1SlAn7tzc+Zz95rSXgyUKa2nzPmY=
 kmodules.xyz/crd-schema-fuzz v0.0.0-20191129174258-81f984340891/go.mod h1:9NXNZ4xhqof0WngtIuo4vl+WoCQpLJEJcyuEo3mPpiM=
 kmodules.xyz/custom-resources v0.0.0-20191130062942-f41b54f62419 h1:o6KD8XMxdyRR3rqScTsWvcufFDT7vQBnYXpHUp6UtRg=
@@ -756,8 +756,8 @@ kmodules.xyz/openshift v0.0.0-20191127054841-113eeb13704f/go.mod h1:de9+Zk2+wtGh
 kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2 h1:wxHidC0FZfaHTRG8ADG9qdxTBHXGUJylWEsTV/m/6Rg=
 kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2/go.mod h1:YdapXw+AMO1U/yYZloDA0dTiha89Rv1iqK05Jh7qQQY=
 kmodules.xyz/webhook-runtime v0.0.0-20191127075323-d4bfdee6974d/go.mod h1:aaaxyAmKOpw0ey3LrpBkqWq0LTl35f9PW6mhwVDBMow=
-kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd h1:LCwUsh3c4tx7XESt8falAatauiFgvAxJ4IsKWKDt+Cc=
-kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd/go.mod h1:YYIkCWfehcb/qR/oHz6nRo7t8nOiGgjel1df4t/6qgI=
+kubedb.dev/apimachinery v0.13.0-rc.4.0.20200519101619-d70848d79c1b h1:EiqHcDV3/7HWVtYrL6ebiHk/MWzNk9qABOzRwBeT+Qw=
+kubedb.dev/apimachinery v0.13.0-rc.4.0.20200519101619-d70848d79c1b/go.mod h1:7ae2YC2hmJnWsIy9b0qNYsRMFZhKDbepp3DeHmwuDAw=
 launchpad.net/gocheck v0.0.0-20140225173054-000000000087/go.mod h1:hj7XX3B/0A+80Vse0e+BUHsHMTEhd0O4cpUHr/e/BUM=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0/go.mod h1:b/QX9oBD/LhixY6NDh+IdGv17hgB+51fET1i2kPSmvk=

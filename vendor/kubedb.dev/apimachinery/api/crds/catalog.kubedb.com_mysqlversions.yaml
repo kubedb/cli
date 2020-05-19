@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: mysqlversions.catalog.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -104,6 +104,42 @@ spec:
               required:
               - image
               type: object
+            upgradeConstraints:
+              description: upgrade constraints
+              properties:
+                blacklist:
+                  description: List of all rejected version for modification request
+                  properties:
+                    groupReplication:
+                      description: List of all rejected version for groupReplication
+                        modification request
+                      items:
+                        type: string
+                      type: array
+                    standalone:
+                      description: List of all rejected version for standalone modification
+                        request
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                whitelist:
+                  description: List of all accepted version for modification request
+                  properties:
+                    groupReplication:
+                      description: List of all accepted version for groupReplication
+                        modification request. empty indicates all accepted
+                      items:
+                        type: string
+                      type: array
+                    standalone:
+                      description: List of all accepted version for standalone modification
+                        request. empty indicates all accepted
+                      items:
+                        type: string
+                      type: array
+                  type: object
+              type: object
             version:
               description: Version
               type: string
@@ -114,6 +150,7 @@ spec:
           - podSecurityPolicies
           - replicationModeDetector
           - tools
+          - upgradeConstraints
           - version
           type: object
       type: object

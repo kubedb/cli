@@ -23,7 +23,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	types "github.com/appscode/go/encoding/json/types"
 	spec "github.com/go-openapi/spec"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,7 +33,6 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/appscode/go/encoding/json/types.IntHash":                          schema_go_encoding_json_types_IntHash(ref),
 		"k8s.io/api/apps/v1.ControllerRevision":                                       schema_k8sio_api_apps_v1_ControllerRevision(ref),
 		"k8s.io/api/apps/v1.ControllerRevisionList":                                   schema_k8sio_api_apps_v1_ControllerRevisionList(ref),
 		"k8s.io/api/apps/v1.DaemonSet":                                                schema_k8sio_api_apps_v1_DaemonSet(ref),
@@ -332,6 +330,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                                     schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                             schema_apimachinery_pkg_util_intstr_IntOrString(ref),
 		"k8s.io/apimachinery/pkg/version.Info":                                        schema_k8sio_apimachinery_pkg_version_Info(ref),
+		"kmodules.xyz/client-go/api/v1.Condition":                                     schema_kmodulesxyz_client_go_api_v1_Condition(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AddKeyTransform":      schema_custom_resources_apis_appcatalog_v1alpha1_AddKeyTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AddKeysFromTransform": schema_custom_resources_apis_appcatalog_v1alpha1_AddKeysFromTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AppBinding":           schema_custom_resources_apis_appcatalog_v1alpha1_AppBinding(ref),
@@ -459,18 +458,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha1.proxysqlStatsService":           schema_apimachinery_apis_kubedb_v1alpha1_proxysqlStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha1.redisApp":                       schema_apimachinery_apis_kubedb_v1alpha1_redisApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha1.redisStatsService":              schema_apimachinery_apis_kubedb_v1alpha1_redisStatsService(ref),
-	}
-}
-
-func schema_go_encoding_json_types_IntHash(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "IntHash represents as int64 Generation and string Hash. It is json serialized into <int64>$<hash_string>.",
-				Type:        types.IntHash{}.OpenAPISchemaType(),
-				Format:      types.IntHash{}.OpenAPISchemaFormat(),
-			},
-		},
 	}
 }
 
@@ -15601,6 +15588,62 @@ func schema_k8sio_apimachinery_pkg_version_Info(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_kmodulesxyz_client_go_api_v1_Condition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type of condition in CamelCase or in foo.example.com/CamelCase. Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be useful (see .node.status.conditions), the ability to deconflict is important.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Status of the condition, one of True, False, Unknown.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If set, this represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.condition[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"lastTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"reason": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The reason for the condition's last transition in CamelCase. The specific API may choose whether or not this field is considered a guaranteed API. This field may not be empty.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"message": {
+						SchemaProps: spec.SchemaProps{
+							Description: "A human readable message indicating details about the transition. This field may be empty.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"type", "status", "lastTransitionTime", "reason", "message"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
 func schema_custom_resources_apis_appcatalog_v1alpha1_AddKeyTransform(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -18758,6 +18801,12 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MemcachedSpec(ref common.Reference
 					"configSource": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ConfigSource is an optional field to provide custom configuration file for database. If specified, this file will be used as configuration file otherwise default configuration file will be used.",
+							Ref:         ref("k8s.io/api/core/v1.VolumeSource"),
+						},
+					},
+					"dataVolume": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolume is an optional field to add one volume to each memcached pod.  The volume will be made available under /data and owned by the memcached user.\n\nWhile not mandated by the API and not configured automatically, the intended purpose is to use that volume for memcached's persistent memory support (https://memcached.org/blog/persistent-memory/) by adding the memory-file and memory-limit options to the config (https://github.com/memcached/memcached/wiki/WarmRestart).\n\nFor that purpose, a CSI inline volume provided by PMEM-CSI can be used, in which case each pod will get its own, empty volume. Warm restarts are not supported.\n\nFor testing, an empty dir can be used instead.",
 							Ref:         ref("k8s.io/api/core/v1.VolumeSource"),
 						},
 					},

@@ -195,7 +195,7 @@ func (m *MySQLSpec) setDefaultProbes() {
 					"-c",
 					`
 export MYSQL_PWD=${MYSQL_ROOT_PASSWORD}
-mysql -h localhost -nsLNE -e "select member_state from performance_schema.replication_group_members where member_id=@@server_uuid;" 2>/dev/null | grep -v "*" | egrep -v "ERROR|OFFLINE"
+mysql -h localhost -nsLNE -e "select member_state from performance_schema.replication_group_members where member_id=@@server_uuid;" 2>/dev/null | grep "ONLINE"
 `,
 				},
 			},

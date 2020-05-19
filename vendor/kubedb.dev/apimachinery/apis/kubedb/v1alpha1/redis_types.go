@@ -31,6 +31,7 @@ const (
 	ResourcePluralRedis   = "redises"
 )
 
+// +kubebuilder:validation:Enum=Standalone;Cluster
 type RedisMode string
 
 const (

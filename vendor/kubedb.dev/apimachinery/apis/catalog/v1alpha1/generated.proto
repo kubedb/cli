@@ -28,6 +28,14 @@ import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha1";
 
+message Blacklist {
+  // List of all rejected version for standalone modification request
+  repeated string standalone = 1;
+
+  // List of all rejected version for groupReplication modification request
+  repeated string groupReplication = 2;
+}
+
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=elasticsearchversions,singular=elasticsearchversion,scope=Cluster,shortName=esversion,categories={datastore,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
@@ -282,6 +290,14 @@ message MongoDBVersionTools {
   optional string image = 1;
 }
 
+message MySQLUpgradeConstraints {
+  // List of all accepted version for modification request
+  optional Whitelist whitelist = 1;
+
+  // List of all rejected version for modification request
+  optional Blacklist blacklist = 2;
+}
+
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=mysqlversions,singular=mysqlversion,scope=Cluster,shortName=myversion,categories={datastore,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
@@ -353,6 +369,9 @@ message MySQLVersionSpec {
 
   // PSP names
   optional MySQLVersionPodSecurityPolicy podSecurityPolicies = 8;
+
+  // upgrade constraints
+  optional MySQLUpgradeConstraints upgradeConstraints = 9;
 }
 
 // MySQLVersionTools is the image for the postgres tools
@@ -637,5 +656,13 @@ message RedisVersionSpec {
 
   // PSP names
   optional RedisVersionPodSecurityPolicy podSecurityPolicies = 5;
+}
+
+message Whitelist {
+  // List of all accepted version for standalone modification request. empty indicates all accepted
+  repeated string standalone = 1;
+
+  // List of all accepted version for groupReplication modification request. empty indicates all accepted
+  repeated string groupReplication = 2;
 }
 

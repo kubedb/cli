@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: elasticsearches.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -59,6 +59,10 @@ spec:
               description: 'Authentication plugin used by Elasticsearch cluster. If
                 unset, defaults to SearchGuard. Deprecated: Use elasticsearchVersion.Spec.AuthPlugin
                 instead'
+              enum:
+              - SearchGuard
+              - None
+              - X-Pack
               type: string
             certificateSecret:
               description: Secret with SSL certificates
@@ -7266,9 +7270,17 @@ spec:
               type: object
             storageType:
               description: StorageType can be durable (default) or ephemeral
+              enum:
+              - Durable
+              - Ephemeral
               type: string
             terminationPolicy:
               description: TerminationPolicy controls the delete operation for database
+              enum:
+              - Halt
+              - Delete
+              - WipeOut
+              - DoNotTerminate
               type: string
             topology:
               description: Elasticsearch topology for node specification
@@ -7781,6 +7793,13 @@ spec:
               format: int64
               type: integer
             phase:
+              enum:
+              - Running
+              - Creating
+              - Initializing
+              - Paused
+              - Halted
+              - Failed
               type: string
             reason:
               type: string

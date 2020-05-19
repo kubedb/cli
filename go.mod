@@ -3,7 +3,7 @@ module kubedb.dev/cli
 go 1.12
 
 require (
-	github.com/appscode/go v0.0.0-20191119085241-0887d8ec2ecc
+	github.com/appscode/go v0.0.0-20200323182826-54e98e09185a
 	github.com/fatih/camelcase v1.0.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/spf13/cobra v0.0.5
@@ -13,11 +13,11 @@ require (
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/component-base v0.0.0-20191114102325-35a9586014f7
 	k8s.io/kubectl v0.0.0-20191114113550-6123e1c827f7
-	kmodules.xyz/client-go v0.0.0-20200505205933-69b83d1c0ab2
+	kmodules.xyz/client-go v0.0.0-20200518125232-435dcc370844
 	kmodules.xyz/custom-resources v0.0.0-20191130062942-f41b54f62419
 	kmodules.xyz/monitoring-agent-api v0.0.0-20200125202117-d3b3e33ce41f
 	kmodules.xyz/objectstore-api v0.0.0-20200214040336-fe8f39a4210d
-	kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd
+	kubedb.dev/apimachinery v0.13.0-rc.4.0.20200519101619-d70848d79c1b
 	stash.appscode.dev/apimachinery v0.9.0-rc.6
 )
 

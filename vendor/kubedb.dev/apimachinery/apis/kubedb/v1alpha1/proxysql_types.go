@@ -31,6 +31,7 @@ const (
 	ResourcePluralProxySQL   = "proxysqls"
 )
 
+// +kubebuilder:validation:Enum=Galera;GroupReplication
 type LoadBalanceMode string
 
 const (

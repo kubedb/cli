@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: mongodbs.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -59,6 +59,11 @@ spec:
               description: 'ClusterAuthMode for replicaset or sharding. (default will
                 be x509 if sslmode is not `disabled`.) See available ClusterAuthMode:
                 https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-clusterauthmode'
+              enum:
+              - keyFile
+              - sendKeyFile
+              - sendX509
+              - x509
               type: string
             configSource:
               description: ConfigSource is an optional field to provide custom configuration
@@ -19521,6 +19526,11 @@ spec:
             sslMode:
               description: 'SSLMode for both standalone and clusters. (default, disabled.)
                 See more options: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-sslmode'
+              enum:
+              - disabled
+              - allowSSL
+              - preferSSL
+              - requireSSL
               type: string
             storage:
               description: Storage spec to specify how storage shall be used.
@@ -19637,9 +19647,17 @@ spec:
               type: object
             storageType:
               description: StorageType can be durable (default) or ephemeral
+              enum:
+              - Durable
+              - Ephemeral
               type: string
             terminationPolicy:
               description: TerminationPolicy controls the delete operation for database
+              enum:
+              - Halt
+              - Delete
+              - WipeOut
+              - DoNotTerminate
               type: string
             tls:
               description: TLS contains tls configurations for client and server.
@@ -19737,6 +19755,13 @@ spec:
               format: int64
               type: integer
             phase:
+              enum:
+              - Running
+              - Creating
+              - Initializing
+              - Paused
+              - Halted
+              - Failed
               type: string
             reason:
               type: string

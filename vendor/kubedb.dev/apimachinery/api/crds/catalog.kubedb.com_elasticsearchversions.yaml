@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: elasticsearchversions.catalog.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -57,6 +57,10 @@ spec:
           properties:
             authPlugin:
               description: Authentication plugin used by Elasticsearch cluster.
+              enum:
+              - SearchGuard
+              - None
+              - X-Pack
               type: string
             db:
               description: Database Image

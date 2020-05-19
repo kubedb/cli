@@ -21,8 +21,8 @@ package scheme
 import (
 	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/apis/config/v1alpha1"
-	dbav1alpha1 "kubedb.dev/apimachinery/apis/dba/v1alpha1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
+	opsv1alpha1 "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -37,8 +37,8 @@ var ParameterCodec = runtime.NewParameterCodec(Scheme)
 var localSchemeBuilder = runtime.SchemeBuilder{
 	catalogv1alpha1.AddToScheme,
 	configv1alpha1.AddToScheme,
-	dbav1alpha1.AddToScheme,
 	kubedbv1alpha1.AddToScheme,
+	opsv1alpha1.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition

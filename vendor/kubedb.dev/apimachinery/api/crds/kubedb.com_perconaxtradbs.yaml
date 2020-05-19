@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubedb
+    app.kubernetes.io/name: kubedb
   name: perconaxtradbs.kubedb.com
 spec:
   additionalPrinterColumns:
@@ -7194,9 +7194,17 @@ spec:
               type: object
             storageType:
               description: StorageType can be durable (default) or ephemeral
+              enum:
+              - Durable
+              - Ephemeral
               type: string
             terminationPolicy:
               description: TerminationPolicy controls the delete operation for database
+              enum:
+              - Halt
+              - Delete
+              - WipeOut
+              - DoNotTerminate
               type: string
             tls:
               description: TLS contains tls configurations for client and server.
@@ -7294,6 +7302,13 @@ spec:
               format: int64
               type: integer
             phase:
+              enum:
+              - Running
+              - Creating
+              - Initializing
+              - Paused
+              - Halted
+              - Failed
               type: string
             reason:
               type: string

@@ -167,6 +167,7 @@ type RecoveryTarget struct {
 	TargetInclusive *bool `json:"targetInclusive,omitempty" protobuf:"varint,4,opt,name=targetInclusive"`
 }
 
+// +kubebuilder:validation:Enum=Hot;Warm
 type PostgresStandbyMode string
 
 const (
@@ -179,6 +180,7 @@ const (
 	DeprecatedWarmStandby PostgresStandbyMode = "warm"
 )
 
+// +kubebuilder:validation:Enum=Synchronous;Asynchronous
 type PostgresStreamingMode string
 
 const (

@@ -20,7 +20,7 @@ github.com/MakeNowJust/heredoc
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/appscode/go v0.0.0-20191119085241-0887d8ec2ecc
+# github.com/appscode/go v0.0.0-20200323182826-54e98e09185a
 github.com/appscode/go/analytics
 github.com/appscode/go/encoding/json/types
 github.com/appscode/go/homedir
@@ -432,8 +432,9 @@ k8s.io/kubernetes/pkg/util/hash
 k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20200505205933-69b83d1c0ab2
+# kmodules.xyz/client-go v0.0.0-20200518125232-435dcc370844
 kmodules.xyz/client-go
+kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/core/v1
 kmodules.xyz/client-go/discovery
 kmodules.xyz/client-go/logs
@@ -455,17 +456,17 @@ kmodules.xyz/objectstore-api/api/v1
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.13.0-rc.4.0.20200321030403-83c8e40a52cd
+# kubedb.dev/apimachinery v0.13.0-rc.4.0.20200519101619-d70848d79c1b
 kubedb.dev/apimachinery/api/crds
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/catalog
 kubedb.dev/apimachinery/apis/catalog/v1alpha1
 kubedb.dev/apimachinery/apis/config
 kubedb.dev/apimachinery/apis/config/v1alpha1
-kubedb.dev/apimachinery/apis/dba
-kubedb.dev/apimachinery/apis/dba/v1alpha1
 kubedb.dev/apimachinery/apis/kubedb
 kubedb.dev/apimachinery/apis/kubedb/v1alpha1
+kubedb.dev/apimachinery/apis/ops
+kubedb.dev/apimachinery/apis/ops/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned/scheme
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1
 # sigs.k8s.io/kustomize v2.0.3+incompatible => sigs.k8s.io/kustomize v2.0.3+incompatible

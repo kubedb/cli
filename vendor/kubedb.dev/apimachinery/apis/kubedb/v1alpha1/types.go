@@ -51,6 +51,7 @@ type LeaderElectionConfig struct {
 	RetryPeriodSeconds int32 `json:"retryPeriodSeconds" protobuf:"varint,3,opt,name=retryPeriodSeconds"`
 }
 
+// +kubebuilder:validation:Enum=Running;Creating;Initializing;Paused;Halted;Failed
 type DatabasePhase string
 
 const (
@@ -68,6 +69,7 @@ const (
 	DatabasePhaseFailed DatabasePhase = "Failed"
 )
 
+// +kubebuilder:validation:Enum=Durable;Ephemeral
 type StorageType string
 
 const (
@@ -77,6 +79,7 @@ const (
 	StorageTypeEphemeral StorageType = "Ephemeral"
 )
 
+// +kubebuilder:validation:Enum=Halt;Delete;WipeOut;DoNotTerminate
 type TerminationPolicy string
 
 const (

@@ -341,6 +341,20 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	}
 
 	if m.Spec.ShardTopology != nil {
+		if m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle == nil {
+			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle = new(core.Lifecycle)
+		}
+
+		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle.PreStop = &core.Handler{
+			Exec: &core.ExecAction{
+				Command: []string{
+					"bash",
+					"-c",
+					"mongo admin --username=$MONGO_INITDB_ROOT_USERNAME --password=$MONGO_INITDB_ROOT_PASSWORD --quiet --eval \"db.adminCommand({ shutdown: 1 })\" || true",
+				},
+			},
+		}
+
 		if m.Spec.ShardTopology.Mongos.Strategy.Type == "" {
 			m.Spec.ShardTopology.Mongos.Strategy.Type = apps.RollingUpdateDeploymentStrategyType
 		}

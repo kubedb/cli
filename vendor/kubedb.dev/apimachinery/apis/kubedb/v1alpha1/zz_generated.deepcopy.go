@@ -750,6 +750,11 @@ func (in *MemcachedSpec) DeepCopyInto(out *MemcachedSpec) {
 		*out = new(corev1.VolumeSource)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.DataVolume != nil {
+		in, out := &in.DataVolume, &out.DataVolume
+		*out = new(corev1.VolumeSource)
+		(*in).DeepCopyInto(*out)
+	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
 	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
