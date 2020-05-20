@@ -75,8 +75,8 @@ spec:
               format: int32
               type: integer
             type:
-              description: Specifies the modification request type; ScaleUp, ScaleDown,
-                Upgrade etc.
+              description: Specifies the ops request type; ScaleUp, ScaleDown, Upgrade
+                etc.
               enum:
               - Upgrade
               - HorizontalScaling

@@ -59,7 +59,7 @@ spec:
                   type: string
               type: object
             type:
-              description: 'Specifies the modification request type: Upgrade, HorizontalScaling,
+              description: 'Specifies the ops request type: Upgrade, HorizontalScaling,
                 VerticalScaling etc.'
               enum:
               - Upgrade

@@ -88,7 +88,7 @@ message ElasticsearchOpsRequestSpec {
   // Specifies the Elasticsearch reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -100,7 +100,7 @@ message ElasticsearchOpsRequestSpec {
 
 // ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest
 message ElasticsearchOpsRequestStatus {
-  // Specifies the current phase of the modification request
+  // Specifies the current phase of the ops request
   // +optional
   optional string phase = 1;
 
@@ -141,7 +141,7 @@ message EtcdOpsRequestSpec {
   // Specifies the etcd reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -189,7 +189,7 @@ message MemcachedOpsRequestSpec {
   // Specifies the Memcached reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -248,7 +248,7 @@ message MongoDBOpsRequestSpec {
   // Specifies the MongoDB reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies information necessary for upgrading mongodb
@@ -336,7 +336,7 @@ message MySQLOpsRequestSpec {
   // Specifies the current ordinal of the StatefulSet
   optional int32 statefulSetOrdinal = 2;
 
-  // Specifies the modification request type; ScaleUp, ScaleDown, Upgrade etc.
+  // Specifies the ops request type; ScaleUp, ScaleDown, Upgrade etc.
   optional string type = 3;
 
   // Specifies the field information that needed to be upgraded
@@ -395,7 +395,7 @@ message PerconaXtraDBOpsRequestSpec {
   // Specifies the Elasticsearch reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -443,7 +443,7 @@ message PgBouncerOpsRequestSpec {
   // Specifies the Elasticsearch reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -491,7 +491,7 @@ message PostgresOpsRequestSpec {
   // Specifies the Elasticsearch reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -539,7 +539,7 @@ message ProxySQLOpsRequestSpec {
   // Specifies the Elasticsearch reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded
@@ -587,7 +587,7 @@ message RedisOpsRequestSpec {
   // Specifies the Elasticsearch reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
-  // Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
   // Specifies the field information that needed to be upgraded

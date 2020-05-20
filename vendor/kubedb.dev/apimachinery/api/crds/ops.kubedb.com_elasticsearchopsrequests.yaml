@@ -75,7 +75,7 @@ spec:
                   type: integer
               type: object
             type:
-              description: 'Specifies the modification request type: Upgrade, HorizontalScaling,
+              description: 'Specifies the ops request type: Upgrade, HorizontalScaling,
                 VerticalScaling etc.'
               enum:
               - Upgrade
@@ -153,7 +153,7 @@ spec:
               format: int64
               type: integer
             phase:
-              description: Specifies the current phase of the modification request
+              description: Specifies the current phase of the ops request
               type: string
           type: object
       type: object

@@ -54,7 +54,7 @@ type MySQLOpsRequestSpec struct {
 	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
 	// Specifies the current ordinal of the StatefulSet
 	StatefulSetOrdinal *int32 `json:"statefulSetOrdinal,omitempty" protobuf:"varint,2,opt,name=statefulSetOrdinal"`
-	// Specifies the modification request type; ScaleUp, ScaleDown, Upgrade etc.
+	// Specifies the ops request type; ScaleUp, ScaleDown, Upgrade etc.
 	Type OpsRequestType `json:"type" protobuf:"bytes,3,opt,name=type,casttype=OpsRequestType"`
 	// Specifies the field information that needed to be upgraded
 	Upgrade *UpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,4,opt,name=upgrade"`

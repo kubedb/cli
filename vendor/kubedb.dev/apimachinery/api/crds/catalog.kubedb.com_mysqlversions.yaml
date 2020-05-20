@@ -108,32 +108,32 @@ spec:
               description: upgrade constraints
               properties:
                 blacklist:
-                  description: List of all rejected version for modification request
+                  description: List of all rejected version for ops request
                   properties:
                     groupReplication:
                       description: List of all rejected version for groupReplication
-                        modification request
+                        ops request
                       items:
                         type: string
                       type: array
                     standalone:
-                      description: List of all rejected version for standalone modification
+                      description: List of all rejected version for standalone ops
                         request
                       items:
                         type: string
                       type: array
                   type: object
                 whitelist:
-                  description: List of all accepted version for modification request
+                  description: List of all accepted version for ops request
                   properties:
                     groupReplication:
                       description: List of all accepted version for groupReplication
-                        modification request. empty indicates all accepted
+                        ops request. empty indicates all accepted
                       items:
                         type: string
                       type: array
                     standalone:
-                      description: List of all accepted version for standalone modification
+                      description: List of all accepted version for standalone ops
                         request. empty indicates all accepted
                       items:
                         type: string

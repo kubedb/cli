@@ -99,23 +99,23 @@ type MySQLVersionPodSecurityPolicy struct {
 }
 
 type MySQLUpgradeConstraints struct {
-	// List of all accepted version for modification request
+	// List of all accepted version for ops request
 	Whitelist Whitelist `json:"whitelist,omitempty" protobuf:"bytes,1,opt,name=whitelist"`
-	// List of all rejected version for modification request
+	// List of all rejected version for ops request
 	Blacklist Blacklist `json:"blacklist,omitempty" protobuf:"bytes,2,opt,name=blacklist"`
 }
 
 type Whitelist struct {
-	// List of all accepted version for standalone modification request. empty indicates all accepted
+	// List of all accepted version for standalone ops request. empty indicates all accepted
 	Standalone []string `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
-	// List of all accepted version for groupReplication modification request. empty indicates all accepted
+	// List of all accepted version for groupReplication ops request. empty indicates all accepted
 	GroupReplication []string `json:"groupReplication,omitempty" protobuf:"bytes,2,opt,name=groupReplication"`
 }
 
 type Blacklist struct {
-	// List of all rejected version for standalone modification request
+	// List of all rejected version for standalone ops request
 	Standalone []string `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
-	// List of all rejected version for groupReplication modification request
+	// List of all rejected version for groupReplication ops request
 	GroupReplication []string `json:"groupReplication,omitempty" protobuf:"bytes,2,opt,name=groupReplication"`
 }
 

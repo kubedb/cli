@@ -756,8 +756,8 @@ kmodules.xyz/openshift v0.0.0-20191127054841-113eeb13704f/go.mod h1:de9+Zk2+wtGh
 kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2 h1:wxHidC0FZfaHTRG8ADG9qdxTBHXGUJylWEsTV/m/6Rg=
 kmodules.xyz/prober v0.0.0-20191216013129-7c91e2b0edb2/go.mod h1:YdapXw+AMO1U/yYZloDA0dTiha89Rv1iqK05Jh7qQQY=
 kmodules.xyz/webhook-runtime v0.0.0-20191127075323-d4bfdee6974d/go.mod h1:aaaxyAmKOpw0ey3LrpBkqWq0LTl35f9PW6mhwVDBMow=
-kubedb.dev/apimachinery v0.13.0-rc.4.0.20200519101619-d70848d79c1b h1:EiqHcDV3/7HWVtYrL6ebiHk/MWzNk9qABOzRwBeT+Qw=
-kubedb.dev/apimachinery v0.13.0-rc.4.0.20200519101619-d70848d79c1b/go.mod h1:7ae2YC2hmJnWsIy9b0qNYsRMFZhKDbepp3DeHmwuDAw=
+kubedb.dev/apimachinery v0.14.0-alpha.0 h1:EO08zSdT8a2q6MpaYquBc81QX8MNoNG04QDKrMdUwuM=
+kubedb.dev/apimachinery v0.14.0-alpha.0/go.mod h1:7ae2YC2hmJnWsIy9b0qNYsRMFZhKDbepp3DeHmwuDAw=
 launchpad.net/gocheck v0.0.0-20140225173054-000000000087/go.mod h1:hj7XX3B/0A+80Vse0e+BUHsHMTEhd0O4cpUHr/e/BUM=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0/go.mod h1:b/QX9oBD/LhixY6NDh+IdGv17hgB+51fET1i2kPSmvk=

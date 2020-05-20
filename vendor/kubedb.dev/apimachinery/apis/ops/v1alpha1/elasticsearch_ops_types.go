@@ -52,7 +52,7 @@ type ElasticsearchOpsRequest struct {
 type ElasticsearchOpsRequestSpec struct {
 	// Specifies the Elasticsearch reference
 	DatabaseRef v1.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
-	// Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
 	// Specifies the field information that needed to be upgraded
 	Upgrade *UpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
@@ -72,7 +72,7 @@ type ElasticsearchHorizontalScalingSpec struct {
 
 // ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest
 type ElasticsearchOpsRequestStatus struct {
-	// Specifies the current phase of the modification request
+	// Specifies the current phase of the ops request
 	// +optional
 	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the

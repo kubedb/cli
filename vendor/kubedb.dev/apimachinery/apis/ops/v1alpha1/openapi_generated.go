@@ -17710,7 +17710,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref commo
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -17745,7 +17745,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestStatus(ref com
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the current phase of the modification request",
+							Description: "Specifies the current phase of the ops request",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -17883,7 +17883,7 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.Referen
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -18049,7 +18049,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref common.Re
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -18251,7 +18251,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -18569,7 +18569,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type; ScaleUp, ScaleDown, Upgrade etc.",
+							Description: "Specifies the ops request type; ScaleUp, ScaleDown, Upgrade etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -18774,7 +18774,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref commo
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -18940,7 +18940,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref common.Re
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -19106,7 +19106,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref common.Ref
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -19272,7 +19272,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestSpec(ref common.Ref
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -19438,7 +19438,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestSpec(ref common.Refere
 					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the modification request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
+							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
 							Type:        []string{"string"},
 							Format:      "",
 						},

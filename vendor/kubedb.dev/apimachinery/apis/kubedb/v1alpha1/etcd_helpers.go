@@ -115,7 +115,7 @@ func (e etcdStatsService) ServiceMonitorName() string {
 }
 
 func (e etcdStatsService) Path() string {
-	return fmt.Sprintf("/metrics")
+	return "/metrics"
 }
 
 func (e etcdStatsService) Scheme() string {

@@ -20,7 +20,7 @@ import (
 	core "k8s.io/api/core/v1"
 )
 
-// List of possible condition types for a modification request
+// List of possible condition types for a ops request
 const (
 	AccessApproved            = "Approved"
 	AccessDenied              = "Denied"
@@ -52,17 +52,17 @@ const (
 type OpsRequestPhase string
 
 const (
-	// used for modification requests that are currently Progressing
+	// used for ops requests that are currently Progressing
 	OpsRequestPhaseProgressing OpsRequestPhase = "Progressing"
-	// used for modification requests that are executed successfully
+	// used for ops requests that are executed successfully
 	OpsRequestPhaseSuccessful OpsRequestPhase = "Successful"
-	// used for modification requests that are waiting for approval
+	// used for ops requests that are waiting for approval
 	OpsRequestPhaseWaitingForApproval OpsRequestPhase = "WaitingForApproval"
-	// used for modification requests that are failed
+	// used for ops requests that are failed
 	OpsRequestPhaseFailed OpsRequestPhase = "Failed"
-	// used for modification requests that are approved
+	// used for ops requests that are approved
 	OpsRequestApproved OpsRequestPhase = "Approved"
-	// used for modification requests that are denied
+	// used for ops requests that are denied
 	OpsRequestDenied OpsRequestPhase = "Denied"
 )
 

@@ -118,7 +118,7 @@ func (m MongoDB) ShardRepSetName(nodeNum int32) string {
 }
 
 func (m MongoDB) ConfigSvrRepSetName() string {
-	repSetName := fmt.Sprintf("cnfRepSet")
+	repSetName := "cnfRepSet"
 	if m.Spec.ShardTopology != nil && m.Spec.ShardTopology.ConfigServer.Prefix != "" {
 		repSetName = m.Spec.ShardTopology.ConfigServer.Prefix
 	}
