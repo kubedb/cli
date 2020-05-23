@@ -17,11 +17,12 @@ limitations under the License.
 package describer
 
 import (
+	"context"
 	"time"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/duration"
-	"k8s.io/kubectl/pkg/describe/versioned"
+	"k8s.io/kubectl/pkg/describe"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	stashV1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
 	stash "stash.appscode.dev/apimachinery/client/clientset/versioned"
@@ -41,7 +42,7 @@ type backupInvokerInfo struct {
 	creationTimestamp metav1.Time
 }
 
-func showBackups(stash stash.Interface, ab *appcat.AppBinding, w versioned.PrefixWriter) error {
+func showBackups(stash stash.Interface, ab *appcat.AppBinding, w describe.PrefixWriter) error {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Backup:\n")
 	var invokers []backupInvokerInfo
@@ -96,7 +97,7 @@ func showBackups(stash stash.Interface, ab *appcat.AppBinding, w versioned.Prefi
 
 func getBackupConfigurationTypeInvokers(stash stash.Interface, ab *appcat.AppBinding) ([]backupInvokerInfo, error) {
 	var bcInvokers []backupInvokerInfo
-	backupConfigurations, err := stash.StashV1beta1().BackupConfigurations(ab.Namespace).List(metav1.ListOptions{})
+	backupConfigurations, err := stash.StashV1beta1().BackupConfigurations(ab.Namespace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +129,7 @@ func getBackupConfigurationTypeInvokers(stash stash.Interface, ab *appcat.AppBin
 
 func getBackupBatchTypeInvokers(stash stash.Interface, ab *appcat.AppBinding) ([]backupInvokerInfo, error) {
 	var bbInvokers []backupInvokerInfo
-	backupBatches, err := stash.StashV1beta1().BackupBatches(ab.Namespace).List(metav1.ListOptions{})
+	backupBatches, err := stash.StashV1beta1().BackupBatches(ab.Namespace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +161,7 @@ func getBackupBatchTypeInvokers(stash stash.Interface, ab *appcat.AppBinding) ([
 
 func getBucket(stash stash.Interface, repoName, repoNamespace string) (string, error) {
 	// Get the respective Repository
-	repo, err := stash.StashV1alpha1().Repositories(repoNamespace).Get(repoName, metav1.GetOptions{})
+	repo, err := stash.StashV1alpha1().Repositories(repoNamespace).Get(context.TODO(), repoName, metav1.GetOptions{})
 	if err != nil {
 		return "", err
 	}
@@ -171,7 +172,7 @@ func getBucket(stash stash.Interface, repoName, repoNamespace string) (string, e
 func getBackupSessions(stash stash.Interface, namespace string, invokers []backupInvokerInfo) ([]stashV1beta1.BackupSession, error) {
 	var backupSessions []stashV1beta1.BackupSession
 
-	bsList, err := stash.StashV1beta1().BackupSessions(namespace).List(metav1.ListOptions{})
+	bsList, err := stash.StashV1beta1().BackupSessions(namespace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}

@@ -17,6 +17,7 @@ limitations under the License.
 package describer
 
 import (
+	"context"
 	"fmt"
 	"sort"
 	"strings"
@@ -30,14 +31,14 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/kubectl/pkg/describe/versioned"
+	"k8s.io/kubectl/pkg/describe"
 	"k8s.io/kubectl/pkg/util/slice"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	store "kmodules.xyz/objectstore-api/api/v1"
 )
 
-func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w versioned.PrefixWriter) {
+func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w describe.PrefixWriter) {
 	if st == api.StorageTypeEphemeral {
 		w.Write(LEVEL_0, "StorageType:\t%s\n", api.StorageTypeEphemeral)
 	} else {
@@ -61,7 +62,7 @@ func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec
 	}
 }
 
-func describeArchiver(archiver *api.PostgresArchiverSpec, w versioned.PrefixWriter) {
+func describeArchiver(archiver *api.PostgresArchiverSpec, w describe.PrefixWriter) {
 	if archiver == nil {
 		return
 	}
@@ -71,7 +72,7 @@ func describeArchiver(archiver *api.PostgresArchiverSpec, w versioned.PrefixWrit
 	}
 }
 
-func describeInitialization(init *api.InitSpec, w versioned.PrefixWriter) {
+func describeInitialization(init *api.InitSpec, w describe.PrefixWriter) {
 	if init == nil {
 		return
 	}
@@ -91,7 +92,7 @@ func describeInitialization(init *api.InitSpec, w versioned.PrefixWriter) {
 	}
 }
 
-func describeSnapshotStorage(level int, snapshot store.Backend, w versioned.PrefixWriter) {
+func describeSnapshotStorage(level int, snapshot store.Backend, w describe.PrefixWriter) {
 	switch {
 	case snapshot.Local != nil:
 		describeVolume(level, snapshot.Local.VolumeSource, w)
@@ -117,7 +118,7 @@ func describeSnapshotStorage(level int, snapshot store.Backend, w versioned.Pref
 	}
 }
 
-func describeMonitor(monitor *mona.AgentSpec, w versioned.PrefixWriter) {
+func describeMonitor(monitor *mona.AgentSpec, w describe.PrefixWriter) {
 	if monitor == nil {
 		return
 	}
@@ -144,7 +145,7 @@ func describeMonitor(monitor *mona.AgentSpec, w versioned.PrefixWriter) {
 	}
 }
 
-func showAppBinding(ab *appcat.AppBinding, w versioned.PrefixWriter) error {
+func showAppBinding(ab *appcat.AppBinding, w describe.PrefixWriter) error {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "AppBinding:\n")
 	if ab == nil || ab.Name == "" {
@@ -166,7 +167,7 @@ func showAppBinding(ab *appcat.AppBinding, w versioned.PrefixWriter) error {
 	return nil
 }
 
-func printUnstructuredContent(w versioned.PrefixWriter, level int, content map[string]interface{}, skipPrefix string, skip ...string) {
+func printUnstructuredContent(w describe.PrefixWriter, level int, content map[string]interface{}, skipPrefix string, skip ...string) {
 	fields := []string{}
 	for field := range content {
 		fields = append(fields, field)
@@ -237,11 +238,11 @@ func smartLabelFor(field string) string {
 	return strings.Join(result, " ")
 }
 
-func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w versioned.PrefixWriter) {
+func showWorkload(client kubernetes.Interface, namespace string, selector labels.Selector, w describe.PrefixWriter) {
 	pc := client.CoreV1().Pods(namespace)
 	opts := metav1.ListOptions{LabelSelector: selector.String()}
 
-	if statefulSets, err := client.AppsV1().StatefulSets(namespace).List(opts); err == nil {
+	if statefulSets, err := client.AppsV1().StatefulSets(namespace).List(context.TODO(), opts); err == nil {
 		for _, s := range statefulSets.Items {
 			selector, err := metav1.LabelSelectorAsSelector(s.Spec.Selector)
 			if err != nil {
@@ -257,7 +258,7 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 		}
 	}
 
-	if deployments, err := client.AppsV1().Deployments(namespace).List(opts); err == nil {
+	if deployments, err := client.AppsV1().Deployments(namespace).List(context.TODO(), opts); err == nil {
 		for _, d := range deployments.Items {
 			selector, err := metav1.LabelSelectorAsSelector(d.Spec.Selector)
 			if err != nil {
@@ -273,19 +274,19 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 		}
 	}
 
-	if services, err := client.CoreV1().Services(namespace).List(opts); err == nil {
+	if services, err := client.CoreV1().Services(namespace).List(context.TODO(), opts); err == nil {
 		for _, s := range services.Items {
-			endpoints, _ := client.CoreV1().Endpoints(namespace).Get(s.Name, metav1.GetOptions{})
+			endpoints, _ := client.CoreV1().Endpoints(namespace).Get(context.TODO(), s.Name, metav1.GetOptions{})
 			describeService(&s, endpoints, w)
 		}
 	}
 }
 
-func showSecret(client kubernetes.Interface, namespace string, secretVolumes map[string]*core.SecretVolumeSource, w versioned.PrefixWriter) {
+func showSecret(client kubernetes.Interface, namespace string, secretVolumes map[string]*core.SecretVolumeSource, w describe.PrefixWriter) {
 	sc := client.CoreV1().Secrets(namespace)
 
 	for key, sv := range secretVolumes {
-		secret, err := sc.Get(sv.SecretName, metav1.GetOptions{})
+		secret, err := sc.Get(context.TODO(), sv.SecretName, metav1.GetOptions{})
 		if err != nil {
 			continue
 		}
@@ -293,13 +294,13 @@ func showSecret(client kubernetes.Interface, namespace string, secretVolumes map
 	}
 }
 
-func showTopology(client kubernetes.Interface, namespace string, selector labels.Selector, specific map[string]labels.Selector, w versioned.PrefixWriter) {
+func showTopology(client kubernetes.Interface, namespace string, selector labels.Selector, specific map[string]labels.Selector, w describe.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Topology:\n")
 	w.Write(LEVEL_0, "  Type\tPod\tStartTime\tPhase\n")
 	w.Write(LEVEL_0, "  ----\t---\t---------\t-----\n")
 
-	pods, _ := client.CoreV1().Pods(namespace).List(metav1.ListOptions{
+	pods, _ := client.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{
 		LabelSelector: selector.String(),
 	})
 

@@ -35,20 +35,6 @@ message ConfigNode {
   optional int32 replicas = 1;
 }
 
-// Resources requested by a single application container
-message ContainerResources {
-  // Name of the container specified as a DNS_LABEL.
-  // Each container in a pod must have a unique name (DNS_LABEL).
-  // Cannot be updated.
-  optional string name = 1;
-
-  // Compute Resources required by this container.
-  // Cannot be updated.
-  // More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  // +optional
-  optional k8s.io.api.core.v1.ResourceRequirements resources = 2;
-}
-
 // ElasticsearchHorizontalScalingSpec contains the horizontal scaling information of an Elasticsearch cluster
 message ElasticsearchHorizontalScalingSpec {
   // Number of master nodes
@@ -284,13 +270,15 @@ message MongoDBShardNode {
 
 // MongoDBVerticalScalingSpec is the spec for mongodb vertical scaling
 message MongoDBVerticalScalingSpec {
-  repeated ContainerResources containers = 1;
+  optional k8s.io.api.core.v1.ResourceRequirements standalone = 1;
 
-  repeated ContainerResources mongos = 2;
+  optional k8s.io.api.core.v1.ResourceRequirements mongos = 2;
 
-  repeated ContainerResources configServer = 3;
+  optional k8s.io.api.core.v1.ResourceRequirements configServer = 3;
 
-  repeated ContainerResources shard = 4;
+  optional k8s.io.api.core.v1.ResourceRequirements shard = 4;
+
+  optional k8s.io.api.core.v1.ResourceRequirements exporter = 5;
 }
 
 // MongosNode is the spec for mongodb Mongos
@@ -364,8 +352,9 @@ message MySQLOpsRequestStatus {
 }
 
 message MySQLVerticalScalingSpec {
-  // Containers represents the containers specification for scaling the requested resources.
-  repeated ContainerResources containers = 1;
+  optional k8s.io.api.core.v1.ResourceRequirements mysql = 1;
+
+  optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
 }
 
 // +kubebuilder:object:root=true
