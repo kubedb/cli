@@ -17,6 +17,7 @@ limitations under the License.
 package describer
 
 import (
+	"context"
 	"io"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
@@ -30,7 +31,6 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe"
-	"k8s.io/kubectl/pkg/describe/versioned"
 	"kmodules.xyz/client-go/discovery"
 	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	stashV1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -45,7 +45,7 @@ type RedisDescriber struct {
 }
 
 func (d *RedisDescriber) Describe(namespace, name string, describerSettings describe.DescriberSettings) (string, error) {
-	item, err := d.kubedb.Redises(namespace).Get(name, metav1.GetOptions{})
+	item, err := d.kubedb.Redises(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
 		return "", err
 	}
@@ -65,7 +65,7 @@ func (d *RedisDescriber) Describe(namespace, name string, describerSettings desc
 
 func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
-		w := versioned.NewPrefixWriter(out)
+		w := describe.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
 		w.Write(LEVEL_0, "Namespace:\t%s\n", item.Namespace)
 		w.Write(LEVEL_0, "CreationTimestamp:\t%s\n", timeToString(&item.CreationTimestamp))
@@ -92,7 +92,7 @@ func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector
 			describeMonitor(item.Spec.Monitor, w)
 		}
 
-		ab, err := d.appcat.AppcatalogV1alpha1().AppBindings(item.Namespace).Get(item.Name, metav1.GetOptions{})
+		ab, err := d.appcat.AppcatalogV1alpha1().AppBindings(item.Namespace).Get(context.TODO(), item.Name, metav1.GetOptions{})
 		if err != nil && !kerr.IsNotFound(err) {
 			return err
 		}

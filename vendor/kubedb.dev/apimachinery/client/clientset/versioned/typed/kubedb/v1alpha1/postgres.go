@@ -19,6 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
 	"time"
 
 	v1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
@@ -38,15 +39,15 @@ type PostgresesGetter interface {
 
 // PostgresInterface has methods to work with Postgres resources.
 type PostgresInterface interface {
-	Create(*v1alpha1.Postgres) (*v1alpha1.Postgres, error)
-	Update(*v1alpha1.Postgres) (*v1alpha1.Postgres, error)
-	UpdateStatus(*v1alpha1.Postgres) (*v1alpha1.Postgres, error)
-	Delete(name string, options *v1.DeleteOptions) error
-	DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error
-	Get(name string, options v1.GetOptions) (*v1alpha1.Postgres, error)
-	List(opts v1.ListOptions) (*v1alpha1.PostgresList, error)
-	Watch(opts v1.ListOptions) (watch.Interface, error)
-	Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Postgres, err error)
+	Create(ctx context.Context, postgres *v1alpha1.Postgres, opts v1.CreateOptions) (*v1alpha1.Postgres, error)
+	Update(ctx context.Context, postgres *v1alpha1.Postgres, opts v1.UpdateOptions) (*v1alpha1.Postgres, error)
+	UpdateStatus(ctx context.Context, postgres *v1alpha1.Postgres, opts v1.UpdateOptions) (*v1alpha1.Postgres, error)
+	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
+	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Postgres, error)
+	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.PostgresList, error)
+	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Postgres, err error)
 	PostgresExpansion
 }
 
@@ -65,20 +66,20 @@ func newPostgreses(c *KubedbV1alpha1Client, namespace string) *postgreses {
 }
 
 // Get takes name of the postgres, and returns the corresponding postgres object, and an error if there is any.
-func (c *postgreses) Get(name string, options v1.GetOptions) (result *v1alpha1.Postgres, err error) {
+func (c *postgreses) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Postgres, err error) {
 	result = &v1alpha1.Postgres{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("postgreses").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do().
+		Do(ctx).
 		Into(result)
 	return
 }
 
 // List takes label and field selectors, and returns the list of Postgreses that match those selectors.
-func (c *postgreses) List(opts v1.ListOptions) (result *v1alpha1.PostgresList, err error) {
+func (c *postgreses) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.PostgresList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -89,13 +90,13 @@ func (c *postgreses) List(opts v1.ListOptions) (result *v1alpha1.PostgresList, e
 		Resource("postgreses").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Do().
+		Do(ctx).
 		Into(result)
 	return
 }
 
 // Watch returns a watch.Interface that watches the requested postgreses.
-func (c *postgreses) Watch(opts v1.ListOptions) (watch.Interface, error) {
+func (c *postgreses) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -106,87 +107,90 @@ func (c *postgreses) Watch(opts v1.ListOptions) (watch.Interface, error) {
 		Resource("postgreses").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Watch()
+		Watch(ctx)
 }
 
 // Create takes the representation of a postgres and creates it.  Returns the server's representation of the postgres, and an error, if there is any.
-func (c *postgreses) Create(postgres *v1alpha1.Postgres) (result *v1alpha1.Postgres, err error) {
+func (c *postgreses) Create(ctx context.Context, postgres *v1alpha1.Postgres, opts v1.CreateOptions) (result *v1alpha1.Postgres, err error) {
 	result = &v1alpha1.Postgres{}
 	err = c.client.Post().
 		Namespace(c.ns).
 		Resource("postgreses").
+		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(postgres).
-		Do().
+		Do(ctx).
 		Into(result)
 	return
 }
 
 // Update takes the representation of a postgres and updates it. Returns the server's representation of the postgres, and an error, if there is any.
-func (c *postgreses) Update(postgres *v1alpha1.Postgres) (result *v1alpha1.Postgres, err error) {
+func (c *postgreses) Update(ctx context.Context, postgres *v1alpha1.Postgres, opts v1.UpdateOptions) (result *v1alpha1.Postgres, err error) {
 	result = &v1alpha1.Postgres{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("postgreses").
 		Name(postgres.Name).
+		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(postgres).
-		Do().
+		Do(ctx).
 		Into(result)
 	return
 }
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-
-func (c *postgreses) UpdateStatus(postgres *v1alpha1.Postgres) (result *v1alpha1.Postgres, err error) {
+func (c *postgreses) UpdateStatus(ctx context.Context, postgres *v1alpha1.Postgres, opts v1.UpdateOptions) (result *v1alpha1.Postgres, err error) {
 	result = &v1alpha1.Postgres{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("postgreses").
 		Name(postgres.Name).
 		SubResource("status").
+		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(postgres).
-		Do().
+		Do(ctx).
 		Into(result)
 	return
 }
 
 // Delete takes name of the postgres and deletes it. Returns an error if one occurs.
-func (c *postgreses) Delete(name string, options *v1.DeleteOptions) error {
+func (c *postgreses) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("postgreses").
 		Name(name).
-		Body(options).
-		Do().
+		Body(&opts).
+		Do(ctx).
 		Error()
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *postgreses) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+func (c *postgreses) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	var timeout time.Duration
-	if listOptions.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOptions.TimeoutSeconds) * time.Second
+	if listOpts.TimeoutSeconds != nil {
+		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("postgreses").
-		VersionedParams(&listOptions, scheme.ParameterCodec).
+		VersionedParams(&listOpts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Body(options).
-		Do().
+		Body(&opts).
+		Do(ctx).
 		Error()
 }
 
 // Patch applies the patch and returns the patched postgres.
-func (c *postgreses) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Postgres, err error) {
+func (c *postgreses) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Postgres, err error) {
 	result = &v1alpha1.Postgres{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
 		Resource("postgreses").
-		SubResource(subresources...).
 		Name(name).
+		SubResource(subresources...).
+		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(data).
-		Do().
+		Do(ctx).
 		Into(result)
 	return
 }

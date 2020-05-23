@@ -72,8 +72,8 @@ type MySQLHorizontalScalingSpec struct {
 }
 
 type MySQLVerticalScalingSpec struct {
-	// Containers represents the containers specification for scaling the requested resources.
-	Containers []ContainerResources `json:"containers,omitempty" protobuf:"bytes,1,opt,name=containers"`
+	MySQL    *core.ResourceRequirements `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
+	Exporter *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
 }
 
 // MySQLOpsRequestStatus is the status for MySQLOpsRequest
