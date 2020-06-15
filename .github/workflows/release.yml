@@ -40,7 +40,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        draft: true
         files: |
           bin/kubectl-dba-linux-amd64
           bin/kubectl-dba-linux-arm
