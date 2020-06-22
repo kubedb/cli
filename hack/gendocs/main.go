@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package main
 
 import (
@@ -31,47 +32,52 @@ import (
 	"github.com/spf13/cobra/doc"
 )
 
-const (
-	version = "0.12.0"
-)
-
 var (
 	tplFrontMatter = template.Must(template.New("index").Parse(`---
-title: Reference
+title: Reference | KubeDB CLI
 description: KubeDB CLI Reference
 menu:
-  docs_{{ .Version }}:
-    identifier: reference
-    name: Reference
-    weight: 1000
-menu_name: docs_{{ .Version }}
+  docs_{{ "{{ .version }}" }}:
+    identifier: reference-cli
+    name: KubeDB CLI
+    weight: 30
+    parent: reference
+menu_name: docs_{{ "{{ .version }}" }}
 ---
 `))
 
 	_ = template.Must(tplFrontMatter.New("cmd").Parse(`---
 title: {{ .Name }}
 menu:
-  docs_{{ .Version }}:
+  docs_{{ "{{ .version }}" }}:
     identifier: {{ .ID }}
     name: {{ .Name }}
-    parent: reference
+    parent: reference-cli
 {{- if .RootCmd }}
     weight: 0
 {{ end }}
-menu_name: docs_{{ .Version }}
+menu_name: docs_{{ "{{ .version }}" }}
 section_menu_id: reference
 {{- if .RootCmd }}
+url: /docs/{{ "{{ .version }}" }}/reference/cli/
 aliases:
-  - /docs/{{ .Version }}/reference/
-{{ end }}
+- /docs/{{ "{{ .version }}" }}/reference/cli/{{ .ID }}/
+{{- end }}
 ---
 `))
 )
 
+func docsDir() string {
+	if dir, ok := os.LookupEnv("DOCS_ROOT"); ok {
+		return dir
+	}
+	return runtime.GOPath() + "/src/kubedb.dev/docs"
+}
+
 // ref: https://github.com/spf13/cobra/blob/master/doc/md_docs.md
 func main() {
 	rootCmd := cmds.NewKubeDBCommand(os.Stdin, os.Stdout, os.Stderr)
-	dir := runtime.GOPath() + "/src/kubedb.dev/docs/docs/reference"
+	dir := filepath.Join(docsDir(), "docs", "reference", "cli")
 	fmt.Printf("Generating cli markdown tree in: %v\n", dir)
 	err := os.RemoveAll(dir)
 	if err != nil {
@@ -88,12 +94,10 @@ func main() {
 		data := struct {
 			ID      string
 			Name    string
-			Version string
 			RootCmd bool
 		}{
 			strings.Replace(base, "_", "-", -1),
 			strings.Title(strings.Replace(base, "_", " ", -1)),
-			version,
 			!strings.ContainsRune(base, '_'),
 		}
 		var buf bytes.Buffer
@@ -104,7 +108,7 @@ func main() {
 	}
 
 	linkHandler := func(name string) string {
-		return "/docs/reference/" + name
+		return "/docs/reference/cli/" + name
 	}
 	err = doc.GenMarkdownTreeCustom(rootCmd, dir, filePrepender, linkHandler)
 	if err != nil {
@@ -116,7 +120,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	err = tplFrontMatter.ExecuteTemplate(f, "index", struct{ Version string }{version})
+	err = tplFrontMatter.ExecuteTemplate(f, "index", struct{}{})
 	if err != nil {
 		log.Fatalln(err)
 	}

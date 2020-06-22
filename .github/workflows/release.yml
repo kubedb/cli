@@ -3,53 +3,51 @@ name: Release
 on:
   push:
     tags:
-      - '*.*'
+      - "*.*"
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
+      - name: Print version info
+        id: semver
+        run: |
+          make version
 
-    - name: Print version info
-      id: semver
-      run: |
-        make version
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          buildx-version: latest
+          qemu-version: latest
 
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: crazy-max/ghaction-docker-buildx@v1
-      with:
-        buildx-version: latest
-        qemu-version: latest
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
 
-    - name: Available platforms
-      run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Build
+        env:
+          APPSCODE_ENV: prod
+        run: |
+          make release
 
-    - name: Build
-      env:
-        APPSCODE_ENV: prod
-      run: |
-        make release
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            bin/kubectl-dba-linux-amd64
+            bin/kubectl-dba-linux-arm
+            bin/kubectl-dba-linux-arm64
+            bin/kubectl-dba-windows-amd64.exe
+            bin/kubectl-dba-darwin-amd64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          bin/kubectl-dba-linux-amd64
-          bin/kubectl-dba-linux-arm
-          bin/kubectl-dba-linux-arm64
-          bin/kubectl-dba-windows-amd64.exe
-          bin/kubectl-dba-darwin-amd64
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: kubedb-cli-binaries
-        path:  bin
+      - uses: actions/upload-artifact@master
+        with:
+          name: kubedb-cli-binaries
+          path: bin
