@@ -43,7 +43,8 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			cli.SendAnalytics(cmd, v.Version.Version)
 		},
-		Run: runHelp,
+		Run:               runHelp,
+		DisableAutoGenTag: true,
 	}
 
 	flags := rootCmd.PersistentFlags()
