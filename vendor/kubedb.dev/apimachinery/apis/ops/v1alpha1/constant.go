@@ -1,5 +1,5 @@
 /*
-Copyright The KubeDB Authors.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,4 +21,23 @@ const (
 
 	LabelOpsRequestKind = GenericKey + "/kind"
 	LabelOpsRequestName = GenericKey + "/name"
+
+	// ======================= Condition Reasons ========================
+	ReasonOpsRequestReconcileFailed         = "OpsRequestReconcileFailed"
+	ReasonOpsRequestObserveGenerationFailed = "OpsRequestObserveGenerationFailed"
+	ReasonOpsRequestDenied                  = "OpsRequestOpsRequestDenied"
+	ReasonOpsRequestProgressing             = "OpsRequestOpsRequestProgressing"
+	ReasonPausingDatabase                   = "PausingDatabase"
+	ReasonPausedDatabase                    = "PausedDatabase"
+	ReasonResumingDatabase                  = "ResumingDatabase"
+	ReasonResumedDatabase                   = "ResumedDatabase"
+	ReasonOpsRequestUpgradingVersion        = "OpsRequestUpgradingVersion"
+	ReasonOpsRequestUpgradedVersion         = "OpsRequestUpgradedVersion"
+	ReasonOpsRequestUpgradedVersionFailed   = "OpsRequestUpgradedVersionFailed"
+	ReasonOpsRequestScalingDatabase         = "OpsRequestScalingDatabase"
+	ReasonOpsRequestHorizontalScaling       = "OpsRequestHorizontalScaling"
+	ReasonOpsRequestHorizontalScalingFailed = "OpsRequestHorizontalScalingFailed"
+	ReasonOpsRequestVerticalScaling         = "OpsRequestVerticalScaling"
+	ReasonOpsRequestVerticalScalingFailed   = "OpsRequestVerticalScalingFailed"
+	ReasonOpsRequestSuccessful              = "OpsRequestSuccessful"
 )

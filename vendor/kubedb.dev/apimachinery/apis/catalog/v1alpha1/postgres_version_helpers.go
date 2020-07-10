@@ -1,5 +1,5 @@
 /*
-Copyright The KubeDB Authors.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ package v1alpha1
 import (
 	"fmt"
 
-	"kubedb.dev/apimachinery/api/crds"
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/crds"
 
-	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	"kmodules.xyz/client-go/apiextensions"
 )
 
 func (_ PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {

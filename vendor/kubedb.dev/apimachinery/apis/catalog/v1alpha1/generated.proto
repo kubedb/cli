@@ -1,5 +1,5 @@
 /*
-Copyright The KubeDB Authors.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,11 +28,19 @@ import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha1";
 
-message Blacklist {
-  // List of all rejected version for standalone ops request
+message Allowlist {
+  // List of all accepted versions for upgrade request of a Standalone server. empty indicates all accepted
   repeated string standalone = 1;
 
-  // List of all rejected version for groupReplication ops request
+  // List of all accepted versions for upgrade request of a GroupReplication cluster. empty indicates all accepted
+  repeated string groupReplication = 2;
+}
+
+message Denylist {
+  // List of all rejected versions for upgrade request of a Standalone server
+  repeated string standalone = 1;
+
+  // List of all rejected versions for upgrade request of a GroupReplication cluster
   repeated string groupReplication = 2;
 }
 
@@ -291,11 +299,11 @@ message MongoDBVersionTools {
 }
 
 message MySQLUpgradeConstraints {
-  // List of all accepted version for ops request
-  optional Whitelist whitelist = 1;
+  // List of all accepted versions for uprade request
+  optional Allowlist allowlist = 1;
 
-  // List of all rejected version for ops request
-  optional Blacklist blacklist = 2;
+  // List of all rejected versions for uprade request
+  optional Denylist denylist = 2;
 }
 
 // +kubebuilder:object:root=true
@@ -320,7 +328,7 @@ message MySQLVersionExporter {
   optional string image = 1;
 }
 
-// MySQLVersionInitContainer is the Elasticsearch Container initializer
+// MySQLVersionInitContainer is the MySQL Container initializer
 message MySQLVersionInitContainer {
   optional string image = 1;
 }
@@ -343,7 +351,7 @@ message MySQLVersionReplicationModeDetector {
   optional string image = 1;
 }
 
-// MySQLVersionSpec is the spec for postgres version
+// MySQLVersionSpec is the spec for MySQL version
 message MySQLVersionSpec {
   // Version
   optional string version = 1;
@@ -374,7 +382,7 @@ message MySQLVersionSpec {
   optional MySQLUpgradeConstraints upgradeConstraints = 9;
 }
 
-// MySQLVersionTools is the image for the postgres tools
+// MySQLVersionTools is the image for the MySQL tools
 message MySQLVersionTools {
   optional string image = 1;
 }
@@ -656,13 +664,5 @@ message RedisVersionSpec {
 
   // PSP names
   optional RedisVersionPodSecurityPolicy podSecurityPolicies = 5;
-}
-
-message Whitelist {
-  // List of all accepted version for standalone ops request. empty indicates all accepted
-  repeated string standalone = 1;
-
-  // List of all accepted version for groupReplication ops request. empty indicates all accepted
-  repeated string groupReplication = 2;
 }
 

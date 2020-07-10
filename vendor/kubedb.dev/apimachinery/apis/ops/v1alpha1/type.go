@@ -1,5 +1,5 @@
 /*
-Copyright The KubeDB Authors.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,8 +29,12 @@ const (
 	NodeDeleted               = "NodeDeleted"
 	NodeRestarted             = "NodeRestarted"
 	PauseDatabase             = "PauseDatabase"
+	PausingDatabase           = "PausingDatabase"
+	PausedDatabase            = "PausedDatabase"
 	Progressing               = "Progressing"
 	ResumeDatabase            = "ResumeDatabase"
+	ResumingDatabase          = "ResumingDatabase"
+	ResumedDatabase           = "ResumedDatabase"
 	ScalingDatabase           = "Scaling"
 	ScalingDown               = "ScalingDown"
 	ScalingUp                 = "ScalingUp"
