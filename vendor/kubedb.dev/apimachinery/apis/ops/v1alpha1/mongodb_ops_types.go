@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	core "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -89,11 +88,10 @@ type MongoDBHorizontalScalingSpec struct {
 
 // MongoDBVerticalScalingSpec is the spec for mongodb vertical scaling
 type MongoDBVerticalScalingSpec struct {
-	Standalone   *core.ResourceRequirements `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
-	Mongos       *core.ResourceRequirements `json:"mongos,omitempty" protobuf:"bytes,2,opt,name=mongos"`
-	ConfigServer *core.ResourceRequirements `json:"configServer,omitempty" protobuf:"bytes,3,opt,name=configServer"`
-	Shard        *core.ResourceRequirements `json:"shard,omitempty" protobuf:"bytes,4,opt,name=shard"`
-	Exporter     *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,5,opt,name=exporter"`
+	Containers   []ContainerResources `json:"containers,omitempty" protobuf:"bytes,1,rep,name=containers"`
+	Mongos       []ContainerResources `json:"mongos,omitempty" protobuf:"bytes,2,rep,name=mongos"`
+	ConfigServer []ContainerResources `json:"configServer,omitempty" protobuf:"bytes,3,rep,name=configServer"`
+	Shard        []ContainerResources `json:"shard,omitempty" protobuf:"bytes,4,rep,name=shard"`
 }
 
 // MongoDBOpsRequestStatus is the status for MongoDBOpsRequest

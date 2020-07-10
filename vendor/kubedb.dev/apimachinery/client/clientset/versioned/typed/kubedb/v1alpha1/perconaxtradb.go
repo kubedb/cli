@@ -19,7 +19,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
 	"time"
 
 	v1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
@@ -39,15 +38,15 @@ type PerconaXtraDBsGetter interface {
 
 // PerconaXtraDBInterface has methods to work with PerconaXtraDB resources.
 type PerconaXtraDBInterface interface {
-	Create(ctx context.Context, perconaXtraDB *v1alpha1.PerconaXtraDB, opts v1.CreateOptions) (*v1alpha1.PerconaXtraDB, error)
-	Update(ctx context.Context, perconaXtraDB *v1alpha1.PerconaXtraDB, opts v1.UpdateOptions) (*v1alpha1.PerconaXtraDB, error)
-	UpdateStatus(ctx context.Context, perconaXtraDB *v1alpha1.PerconaXtraDB, opts v1.UpdateOptions) (*v1alpha1.PerconaXtraDB, error)
-	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
-	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.PerconaXtraDB, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.PerconaXtraDBList, error)
-	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.PerconaXtraDB, err error)
+	Create(*v1alpha1.PerconaXtraDB) (*v1alpha1.PerconaXtraDB, error)
+	Update(*v1alpha1.PerconaXtraDB) (*v1alpha1.PerconaXtraDB, error)
+	UpdateStatus(*v1alpha1.PerconaXtraDB) (*v1alpha1.PerconaXtraDB, error)
+	Delete(name string, options *v1.DeleteOptions) error
+	DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error
+	Get(name string, options v1.GetOptions) (*v1alpha1.PerconaXtraDB, error)
+	List(opts v1.ListOptions) (*v1alpha1.PerconaXtraDBList, error)
+	Watch(opts v1.ListOptions) (watch.Interface, error)
+	Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.PerconaXtraDB, err error)
 	PerconaXtraDBExpansion
 }
 
@@ -66,20 +65,20 @@ func newPerconaXtraDBs(c *KubedbV1alpha1Client, namespace string) *perconaXtraDB
 }
 
 // Get takes name of the perconaXtraDB, and returns the corresponding perconaXtraDB object, and an error if there is any.
-func (c *perconaXtraDBs) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.PerconaXtraDB, err error) {
+func (c *perconaXtraDBs) Get(name string, options v1.GetOptions) (result *v1alpha1.PerconaXtraDB, err error) {
 	result = &v1alpha1.PerconaXtraDB{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // List takes label and field selectors, and returns the list of PerconaXtraDBs that match those selectors.
-func (c *perconaXtraDBs) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.PerconaXtraDBList, err error) {
+func (c *perconaXtraDBs) List(opts v1.ListOptions) (result *v1alpha1.PerconaXtraDBList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -90,13 +89,13 @@ func (c *perconaXtraDBs) List(ctx context.Context, opts v1.ListOptions) (result 
 		Resource("perconaxtradbs").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Watch returns a watch.Interface that watches the requested perconaXtraDBs.
-func (c *perconaXtraDBs) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *perconaXtraDBs) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -107,90 +106,87 @@ func (c *perconaXtraDBs) Watch(ctx context.Context, opts v1.ListOptions) (watch.
 		Resource("perconaxtradbs").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Watch(ctx)
+		Watch()
 }
 
 // Create takes the representation of a perconaXtraDB and creates it.  Returns the server's representation of the perconaXtraDB, and an error, if there is any.
-func (c *perconaXtraDBs) Create(ctx context.Context, perconaXtraDB *v1alpha1.PerconaXtraDB, opts v1.CreateOptions) (result *v1alpha1.PerconaXtraDB, err error) {
+func (c *perconaXtraDBs) Create(perconaXtraDB *v1alpha1.PerconaXtraDB) (result *v1alpha1.PerconaXtraDB, err error) {
 	result = &v1alpha1.PerconaXtraDB{}
 	err = c.client.Post().
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(perconaXtraDB).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Update takes the representation of a perconaXtraDB and updates it. Returns the server's representation of the perconaXtraDB, and an error, if there is any.
-func (c *perconaXtraDBs) Update(ctx context.Context, perconaXtraDB *v1alpha1.PerconaXtraDB, opts v1.UpdateOptions) (result *v1alpha1.PerconaXtraDB, err error) {
+func (c *perconaXtraDBs) Update(perconaXtraDB *v1alpha1.PerconaXtraDB) (result *v1alpha1.PerconaXtraDB, err error) {
 	result = &v1alpha1.PerconaXtraDB{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
 		Name(perconaXtraDB.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(perconaXtraDB).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *perconaXtraDBs) UpdateStatus(ctx context.Context, perconaXtraDB *v1alpha1.PerconaXtraDB, opts v1.UpdateOptions) (result *v1alpha1.PerconaXtraDB, err error) {
+
+func (c *perconaXtraDBs) UpdateStatus(perconaXtraDB *v1alpha1.PerconaXtraDB) (result *v1alpha1.PerconaXtraDB, err error) {
 	result = &v1alpha1.PerconaXtraDB{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
 		Name(perconaXtraDB.Name).
 		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(perconaXtraDB).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Delete takes name of the perconaXtraDB and deletes it. Returns an error if one occurs.
-func (c *perconaXtraDBs) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (c *perconaXtraDBs) Delete(name string, options *v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
 		Name(name).
-		Body(&opts).
-		Do(ctx).
+		Body(options).
+		Do().
 		Error()
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *perconaXtraDBs) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *perconaXtraDBs) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
+	if listOptions.TimeoutSeconds != nil {
+		timeout = time.Duration(*listOptions.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
+		VersionedParams(&listOptions, scheme.ParameterCodec).
 		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
+		Body(options).
+		Do().
 		Error()
 }
 
 // Patch applies the patch and returns the patched perconaXtraDB.
-func (c *perconaXtraDBs) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.PerconaXtraDB, err error) {
+func (c *perconaXtraDBs) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.PerconaXtraDB, err error) {
 	result = &v1alpha1.PerconaXtraDB{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
 		Resource("perconaxtradbs").
-		Name(name).
 		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
+		Name(name).
 		Body(data).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
