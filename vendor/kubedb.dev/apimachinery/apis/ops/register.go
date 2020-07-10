@@ -1,5 +1,5 @@
 /*
-Copyright The KubeDB Authors.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,5 +16,11 @@ limitations under the License.
 
 package ops
 
-// GroupName is the group name use in this package
-const GroupName = "ops.kubedb.com"
+const (
+	// GroupName is the group name use in this package
+	GroupName = "ops.kubedb.com"
+	// MutatorGroupName is the group name used to implement mutating webhooks for types in this package
+	MutatorGroupName = "mutators." + GroupName
+	// ValidatorGroupName is the group name used to implement validating webhooks for types in this package
+	ValidatorGroupName = "validators." + GroupName
+)
