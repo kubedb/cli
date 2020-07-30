@@ -13,7 +13,7 @@ require (
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/component-base v0.18.3
 	k8s.io/kubectl v0.18.3
-	kmodules.xyz/client-go v0.0.0-20200723053948-317b6023eb5d
+	kmodules.xyz/client-go v0.0.0-20200730042423-9c59c231fe96
 	kmodules.xyz/custom-resources v0.0.0-20200604135349-9e9f5c4fdba9
 	kmodules.xyz/monitoring-agent-api v0.0.0-20200525002655-2aa50cb10ce9
 	kmodules.xyz/objectstore-api v0.0.0-20200521103120-92080446e04d
