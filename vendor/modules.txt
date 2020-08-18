@@ -446,7 +446,7 @@ k8s.io/kubernetes/pkg/util/hash
 k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20200807163543-64a96054c515
+# kmodules.xyz/client-go v0.0.0-20200817064010-b2e03dabff6b
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
