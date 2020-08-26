@@ -27,31 +27,22 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 )
 
-func (_ RestoreSession) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
-	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRestoreSession))
+func (_ RestoreBatch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRestoreBatch))
 }
 
-func (r RestoreSession) GetSpecHash() string {
+func (b RestoreBatch) GetSpecHash() string {
 	hash := fnv.New64a()
-	hashutil.DeepHashObject(hash, r.Spec)
+	hashutil.DeepHashObject(hash, b.Spec)
 	return strconv.FormatUint(hash.Sum64(), 10)
 }
 
-// OffshootLabels return labels consist of the labels provided by user to BackupConfiguration crd and
+// OffshootLabels return labels consist of the labels provided by user to RestoreBatch crd and
 // stash specific generic labels. It overwrites the the user provided labels if it matched with stash specific generic labels.
-func (r RestoreSession) OffshootLabels() map[string]string {
+func (b RestoreBatch) OffshootLabels() map[string]string {
 	overrides := make(map[string]string)
 	overrides[meta_util.ComponentLabelKey] = StashRestoreComponent
 	overrides[meta_util.ManagedByLabelKey] = StashKey
 
-	return upsertLabels(r.Labels, overrides)
-}
-
-// Migrate moved deprecated fields into the appropriate fields
-func (r *RestoreSession) Migrate() {
-	// move the deprecated "rules" section of ".Spec" section, into the "rules" section under ".Spec.BackupTargetStatus" section
-	if len(r.Spec.Rules) > 0 && r.Spec.Target != nil {
-		r.Spec.Target.Rules = r.Spec.Rules
-		r.Spec.Rules = nil
-	}
+	return upsertLabels(b.Labels, overrides)
 }
