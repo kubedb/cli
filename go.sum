@@ -1269,6 +1269,6 @@ software.sslmate.com/src/go-pkcs12 v0.0.0-20180114231543-2291e8f0f237/go.mod h1:
 sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4/go.mod h1:ketZ/q3QxT9HOBeFhu6RdvsftgpsbFHBF5Cas6cDKZ0=
 stash.appscode.dev/apimachinery v0.10.0-beta.1 h1:R1IhAhZ/iUbs2M+v9LYJacDCOmc4lk00JzSjVBrxOG0=
 stash.appscode.dev/apimachinery v0.10.0-beta.1/go.mod h1:v3rBovazmdCv/9rAA5U7LpDRFhVqcLsagnLlbPfD2Eg=
-stash.appscode.dev/apimachinery v0.10.0-rc.1 h1:J2yxSXvBYhMu0WOl5mP6cOSwjS9AwkGZXM2u93sr8jA=
-stash.appscode.dev/apimachinery v0.10.0-rc.1/go.mod h1:TpdBIAiHCtpkUB13SDUyCZ6y+5wmzXBMAf9e72cSPO4=
+stash.appscode.dev/apimachinery v0.10.0-rc.2 h1:l0lGBBShYP56ylDOiLKxG68Shn2X4DunBRaAVcmmjUk=
+stash.appscode.dev/apimachinery v0.10.0-rc.2/go.mod h1:TpdBIAiHCtpkUB13SDUyCZ6y+5wmzXBMAf9e72cSPO4=
 vbom.ml/util v0.0.0-20160121211510-db5cfe13f5cc/go.mod h1:so/NYdZXCz+E3ZpW0uAoCj6uzU2+8OWDFv/HxUSs7kI=
