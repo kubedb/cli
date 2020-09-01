@@ -51,7 +51,6 @@ func (e ElasticsearchVersion) ValidateSpecs() error {
 	if e.Spec.AuthPlugin == "" ||
 		e.Spec.Version == "" ||
 		e.Spec.DB.Image == "" ||
-		e.Spec.Tools.Image == "" ||
 		e.Spec.Exporter.Image == "" ||
 		e.Spec.InitContainer.YQImage == "" ||
 		e.Spec.InitContainer.Image == "" {
@@ -59,7 +58,6 @@ func (e ElasticsearchVersion) ValidateSpecs() error {
 spec.authPlugin,
 spec.version,
 spec.db.image,
-spec.tools.image,
 spec.exporter.image,
 spec.initContainer.yqImage,
 spec.initContainer.image.`, e.Name)

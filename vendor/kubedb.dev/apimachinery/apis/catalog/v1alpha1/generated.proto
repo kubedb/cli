@@ -102,6 +102,7 @@ message ElasticsearchVersionSpec {
   optional ElasticsearchVersionExporter exporter = 4;
 
   // Tools Image
+  // +optional
   optional ElasticsearchVersionTools tools = 5;
 
   // Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.

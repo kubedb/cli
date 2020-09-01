@@ -111,7 +111,11 @@ func (e etcdStatsService) ServiceName() string {
 }
 
 func (e etcdStatsService) ServiceMonitorName() string {
-	return fmt.Sprintf("kubedb-%s-%s", e.Namespace, e.Name)
+	return e.ServiceName()
+}
+
+func (e etcdStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return e.OffshootLabels()
 }
 
 func (e etcdStatsService) Path() string {

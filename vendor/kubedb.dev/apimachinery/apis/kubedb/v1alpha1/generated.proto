@@ -27,6 +27,7 @@ import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
 import "k8s.io/apimachinery/pkg/util/intstr/generated.proto";
+import "kmodules.xyz/client-go/api/v1/generated.proto";
 import "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1/generated.proto";
 import "kmodules.xyz/monitoring-agent-api/api/v1/generated.proto";
 import "kmodules.xyz/objectstore-api/api/v1/generated.proto";
@@ -34,33 +35,6 @@ import "kmodules.xyz/offshoot-api/api/v1/generated.proto";
 
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha1";
-
-message CertificateSpec {
-  // Organization is the organization to be used on the Certificate
-  // +optional
-  repeated string organization = 1;
-
-  // Certificate default Duration
-  // +optional
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration duration = 2;
-
-  // Certificate renew before expiration duration
-  // +optional
-  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration renewBefore = 3;
-
-  // DNSNames is a list of subject alt names to be used on the Certificate.
-  // +optional
-  repeated string dnsNames = 4;
-
-  // IPAddresses is a list of IP addresses to be used on the Certificate
-  // +optional
-  repeated string ipAddresses = 5;
-
-  // URISANs is a list of URI Subject Alternative Names to be set on this
-  // Certificate.
-  // +optional
-  repeated string uriSANs = 6;
-}
 
 message ConnectionPoolConfig {
   // Port is the port number on which PgBouncer listens to clients. Default: 5432.
@@ -189,6 +163,42 @@ message ElasticsearchNode {
   optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 5;
 }
 
+// Specifies the role mapping structure.
+// Both 'json' and 'yaml' tags are used in structure metadata.
+// The `json` tags (camel case) are used while taking input from users.
+// The `yaml` tags (snake case) are used by the operator to generate roles_mapping.yml file.
+message ElasticsearchRoleMapSpec {
+  // Specifies the reserved status.
+  // Resources that have this set to true can’t be changed using the REST API or Kibana.
+  // Default to "false".
+  // +optional
+  optional bool reserved = 1;
+
+  // Specifies the hidden status.
+  // Resources that have this set to true are not returned by the REST API
+  // and not visible in Kibana.
+  // Default to "false".
+  // +optional
+  optional bool hidden = 2;
+
+  // Specifies a list of backend roles assigned to this role.
+  // Backend roles can come from the internal user database,
+  // LDAP groups, JSON web token claims or SAML assertions.
+  // +optional
+  repeated string backendRoles = 3;
+
+  // Specifies a list of hosts assigned to this role.
+  // +optional
+  repeated string hosts = 4;
+
+  // Specifies a list of users assigned to this role.
+  // +optional
+  repeated string users = 5;
+
+  // Specifies a list of backend roles (migrated from ES-version6) assigned to this role.
+  repeated string andBackendRoles = 6;
+}
+
 message ElasticsearchSpec {
   // Version of Elasticsearch to be deployed.
   optional string version = 1;
@@ -203,6 +213,7 @@ message ElasticsearchSpec {
   optional bool enableSSL = 4;
 
   // Secret with SSL certificates
+  // Deprecated: Use spec.tls instead
   optional k8s.io.api.core.v1.SecretVolumeSource certificateSecret = 5;
 
   // disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user.
@@ -228,43 +239,62 @@ message ElasticsearchSpec {
 
   // Monitor is used monitor database instance
   // +optional
-  optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 13;
+  optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 12;
 
   // ConfigSource is an optional field to provide custom configuration file for database.
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 14;
+  optional k8s.io.api.core.v1.VolumeSource configSource = 13;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 15;
+  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 14;
 
   // ServiceTemplate is an optional configuration for service used to expose database
   // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplate = 16;
+  optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplate = 15;
 
   // An eviction is allowed if at most "maxUnavailable" pods selected by
   // "selector" are unavailable after the eviction, i.e. even in absence of
   // the evicted pod. For example, one can prevent all voluntary evictions
   // by specifying 0. This is a mutually exclusive setting with "minAvailable".
   // +optional
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 17;
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 16;
 
-  // updateStrategy indicates the StatefulSetUpdateStrategy that will be
-  // employed to update Pods in the StatefulSet when a revision is made to
-  // Template.
-  optional k8s.io.api.apps.v1.StatefulSetUpdateStrategy updateStrategy = 18;
+  // TLS contains tls configurations
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 17;
+
+  // InternalUsers contains internal user configurations.
+  // Expected Input format:
+  // internalUsers:
+  //   <username1>:
+  // 		...
+  //   <username2>:
+  // 		...
+  // +optional
+  map<string, ElasticsearchUserSpec> internalUsers = 18;
+
+  // RolesMapping contains roles mapping configurations.
+  // Expected Input format:
+  // rolesMapping:
+  //   <role1>:
+  // 		...
+  //   <role2>:
+  // 		...
+  // +optional
+  map<string, ElasticsearchRoleMapSpec> rolesMapping = 19;
 
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
-  optional bool paused = 19;
+  optional bool paused = 20;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 20;
+  optional bool halted = 21;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 21;
+  optional string terminationPolicy = 22;
 }
 
 message ElasticsearchStatus {
@@ -276,6 +306,52 @@ message ElasticsearchStatus {
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
   optional int64 observedGeneration = 3;
+}
+
+// Specifies the security plugin internal user structure.
+// Both 'json' and 'yaml' tags are used in structure metadata.
+// The `json` tags (camel case) are used while taking input from users.
+// The `yaml` tags (snake case) are used by the operator to generate internal_users.yml file.
+message ElasticsearchUserSpec {
+  // Specifies the hash of the password.
+  // +optional
+  optional string hash = 1;
+
+  // Specifies the reserved status.
+  // Resources that have this set to true can’t be changed using the REST API or Kibana.
+  // Default to "false".
+  // +optional
+  optional bool reserved = 2;
+
+  // Specifies the hidden status.
+  // Resources that have this set to true are not returned by the REST API
+  // and not visible in Kibana.
+  // Default to "false".
+  // +optional
+  optional bool hidden = 3;
+
+  // Specifies a list of backend roles assigned to this user.
+  // Backend roles can come from the internal user database,
+  // LDAP groups, JSON web token claims or SAML assertions.
+  // +optional
+  repeated string backendRoles = 4;
+
+  // Specifies a list of searchguard security plugin roles assigned to this user.
+  // +optional
+  repeated string searchGuardRoles = 5;
+
+  // Specifies a list of opendistro security plugin roles assigned to this user.
+  // +optional
+  repeated string opendistroSecurityRoles = 6;
+
+  // Specifies one or more custom attributes,
+  // which can be used in index names and DLS queries.
+  // +optional
+  map<string, string> attributes = 7;
+
+  // Specifies the description of the user
+  // +optional
+  optional string description = 8;
 }
 
 // +kubebuilder:object:root=true
@@ -454,6 +530,10 @@ message MariaDBSpec {
   // Template.
   optional k8s.io.api.apps.v1.StatefulSetUpdateStrategy updateStrategy = 11;
 
+  // TLS contains tls configurations
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 15;
+
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
   optional bool paused = 12;
@@ -554,17 +634,21 @@ message MemcachedSpec {
   // +optional
   optional k8s.io.api.apps.v1.DeploymentStrategy strategy = 12;
 
+  // TLS contains tls configurations
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 13;
+
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
-  optional bool paused = 13;
+  optional bool paused = 14;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 14;
+  optional bool halted = 15;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 15;
+  optional string terminationPolicy = 16;
 }
 
 message MemcachedStatus {
@@ -721,7 +805,7 @@ message MongoDBSpec {
 
   // TLS contains tls configurations for client and server.
   // +optional
-  optional TLSConfig tls = 16;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 16;
 
   // Secret for KeyFile. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
   optional k8s.io.api.core.v1.SecretVolumeSource keyFile = 17;
@@ -737,6 +821,10 @@ message MongoDBSpec {
   // TerminationPolicy controls the delete operation for database
   // +optional
   optional string terminationPolicy = 20;
+
+  // StorageEngine can be wiredTiger (default) or inMemory
+  // See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
+  optional string storageEngine = 21;
 }
 
 message MongoDBStatus {
@@ -851,7 +939,7 @@ message MySQLSpec {
 
   // TLS contains tls configurations for client and server.
   // +optional
-  optional TLSConfig tls = 15;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 15;
 
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
@@ -941,17 +1029,17 @@ message PerconaXtraDBSpec {
   // Template.
   optional k8s.io.api.apps.v1.StatefulSetUpdateStrategy updateStrategy = 11;
 
+  // TLS contains tls configurations for client and server.
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 12;
+
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
-  optional bool paused = 12;
+  optional bool paused = 13;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 13;
-
-  // TLS contains tls configurations for client and server.
-  // +optional
-  optional TLSConfig tls = 14;
+  optional bool halted = 14;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
@@ -1025,7 +1113,7 @@ message PgBouncerSpec {
 
   // TLS contains tls configurations for client and server.
   // +optional
-  optional TLSConfig tls = 9;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 9;
 
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
@@ -1128,17 +1216,17 @@ message PostgresSpec {
   // Template.
   optional k8s.io.api.apps.v1.StatefulSetUpdateStrategy updateStrategy = 17;
 
+  // TLS contains tls configurations for client and server.
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 18;
+
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
-  optional bool paused = 18;
+  optional bool paused = 19;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 19;
-
-  // TLS contains tls configurations for client and server.
-  // +optional
-  optional TLSConfig tls = 20;
+  optional bool halted = 20;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
@@ -1180,7 +1268,7 @@ message ProxySQL {
 
 message ProxySQLBackendSpec {
   // Ref lets one to locate the typed referenced object
-  // (in our case, it is the MySQL/Percona-XtraDB/MariaDB object)
+  // (in our case, it is the MySQL/Percona-XtraDB/ProxySQL object)
   // inside the same namespace.
   optional k8s.io.api.core.v1.TypedLocalObjectReference ref = 7;
 
@@ -1236,7 +1324,7 @@ message ProxySQLSpec {
 
   // TLS contains tls configurations for client and server.
   // +optional
-  optional TLSConfig tls = 11;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 11;
 
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
@@ -1339,17 +1427,21 @@ message RedisSpec {
   // Template.
   optional k8s.io.api.apps.v1.StatefulSetUpdateStrategy updateStrategy = 11;
 
+  // TLS contains tls configurations for client and server.
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 12;
+
   // Indicates that the database is paused and controller will not sync any changes made to this spec.
   // +optional
-  optional bool paused = 12;
+  optional bool paused = 13;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 13;
+  optional bool halted = 14;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 14;
+  optional string terminationPolicy = 15;
 }
 
 message RedisStatus {
@@ -1367,17 +1459,6 @@ message ScriptSourceSpec {
   optional string scriptPath = 1;
 
   optional k8s.io.api.core.v1.VolumeSource volumeSource = 2;
-}
-
-message TLSConfig {
-  // IssuerRef is a reference to a Certificate Issuer.
-  optional k8s.io.api.core.v1.TypedLocalObjectReference issuerRef = 1;
-
-  // Certificate provides server certificate options used by PgBouncer pods.
-  // These options are passed to a cert-manager Certificate object.
-  // xref: https://github.com/jetstack/cert-manager/blob/v0.12.0/pkg/apis/certmanager/v1alpha2/types_certificate.go#L71-L146
-  // +optional
-  optional CertificateSpec certificate = 2;
 }
 
 message TLSPolicy {

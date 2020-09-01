@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	core "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 type InitSpec struct {
@@ -95,41 +94,3 @@ const (
 	// Rejects attempt to delete database using ValidationWebhook. This replaces spec.doNotPause = true
 	TerminationPolicyDoNotTerminate TerminationPolicy = "DoNotTerminate"
 )
-
-type TLSConfig struct {
-	// IssuerRef is a reference to a Certificate Issuer.
-	IssuerRef *core.TypedLocalObjectReference `json:"issuerRef" protobuf:"bytes,1,opt,name=issuerRef"`
-
-	// Certificate provides server certificate options used by PgBouncer pods.
-	// These options are passed to a cert-manager Certificate object.
-	// xref: https://github.com/jetstack/cert-manager/blob/v0.12.0/pkg/apis/certmanager/v1alpha2/types_certificate.go#L71-L146
-	// +optional
-	Certificate *CertificateSpec `json:"certificate,omitempty" protobuf:"bytes,2,opt,name=certificate"`
-}
-
-type CertificateSpec struct {
-	// Organization is the organization to be used on the Certificate
-	// +optional
-	Organization []string `json:"organization,omitempty" protobuf:"bytes,1,rep,name=organization"`
-
-	// Certificate default Duration
-	// +optional
-	Duration *metav1.Duration `json:"duration,omitempty" protobuf:"bytes,2,opt,name=duration"`
-
-	// Certificate renew before expiration duration
-	// +optional
-	RenewBefore *metav1.Duration `json:"renewBefore,omitempty" protobuf:"bytes,3,opt,name=renewBefore"`
-
-	// DNSNames is a list of subject alt names to be used on the Certificate.
-	// +optional
-	DNSNames []string `json:"dnsNames,omitempty" protobuf:"bytes,4,rep,name=dnsNames"`
-
-	// IPAddresses is a list of IP addresses to be used on the Certificate
-	// +optional
-	IPAddresses []string `json:"ipAddresses,omitempty" protobuf:"bytes,5,rep,name=ipAddresses"`
-
-	// URISANs is a list of URI Subject Alternative Names to be set on this
-	// Certificate.
-	// +optional
-	URISANs []string `json:"uriSANs,omitempty" protobuf:"bytes,6,rep,name=uriSANs"`
-}

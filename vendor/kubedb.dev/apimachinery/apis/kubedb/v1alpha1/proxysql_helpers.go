@@ -108,7 +108,11 @@ func (p proxysqlStatsService) ServiceName() string {
 }
 
 func (p proxysqlStatsService) ServiceMonitorName() string {
-	return fmt.Sprintf("kubedb-%s-%s", p.Namespace, p.Name)
+	return p.ServiceName()
+}
+
+func (p proxysqlStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return p.OffshootLabels()
 }
 
 func (p proxysqlStatsService) Path() string {

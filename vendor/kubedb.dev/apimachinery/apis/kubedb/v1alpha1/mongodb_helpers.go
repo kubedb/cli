@@ -30,6 +30,7 @@ import (
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
 	v1 "kmodules.xyz/client-go/core/v1"
@@ -195,6 +196,9 @@ func (m MongoDB) ServiceName() string {
 // Governing Service Name. Here, name parameter is either
 // OffshootName, ShardNodeName or ConfigSvrNodeName
 func (m MongoDB) GvrSvcName(name string) string {
+	if name == "" {
+		panic(fmt.Sprintf("StatefulSet name is missing for MongoDB %s/%s", m.Namespace, m.Name))
+	}
 	return name + "-gvr"
 }
 
@@ -283,7 +287,11 @@ func (m mongoDBStatsService) ServiceName() string {
 }
 
 func (m mongoDBStatsService) ServiceMonitorName() string {
-	return fmt.Sprintf("kubedb-%s-%s", m.Namespace, m.Name)
+	return m.ServiceName()
+}
+
+func (m mongoDBStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return m.OffshootLabels()
 }
 
 func (m mongoDBStatsService) Path() string {
@@ -318,6 +326,9 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 
 	if m.Spec.StorageType == "" {
 		m.Spec.StorageType = StorageTypeDurable
+	}
+	if m.Spec.StorageEngine == "" {
+		m.Spec.StorageEngine = StorageEngineWiredTiger
 	}
 	if m.Spec.UpdateStrategy.Type == "" {
 		m.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
@@ -402,6 +413,52 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		// set default affinity (PodAntiAffinity)
 		m.setDefaultAffinity(m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	}
+
+	m.setDefaultTLSConfig()
+}
+
+func (m *MongoDB) setDefaultTLSConfig() {
+	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
+		return
+	}
+
+	if m.Spec.ShardTopology != nil {
+		m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
+			Alias:      string(MongoDBServerCert),
+			SecretName: "",
+			Subject: &kmapi.X509Subject{
+				Organizations:       []string{DatabaseNamePrefix},
+				OrganizationalUnits: []string{string(MongoDBServerCert)},
+			},
+		})
+		// reset secret name to empty string, since multiple secrets will be created for each StatefulSet.
+		m.Spec.TLS.Certificates = kmapi.SetSecretNameForCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert), "")
+	} else {
+		m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
+			Alias:      string(MongoDBServerCert),
+			SecretName: m.CertificateName(MongoDBServerCert, ""),
+			Subject: &kmapi.X509Subject{
+				Organizations:       []string{DatabaseNamePrefix},
+				OrganizationalUnits: []string{string(MongoDBServerCert)},
+			},
+		})
+	}
+	m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
+		Alias:      string(MongoDBClientCert),
+		SecretName: m.CertificateName(MongoDBClientCert, ""),
+		Subject: &kmapi.X509Subject{
+			Organizations:       []string{DatabaseNamePrefix},
+			OrganizationalUnits: []string{string(MongoDBClientCert)},
+		},
+	})
+	m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
+		Alias:      string(MongoDBMetricsExporterCert),
+		SecretName: m.CertificateName(MongoDBMetricsExporterCert, ""),
+		Subject: &kmapi.X509Subject{
+			Organizations:       []string{DatabaseNamePrefix},
+			OrganizationalUnits: []string{string(MongoDBMetricsExporterCert)},
+		},
+	})
 }
 
 // setDefaultProbes sets defaults only when probe fields are nil.
@@ -557,4 +614,35 @@ func (m *MongoDB) KeyFileRequired() bool {
 	return m.Spec.ClusterAuthMode == ClusterAuthModeKeyFile ||
 		m.Spec.ClusterAuthMode == ClusterAuthModeSendKeyFile ||
 		m.Spec.ClusterAuthMode == ClusterAuthModeSendX509
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (m *MongoDB) CertificateName(alias MongoDBCertificateAlias, stsName string) string {
+	if m.Spec.ShardTopology != nil && alias == MongoDBServerCert {
+		if stsName == "" {
+			panic(fmt.Sprintf("StatefulSet name required to compute %s certificate name for MongoDB %s/%s", alias, m.Namespace, m.Name))
+		}
+		return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", stsName))
+	}
+	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// MustCertSecretName returns the secret name for a certificate alias
+func (m *MongoDB) MustCertSecretName(alias MongoDBCertificateAlias, stsName string) string {
+	if m == nil {
+		panic("missing MongoDB database")
+	} else if m.Spec.TLS == nil {
+		panic(fmt.Errorf("MongoDB %s/%s is missing tls spec", m.Namespace, m.Name))
+	}
+	if m.Spec.ShardTopology != nil && alias == MongoDBServerCert {
+		if stsName == "" {
+			panic(fmt.Sprintf("StatefulSet name required to compute %s certificate name for MongoDB %s/%s", alias, m.Namespace, m.Name))
+		}
+		return m.CertificateName(alias, stsName)
+	}
+	name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+	if !ok {
+		panic(fmt.Errorf("MongoDB %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
+	}
+	return name
 }

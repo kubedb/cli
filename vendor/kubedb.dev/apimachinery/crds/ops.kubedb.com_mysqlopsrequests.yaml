@@ -84,6 +84,7 @@ spec:
               - VolumeExpansion
               - Restart
               - RotateCertificates
+              - Reconfigure
               type: string
             upgrade:
               description: Specifies the field information that needed to be upgraded

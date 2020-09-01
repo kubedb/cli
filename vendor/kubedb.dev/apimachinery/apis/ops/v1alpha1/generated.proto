@@ -22,6 +22,7 @@ syntax = 'proto2';
 package kubedb.dev.apimachinery.apis.ops.v1alpha1;
 
 import "k8s.io/api/core/v1/generated.proto";
+import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
@@ -196,6 +197,24 @@ message MemcachedOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
+message MongoDBCustomConfig {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+}
+
+message MongoDBCustomConfigSpec {
+  optional MongoDBCustomConfig standalone = 1;
+
+  optional MongoDBCustomConfig replicaSet = 5;
+
+  optional MongoDBCustomConfig mongos = 2;
+
+  optional MongoDBCustomConfig configServer = 3;
+
+  optional MongoDBCustomConfig shard = 4;
+}
+
 // HorizontalScaling is the spec for mongodb horizontal scaling
 message MongoDBHorizontalScalingSpec {
   optional MongoDBShardNode shard = 1;
@@ -245,6 +264,12 @@ message MongoDBOpsRequestSpec {
 
   // Specifies information necessary for vertical scaling
   optional MongoDBVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional MongoDBVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of MongoDB
+  optional MongoDBCustomConfigSpec customConfig = 7;
 }
 
 // MongoDBOpsRequestStatus is the status for MongoDBOpsRequest
@@ -272,6 +297,8 @@ message MongoDBShardNode {
 message MongoDBVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements standalone = 1;
 
+  optional k8s.io.api.core.v1.ResourceRequirements replicaSet = 6;
+
   optional k8s.io.api.core.v1.ResourceRequirements mongos = 2;
 
   optional k8s.io.api.core.v1.ResourceRequirements configServer = 3;
@@ -279,6 +306,17 @@ message MongoDBVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements shard = 4;
 
   optional k8s.io.api.core.v1.ResourceRequirements exporter = 5;
+}
+
+// MongoDBVolumeExpansionSpec is the spec for mongodb volume expansion
+message MongoDBVolumeExpansionSpec {
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity standalone = 1;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity replicaSet = 4;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity configServer = 2;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity shard = 3;
 }
 
 // MongosNode is the spec for mongodb Mongos
@@ -549,6 +587,14 @@ message ProxySQLOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
+message RedisHorizontalScalingSpec {
+  // Number of Masters in the cluster
+  optional int32 master = 1;
+
+  // specifies the number of replica for the master
+  optional int32 replicas = 2;
+}
+
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=redisopsrequests,singular=redisopsrequest,shortName=rdops,categories={datastore,kubedb,appscode}
 // +kubebuilder:subresource:status
@@ -573,7 +619,7 @@ message RedisOpsRequestList {
 
 // RedisOpsRequestSpec is the spec for RedisOpsRequest
 message RedisOpsRequestSpec {
-  // Specifies the Elasticsearch reference
+  // Specifies the Redis reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
@@ -581,6 +627,12 @@ message RedisOpsRequestSpec {
 
   // Specifies the field information that needed to be upgraded
   optional UpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling.
+  optional RedisHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional RedisVerticalScalingSpec verticalScaling = 5;
 }
 
 // RedisOpsRequestStatus is the status for RedisOpsRequest
@@ -595,6 +647,13 @@ message RedisOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// RedisVerticalScalingSpec is the spec for Redis vertical scaling
+message RedisVerticalScalingSpec {
+  optional k8s.io.api.core.v1.ResourceRequirements redis = 1;
+
+  optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
 }
 
 message UpgradeSpec {

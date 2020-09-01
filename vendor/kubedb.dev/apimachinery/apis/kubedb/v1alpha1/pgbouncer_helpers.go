@@ -23,13 +23,14 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
 
-func (_ PgBouncer) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p PgBouncer) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPgBouncer))
 }
 
@@ -105,7 +106,11 @@ func (p pgbouncerStatsService) ServiceName() string {
 }
 
 func (p pgbouncerStatsService) ServiceMonitorName() string {
-	return fmt.Sprintf("kubedb-%s-%s", p.Namespace, p.Name)
+	return p.ServiceName()
+}
+
+func (p pgbouncerStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return p.OffshootLabels()
 }
 
 func (p pgbouncerStatsService) Path() string {
@@ -142,4 +147,35 @@ func (p *PgBouncer) SetDefaults() {
 		return
 	}
 	p.Spec.Monitor.SetDefaults()
+
+	p.setDefaultTLSConfig()
+}
+
+func (p *PgBouncer) setDefaultTLSConfig() {
+	if p.Spec.TLS == nil || p.Spec.TLS.IssuerRef == nil {
+		return
+	}
+
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerServerCert), p.CertificateName(PgBouncerServerCert))
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerClientCert), p.CertificateName(PgBouncerClientCert))
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerMetricsExporterCert), p.CertificateName(PgBouncerMetricsExporterCert))
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (p *PgBouncer) CertificateName(alias PgBouncerCertificateAlias) string {
+	return meta_util.NameWithSuffix(p.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// MustCertSecretName returns the secret name for a certificate alias
+func (p *PgBouncer) MustCertSecretName(alias PgBouncerCertificateAlias) string {
+	if p == nil {
+		panic("missing PgBouncer database")
+	} else if p.Spec.TLS == nil {
+		panic(fmt.Errorf("PgBouncer %s/%s is missing tls spec", p.Namespace, p.Name))
+	}
+	name, ok := kmapi.GetCertificateSecretName(p.Spec.TLS.Certificates, string(alias))
+	if !ok {
+		panic(fmt.Errorf("PgBouncer %s/%s is missing secret name for %s certificate", p.Namespace, p.Name, alias))
+	}
+	return name
 }
