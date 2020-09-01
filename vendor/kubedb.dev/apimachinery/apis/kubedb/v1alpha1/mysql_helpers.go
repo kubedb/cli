@@ -26,6 +26,7 @@ import (
 	"github.com/appscode/go/types"
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -120,7 +121,11 @@ func (m mysqlStatsService) ServiceName() string {
 }
 
 func (m mysqlStatsService) ServiceMonitorName() string {
-	return fmt.Sprintf("kubedb-%s-%s", m.Namespace, m.Name)
+	return m.ServiceName()
+}
+
+func (m mysqlStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return m.OffshootLabels()
 }
 
 func (m mysqlStatsService) Path() string {
@@ -180,6 +185,17 @@ func (m *MySQL) SetDefaults() {
 	}
 
 	m.Spec.Monitor.SetDefaults()
+
+	m.setDefaultTLSConfig()
+}
+
+func (m *MySQL) setDefaultTLSConfig() {
+	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLServerCert), m.CertificateName(MySQLServerCert))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLClientCert), m.CertificateName(MySQLClientCert))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLMetricsExporterCert), m.CertificateName(MySQLMetricsExporterCert))
 }
 
 // setDefaultProbes sets defaults only when probe fields are nil.
@@ -212,14 +228,33 @@ mysql -h localhost -nsLNE -e "select member_state from performance_schema.replic
 	}
 }
 
-func (e *MySQLSpec) GetSecrets() []string {
-	if e == nil {
+func (m *MySQLSpec) GetSecrets() []string {
+	if m == nil {
 		return nil
 	}
 
 	var secrets []string
-	if e.DatabaseSecret != nil {
-		secrets = append(secrets, e.DatabaseSecret.SecretName)
+	if m.DatabaseSecret != nil {
+		secrets = append(secrets, m.DatabaseSecret.SecretName)
 	}
 	return secrets
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (m *MySQL) CertificateName(alias MySQLCertificateAlias) string {
+	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// MustCertSecretName returns the secret name for a certificate alias
+func (m *MySQL) MustCertSecretName(alias MySQLCertificateAlias) string {
+	if m == nil {
+		panic("missing MySQL database")
+	} else if m.Spec.TLS == nil {
+		panic(fmt.Errorf("MySQL %s/%s is missing tls spec", m.Namespace, m.Name))
+	}
+	name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+	if !ok {
+		panic(fmt.Errorf("MySQL %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
+	}
+	return name
 }

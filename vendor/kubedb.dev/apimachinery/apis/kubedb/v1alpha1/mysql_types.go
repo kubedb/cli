@@ -20,6 +20,7 @@ import (
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -117,7 +118,7 @@ type MySQLSpec struct {
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
 
 	// Indicates that the database is paused and controller will not sync any changes made to this spec.
 	// +optional
@@ -131,6 +132,15 @@ type MySQLSpec struct {
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
+
+// +kubebuilder:validation:Enum=server;archiver;metrics-exporter
+type MySQLCertificateAlias string
+
+const (
+	MySQLServerCert          MySQLCertificateAlias = "server"
+	MySQLClientCert          MySQLCertificateAlias = "client"
+	MySQLMetricsExporterCert MySQLCertificateAlias = "metrics-exporter"
+)
 
 type MySQLClusterTopology struct {
 	// If set to -

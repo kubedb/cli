@@ -49,6 +49,96 @@ spec:
           spec:
             description: MongoDBOpsRequestSpec is the spec for MongoDBOpsRequest
             properties:
+              customConfig:
+                description: Specifies information necessary for custom configuration
+                  of MongoDB
+                properties:
+                  configServer:
+                    properties:
+                      configMap:
+                        description: LocalObjectReference contains enough information
+                          to let you locate the referenced object inside the same
+                          namespace.
+                        properties:
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                        type: object
+                      data:
+                        additionalProperties:
+                          type: string
+                        type: object
+                    type: object
+                  mongos:
+                    properties:
+                      configMap:
+                        description: LocalObjectReference contains enough information
+                          to let you locate the referenced object inside the same
+                          namespace.
+                        properties:
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                        type: object
+                      data:
+                        additionalProperties:
+                          type: string
+                        type: object
+                    type: object
+                  replicaSet:
+                    properties:
+                      configMap:
+                        description: LocalObjectReference contains enough information
+                          to let you locate the referenced object inside the same
+                          namespace.
+                        properties:
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                        type: object
+                      data:
+                        additionalProperties:
+                          type: string
+                        type: object
+                    type: object
+                  shard:
+                    properties:
+                      configMap:
+                        description: LocalObjectReference contains enough information
+                          to let you locate the referenced object inside the same
+                          namespace.
+                        properties:
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                        type: object
+                      data:
+                        additionalProperties:
+                          type: string
+                        type: object
+                    type: object
+                  standalone:
+                    properties:
+                      configMap:
+                        description: LocalObjectReference contains enough information
+                          to let you locate the referenced object inside the same
+                          namespace.
+                        properties:
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                        type: object
+                      data:
+                        additionalProperties:
+                          type: string
+                        type: object
+                    type: object
+                type: object
               databaseRef:
                 description: Specifies the MongoDB reference
                 properties:
@@ -98,6 +188,7 @@ spec:
                 - VolumeExpansion
                 - Restart
                 - RotateCertificates
+                - Reconfigure
                 type: string
               upgrade:
                 description: Specifies information necessary for upgrading mongodb
@@ -190,6 +281,33 @@ spec:
                           to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
                         type: object
                     type: object
+                  replicaSet:
+                    description: ResourceRequirements describes the compute resource
+                      requirements.
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                    type: object
                   shard:
                     description: ResourceRequirements describes the compute resource
                       requirements.
@@ -244,6 +362,34 @@ spec:
                           to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
                         type: object
                     type: object
+                type: object
+              volumeExpansion:
+                description: Specifies information necessary for volume expansion
+                properties:
+                  configServer:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  replicaSet:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  shard:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  standalone:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
                 type: object
             required:
             - databaseRef

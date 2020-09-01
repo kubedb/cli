@@ -57,7 +57,8 @@ type ElasticsearchVersionSpec struct {
 	// Exporter Image
 	Exporter ElasticsearchVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
 	// Tools Image
-	Tools ElasticsearchVersionTools `json:"tools" protobuf:"bytes,5,opt,name=tools"`
+	// +optional
+	Tools ElasticsearchVersionTools `json:"tools,omitempty" protobuf:"bytes,5,opt,name=tools"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
@@ -103,11 +104,12 @@ type ElasticsearchVersionList struct {
 	Items []ElasticsearchVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
 
-// +kubebuilder:validation:Enum=SearchGuard;None;X-Pack
+// +kubebuilder:validation:Enum=SearchGuard;None;X-Pack;OpenDistro
 type ElasticsearchAuthPlugin string
 
 const (
 	ElasticsearchAuthPluginSearchGuard ElasticsearchAuthPlugin = "SearchGuard"
 	ElasticsearchAuthPluginNone        ElasticsearchAuthPlugin = "None" // deprecated
 	ElasticsearchAuthPluginXpack       ElasticsearchAuthPlugin = "X-Pack"
+	ElasticsearchAuthPluginOpenDistro  ElasticsearchAuthPlugin = "OpenDistro"
 )

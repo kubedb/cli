@@ -2824,10 +2824,6 @@ spec:
                         Prometheus instance via ServiceMonitor labels. Deprecated:
                         use prometheus.serviceMonitor.labels'
                       type: object
-                    namespace:
-                      description: 'Namespace of Prometheus. Service monitors will
-                        be created in this namespace. Deprecated: use prometheus.serviceMonitor.namespace'
-                      type: string
                     port:
                       description: 'Port number for the exporter side car. Deprecated:
                         use exporter.port'
@@ -2844,10 +2840,6 @@ spec:
                           description: Labels are key value pairs that is used to
                             select Prometheus instance via ServiceMonitor labels.
                           type: object
-                        namespace:
-                          description: Namespace of Prometheus. Service monitors will
-                            be created in this namespace.
-                          type: string
                       type: object
                   type: object
                 resources:
@@ -5787,6 +5779,125 @@ spec:
               - WipeOut
               - DoNotTerminate
               type: string
+            tls:
+              description: TLS contains tls configurations
+              properties:
+                certificates:
+                  description: 'Certificate provides server and/or client certificate
+                    options used by application pods. These options are passed to
+                    a cert-manager Certificate object. xref: https://github.com/jetstack/cert-manager/blob/v0.16.0/pkg/apis/certmanager/v1beta1/types_certificate.go#L82-L162'
+                  items:
+                    properties:
+                      alias:
+                        description: Alias represents the identifier of the certificate.
+                        type: string
+                      dnsNames:
+                        description: DNSNames is a list of subject alt names to be
+                          used on the Certificate.
+                        items:
+                          type: string
+                        type: array
+                      duration:
+                        description: Certificate default Duration
+                        type: string
+                      emailSANs:
+                        description: EmailSANs is a list of email subjectAltNames
+                          to be set on the Certificate.
+                        items:
+                          type: string
+                        type: array
+                      ipAddresses:
+                        description: IPAddresses is a list of IP addresses to be used
+                          on the Certificate
+                        items:
+                          type: string
+                        type: array
+                      keyEncoding:
+                        description: KeyEncoding is the private key cryptography standards
+                          (PKCS) for this certificate's private key to be encoded
+                          in. If provided, allowed values are "pkcs1" and "pkcs8".
+                          If KeyEncoding is not specified, then PKCS#1 will be used
+                          by default.
+                        type: string
+                      renewBefore:
+                        description: Certificate renew before expiration duration
+                        type: string
+                      secretName:
+                        description: Specifies the k8s secret name that holds the
+                          certificates. Default to <resource-name>-<cert-alias>-cert.
+                        type: string
+                      subject:
+                        description: Full X509 name specification (https://golang.org/pkg/crypto/x509/pkix/#Name).
+                        properties:
+                          countries:
+                            description: Countries to be used on the CertificateSpec.
+                            items:
+                              type: string
+                            type: array
+                          localities:
+                            description: Cities to be used on the CertificateSpec.
+                            items:
+                              type: string
+                            type: array
+                          organizationalUnits:
+                            description: Organizational Units to be used on the CertificateSpec.
+                            items:
+                              type: string
+                            type: array
+                          organizations:
+                            description: Organizations to be used on the Certificate.
+                            items:
+                              type: string
+                            type: array
+                          postalCodes:
+                            description: Postal codes to be used on the CertificateSpec.
+                            items:
+                              type: string
+                            type: array
+                          provinces:
+                            description: State/Provinces to be used on the CertificateSpec.
+                            items:
+                              type: string
+                            type: array
+                          serialNumber:
+                            description: Serial number to be used on the CertificateSpec.
+                            type: string
+                          streetAddresses:
+                            description: Street addresses to be used on the CertificateSpec.
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                      uriSANs:
+                        description: URISANs is a list of URI Subject Alternative
+                          Names to be set on this Certificate.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - alias
+                    type: object
+                  type: array
+                issuerRef:
+                  description: IssuerRef is a reference to a Certificate Issuer.
+                  properties:
+                    apiGroup:
+                      description: APIGroup is the group for the resource being referenced.
+                        If APIGroup is not specified, the specified Kind must be in
+                        the core API group. For any other third-party types, APIGroup
+                        is required.
+                      type: string
+                    kind:
+                      description: Kind is the type of resource being referenced
+                      type: string
+                    name:
+                      description: Name is the name of resource being referenced
+                      type: string
+                  required:
+                  - kind
+                  - name
+                  type: object
+              type: object
             version:
               description: Version of Memcached to be deployed.
               type: string

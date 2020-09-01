@@ -20,6 +20,7 @@ import (
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -91,6 +92,10 @@ type MariaDBSpec struct {
 	// Template.
 	UpdateStrategy apps.StatefulSetUpdateStrategy `json:"updateStrategy,omitempty" protobuf:"bytes,11,opt,name=updateStrategy"`
 
+	// TLS contains tls configurations
+	// +optional
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
+
 	// Indicates that the database is paused and controller will not sync any changes made to this spec.
 	// +optional
 	Paused bool `json:"paused,omitempty" protobuf:"varint,12,opt,name=paused"`
@@ -103,6 +108,15 @@ type MariaDBSpec struct {
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,14,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
+
+// +kubebuilder:validation:Enum=server;archiver;metrics-exporter
+type MariaDBCertificateAlias string
+
+const (
+	MariaDBServerCert          MariaDBCertificateAlias = "server"
+	MariaDBArchiverCert        MariaDBCertificateAlias = "archiver"
+	MariaDBMetricsExporterCert MariaDBCertificateAlias = "metrics-exporter"
+)
 
 type MariaDBStatus struct {
 	Phase  DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`

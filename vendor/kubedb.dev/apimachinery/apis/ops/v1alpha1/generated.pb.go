@@ -28,7 +28,9 @@ import (
 	strings "strings"
 
 	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	v11 "k8s.io/api/core/v1"
+	resource "k8s.io/apimachinery/pkg/api/resource"
 	v12 "kmodules.xyz/client-go/api/v1"
 )
 
@@ -435,10 +437,66 @@ func (m *MemcachedOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MemcachedOpsRequestStatus proto.InternalMessageInfo
 
+func (m *MongoDBCustomConfig) Reset()      { *m = MongoDBCustomConfig{} }
+func (*MongoDBCustomConfig) ProtoMessage() {}
+func (*MongoDBCustomConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{14}
+}
+func (m *MongoDBCustomConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBCustomConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBCustomConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBCustomConfig.Merge(m, src)
+}
+func (m *MongoDBCustomConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBCustomConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBCustomConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBCustomConfig proto.InternalMessageInfo
+
+func (m *MongoDBCustomConfigSpec) Reset()      { *m = MongoDBCustomConfigSpec{} }
+func (*MongoDBCustomConfigSpec) ProtoMessage() {}
+func (*MongoDBCustomConfigSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{15}
+}
+func (m *MongoDBCustomConfigSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBCustomConfigSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBCustomConfigSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBCustomConfigSpec.Merge(m, src)
+}
+func (m *MongoDBCustomConfigSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBCustomConfigSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBCustomConfigSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBCustomConfigSpec proto.InternalMessageInfo
+
 func (m *MongoDBHorizontalScalingSpec) Reset()      { *m = MongoDBHorizontalScalingSpec{} }
 func (*MongoDBHorizontalScalingSpec) ProtoMessage() {}
 func (*MongoDBHorizontalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{14}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{16}
 }
 func (m *MongoDBHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -466,7 +524,7 @@ var xxx_messageInfo_MongoDBHorizontalScalingSpec proto.InternalMessageInfo
 func (m *MongoDBOpsRequest) Reset()      { *m = MongoDBOpsRequest{} }
 func (*MongoDBOpsRequest) ProtoMessage() {}
 func (*MongoDBOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{15}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{17}
 }
 func (m *MongoDBOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -494,7 +552,7 @@ var xxx_messageInfo_MongoDBOpsRequest proto.InternalMessageInfo
 func (m *MongoDBOpsRequestList) Reset()      { *m = MongoDBOpsRequestList{} }
 func (*MongoDBOpsRequestList) ProtoMessage() {}
 func (*MongoDBOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{16}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{18}
 }
 func (m *MongoDBOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -522,7 +580,7 @@ var xxx_messageInfo_MongoDBOpsRequestList proto.InternalMessageInfo
 func (m *MongoDBOpsRequestSpec) Reset()      { *m = MongoDBOpsRequestSpec{} }
 func (*MongoDBOpsRequestSpec) ProtoMessage() {}
 func (*MongoDBOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{17}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{19}
 }
 func (m *MongoDBOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -550,7 +608,7 @@ var xxx_messageInfo_MongoDBOpsRequestSpec proto.InternalMessageInfo
 func (m *MongoDBOpsRequestStatus) Reset()      { *m = MongoDBOpsRequestStatus{} }
 func (*MongoDBOpsRequestStatus) ProtoMessage() {}
 func (*MongoDBOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{18}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{20}
 }
 func (m *MongoDBOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -578,7 +636,7 @@ var xxx_messageInfo_MongoDBOpsRequestStatus proto.InternalMessageInfo
 func (m *MongoDBShardNode) Reset()      { *m = MongoDBShardNode{} }
 func (*MongoDBShardNode) ProtoMessage() {}
 func (*MongoDBShardNode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{19}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{21}
 }
 func (m *MongoDBShardNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -606,7 +664,7 @@ var xxx_messageInfo_MongoDBShardNode proto.InternalMessageInfo
 func (m *MongoDBVerticalScalingSpec) Reset()      { *m = MongoDBVerticalScalingSpec{} }
 func (*MongoDBVerticalScalingSpec) ProtoMessage() {}
 func (*MongoDBVerticalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{20}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{22}
 }
 func (m *MongoDBVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -631,10 +689,38 @@ func (m *MongoDBVerticalScalingSpec) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MongoDBVerticalScalingSpec proto.InternalMessageInfo
 
+func (m *MongoDBVolumeExpansionSpec) Reset()      { *m = MongoDBVolumeExpansionSpec{} }
+func (*MongoDBVolumeExpansionSpec) ProtoMessage() {}
+func (*MongoDBVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{23}
+}
+func (m *MongoDBVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBVolumeExpansionSpec.Merge(m, src)
+}
+func (m *MongoDBVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBVolumeExpansionSpec proto.InternalMessageInfo
+
 func (m *MongosNode) Reset()      { *m = MongosNode{} }
 func (*MongosNode) ProtoMessage() {}
 func (*MongosNode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{21}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{24}
 }
 func (m *MongosNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -662,7 +748,7 @@ var xxx_messageInfo_MongosNode proto.InternalMessageInfo
 func (m *MySQLHorizontalScalingSpec) Reset()      { *m = MySQLHorizontalScalingSpec{} }
 func (*MySQLHorizontalScalingSpec) ProtoMessage() {}
 func (*MySQLHorizontalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{22}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{25}
 }
 func (m *MySQLHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -690,7 +776,7 @@ var xxx_messageInfo_MySQLHorizontalScalingSpec proto.InternalMessageInfo
 func (m *MySQLOpsRequest) Reset()      { *m = MySQLOpsRequest{} }
 func (*MySQLOpsRequest) ProtoMessage() {}
 func (*MySQLOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{23}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{26}
 }
 func (m *MySQLOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -718,7 +804,7 @@ var xxx_messageInfo_MySQLOpsRequest proto.InternalMessageInfo
 func (m *MySQLOpsRequestList) Reset()      { *m = MySQLOpsRequestList{} }
 func (*MySQLOpsRequestList) ProtoMessage() {}
 func (*MySQLOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{24}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{27}
 }
 func (m *MySQLOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -746,7 +832,7 @@ var xxx_messageInfo_MySQLOpsRequestList proto.InternalMessageInfo
 func (m *MySQLOpsRequestSpec) Reset()      { *m = MySQLOpsRequestSpec{} }
 func (*MySQLOpsRequestSpec) ProtoMessage() {}
 func (*MySQLOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{25}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{28}
 }
 func (m *MySQLOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -774,7 +860,7 @@ var xxx_messageInfo_MySQLOpsRequestSpec proto.InternalMessageInfo
 func (m *MySQLOpsRequestStatus) Reset()      { *m = MySQLOpsRequestStatus{} }
 func (*MySQLOpsRequestStatus) ProtoMessage() {}
 func (*MySQLOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{26}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{29}
 }
 func (m *MySQLOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -802,7 +888,7 @@ var xxx_messageInfo_MySQLOpsRequestStatus proto.InternalMessageInfo
 func (m *MySQLVerticalScalingSpec) Reset()      { *m = MySQLVerticalScalingSpec{} }
 func (*MySQLVerticalScalingSpec) ProtoMessage() {}
 func (*MySQLVerticalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{27}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{30}
 }
 func (m *MySQLVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -830,7 +916,7 @@ var xxx_messageInfo_MySQLVerticalScalingSpec proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequest) Reset()      { *m = PerconaXtraDBOpsRequest{} }
 func (*PerconaXtraDBOpsRequest) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{28}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{31}
 }
 func (m *PerconaXtraDBOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -858,7 +944,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequest proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequestList) Reset()      { *m = PerconaXtraDBOpsRequestList{} }
 func (*PerconaXtraDBOpsRequestList) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{29}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{32}
 }
 func (m *PerconaXtraDBOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -886,7 +972,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequestList proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequestSpec) Reset()      { *m = PerconaXtraDBOpsRequestSpec{} }
 func (*PerconaXtraDBOpsRequestSpec) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{30}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{33}
 }
 func (m *PerconaXtraDBOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -914,7 +1000,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequestSpec proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequestStatus) Reset()      { *m = PerconaXtraDBOpsRequestStatus{} }
 func (*PerconaXtraDBOpsRequestStatus) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{31}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{34}
 }
 func (m *PerconaXtraDBOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -942,7 +1028,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequestStatus proto.InternalMessageInfo
 func (m *PgBouncerOpsRequest) Reset()      { *m = PgBouncerOpsRequest{} }
 func (*PgBouncerOpsRequest) ProtoMessage() {}
 func (*PgBouncerOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{32}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{35}
 }
 func (m *PgBouncerOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -970,7 +1056,7 @@ var xxx_messageInfo_PgBouncerOpsRequest proto.InternalMessageInfo
 func (m *PgBouncerOpsRequestList) Reset()      { *m = PgBouncerOpsRequestList{} }
 func (*PgBouncerOpsRequestList) ProtoMessage() {}
 func (*PgBouncerOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{33}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{36}
 }
 func (m *PgBouncerOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -998,7 +1084,7 @@ var xxx_messageInfo_PgBouncerOpsRequestList proto.InternalMessageInfo
 func (m *PgBouncerOpsRequestSpec) Reset()      { *m = PgBouncerOpsRequestSpec{} }
 func (*PgBouncerOpsRequestSpec) ProtoMessage() {}
 func (*PgBouncerOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{34}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{37}
 }
 func (m *PgBouncerOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1026,7 +1112,7 @@ var xxx_messageInfo_PgBouncerOpsRequestSpec proto.InternalMessageInfo
 func (m *PgBouncerOpsRequestStatus) Reset()      { *m = PgBouncerOpsRequestStatus{} }
 func (*PgBouncerOpsRequestStatus) ProtoMessage() {}
 func (*PgBouncerOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{35}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{38}
 }
 func (m *PgBouncerOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1054,7 +1140,7 @@ var xxx_messageInfo_PgBouncerOpsRequestStatus proto.InternalMessageInfo
 func (m *PostgresOpsRequest) Reset()      { *m = PostgresOpsRequest{} }
 func (*PostgresOpsRequest) ProtoMessage() {}
 func (*PostgresOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{36}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{39}
 }
 func (m *PostgresOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1082,7 +1168,7 @@ var xxx_messageInfo_PostgresOpsRequest proto.InternalMessageInfo
 func (m *PostgresOpsRequestList) Reset()      { *m = PostgresOpsRequestList{} }
 func (*PostgresOpsRequestList) ProtoMessage() {}
 func (*PostgresOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{37}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{40}
 }
 func (m *PostgresOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1110,7 +1196,7 @@ var xxx_messageInfo_PostgresOpsRequestList proto.InternalMessageInfo
 func (m *PostgresOpsRequestSpec) Reset()      { *m = PostgresOpsRequestSpec{} }
 func (*PostgresOpsRequestSpec) ProtoMessage() {}
 func (*PostgresOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{38}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{41}
 }
 func (m *PostgresOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1138,7 +1224,7 @@ var xxx_messageInfo_PostgresOpsRequestSpec proto.InternalMessageInfo
 func (m *PostgresOpsRequestStatus) Reset()      { *m = PostgresOpsRequestStatus{} }
 func (*PostgresOpsRequestStatus) ProtoMessage() {}
 func (*PostgresOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{39}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{42}
 }
 func (m *PostgresOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1166,7 +1252,7 @@ var xxx_messageInfo_PostgresOpsRequestStatus proto.InternalMessageInfo
 func (m *ProxySQLOpsRequest) Reset()      { *m = ProxySQLOpsRequest{} }
 func (*ProxySQLOpsRequest) ProtoMessage() {}
 func (*ProxySQLOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{40}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{43}
 }
 func (m *ProxySQLOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1194,7 +1280,7 @@ var xxx_messageInfo_ProxySQLOpsRequest proto.InternalMessageInfo
 func (m *ProxySQLOpsRequestList) Reset()      { *m = ProxySQLOpsRequestList{} }
 func (*ProxySQLOpsRequestList) ProtoMessage() {}
 func (*ProxySQLOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{41}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{44}
 }
 func (m *ProxySQLOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1222,7 +1308,7 @@ var xxx_messageInfo_ProxySQLOpsRequestList proto.InternalMessageInfo
 func (m *ProxySQLOpsRequestSpec) Reset()      { *m = ProxySQLOpsRequestSpec{} }
 func (*ProxySQLOpsRequestSpec) ProtoMessage() {}
 func (*ProxySQLOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{42}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{45}
 }
 func (m *ProxySQLOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1250,7 +1336,7 @@ var xxx_messageInfo_ProxySQLOpsRequestSpec proto.InternalMessageInfo
 func (m *ProxySQLOpsRequestStatus) Reset()      { *m = ProxySQLOpsRequestStatus{} }
 func (*ProxySQLOpsRequestStatus) ProtoMessage() {}
 func (*ProxySQLOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{43}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{46}
 }
 func (m *ProxySQLOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1275,10 +1361,38 @@ func (m *ProxySQLOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProxySQLOpsRequestStatus proto.InternalMessageInfo
 
+func (m *RedisHorizontalScalingSpec) Reset()      { *m = RedisHorizontalScalingSpec{} }
+func (*RedisHorizontalScalingSpec) ProtoMessage() {}
+func (*RedisHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{47}
+}
+func (m *RedisHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RedisHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RedisHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisHorizontalScalingSpec.Merge(m, src)
+}
+func (m *RedisHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *RedisHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RedisHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *RedisOpsRequest) Reset()      { *m = RedisOpsRequest{} }
 func (*RedisOpsRequest) ProtoMessage() {}
 func (*RedisOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{44}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{48}
 }
 func (m *RedisOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1306,7 +1420,7 @@ var xxx_messageInfo_RedisOpsRequest proto.InternalMessageInfo
 func (m *RedisOpsRequestList) Reset()      { *m = RedisOpsRequestList{} }
 func (*RedisOpsRequestList) ProtoMessage() {}
 func (*RedisOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{45}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{49}
 }
 func (m *RedisOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1334,7 +1448,7 @@ var xxx_messageInfo_RedisOpsRequestList proto.InternalMessageInfo
 func (m *RedisOpsRequestSpec) Reset()      { *m = RedisOpsRequestSpec{} }
 func (*RedisOpsRequestSpec) ProtoMessage() {}
 func (*RedisOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{46}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{50}
 }
 func (m *RedisOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1362,7 +1476,7 @@ var xxx_messageInfo_RedisOpsRequestSpec proto.InternalMessageInfo
 func (m *RedisOpsRequestStatus) Reset()      { *m = RedisOpsRequestStatus{} }
 func (*RedisOpsRequestStatus) ProtoMessage() {}
 func (*RedisOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{47}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{51}
 }
 func (m *RedisOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1387,10 +1501,38 @@ func (m *RedisOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RedisOpsRequestStatus proto.InternalMessageInfo
 
+func (m *RedisVerticalScalingSpec) Reset()      { *m = RedisVerticalScalingSpec{} }
+func (*RedisVerticalScalingSpec) ProtoMessage() {}
+func (*RedisVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{52}
+}
+func (m *RedisVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RedisVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RedisVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisVerticalScalingSpec.Merge(m, src)
+}
+func (m *RedisVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *RedisVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RedisVerticalScalingSpec proto.InternalMessageInfo
+
 func (m *UpgradeSpec) Reset()      { *m = UpgradeSpec{} }
 func (*UpgradeSpec) ProtoMessage() {}
 func (*UpgradeSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{48}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{53}
 }
 func (m *UpgradeSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1430,6 +1572,9 @@ func init() {
 	proto.RegisterType((*MemcachedOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequestList")
 	proto.RegisterType((*MemcachedOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequestSpec")
 	proto.RegisterType((*MemcachedOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequestStatus")
+	proto.RegisterType((*MongoDBCustomConfig)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfig")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfig.DataEntry")
+	proto.RegisterType((*MongoDBCustomConfigSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfigSpec")
 	proto.RegisterType((*MongoDBHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBHorizontalScalingSpec")
 	proto.RegisterType((*MongoDBOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequest")
 	proto.RegisterType((*MongoDBOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequestList")
@@ -1437,6 +1582,7 @@ func init() {
 	proto.RegisterType((*MongoDBOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequestStatus")
 	proto.RegisterType((*MongoDBShardNode)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBShardNode")
 	proto.RegisterType((*MongoDBVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBVerticalScalingSpec")
+	proto.RegisterType((*MongoDBVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBVolumeExpansionSpec")
 	proto.RegisterType((*MongosNode)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongosNode")
 	proto.RegisterType((*MySQLHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLHorizontalScalingSpec")
 	proto.RegisterType((*MySQLOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLOpsRequest")
@@ -1460,10 +1606,12 @@ func init() {
 	proto.RegisterType((*ProxySQLOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequestList")
 	proto.RegisterType((*ProxySQLOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequestSpec")
 	proto.RegisterType((*ProxySQLOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequestStatus")
+	proto.RegisterType((*RedisHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisHorizontalScalingSpec")
 	proto.RegisterType((*RedisOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequest")
 	proto.RegisterType((*RedisOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequestList")
 	proto.RegisterType((*RedisOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequestSpec")
 	proto.RegisterType((*RedisOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequestStatus")
+	proto.RegisterType((*RedisVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisVerticalScalingSpec")
 	proto.RegisterType((*UpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.UpgradeSpec")
 }
 
@@ -1472,120 +1620,141 @@ func init() {
 }
 
 var fileDescriptor_7d9e6c4cc31bafaf = []byte{
-	// 1805 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x59, 0xcd, 0x6f, 0x1b, 0x45,
-	0x14, 0xcf, 0xae, 0x9d, 0x34, 0x1d, 0xa7, 0x49, 0xbb, 0x69, 0xda, 0x10, 0x5a, 0xbb, 0xf2, 0x01,
-	0x05, 0x89, 0xae, 0x49, 0x44, 0xab, 0x7e, 0x50, 0x28, 0x9b, 0xa4, 0x5f, 0x6a, 0x48, 0x18, 0x97,
-	0x52, 0x50, 0x69, 0x3a, 0xde, 0x9d, 0xac, 0xb7, 0xb1, 0x77, 0xb7, 0x3b, 0xeb, 0xa8, 0xe9, 0x89,
-	0x22, 0x0e, 0x50, 0x15, 0x09, 0xf8, 0x0f, 0xb8, 0xf0, 0x3f, 0x20, 0x21, 0xf5, 0x80, 0x90, 0x22,
-	0x71, 0xa9, 0x10, 0x52, 0x2b, 0x84, 0x2c, 0xea, 0x72, 0xe6, 0x4c, 0x0b, 0x48, 0x68, 0x67, 0xd7,
-	0x1f, 0xfb, 0xe5, 0x64, 0xed, 0xc6, 0x4a, 0xb5, 0x37, 0xef, 0xcc, 0xbc, 0xf7, 0x7e, 0xef, 0xcd,
-	0xf3, 0xef, 0xbd, 0x99, 0x01, 0xc7, 0x57, 0x2a, 0x05, 0x2c, 0x15, 0x78, 0x09, 0xaf, 0xe6, 0x90,
-	0xae, 0x94, 0x91, 0x58, 0x54, 0x54, 0x6c, 0xac, 0x59, 0x1f, 0x24, 0xa7, 0xe9, 0x24, 0xb7, 0x3a,
-	0x85, 0x4a, 0x7a, 0x11, 0x4d, 0xe5, 0x64, 0xac, 0x62, 0x03, 0x99, 0x58, 0xe2, 0x75, 0x43, 0x33,
-	0x35, 0xee, 0xd5, 0xa6, 0x28, 0xdf, 0x2a, 0x6a, 0x7d, 0x10, 0x5e, 0xd3, 0x09, 0x5f, 0x17, 0x9d,
-	0x38, 0x2c, 0x2b, 0x66, 0xb1, 0x52, 0xe0, 0x45, 0xad, 0x9c, 0x93, 0x35, 0x59, 0xcb, 0x51, 0x0d,
-	0x85, 0xca, 0x32, 0xfd, 0xa2, 0x1f, 0xf4, 0x97, 0xad, 0x79, 0x22, 0xbb, 0x72, 0x8c, 0xf0, 0x8a,
-	0x66, 0x61, 0xc8, 0x89, 0x9a, 0x81, 0x73, 0xab, 0x3e, 0xeb, 0x13, 0x6f, 0x34, 0xd7, 0x34, 0x41,
-	0xeb, 0x2b, 0xb2, 0x0d, 0xbc, 0x8c, 0x4d, 0x14, 0x24, 0x95, 0x0b, 0x93, 0x32, 0x2a, 0xaa, 0xa9,
-	0x94, 0xb1, 0x4f, 0xe0, 0xe8, 0x46, 0x02, 0x44, 0x2c, 0xe2, 0x32, 0xf2, 0xc9, 0x1d, 0x5e, 0x29,
-	0x6b, 0x52, 0xa5, 0x84, 0x09, 0x7f, 0x6b, 0xed, 0x76, 0x4e, 0x2c, 0x29, 0x58, 0x35, 0x0f, 0xcb,
-	0xb6, 0x4b, 0x7e, 0x5c, 0xd9, 0x13, 0x00, 0xcc, 0x68, 0xea, 0xb2, 0x22, 0xbf, 0xab, 0x49, 0x98,
-	0x7b, 0x0d, 0x0c, 0x1a, 0x58, 0x2f, 0x29, 0x22, 0x22, 0xe3, 0xcc, 0x21, 0x66, 0xb2, 0x5f, 0xd8,
-	0xbd, 0x5e, 0xcd, 0xf4, 0xd5, 0xaa, 0x99, 0x41, 0xe8, 0x8c, 0xc3, 0xc6, 0x8a, 0xec, 0x5d, 0x06,
-	0x64, 0xe7, 0x4a, 0x88, 0x98, 0x8a, 0x48, 0x30, 0x32, 0xc4, 0xe2, 0x39, 0xcd, 0x50, 0x6e, 0x6b,
-	0xaa, 0x89, 0x4a, 0x79, 0x11, 0x95, 0x14, 0x55, 0xce, 0xeb, 0x58, 0xe4, 0xb2, 0x60, 0xa0, 0x8c,
-	0x88, 0x89, 0x0d, 0x47, 0x25, 0xa8, 0x55, 0x33, 0x03, 0xf3, 0x74, 0x04, 0x3a, 0x33, 0xdc, 0x01,
-	0x90, 0x94, 0x90, 0x89, 0xc6, 0x59, 0xba, 0x62, 0xb0, 0x56, 0xcd, 0x24, 0x67, 0x91, 0x89, 0x20,
-	0x1d, 0xb5, 0x34, 0xd8, 0x8e, 0x8c, 0x27, 0x9a, 0x1a, 0x66, 0xe8, 0x08, 0x74, 0x66, 0xb2, 0x0f,
-	0x59, 0xb0, 0xdf, 0x05, 0x66, 0x41, 0x27, 0x10, 0xdf, 0xac, 0x60, 0x62, 0x72, 0xd7, 0xc1, 0xa0,
-	0xb5, 0x2f, 0xd4, 0x82, 0x85, 0x21, 0x35, 0xfd, 0x3a, 0x6f, 0x87, 0xd7, 0x9d, 0x3f, 0xfa, 0x8a,
-	0x6c, 0xe7, 0x90, 0xb5, 0x9a, 0x5f, 0x9d, 0xe2, 0x17, 0x0a, 0x37, 0xb0, 0x68, 0xce, 0x63, 0x13,
-	0x09, 0x9c, 0x13, 0x08, 0xd0, 0x1c, 0x83, 0x0d, 0xad, 0x5c, 0x11, 0x24, 0x89, 0x8e, 0x45, 0x8a,
-	0x3f, 0x35, 0x7d, 0x86, 0xdf, 0x74, 0x86, 0xf2, 0x21, 0x98, 0xad, 0xc8, 0x09, 0x43, 0x8e, 0xcd,
-	0xa4, 0xf5, 0x05, 0xa9, 0x05, 0x4e, 0x07, 0x03, 0xc4, 0x44, 0x66, 0x85, 0xd0, 0x58, 0xa4, 0xa6,
-	0xcf, 0x3d, 0x07, 0x5b, 0x54, 0x9f, 0x30, 0xec, 0x58, 0x1b, 0xb0, 0xbf, 0xa1, 0x63, 0x27, 0xfb,
-	0x27, 0x03, 0x5e, 0x0e, 0x91, 0xbc, 0xa8, 0x10, 0x93, 0xbb, 0xea, 0x8b, 0x2e, 0xbf, 0xb9, 0xe8,
-	0x5a, 0xd2, 0x34, 0xb6, 0x8d, 0x24, 0xab, 0x8f, 0xb4, 0x44, 0x56, 0x06, 0xfd, 0x8a, 0x89, 0xcb,
-	0x64, 0x9c, 0x3d, 0x94, 0x98, 0x4c, 0x4d, 0x0b, 0xdd, 0xbb, 0x2b, 0xec, 0x72, 0xcc, 0xf5, 0x9f,
-	0xb7, 0x14, 0x43, 0x5b, 0x7f, 0xf6, 0xbb, 0x44, 0xa8, 0x9b, 0x34, 0x8d, 0x97, 0x40, 0xca, 0x02,
-	0x54, 0x40, 0x04, 0x43, 0xbc, 0xec, 0x78, 0x3a, 0xd9, 0xe2, 0x29, 0x6f, 0x31, 0x06, 0xf5, 0x4b,
-	0x13, 0x51, 0xc9, 0x4e, 0x13, 0x88, 0x97, 0xb1, 0x81, 0x55, 0x11, 0x0b, 0xa3, 0x8e, 0xd1, 0xd4,
-	0x6c, 0x53, 0x09, 0x6c, 0xd5, 0xc8, 0x4d, 0x83, 0xa4, 0xb9, 0xa6, 0x63, 0x9a, 0x43, 0x3b, 0x85,
-	0x74, 0x7d, 0xef, 0x2f, 0xad, 0xe9, 0xf8, 0x59, 0x35, 0x33, 0xdc, 0x84, 0x63, 0x8d, 0x40, 0xba,
-	0x96, 0xfb, 0x18, 0xec, 0xa8, 0xe8, 0xb2, 0x81, 0x24, 0xec, 0xa4, 0xc3, 0xd1, 0x08, 0xf1, 0x79,
-	0xdf, 0x96, 0xa4, 0xa9, 0x96, 0xaa, 0x55, 0x33, 0x3b, 0x9c, 0x01, 0x58, 0xd7, 0xc9, 0x7d, 0xc3,
-	0x80, 0x3d, 0x45, 0xef, 0x9f, 0x7a, 0x3c, 0x49, 0x2d, 0xcd, 0x77, 0xba, 0x13, 0x81, 0x2c, 0x21,
-	0x8c, 0xd5, 0xaa, 0x99, 0x3d, 0xbe, 0x29, 0xe8, 0x37, 0x9f, 0xbd, 0xc3, 0x82, 0x83, 0x6d, 0x33,
-	0x99, 0x3b, 0x0a, 0xfa, 0xf5, 0x22, 0x22, 0x98, 0x6e, 0xd2, 0x4e, 0xe1, 0x50, 0x7d, 0xbf, 0x17,
-	0xad, 0xc1, 0x67, 0xd5, 0xcc, 0x48, 0x53, 0x82, 0x0e, 0x41, 0x7b, 0x39, 0x77, 0x01, 0x70, 0x5a,
-	0x81, 0x60, 0x63, 0x15, 0x4b, 0x67, 0x6d, 0x9e, 0x54, 0x34, 0x95, 0xee, 0x47, 0x42, 0x98, 0x70,
-	0x94, 0x70, 0x0b, 0xbe, 0x15, 0x30, 0x40, 0x8a, 0xbb, 0x0a, 0x80, 0xa8, 0xa9, 0x92, 0x62, 0x7d,
-	0x58, 0xff, 0xd5, 0x84, 0x9d, 0x2d, 0x2d, 0xe4, 0xcc, 0xdb, 0xcc, 0xb5, 0x24, 0xdb, 0xd9, 0xb3,
-	0x3a, 0xc5, 0xcf, 0xd4, 0x05, 0x9a, 0x6c, 0xd3, 0x18, 0x22, 0xb0, 0x45, 0x5f, 0xf6, 0x07, 0x16,
-	0x0c, 0xcf, 0x99, 0xa2, 0xd4, 0x53, 0x92, 0x5b, 0x72, 0x91, 0xdc, 0xa9, 0x28, 0xfb, 0xef, 0x82,
-	0x1a, 0xca, 0x6d, 0xb2, 0x87, 0xdb, 0xde, 0xee, 0xdc, 0x44, 0x7b, 0x4a, 0xfb, 0x85, 0x01, 0x9c,
-	0x5b, 0xa0, 0x07, 0x4c, 0x76, 0xcd, 0xcd, 0x64, 0xc7, 0x3b, 0x76, 0x2e, 0x84, 0xc0, 0x3e, 0x67,
-	0xbd, 0x4e, 0xc5, 0x95, 0xb7, 0xb2, 0x7f, 0x33, 0x60, 0x6f, 0x50, 0x42, 0xc4, 0x80, 0x19, 0x7e,
-	0x66, 0xc1, 0xe8, 0x3c, 0x2e, 0x8b, 0x48, 0x2c, 0xe2, 0xde, 0xd2, 0x83, 0xe4, 0xa2, 0x87, 0x28,
-	0x85, 0x3a, 0x00, 0x6f, 0x28, 0x47, 0x94, 0x3c, 0x1c, 0x31, 0xdb, 0xa5, 0x9d, 0xf6, 0x44, 0xf1,
-	0x3b, 0x03, 0xf6, 0x07, 0x48, 0xf5, 0x80, 0x2d, 0x44, 0x37, 0x5b, 0xbc, 0xd5, 0x9d, 0x9b, 0x21,
-	0x94, 0xf1, 0x25, 0x1b, 0xe8, 0x5e, 0x6c, 0x79, 0xe3, 0x3f, 0x06, 0xbc, 0x14, 0x9a, 0x24, 0x31,
-	0x20, 0x8f, 0xbf, 0x58, 0x70, 0x60, 0x5e, 0x53, 0x65, 0x6d, 0x56, 0x08, 0x3e, 0xcb, 0x5d, 0x05,
-	0xfd, 0xa4, 0x88, 0x0c, 0xc9, 0x49, 0x87, 0x93, 0x51, 0xb2, 0xd2, 0xd6, 0x9b, 0xb7, 0xc4, 0xad,
-	0xc3, 0xa6, 0xb0, 0xd3, 0x8a, 0x1d, 0xfd, 0x84, 0xb6, 0x52, 0x6e, 0x05, 0x0c, 0x89, 0xf4, 0x30,
-	0x9a, 0xb7, 0xdc, 0x36, 0x1c, 0x26, 0x39, 0x12, 0xc1, 0x48, 0xf3, 0x2c, 0x2b, 0xec, 0xae, 0x55,
-	0x33, 0x43, 0x33, 0x2d, 0xea, 0xa0, 0x4b, 0x39, 0xf7, 0x21, 0x18, 0x28, 0x5b, 0x90, 0xea, 0x44,
-	0x72, 0x24, 0xaa, 0x2f, 0x84, 0x9a, 0xb1, 0x4f, 0xb3, 0xf4, 0x1b, 0x3a, 0x0a, 0xb9, 0xc9, 0x96,
-	0x63, 0x74, 0x92, 0x9e, 0x58, 0x87, 0x42, 0x8e, 0xd0, 0x3f, 0xb1, 0x60, 0x8f, 0x13, 0x98, 0x9e,
-	0x72, 0x75, 0xc1, 0xc5, 0xd5, 0xa7, 0xa3, 0x6f, 0xe3, 0x26, 0x98, 0xfa, 0x86, 0x87, 0xa9, 0x85,
-	0xae, 0xac, 0xb4, 0xe7, 0xe9, 0x47, 0x0c, 0x18, 0xf3, 0xc9, 0xf4, 0x80, 0xa5, 0x91, 0x9b, 0xa5,
-	0xdf, 0xec, 0xc6, 0xc5, 0x10, 0x8e, 0xfe, 0x36, 0x19, 0xe0, 0x5a, 0x6c, 0x4f, 0xa4, 0xf7, 0xda,
-	0x9c, 0x48, 0xcf, 0x46, 0x8f, 0x7e, 0x97, 0x67, 0x51, 0xee, 0x33, 0x06, 0x8c, 0xac, 0x62, 0xc3,
-	0x54, 0xc4, 0x26, 0x98, 0x7e, 0x0a, 0x66, 0x2e, 0x3a, 0x98, 0xcb, 0x6e, 0x45, 0x14, 0xca, 0x68,
-	0xad, 0x9a, 0x19, 0xf1, 0x4c, 0x40, 0xaf, 0xc9, 0xec, 0x3f, 0x56, 0x9b, 0x12, 0xfc, 0x97, 0x89,
-	0x41, 0xd5, 0x2a, 0x82, 0xdd, 0xde, 0xe2, 0xc2, 0xbd, 0x02, 0x06, 0x68, 0x4d, 0xa9, 0xdf, 0x63,
-	0x36, 0x89, 0x83, 0x8e, 0x42, 0x67, 0xd6, 0x75, 0xe3, 0xc9, 0x6e, 0x78, 0xe3, 0xf9, 0x63, 0x02,
-	0x4c, 0x84, 0x6f, 0x16, 0x77, 0x05, 0x00, 0x62, 0x22, 0x55, 0x42, 0x25, 0x4d, 0xc5, 0xed, 0xfe,
-	0x8f, 0x10, 0x13, 0xad, 0x62, 0x88, 0xd8, 0x8a, 0xbb, 0x62, 0xe0, 0x32, 0x56, 0x4d, 0x22, 0x0c,
-	0x5b, 0x2e, 0xe6, 0x1b, 0xf2, 0xb0, 0x45, 0x17, 0x77, 0xb1, 0x51, 0xac, 0xd8, 0x88, 0x5a, 0x83,
-	0xea, 0xd3, 0x35, 0x4f, 0x9d, 0x4d, 0x44, 0xd4, 0xb9, 0x51, 0x69, 0x3d, 0x5f, 0xef, 0x12, 0x92,
-	0x11, 0x15, 0xfb, 0x5b, 0x02, 0x08, 0x06, 0xf1, 0x2d, 0x5d, 0x33, 0x4c, 0x6c, 0x38, 0x7f, 0xac,
-	0xcd, 0x6b, 0xa3, 0x45, 0x77, 0xce, 0x91, 0x86, 0x0d, 0x3d, 0xd9, 0x13, 0x00, 0x34, 0x0b, 0x78,
-	0xc4, 0x3b, 0xef, 0xdb, 0x60, 0x62, 0x7e, 0x2d, 0xff, 0xde, 0xc5, 0xf0, 0xab, 0x6e, 0x5c, 0x2e,
-	0x78, 0xae, 0xba, 0xe9, 0x08, 0x74, 0x66, 0xb8, 0x63, 0x60, 0xc8, 0xfe, 0xf5, 0x01, 0x56, 0xe4,
-	0xa2, 0xe9, 0x64, 0xdd, 0x5e, 0xc7, 0xe6, 0xd0, 0x7c, 0xcb, 0x1c, 0x74, 0xad, 0xcc, 0xde, 0x67,
-	0xc1, 0x08, 0x35, 0xde, 0xd3, 0x56, 0xe1, 0xba, 0xab, 0x55, 0x88, 0x74, 0x0e, 0x71, 0x63, 0x0d,
-	0x6d, 0x14, 0x8a, 0x9e, 0x46, 0xe1, 0x74, 0x17, 0x36, 0xda, 0xb7, 0x09, 0xbf, 0x32, 0x60, 0xd4,
-	0x23, 0xd1, 0x83, 0x26, 0x61, 0xc9, 0xdd, 0x24, 0x9c, 0xe8, 0xdc, 0xbd, 0x90, 0x16, 0xe1, 0x49,
-	0xd2, 0xe7, 0x56, 0x6f, 0x1a, 0x84, 0x33, 0x80, 0xb3, 0x22, 0x8b, 0x97, 0x2b, 0xa5, 0x3c, 0x36,
-	0x17, 0x0c, 0x49, 0x51, 0x51, 0xc9, 0xc9, 0xe8, 0x7d, 0x56, 0x7d, 0xc8, 0xfb, 0x66, 0x61, 0x80,
-	0x44, 0xa3, 0xd1, 0x48, 0x74, 0xd6, 0x68, 0x24, 0xb7, 0xa0, 0xd1, 0xb8, 0x1b, 0xd8, 0x68, 0x74,
-	0x50, 0xdb, 0x43, 0xd9, 0x22, 0x42, 0x9b, 0xf1, 0x69, 0x40, 0x9b, 0x31, 0x40, 0xa1, 0xcc, 0x44,
-	0x85, 0xd2, 0x79, 0x93, 0xf1, 0xd4, 0xea, 0xb1, 0x83, 0xfe, 0x6e, 0x31, 0x68, 0x31, 0xbe, 0x67,
-	0xc0, 0x78, 0x58, 0xf8, 0xac, 0x72, 0x57, 0x5e, 0x23, 0x37, 0x4b, 0x91, 0x2b, 0x3e, 0x2d, 0x77,
-	0x54, 0x2d, 0xb4, 0x35, 0xb8, 0xca, 0x1d, 0xfb, 0x9c, 0xca, 0xdd, 0x43, 0x16, 0xec, 0x5f, 0xc4,
-	0x86, 0xa8, 0xa9, 0xe8, 0x8a, 0x69, 0xa0, 0x1e, 0x9f, 0x34, 0x3b, 0x7f, 0x19, 0x0d, 0xc1, 0xbc,
-	0x25, 0x2f, 0xa3, 0x61, 0xb6, 0x36, 0x7e, 0x19, 0x0d, 0x91, 0xdc, 0xde, 0x2f, 0xa3, 0x21, 0xa0,
-	0x43, 0xca, 0xcb, 0xd7, 0x6c, 0xa8, 0x9b, 0xb1, 0xbd, 0x29, 0xbc, 0xc3, 0x82, 0x83, 0x6d, 0x93,
-	0x26, 0x26, 0x4f, 0x0d, 0x8b, 0xb2, 0xa0, 0x55, 0x54, 0x11, 0x1b, 0x2f, 0xc8, 0x53, 0x43, 0x00,
-	0xde, 0x2d, 0x79, 0x6a, 0x08, 0xb2, 0xb3, 0xf1, 0x53, 0x43, 0x80, 0xd4, 0xf6, 0x7e, 0x6a, 0x08,
-	0x00, 0xdc, 0xe6, 0xa9, 0x21, 0x24, 0xf8, 0xb1, 0x7d, 0x6a, 0x08, 0x4d, 0x92, 0x18, 0x90, 0xc7,
-	0x3a, 0x0b, 0xb8, 0x45, 0x8d, 0x98, 0xb2, 0x81, 0x49, 0x4f, 0xb9, 0x43, 0x74, 0x71, 0xc7, 0x3b,
-	0x51, 0x92, 0xdd, 0x07, 0x37, 0x94, 0x3a, 0x56, 0x3c, 0xd4, 0x31, 0xd3, 0x9d, 0x99, 0xf6, 0xcc,
-	0xf1, 0x1b, 0x03, 0xf6, 0xf9, 0x85, 0x7a, 0x40, 0x1c, 0x05, 0x37, 0x71, 0x9c, 0xea, 0xca, 0xc9,
-	0x10, 0xde, 0xb8, 0xc7, 0x06, 0x39, 0x17, 0x5b, 0xda, 0xf8, 0x97, 0x01, 0xe3, 0x61, 0x09, 0x12,
-	0x17, 0xd6, 0x30, 0xb4, 0x5b, 0x3d, 0xbf, 0x05, 0xeb, 0x82, 0x35, 0x7c, 0x70, 0xb7, 0x86, 0x35,
-	0xfc, 0x66, 0x36, 0xc1, 0x1a, 0x3e, 0xa1, 0x6d, 0xce, 0x1a, 0x3e, 0xbc, 0xed, 0x58, 0x23, 0x30,
-	0xf0, 0xf1, 0x65, 0x8d, 0x90, 0x04, 0x89, 0x01, 0x6b, 0xdc, 0x67, 0xc1, 0x08, 0xc4, 0x92, 0x42,
-	0x5e, 0x90, 0x8b, 0x73, 0x0f, 0xd6, 0x2d, 0xb9, 0x38, 0xf7, 0xda, 0xd8, 0xf8, 0xe2, 0xdc, 0x23,
-	0xb1, 0xbd, 0x2f, 0xce, 0x3d, 0x60, 0x43, 0x68, 0xe2, 0x0b, 0xd6, 0xe7, 0x56, 0x6c, 0x39, 0xe2,
-	0x29, 0x03, 0xc6, 0x02, 0x93, 0x22, 0x06, 0x04, 0x71, 0x01, 0xa4, 0x5a, 0x02, 0xc4, 0x9d, 0x04,
-	0xbb, 0x4c, 0x64, 0xc8, 0xd8, 0xbc, 0x8c, 0x0d, 0x62, 0x61, 0xb6, 0x1d, 0x1f, 0x73, 0xb4, 0xec,
-	0xba, 0xd4, 0x3a, 0x09, 0xdd, 0x6b, 0x05, 0x7e, 0xfd, 0x71, 0xba, 0xef, 0xc1, 0xe3, 0x74, 0xdf,
-	0xa3, 0xc7, 0xe9, 0xbe, 0x4f, 0x6a, 0x69, 0x66, 0xbd, 0x96, 0x66, 0x1e, 0xd4, 0xd2, 0xcc, 0xa3,
-	0x5a, 0x9a, 0xf9, 0xa3, 0x96, 0x66, 0xbe, 0x7a, 0x92, 0xee, 0xfb, 0x68, 0xb0, 0xbe, 0x33, 0xff,
-	0x07, 0x00, 0x00, 0xff, 0xff, 0x9d, 0x22, 0x73, 0xcb, 0x09, 0x35, 0x00, 0x00,
+	// 2140 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x5b, 0xcf, 0x8f, 0xdb, 0xc6,
+	0x15, 0x5e, 0x52, 0x5a, 0x79, 0x77, 0x76, 0xed, 0xb5, 0xc7, 0x76, 0xac, 0x6e, 0x13, 0xc9, 0xd0,
+	0xa1, 0xd8, 0x02, 0x35, 0x55, 0x2f, 0x5a, 0xd7, 0x71, 0x9a, 0x34, 0xd5, 0x7a, 0x93, 0x38, 0xf0,
+	0x66, 0x9d, 0x51, 0x92, 0xba, 0x85, 0xeb, 0xcd, 0x88, 0x9c, 0xa5, 0xe8, 0x95, 0x48, 0x86, 0x33,
+	0x5a, 0xac, 0x7c, 0x6a, 0x8a, 0x1e, 0x0a, 0x23, 0x05, 0x9a, 0xf6, 0x58, 0xf4, 0xd2, 0x43, 0xff,
+	0x82, 0x5e, 0x0a, 0x14, 0xc8, 0xa9, 0x80, 0x81, 0x5e, 0x82, 0xa2, 0x40, 0x8c, 0xa2, 0x10, 0x6a,
+	0xa5, 0xe7, 0x9e, 0xdb, 0xb4, 0x05, 0x0a, 0x0e, 0x29, 0x51, 0xfc, 0x31, 0xda, 0xa5, 0xe4, 0x15,
+	0x6c, 0xf0, 0x26, 0x0e, 0xe7, 0xbd, 0xef, 0xcd, 0x9b, 0xc7, 0x6f, 0x3e, 0xce, 0x50, 0xe0, 0xc5,
+	0xbd, 0x4e, 0x83, 0x68, 0x0d, 0x45, 0x23, 0xfb, 0x55, 0x6c, 0x1b, 0x6d, 0xac, 0x36, 0x0d, 0x93,
+	0x38, 0x5d, 0xf7, 0x82, 0x56, 0x2d, 0x9b, 0x56, 0xf7, 0x2f, 0xe3, 0x96, 0xdd, 0xc4, 0x97, 0xab,
+	0x3a, 0x31, 0x89, 0x83, 0x19, 0xd1, 0x14, 0xdb, 0xb1, 0x98, 0x05, 0xbf, 0x1a, 0x98, 0x2a, 0xa3,
+	0xa6, 0xee, 0x05, 0x55, 0x2c, 0x9b, 0x2a, 0x03, 0xd3, 0xd5, 0x4b, 0xba, 0xc1, 0x9a, 0x9d, 0x86,
+	0xa2, 0x5a, 0xed, 0xaa, 0x6e, 0xe9, 0x56, 0x95, 0x7b, 0x68, 0x74, 0x76, 0xf9, 0x15, 0xbf, 0xe0,
+	0xbf, 0x3c, 0xcf, 0xab, 0x95, 0xbd, 0xab, 0x54, 0x31, 0x2c, 0x37, 0x86, 0xaa, 0x6a, 0x39, 0xa4,
+	0xba, 0x1f, 0x43, 0x5f, 0xfd, 0x46, 0xd0, 0x27, 0x08, 0xda, 0xde, 0xd3, 0xb9, 0x91, 0x43, 0xa8,
+	0xd5, 0x71, 0x54, 0x92, 0xca, 0x8a, 0x56, 0xdb, 0x84, 0xe1, 0x24, 0xac, 0xaa, 0xc8, 0xca, 0xe9,
+	0x98, 0xcc, 0x68, 0xc7, 0x61, 0xae, 0x1c, 0x66, 0x40, 0xd5, 0x26, 0x69, 0xe3, 0x98, 0xdd, 0xa5,
+	0xbd, 0xb6, 0xa5, 0x75, 0x5a, 0x84, 0x2a, 0x07, 0xdd, 0xfb, 0x55, 0xb5, 0x65, 0x10, 0x93, 0x5d,
+	0xd2, 0xbd, 0x44, 0xc4, 0xe3, 0xaa, 0x5c, 0x03, 0x60, 0xc3, 0x32, 0x77, 0x0d, 0xfd, 0x2d, 0x4b,
+	0x23, 0xf0, 0x6b, 0x60, 0xc1, 0x21, 0x76, 0xcb, 0x50, 0x31, 0x2d, 0x4a, 0x17, 0xa5, 0xb5, 0xf9,
+	0xda, 0xe9, 0x87, 0xbd, 0xf2, 0x5c, 0xbf, 0x57, 0x5e, 0x40, 0x7e, 0x3b, 0x1a, 0xf6, 0xa8, 0x3c,
+	0x90, 0x40, 0x65, 0xb3, 0x85, 0x29, 0x33, 0x54, 0x4a, 0xb0, 0xa3, 0x36, 0xdf, 0xb0, 0x1c, 0xe3,
+	0xbe, 0x65, 0x32, 0xdc, 0xaa, 0xab, 0xb8, 0x65, 0x98, 0x7a, 0xdd, 0x26, 0x2a, 0xac, 0x80, 0x42,
+	0x1b, 0x53, 0x46, 0x1c, 0xdf, 0x25, 0xe8, 0xf7, 0xca, 0x85, 0x2d, 0xde, 0x82, 0xfc, 0x3b, 0xf0,
+	0x79, 0x90, 0xd7, 0x30, 0xc3, 0x45, 0x99, 0xf7, 0x58, 0xe8, 0xf7, 0xca, 0xf9, 0xeb, 0x98, 0x61,
+	0xc4, 0x5b, 0x5d, 0x0f, 0xde, 0x40, 0x8a, 0xb9, 0xc0, 0xc3, 0x06, 0x6f, 0x41, 0xfe, 0x9d, 0xca,
+	0x67, 0x32, 0xb8, 0x10, 0x0a, 0x66, 0xdb, 0xa6, 0x88, 0x7c, 0xd0, 0x21, 0x94, 0xc1, 0xf7, 0xc1,
+	0x82, 0x3b, 0x2f, 0x1c, 0xc1, 0x8d, 0x61, 0x69, 0xfd, 0xeb, 0x8a, 0x97, 0xde, 0x70, 0xd5, 0xd9,
+	0x7b, 0xba, 0x57, 0x79, 0x6e, 0x6f, 0x65, 0xff, 0xb2, 0xb2, 0xdd, 0xb8, 0x47, 0x54, 0xb6, 0x45,
+	0x18, 0xae, 0x41, 0x3f, 0x11, 0x20, 0x68, 0x43, 0x43, 0xaf, 0xb0, 0x09, 0xf2, 0xd4, 0x26, 0x2a,
+	0x8f, 0x7f, 0x69, 0xfd, 0x35, 0xe5, 0xc8, 0x75, 0xad, 0x08, 0x62, 0x76, 0x33, 0x57, 0x5b, 0xf6,
+	0x31, 0xf3, 0xee, 0x15, 0xe2, 0x08, 0xd0, 0x06, 0x05, 0xca, 0x30, 0xeb, 0x50, 0x9e, 0x8b, 0xa5,
+	0xf5, 0x37, 0x9e, 0x00, 0x16, 0xf7, 0x57, 0x3b, 0xe5, 0xa3, 0x15, 0xbc, 0x6b, 0xe4, 0xe3, 0x54,
+	0xfe, 0x21, 0x81, 0x2f, 0x0b, 0x2c, 0x6f, 0x1a, 0x94, 0xc1, 0x3b, 0xb1, 0xec, 0x2a, 0x47, 0xcb,
+	0xae, 0x6b, 0xcd, 0x73, 0x3b, 0x2c, 0xb2, 0x41, 0xcb, 0x48, 0x66, 0x75, 0x30, 0x6f, 0x30, 0xd2,
+	0xa6, 0x45, 0xf9, 0x62, 0x6e, 0x6d, 0x69, 0xbd, 0x36, 0xfd, 0x70, 0x6b, 0x27, 0x7d, 0xb8, 0xf9,
+	0x1b, 0xae, 0x63, 0xe4, 0xf9, 0xaf, 0xfc, 0x36, 0x27, 0x1c, 0x26, 0x2f, 0xe3, 0x1d, 0xb0, 0xe4,
+	0x06, 0xd4, 0xc0, 0x94, 0x20, 0xb2, 0xeb, 0x8f, 0x74, 0x6d, 0x64, 0xa4, 0x8a, 0xcb, 0x33, 0x7c,
+	0x5c, 0x96, 0x8a, 0x5b, 0x5e, 0x99, 0x20, 0xb2, 0x4b, 0x1c, 0x62, 0xaa, 0xa4, 0x76, 0xd6, 0x07,
+	0x5d, 0xba, 0x1e, 0x38, 0x41, 0xa3, 0x1e, 0xe1, 0x3a, 0xc8, 0xb3, 0xae, 0x4d, 0x78, 0x0d, 0x2d,
+	0xd6, 0x4a, 0x83, 0xb9, 0x7f, 0xa7, 0x6b, 0x93, 0x2f, 0x7a, 0xe5, 0x53, 0x41, 0x38, 0x6e, 0x0b,
+	0xe2, 0x7d, 0xe1, 0x0f, 0xc1, 0x89, 0x8e, 0xad, 0x3b, 0x58, 0x23, 0x7e, 0x39, 0x5c, 0x49, 0x91,
+	0x9f, 0x77, 0x3d, 0x4b, 0x5e, 0x6a, 0x4b, 0xfd, 0x5e, 0xf9, 0x84, 0xdf, 0x80, 0x06, 0x3e, 0xe1,
+	0x2f, 0x24, 0x70, 0xa6, 0x19, 0x7d, 0xa8, 0x8b, 0x79, 0x8e, 0xb4, 0x35, 0xe9, 0x4c, 0x24, 0xb2,
+	0x44, 0xed, 0x7c, 0xbf, 0x57, 0x3e, 0x13, 0xbb, 0x85, 0xe2, 0xf0, 0x95, 0x0f, 0x65, 0xf0, 0xc2,
+	0xd8, 0x4a, 0x86, 0x57, 0xc0, 0xbc, 0xdd, 0xc4, 0x94, 0xf0, 0x49, 0x5a, 0xac, 0x5d, 0x1c, 0xcc,
+	0xf7, 0x2d, 0xb7, 0xf1, 0x8b, 0x5e, 0x79, 0x25, 0xb0, 0xe0, 0x4d, 0xc8, 0xeb, 0x0e, 0xdf, 0x04,
+	0xd0, 0x6a, 0x50, 0xe2, 0xec, 0x13, 0xed, 0x75, 0x8f, 0x27, 0x0d, 0xcb, 0xe4, 0xf3, 0x91, 0xab,
+	0xad, 0xfa, 0x4e, 0xe0, 0x76, 0xac, 0x07, 0x4a, 0xb0, 0x82, 0x77, 0x00, 0x50, 0x2d, 0x53, 0x33,
+	0xdc, 0x0b, 0xf7, 0x59, 0xcd, 0x79, 0xd5, 0x32, 0x42, 0xce, 0x8a, 0xc7, 0x5c, 0x3b, 0xba, 0x57,
+	0x3d, 0xfb, 0x97, 0x95, 0x8d, 0x81, 0x41, 0xc0, 0x36, 0xc3, 0x26, 0x8a, 0x46, 0xfc, 0x55, 0xfe,
+	0x20, 0x83, 0x53, 0x9b, 0x4c, 0xd5, 0x66, 0x4a, 0x72, 0x3b, 0x21, 0x92, 0x7b, 0x39, 0xcd, 0xfc,
+	0x87, 0x42, 0x15, 0x72, 0x9b, 0x1e, 0xe1, 0xb6, 0xef, 0x4c, 0x0e, 0x31, 0x9e, 0xd2, 0xfe, 0x2c,
+	0x01, 0x18, 0x36, 0x98, 0x01, 0x93, 0xdd, 0x0d, 0x33, 0xd9, 0x8b, 0x13, 0x0f, 0x4e, 0x40, 0x60,
+	0x3f, 0x95, 0xa3, 0x83, 0xca, 0x2a, 0x6f, 0x55, 0xfe, 0x25, 0x81, 0x73, 0x49, 0x05, 0x91, 0x01,
+	0x66, 0xf8, 0x93, 0x0c, 0xce, 0x6e, 0x91, 0xb6, 0x8a, 0xd5, 0x26, 0x99, 0x2d, 0x3d, 0x68, 0x21,
+	0x7a, 0x48, 0xb3, 0x50, 0x27, 0xc4, 0x2b, 0xe4, 0x88, 0x56, 0x84, 0x23, 0xae, 0x4f, 0x89, 0x33,
+	0x9e, 0x28, 0xfe, 0x26, 0x81, 0x0b, 0x09, 0x56, 0x33, 0x60, 0x0b, 0x35, 0xcc, 0x16, 0xaf, 0x4c,
+	0x37, 0x4c, 0x01, 0x65, 0xfc, 0x4c, 0x4e, 0x1c, 0x5e, 0x66, 0x79, 0xe3, 0x7f, 0x12, 0xf8, 0x92,
+	0xb0, 0x48, 0x32, 0x40, 0x1e, 0x1f, 0xbb, 0xe4, 0x61, 0x99, 0xba, 0x75, 0xbd, 0xb6, 0xd1, 0xa1,
+	0xcc, 0x6a, 0x7b, 0xef, 0x86, 0xf0, 0x5d, 0xb0, 0xa8, 0xf2, 0x5f, 0x5b, 0xd8, 0x4e, 0x5d, 0x09,
+	0x27, 0xfb, 0xbd, 0xf2, 0xe2, 0xc6, 0xc0, 0x1c, 0x05, 0x9e, 0xe0, 0xbd, 0xe1, 0x5b, 0x5f, 0x2e,
+	0xe5, 0x9b, 0x4c, 0x42, 0x90, 0x8a, 0x5b, 0x68, 0x9b, 0x26, 0x73, 0xba, 0x01, 0x6f, 0x04, 0xef,
+	0x90, 0xab, 0xdf, 0x02, 0x8b, 0xc3, 0x0e, 0xf0, 0x34, 0xc8, 0xed, 0x91, 0xae, 0x37, 0x8f, 0xc8,
+	0xfd, 0x09, 0xcf, 0x81, 0xf9, 0x7d, 0xdc, 0xea, 0xf8, 0xd5, 0x88, 0xbc, 0x8b, 0x6b, 0xf2, 0x55,
+	0xa9, 0xf2, 0xbb, 0x3c, 0xb8, 0x90, 0x00, 0xc7, 0x9f, 0x11, 0x13, 0x00, 0xca, 0xb0, 0xa9, 0xe1,
+	0x96, 0x65, 0x12, 0x3f, 0x31, 0xaf, 0x4c, 0x37, 0x8c, 0xda, 0x29, 0x77, 0x7e, 0xea, 0x43, 0xaf,
+	0x68, 0x04, 0xc1, 0xc5, 0xf3, 0xdf, 0xbe, 0xeb, 0x84, 0x15, 0xe7, 0x9f, 0x1c, 0x1e, 0x1a, 0x7a,
+	0x45, 0x23, 0x08, 0xb0, 0x01, 0x0a, 0x6d, 0xd7, 0x84, 0xfa, 0xa4, 0x3e, 0x2d, 0x96, 0xf7, 0xea,
+	0xcf, 0x3d, 0x22, 0xdf, 0x33, 0x64, 0x60, 0xd9, 0xab, 0x88, 0xba, 0x5b, 0xeb, 0x8e, 0xff, 0x5c,
+	0x4f, 0x8b, 0x74, 0xba, 0xdf, 0x2b, 0x2f, 0x6f, 0x8c, 0xf8, 0x45, 0x21, 0x14, 0xb8, 0x03, 0xe6,
+	0x69, 0x13, 0x3b, 0x9a, 0xff, 0x32, 0x33, 0x2d, 0xdc, 0xa2, 0xcb, 0x03, 0x75, 0xd7, 0x21, 0xf2,
+	0xfc, 0x56, 0xfe, 0x29, 0x83, 0xe7, 0xfd, 0x9e, 0xc9, 0xdb, 0x22, 0x77, 0x06, 0x11, 0x78, 0x65,
+	0xf3, 0x52, 0xfa, 0x08, 0x38, 0xde, 0x5b, 0x96, 0x46, 0xe2, 0xf0, 0x70, 0x2f, 0x92, 0x55, 0x6f,
+	0xfe, 0xbe, 0x99, 0x02, 0x24, 0xd8, 0x16, 0x3a, 0x34, 0x99, 0xdf, 0x1f, 0x96, 0x49, 0x2e, 0x35,
+	0x8c, 0x57, 0x0d, 0x1c, 0x26, 0xa9, 0x3a, 0xd6, 0x46, 0x76, 0xa4, 0xf2, 0x7c, 0xf3, 0x67, 0x59,
+	0xb0, 0x1b, 0xf5, 0x47, 0x19, 0x9c, 0xf1, 0x13, 0x33, 0x53, 0xd9, 0xd3, 0x08, 0xc9, 0x9e, 0x57,
+	0xd3, 0x4f, 0xe3, 0x11, 0x44, 0xcf, 0xbd, 0x88, 0xe8, 0xa9, 0x4d, 0x85, 0x32, 0x5e, 0xf2, 0x3c,
+	0x92, 0xc0, 0xf9, 0x98, 0xcd, 0x0c, 0x04, 0x0f, 0x0e, 0x0b, 0x9e, 0x6f, 0x4f, 0x33, 0x44, 0x81,
+	0xdc, 0xf9, 0x4d, 0x21, 0x61, 0x68, 0x99, 0xdd, 0xdc, 0xf9, 0x68, 0xcc, 0xe6, 0xce, 0xeb, 0xe9,
+	0xb3, 0x3f, 0xe5, 0xb6, 0x0e, 0xfc, 0x89, 0x04, 0x56, 0xf6, 0x89, 0xc3, 0x0c, 0x35, 0x08, 0xc6,
+	0x5b, 0xe1, 0x36, 0xd3, 0x07, 0xf3, 0x5e, 0xd8, 0x11, 0x0f, 0xe5, 0x6c, 0xbf, 0x57, 0x5e, 0x89,
+	0xdc, 0x40, 0x51, 0x48, 0x2f, 0x0c, 0xab, 0xd5, 0x69, 0x93, 0xcd, 0x03, 0x1b, 0x9b, 0xd4, 0x95,
+	0x6a, 0x85, 0x89, 0xc3, 0x08, 0x3b, 0x1a, 0x09, 0x23, 0x7c, 0x03, 0x45, 0x21, 0xe1, 0x01, 0x58,
+	0x56, 0x47, 0x16, 0x98, 0xe2, 0x89, 0x49, 0x9f, 0xfb, 0xa8, 0x66, 0xf1, 0xc9, 0x7c, 0xa4, 0x15,
+	0x85, 0x90, 0x2a, 0xff, 0x91, 0x86, 0x7a, 0x27, 0x83, 0x0a, 0xb8, 0x09, 0x4e, 0x47, 0x57, 0x57,
+	0xf8, 0x15, 0x50, 0xe0, 0x8b, 0xea, 0xe0, 0x4c, 0x24, 0x60, 0x4e, 0xde, 0x8a, 0xfc, 0xbb, 0xa1,
+	0xd3, 0x13, 0xf9, 0xd0, 0xd3, 0x93, 0x5f, 0xe7, 0xc1, 0xaa, 0xb8, 0x5a, 0xe1, 0xed, 0x04, 0x69,
+	0x99, 0x48, 0x48, 0xc8, 0x3f, 0xa8, 0x72, 0xf3, 0x6e, 0x38, 0xa4, 0x4d, 0x4c, 0x46, 0xc7, 0x8a,
+	0xc8, 0xdb, 0x21, 0x11, 0x59, 0x98, 0xc4, 0xb3, 0x40, 0x2e, 0xde, 0x8c, 0xc8, 0xc5, 0xa3, 0x7b,
+	0x4d, 0x5a, 0xfa, 0xef, 0x26, 0x0a, 0xc3, 0xa3, 0xfb, 0x3c, 0x4c, 0xb5, 0xdc, 0x08, 0x4b, 0xc0,
+	0xa3, 0x3b, 0x8e, 0xab, 0x2d, 0x04, 0x16, 0xc8, 0x81, 0x6d, 0x39, 0x8c, 0x38, 0x3e, 0x67, 0x1d,
+	0xdd, 0x1b, 0xd7, 0x33, 0x9b, 0xbe, 0x35, 0x1a, 0xfa, 0xa9, 0xfc, 0x32, 0x17, 0xd4, 0x47, 0x9c,
+	0x46, 0xe0, 0xdd, 0x84, 0xfa, 0x18, 0xbb, 0x1c, 0x2b, 0x83, 0x13, 0x4d, 0xe5, 0xed, 0x0e, 0x36,
+	0x99, 0xc1, 0xba, 0x63, 0xab, 0xe4, 0x6e, 0xa8, 0x4a, 0xf2, 0x93, 0xfb, 0x17, 0xd4, 0x8a, 0x96,
+	0x28, 0x50, 0xd3, 0x22, 0x1c, 0x36, 0xc7, 0xdb, 0x83, 0x39, 0xce, 0x4d, 0xe4, 0x3e, 0x2e, 0xeb,
+	0xaf, 0x01, 0x10, 0x28, 0xd6, 0x94, 0xe7, 0xa5, 0xf7, 0xc1, 0xea, 0x56, 0xb7, 0xfe, 0xf6, 0x4d,
+	0xf1, 0x31, 0x29, 0x69, 0x37, 0x22, 0xc7, 0xa4, 0xbc, 0x05, 0xf9, 0x77, 0xe0, 0x55, 0xb0, 0xec,
+	0xfd, 0xfa, 0x1e, 0x31, 0xf4, 0x26, 0xf3, 0x59, 0xe6, 0x9c, 0x8f, 0xb9, 0xbc, 0x35, 0x72, 0x0f,
+	0x85, 0x7a, 0x56, 0x3e, 0x91, 0xc1, 0x0a, 0x07, 0x9f, 0xa9, 0x36, 0x7e, 0x3f, 0xa4, 0x8d, 0x53,
+	0xbd, 0x64, 0x85, 0x63, 0x15, 0x2a, 0xe3, 0x66, 0x44, 0x19, 0xbf, 0x3a, 0x05, 0xc6, 0x78, 0x5d,
+	0xfc, 0x17, 0x09, 0x9c, 0x8d, 0x58, 0xcc, 0x40, 0x15, 0xef, 0x84, 0x55, 0xf1, 0xb5, 0xc9, 0x87,
+	0x27, 0xd0, 0xc4, 0x9f, 0xe7, 0x63, 0xc3, 0x9a, 0x8d, 0x22, 0x7e, 0x0d, 0x40, 0x37, 0xb3, 0x64,
+	0xb7, 0xd3, 0xaa, 0x13, 0xb6, 0xed, 0x68, 0x86, 0x89, 0x5b, 0x7e, 0x45, 0x3f, 0xe7, 0xea, 0x81,
+	0x7a, 0xec, 0x2e, 0x4a, 0xb0, 0x18, 0x2a, 0xeb, 0xdc, 0x64, 0xca, 0x3a, 0x7f, 0x0c, 0xca, 0xfa,
+	0x41, 0xa2, 0xb2, 0x9e, 0x40, 0xcc, 0x0a, 0xd9, 0x22, 0x85, 0xae, 0xfe, 0x71, 0x82, 0xae, 0xf6,
+	0x16, 0xfd, 0x8d, 0xb4, 0xa1, 0x4c, 0xac, 0xaa, 0x2b, 0xff, 0x76, 0x5f, 0x2a, 0x93, 0x1e, 0xb7,
+	0x0c, 0x48, 0xca, 0xdf, 0x4b, 0xa0, 0x28, 0x4a, 0x9f, 0x2b, 0x42, 0xda, 0x5d, 0xfa, 0x41, 0x2b,
+	0xb5, 0xc2, 0xe3, 0x4b, 0x13, 0x77, 0x8b, 0x3c, 0x0f, 0x21, 0x11, 0x22, 0x3f, 0x21, 0x11, 0xf2,
+	0x99, 0x0c, 0x2e, 0xdc, 0x22, 0x8e, 0x6a, 0x99, 0xf8, 0x36, 0x73, 0xf0, 0x8c, 0xb7, 0x56, 0x26,
+	0xff, 0xaa, 0x46, 0x10, 0xf3, 0xb1, 0x7c, 0x55, 0x23, 0xc2, 0x3a, 0xfc, 0xab, 0x1a, 0x81, 0xe5,
+	0xd3, 0xfd, 0x55, 0x8d, 0x20, 0x68, 0xc1, 0xf2, 0xf2, 0xb1, 0x2c, 0x1c, 0x66, 0x66, 0x4f, 0x99,
+	0x3e, 0x94, 0xc1, 0x0b, 0x63, 0x8b, 0x26, 0x23, 0xc7, 0xd4, 0xb7, 0xf4, 0x9a, 0xd5, 0x31, 0x55,
+	0xe2, 0x3c, 0x23, 0xc7, 0xd4, 0x09, 0xf1, 0x1e, 0xcb, 0x31, 0x75, 0x12, 0xce, 0xe1, 0xc7, 0xd4,
+	0x09, 0x56, 0x4f, 0xf7, 0x31, 0x75, 0x42, 0xc0, 0x63, 0x8e, 0xa9, 0x05, 0xc9, 0xcf, 0xec, 0x31,
+	0xb5, 0xb0, 0x48, 0x32, 0x40, 0x1e, 0x0f, 0x65, 0x00, 0x6f, 0x59, 0x94, 0xe9, 0x0e, 0xa1, 0x33,
+	0xe5, 0x0e, 0x35, 0xc4, 0x1d, 0xdf, 0x4d, 0x53, 0xec, 0xb1, 0x70, 0x85, 0xd4, 0xb1, 0x17, 0xa1,
+	0x8e, 0x8d, 0xe9, 0x60, 0xc6, 0x33, 0xc7, 0x5f, 0x25, 0xf0, 0x5c, 0xdc, 0x68, 0x06, 0xc4, 0xd1,
+	0x08, 0x13, 0xc7, 0xcb, 0x53, 0x0d, 0x52, 0xc0, 0x1b, 0x1f, 0xc9, 0x49, 0x83, 0xcb, 0x2c, 0x6d,
+	0xfc, 0x57, 0x02, 0x45, 0x51, 0x81, 0x64, 0x85, 0x35, 0x1c, 0xeb, 0x60, 0xe6, 0xbb, 0x60, 0x53,
+	0xb0, 0x46, 0x2c, 0xdc, 0xe3, 0x61, 0x8d, 0x38, 0xcc, 0x11, 0x58, 0x23, 0x66, 0xf4, 0x94, 0xb3,
+	0x46, 0x2c, 0xde, 0x71, 0xac, 0x91, 0x98, 0xf8, 0xec, 0xb2, 0x86, 0xa0, 0x40, 0x32, 0xc0, 0x1a,
+	0xf7, 0xc0, 0x2a, 0x22, 0x9a, 0x41, 0x27, 0xff, 0x6f, 0xd3, 0x5a, 0xec, 0x58, 0x50, 0xf4, 0x09,
+	0xcb, 0x27, 0x32, 0x58, 0xe1, 0x60, 0xcf, 0xc8, 0x26, 0x7d, 0x24, 0xd6, 0x63, 0xd9, 0xa4, 0x8f,
+	0x62, 0x1c, 0xbe, 0x49, 0x1f, 0xb1, 0x78, 0xba, 0x37, 0xe9, 0x23, 0xc1, 0x0a, 0x28, 0xe9, 0x57,
+	0xf9, 0xd8, 0xb0, 0x32, 0xfb, 0xd9, 0xca, 0x83, 0x31, 0x9f, 0xad, 0x6c, 0xa6, 0xcd, 0xfc, 0x71,
+	0x6c, 0xae, 0xcf, 0xa7, 0x5e, 0x7f, 0x79, 0x28, 0xd3, 0x6d, 0xae, 0x27, 0x3e, 0x26, 0x19, 0xd9,
+	0x5c, 0x17, 0xa5, 0x0f, 0xde, 0x00, 0xf3, 0x8e, 0x7b, 0x6f, 0xb2, 0xcd, 0x75, 0xee, 0x16, 0x79,
+	0x1e, 0x8e, 0x65, 0x73, 0xfd, 0x4d, 0xb0, 0x34, 0x52, 0xee, 0xf0, 0x25, 0x70, 0x92, 0x61, 0x47,
+	0x27, 0xec, 0x3d, 0xe2, 0xf0, 0xcf, 0x8e, 0xbc, 0x49, 0x3b, 0xef, 0x67, 0xe0, 0xe4, 0x3b, 0xa3,
+	0x37, 0x51, 0xb8, 0x6f, 0x4d, 0x79, 0xf8, 0xb8, 0x34, 0xf7, 0xe9, 0xe3, 0xd2, 0xdc, 0xa3, 0xc7,
+	0xa5, 0xb9, 0x1f, 0xf5, 0x4b, 0xd2, 0xc3, 0x7e, 0x49, 0xfa, 0xb4, 0x5f, 0x92, 0x1e, 0xf5, 0x4b,
+	0xd2, 0xdf, 0xfb, 0x25, 0xe9, 0xe7, 0x9f, 0x97, 0xe6, 0x7e, 0xb0, 0x30, 0x28, 0xb9, 0xff, 0x07,
+	0x00, 0x00, 0xff, 0xff, 0x22, 0xc4, 0x39, 0x15, 0xb5, 0x3d, 0x00, 0x00,
 }
 
 func (m *ConfigNode) Marshal() (dAtA []byte, err error) {
@@ -2249,6 +2418,148 @@ func (m *MemcachedOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
+func (m *MongoDBCustomConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MongoDBCustomConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MongoDBCustomConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MongoDBCustomConfigSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MongoDBCustomConfigSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MongoDBCustomConfigSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReplicaSet != nil {
+		{
+			size, err := m.ReplicaSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Shard != nil {
+		{
+			size, err := m.Shard.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ConfigServer != nil {
+		{
+			size, err := m.ConfigServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Mongos != nil {
+		{
+			size, err := m.Mongos.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Standalone != nil {
+		{
+			size, err := m.Standalone.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *MongoDBHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2433,6 +2744,30 @@ func (m *MongoDBOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.CustomConfig != nil {
+		{
+			size, err := m.CustomConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.VerticalScaling != nil {
 		{
 			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
@@ -2581,6 +2916,18 @@ func (m *MongoDBVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
+	if m.ReplicaSet != nil {
+		{
+			size, err := m.ReplicaSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.Exporter != nil {
 		{
 			size, err := m.Exporter.MarshalToSizedBuffer(dAtA[:i])
@@ -2620,6 +2967,77 @@ func (m *MongoDBVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, err
 	if m.Mongos != nil {
 		{
 			size, err := m.Mongos.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Standalone != nil {
+		{
+			size, err := m.Standalone.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MongoDBVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MongoDBVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MongoDBVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReplicaSet != nil {
+		{
+			size, err := m.ReplicaSet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Shard != nil {
+		{
+			size, err := m.Shard.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.ConfigServer != nil {
+		{
+			size, err := m.ConfigServer.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3752,6 +4170,39 @@ func (m *ProxySQLOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
+func (m *RedisHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RedisHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RedisHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Replicas != nil {
+		i = encodeVarintGenerated(dAtA, i, uint64(*m.Replicas))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Master != nil {
+		i = encodeVarintGenerated(dAtA, i, uint64(*m.Master))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *RedisOpsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3872,6 +4323,30 @@ func (m *RedisOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -3944,6 +4419,53 @@ func (m *RedisOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *RedisVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RedisVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RedisVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Exporter != nil {
+		{
+			size, err := m.Exporter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Redis != nil {
+		{
+			size, err := m.Redis.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -4219,6 +4741,56 @@ func (m *MemcachedOpsRequestStatus) Size() (n int) {
 	return n
 }
 
+func (m *MongoDBCustomConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *MongoDBCustomConfigSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Standalone != nil {
+		l = m.Standalone.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Mongos != nil {
+		l = m.Mongos.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.ConfigServer != nil {
+		l = m.ConfigServer.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Shard != nil {
+		l = m.Shard.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.ReplicaSet != nil {
+		l = m.ReplicaSet.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
 func (m *MongoDBHorizontalScalingSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4297,6 +4869,14 @@ func (m *MongoDBOpsRequestSpec) Size() (n int) {
 		l = m.VerticalScaling.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.CustomConfig != nil {
+		l = m.CustomConfig.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -4353,6 +4933,35 @@ func (m *MongoDBVerticalScalingSpec) Size() (n int) {
 	}
 	if m.Exporter != nil {
 		l = m.Exporter.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.ReplicaSet != nil {
+		l = m.ReplicaSet.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *MongoDBVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Standalone != nil {
+		l = m.Standalone.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.ConfigServer != nil {
+		l = m.ConfigServer.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Shard != nil {
+		l = m.Shard.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.ReplicaSet != nil {
+		l = m.ReplicaSet.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
 	return n
@@ -4744,6 +5353,21 @@ func (m *ProxySQLOpsRequestStatus) Size() (n int) {
 	return n
 }
 
+func (m *RedisHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Master != nil {
+		n += 1 + sovGenerated(uint64(*m.Master))
+	}
+	if m.Replicas != nil {
+		n += 1 + sovGenerated(uint64(*m.Replicas))
+	}
+	return n
+}
+
 func (m *RedisOpsRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4790,6 +5414,14 @@ func (m *RedisOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -4807,6 +5439,23 @@ func (m *RedisOpsRequestStatus) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovGenerated(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *RedisVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Redis != nil {
+		l = m.Redis.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Exporter != nil {
+		l = m.Exporter.Size()
+		n += 1 + l + sovGenerated(uint64(l))
 	}
 	return n
 }
@@ -5022,6 +5671,41 @@ func (this *MemcachedOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *MongoDBCustomConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&MongoDBCustomConfig{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v11.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MongoDBCustomConfigSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MongoDBCustomConfigSpec{`,
+		`Standalone:` + strings.Replace(this.Standalone.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
+		`Mongos:` + strings.Replace(this.Mongos.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
+		`ConfigServer:` + strings.Replace(this.ConfigServer.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
+		`Shard:` + strings.Replace(this.Shard.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
+		`ReplicaSet:` + strings.Replace(this.ReplicaSet.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *MongoDBHorizontalScalingSpec) String() string {
 	if this == nil {
 		return "nil"
@@ -5073,6 +5757,8 @@ func (this *MongoDBOpsRequestSpec) String() string {
 		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
 		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "MongoDBHorizontalScalingSpec", "MongoDBHorizontalScalingSpec", 1) + `,`,
 		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "MongoDBVerticalScalingSpec", "MongoDBVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "MongoDBVolumeExpansionSpec", "MongoDBVolumeExpansionSpec", 1) + `,`,
+		`CustomConfig:` + strings.Replace(this.CustomConfig.String(), "MongoDBCustomConfigSpec", "MongoDBCustomConfigSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5115,6 +5801,20 @@ func (this *MongoDBVerticalScalingSpec) String() string {
 		`ConfigServer:` + strings.Replace(fmt.Sprintf("%v", this.ConfigServer), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
 		`Shard:` + strings.Replace(fmt.Sprintf("%v", this.Shard), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
 		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
+		`ReplicaSet:` + strings.Replace(fmt.Sprintf("%v", this.ReplicaSet), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MongoDBVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MongoDBVolumeExpansionSpec{`,
+		`Standalone:` + strings.Replace(fmt.Sprintf("%v", this.Standalone), "Quantity", "resource.Quantity", 1) + `,`,
+		`ConfigServer:` + strings.Replace(fmt.Sprintf("%v", this.ConfigServer), "Quantity", "resource.Quantity", 1) + `,`,
+		`Shard:` + strings.Replace(fmt.Sprintf("%v", this.Shard), "Quantity", "resource.Quantity", 1) + `,`,
+		`ReplicaSet:` + strings.Replace(fmt.Sprintf("%v", this.ReplicaSet), "Quantity", "resource.Quantity", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5439,6 +6139,17 @@ func (this *ProxySQLOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *RedisHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RedisHorizontalScalingSpec{`,
+		`Master:` + valueToStringGenerated(this.Master) + `,`,
+		`Replicas:` + valueToStringGenerated(this.Replicas) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *RedisOpsRequest) String() string {
 	if this == nil {
 		return "nil"
@@ -5475,6 +6186,8 @@ func (this *RedisOpsRequestSpec) String() string {
 		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
 		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "RedisHorizontalScalingSpec", "RedisHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "RedisVerticalScalingSpec", "RedisVerticalScalingSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5492,6 +6205,17 @@ func (this *RedisOpsRequestStatus) String() string {
 		`Phase:` + fmt.Sprintf("%v", this.Phase) + `,`,
 		`ObservedGeneration:` + fmt.Sprintf("%v", this.ObservedGeneration) + `,`,
 		`Conditions:` + repeatedStringForConditions + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RedisVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RedisVerticalScalingSpec{`,
+		`Redis:` + strings.Replace(fmt.Sprintf("%v", this.Redis), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
+		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7427,6 +8151,455 @@ func (m *MemcachedOpsRequestStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MongoDBCustomConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MongoDBCustomConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MongoDBCustomConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v11.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MongoDBCustomConfigSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MongoDBCustomConfigSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Standalone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Standalone == nil {
+				m.Standalone = &MongoDBCustomConfig{}
+			}
+			if err := m.Standalone.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mongos", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Mongos == nil {
+				m.Mongos = &MongoDBCustomConfig{}
+			}
+			if err := m.Mongos.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigServer == nil {
+				m.ConfigServer = &MongoDBCustomConfig{}
+			}
+			if err := m.ConfigServer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Shard", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Shard == nil {
+				m.Shard = &MongoDBCustomConfig{}
+			}
+			if err := m.Shard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReplicaSet", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReplicaSet == nil {
+				m.ReplicaSet = &MongoDBCustomConfig{}
+			}
+			if err := m.ReplicaSet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MongoDBHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -8082,6 +9255,78 @@ func (m *MongoDBOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &MongoDBVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CustomConfig == nil {
+				m.CustomConfig = &MongoDBCustomConfigSpec{}
+			}
+			if err := m.CustomConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -8541,6 +9786,239 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				m.Exporter = &v11.ResourceRequirements{}
 			}
 			if err := m.Exporter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReplicaSet", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReplicaSet == nil {
+				m.ReplicaSet = &v11.ResourceRequirements{}
+			}
+			if err := m.ReplicaSet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MongoDBVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MongoDBVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MongoDBVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Standalone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Standalone == nil {
+				m.Standalone = &resource.Quantity{}
+			}
+			if err := m.Standalone.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigServer == nil {
+				m.ConfigServer = &resource.Quantity{}
+			}
+			if err := m.ConfigServer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Shard", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Shard == nil {
+				m.Shard = &resource.Quantity{}
+			}
+			if err := m.Shard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReplicaSet", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReplicaSet == nil {
+				m.ReplicaSet = &resource.Quantity{}
+			}
+			if err := m.ReplicaSet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -11769,6 +13247,99 @@ func (m *ProxySQLOpsRequestStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *RedisHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RedisHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RedisHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Master", wireType)
+			}
+			var v int32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Master = &v
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Replicas", wireType)
+			}
+			var v int32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Replicas = &v
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *RedisOpsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -12171,6 +13742,78 @@ func (m *RedisOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &RedisHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &RedisVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -12306,6 +13949,131 @@ func (m *RedisOpsRequestStatus) Unmarshal(dAtA []byte) error {
 			}
 			m.Conditions = append(m.Conditions, v12.Condition{})
 			if err := m.Conditions[len(m.Conditions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RedisVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RedisVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RedisVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Redis", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Redis == nil {
+				m.Redis = &v11.ResourceRequirements{}
+			}
+			if err := m.Redis.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Exporter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Exporter == nil {
+				m.Exporter = &v11.ResourceRequirements{}
+			}
+			if err := m.Exporter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

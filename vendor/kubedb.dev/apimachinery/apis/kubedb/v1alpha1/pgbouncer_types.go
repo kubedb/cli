@@ -19,6 +19,7 @@ package v1alpha1
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -76,11 +77,20 @@ type PgBouncerSpec struct {
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,8,opt,name=monitor"`
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *TLSConfig `json:"tls,omitempty" protobuf:"bytes,9,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,9,opt,name=tls"`
 	// Indicates that the database is paused and controller will not sync any changes made to this spec.
 	// +optional
 	Paused bool `json:"paused,omitempty" protobuf:"varint,10,opt,name=paused"`
 }
+
+// +kubebuilder:validation:Enum=server;archiver;metrics-exporter
+type PgBouncerCertificateAlias string
+
+const (
+	PgBouncerServerCert          PgBouncerCertificateAlias = "server"
+	PgBouncerClientCert          PgBouncerCertificateAlias = "client"
+	PgBouncerMetricsExporterCert PgBouncerCertificateAlias = "metrics-exporter"
+)
 
 type Databases struct {
 	// Alias to uniquely identify a target database running inside a specific Postgres instance.

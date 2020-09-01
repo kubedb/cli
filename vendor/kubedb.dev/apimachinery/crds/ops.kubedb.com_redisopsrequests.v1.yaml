@@ -50,12 +50,24 @@ spec:
             description: RedisOpsRequestSpec is the spec for RedisOpsRequest
             properties:
               databaseRef:
-                description: Specifies the Elasticsearch reference
+                description: Specifies the Redis reference
                 properties:
                   name:
                     description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                       TODO: Add other useful fields. apiVersion, kind, uid?'
                     type: string
+                type: object
+              horizontalScaling:
+                description: Specifies information necessary for horizontal scaling.
+                properties:
+                  master:
+                    description: Number of Masters in the cluster
+                    format: int32
+                    type: integer
+                  replicas:
+                    description: specifies the number of replica for the master
+                    format: int32
+                    type: integer
                 type: object
               type:
                 description: 'Specifies the ops request type: Upgrade, HorizontalScaling,
@@ -67,6 +79,7 @@ spec:
                 - VolumeExpansion
                 - Restart
                 - RotateCertificates
+                - Reconfigure
                 type: string
               upgrade:
                 description: Specifies the field information that needed to be upgraded
@@ -74,6 +87,64 @@ spec:
                   targetVersion:
                     description: Specifies the target version name from catalog
                     type: string
+                type: object
+              verticalScaling:
+                description: Specifies information necessary for vertical scaling
+                properties:
+                  exporter:
+                    description: ResourceRequirements describes the compute resource
+                      requirements.
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                    type: object
+                  redis:
+                    description: ResourceRequirements describes the compute resource
+                      requirements.
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                    type: object
                 type: object
             required:
             - databaseRef

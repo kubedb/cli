@@ -29,24 +29,47 @@ const (
 	NodeDeleted               = "NodeDeleted"
 	NodeRestarted             = "NodeRestarted"
 	PauseDatabase             = "PauseDatabase"
-	PausingDatabase           = "PausingDatabase"
-	PausedDatabase            = "PausedDatabase"
 	Progressing               = "Progressing"
 	ResumeDatabase            = "ResumeDatabase"
-	ResumingDatabase          = "ResumingDatabase"
-	ResumedDatabase           = "ResumedDatabase"
 	ScalingDatabase           = "Scaling"
 	ScalingDown               = "ScalingDown"
 	ScalingUp                 = "ScalingUp"
-	StartingBalancer          = "StartingBalancer"
-	StoppingBalancer          = "StoppingBalancer"
 	Successful                = "Successful"
 	Updating                  = "Updating"
-	UpgradedVersion           = "UpgradedVersion"
-	UpgradingVersion          = "UpgradingVersion"
+	Upgrading                 = "Upgrading"
+	UpgradeVersion            = "UpgradeVersion"
 	VerticalScalingDatabase   = "VerticalScaling"
 	VotingExclusionAdded      = "VotingExclusionAdded"
 	VotingExclusionDeleted    = "VotingExclusionDeleted"
+	UpdateStatefulSets        = "UpdateStatefulSets"
+
+	// MongoDB Constants
+	StartingBalancer            = "StartingBalancer"
+	StoppingBalancer            = "StoppingBalancer"
+	UpdateShardImage            = "UpdateShardImage"
+	UpdateStatefulSetResources  = "UpdateStatefulSetResources"
+	UpdateShardResources        = "UpdateShardResources"
+	ScaleDownShard              = "ScaleDownShard"
+	ScaleUpShard                = "ScaleUpShard"
+	UpdateReplicaSetImage       = "UpdateReplicaSetImage"
+	UpdateConfigServerImage     = "UpdateConfigServerImage"
+	UpdateMongosImage           = "UpdateMongosImage"
+	UpdateReplicaSetResources   = "UpdateReplicaSetResources"
+	UpdateConfigServerResources = "UpdateConfigServerResources"
+	UpdateMongosResources       = "UpdateMongosResources"
+	FlushRouterConfig           = "FlushRouterConfig"
+	ScaleDownReplicaSet         = "ScaleDownReplicaSet"
+	ScaleUpReplicaSet           = "ScaleUpReplicaSet"
+	ScaleUpShardReplicas        = "ScaleUpShardReplicas"
+	ScaleDownShardReplicas      = "ScaleDownShardReplicas"
+	ScaleDownConfigServer       = "ScaleDownConfigServer "
+	ScaleUpConfigServer         = "ScaleUpConfigServer "
+	ScaleMongos                 = "ScaleMongos"
+	VolumeExpansion             = "VolumeExpansion"
+	ReconfigureReplicaset       = "ReconfigureReplicaset"
+	ReconfigureMongos           = "ReconfigureMongos"
+	ReconfigureShard            = "ReconfigureShard"
+	ReconfigureConfigServer     = "ReconfigureConfigServer"
 )
 
 type OpsRequestPhase string
@@ -66,7 +89,7 @@ const (
 	OpsRequestDenied OpsRequestPhase = "Denied"
 )
 
-// +kubebuilder:validation:Enum=Upgrade;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;RotateCertificates
+// +kubebuilder:validation:Enum=Upgrade;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;RotateCertificates;Reconfigure
 type OpsRequestType string
 
 const (
@@ -82,6 +105,8 @@ const (
 	OpsRequestTypeRestart OpsRequestType = "Restart"
 	// used for RotateCertificates operation
 	OpsRequestTypeRotateCertificates OpsRequestType = "RotateCertificates"
+	// used for Reconfigure operation
+	OpsRequestTypeReconfigure OpsRequestType = "Reconfigure"
 )
 
 type UpgradeSpec struct {

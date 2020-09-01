@@ -35,8 +35,8 @@ github.com/chai2010/gettext-go/gettext
 github.com/chai2010/gettext-go/gettext/mo
 github.com/chai2010/gettext-go/gettext/plural
 github.com/chai2010/gettext-go/gettext/po
-# github.com/cpuguy83/go-md2man v1.0.10
-github.com/cpuguy83/go-md2man/md2man
+# github.com/cpuguy83/go-md2man/v2 v2.0.0
+github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -134,17 +134,21 @@ github.com/modern-go/concurrent
 github.com/modern-go/reflect2
 # github.com/peterbourgon/diskv v2.0.1+incompatible
 github.com/peterbourgon/diskv
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/robfig/cron/v3 v3.0.1
 github.com/robfig/cron/v3
 # github.com/russross/blackfriday v1.5.2
 github.com/russross/blackfriday
+# github.com/russross/blackfriday/v2 v2.0.1
+github.com/russross/blackfriday/v2
 # github.com/sergi/go-diff v1.0.0
 github.com/sergi/go-diff/diffmatchpatch
+# github.com/shurcooL/sanitized_anchor_name v1.0.0
+github.com/shurcooL/sanitized_anchor_name
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
-# github.com/spf13/cobra v0.0.5
+# github.com/spf13/cobra v1.0.0
 github.com/spf13/cobra
 github.com/spf13/cobra/doc
 # github.com/spf13/pflag v1.0.5
@@ -156,7 +160,7 @@ github.com/yudai/gojsondiff/formatter
 github.com/yudai/golcs
 # golang.org/x/crypto v0.0.0-20200429183012-4b2356b1ed79
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
+# golang.org/x/net v0.0.0-20200421231249-e086a090c8fd
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/http/httpguts
@@ -206,7 +210,7 @@ google.golang.org/appengine/urlfetch
 gopkg.in/inf.v0
 # gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2
-# k8s.io/api v0.18.3 => github.com/kmodules/api v0.18.4-0.20200524125823-c8bc107809b9
+# k8s.io/api v0.18.5 => github.com/kmodules/api v0.18.4-0.20200524125823-c8bc107809b9
 k8s.io/api/admission/v1
 k8s.io/api/admission/v1beta1
 k8s.io/api/admissionregistration/v1
@@ -250,7 +254,7 @@ k8s.io/api/settings/v1alpha1
 k8s.io/api/storage/v1
 k8s.io/api/storage/v1alpha1
 k8s.io/api/storage/v1beta1
-# k8s.io/apiextensions-apiserver v0.18.3
+# k8s.io/apiextensions-apiserver v0.18.5
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1
@@ -258,7 +262,7 @@ k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
-# k8s.io/apimachinery v0.18.3 => github.com/kmodules/apimachinery v0.19.0-alpha.0.0.20200520235721-10b58e57a423
+# k8s.io/apimachinery v0.18.5 => github.com/kmodules/apimachinery v0.19.0-alpha.0.0.20200520235721-10b58e57a423
 k8s.io/apimachinery/pkg/api/equality
 k8s.io/apimachinery/pkg/api/errors
 k8s.io/apimachinery/pkg/api/meta
@@ -309,7 +313,7 @@ k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/third_party/forked/golang/json
 k8s.io/apimachinery/third_party/forked/golang/netutil
 k8s.io/apimachinery/third_party/forked/golang/reflect
-# k8s.io/cli-runtime v0.18.3
+# k8s.io/cli-runtime v0.18.5
 k8s.io/cli-runtime/pkg/genericclioptions
 k8s.io/cli-runtime/pkg/kustomize
 k8s.io/cli-runtime/pkg/kustomize/k8sdeps
@@ -410,7 +414,7 @@ k8s.io/client-go/util/homedir
 k8s.io/client-go/util/jsonpath
 k8s.io/client-go/util/keyutil
 k8s.io/client-go/util/workqueue
-# k8s.io/component-base v0.18.3
+# k8s.io/component-base v0.18.5
 k8s.io/component-base/cli/flag
 k8s.io/component-base/version
 # k8s.io/klog v1.0.0
@@ -419,7 +423,7 @@ k8s.io/klog
 k8s.io/kube-openapi/pkg/common
 k8s.io/kube-openapi/pkg/util/proto
 k8s.io/kube-openapi/pkg/util/proto/validation
-# k8s.io/kubectl v0.18.3
+# k8s.io/kubectl v0.18.5
 k8s.io/kubectl/pkg/cmd/util
 k8s.io/kubectl/pkg/describe
 k8s.io/kubectl/pkg/generated
@@ -446,7 +450,7 @@ k8s.io/kubernetes/pkg/util/hash
 k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20200818171030-24b2ce405feb
+# kmodules.xyz/client-go v0.0.0-20200901064306-0f1faee534af
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
@@ -465,7 +469,7 @@ kmodules.xyz/custom-resources/client/clientset/versioned
 kmodules.xyz/custom-resources/client/clientset/versioned/scheme
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.0.0-20200525002655-2aa50cb10ce9
+# kmodules.xyz/monitoring-agent-api v0.0.0-20200828051750-42aa8e7852f3
 kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.0.0-20200521103120-92080446e04d
 kmodules.xyz/objectstore-api/api/v1
@@ -473,8 +477,10 @@ kmodules.xyz/objectstore-api/api/v1
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20200521101241-adf06150535c
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.14.0-beta.1
+# kubedb.dev/apimachinery v0.14.0-beta.1.0.20200901165349-2d1b5878a345
 kubedb.dev/apimachinery/apis
+kubedb.dev/apimachinery/apis/autoscaling
+kubedb.dev/apimachinery/apis/autoscaling/v1alpha1
 kubedb.dev/apimachinery/apis/catalog
 kubedb.dev/apimachinery/apis/catalog/v1alpha1
 kubedb.dev/apimachinery/apis/config

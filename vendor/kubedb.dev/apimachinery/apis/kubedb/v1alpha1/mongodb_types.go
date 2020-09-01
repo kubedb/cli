@@ -20,6 +20,7 @@ import (
 	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -107,7 +108,7 @@ type MongoDBSpec struct {
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *TLSConfig `json:"tls,omitempty" protobuf:"bytes,16,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,16,opt,name=tls"`
 
 	// Secret for KeyFile. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
 	KeyFile *core.SecretVolumeSource `json:"keyFile,omitempty" protobuf:"bytes,17,opt,name=keyFile"`
@@ -123,7 +124,20 @@ type MongoDBSpec struct {
 	// TerminationPolicy controls the delete operation for database
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,20,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+
+	// StorageEngine can be wiredTiger (default) or inMemory
+	// See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
+	StorageEngine StorageEngine `json:"storageEngine,omitempty" protobuf:"bytes,21,opt,name=storageEngine,casttype=StorageEngine"`
 }
+
+// +kubebuilder:validation:Enum=server;client;metrics-exporter
+type MongoDBCertificateAlias string
+
+const (
+	MongoDBServerCert          MongoDBCertificateAlias = "server"
+	MongoDBClientCert          MongoDBCertificateAlias = "client"
+	MongoDBMetricsExporterCert MongoDBCertificateAlias = "metrics-exporter"
+)
 
 // ClusterAuthMode represents the clusterAuthMode of mongodb clusters ( replicaset or sharding)
 // ref: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-clusterauthmode
@@ -167,6 +181,18 @@ const (
 
 	// SSLModeRequireSSL represents `requiteSSL` sslmode. It ensures that the server uses and accepts only TLS/SSL encrypted connections.
 	SSLModeRequireSSL SSLMode = "requireSSL"
+)
+
+// StorageEngine represents storage engine of mongodb clusters.
+// ref: https://docs.mongodb.com/manual/core/storage-engines/
+type StorageEngine string
+
+const (
+	// StorageEngineWiredTiger represents `wiredTiger` storage engine of mongodb.
+	StorageEngineWiredTiger StorageEngine = "wiredTiger"
+
+	// StorageEngineInMemory represents `inMemory` storage engine of mongodb.
+	StorageEngineInMemory StorageEngine = "inMemory"
 )
 
 type MongoDBReplicaSet struct {

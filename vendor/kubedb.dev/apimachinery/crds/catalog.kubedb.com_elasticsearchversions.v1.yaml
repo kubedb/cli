@@ -61,6 +61,7 @@ spec:
                 - SearchGuard
                 - None
                 - X-Pack
+                - OpenDistro
                 type: string
               db:
                 description: Database Image
@@ -118,7 +119,6 @@ spec:
             - exporter
             - initContainer
             - podSecurityPolicies
-            - tools
             - version
             type: object
         type: object

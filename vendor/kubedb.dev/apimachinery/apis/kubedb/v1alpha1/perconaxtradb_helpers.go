@@ -128,7 +128,11 @@ func (p perconaXtraDBStatsService) ServiceName() string {
 }
 
 func (p perconaXtraDBStatsService) ServiceMonitorName() string {
-	return fmt.Sprintf("kubedb-%s-%s", p.Namespace, p.Name)
+	return p.ServiceName()
+}
+
+func (p perconaXtraDBStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return p.OffshootLabels()
 }
 
 func (p perconaXtraDBStatsService) Path() string {

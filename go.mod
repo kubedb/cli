@@ -6,18 +6,18 @@ require (
 	github.com/appscode/go v0.0.0-20200323182826-54e98e09185a
 	github.com/fatih/camelcase v1.0.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/spf13/cobra v0.0.5
-	k8s.io/api v0.18.3
-	k8s.io/apimachinery v0.18.3
-	k8s.io/cli-runtime v0.18.3
+	github.com/spf13/cobra v1.0.0
+	k8s.io/api v0.18.5
+	k8s.io/apimachinery v0.18.5
+	k8s.io/cli-runtime v0.18.5
 	k8s.io/client-go v12.0.0+incompatible
-	k8s.io/component-base v0.18.3
-	k8s.io/kubectl v0.18.3
-	kmodules.xyz/client-go v0.0.0-20200818171030-24b2ce405feb
+	k8s.io/component-base v0.18.5
+	k8s.io/kubectl v0.18.5
+	kmodules.xyz/client-go v0.0.0-20200901064306-0f1faee534af
 	kmodules.xyz/custom-resources v0.0.0-20200604135349-9e9f5c4fdba9
-	kmodules.xyz/monitoring-agent-api v0.0.0-20200525002655-2aa50cb10ce9
+	kmodules.xyz/monitoring-agent-api v0.0.0-20200828051750-42aa8e7852f3
 	kmodules.xyz/objectstore-api v0.0.0-20200521103120-92080446e04d
-	kubedb.dev/apimachinery v0.14.0-beta.1
+	kubedb.dev/apimachinery v0.14.0-beta.1.0.20200901165349-2d1b5878a345
 	stash.appscode.dev/apimachinery v0.10.0
 )
 
