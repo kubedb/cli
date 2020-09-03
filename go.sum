@@ -1255,6 +1255,8 @@ kmodules.xyz/client-go v0.0.0-20200818171030-24b2ce405feb h1:0yIIoTfkhR4JAgx8UyX
 kmodules.xyz/client-go v0.0.0-20200818171030-24b2ce405feb/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
 kmodules.xyz/client-go v0.0.0-20200901064306-0f1faee534af h1:Ly3rbfwRgQumrPnXVpdQsW2UqZiBpsEe40oik8AFNAY=
 kmodules.xyz/client-go v0.0.0-20200901064306-0f1faee534af/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
+kmodules.xyz/client-go v0.0.0-20200903033732-dab39b86c81b h1:Erhqi9TZEqKmiIO2Lc7gX18JMH474wIJsoZ6xf//Lf0=
+kmodules.xyz/client-go v0.0.0-20200903033732-dab39b86c81b/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
 kmodules.xyz/constants v0.0.0-20200506032633-a21e58ceec72/go.mod h1:DbiFk1bJ1KEO94t1SlAn7tzc+Zz95rSXgyUKa2nzPmY=
 kmodules.xyz/crd-schema-fuzz v0.0.0-20200521005638-2433a187de95/go.mod h1:jpu8xFsDKd6kAWUAKk8oTu/GQGBWqhrcaDeOJdaCJnk=
 kmodules.xyz/custom-resources v0.0.0-20200604135349-9e9f5c4fdba9 h1:W+k1qhU0W1rptia2PWPOb7IWUvWnf31EMnatXt7MW6w=
