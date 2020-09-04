@@ -24,7 +24,6 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
-	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -159,9 +158,6 @@ func (m *MySQL) SetDefaults() {
 	}
 	if m.Spec.StorageType == "" {
 		m.Spec.StorageType = StorageTypeDurable
-	}
-	if m.Spec.UpdateStrategy.Type == "" {
-		m.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if m.Spec.TerminationPolicy == "" {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete

@@ -24,7 +24,6 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
-	apps "k8s.io/api/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -154,9 +153,6 @@ func (e *Etcd) SetDefaults() {
 	}
 	if e.Spec.StorageType == "" {
 		e.Spec.StorageType = StorageTypeDurable
-	}
-	if e.Spec.UpdateStrategy.Type == "" {
-		e.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if e.Spec.TerminationPolicy == "" {
 		e.Spec.TerminationPolicy = TerminationPolicyDelete

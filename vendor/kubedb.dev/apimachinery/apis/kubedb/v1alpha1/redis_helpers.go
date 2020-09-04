@@ -24,7 +24,6 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
-	apps "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -181,9 +180,6 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	}
 	if r.Spec.StorageType == "" {
 		r.Spec.StorageType = StorageTypeDurable
-	}
-	if r.Spec.UpdateStrategy.Type == "" {
-		r.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if r.Spec.TerminationPolicy == "" {
 		r.Spec.TerminationPolicy = TerminationPolicyDelete

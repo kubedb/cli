@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -107,30 +106,25 @@ type MySQLSpec struct {
 	// +optional
 	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,12,opt,name=serviceTemplate"`
 
-	// updateStrategy indicates the StatefulSetUpdateStrategy that will be
-	// employed to update Pods in the StatefulSet when a revision is made to
-	// Template.
-	UpdateStrategy apps.StatefulSetUpdateStrategy `json:"updateStrategy,omitempty" protobuf:"bytes,13,opt,name=updateStrategy"`
-
 	// Indicates that the database server need to be encrypted connections(ssl)
 	// +optional
-	RequireSSL bool `json:"requireSSL,omitempty" protobuf:"varint,14,opt,name=requireSSL"`
+	RequireSSL bool `json:"requireSSL,omitempty" protobuf:"varint,13,opt,name=requireSSL"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,14,opt,name=tls"`
 
 	// Indicates that the database is paused and controller will not sync any changes made to this spec.
 	// +optional
-	Paused bool `json:"paused,omitempty" protobuf:"varint,16,opt,name=paused"`
+	Paused bool `json:"paused,omitempty" protobuf:"varint,15,opt,name=paused"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,17,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,16,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,17,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter

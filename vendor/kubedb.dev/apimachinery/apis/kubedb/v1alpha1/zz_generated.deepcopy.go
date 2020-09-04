@@ -498,7 +498,6 @@ func (in *EtcdSpec) DeepCopyInto(out *EtcdSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	return
 }
 
@@ -671,7 +670,6 @@ func (in *MariaDBSpec) DeepCopyInto(out *MariaDBSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -808,7 +806,6 @@ func (in *MemcachedSpec) DeepCopyInto(out *MemcachedSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -1072,7 +1069,6 @@ func (in *MongoDBSpec) DeepCopyInto(out *MongoDBSpec) {
 		(*in).DeepCopyInto(*out)
 	}
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -1265,7 +1261,6 @@ func (in *MySQLSpec) DeepCopyInto(out *MySQLSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -1396,7 +1391,6 @@ func (in *PerconaXtraDBSpec) DeepCopyInto(out *PerconaXtraDBSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -1696,7 +1690,6 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
 	in.ReplicaServiceTemplate.DeepCopyInto(&out.ReplicaServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -1875,7 +1868,6 @@ func (in *ProxySQLSpec) DeepCopyInto(out *ProxySQLSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)
@@ -2048,7 +2040,6 @@ func (in *RedisSpec) DeepCopyInto(out *RedisSpec) {
 	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	in.ServiceTemplate.DeepCopyInto(&out.ServiceTemplate)
-	in.UpdateStrategy.DeepCopyInto(&out.UpdateStrategy)
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS
 		*out = new(clientgoapiv1.TLSConfig)

@@ -24,7 +24,6 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
-	apps "k8s.io/api/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -150,9 +149,6 @@ func (p *Postgres) SetDefaults() {
 
 	if p.Spec.StorageType == "" {
 		p.Spec.StorageType = StorageTypeDurable
-	}
-	if p.Spec.UpdateStrategy.Type == "" {
-		p.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
 	}
 	if p.Spec.TerminationPolicy == "" {
 		p.Spec.TerminationPolicy = TerminationPolicyDelete

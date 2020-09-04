@@ -330,9 +330,6 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	if m.Spec.StorageEngine == "" {
 		m.Spec.StorageEngine = StorageEngineWiredTiger
 	}
-	if m.Spec.UpdateStrategy.Type == "" {
-		m.Spec.UpdateStrategy.Type = apps.RollingUpdateStatefulSetStrategyType
-	}
 	if m.Spec.TerminationPolicy == "" {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
 	} else if m.Spec.TerminationPolicy == TerminationPolicyPause {

@@ -23,7 +23,6 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	apps "k8s.io/api/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -144,9 +143,6 @@ func (m *Memcached) SetDefaults() {
 	}
 
 	// perform defaulting
-	if m.Spec.UpdateStrategy.Type == "" {
-		m.Spec.UpdateStrategy.Type = apps.RollingUpdateDeploymentStrategyType
-	}
 	if m.Spec.TerminationPolicy == "" {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
 	} else if m.Spec.TerminationPolicy == TerminationPolicyPause {
