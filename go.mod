@@ -18,7 +18,7 @@ require (
 	kmodules.xyz/monitoring-agent-api v0.0.0-20200915181828-7e94cbcaa0f3
 	kmodules.xyz/objectstore-api v0.0.0-20200521103120-92080446e04d
 	kubedb.dev/apimachinery v0.14.0-beta.2
-	stash.appscode.dev/apimachinery v0.10.0
+	stash.appscode.dev/apimachinery v0.11.0
 )
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
