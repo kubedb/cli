@@ -1454,6 +1454,8 @@ kmodules.xyz/client-go v0.0.0-20200903033732-dab39b86c81b h1:Erhqi9TZEqKmiIO2Lc7
 kmodules.xyz/client-go v0.0.0-20200903033732-dab39b86c81b/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
 kmodules.xyz/client-go v0.0.0-20200915091229-7df16c29f4e8 h1:C6+M9aTLhPCmsJ8dmhPvkr7Qe2MN+iiY3kZvbonhS9E=
 kmodules.xyz/client-go v0.0.0-20200915091229-7df16c29f4e8/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
+kmodules.xyz/client-go v0.0.0-20200917200341-3f5fe7b6c182 h1:G/R4rl6XIgKMbiId5F6unK43nj2wlbYeWReVNWVgegk=
+kmodules.xyz/client-go v0.0.0-20200917200341-3f5fe7b6c182/go.mod h1:sY/eoe4ktxZEoHpr5NpAQ5s22VSwTE8psJtKVeVgLRY=
 kmodules.xyz/constants v0.0.0-20200506032633-a21e58ceec72/go.mod h1:DbiFk1bJ1KEO94t1SlAn7tzc+Zz95rSXgyUKa2nzPmY=
 kmodules.xyz/crd-schema-fuzz v0.0.0-20200521005638-2433a187de95/go.mod h1:jpu8xFsDKd6kAWUAKk8oTu/GQGBWqhrcaDeOJdaCJnk=
 kmodules.xyz/custom-resources v0.0.0-20200604135349-9e9f5c4fdba9 h1:W+k1qhU0W1rptia2PWPOb7IWUvWnf31EMnatXt7MW6w=
