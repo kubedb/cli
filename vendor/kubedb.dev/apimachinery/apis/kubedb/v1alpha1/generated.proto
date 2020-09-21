@@ -435,13 +435,13 @@ message EtcdStatus {
 }
 
 message InitSpec {
-  optional ScriptSourceSpec scriptSource = 1;
+  // Initializer object in same namespace of a KubeDB object.
+  // ref: https://github.com/stashed/stash/blob/09af5d319bb5be889186965afb04045781d6f926/apis/stash/v1beta1/restore_session_types.go#L22
+  optional k8s.io.api.core.v1.TypedLocalObjectReference initializer = 1;
+
+  optional ScriptSourceSpec script = 2;
 
   optional PostgresWALSourceSpec postgresWAL = 3;
-
-  // Name of stash restoreSession in same namespace of kubedb object.
-  // ref: https://github.com/stashed/stash/blob/09af5d319bb5be889186965afb04045781d6f926/apis/stash/v1beta1/restore_session_types.go#L22
-  optional k8s.io.api.core.v1.LocalObjectReference stashRestoreSession = 4;
 }
 
 // LeaderElectionConfig contains essential attributes of leader election.
@@ -1366,6 +1366,10 @@ message RedisSpec {
 
   // Storage spec to specify how storage shall be used.
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 6;
+
+  // Init is used to initialize database
+  // +optional
+  optional InitSpec init = 16;
 
   // Monitor is used monitor database instance
   // +optional

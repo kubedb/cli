@@ -16569,9 +16569,9 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 							},
 						},
 					},
-					"uriSANs": {
+					"uris": {
 						SchemaProps: spec.SchemaProps{
-							Description: "URISANs is a list of URI Subject Alternative Names to be set on this Certificate.",
+							Description: "URIs is a list of URI subjectAltNames to be set on the Certificate.",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
@@ -16583,9 +16583,9 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 							},
 						},
 					},
-					"emailSANs": {
+					"emailAddresses": {
 						SchemaProps: spec.SchemaProps{
-							Description: "EmailSANs is a list of email subjectAltNames to be set on the Certificate.",
+							Description: "EmailAddresses is a list of email subjectAltNames to be set on the Certificate.",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{

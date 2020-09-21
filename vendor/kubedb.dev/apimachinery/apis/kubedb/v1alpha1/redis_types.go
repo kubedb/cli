@@ -78,6 +78,10 @@ type RedisSpec struct {
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,6,opt,name=storage"`
 
+	// Init is used to initialize database
+	// +optional
+	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,16,opt,name=init"`
+
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,7,opt,name=monitor"`

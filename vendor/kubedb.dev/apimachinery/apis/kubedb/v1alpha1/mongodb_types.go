@@ -30,6 +30,11 @@ const (
 	ResourceKindMongoDB     = "MongoDB"
 	ResourceSingularMongoDB = "mongodb"
 	ResourcePluralMongoDB   = "mongodbs"
+
+	MongoDBInitInstallContainerName   = "copy-config"
+	MongoDBInitBootstrapContainerName = "bootstrap"
+	MongoDBConfigDirectoryName        = "configdir"
+	MongoDBContainerName              = ResourceSingularMongoDB
 )
 
 // MongoDB defines a MongoDB database.

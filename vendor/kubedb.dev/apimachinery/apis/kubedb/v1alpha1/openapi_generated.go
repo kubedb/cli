@@ -16588,9 +16588,9 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 							},
 						},
 					},
-					"uriSANs": {
+					"uris": {
 						SchemaProps: spec.SchemaProps{
-							Description: "URISANs is a list of URI Subject Alternative Names to be set on this Certificate.",
+							Description: "URIs is a list of URI subjectAltNames to be set on the Certificate.",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
@@ -16602,9 +16602,9 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 							},
 						},
 					},
-					"emailSANs": {
+					"emailAddresses": {
 						SchemaProps: spec.SchemaProps{
-							Description: "EmailSANs is a list of email subjectAltNames to be set on the Certificate.",
+							Description: "EmailAddresses is a list of email subjectAltNames to be set on the Certificate.",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
@@ -19664,7 +19664,13 @@ func schema_apimachinery_apis_kubedb_v1alpha1_InitSpec(ref common.ReferenceCallb
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"scriptSource": {
+					"initializer": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Initializer object in same namespace of a KubeDB object. ref: https://github.com/stashed/stash/blob/09af5d319bb5be889186965afb04045781d6f926/apis/stash/v1beta1/restore_session_types.go#L22",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"script": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha1.ScriptSourceSpec"),
 						},
@@ -19674,17 +19680,11 @@ func schema_apimachinery_apis_kubedb_v1alpha1_InitSpec(ref common.ReferenceCallb
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha1.PostgresWALSourceSpec"),
 						},
 					},
-					"stashRestoreSession": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Name of stash restoreSession in same namespace of kubedb object. ref: https://github.com/stashed/stash/blob/09af5d319bb5be889186965afb04045781d6f926/apis/stash/v1beta1/restore_session_types.go#L22",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.PostgresWALSourceSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.ScriptSourceSpec"},
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.PostgresWALSourceSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.ScriptSourceSpec"},
 	}
 }
 
@@ -22191,6 +22191,12 @@ func schema_apimachinery_apis_kubedb_v1alpha1_RedisSpec(ref common.ReferenceCall
 							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
 						},
 					},
+					"init": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Init is used to initialize database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha1.InitSpec"),
+						},
+					},
 					"monitor": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Monitor is used monitor database instance",
@@ -22247,7 +22253,7 @@ func schema_apimachinery_apis_kubedb_v1alpha1_RedisSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.RedisClusterSpec"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha1.RedisClusterSpec"},
 	}
 }
 
