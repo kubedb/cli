@@ -457,6 +457,62 @@ func (m *MongoDB) setDefaultTLSConfig() {
 		},
 	})
 }
+func (m *MongoDB) getCmdForProbes(mgVersion *v1alpha1.MongoDBVersion) []string {
+	var sslArgs string
+	if m.Spec.SSLMode == SSLModeRequireSSL {
+		sslArgs = fmt.Sprintf("--tls --tlsCAFile=%v/%v --tlsCertificateKeyFile=%v/%v",
+			MongoCertDirectory, TLSCACertFileName, MongoCertDirectory, MongoClientFileName)
+
+		breakingVer, _ := version.NewVersion("4.1")
+		exceptionVer, _ := version.NewVersion("4.1.4")
+		currentVer, err := version.NewVersion(mgVersion.Spec.Version)
+		if err != nil {
+			panic(fmt.Errorf("MongoDB %s/%s: unable to parse version. reason: %s", m.Namespace, m.Name, err.Error()))
+		}
+		if currentVer.Equal(exceptionVer) {
+			sslArgs = fmt.Sprintf("--tls --tlsCAFile=%v/%v --tlsPEMKeyFile=%v/%v", MongoCertDirectory, TLSCACertFileName, MongoCertDirectory, MongoClientFileName)
+		} else if currentVer.LessThan(breakingVer) {
+			sslArgs = fmt.Sprintf("--ssl --sslCAFile=%v/%v --sslPEMKeyFile=%v/%v", MongoCertDirectory, TLSCACertFileName, MongoCertDirectory, MongoClientFileName)
+		}
+	}
+
+	return []string{
+		"bash",
+		"-c",
+		fmt.Sprintf(`set -x; if [[ $(mongo admin --host=localhost %v --username=$MONGO_INITDB_ROOT_USERNAME --password=$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase=admin --quiet --eval "db.adminCommand('ping').ok" ) -eq "1" ]]; then 
+          exit 0
+        fi
+        exit 1`, sslArgs),
+	}
+}
+
+func (m *MongoDB) GetDefaultLivenessProbeSpec(mgVersion *v1alpha1.MongoDBVersion) *core.Probe {
+	return &core.Probe{
+		Handler: core.Handler{
+			Exec: &core.ExecAction{
+				Command: m.getCmdForProbes(mgVersion),
+			},
+		},
+		FailureThreshold: 3,
+		PeriodSeconds:    10,
+		SuccessThreshold: 1,
+		TimeoutSeconds:   5,
+	}
+}
+
+func (m *MongoDB) GetDefaultReadinessProbeSpec(mgVersion *v1alpha1.MongoDBVersion) *core.Probe {
+	return &core.Probe{
+		Handler: core.Handler{
+			Exec: &core.ExecAction{
+				Command: m.getCmdForProbes(mgVersion),
+			},
+		},
+		FailureThreshold: 3,
+		PeriodSeconds:    10,
+		SuccessThreshold: 1,
+		TimeoutSeconds:   1,
+	}
+}
 
 // setDefaultProbes sets defaults only when probe fields are nil.
 // In operator, check if the value of probe fields is "{}".
@@ -466,64 +522,12 @@ func (m *MongoDB) setDefaultProbes(podTemplate *ofst.PodTemplateSpec, mgVersion 
 	if podTemplate == nil {
 		return
 	}
-	var sslArgs string
-	if m.Spec.SSLMode == SSLModeRequireSSL {
-		sslArgs = fmt.Sprintf("--tls --tlsCAFile=%v/%v --tlsCertificateKeyFile=%v/%v",
-			MongoCertDirectory, TLSCACertFileName, MongoCertDirectory, MongoClientFileName)
-
-		breakingVer, err := version.NewVersion("4.1")
-		if err != nil {
-			return
-		}
-		exceptionVer, err := version.NewVersion("4.1.4")
-		if err != nil {
-			return
-		}
-		currentVer, err := version.NewVersion(mgVersion.Spec.Version)
-		if err != nil {
-			return
-		}
-		if currentVer.Equal(exceptionVer) {
-			sslArgs = fmt.Sprintf("--tls --tlsCAFile=%v/%v --tlsPEMKeyFile=%v/%v", MongoCertDirectory, TLSCACertFileName, MongoCertDirectory, MongoClientFileName)
-		} else if currentVer.LessThan(breakingVer) {
-			sslArgs = fmt.Sprintf("--ssl --sslCAFile=%v/%v --sslPEMKeyFile=%v/%v", MongoCertDirectory, TLSCACertFileName, MongoCertDirectory, MongoClientFileName)
-		}
-	}
-
-	cmd := []string{
-		"bash",
-		"-c",
-		fmt.Sprintf(`set -x; if [[ $(mongo admin --host=localhost %v --username=$MONGO_INITDB_ROOT_USERNAME --password=$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase=admin --quiet --eval "db.adminCommand('ping').ok" ) -eq "1" ]]; then 
-          exit 0
-        fi
-        exit 1`, sslArgs),
-	}
 
 	if podTemplate.Spec.LivenessProbe == nil {
-		podTemplate.Spec.LivenessProbe = &core.Probe{
-			Handler: core.Handler{
-				Exec: &core.ExecAction{
-					Command: cmd,
-				},
-			},
-			FailureThreshold: 3,
-			PeriodSeconds:    10,
-			SuccessThreshold: 1,
-			TimeoutSeconds:   5,
-		}
+		podTemplate.Spec.LivenessProbe = m.GetDefaultLivenessProbeSpec(mgVersion)
 	}
 	if podTemplate.Spec.ReadinessProbe == nil {
-		podTemplate.Spec.ReadinessProbe = &core.Probe{
-			Handler: core.Handler{
-				Exec: &core.ExecAction{
-					Command: cmd,
-				},
-			},
-			FailureThreshold: 3,
-			PeriodSeconds:    10,
-			SuccessThreshold: 1,
-			TimeoutSeconds:   1,
-		}
+		podTemplate.Spec.ReadinessProbe = m.GetDefaultReadinessProbeSpec(mgVersion)
 	}
 }
 

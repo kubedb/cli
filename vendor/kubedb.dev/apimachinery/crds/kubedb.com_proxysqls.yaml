@@ -2277,7 +2277,7 @@ spec:
                         type: array
                       duration:
                         type: string
-                      emailSANs:
+                      emailAddresses:
                         items:
                           type: string
                         type: array
@@ -2324,7 +2324,7 @@ spec:
                               type: string
                             type: array
                         type: object
-                      uriSANs:
+                      uris:
                         items:
                           type: string
                         type: array

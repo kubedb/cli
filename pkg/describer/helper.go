@@ -78,13 +78,17 @@ func describeInitialization(init *api.InitSpec, w describe.PrefixWriter) {
 	}
 
 	w.WriteLine("\nInit:")
-	if init.ScriptSource != nil {
+	if init.Script != nil {
 		w.Write(LEVEL_1, "Script Source:\n")
-		describeVolume(LEVEL_2, init.ScriptSource.VolumeSource, w)
+		describeVolume(LEVEL_2, init.Script.VolumeSource, w)
 	}
-	if init.StashRestoreSession != nil {
+	if init.Initializer != nil {
 		w.Write(LEVEL_1, "Stash RestoreSession:\n")
-		w.Write(LEVEL_2, "Name:\t%s\n", init.StashRestoreSession.Name)
+		if init.Initializer.APIGroup != nil {
+			w.Write(LEVEL_2, "APIGroup:\t%s\n", init.Initializer.APIGroup)
+		}
+		w.Write(LEVEL_2, "Kind:\t%s\n", init.Initializer.Kind)
+		w.Write(LEVEL_2, "Name:\t%s\n", init.Initializer.Name)
 	}
 	if init.PostgresWAL != nil {
 		w.Write(LEVEL_1, "Postgres WAL:\n")

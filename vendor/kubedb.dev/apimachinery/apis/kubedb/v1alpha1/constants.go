@@ -105,6 +105,9 @@ const (
 	PgBouncerUpstreamServerCA = "upstream-server-ca.crt"
 
 	MySQLContainerReplicationModeDetectorName = "replication-mode-detector"
+	MySQLPodPrimary                           = "primary"
+	MySQLPodSecondary                         = "secondary"
+	MySQLLabelRole                            = MySQLKey + "/role"
 
 	ContainerExporterName = "exporter"
 	LocalHost             = "localhost"
