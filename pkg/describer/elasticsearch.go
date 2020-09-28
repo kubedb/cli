@@ -31,6 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/discovery"
 	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	stashV1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -72,9 +73,6 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 		printLabelsMultiline(LEVEL_0, w, "Labels", item.Labels)
 		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
-		if len(item.Status.Reason) > 0 {
-			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
-		}
 
 		if item.Spec.Replicas != nil {
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
@@ -82,7 +80,7 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 
 		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
-		w.Write(LEVEL_0, "Paused:\t%v\n", item.Spec.Paused)
+		w.Write(LEVEL_0, "Paused:\t%v\n", kmapi.IsConditionTrue(item.Status.Conditions, api.DatabasePaused))
 		w.Write(LEVEL_0, "Halted:\t%v\n", item.Spec.Halted)
 		w.Write(LEVEL_0, "Termination Policy:\t%v\n", item.Spec.TerminationPolicy)
 
@@ -91,9 +89,6 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 		secretVolumes := make(map[string]*core.SecretVolumeSource)
 		if item.Spec.DatabaseSecret != nil {
 			secretVolumes["Database"] = item.Spec.DatabaseSecret
-		}
-		if item.Spec.CertificateSecret != nil {
-			secretVolumes["Certificate"] = item.Spec.CertificateSecret
 		}
 		showSecret(d.client, item.Namespace, secretVolumes, w)
 

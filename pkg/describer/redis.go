@@ -31,6 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/discovery"
 	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	stashV1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -76,13 +77,10 @@ func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector
 			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
 		}
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
-		if len(item.Status.Reason) > 0 {
-			w.Write(LEVEL_0, "Reason:\t%s\n", item.Status.Reason)
-		}
 
 		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
-		w.Write(LEVEL_0, "Paused:\t%v\n", item.Spec.Paused)
+		w.Write(LEVEL_0, "Paused:\t%v\n", kmapi.IsConditionTrue(item.Status.Conditions, api.DatabasePaused))
 		w.Write(LEVEL_0, "Halted:\t%v\n", item.Spec.Halted)
 		w.Write(LEVEL_0, "Termination Policy:\t%v\n", item.Spec.TerminationPolicy)
 
