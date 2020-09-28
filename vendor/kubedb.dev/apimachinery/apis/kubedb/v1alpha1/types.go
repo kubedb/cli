@@ -82,9 +82,6 @@ const (
 type TerminationPolicy string
 
 const (
-	// Pauses database into a DormantDatabase
-	// Deprecated: Use spec.halted = true
-	TerminationPolicyPause TerminationPolicy = "Pause"
 	// Deletes database pods, service but leave the PVCs and stash backup data intact.
 	TerminationPolicyHalt TerminationPolicy = "Halt"
 	// Deletes database pods, service, pvcs but leave the stash backup data intact.

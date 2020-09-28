@@ -21,7 +21,6 @@ syntax = 'proto2';
 
 package kubedb.dev.apimachinery.apis.kubedb.v1alpha1;
 
-import "k8s.io/api/apps/v1/generated.proto";
 import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
@@ -133,7 +132,7 @@ message ElasticsearchClusterTopology {
 
   optional ElasticsearchNode data = 2;
 
-  optional ElasticsearchNode client = 3;
+  optional ElasticsearchNode ingest = 3;
 }
 
 message ElasticsearchList {
@@ -212,57 +211,49 @@ message ElasticsearchSpec {
   // To enable ssl in transport & http layer
   optional bool enableSSL = 4;
 
-  // Secret with SSL certificates
-  // Deprecated: Use spec.tls instead
-  optional k8s.io.api.core.v1.SecretVolumeSource certificateSecret = 5;
-
   // disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user.
   // If unset, default is false
-  optional bool disableSecurity = 6;
-
-  // Authentication plugin used by Elasticsearch cluster. If unset, defaults to SearchGuard.
-  // Deprecated: Use elasticsearchVersion.Spec.AuthPlugin instead
-  optional string authPlugin = 7;
+  optional bool disableSecurity = 5;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 8;
+  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 6;
 
   // StorageType can be durable (default) or ephemeral
-  optional string storageType = 9;
+  optional string storageType = 7;
 
   // Storage to specify how storage shall be used.
-  optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 10;
+  optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 8;
 
   // Init is used to initialize database
   // +optional
-  optional InitSpec init = 11;
+  optional InitSpec init = 9;
 
   // Monitor is used monitor database instance
   // +optional
-  optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 12;
+  optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 10;
 
   // ConfigSource is an optional field to provide custom configuration file for database.
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 13;
+  optional k8s.io.api.core.v1.VolumeSource configSource = 11;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 14;
+  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 12;
 
   // ServiceTemplate is an optional configuration for service used to expose database
   // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplate = 15;
+  optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplate = 13;
 
   // An eviction is allowed if at most "maxUnavailable" pods selected by
   // "selector" are unavailable after the eviction, i.e. even in absence of
   // the evicted pod. For example, one can prevent all voluntary evictions
   // by specifying 0. This is a mutually exclusive setting with "minAvailable".
   // +optional
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 16;
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 14;
 
   // TLS contains tls configurations
   // +optional
-  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 17;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 15;
 
   // InternalUsers contains internal user configurations.
   // Expected Input format:
@@ -272,7 +263,7 @@ message ElasticsearchSpec {
   //   <username2>:
   // 		...
   // +optional
-  map<string, ElasticsearchUserSpec> internalUsers = 18;
+  map<string, ElasticsearchUserSpec> internalUsers = 16;
 
   // RolesMapping contains roles mapping configurations.
   // Expected Input format:
@@ -282,30 +273,30 @@ message ElasticsearchSpec {
   //   <role2>:
   // 		...
   // +optional
-  map<string, ElasticsearchRoleMapSpec> rolesMapping = 19;
-
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 20;
+  map<string, ElasticsearchRoleMapSpec> rolesMapping = 17;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 21;
+  optional bool halted = 18;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 22;
+  optional string terminationPolicy = 19;
 }
 
 message ElasticsearchStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 // Specifies the security plugin internal user structure.
@@ -410,28 +401,28 @@ message EtcdSpec {
   // +optional
   optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplate = 11;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 12;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 13;
+  optional bool halted = 12;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 14;
+  optional string terminationPolicy = 13;
 }
 
 message EtcdStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 message InitSpec {
@@ -524,28 +515,28 @@ message MariaDBSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 11;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 12;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 13;
+  optional bool halted = 12;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 14;
+  optional string terminationPolicy = 13;
 }
 
 message MariaDBStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 message MemberSecret {
@@ -624,28 +615,28 @@ message MemcachedSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 12;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 13;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 14;
+  optional bool halted = 13;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 15;
+  optional string terminationPolicy = 14;
 }
 
 message MemcachedStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 // +kubebuilder:object:root=true
@@ -679,11 +670,7 @@ message MongoDBList {
 
 message MongoDBMongosNode {
   // MongoDB mongos node configs
-  optional MongoDBNode mongoDBNode = 5;
-
-  // The deployment strategy to use to replace existing pods with new ones.
-  // Deprecated: Deployment has been Replaced by StatefulSet. MongosNode now uses spec.updateStrategy
-  optional k8s.io.api.apps.v1.DeploymentStrategy strategy = 4;
+  optional MongoDBNode mongoDBNode = 1;
 }
 
 message MongoDBNode {
@@ -791,32 +778,32 @@ message MongoDBSpec {
   // Secret for KeyFile. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
   optional k8s.io.api.core.v1.SecretVolumeSource keyFile = 16;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 17;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 18;
+  optional bool halted = 17;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 19;
+  optional string terminationPolicy = 18;
 
   // StorageEngine can be wiredTiger (default) or inMemory
   // See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
-  optional string storageEngine = 20;
+  optional string storageEngine = 19;
 }
 
 message MongoDBStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 // +kubebuilder:object:root=true
@@ -917,28 +904,28 @@ message MySQLSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 14;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 15;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 16;
+  optional bool halted = 15;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 17;
+  optional string terminationPolicy = 16;
 }
 
 message MySQLStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 // +kubebuilder:object:root=true
@@ -1004,28 +991,28 @@ message PerconaXtraDBSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 11;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 12;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 13;
+  optional bool halted = 12;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 14;
+  optional string terminationPolicy = 13;
 }
 
 message PerconaXtraDBStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 // +kubebuilder:object:root=true
@@ -1085,23 +1072,21 @@ message PgBouncerSpec {
   // TLS contains tls configurations for client and server.
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 9;
-
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 10;
 }
 
 message PgBouncerStatus {
-  // Phase specifies the current state of PgBouncer server.
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  // Reason is used to explain phases of interest of the server.
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 // +kubebuilder:object:root=true
@@ -1186,28 +1171,28 @@ message PostgresSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 17;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 18;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 19;
+  optional bool halted = 18;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 20;
+  optional string terminationPolicy = 19;
 }
 
 message PostgresStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 message PostgresWALSourceSpec {
@@ -1286,21 +1271,21 @@ message ProxySQLSpec {
   // TLS contains tls configurations for client and server.
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 10;
-
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 11;
 }
 
 message ProxySQLStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 message RecoveryTarget {
@@ -1391,28 +1376,28 @@ message RedisSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 11;
 
-  // Indicates that the database is paused and controller will not sync any changes made to this spec.
-  // +optional
-  optional bool paused = 12;
-
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 13;
+  optional bool halted = 12;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 14;
+  optional string terminationPolicy = 13;
 }
 
 message RedisStatus {
+  // Specifies the current phase of the database
+  // +optional
   optional string phase = 1;
-
-  optional string reason = 2;
 
   // observedGeneration is the most recent generation observed for this resource. It corresponds to the
   // resource's generation, which is updated on mutation by the API Server.
   // +optional
-  optional int64 observedGeneration = 3;
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the database, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
 message ScriptSourceSpec {

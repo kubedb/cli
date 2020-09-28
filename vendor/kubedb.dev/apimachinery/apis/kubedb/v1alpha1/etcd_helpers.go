@@ -53,8 +53,8 @@ func (e Etcd) OffshootLabels() map[string]string {
 	out[meta_util.VersionLabelKey] = string(e.Spec.Version)
 	out[meta_util.InstanceLabelKey] = e.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = GenericKey
-	return meta_util.FilterKeys(GenericKey, out, e.Labels)
+	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
+	return meta_util.FilterKeys(kubedb.GroupName, out, e.Labels)
 }
 
 func (e Etcd) ResourceShortCode() string {
@@ -130,7 +130,7 @@ func (e Etcd) StatsService() mona.StatsAccessor {
 }
 
 func (e Etcd) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(GenericKey, e.OffshootSelectors(), e.Labels)
+	lbl := meta_util.FilterKeys(kubedb.GroupName, e.OffshootSelectors(), e.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
 }
@@ -156,8 +156,6 @@ func (e *Etcd) SetDefaults() {
 	}
 	if e.Spec.TerminationPolicy == "" {
 		e.Spec.TerminationPolicy = TerminationPolicyDelete
-	} else if e.Spec.TerminationPolicy == TerminationPolicyPause {
-		e.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
 
 	e.Spec.Monitor.SetDefaults()

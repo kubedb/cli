@@ -53,8 +53,8 @@ func (p Postgres) OffshootLabels() map[string]string {
 	out[meta_util.VersionLabelKey] = string(p.Spec.Version)
 	out[meta_util.InstanceLabelKey] = p.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = GenericKey
-	return meta_util.FilterKeys(GenericKey, out, p.Labels)
+	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
+	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
 }
 
 func (p Postgres) ResourceShortCode() string {
@@ -126,7 +126,7 @@ func (p Postgres) StatsService() mona.StatsAccessor {
 }
 
 func (p Postgres) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(GenericKey, p.OffshootSelectors(), p.Labels)
+	lbl := meta_util.FilterKeys(kubedb.GroupName, p.OffshootSelectors(), p.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
 }
@@ -152,9 +152,8 @@ func (p *Postgres) SetDefaults() {
 	}
 	if p.Spec.TerminationPolicy == "" {
 		p.Spec.TerminationPolicy = TerminationPolicyDelete
-	} else if p.Spec.TerminationPolicy == TerminationPolicyPause {
-		p.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
+
 	if p.Spec.Init != nil && p.Spec.Init.PostgresWAL != nil && p.Spec.Init.PostgresWAL.PITR != nil {
 		pitr := p.Spec.Init.PostgresWAL.PITR
 

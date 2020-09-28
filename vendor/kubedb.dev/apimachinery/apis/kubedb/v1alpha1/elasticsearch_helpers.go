@@ -64,8 +64,8 @@ func (e Elasticsearch) OffshootLabels() map[string]string {
 	out[meta_util.VersionLabelKey] = string(e.Spec.Version)
 	out[meta_util.InstanceLabelKey] = e.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = GenericKey
-	return meta_util.FilterKeys(GenericKey, out, e.Labels)
+	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
+	return meta_util.FilterKeys(kubedb.GroupName, out, e.Labels)
 }
 
 func (e Elasticsearch) ResourceShortCode() string {
@@ -114,6 +114,11 @@ func (e *Elasticsearch) MustCertSecretName(alias ElasticsearchCertificateAlias) 
 		panic(fmt.Errorf("Elasticsearch %s/%s is missing secret name for %s certificate", e.Namespace, e.Name, alias))
 	}
 	return name
+}
+
+// ClientCertificateCN returns the CN for a client certificate
+func (e *Elasticsearch) ClientCertificateCN(alias ElasticsearchCertificateAlias) string {
+	return fmt.Sprintf("%s-%s", e.Name, string(alias))
 }
 
 // returns the volume name for certificate secret.
@@ -202,7 +207,7 @@ func (e Elasticsearch) StatsService() mona.StatsAccessor {
 }
 
 func (e Elasticsearch) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(GenericKey, e.OffshootSelectors(), e.Labels)
+	lbl := meta_util.FilterKeys(kubedb.GroupName, e.OffshootSelectors(), e.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
 }
@@ -214,22 +219,17 @@ func (e *Elasticsearch) GetMonitoringVendor() string {
 	return ""
 }
 
-func (e *Elasticsearch) SetDefaults(topology *core_util.Topology) {
+func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, topology *core_util.Topology) {
 	if e == nil {
 		return
 	}
-	if !e.Spec.DisableSecurity && e.Spec.AuthPlugin == v1alpha1.ElasticsearchAuthPluginNone {
-		e.Spec.DisableSecurity = true
-	}
-	e.Spec.AuthPlugin = ""
+
 	if e.Spec.StorageType == "" {
 		e.Spec.StorageType = StorageTypeDurable
 	}
 
 	if e.Spec.TerminationPolicy == "" {
 		e.Spec.TerminationPolicy = TerminationPolicyDelete
-	} else if e.Spec.TerminationPolicy == TerminationPolicyPause {
-		e.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
 
 	if e.Spec.PodTemplate.Spec.ServiceAccountName == "" {
@@ -254,8 +254,27 @@ func (e *Elasticsearch) SetDefaults(topology *core_util.Topology) {
 
 	}
 
+	// set default elasticsearch node name prefix
+	if e.Spec.Topology != nil {
+
+		// Default to "ingest"
+		if e.Spec.Topology.Ingest.Prefix == "" {
+			e.Spec.Topology.Ingest.Prefix = ElasticsearchIngestNodePrefix
+		}
+
+		// Default to "data"
+		if e.Spec.Topology.Data.Prefix == "" {
+			e.Spec.Topology.Data.Prefix = ElasticsearchDataNodePrefix
+		}
+
+		// Default to "master"
+		if e.Spec.Topology.Master.Prefix == "" {
+			e.Spec.Topology.Master.Prefix = ElasticsearchMasterNodePrefix
+		}
+	}
+
 	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
-	e.setDefaultTLSConfig()
+	e.setDefaultTLSConfig(esVersion)
 	e.Spec.Monitor.SetDefaults()
 }
 
@@ -303,7 +322,7 @@ func (e *Elasticsearch) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, la
 }
 
 // set default tls configuration (ie. alias, secretName)
-func (e *Elasticsearch) setDefaultTLSConfig() {
+func (e *Elasticsearch) setDefaultTLSConfig(esVersion *v1alpha1.ElasticsearchVersion) {
 	// If security is disabled (ie. DisableSecurity: true), ignore.
 	if e.Spec.DisableSecurity {
 		return
@@ -313,18 +332,79 @@ func (e *Elasticsearch) setDefaultTLSConfig() {
 	if tlsConfig == nil {
 		tlsConfig = &kmapi.TLSConfig{}
 	}
-	// root
-	tlsConfig.Certificates = kmapi.SetMissingSecretNameForCertificate(tlsConfig.Certificates, string(ElasticsearchRootCert), e.CertificateName(ElasticsearchRootCert))
-	// transport
-	tlsConfig.Certificates = kmapi.SetMissingSecretNameForCertificate(tlsConfig.Certificates, string(ElasticsearchTransportCert), e.CertificateName(ElasticsearchTransportCert))
-	// http
-	tlsConfig.Certificates = kmapi.SetMissingSecretNameForCertificate(tlsConfig.Certificates, string(ElasticsearchHTTPCert), e.CertificateName(ElasticsearchHTTPCert))
-	// admin
-	tlsConfig.Certificates = kmapi.SetMissingSecretNameForCertificate(tlsConfig.Certificates, string(ElasticsearchAdminCert), e.CertificateName(ElasticsearchAdminCert))
-	// matrics-exporter
-	tlsConfig.Certificates = kmapi.SetMissingSecretNameForCertificate(tlsConfig.Certificates, string(ElasticsearchMetricsExporterCert), e.CertificateName(ElasticsearchMetricsExporterCert))
-	// archiver
-	tlsConfig.Certificates = kmapi.SetMissingSecretNameForCertificate(tlsConfig.Certificates, string(ElasticsearchArchiverCert), e.CertificateName(ElasticsearchArchiverCert))
+
+	// transport layer is always secured with certificate
+	tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+		Alias:      string(ElasticsearchTransportCert),
+		SecretName: e.CertificateName(ElasticsearchTransportCert),
+		Subject: &kmapi.X509Subject{
+			Organizations: []string{KubeDBOrganization},
+		},
+	})
+
+	// If SSL is enabled, set missing certificate spec
+	if e.Spec.EnableSSL {
+
+		// If the issuerRef is nil, the operator will create the CA certificate.
+		if tlsConfig.IssuerRef == nil {
+			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+				Alias:      string(ElasticsearchCACert),
+				SecretName: e.CertificateName(ElasticsearchCACert),
+				Subject: &kmapi.X509Subject{
+					Organizations: []string{KubeDBOrganization},
+				},
+			})
+		}
+
+		// http
+		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+			Alias:      string(ElasticsearchHTTPCert),
+			SecretName: e.CertificateName(ElasticsearchHTTPCert),
+			Subject: &kmapi.X509Subject{
+				Organizations: []string{KubeDBOrganization},
+			},
+		})
+
+		// Set missing admin certificate spec, if authPlugin is either "OpenDistro" or "SearchGuard"
+		if esVersion.Spec.AuthPlugin == v1alpha1.ElasticsearchAuthPluginOpenDistro ||
+			esVersion.Spec.AuthPlugin == v1alpha1.ElasticsearchAuthPluginSearchGuard {
+			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+				Alias:      string(ElasticsearchAdminCert),
+				SecretName: e.CertificateName(ElasticsearchAdminCert),
+				Subject: &kmapi.X509Subject{
+					Organizations: []string{KubeDBOrganization},
+				},
+			})
+		}
+
+		// Set missing metrics-exporter certificate, if monitoring is enabled.
+		if e.Spec.Monitor != nil {
+			// matrics-exporter
+			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+				Alias:      string(ElasticsearchMetricsExporterCert),
+				SecretName: e.CertificateName(ElasticsearchMetricsExporterCert),
+				Subject: &kmapi.X509Subject{
+					Organizations: []string{KubeDBOrganization},
+				},
+			})
+		}
+
+		// archiver
+		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+			Alias:      string(ElasticsearchArchiverCert),
+			SecretName: e.CertificateName(ElasticsearchArchiverCert),
+			Subject: &kmapi.X509Subject{
+				Organizations: []string{KubeDBOrganization},
+			},
+		})
+	}
+
+	// Force overwrite the private key encoding type to PKCS#8
+	for id := range tlsConfig.Certificates {
+		tlsConfig.Certificates[id].PrivateKey = &kmapi.CertificatePrivateKey{
+			Encoding: kmapi.PKCS8,
+		}
+	}
 
 	e.Spec.TLS = tlsConfig
 }
@@ -350,9 +430,6 @@ func (e *ElasticsearchSpec) GetSecrets() []string {
 	var secrets []string
 	if e.DatabaseSecret != nil {
 		secrets = append(secrets, e.DatabaseSecret.SecretName)
-	}
-	if e.CertificateSecret != nil {
-		secrets = append(secrets, e.CertificateSecret.SecretName)
 	}
 	return secrets
 }

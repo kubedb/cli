@@ -2259,8 +2259,6 @@ spec:
                       type: object
                   type: object
               type: object
-            paused:
-              type: boolean
             podTemplate:
               properties:
                 controller:
@@ -7256,24 +7254,6 @@ spec:
                     replicas:
                       format: int32
                       type: integer
-                    strategy:
-                      properties:
-                        rollingUpdate:
-                          properties:
-                            maxSurge:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              x-kubernetes-int-or-string: true
-                            maxUnavailable:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              x-kubernetes-int-or-string: true
-                          type: object
-                        type:
-                          type: string
-                      type: object
                   required:
                   - replicas
                   type: object
@@ -9282,8 +9262,14 @@ spec:
                         items:
                           type: string
                         type: array
-                      keyEncoding:
-                        type: string
+                      privateKey:
+                        properties:
+                          encoding:
+                            enum:
+                            - PKCS1
+                            - PKCS8
+                            type: string
+                        type: object
                       renewBefore:
                         type: string
                       secretName:
@@ -9349,6 +9335,31 @@ spec:
           type: object
         status:
           properties:
+            conditions:
+              items:
+                properties:
+                  lastTransitionTime:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  observedGeneration:
+                    format: int64
+                    type: integer
+                  reason:
+                    type: string
+                  status:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - lastTransitionTime
+                - message
+                - reason
+                - status
+                - type
+                type: object
+              type: array
             observedGeneration:
               format: int64
               type: integer
@@ -9360,8 +9371,6 @@ spec:
               - Paused
               - Halted
               - Failed
-              type: string
-            reason:
               type: string
           type: object
       type: object

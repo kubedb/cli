@@ -352,6 +352,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                                     schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                             schema_apimachinery_pkg_util_intstr_IntOrString(ref),
 		"k8s.io/apimachinery/pkg/version.Info":                                        schema_k8sio_apimachinery_pkg_version_Info(ref),
+		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                         schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                               schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                     schema_kmodulesxyz_client_go_api_v1_Condition(ref),
 		"kmodules.xyz/client-go/api/v1.TLSConfig":                                     schema_kmodulesxyz_client_go_api_v1_TLSConfig(ref),
@@ -16515,6 +16516,26 @@ func schema_k8sio_apimachinery_pkg_version_Info(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "CertificatePrivateKey contains configuration options for private keys used by the Certificate controller. This allows control of how private keys are rotated.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"encoding": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The private key cryptography standards (PKCS) encoding for this certificate's private key to be encoded in. If provided, allowed values are \"pkcs1\" and \"pkcs8\" standing for PKCS#1 and PKCS#8, respectively. Defaults to PKCS#1 if not specified.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -16531,13 +16552,6 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 					"secretName": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies the k8s secret name that holds the certificates. Default to <resource-name>-<cert-alias>-cert.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"keyEncoding": {
-						SchemaProps: spec.SchemaProps{
-							Description: "KeyEncoding is the private key cryptography standards (PKCS) for this certificate's private key to be encoded in. If provided, allowed values are \"pkcs1\" and \"pkcs8\". If KeyEncoding is not specified, then PKCS#1 will be used by default.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -16616,12 +16630,18 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 							},
 						},
 					},
+					"privateKey": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Options to control private keys used for the Certificate.",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.CertificatePrivateKey"),
+						},
+					},
 				},
 				Required: []string{"alias"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.X509Subject"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.CertificatePrivateKey", "kmodules.xyz/client-go/api/v1.X509Subject"},
 	}
 }
 
@@ -18957,13 +18977,13 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchClusterTopology(ref c
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha1.ElasticsearchNode"),
 						},
 					},
-					"client": {
+					"ingest": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha1.ElasticsearchNode"),
 						},
 					},
 				},
-				Required: []string{"master", "data", "client"},
+				Required: []string{"master", "data", "ingest"},
 			},
 		},
 		Dependencies: []string{
@@ -19178,23 +19198,10 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchSpec(ref common.Refer
 							Format:      "",
 						},
 					},
-					"certificateSecret": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Secret with SSL certificates Deprecated: Use spec.tls instead",
-							Ref:         ref("k8s.io/api/core/v1.SecretVolumeSource"),
-						},
-					},
 					"disableSecurity": {
 						SchemaProps: spec.SchemaProps{
 							Description: "disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user. If unset, default is false",
 							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
-					"authPlugin": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Authentication plugin used by Elasticsearch cluster. If unset, defaults to SearchGuard. Deprecated: Use elasticsearchVersion.Spec.AuthPlugin instead",
-							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
@@ -19287,13 +19294,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchSpec(ref common.Refer
 							},
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -19325,14 +19325,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchStatus(ref common.Ref
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -19342,9 +19337,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ElasticsearchStatus(ref common.Ref
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -19597,13 +19607,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_EtcdSpec(ref common.ReferenceCallb
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -19635,14 +19638,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_EtcdStatus(ref common.ReferenceCal
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -19652,9 +19650,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_EtcdStatus(ref common.ReferenceCal
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -19887,13 +19900,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MariaDBSpec(ref common.ReferenceCa
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -19925,14 +19931,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MariaDBStatus(ref common.Reference
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -19942,9 +19943,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MariaDBStatus(ref common.Reference
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -20119,13 +20135,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MemcachedSpec(ref common.Reference
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -20157,14 +20166,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MemcachedStatus(ref common.Referen
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -20174,9 +20178,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MemcachedStatus(ref common.Referen
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -20348,18 +20367,12 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MongoDBMongosNode(ref common.Refer
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"strategy": {
-						SchemaProps: spec.SchemaProps{
-							Description: "The deployment strategy to use to replace existing pods with new ones. Deprecated: Deployment has been Replaced by StatefulSet. MongosNode now uses spec.updateStrategy",
-							Ref:         ref("k8s.io/api/apps/v1.DeploymentStrategy"),
-						},
-					},
 				},
 				Required: []string{"replicas"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/apps/v1.DeploymentStrategy", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"},
+			"k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"},
 	}
 }
 
@@ -20618,13 +20631,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MongoDBSpec(ref common.ReferenceCa
 							Ref:         ref("k8s.io/api/core/v1.SecretVolumeSource"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -20663,14 +20669,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MongoDBStatus(ref common.Reference
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -20680,9 +20681,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MongoDBStatus(ref common.Reference
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -20923,13 +20939,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MySQLSpec(ref common.ReferenceCall
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -20961,14 +20970,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MySQLStatus(ref common.ReferenceCa
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -20978,9 +20982,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_MySQLStatus(ref common.ReferenceCa
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -21148,13 +21167,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PerconaXtraDBSpec(ref common.Refer
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -21186,14 +21198,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PerconaXtraDBStatus(ref common.Ref
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -21203,9 +21210,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PerconaXtraDBStatus(ref common.Ref
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -21367,13 +21389,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PgBouncerSpec(ref common.Reference
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 				},
 				Required: []string{"version"},
 			},
@@ -21391,14 +21406,7 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PgBouncerStatus(ref common.Referen
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Phase specifies the current state of PgBouncer server.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Reason is used to explain phases of interest of the server.",
+							Description: "Specifies the current phase of the database",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -21410,9 +21418,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PgBouncerStatus(ref common.Referen
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -21631,13 +21654,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PostgresSpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -21669,14 +21685,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PostgresStatus(ref common.Referenc
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -21686,9 +21697,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_PostgresStatus(ref common.Referenc
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -21943,13 +21969,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ProxySQLSpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 				},
 				Required: []string{"version"},
 			},
@@ -21967,14 +21986,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ProxySQLStatus(ref common.Referenc
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -21984,9 +21998,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_ProxySQLStatus(ref common.Referenc
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -22227,13 +22256,6 @@ func schema_apimachinery_apis_kubedb_v1alpha1_RedisSpec(ref common.ReferenceCall
 							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
-					"paused": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Indicates that the database is paused and controller will not sync any changes made to this spec.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"halted": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
@@ -22265,14 +22287,9 @@ func schema_apimachinery_apis_kubedb_v1alpha1_RedisStatus(ref common.ReferenceCa
 				Properties: map[string]spec.Schema{
 					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"observedGeneration": {
@@ -22282,9 +22299,24 @@ func schema_apimachinery_apis_kubedb_v1alpha1_RedisStatus(ref common.ReferenceCa
 							Format:      "int64",
 						},
 					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
