@@ -78,9 +78,6 @@ type PgBouncerSpec struct {
 	// TLS contains tls configurations for client and server.
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,9,opt,name=tls"`
-	// Indicates that the database is paused and controller will not sync any changes made to this spec.
-	// +optional
-	Paused bool `json:"paused,omitempty" protobuf:"varint,10,opt,name=paused"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
@@ -163,12 +160,14 @@ type PgBouncerList struct {
 }
 
 type PgBouncerStatus struct {
-	// Phase specifies the current state of PgBouncer server.
+	// Specifies the current phase of the database
+	// +optional
 	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
-	// Reason is used to explain phases of interest of the server.
-	Reason string `json:"reason,omitempty" protobuf:"bytes,2,opt,name=reason"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,3,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	// Conditions applied to the database, such as approval or denial.
+	// +optional
+	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
 }

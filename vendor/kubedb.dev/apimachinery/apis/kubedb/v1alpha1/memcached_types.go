@@ -95,17 +95,13 @@ type MemcachedSpec struct {
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,12,opt,name=tls"`
 
-	// Indicates that the database is paused and controller will not sync any changes made to this spec.
-	// +optional
-	Paused bool `json:"paused,omitempty" protobuf:"varint,13,opt,name=paused"`
-
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,14,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,13,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,15,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,14,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
 
 // +kubebuilder:validation:Enum=server;metrics-exporter
@@ -117,12 +113,16 @@ const (
 )
 
 type MemcachedStatus struct {
-	Phase  DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
-	Reason string        `json:"reason,omitempty" protobuf:"bytes,2,opt,name=reason"`
+	// Specifies the current phase of the database
+	// +optional
+	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,3,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	// Conditions applied to the database, such as approval or denial.
+	// +optional
+	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

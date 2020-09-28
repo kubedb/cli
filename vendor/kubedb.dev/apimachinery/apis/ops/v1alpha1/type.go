@@ -22,7 +22,7 @@ const (
 	AccessDenied              = "Denied"
 	DisableSharding           = "DisableSharding"
 	EnableSharding            = "EnableSharding"
-	Failure                   = "Failure"
+	Failed                    = "Failed"
 	HorizontalScalingDatabase = "HorizontalScaling"
 	MigratingData             = "MigratingData"
 	NodeCreated               = "NodeCreated"

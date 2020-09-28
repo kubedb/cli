@@ -51,7 +51,6 @@ spec:
               authPlugin:
                 enum:
                 - SearchGuard
-                - None
                 - X-Pack
                 - OpenDistro
                 type: string

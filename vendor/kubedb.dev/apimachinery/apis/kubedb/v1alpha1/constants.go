@@ -16,44 +16,68 @@ limitations under the License.
 
 package v1alpha1
 
+import "kubedb.dev/apimachinery/apis/kubedb"
+
 const (
+	// Deprecated
 	DatabaseNamePrefix = "kubedb"
 
-	GenericKey = "kubedb.com"
+	KubeDBOrganization = "kubedb"
 
-	LabelDatabaseKind = GenericKey + "/kind"
-	LabelDatabaseName = GenericKey + "/name"
-	LabelRole         = GenericKey + "/role"
+	LabelDatabaseKind = kubedb.GroupName + "/kind"
+	LabelDatabaseName = kubedb.GroupName + "/name"
+	LabelRole         = kubedb.GroupName + "/role"
 
-	ComponentDatabase = "database"
-	RoleStats         = "stats"
-	DefaultStatsPath  = "/metrics"
+	ComponentDatabase     = "database"
+	RoleStats             = "stats"
+	DefaultStatsPath      = "/metrics"
+	DefaultPasswordLength = 16
 
-	PostgresKey      = ResourceSingularPostgres + "." + GenericKey
-	ElasticsearchKey = ResourceSingularElasticsearch + "." + GenericKey
-	MySQLKey         = ResourceSingularMySQL + "." + GenericKey
-	PerconaXtraDBKey = ResourceSingularPerconaXtraDB + "." + GenericKey
-	MongoDBKey       = ResourceSingularMongoDB + "." + GenericKey
-	RedisKey         = ResourceSingularRedis + "." + GenericKey
-	MemcachedKey     = ResourceSingularMemcached + "." + GenericKey
-	EtcdKey          = ResourceSingularEtcd + "." + GenericKey
-	ProxySQLKey      = ResourceSingularProxySQL + "." + GenericKey
-
-	AnnotationInitialized = GenericKey + "/initialized"
-	AnnotationJobType     = GenericKey + "/job-type"
+	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
+	ElasticsearchKey = ResourceSingularElasticsearch + "." + kubedb.GroupName
+	MySQLKey         = ResourceSingularMySQL + "." + kubedb.GroupName
+	PerconaXtraDBKey = ResourceSingularPerconaXtraDB + "." + kubedb.GroupName
+	MongoDBKey       = ResourceSingularMongoDB + "." + kubedb.GroupName
+	RedisKey         = ResourceSingularRedis + "." + kubedb.GroupName
+	MemcachedKey     = ResourceSingularMemcached + "." + kubedb.GroupName
+	EtcdKey          = ResourceSingularEtcd + "." + kubedb.GroupName
+	ProxySQLKey      = ResourceSingularProxySQL + "." + kubedb.GroupName
 
 	PrometheusExporterPortNumber = 56790
 	PrometheusExporterPortName   = "prom-http"
 
-	JobTypeBackup  = "backup"
-	JobTypeRestore = "restore"
+	ElasticsearchRestPort                        = 9200
+	ElasticsearchRestPortName                    = "http"
+	ElasticsearchTransportPort                   = 9300
+	ElasticsearchTransportPortName               = "transport"
+	ElasticsearchMetricsPort                     = 9600
+	ElasticsearchMetricsPortName                 = "metrics"
+	ElasticsearchIngestNodePrefix                = "ingest"
+	ElasticsearchDataNodePrefix                  = "data"
+	ElasticsearchMasterNodePrefix                = "master"
+	ElasticsearchNodeRoleMaster                  = "node.role.master"
+	ElasticsearchNodeRoleIngest                  = "node.role.ingest"
+	ElasticsearchNodeRoleData                    = "node.role.data"
+	ElasticsearchNodeRoleSet                     = "set"
+	ElasticsearchConfigDir                       = "/usr/share/elasticsearch/config"
+	ElasticsearchTempConfigDir                   = "/elasticsearch/temp-config"
+	ElasticsearchCustomConfigDir                 = "/elasticsearch/custom-config"
+	ElasticsearchDataDir                         = "/usr/share/elasticsearch/data"
+	ElasticsearchOpendistroSecurityConfigDir     = "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
+	ElasticsearchSearchGuardSecurityConfigDir    = "/usr/share/elasticsearch/plugins/search-guard-%v/sgconfig"
+	ElasticsearchOpendistroReadallMonitorRole    = "readall_and_monitor"
+	ElasticsearchSearchGuardReadallMonitorRoleV7 = "SGS_READALL_AND_MONITOR"
+	ElasticsearchSearchGuardReadallMonitorRoleV6 = "sg_readall_and_monitor"
 
-	ElasticsearchRestPort        = 9200
-	ElasticsearchRestPortName    = "http"
-	ElasticsearchNodePort        = 9300
-	ElasticsearchNodePortName    = "transport"
-	ElasticsearchMetricsPort     = 9600
-	ElasticsearchMetricsPortName = "metrics"
+	// Ref:
+	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size
+	//	- no more than 50% of your physical RAM
+	//	- no more than 32GB that the JVM uses for compressed object pointers (compressed oops)
+	//	- no more than 26GB for zero-based compressed oops;
+	// 26 GB is safe on most systems
+	ElasticsearchMaxHeapSize = 26 * 1024 * 1024 * 1024
+	// 128MB
+	ElasticsearchMinHeapSize = 128 * 1024 * 1024
 
 	MongoDBShardPort           = 27017
 	MongoDBConfigdbPort        = 27017
@@ -112,4 +136,28 @@ const (
 	ContainerExporterName = "exporter"
 	LocalHost             = "localhost"
 	LocalHostIP           = "127.0.0.1"
+)
+
+// List of possible condition types for a KubeDB object
+const (
+	// used for Databases that are currently running
+	DatabaseRunning = "Running"
+	// used for Databases that are currently running
+	DatabasePodRunning = "PodRunning"
+	// used for Databases that are currently creating
+	DatabaseCreating = "Creating"
+	// used for Databases that are currently initializing
+	DatabaseeInitializing = "Initializing"
+	// used for Databases that are already initialized
+	DatabaseInitialized = "Initialized"
+	// used for Databases that are paused
+	DatabasePaused = "Paused"
+	// used for Databases that are halted
+	DatabaseHalted = "Halted"
+	// used for Databases that are failed
+	DatabaseFailed = "Failed"
+
+	// Condition reasons
+	DatabaseSuccessfullyInitialized = "SuccessfullyInitialized"
+	FailedToInitializeDatabase      = "FailedToInitialize"
 )

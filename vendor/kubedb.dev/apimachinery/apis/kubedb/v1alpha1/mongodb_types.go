@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	apps "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -113,21 +112,17 @@ type MongoDBSpec struct {
 	// Secret for KeyFile. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
 	KeyFile *core.SecretVolumeSource `json:"keyFile,omitempty" protobuf:"bytes,16,opt,name=keyFile"`
 
-	// Indicates that the database is paused and controller will not sync any changes made to this spec.
-	// +optional
-	Paused bool `json:"paused,omitempty" protobuf:"varint,17,opt,name=paused"`
-
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,18,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,17,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,19,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 
 	// StorageEngine can be wiredTiger (default) or inMemory
 	// See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
-	StorageEngine StorageEngine `json:"storageEngine,omitempty" protobuf:"bytes,20,opt,name=storageEngine,casttype=StorageEngine"`
+	StorageEngine StorageEngine `json:"storageEngine,omitempty" protobuf:"bytes,19,opt,name=storageEngine,casttype=StorageEngine"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter
@@ -236,11 +231,7 @@ type MongoDBConfigNode struct {
 
 type MongoDBMongosNode struct {
 	// MongoDB mongos node configs
-	MongoDBNode `json:",inline" protobuf:"bytes,5,opt,name=mongoDBNode"`
-
-	// The deployment strategy to use to replace existing pods with new ones.
-	// Deprecated: Deployment has been Replaced by StatefulSet. MongosNode now uses spec.updateStrategy
-	Strategy apps.DeploymentStrategy `json:"strategy,omitempty" protobuf:"bytes,4,opt,name=strategy"`
+	MongoDBNode `json:",inline" protobuf:"bytes,1,opt,name=mongoDBNode"`
 }
 
 type MongoDBNode struct {
@@ -261,12 +252,16 @@ type MongoDBNode struct {
 }
 
 type MongoDBStatus struct {
-	Phase  DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
-	Reason string        `json:"reason,omitempty" protobuf:"bytes,2,opt,name=reason"`
+	// Specifies the current phase of the database
+	// +optional
+	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,3,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	// Conditions applied to the database, such as approval or denial.
+	// +optional
+	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

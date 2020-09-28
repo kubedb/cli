@@ -62,8 +62,8 @@ func (r Redis) OffshootLabels() map[string]string {
 	out[meta_util.VersionLabelKey] = string(r.Spec.Version)
 	out[meta_util.InstanceLabelKey] = r.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = GenericKey
-	return meta_util.FilterKeys(GenericKey, out, r.Labels)
+	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
+	return meta_util.FilterKeys(kubedb.GroupName, out, r.Labels)
 }
 
 func (r Redis) ResourceShortCode() string {
@@ -147,7 +147,7 @@ func (r Redis) StatsService() mona.StatsAccessor {
 }
 
 func (r Redis) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(GenericKey, r.OffshootSelectors(), r.Labels)
+	lbl := meta_util.FilterKeys(kubedb.GroupName, r.OffshootSelectors(), r.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
 }
@@ -183,8 +183,6 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	}
 	if r.Spec.TerminationPolicy == "" {
 		r.Spec.TerminationPolicy = TerminationPolicyDelete
-	} else if r.Spec.TerminationPolicy == TerminationPolicyPause {
-		r.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
 
 	if r.Spec.PodTemplate.Spec.ServiceAccountName == "" {

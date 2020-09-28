@@ -43,38 +43,6 @@ spec:
             type: object
           spec:
             properties:
-              authPlugin:
-                enum:
-                - SearchGuard
-                - None
-                - X-Pack
-                - OpenDistro
-                type: string
-              certificateSecret:
-                properties:
-                  defaultMode:
-                    format: int32
-                    type: integer
-                  items:
-                    items:
-                      properties:
-                        key:
-                          type: string
-                        mode:
-                          format: int32
-                          type: integer
-                        path:
-                          type: string
-                      required:
-                      - key
-                      - path
-                      type: object
-                    type: array
-                  optional:
-                    type: boolean
-                  secretName:
-                    type: string
-                type: object
               configSource:
                 properties:
                   awsElasticBlockStore:
@@ -2289,8 +2257,6 @@ spec:
                         type: object
                     type: object
                 type: object
-              paused:
-                type: boolean
               podTemplate:
                 properties:
                   controller:
@@ -3699,8 +3665,14 @@ spec:
                           items:
                             type: string
                           type: array
-                        keyEncoding:
-                          type: string
+                        privateKey:
+                          properties:
+                            encoding:
+                              enum:
+                              - PKCS1
+                              - PKCS8
+                              type: string
+                          type: object
                         renewBefore:
                           type: string
                         secretName:
@@ -3761,7 +3733,7 @@ spec:
                 type: object
               topology:
                 properties:
-                  client:
+                  data:
                     properties:
                       maxUnavailable:
                         anyOf:
@@ -3860,7 +3832,7 @@ spec:
                             type: string
                         type: object
                     type: object
-                  data:
+                  ingest:
                     properties:
                       maxUnavailable:
                         anyOf:
@@ -4059,8 +4031,8 @@ spec:
                         type: object
                     type: object
                 required:
-                - client
                 - data
+                - ingest
                 - master
                 type: object
               version:
@@ -4070,6 +4042,31 @@ spec:
             type: object
           status:
             properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      type: integer
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
               observedGeneration:
                 format: int64
                 type: integer
@@ -4081,8 +4078,6 @@ spec:
                 - Paused
                 - Halted
                 - Failed
-                type: string
-              reason:
                 type: string
             type: object
         type: object

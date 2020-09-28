@@ -55,8 +55,8 @@ func (m MySQL) OffshootLabels() map[string]string {
 	out[meta_util.VersionLabelKey] = string(m.Spec.Version)
 	out[meta_util.InstanceLabelKey] = m.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = GenericKey
-	return meta_util.FilterKeys(GenericKey, out, m.Labels)
+	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
+	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
 }
 
 func (m MySQL) ResourceShortCode() string {
@@ -77,6 +77,10 @@ func (m MySQL) ResourcePlural() string {
 
 func (m MySQL) ServiceName() string {
 	return m.OffshootName()
+}
+
+func (m MySQL) SecondaryServiceName() string {
+	return meta_util.NameWithPrefix(m.ServiceName(), "replicas")
 }
 
 func (m MySQL) GoverningServiceName() string {
@@ -140,7 +144,7 @@ func (m MySQL) StatsService() mona.StatsAccessor {
 }
 
 func (m MySQL) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(GenericKey, m.OffshootSelectors(), m.Labels)
+	lbl := meta_util.FilterKeys(kubedb.GroupName, m.OffshootSelectors(), m.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
 }
@@ -152,6 +156,10 @@ func (m *MySQL) GetMonitoringVendor() string {
 	return ""
 }
 
+func (m *MySQL) UsesGroupReplication() bool {
+	return m.Spec.Topology != nil && m.Spec.Topology.Mode != nil && *m.Spec.Topology.Mode == MySQLClusterModeGroup
+}
+
 func (m *MySQL) SetDefaults() {
 	if m == nil {
 		return
@@ -161,11 +169,9 @@ func (m *MySQL) SetDefaults() {
 	}
 	if m.Spec.TerminationPolicy == "" {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
-	} else if m.Spec.TerminationPolicy == TerminationPolicyPause {
-		m.Spec.TerminationPolicy = TerminationPolicyHalt
 	}
 
-	if m.Spec.Topology != nil && m.Spec.Topology.Mode != nil && *m.Spec.Topology.Mode == MySQLClusterModeGroup {
+	if m.UsesGroupReplication() {
 		if m.Spec.Replicas == nil {
 			m.Spec.Replicas = types.Int32P(MySQLDefaultGroupSize)
 		}

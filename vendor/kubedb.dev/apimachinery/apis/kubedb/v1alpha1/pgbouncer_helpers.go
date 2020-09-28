@@ -53,8 +53,8 @@ func (p PgBouncer) OffshootLabels() map[string]string {
 	out[meta_util.InstanceLabelKey] = p.Name
 	out[meta_util.ComponentLabelKey] = "connection-pooler"
 	out[meta_util.VersionLabelKey] = string(p.Spec.Version)
-	out[meta_util.ManagedByLabelKey] = GenericKey
-	return meta_util.FilterKeys(GenericKey, out, p.Labels)
+	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
+	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
 }
 
 func (p PgBouncer) ResourceShortCode() string {
@@ -126,7 +126,7 @@ func (p PgBouncer) StatsService() mona.StatsAccessor {
 }
 
 func (p PgBouncer) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(GenericKey, p.OffshootSelectors(), p.Labels)
+	lbl := meta_util.FilterKeys(kubedb.GroupName, p.OffshootSelectors(), p.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
 }
