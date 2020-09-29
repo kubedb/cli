@@ -20,7 +20,7 @@ github.com/MakeNowJust/heredoc
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/appscode/go v0.0.0-20200323182826-54e98e09185a
+# github.com/appscode/go v0.0.0-20200928211031-cc0c23082d91
 github.com/appscode/go/analytics
 github.com/appscode/go/encoding/json/types
 github.com/appscode/go/homedir
@@ -451,7 +451,7 @@ k8s.io/kubernetes/pkg/util/hash
 k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
-# kmodules.xyz/client-go v0.0.0-20200928072851-0b8648a2b8b9
+# kmodules.xyz/client-go v0.0.0-20200929030759-cce6a3c623c1
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
