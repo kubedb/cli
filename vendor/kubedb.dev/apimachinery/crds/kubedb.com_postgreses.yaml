@@ -4446,12 +4446,12 @@ spec:
               type: integer
             phase:
               enum:
-              - Running
-              - Creating
-              - Initializing
+              - Provisioning
+              - Ready
+              - Critical
+              - NotReady
               - Paused
               - Halted
-              - Failed
               type: string
           type: object
       type: object

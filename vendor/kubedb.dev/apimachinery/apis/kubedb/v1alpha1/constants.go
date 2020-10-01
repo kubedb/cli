@@ -140,24 +140,20 @@ const (
 
 // List of possible condition types for a KubeDB object
 const (
-	// used for Databases that are currently running
-	DatabaseRunning = "Running"
-	// used for Databases that are currently running
-	DatabasePodRunning = "PodRunning"
-	// used for Databases that are currently creating
-	DatabaseCreating = "Creating"
-	// used for Databases that are currently initializing
-	DatabaseeInitializing = "Initializing"
-	// used for Databases that are already initialized
-	DatabaseInitialized = "Initialized"
+	// used for Databases that have started provisioning
+	DatabaseProvisioningStarted = "ProvisioningStarted"
+	// used for Databases whose pods are ready
+	DatabaseReplicaReady = "ReplicaReady"
+	// used for Databases that are currently accepting connection
+	DatabaseAcceptingConnection = "AcceptingConnection"
+	// used for Databases that report status OK (also implies that we can connect to it)
+	DatabaseReady = "Ready"
+	// used for Databases that are already initialized using stash
+	DatabaseDataRestored = "DataRestored"
 	// used for Databases that are paused
 	DatabasePaused = "Paused"
-	// used for Databases that are halted
-	DatabaseHalted = "Halted"
-	// used for Databases that are failed
-	DatabaseFailed = "Failed"
 
 	// Condition reasons
-	DatabaseSuccessfullyInitialized = "SuccessfullyInitialized"
-	FailedToInitializeDatabase      = "FailedToInitialize"
+	DatabaseSuccessfullyRestored = "SuccessfullyDataRestored"
+	FailedToRestoreData          = "FailedToRestoreData"
 )

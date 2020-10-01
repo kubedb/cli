@@ -50,22 +50,22 @@ type LeaderElectionConfig struct {
 	RetryPeriodSeconds int32 `json:"retryPeriodSeconds" protobuf:"varint,3,opt,name=retryPeriodSeconds"`
 }
 
-// +kubebuilder:validation:Enum=Running;Creating;Initializing;Paused;Halted;Failed
+// +kubebuilder:validation:Enum=Provisioning;Ready;Critical;NotReady;Paused;Halted
 type DatabasePhase string
 
 const (
-	// used for Databases that are currently running
-	DatabasePhaseRunning DatabasePhase = "Running"
-	// used for Databases that are currently creating
-	DatabasePhaseCreating DatabasePhase = "Creating"
-	// used for Databases that are currently initializing
-	DatabasePhaseInitializing DatabasePhase = "Initializing"
+	// used for Databases that are currently provisioning
+	DatabasePhaseProvisioning DatabasePhase = "Provisioning"
+	// used for Databases that are currently ReplicaReady, AcceptingConnection and Ready
+	DatabasePhaseRunning DatabasePhase = "Ready"
+	// used for Databases that can connect, ReplicaReady == false || Ready == false (eg, ES yellow)
+	DatabasePhaseCritical DatabasePhase = "Critical"
+	// used for Databases that can't connect
+	DatabasePhaseNotReady DatabasePhase = "NotReady"
 	// used for Databases that are paused
 	DatabasePhasePaused DatabasePhase = "Paused"
 	// used for Databases that are halted
 	DatabasePhaseHalted DatabasePhase = "Halted"
-	// used for Databases that are failed
-	DatabasePhaseFailed DatabasePhase = "Failed"
 )
 
 // +kubebuilder:validation:Enum=Durable;Ephemeral
