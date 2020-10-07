@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
@@ -51,11 +51,56 @@ type MemcachedOpsRequest struct {
 // MemcachedOpsRequestSpec is the spec for MemcachedOpsRequest
 type MemcachedOpsRequestSpec struct {
 	// Specifies the Memcached reference
-	DatabaseRef v1.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
-	// Specifies the field information that needed to be upgraded
-	Upgrade *UpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	// Specifies information necessary for upgrading Memcached
+	Upgrade *MemcachedUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *MemcachedHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	// Specifies information necessary for vertical scaling
+	VerticalScaling *MemcachedVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *MemcachedVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	// Specifies information necessary for custom configuration of Memcached
+	Configuration *MemcachedCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	// Specifies information necessary for configuring TLS
+	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	// Specifies information necessary for restarting database
+	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+}
+
+// MemcachedReplicaReadinessCriteria is the criteria for checking readiness of a Memcached pod
+// after updating, horizontal scaling etc.
+type MemcachedReplicaReadinessCriteria struct {
+}
+
+type MemcachedUpgradeSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion     string                             `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
+	ReadinessCriteria *MemcachedReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+}
+
+// HorizontalScaling is the spec for Memcached horizontal scaling
+type MemcachedHorizontalScalingSpec struct {
+}
+
+// MemcachedVerticalScalingSpec is the spec for Memcached vertical scaling
+type MemcachedVerticalScalingSpec struct {
+	ReadinessCriteria *MemcachedReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,1,opt,name=readinessCriteria"`
+}
+
+// MemcachedVolumeExpansionSpec is the spec for Memcached volume expansion
+type MemcachedVolumeExpansionSpec struct {
+}
+
+type MemcachedCustomConfigurationSpec struct {
+}
+
+type MemcachedCustomConfiguration struct {
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
+	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
+	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
 }
 
 // MemcachedOpsRequestStatus is the status for MemcachedOpsRequest

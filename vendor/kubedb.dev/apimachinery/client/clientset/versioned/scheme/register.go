@@ -22,7 +22,7 @@ import (
 	autoscalingv1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
 	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/apis/config/v1alpha1"
-	kubedbv1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
+	kubedbv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsv1alpha1 "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -39,7 +39,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	autoscalingv1alpha1.AddToScheme,
 	catalogv1alpha1.AddToScheme,
 	configv1alpha1.AddToScheme,
-	kubedbv1alpha1.AddToScheme,
+	kubedbv1alpha2.AddToScheme,
 	opsv1alpha1.AddToScheme,
 }
 

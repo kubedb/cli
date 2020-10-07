@@ -60,6 +60,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&EtcdVersionList{},
 		&MemcachedVersion{},
 		&MemcachedVersionList{},
+		&MariaDBVersion{},
+		&MariaDBVersionList{},
 		&MongoDBVersion{},
 		&MongoDBVersionList{},
 		&MySQLVersion{},

@@ -20,9 +20,9 @@ import (
 	"context"
 	"io"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 
 	"github.com/appscode/go/types"
 	core "k8s.io/api/core/v1"
@@ -40,7 +40,7 @@ import (
 
 type ElasticsearchDescriber struct {
 	client kubernetes.Interface
-	kubedb cs.KubedbV1alpha1Interface
+	kubedb cs.KubedbV1alpha2Interface
 	stash  stash.Interface
 	appcat appcat_cs.Interface
 }

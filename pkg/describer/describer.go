@@ -26,8 +26,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	"kubedb.dev/cli/pkg/events"
 
 	"github.com/golang/glog"

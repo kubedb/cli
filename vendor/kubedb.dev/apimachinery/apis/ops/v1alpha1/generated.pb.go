@@ -29,7 +29,7 @@ import (
 
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
-	v11 "k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v12 "kmodules.xyz/client-go/api/v1"
 )
@@ -73,10 +73,66 @@ func (m *ConfigNode) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ConfigNode proto.InternalMessageInfo
 
+func (m *ElasticsearchCustomConfiguration) Reset()      { *m = ElasticsearchCustomConfiguration{} }
+func (*ElasticsearchCustomConfiguration) ProtoMessage() {}
+func (*ElasticsearchCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{1}
+}
+func (m *ElasticsearchCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticsearchCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticsearchCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticsearchCustomConfiguration.Merge(m, src)
+}
+func (m *ElasticsearchCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticsearchCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticsearchCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticsearchCustomConfiguration proto.InternalMessageInfo
+
+func (m *ElasticsearchCustomConfigurationSpec) Reset()      { *m = ElasticsearchCustomConfigurationSpec{} }
+func (*ElasticsearchCustomConfigurationSpec) ProtoMessage() {}
+func (*ElasticsearchCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{2}
+}
+func (m *ElasticsearchCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticsearchCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticsearchCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticsearchCustomConfigurationSpec.Merge(m, src)
+}
+func (m *ElasticsearchCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticsearchCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticsearchCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticsearchCustomConfigurationSpec proto.InternalMessageInfo
+
 func (m *ElasticsearchHorizontalScalingSpec) Reset()      { *m = ElasticsearchHorizontalScalingSpec{} }
 func (*ElasticsearchHorizontalScalingSpec) ProtoMessage() {}
 func (*ElasticsearchHorizontalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{1}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{3}
 }
 func (m *ElasticsearchHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -104,7 +160,7 @@ var xxx_messageInfo_ElasticsearchHorizontalScalingSpec proto.InternalMessageInfo
 func (m *ElasticsearchOpsRequest) Reset()      { *m = ElasticsearchOpsRequest{} }
 func (*ElasticsearchOpsRequest) ProtoMessage() {}
 func (*ElasticsearchOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{2}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{4}
 }
 func (m *ElasticsearchOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -132,7 +188,7 @@ var xxx_messageInfo_ElasticsearchOpsRequest proto.InternalMessageInfo
 func (m *ElasticsearchOpsRequestList) Reset()      { *m = ElasticsearchOpsRequestList{} }
 func (*ElasticsearchOpsRequestList) ProtoMessage() {}
 func (*ElasticsearchOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{3}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{5}
 }
 func (m *ElasticsearchOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -160,7 +216,7 @@ var xxx_messageInfo_ElasticsearchOpsRequestList proto.InternalMessageInfo
 func (m *ElasticsearchOpsRequestSpec) Reset()      { *m = ElasticsearchOpsRequestSpec{} }
 func (*ElasticsearchOpsRequestSpec) ProtoMessage() {}
 func (*ElasticsearchOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{4}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{6}
 }
 func (m *ElasticsearchOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -188,7 +244,7 @@ var xxx_messageInfo_ElasticsearchOpsRequestSpec proto.InternalMessageInfo
 func (m *ElasticsearchOpsRequestStatus) Reset()      { *m = ElasticsearchOpsRequestStatus{} }
 func (*ElasticsearchOpsRequestStatus) ProtoMessage() {}
 func (*ElasticsearchOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{5}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{7}
 }
 func (m *ElasticsearchOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -213,10 +269,206 @@ func (m *ElasticsearchOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ElasticsearchOpsRequestStatus proto.InternalMessageInfo
 
+func (m *ElasticsearchReplicaReadinessCriteria) Reset()      { *m = ElasticsearchReplicaReadinessCriteria{} }
+func (*ElasticsearchReplicaReadinessCriteria) ProtoMessage() {}
+func (*ElasticsearchReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{8}
+}
+func (m *ElasticsearchReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticsearchReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticsearchReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticsearchReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *ElasticsearchReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticsearchReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticsearchReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticsearchReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *ElasticsearchUpgradeSpec) Reset()      { *m = ElasticsearchUpgradeSpec{} }
+func (*ElasticsearchUpgradeSpec) ProtoMessage() {}
+func (*ElasticsearchUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{9}
+}
+func (m *ElasticsearchUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticsearchUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticsearchUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticsearchUpgradeSpec.Merge(m, src)
+}
+func (m *ElasticsearchUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticsearchUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticsearchUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticsearchUpgradeSpec proto.InternalMessageInfo
+
+func (m *ElasticsearchVerticalScalingSpec) Reset()      { *m = ElasticsearchVerticalScalingSpec{} }
+func (*ElasticsearchVerticalScalingSpec) ProtoMessage() {}
+func (*ElasticsearchVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{10}
+}
+func (m *ElasticsearchVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticsearchVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticsearchVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticsearchVerticalScalingSpec.Merge(m, src)
+}
+func (m *ElasticsearchVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticsearchVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticsearchVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticsearchVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *ElasticsearchVolumeExpansionSpec) Reset()      { *m = ElasticsearchVolumeExpansionSpec{} }
+func (*ElasticsearchVolumeExpansionSpec) ProtoMessage() {}
+func (*ElasticsearchVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{11}
+}
+func (m *ElasticsearchVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticsearchVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticsearchVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticsearchVolumeExpansionSpec.Merge(m, src)
+}
+func (m *ElasticsearchVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticsearchVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticsearchVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticsearchVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *EtcdCustomConfiguration) Reset()      { *m = EtcdCustomConfiguration{} }
+func (*EtcdCustomConfiguration) ProtoMessage() {}
+func (*EtcdCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{12}
+}
+func (m *EtcdCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdCustomConfiguration.Merge(m, src)
+}
+func (m *EtcdCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdCustomConfiguration proto.InternalMessageInfo
+
+func (m *EtcdCustomConfigurationSpec) Reset()      { *m = EtcdCustomConfigurationSpec{} }
+func (*EtcdCustomConfigurationSpec) ProtoMessage() {}
+func (*EtcdCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{13}
+}
+func (m *EtcdCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdCustomConfigurationSpec.Merge(m, src)
+}
+func (m *EtcdCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *EtcdHorizontalScalingSpec) Reset()      { *m = EtcdHorizontalScalingSpec{} }
+func (*EtcdHorizontalScalingSpec) ProtoMessage() {}
+func (*EtcdHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{14}
+}
+func (m *EtcdHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdHorizontalScalingSpec.Merge(m, src)
+}
+func (m *EtcdHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *EtcdOpsRequest) Reset()      { *m = EtcdOpsRequest{} }
 func (*EtcdOpsRequest) ProtoMessage() {}
 func (*EtcdOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{6}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{15}
 }
 func (m *EtcdOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -244,7 +496,7 @@ var xxx_messageInfo_EtcdOpsRequest proto.InternalMessageInfo
 func (m *EtcdOpsRequestList) Reset()      { *m = EtcdOpsRequestList{} }
 func (*EtcdOpsRequestList) ProtoMessage() {}
 func (*EtcdOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{7}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{16}
 }
 func (m *EtcdOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -272,7 +524,7 @@ var xxx_messageInfo_EtcdOpsRequestList proto.InternalMessageInfo
 func (m *EtcdOpsRequestSpec) Reset()      { *m = EtcdOpsRequestSpec{} }
 func (*EtcdOpsRequestSpec) ProtoMessage() {}
 func (*EtcdOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{8}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{17}
 }
 func (m *EtcdOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -300,7 +552,7 @@ var xxx_messageInfo_EtcdOpsRequestSpec proto.InternalMessageInfo
 func (m *EtcdOpsRequestStatus) Reset()      { *m = EtcdOpsRequestStatus{} }
 func (*EtcdOpsRequestStatus) ProtoMessage() {}
 func (*EtcdOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{9}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{18}
 }
 func (m *EtcdOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -325,10 +577,514 @@ func (m *EtcdOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EtcdOpsRequestStatus proto.InternalMessageInfo
 
+func (m *EtcdReplicaReadinessCriteria) Reset()      { *m = EtcdReplicaReadinessCriteria{} }
+func (*EtcdReplicaReadinessCriteria) ProtoMessage() {}
+func (*EtcdReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{19}
+}
+func (m *EtcdReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *EtcdReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *EtcdUpgradeSpec) Reset()      { *m = EtcdUpgradeSpec{} }
+func (*EtcdUpgradeSpec) ProtoMessage() {}
+func (*EtcdUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{20}
+}
+func (m *EtcdUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdUpgradeSpec.Merge(m, src)
+}
+func (m *EtcdUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdUpgradeSpec proto.InternalMessageInfo
+
+func (m *EtcdVerticalScalingSpec) Reset()      { *m = EtcdVerticalScalingSpec{} }
+func (*EtcdVerticalScalingSpec) ProtoMessage() {}
+func (*EtcdVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{21}
+}
+func (m *EtcdVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdVerticalScalingSpec.Merge(m, src)
+}
+func (m *EtcdVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *EtcdVolumeExpansionSpec) Reset()      { *m = EtcdVolumeExpansionSpec{} }
+func (*EtcdVolumeExpansionSpec) ProtoMessage() {}
+func (*EtcdVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{22}
+}
+func (m *EtcdVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EtcdVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EtcdVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EtcdVolumeExpansionSpec.Merge(m, src)
+}
+func (m *EtcdVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *EtcdVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_EtcdVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EtcdVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *MariaDBCustomConfiguration) Reset()      { *m = MariaDBCustomConfiguration{} }
+func (*MariaDBCustomConfiguration) ProtoMessage() {}
+func (*MariaDBCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{23}
+}
+func (m *MariaDBCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBCustomConfiguration.Merge(m, src)
+}
+func (m *MariaDBCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBCustomConfiguration proto.InternalMessageInfo
+
+func (m *MariaDBCustomConfigurationSpec) Reset()      { *m = MariaDBCustomConfigurationSpec{} }
+func (*MariaDBCustomConfigurationSpec) ProtoMessage() {}
+func (*MariaDBCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{24}
+}
+func (m *MariaDBCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBCustomConfigurationSpec.Merge(m, src)
+}
+func (m *MariaDBCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *MariaDBHorizontalScalingSpec) Reset()      { *m = MariaDBHorizontalScalingSpec{} }
+func (*MariaDBHorizontalScalingSpec) ProtoMessage() {}
+func (*MariaDBHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{25}
+}
+func (m *MariaDBHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBHorizontalScalingSpec.Merge(m, src)
+}
+func (m *MariaDBHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBHorizontalScalingSpec proto.InternalMessageInfo
+
+func (m *MariaDBOpsRequest) Reset()      { *m = MariaDBOpsRequest{} }
+func (*MariaDBOpsRequest) ProtoMessage() {}
+func (*MariaDBOpsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{26}
+}
+func (m *MariaDBOpsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBOpsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBOpsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBOpsRequest.Merge(m, src)
+}
+func (m *MariaDBOpsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBOpsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBOpsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBOpsRequest proto.InternalMessageInfo
+
+func (m *MariaDBOpsRequestList) Reset()      { *m = MariaDBOpsRequestList{} }
+func (*MariaDBOpsRequestList) ProtoMessage() {}
+func (*MariaDBOpsRequestList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{27}
+}
+func (m *MariaDBOpsRequestList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBOpsRequestList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBOpsRequestList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBOpsRequestList.Merge(m, src)
+}
+func (m *MariaDBOpsRequestList) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBOpsRequestList) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBOpsRequestList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBOpsRequestList proto.InternalMessageInfo
+
+func (m *MariaDBOpsRequestSpec) Reset()      { *m = MariaDBOpsRequestSpec{} }
+func (*MariaDBOpsRequestSpec) ProtoMessage() {}
+func (*MariaDBOpsRequestSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{28}
+}
+func (m *MariaDBOpsRequestSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBOpsRequestSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBOpsRequestSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBOpsRequestSpec.Merge(m, src)
+}
+func (m *MariaDBOpsRequestSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBOpsRequestSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBOpsRequestSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBOpsRequestSpec proto.InternalMessageInfo
+
+func (m *MariaDBOpsRequestStatus) Reset()      { *m = MariaDBOpsRequestStatus{} }
+func (*MariaDBOpsRequestStatus) ProtoMessage() {}
+func (*MariaDBOpsRequestStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{29}
+}
+func (m *MariaDBOpsRequestStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBOpsRequestStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBOpsRequestStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBOpsRequestStatus.Merge(m, src)
+}
+func (m *MariaDBOpsRequestStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBOpsRequestStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBOpsRequestStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBOpsRequestStatus proto.InternalMessageInfo
+
+func (m *MariaDBReplicaReadinessCriteria) Reset()      { *m = MariaDBReplicaReadinessCriteria{} }
+func (*MariaDBReplicaReadinessCriteria) ProtoMessage() {}
+func (*MariaDBReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{30}
+}
+func (m *MariaDBReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *MariaDBReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *MariaDBUpgradeSpec) Reset()      { *m = MariaDBUpgradeSpec{} }
+func (*MariaDBUpgradeSpec) ProtoMessage() {}
+func (*MariaDBUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{31}
+}
+func (m *MariaDBUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBUpgradeSpec.Merge(m, src)
+}
+func (m *MariaDBUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBUpgradeSpec proto.InternalMessageInfo
+
+func (m *MariaDBVerticalScalingSpec) Reset()      { *m = MariaDBVerticalScalingSpec{} }
+func (*MariaDBVerticalScalingSpec) ProtoMessage() {}
+func (*MariaDBVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{32}
+}
+func (m *MariaDBVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBVerticalScalingSpec.Merge(m, src)
+}
+func (m *MariaDBVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *MariaDBVolumeExpansionSpec) Reset()      { *m = MariaDBVolumeExpansionSpec{} }
+func (*MariaDBVolumeExpansionSpec) ProtoMessage() {}
+func (*MariaDBVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{33}
+}
+func (m *MariaDBVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MariaDBVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MariaDBVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MariaDBVolumeExpansionSpec.Merge(m, src)
+}
+func (m *MariaDBVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MariaDBVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MariaDBVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MariaDBVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *MemcachedCustomConfiguration) Reset()      { *m = MemcachedCustomConfiguration{} }
+func (*MemcachedCustomConfiguration) ProtoMessage() {}
+func (*MemcachedCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{34}
+}
+func (m *MemcachedCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MemcachedCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MemcachedCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedCustomConfiguration.Merge(m, src)
+}
+func (m *MemcachedCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *MemcachedCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MemcachedCustomConfiguration proto.InternalMessageInfo
+
+func (m *MemcachedCustomConfigurationSpec) Reset()      { *m = MemcachedCustomConfigurationSpec{} }
+func (*MemcachedCustomConfigurationSpec) ProtoMessage() {}
+func (*MemcachedCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{35}
+}
+func (m *MemcachedCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MemcachedCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MemcachedCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedCustomConfigurationSpec.Merge(m, src)
+}
+func (m *MemcachedCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MemcachedCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MemcachedCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *MemcachedHorizontalScalingSpec) Reset()      { *m = MemcachedHorizontalScalingSpec{} }
+func (*MemcachedHorizontalScalingSpec) ProtoMessage() {}
+func (*MemcachedHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{36}
+}
+func (m *MemcachedHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MemcachedHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MemcachedHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedHorizontalScalingSpec.Merge(m, src)
+}
+func (m *MemcachedHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MemcachedHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MemcachedHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *MemcachedOpsRequest) Reset()      { *m = MemcachedOpsRequest{} }
 func (*MemcachedOpsRequest) ProtoMessage() {}
 func (*MemcachedOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{10}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{37}
 }
 func (m *MemcachedOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -356,7 +1112,7 @@ var xxx_messageInfo_MemcachedOpsRequest proto.InternalMessageInfo
 func (m *MemcachedOpsRequestList) Reset()      { *m = MemcachedOpsRequestList{} }
 func (*MemcachedOpsRequestList) ProtoMessage() {}
 func (*MemcachedOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{11}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{38}
 }
 func (m *MemcachedOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -384,7 +1140,7 @@ var xxx_messageInfo_MemcachedOpsRequestList proto.InternalMessageInfo
 func (m *MemcachedOpsRequestSpec) Reset()      { *m = MemcachedOpsRequestSpec{} }
 func (*MemcachedOpsRequestSpec) ProtoMessage() {}
 func (*MemcachedOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{12}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{39}
 }
 func (m *MemcachedOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -412,7 +1168,7 @@ var xxx_messageInfo_MemcachedOpsRequestSpec proto.InternalMessageInfo
 func (m *MemcachedOpsRequestStatus) Reset()      { *m = MemcachedOpsRequestStatus{} }
 func (*MemcachedOpsRequestStatus) ProtoMessage() {}
 func (*MemcachedOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{13}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{40}
 }
 func (m *MemcachedOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -437,15 +1193,15 @@ func (m *MemcachedOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MemcachedOpsRequestStatus proto.InternalMessageInfo
 
-func (m *MongoDBCustomConfig) Reset()      { *m = MongoDBCustomConfig{} }
-func (*MongoDBCustomConfig) ProtoMessage() {}
-func (*MongoDBCustomConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{14}
+func (m *MemcachedReplicaReadinessCriteria) Reset()      { *m = MemcachedReplicaReadinessCriteria{} }
+func (*MemcachedReplicaReadinessCriteria) ProtoMessage() {}
+func (*MemcachedReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{41}
 }
-func (m *MongoDBCustomConfig) XXX_Unmarshal(b []byte) error {
+func (m *MemcachedReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MongoDBCustomConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MemcachedReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -453,27 +1209,27 @@ func (m *MongoDBCustomConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 	}
 	return b[:n], nil
 }
-func (m *MongoDBCustomConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MongoDBCustomConfig.Merge(m, src)
+func (m *MemcachedReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedReplicaReadinessCriteria.Merge(m, src)
 }
-func (m *MongoDBCustomConfig) XXX_Size() int {
+func (m *MemcachedReplicaReadinessCriteria) XXX_Size() int {
 	return m.Size()
 }
-func (m *MongoDBCustomConfig) XXX_DiscardUnknown() {
-	xxx_messageInfo_MongoDBCustomConfig.DiscardUnknown(m)
+func (m *MemcachedReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedReplicaReadinessCriteria.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MongoDBCustomConfig proto.InternalMessageInfo
+var xxx_messageInfo_MemcachedReplicaReadinessCriteria proto.InternalMessageInfo
 
-func (m *MongoDBCustomConfigSpec) Reset()      { *m = MongoDBCustomConfigSpec{} }
-func (*MongoDBCustomConfigSpec) ProtoMessage() {}
-func (*MongoDBCustomConfigSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{15}
+func (m *MemcachedUpgradeSpec) Reset()      { *m = MemcachedUpgradeSpec{} }
+func (*MemcachedUpgradeSpec) ProtoMessage() {}
+func (*MemcachedUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{42}
 }
-func (m *MongoDBCustomConfigSpec) XXX_Unmarshal(b []byte) error {
+func (m *MemcachedUpgradeSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MongoDBCustomConfigSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MemcachedUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -481,22 +1237,134 @@ func (m *MongoDBCustomConfigSpec) XXX_Marshal(b []byte, deterministic bool) ([]b
 	}
 	return b[:n], nil
 }
-func (m *MongoDBCustomConfigSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MongoDBCustomConfigSpec.Merge(m, src)
+func (m *MemcachedUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedUpgradeSpec.Merge(m, src)
 }
-func (m *MongoDBCustomConfigSpec) XXX_Size() int {
+func (m *MemcachedUpgradeSpec) XXX_Size() int {
 	return m.Size()
 }
-func (m *MongoDBCustomConfigSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_MongoDBCustomConfigSpec.DiscardUnknown(m)
+func (m *MemcachedUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedUpgradeSpec.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MongoDBCustomConfigSpec proto.InternalMessageInfo
+var xxx_messageInfo_MemcachedUpgradeSpec proto.InternalMessageInfo
+
+func (m *MemcachedVerticalScalingSpec) Reset()      { *m = MemcachedVerticalScalingSpec{} }
+func (*MemcachedVerticalScalingSpec) ProtoMessage() {}
+func (*MemcachedVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{43}
+}
+func (m *MemcachedVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MemcachedVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MemcachedVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedVerticalScalingSpec.Merge(m, src)
+}
+func (m *MemcachedVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MemcachedVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MemcachedVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *MemcachedVolumeExpansionSpec) Reset()      { *m = MemcachedVolumeExpansionSpec{} }
+func (*MemcachedVolumeExpansionSpec) ProtoMessage() {}
+func (*MemcachedVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{44}
+}
+func (m *MemcachedVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MemcachedVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MemcachedVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MemcachedVolumeExpansionSpec.Merge(m, src)
+}
+func (m *MemcachedVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MemcachedVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MemcachedVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MemcachedVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *MongoDBCustomConfiguration) Reset()      { *m = MongoDBCustomConfiguration{} }
+func (*MongoDBCustomConfiguration) ProtoMessage() {}
+func (*MongoDBCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{45}
+}
+func (m *MongoDBCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBCustomConfiguration.Merge(m, src)
+}
+func (m *MongoDBCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBCustomConfiguration proto.InternalMessageInfo
+
+func (m *MongoDBCustomConfigurationSpec) Reset()      { *m = MongoDBCustomConfigurationSpec{} }
+func (*MongoDBCustomConfigurationSpec) ProtoMessage() {}
+func (*MongoDBCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{46}
+}
+func (m *MongoDBCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBCustomConfigurationSpec.Merge(m, src)
+}
+func (m *MongoDBCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBCustomConfigurationSpec proto.InternalMessageInfo
 
 func (m *MongoDBHorizontalScalingSpec) Reset()      { *m = MongoDBHorizontalScalingSpec{} }
 func (*MongoDBHorizontalScalingSpec) ProtoMessage() {}
 func (*MongoDBHorizontalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{16}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{47}
 }
 func (m *MongoDBHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -524,7 +1392,7 @@ var xxx_messageInfo_MongoDBHorizontalScalingSpec proto.InternalMessageInfo
 func (m *MongoDBOpsRequest) Reset()      { *m = MongoDBOpsRequest{} }
 func (*MongoDBOpsRequest) ProtoMessage() {}
 func (*MongoDBOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{17}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{48}
 }
 func (m *MongoDBOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -552,7 +1420,7 @@ var xxx_messageInfo_MongoDBOpsRequest proto.InternalMessageInfo
 func (m *MongoDBOpsRequestList) Reset()      { *m = MongoDBOpsRequestList{} }
 func (*MongoDBOpsRequestList) ProtoMessage() {}
 func (*MongoDBOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{18}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{49}
 }
 func (m *MongoDBOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -580,7 +1448,7 @@ var xxx_messageInfo_MongoDBOpsRequestList proto.InternalMessageInfo
 func (m *MongoDBOpsRequestSpec) Reset()      { *m = MongoDBOpsRequestSpec{} }
 func (*MongoDBOpsRequestSpec) ProtoMessage() {}
 func (*MongoDBOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{19}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{50}
 }
 func (m *MongoDBOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -608,7 +1476,7 @@ var xxx_messageInfo_MongoDBOpsRequestSpec proto.InternalMessageInfo
 func (m *MongoDBOpsRequestStatus) Reset()      { *m = MongoDBOpsRequestStatus{} }
 func (*MongoDBOpsRequestStatus) ProtoMessage() {}
 func (*MongoDBOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{20}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{51}
 }
 func (m *MongoDBOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -633,10 +1501,38 @@ func (m *MongoDBOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MongoDBOpsRequestStatus proto.InternalMessageInfo
 
+func (m *MongoDBReplicaReadinessCriteria) Reset()      { *m = MongoDBReplicaReadinessCriteria{} }
+func (*MongoDBReplicaReadinessCriteria) ProtoMessage() {}
+func (*MongoDBReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{52}
+}
+func (m *MongoDBReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *MongoDBReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBReplicaReadinessCriteria proto.InternalMessageInfo
+
 func (m *MongoDBShardNode) Reset()      { *m = MongoDBShardNode{} }
 func (*MongoDBShardNode) ProtoMessage() {}
 func (*MongoDBShardNode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{21}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{53}
 }
 func (m *MongoDBShardNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -661,10 +1557,38 @@ func (m *MongoDBShardNode) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MongoDBShardNode proto.InternalMessageInfo
 
+func (m *MongoDBUpgradeSpec) Reset()      { *m = MongoDBUpgradeSpec{} }
+func (*MongoDBUpgradeSpec) ProtoMessage() {}
+func (*MongoDBUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{54}
+}
+func (m *MongoDBUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MongoDBUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MongoDBUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MongoDBUpgradeSpec.Merge(m, src)
+}
+func (m *MongoDBUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MongoDBUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MongoDBUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MongoDBUpgradeSpec proto.InternalMessageInfo
+
 func (m *MongoDBVerticalScalingSpec) Reset()      { *m = MongoDBVerticalScalingSpec{} }
 func (*MongoDBVerticalScalingSpec) ProtoMessage() {}
 func (*MongoDBVerticalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{22}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{55}
 }
 func (m *MongoDBVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -692,7 +1616,7 @@ var xxx_messageInfo_MongoDBVerticalScalingSpec proto.InternalMessageInfo
 func (m *MongoDBVolumeExpansionSpec) Reset()      { *m = MongoDBVolumeExpansionSpec{} }
 func (*MongoDBVolumeExpansionSpec) ProtoMessage() {}
 func (*MongoDBVolumeExpansionSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{23}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{56}
 }
 func (m *MongoDBVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -720,7 +1644,7 @@ var xxx_messageInfo_MongoDBVolumeExpansionSpec proto.InternalMessageInfo
 func (m *MongosNode) Reset()      { *m = MongosNode{} }
 func (*MongosNode) ProtoMessage() {}
 func (*MongosNode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{24}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{57}
 }
 func (m *MongosNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -745,10 +1669,66 @@ func (m *MongosNode) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MongosNode proto.InternalMessageInfo
 
+func (m *MySQLCustomConfiguration) Reset()      { *m = MySQLCustomConfiguration{} }
+func (*MySQLCustomConfiguration) ProtoMessage() {}
+func (*MySQLCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{58}
+}
+func (m *MySQLCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MySQLCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MySQLCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MySQLCustomConfiguration.Merge(m, src)
+}
+func (m *MySQLCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *MySQLCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_MySQLCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MySQLCustomConfiguration proto.InternalMessageInfo
+
+func (m *MySQLCustomConfigurationSpec) Reset()      { *m = MySQLCustomConfigurationSpec{} }
+func (*MySQLCustomConfigurationSpec) ProtoMessage() {}
+func (*MySQLCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{59}
+}
+func (m *MySQLCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MySQLCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MySQLCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MySQLCustomConfigurationSpec.Merge(m, src)
+}
+func (m *MySQLCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MySQLCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MySQLCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MySQLCustomConfigurationSpec proto.InternalMessageInfo
+
 func (m *MySQLHorizontalScalingSpec) Reset()      { *m = MySQLHorizontalScalingSpec{} }
 func (*MySQLHorizontalScalingSpec) ProtoMessage() {}
 func (*MySQLHorizontalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{25}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{60}
 }
 func (m *MySQLHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -776,7 +1756,7 @@ var xxx_messageInfo_MySQLHorizontalScalingSpec proto.InternalMessageInfo
 func (m *MySQLOpsRequest) Reset()      { *m = MySQLOpsRequest{} }
 func (*MySQLOpsRequest) ProtoMessage() {}
 func (*MySQLOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{26}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{61}
 }
 func (m *MySQLOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -804,7 +1784,7 @@ var xxx_messageInfo_MySQLOpsRequest proto.InternalMessageInfo
 func (m *MySQLOpsRequestList) Reset()      { *m = MySQLOpsRequestList{} }
 func (*MySQLOpsRequestList) ProtoMessage() {}
 func (*MySQLOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{27}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{62}
 }
 func (m *MySQLOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -832,7 +1812,7 @@ var xxx_messageInfo_MySQLOpsRequestList proto.InternalMessageInfo
 func (m *MySQLOpsRequestSpec) Reset()      { *m = MySQLOpsRequestSpec{} }
 func (*MySQLOpsRequestSpec) ProtoMessage() {}
 func (*MySQLOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{28}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{63}
 }
 func (m *MySQLOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -860,7 +1840,7 @@ var xxx_messageInfo_MySQLOpsRequestSpec proto.InternalMessageInfo
 func (m *MySQLOpsRequestStatus) Reset()      { *m = MySQLOpsRequestStatus{} }
 func (*MySQLOpsRequestStatus) ProtoMessage() {}
 func (*MySQLOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{29}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{64}
 }
 func (m *MySQLOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -885,10 +1865,66 @@ func (m *MySQLOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MySQLOpsRequestStatus proto.InternalMessageInfo
 
+func (m *MySQLReplicaReadinessCriteria) Reset()      { *m = MySQLReplicaReadinessCriteria{} }
+func (*MySQLReplicaReadinessCriteria) ProtoMessage() {}
+func (*MySQLReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{65}
+}
+func (m *MySQLReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MySQLReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MySQLReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MySQLReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *MySQLReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *MySQLReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_MySQLReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MySQLReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *MySQLUpgradeSpec) Reset()      { *m = MySQLUpgradeSpec{} }
+func (*MySQLUpgradeSpec) ProtoMessage() {}
+func (*MySQLUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{66}
+}
+func (m *MySQLUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MySQLUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MySQLUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MySQLUpgradeSpec.Merge(m, src)
+}
+func (m *MySQLUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MySQLUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MySQLUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MySQLUpgradeSpec proto.InternalMessageInfo
+
 func (m *MySQLVerticalScalingSpec) Reset()      { *m = MySQLVerticalScalingSpec{} }
 func (*MySQLVerticalScalingSpec) ProtoMessage() {}
 func (*MySQLVerticalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{30}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{67}
 }
 func (m *MySQLVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -913,10 +1949,122 @@ func (m *MySQLVerticalScalingSpec) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MySQLVerticalScalingSpec proto.InternalMessageInfo
 
+func (m *MySQLVolumeExpansionSpec) Reset()      { *m = MySQLVolumeExpansionSpec{} }
+func (*MySQLVolumeExpansionSpec) ProtoMessage() {}
+func (*MySQLVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{68}
+}
+func (m *MySQLVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MySQLVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MySQLVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MySQLVolumeExpansionSpec.Merge(m, src)
+}
+func (m *MySQLVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *MySQLVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MySQLVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MySQLVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *PerconaXtraDBCustomConfiguration) Reset()      { *m = PerconaXtraDBCustomConfiguration{} }
+func (*PerconaXtraDBCustomConfiguration) ProtoMessage() {}
+func (*PerconaXtraDBCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{69}
+}
+func (m *PerconaXtraDBCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBCustomConfiguration.Merge(m, src)
+}
+func (m *PerconaXtraDBCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBCustomConfiguration proto.InternalMessageInfo
+
+func (m *PerconaXtraDBCustomConfigurationSpec) Reset()      { *m = PerconaXtraDBCustomConfigurationSpec{} }
+func (*PerconaXtraDBCustomConfigurationSpec) ProtoMessage() {}
+func (*PerconaXtraDBCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{70}
+}
+func (m *PerconaXtraDBCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBCustomConfigurationSpec.Merge(m, src)
+}
+func (m *PerconaXtraDBCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *PerconaXtraDBHorizontalScalingSpec) Reset()      { *m = PerconaXtraDBHorizontalScalingSpec{} }
+func (*PerconaXtraDBHorizontalScalingSpec) ProtoMessage() {}
+func (*PerconaXtraDBHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{71}
+}
+func (m *PerconaXtraDBHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBHorizontalScalingSpec.Merge(m, src)
+}
+func (m *PerconaXtraDBHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *PerconaXtraDBOpsRequest) Reset()      { *m = PerconaXtraDBOpsRequest{} }
 func (*PerconaXtraDBOpsRequest) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{31}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{72}
 }
 func (m *PerconaXtraDBOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -944,7 +2092,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequest proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequestList) Reset()      { *m = PerconaXtraDBOpsRequestList{} }
 func (*PerconaXtraDBOpsRequestList) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{32}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{73}
 }
 func (m *PerconaXtraDBOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -972,7 +2120,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequestList proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequestSpec) Reset()      { *m = PerconaXtraDBOpsRequestSpec{} }
 func (*PerconaXtraDBOpsRequestSpec) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{33}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{74}
 }
 func (m *PerconaXtraDBOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1000,7 +2148,7 @@ var xxx_messageInfo_PerconaXtraDBOpsRequestSpec proto.InternalMessageInfo
 func (m *PerconaXtraDBOpsRequestStatus) Reset()      { *m = PerconaXtraDBOpsRequestStatus{} }
 func (*PerconaXtraDBOpsRequestStatus) ProtoMessage() {}
 func (*PerconaXtraDBOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{34}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{75}
 }
 func (m *PerconaXtraDBOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1025,10 +2173,206 @@ func (m *PerconaXtraDBOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PerconaXtraDBOpsRequestStatus proto.InternalMessageInfo
 
+func (m *PerconaXtraDBReplicaReadinessCriteria) Reset()      { *m = PerconaXtraDBReplicaReadinessCriteria{} }
+func (*PerconaXtraDBReplicaReadinessCriteria) ProtoMessage() {}
+func (*PerconaXtraDBReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{76}
+}
+func (m *PerconaXtraDBReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *PerconaXtraDBReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *PerconaXtraDBUpgradeSpec) Reset()      { *m = PerconaXtraDBUpgradeSpec{} }
+func (*PerconaXtraDBUpgradeSpec) ProtoMessage() {}
+func (*PerconaXtraDBUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{77}
+}
+func (m *PerconaXtraDBUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBUpgradeSpec.Merge(m, src)
+}
+func (m *PerconaXtraDBUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBUpgradeSpec proto.InternalMessageInfo
+
+func (m *PerconaXtraDBVerticalScalingSpec) Reset()      { *m = PerconaXtraDBVerticalScalingSpec{} }
+func (*PerconaXtraDBVerticalScalingSpec) ProtoMessage() {}
+func (*PerconaXtraDBVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{78}
+}
+func (m *PerconaXtraDBVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBVerticalScalingSpec.Merge(m, src)
+}
+func (m *PerconaXtraDBVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *PerconaXtraDBVolumeExpansionSpec) Reset()      { *m = PerconaXtraDBVolumeExpansionSpec{} }
+func (*PerconaXtraDBVolumeExpansionSpec) ProtoMessage() {}
+func (*PerconaXtraDBVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{79}
+}
+func (m *PerconaXtraDBVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PerconaXtraDBVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PerconaXtraDBVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PerconaXtraDBVolumeExpansionSpec.Merge(m, src)
+}
+func (m *PerconaXtraDBVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PerconaXtraDBVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PerconaXtraDBVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PerconaXtraDBVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *PgBouncerCustomConfiguration) Reset()      { *m = PgBouncerCustomConfiguration{} }
+func (*PgBouncerCustomConfiguration) ProtoMessage() {}
+func (*PgBouncerCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{80}
+}
+func (m *PgBouncerCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerCustomConfiguration.Merge(m, src)
+}
+func (m *PgBouncerCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerCustomConfiguration proto.InternalMessageInfo
+
+func (m *PgBouncerCustomConfigurationSpec) Reset()      { *m = PgBouncerCustomConfigurationSpec{} }
+func (*PgBouncerCustomConfigurationSpec) ProtoMessage() {}
+func (*PgBouncerCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{81}
+}
+func (m *PgBouncerCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerCustomConfigurationSpec.Merge(m, src)
+}
+func (m *PgBouncerCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *PgBouncerHorizontalScalingSpec) Reset()      { *m = PgBouncerHorizontalScalingSpec{} }
+func (*PgBouncerHorizontalScalingSpec) ProtoMessage() {}
+func (*PgBouncerHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{82}
+}
+func (m *PgBouncerHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerHorizontalScalingSpec.Merge(m, src)
+}
+func (m *PgBouncerHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *PgBouncerOpsRequest) Reset()      { *m = PgBouncerOpsRequest{} }
 func (*PgBouncerOpsRequest) ProtoMessage() {}
 func (*PgBouncerOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{35}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{83}
 }
 func (m *PgBouncerOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1056,7 +2400,7 @@ var xxx_messageInfo_PgBouncerOpsRequest proto.InternalMessageInfo
 func (m *PgBouncerOpsRequestList) Reset()      { *m = PgBouncerOpsRequestList{} }
 func (*PgBouncerOpsRequestList) ProtoMessage() {}
 func (*PgBouncerOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{36}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{84}
 }
 func (m *PgBouncerOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1084,7 +2428,7 @@ var xxx_messageInfo_PgBouncerOpsRequestList proto.InternalMessageInfo
 func (m *PgBouncerOpsRequestSpec) Reset()      { *m = PgBouncerOpsRequestSpec{} }
 func (*PgBouncerOpsRequestSpec) ProtoMessage() {}
 func (*PgBouncerOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{37}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{85}
 }
 func (m *PgBouncerOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1112,7 +2456,7 @@ var xxx_messageInfo_PgBouncerOpsRequestSpec proto.InternalMessageInfo
 func (m *PgBouncerOpsRequestStatus) Reset()      { *m = PgBouncerOpsRequestStatus{} }
 func (*PgBouncerOpsRequestStatus) ProtoMessage() {}
 func (*PgBouncerOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{38}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{86}
 }
 func (m *PgBouncerOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1137,10 +2481,206 @@ func (m *PgBouncerOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PgBouncerOpsRequestStatus proto.InternalMessageInfo
 
+func (m *PgBouncerReplicaReadinessCriteria) Reset()      { *m = PgBouncerReplicaReadinessCriteria{} }
+func (*PgBouncerReplicaReadinessCriteria) ProtoMessage() {}
+func (*PgBouncerReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{87}
+}
+func (m *PgBouncerReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *PgBouncerReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *PgBouncerUpgradeSpec) Reset()      { *m = PgBouncerUpgradeSpec{} }
+func (*PgBouncerUpgradeSpec) ProtoMessage() {}
+func (*PgBouncerUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{88}
+}
+func (m *PgBouncerUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerUpgradeSpec.Merge(m, src)
+}
+func (m *PgBouncerUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerUpgradeSpec proto.InternalMessageInfo
+
+func (m *PgBouncerVerticalScalingSpec) Reset()      { *m = PgBouncerVerticalScalingSpec{} }
+func (*PgBouncerVerticalScalingSpec) ProtoMessage() {}
+func (*PgBouncerVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{89}
+}
+func (m *PgBouncerVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerVerticalScalingSpec.Merge(m, src)
+}
+func (m *PgBouncerVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *PgBouncerVolumeExpansionSpec) Reset()      { *m = PgBouncerVolumeExpansionSpec{} }
+func (*PgBouncerVolumeExpansionSpec) ProtoMessage() {}
+func (*PgBouncerVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{90}
+}
+func (m *PgBouncerVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PgBouncerVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PgBouncerVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgBouncerVolumeExpansionSpec.Merge(m, src)
+}
+func (m *PgBouncerVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PgBouncerVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PgBouncerVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PgBouncerVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *PostgresCustomConfiguration) Reset()      { *m = PostgresCustomConfiguration{} }
+func (*PostgresCustomConfiguration) ProtoMessage() {}
+func (*PostgresCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{91}
+}
+func (m *PostgresCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresCustomConfiguration.Merge(m, src)
+}
+func (m *PostgresCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresCustomConfiguration proto.InternalMessageInfo
+
+func (m *PostgresCustomConfigurationSpec) Reset()      { *m = PostgresCustomConfigurationSpec{} }
+func (*PostgresCustomConfigurationSpec) ProtoMessage() {}
+func (*PostgresCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{92}
+}
+func (m *PostgresCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresCustomConfigurationSpec.Merge(m, src)
+}
+func (m *PostgresCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *PostgresHorizontalScalingSpec) Reset()      { *m = PostgresHorizontalScalingSpec{} }
+func (*PostgresHorizontalScalingSpec) ProtoMessage() {}
+func (*PostgresHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{93}
+}
+func (m *PostgresHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresHorizontalScalingSpec.Merge(m, src)
+}
+func (m *PostgresHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *PostgresOpsRequest) Reset()      { *m = PostgresOpsRequest{} }
 func (*PostgresOpsRequest) ProtoMessage() {}
 func (*PostgresOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{39}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{94}
 }
 func (m *PostgresOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1168,7 +2708,7 @@ var xxx_messageInfo_PostgresOpsRequest proto.InternalMessageInfo
 func (m *PostgresOpsRequestList) Reset()      { *m = PostgresOpsRequestList{} }
 func (*PostgresOpsRequestList) ProtoMessage() {}
 func (*PostgresOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{40}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{95}
 }
 func (m *PostgresOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1196,7 +2736,7 @@ var xxx_messageInfo_PostgresOpsRequestList proto.InternalMessageInfo
 func (m *PostgresOpsRequestSpec) Reset()      { *m = PostgresOpsRequestSpec{} }
 func (*PostgresOpsRequestSpec) ProtoMessage() {}
 func (*PostgresOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{41}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{96}
 }
 func (m *PostgresOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1224,7 +2764,7 @@ var xxx_messageInfo_PostgresOpsRequestSpec proto.InternalMessageInfo
 func (m *PostgresOpsRequestStatus) Reset()      { *m = PostgresOpsRequestStatus{} }
 func (*PostgresOpsRequestStatus) ProtoMessage() {}
 func (*PostgresOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{42}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{97}
 }
 func (m *PostgresOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1249,10 +2789,206 @@ func (m *PostgresOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PostgresOpsRequestStatus proto.InternalMessageInfo
 
+func (m *PostgresReplicaReadinessCriteria) Reset()      { *m = PostgresReplicaReadinessCriteria{} }
+func (*PostgresReplicaReadinessCriteria) ProtoMessage() {}
+func (*PostgresReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{98}
+}
+func (m *PostgresReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *PostgresReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *PostgresUpgradeSpec) Reset()      { *m = PostgresUpgradeSpec{} }
+func (*PostgresUpgradeSpec) ProtoMessage() {}
+func (*PostgresUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{99}
+}
+func (m *PostgresUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresUpgradeSpec.Merge(m, src)
+}
+func (m *PostgresUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresUpgradeSpec proto.InternalMessageInfo
+
+func (m *PostgresVerticalScalingSpec) Reset()      { *m = PostgresVerticalScalingSpec{} }
+func (*PostgresVerticalScalingSpec) ProtoMessage() {}
+func (*PostgresVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{100}
+}
+func (m *PostgresVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresVerticalScalingSpec.Merge(m, src)
+}
+func (m *PostgresVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *PostgresVolumeExpansionSpec) Reset()      { *m = PostgresVolumeExpansionSpec{} }
+func (*PostgresVolumeExpansionSpec) ProtoMessage() {}
+func (*PostgresVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{101}
+}
+func (m *PostgresVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PostgresVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PostgresVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostgresVolumeExpansionSpec.Merge(m, src)
+}
+func (m *PostgresVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *PostgresVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PostgresVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PostgresVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *ProxySQLCustomConfiguration) Reset()      { *m = ProxySQLCustomConfiguration{} }
+func (*ProxySQLCustomConfiguration) ProtoMessage() {}
+func (*ProxySQLCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{102}
+}
+func (m *ProxySQLCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLCustomConfiguration.Merge(m, src)
+}
+func (m *ProxySQLCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLCustomConfiguration proto.InternalMessageInfo
+
+func (m *ProxySQLCustomConfigurationSpec) Reset()      { *m = ProxySQLCustomConfigurationSpec{} }
+func (*ProxySQLCustomConfigurationSpec) ProtoMessage() {}
+func (*ProxySQLCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{103}
+}
+func (m *ProxySQLCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLCustomConfigurationSpec.Merge(m, src)
+}
+func (m *ProxySQLCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLCustomConfigurationSpec proto.InternalMessageInfo
+
+func (m *ProxySQLHorizontalScalingSpec) Reset()      { *m = ProxySQLHorizontalScalingSpec{} }
+func (*ProxySQLHorizontalScalingSpec) ProtoMessage() {}
+func (*ProxySQLHorizontalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{104}
+}
+func (m *ProxySQLHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLHorizontalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLHorizontalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLHorizontalScalingSpec.Merge(m, src)
+}
+func (m *ProxySQLHorizontalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLHorizontalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLHorizontalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLHorizontalScalingSpec proto.InternalMessageInfo
+
 func (m *ProxySQLOpsRequest) Reset()      { *m = ProxySQLOpsRequest{} }
 func (*ProxySQLOpsRequest) ProtoMessage() {}
 func (*ProxySQLOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{43}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{105}
 }
 func (m *ProxySQLOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1280,7 +3016,7 @@ var xxx_messageInfo_ProxySQLOpsRequest proto.InternalMessageInfo
 func (m *ProxySQLOpsRequestList) Reset()      { *m = ProxySQLOpsRequestList{} }
 func (*ProxySQLOpsRequestList) ProtoMessage() {}
 func (*ProxySQLOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{44}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{106}
 }
 func (m *ProxySQLOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1308,7 +3044,7 @@ var xxx_messageInfo_ProxySQLOpsRequestList proto.InternalMessageInfo
 func (m *ProxySQLOpsRequestSpec) Reset()      { *m = ProxySQLOpsRequestSpec{} }
 func (*ProxySQLOpsRequestSpec) ProtoMessage() {}
 func (*ProxySQLOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{45}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{107}
 }
 func (m *ProxySQLOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1336,7 +3072,7 @@ var xxx_messageInfo_ProxySQLOpsRequestSpec proto.InternalMessageInfo
 func (m *ProxySQLOpsRequestStatus) Reset()      { *m = ProxySQLOpsRequestStatus{} }
 func (*ProxySQLOpsRequestStatus) ProtoMessage() {}
 func (*ProxySQLOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{46}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{108}
 }
 func (m *ProxySQLOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1361,10 +3097,178 @@ func (m *ProxySQLOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProxySQLOpsRequestStatus proto.InternalMessageInfo
 
+func (m *ProxySQLReplicaReadinessCriteria) Reset()      { *m = ProxySQLReplicaReadinessCriteria{} }
+func (*ProxySQLReplicaReadinessCriteria) ProtoMessage() {}
+func (*ProxySQLReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{109}
+}
+func (m *ProxySQLReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *ProxySQLReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *ProxySQLUpgradeSpec) Reset()      { *m = ProxySQLUpgradeSpec{} }
+func (*ProxySQLUpgradeSpec) ProtoMessage() {}
+func (*ProxySQLUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{110}
+}
+func (m *ProxySQLUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLUpgradeSpec.Merge(m, src)
+}
+func (m *ProxySQLUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLUpgradeSpec proto.InternalMessageInfo
+
+func (m *ProxySQLVerticalScalingSpec) Reset()      { *m = ProxySQLVerticalScalingSpec{} }
+func (*ProxySQLVerticalScalingSpec) ProtoMessage() {}
+func (*ProxySQLVerticalScalingSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{111}
+}
+func (m *ProxySQLVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLVerticalScalingSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLVerticalScalingSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLVerticalScalingSpec.Merge(m, src)
+}
+func (m *ProxySQLVerticalScalingSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLVerticalScalingSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLVerticalScalingSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLVerticalScalingSpec proto.InternalMessageInfo
+
+func (m *ProxySQLVolumeExpansionSpec) Reset()      { *m = ProxySQLVolumeExpansionSpec{} }
+func (*ProxySQLVolumeExpansionSpec) ProtoMessage() {}
+func (*ProxySQLVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{112}
+}
+func (m *ProxySQLVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ProxySQLVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ProxySQLVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySQLVolumeExpansionSpec.Merge(m, src)
+}
+func (m *ProxySQLVolumeExpansionSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *ProxySQLVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySQLVolumeExpansionSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxySQLVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *RedisCustomConfiguration) Reset()      { *m = RedisCustomConfiguration{} }
+func (*RedisCustomConfiguration) ProtoMessage() {}
+func (*RedisCustomConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{113}
+}
+func (m *RedisCustomConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RedisCustomConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RedisCustomConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisCustomConfiguration.Merge(m, src)
+}
+func (m *RedisCustomConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *RedisCustomConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisCustomConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RedisCustomConfiguration proto.InternalMessageInfo
+
+func (m *RedisCustomConfigurationSpec) Reset()      { *m = RedisCustomConfigurationSpec{} }
+func (*RedisCustomConfigurationSpec) ProtoMessage() {}
+func (*RedisCustomConfigurationSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{114}
+}
+func (m *RedisCustomConfigurationSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RedisCustomConfigurationSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RedisCustomConfigurationSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisCustomConfigurationSpec.Merge(m, src)
+}
+func (m *RedisCustomConfigurationSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *RedisCustomConfigurationSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisCustomConfigurationSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RedisCustomConfigurationSpec proto.InternalMessageInfo
+
 func (m *RedisHorizontalScalingSpec) Reset()      { *m = RedisHorizontalScalingSpec{} }
 func (*RedisHorizontalScalingSpec) ProtoMessage() {}
 func (*RedisHorizontalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{47}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{115}
 }
 func (m *RedisHorizontalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1392,7 +3296,7 @@ var xxx_messageInfo_RedisHorizontalScalingSpec proto.InternalMessageInfo
 func (m *RedisOpsRequest) Reset()      { *m = RedisOpsRequest{} }
 func (*RedisOpsRequest) ProtoMessage() {}
 func (*RedisOpsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{48}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{116}
 }
 func (m *RedisOpsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1420,7 +3324,7 @@ var xxx_messageInfo_RedisOpsRequest proto.InternalMessageInfo
 func (m *RedisOpsRequestList) Reset()      { *m = RedisOpsRequestList{} }
 func (*RedisOpsRequestList) ProtoMessage() {}
 func (*RedisOpsRequestList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{49}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{117}
 }
 func (m *RedisOpsRequestList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1448,7 +3352,7 @@ var xxx_messageInfo_RedisOpsRequestList proto.InternalMessageInfo
 func (m *RedisOpsRequestSpec) Reset()      { *m = RedisOpsRequestSpec{} }
 func (*RedisOpsRequestSpec) ProtoMessage() {}
 func (*RedisOpsRequestSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{50}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{118}
 }
 func (m *RedisOpsRequestSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1476,7 +3380,7 @@ var xxx_messageInfo_RedisOpsRequestSpec proto.InternalMessageInfo
 func (m *RedisOpsRequestStatus) Reset()      { *m = RedisOpsRequestStatus{} }
 func (*RedisOpsRequestStatus) ProtoMessage() {}
 func (*RedisOpsRequestStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{51}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{119}
 }
 func (m *RedisOpsRequestStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1501,10 +3405,66 @@ func (m *RedisOpsRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RedisOpsRequestStatus proto.InternalMessageInfo
 
+func (m *RedisReplicaReadinessCriteria) Reset()      { *m = RedisReplicaReadinessCriteria{} }
+func (*RedisReplicaReadinessCriteria) ProtoMessage() {}
+func (*RedisReplicaReadinessCriteria) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{120}
+}
+func (m *RedisReplicaReadinessCriteria) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RedisReplicaReadinessCriteria) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RedisReplicaReadinessCriteria) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisReplicaReadinessCriteria.Merge(m, src)
+}
+func (m *RedisReplicaReadinessCriteria) XXX_Size() int {
+	return m.Size()
+}
+func (m *RedisReplicaReadinessCriteria) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisReplicaReadinessCriteria.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RedisReplicaReadinessCriteria proto.InternalMessageInfo
+
+func (m *RedisUpgradeSpec) Reset()      { *m = RedisUpgradeSpec{} }
+func (*RedisUpgradeSpec) ProtoMessage() {}
+func (*RedisUpgradeSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{121}
+}
+func (m *RedisUpgradeSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RedisUpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RedisUpgradeSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisUpgradeSpec.Merge(m, src)
+}
+func (m *RedisUpgradeSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *RedisUpgradeSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisUpgradeSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RedisUpgradeSpec proto.InternalMessageInfo
+
 func (m *RedisVerticalScalingSpec) Reset()      { *m = RedisVerticalScalingSpec{} }
 func (*RedisVerticalScalingSpec) ProtoMessage() {}
 func (*RedisVerticalScalingSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{52}
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{122}
 }
 func (m *RedisVerticalScalingSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1529,15 +3489,15 @@ func (m *RedisVerticalScalingSpec) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RedisVerticalScalingSpec proto.InternalMessageInfo
 
-func (m *UpgradeSpec) Reset()      { *m = UpgradeSpec{} }
-func (*UpgradeSpec) ProtoMessage() {}
-func (*UpgradeSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d9e6c4cc31bafaf, []int{53}
+func (m *RedisVolumeExpansionSpec) Reset()      { *m = RedisVolumeExpansionSpec{} }
+func (*RedisVolumeExpansionSpec) ProtoMessage() {}
+func (*RedisVolumeExpansionSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{123}
 }
-func (m *UpgradeSpec) XXX_Unmarshal(b []byte) error {
+func (m *RedisVolumeExpansionSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *UpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *RedisVolumeExpansionSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -1545,74 +3505,212 @@ func (m *UpgradeSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 	}
 	return b[:n], nil
 }
-func (m *UpgradeSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpgradeSpec.Merge(m, src)
+func (m *RedisVolumeExpansionSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RedisVolumeExpansionSpec.Merge(m, src)
 }
-func (m *UpgradeSpec) XXX_Size() int {
+func (m *RedisVolumeExpansionSpec) XXX_Size() int {
 	return m.Size()
 }
-func (m *UpgradeSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpgradeSpec.DiscardUnknown(m)
+func (m *RedisVolumeExpansionSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_RedisVolumeExpansionSpec.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UpgradeSpec proto.InternalMessageInfo
+var xxx_messageInfo_RedisVolumeExpansionSpec proto.InternalMessageInfo
+
+func (m *RestartSpec) Reset()      { *m = RestartSpec{} }
+func (*RestartSpec) ProtoMessage() {}
+func (*RestartSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{124}
+}
+func (m *RestartSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RestartSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RestartSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RestartSpec.Merge(m, src)
+}
+func (m *RestartSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *RestartSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_RestartSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RestartSpec proto.InternalMessageInfo
+
+func (m *TLSSpec) Reset()      { *m = TLSSpec{} }
+func (*TLSSpec) ProtoMessage() {}
+func (*TLSSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d9e6c4cc31bafaf, []int{125}
+}
+func (m *TLSSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TLSSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TLSSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TLSSpec.Merge(m, src)
+}
+func (m *TLSSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *TLSSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_TLSSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TLSSpec proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*ConfigNode)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ConfigNode")
+	proto.RegisterType((*ElasticsearchCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchCustomConfiguration.DataEntry")
+	proto.RegisterType((*ElasticsearchCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchCustomConfigurationSpec")
 	proto.RegisterType((*ElasticsearchHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchHorizontalScalingSpec")
 	proto.RegisterType((*ElasticsearchOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchOpsRequest")
 	proto.RegisterType((*ElasticsearchOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchOpsRequestList")
 	proto.RegisterType((*ElasticsearchOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchOpsRequestSpec")
 	proto.RegisterType((*ElasticsearchOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchOpsRequestStatus")
+	proto.RegisterType((*ElasticsearchReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchReplicaReadinessCriteria")
+	proto.RegisterType((*ElasticsearchUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchUpgradeSpec")
+	proto.RegisterType((*ElasticsearchVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchVerticalScalingSpec")
+	proto.RegisterType((*ElasticsearchVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ElasticsearchVolumeExpansionSpec")
+	proto.RegisterType((*EtcdCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdCustomConfiguration.DataEntry")
+	proto.RegisterType((*EtcdCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdCustomConfigurationSpec")
+	proto.RegisterType((*EtcdHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdHorizontalScalingSpec")
 	proto.RegisterType((*EtcdOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdOpsRequest")
 	proto.RegisterType((*EtcdOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdOpsRequestList")
 	proto.RegisterType((*EtcdOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdOpsRequestSpec")
 	proto.RegisterType((*EtcdOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdOpsRequestStatus")
+	proto.RegisterType((*EtcdReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdReplicaReadinessCriteria")
+	proto.RegisterType((*EtcdUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdUpgradeSpec")
+	proto.RegisterType((*EtcdVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdVerticalScalingSpec")
+	proto.RegisterType((*EtcdVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.EtcdVolumeExpansionSpec")
+	proto.RegisterType((*MariaDBCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBCustomConfiguration.DataEntry")
+	proto.RegisterType((*MariaDBCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBCustomConfigurationSpec")
+	proto.RegisterType((*MariaDBHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBHorizontalScalingSpec")
+	proto.RegisterType((*MariaDBOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBOpsRequest")
+	proto.RegisterType((*MariaDBOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBOpsRequestList")
+	proto.RegisterType((*MariaDBOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBOpsRequestSpec")
+	proto.RegisterType((*MariaDBOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBOpsRequestStatus")
+	proto.RegisterType((*MariaDBReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBReplicaReadinessCriteria")
+	proto.RegisterType((*MariaDBUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBUpgradeSpec")
+	proto.RegisterType((*MariaDBVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBVerticalScalingSpec")
+	proto.RegisterType((*MariaDBVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MariaDBVolumeExpansionSpec")
+	proto.RegisterType((*MemcachedCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedCustomConfiguration.DataEntry")
+	proto.RegisterType((*MemcachedCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedCustomConfigurationSpec")
+	proto.RegisterType((*MemcachedHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedHorizontalScalingSpec")
 	proto.RegisterType((*MemcachedOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequest")
 	proto.RegisterType((*MemcachedOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequestList")
 	proto.RegisterType((*MemcachedOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequestSpec")
 	proto.RegisterType((*MemcachedOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedOpsRequestStatus")
-	proto.RegisterType((*MongoDBCustomConfig)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfig")
-	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfig.DataEntry")
-	proto.RegisterType((*MongoDBCustomConfigSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfigSpec")
+	proto.RegisterType((*MemcachedReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedReplicaReadinessCriteria")
+	proto.RegisterType((*MemcachedUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedUpgradeSpec")
+	proto.RegisterType((*MemcachedVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedVerticalScalingSpec")
+	proto.RegisterType((*MemcachedVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MemcachedVolumeExpansionSpec")
+	proto.RegisterType((*MongoDBCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfiguration.DataEntry")
+	proto.RegisterType((*MongoDBCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBCustomConfigurationSpec")
 	proto.RegisterType((*MongoDBHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBHorizontalScalingSpec")
 	proto.RegisterType((*MongoDBOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequest")
 	proto.RegisterType((*MongoDBOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequestList")
 	proto.RegisterType((*MongoDBOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequestSpec")
 	proto.RegisterType((*MongoDBOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBOpsRequestStatus")
+	proto.RegisterType((*MongoDBReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBReplicaReadinessCriteria")
 	proto.RegisterType((*MongoDBShardNode)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBShardNode")
+	proto.RegisterType((*MongoDBUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBUpgradeSpec")
 	proto.RegisterType((*MongoDBVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBVerticalScalingSpec")
 	proto.RegisterType((*MongoDBVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongoDBVolumeExpansionSpec")
 	proto.RegisterType((*MongosNode)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MongosNode")
+	proto.RegisterType((*MySQLCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLCustomConfiguration.DataEntry")
+	proto.RegisterType((*MySQLCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLCustomConfigurationSpec")
 	proto.RegisterType((*MySQLHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLHorizontalScalingSpec")
 	proto.RegisterType((*MySQLOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLOpsRequest")
 	proto.RegisterType((*MySQLOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLOpsRequestList")
 	proto.RegisterType((*MySQLOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLOpsRequestSpec")
 	proto.RegisterType((*MySQLOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLOpsRequestStatus")
+	proto.RegisterType((*MySQLReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLReplicaReadinessCriteria")
+	proto.RegisterType((*MySQLUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLUpgradeSpec")
 	proto.RegisterType((*MySQLVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLVerticalScalingSpec")
+	proto.RegisterType((*MySQLVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.MySQLVolumeExpansionSpec")
+	proto.RegisterType((*PerconaXtraDBCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBCustomConfiguration.DataEntry")
+	proto.RegisterType((*PerconaXtraDBCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBCustomConfigurationSpec")
+	proto.RegisterType((*PerconaXtraDBHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBHorizontalScalingSpec")
 	proto.RegisterType((*PerconaXtraDBOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBOpsRequest")
 	proto.RegisterType((*PerconaXtraDBOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBOpsRequestList")
 	proto.RegisterType((*PerconaXtraDBOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBOpsRequestSpec")
 	proto.RegisterType((*PerconaXtraDBOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBOpsRequestStatus")
+	proto.RegisterType((*PerconaXtraDBReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBReplicaReadinessCriteria")
+	proto.RegisterType((*PerconaXtraDBUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBUpgradeSpec")
+	proto.RegisterType((*PerconaXtraDBVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBVerticalScalingSpec")
+	proto.RegisterType((*PerconaXtraDBVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PerconaXtraDBVolumeExpansionSpec")
+	proto.RegisterType((*PgBouncerCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerCustomConfiguration.DataEntry")
+	proto.RegisterType((*PgBouncerCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerCustomConfigurationSpec")
+	proto.RegisterType((*PgBouncerHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerHorizontalScalingSpec")
 	proto.RegisterType((*PgBouncerOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerOpsRequest")
 	proto.RegisterType((*PgBouncerOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerOpsRequestList")
 	proto.RegisterType((*PgBouncerOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerOpsRequestSpec")
 	proto.RegisterType((*PgBouncerOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerOpsRequestStatus")
+	proto.RegisterType((*PgBouncerReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerReplicaReadinessCriteria")
+	proto.RegisterType((*PgBouncerUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerUpgradeSpec")
+	proto.RegisterType((*PgBouncerVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerVerticalScalingSpec")
+	proto.RegisterType((*PgBouncerVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PgBouncerVolumeExpansionSpec")
+	proto.RegisterType((*PostgresCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresCustomConfiguration.DataEntry")
+	proto.RegisterType((*PostgresCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresCustomConfigurationSpec")
+	proto.RegisterType((*PostgresHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresHorizontalScalingSpec")
 	proto.RegisterType((*PostgresOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresOpsRequest")
 	proto.RegisterType((*PostgresOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresOpsRequestList")
 	proto.RegisterType((*PostgresOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresOpsRequestSpec")
 	proto.RegisterType((*PostgresOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresOpsRequestStatus")
+	proto.RegisterType((*PostgresReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresReplicaReadinessCriteria")
+	proto.RegisterType((*PostgresUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresUpgradeSpec")
+	proto.RegisterType((*PostgresVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresVerticalScalingSpec")
+	proto.RegisterType((*PostgresVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.PostgresVolumeExpansionSpec")
+	proto.RegisterType((*ProxySQLCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLCustomConfiguration.DataEntry")
+	proto.RegisterType((*ProxySQLCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLCustomConfigurationSpec")
+	proto.RegisterType((*ProxySQLHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLHorizontalScalingSpec")
 	proto.RegisterType((*ProxySQLOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequest")
 	proto.RegisterType((*ProxySQLOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequestList")
 	proto.RegisterType((*ProxySQLOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequestSpec")
 	proto.RegisterType((*ProxySQLOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLOpsRequestStatus")
+	proto.RegisterType((*ProxySQLReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLReplicaReadinessCriteria")
+	proto.RegisterType((*ProxySQLUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLUpgradeSpec")
+	proto.RegisterType((*ProxySQLVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLVerticalScalingSpec")
+	proto.RegisterType((*ProxySQLVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.ProxySQLVolumeExpansionSpec")
+	proto.RegisterType((*RedisCustomConfiguration)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisCustomConfiguration")
+	proto.RegisterMapType((map[string]string)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisCustomConfiguration.DataEntry")
+	proto.RegisterType((*RedisCustomConfigurationSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisCustomConfigurationSpec")
 	proto.RegisterType((*RedisHorizontalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisHorizontalScalingSpec")
 	proto.RegisterType((*RedisOpsRequest)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequest")
 	proto.RegisterType((*RedisOpsRequestList)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequestList")
 	proto.RegisterType((*RedisOpsRequestSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequestSpec")
 	proto.RegisterType((*RedisOpsRequestStatus)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisOpsRequestStatus")
+	proto.RegisterType((*RedisReplicaReadinessCriteria)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisReplicaReadinessCriteria")
+	proto.RegisterType((*RedisUpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisUpgradeSpec")
 	proto.RegisterType((*RedisVerticalScalingSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisVerticalScalingSpec")
-	proto.RegisterType((*UpgradeSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.UpgradeSpec")
+	proto.RegisterType((*RedisVolumeExpansionSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RedisVolumeExpansionSpec")
+	proto.RegisterType((*RestartSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.RestartSpec")
+	proto.RegisterType((*TLSSpec)(nil), "kubedb.dev.apimachinery.apis.ops.v1alpha1.TLSSpec")
 }
 
 func init() {
@@ -1620,141 +3718,225 @@ func init() {
 }
 
 var fileDescriptor_7d9e6c4cc31bafaf = []byte{
-	// 2140 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x5b, 0xcf, 0x8f, 0xdb, 0xc6,
-	0x15, 0x5e, 0x52, 0x5a, 0x79, 0x77, 0x76, 0xed, 0xb5, 0xc7, 0x76, 0xac, 0x6e, 0x13, 0xc9, 0xd0,
-	0xa1, 0xd8, 0x02, 0x35, 0x55, 0x2f, 0x5a, 0xd7, 0x71, 0x9a, 0x34, 0xd5, 0x7a, 0x93, 0x38, 0xf0,
-	0x66, 0x9d, 0x51, 0x92, 0xba, 0x85, 0xeb, 0xcd, 0x88, 0x9c, 0xa5, 0xe8, 0x95, 0x48, 0x86, 0x33,
-	0x5a, 0xac, 0x7c, 0x6a, 0x8a, 0x1e, 0x0a, 0x23, 0x05, 0x9a, 0xf6, 0x58, 0xf4, 0xd2, 0x43, 0xff,
-	0x82, 0x5e, 0x0a, 0x14, 0xc8, 0xa9, 0x80, 0x81, 0x5e, 0x82, 0xa2, 0x40, 0x8c, 0xa2, 0x10, 0x6a,
-	0xa5, 0xe7, 0x9e, 0xdb, 0xb4, 0x05, 0x0a, 0x0e, 0x29, 0x51, 0xfc, 0x31, 0xda, 0xa5, 0xe4, 0x15,
-	0x6c, 0xf0, 0x26, 0x0e, 0xe7, 0xbd, 0xef, 0xcd, 0x9b, 0xc7, 0x6f, 0x3e, 0xce, 0x50, 0xe0, 0xc5,
-	0xbd, 0x4e, 0x83, 0x68, 0x0d, 0x45, 0x23, 0xfb, 0x55, 0x6c, 0x1b, 0x6d, 0xac, 0x36, 0x0d, 0x93,
-	0x38, 0x5d, 0xf7, 0x82, 0x56, 0x2d, 0x9b, 0x56, 0xf7, 0x2f, 0xe3, 0x96, 0xdd, 0xc4, 0x97, 0xab,
-	0x3a, 0x31, 0x89, 0x83, 0x19, 0xd1, 0x14, 0xdb, 0xb1, 0x98, 0x05, 0xbf, 0x1a, 0x98, 0x2a, 0xa3,
-	0xa6, 0xee, 0x05, 0x55, 0x2c, 0x9b, 0x2a, 0x03, 0xd3, 0xd5, 0x4b, 0xba, 0xc1, 0x9a, 0x9d, 0x86,
-	0xa2, 0x5a, 0xed, 0xaa, 0x6e, 0xe9, 0x56, 0x95, 0x7b, 0x68, 0x74, 0x76, 0xf9, 0x15, 0xbf, 0xe0,
-	0xbf, 0x3c, 0xcf, 0xab, 0x95, 0xbd, 0xab, 0x54, 0x31, 0x2c, 0x37, 0x86, 0xaa, 0x6a, 0x39, 0xa4,
-	0xba, 0x1f, 0x43, 0x5f, 0xfd, 0x46, 0xd0, 0x27, 0x08, 0xda, 0xde, 0xd3, 0xb9, 0x91, 0x43, 0xa8,
-	0xd5, 0x71, 0x54, 0x92, 0xca, 0x8a, 0x56, 0xdb, 0x84, 0xe1, 0x24, 0xac, 0xaa, 0xc8, 0xca, 0xe9,
-	0x98, 0xcc, 0x68, 0xc7, 0x61, 0xae, 0x1c, 0x66, 0x40, 0xd5, 0x26, 0x69, 0xe3, 0x98, 0xdd, 0xa5,
-	0xbd, 0xb6, 0xa5, 0x75, 0x5a, 0x84, 0x2a, 0x07, 0xdd, 0xfb, 0x55, 0xb5, 0x65, 0x10, 0x93, 0x5d,
-	0xd2, 0xbd, 0x44, 0xc4, 0xe3, 0xaa, 0x5c, 0x03, 0x60, 0xc3, 0x32, 0x77, 0x0d, 0xfd, 0x2d, 0x4b,
-	0x23, 0xf0, 0x6b, 0x60, 0xc1, 0x21, 0x76, 0xcb, 0x50, 0x31, 0x2d, 0x4a, 0x17, 0xa5, 0xb5, 0xf9,
-	0xda, 0xe9, 0x87, 0xbd, 0xf2, 0x5c, 0xbf, 0x57, 0x5e, 0x40, 0x7e, 0x3b, 0x1a, 0xf6, 0xa8, 0x3c,
-	0x90, 0x40, 0x65, 0xb3, 0x85, 0x29, 0x33, 0x54, 0x4a, 0xb0, 0xa3, 0x36, 0xdf, 0xb0, 0x1c, 0xe3,
-	0xbe, 0x65, 0x32, 0xdc, 0xaa, 0xab, 0xb8, 0x65, 0x98, 0x7a, 0xdd, 0x26, 0x2a, 0xac, 0x80, 0x42,
-	0x1b, 0x53, 0x46, 0x1c, 0xdf, 0x25, 0xe8, 0xf7, 0xca, 0x85, 0x2d, 0xde, 0x82, 0xfc, 0x3b, 0xf0,
-	0x79, 0x90, 0xd7, 0x30, 0xc3, 0x45, 0x99, 0xf7, 0x58, 0xe8, 0xf7, 0xca, 0xf9, 0xeb, 0x98, 0x61,
-	0xc4, 0x5b, 0x5d, 0x0f, 0xde, 0x40, 0x8a, 0xb9, 0xc0, 0xc3, 0x06, 0x6f, 0x41, 0xfe, 0x9d, 0xca,
-	0x67, 0x32, 0xb8, 0x10, 0x0a, 0x66, 0xdb, 0xa6, 0x88, 0x7c, 0xd0, 0x21, 0x94, 0xc1, 0xf7, 0xc1,
-	0x82, 0x3b, 0x2f, 0x1c, 0xc1, 0x8d, 0x61, 0x69, 0xfd, 0xeb, 0x8a, 0x97, 0xde, 0x70, 0xd5, 0xd9,
-	0x7b, 0xba, 0x57, 0x79, 0x6e, 0x6f, 0x65, 0xff, 0xb2, 0xb2, 0xdd, 0xb8, 0x47, 0x54, 0xb6, 0x45,
-	0x18, 0xae, 0x41, 0x3f, 0x11, 0x20, 0x68, 0x43, 0x43, 0xaf, 0xb0, 0x09, 0xf2, 0xd4, 0x26, 0x2a,
-	0x8f, 0x7f, 0x69, 0xfd, 0x35, 0xe5, 0xc8, 0x75, 0xad, 0x08, 0x62, 0x76, 0x33, 0x57, 0x5b, 0xf6,
-	0x31, 0xf3, 0xee, 0x15, 0xe2, 0x08, 0xd0, 0x06, 0x05, 0xca, 0x30, 0xeb, 0x50, 0x9e, 0x8b, 0xa5,
-	0xf5, 0x37, 0x9e, 0x00, 0x16, 0xf7, 0x57, 0x3b, 0xe5, 0xa3, 0x15, 0xbc, 0x6b, 0xe4, 0xe3, 0x54,
-	0xfe, 0x21, 0x81, 0x2f, 0x0b, 0x2c, 0x6f, 0x1a, 0x94, 0xc1, 0x3b, 0xb1, 0xec, 0x2a, 0x47, 0xcb,
-	0xae, 0x6b, 0xcd, 0x73, 0x3b, 0x2c, 0xb2, 0x41, 0xcb, 0x48, 0x66, 0x75, 0x30, 0x6f, 0x30, 0xd2,
-	0xa6, 0x45, 0xf9, 0x62, 0x6e, 0x6d, 0x69, 0xbd, 0x36, 0xfd, 0x70, 0x6b, 0x27, 0x7d, 0xb8, 0xf9,
-	0x1b, 0xae, 0x63, 0xe4, 0xf9, 0xaf, 0xfc, 0x36, 0x27, 0x1c, 0x26, 0x2f, 0xe3, 0x1d, 0xb0, 0xe4,
-	0x06, 0xd4, 0xc0, 0x94, 0x20, 0xb2, 0xeb, 0x8f, 0x74, 0x6d, 0x64, 0xa4, 0x8a, 0xcb, 0x33, 0x7c,
-	0x5c, 0x96, 0x8a, 0x5b, 0x5e, 0x99, 0x20, 0xb2, 0x4b, 0x1c, 0x62, 0xaa, 0xa4, 0x76, 0xd6, 0x07,
-	0x5d, 0xba, 0x1e, 0x38, 0x41, 0xa3, 0x1e, 0xe1, 0x3a, 0xc8, 0xb3, 0xae, 0x4d, 0x78, 0x0d, 0x2d,
-	0xd6, 0x4a, 0x83, 0xb9, 0x7f, 0xa7, 0x6b, 0x93, 0x2f, 0x7a, 0xe5, 0x53, 0x41, 0x38, 0x6e, 0x0b,
-	0xe2, 0x7d, 0xe1, 0x0f, 0xc1, 0x89, 0x8e, 0xad, 0x3b, 0x58, 0x23, 0x7e, 0x39, 0x5c, 0x49, 0x91,
-	0x9f, 0x77, 0x3d, 0x4b, 0x5e, 0x6a, 0x4b, 0xfd, 0x5e, 0xf9, 0x84, 0xdf, 0x80, 0x06, 0x3e, 0xe1,
-	0x2f, 0x24, 0x70, 0xa6, 0x19, 0x7d, 0xa8, 0x8b, 0x79, 0x8e, 0xb4, 0x35, 0xe9, 0x4c, 0x24, 0xb2,
-	0x44, 0xed, 0x7c, 0xbf, 0x57, 0x3e, 0x13, 0xbb, 0x85, 0xe2, 0xf0, 0x95, 0x0f, 0x65, 0xf0, 0xc2,
-	0xd8, 0x4a, 0x86, 0x57, 0xc0, 0xbc, 0xdd, 0xc4, 0x94, 0xf0, 0x49, 0x5a, 0xac, 0x5d, 0x1c, 0xcc,
-	0xf7, 0x2d, 0xb7, 0xf1, 0x8b, 0x5e, 0x79, 0x25, 0xb0, 0xe0, 0x4d, 0xc8, 0xeb, 0x0e, 0xdf, 0x04,
-	0xd0, 0x6a, 0x50, 0xe2, 0xec, 0x13, 0xed, 0x75, 0x8f, 0x27, 0x0d, 0xcb, 0xe4, 0xf3, 0x91, 0xab,
-	0xad, 0xfa, 0x4e, 0xe0, 0x76, 0xac, 0x07, 0x4a, 0xb0, 0x82, 0x77, 0x00, 0x50, 0x2d, 0x53, 0x33,
-	0xdc, 0x0b, 0xf7, 0x59, 0xcd, 0x79, 0xd5, 0x32, 0x42, 0xce, 0x8a, 0xc7, 0x5c, 0x3b, 0xba, 0x57,
-	0x3d, 0xfb, 0x97, 0x95, 0x8d, 0x81, 0x41, 0xc0, 0x36, 0xc3, 0x26, 0x8a, 0x46, 0xfc, 0x55, 0xfe,
-	0x20, 0x83, 0x53, 0x9b, 0x4c, 0xd5, 0x66, 0x4a, 0x72, 0x3b, 0x21, 0x92, 0x7b, 0x39, 0xcd, 0xfc,
-	0x87, 0x42, 0x15, 0x72, 0x9b, 0x1e, 0xe1, 0xb6, 0xef, 0x4c, 0x0e, 0x31, 0x9e, 0xd2, 0xfe, 0x2c,
-	0x01, 0x18, 0x36, 0x98, 0x01, 0x93, 0xdd, 0x0d, 0x33, 0xd9, 0x8b, 0x13, 0x0f, 0x4e, 0x40, 0x60,
-	0x3f, 0x95, 0xa3, 0x83, 0xca, 0x2a, 0x6f, 0x55, 0xfe, 0x25, 0x81, 0x73, 0x49, 0x05, 0x91, 0x01,
-	0x66, 0xf8, 0x93, 0x0c, 0xce, 0x6e, 0x91, 0xb6, 0x8a, 0xd5, 0x26, 0x99, 0x2d, 0x3d, 0x68, 0x21,
-	0x7a, 0x48, 0xb3, 0x50, 0x27, 0xc4, 0x2b, 0xe4, 0x88, 0x56, 0x84, 0x23, 0xae, 0x4f, 0x89, 0x33,
-	0x9e, 0x28, 0xfe, 0x26, 0x81, 0x0b, 0x09, 0x56, 0x33, 0x60, 0x0b, 0x35, 0xcc, 0x16, 0xaf, 0x4c,
-	0x37, 0x4c, 0x01, 0x65, 0xfc, 0x4c, 0x4e, 0x1c, 0x5e, 0x66, 0x79, 0xe3, 0x7f, 0x12, 0xf8, 0x92,
-	0xb0, 0x48, 0x32, 0x40, 0x1e, 0x1f, 0xbb, 0xe4, 0x61, 0x99, 0xba, 0x75, 0xbd, 0xb6, 0xd1, 0xa1,
-	0xcc, 0x6a, 0x7b, 0xef, 0x86, 0xf0, 0x5d, 0xb0, 0xa8, 0xf2, 0x5f, 0x5b, 0xd8, 0x4e, 0x5d, 0x09,
-	0x27, 0xfb, 0xbd, 0xf2, 0xe2, 0xc6, 0xc0, 0x1c, 0x05, 0x9e, 0xe0, 0xbd, 0xe1, 0x5b, 0x5f, 0x2e,
-	0xe5, 0x9b, 0x4c, 0x42, 0x90, 0x8a, 0x5b, 0x68, 0x9b, 0x26, 0x73, 0xba, 0x01, 0x6f, 0x04, 0xef,
-	0x90, 0xab, 0xdf, 0x02, 0x8b, 0xc3, 0x0e, 0xf0, 0x34, 0xc8, 0xed, 0x91, 0xae, 0x37, 0x8f, 0xc8,
-	0xfd, 0x09, 0xcf, 0x81, 0xf9, 0x7d, 0xdc, 0xea, 0xf8, 0xd5, 0x88, 0xbc, 0x8b, 0x6b, 0xf2, 0x55,
-	0xa9, 0xf2, 0xbb, 0x3c, 0xb8, 0x90, 0x00, 0xc7, 0x9f, 0x11, 0x13, 0x00, 0xca, 0xb0, 0xa9, 0xe1,
-	0x96, 0x65, 0x12, 0x3f, 0x31, 0xaf, 0x4c, 0x37, 0x8c, 0xda, 0x29, 0x77, 0x7e, 0xea, 0x43, 0xaf,
-	0x68, 0x04, 0xc1, 0xc5, 0xf3, 0xdf, 0xbe, 0xeb, 0x84, 0x15, 0xe7, 0x9f, 0x1c, 0x1e, 0x1a, 0x7a,
-	0x45, 0x23, 0x08, 0xb0, 0x01, 0x0a, 0x6d, 0xd7, 0x84, 0xfa, 0xa4, 0x3e, 0x2d, 0x96, 0xf7, 0xea,
-	0xcf, 0x3d, 0x22, 0xdf, 0x33, 0x64, 0x60, 0xd9, 0xab, 0x88, 0xba, 0x5b, 0xeb, 0x8e, 0xff, 0x5c,
-	0x4f, 0x8b, 0x74, 0xba, 0xdf, 0x2b, 0x2f, 0x6f, 0x8c, 0xf8, 0x45, 0x21, 0x14, 0xb8, 0x03, 0xe6,
-	0x69, 0x13, 0x3b, 0x9a, 0xff, 0x32, 0x33, 0x2d, 0xdc, 0xa2, 0xcb, 0x03, 0x75, 0xd7, 0x21, 0xf2,
-	0xfc, 0x56, 0xfe, 0x29, 0x83, 0xe7, 0xfd, 0x9e, 0xc9, 0xdb, 0x22, 0x77, 0x06, 0x11, 0x78, 0x65,
-	0xf3, 0x52, 0xfa, 0x08, 0x38, 0xde, 0x5b, 0x96, 0x46, 0xe2, 0xf0, 0x70, 0x2f, 0x92, 0x55, 0x6f,
-	0xfe, 0xbe, 0x99, 0x02, 0x24, 0xd8, 0x16, 0x3a, 0x34, 0x99, 0xdf, 0x1f, 0x96, 0x49, 0x2e, 0x35,
-	0x8c, 0x57, 0x0d, 0x1c, 0x26, 0xa9, 0x3a, 0xd6, 0x46, 0x76, 0xa4, 0xf2, 0x7c, 0xf3, 0x67, 0x59,
-	0xb0, 0x1b, 0xf5, 0x47, 0x19, 0x9c, 0xf1, 0x13, 0x33, 0x53, 0xd9, 0xd3, 0x08, 0xc9, 0x9e, 0x57,
-	0xd3, 0x4f, 0xe3, 0x11, 0x44, 0xcf, 0xbd, 0x88, 0xe8, 0xa9, 0x4d, 0x85, 0x32, 0x5e, 0xf2, 0x3c,
-	0x92, 0xc0, 0xf9, 0x98, 0xcd, 0x0c, 0x04, 0x0f, 0x0e, 0x0b, 0x9e, 0x6f, 0x4f, 0x33, 0x44, 0x81,
-	0xdc, 0xf9, 0x4d, 0x21, 0x61, 0x68, 0x99, 0xdd, 0xdc, 0xf9, 0x68, 0xcc, 0xe6, 0xce, 0xeb, 0xe9,
-	0xb3, 0x3f, 0xe5, 0xb6, 0x0e, 0xfc, 0x89, 0x04, 0x56, 0xf6, 0x89, 0xc3, 0x0c, 0x35, 0x08, 0xc6,
-	0x5b, 0xe1, 0x36, 0xd3, 0x07, 0xf3, 0x5e, 0xd8, 0x11, 0x0f, 0xe5, 0x6c, 0xbf, 0x57, 0x5e, 0x89,
-	0xdc, 0x40, 0x51, 0x48, 0x2f, 0x0c, 0xab, 0xd5, 0x69, 0x93, 0xcd, 0x03, 0x1b, 0x9b, 0xd4, 0x95,
-	0x6a, 0x85, 0x89, 0xc3, 0x08, 0x3b, 0x1a, 0x09, 0x23, 0x7c, 0x03, 0x45, 0x21, 0xe1, 0x01, 0x58,
-	0x56, 0x47, 0x16, 0x98, 0xe2, 0x89, 0x49, 0x9f, 0xfb, 0xa8, 0x66, 0xf1, 0xc9, 0x7c, 0xa4, 0x15,
-	0x85, 0x90, 0x2a, 0xff, 0x91, 0x86, 0x7a, 0x27, 0x83, 0x0a, 0xb8, 0x09, 0x4e, 0x47, 0x57, 0x57,
-	0xf8, 0x15, 0x50, 0xe0, 0x8b, 0xea, 0xe0, 0x4c, 0x24, 0x60, 0x4e, 0xde, 0x8a, 0xfc, 0xbb, 0xa1,
-	0xd3, 0x13, 0xf9, 0xd0, 0xd3, 0x93, 0x5f, 0xe7, 0xc1, 0xaa, 0xb8, 0x5a, 0xe1, 0xed, 0x04, 0x69,
-	0x99, 0x48, 0x48, 0xc8, 0x3f, 0xa8, 0x72, 0xf3, 0x6e, 0x38, 0xa4, 0x4d, 0x4c, 0x46, 0xc7, 0x8a,
-	0xc8, 0xdb, 0x21, 0x11, 0x59, 0x98, 0xc4, 0xb3, 0x40, 0x2e, 0xde, 0x8c, 0xc8, 0xc5, 0xa3, 0x7b,
-	0x4d, 0x5a, 0xfa, 0xef, 0x26, 0x0a, 0xc3, 0xa3, 0xfb, 0x3c, 0x4c, 0xb5, 0xdc, 0x08, 0x4b, 0xc0,
-	0xa3, 0x3b, 0x8e, 0xab, 0x2d, 0x04, 0x16, 0xc8, 0x81, 0x6d, 0x39, 0x8c, 0x38, 0x3e, 0x67, 0x1d,
-	0xdd, 0x1b, 0xd7, 0x33, 0x9b, 0xbe, 0x35, 0x1a, 0xfa, 0xa9, 0xfc, 0x32, 0x17, 0xd4, 0x47, 0x9c,
-	0x46, 0xe0, 0xdd, 0x84, 0xfa, 0x18, 0xbb, 0x1c, 0x2b, 0x83, 0x13, 0x4d, 0xe5, 0xed, 0x0e, 0x36,
-	0x99, 0xc1, 0xba, 0x63, 0xab, 0xe4, 0x6e, 0xa8, 0x4a, 0xf2, 0x93, 0xfb, 0x17, 0xd4, 0x8a, 0x96,
-	0x28, 0x50, 0xd3, 0x22, 0x1c, 0x36, 0xc7, 0xdb, 0x83, 0x39, 0xce, 0x4d, 0xe4, 0x3e, 0x2e, 0xeb,
-	0xaf, 0x01, 0x10, 0x28, 0xd6, 0x94, 0xe7, 0xa5, 0xf7, 0xc1, 0xea, 0x56, 0xb7, 0xfe, 0xf6, 0x4d,
-	0xf1, 0x31, 0x29, 0x69, 0x37, 0x22, 0xc7, 0xa4, 0xbc, 0x05, 0xf9, 0x77, 0xe0, 0x55, 0xb0, 0xec,
-	0xfd, 0xfa, 0x1e, 0x31, 0xf4, 0x26, 0xf3, 0x59, 0xe6, 0x9c, 0x8f, 0xb9, 0xbc, 0x35, 0x72, 0x0f,
-	0x85, 0x7a, 0x56, 0x3e, 0x91, 0xc1, 0x0a, 0x07, 0x9f, 0xa9, 0x36, 0x7e, 0x3f, 0xa4, 0x8d, 0x53,
-	0xbd, 0x64, 0x85, 0x63, 0x15, 0x2a, 0xe3, 0x66, 0x44, 0x19, 0xbf, 0x3a, 0x05, 0xc6, 0x78, 0x5d,
-	0xfc, 0x17, 0x09, 0x9c, 0x8d, 0x58, 0xcc, 0x40, 0x15, 0xef, 0x84, 0x55, 0xf1, 0xb5, 0xc9, 0x87,
-	0x27, 0xd0, 0xc4, 0x9f, 0xe7, 0x63, 0xc3, 0x9a, 0x8d, 0x22, 0x7e, 0x0d, 0x40, 0x37, 0xb3, 0x64,
-	0xb7, 0xd3, 0xaa, 0x13, 0xb6, 0xed, 0x68, 0x86, 0x89, 0x5b, 0x7e, 0x45, 0x3f, 0xe7, 0xea, 0x81,
-	0x7a, 0xec, 0x2e, 0x4a, 0xb0, 0x18, 0x2a, 0xeb, 0xdc, 0x64, 0xca, 0x3a, 0x7f, 0x0c, 0xca, 0xfa,
-	0x41, 0xa2, 0xb2, 0x9e, 0x40, 0xcc, 0x0a, 0xd9, 0x22, 0x85, 0xae, 0xfe, 0x71, 0x82, 0xae, 0xf6,
-	0x16, 0xfd, 0x8d, 0xb4, 0xa1, 0x4c, 0xac, 0xaa, 0x2b, 0xff, 0x76, 0x5f, 0x2a, 0x93, 0x1e, 0xb7,
-	0x0c, 0x48, 0xca, 0xdf, 0x4b, 0xa0, 0x28, 0x4a, 0x9f, 0x2b, 0x42, 0xda, 0x5d, 0xfa, 0x41, 0x2b,
-	0xb5, 0xc2, 0xe3, 0x4b, 0x13, 0x77, 0x8b, 0x3c, 0x0f, 0x21, 0x11, 0x22, 0x3f, 0x21, 0x11, 0xf2,
-	0x99, 0x0c, 0x2e, 0xdc, 0x22, 0x8e, 0x6a, 0x99, 0xf8, 0x36, 0x73, 0xf0, 0x8c, 0xb7, 0x56, 0x26,
-	0xff, 0xaa, 0x46, 0x10, 0xf3, 0xb1, 0x7c, 0x55, 0x23, 0xc2, 0x3a, 0xfc, 0xab, 0x1a, 0x81, 0xe5,
-	0xd3, 0xfd, 0x55, 0x8d, 0x20, 0x68, 0xc1, 0xf2, 0xf2, 0xb1, 0x2c, 0x1c, 0x66, 0x66, 0x4f, 0x99,
-	0x3e, 0x94, 0xc1, 0x0b, 0x63, 0x8b, 0x26, 0x23, 0xc7, 0xd4, 0xb7, 0xf4, 0x9a, 0xd5, 0x31, 0x55,
-	0xe2, 0x3c, 0x23, 0xc7, 0xd4, 0x09, 0xf1, 0x1e, 0xcb, 0x31, 0x75, 0x12, 0xce, 0xe1, 0xc7, 0xd4,
-	0x09, 0x56, 0x4f, 0xf7, 0x31, 0x75, 0x42, 0xc0, 0x63, 0x8e, 0xa9, 0x05, 0xc9, 0xcf, 0xec, 0x31,
-	0xb5, 0xb0, 0x48, 0x32, 0x40, 0x1e, 0x0f, 0x65, 0x00, 0x6f, 0x59, 0x94, 0xe9, 0x0e, 0xa1, 0x33,
-	0xe5, 0x0e, 0x35, 0xc4, 0x1d, 0xdf, 0x4d, 0x53, 0xec, 0xb1, 0x70, 0x85, 0xd4, 0xb1, 0x17, 0xa1,
-	0x8e, 0x8d, 0xe9, 0x60, 0xc6, 0x33, 0xc7, 0x5f, 0x25, 0xf0, 0x5c, 0xdc, 0x68, 0x06, 0xc4, 0xd1,
-	0x08, 0x13, 0xc7, 0xcb, 0x53, 0x0d, 0x52, 0xc0, 0x1b, 0x1f, 0xc9, 0x49, 0x83, 0xcb, 0x2c, 0x6d,
-	0xfc, 0x57, 0x02, 0x45, 0x51, 0x81, 0x64, 0x85, 0x35, 0x1c, 0xeb, 0x60, 0xe6, 0xbb, 0x60, 0x53,
-	0xb0, 0x46, 0x2c, 0xdc, 0xe3, 0x61, 0x8d, 0x38, 0xcc, 0x11, 0x58, 0x23, 0x66, 0xf4, 0x94, 0xb3,
-	0x46, 0x2c, 0xde, 0x71, 0xac, 0x91, 0x98, 0xf8, 0xec, 0xb2, 0x86, 0xa0, 0x40, 0x32, 0xc0, 0x1a,
-	0xf7, 0xc0, 0x2a, 0x22, 0x9a, 0x41, 0x27, 0xff, 0x6f, 0xd3, 0x5a, 0xec, 0x58, 0x50, 0xf4, 0x09,
-	0xcb, 0x27, 0x32, 0x58, 0xe1, 0x60, 0xcf, 0xc8, 0x26, 0x7d, 0x24, 0xd6, 0x63, 0xd9, 0xa4, 0x8f,
-	0x62, 0x1c, 0xbe, 0x49, 0x1f, 0xb1, 0x78, 0xba, 0x37, 0xe9, 0x23, 0xc1, 0x0a, 0x28, 0xe9, 0x57,
-	0xf9, 0xd8, 0xb0, 0x32, 0xfb, 0xd9, 0xca, 0x83, 0x31, 0x9f, 0xad, 0x6c, 0xa6, 0xcd, 0xfc, 0x71,
-	0x6c, 0xae, 0xcf, 0xa7, 0x5e, 0x7f, 0x79, 0x28, 0xd3, 0x6d, 0xae, 0x27, 0x3e, 0x26, 0x19, 0xd9,
-	0x5c, 0x17, 0xa5, 0x0f, 0xde, 0x00, 0xf3, 0x8e, 0x7b, 0x6f, 0xb2, 0xcd, 0x75, 0xee, 0x16, 0x79,
-	0x1e, 0x8e, 0x65, 0x73, 0xfd, 0x4d, 0xb0, 0x34, 0x52, 0xee, 0xf0, 0x25, 0x70, 0x92, 0x61, 0x47,
-	0x27, 0xec, 0x3d, 0xe2, 0xf0, 0xcf, 0x8e, 0xbc, 0x49, 0x3b, 0xef, 0x67, 0xe0, 0xe4, 0x3b, 0xa3,
-	0x37, 0x51, 0xb8, 0x6f, 0x4d, 0x79, 0xf8, 0xb8, 0x34, 0xf7, 0xe9, 0xe3, 0xd2, 0xdc, 0xa3, 0xc7,
-	0xa5, 0xb9, 0x1f, 0xf5, 0x4b, 0xd2, 0xc3, 0x7e, 0x49, 0xfa, 0xb4, 0x5f, 0x92, 0x1e, 0xf5, 0x4b,
-	0xd2, 0xdf, 0xfb, 0x25, 0xe9, 0xe7, 0x9f, 0x97, 0xe6, 0x7e, 0xb0, 0x30, 0x28, 0xb9, 0xff, 0x07,
-	0x00, 0x00, 0xff, 0xff, 0x22, 0xc4, 0x39, 0x15, 0xb5, 0x3d, 0x00, 0x00,
+	// 3486 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x9d, 0x5d, 0x70, 0xe3, 0x56,
+	0x15, 0xc7, 0x57, 0xce, 0x87, 0x93, 0x93, 0xcd, 0x7e, 0x68, 0x77, 0x5b, 0x37, 0x9b, 0xb5, 0x53,
+	0x51, 0xca, 0x32, 0x43, 0x1d, 0x76, 0x07, 0x4a, 0xbb, 0xa5, 0x1f, 0x38, 0xc9, 0x7e, 0xb4, 0x49,
+	0x93, 0x5e, 0x6f, 0x4b, 0xcb, 0x94, 0xdd, 0xca, 0xf2, 0x8d, 0xad, 0x8d, 0x6d, 0xb9, 0x92, 0x1c,
+	0x36, 0x0b, 0x33, 0xb4, 0x65, 0xdb, 0x81, 0x4e, 0x0b, 0x2d, 0x0c, 0xaf, 0x3c, 0xf3, 0x06, 0xc3,
+	0x1b, 0x0c, 0x33, 0x9d, 0x4e, 0x87, 0x61, 0x99, 0x3e, 0xd0, 0xa1, 0x0c, 0xdd, 0x61, 0x20, 0x50,
+	0x17, 0x06, 0x9e, 0xca, 0x2b, 0x2d, 0x30, 0xc3, 0xe8, 0xea, 0xda, 0xb2, 0x3e, 0xae, 0x6c, 0xc9,
+	0x8e, 0xec, 0x38, 0x6f, 0x91, 0x74, 0xef, 0x3d, 0xff, 0x7b, 0x75, 0x74, 0xf4, 0x3b, 0x92, 0x8f,
+	0x02, 0xf7, 0x6e, 0xd4, 0x72, 0x38, 0x9f, 0x4b, 0xe7, 0xf1, 0xe6, 0xbc, 0x58, 0x95, 0xcb, 0xa2,
+	0x54, 0x94, 0x2b, 0x58, 0xdd, 0x32, 0x36, 0xb4, 0x79, 0xa5, 0xaa, 0xcd, 0x6f, 0x9e, 0x12, 0x4b,
+	0xd5, 0xa2, 0x78, 0x6a, 0xbe, 0x80, 0x2b, 0x58, 0x15, 0x75, 0x9c, 0x4f, 0x57, 0x55, 0x45, 0x57,
+	0xf8, 0x4f, 0x5b, 0x5d, 0xd3, 0xad, 0x5d, 0x8d, 0x0d, 0x2d, 0xad, 0x54, 0xb5, 0x74, 0xa3, 0xeb,
+	0xcc, 0x5d, 0x05, 0x59, 0x2f, 0xd6, 0x72, 0x69, 0x49, 0x29, 0xcf, 0x17, 0x94, 0x82, 0x32, 0x4f,
+	0x46, 0xc8, 0xd5, 0xd6, 0xc9, 0x16, 0xd9, 0x20, 0x7f, 0x99, 0x23, 0xcf, 0x08, 0x1b, 0xf7, 0x68,
+	0x69, 0x59, 0x31, 0x34, 0xcc, 0x4b, 0x8a, 0x8a, 0xe7, 0x37, 0x5d, 0xd6, 0x67, 0x3e, 0x67, 0xb5,
+	0xb1, 0x44, 0x57, 0x37, 0x0a, 0xa4, 0x93, 0x8a, 0x35, 0xa5, 0xa6, 0x4a, 0x38, 0x50, 0x2f, 0x6d,
+	0xbe, 0x8c, 0x75, 0xd1, 0xcb, 0xd6, 0x3c, 0xab, 0x97, 0x5a, 0xab, 0xe8, 0x72, 0xd9, 0x6d, 0xe6,
+	0xee, 0x76, 0x1d, 0x34, 0xa9, 0x88, 0xcb, 0xa2, 0xab, 0xdf, 0x5d, 0x1b, 0x65, 0x25, 0x5f, 0x2b,
+	0x61, 0x2d, 0x7d, 0x75, 0xeb, 0xda, 0xbc, 0x54, 0x92, 0x71, 0x45, 0xbf, 0xab, 0x60, 0x2e, 0x84,
+	0x5b, 0x97, 0x70, 0x06, 0x60, 0x41, 0xa9, 0xac, 0xcb, 0x85, 0x47, 0x95, 0x3c, 0xe6, 0x3f, 0x03,
+	0x13, 0x2a, 0xae, 0x96, 0x64, 0x49, 0xd4, 0x12, 0xdc, 0x1c, 0x77, 0x72, 0x2c, 0x73, 0xe8, 0xc6,
+	0x76, 0x6a, 0x5f, 0x7d, 0x3b, 0x35, 0x81, 0xe8, 0x7e, 0xd4, 0x6c, 0x21, 0xbc, 0x1b, 0x83, 0xb9,
+	0xa5, 0x92, 0xa8, 0xe9, 0xb2, 0xa4, 0x61, 0x51, 0x95, 0x8a, 0x0b, 0x35, 0x4d, 0x57, 0xca, 0xe6,
+	0x78, 0x35, 0x55, 0xd4, 0x65, 0xa5, 0xc2, 0x3f, 0x0e, 0x93, 0x12, 0xd9, 0xb1, 0x22, 0x56, 0xc9,
+	0x98, 0x53, 0xa7, 0x4f, 0xa6, 0xcd, 0xb9, 0x19, 0x67, 0x39, 0x6d, 0x9c, 0x9c, 0xf4, 0xe6, 0xa9,
+	0xf4, 0xb2, 0x22, 0x89, 0xa5, 0xd5, 0xdc, 0x15, 0x2c, 0xe9, 0x08, 0xaf, 0x63, 0x15, 0x57, 0x24,
+	0x9c, 0x99, 0xae, 0x6f, 0xa7, 0x26, 0x17, 0x1a, 0xdd, 0x91, 0x35, 0x12, 0xff, 0x35, 0x18, 0xcd,
+	0x8b, 0xba, 0x98, 0x88, 0xcd, 0x8d, 0x9c, 0x9c, 0x3a, 0xfd, 0x78, 0xba, 0x63, 0x47, 0x4a, 0xb7,
+	0x53, 0x9c, 0x5e, 0x14, 0x75, 0x71, 0xa9, 0xa2, 0xab, 0x5b, 0x99, 0xfd, 0x74, 0xf2, 0xa3, 0xc6,
+	0x2e, 0x44, 0x0c, 0xf2, 0x77, 0xc2, 0xb8, 0x8a, 0xcb, 0xca, 0x26, 0x4e, 0x8c, 0xcc, 0x71, 0x27,
+	0x27, 0x32, 0x07, 0x68, 0x9b, 0x71, 0x44, 0xf6, 0x22, 0x7a, 0x74, 0xe6, 0x0b, 0x30, 0xd9, 0x1c,
+	0x88, 0x3f, 0x04, 0x23, 0x1b, 0x78, 0x8b, 0x4c, 0x7f, 0x12, 0x19, 0x7f, 0xf2, 0x47, 0x61, 0x6c,
+	0x53, 0x2c, 0xd5, 0x70, 0x22, 0x46, 0xf6, 0x99, 0x1b, 0x67, 0x62, 0xf7, 0x70, 0xc2, 0x9d, 0x70,
+	0x47, 0x3b, 0x89, 0xd9, 0x2a, 0x96, 0x84, 0x97, 0x39, 0x10, 0x6c, 0x0d, 0xcf, 0x2b, 0xaa, 0x7c,
+	0x4d, 0xa9, 0xe8, 0x62, 0x29, 0x2b, 0x89, 0x25, 0xb9, 0x52, 0x30, 0x9a, 0xf1, 0x02, 0x8c, 0x97,
+	0x45, 0x4d, 0xc7, 0x2a, 0x3d, 0xa1, 0x60, 0x68, 0x5d, 0x21, 0x7b, 0x10, 0x3d, 0xc2, 0xcf, 0x36,
+	0x17, 0xd3, 0x68, 0x31, 0xe1, 0x98, 0xb1, 0x00, 0xe3, 0xa6, 0x1b, 0x91, 0x19, 0xd3, 0x11, 0x16,
+	0xc8, 0x1e, 0x44, 0x8f, 0x08, 0xef, 0xc5, 0xe0, 0x56, 0x9b, 0x98, 0xd5, 0xaa, 0x86, 0xf0, 0xb3,
+	0x35, 0xac, 0xe9, 0xfc, 0x33, 0x30, 0x61, 0x5c, 0x15, 0xc4, 0x82, 0xe9, 0x00, 0x9f, 0x6d, 0x71,
+	0x00, 0xeb, 0x54, 0x55, 0x37, 0x0a, 0xe6, 0xe9, 0x32, 0x5a, 0x1b, 0x2e, 0x61, 0x7a, 0xc3, 0x0a,
+	0xd6, 0xc5, 0x0c, 0x4f, 0x57, 0x19, 0xac, 0x7d, 0xa8, 0x39, 0x2a, 0x5f, 0x84, 0x51, 0xad, 0x8a,
+	0x25, 0xa2, 0x7f, 0xea, 0xf4, 0xd9, 0xb0, 0xce, 0x60, 0x69, 0x36, 0x56, 0xce, 0x3a, 0xfb, 0xc6,
+	0x16, 0x22, 0x16, 0xf8, 0x2a, 0x8c, 0x6b, 0xba, 0xa8, 0xd7, 0x34, 0xb2, 0x16, 0x53, 0xa7, 0xcf,
+	0xf7, 0xc0, 0x16, 0x19, 0xcf, 0xf2, 0x23, 0x73, 0x1b, 0x51, 0x3b, 0xc2, 0xdf, 0x38, 0x38, 0xce,
+	0xe8, 0xb9, 0x2c, 0x6b, 0x3a, 0xff, 0xb4, 0x6b, 0x75, 0xd3, 0x9d, 0xad, 0xae, 0xd1, 0x9b, 0xac,
+	0x6d, 0xf3, 0x12, 0x6f, 0xec, 0x69, 0x59, 0xd9, 0x02, 0x8c, 0xc9, 0x3a, 0x2e, 0x6b, 0xf4, 0x3a,
+	0xcb, 0x74, 0x3f, 0xdd, 0xcc, 0x34, 0x35, 0x37, 0x76, 0xc1, 0x18, 0x18, 0x99, 0xe3, 0x0b, 0x2f,
+	0x4d, 0x30, 0xa7, 0x49, 0xdc, 0xf8, 0x32, 0x4c, 0x19, 0x82, 0x72, 0xa2, 0x86, 0x11, 0x5e, 0x0f,
+	0x1c, 0x48, 0x8e, 0x50, 0xa3, 0x53, 0x8b, 0xd6, 0x20, 0xa8, 0x75, 0x44, 0xfe, 0x34, 0x8c, 0xea,
+	0x5b, 0x55, 0x7a, 0x3d, 0x66, 0x92, 0x8d, 0x73, 0x7f, 0x71, 0xab, 0x8a, 0x3f, 0xde, 0x4e, 0x1d,
+	0xb0, 0xe4, 0x18, 0x7b, 0x10, 0x69, 0xcb, 0x5f, 0x81, 0x78, 0xad, 0x5a, 0x50, 0xc5, 0x3c, 0xa6,
+	0xee, 0xb0, 0x10, 0x76, 0x7d, 0x1e, 0x37, 0x87, 0x21, 0x7e, 0x37, 0x55, 0xdf, 0x4e, 0xc5, 0xe9,
+	0x0e, 0xd4, 0x30, 0xc0, 0x7f, 0x9f, 0x83, 0xc3, 0x45, 0xe7, 0x15, 0x9e, 0x18, 0x25, 0x66, 0x57,
+	0xc2, 0x9a, 0xf5, 0x0c, 0x19, 0x99, 0x63, 0xf5, 0xed, 0xd4, 0x61, 0xd7, 0x21, 0xe4, 0x36, 0xcf,
+	0xbf, 0xcc, 0xc1, 0xc1, 0x4d, 0xac, 0xea, 0xb2, 0x64, 0x49, 0x1a, 0x23, 0x92, 0x1e, 0x09, 0x2b,
+	0xe9, 0x09, 0xfb, 0x70, 0x44, 0xd0, 0x91, 0xfa, 0x76, 0xea, 0xa0, 0xe3, 0x00, 0x72, 0x1a, 0x36,
+	0xc5, 0x28, 0xa5, 0x5a, 0x19, 0x2f, 0x5d, 0xad, 0x8a, 0x15, 0x4d, 0x56, 0x2a, 0x89, 0xf1, 0x2e,
+	0xc5, 0xd8, 0x87, 0x6b, 0x11, 0x63, 0x3f, 0x80, 0x9c, 0x86, 0xf9, 0x6f, 0x73, 0x30, 0x2d, 0xb5,
+	0xc6, 0xec, 0x44, 0x9c, 0x48, 0x59, 0xed, 0xe1, 0x9d, 0x8a, 0xc8, 0x39, 0x5c, 0xdf, 0x4e, 0x4d,
+	0xdb, 0x76, 0x23, 0xbb, 0x61, 0x7e, 0x05, 0x46, 0xf4, 0x92, 0x96, 0x98, 0x20, 0xf6, 0x4f, 0x07,
+	0xb0, 0x7f, 0x71, 0x39, 0x4b, 0x4c, 0xc4, 0xeb, 0xdb, 0xa9, 0x91, 0x8b, 0xcb, 0x59, 0x64, 0x8c,
+	0xc3, 0x7f, 0x15, 0xe2, 0x2a, 0xd6, 0x74, 0x51, 0xd5, 0x13, 0x93, 0x64, 0xc8, 0xbb, 0x03, 0x0c,
+	0x89, 0xcc, 0x9e, 0x96, 0x9f, 0xd3, 0x1d, 0xa8, 0x31, 0xa6, 0xf0, 0x7c, 0x0c, 0x4e, 0xf8, 0x46,
+	0x4a, 0xfe, 0x6e, 0x18, 0xab, 0x16, 0x45, 0x0d, 0x9b, 0xb7, 0xd3, 0xcc, 0x5c, 0x23, 0x9e, 0xac,
+	0x19, 0x3b, 0x3f, 0xde, 0x4e, 0x1d, 0xb4, 0x7a, 0x90, 0x5d, 0xc8, 0x6c, 0xce, 0x3f, 0x0c, 0xbc,
+	0x92, 0xd3, 0xb0, 0xba, 0x89, 0xf3, 0xe7, 0x4c, 0x0a, 0x32, 0x4e, 0x8b, 0x71, 0xbd, 0x8f, 0x64,
+	0x66, 0xe8, 0x20, 0xfc, 0xaa, 0xab, 0x05, 0xf2, 0xe8, 0xc5, 0x3f, 0x0d, 0x20, 0x29, 0x95, 0xbc,
+	0x6c, 0x6c, 0x18, 0xf7, 0x82, 0x11, 0x33, 0x1a, 0xb5, 0xa0, 0x57, 0xda, 0xbc, 0x33, 0x5e, 0x2e,
+	0x98, 0xd1, 0x69, 0xf3, 0x54, 0x7a, 0xa1, 0xd1, 0xc1, 0xba, 0x9b, 0x35, 0x77, 0x69, 0xa8, 0x65,
+	0x3c, 0xe1, 0x53, 0xf0, 0x49, 0xdb, 0x12, 0x50, 0xf6, 0x42, 0x58, 0xcc, 0xcb, 0x15, 0xac, 0x69,
+	0x0b, 0xaa, 0xac, 0x63, 0x55, 0x16, 0x85, 0x7f, 0x71, 0x90, 0x60, 0xc5, 0x11, 0xfe, 0x3e, 0x98,
+	0xd6, 0x45, 0xb5, 0x80, 0xf5, 0x27, 0xb0, 0x4a, 0x2e, 0x06, 0x73, 0xbd, 0x8e, 0x51, 0xe3, 0xd3,
+	0x17, 0x5b, 0x0f, 0x22, 0x7b, 0x5b, 0xfe, 0x87, 0x1c, 0x1c, 0x56, 0x9d, 0xf6, 0xe8, 0x0d, 0x76,
+	0x2d, 0xac, 0x0f, 0xb3, 0xe6, 0x61, 0x46, 0x1c, 0xd7, 0x6e, 0xe4, 0x56, 0x20, 0xfc, 0x82, 0x73,
+	0x30, 0xa7, 0x47, 0xbc, 0x60, 0x88, 0xe7, 0xfa, 0x2e, 0x5e, 0x70, 0x6a, 0x77, 0x87, 0x17, 0xe1,
+	0x4d, 0x83, 0xa4, 0x74, 0x29, 0x1f, 0x21, 0x4b, 0x57, 0x6c, 0x2c, 0xbd, 0x1c, 0x64, 0x81, 0xbc,
+	0x85, 0xf6, 0x1b, 0xa1, 0x4f, 0xc0, 0x71, 0x86, 0x32, 0xb2, 0xc4, 0xc7, 0xe1, 0x36, 0xe3, 0xb0,
+	0xe7, 0xcd, 0x4f, 0xf8, 0x65, 0x0c, 0x0e, 0x18, 0x47, 0x23, 0x05, 0xd8, 0xcb, 0x36, 0x80, 0xbd,
+	0x3f, 0xe0, 0x19, 0xe8, 0x80, 0x5b, 0x0b, 0x0e, 0x6e, 0x7d, 0x30, 0xbc, 0x09, 0x7f, 0x5c, 0xfd,
+	0x1d, 0x07, 0xbc, 0xbd, 0x43, 0x04, 0x94, 0x7a, 0xc9, 0x4e, 0xa9, 0xf7, 0x86, 0x9e, 0x1c, 0x03,
+	0x4e, 0x7f, 0x1b, 0x77, 0x4e, 0x6a, 0x70, 0x99, 0x54, 0x74, 0x32, 0xe9, 0x99, 0x80, 0xab, 0xd1,
+	0x1e, 0x45, 0xbf, 0xe3, 0x83, 0xa2, 0x8b, 0x01, 0xad, 0x75, 0x4b, 0xa0, 0xcf, 0x33, 0x09, 0x34,
+	0x13, 0x50, 0x49, 0x78, 0xf0, 0x7c, 0x9e, 0x09, 0x9e, 0x81, 0x35, 0x84, 0xe6, 0xcd, 0x6f, 0x7a,
+	0xe3, 0xe6, 0xd9, 0xee, 0x83, 0xf9, 0x50, 0x52, 0xe6, 0xbf, 0x39, 0x38, 0xea, 0x15, 0xd7, 0xf6,
+	0x00, 0x5c, 0x26, 0x61, 0xd6, 0x98, 0x39, 0x93, 0x29, 0xff, 0xcc, 0xc1, 0x41, 0x47, 0x1c, 0xe8,
+	0x0e, 0x25, 0x5f, 0xf1, 0x41, 0xc9, 0x73, 0x01, 0xfd, 0xb3, 0x07, 0x10, 0xf6, 0x63, 0xce, 0x04,
+	0x2c, 0x2f, 0x70, 0x7c, 0xc5, 0x07, 0x1c, 0xfb, 0x20, 0xf5, 0x36, 0xaa, 0xd4, 0x03, 0x13, 0x7f,
+	0x1d, 0x83, 0x99, 0x15, 0x51, 0x95, 0xc5, 0xc5, 0x4c, 0x84, 0xa4, 0xf8, 0xac, 0x8d, 0x14, 0x83,
+	0xe4, 0xb2, 0x6c, 0xad, 0xfd, 0x86, 0xc5, 0x39, 0x48, 0xb2, 0xc5, 0x91, 0xb5, 0xfe, 0x06, 0xcc,
+	0xd2, 0x16, 0xec, 0x47, 0xac, 0xb8, 0x9c, 0x73, 0x3c, 0x62, 0x25, 0x7b, 0x10, 0x3d, 0xc2, 0xdf,
+	0x03, 0xfb, 0xcd, 0xbf, 0xbe, 0x8c, 0xe5, 0x42, 0x51, 0xa7, 0x8f, 0x5a, 0x8f, 0xd2, 0xc9, 0xec,
+	0x5f, 0x69, 0x39, 0x86, 0x6c, 0x2d, 0x85, 0x5f, 0xc5, 0xe0, 0x30, 0x35, 0x1f, 0x29, 0x93, 0xe6,
+	0x6c, 0x4c, 0xfa, 0x50, 0xf0, 0x73, 0xdd, 0x01, 0x96, 0x5e, 0x71, 0x60, 0x69, 0xa6, 0x2b, 0x2b,
+	0xfe, 0x64, 0x7a, 0x93, 0x83, 0x63, 0xae, 0x3e, 0x11, 0xc0, 0xa9, 0x68, 0x87, 0xd3, 0x2f, 0x76,
+	0x33, 0x45, 0x06, 0x9f, 0xd6, 0xe3, 0x1e, 0x53, 0x1b, 0x5c, 0x44, 0xcd, 0x3b, 0x11, 0xf5, 0xfe,
+	0xe0, 0x6b, 0xd2, 0x9e, 0x52, 0x5f, 0xf1, 0xa1, 0xd4, 0x73, 0xc1, 0x0d, 0x76, 0x0b, 0xaa, 0xd7,
+	0x99, 0xa0, 0xba, 0x14, 0x5c, 0x4c, 0x78, 0x56, 0xbd, 0xce, 0x64, 0xd5, 0x30, 0x32, 0x42, 0xe3,
+	0xea, 0x0b, 0x8c, 0xc7, 0xa3, 0x17, 0x7a, 0x72, 0x4b, 0x19, 0x4a, 0x64, 0xfd, 0x0f, 0x07, 0xb7,
+	0x32, 0x62, 0xde, 0x1e, 0xa0, 0xd6, 0xdb, 0x21, 0x45, 0x27, 0xcf, 0x04, 0xd7, 0x0f, 0x38, 0xe0,
+	0xdd, 0xd1, 0xa1, 0x3b, 0x76, 0xfd, 0x9e, 0x0f, 0xbb, 0x3e, 0x1c, 0xdc, 0x57, 0x7b, 0xc0, 0x84,
+	0x6f, 0x72, 0x4d, 0xf0, 0xf3, 0x22, 0xd8, 0x55, 0x88, 0x97, 0x8d, 0xa3, 0xf9, 0x9c, 0x5f, 0xb0,
+	0x47, 0xf4, 0xc7, 0x0d, 0x86, 0x4f, 0xc8, 0x2a, 0x2e, 0xe3, 0x8a, 0xae, 0x99, 0x6e, 0xd7, 0x10,
+	0xda, 0x18, 0x85, 0x47, 0x30, 0x81, 0xaf, 0x56, 0x15, 0x55, 0xc7, 0x2a, 0x9d, 0x77, 0xe7, 0x23,
+	0xee, 0x37, 0x6e, 0x89, 0x4b, 0xb4, 0x37, 0x6a, 0x8e, 0x23, 0xcc, 0x5a, 0x53, 0xf0, 0x40, 0xdb,
+	0xb7, 0x63, 0x30, 0xbb, 0x82, 0xcb, 0x92, 0x28, 0x15, 0x71, 0x94, 0x8f, 0x41, 0x35, 0x1b, 0xdc,
+	0x3e, 0x16, 0xe4, 0xec, 0xfa, 0xa8, 0xed, 0x37, 0xde, 0x0a, 0x30, 0xe7, 0x27, 0x8f, 0xac, 0xb8,
+	0x81, 0xc0, 0x8d, 0x36, 0xde, 0x4f, 0x45, 0xdf, 0x8e, 0xc1, 0x91, 0x66, 0x93, 0x48, 0x31, 0x34,
+	0x6f, 0xc3, 0xd0, 0x4c, 0x98, 0xb3, 0xd2, 0x01, 0x88, 0x96, 0x1c, 0x20, 0xba, 0xd8, 0xa5, 0x1d,
+	0x7f, 0x14, 0xfd, 0x93, 0x11, 0xca, 0xdd, 0xbd, 0x22, 0x80, 0x51, 0xc9, 0x0e, 0xa3, 0x0f, 0x74,
+	0x37, 0x4d, 0x06, 0x8e, 0x7e, 0x18, 0xf7, 0x9c, 0xde, 0xe0, 0x02, 0xe9, 0xba, 0x13, 0x48, 0x1f,
+	0x0c, 0xb3, 0x2e, 0xed, 0x91, 0xf4, 0xbb, 0x3e, 0x48, 0x7a, 0x21, 0x8c, 0xc9, 0x6e, 0xa1, 0xf4,
+	0x25, 0x26, 0x94, 0x9e, 0x0b, 0x23, 0x27, 0x3c, 0x96, 0xbe, 0xc4, 0xc4, 0xd2, 0x70, 0x42, 0x42,
+	0x83, 0xe9, 0x75, 0x06, 0x98, 0x3e, 0xd2, 0xa3, 0xdb, 0xc1, 0x50, 0xa2, 0xe9, 0xff, 0x38, 0xb8,
+	0x8d, 0x19, 0x05, 0xf7, 0x00, 0x9c, 0x7e, 0x02, 0x6e, 0x6f, 0x4e, 0x9f, 0x89, 0xa7, 0xff, 0xe0,
+	0xe0, 0xa8, 0x57, 0xac, 0xe8, 0x0e, 0x50, 0x5f, 0xf7, 0x01, 0xd4, 0xe5, 0x30, 0x3e, 0xdb, 0x03,
+	0x44, 0xfd, 0x19, 0xd7, 0x02, 0x70, 0x5e, 0x90, 0xfa, 0xba, 0xcf, 0x63, 0xd6, 0x7e, 0x89, 0x4e,
+	0xb6, 0x6a, 0x66, 0x3d, 0x70, 0x55, 0x2a, 0x05, 0x65, 0xb7, 0x3c, 0x70, 0x65, 0x6a, 0xed, 0x37,
+	0x91, 0x6e, 0x8f, 0x42, 0x92, 0xad, 0x8e, 0x38, 0x48, 0x0d, 0x40, 0xd3, 0xc5, 0x4a, 0x5e, 0x2c,
+	0x29, 0x15, 0x4c, 0x97, 0x73, 0xa9, 0x27, 0x93, 0xcf, 0x1c, 0x30, 0xae, 0xe3, 0x6c, 0x73, 0x70,
+	0xd4, 0x62, 0xc8, 0x30, 0x4b, 0x7f, 0xdc, 0x9c, 0xc5, 0x7a, 0x98, 0xa7, 0x33, 0x6d, 0xcc, 0xa2,
+	0xe6, 0xe0, 0xa8, 0xc5, 0x10, 0x2f, 0xc3, 0x78, 0xd9, 0xe8, 0xa9, 0xd1, 0xeb, 0xb6, 0x47, 0x26,
+	0xcd, 0xc7, 0xd0, 0x64, 0x60, 0x44, 0x0d, 0xf0, 0x5f, 0x87, 0xfd, 0xa6, 0x73, 0x65, 0x8d, 0x08,
+	0xa9, 0x52, 0xdc, 0xe9, 0x91, 0xc1, 0x43, 0xf5, 0xed, 0xd4, 0xfe, 0x85, 0x96, 0xe1, 0x91, 0xcd,
+	0x18, 0xbf, 0x0e, 0x63, 0x5a, 0x51, 0x54, 0xf3, 0x94, 0x78, 0x7a, 0x64, 0x75, 0xd2, 0xb8, 0x97,
+	0x64, 0x8d, 0x71, 0x91, 0x39, 0xbc, 0xf0, 0xa1, 0x91, 0x40, 0x9a, 0x1d, 0xbc, 0x1f, 0xd8, 0x3f,
+	0xdd, 0x10, 0x62, 0x7a, 0xd6, 0x7d, 0xc1, 0x85, 0x10, 0x7b, 0x8f, 0x2a, 0x79, 0xec, 0x36, 0xcf,
+	0x6f, 0x38, 0xd6, 0xd8, 0x3c, 0xa9, 0x9f, 0x0f, 0x60, 0xc4, 0xfa, 0x45, 0x7e, 0xdb, 0x35, 0x7d,
+	0xaa, 0xe9, 0x3b, 0x23, 0x81, 0xcd, 0x98, 0xbe, 0x41, 0xcc, 0x78, 0xf9, 0xca, 0xc9, 0x96, 0x62,
+	0x80, 0x51, 0xf2, 0xba, 0x62, 0x3f, 0xa3, 0x10, 0x80, 0xbc, 0xa2, 0x30, 0x17, 0x66, 0xb7, 0xbc,
+	0xa2, 0x70, 0xaa, 0xdd, 0x99, 0x57, 0x14, 0x2e, 0x2b, 0x1d, 0xbc, 0xa2, 0x70, 0xf6, 0x19, 0xf0,
+	0x57, 0x14, 0x4e, 0xb9, 0x7e, 0xaf, 0x28, 0xbc, 0x16, 0x7d, 0x18, 0x5f, 0x51, 0x98, 0xf3, 0x8c,
+	0xf0, 0x15, 0x85, 0x4f, 0xb0, 0x8b, 0xfe, 0x15, 0x85, 0x29, 0xa6, 0xef, 0xaf, 0x28, 0xa8, 0x8c,
+	0xfe, 0xbe, 0xa2, 0xf0, 0xc5, 0x9c, 0xe1, 0x7c, 0x45, 0xe1, 0x1d, 0xf3, 0xf6, 0x40, 0x16, 0xf8,
+	0x06, 0x07, 0x29, 0x3a, 0x7b, 0x56, 0x3e, 0x42, 0x66, 0x53, 0x2d, 0x29, 0x85, 0x15, 0xf1, 0xea,
+	0xb2, 0x58, 0xc8, 0x62, 0xa3, 0x7b, 0xa3, 0xd4, 0xce, 0x9a, 0x8d, 0xab, 0x05, 0xf2, 0xe8, 0xc5,
+	0xaf, 0xc1, 0xd1, 0x7c, 0x2e, 0x2b, 0x5f, 0xc3, 0x8b, 0xf2, 0xfa, 0xfa, 0x1a, 0x56, 0x25, 0x5c,
+	0xd1, 0xc5, 0x02, 0xa6, 0x3f, 0x2d, 0x98, 0xa5, 0xa3, 0x1d, 0x5d, 0xcc, 0xb8, 0xdb, 0x20, 0xcf,
+	0x9e, 0x42, 0x11, 0x0e, 0x39, 0xf9, 0xc6, 0x48, 0x07, 0x08, 0xd6, 0x34, 0x54, 0x5a, 0xf7, 0x2e,
+	0xb2, 0x17, 0xd1, 0xa3, 0xb6, 0xd2, 0xc1, 0x58, 0xdb, 0xd2, 0x41, 0xf2, 0xae, 0xc6, 0x15, 0x26,
+	0x07, 0xe4, 0x5d, 0x8d, 0xff, 0x39, 0x0c, 0x90, 0x53, 0xfe, 0x64, 0xac, 0x99, 0x33, 0x7a, 0xa5,
+	0xc1, 0x4f, 0x7a, 0x64, 0x39, 0x9d, 0xbf, 0x5c, 0xf1, 0x4b, 0x64, 0x9e, 0xb4, 0x25, 0x32, 0xe3,
+	0x61, 0x46, 0x66, 0xe4, 0x2a, 0xcb, 0x8e, 0x5c, 0xa5, 0xf3, 0x51, 0xbd, 0x10, 0xf3, 0x92, 0x67,
+	0x3a, 0xd2, 0xf9, 0x98, 0xed, 0xe8, 0xf8, 0x82, 0x3d, 0xe3, 0xe8, 0x7c, 0x60, 0x37, 0xd5, 0xb7,
+	0xbe, 0x07, 0x1b, 0xeb, 0xcd, 0x7b, 0x30, 0x86, 0xc7, 0xc6, 0xfb, 0xe8, 0xb1, 0x3f, 0x18, 0xb1,
+	0x3c, 0xd6, 0x7d, 0xe7, 0xe4, 0x2f, 0x79, 0x78, 0xac, 0x2f, 0x88, 0xa6, 0x1b, 0x65, 0xd4, 0xe9,
+	0xc7, 0x6a, 0x62, 0x45, 0x97, 0xf5, 0x2d, 0x5f, 0xbf, 0xbd, 0x64, 0xf3, 0xdb, 0xd1, 0xf0, 0xe3,
+	0x33, 0xbc, 0x37, 0xef, 0x99, 0x9a, 0x05, 0xb5, 0xd0, 0xce, 0xeb, 0x56, 0x1b, 0x5e, 0x37, 0x12,
+	0x6a, 0x78, 0x77, 0x42, 0x7b, 0x06, 0xc0, 0xca, 0xd5, 0x02, 0x16, 0x69, 0xbf, 0x15, 0x83, 0xc4,
+	0xca, 0x56, 0xf6, 0xb1, 0xe5, 0x08, 0x9f, 0x5a, 0x29, 0xb6, 0xa7, 0x56, 0x41, 0xaa, 0x13, 0x59,
+	0x4a, 0xfb, 0xfd, 0xcc, 0xea, 0x3a, 0x07, 0xb3, 0x2c, 0x6d, 0xe4, 0xca, 0xc8, 0xc3, 0x58, 0x79,
+	0x4b, 0x7b, 0xb6, 0x44, 0x57, 0x71, 0xa1, 0x07, 0x73, 0x36, 0x1d, 0x81, 0x1c, 0x45, 0xe6, 0xe0,
+	0xc2, 0x35, 0x98, 0x21, 0xdb, 0xfd, 0xf8, 0x1d, 0xe2, 0x1b, 0x31, 0x38, 0x48, 0x8c, 0x47, 0x9a,
+	0xe2, 0x3f, 0x63, 0x4b, 0xf1, 0x1f, 0x08, 0xba, 0xac, 0x1d, 0x24, 0xf8, 0x45, 0x47, 0x82, 0xff,
+	0x50, 0x17, 0x36, 0xfc, 0xd3, 0xfb, 0xdf, 0x73, 0x70, 0xc4, 0xd1, 0x23, 0x82, 0xe4, 0xfe, 0xb2,
+	0x3d, 0xb9, 0x3f, 0x13, 0x7e, 0x7a, 0x8c, 0xd4, 0xfe, 0x47, 0x13, 0xae, 0x69, 0x0d, 0x6e, 0x62,
+	0x9f, 0x73, 0x26, 0xf6, 0xf7, 0x05, 0x5d, 0x8f, 0xf6, 0x69, 0xfd, 0xcb, 0x3e, 0x69, 0xfd, 0x52,
+	0x50, 0x73, 0xdd, 0x26, 0xf5, 0x2f, 0x30, 0x93, 0xfa, 0xc0, 0x31, 0x2a, 0x7c, 0x4a, 0xff, 0x02,
+	0x33, 0xa5, 0x0f, 0x2e, 0x22, 0x74, 0x42, 0xff, 0x1c, 0x23, 0xa1, 0x3f, 0xd7, 0x83, 0x58, 0x3d,
+	0x8c, 0xe9, 0x3c, 0x7f, 0x16, 0x78, 0x23, 0x72, 0xe1, 0xf5, 0x5a, 0x29, 0x8b, 0xf5, 0x55, 0x35,
+	0x2f, 0x57, 0xc4, 0x52, 0x02, 0xc8, 0x1d, 0xe3, 0x16, 0x23, 0x51, 0xcd, 0xba, 0x8e, 0x22, 0x8f,
+	0x1e, 0xc2, 0x47, 0x1c, 0x1c, 0xf3, 0x8c, 0x94, 0x7b, 0xe0, 0xa1, 0x40, 0x0a, 0x4e, 0x98, 0x77,
+	0x70, 0xd6, 0x6b, 0xe1, 0xbf, 0x70, 0x70, 0xc8, 0x19, 0x57, 0xba, 0xcb, 0x83, 0x5f, 0xf5, 0xc9,
+	0x83, 0xcf, 0x07, 0xf5, 0xf5, 0x1e, 0xe4, 0x14, 0x3f, 0xe7, 0x28, 0x81, 0x7a, 0xe5, 0xc0, 0x17,
+	0xec, 0xdc, 0x14, 0x30, 0x43, 0x6b, 0x85, 0xa3, 0x1d, 0xf9, 0xa5, 0xe2, 0x46, 0x43, 0xba, 0x47,
+	0x32, 0xb4, 0x6a, 0x97, 0x1e, 0x0a, 0xf3, 0x6d, 0x74, 0xf7, 0x6e, 0x0c, 0xe6, 0xd6, 0xb0, 0x2a,
+	0x29, 0x15, 0xf1, 0x49, 0x5d, 0x8d, 0xb6, 0xb2, 0x27, 0xfc, 0xf7, 0x94, 0xda, 0x29, 0x1e, 0x80,
+	0xef, 0x29, 0xb5, 0x93, 0x48, 0x5e, 0xf0, 0xdf, 0x01, 0x82, 0xad, 0x9d, 0xf7, 0x0f, 0x21, 0xdf,
+	0x8b, 0xc1, 0xad, 0xb6, 0x66, 0xbb, 0xe4, 0x43, 0x47, 0x0c, 0xcd, 0x3b, 0xf2, 0xa1, 0x23, 0x96,
+	0xad, 0xf6, 0x1f, 0x3a, 0x62, 0xf4, 0x1c, 0xec, 0x0f, 0x1d, 0x31, 0x44, 0xfb, 0x7c, 0xe8, 0xc8,
+	0xe7, 0x64, 0x0c, 0xe1, 0x87, 0x8e, 0x6c, 0xb3, 0x8d, 0xee, 0x43, 0x47, 0xed, 0x2f, 0xe6, 0xc8,
+	0x3f, 0x74, 0x64, 0x93, 0xd4, 0xef, 0x0f, 0x1d, 0xd9, 0xc5, 0xf4, 0xf5, 0x43, 0x47, 0x9d, 0xc4,
+	0xe7, 0xa1, 0xfc, 0xd0, 0x91, 0x6f, 0xa4, 0xdc, 0x1b, 0x1f, 0x3a, 0xb2, 0x2d, 0x81, 0xef, 0x87,
+	0x8e, 0x58, 0x71, 0x64, 0x30, 0x3e, 0x74, 0xd4, 0xd1, 0x3c, 0x02, 0x7e, 0xe8, 0xa8, 0x5d, 0xbc,
+	0xe8, 0xd9, 0x87, 0x8e, 0x7a, 0x2d, 0x5e, 0x70, 0x6a, 0x67, 0x94, 0xf9, 0xac, 0x15, 0x32, 0x4a,
+	0xad, 0x22, 0x61, 0x75, 0x57, 0x94, 0xf9, 0xf8, 0xa9, 0x1d, 0x80, 0x32, 0x1f, 0x3f, 0x79, 0x8d,
+	0x32, 0x9f, 0x66, 0x1b, 0x76, 0x99, 0x4f, 0xb3, 0xc9, 0x2e, 0x29, 0xf3, 0xf1, 0xd0, 0xbb, 0x23,
+	0x65, 0x3e, 0x5e, 0x76, 0xda, 0x97, 0xf9, 0x78, 0xf4, 0x1a, 0xec, 0x32, 0x1f, 0x0f, 0xc1, 0x3e,
+	0x65, 0x3e, 0x8c, 0xc5, 0x1f, 0xc2, 0x32, 0x9f, 0xe6, 0x4c, 0xa3, 0x2b, 0xf3, 0xf1, 0xbf, 0x58,
+	0x23, 0x2f, 0xf3, 0x69, 0xca, 0xe9, 0x77, 0x99, 0x8f, 0x25, 0xa4, 0xaf, 0x65, 0x3e, 0xed, 0xe2,
+	0xed, 0x50, 0x96, 0xf9, 0x30, 0xa3, 0xe0, 0xde, 0x28, 0xf3, 0x69, 0x4e, 0xdf, 0xb7, 0xcc, 0xc7,
+	0x2b, 0x56, 0x0c, 0x46, 0x99, 0x4f, 0x5b, 0xfd, 0x01, 0xcb, 0x7c, 0xfc, 0x62, 0x42, 0xcf, 0xca,
+	0x7c, 0x7a, 0x29, 0x3a, 0xd9, 0xaa, 0xd9, 0x83, 0x4a, 0x7f, 0x13, 0x83, 0xe3, 0x6b, 0x8a, 0xa6,
+	0x17, 0x54, 0xac, 0x45, 0x08, 0xa5, 0xaa, 0x0d, 0x4a, 0x03, 0xa1, 0x3b, 0x5b, 0x6c, 0xbf, 0x99,
+	0xf4, 0x76, 0x48, 0xf9, 0xa8, 0x23, 0xcb, 0x9d, 0x82, 0x13, 0x8d, 0x26, 0xde, 0x44, 0x7a, 0x23,
+	0x06, 0x7c, 0xa3, 0x45, 0xa4, 0x40, 0x2a, 0xd9, 0x80, 0xf4, 0x4b, 0x21, 0xce, 0x48, 0x07, 0x3c,
+	0xba, 0xe1, 0xe0, 0xd1, 0x85, 0xee, 0xcc, 0xf8, 0xe3, 0xe8, 0x1f, 0x39, 0xb8, 0xc5, 0xdd, 0x29,
+	0x02, 0x1a, 0xcd, 0xd9, 0x69, 0xf4, 0xfe, 0xae, 0x26, 0xc9, 0x80, 0xd1, 0x7f, 0xc6, 0xbd, 0x26,
+	0x37, 0xb8, 0x2c, 0x8a, 0x9d, 0x2c, 0xfa, 0x40, 0x88, 0x55, 0x69, 0x8f, 0xa2, 0xaf, 0xfa, 0xa0,
+	0xe8, 0xf9, 0x10, 0x16, 0xbb, 0x25, 0xd1, 0x17, 0x99, 0x24, 0x7a, 0x36, 0x84, 0x9a, 0xf0, 0x20,
+	0xfa, 0x22, 0x13, 0x44, 0x43, 0xe9, 0x08, 0xcd, 0xa1, 0xdf, 0x62, 0x70, 0xe8, 0xc3, 0xbd, 0xb9,
+	0x03, 0x0c, 0x25, 0x86, 0xfe, 0x97, 0x83, 0x04, 0x2b, 0xf8, 0xed, 0x01, 0x0a, 0x15, 0x60, 0xae,
+	0x31, 0x7b, 0x26, 0x84, 0xfe, 0x9d, 0x83, 0x23, 0x1e, 0x41, 0xa2, 0x3b, 0x06, 0x7d, 0xcd, 0x87,
+	0x41, 0x1f, 0x09, 0xe1, 0xaf, 0x3d, 0xa0, 0xb9, 0x9f, 0x72, 0x16, 0xad, 0x79, 0x11, 0xe8, 0x6b,
+	0x3e, 0x04, 0xda, 0x27, 0xc9, 0x27, 0x5a, 0x14, 0xb3, 0xf8, 0x53, 0x55, 0xae, 0x46, 0xfc, 0x8b,
+	0xdd, 0x2e, 0xf8, 0x93, 0x2d, 0x76, 0x10, 0xf8, 0x93, 0xad, 0xae, 0xc9, 0x9f, 0xb4, 0x89, 0x0f,
+	0x7f, 0xd2, 0x16, 0xbb, 0x85, 0x3f, 0x5d, 0x72, 0x77, 0x86, 0x3f, 0xdd, 0x66, 0x3a, 0xe0, 0x4f,
+	0x57, 0xa7, 0x01, 0xe7, 0x4f, 0x97, 0x5e, 0x3f, 0xfe, 0xf4, 0x5c, 0xf8, 0x61, 0xe4, 0x4f, 0x3a,
+	0xd1, 0x08, 0xf9, 0xd3, 0xef, 0x22, 0x8d, 0x9e, 0x3f, 0xa9, 0x9a, 0xbe, 0xf3, 0x67, 0x43, 0x47,
+	0x7f, 0xf9, 0xd3, 0x3f, 0xc6, 0x0e, 0x27, 0x7f, 0x32, 0x82, 0xdf, 0x1e, 0xe1, 0x4f, 0x3a, 0x7b,
+	0x7f, 0xfe, 0x74, 0x07, 0x89, 0x01, 0xe1, 0xcf, 0x36, 0xea, 0x83, 0xf2, 0x27, 0x3b, 0x18, 0xf4,
+	0x8e, 0x3f, 0x7b, 0x27, 0xf9, 0x44, 0x8b, 0x62, 0x0f, 0xfe, 0x7c, 0x2b, 0x06, 0x09, 0x84, 0xf3,
+	0xb2, 0xb6, 0x2b, 0xca, 0xc5, 0x58, 0x4a, 0xfb, 0x4d, 0x9e, 0x49, 0x98, 0x65, 0x49, 0x23, 0xab,
+	0x7c, 0x05, 0x66, 0xc8, 0xf1, 0xf0, 0xff, 0xb2, 0xf3, 0xa4, 0xab, 0xdc, 0x9a, 0xf5, 0x71, 0x96,
+	0x37, 0x62, 0x70, 0x90, 0x18, 0xdb, 0x25, 0x75, 0x5b, 0x0e, 0xad, 0x3b, 0x52, 0xb7, 0xe5, 0xb4,
+	0xd1, 0xbe, 0x6e, 0xcb, 0xd1, 0x63, 0xb0, 0xeb, 0xb6, 0x1c, 0x62, 0x19, 0xc8, 0xfa, 0x87, 0xb8,
+	0x6b, 0x5a, 0x43, 0x5a, 0xb7, 0x45, 0x66, 0x19, 0x5d, 0xdd, 0x16, 0xfb, 0xd2, 0x8e, 0xbc, 0x6e,
+	0x8b, 0x48, 0xe9, 0x77, 0xdd, 0x96, 0x29, 0xa2, 0xaf, 0x75, 0x5b, 0x7e, 0xd1, 0x78, 0xe8, 0x00,
+	0xf5, 0x23, 0x0e, 0x8e, 0x79, 0x46, 0xb8, 0xbd, 0x51, 0x6f, 0x45, 0xa6, 0xee, 0x5b, 0x6f, 0xe5,
+	0x8c, 0x07, 0x83, 0x51, 0x6f, 0xe5, 0xab, 0x3b, 0x60, 0xbd, 0x15, 0xeb, 0xba, 0xe7, 0x2f, 0xc0,
+	0x98, 0x6a, 0x1c, 0x0b, 0x57, 0x6f, 0x65, 0x4a, 0x34, 0x47, 0xd8, 0x91, 0x7a, 0xab, 0x99, 0x86,
+	0x74, 0x0f, 0x34, 0x9d, 0x86, 0xa9, 0x16, 0xdf, 0x17, 0x6e, 0x72, 0x10, 0xa7, 0x97, 0x17, 0xff,
+	0x14, 0x4c, 0xea, 0xcb, 0x59, 0xf3, 0x12, 0xb6, 0x66, 0xe6, 0xeb, 0x52, 0x17, 0x1b, 0xed, 0x33,
+	0x87, 0xe9, 0x59, 0x9e, 0x6c, 0xee, 0x42, 0xd6, 0x68, 0x86, 0xeb, 0xab, 0x8a, 0x2e, 0xea, 0x78,
+	0xc1, 0x58, 0xcd, 0x75, 0x59, 0x12, 0x75, 0x6c, 0x22, 0xd7, 0x84, 0xe5, 0xfa, 0xc8, 0xd5, 0x02,
+	0x79, 0xf4, 0xea, 0x94, 0x3b, 0x33, 0xe9, 0x1b, 0xef, 0x27, 0xf7, 0xbd, 0xf3, 0x7e, 0x72, 0xdf,
+	0xcd, 0xf7, 0x93, 0xfb, 0x9e, 0xab, 0x27, 0xb9, 0x1b, 0xf5, 0x24, 0xf7, 0x4e, 0x3d, 0xc9, 0xdd,
+	0xac, 0x27, 0xb9, 0xbf, 0xd6, 0x93, 0xdc, 0x6b, 0x1f, 0x24, 0xf7, 0x7d, 0x65, 0xa2, 0xe1, 0x39,
+	0xff, 0x0f, 0x00, 0x00, 0xff, 0xff, 0xdd, 0xa1, 0xfa, 0x74, 0x82, 0x81, 0x00, 0x00,
 }
 
 func (m *ConfigNode) Marshal() (dAtA []byte, err error) {
@@ -1780,6 +3962,96 @@ func (m *ConfigNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i = encodeVarintGenerated(dAtA, i, uint64(m.Replicas))
 	i--
 	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticsearchCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticsearchCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticsearchCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticsearchCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticsearchCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticsearchCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -1941,6 +4213,66 @@ func (m *ElasticsearchOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, er
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
 	if m.HorizontalScaling != nil {
 		{
 			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
@@ -2025,6 +4357,240 @@ func (m *ElasticsearchOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, 
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticsearchReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticsearchReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticsearchReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticsearchUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticsearchUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticsearchUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticsearchVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticsearchVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticsearchVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticsearchVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticsearchVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticsearchVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -2148,6 +4714,78 @@ func (m *EtcdOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -2220,6 +4858,761 @@ func (m *EtcdOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EtcdVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EtcdVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EtcdVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i = encodeVarintGenerated(dAtA, i, uint64(m.MemberWeight))
+	i--
+	dAtA[i] = 0x10
+	if m.Member != nil {
+		i = encodeVarintGenerated(dAtA, i, uint64(*m.Member))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBOpsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBOpsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBOpsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Status.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.ObjectMeta.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBOpsRequestList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBOpsRequestList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBOpsRequestList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenerated(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	{
+		size, err := m.ListMeta.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBOpsRequestSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBOpsRequestSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Upgrade != nil {
+		{
+			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	i -= len(m.Type)
+	copy(dAtA[i:], m.Type)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Type)))
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.DatabaseRef.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBOpsRequestStatus) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBOpsRequestStatus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Conditions) > 0 {
+		for iNdEx := len(m.Conditions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Conditions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenerated(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	i = encodeVarintGenerated(dAtA, i, uint64(m.ObservedGeneration))
+	i--
+	dAtA[i] = 0x10
+	i -= len(m.Phase)
+	copy(dAtA[i:], m.Phase)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Exporter != nil {
+		{
+			size, err := m.Exporter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.MariaDB != nil {
+		{
+			size, err := m.MariaDB.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MariaDBVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MariaDBVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MariaDBVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MemcachedCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MemcachedCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MemcachedCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MemcachedCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MemcachedCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MemcachedCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MemcachedHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MemcachedHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MemcachedHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -2343,6 +5736,78 @@ func (m *MemcachedOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -2418,7 +5883,7 @@ func (m *MemcachedOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
-func (m *MongoDBCustomConfig) Marshal() (dAtA []byte, err error) {
+func (m *MemcachedReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2428,16 +5893,145 @@ func (m *MongoDBCustomConfig) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MongoDBCustomConfig) MarshalTo(dAtA []byte) (int, error) {
+func (m *MemcachedReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MongoDBCustomConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MemcachedReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MemcachedUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MemcachedUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MemcachedUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *MemcachedVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MemcachedVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MemcachedVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MemcachedVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MemcachedVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MemcachedVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MongoDBCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MongoDBCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MongoDBCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
 	if len(m.Data) > 0 {
 		keysForData := make([]string, 0, len(m.Data))
 		for k := range m.Data {
@@ -2477,7 +6071,7 @@ func (m *MongoDBCustomConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MongoDBCustomConfigSpec) Marshal() (dAtA []byte, err error) {
+func (m *MongoDBCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2487,12 +6081,12 @@ func (m *MongoDBCustomConfigSpec) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MongoDBCustomConfigSpec) MarshalTo(dAtA []byte) (int, error) {
+func (m *MongoDBCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MongoDBCustomConfigSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MongoDBCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2744,9 +6338,33 @@ func (m *MongoDBOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.CustomConfig != nil {
+	if m.Restart != nil {
 		{
-			size, err := m.CustomConfig.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2867,6 +6485,35 @@ func (m *MongoDBOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MongoDBReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MongoDBReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MongoDBReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i = encodeVarintGenerated(dAtA, i, uint64(m.DBSizeDiffPercentage))
+	i--
+	dAtA[i] = 0x10
+	i = encodeVarintGenerated(dAtA, i, uint64(m.OplogMaxLagSeconds))
+	i--
+	dAtA[i] = 0x8
+	return len(dAtA) - i, nil
+}
+
 func (m *MongoDBShardNode) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2896,6 +6543,46 @@ func (m *MongoDBShardNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MongoDBUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MongoDBUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MongoDBUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func (m *MongoDBVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2916,6 +6603,18 @@ func (m *MongoDBVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
 	if m.ReplicaSet != nil {
 		{
 			size, err := m.ReplicaSet.MarshalToSizedBuffer(dAtA[:i])
@@ -3088,6 +6787,108 @@ func (m *MongosNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MySQLCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MySQLCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MySQLCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MySQLCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MySQLCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MySQLCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MySQL != nil {
+		{
+			size, err := m.MySQL.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *MySQLHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3239,6 +7040,59 @@ func (m *MySQLOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.StatefulSetOrdinal != nil {
+		i = encodeVarintGenerated(dAtA, i, uint64(*m.StatefulSetOrdinal))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.VerticalScaling != nil {
 		{
 			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
@@ -3249,7 +7103,7 @@ func (m *MySQLOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintGenerated(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x2a
 	}
 	if m.HorizontalScaling != nil {
 		{
@@ -3261,7 +7115,7 @@ func (m *MySQLOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintGenerated(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x22
 	}
 	if m.Upgrade != nil {
 		{
@@ -3273,18 +7127,13 @@ func (m *MySQLOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintGenerated(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x1a
 	}
 	i -= len(m.Type)
 	copy(dAtA[i:], m.Type)
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Type)))
 	i--
-	dAtA[i] = 0x1a
-	if m.StatefulSetOrdinal != nil {
-		i = encodeVarintGenerated(dAtA, i, uint64(*m.StatefulSetOrdinal))
-		i--
-		dAtA[i] = 0x10
-	}
+	dAtA[i] = 0x12
 	{
 		size, err := m.DatabaseRef.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -3343,6 +7192,69 @@ func (m *MySQLOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MySQLReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MySQLReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MySQLReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MySQLUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MySQLUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MySQLUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func (m *MySQLVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3387,6 +7299,154 @@ func (m *MySQLVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0xa
 	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MySQLVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MySQLVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MySQLVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MySQL != nil {
+		{
+			size, err := m.MySQL.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -3510,6 +7570,78 @@ func (m *PerconaXtraDBOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, er
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -3582,6 +7714,240 @@ func (m *PerconaXtraDBOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, 
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PerconaXtraDBVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerconaXtraDBVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PerconaXtraDBVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -3705,6 +8071,78 @@ func (m *PgBouncerOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -3777,6 +8215,240 @@ func (m *PgBouncerOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PgBouncerVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PgBouncerVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PgBouncerVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -3900,6 +8572,78 @@ func (m *PostgresOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -3972,6 +8716,240 @@ func (m *PostgresOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PostgresVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PostgresVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PostgresVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLHorizontalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLHorizontalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLHorizontalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -4095,6 +9073,78 @@ func (m *ProxySQLOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.VerticalScaling != nil {
+		{
+			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HorizontalScaling != nil {
+		{
+			size, err := m.HorizontalScaling.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.Upgrade != nil {
 		{
 			size, err := m.Upgrade.MarshalToSizedBuffer(dAtA[:i])
@@ -4167,6 +9217,217 @@ func (m *ProxySQLOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Phase)))
 	i--
 	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLVerticalScalingSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxySQLVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ProxySQLVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxySQLVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *RedisCustomConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RedisCustomConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RedisCustomConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	if len(m.Data) > 0 {
+		keysForData := make([]string, 0, len(m.Data))
+		for k := range m.Data {
+			keysForData = append(keysForData, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+		for iNdEx := len(keysForData) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Data[string(keysForData[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintGenerated(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForData[iNdEx])
+			copy(dAtA[i:], keysForData[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(keysForData[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintGenerated(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.ConfigMap != nil {
+		{
+			size, err := m.ConfigMap.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RedisCustomConfigurationSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RedisCustomConfigurationSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RedisCustomConfigurationSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	return len(dAtA) - i, nil
 }
 
@@ -4323,6 +9584,54 @@ func (m *RedisOpsRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Restart != nil {
+		{
+			size, err := m.Restart.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TLS != nil {
+		{
+			size, err := m.TLS.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Configuration != nil {
+		{
+			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.VolumeExpansion != nil {
+		{
+			size, err := m.VolumeExpansion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.VerticalScaling != nil {
 		{
 			size, err := m.VerticalScaling.MarshalToSizedBuffer(dAtA[:i])
@@ -4422,6 +9731,69 @@ func (m *RedisOpsRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *RedisReplicaReadinessCriteria) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RedisReplicaReadinessCriteria) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RedisReplicaReadinessCriteria) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *RedisUpgradeSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RedisUpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RedisUpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		{
+			size, err := m.ReadinessCriteria.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintGenerated(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	i -= len(m.TargetVersion)
+	copy(dAtA[i:], m.TargetVersion)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func (m *RedisVerticalScalingSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4469,7 +9841,7 @@ func (m *RedisVerticalScalingSpec) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
-func (m *UpgradeSpec) Marshal() (dAtA []byte, err error) {
+func (m *RedisVolumeExpansionSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -4479,19 +9851,86 @@ func (m *UpgradeSpec) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UpgradeSpec) MarshalTo(dAtA []byte) (int, error) {
+func (m *RedisVolumeExpansionSpec) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *UpgradeSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *RedisVolumeExpansionSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	i -= len(m.TargetVersion)
-	copy(dAtA[i:], m.TargetVersion)
-	i = encodeVarintGenerated(dAtA, i, uint64(len(m.TargetVersion)))
+	return len(dAtA) - i, nil
+}
+
+func (m *RestartSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RestartSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RestartSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *TLSSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TLSSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i--
+	if m.Remove {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x18
+	i--
+	if m.RotateCertificates {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x10
+	{
+		size, err := m.TLSConfig.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
 	i--
 	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
@@ -4515,6 +9954,37 @@ func (m *ConfigNode) Size() (n int) {
 	var l int
 	_ = l
 	n += 1 + sovGenerated(uint64(m.Replicas))
+	return n
+}
+
+func (m *ElasticsearchCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *ElasticsearchCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -4586,6 +10056,26 @@ func (m *ElasticsearchOpsRequestSpec) Size() (n int) {
 		l = m.HorizontalScaling.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -4604,6 +10094,92 @@ func (m *ElasticsearchOpsRequestStatus) Size() (n int) {
 			n += 1 + l + sovGenerated(uint64(l))
 		}
 	}
+	return n
+}
+
+func (m *ElasticsearchReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ElasticsearchUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *ElasticsearchVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *ElasticsearchVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *EtcdCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *EtcdCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *EtcdHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -4653,6 +10229,30 @@ func (m *EtcdOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -4671,6 +10271,277 @@ func (m *EtcdOpsRequestStatus) Size() (n int) {
 			n += 1 + l + sovGenerated(uint64(l))
 		}
 	}
+	return n
+}
+
+func (m *EtcdReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *EtcdUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *EtcdVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *EtcdVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MariaDBCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *MariaDBCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MariaDBHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Member != nil {
+		n += 1 + sovGenerated(uint64(*m.Member))
+	}
+	n += 1 + sovGenerated(uint64(m.MemberWeight))
+	return n
+}
+
+func (m *MariaDBOpsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.ObjectMeta.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	l = m.Spec.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	l = m.Status.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	return n
+}
+
+func (m *MariaDBOpsRequestList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.ListMeta.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovGenerated(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MariaDBOpsRequestSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.DatabaseRef.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	l = len(m.Type)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.Upgrade != nil {
+		l = m.Upgrade.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *MariaDBOpsRequestStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Phase)
+	n += 1 + l + sovGenerated(uint64(l))
+	n += 1 + sovGenerated(uint64(m.ObservedGeneration))
+	if len(m.Conditions) > 0 {
+		for _, e := range m.Conditions {
+			l = e.Size()
+			n += 1 + l + sovGenerated(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MariaDBReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MariaDBUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *MariaDBVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MariaDB != nil {
+		l = m.MariaDB.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Exporter != nil {
+		l = m.Exporter.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *MariaDBVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MemcachedCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *MemcachedCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MemcachedHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -4720,6 +10591,30 @@ func (m *MemcachedOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -4741,7 +10636,53 @@ func (m *MemcachedOpsRequestStatus) Size() (n int) {
 	return n
 }
 
-func (m *MongoDBCustomConfig) Size() (n int) {
+func (m *MemcachedReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MemcachedUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *MemcachedVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *MemcachedVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MongoDBCustomConfiguration) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -4759,10 +10700,11 @@ func (m *MongoDBCustomConfig) Size() (n int) {
 			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
 		}
 	}
+	n += 2
 	return n
 }
 
-func (m *MongoDBCustomConfigSpec) Size() (n int) {
+func (m *MongoDBCustomConfigurationSpec) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -4873,8 +10815,16 @@ func (m *MongoDBOpsRequestSpec) Size() (n int) {
 		l = m.VolumeExpansion.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
-	if m.CustomConfig != nil {
-		l = m.CustomConfig.Size()
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
 	return n
@@ -4898,6 +10848,17 @@ func (m *MongoDBOpsRequestStatus) Size() (n int) {
 	return n
 }
 
+func (m *MongoDBReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovGenerated(uint64(m.OplogMaxLagSeconds))
+	n += 1 + sovGenerated(uint64(m.DBSizeDiffPercentage))
+	return n
+}
+
 func (m *MongoDBShardNode) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4906,6 +10867,21 @@ func (m *MongoDBShardNode) Size() (n int) {
 	_ = l
 	n += 1 + sovGenerated(uint64(m.Shards))
 	n += 1 + sovGenerated(uint64(m.Replicas))
+	return n
+}
+
+func (m *MongoDBUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -4937,6 +10913,10 @@ func (m *MongoDBVerticalScalingSpec) Size() (n int) {
 	}
 	if m.ReplicaSet != nil {
 		l = m.ReplicaSet.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
 	return n
@@ -4974,6 +10954,41 @@ func (m *MongosNode) Size() (n int) {
 	var l int
 	_ = l
 	n += 1 + sovGenerated(uint64(m.Replicas))
+	return n
+}
+
+func (m *MySQLCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *MySQLCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MySQL != nil {
+		l = m.MySQL.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -5030,9 +11045,6 @@ func (m *MySQLOpsRequestSpec) Size() (n int) {
 	_ = l
 	l = m.DatabaseRef.Size()
 	n += 1 + l + sovGenerated(uint64(l))
-	if m.StatefulSetOrdinal != nil {
-		n += 1 + sovGenerated(uint64(*m.StatefulSetOrdinal))
-	}
 	l = len(m.Type)
 	n += 1 + l + sovGenerated(uint64(l))
 	if m.Upgrade != nil {
@@ -5046,6 +11058,25 @@ func (m *MySQLOpsRequestSpec) Size() (n int) {
 	if m.VerticalScaling != nil {
 		l = m.VerticalScaling.Size()
 		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.StatefulSetOrdinal != nil {
+		n += 1 + sovGenerated(uint64(*m.StatefulSetOrdinal))
 	}
 	return n
 }
@@ -5068,6 +11099,30 @@ func (m *MySQLOpsRequestStatus) Size() (n int) {
 	return n
 }
 
+func (m *MySQLReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MySQLUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
 func (m *MySQLVerticalScalingSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5082,6 +11137,59 @@ func (m *MySQLVerticalScalingSpec) Size() (n int) {
 		l = m.Exporter.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	return n
+}
+
+func (m *MySQLVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MySQL != nil {
+		l = m.MySQL.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PerconaXtraDBCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *PerconaXtraDBCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PerconaXtraDBHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -5131,6 +11239,30 @@ func (m *PerconaXtraDBOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -5149,6 +11281,92 @@ func (m *PerconaXtraDBOpsRequestStatus) Size() (n int) {
 			n += 1 + l + sovGenerated(uint64(l))
 		}
 	}
+	return n
+}
+
+func (m *PerconaXtraDBReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PerconaXtraDBUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PerconaXtraDBVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PerconaXtraDBVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PgBouncerCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *PgBouncerCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PgBouncerHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -5198,6 +11416,30 @@ func (m *PgBouncerOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -5216,6 +11458,92 @@ func (m *PgBouncerOpsRequestStatus) Size() (n int) {
 			n += 1 + l + sovGenerated(uint64(l))
 		}
 	}
+	return n
+}
+
+func (m *PgBouncerReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PgBouncerUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PgBouncerVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PgBouncerVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PostgresCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *PostgresCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PostgresHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -5265,6 +11593,30 @@ func (m *PostgresOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -5283,6 +11635,92 @@ func (m *PostgresOpsRequestStatus) Size() (n int) {
 			n += 1 + l + sovGenerated(uint64(l))
 		}
 	}
+	return n
+}
+
+func (m *PostgresReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *PostgresUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PostgresVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *PostgresVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ProxySQLCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *ProxySQLCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ProxySQLHorizontalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -5332,6 +11770,30 @@ func (m *ProxySQLOpsRequestSpec) Size() (n int) {
 		l = m.Upgrade.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.HorizontalScaling != nil {
+		l = m.HorizontalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VerticalScaling != nil {
+		l = m.VerticalScaling.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -5350,6 +11812,83 @@ func (m *ProxySQLOpsRequestStatus) Size() (n int) {
 			n += 1 + l + sovGenerated(uint64(l))
 		}
 	}
+	return n
+}
+
+func (m *ProxySQLReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ProxySQLUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *ProxySQLVerticalScalingSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
+func (m *ProxySQLVolumeExpansionSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *RedisCustomConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConfigMap != nil {
+		l = m.ConfigMap.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if len(m.Data) > 0 {
+		for k, v := range m.Data {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovGenerated(uint64(len(k))) + 1 + len(v) + sovGenerated(uint64(len(v)))
+			n += mapEntrySize + 1 + sovGenerated(uint64(mapEntrySize))
+		}
+	}
+	n += 2
+	return n
+}
+
+func (m *RedisCustomConfigurationSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -5422,6 +11961,22 @@ func (m *RedisOpsRequestSpec) Size() (n int) {
 		l = m.VerticalScaling.Size()
 		n += 1 + l + sovGenerated(uint64(l))
 	}
+	if m.VolumeExpansion != nil {
+		l = m.VolumeExpansion.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Configuration != nil {
+		l = m.Configuration.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.TLS != nil {
+		l = m.TLS.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	if m.Restart != nil {
+		l = m.Restart.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
 	return n
 }
 
@@ -5443,6 +11998,30 @@ func (m *RedisOpsRequestStatus) Size() (n int) {
 	return n
 }
 
+func (m *RedisReplicaReadinessCriteria) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *RedisUpgradeSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TargetVersion)
+	n += 1 + l + sovGenerated(uint64(l))
+	if m.ReadinessCriteria != nil {
+		l = m.ReadinessCriteria.Size()
+		n += 1 + l + sovGenerated(uint64(l))
+	}
+	return n
+}
+
 func (m *RedisVerticalScalingSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5460,14 +12039,34 @@ func (m *RedisVerticalScalingSpec) Size() (n int) {
 	return n
 }
 
-func (m *UpgradeSpec) Size() (n int) {
+func (m *RedisVolumeExpansionSpec) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.TargetVersion)
+	return n
+}
+
+func (m *RestartSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *TLSSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.TLSConfig.Size()
 	n += 1 + l + sovGenerated(uint64(l))
+	n += 2
+	n += 2
 	return n
 }
 
@@ -5483,6 +12082,37 @@ func (this *ConfigNode) String() string {
 	}
 	s := strings.Join([]string{`&ConfigNode{`,
 		`Replicas:` + fmt.Sprintf("%v", this.Replicas) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticsearchCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&ElasticsearchCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticsearchCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticsearchCustomConfigurationSpec{`,
 		`}`,
 	}, "")
 	return s
@@ -5504,7 +12134,7 @@ func (this *ElasticsearchOpsRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ElasticsearchOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "ElasticsearchOpsRequestSpec", "ElasticsearchOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "ElasticsearchOpsRequestStatus", "ElasticsearchOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5521,7 +12151,7 @@ func (this *ElasticsearchOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&ElasticsearchOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -5532,10 +12162,15 @@ func (this *ElasticsearchOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ElasticsearchOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "ElasticsearchUpgradeSpec", "ElasticsearchUpgradeSpec", 1) + `,`,
 		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "ElasticsearchHorizontalScalingSpec", "ElasticsearchHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "ElasticsearchVerticalScalingSpec", "ElasticsearchVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "ElasticsearchVolumeExpansionSpec", "ElasticsearchVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "ElasticsearchCustomConfigurationSpec", "ElasticsearchCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5557,12 +12192,91 @@ func (this *ElasticsearchOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *ElasticsearchReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticsearchReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticsearchUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticsearchUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "ElasticsearchReplicaReadinessCriteria", "ElasticsearchReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticsearchVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticsearchVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "ElasticsearchReplicaReadinessCriteria", "ElasticsearchReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticsearchVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticsearchVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EtcdCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&EtcdCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EtcdCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EtcdCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EtcdHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EtcdHorizontalScalingSpec{`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *EtcdOpsRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&EtcdOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "EtcdOpsRequestSpec", "EtcdOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "EtcdOpsRequestStatus", "EtcdOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5579,7 +12293,7 @@ func (this *EtcdOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&EtcdOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -5590,9 +12304,15 @@ func (this *EtcdOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&EtcdOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "EtcdUpgradeSpec", "EtcdUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "EtcdHorizontalScalingSpec", "EtcdHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "EtcdVerticalScalingSpec", "EtcdVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "EtcdVolumeExpansionSpec", "EtcdVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "EtcdCustomConfigurationSpec", "EtcdCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5614,12 +12334,236 @@ func (this *EtcdOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *EtcdReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EtcdReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EtcdUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EtcdUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "EtcdReplicaReadinessCriteria", "EtcdReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EtcdVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EtcdVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "EtcdReplicaReadinessCriteria", "EtcdReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EtcdVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EtcdVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&MariaDBCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBHorizontalScalingSpec{`,
+		`Member:` + valueToStringGenerated(this.Member) + `,`,
+		`MemberWeight:` + fmt.Sprintf("%v", this.MemberWeight) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBOpsRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBOpsRequest{`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "MariaDBOpsRequestSpec", "MariaDBOpsRequestSpec", 1), `&`, ``, 1) + `,`,
+		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "MariaDBOpsRequestStatus", "MariaDBOpsRequestStatus", 1), `&`, ``, 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBOpsRequestList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]MariaDBOpsRequest{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(strings.Replace(f.String(), "MariaDBOpsRequest", "MariaDBOpsRequest", 1), `&`, ``, 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&MariaDBOpsRequestList{`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
+		`Items:` + repeatedStringForItems + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBOpsRequestSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBOpsRequestSpec{`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "MariaDBUpgradeSpec", "MariaDBUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "MariaDBHorizontalScalingSpec", "MariaDBHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "MariaDBVerticalScalingSpec", "MariaDBVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "MariaDBVolumeExpansionSpec", "MariaDBVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "MariaDBCustomConfigurationSpec", "MariaDBCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBOpsRequestStatus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForConditions := "[]Condition{"
+	for _, f := range this.Conditions {
+		repeatedStringForConditions += fmt.Sprintf("%v", f) + ","
+	}
+	repeatedStringForConditions += "}"
+	s := strings.Join([]string{`&MariaDBOpsRequestStatus{`,
+		`Phase:` + fmt.Sprintf("%v", this.Phase) + `,`,
+		`ObservedGeneration:` + fmt.Sprintf("%v", this.ObservedGeneration) + `,`,
+		`Conditions:` + repeatedStringForConditions + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "MariaDBReplicaReadinessCriteria", "MariaDBReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBVerticalScalingSpec{`,
+		`MariaDB:` + strings.Replace(fmt.Sprintf("%v", this.MariaDB), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MariaDBVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MariaDBVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MemcachedCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&MemcachedCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MemcachedCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MemcachedCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MemcachedHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MemcachedHorizontalScalingSpec{`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *MemcachedOpsRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MemcachedOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "MemcachedOpsRequestSpec", "MemcachedOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "MemcachedOpsRequestStatus", "MemcachedOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5636,7 +12580,7 @@ func (this *MemcachedOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&MemcachedOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -5647,9 +12591,15 @@ func (this *MemcachedOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MemcachedOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "MemcachedUpgradeSpec", "MemcachedUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "MemcachedHorizontalScalingSpec", "MemcachedHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "MemcachedVerticalScalingSpec", "MemcachedVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "MemcachedVolumeExpansionSpec", "MemcachedVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "MemcachedCustomConfigurationSpec", "MemcachedCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5671,7 +12621,46 @@ func (this *MemcachedOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
-func (this *MongoDBCustomConfig) String() string {
+func (this *MemcachedReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MemcachedReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MemcachedUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MemcachedUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "MemcachedReplicaReadinessCriteria", "MemcachedReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MemcachedVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MemcachedVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "MemcachedReplicaReadinessCriteria", "MemcachedReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MemcachedVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MemcachedVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MongoDBCustomConfiguration) String() string {
 	if this == nil {
 		return "nil"
 	}
@@ -5685,23 +12674,24 @@ func (this *MongoDBCustomConfig) String() string {
 		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
 	}
 	mapStringForData += "}"
-	s := strings.Join([]string{`&MongoDBCustomConfig{`,
-		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v11.LocalObjectReference", 1) + `,`,
+	s := strings.Join([]string{`&MongoDBCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
 		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *MongoDBCustomConfigSpec) String() string {
+func (this *MongoDBCustomConfigurationSpec) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&MongoDBCustomConfigSpec{`,
-		`Standalone:` + strings.Replace(this.Standalone.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
-		`Mongos:` + strings.Replace(this.Mongos.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
-		`ConfigServer:` + strings.Replace(this.ConfigServer.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
-		`Shard:` + strings.Replace(this.Shard.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
-		`ReplicaSet:` + strings.Replace(this.ReplicaSet.String(), "MongoDBCustomConfig", "MongoDBCustomConfig", 1) + `,`,
+	s := strings.Join([]string{`&MongoDBCustomConfigurationSpec{`,
+		`Standalone:` + strings.Replace(this.Standalone.String(), "MongoDBCustomConfiguration", "MongoDBCustomConfiguration", 1) + `,`,
+		`Mongos:` + strings.Replace(this.Mongos.String(), "MongoDBCustomConfiguration", "MongoDBCustomConfiguration", 1) + `,`,
+		`ConfigServer:` + strings.Replace(this.ConfigServer.String(), "MongoDBCustomConfiguration", "MongoDBCustomConfiguration", 1) + `,`,
+		`Shard:` + strings.Replace(this.Shard.String(), "MongoDBCustomConfiguration", "MongoDBCustomConfiguration", 1) + `,`,
+		`ReplicaSet:` + strings.Replace(this.ReplicaSet.String(), "MongoDBCustomConfiguration", "MongoDBCustomConfiguration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5724,7 +12714,7 @@ func (this *MongoDBOpsRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MongoDBOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "MongoDBOpsRequestSpec", "MongoDBOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "MongoDBOpsRequestStatus", "MongoDBOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5741,7 +12731,7 @@ func (this *MongoDBOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&MongoDBOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -5752,13 +12742,15 @@ func (this *MongoDBOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MongoDBOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "MongoDBUpgradeSpec", "MongoDBUpgradeSpec", 1) + `,`,
 		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "MongoDBHorizontalScalingSpec", "MongoDBHorizontalScalingSpec", 1) + `,`,
 		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "MongoDBVerticalScalingSpec", "MongoDBVerticalScalingSpec", 1) + `,`,
 		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "MongoDBVolumeExpansionSpec", "MongoDBVolumeExpansionSpec", 1) + `,`,
-		`CustomConfig:` + strings.Replace(this.CustomConfig.String(), "MongoDBCustomConfigSpec", "MongoDBCustomConfigSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "MongoDBCustomConfigurationSpec", "MongoDBCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5780,6 +12772,17 @@ func (this *MongoDBOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *MongoDBReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MongoDBReplicaReadinessCriteria{`,
+		`OplogMaxLagSeconds:` + fmt.Sprintf("%v", this.OplogMaxLagSeconds) + `,`,
+		`DBSizeDiffPercentage:` + fmt.Sprintf("%v", this.DBSizeDiffPercentage) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *MongoDBShardNode) String() string {
 	if this == nil {
 		return "nil"
@@ -5791,17 +12794,29 @@ func (this *MongoDBShardNode) String() string {
 	}, "")
 	return s
 }
+func (this *MongoDBUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MongoDBUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "MongoDBReplicaReadinessCriteria", "MongoDBReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *MongoDBVerticalScalingSpec) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MongoDBVerticalScalingSpec{`,
-		`Standalone:` + strings.Replace(fmt.Sprintf("%v", this.Standalone), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`Mongos:` + strings.Replace(fmt.Sprintf("%v", this.Mongos), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`ConfigServer:` + strings.Replace(fmt.Sprintf("%v", this.ConfigServer), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`Shard:` + strings.Replace(fmt.Sprintf("%v", this.Shard), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`ReplicaSet:` + strings.Replace(fmt.Sprintf("%v", this.ReplicaSet), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
+		`Standalone:` + strings.Replace(fmt.Sprintf("%v", this.Standalone), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`Mongos:` + strings.Replace(fmt.Sprintf("%v", this.Mongos), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`ConfigServer:` + strings.Replace(fmt.Sprintf("%v", this.ConfigServer), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`Shard:` + strings.Replace(fmt.Sprintf("%v", this.Shard), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`ReplicaSet:` + strings.Replace(fmt.Sprintf("%v", this.ReplicaSet), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "MongoDBReplicaReadinessCriteria", "MongoDBReplicaReadinessCriteria", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5829,6 +12844,38 @@ func (this *MongosNode) String() string {
 	}, "")
 	return s
 }
+func (this *MySQLCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&MySQLCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MySQLCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MySQLCustomConfigurationSpec{`,
+		`MySQL:` + strings.Replace(this.MySQL.String(), "MySQLCustomConfiguration", "MySQLCustomConfiguration", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *MySQLHorizontalScalingSpec) String() string {
 	if this == nil {
 		return "nil"
@@ -5845,7 +12892,7 @@ func (this *MySQLOpsRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MySQLOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "MySQLOpsRequestSpec", "MySQLOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "MySQLOpsRequestStatus", "MySQLOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5862,7 +12909,7 @@ func (this *MySQLOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&MySQLOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -5873,12 +12920,16 @@ func (this *MySQLOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MySQLOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
-		`StatefulSetOrdinal:` + valueToStringGenerated(this.StatefulSetOrdinal) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "MySQLUpgradeSpec", "MySQLUpgradeSpec", 1) + `,`,
 		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "MySQLHorizontalScalingSpec", "MySQLHorizontalScalingSpec", 1) + `,`,
 		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "MySQLVerticalScalingSpec", "MySQLVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "MySQLVolumeExpansionSpec", "MySQLVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "MySQLCustomConfigurationSpec", "MySQLCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
+		`StatefulSetOrdinal:` + valueToStringGenerated(this.StatefulSetOrdinal) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5900,13 +12951,83 @@ func (this *MySQLOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *MySQLReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MySQLReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MySQLUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MySQLUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "MySQLReplicaReadinessCriteria", "MySQLReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *MySQLVerticalScalingSpec) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&MySQLVerticalScalingSpec{`,
-		`MySQL:` + strings.Replace(fmt.Sprintf("%v", this.MySQL), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
+		`MySQL:` + strings.Replace(fmt.Sprintf("%v", this.MySQL), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MySQLVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MySQLVolumeExpansionSpec{`,
+		`MySQL:` + strings.Replace(fmt.Sprintf("%v", this.MySQL), "Quantity", "resource.Quantity", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerconaXtraDBCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&PerconaXtraDBCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerconaXtraDBCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerconaXtraDBCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerconaXtraDBHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerconaXtraDBHorizontalScalingSpec{`,
 		`}`,
 	}, "")
 	return s
@@ -5916,7 +13037,7 @@ func (this *PerconaXtraDBOpsRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PerconaXtraDBOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "PerconaXtraDBOpsRequestSpec", "PerconaXtraDBOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "PerconaXtraDBOpsRequestStatus", "PerconaXtraDBOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5933,7 +13054,7 @@ func (this *PerconaXtraDBOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&PerconaXtraDBOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -5944,9 +13065,15 @@ func (this *PerconaXtraDBOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PerconaXtraDBOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "PerconaXtraDBUpgradeSpec", "PerconaXtraDBUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "PerconaXtraDBHorizontalScalingSpec", "PerconaXtraDBHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "PerconaXtraDBVerticalScalingSpec", "PerconaXtraDBVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "PerconaXtraDBVolumeExpansionSpec", "PerconaXtraDBVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "PerconaXtraDBCustomConfigurationSpec", "PerconaXtraDBCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5968,12 +13095,91 @@ func (this *PerconaXtraDBOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *PerconaXtraDBReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerconaXtraDBReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerconaXtraDBUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerconaXtraDBUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "PerconaXtraDBReplicaReadinessCriteria", "PerconaXtraDBReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerconaXtraDBVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerconaXtraDBVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "PerconaXtraDBReplicaReadinessCriteria", "PerconaXtraDBReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerconaXtraDBVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerconaXtraDBVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PgBouncerCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&PgBouncerCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PgBouncerCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PgBouncerCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PgBouncerHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PgBouncerHorizontalScalingSpec{`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *PgBouncerOpsRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PgBouncerOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "PgBouncerOpsRequestSpec", "PgBouncerOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "PgBouncerOpsRequestStatus", "PgBouncerOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -5990,7 +13196,7 @@ func (this *PgBouncerOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&PgBouncerOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -6001,9 +13207,15 @@ func (this *PgBouncerOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PgBouncerOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "PgBouncerUpgradeSpec", "PgBouncerUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "PgBouncerHorizontalScalingSpec", "PgBouncerHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "PgBouncerVerticalScalingSpec", "PgBouncerVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "PgBouncerVolumeExpansionSpec", "PgBouncerVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "PgBouncerCustomConfigurationSpec", "PgBouncerCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6025,12 +13237,91 @@ func (this *PgBouncerOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *PgBouncerReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PgBouncerReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PgBouncerUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PgBouncerUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "PgBouncerReplicaReadinessCriteria", "PgBouncerReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PgBouncerVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PgBouncerVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "PgBouncerReplicaReadinessCriteria", "PgBouncerReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PgBouncerVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PgBouncerVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PostgresCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&PostgresCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PostgresCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PostgresCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PostgresHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PostgresHorizontalScalingSpec{`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *PostgresOpsRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PostgresOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "PostgresOpsRequestSpec", "PostgresOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "PostgresOpsRequestStatus", "PostgresOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -6047,7 +13338,7 @@ func (this *PostgresOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&PostgresOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -6058,9 +13349,15 @@ func (this *PostgresOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PostgresOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "PostgresUpgradeSpec", "PostgresUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "PostgresHorizontalScalingSpec", "PostgresHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "PostgresVerticalScalingSpec", "PostgresVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "PostgresVolumeExpansionSpec", "PostgresVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "PostgresCustomConfigurationSpec", "PostgresCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6082,12 +13379,91 @@ func (this *PostgresOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *PostgresReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PostgresReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PostgresUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PostgresUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "PostgresReplicaReadinessCriteria", "PostgresReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PostgresVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PostgresVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "PostgresReplicaReadinessCriteria", "PostgresReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PostgresVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PostgresVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxySQLCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&ProxySQLCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxySQLCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxySQLCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxySQLHorizontalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxySQLHorizontalScalingSpec{`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ProxySQLOpsRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ProxySQLOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "ProxySQLOpsRequestSpec", "ProxySQLOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "ProxySQLOpsRequestStatus", "ProxySQLOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -6104,7 +13480,7 @@ func (this *ProxySQLOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&ProxySQLOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -6115,9 +13491,15 @@ func (this *ProxySQLOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ProxySQLOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "ProxySQLUpgradeSpec", "ProxySQLUpgradeSpec", 1) + `,`,
+		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "ProxySQLHorizontalScalingSpec", "ProxySQLHorizontalScalingSpec", 1) + `,`,
+		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "ProxySQLVerticalScalingSpec", "ProxySQLVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "ProxySQLVolumeExpansionSpec", "ProxySQLVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "ProxySQLCustomConfigurationSpec", "ProxySQLCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6139,6 +13521,76 @@ func (this *ProxySQLOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *ProxySQLReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxySQLReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxySQLUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxySQLUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "ProxySQLReplicaReadinessCriteria", "ProxySQLReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxySQLVerticalScalingSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxySQLVerticalScalingSpec{`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "ProxySQLReplicaReadinessCriteria", "ProxySQLReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxySQLVolumeExpansionSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxySQLVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RedisCustomConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForData := make([]string, 0, len(this.Data))
+	for k := range this.Data {
+		keysForData = append(keysForData, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForData)
+	mapStringForData := "map[string]string{"
+	for _, k := range keysForData {
+		mapStringForData += fmt.Sprintf("%v: %v,", k, this.Data[k])
+	}
+	mapStringForData += "}"
+	s := strings.Join([]string{`&RedisCustomConfiguration{`,
+		`ConfigMap:` + strings.Replace(fmt.Sprintf("%v", this.ConfigMap), "LocalObjectReference", "v1.LocalObjectReference", 1) + `,`,
+		`Data:` + mapStringForData + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RedisCustomConfigurationSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RedisCustomConfigurationSpec{`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *RedisHorizontalScalingSpec) String() string {
 	if this == nil {
 		return "nil"
@@ -6155,7 +13607,7 @@ func (this *RedisOpsRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RedisOpsRequest{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "RedisOpsRequestSpec", "RedisOpsRequestSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "RedisOpsRequestStatus", "RedisOpsRequestStatus", 1), `&`, ``, 1) + `,`,
 		`}`,
@@ -6172,7 +13624,7 @@ func (this *RedisOpsRequestList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&RedisOpsRequestList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -6183,11 +13635,15 @@ func (this *RedisOpsRequestSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RedisOpsRequestSpec{`,
-		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v11.LocalObjectReference", 1), `&`, ``, 1) + `,`,
+		`DatabaseRef:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.DatabaseRef), "LocalObjectReference", "v1.LocalObjectReference", 1), `&`, ``, 1) + `,`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`Upgrade:` + strings.Replace(this.Upgrade.String(), "UpgradeSpec", "UpgradeSpec", 1) + `,`,
+		`Upgrade:` + strings.Replace(this.Upgrade.String(), "RedisUpgradeSpec", "RedisUpgradeSpec", 1) + `,`,
 		`HorizontalScaling:` + strings.Replace(this.HorizontalScaling.String(), "RedisHorizontalScalingSpec", "RedisHorizontalScalingSpec", 1) + `,`,
 		`VerticalScaling:` + strings.Replace(this.VerticalScaling.String(), "RedisVerticalScalingSpec", "RedisVerticalScalingSpec", 1) + `,`,
+		`VolumeExpansion:` + strings.Replace(this.VolumeExpansion.String(), "RedisVolumeExpansionSpec", "RedisVolumeExpansionSpec", 1) + `,`,
+		`Configuration:` + strings.Replace(this.Configuration.String(), "RedisCustomConfigurationSpec", "RedisCustomConfigurationSpec", 1) + `,`,
+		`TLS:` + strings.Replace(this.TLS.String(), "TLSSpec", "TLSSpec", 1) + `,`,
+		`Restart:` + strings.Replace(this.Restart.String(), "RestartSpec", "RestartSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6209,23 +13665,63 @@ func (this *RedisOpsRequestStatus) String() string {
 	}, "")
 	return s
 }
+func (this *RedisReplicaReadinessCriteria) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RedisReplicaReadinessCriteria{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RedisUpgradeSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RedisUpgradeSpec{`,
+		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+		`ReadinessCriteria:` + strings.Replace(this.ReadinessCriteria.String(), "RedisReplicaReadinessCriteria", "RedisReplicaReadinessCriteria", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *RedisVerticalScalingSpec) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RedisVerticalScalingSpec{`,
-		`Redis:` + strings.Replace(fmt.Sprintf("%v", this.Redis), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
-		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v11.ResourceRequirements", 1) + `,`,
+		`Redis:` + strings.Replace(fmt.Sprintf("%v", this.Redis), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
+		`Exporter:` + strings.Replace(fmt.Sprintf("%v", this.Exporter), "ResourceRequirements", "v1.ResourceRequirements", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *UpgradeSpec) String() string {
+func (this *RedisVolumeExpansionSpec) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&UpgradeSpec{`,
-		`TargetVersion:` + fmt.Sprintf("%v", this.TargetVersion) + `,`,
+	s := strings.Join([]string{`&RedisVolumeExpansionSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RestartSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RestartSpec{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSSpec{`,
+		`TLSConfig:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.TLSConfig), "TLSConfig", "v12.TLSConfig", 1), `&`, ``, 1) + `,`,
+		`RotateCertificates:` + fmt.Sprintf("%v", this.RotateCertificates) + `,`,
+		`Remove:` + fmt.Sprintf("%v", this.Remove) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6286,6 +13782,295 @@ func (m *ConfigNode) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticsearchCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticsearchCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticsearchCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticsearchCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticsearchCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticsearchCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -6819,7 +14604,7 @@ func (m *ElasticsearchOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &ElasticsearchUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6858,6 +14643,186 @@ func (m *ElasticsearchOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				m.HorizontalScaling = &ElasticsearchHorizontalScalingSpec{}
 			}
 			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &ElasticsearchVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &ElasticsearchVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &ElasticsearchCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -6999,6 +14964,664 @@ func (m *ElasticsearchOpsRequestStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticsearchReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticsearchReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticsearchReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticsearchUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticsearchUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticsearchUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &ElasticsearchReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticsearchVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticsearchVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticsearchVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &ElasticsearchReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticsearchVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticsearchVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticsearchVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -7419,9 +16042,225 @@ func (m *EtcdOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &EtcdUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &EtcdHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &EtcdVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &EtcdVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &EtcdCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -7563,6 +16402,2177 @@ func (m *EtcdOpsRequestStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &EtcdReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &EtcdReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EtcdVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EtcdVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EtcdVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Member", wireType)
+			}
+			var v int32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Member = &v
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MemberWeight", wireType)
+			}
+			m.MemberWeight = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MemberWeight |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBOpsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBOpsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBOpsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectMeta", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ObjectMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Status.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBOpsRequestList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBOpsRequestList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBOpsRequestList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListMeta", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ListMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, MariaDBOpsRequest{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBOpsRequestSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBOpsRequestSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBOpsRequestSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DatabaseRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.DatabaseRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Type = OpsRequestType(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Upgrade", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Upgrade == nil {
+				m.Upgrade = &MariaDBUpgradeSpec{}
+			}
+			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &MariaDBHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &MariaDBVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &MariaDBVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &MariaDBCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBOpsRequestStatus) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBOpsRequestStatus: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBOpsRequestStatus: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Phase", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Phase = OpsRequestPhase(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObservedGeneration", wireType)
+			}
+			m.ObservedGeneration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ObservedGeneration |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Conditions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Conditions = append(m.Conditions, v12.Condition{})
+			if err := m.Conditions[len(m.Conditions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &MariaDBReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MariaDB", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MariaDB == nil {
+				m.MariaDB = &v1.ResourceRequirements{}
+			}
+			if err := m.MariaDB.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Exporter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Exporter == nil {
+				m.Exporter = &v1.ResourceRequirements{}
+			}
+			if err := m.Exporter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MariaDBVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MariaDBVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MariaDBVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MemcachedCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MemcachedCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MemcachedCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MemcachedCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MemcachedCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MemcachedCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MemcachedHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MemcachedHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MemcachedHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -7983,9 +18993,225 @@ func (m *MemcachedOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &MemcachedUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &MemcachedHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &MemcachedVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &MemcachedVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &MemcachedCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -8151,7 +19377,7 @@ func (m *MemcachedOpsRequestStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MongoDBCustomConfig) Unmarshal(dAtA []byte) error {
+func (m *MemcachedReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -8174,10 +19400,326 @@ func (m *MongoDBCustomConfig) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MongoDBCustomConfig: wiretype end group for non-group")
+			return fmt.Errorf("proto: MemcachedReplicaReadinessCriteria: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MongoDBCustomConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MemcachedReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MemcachedUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MemcachedUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MemcachedUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &MemcachedReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MemcachedVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MemcachedVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MemcachedVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &MemcachedReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MemcachedVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MemcachedVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MemcachedVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MongoDBCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MongoDBCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MongoDBCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -8210,7 +19752,7 @@ func (m *MongoDBCustomConfig) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ConfigMap == nil {
-				m.ConfigMap = &v11.LocalObjectReference{}
+				m.ConfigMap = &v1.LocalObjectReference{}
 			}
 			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8343,6 +19885,26 @@ func (m *MongoDBCustomConfig) Unmarshal(dAtA []byte) error {
 			}
 			m.Data[mapkey] = mapvalue
 			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -8367,7 +19929,7 @@ func (m *MongoDBCustomConfig) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
+func (m *MongoDBCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -8390,10 +19952,10 @@ func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MongoDBCustomConfigSpec: wiretype end group for non-group")
+			return fmt.Errorf("proto: MongoDBCustomConfigurationSpec: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MongoDBCustomConfigSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MongoDBCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -8426,7 +19988,7 @@ func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Standalone == nil {
-				m.Standalone = &MongoDBCustomConfig{}
+				m.Standalone = &MongoDBCustomConfiguration{}
 			}
 			if err := m.Standalone.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8462,7 +20024,7 @@ func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Mongos == nil {
-				m.Mongos = &MongoDBCustomConfig{}
+				m.Mongos = &MongoDBCustomConfiguration{}
 			}
 			if err := m.Mongos.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8498,7 +20060,7 @@ func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ConfigServer == nil {
-				m.ConfigServer = &MongoDBCustomConfig{}
+				m.ConfigServer = &MongoDBCustomConfiguration{}
 			}
 			if err := m.ConfigServer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8534,7 +20096,7 @@ func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Shard == nil {
-				m.Shard = &MongoDBCustomConfig{}
+				m.Shard = &MongoDBCustomConfiguration{}
 			}
 			if err := m.Shard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8570,7 +20132,7 @@ func (m *MongoDBCustomConfigSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ReplicaSet == nil {
-				m.ReplicaSet = &MongoDBCustomConfig{}
+				m.ReplicaSet = &MongoDBCustomConfiguration{}
 			}
 			if err := m.ReplicaSet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9177,7 +20739,7 @@ func (m *MongoDBOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &MongoDBUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9293,7 +20855,7 @@ func (m *MongoDBOpsRequestSpec) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomConfig", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -9320,10 +20882,82 @@ func (m *MongoDBOpsRequestSpec) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.CustomConfig == nil {
-				m.CustomConfig = &MongoDBCustomConfigSpec{}
+			if m.Configuration == nil {
+				m.Configuration = &MongoDBCustomConfigurationSpec{}
 			}
-			if err := m.CustomConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -9489,6 +21123,97 @@ func (m *MongoDBOpsRequestStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MongoDBReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MongoDBReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MongoDBReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OplogMaxLagSeconds", wireType)
+			}
+			m.OplogMaxLagSeconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OplogMaxLagSeconds |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DBSizeDiffPercentage", wireType)
+			}
+			m.DBSizeDiffPercentage = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DBSizeDiffPercentage |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MongoDBShardNode) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -9580,6 +21305,127 @@ func (m *MongoDBShardNode) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MongoDBUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MongoDBUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MongoDBUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &MongoDBReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -9639,7 +21485,7 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Standalone == nil {
-				m.Standalone = &v11.ResourceRequirements{}
+				m.Standalone = &v1.ResourceRequirements{}
 			}
 			if err := m.Standalone.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9675,7 +21521,7 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Mongos == nil {
-				m.Mongos = &v11.ResourceRequirements{}
+				m.Mongos = &v1.ResourceRequirements{}
 			}
 			if err := m.Mongos.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9711,7 +21557,7 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ConfigServer == nil {
-				m.ConfigServer = &v11.ResourceRequirements{}
+				m.ConfigServer = &v1.ResourceRequirements{}
 			}
 			if err := m.ConfigServer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9747,7 +21593,7 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Shard == nil {
-				m.Shard = &v11.ResourceRequirements{}
+				m.Shard = &v1.ResourceRequirements{}
 			}
 			if err := m.Shard.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9783,7 +21629,7 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Exporter == nil {
-				m.Exporter = &v11.ResourceRequirements{}
+				m.Exporter = &v1.ResourceRequirements{}
 			}
 			if err := m.Exporter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9819,9 +21665,45 @@ func (m *MongoDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ReplicaSet == nil {
-				m.ReplicaSet = &v11.ResourceRequirements{}
+				m.ReplicaSet = &v1.ResourceRequirements{}
 			}
 			if err := m.ReplicaSet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &MongoDBReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -10094,6 +21976,331 @@ func (m *MongosNode) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MySQLCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MySQLCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MySQLCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MySQLCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MySQLCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MySQLCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MySQL", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MySQL == nil {
+				m.MySQL = &MySQLCustomConfiguration{}
+			}
+			if err := m.MySQL.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -10545,26 +22752,6 @@ func (m *MySQLOpsRequestSpec) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StatefulSetOrdinal", wireType)
-			}
-			var v int32
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenerated
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.StatefulSetOrdinal = &v
-		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
 			}
@@ -10596,7 +22783,7 @@ func (m *MySQLOpsRequestSpec) Unmarshal(dAtA []byte) error {
 			}
 			m.Type = OpsRequestType(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Upgrade", wireType)
 			}
@@ -10626,13 +22813,13 @@ func (m *MySQLOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &MySQLUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
 			}
@@ -10668,7 +22855,7 @@ func (m *MySQLOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
 			}
@@ -10704,6 +22891,170 @@ func (m *MySQLOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &MySQLVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &MySQLCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatefulSetOrdinal", wireType)
+			}
+			var v int32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.StatefulSetOrdinal = &v
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -10866,6 +23217,180 @@ func (m *MySQLOpsRequestStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MySQLReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MySQLReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MySQLReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MySQLUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MySQLUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MySQLUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &MySQLReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MySQLVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -10925,7 +23450,7 @@ func (m *MySQLVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.MySQL == nil {
-				m.MySQL = &v11.ResourceRequirements{}
+				m.MySQL = &v1.ResourceRequirements{}
 			}
 			if err := m.MySQL.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -10961,12 +23486,443 @@ func (m *MySQLVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Exporter == nil {
-				m.Exporter = &v11.ResourceRequirements{}
+				m.Exporter = &v1.ResourceRequirements{}
 			}
 			if err := m.Exporter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MySQLVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MySQLVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MySQLVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MySQL", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MySQL == nil {
+				m.MySQL = &resource.Quantity{}
+			}
+			if err := m.MySQL.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -11387,9 +24343,225 @@ func (m *PerconaXtraDBOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &PerconaXtraDBUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &PerconaXtraDBHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &PerconaXtraDBVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &PerconaXtraDBVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &PerconaXtraDBCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -11531,6 +24703,664 @@ func (m *PerconaXtraDBOpsRequestStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &PerconaXtraDBReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &PerconaXtraDBReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PerconaXtraDBVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerconaXtraDBVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerconaXtraDBVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -11951,9 +25781,225 @@ func (m *PgBouncerOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &PgBouncerUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &PgBouncerHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &PgBouncerVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &PgBouncerVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &PgBouncerCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -12095,6 +26141,664 @@ func (m *PgBouncerOpsRequestStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &PgBouncerReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &PgBouncerReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PgBouncerVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PgBouncerVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PgBouncerVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -12515,9 +27219,225 @@ func (m *PostgresOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &PostgresUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &PostgresHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &PostgresVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &PostgresVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &PostgresCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -12659,6 +27579,664 @@ func (m *PostgresOpsRequestStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &PostgresReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &PostgresReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PostgresVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PostgresVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PostgresVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLHorizontalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLHorizontalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLHorizontalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -13079,9 +28657,225 @@ func (m *ProxySQLOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &ProxySQLUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HorizontalScaling == nil {
+				m.HorizontalScaling = &ProxySQLHorizontalScalingSpec{}
+			}
+			if err := m.HorizontalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalScaling", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VerticalScaling == nil {
+				m.VerticalScaling = &ProxySQLVerticalScalingSpec{}
+			}
+			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &ProxySQLVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &ProxySQLCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -13223,6 +29017,611 @@ func (m *ProxySQLOpsRequestStatus) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &ProxySQLReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLVerticalScalingSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLVerticalScalingSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLVerticalScalingSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &ProxySQLReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ProxySQLVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ProxySQLVolumeExpansionSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ProxySQLVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RedisCustomConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RedisCustomConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RedisCustomConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConfigMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConfigMap == nil {
+				m.ConfigMap = &v1.LocalObjectReference{}
+			}
+			if err := m.ConfigMap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenerated
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenerated
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipGenerated(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthGenerated
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Data[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RedisCustomConfigurationSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RedisCustomConfigurationSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RedisCustomConfigurationSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -13736,7 +30135,7 @@ func (m *RedisOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Upgrade == nil {
-				m.Upgrade = &UpgradeSpec{}
+				m.Upgrade = &RedisUpgradeSpec{}
 			}
 			if err := m.Upgrade.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -13811,6 +30210,150 @@ func (m *RedisOpsRequestSpec) Unmarshal(dAtA []byte) error {
 				m.VerticalScaling = &RedisVerticalScalingSpec{}
 			}
 			if err := m.VerticalScaling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolumeExpansion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VolumeExpansion == nil {
+				m.VolumeExpansion = &RedisVolumeExpansionSpec{}
+			}
+			if err := m.VolumeExpansion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Configuration == nil {
+				m.Configuration = &RedisCustomConfigurationSpec{}
+			}
+			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TLS", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TLS == nil {
+				m.TLS = &TLSSpec{}
+			}
+			if err := m.TLS.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Restart", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Restart == nil {
+				m.Restart = &RestartSpec{}
+			}
+			if err := m.Restart.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -13976,6 +30519,180 @@ func (m *RedisOpsRequestStatus) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *RedisReplicaReadinessCriteria) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RedisReplicaReadinessCriteria: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RedisReplicaReadinessCriteria: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RedisUpgradeSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RedisUpgradeSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RedisUpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReadinessCriteria", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ReadinessCriteria == nil {
+				m.ReadinessCriteria = &RedisReplicaReadinessCriteria{}
+			}
+			if err := m.ReadinessCriteria.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *RedisVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -14035,7 +30752,7 @@ func (m *RedisVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Redis == nil {
-				m.Redis = &v11.ResourceRequirements{}
+				m.Redis = &v1.ResourceRequirements{}
 			}
 			if err := m.Redis.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -14071,7 +30788,7 @@ func (m *RedisVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Exporter == nil {
-				m.Exporter = &v11.ResourceRequirements{}
+				m.Exporter = &v1.ResourceRequirements{}
 			}
 			if err := m.Exporter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -14101,7 +30818,7 @@ func (m *RedisVerticalScalingSpec) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *UpgradeSpec) Unmarshal(dAtA []byte) error {
+func (m *RedisVolumeExpansionSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -14124,17 +30841,123 @@ func (m *UpgradeSpec) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: UpgradeSpec: wiretype end group for non-group")
+			return fmt.Errorf("proto: RedisVolumeExpansionSpec: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UpgradeSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: RedisVolumeExpansionSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RestartSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RestartSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RestartSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TLSSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TLSSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TLSSpec: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TargetVersion", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TLSConfig", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenerated
@@ -14144,24 +30967,65 @@ func (m *UpgradeSpec) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthGenerated
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthGenerated
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.TargetVersion = string(dAtA[iNdEx:postIndex])
+			if err := m.TLSConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RotateCertificates", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.RotateCertificates = bool(v != 0)
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remove", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Remove = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
