@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
@@ -50,12 +50,57 @@ type PgBouncerOpsRequest struct {
 
 // PgBouncerOpsRequestSpec is the spec for PgBouncerOpsRequest
 type PgBouncerOpsRequestSpec struct {
-	// Specifies the Elasticsearch reference
-	DatabaseRef v1.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	// Specifies the PgBouncer reference
+	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
-	// Specifies the field information that needed to be upgraded
-	Upgrade *UpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	// Specifies information necessary for upgrading PgBouncer
+	Upgrade *PgBouncerUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *PgBouncerHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	// Specifies information necessary for vertical scaling
+	VerticalScaling *PgBouncerVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *PgBouncerVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	// Specifies information necessary for custom configuration of PgBouncer
+	Configuration *PgBouncerCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	// Specifies information necessary for configuring TLS
+	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	// Specifies information necessary for restarting database
+	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+}
+
+// PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
+// after updating, horizontal scaling etc.
+type PgBouncerReplicaReadinessCriteria struct {
+}
+
+type PgBouncerUpgradeSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion     string                             `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
+	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+}
+
+// HorizontalScaling is the spec for PgBouncer horizontal scaling
+type PgBouncerHorizontalScalingSpec struct {
+}
+
+// PgBouncerVerticalScalingSpec is the spec for PgBouncer vertical scaling
+type PgBouncerVerticalScalingSpec struct {
+	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,1,opt,name=readinessCriteria"`
+}
+
+// PgBouncerVolumeExpansionSpec is the spec for PgBouncer volume expansion
+type PgBouncerVolumeExpansionSpec struct {
+}
+
+type PgBouncerCustomConfigurationSpec struct {
+}
+
+type PgBouncerCustomConfiguration struct {
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
+	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
+	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
 }
 
 // PgBouncerOpsRequestStatus is the status for PgBouncerOpsRequest

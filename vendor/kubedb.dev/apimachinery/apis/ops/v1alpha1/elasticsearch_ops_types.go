@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
@@ -51,13 +51,34 @@ type ElasticsearchOpsRequest struct {
 // ElasticsearchOpsRequestSpec is the spec for ElasticsearchOpsRequest
 type ElasticsearchOpsRequestSpec struct {
 	// Specifies the Elasticsearch reference
-	DatabaseRef v1.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
-	// Specifies the field information that needed to be upgraded
-	Upgrade *UpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
-	// HorizontalScaling specifies the horizontal scaling.
+	// Specifies information necessary for upgrading Elasticsearch
+	Upgrade *ElasticsearchUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *ElasticsearchHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	// Specifies information necessary for vertical scaling
+	VerticalScaling *ElasticsearchVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *ElasticsearchVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	// Specifies information necessary for custom configuration of Elasticsearch
+	Configuration *ElasticsearchCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	// Specifies information necessary for configuring TLS
+	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	// Specifies information necessary for restarting database
+	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+}
+
+// ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of a Elasticsearch pod
+// after updating, horizontal scaling etc.
+type ElasticsearchReplicaReadinessCriteria struct {
+}
+
+type ElasticsearchUpgradeSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion     string                                 `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
+	ReadinessCriteria *ElasticsearchReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
 }
 
 // ElasticsearchHorizontalScalingSpec contains the horizontal scaling information of an Elasticsearch cluster
@@ -68,6 +89,24 @@ type ElasticsearchHorizontalScalingSpec struct {
 	Data *int32 `json:"data,omitempty" protobuf:"bytes,2,opt,name=data"`
 	// Number of client nodes
 	Client *int32 `json:"client,omitempty" protobuf:"bytes,3,opt,name=client"`
+}
+
+// ElasticsearchVerticalScalingSpec is the spec for Elasticsearch vertical scaling
+type ElasticsearchVerticalScalingSpec struct {
+	ReadinessCriteria *ElasticsearchReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,1,opt,name=readinessCriteria"`
+}
+
+// ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
+type ElasticsearchVolumeExpansionSpec struct {
+}
+
+type ElasticsearchCustomConfigurationSpec struct {
+}
+
+type ElasticsearchCustomConfiguration struct {
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
+	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
+	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
 }
 
 // ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest

@@ -42,7 +42,7 @@ spec:
             type: object
           spec:
             properties:
-              customConfig:
+              configuration:
                 properties:
                   configServer:
                     properties:
@@ -55,6 +55,8 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      remove:
+                        type: boolean
                     type: object
                   mongos:
                     properties:
@@ -67,6 +69,8 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      remove:
+                        type: boolean
                     type: object
                   replicaSet:
                     properties:
@@ -79,6 +83,8 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      remove:
+                        type: boolean
                     type: object
                   shard:
                     properties:
@@ -91,6 +97,8 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      remove:
+                        type: boolean
                     type: object
                   standalone:
                     properties:
@@ -103,6 +111,8 @@ spec:
                         additionalProperties:
                           type: string
                         type: object
+                      remove:
+                        type: boolean
                     type: object
                 type: object
               databaseRef:
@@ -137,6 +147,99 @@ spec:
                         type: integer
                     type: object
                 type: object
+              restart:
+                type: object
+              tls:
+                properties:
+                  certificates:
+                    items:
+                      properties:
+                        alias:
+                          type: string
+                        dnsNames:
+                          items:
+                            type: string
+                          type: array
+                        duration:
+                          type: string
+                        emailAddresses:
+                          items:
+                            type: string
+                          type: array
+                        ipAddresses:
+                          items:
+                            type: string
+                          type: array
+                        privateKey:
+                          properties:
+                            encoding:
+                              enum:
+                              - PKCS1
+                              - PKCS8
+                              type: string
+                          type: object
+                        renewBefore:
+                          type: string
+                        secretName:
+                          type: string
+                        subject:
+                          properties:
+                            countries:
+                              items:
+                                type: string
+                              type: array
+                            localities:
+                              items:
+                                type: string
+                              type: array
+                            organizationalUnits:
+                              items:
+                                type: string
+                              type: array
+                            organizations:
+                              items:
+                                type: string
+                              type: array
+                            postalCodes:
+                              items:
+                                type: string
+                              type: array
+                            provinces:
+                              items:
+                                type: string
+                              type: array
+                            serialNumber:
+                              type: string
+                            streetAddresses:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        uris:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - alias
+                      type: object
+                    type: array
+                  issuerRef:
+                    properties:
+                      apiGroup:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - kind
+                    - name
+                    type: object
+                  remove:
+                    type: boolean
+                  rotateCertificates:
+                    type: boolean
+                type: object
               type:
                 enum:
                 - Upgrade
@@ -144,11 +247,23 @@ spec:
                 - VerticalScaling
                 - VolumeExpansion
                 - Restart
-                - RotateCertificates
                 - Reconfigure
+                - ReconfigureTLS
                 type: string
               upgrade:
                 properties:
+                  readinessCriteria:
+                    properties:
+                      dbSizeDiffPercentage:
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      oplogMaxLagSeconds:
+                        format: int32
+                        minimum: 0
+                        type: integer
+                    type: object
                   targetVersion:
                     type: string
                 type: object
@@ -210,6 +325,18 @@ spec:
                           pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                           x-kubernetes-int-or-string: true
                         type: object
+                    type: object
+                  readinessCriteria:
+                    properties:
+                      dbSizeDiffPercentage:
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      oplogMaxLagSeconds:
+                        format: int32
+                        minimum: 0
+                        type: integer
                     type: object
                   replicaSet:
                     properties:
@@ -331,6 +458,13 @@ spec:
                 format: int64
                 type: integer
               phase:
+                enum:
+                - Progressing
+                - Successful
+                - WaitingForApproval
+                - Failed
+                - Approved
+                - Denied
                 type: string
             type: object
         type: object

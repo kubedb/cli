@@ -23,7 +23,7 @@ import (
 	"strings"
 	"unicode"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 
 	"github.com/fatih/camelcase"
 	core "k8s.io/api/core/v1"
@@ -82,13 +82,8 @@ func describeInitialization(init *api.InitSpec, w describe.PrefixWriter) {
 		w.Write(LEVEL_1, "Script Source:\n")
 		describeVolume(LEVEL_2, init.Script.VolumeSource, w)
 	}
-	if init.Initializer != nil {
-		w.Write(LEVEL_1, "Stash RestoreSession:\n")
-		if init.Initializer.APIGroup != nil {
-			w.Write(LEVEL_2, "APIGroup:\t%s\n", init.Initializer.APIGroup)
-		}
-		w.Write(LEVEL_2, "Kind:\t%s\n", init.Initializer.Kind)
-		w.Write(LEVEL_2, "Name:\t%s\n", init.Initializer.Name)
+	if init.WaitForInitialRestore {
+		w.Write(LEVEL_1, "WaitForInitialRestore:\t%s\n", init.WaitForInitialRestore)
 	}
 	if init.PostgresWAL != nil {
 		w.Write(LEVEL_1, "Postgres WAL:\n")

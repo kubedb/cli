@@ -62,6 +62,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MemcachedOpsRequestList{},
 		&MongoDBOpsRequest{},
 		&MongoDBOpsRequestList{},
+		&MariaDBOpsRequest{},
+		&MariaDBOpsRequestList{},
 		&MySQLOpsRequest{},
 		&MySQLOpsRequestList{},
 		&PerconaXtraDBOpsRequest{},
