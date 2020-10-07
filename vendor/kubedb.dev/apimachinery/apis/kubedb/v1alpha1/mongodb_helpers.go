@@ -29,6 +29,7 @@ import (
 	"gomodules.xyz/version"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -311,13 +312,6 @@ func (m MongoDB) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (m *MongoDB) GetMonitoringVendor() string {
-	if m.Spec.Monitor != nil {
-		return m.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core_util.Topology) {
 	if m == nil {
 		return
@@ -405,10 +399,10 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		m.setDefaultAffinity(m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	}
 
-	m.setDefaultTLSConfig()
+	m.SetTLSDefaults()
 }
 
-func (m *MongoDB) setDefaultTLSConfig() {
+func (m *MongoDB) SetTLSDefaults() {
 	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
 		return
 	}
@@ -640,4 +634,10 @@ func (m *MongoDB) MustCertSecretName(alias MongoDBCertificateAlias, stsName stri
 		panic(fmt.Errorf("MongoDB %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
 	}
 	return name
+}
+
+func (m *MongoDB) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

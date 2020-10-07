@@ -43,9 +43,6 @@ const (
 	EtcdKey          = ResourceSingularEtcd + "." + kubedb.GroupName
 	ProxySQLKey      = ResourceSingularProxySQL + "." + kubedb.GroupName
 
-	PrometheusExporterPortNumber = 56790
-	PrometheusExporterPortName   = "prom-http"
-
 	ElasticsearchRestPort                        = 9200
 	ElasticsearchRestPortName                    = "http"
 	ElasticsearchTransportPort                   = 9300
@@ -98,6 +95,9 @@ const (
 	// for BaseServerID calculated as max MySQL server_id value - max Replication Group size.
 	// xref: https://dev.mysql.com/doc/refman/5.7/en/replication-options.html
 	MySQLMaxBaseServerID int64 = ((1 << 32) - 1) - 9
+	MySQLRootUserName          = "MYSQL_ROOT_USERNAME"
+	MySQLRootPassword          = "MYSQL_ROOT_PASSWORD"
+	MySQLName                  = "MYSQL_NAME"
 
 	PerconaXtraDBClusterRecommendedVersion    = "5.7"
 	PerconaXtraDBMaxClusterNameLength         = 32
@@ -142,18 +142,30 @@ const (
 const (
 	// used for Databases that have started provisioning
 	DatabaseProvisioningStarted = "ProvisioningStarted"
+	// used for Databases which completed provisioning
+	DatabaseProvisioned = "Provisioned"
+	// used for Databases that are currently being initialized using stash
+	DatabaseDataRestoreStarted = "DataRestoreStarted"
+	// used for Databases that have been initialized using stash
+	DatabaseDataRestored = "DataRestored"
 	// used for Databases whose pods are ready
 	DatabaseReplicaReady = "ReplicaReady"
 	// used for Databases that are currently accepting connection
 	DatabaseAcceptingConnection = "AcceptingConnection"
 	// used for Databases that report status OK (also implies that we can connect to it)
 	DatabaseReady = "Ready"
-	// used for Databases that are already initialized using stash
-	DatabaseDataRestored = "DataRestored"
 	// used for Databases that are paused
 	DatabasePaused = "Paused"
 
 	// Condition reasons
-	DatabaseSuccessfullyRestored = "SuccessfullyDataRestored"
-	FailedToRestoreData          = "FailedToRestoreData"
+	DataRestoreStartedByExternalInitializer = "DataRestoreStartedByExternalInitializer"
+	DatabaseSuccessfullyRestored            = "SuccessfullyDataRestored"
+	FailedToRestoreData                     = "FailedToRestoreData"
+	AllReplicasAreReady                     = "AllReplicasReady"
+	SomeReplicasAreNotReady                 = "SomeReplicasNotReady"
+)
+
+// Resource kind related constants
+const (
+	ResourceKindStatefulSet = "StatefulSet"
 )

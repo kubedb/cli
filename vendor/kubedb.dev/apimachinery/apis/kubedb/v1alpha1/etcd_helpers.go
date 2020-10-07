@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -135,13 +136,6 @@ func (e Etcd) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (e *Etcd) GetMonitoringVendor() string {
-	if e.Spec.Monitor != nil {
-		return e.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (e *Etcd) SetDefaults() {
 	if e == nil {
 		return
@@ -163,4 +157,10 @@ func (e *Etcd) SetDefaults() {
 
 func (e *EtcdSpec) GetSecrets() []string {
 	return nil
+}
+
+func (e *Etcd) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

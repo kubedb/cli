@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -132,13 +133,6 @@ func (p ProxySQL) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (p *ProxySQL) GetMonitoringVendor() string {
-	if p.Spec.Monitor != nil {
-		return p.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (p *ProxySQL) SetDefaults() {
 	if p == nil {
 		return
@@ -165,4 +159,10 @@ func (p *ProxySQLSpec) GetSecrets() []string {
 		secrets = append(secrets, p.ProxySQLSecret.SecretName)
 	}
 	return secrets
+}
+
+func (p *ProxySQL) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

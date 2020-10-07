@@ -36,6 +36,17 @@ message ConfigNode {
   optional int32 replicas = 1;
 }
 
+message ElasticsearchCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message ElasticsearchCustomConfigurationSpec {
+}
+
 // ElasticsearchHorizontalScalingSpec contains the horizontal scaling information of an Elasticsearch cluster
 message ElasticsearchHorizontalScalingSpec {
   // Number of master nodes
@@ -78,11 +89,26 @@ message ElasticsearchOpsRequestSpec {
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading Elasticsearch
+  optional ElasticsearchUpgradeSpec upgrade = 3;
 
-  // HorizontalScaling specifies the horizontal scaling.
+  // Specifies information necessary for horizontal scaling
   optional ElasticsearchHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional ElasticsearchVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional ElasticsearchVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of Elasticsearch
+  optional ElasticsearchCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest
@@ -99,6 +125,42 @@ message ElasticsearchOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of a Elasticsearch pod
+// after updating, horizontal scaling etc.
+message ElasticsearchReplicaReadinessCriteria {
+}
+
+message ElasticsearchUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional ElasticsearchReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// ElasticsearchVerticalScalingSpec is the spec for Elasticsearch vertical scaling
+message ElasticsearchVerticalScalingSpec {
+  optional ElasticsearchReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
+message ElasticsearchVolumeExpansionSpec {
+}
+
+message EtcdCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message EtcdCustomConfigurationSpec {
+}
+
+// HorizontalScaling is the spec for Etcd horizontal scaling
+message EtcdHorizontalScalingSpec {
 }
 
 // +kubebuilder:object:root=true
@@ -125,14 +187,32 @@ message EtcdOpsRequestList {
 
 // EtcdOpsRequestSpec is the spec for EtcdOpsRequest
 message EtcdOpsRequestSpec {
-  // Specifies the etcd reference
+  // Specifies the Etcd reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading Etcd
+  optional EtcdUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional EtcdHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional EtcdVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional EtcdVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of Etcd
+  optional EtcdCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // EtcdOpsRequestStatus is the status for EtcdOpsRequest
@@ -147,6 +227,149 @@ message EtcdOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// EtcdReplicaReadinessCriteria is the criteria for checking readiness of a Etcd pod
+// after updating, horizontal scaling etc.
+message EtcdReplicaReadinessCriteria {
+}
+
+message EtcdUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional EtcdReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// EtcdVerticalScalingSpec is the spec for Etcd vertical scaling
+message EtcdVerticalScalingSpec {
+  optional EtcdReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// EtcdVolumeExpansionSpec is the spec for Etcd volume expansion
+message EtcdVolumeExpansionSpec {
+}
+
+message MariaDBCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message MariaDBCustomConfigurationSpec {
+}
+
+message MariaDBHorizontalScalingSpec {
+  // Number of nodes/members of the group
+  optional int32 member = 1;
+
+  // specifies the weight of the current member/Node
+  optional int32 memberWeight = 2;
+}
+
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=mariadbopsrequests,singular=mariadbopsrequest,shortName=mariaops,categories={datastore,kubedb,appscode}
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.type"
+// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
+message MariaDBOpsRequest {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional MariaDBOpsRequestSpec spec = 2;
+
+  optional MariaDBOpsRequestStatus status = 3;
+}
+
+// MariaDBOpsRequestList is a list of MariaDBOpsRequests
+message MariaDBOpsRequestList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  // Items is a list of MariaDBOpsRequest CRD objects
+  repeated MariaDBOpsRequest items = 2;
+}
+
+// MariaDBOpsRequestSpec is the spec for MariaDBOpsRequest
+message MariaDBOpsRequestSpec {
+  // Specifies the MariaDB reference
+  optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
+
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  optional string type = 2;
+
+  // Specifies information necessary for upgrading MariaDB
+  optional MariaDBUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional MariaDBHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional MariaDBVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional MariaDBVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of MariaDB
+  optional MariaDBCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
+}
+
+// MariaDBOpsRequestStatus is the status for MariaDBOpsRequest
+message MariaDBOpsRequestStatus {
+  optional string phase = 1;
+
+  // observedGeneration is the most recent generation observed for this resource. It corresponds to the
+  // resource's generation, which is updated on mutation by the API Server.
+  // +optional
+  optional int64 observedGeneration = 2;
+
+  // Conditions applied to the request, such as approval or denial.
+  // +optional
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// MariaDBReplicaReadinessCriteria is the criteria for checking readiness of a MariaDB pod
+// after updating, horizontal scaling etc.
+message MariaDBReplicaReadinessCriteria {
+}
+
+message MariaDBUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional MariaDBReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+message MariaDBVerticalScalingSpec {
+  optional k8s.io.api.core.v1.ResourceRequirements mariadb = 1;
+
+  optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
+}
+
+// MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion
+message MariaDBVolumeExpansionSpec {
+}
+
+message MemcachedCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message MemcachedCustomConfigurationSpec {
+}
+
+// HorizontalScaling is the spec for Memcached horizontal scaling
+message MemcachedHorizontalScalingSpec {
 }
 
 // +kubebuilder:object:root=true
@@ -179,8 +402,26 @@ message MemcachedOpsRequestSpec {
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading Memcached
+  optional MemcachedUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional MemcachedHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional MemcachedVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional MemcachedVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of Memcached
+  optional MemcachedCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // MemcachedOpsRequestStatus is the status for MemcachedOpsRequest
@@ -197,22 +438,45 @@ message MemcachedOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
-message MongoDBCustomConfig {
+// MemcachedReplicaReadinessCriteria is the criteria for checking readiness of a Memcached pod
+// after updating, horizontal scaling etc.
+message MemcachedReplicaReadinessCriteria {
+}
+
+message MemcachedUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional MemcachedReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// MemcachedVerticalScalingSpec is the spec for Memcached vertical scaling
+message MemcachedVerticalScalingSpec {
+  optional MemcachedReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// MemcachedVolumeExpansionSpec is the spec for Memcached volume expansion
+message MemcachedVolumeExpansionSpec {
+}
+
+message MongoDBCustomConfiguration {
   optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
 
   map<string, string> data = 2;
+
+  optional bool remove = 3;
 }
 
-message MongoDBCustomConfigSpec {
-  optional MongoDBCustomConfig standalone = 1;
+message MongoDBCustomConfigurationSpec {
+  optional MongoDBCustomConfiguration standalone = 1;
 
-  optional MongoDBCustomConfig replicaSet = 5;
+  optional MongoDBCustomConfiguration replicaSet = 5;
 
-  optional MongoDBCustomConfig mongos = 2;
+  optional MongoDBCustomConfiguration mongos = 2;
 
-  optional MongoDBCustomConfig configServer = 3;
+  optional MongoDBCustomConfiguration configServer = 3;
 
-  optional MongoDBCustomConfig shard = 4;
+  optional MongoDBCustomConfiguration shard = 4;
 }
 
 // HorizontalScaling is the spec for mongodb horizontal scaling
@@ -257,7 +521,7 @@ message MongoDBOpsRequestSpec {
   optional string type = 2;
 
   // Specifies information necessary for upgrading mongodb
-  optional UpgradeSpec upgrade = 3;
+  optional MongoDBUpgradeSpec upgrade = 3;
 
   // Specifies information necessary for horizontal scaling
   optional MongoDBHorizontalScalingSpec horizontalScaling = 4;
@@ -269,7 +533,13 @@ message MongoDBOpsRequestSpec {
   optional MongoDBVolumeExpansionSpec volumeExpansion = 6;
 
   // Specifies information necessary for custom configuration of MongoDB
-  optional MongoDBCustomConfigSpec customConfig = 7;
+  optional MongoDBCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // MongoDBOpsRequestStatus is the status for MongoDBOpsRequest
@@ -286,11 +556,29 @@ message MongoDBOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
+// MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod
+// after updating, horizontal scaling etc.
+message MongoDBReplicaReadinessCriteria {
+  // +kubebuilder:validation:Minimum:=0
+  optional int32 oplogMaxLagSeconds = 1;
+
+  // +kubebuilder:validation:Minimum:=0
+  // +kubebuilder:validation:Maximum:=100
+  optional int32 dbSizeDiffPercentage = 2;
+}
+
 // MongoDBShardNode is the spec for mongodb Shard
 message MongoDBShardNode {
   optional int32 shards = 1;
 
   optional int32 replicas = 2;
+}
+
+message MongoDBUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional MongoDBReplicaReadinessCriteria readinessCriteria = 2;
 }
 
 // MongoDBVerticalScalingSpec is the spec for mongodb vertical scaling
@@ -306,6 +594,8 @@ message MongoDBVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements shard = 4;
 
   optional k8s.io.api.core.v1.ResourceRequirements exporter = 5;
+
+  optional MongoDBReplicaReadinessCriteria readinessCriteria = 7;
 }
 
 // MongoDBVolumeExpansionSpec is the spec for mongodb volume expansion
@@ -322,6 +612,17 @@ message MongoDBVolumeExpansionSpec {
 // MongosNode is the spec for mongodb Mongos
 message MongosNode {
   optional int32 replicas = 1;
+}
+
+message MySQLCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message MySQLCustomConfigurationSpec {
 }
 
 message MySQLHorizontalScalingSpec {
@@ -356,23 +657,35 @@ message MySQLOpsRequestList {
 
 // MySQLOpsRequestSpec is the spec for MySQLOpsRequest
 message MySQLOpsRequestSpec {
-  // Specifies the database reference
+  // Specifies the MySQL reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
+  // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+  optional string type = 2;
+
+  // Specifies information necessary for upgrading MySQL
+  optional MySQLUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional MySQLHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional MySQLVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional MySQLVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of MySQL
+  optional MySQLCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
+
   // Specifies the current ordinal of the StatefulSet
-  optional int32 statefulSetOrdinal = 2;
-
-  // Specifies the ops request type; ScaleUp, ScaleDown, Upgrade etc.
-  optional string type = 3;
-
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 4;
-
-  // HorizontalScaling specifies the horizontal scaling.
-  optional MySQLHorizontalScalingSpec horizontalScaling = 5;
-
-  // VerticalScaling specifies the vertical scaling.
-  optional MySQLVerticalScalingSpec verticalScaling = 6;
+  optional int32 statefulSetOrdinal = 10;
 }
 
 // MySQLOpsRequestStatus is the status for MySQLOpsRequest
@@ -389,10 +702,41 @@ message MySQLOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
+// MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
+// after updating, horizontal scaling etc.
+message MySQLReplicaReadinessCriteria {
+}
+
+message MySQLUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional MySQLReplicaReadinessCriteria readinessCriteria = 2;
+}
+
 message MySQLVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements mysql = 1;
 
   optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
+}
+
+// MySQLVolumeExpansionSpec is the spec for MySQL volume expansion
+message MySQLVolumeExpansionSpec {
+}
+
+message PerconaXtraDBCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message PerconaXtraDBCustomConfigurationSpec {
+}
+
+// HorizontalScaling is the spec for PerconaXtraDB horizontal scaling
+message PerconaXtraDBHorizontalScalingSpec {
 }
 
 // +kubebuilder:object:root=true
@@ -419,14 +763,32 @@ message PerconaXtraDBOpsRequestList {
 
 // PerconaXtraDBOpsRequestSpec is the spec for PerconaXtraDBOpsRequest
 message PerconaXtraDBOpsRequestSpec {
-  // Specifies the Elasticsearch reference
+  // Specifies the PerconaXtraDB reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading PerconaXtraDB
+  optional PerconaXtraDBUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional PerconaXtraDBHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional PerconaXtraDBVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional PerconaXtraDBVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of PerconaXtraDB
+  optional PerconaXtraDBCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // PerconaXtraDBOpsRequestStatus is the status for PerconaXtraDBOpsRequest
@@ -441,6 +803,42 @@ message PerconaXtraDBOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// PerconaXtraDBReplicaReadinessCriteria is the criteria for checking readiness of a PerconaXtraDB pod
+// after updating, horizontal scaling etc.
+message PerconaXtraDBReplicaReadinessCriteria {
+}
+
+message PerconaXtraDBUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional PerconaXtraDBReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// PerconaXtraDBVerticalScalingSpec is the spec for PerconaXtraDB vertical scaling
+message PerconaXtraDBVerticalScalingSpec {
+  optional PerconaXtraDBReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// PerconaXtraDBVolumeExpansionSpec is the spec for PerconaXtraDB volume expansion
+message PerconaXtraDBVolumeExpansionSpec {
+}
+
+message PgBouncerCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message PgBouncerCustomConfigurationSpec {
+}
+
+// HorizontalScaling is the spec for PgBouncer horizontal scaling
+message PgBouncerHorizontalScalingSpec {
 }
 
 // +kubebuilder:object:root=true
@@ -467,14 +865,32 @@ message PgBouncerOpsRequestList {
 
 // PgBouncerOpsRequestSpec is the spec for PgBouncerOpsRequest
 message PgBouncerOpsRequestSpec {
-  // Specifies the Elasticsearch reference
+  // Specifies the PgBouncer reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading PgBouncer
+  optional PgBouncerUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional PgBouncerHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional PgBouncerVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional PgBouncerVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of PgBouncer
+  optional PgBouncerCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // PgBouncerOpsRequestStatus is the status for PgBouncerOpsRequest
@@ -489,6 +905,42 @@ message PgBouncerOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
+// after updating, horizontal scaling etc.
+message PgBouncerReplicaReadinessCriteria {
+}
+
+message PgBouncerUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional PgBouncerReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// PgBouncerVerticalScalingSpec is the spec for PgBouncer vertical scaling
+message PgBouncerVerticalScalingSpec {
+  optional PgBouncerReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// PgBouncerVolumeExpansionSpec is the spec for PgBouncer volume expansion
+message PgBouncerVolumeExpansionSpec {
+}
+
+message PostgresCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message PostgresCustomConfigurationSpec {
+}
+
+// HorizontalScaling is the spec for Postgres horizontal scaling
+message PostgresHorizontalScalingSpec {
 }
 
 // +kubebuilder:object:root=true
@@ -515,14 +967,32 @@ message PostgresOpsRequestList {
 
 // PostgresOpsRequestSpec is the spec for PostgresOpsRequest
 message PostgresOpsRequestSpec {
-  // Specifies the Elasticsearch reference
+  // Specifies the Postgres reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading Postgres
+  optional PostgresUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional PostgresHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional PostgresVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional PostgresVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of Postgres
+  optional PostgresCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // PostgresOpsRequestStatus is the status for PostgresOpsRequest
@@ -537,6 +1007,42 @@ message PostgresOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// PostgresReplicaReadinessCriteria is the criteria for checking readiness of a Postgres pod
+// after updating, horizontal scaling etc.
+message PostgresReplicaReadinessCriteria {
+}
+
+message PostgresUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional PostgresReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// PostgresVerticalScalingSpec is the spec for Postgres vertical scaling
+message PostgresVerticalScalingSpec {
+  optional PostgresReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// PostgresVolumeExpansionSpec is the spec for Postgres volume expansion
+message PostgresVolumeExpansionSpec {
+}
+
+message ProxySQLCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message ProxySQLCustomConfigurationSpec {
+}
+
+// HorizontalScaling is the spec for ProxySQL horizontal scaling
+message ProxySQLHorizontalScalingSpec {
 }
 
 // +kubebuilder:object:root=true
@@ -563,14 +1069,32 @@ message ProxySQLOpsRequestList {
 
 // ProxySQLOpsRequestSpec is the spec for ProxySQLOpsRequest
 message ProxySQLOpsRequestSpec {
-  // Specifies the Elasticsearch reference
+  // Specifies the ProxySQL reference
   optional k8s.io.api.core.v1.LocalObjectReference databaseRef = 1;
 
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading ProxySQL
+  optional ProxySQLUpgradeSpec upgrade = 3;
+
+  // Specifies information necessary for horizontal scaling
+  optional ProxySQLHorizontalScalingSpec horizontalScaling = 4;
+
+  // Specifies information necessary for vertical scaling
+  optional ProxySQLVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional ProxySQLVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of ProxySQL
+  optional ProxySQLCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // ProxySQLOpsRequestStatus is the status for ProxySQLOpsRequest
@@ -585,6 +1109,38 @@ message ProxySQLOpsRequestStatus {
   // Conditions applied to the request, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
+}
+
+// ProxySQLReplicaReadinessCriteria is the criteria for checking readiness of a ProxySQL pod
+// after updating, horizontal scaling etc.
+message ProxySQLReplicaReadinessCriteria {
+}
+
+message ProxySQLUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional ProxySQLReplicaReadinessCriteria readinessCriteria = 2;
+}
+
+// ProxySQLVerticalScalingSpec is the spec for ProxySQL vertical scaling
+message ProxySQLVerticalScalingSpec {
+  optional ProxySQLReplicaReadinessCriteria readinessCriteria = 1;
+}
+
+// ProxySQLVolumeExpansionSpec is the spec for ProxySQL volume expansion
+message ProxySQLVolumeExpansionSpec {
+}
+
+message RedisCustomConfiguration {
+  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+
+  map<string, string> data = 2;
+
+  optional bool remove = 3;
+}
+
+message RedisCustomConfigurationSpec {
 }
 
 message RedisHorizontalScalingSpec {
@@ -625,14 +1181,26 @@ message RedisOpsRequestSpec {
   // Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
   optional string type = 2;
 
-  // Specifies the field information that needed to be upgraded
-  optional UpgradeSpec upgrade = 3;
+  // Specifies information necessary for upgrading Redis
+  optional RedisUpgradeSpec upgrade = 3;
 
-  // Specifies information necessary for horizontal scaling.
+  // Specifies information necessary for horizontal scaling
   optional RedisHorizontalScalingSpec horizontalScaling = 4;
 
   // Specifies information necessary for vertical scaling
   optional RedisVerticalScalingSpec verticalScaling = 5;
+
+  // Specifies information necessary for volume expansion
+  optional RedisVolumeExpansionSpec volumeExpansion = 6;
+
+  // Specifies information necessary for custom configuration of Redis
+  optional RedisCustomConfigurationSpec configuration = 7;
+
+  // Specifies information necessary for configuring TLS
+  optional TLSSpec tls = 8;
+
+  // Specifies information necessary for restarting database
+  optional RestartSpec restart = 9;
 }
 
 // RedisOpsRequestStatus is the status for RedisOpsRequest
@@ -649,6 +1217,18 @@ message RedisOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
+// RedisReplicaReadinessCriteria is the criteria for checking readiness of a Redis pod
+// after updating, horizontal scaling etc.
+message RedisReplicaReadinessCriteria {
+}
+
+message RedisUpgradeSpec {
+  // Specifies the target version name from catalog
+  optional string targetVersion = 1;
+
+  optional RedisReplicaReadinessCriteria readinessCriteria = 2;
+}
+
 // RedisVerticalScalingSpec is the spec for Redis vertical scaling
 message RedisVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements redis = 1;
@@ -656,8 +1236,24 @@ message RedisVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
 }
 
-message UpgradeSpec {
-  // Specifies the target version name from catalog
-  optional string targetVersion = 1;
+// RedisVolumeExpansionSpec is the spec for Redis volume expansion
+message RedisVolumeExpansionSpec {
+}
+
+message RestartSpec {
+}
+
+message TLSSpec {
+  // TLSConfig contains updated tls configurations for client and server.
+  // +optional
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tLSConfig = 1;
+
+  // RotateCertificates tells operator to initiate certificate rotation
+  // +optional
+  optional bool rotateCertificates = 2;
+
+  // Remove tells operator to remove TLS configuration
+  // +optional
+  optional bool remove = 3;
 }
 

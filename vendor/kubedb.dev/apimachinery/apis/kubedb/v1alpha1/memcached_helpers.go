@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -130,13 +131,6 @@ func (m Memcached) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (m *Memcached) GetMonitoringVendor() string {
-	if m.Spec.Monitor != nil {
-		return m.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (m *Memcached) SetDefaults() {
 	if m == nil {
 		return
@@ -154,6 +148,12 @@ func (m *Memcached) SetDefaults() {
 	m.Spec.Monitor.SetDefaults()
 }
 
-func (e *MemcachedSpec) GetSecrets() []string {
+func (m *MemcachedSpec) GetSecrets() []string {
 	return nil
+}
+
+func (m *Memcached) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

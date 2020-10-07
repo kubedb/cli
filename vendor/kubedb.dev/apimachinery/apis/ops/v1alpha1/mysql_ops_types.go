@@ -50,18 +50,38 @@ type MySQLOpsRequest struct {
 
 // MySQLOpsRequestSpec is the spec for MySQLOpsRequest
 type MySQLOpsRequestSpec struct {
-	// Specifies the database reference
+	// Specifies the MySQL reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
+	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	// Specifies information necessary for upgrading MySQL
+	Upgrade *MySQLUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *MySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	// Specifies information necessary for vertical scaling
+	VerticalScaling *MySQLVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *MySQLVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	// Specifies information necessary for custom configuration of MySQL
+	Configuration *MySQLCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	// Specifies information necessary for configuring TLS
+	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	// Specifies information necessary for restarting database
+	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+
 	// Specifies the current ordinal of the StatefulSet
-	StatefulSetOrdinal *int32 `json:"statefulSetOrdinal,omitempty" protobuf:"varint,2,opt,name=statefulSetOrdinal"`
-	// Specifies the ops request type; ScaleUp, ScaleDown, Upgrade etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,3,opt,name=type,casttype=OpsRequestType"`
-	// Specifies the field information that needed to be upgraded
-	Upgrade *UpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,4,opt,name=upgrade"`
-	// HorizontalScaling specifies the horizontal scaling.
-	HorizontalScaling *MySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,5,opt,name=horizontalScaling"`
-	// VerticalScaling specifies the vertical scaling.
-	VerticalScaling *MySQLVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,6,opt,name=verticalScaling"`
+	StatefulSetOrdinal *int32 `json:"statefulSetOrdinal,omitempty" protobuf:"varint,10,opt,name=statefulSetOrdinal"`
+}
+
+// MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
+// after updating, horizontal scaling etc.
+type MySQLReplicaReadinessCriteria struct {
+}
+
+type MySQLUpgradeSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion     string                         `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
+	ReadinessCriteria *MySQLReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
 }
 
 type MySQLHorizontalScalingSpec struct {
@@ -74,6 +94,19 @@ type MySQLHorizontalScalingSpec struct {
 type MySQLVerticalScalingSpec struct {
 	MySQL    *core.ResourceRequirements `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
 	Exporter *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+}
+
+// MySQLVolumeExpansionSpec is the spec for MySQL volume expansion
+type MySQLVolumeExpansionSpec struct {
+}
+
+type MySQLCustomConfigurationSpec struct {
+}
+
+type MySQLCustomConfiguration struct {
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
+	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
+	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
 }
 
 // MySQLOpsRequestStatus is the status for MySQLOpsRequest

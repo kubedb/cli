@@ -1,5 +1,5 @@
 /*
-Copyright AppsCode Inc. and Contributors
+Copyright 2014 The Kubernetes Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha1
-
-const (
-	GenericKey = "autoscaling.kubedb.com"
-)
+// Package cache is a client-side caching mechanism. It is useful for
+// reducing the number of server calls you'd otherwise need to make.
+// Reflector watches a server and updates a Store. Two stores are provided;
+// one that simply caches objects (for example, to allow a scheduler to
+// list currently available nodes), and one that additionally acts as
+// a FIFO queue (for example, to allow a scheduler to process incoming
+// pods).
+package cache // import "k8s.io/client-go/tools/cache"

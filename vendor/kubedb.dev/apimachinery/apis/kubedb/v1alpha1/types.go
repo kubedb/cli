@@ -21,11 +21,10 @@ import (
 )
 
 type InitSpec struct {
-	// Initializer object in same namespace of a KubeDB object.
-	// ref: https://github.com/stashed/stash/blob/09af5d319bb5be889186965afb04045781d6f926/apis/stash/v1beta1/restore_session_types.go#L22
-	Initializer *core.TypedLocalObjectReference `json:"initializer,omitempty" protobuf:"bytes,1,opt,name=initializer"`
-	Script      *ScriptSourceSpec               `json:"script,omitempty" protobuf:"bytes,2,opt,name=script"`
-	PostgresWAL *PostgresWALSourceSpec          `json:"postgresWAL,omitempty" protobuf:"bytes,3,opt,name=postgresWAL"`
+	// Wait for initial DataRestore condition
+	WaitForInitialRestore bool                   `json:"waitForInitialRestore,omitempty" protobuf:"varint,1,opt,name=waitForInitialRestore"`
+	Script                *ScriptSourceSpec      `json:"script,omitempty" protobuf:"bytes,2,opt,name=script"`
+	PostgresWAL           *PostgresWALSourceSpec `json:"postgresWAL,omitempty" protobuf:"bytes,3,opt,name=postgresWAL"`
 }
 
 type ScriptSourceSpec struct {
@@ -50,20 +49,20 @@ type LeaderElectionConfig struct {
 	RetryPeriodSeconds int32 `json:"retryPeriodSeconds" protobuf:"varint,3,opt,name=retryPeriodSeconds"`
 }
 
-// +kubebuilder:validation:Enum=Provisioning;Ready;Critical;NotReady;Paused;Halted
+// +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted
 type DatabasePhase string
 
 const (
 	// used for Databases that are currently provisioning
 	DatabasePhaseProvisioning DatabasePhase = "Provisioning"
+	// used for Databases for which data is currently restoring
+	DatabasePhaseDataRestoring DatabasePhase = "DataRestoring"
 	// used for Databases that are currently ReplicaReady, AcceptingConnection and Ready
-	DatabasePhaseRunning DatabasePhase = "Ready"
+	DatabasePhaseReady DatabasePhase = "Ready"
 	// used for Databases that can connect, ReplicaReady == false || Ready == false (eg, ES yellow)
 	DatabasePhaseCritical DatabasePhase = "Critical"
 	// used for Databases that can't connect
 	DatabasePhaseNotReady DatabasePhase = "NotReady"
-	// used for Databases that are paused
-	DatabasePhasePaused DatabasePhase = "Paused"
 	// used for Databases that are halted
 	DatabasePhaseHalted DatabasePhase = "Halted"
 )
@@ -88,6 +87,6 @@ const (
 	TerminationPolicyDelete TerminationPolicy = "Delete"
 	// Deletes database pods, service, pvcs and stash backup data.
 	TerminationPolicyWipeOut TerminationPolicy = "WipeOut"
-	// Rejects attempt to delete database using ValidationWebhook. This replaces spec.doNotPause = true
+	// Rejects attempt to delete database using ValidationWebhook.
 	TerminationPolicyDoNotTerminate TerminationPolicy = "DoNotTerminate"
 )

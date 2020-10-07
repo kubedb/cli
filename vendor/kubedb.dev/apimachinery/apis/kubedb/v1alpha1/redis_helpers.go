@@ -26,6 +26,7 @@ import (
 	"github.com/appscode/go/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -152,13 +153,6 @@ func (r Redis) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (r *Redis) GetMonitoringVendor() string {
-	if r.Spec.Monitor != nil {
-		return r.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	if r == nil {
 		return
@@ -197,10 +191,10 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 
 	r.Spec.Monitor.SetDefaults()
 
-	r.setDefaultTLSConfig()
+	r.SetTLSDefaults()
 }
 
-func (r *Redis) setDefaultTLSConfig() {
+func (r *Redis) SetTLSDefaults() {
 	if r.Spec.TLS == nil || r.Spec.TLS.IssuerRef == nil {
 		return
 	}
@@ -276,4 +270,10 @@ func (r *Redis) MustCertSecretName(alias RedisCertificateAlias) string {
 		panic(fmt.Errorf("Redis %s/%s is missing secret name for %s certificate", r.Namespace, r.Name, alias))
 	}
 	return name
+}
+
+func (r *Redis) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

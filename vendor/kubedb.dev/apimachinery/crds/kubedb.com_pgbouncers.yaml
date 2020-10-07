@@ -127,70 +127,6 @@ spec:
               properties:
                 agent:
                   type: string
-                args:
-                  items:
-                    type: string
-                  type: array
-                env:
-                  items:
-                    properties:
-                      name:
-                        type: string
-                      value:
-                        type: string
-                      valueFrom:
-                        properties:
-                          configMapKeyRef:
-                            properties:
-                              key:
-                                type: string
-                              name:
-                                type: string
-                              optional:
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                          fieldRef:
-                            properties:
-                              apiVersion:
-                                type: string
-                              fieldPath:
-                                type: string
-                            required:
-                            - fieldPath
-                            type: object
-                          resourceFieldRef:
-                            properties:
-                              containerName:
-                                type: string
-                              divisor:
-                                anyOf:
-                                - type: integer
-                                - type: string
-                                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                                x-kubernetes-int-or-string: true
-                              resource:
-                                type: string
-                            required:
-                            - resource
-                            type: object
-                          secretKeyRef:
-                            properties:
-                              key:
-                                type: string
-                              name:
-                                type: string
-                              optional:
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                        type: object
-                    required:
-                    - name
-                    type: object
-                  type: array
                 prometheus:
                   properties:
                     exporter:
@@ -332,15 +268,6 @@ spec:
                               type: object
                           type: object
                       type: object
-                    interval:
-                      type: string
-                    labels:
-                      additionalProperties:
-                        type: string
-                      type: object
-                    port:
-                      format: int32
-                      type: integer
                     serviceMonitor:
                       properties:
                         interval:
@@ -349,75 +276,6 @@ spec:
                           additionalProperties:
                             type: string
                           type: object
-                      type: object
-                  type: object
-                resources:
-                  properties:
-                    limits:
-                      additionalProperties:
-                        anyOf:
-                        - type: integer
-                        - type: string
-                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                        x-kubernetes-int-or-string: true
-                      type: object
-                    requests:
-                      additionalProperties:
-                        anyOf:
-                        - type: integer
-                        - type: string
-                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                        x-kubernetes-int-or-string: true
-                      type: object
-                  type: object
-                securityContext:
-                  properties:
-                    allowPrivilegeEscalation:
-                      type: boolean
-                    capabilities:
-                      properties:
-                        add:
-                          items:
-                            type: string
-                          type: array
-                        drop:
-                          items:
-                            type: string
-                          type: array
-                      type: object
-                    privileged:
-                      type: boolean
-                    procMount:
-                      type: string
-                    readOnlyRootFilesystem:
-                      type: boolean
-                    runAsGroup:
-                      format: int64
-                      type: integer
-                    runAsNonRoot:
-                      type: boolean
-                    runAsUser:
-                      format: int64
-                      type: integer
-                    seLinuxOptions:
-                      properties:
-                        level:
-                          type: string
-                        role:
-                          type: string
-                        type:
-                          type: string
-                        user:
-                          type: string
-                      type: object
-                    windowsOptions:
-                      properties:
-                        gmsaCredentialSpec:
-                          type: string
-                        gmsaCredentialSpecName:
-                          type: string
-                        runAsUserName:
-                          type: string
                       type: object
                   type: object
               type: object
@@ -1833,10 +1691,10 @@ spec:
             phase:
               enum:
               - Provisioning
+              - DataRestoring
               - Ready
               - Critical
               - NotReady
-              - Paused
               - Halted
               type: string
           type: object

@@ -58,6 +58,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ElasticsearchAutoscalerList{},
 		&EtcdAutoscaler{},
 		&EtcdAutoscalerList{},
+		&MariaDBAutoscaler{},
+		&MariaDBAutoscalerList{},
 		&MemcachedAutoscaler{},
 		&MemcachedAutoscalerList{},
 		&MongoDBAutoscaler{},
@@ -72,6 +74,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProxySQLAutoscalerList{},
 		&RedisAutoscaler{},
 		&RedisAutoscalerList{},
+		&VerticalAutoscaler{},
+		&VerticalAutoscalerList{},
+		&VerticalAutoscalerCheckpoint{},
+		&VerticalAutoscalerCheckpointList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

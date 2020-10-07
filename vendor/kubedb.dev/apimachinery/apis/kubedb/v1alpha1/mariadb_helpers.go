@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -135,13 +136,6 @@ func (m MariaDB) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (m *MariaDB) GetMonitoringVendor() string {
-	if m.Spec.Monitor != nil {
-		return m.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (m *MariaDB) SetDefaults() {
 	if m == nil {
 		return
@@ -172,4 +166,10 @@ func (m *MariaDBSpec) GetSecrets() []string {
 		secrets = append(secrets, m.DatabaseSecret.SecretName)
 	}
 	return secrets
+}
+
+func (m *MariaDB) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

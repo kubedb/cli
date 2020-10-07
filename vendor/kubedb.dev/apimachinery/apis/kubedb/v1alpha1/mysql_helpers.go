@@ -25,6 +25,7 @@ import (
 
 	"github.com/appscode/go/types"
 	core "k8s.io/api/core/v1"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -149,13 +150,6 @@ func (m MySQL) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (m *MySQL) GetMonitoringVendor() string {
-	if m.Spec.Monitor != nil {
-		return m.Spec.Monitor.Agent.Vendor()
-	}
-	return ""
-}
-
 func (m *MySQL) UsesGroupReplication() bool {
 	return m.Spec.Topology != nil && m.Spec.Topology.Mode != nil && *m.Spec.Topology.Mode == MySQLClusterModeGroup
 }
@@ -188,10 +182,10 @@ func (m *MySQL) SetDefaults() {
 
 	m.Spec.Monitor.SetDefaults()
 
-	m.setDefaultTLSConfig()
+	m.SetTLSDefaults()
 }
 
-func (m *MySQL) setDefaultTLSConfig() {
+func (m *MySQL) SetTLSDefaults() {
 	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
 		return
 	}
@@ -259,4 +253,10 @@ func (m *MySQL) MustCertSecretName(alias MySQLCertificateAlias) string {
 		panic(fmt.Errorf("MySQL %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
 	}
 	return name
+}
+
+func (m *MySQL) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
+	// TODO: Implement database specific logic here
+	// return isReplicasReady, message, error
+	return false, "", nil
 }

@@ -23,6 +23,7 @@ package kubedb.dev.apimachinery.apis.autoscaling.v1alpha1;
 
 import "k8s.io/api/autoscaling/v2beta2/generated.proto";
 import "k8s.io/api/core/v1/generated.proto";
+import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
@@ -30,6 +31,41 @@ import "kmodules.xyz/client-go/api/v1/generated.proto";
 
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha1";
+
+// ContainerResourcePolicy controls how autoscaler computes the recommended
+// resources for a specific container.
+message ContainerResourcePolicy {
+  // Name of the container or DefaultContainerResourcePolicy, in which
+  // case the policy is used by the containers that don't have their own
+  // policy specified.
+  optional string containerName = 1;
+
+  // Whether autoscaler is enabled for the container. The default is "Auto".
+  // +optional
+  optional string mode = 2;
+
+  // Specifies the minimal amount of resources that will be recommended
+  // for the container. The default is no minimum.
+  // +optional
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> minAllowed = 3;
+
+  // Specifies the maximum amount of resources that will be recommended
+  // for the container. The default is no maximum.
+  // +optional
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> maxAllowed = 4;
+
+  // Specifies the type of recommendations that will be computed
+  // (and possibly applied) by VPA.
+  // If not specified, the default of [ResourceCPU, ResourceMemory] will be used.
+  // +optional
+  // +patchStrategy=merge
+  repeated string controlledResources = 5;
+
+  // Specifies which resource values should be controlled.
+  // The default is "RequestsAndLimits".
+  // +optional
+  optional string controlledValues = 6;
+}
 
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=elasticsearchautoscalers,singular=elasticsearchautoscaler,shortName=esscaler,categories={datastore,kubedb,appscode}
@@ -335,6 +371,171 @@ message EtcdScalingRules {
   // At least one policy must be specified, otherwise the EtcdScalingRules will be discarded as invalid
   // +optional
   repeated EtcdScalingPolicy policies = 2;
+}
+
+// HistogramCheckpoint contains data needed to reconstruct the histogram.
+message HistogramCheckpoint {
+  // Reference timestamp for samples collected within this histogram.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time referenceTimestamp = 1;
+
+  // Map from bucket index to bucket weight.
+  map<string, uint32> bucketWeights = 2;
+
+  // Sum of samples to be used as denominator for weights from BucketWeights.
+  optional double totalWeight = 3;
+}
+
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=mariadbautoscalers,singular=mariadbautoscaler,shortName=mariascaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:subresource:status
+message MariaDBAutoscaler {
+  // metadata is the standard object metadata.
+  // More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  // spec is the specification for the behaviour of the autoscaler.
+  // More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status.
+  // +optional
+  optional MariaDBAutoscalerSpec spec = 2;
+
+  // status is the current information about the autoscaler.
+  // +optional
+  optional MariaDBAutoscalerStatus status = 3;
+}
+
+// MariaDBAutoscalerBehavior configures the scaling behavior of the target
+// in both Up and Down directions (scaleUp and scaleDown fields respectively).
+message MariaDBAutoscalerBehavior {
+  // scaleUp is scaling policy for scaling Up.
+  // If not set, the default value is the higher of:
+  //   * increase no more than 4 pods per 60 seconds
+  //   * double the number of pods per 60 seconds
+  // No stabilization is used.
+  // +optional
+  optional MariaDBScalingRules scaleUp = 1;
+
+  // scaleDown is scaling policy for scaling Down.
+  // If not set, the default value is to allow to scale down to minReplicas pods, with a
+  // 300 second stabilization window (i.e., the highest recommendation for
+  // the last 300sec is used).
+  // +optional
+  optional MariaDBScalingRules scaleDown = 2;
+}
+
+// MariaDBAutoscalerList is a list of horizontal pod autoscaler objects.
+message MariaDBAutoscalerList {
+  // metadata is the standard list metadata.
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  // items is the list of horizontal pod autoscaler objects.
+  repeated MariaDBAutoscaler items = 2;
+}
+
+// MariaDBAutoscalerSpec describes the desired functionality of the MariaDBAutoscaler.
+message MariaDBAutoscalerSpec {
+  // scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
+  // should be collected, as well as to actually change the replica count.
+  optional k8s.io.api.core.v1.LocalObjectReference scaleTargetRef = 1;
+
+  // minReplicas is the lower limit for the number of replicas to which the autoscaler
+  // can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
+  // alpha feature gate HPAScaleToZero is enabled and at least one Object or External
+  // metric is configured.  Scaling is active as long as at least one metric value is
+  // available.
+  // +optional
+  optional int32 minReplicas = 2;
+
+  // maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up.
+  // It cannot be less that minReplicas.
+  optional int32 maxReplicas = 3;
+
+  // metrics contains the specifications for which to use to calculate the
+  // desired replica count (the maximum replica count across all metrics will
+  // be used).  The desired replica count is calculated multiplying the
+  // ratio between the target value and the current value by the current
+  // number of pods.  Ergo, metrics used must decrease as the pod count is
+  // increased, and vice-versa.  See the individual metric source types for
+  // more information about how each type of metric must respond.
+  // If not set, the default metric will be set to 80% average CPU utilization.
+  // +optional
+  repeated k8s.io.api.autoscaling.v2beta2.MetricSpec metrics = 4;
+
+  // behavior configures the scaling behavior of the target
+  // in both Up and Down directions (scaleUp and scaleDown fields respectively).
+  // If not set, the default MariaDBScalingRules for scale up and scale down are used.
+  // +optional
+  optional MariaDBAutoscalerBehavior behavior = 5;
+}
+
+// MariaDBAutoscalerStatus describes the current status of a horizontal pod autoscaler.
+message MariaDBAutoscalerStatus {
+  // observedGeneration is the most recent generation observed by this autoscaler.
+  // +optional
+  optional int64 observedGeneration = 1;
+
+  // lastScaleTime is the last time the MariaDBAutoscaler scaled the number of pods,
+  // used by the autoscaler to control how often the number of pods is changed.
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastScaleTime = 2;
+
+  // currentReplicas is current number of replicas of pods managed by this autoscaler,
+  // as last seen by the autoscaler.
+  optional int32 currentReplicas = 3;
+
+  // desiredReplicas is the desired number of replicas of pods managed by this autoscaler,
+  // as last calculated by the autoscaler.
+  optional int32 desiredReplicas = 4;
+
+  // currentMetrics is the last read state of the metrics used by this autoscaler.
+  // +optional
+  repeated k8s.io.api.autoscaling.v2beta2.MetricStatus currentMetrics = 5;
+
+  // conditions is the set of conditions required for this autoscaler to scale its target,
+  // and indicates whether or not those conditions are met.
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 6;
+}
+
+// MariaDBScalingPolicy is a single policy which must hold true for a specified past interval.
+message MariaDBScalingPolicy {
+  // Type is used to specify the scaling policy.
+  optional string type = 1;
+
+  // Value contains the amount of change which is permitted by the policy.
+  // It must be greater than zero
+  optional int32 value = 2;
+
+  // PeriodSeconds specifies the window of time for which the policy should hold true.
+  // PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
+  optional int32 periodSeconds = 3;
+}
+
+// MariaDBScalingRules configures the scaling behavior for one direction.
+// These Rules are applied after calculating DesiredReplicas from metrics for the HPA.
+// They can limit the scaling velocity by specifying scaling policies.
+// They can prevent flapping by specifying the stabilization window, so that the
+// number of replicas is not set instantly, instead, the safest value from the stabilization
+// window is chosen.
+message MariaDBScalingRules {
+  // StabilizationWindowSeconds is the number of seconds for which past recommendations should be
+  // considered while scaling up or scaling down.
+  // StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour).
+  // If not set, use the default values:
+  // - For scale up: 0 (i.e. no stabilization is done).
+  // - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
+  // +optional
+  optional int32 stabilizationWindowSeconds = 3;
+
+  // selectPolicy is used to specify which policy should be used.
+  // If not set, the default value MaxPolicySelect is used.
+  // +optional
+  optional string selectPolicy = 1;
+
+  // policies is a list of potential scaling polices which can be used during scaling.
+  // At least one policy must be specified, otherwise the MariaDBScalingRules will be discarded as invalid
+  // +optional
+  repeated MariaDBScalingPolicy policies = 2;
 }
 
 // +kubebuilder:object:root=true
@@ -1102,6 +1303,26 @@ message PgBouncerScalingRules {
   repeated PgBouncerScalingPolicy policies = 2;
 }
 
+// PodResourcePolicy controls how autoscaler computes the recommended resources
+// for containers belonging to the pod. There can be at most one entry for every
+// named container and optionally a single wildcard entry with `containerName` = '*',
+// which handles all containers that don't have individual policies.
+message PodResourcePolicy {
+  // Per-container resource policies.
+  // +optional
+  // +patchMergeKey=containerName
+  // +patchStrategy=merge
+  repeated ContainerResourcePolicy containerPolicies = 1;
+}
+
+// PodUpdatePolicy describes the rules on how changes are applied to the pods.
+message PodUpdatePolicy {
+  // Controls when autoscaler applies changes to the pod resources.
+  // The default is 'Auto'.
+  // +optional
+  optional string updateMode = 1;
+}
+
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=postgresautoscalers,singular=postgresautoscaler,shortName=pgscaler,categories={datastore,kubedb,appscode}
 // +kubebuilder:subresource:status
@@ -1408,6 +1629,49 @@ message ProxySQLScalingRules {
   repeated ProxySQLScalingPolicy policies = 2;
 }
 
+// RecommendedContainerResources is the recommendation of resources computed by
+// autoscaler for a specific container. Respects the container resource policy
+// if present in the spec. In particular the recommendation is not produced for
+// containers with `ContainerScalingMode` set to 'Off'.
+message RecommendedContainerResources {
+  // Name of the container.
+  optional string containerName = 1;
+
+  // Recommended amount of resources. Observes ContainerResourcePolicy.
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> target = 2;
+
+  // Minimum recommended amount of resources. Observes ContainerResourcePolicy.
+  // This amount is not guaranteed to be sufficient for the application to operate in a stable way, however
+  // running with less resources is likely to have significant impact on performance/availability.
+  // +optional
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> lowerBound = 3;
+
+  // Maximum recommended amount of resources. Observes ContainerResourcePolicy.
+  // Any resources allocated beyond this value are likely wasted. This value may be larger than the maximum
+  // amount of application is actually capable of consuming.
+  // +optional
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> upperBound = 4;
+
+  // The most recent recommended resources target computed by the autoscaler
+  // for the controlled pods, based only on actual resource usage, not taking
+  // into account the ContainerResourcePolicy.
+  // May differ from the Recommendation if the actual resource usage causes
+  // the target to violate the ContainerResourcePolicy (lower than MinAllowed
+  // or higher that MaxAllowed).
+  // Used only as status indication, will not affect actual resource assignment.
+  // +optional
+  map<string, k8s.io.apimachinery.pkg.api.resource.Quantity> uncappedTarget = 5;
+}
+
+// RecommendedPodResources is the recommendation of resources computed by
+// autoscaler. It contains a recommendation for each container in the pod
+// (except for those with `ContainerScalingMode` set to 'Off').
+message RecommendedPodResources {
+  // Resources recommended by the autoscaler for each container.
+  // +optional
+  repeated RecommendedContainerResources containerRecommendations = 1;
+}
+
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=redisautoscalers,singular=redisautoscaler,shortName=rdscaler,categories={datastore,kubedb,appscode}
 // +kubebuilder:subresource:status
@@ -1564,5 +1828,133 @@ message RedisScalingRules {
 message UpgradeSpec {
   // Specifies the target version name from catalog
   optional string targetVersion = 1;
+}
+
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=verticalautoscalers,singular=verticalautoscaler,shortName=vascaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:subresource:status
+message VerticalAutoscaler {
+  // Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  // Specification of the behavior of the autoscaler.
+  // More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.
+  optional VerticalAutoscalerSpec spec = 2;
+
+  // Current information about the autoscaler.
+  // +optional
+  optional VerticalAutoscalerStatus status = 3;
+}
+
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+message VerticalAutoscalerCheckpoint {
+  // Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  // Specification of the checkpoint.
+  // More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.
+  // +optional
+  optional VerticalAutoscalerCheckpointSpec spec = 2;
+
+  // Data of the checkpoint.
+  // +optional
+  optional VerticalAutoscalerCheckpointStatus status = 3;
+}
+
+// VerticalAutoscalerCheckpointList is a list of VerticalAutoscalerCheckpoint objects.
+message VerticalAutoscalerCheckpointList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated VerticalAutoscalerCheckpoint items = 2;
+}
+
+// VerticalAutoscalerCheckpointSpec is the specification of the checkpoint object.
+message VerticalAutoscalerCheckpointSpec {
+  // Name of the VPA object that stored VerticalAutoscalerCheckpoint object.
+  optional string vpaObjectName = 1;
+
+  // Name of the checkpointed container.
+  optional string containerName = 2;
+}
+
+// VerticalAutoscalerCheckpointStatus contains data of the checkpoint.
+message VerticalAutoscalerCheckpointStatus {
+  // The time when the status was last refreshed.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastUpdateTime = 1;
+
+  // Version of the format of the stored data.
+  optional string version = 2;
+
+  // Checkpoint of histogram for consumption of CPU.
+  optional HistogramCheckpoint cpuHistograms = 3;
+
+  // Checkpoint of histogram for consumption of memory.
+  optional HistogramCheckpoint memoryHistogram = 4;
+
+  // Timestamp of the fist sample from the histograms.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time firstSampleStart = 5;
+
+  // Timestamp of the last sample from the histograms.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastSampleStart = 6;
+
+  // Total number of samples in the histograms.
+  optional int64 totalSamplesCount = 7;
+}
+
+// VerticalAutoscalerList is a list of VerticalAutoscaler objects.
+message VerticalAutoscalerList {
+  // metadata is the standard list metadata.
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  // items is the list of vertical pod autoscaler objects.
+  repeated VerticalAutoscaler items = 2;
+}
+
+// VerticalAutoscalerSpec is the specification of the behavior of the autoscaler.
+message VerticalAutoscalerSpec {
+  // TargetRef points to the controller managing the set of pods for the
+  // autoscaler to control - e.g. Deployment, StatefulSet. VerticalAutoscaler
+  // can be targeted at controller implementing scale subresource (the pod set is
+  // retrieved from the controller's ScaleStatus) or some well known controllers
+  // (e.g. for DaemonSet the pod set is read from the controller's spec).
+  // If VerticalAutoscaler cannot use specified target it will report
+  // ConfigUnsupported condition.
+  // Note that VerticalAutoscaler does not require full implementation
+  // of scale subresource - it will not use it to modify the replica count.
+  // The only thing retrieved is a label selector matching pods grouped by
+  // the target resource.
+  optional k8s.io.api.core.v1.TypedLocalObjectReference targetRef = 1;
+
+  // Describes the rules on how changes are applied to the pods.
+  // If not specified, all fields in the `PodUpdatePolicy` are set to their
+  // default values.
+  // +optional
+  optional PodUpdatePolicy updatePolicy = 2;
+
+  // Controls how the autoscaler computes recommended resources.
+  // The resource policy may be used to set constraints on the recommendations
+  // for individual containers. If not specified, the autoscaler computes recommended
+  // resources for all containers in the pod, without additional constraints.
+  // +optional
+  optional PodResourcePolicy resourcePolicy = 3;
+}
+
+// VerticalAutoscalerStatus describes the runtime state of the autoscaler.
+message VerticalAutoscalerStatus {
+  // The most recently computed amount of resources recommended by the
+  // autoscaler for the controlled pods.
+  // +optional
+  optional RecommendedPodResources recommendation = 1;
+
+  // Conditions is the set of conditions required for this autoscaler to scale its target,
+  // and indicates whether or not those conditions are met.
+  // +optional
+  // +patchMergeKey=type
+  // +patchStrategy=merge
+  repeated kmodules.xyz.client_go.api.v1.Condition conditions = 2;
 }
 
