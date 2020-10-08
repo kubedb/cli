@@ -32,7 +32,6 @@ import (
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
-	apps_util "kmodules.xyz/client-go/apps/v1"
 	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -418,7 +417,7 @@ func (e *Elasticsearch) GetMatchExpressions() []metav1.LabelSelectorRequirement 
 	}
 }
 
-func (e *ElasticsearchSpec) GetSecrets() []string {
+func (e *ElasticsearchSpec) GetPersistentSecrets() []string {
 	if e == nil {
 		return nil
 	}
@@ -430,22 +429,11 @@ func (e *ElasticsearchSpec) GetSecrets() []string {
 	return secrets
 }
 
-func (e *Elasticsearch) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	stsList, err := stsLister.StatefulSets(e.Namespace).List(labels.SelectorFromSet(e.OffshootLabels()))
-	if err != nil {
-		return false, "", err
-	}
-
-	// Desire number of statefulSet for Elasticsearch
-	numOfStatefulSet := 1
+func (e *Elasticsearch) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
 	if e.Spec.Topology != nil {
-		numOfStatefulSet = 3
+		expectedItems = 3
 	}
-	if len(stsList) != numOfStatefulSet {
-		return false, fmt.Sprintf("All StatefulSets are not available. Desire number of StatefulSet: %d, Available: %d", numOfStatefulSet, len(stsList)), nil
-	}
-
-	// return isReplicasReady, message, error
-	ready, msg := apps_util.StatefulSetsAreReady(stsList)
-	return ready, msg, nil
+	return checkReplicas(lister.StatefulSets(e.Namespace), labels.SelectorFromSet(e.OffshootLabels()), expectedItems)
 }

@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
+	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -155,12 +156,12 @@ func (e *Etcd) SetDefaults() {
 	e.Spec.Monitor.SetDefaults()
 }
 
-func (e *EtcdSpec) GetSecrets() []string {
+func (e *EtcdSpec) GetPersistentSecrets() []string {
 	return nil
 }
 
-func (e *Etcd) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	// TODO: Implement database specific logic here
-	// return isReplicasReady, message, error
-	return false, "", nil
+func (e *Etcd) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	return checkReplicas(lister.StatefulSets(e.Namespace), labels.SelectorFromSet(e.OffshootLabels()), expectedItems)
 }

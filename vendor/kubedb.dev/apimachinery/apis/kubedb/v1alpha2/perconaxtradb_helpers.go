@@ -25,6 +25,7 @@ import (
 
 	"github.com/appscode/go/types"
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -215,7 +216,7 @@ fi
 	}
 }
 
-func (p *PerconaXtraDBSpec) GetSecrets() []string {
+func (p *PerconaXtraDBSpec) GetPersistentSecrets() []string {
 	if p == nil {
 		return nil
 	}
@@ -227,8 +228,8 @@ func (p *PerconaXtraDBSpec) GetSecrets() []string {
 	return secrets
 }
 
-func (p *PerconaXtraDB) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	// TODO: Implement database specific logic here
-	// return isReplicasReady, message, error
-	return false, "", nil
+func (p *PerconaXtraDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	return checkReplicas(lister.StatefulSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
 }
