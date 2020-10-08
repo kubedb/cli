@@ -78,6 +78,8 @@ spec:
               type: boolean
             init:
               properties:
+                initialized:
+                  type: boolean
                 postgresWAL:
                   properties:
                     azure:
