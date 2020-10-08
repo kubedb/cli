@@ -29,6 +29,7 @@ import (
 	"gomodules.xyz/version"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -581,7 +582,7 @@ func (m *MongoDBSpec) SetSecurityContext(podTemplate *ofst.PodTemplateSpec) {
 	}
 }
 
-func (m *MongoDBSpec) GetSecrets() []string {
+func (m *MongoDBSpec) GetPersistentSecrets() []string {
 	if m == nil {
 		return nil
 	}
@@ -636,8 +637,11 @@ func (m *MongoDB) MustCertSecretName(alias MongoDBCertificateAlias, stsName stri
 	return name
 }
 
-func (m *MongoDB) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	// TODO: Implement database specific logic here
-	// return isReplicasReady, message, error
-	return false, "", nil
+func (m *MongoDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	if m.Spec.ShardTopology != nil {
+		expectedItems = 2 + int(m.Spec.ShardTopology.Shard.Shards)
+	}
+	return checkReplicas(lister.StatefulSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
 }

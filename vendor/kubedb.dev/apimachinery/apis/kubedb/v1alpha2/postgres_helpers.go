@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"github.com/appscode/go/types"
+	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -174,7 +175,7 @@ func (p *Postgres) SetDefaults() {
 	p.Spec.Monitor.SetDefaults()
 }
 
-func (e *PostgresSpec) GetSecrets() []string {
+func (e *PostgresSpec) GetPersistentSecrets() []string {
 	if e == nil {
 		return nil
 	}
@@ -186,8 +187,8 @@ func (e *PostgresSpec) GetSecrets() []string {
 	return secrets
 }
 
-func (p *Postgres) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	// TODO: Implement database specific logic here
-	// return isReplicasReady, message, error
-	return false, "", nil
+func (p *Postgres) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	return checkReplicas(lister.StatefulSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
 }

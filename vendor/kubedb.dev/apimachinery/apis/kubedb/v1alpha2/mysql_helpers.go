@@ -25,6 +25,7 @@ import (
 
 	"github.com/appscode/go/types"
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -224,7 +225,7 @@ mysql -h localhost -nsLNE -e "select member_state from performance_schema.replic
 	}
 }
 
-func (m *MySQLSpec) GetSecrets() []string {
+func (m *MySQLSpec) GetPersistentSecrets() []string {
 	if m == nil {
 		return nil
 	}
@@ -255,8 +256,8 @@ func (m *MySQL) MustCertSecretName(alias MySQLCertificateAlias) string {
 	return name
 }
 
-func (m *MySQL) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	// TODO: Implement database specific logic here
-	// return isReplicasReady, message, error
-	return false, "", nil
+func (m *MySQL) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	return checkReplicas(lister.StatefulSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
 }

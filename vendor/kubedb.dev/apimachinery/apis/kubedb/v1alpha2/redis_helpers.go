@@ -26,6 +26,7 @@ import (
 	"github.com/appscode/go/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -203,7 +204,7 @@ func (r *Redis) SetTLSDefaults() {
 	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(RedisMetricsExporterCert), r.CertificateName(RedisMetricsExporterCert))
 }
 
-func (r *RedisSpec) GetSecrets() []string {
+func (r *RedisSpec) GetPersistentSecrets() []string {
 	return nil
 }
 
@@ -272,8 +273,11 @@ func (r *Redis) MustCertSecretName(alias RedisCertificateAlias) string {
 	return name
 }
 
-func (r *Redis) ReplicasAreReady(stsLister appslister.StatefulSetLister) (bool, string, error) {
-	// TODO: Implement database specific logic here
-	// return isReplicasReady, message, error
-	return false, "", nil
+func (r *Redis) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	if r.Spec.Cluster != nil {
+		expectedItems = int(types.Int32(r.Spec.Cluster.Master))
+	}
+	return checkReplicas(lister.StatefulSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }
