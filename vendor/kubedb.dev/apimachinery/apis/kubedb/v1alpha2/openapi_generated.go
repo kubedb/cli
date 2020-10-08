@@ -19603,6 +19603,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref common.ReferenceCallb
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"initialized": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Initialized indicates that this database has been initialized. This will be set by the operator when status.conditions[\"Provisioned\"] is set to ensure that database is not mistakenly reset when recovered using disaster recovery tools.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 					"waitForInitialRestore": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Wait for initial DataRestore condition",

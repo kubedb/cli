@@ -21,10 +21,14 @@ import (
 )
 
 type InitSpec struct {
+	// Initialized indicates that this database has been initialized.
+	// This will be set by the operator when status.conditions["Provisioned"] is set to ensure
+	// that database is not mistakenly reset when recovered using disaster recovery tools.
+	Initialized bool `json:"initialized,omitempty" protobuf:"varint,1,opt,name=initialized"`
 	// Wait for initial DataRestore condition
-	WaitForInitialRestore bool                   `json:"waitForInitialRestore,omitempty" protobuf:"varint,1,opt,name=waitForInitialRestore"`
-	Script                *ScriptSourceSpec      `json:"script,omitempty" protobuf:"bytes,2,opt,name=script"`
-	PostgresWAL           *PostgresWALSourceSpec `json:"postgresWAL,omitempty" protobuf:"bytes,3,opt,name=postgresWAL"`
+	WaitForInitialRestore bool                   `json:"waitForInitialRestore,omitempty" protobuf:"varint,2,opt,name=waitForInitialRestore"`
+	Script                *ScriptSourceSpec      `json:"script,omitempty" protobuf:"bytes,3,opt,name=script"`
+	PostgresWAL           *PostgresWALSourceSpec `json:"postgresWAL,omitempty" protobuf:"bytes,4,opt,name=postgresWAL"`
 }
 
 type ScriptSourceSpec struct {

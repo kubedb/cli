@@ -426,12 +426,17 @@ message EtcdStatus {
 }
 
 message InitSpec {
+  // Initialized indicates that this database has been initialized.
+  // This will be set by the operator when status.conditions["Provisioned"] is set to ensure
+  // that database is not mistakenly reset when recovered using disaster recovery tools.
+  optional bool initialized = 1;
+
   // Wait for initial DataRestore condition
-  optional bool waitForInitialRestore = 1;
+  optional bool waitForInitialRestore = 2;
 
-  optional ScriptSourceSpec script = 2;
+  optional ScriptSourceSpec script = 3;
 
-  optional PostgresWALSourceSpec postgresWAL = 3;
+  optional PostgresWALSourceSpec postgresWAL = 4;
 }
 
 // LeaderElectionConfig contains essential attributes of leader election.
