@@ -24,7 +24,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-var SchemeGroupVersion = schema.GroupVersion{Group: kubedb.GroupName, Version: "v1alpha1"}
+var SchemeGroupVersion = schema.GroupVersion{Group: kubedb.GroupName, Version: "v1alpha2"}
 
 var (
 	// TODO: move SchemeBuilder with zz_generated.deepcopy.go to k8s.io/api.
