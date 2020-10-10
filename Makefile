@@ -71,7 +71,6 @@ BUILD_DIRS  := bin/$(OS)_$(ARCH)     \
                $(HOME)/.kube         \
                $(HOME)/.minikube
 
-
 DOCKER_REPO_ROOT := /go/src/$(GO_PKG)/$(REPO)
 
 # If you want to build all binaries, see the 'all-build' rule.
@@ -89,6 +88,10 @@ build-%:
 	    GOARCH=$(lastword $(subst _, ,$*))
 
 all-build: $(addprefix build-, $(subst /,_, $(BIN_PLATFORMS)))
+ifeq ($(COMPRESS),yes)
+	@cd bin; \
+	sha256sum $(patsubst $(BIN)-windows-%.tar.gz,$(BIN)-windows-%.zip, $(addsuffix .tar.gz, $(addprefix $(BIN)-, $(subst /,-, $(BIN_PLATFORMS))))) > $(BIN)-checksums.txt
+endif
 
 version:
 	@echo ::set-output name=version::$(VERSION)
@@ -155,26 +158,21 @@ $(OUTBIN): .go/$(OUTBIN).stamp
 	        commit_timestamp=$(commit_timestamp)                \
 	        ./hack/build.sh                                     \
 	    "
-	@if [ $(COMPRESS) = yes ] && [ $(OS) != darwin ]; then          \
-		echo "compressing $(OUTBIN)";                               \
-		docker run                                                  \
-		    -i                                                      \
-		    --rm                                                    \
-		    -u $$(id -u):$$(id -g)                                  \
-		    -v $$(pwd):/src                                         \
-		    -w /src                                                 \
-		    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin                \
-		    -v $$(pwd)/.go/bin/$(OS)_$(ARCH):/go/bin/$(OS)_$(ARCH)  \
-		    -v $$(pwd)/.go/cache:/.cache                            \
-		    --env HTTP_PROXY=$(HTTP_PROXY)                          \
-		    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
-		    $(BUILD_IMAGE)                                          \
-		    upx --brute /go/bin/$(BIN);                             \
-	fi
 	@if ! cmp -s .go/bin/$(OS)_$(ARCH)/$(BIN) $(OUTBIN); then   \
 	    mv .go/bin/$(OS)_$(ARCH)/$(BIN) $(OUTBIN);              \
 	    date >$@;                                               \
 	fi
+ifeq ($(COMPRESS),yes)
+ifeq ($(OS),windows)
+	@echo "compressing $(OUTBIN)";                               \
+	cd bin;                                                      \
+	zip -j $(subst .exe,,$(BIN))-$(OS)-$(ARCH).zip $(subst .exe,,$(BIN))-$(OS)-$(ARCH).exe ../LICENSE.md
+else
+	@echo "compressing $(OUTBIN)";                               \
+	cd bin;                                                      \
+	tar -czvf $(BIN)-$(OS)-$(ARCH).tar.gz $(BIN)-$(OS)-$(ARCH) ../LICENSE.md
+endif
+endif
 	@echo
 
 .PHONY: test
@@ -255,7 +253,7 @@ add-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib third_party libbuild" -v
+		ltag -t "./hack/license" --excludes "vendor contrib" -v
 
 .PHONY: check-license
 check-license:
@@ -268,10 +266,10 @@ check-license:
 		--env HTTP_PROXY=$(HTTP_PROXY)                   \
 		--env HTTPS_PROXY=$(HTTPS_PROXY)                 \
 		$(BUILD_IMAGE)                                   \
-		ltag -t "./hack/license" --excludes "vendor contrib third_party libbuild" --check -v
+		ltag -t "./hack/license" --excludes "vendor contrib" --check -v
 
 .PHONY: ci
-ci: verify lint build unit-tests #cover
+ci: verify check-license lint build unit-tests #cover
 
 .PHONY: qa
 qa:
@@ -300,3 +298,18 @@ release:
 .PHONY: clean
 clean:
 	rm -rf .go bin
+
+.PHONY: gen-krew-manifest
+gen-krew-manifest:
+	@if [ "$(version_strategy)" != "tag" ]; then       \
+		echo "apply tag to generate krew manifest.";   \
+		exit 1;                                        \
+	fi
+	@sed                                               \
+      -e 's|{VERSION}|$(VERSION)|g'                                                                       \
+      -e 's|{SHA256SUM_DARWIN_AMD64}|$(shell sha256sum bin/$(BIN)-darwin-amd64.tar.gz | cut -d' ' -f1)|g' \
+      -e 's|{SHA256SUM_LINUX_AMD64}|$(shell sha256sum bin/$(BIN)-linux-amd64.tar.gz | cut -d' ' -f1)|g'   \
+      -e 's|{SHA256SUM_LINUX_ARM}|$(shell sha256sum bin/$(BIN)-linux-arm.tar.gz | cut -d' ' -f1)|g'       \
+      -e 's|{SHA256SUM_LINUX_ARM64}|$(shell sha256sum bin/$(BIN)-linux-arm64.tar.gz | cut -d' ' -f1)|g'   \
+      -e 's|{SHA256SUM_WINDOWS_AMD64}|$(shell sha256sum bin/$(BIN)-windows-amd64.zip | cut -d' ' -f1)|g'  \
+      hack/krew/plugin.yaml
