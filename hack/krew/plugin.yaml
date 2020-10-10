@@ -4,7 +4,7 @@ metadata:
   name: dba
 spec:
   version: {VERSION}
-  homepage: https://dba.run
+  homepage: https://kubedb.com
   shortDescription: kubectl plugin for KubeDB by AppsCode
   description: |
     This plugin provides a list of commands to interact with KubeDB custom resources.

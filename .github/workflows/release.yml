@@ -70,8 +70,7 @@ jobs:
         env:
           GITHUB_USER: 1gtm
           GITHUB_TOKEN: ${{ secrets.LGTM_GITHUB_TOKEN }}
-        if: startsWith(github.event.ref, 'refs/tags/')
-        # if: startsWith(github.event.ref, 'refs/tags/') && (contains(github.ref, '-alpha.') || contains(github.ref, '-beta.') || contains(github.ref, '-rc.')) == false
+        if: startsWith(github.event.ref, 'refs/tags/') && (contains(github.ref, '-alpha.') || contains(github.ref, '-beta.') || contains(github.ref, '-rc.')) == false
         run: |
           cd $RUNNER_WORKSPACE/krew-index
           ./hack/scripts/open-pr.sh $GITHUB_WORKSPACE dba
