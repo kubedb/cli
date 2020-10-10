@@ -32,22 +32,46 @@ jobs:
         env:
           APPSCODE_ENV: prod
         run: |
-          make release
+          make release COMPRESS=yes
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            bin/kubectl-dba-linux-amd64
-            bin/kubectl-dba-linux-arm
-            bin/kubectl-dba-linux-arm64
-            bin/kubectl-dba-windows-amd64.exe
-            bin/kubectl-dba-darwin-amd64
+            bin/kubectl-dba-darwin-amd64.tar.gz
+            bin/kubectl-dba-linux-amd64.tar.gz
+            bin/kubectl-dba-linux-arm.tar.gz
+            bin/kubectl-dba-linux-arm64.tar.gz
+            bin/kubectl-dba-windows-amd64.zip
+            bin/kubectl-dba-checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: kubedb-cli-binaries
-          path: bin
+      - name: Install GitHub CLI
+        run: |
+          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
+          sudo mv bin/hub /usr/local/bin
+
+      - name: Clone krew-index repository
+        env:
+          GITHUB_USER: 1gtm
+          GITHUB_TOKEN: ${{ secrets.LGTM_GITHUB_TOKEN }}
+        run: |
+          KREW_INDEX_REPOSITORY=github.com/appscode/krew-index
+          url="https://${GITHUB_USER}:${GITHUB_TOKEN}@${KREW_INDEX_REPOSITORY}.git"
+          cd $RUNNER_WORKSPACE
+          git clone $url
+          cd $(basename $KREW_INDEX_REPOSITORY)
+          git config user.name "${GITHUB_USER}"
+          git config user.email "${GITHUB_USER}@appscode.com"
+
+      - name: Publish krew manifest
+        env:
+          GITHUB_USER: 1gtm
+          GITHUB_TOKEN: ${{ secrets.LGTM_GITHUB_TOKEN }}
+        if: startsWith(github.event.ref, 'refs/tags/')
+        # if: startsWith(github.event.ref, 'refs/tags/') && (contains(github.ref, '-alpha.') || contains(github.ref, '-beta.') || contains(github.ref, '-rc.')) == false
+        run: |
+          cd $RUNNER_WORKSPACE/krew-index
+          ./hack/scripts/open-pr.sh $GITHUB_WORKSPACE dba
