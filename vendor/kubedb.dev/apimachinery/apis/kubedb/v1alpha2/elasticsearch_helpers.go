@@ -417,14 +417,26 @@ func (e *Elasticsearch) GetMatchExpressions() []metav1.LabelSelectorRequirement 
 	}
 }
 
-func (e *ElasticsearchSpec) GetPersistentSecrets() []string {
+func (e *Elasticsearch) GetPersistentSecrets() []string {
 	if e == nil {
 		return nil
 	}
 
 	var secrets []string
-	if e.DatabaseSecret != nil {
-		secrets = append(secrets, e.DatabaseSecret.SecretName)
+	// Add Admin/Elastic user secret name
+	if e.Spec.DatabaseSecret != nil {
+		secrets = append(secrets, e.Spec.DatabaseSecret.SecretName)
+	}
+
+	// Skip for Admin/Elastic User.
+	// Add other user cred secret names.
+	if e.Spec.InternalUsers != nil {
+		for user := range e.Spec.InternalUsers {
+			if user == string(ElasticsearchInternalUserAdmin) || user == string(ElasticsearchInternalUserElastic) {
+				continue
+			}
+			secrets = append(secrets, e.UserCredSecretName(user))
+		}
 	}
 	return secrets
 }
