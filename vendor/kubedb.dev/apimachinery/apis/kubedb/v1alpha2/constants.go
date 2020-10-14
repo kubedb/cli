@@ -161,6 +161,8 @@ const (
 	DatabaseReady = "Ready"
 	// used for Databases that are paused
 	DatabasePaused = "Paused"
+	// used for Databases that are halted
+	DatabaseHalted = "Halted"
 
 	// Condition reasons
 	DataRestoreStartedByExternalInitializer = "DataRestoreStartedByExternalInitializer"
@@ -174,6 +176,7 @@ const (
 	ReadinessCheckFailed                    = "ReadinessCheckFailed"
 	DatabaseProvisioningStartedSuccessfully = "DatabaseProvisioningStartedSuccessfully"
 	DatabaseSuccessfullyProvisioned         = "DatabaseSuccessfullyProvisioned"
+	DatabaseHaltedSuccessfully              = "DatabaseHaltedSuccessfully"
 )
 
 // Resource kind related constants
