@@ -20604,26 +20604,24 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfiguration(ref common.R
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"configMap": {
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
+						},
+					},
+					"configSecret": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
-					"data": {
+					"inlineConfig": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"object"},
-							AdditionalProperties: &spec.SchemaOrBool{
-								Allows: true,
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Type:   []string{"string"},
-										Format: "",
-									},
-								},
-							},
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
-					"remove": {
+					"removeCustomConfig": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"boolean"},
 							Format: "",
@@ -20633,7 +20631,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfiguration(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"},
 	}
 }
 
@@ -22664,8 +22662,17 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisVolumeExpansionSpec(ref common.R
 			SchemaProps: spec.SchemaProps{
 				Description: "RedisVolumeExpansionSpec is the spec for Redis volume expansion",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"redis": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+				},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
