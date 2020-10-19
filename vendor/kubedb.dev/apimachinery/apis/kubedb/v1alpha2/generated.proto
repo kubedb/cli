@@ -106,11 +106,11 @@ message Databases {
   // DatabaseName is the name of the target database inside a Postgres instance.
   optional string databaseName = 3;
 
-  // DatabaseSecretRef points to a secret that contains the credentials
+  // AuthSecretRef points to a secret that contains the credentials
   // (username and password) of an existing user of this database.
   // It is used to bind a single user to this specific database connection.
   // +optional
-  optional k8s.io.api.core.v1.LocalObjectReference databaseSecretRef = 4;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecretRef = 4;
 }
 
 // +kubebuilder:object:root=true
@@ -216,7 +216,7 @@ message ElasticsearchSpec {
   optional bool disableSecurity = 5;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 6;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 6;
 
   // StorageType can be durable (default) or ephemeral
   optional string storageType = 7;
@@ -232,9 +232,9 @@ message ElasticsearchSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 10;
 
-  // ConfigSource is an optional field to provide custom configuration file for database.
+  // ConfigSecret is an optional field to provide custom configuration file for database.
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 11;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 11;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -380,7 +380,7 @@ message EtcdSpec {
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 4;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 5;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 5;
 
   // Init is used to initialize database
   // +optional
@@ -493,7 +493,7 @@ message MariaDBSpec {
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 4;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 5;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 5;
 
   // Init is used to initialize database
   // +optional
@@ -503,9 +503,9 @@ message MariaDBSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 7;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 8;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 8;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -585,9 +585,9 @@ message MemcachedSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 7;
 
-  // ConfigSource is an optional field to provide custom configuration file for database.
+  // ConfigSecret is an optional field to provide custom configuration file for database.
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 8;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 8;
 
   // DataVolume is an optional field to add one volume to each
   // memcached pod.  The volume will be made available under
@@ -685,9 +685,9 @@ message MongoDBNode {
   // Prefix is the name prefix of this node.
   optional string prefix = 2;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e mongod.cnf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 3;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 3;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -745,7 +745,7 @@ message MongoDBSpec {
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 6;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 7;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 7;
 
   // ClusterAuthMode for replicaset or sharding. (default will be x509 if sslmode is not `disabled`.)
   // See available ClusterAuthMode: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-clusterauthmode
@@ -763,9 +763,9 @@ message MongoDBSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 11;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e mongod.cnf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 12;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 12;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -779,8 +779,8 @@ message MongoDBSpec {
   // +optional
   optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 15;
 
-  // Secret for KeyFile. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
-  optional k8s.io.api.core.v1.SecretVolumeSource keyFile = 16;
+  // Secret for KeyFileSecret. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
+  optional k8s.io.api.core.v1.LocalObjectReference keyFileSecret = 16;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
@@ -878,7 +878,7 @@ message MySQLSpec {
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 5;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 6;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 6;
 
   // Init is used to initialize database
   // +optional
@@ -888,9 +888,9 @@ message MySQLSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 9;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 10;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 10;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -969,7 +969,7 @@ message PerconaXtraDBSpec {
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 4;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 5;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 5;
 
   // Init is used to initialize database
   // +optional
@@ -979,9 +979,9 @@ message PerconaXtraDBSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 7;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 8;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 8;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -1139,7 +1139,7 @@ message PostgresSpec {
   optional LeaderElectionConfig leaderElection = 6;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.SecretVolumeSource databaseSecret = 7;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 7;
 
   // StorageType can be durable (default) or ephemeral
   optional string storageType = 8;
@@ -1155,9 +1155,9 @@ message PostgresSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 12;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e postgresql.conf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e postgresql.conf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 13;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 13;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
@@ -1254,15 +1254,15 @@ message ProxySQLSpec {
   optional ProxySQLBackendSpec backend = 4;
 
   // ProxySQL secret containing username and password for root user and proxysql user
-  optional k8s.io.api.core.v1.SecretVolumeSource proxysqlSecret = 5;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 5;
 
   // Monitor is used monitor proxysql instance
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 6;
 
-  // ConfigSource is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf).
+  // ConfigSecret is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 7;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 7;
 
   // PodTemplate is an optional configuration for pods used to expose proxysql
   // +optional
@@ -1364,9 +1364,9 @@ message RedisSpec {
   // +optional
   optional kmodules.xyz.monitoring_agent_api.api.v1.AgentSpec monitor = 7;
 
-  // ConfigSource is an optional field to provide custom configuration file for database (i.e redis.conf).
+  // ConfigSecret is an optional field to provide custom configuration file for database (i.e redis.conf).
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
-  optional k8s.io.api.core.v1.VolumeSource configSource = 8;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 8;
 
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional

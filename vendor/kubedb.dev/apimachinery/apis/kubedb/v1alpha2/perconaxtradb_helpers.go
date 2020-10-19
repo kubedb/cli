@@ -92,8 +92,8 @@ func (p PerconaXtraDB) PeerName(idx int) string {
 	return fmt.Sprintf("%s-%d.%s.%s", p.OffshootName(), idx, p.GoverningServiceName(), p.Namespace)
 }
 
-func (p PerconaXtraDB) GetDatabaseSecretName() string {
-	return p.Spec.DatabaseSecret.SecretName
+func (p PerconaXtraDB) GetAuthSecretName() string {
+	return p.Spec.AuthSecret.Name
 }
 
 func (p PerconaXtraDB) ClusterName() string {
@@ -222,8 +222,8 @@ func (p *PerconaXtraDBSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if p.DatabaseSecret != nil {
-		secrets = append(secrets, p.DatabaseSecret.SecretName)
+	if p.AuthSecret != nil {
+		secrets = append(secrets, p.AuthSecret.Name)
 	}
 	return secrets
 }

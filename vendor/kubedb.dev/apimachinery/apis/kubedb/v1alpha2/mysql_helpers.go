@@ -93,8 +93,8 @@ func (m MySQL) PeerName(idx int) string {
 	return fmt.Sprintf("%s-%d.%s.%s", m.OffshootName(), idx, m.GoverningServiceName(), m.Namespace)
 }
 
-func (m MySQL) GetDatabaseSecretName() string {
-	return m.Spec.DatabaseSecret.SecretName
+func (m MySQL) GetAuthSecretName() string {
+	return m.Spec.AuthSecret.Name
 }
 
 type mysqlApp struct {
@@ -231,8 +231,8 @@ func (m *MySQLSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if m.DatabaseSecret != nil {
-		secrets = append(secrets, m.DatabaseSecret.SecretName)
+	if m.AuthSecret != nil {
+		secrets = append(secrets, m.AuthSecret.Name)
 	}
 	return secrets
 }

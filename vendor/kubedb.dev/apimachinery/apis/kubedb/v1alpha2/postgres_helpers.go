@@ -181,8 +181,8 @@ func (e *PostgresSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if e.DatabaseSecret != nil {
-		secrets = append(secrets, e.DatabaseSecret.SecretName)
+	if e.AuthSecret != nil {
+		secrets = append(secrets, e.AuthSecret.Name)
 	}
 	return secrets
 }

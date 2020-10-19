@@ -43,29 +43,9 @@ spec:
             type: object
           spec:
             properties:
-              databaseSecret:
+              authSecret:
                 properties:
-                  defaultMode:
-                    format: int32
-                    type: integer
-                  items:
-                    items:
-                      properties:
-                        key:
-                          type: string
-                        mode:
-                          format: int32
-                          type: integer
-                        path:
-                          type: string
-                      required:
-                      - key
-                      - path
-                      type: object
-                    type: array
-                  optional:
-                    type: boolean
-                  secretName:
+                  name:
                     type: string
                 type: object
               halted:

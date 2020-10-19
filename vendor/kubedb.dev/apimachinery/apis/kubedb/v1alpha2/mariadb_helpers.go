@@ -163,8 +163,8 @@ func (m *MariaDBSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if m.DatabaseSecret != nil {
-		secrets = append(secrets, m.DatabaseSecret.SecretName)
+	if m.AuthSecret != nil {
+		secrets = append(secrets, m.AuthSecret.Name)
 	}
 	return secrets
 }

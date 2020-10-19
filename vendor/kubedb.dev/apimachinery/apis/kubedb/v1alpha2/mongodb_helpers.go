@@ -588,11 +588,11 @@ func (m *MongoDBSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if m.DatabaseSecret != nil {
-		secrets = append(secrets, m.DatabaseSecret.SecretName)
+	if m.AuthSecret != nil {
+		secrets = append(secrets, m.AuthSecret.Name)
 	}
-	if m.KeyFile != nil {
-		secrets = append(secrets, m.KeyFile.SecretName)
+	if m.KeyFileSecret != nil {
+		secrets = append(secrets, m.KeyFileSecret.Name)
 	}
 	return secrets
 }
