@@ -424,8 +424,8 @@ func (e *Elasticsearch) GetPersistentSecrets() []string {
 
 	var secrets []string
 	// Add Admin/Elastic user secret name
-	if e.Spec.DatabaseSecret != nil {
-		secrets = append(secrets, e.Spec.DatabaseSecret.SecretName)
+	if e.Spec.AuthSecret != nil {
+		secrets = append(secrets, e.Spec.AuthSecret.Name)
 	}
 
 	// Skip for Admin/Elastic User.

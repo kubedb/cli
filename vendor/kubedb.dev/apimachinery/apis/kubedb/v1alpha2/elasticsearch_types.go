@@ -69,7 +69,7 @@ type ElasticsearchSpec struct {
 	DisableSecurity bool `json:"disableSecurity,omitempty" protobuf:"varint,5,opt,name=disableSecurity"`
 
 	// Database authentication secret
-	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty" protobuf:"bytes,6,opt,name=databaseSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,6,opt,name=authSecret"`
 
 	// StorageType can be durable (default) or ephemeral
 	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,7,opt,name=storageType,casttype=StorageType"`
@@ -85,9 +85,9 @@ type ElasticsearchSpec struct {
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,10,opt,name=monitor"`
 
-	// ConfigSource is an optional field to provide custom configuration file for database.
+	// ConfigSecret is an optional field to provide custom configuration file for database.
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,11,opt,name=configSource"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,11,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional

@@ -86,9 +86,9 @@ type RedisSpec struct {
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,7,opt,name=monitor"`
 
-	// ConfigSource is an optional field to provide custom configuration file for database (i.e redis.conf).
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e redis.conf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,8,opt,name=configSource"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,8,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional

@@ -88,11 +88,11 @@ func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
-		secretVolumes := make(map[string]*core.SecretVolumeSource)
-		if item.Spec.DatabaseSecret != nil {
-			secretVolumes["Database"] = item.Spec.DatabaseSecret
+		secrets := make(map[string]*core.LocalObjectReference)
+		if item.Spec.AuthSecret != nil {
+			secrets["Auth"] = item.Spec.AuthSecret
 		}
-		showSecret(d.client, item.Namespace, secretVolumes, w)
+		showSecret(d.client, item.Namespace, secrets, w)
 
 		specific := map[string]labels.Selector{
 			"primary": labels.SelectorFromSet(map[string]string{"kubedb.com/role": "primary"}),

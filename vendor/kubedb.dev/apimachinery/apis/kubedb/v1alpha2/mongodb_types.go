@@ -75,7 +75,7 @@ type MongoDBSpec struct {
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,6,opt,name=storage"`
 
 	// Database authentication secret
-	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty" protobuf:"bytes,7,opt,name=databaseSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,7,opt,name=authSecret"`
 
 	// ClusterAuthMode for replicaset or sharding. (default will be x509 if sslmode is not `disabled`.)
 	// See available ClusterAuthMode: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-clusterauthmode
@@ -93,9 +93,9 @@ type MongoDBSpec struct {
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,11,opt,name=monitor"`
 
-	// ConfigSource is an optional field to provide custom configuration file for database (i.e mongod.cnf).
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,12,opt,name=configSource"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,12,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
@@ -109,8 +109,8 @@ type MongoDBSpec struct {
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
 
-	// Secret for KeyFile. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
-	KeyFile *core.SecretVolumeSource `json:"keyFile,omitempty" protobuf:"bytes,16,opt,name=keyFile"`
+	// Secret for KeyFileSecret. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
+	KeyFileSecret *core.LocalObjectReference `json:"keyFileSecret,omitempty" protobuf:"bytes,16,opt,name=keyFileSecret"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
@@ -242,9 +242,9 @@ type MongoDBNode struct {
 	// Prefix is the name prefix of this node.
 	Prefix string `json:"prefix,omitempty" protobuf:"bytes,2,opt,name=prefix"`
 
-	// ConfigSource is an optional field to provide custom configuration file for database (i.e mongod.cnf).
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,3,opt,name=configSource"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,3,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional

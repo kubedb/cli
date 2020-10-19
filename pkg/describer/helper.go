@@ -278,11 +278,11 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 	}
 }
 
-func showSecret(client kubernetes.Interface, namespace string, secretVolumes map[string]*core.SecretVolumeSource, w describe.PrefixWriter) {
+func showSecret(client kubernetes.Interface, namespace string, secrets map[string]*core.LocalObjectReference, w describe.PrefixWriter) {
 	sc := client.CoreV1().Secrets(namespace)
 
-	for key, sv := range secretVolumes {
-		secret, err := sc.Get(context.TODO(), sv.SecretName, metav1.GetOptions{})
+	for key, sv := range secrets {
+		secret, err := sc.Get(context.TODO(), sv.Name, metav1.GetOptions{})
 		if err != nil {
 			continue
 		}

@@ -96,6 +96,11 @@ spec:
                 properties:
                   alias:
                     type: string
+                  authSecretRef:
+                    properties:
+                      name:
+                        type: string
+                    type: object
                   databaseName:
                     type: string
                   databaseRef:
@@ -111,11 +116,6 @@ spec:
                     required:
                     - name
                     - namespace
-                    type: object
-                  databaseSecretRef:
-                    properties:
-                      name:
-                        type: string
                     type: object
                 required:
                 - alias

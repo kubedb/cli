@@ -156,8 +156,8 @@ func (p *ProxySQLSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if p.ProxySQLSecret != nil {
-		secrets = append(secrets, p.ProxySQLSecret.SecretName)
+	if p.AuthSecret != nil {
+		secrets = append(secrets, p.AuthSecret.Name)
 	}
 	return secrets
 }

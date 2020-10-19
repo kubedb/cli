@@ -74,15 +74,15 @@ type ProxySQLSpec struct {
 	Backend *ProxySQLBackendSpec `json:"backend,omitempty" protobuf:"bytes,4,opt,name=backend"`
 
 	// ProxySQL secret containing username and password for root user and proxysql user
-	ProxySQLSecret *core.SecretVolumeSource `json:"proxysqlSecret,omitempty" protobuf:"bytes,5,opt,name=proxysqlSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,5,opt,name=authSecret"`
 
 	// Monitor is used monitor proxysql instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,6,opt,name=monitor"`
 
-	// ConfigSource is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf).
+	// ConfigSecret is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,7,opt,name=configSource"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,7,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose proxysql
 	// +optional
