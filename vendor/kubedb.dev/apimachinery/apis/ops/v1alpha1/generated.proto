@@ -620,11 +620,15 @@ message MongosNode {
 }
 
 message MySQLCustomConfiguration {
-  optional k8s.io.api.core.v1.LocalObjectReference configMap = 1;
+  // PodTemplate is an optional configuration for pods used to expose database
+  // +optional
+  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 1;
 
-  map<string, string> data = 2;
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 2;
 
-  optional bool remove = 3;
+  optional string inlineConfig = 3;
+
+  optional bool removeCustomConfig = 4;
 }
 
 message MySQLCustomConfigurationSpec {
@@ -1254,6 +1258,7 @@ message RedisVerticalScalingSpec {
 
 // RedisVolumeExpansionSpec is the spec for Redis volume expansion
 message RedisVolumeExpansionSpec {
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity redis = 1;
 }
 
 message RestartSpec {

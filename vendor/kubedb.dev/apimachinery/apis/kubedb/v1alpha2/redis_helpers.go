@@ -88,7 +88,7 @@ func (r Redis) ServiceName() string {
 	return r.OffshootName()
 }
 
-func (r Redis) ConfigMapName() string {
+func (r Redis) ConfigSecretName() string {
 	return r.OffshootName()
 }
 
