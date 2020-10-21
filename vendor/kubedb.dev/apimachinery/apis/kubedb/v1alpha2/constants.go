@@ -84,6 +84,7 @@ const (
 	MongoDBMongosPort          = 27017
 	MongoDBKeyFileSecretSuffix = "key"
 	MongoDBRootUsername        = "root"
+	MongoDBCustomConfigFile    = "mongod.conf"
 
 	MySQLMetricsExporterConfigSecretSuffix = "metrics-exporter-config"
 	MySQLNodePort                          = 3306
