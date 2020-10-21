@@ -62,7 +62,7 @@ type RedisSpec struct {
 	// Version of Redis to be deployed.
 	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
 
-	// Number of instances to deploy for a MySQL database.
+	// Number of instances to deploy for a Redis database.
 	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
 
 	// Default is "Standalone". If set to "Cluster", ClusterSpec is required and redis servers will
@@ -78,37 +78,40 @@ type RedisSpec struct {
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,6,opt,name=storage"`
 
+	// Database authentication secret
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,7,opt,name=authSecret"`
+
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,16,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,8,opt,name=init"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,7,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,9,opt,name=monitor"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e redis.conf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,8,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,10,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,9,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,11,opt,name=podTemplate"`
 
 	// ServiceTemplate is an optional configuration for service used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,10,opt,name=serviceTemplate"`
+	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,12,opt,name=serviceTemplate"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,11,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,13,opt,name=tls"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,12,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,14,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,13,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,15,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

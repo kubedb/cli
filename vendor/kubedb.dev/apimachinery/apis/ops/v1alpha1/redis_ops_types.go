@@ -110,12 +110,6 @@ type RedisCustomConfigurationSpec struct {
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,4,opt,name=removeCustomConfig"`
 }
 
-type RedisCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
-	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
-	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
-}
-
 // RedisOpsRequestStatus is the status for RedisOpsRequest
 type RedisOpsRequestStatus struct {
 	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`

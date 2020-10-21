@@ -2087,6 +2087,11 @@ func (in *RedisSpec) DeepCopyInto(out *RedisSpec) {
 		*out = new(v1.PersistentVolumeClaimSpec)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.AuthSecret != nil {
+		in, out := &in.AuthSecret, &out.AuthSecret
+		*out = new(v1.LocalObjectReference)
+		**out = **in
+	}
 	if in.Init != nil {
 		in, out := &in.Init, &out.Init
 		*out = new(InitSpec)

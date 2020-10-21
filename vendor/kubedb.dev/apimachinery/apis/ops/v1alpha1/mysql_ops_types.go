@@ -104,10 +104,6 @@ type MySQLVolumeExpansionSpec struct {
 }
 
 type MySQLCustomConfigurationSpec struct {
-	MySQL *MySQLCustomConfiguration `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
-}
-
-type MySQLCustomConfiguration struct {
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate        ofst.PodTemplateSpec       `json:"podTemplate,omitempty" protobuf:"bytes,1,opt,name=podTemplate"`
