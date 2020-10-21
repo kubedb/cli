@@ -453,7 +453,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec":            schema_apimachinery_apis_ops_v1alpha1_MongoDBVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec":            schema_apimachinery_apis_ops_v1alpha1_MongoDBVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongosNode":                            schema_apimachinery_apis_ops_v1alpha1_MongosNode(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfiguration":              schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfigurationSpec":          schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec":            schema_apimachinery_apis_ops_v1alpha1_MySQLHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequest":                       schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequest(ref),
@@ -508,7 +507,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpgradeSpec":                   schema_apimachinery_apis_ops_v1alpha1_ProxySQLUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_ProxySQLVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVolumeExpansionSpec":           schema_apimachinery_apis_ops_v1alpha1_ProxySQLVolumeExpansionSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisCustomConfiguration":              schema_apimachinery_apis_ops_v1alpha1_RedisCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisCustomConfigurationSpec":          schema_apimachinery_apis_ops_v1alpha1_RedisCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisHorizontalScalingSpec":            schema_apimachinery_apis_ops_v1alpha1_RedisHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequest":                       schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequest(ref),
@@ -20598,7 +20596,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongosNode(ref common.ReferenceCallba
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -20632,25 +20630,6 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfiguration(ref common.R
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_MySQLCustomConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"mysql": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfiguration"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfiguration"},
 	}
 }
 
@@ -22287,45 +22266,6 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLVolumeExpansionSpec(ref commo
 				Type:        []string{"object"},
 			},
 		},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_RedisCustomConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"configMap": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
-					"data": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"object"},
-							AdditionalProperties: &spec.SchemaOrBool{
-								Allows: true,
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Type:   []string{"string"},
-										Format: "",
-									},
-								},
-							},
-						},
-					},
-					"remove": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"boolean"},
-							Format: "",
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 

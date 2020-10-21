@@ -49,6 +49,11 @@ spec:
           type: object
         spec:
           properties:
+            authSecret:
+              properties:
+                name:
+                  type: string
+              type: object
             cluster:
               properties:
                 master:
