@@ -18,7 +18,7 @@ package v1alpha2
 
 import (
 	"fmt"
-	"strconv"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
@@ -210,18 +210,22 @@ func (m MongoDB) GvrSvcName(name string) string {
 // we used governing service name as part of host while adding members
 // to replicaset.
 func (m MongoDB) HostAddress() string {
-	host := m.ServiceName()
 	if m.Spec.ReplicaSet != nil {
-		//host = m.Spec.ReplicaSet.Name + "/" + m.Name + "-0." + m.GvrSvcName(m.OffshootName()) + "." + m.Namespace + ".svc"
-		host = fmt.Sprintf("%v/", m.RepSetName())
+		return fmt.Sprintf("%v/", m.RepSetName()) + strings.Join(m.Hosts(), ",")
+	}
+
+	return m.ServiceName()
+}
+
+func (m MongoDB) Hosts() []string {
+	hosts := []string{fmt.Sprintf("%v-0.%v.%v.svc", m.Name, m.GvrSvcName(m.OffshootName()), m.Namespace)}
+	if m.Spec.ReplicaSet != nil {
+		hosts = make([]string, *m.Spec.Replicas)
 		for i := 0; i < int(types.Int32(m.Spec.Replicas)); i++ {
-			if i != 0 {
-				host += ","
-			}
-			host += fmt.Sprintf("%v-%v.%v.%v.svc", m.Name, strconv.Itoa(i), m.GvrSvcName(m.OffshootName()), m.Namespace)
+			hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc", m.Name, i, m.GvrSvcName(m.OffshootName()), m.Namespace)
 		}
 	}
-	return host
+	return hosts
 }
 
 // ShardDSN = <shardReplName>/<host1:port>,<host2:port>,<host3:port>
@@ -230,16 +234,18 @@ func (m MongoDB) ShardDSN(nodeNum int32) string {
 	if m.Spec.ShardTopology == nil {
 		return ""
 	}
-	host := fmt.Sprintf("%v/", m.ShardRepSetName(nodeNum))
-	for i := 0; i < int(m.Spec.ShardTopology.Shard.Replicas); i++ {
-		//host += "," + m.ShardNodeName(nodeNum) + "-" + strconv.Itoa(i) + "." + m.GvrSvcName(m.ShardNodeName(nodeNum)) + "." + m.Namespace + ".svc"
+	return fmt.Sprintf("%v/", m.ShardRepSetName(nodeNum)) + strings.Join(m.ShardHosts(nodeNum), ",")
+}
 
-		if i != 0 {
-			host += ","
-		}
-		host += fmt.Sprintf("%v-%v.%v.%v.svc:%v", m.ShardNodeName(nodeNum), strconv.Itoa(i), m.GvrSvcName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBShardPort)
+func (m MongoDB) ShardHosts(nodeNum int32) []string {
+	if m.Spec.ShardTopology == nil {
+		return []string{}
 	}
-	return host
+	hosts := make([]string, m.Spec.ShardTopology.Shard.Replicas)
+	for i := 0; i < int(m.Spec.ShardTopology.Shard.Replicas); i++ {
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ShardNodeName(nodeNum), i, m.GvrSvcName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBShardPort)
+	}
+	return hosts
 }
 
 // ConfigSvrDSN = <configSvrReplName>/<host1:port>,<host2:port>,<host3:port>
@@ -248,15 +254,32 @@ func (m MongoDB) ConfigSvrDSN() string {
 	if m.Spec.ShardTopology == nil {
 		return ""
 	}
-	//	host := m.ConfigSvrRepSetName() + "/" + m.ConfigSvrNodeName() + "-0." + m.GvrSvcName(m.ConfigSvrNodeName()) + "." + m.Namespace + ".svc"
-	host := fmt.Sprintf("%v/", m.ConfigSvrRepSetName())
-	for i := 0; i < int(m.Spec.ShardTopology.ConfigServer.Replicas); i++ {
-		if i != 0 {
-			host += ","
-		}
-		host += fmt.Sprintf("%v-%v.%v.%v.svc:%v", m.ConfigSvrNodeName(), strconv.Itoa(i), m.GvrSvcName(m.ConfigSvrNodeName()), m.Namespace, MongoDBShardPort)
+
+	return fmt.Sprintf("%v/", m.ConfigSvrRepSetName()) + strings.Join(m.ConfigSvrHosts(), ",")
+}
+
+func (m MongoDB) ConfigSvrHosts() []string {
+	if m.Spec.ShardTopology == nil {
+		return []string{}
 	}
-	return host
+
+	hosts := make([]string, m.Spec.ShardTopology.ConfigServer.Replicas)
+	for i := 0; i < int(m.Spec.ShardTopology.ConfigServer.Replicas); i++ {
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ConfigSvrNodeName(), i, m.GvrSvcName(m.ConfigSvrNodeName()), m.Namespace, MongoDBShardPort)
+	}
+	return hosts
+}
+
+func (m MongoDB) MongosHosts() []string {
+	if m.Spec.ShardTopology == nil {
+		return []string{}
+	}
+
+	hosts := make([]string, m.Spec.ShardTopology.Mongos.Replicas)
+	for i := 0; i < int(m.Spec.ShardTopology.Mongos.Replicas); i++ {
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.MongosNodeName(), i, m.GvrSvcName(m.MongosNodeName()), m.Namespace, MongoDBShardPort)
+	}
+	return hosts
 }
 
 type mongoDBApp struct {
