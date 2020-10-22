@@ -1496,4 +1496,6 @@ sourcegraph.com/sourcegraph/appdash v0.0.0-20190731080439-ebfcffb1b5c0/go.mod h1
 sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4/go.mod h1:ketZ/q3QxT9HOBeFhu6RdvsftgpsbFHBF5Cas6cDKZ0=
 stash.appscode.dev/apimachinery v0.11.2 h1:ZbkbWWfAR0SOhhZHRnLcbsbsKh/7hBkqnjIFWXkvyeg=
 stash.appscode.dev/apimachinery v0.11.2/go.mod h1:9rK2Iz8tgbmyE0eiYS7plYbGxFsa80PCf0jvDNTroOY=
+stash.appscode.dev/apimachinery v0.11.3 h1:QtDA1w1Piu350toPE++99NvKM1y+zqv44A9sr7LBRCw=
+stash.appscode.dev/apimachinery v0.11.3/go.mod h1:j6XQeyMu0BoUwI9+n3wuts0RpZzU8HNYaGOrCuD3I6U=
 vbom.ml/util v0.0.0-20160121211510-db5cfe13f5cc/go.mod h1:so/NYdZXCz+E3ZpW0uAoCj6uzU2+8OWDFv/HxUSs7kI=
