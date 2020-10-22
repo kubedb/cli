@@ -328,6 +328,20 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 		tlsConfig = &kmapi.TLSConfig{}
 	}
 
+	// If the issuerRef is nil, the operator will create the CA certificate.
+	// It is required even if the spec.EnableSSL is false. Because, the transport
+	// layer is always secured with certificates. Unless you turned off all the security
+	// by setting spec.DisableSecurity to true.
+	if tlsConfig.IssuerRef == nil {
+		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+			Alias:      string(ElasticsearchCACert),
+			SecretName: e.CertificateName(ElasticsearchCACert),
+			Subject: &kmapi.X509Subject{
+				Organizations: []string{KubeDBOrganization},
+			},
+		})
+	}
+
 	// transport layer is always secured with certificate
 	tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 		Alias:      string(ElasticsearchTransportCert),
@@ -339,18 +353,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 
 	// If SSL is enabled, set missing certificate spec
 	if e.Spec.EnableSSL {
-
-		// If the issuerRef is nil, the operator will create the CA certificate.
-		if tlsConfig.IssuerRef == nil {
-			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
-				Alias:      string(ElasticsearchCACert),
-				SecretName: e.CertificateName(ElasticsearchCACert),
-				Subject: &kmapi.X509Subject{
-					Organizations: []string{KubeDBOrganization},
-				},
-			})
-		}
-
 		// http
 		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 			Alias:      string(ElasticsearchHTTPCert),
