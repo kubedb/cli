@@ -16,6 +16,8 @@ spec:
     kind: ProxySQL
     listKind: ProxySQLList
     plural: proxysqls
+    shortNames:
+    - prx
     singular: proxysql
   scope: Namespaced
   versions:
