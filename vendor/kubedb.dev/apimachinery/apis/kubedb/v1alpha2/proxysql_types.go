@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	ResourceCodeProxySQL     = "psql"
+	ResourceCodeProxySQL     = "prx"
 	ResourceKindProxySQL     = "ProxySQL"
 	ResourceSingularProxySQL = "proxysql"
 	ResourcePluralProxySQL   = "proxysqls"
@@ -46,7 +46,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=proxysqls,singular=proxysql,categories={datastore,kubedb,appscode,all}
+// +kubebuilder:resource:path=proxysqls,singular=proxysql,shortName=prx,categories={datastore,kubedb,appscode,all}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"

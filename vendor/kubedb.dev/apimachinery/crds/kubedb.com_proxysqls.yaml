@@ -26,6 +26,8 @@ spec:
     kind: ProxySQL
     listKind: ProxySQLList
     plural: proxysqls
+    shortNames:
+    - prx
     singular: proxysql
   preserveUnknownFields: false
   scope: Namespaced
