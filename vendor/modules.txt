@@ -481,7 +481,7 @@ kmodules.xyz/custom-resources/client/clientset/versioned
 kmodules.xyz/custom-resources/client/clientset/versioned/scheme
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.0.0-20201007104803-408a1ff2de8d
+# kmodules.xyz/monitoring-agent-api v0.0.0-20201022103441-f51a42fb9ac8
 kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.0.0-20200922210707-59bab27e5d41
 kmodules.xyz/objectstore-api/api/v1
