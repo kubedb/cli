@@ -15,7 +15,7 @@ require (
 	k8s.io/kubectl v0.18.9
 	kmodules.xyz/client-go v0.0.0-20201021051118-03dac1aea508
 	kmodules.xyz/custom-resources v0.0.0-20201008012351-6d8090f759d4
-	kmodules.xyz/monitoring-agent-api v0.0.0-20201007104803-408a1ff2de8d
+	kmodules.xyz/monitoring-agent-api v0.0.0-20201022103441-f51a42fb9ac8
 	kmodules.xyz/objectstore-api v0.0.0-20200922210707-59bab27e5d41
 	kubedb.dev/apimachinery v0.14.0-beta.3.0.20201023043049-a57a7df5b78a
 	stash.appscode.dev/apimachinery v0.11.3

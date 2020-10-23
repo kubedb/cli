@@ -1453,6 +1453,8 @@ kmodules.xyz/custom-resources v0.0.0-20201008012351-6d8090f759d4 h1:eftT0CrrAYK1
 kmodules.xyz/custom-resources v0.0.0-20201008012351-6d8090f759d4/go.mod h1:+YU32jSWaGGE4etTr/iCF88tLAeDNq1lhptVymjUbjg=
 kmodules.xyz/monitoring-agent-api v0.0.0-20201007104803-408a1ff2de8d h1:HFdWHhAkJZpoyMkp0kayKPf896IEkI7fWIpeJK4sY1o=
 kmodules.xyz/monitoring-agent-api v0.0.0-20201007104803-408a1ff2de8d/go.mod h1:ySvogFmyMVUNEFdUYnHp9T4njsB7o661ClfwNLcBWVo=
+kmodules.xyz/monitoring-agent-api v0.0.0-20201022103441-f51a42fb9ac8 h1:4WDb9Dt6/mLqLunbd+MseB7FtI8sO8334T8u1kCxZkI=
+kmodules.xyz/monitoring-agent-api v0.0.0-20201022103441-f51a42fb9ac8/go.mod h1:cfJEY2nsOqFF1tLzVqPj6n4KHWfbpRNf/WinOOD/bT4=
 kmodules.xyz/objectstore-api v0.0.0-20200922210707-59bab27e5d41 h1:BsCSSPoY0uRGylfPTUzzQ28h2axuXremPGPzwpmxvYI=
 kmodules.xyz/objectstore-api v0.0.0-20200922210707-59bab27e5d41/go.mod h1:XAWxC/b1ICoufU6XDV0AOHNQY+y+4/B3Z5uyLnW1B6s=
 kmodules.xyz/offshoot-api v0.0.0-20200922211229-36acc531abab h1:d/4AFAN0TfKgwhjbQYzwXXHT/5/vTP7SAAvS4uJX+wQ=
