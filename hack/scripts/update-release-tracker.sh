@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
-
 set -eou pipefail
 
 # ref: https://gist.github.com/joshisa/297b0bc1ec0dcdda0d1625029711fa24
