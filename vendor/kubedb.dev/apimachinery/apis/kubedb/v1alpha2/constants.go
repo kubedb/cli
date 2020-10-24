@@ -33,6 +33,13 @@ const (
 	DefaultStatsPath      = "/metrics"
 	DefaultPasswordLength = 16
 
+	ContainerExporterName = "exporter"
+	LocalHost             = "localhost"
+	LocalHostIP           = "127.0.0.1"
+
+	DBCustomConfigName = "custom-config"
+
+	// =========================== Database key Constants ============================
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
 	ElasticsearchKey = ResourceSingularElasticsearch + "." + kubedb.GroupName
 	MySQLKey         = ResourceSingularMySQL + "." + kubedb.GroupName
@@ -43,6 +50,7 @@ const (
 	EtcdKey          = ResourceSingularEtcd + "." + kubedb.GroupName
 	ProxySQLKey      = ResourceSingularProxySQL + "." + kubedb.GroupName
 
+	// =========================== Elasticsearch Constants ============================
 	ElasticsearchRestPort                        = 9200
 	ElasticsearchRestPortName                    = "http"
 	ElasticsearchTransportPort                   = 9300
@@ -69,6 +77,7 @@ const (
 	ElasticsearchStatusYellow                    = "yellow"
 	ElasticsearchStatusRed                       = "red"
 
+	// =========================== MongoDB Constants ============================
 	// Ref:
 	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size
 	//	- no more than 50% of your physical RAM
@@ -86,6 +95,7 @@ const (
 	MongoDBRootUsername        = "root"
 	MongoDBCustomConfigFile    = "mongod.conf"
 
+	// =========================== MySQL Constants ============================
 	MySQLMetricsExporterConfigSecretSuffix = "metrics-exporter-config"
 	MySQLNodePort                          = 3306
 	MySQLGroupComPort                      = 33060
@@ -108,6 +118,13 @@ const (
 	MySQLPodSecondary                         = "secondary"
 	MySQLLabelRole                            = MySQLKey + "/role"
 
+	MySQLTLSConfigCustom     = "custom"
+	MySQLTLSConfigSkipVerify = "skip-verify"
+	MySQLTLSConfigTrue       = "true"
+	MySQLTLSConfigFalse      = "false"
+	MySQLTLSConfigPreferred  = "preferred"
+
+	// =========================== PerconaXtraDB Constants ============================
 	PerconaXtraDBClusterRecommendedVersion    = "5.7"
 	PerconaXtraDBMaxClusterNameLength         = 32
 	PerconaXtraDBStandaloneReplicas           = 1
@@ -118,6 +135,7 @@ const (
 	PerconaXtraDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
 	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
 
+	// =========================== LabelProxySQL Constants ============================
 	LabelProxySQLName        = ProxySQLKey + "/name"
 	LabelProxySQLLoadBalance = ProxySQLKey + "/load-balance"
 
@@ -127,6 +145,7 @@ const (
 	ProxySQLDataMountPath         = "/var/lib/proxysql"
 	ProxySQLCustomConfigMountPath = "/etc/custom-config"
 
+	// =========================== Redis Constants ============================
 	RedisShardKey   = RedisKey + "/shard"
 	RedisNodePort   = 6379
 	RedisGossipPort = 16379
@@ -135,13 +154,8 @@ const (
 	RedisPEMSecretSuffix     = "pem"
 	RedisRootUsername        = "root"
 
+	// =========================== PgBouncer Constants ============================
 	PgBouncerUpstreamServerCA = "upstream-server-ca.crt"
-
-	ContainerExporterName = "exporter"
-	LocalHost             = "localhost"
-	LocalHostIP           = "127.0.0.1"
-
-	DBCustomConfigName = "custom-config"
 )
 
 // List of possible condition types for a KubeDB object
