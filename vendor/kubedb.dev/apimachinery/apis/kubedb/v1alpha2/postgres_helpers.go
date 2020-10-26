@@ -79,6 +79,14 @@ func (p Postgres) ServiceName() string {
 	return p.OffshootName()
 }
 
+func (p Postgres) StandbyServiceName() string {
+	return meta_util.NameWithPrefix(p.ServiceName(), "standby")
+}
+
+func (p Postgres) GoverningServiceName() string {
+	return meta_util.NameWithSuffix(p.ServiceName(), "pods")
+}
+
 type postgresApp struct {
 	*Postgres
 }
@@ -131,10 +139,6 @@ func (p Postgres) StatsServiceLabels() map[string]string {
 	lbl := meta_util.FilterKeys(kubedb.GroupName, p.OffshootSelectors(), p.Labels)
 	lbl[LabelRole] = RoleStats
 	return lbl
-}
-
-func (p Postgres) ReplicasServiceName() string {
-	return fmt.Sprintf("%v-replicas", p.Name)
 }
 
 func (p *Postgres) SetDefaults() {

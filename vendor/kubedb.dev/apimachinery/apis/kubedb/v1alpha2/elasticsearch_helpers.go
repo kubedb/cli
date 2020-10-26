@@ -94,9 +94,8 @@ func (e *Elasticsearch) MasterServiceName() string {
 	return meta_util.NameWithSuffix(e.ServiceName(), "master")
 }
 
-// Governing Service Name
-func (e Elasticsearch) GvrSvcName() string {
-	return meta_util.NameWithSuffix(e.OffshootName(), "gvr")
+func (e Elasticsearch) GoverningServiceName() string {
+	return meta_util.NameWithSuffix(e.ServiceName(), "pods")
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias

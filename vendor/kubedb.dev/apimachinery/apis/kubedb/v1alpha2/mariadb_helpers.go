@@ -80,7 +80,7 @@ func (m MariaDB) ServiceName() string {
 }
 
 func (m MariaDB) GoverningServiceName() string {
-	return m.OffshootName() + "-gvr"
+	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
 }
 
 type mariadbApp struct {

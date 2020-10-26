@@ -80,6 +80,10 @@ func (p ProxySQL) ServiceName() string {
 	return p.OffshootName()
 }
 
+func (p ProxySQL) GoverningServiceName() string {
+	return meta_util.NameWithSuffix(p.ServiceName(), "pods")
+}
+
 type proxysqlApp struct {
 	*ProxySQL
 }

@@ -85,7 +85,7 @@ func (p PerconaXtraDB) IsCluster() bool {
 }
 
 func (p PerconaXtraDB) GoverningServiceName() string {
-	return p.OffshootName() + "-gvr"
+	return meta_util.NameWithSuffix(p.ServiceName(), "pods")
 }
 
 func (p PerconaXtraDB) PeerName(idx int) string {
