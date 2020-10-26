@@ -81,12 +81,12 @@ func (m MySQL) ServiceName() string {
 	return m.OffshootName()
 }
 
-func (m MySQL) SecondaryServiceName() string {
-	return meta_util.NameWithPrefix(m.ServiceName(), "replicas")
+func (m MySQL) StandbyServiceName() string {
+	return meta_util.NameWithPrefix(m.ServiceName(), "standby")
 }
 
 func (m MySQL) GoverningServiceName() string {
-	return m.OffshootName() + "-gvr"
+	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
 }
 
 func (m MySQL) PeerName(idx int) string {

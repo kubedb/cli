@@ -88,6 +88,10 @@ func (r Redis) ServiceName() string {
 	return r.OffshootName()
 }
 
+func (r Redis) GoverningServiceName() string {
+	return meta_util.NameWithSuffix(r.ServiceName(), "pods")
+}
+
 func (r Redis) ConfigSecretName() string {
 	return r.OffshootName()
 }

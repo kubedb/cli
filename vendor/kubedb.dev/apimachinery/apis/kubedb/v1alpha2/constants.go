@@ -77,7 +77,6 @@ const (
 	ElasticsearchStatusYellow                    = "yellow"
 	ElasticsearchStatusRed                       = "red"
 
-	// =========================== MongoDB Constants ============================
 	// Ref:
 	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size
 	//	- no more than 50% of your physical RAM
@@ -88,16 +87,26 @@ const (
 	// 128MB
 	ElasticsearchMinHeapSize = 128 * 1024 * 1024
 
-	MongoDBShardPort           = 27017
-	MongoDBConfigdbPort        = 27017
-	MongoDBMongosPort          = 27017
-	MongoDBKeyFileSecretSuffix = "key"
-	MongoDBRootUsername        = "root"
-	MongoDBCustomConfigFile    = "mongod.conf"
+	// =========================== Memcached Constants ============================
+	MemcachedDatabasePortName       = "db"
+	MemcachedPrimaryServicePortName = "primary"
+	MemcachedDatabasePort           = 11211
+
+	// =========================== MongoDB Constants ============================
+
+	MongoDBDatabasePortName       = "db"
+	MongoDBPrimaryServicePortName = "primary"
+	MongoDBDatabasePort           = 27017
+	MongoDBKeyFileSecretSuffix    = "key"
+	MongoDBRootUsername           = "root"
+	MongoDBCustomConfigFile       = "mongod.conf"
 
 	// =========================== MySQL Constants ============================
 	MySQLMetricsExporterConfigSecretSuffix = "metrics-exporter-config"
-	MySQLNodePort                          = 3306
+	MySQLDatabasePortName                  = "db"
+	MySQLPrimaryServicePortName            = "primary"
+	MySQLStandbyServicePortName            = "standby"
+	MySQLDatabasePort                      = 3306
 	MySQLGroupComPort                      = 33060
 	MySQLMaxGroupMembers                   = 9
 	// The recommended MySQL server version for group replication (GR)
@@ -115,8 +124,8 @@ const (
 
 	MySQLContainerReplicationModeDetectorName = "replication-mode-detector"
 	MySQLPodPrimary                           = "primary"
-	MySQLPodSecondary                         = "secondary"
-	MySQLLabelRole                            = MySQLKey + "/role"
+	MySQLPodStandby                           = "standby"
+	MySQLLabelRole                            = kubedb.GroupName + "/role"
 
 	MySQLTLSConfigCustom     = "custom"
 	MySQLTLSConfigSkipVerify = "skip-verify"
@@ -135,27 +144,46 @@ const (
 	PerconaXtraDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
 	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
 
-	// =========================== LabelProxySQL Constants ============================
+	// =========================== PostgreSQL Constants ============================
+	PostgresDatabasePortName       = "db"
+	PostgresPrimaryServicePortName = "primary"
+	PostgresStandbyServicePortName = "standby"
+	PostgresDatabasePort           = 5432
+	PostgresPodPrimary             = "primary"
+	PostgresPodStandby             = "standby"
+	PostgresLabelRole              = kubedb.GroupName + "/role"
+
+	// =========================== ProxySQL Constants ============================
 	LabelProxySQLName        = ProxySQLKey + "/name"
 	LabelProxySQLLoadBalance = ProxySQLKey + "/load-balance"
 
-	ProxySQLMySQLNodePort         = 6033
-	ProxySQLAdminPort             = 6032
-	ProxySQLAdminPortName         = "admin"
-	ProxySQLDataMountPath         = "/var/lib/proxysql"
-	ProxySQLCustomConfigMountPath = "/etc/custom-config"
+	ProxySQLDatabasePort           = 6033
+	ProxySQLDatabasePortName       = "db"
+	ProxySQLPrimaryServicePortName = "db"
+	ProxySQLAdminPort              = 6032
+	ProxySQLAdminPortName          = "admin"
+	ProxySQLDataMountPath          = "/var/lib/proxysql"
+	ProxySQLCustomConfigMountPath  = "/etc/custom-config"
 
 	// =========================== Redis Constants ============================
-	RedisShardKey   = RedisKey + "/shard"
-	RedisNodePort   = 6379
-	RedisGossipPort = 16379
+	RedisShardKey               = RedisKey + "/shard"
+	RedisDatabasePortName       = "db"
+	RedisPrimaryServicePortName = "primary"
+	RedisDatabasePort           = 6379
+	RedisGossipPortName         = "gossip"
+	RedisGossipPort             = 16379
 
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"
 	RedisRootUsername        = "root"
 
 	// =========================== PgBouncer Constants ============================
-	PgBouncerUpstreamServerCA = "upstream-server-ca.crt"
+	PgBouncerUpstreamServerCA       = "upstream-server-ca.crt"
+	PgBouncerDatabasePortName       = "db"
+	PgBouncerPrimaryServicePortName = "primary"
+	PgBouncerDatabasePort           = 5432
+	PgBouncerConfigFile             = "pgbouncer.ini"
+	PgBouncerAdminUsername          = "kubedb"
 )
 
 // List of possible condition types for a KubeDB object

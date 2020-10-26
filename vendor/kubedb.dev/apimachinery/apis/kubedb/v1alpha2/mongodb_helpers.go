@@ -196,11 +196,11 @@ func (m MongoDB) ServiceName() string {
 
 // Governing Service Name. Here, name parameter is either
 // OffshootName, ShardNodeName or ConfigSvrNodeName
-func (m MongoDB) GvrSvcName(name string) string {
+func (m MongoDB) GoverningServiceName(name string) string {
 	if name == "" {
 		panic(fmt.Sprintf("StatefulSet name is missing for MongoDB %s/%s", m.Namespace, m.Name))
 	}
-	return name + "-gvr"
+	return name + "-pods"
 }
 
 // HostAddress returns serviceName for standalone mongodb.
@@ -218,11 +218,11 @@ func (m MongoDB) HostAddress() string {
 }
 
 func (m MongoDB) Hosts() []string {
-	hosts := []string{fmt.Sprintf("%v-0.%v.%v.svc", m.Name, m.GvrSvcName(m.OffshootName()), m.Namespace)}
+	hosts := []string{fmt.Sprintf("%v-0.%v.%v.svc", m.Name, m.GoverningServiceName(m.OffshootName()), m.Namespace)}
 	if m.Spec.ReplicaSet != nil {
 		hosts = make([]string, *m.Spec.Replicas)
 		for i := 0; i < int(types.Int32(m.Spec.Replicas)); i++ {
-			hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc", m.Name, i, m.GvrSvcName(m.OffshootName()), m.Namespace)
+			hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc", m.Name, i, m.GoverningServiceName(m.OffshootName()), m.Namespace)
 		}
 	}
 	return hosts
@@ -243,7 +243,7 @@ func (m MongoDB) ShardHosts(nodeNum int32) []string {
 	}
 	hosts := make([]string, m.Spec.ShardTopology.Shard.Replicas)
 	for i := 0; i < int(m.Spec.ShardTopology.Shard.Replicas); i++ {
-		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ShardNodeName(nodeNum), i, m.GvrSvcName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBShardPort)
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ShardNodeName(nodeNum), i, m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBDatabasePort)
 	}
 	return hosts
 }
@@ -265,7 +265,7 @@ func (m MongoDB) ConfigSvrHosts() []string {
 
 	hosts := make([]string, m.Spec.ShardTopology.ConfigServer.Replicas)
 	for i := 0; i < int(m.Spec.ShardTopology.ConfigServer.Replicas); i++ {
-		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ConfigSvrNodeName(), i, m.GvrSvcName(m.ConfigSvrNodeName()), m.Namespace, MongoDBShardPort)
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ConfigSvrNodeName(), i, m.GoverningServiceName(m.ConfigSvrNodeName()), m.Namespace, MongoDBDatabasePort)
 	}
 	return hosts
 }
@@ -277,7 +277,7 @@ func (m MongoDB) MongosHosts() []string {
 
 	hosts := make([]string, m.Spec.ShardTopology.Mongos.Replicas)
 	for i := 0; i < int(m.Spec.ShardTopology.Mongos.Replicas); i++ {
-		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.MongosNodeName(), i, m.GvrSvcName(m.MongosNodeName()), m.Namespace, MongoDBShardPort)
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.MongosNodeName(), i, m.GoverningServiceName(m.MongosNodeName()), m.Namespace, MongoDBDatabasePort)
 	}
 	return hosts
 }

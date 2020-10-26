@@ -78,6 +78,10 @@ func (m Memcached) ServiceName() string {
 	return m.OffshootName()
 }
 
+func (m Memcached) GoverningServiceName() string {
+	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
+}
+
 type memcachedApp struct {
 	*Memcached
 }
