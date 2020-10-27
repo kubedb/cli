@@ -158,6 +158,21 @@ type PodSpec struct {
 	// Cannot be updated.
 	// +optional
 	Lifecycle *core.Lifecycle `json:"lifecycle,omitempty" protobuf:"bytes,16,opt,name=lifecycle"`
+
+	// Set DNS policy for the pod.
+	// Defaults to "ClusterFirst".
+	// Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.
+	// DNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy.
+	// To have DNS options set along with hostNetwork, you have to specify DNS policy
+	// explicitly to 'ClusterFirstWithHostNet'.
+	// +optional
+	DNSPolicy core.DNSPolicy `json:"dnsPolicy,omitempty" protobuf:"bytes,17,opt,name=dnsPolicy,casttype=k8s.io/api/core/v1.DNSPolicy"`
+
+	// Specifies the DNS parameters of a pod.
+	// Parameters specified here will be merged to the generated DNS
+	// configuration based on DNSPolicy.
+	// +optional
+	DNSConfig *core.PodDNSConfig `json:"dnsConfig,omitempty" protobuf:"bytes,18,opt,name=dnsConfig"`
 }
 
 // ServiceTemplateSpec describes the data a service should have when created from a template
