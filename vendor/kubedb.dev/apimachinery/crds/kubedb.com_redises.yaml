@@ -1773,6 +1773,28 @@ spec:
                       items:
                         type: string
                       type: array
+                    dnsConfig:
+                      properties:
+                        nameservers:
+                          items:
+                            type: string
+                          type: array
+                        options:
+                          items:
+                            properties:
+                              name:
+                                type: string
+                              value:
+                                type: string
+                            type: object
+                          type: array
+                        searches:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    dnsPolicy:
+                      type: string
                     env:
                       items:
                         properties:
