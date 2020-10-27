@@ -13,11 +13,11 @@ require (
 	k8s.io/client-go v0.18.9
 	k8s.io/component-base v0.18.9
 	k8s.io/kubectl v0.18.9
-	kmodules.xyz/client-go v0.0.0-20201021051118-03dac1aea508
+	kmodules.xyz/client-go v0.0.0-20201027113349-01a6d453d836
 	kmodules.xyz/custom-resources v0.0.0-20201008012351-6d8090f759d4
 	kmodules.xyz/monitoring-agent-api v0.0.0-20201022103441-f51a42fb9ac8
 	kmodules.xyz/objectstore-api v0.0.0-20200922210707-59bab27e5d41
-	kubedb.dev/apimachinery v0.14.0-beta.5
+	kubedb.dev/apimachinery v0.14.0-beta.5.0.20201027120621-cd358dda127d
 	stash.appscode.dev/apimachinery v0.11.3
 )
 

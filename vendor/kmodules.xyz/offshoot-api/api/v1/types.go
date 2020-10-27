@@ -276,7 +276,9 @@ type ServicePort struct {
 	NodePort int32 `json:"nodePort,omitempty" protobuf:"varint,3,opt,name=nodePort"`
 }
 
-func MergeServicePorts(cur []core.ServicePort, desired []ServicePort) []core.ServicePort {
+// Beware of MergeServicePorts
+// ref: https://github.com/kmodules/client-go/blob/03dac1aea5084354127990a10d0b0e7529460dd5/core/v1/service.go#L103-L136
+func PatchServicePorts(cur []core.ServicePort, desired []ServicePort) []core.ServicePort {
 	if len(desired) == 0 {
 		return cur
 	}
