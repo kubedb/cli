@@ -23,7 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
@@ -168,12 +168,12 @@ func (m *MySQL) SetDefaults() {
 
 	if m.UsesGroupReplication() {
 		if m.Spec.Replicas == nil {
-			m.Spec.Replicas = types.Int32P(MySQLDefaultGroupSize)
+			m.Spec.Replicas = pointer.Int32P(MySQLDefaultGroupSize)
 		}
 		m.Spec.setDefaultProbes()
 	} else {
 		if m.Spec.Replicas == nil {
-			m.Spec.Replicas = types.Int32P(1)
+			m.Spec.Replicas = pointer.Int32P(1)
 		}
 	}
 

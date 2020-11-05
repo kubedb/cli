@@ -25,7 +25,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	"gomodules.xyz/version"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -221,7 +221,7 @@ func (m MongoDB) Hosts() []string {
 	hosts := []string{fmt.Sprintf("%v-0.%v.%v.svc", m.Name, m.GoverningServiceName(m.OffshootName()), m.Namespace)}
 	if m.Spec.ReplicaSet != nil {
 		hosts = make([]string, *m.Spec.Replicas)
-		for i := 0; i < int(types.Int32(m.Spec.Replicas)); i++ {
+		for i := 0; i < int(pointer.Int32(m.Spec.Replicas)); i++ {
 			hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc", m.Name, i, m.GoverningServiceName(m.OffshootName()), m.Namespace)
 		}
 	}
@@ -407,7 +407,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		m.setDefaultAffinity(&m.Spec.ShardTopology.Mongos.PodTemplate, mongosLabels, topology)
 	} else {
 		if m.Spec.Replicas == nil {
-			m.Spec.Replicas = types.Int32P(1)
+			m.Spec.Replicas = pointer.Int32P(1)
 		}
 
 		if m.Spec.PodTemplate == nil {
@@ -595,13 +595,13 @@ func (m *MongoDBSpec) SetSecurityContext(podTemplate *ofst.PodTemplateSpec) {
 		podTemplate.Spec.SecurityContext = new(core.PodSecurityContext)
 	}
 	if podTemplate.Spec.SecurityContext.FSGroup == nil {
-		podTemplate.Spec.SecurityContext.FSGroup = types.Int64P(999)
+		podTemplate.Spec.SecurityContext.FSGroup = pointer.Int64P(999)
 	}
 	if podTemplate.Spec.SecurityContext.RunAsNonRoot == nil {
-		podTemplate.Spec.SecurityContext.RunAsNonRoot = types.BoolP(true)
+		podTemplate.Spec.SecurityContext.RunAsNonRoot = pointer.BoolP(true)
 	}
 	if podTemplate.Spec.SecurityContext.RunAsUser == nil {
-		podTemplate.Spec.SecurityContext.RunAsUser = types.Int64P(999)
+		podTemplate.Spec.SecurityContext.RunAsUser = pointer.Int64P(999)
 	}
 }
 

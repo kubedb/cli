@@ -6,19 +6,19 @@ require (
 	github.com/appscode/go v0.0.0-20201006035845-a0302ac8e3d3
 	github.com/fatih/camelcase v1.0.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/spf13/cobra v1.0.0
+	github.com/spf13/cobra v1.1.1
 	k8s.io/api v0.18.9
 	k8s.io/apimachinery v0.18.9
 	k8s.io/cli-runtime v0.18.9
 	k8s.io/client-go v0.18.9
 	k8s.io/component-base v0.18.9
 	k8s.io/kubectl v0.18.9
-	kmodules.xyz/client-go v0.0.0-20201027113349-01a6d453d836
-	kmodules.xyz/custom-resources v0.0.0-20201008012351-6d8090f759d4
-	kmodules.xyz/monitoring-agent-api v0.0.0-20201022103441-f51a42fb9ac8
-	kmodules.xyz/objectstore-api v0.0.0-20200922210707-59bab27e5d41
-	kubedb.dev/apimachinery v0.14.1-0.20201030200006-92af33bde233
-	stash.appscode.dev/apimachinery v0.11.5
+	kmodules.xyz/client-go v0.0.0-20201105071625-0b277310b9b8
+	kmodules.xyz/custom-resources v0.0.0-20201105075444-3c6af51b4f79
+	kmodules.xyz/monitoring-agent-api v0.0.0-20201105074044-be7a1044891a
+	kmodules.xyz/objectstore-api v0.0.0-20201105133858-cbb2af88d50a
+	kubedb.dev/apimachinery v0.14.1-0.20201105213239-f74effb9db37
+	stash.appscode.dev/apimachinery v0.11.6-0.20201105125158-b51d7c6a387c
 )
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
