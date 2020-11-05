@@ -23,7 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
@@ -81,7 +81,7 @@ func (p PerconaXtraDB) ServiceName() string {
 }
 
 func (p PerconaXtraDB) IsCluster() bool {
-	return types.Int32(p.Spec.Replicas) > 1
+	return pointer.Int32(p.Spec.Replicas) > 1
 }
 
 func (p PerconaXtraDB) GoverningServiceName() string {
@@ -160,7 +160,7 @@ func (p *PerconaXtraDB) SetDefaults() {
 	}
 
 	if p.Spec.Replicas == nil {
-		p.Spec.Replicas = types.Int32P(1)
+		p.Spec.Replicas = pointer.Int32P(1)
 	}
 
 	if p.Spec.StorageType == "" {
@@ -184,7 +184,7 @@ func (p *PerconaXtraDBSpec) setDefaultProbes() {
 	}
 
 	var readynessProbeCmd []string
-	if types.Int32(p.Replicas) > 1 {
+	if pointer.Int32(p.Replicas) > 1 {
 		readynessProbeCmd = []string{
 			"/cluster-check.sh",
 		}

@@ -23,7 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -144,7 +144,7 @@ func (e *Etcd) SetDefaults() {
 
 	// perform defaulting
 	if e.Spec.Replicas == nil {
-		e.Spec.Replicas = types.Int32P(1)
+		e.Spec.Replicas = pointer.Int32P(1)
 	}
 	if e.Spec.StorageType == "" {
 		e.Spec.StorageType = StorageTypeDurable

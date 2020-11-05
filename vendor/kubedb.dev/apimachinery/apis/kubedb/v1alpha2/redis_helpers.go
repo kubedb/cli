@@ -23,7 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -171,10 +171,10 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 			r.Spec.Cluster = &RedisClusterSpec{}
 		}
 		if r.Spec.Cluster.Master == nil {
-			r.Spec.Cluster.Master = types.Int32P(3)
+			r.Spec.Cluster.Master = pointer.Int32P(3)
 		}
 		if r.Spec.Cluster.Replicas == nil {
-			r.Spec.Cluster.Replicas = types.Int32P(1)
+			r.Spec.Cluster.Replicas = pointer.Int32P(1)
 		}
 	}
 	if r.Spec.StorageType == "" {
@@ -281,7 +281,7 @@ func (r *Redis) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, str
 	// Desire number of statefulSets
 	expectedItems := 1
 	if r.Spec.Cluster != nil {
-		expectedItems = int(types.Int32(r.Spec.Cluster.Master))
+		expectedItems = int(pointer.Int32(r.Spec.Cluster.Master))
 	}
 	return checkReplicas(lister.StatefulSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }

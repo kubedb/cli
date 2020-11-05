@@ -23,7 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -157,7 +157,7 @@ func (p *Postgres) SetDefaults() {
 		pitr := p.Spec.Init.PostgresWAL.PITR
 
 		if pitr.TargetInclusive == nil {
-			pitr.TargetInclusive = types.BoolP(true)
+			pitr.TargetInclusive = pointer.BoolP(true)
 		}
 
 		p.Spec.Init.PostgresWAL.PITR = pitr

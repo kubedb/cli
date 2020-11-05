@@ -23,7 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -142,7 +142,7 @@ func (m *MariaDB) SetDefaults() {
 		return
 	}
 	if m.Spec.Replicas == nil {
-		m.Spec.Replicas = types.Int32P(1)
+		m.Spec.Replicas = pointer.Int32P(1)
 	}
 
 	// perform defaulting
