@@ -20,10 +20,6 @@ github.com/MakeNowJust/heredoc
 github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
-# github.com/appscode/go v0.0.0-20201006035845-a0302ac8e3d3
-github.com/appscode/go/runtime
-github.com/appscode/go/types
-github.com/appscode/go/version
 # github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5
 github.com/chai2010/gettext-go/gettext
 github.com/chai2010/gettext-go/gettext/mo
@@ -196,11 +192,14 @@ gomodules.xyz/homedir
 gomodules.xyz/jsonpatch/v2
 # gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 gomodules.xyz/pointer
+# gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b
+gomodules.xyz/runtime
 # gomodules.xyz/version v0.1.0
 gomodules.xyz/version
 # gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
 gomodules.xyz/x/analytics
 gomodules.xyz/x/log/golog
+gomodules.xyz/x/version
 # google.golang.org/appengine v1.6.6
 google.golang.org/appengine
 google.golang.org/appengine/internal

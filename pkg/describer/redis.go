@@ -24,7 +24,7 @@ import (
 	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 
-	"github.com/appscode/go/types"
+	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -74,7 +74,7 @@ func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector
 		printAnnotationsMultiline(LEVEL_0, w, "Annotations", item.Annotations)
 
 		if item.Spec.Replicas != nil {
-			w.Write(LEVEL_0, "Replicas:\t%d  total\n", types.Int32(item.Spec.Replicas))
+			w.Write(LEVEL_0, "Replicas:\t%d  total\n", pointer.Int32(item.Spec.Replicas))
 		}
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
 
