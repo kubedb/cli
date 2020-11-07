@@ -19,7 +19,7 @@ require (
 	kmodules.xyz/custom-resources v0.0.0-20201105075444-3c6af51b4f79
 	kmodules.xyz/monitoring-agent-api v0.0.0-20201105074044-be7a1044891a
 	kmodules.xyz/objectstore-api v0.0.0-20201105133858-cbb2af88d50a
-	kubedb.dev/apimachinery v0.14.1-0.20201105213239-f74effb9db37
+	kubedb.dev/apimachinery v0.14.1-0.20201107045055-1c8d3ff8c349
 	stash.appscode.dev/apimachinery v0.11.6
 )
 
