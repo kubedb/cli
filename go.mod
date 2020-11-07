@@ -6,7 +6,6 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/spf13/cobra v1.1.1
-	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
 	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 	gomodules.xyz/runtime v0.0.0-20201104200926-d838b09dda8b
 	gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
@@ -20,7 +19,7 @@ require (
 	kmodules.xyz/custom-resources v0.0.0-20201105075444-3c6af51b4f79
 	kmodules.xyz/monitoring-agent-api v0.0.0-20201105074044-be7a1044891a
 	kmodules.xyz/objectstore-api v0.0.0-20201105133858-cbb2af88d50a
-	kubedb.dev/apimachinery v0.14.1-0.20201107045055-1c8d3ff8c349
+	kubedb.dev/apimachinery v0.14.1-0.20201107121642-52b04a206325
 	stash.appscode.dev/apimachinery v0.11.6
 )
 
