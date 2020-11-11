@@ -101,9 +101,9 @@ type MongoDBSpec struct {
 	// +optional
 	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,13,opt,name=podTemplate"`
 
-	// ServiceTemplate is an optional configuration for service used to expose database
+	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,14,opt,name=serviceTemplate"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,14,rep,name=serviceTemplates"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional

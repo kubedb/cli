@@ -766,8 +766,8 @@ func (in *MongoDBVersionSpec) DeepCopyInto(out *MongoDBVersionSpec) {
 	out.Exporter = in.Exporter
 	out.Tools = in.Tools
 	out.InitContainer = in.InitContainer
-	out.ReplicationModeDetector = in.ReplicationModeDetector
 	out.PodSecurityPolicies = in.PodSecurityPolicies
+	out.ReplicationModeDetector = in.ReplicationModeDetector
 	return
 }
 

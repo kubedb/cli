@@ -353,11 +353,11 @@ message MongoDBVersionSpec {
   // Init container Image
   optional MongoDBVersionInitContainer initContainer = 6;
 
-  // ReplicationModeDetector Image
-  optional ReplicationModeDetector replicationModeDetector = 8;
-
   // PSP names
   optional MongoDBVersionPodSecurityPolicy podSecurityPolicies = 7;
+
+  // ReplicationModeDetector Image
+  optional ReplicationModeDetector replicationModeDetector = 8;
 }
 
 // MongoDBVersionTools is the image for the mongodb tools

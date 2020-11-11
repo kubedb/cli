@@ -93,9 +93,9 @@ type ElasticsearchSpec struct {
 	// +optional
 	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,12,opt,name=podTemplate"`
 
-	// ServiceTemplate is an optional configuration for service used to expose database
+	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,13,opt,name=serviceTemplate"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,13,rep,name=serviceTemplates"`
 
 	// An eviction is allowed if at most "maxUnavailable" pods selected by
 	// "selector" are unavailable after the eviction, i.e. even in absence of

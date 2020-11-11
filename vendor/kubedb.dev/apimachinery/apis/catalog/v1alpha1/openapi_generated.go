@@ -19840,20 +19840,20 @@ func schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionInitContainer"),
 						},
 					},
-					"replicationModeDetector": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ReplicationModeDetector Image",
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"),
-						},
-					},
 					"podSecurityPolicies": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PSP names",
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionPodSecurityPolicy"),
 						},
 					},
+					"replicationModeDetector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ReplicationModeDetector Image",
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"),
+						},
+					},
 				},
-				Required: []string{"version", "db", "exporter", "tools", "initContainer", "replicationModeDetector", "podSecurityPolicies"},
+				Required: []string{"version", "db", "exporter", "tools", "initContainer", "podSecurityPolicies", "replicationModeDetector"},
 			},
 		},
 		Dependencies: []string{

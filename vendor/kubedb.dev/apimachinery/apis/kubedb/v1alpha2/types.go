@@ -18,6 +18,7 @@ package v1alpha2
 
 import (
 	core "k8s.io/api/core/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 type InitSpec struct {
@@ -94,3 +95,21 @@ const (
 	// Rejects attempt to delete database using ValidationWebhook.
 	TerminationPolicyDoNotTerminate TerminationPolicy = "DoNotTerminate"
 )
+
+// +kubebuilder:validation:Enum=primary;standby;stats
+type ServiceAlias string
+
+const (
+	PrimaryServiceAlias ServiceAlias = "primary"
+	StandbyServiceAlias ServiceAlias = "standby"
+	StatsServiceAlias   ServiceAlias = "stats"
+)
+
+type NamedServiceTemplateSpec struct {
+	// Alias represents the identifier of the service.
+	Alias ServiceAlias `json:"alias" protobuf:"bytes,1,opt,name=alias"`
+
+	// ServiceTemplate is an optional configuration for a service used to expose database
+	// +optional
+	ServiceTemplate ofst.ServiceTemplateSpec `json:",inline,omitempty" protobuf:"bytes,2,opt,name=serviceTemplate"`
+}

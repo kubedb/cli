@@ -57,9 +57,9 @@ type PgBouncerSpec struct {
 	// Number of instances to deploy for a PgBouncer instance.
 	// +optional
 	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
-	// ServiceTemplate is an optional configuration for service used to expose database.
+	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,3,opt,name=serviceTemplate"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,3,rep,name=serviceTemplates"`
 	// PodTemplate is an optional configuration for pods.
 	// +optional
 	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,4,opt,name=podTemplate"`
