@@ -89,7 +89,7 @@ func (e Elasticsearch) ServiceName() string {
 	return e.OffshootName()
 }
 
-func (e *Elasticsearch) MasterServiceName() string {
+func (e *Elasticsearch) MasterDiscoveryServiceName() string {
 	return meta_util.NameWithSuffix(e.ServiceName(), "master")
 }
 
@@ -254,16 +254,21 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 		if e.Spec.Topology.Ingest.Prefix == "" {
 			e.Spec.Topology.Ingest.Prefix = ElasticsearchIngestNodePrefix
 		}
+		setDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources)
 
 		// Default to "data"
 		if e.Spec.Topology.Data.Prefix == "" {
 			e.Spec.Topology.Data.Prefix = ElasticsearchDataNodePrefix
 		}
+		setDefaultResourceLimits(&e.Spec.Topology.Data.Resources)
 
 		// Default to "master"
 		if e.Spec.Topology.Master.Prefix == "" {
 			e.Spec.Topology.Master.Prefix = ElasticsearchMasterNodePrefix
 		}
+		setDefaultResourceLimits(&e.Spec.Topology.Master.Resources)
+	} else {
+		setDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources)
 	}
 
 	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
