@@ -155,7 +155,6 @@ func (m MongoDB) MongosSelectors() map[string]string {
 func (m MongoDB) OffshootLabels() map[string]string {
 	out := m.OffshootSelectors()
 	out[meta_util.NameLabelKey] = ResourceSingularMongoDB
-	out[meta_util.VersionLabelKey] = string(m.Spec.Version)
 	out[meta_util.InstanceLabelKey] = m.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
