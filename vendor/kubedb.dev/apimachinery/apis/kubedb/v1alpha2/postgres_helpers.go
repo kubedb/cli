@@ -176,6 +176,7 @@ func (p *Postgres) SetDefaults() {
 	}
 
 	p.Spec.Monitor.SetDefaults()
+	setDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources)
 }
 
 func (e *PostgresSpec) GetPersistentSecrets() []string {

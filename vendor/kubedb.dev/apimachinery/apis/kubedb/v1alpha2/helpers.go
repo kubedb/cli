@@ -19,9 +19,12 @@ package v1alpha2
 import (
 	"fmt"
 
+	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	apps_util "kmodules.xyz/client-go/apps/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 func checkReplicas(lister appslister.StatefulSetNamespaceLister, selector labels.Selector, expectedItems int) (bool, string, error) {
@@ -36,4 +39,48 @@ func checkReplicas(lister appslister.StatefulSetNamespaceLister, selector labels
 	// return isReplicasReady, message, error
 	ready, msg := apps_util.StatefulSetsAreReady(items)
 	return ready, msg, nil
+}
+
+// HasServiceTemplate returns "true" if the desired serviceTemplate provided in "aliaS" is present in the serviceTemplate list.
+// Otherwise, it returns "false".
+func HasServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias) bool {
+	for i := range templates {
+		if templates[i].Alias == alias {
+			return true
+		}
+	}
+	return false
+}
+
+// GetServiceTemplate returns a pointer to the desired serviceTemplate referred by "aliaS". Otherwise, it returns nil.
+func GetServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias) ofst.ServiceTemplateSpec {
+	for i := range templates {
+		c := templates[i]
+		if c.Alias == alias {
+			return c.ServiceTemplate
+		}
+	}
+	return ofst.ServiceTemplateSpec{}
+}
+
+func setDefaultResourceLimits(req *core.ResourceRequirements) {
+	fn := func(name core.ResourceName, defaultValue resource.Quantity) resource.Quantity {
+		if req.Limits != nil {
+			if v, ok := req.Limits[name]; ok {
+				return v
+			}
+		}
+		if req.Requests != nil {
+			if v, ok := req.Requests[name]; ok {
+				return v
+			}
+		}
+		return defaultValue
+	}
+
+	if req.Limits == nil {
+		req.Limits = core.ResourceList{}
+	}
+	req.Limits[core.ResourceCPU] = fn(core.ResourceCPU, resource.MustParse(DefaultCPULimit))
+	req.Limits[core.ResourceMemory] = fn(core.ResourceMemory, resource.MustParse(DefaultMemoryLimit))
 }

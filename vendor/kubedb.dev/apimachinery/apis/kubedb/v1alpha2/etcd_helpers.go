@@ -153,6 +153,7 @@ func (e *Etcd) SetDefaults() {
 	}
 
 	e.Spec.Monitor.SetDefaults()
+	setDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources)
 }
 
 func (e *EtcdSpec) GetPersistentSecrets() []string {

@@ -43,6 +43,9 @@ const (
 
 	DBCustomConfigName = "custom-config"
 
+	DefaultCPULimit    = ".25"
+	DefaultMemoryLimit = "512Mi"
+
 	// =========================== Database key Constants ============================
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
 	ElasticsearchKey = ResourceSingularElasticsearch + "." + kubedb.GroupName
@@ -60,7 +63,6 @@ const (
 	ElasticsearchTransportPort                   = 9300
 	ElasticsearchTransportPortName               = "transport"
 	ElasticsearchMetricsPort                     = 9600
-	ElasticsearchMetricsPortName                 = "metrics"
 	ElasticsearchIngestNodePrefix                = "ingest"
 	ElasticsearchDataNodePrefix                  = "data"
 	ElasticsearchMasterNodePrefix                = "master"
