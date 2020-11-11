@@ -436,6 +436,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLList":                      schema_apimachinery_apis_kubedb_v1alpha2_MySQLList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLSpec":                      schema_apimachinery_apis_kubedb_v1alpha2_MySQLSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLStatus":                    schema_apimachinery_apis_kubedb_v1alpha2_MySQLStatus(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec":       schema_apimachinery_apis_kubedb_v1alpha2_NamedServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PerconaXtraDB":                  schema_apimachinery_apis_kubedb_v1alpha2_PerconaXtraDB(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PerconaXtraDBList":              schema_apimachinery_apis_kubedb_v1alpha2_PerconaXtraDBList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PerconaXtraDBSpec":              schema_apimachinery_apis_kubedb_v1alpha2_PerconaXtraDBSpec(ref),
@@ -19187,10 +19188,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ElasticsearchSpec(ref common.Refer
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"maxUnavailable": {
@@ -19252,7 +19260,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ElasticsearchSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/apimachinery/pkg/util/intstr.IntOrString", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchRoleMapSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchUserSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/apimachinery/pkg/util/intstr.IntOrString", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchRoleMapSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchUserSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -19540,10 +19548,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_EtcdSpec(ref common.ReferenceCallb
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"halted": {
@@ -19565,7 +19580,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_EtcdSpec(ref common.ReferenceCallb
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.TLSPolicy"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.TLSPolicy"},
 	}
 }
 
@@ -19835,10 +19850,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref common.ReferenceCa
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -19866,7 +19888,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -20070,10 +20092,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MemcachedSpec(ref common.Reference
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -20101,7 +20130,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MemcachedSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -20560,10 +20589,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MongoDBSpec(ref common.ReferenceCa
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -20604,7 +20640,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MongoDBSpec(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBReplicaSet", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBShardingTopology"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBReplicaSet", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBShardingTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -20867,10 +20903,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLSpec(ref common.ReferenceCall
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"requireSSL": {
@@ -20905,7 +20948,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLClusterTopology"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -20947,6 +20990,40 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLStatus(ref common.ReferenceCa
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.Condition"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_NamedServiceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the desired behavior of the service. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceSpec"),
+						},
+					},
+				},
+				Required: []string{"alias"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.ObjectMeta", "kmodules.xyz/offshoot-api/api/v1.ServiceSpec"},
 	}
 }
 
@@ -21102,10 +21179,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PerconaXtraDBSpec(ref common.Refer
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -21133,7 +21217,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PerconaXtraDBSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -21287,10 +21371,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerSpec(ref common.Reference
 							Format:      "int32",
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database.",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"podTemplate": {
@@ -21341,7 +21432,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConnectionPoolConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Databases"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConnectionPoolConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Databases", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -21583,16 +21674,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
-						},
-					},
-					"replicaServiceTemplate": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ReplicaServiceTemplate is an optional configuration for service used to expose postgres replicas",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -21620,7 +21712,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.LeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresArchiverSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.LeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresArchiverSpec"},
 	}
 }
 
@@ -21904,10 +21996,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLSpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose proxysql",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -21921,7 +22020,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLSpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLBackendSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLBackendSpec"},
 	}
 }
 
@@ -22197,10 +22296,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RedisSpec(ref common.ReferenceCall
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
 						},
 					},
-					"serviceTemplate": {
+					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceTemplate is an optional configuration for service used to expose database",
-							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec"),
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
 						},
 					},
 					"tls": {
@@ -22228,7 +22334,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RedisSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisClusterSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisClusterSpec"},
 	}
 }
 

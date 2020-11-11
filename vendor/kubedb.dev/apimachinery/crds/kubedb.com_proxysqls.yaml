@@ -1486,62 +1486,72 @@ spec:
             replicas:
               format: int32
               type: integer
-            serviceTemplate:
-              properties:
-                metadata:
-                  properties:
-                    annotations:
-                      additionalProperties:
-                        type: string
-                      type: object
-                  type: object
-                spec:
-                  properties:
-                    clusterIP:
-                      type: string
-                    externalIPs:
-                      items:
-                        type: string
-                      type: array
-                    externalTrafficPolicy:
-                      type: string
-                    healthCheckNodePort:
-                      format: int32
-                      type: integer
-                    loadBalancerIP:
-                      type: string
-                    loadBalancerSourceRanges:
-                      items:
-                        type: string
-                      type: array
-                    ports:
-                      items:
-                        properties:
-                          name:
-                            type: string
-                          nodePort:
-                            format: int32
-                            type: integer
-                          port:
-                            format: int32
-                            type: integer
-                        required:
-                        - port
+            serviceTemplates:
+              items:
+                properties:
+                  alias:
+                    enum:
+                    - primary
+                    - standby
+                    - stats
+                    type: string
+                  metadata:
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
                         type: object
-                      type: array
-                    sessionAffinityConfig:
-                      properties:
-                        clientIP:
+                    type: object
+                  spec:
+                    properties:
+                      clusterIP:
+                        type: string
+                      externalIPs:
+                        items:
+                          type: string
+                        type: array
+                      externalTrafficPolicy:
+                        type: string
+                      healthCheckNodePort:
+                        format: int32
+                        type: integer
+                      loadBalancerIP:
+                        type: string
+                      loadBalancerSourceRanges:
+                        items:
+                          type: string
+                        type: array
+                      ports:
+                        items:
                           properties:
-                            timeoutSeconds:
+                            name:
+                              type: string
+                            nodePort:
                               format: int32
                               type: integer
+                            port:
+                              format: int32
+                              type: integer
+                          required:
+                          - port
                           type: object
-                      type: object
-                    type:
-                      type: string
-                  type: object
-              type: object
+                        type: array
+                      sessionAffinityConfig:
+                        properties:
+                          clientIP:
+                            properties:
+                              timeoutSeconds:
+                                format: int32
+                                type: integer
+                            type: object
+                        type: object
+                      type:
+                        type: string
+                    type: object
+                required:
+                - alias
+                type: object
+              type: array
             tls:
               properties:
                 certificates:
