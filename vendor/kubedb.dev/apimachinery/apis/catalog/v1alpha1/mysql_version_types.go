@@ -56,7 +56,7 @@ type MySQLVersionSpec struct {
 	// Tools Image
 	Tools MySQLVersionTools `json:"tools" protobuf:"bytes,4,opt,name=tools"`
 	// ReplicationModeDetector Image
-	ReplicationModeDetector MySQLVersionReplicationModeDetector `json:"replicationModeDetector" protobuf:"bytes,5,opt,name=replicationModeDetector"`
+	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector" protobuf:"bytes,5,opt,name=replicationModeDetector"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
@@ -75,11 +75,6 @@ type MySQLVersionDatabase struct {
 
 // MySQLVersionExporter is the image for the MySQL exporter
 type MySQLVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
-}
-
-// MySQLVersionReplicationModeDetector is the image for the MySQL replication mode detector
-type MySQLVersionReplicationModeDetector struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 

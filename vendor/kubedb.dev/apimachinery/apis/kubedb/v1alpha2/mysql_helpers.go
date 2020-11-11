@@ -54,7 +54,6 @@ func (m MySQL) OffshootSelectors() map[string]string {
 func (m MySQL) OffshootLabels() map[string]string {
 	out := m.OffshootSelectors()
 	out[meta_util.NameLabelKey] = ResourceSingularMySQL
-	out[meta_util.VersionLabelKey] = string(m.Spec.Version)
 	out[meta_util.InstanceLabelKey] = m.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
 	out[meta_util.ManagedByLabelKey] = kubedb.GroupName

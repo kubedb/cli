@@ -62,6 +62,8 @@ type MongoDBVersionSpec struct {
 	InitContainer MongoDBVersionInitContainer `json:"initContainer" protobuf:"bytes,6,opt,name=initContainer"`
 	// PSP names
 	PodSecurityPolicies MongoDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
+	// ReplicationModeDetector Image
+	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector" protobuf:"bytes,8,opt,name=replicationModeDetector"`
 }
 
 // MongoDBVersionDatabase is the MongoDB Database image

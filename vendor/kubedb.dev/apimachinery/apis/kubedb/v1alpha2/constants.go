@@ -28,6 +28,10 @@ const (
 	LabelDatabaseName = kubedb.GroupName + "/name"
 	LabelRole         = kubedb.GroupName + "/role"
 
+	ReplicationModeDetectorContainerName = "replication-mode-detector"
+	DatabasePodPrimary                   = "primary"
+	DatabasePodStandby                   = "standby"
+
 	ComponentDatabase     = "database"
 	RoleStats             = "stats"
 	DefaultStatsPath      = "/metrics"
@@ -76,6 +80,10 @@ const (
 	ElasticsearchStatusGreen                     = "green"
 	ElasticsearchStatusYellow                    = "yellow"
 	ElasticsearchStatusRed                       = "red"
+	ElasticsearchInitSysctlContainerName         = "init-sysctl"
+	ElasticsearchInitConfigMergerContainerName   = "config-merger"
+	ElasticsearchContainerName                   = "elasticsearch"
+	ElasticsearchExporterContainerName           = "exporter"
 
 	// Ref:
 	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size
@@ -121,11 +129,6 @@ const (
 	MySQLRootUserName          = "MYSQL_ROOT_USERNAME"
 	MySQLRootPassword          = "MYSQL_ROOT_PASSWORD"
 	MySQLName                  = "MYSQL_NAME"
-
-	MySQLContainerReplicationModeDetectorName = "replication-mode-detector"
-	MySQLPodPrimary                           = "primary"
-	MySQLPodStandby                           = "standby"
-	MySQLLabelRole                            = kubedb.GroupName + "/role"
 
 	MySQLTLSConfigCustom     = "custom"
 	MySQLTLSConfigSkipVerify = "skip-verify"

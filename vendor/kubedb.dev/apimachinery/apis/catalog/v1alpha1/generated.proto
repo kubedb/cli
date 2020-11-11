@@ -353,6 +353,9 @@ message MongoDBVersionSpec {
   // Init container Image
   optional MongoDBVersionInitContainer initContainer = 6;
 
+  // ReplicationModeDetector Image
+  optional ReplicationModeDetector replicationModeDetector = 8;
+
   // PSP names
   optional MongoDBVersionPodSecurityPolicy podSecurityPolicies = 7;
 }
@@ -410,11 +413,6 @@ message MySQLVersionPodSecurityPolicy {
   optional string databasePolicyName = 1;
 }
 
-// MySQLVersionReplicationModeDetector is the image for the MySQL replication mode detector
-message MySQLVersionReplicationModeDetector {
-  optional string image = 1;
-}
-
 // MySQLVersionSpec is the spec for MySQL version
 message MySQLVersionSpec {
   // Version
@@ -430,7 +428,7 @@ message MySQLVersionSpec {
   optional MySQLVersionTools tools = 4;
 
   // ReplicationModeDetector Image
-  optional MySQLVersionReplicationModeDetector replicationModeDetector = 5;
+  optional ReplicationModeDetector replicationModeDetector = 5;
 
   // Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
   // +optional
@@ -728,5 +726,10 @@ message RedisVersionSpec {
 
   // PSP names
   optional RedisVersionPodSecurityPolicy podSecurityPolicies = 5;
+}
+
+// ReplicationModeDetector is the image for the MySQL replication mode detector
+message ReplicationModeDetector {
+  optional string image = 1;
 }
 
