@@ -78,8 +78,24 @@ func (m MariaDB) ServiceName() string {
 	return m.OffshootName()
 }
 
+func (m MariaDB) IsCluster() bool {
+	return pointer.Int32(m.Spec.Replicas) > 1
+}
+
 func (m MariaDB) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
+}
+
+func (m MariaDB) PeerName(idx int) string {
+	return fmt.Sprintf("%s-%d.%s.%s", m.OffshootName(), idx, m.GoverningServiceName(), m.Namespace)
+}
+
+func (m MariaDB) GetAuthSecretName() string {
+	return m.Spec.AuthSecret.Name
+}
+
+func (m MariaDB) ClusterName() string {
+	return m.OffshootName()
 }
 
 type mariadbApp struct {
@@ -140,11 +156,10 @@ func (m *MariaDB) SetDefaults() {
 	if m == nil {
 		return
 	}
+
 	if m.Spec.Replicas == nil {
 		m.Spec.Replicas = pointer.Int32P(1)
 	}
-
-	// perform defaulting
 
 	if m.Spec.StorageType == "" {
 		m.Spec.StorageType = StorageTypeDurable
@@ -153,8 +168,12 @@ func (m *MariaDB) SetDefaults() {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
 
+	m.Spec.setDefaultProbes()
 	m.Spec.Monitor.SetDefaults()
 	setDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources)
+}
+
+func (m *MariaDBSpec) setDefaultProbes() {
 }
 
 func (m *MariaDBSpec) GetPersistentSecrets() []string {
