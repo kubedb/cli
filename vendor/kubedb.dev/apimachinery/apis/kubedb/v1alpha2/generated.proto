@@ -938,7 +938,7 @@ message NamedServiceTemplateSpec {
 
   // ServiceTemplate is an optional configuration for a service used to expose database
   // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplate = 2;
+  optional kmodules.xyz.offshoot_api.api.v1.ServiceTemplateSpec serviceTemplateSpec = 2;
 }
 
 // +kubebuilder:object:root=true

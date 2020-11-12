@@ -57,7 +57,7 @@ func GetServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias
 	for i := range templates {
 		c := templates[i]
 		if c.Alias == alias {
-			return c.ServiceTemplate
+			return c.ServiceTemplateSpec
 		}
 	}
 	return ofst.ServiceTemplateSpec{}
@@ -81,6 +81,15 @@ func setDefaultResourceLimits(req *core.ResourceRequirements) {
 	if req.Limits == nil {
 		req.Limits = core.ResourceList{}
 	}
+	if req.Requests == nil {
+		req.Requests = core.ResourceList{}
+	}
 	req.Limits[core.ResourceCPU] = fn(core.ResourceCPU, resource.MustParse(DefaultCPULimit))
+	if _, ok := req.Requests[core.ResourceCPU]; !ok {
+		req.Requests[core.ResourceCPU] = resource.MustParse(DefaultCPURequest)
+	}
 	req.Limits[core.ResourceMemory] = fn(core.ResourceMemory, resource.MustParse(DefaultMemoryLimit))
+	if _, ok := req.Requests[core.ResourceMemory]; !ok {
+		req.Requests[core.ResourceMemory] = resource.MustParse(DefaultMemoryRequest)
+	}
 }
