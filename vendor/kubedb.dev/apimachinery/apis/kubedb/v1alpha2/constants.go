@@ -43,8 +43,10 @@ const (
 
 	DBCustomConfigName = "custom-config"
 
-	DefaultCPULimit    = ".25"
-	DefaultMemoryLimit = "512Mi"
+	DefaultCPULimit      = ".250"
+	DefaultMemoryLimit   = "512Mi"
+	DefaultCPURequest    = ".100"
+	DefaultMemoryRequest = "256Mi"
 
 	// =========================== Database key Constants ============================
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName

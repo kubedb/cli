@@ -111,5 +111,5 @@ type NamedServiceTemplateSpec struct {
 
 	// ServiceTemplate is an optional configuration for a service used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:",inline,omitempty" protobuf:"bytes,2,opt,name=serviceTemplate"`
+	ofst.ServiceTemplateSpec `json:",inline,omitempty" protobuf:"bytes,2,opt,name=serviceTemplateSpec"`
 }
