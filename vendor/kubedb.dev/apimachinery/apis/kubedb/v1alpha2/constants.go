@@ -50,6 +50,7 @@ const (
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
 	ElasticsearchKey = ResourceSingularElasticsearch + "." + kubedb.GroupName
 	MySQLKey         = ResourceSingularMySQL + "." + kubedb.GroupName
+	MariaDBKey       = ResourceSingularMariaDB + "." + kubedb.GroupName
 	PerconaXtraDBKey = ResourceSingularPerconaXtraDB + "." + kubedb.GroupName
 	MongoDBKey       = ResourceSingularMongoDB + "." + kubedb.GroupName
 	RedisKey         = ResourceSingularRedis + "." + kubedb.GroupName
@@ -148,6 +149,17 @@ const (
 	PerconaXtraDBInitDBMountPath              = "/docker-entrypoint-initdb.d"
 	PerconaXtraDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
 	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
+
+	// =========================== MariaDB Constants ============================
+	MariaDBClusterRecommendedVersion    = "5.7"
+	MariaDBMaxClusterNameLength         = 32
+	MariaDBStandaloneReplicas           = 1
+	MariaDBDefaultClusterSize           = 3
+	MariaDBDataMountPath                = "/var/lib/mysql"
+	MariaDBDataLostFoundPath            = MariaDBDataMountPath + "lost+found"
+	MariaDBInitDBMountPath              = "/docker-entrypoint-initdb.d"
+	MariaDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
+	MariaDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
 
 	// =========================== PostgreSQL Constants ============================
 	PostgresDatabasePortName       = "db"
