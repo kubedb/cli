@@ -67,7 +67,7 @@ type MySQLOpsRequestSpec struct {
 	// Specifies information necessary for custom configuration of MySQL
 	Configuration *MySQLCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *MySQLTLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
 
@@ -110,6 +110,14 @@ type MySQLCustomConfigurationSpec struct {
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,2,opt,name=configSecret"`
 	InlineConfig       string                     `json:"inlineConfig,omitempty" protobuf:"bytes,3,opt,name=inlineConfig"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,4,opt,name=removeCustomConfig"`
+}
+
+type MySQLTLSSpec struct {
+	TLSSpec `json:",inline,omitempty" protobuf:"bytes,1,opt,name=tLSSpec"`
+
+	// Indicates that the database server need to be encrypted connections(ssl)
+	// +optional
+	RequireSSL bool `json:"requireSSL,omitempty" protobuf:"varint,2,opt,name=requireSSL"`
 }
 
 // MySQLOpsRequestStatus is the status for MySQLOpsRequest
