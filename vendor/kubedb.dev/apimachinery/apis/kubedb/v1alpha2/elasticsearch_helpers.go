@@ -26,7 +26,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
-	corev1 "k8s.io/api/core/v1"
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
@@ -254,21 +254,21 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 		if e.Spec.Topology.Ingest.Prefix == "" {
 			e.Spec.Topology.Ingest.Prefix = ElasticsearchIngestNodePrefix
 		}
-		setDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources)
+		setDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, defaultElasticsearchResourceLimits, defaultElasticsearchResourceRequests)
 
 		// Default to "data"
 		if e.Spec.Topology.Data.Prefix == "" {
 			e.Spec.Topology.Data.Prefix = ElasticsearchDataNodePrefix
 		}
-		setDefaultResourceLimits(&e.Spec.Topology.Data.Resources)
+		setDefaultResourceLimits(&e.Spec.Topology.Data.Resources, defaultElasticsearchResourceLimits, defaultElasticsearchResourceRequests)
 
 		// Default to "master"
 		if e.Spec.Topology.Master.Prefix == "" {
 			e.Spec.Topology.Master.Prefix = ElasticsearchMasterNodePrefix
 		}
-		setDefaultResourceLimits(&e.Spec.Topology.Master.Resources)
+		setDefaultResourceLimits(&e.Spec.Topology.Master.Resources, defaultElasticsearchResourceLimits, defaultElasticsearchResourceRequests)
 	} else {
-		setDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources)
+		setDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, defaultElasticsearchResourceLimits, defaultElasticsearchResourceRequests)
 	}
 
 	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
@@ -286,26 +286,26 @@ func (e *Elasticsearch) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, la
 		return
 	}
 
-	podTemplate.Spec.Affinity = &corev1.Affinity{
-		PodAntiAffinity: &corev1.PodAntiAffinity{
-			PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{
+	podTemplate.Spec.Affinity = &core.Affinity{
+		PodAntiAffinity: &core.PodAntiAffinity{
+			PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
 				// Prefer to not schedule multiple pods on the same node
 				{
 					Weight: 100,
-					PodAffinityTerm: corev1.PodAffinityTerm{
+					PodAffinityTerm: core.PodAffinityTerm{
 						Namespaces: []string{e.Namespace},
 						LabelSelector: &metav1.LabelSelector{
 							MatchLabels:      labels,
 							MatchExpressions: e.GetMatchExpressions(),
 						},
 
-						TopologyKey: corev1.LabelHostname,
+						TopologyKey: core.LabelHostname,
 					},
 				},
 				// Prefer to not schedule multiple pods on the node with same zone
 				{
 					Weight: 50,
-					PodAffinityTerm: corev1.PodAffinityTerm{
+					PodAffinityTerm: core.PodAffinityTerm{
 						Namespaces: []string{e.Namespace},
 						LabelSelector: &metav1.LabelSelector{
 							MatchLabels:      labels,
