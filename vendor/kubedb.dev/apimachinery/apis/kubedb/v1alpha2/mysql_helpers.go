@@ -183,7 +183,7 @@ func (m *MySQL) SetDefaults() {
 	m.Spec.Monitor.SetDefaults()
 
 	m.SetTLSDefaults()
-	setDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources)
+	setDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceRequests)
 }
 
 func (m *MySQL) SetTLSDefaults() {
