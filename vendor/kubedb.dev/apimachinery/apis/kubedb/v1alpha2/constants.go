@@ -264,4 +264,13 @@ var (
 		core.ResourceCPU:    resource.MustParse(".300"),
 		core.ResourceMemory: resource.MustParse("256Mi"),
 	}
+
+	defaultMySQLResourceLimits = core.ResourceList{
+		core.ResourceCPU:    resource.MustParse(".500"),
+		core.ResourceMemory: resource.MustParse("1024Mi"),
+	}
+	defaultMySQLResourceRequests = core.ResourceList{
+		core.ResourceCPU:    resource.MustParse(".500"),
+		core.ResourceMemory: resource.MustParse("1024Mi"),
+	}
 )

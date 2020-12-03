@@ -1396,8 +1396,8 @@ kmodules.xyz/openshift v0.0.0-20201105073146-0da509a7d39f/go.mod h1:vFwB/f5rVH5Q
 kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8 h1:UJb5lHQVFKbmlgmRLq5IWJGtz3JqYYbyVG+dNdjC9Cc=
 kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8/go.mod h1:2eN8X5Wq7/AAgE5AWMAX8T0lE51HZiYEldG2RQuouX4=
 kmodules.xyz/webhook-runtime v0.0.0-20201105073856-2dc7382b88c6/go.mod h1:xLgewoOzwR5ZrVOHQ2SR0P4E7tgCyBWbYlUawEXgeF4=
-kubedb.dev/apimachinery v0.15.2-0.20201125071559-89b09825e3bc h1:+Wr759MzKPGDUU78GGsFIS9xs7W4ijl6AM8iKQsiSRU=
-kubedb.dev/apimachinery v0.15.2-0.20201125071559-89b09825e3bc/go.mod h1:mGPDiCw22e2HcQ/AD/TRwog0PWSvBWcEDDC2WDP/Xd4=
+kubedb.dev/apimachinery v0.15.2-0.20201202102845-5917f095edf6 h1:aiJXnR4PWQmWQdXijXzWHTdO9kiS77Shi4e2s+V89Qw=
+kubedb.dev/apimachinery v0.15.2-0.20201202102845-5917f095edf6/go.mod h1:mGPDiCw22e2HcQ/AD/TRwog0PWSvBWcEDDC2WDP/Xd4=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0/go.mod h1:b/QX9oBD/LhixY6NDh+IdGv17hgB+51fET1i2kPSmvk=
 modernc.org/mathutil v1.0.0/go.mod h1:wU0vUrJsVWBZ4P6e7xtFJEhFSNsfRLJ8H458uRjg03k=
