@@ -158,6 +158,31 @@ func (e *Elasticsearch) GetConnectionURL() string {
 	return fmt.Sprintf("%v://%s.%s:%d", e.GetConnectionScheme(), e.OffshootName(), e.Namespace, ElasticsearchRestPort)
 }
 
+func (e *Elasticsearch) CombinedStatefulSetName() string {
+	return e.OffshootName()
+}
+
+func (e *Elasticsearch) MasterStatefulSetName() string {
+	if e.Spec.Topology.Master.Prefix != "" {
+		return fmt.Sprintf("%s-%s", e.Spec.Topology.Master.Prefix, e.OffshootName())
+	}
+	return fmt.Sprintf("%s-%s", ElasticsearchMasterNodePrefix, e.OffshootName())
+}
+
+func (e *Elasticsearch) DataStatefulSetName() string {
+	if e.Spec.Topology.Data.Prefix != "" {
+		return fmt.Sprintf("%s-%s", e.Spec.Topology.Data.Prefix, e.OffshootName())
+	}
+	return fmt.Sprintf("%s-%s", ElasticsearchDataNodePrefix, e.OffshootName())
+}
+
+func (e *Elasticsearch) IngestStatefulSetName() string {
+	if e.Spec.Topology.Ingest.Prefix != "" {
+		return fmt.Sprintf("%s-%s", e.Spec.Topology.Ingest.Prefix, e.OffshootName())
+	}
+	return fmt.Sprintf("%s-%s", ElasticsearchIngestNodePrefix, e.OffshootName())
+}
+
 type elasticsearchApp struct {
 	*Elasticsearch
 }
