@@ -101,12 +101,12 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]describe.Reso
 	}
 
 	m := map[schema.GroupKind]describe.ResourceDescriber{
-		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{client: c, kubedb: k, stash: s},
-		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{client: c, kubedb: k, stash: s},
-		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
 		api.Kind(api.ResourceKindMySQL):         &MySQLDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
-		api.Kind(api.ResourceKindPostgres):      &PostgresDescriber{client: c, kubedb: k, stash: s},
-		api.Kind(api.ResourceKindRedis):         &RedisDescriber{client: c, kubedb: k, stash: s},
+		api.Kind(api.ResourceKindPostgres):      &PostgresDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		api.Kind(api.ResourceKindRedis):         &RedisDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
 	}
 
 	return m, nil
