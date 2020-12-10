@@ -155,7 +155,7 @@ func (p *PgBouncer) SetDefaults() {
 	p.Spec.Monitor.SetDefaults()
 
 	p.SetTLSDefaults()
-	setDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceRequests)
+	setDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceLimits)
 }
 
 func (p *PgBouncer) SetTLSDefaults() {
