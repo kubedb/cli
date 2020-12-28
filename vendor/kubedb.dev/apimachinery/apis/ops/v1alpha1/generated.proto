@@ -50,14 +50,23 @@ message ElasticsearchCustomConfigurationSpec {
 
 // ElasticsearchHorizontalScalingSpec contains the horizontal scaling information of an Elasticsearch cluster
 message ElasticsearchHorizontalScalingSpec {
+  // Number of combined (i.e. master, data, ingest) node
+  optional int32 node = 1;
+
+  // Node topology specification
+  optional ElasticsearchHorizontalScalingTopologySpec topology = 2;
+}
+
+// ElasticsearchHorizontalScalingTopologySpec contains the horizontal scaling information in cluster topology mode
+message ElasticsearchHorizontalScalingTopologySpec {
   // Number of master nodes
   optional int32 master = 1;
 
   // Number of data nodes
   optional int32 data = 2;
 
-  // Number of client nodes
-  optional int32 client = 3;
+  // Number of ingest nodes
+  optional int32 ingest = 3;
 }
 
 // +kubebuilder:object:root=true

@@ -83,12 +83,20 @@ type ElasticsearchUpgradeSpec struct {
 
 // ElasticsearchHorizontalScalingSpec contains the horizontal scaling information of an Elasticsearch cluster
 type ElasticsearchHorizontalScalingSpec struct {
+	// Number of combined (i.e. master, data, ingest) node
+	Node *int32 `json:"node,omitempty" protobuf:"varint,1,opt,name=node"`
+	// Node topology specification
+	Topology *ElasticsearchHorizontalScalingTopologySpec `json:"topology,omitempty" protobuf:"bytes,2,opt,name=topology"`
+}
+
+// ElasticsearchHorizontalScalingTopologySpec contains the horizontal scaling information in cluster topology mode
+type ElasticsearchHorizontalScalingTopologySpec struct {
 	// Number of master nodes
-	Master *int32 `json:"master,omitempty" protobuf:"bytes,1,opt,name=master"`
+	Master *int32 `json:"master,omitempty" protobuf:"varint,1,opt,name=master"`
 	// Number of data nodes
-	Data *int32 `json:"data,omitempty" protobuf:"bytes,2,opt,name=data"`
-	// Number of client nodes
-	Client *int32 `json:"client,omitempty" protobuf:"bytes,3,opt,name=client"`
+	Data *int32 `json:"data,omitempty" protobuf:"varint,2,opt,name=data"`
+	// Number of ingest nodes
+	Ingest *int32 `json:"ingest,omitempty" protobuf:"varint,3,opt,name=ingest"`
 }
 
 // ElasticsearchVerticalScalingSpec is the spec for Elasticsearch vertical scaling
