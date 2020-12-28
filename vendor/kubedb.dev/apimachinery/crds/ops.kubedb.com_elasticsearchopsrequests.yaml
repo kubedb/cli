@@ -52,15 +52,21 @@ spec:
               type: object
             horizontalScaling:
               properties:
-                client:
+                node:
                   format: int32
                   type: integer
-                data:
-                  format: int32
-                  type: integer
-                master:
-                  format: int32
-                  type: integer
+                topology:
+                  properties:
+                    data:
+                      format: int32
+                      type: integer
+                    ingest:
+                      format: int32
+                      type: integer
+                    master:
+                      format: int32
+                      type: integer
+                  type: object
               type: object
             restart:
               type: object
