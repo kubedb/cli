@@ -137,25 +137,54 @@ message ElasticsearchOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
-// ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of a Elasticsearch pod
-// after updating, horizontal scaling etc.
-message ElasticsearchReplicaReadinessCriteria {
-}
-
 message ElasticsearchUpgradeSpec {
   // Specifies the target version name from catalog
   optional string targetVersion = 1;
-
-  optional ElasticsearchReplicaReadinessCriteria readinessCriteria = 2;
 }
 
 // ElasticsearchVerticalScalingSpec is the spec for Elasticsearch vertical scaling
 message ElasticsearchVerticalScalingSpec {
-  optional ElasticsearchReplicaReadinessCriteria readinessCriteria = 1;
+  // Resource spec for combined nodes
+  optional k8s.io.api.core.v1.ResourceRequirements node = 1;
+
+  // Resource spec for exporter sidecar
+  optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
+
+  // Specifies the resource spec for cluster in topology mode
+  optional ElasticsearchVerticalScalingTopologySpec topology = 3;
+}
+
+// ElasticsearchVerticalScalingTopologySpec is the resource spec in the cluster topology mode
+message ElasticsearchVerticalScalingTopologySpec {
+  // Resource spec for master nodes
+  optional k8s.io.api.core.v1.ResourceRequirements master = 1;
+
+  // Resource spec for data nodes
+  optional k8s.io.api.core.v1.ResourceRequirements data = 2;
+
+  // Resource spec for ingest nodes
+  optional k8s.io.api.core.v1.ResourceRequirements ingest = 3;
 }
 
 // ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
 message ElasticsearchVolumeExpansionSpec {
+  // volume specification for combined nodes
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity node = 1;
+
+  // volume specification for nodes in cluster topology
+  optional ElasticsearchVolumeExpansionTopologySpec topology = 2;
+}
+
+// ElasticsearchVolumeExpansionTopologySpec is the spec for Elasticsearch volume expansion in topology mode
+message ElasticsearchVolumeExpansionTopologySpec {
+  // volume specification for master nodes
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity master = 1;
+
+  // volume specification for data nodes
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity data = 2;
+
+  // volume specification for ingest nodes
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity ingest = 3;
 }
 
 message EtcdCustomConfiguration {

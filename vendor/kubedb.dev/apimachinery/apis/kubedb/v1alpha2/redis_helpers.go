@@ -103,6 +103,10 @@ func (r Redis) StatefulSetNameWithShard(i int) string {
 	return fmt.Sprintf("%s%d", r.BaseNameForShard(), i)
 }
 
+func (r Redis) Address() string {
+	return fmt.Sprintf("%v.%v.svc:%d", r.Name, r.Namespace, RedisDatabasePort)
+}
+
 type redisApp struct {
 	*Redis
 }

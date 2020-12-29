@@ -88,14 +88,31 @@ const (
 	ConfigServerVolumeExpansion = "ConfigServerVolumeExpansion"
 
 	// Elasticsearch Constant
-	ScaleUpMasterNode     = "ScaleUpMasterNode"
-	ScaleUpDataNode       = "ScaleUpDataNode"
-	ScaleUpIngestNode     = "ScaleUpIngestNode"
-	ScaleUpCombinedNode   = "ScaleUpCombinedNode"
-	ScaleDownMasterNode   = "ScaleDownMasterNode"
-	ScaleDownDataNode     = "ScaleDownDataNode"
-	ScaleDownIngestNode   = "ScaleDownIngestNode"
-	ScaleDownCombinedNode = "ScaleDownCombinedNode"
+	OrphanStatefulSetPods  = "OrphanStatefulSetPods"
+	ReadyStatefulSets      = "ReadyStatefulSets"
+	ScaleDownCombinedNode  = "ScaleDownCombinedNode"
+	ScaleDownDataNode      = "ScaleDownDataNode"
+	ScaleDownIngestNode    = "ScaleDownIngestNode"
+	ScaleDownMasterNode    = "ScaleDownMasterNode"
+	ScaleUpCombinedNode    = "ScaleUpCombinedNode"
+	ScaleUpDataNode        = "ScaleUpDataNode"
+	ScaleUpIngestNode      = "ScaleUpIngestNode"
+	ScaleUpMasterNode      = "ScaleUpMasterNode"
+	UpdateCombinedNodePVCs = "UpdateCombinedNodePVCs"
+	UpdateDataNodePVCs     = "UpdateDataNodePVCs"
+	UpdateIngestNodePVCs   = "UpdateIngestNodePVCs"
+	UpdateNodeResources    = "UpdateNodeResources"
+
+	//Redis Constants
+	PatchedSecret                = "patchedSecret"
+	ConfigKeyRedis               = "redis.conf"
+	IssuingConditionUpdated      = "IssuingConditionUpdated"
+	CertificateIssuingSuccessful = "CertificateIssuingSuccessful"
+	TLSAdded                     = "TLSAdded"
+	TLSRemoved                   = "TLSRemoved"
+	RedisTLSArg                  = "--tls-port 6379"
+	DBReady                      = "DBReady"
+	RestartedPods                = "RestartedPods"
 )
 
 // +kubebuilder:validation:Enum=Progressing;Successful;WaitingForApproval;Failed;Approved;Denied
