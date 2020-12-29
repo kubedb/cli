@@ -46,7 +46,8 @@ const (
 	LocalHost             = "localhost"
 	LocalHostIP           = "127.0.0.1"
 
-	DBCustomConfigName = "custom-config"
+	DBCustomConfigName             = "custom-config"
+	DefaultVolumeClaimTemplateName = "data"
 
 	// =========================== Database key Constants ============================
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
