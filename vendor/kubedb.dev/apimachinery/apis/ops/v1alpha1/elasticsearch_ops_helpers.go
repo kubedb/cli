@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ ElasticsearchOpsRequest) CustomResourceDefinition() *apiextensions.Custo
 }
 
 var _ apis.ResourceInfo = &ElasticsearchOpsRequest{}
+
+func (e ElasticsearchOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralElasticsearchOpsRequest, ops.GroupName)
+}
 
 func (e ElasticsearchOpsRequest) ResourceShortCode() string {
 	return ResourceCodeElasticsearchOpsRequest

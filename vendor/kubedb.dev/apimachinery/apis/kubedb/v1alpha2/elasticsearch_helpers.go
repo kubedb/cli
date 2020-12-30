@@ -55,18 +55,20 @@ func (e Elasticsearch) OffshootName() string {
 
 func (e Elasticsearch) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseKind: ResourceKindElasticsearch,
-		LabelDatabaseName: e.Name,
+		meta_util.NameLabelKey:      e.ResourceFQN(),
+		meta_util.InstanceLabelKey:  e.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (e Elasticsearch) OffshootLabels() map[string]string {
 	out := e.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularElasticsearch
-	out[meta_util.InstanceLabelKey] = e.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, e.Labels)
+}
+
+func (e Elasticsearch) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralElasticsearch, kubedb.GroupName)
 }
 
 func (e Elasticsearch) ResourceShortCode() string {

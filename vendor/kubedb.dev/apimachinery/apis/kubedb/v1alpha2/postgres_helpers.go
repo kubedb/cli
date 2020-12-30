@@ -44,18 +44,20 @@ func (p Postgres) OffshootName() string {
 
 func (p Postgres) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: p.Name,
-		LabelDatabaseKind: ResourceKindPostgres,
+		meta_util.NameLabelKey:      p.ResourceFQN(),
+		meta_util.InstanceLabelKey:  p.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (p Postgres) OffshootLabels() map[string]string {
 	out := p.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularPostgres
-	out[meta_util.InstanceLabelKey] = p.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
+}
+
+func (p Postgres) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPostgres, kubedb.GroupName)
 }
 
 func (p Postgres) ResourceShortCode() string {

@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResour
 }
 
 var _ apis.ResourceInfo = &MemcachedVersion{}
+
+func (m MemcachedVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMemcachedVersion, catalog.GroupName)
+}
 
 func (m MemcachedVersion) ResourceShortCode() string {
 	return ResourceCodeMemcachedVersion

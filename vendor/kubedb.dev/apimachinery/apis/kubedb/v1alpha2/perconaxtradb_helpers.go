@@ -45,18 +45,20 @@ func (p PerconaXtraDB) OffshootName() string {
 
 func (p PerconaXtraDB) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: p.Name,
-		LabelDatabaseKind: ResourceKindPerconaXtraDB,
+		meta_util.NameLabelKey:      p.ResourceFQN(),
+		meta_util.InstanceLabelKey:  p.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (p PerconaXtraDB) OffshootLabels() map[string]string {
 	out := p.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularPerconaXtraDB
-	out[meta_util.InstanceLabelKey] = p.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
+}
+
+func (p PerconaXtraDB) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPerconaXtraDB, kubedb.GroupName)
 }
 
 func (p PerconaXtraDB) ResourceShortCode() string {

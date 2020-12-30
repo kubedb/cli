@@ -44,19 +44,21 @@ func (p ProxySQL) OffshootName() string {
 
 func (p ProxySQL) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelProxySQLName:        p.Name,
-		LabelProxySQLLoadBalance: string(*p.Spec.Mode),
-		LabelDatabaseKind:        ResourceKindProxySQL,
+		meta_util.NameLabelKey:      p.ResourceFQN(),
+		meta_util.InstanceLabelKey:  p.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
+		LabelProxySQLLoadBalance:    string(*p.Spec.Mode),
 	}
 }
 
 func (p ProxySQL) OffshootLabels() map[string]string {
 	out := p.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularProxySQL
-	out[meta_util.InstanceLabelKey] = p.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
+}
+
+func (p ProxySQL) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralProxySQL, kubedb.GroupName)
 }
 
 func (p ProxySQL) ResourceShortCode() string {

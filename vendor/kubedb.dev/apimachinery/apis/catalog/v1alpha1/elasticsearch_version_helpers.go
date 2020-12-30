@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomRe
 }
 
 var _ apis.ResourceInfo = &ElasticsearchVersion{}
+
+func (e ElasticsearchVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralElasticsearchVersion, catalog.GroupName)
+}
 
 func (e ElasticsearchVersion) ResourceShortCode() string {
 	return ResourceCodeElasticsearchVersion

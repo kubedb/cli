@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ VerticalAutoscaler) CustomResourceDefinition() *apiextensions.CustomReso
 }
 
 var _ apis.ResourceInfo = &VerticalAutoscaler{}
+
+func (r VerticalAutoscaler) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralVerticalAutoscaler, catalog.GroupName)
+}
 
 func (r VerticalAutoscaler) ResourceShortCode() string {
 	return ResourceCodeVerticalAutoscaler

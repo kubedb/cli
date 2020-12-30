@@ -44,18 +44,20 @@ func (e Etcd) OffshootName() string {
 
 func (e Etcd) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: e.Name,
-		LabelDatabaseKind: ResourceKindEtcd,
+		meta_util.NameLabelKey:      e.ResourceFQN(),
+		meta_util.InstanceLabelKey:  e.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (e Etcd) OffshootLabels() map[string]string {
 	out := e.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularEtcd
-	out[meta_util.InstanceLabelKey] = e.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, e.Labels)
+}
+
+func (e Etcd) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralEtcd, kubedb.GroupName)
 }
 
 func (e Etcd) ResourceShortCode() string {

@@ -29,9 +29,7 @@ const (
 
 	KubeDBOrganization = "kubedb"
 
-	LabelDatabaseKind = kubedb.GroupName + "/kind"
-	LabelDatabaseName = kubedb.GroupName + "/name"
-	LabelRole         = kubedb.GroupName + "/role"
+	LabelRole = kubedb.GroupName + "/role"
 
 	ReplicationModeDetectorContainerName = "replication-mode-detector"
 	DatabasePodPrimary                   = "primary"

@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ EtcdOpsRequest) CustomResourceDefinition() *apiextensions.CustomResource
 }
 
 var _ apis.ResourceInfo = &EtcdOpsRequest{}
+
+func (e EtcdOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralEtcdOpsRequest, ops.GroupName)
+}
 
 func (e EtcdOpsRequest) ResourceShortCode() string {
 	return ResourceCodeEtcdOpsRequest

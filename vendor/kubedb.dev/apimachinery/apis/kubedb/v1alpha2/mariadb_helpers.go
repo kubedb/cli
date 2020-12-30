@@ -44,18 +44,20 @@ func (m MariaDB) OffshootName() string {
 
 func (m MariaDB) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: m.Name,
-		LabelDatabaseKind: ResourceKindMariaDB,
+		meta_util.NameLabelKey:      m.ResourceFQN(),
+		meta_util.InstanceLabelKey:  m.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (m MariaDB) OffshootLabels() map[string]string {
 	out := m.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularMariaDB
-	out[meta_util.InstanceLabelKey] = m.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
+}
+
+func (m MariaDB) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMariaDB, kubedb.GroupName)
 }
 
 func (m MariaDB) ResourceShortCode() string {

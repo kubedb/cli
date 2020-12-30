@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDe
 }
 
 var _ apis.ResourceInfo = &RedisVersion{}
+
+func (r RedisVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralRedisVersion, catalog.GroupName)
+}
 
 func (r RedisVersion) ResourceShortCode() string {
 	return ResourceCodeRedisVersion

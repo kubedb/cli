@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ MemcachedAutoscaler) CustomResourceDefinition() *apiextensions.CustomRes
 }
 
 var _ apis.ResourceInfo = &MemcachedAutoscaler{}
+
+func (m MemcachedAutoscaler) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMemcachedAutoscaler, catalog.GroupName)
+}
 
 func (m MemcachedAutoscaler) ResourceShortCode() string {
 	return ResourceCodeMemcachedAutoscaler
