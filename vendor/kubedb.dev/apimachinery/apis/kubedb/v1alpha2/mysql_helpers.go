@@ -46,18 +46,20 @@ func (m MySQL) OffshootName() string {
 
 func (m MySQL) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: m.Name,
-		LabelDatabaseKind: ResourceKindMySQL,
+		meta_util.NameLabelKey:      m.ResourceFQN(),
+		meta_util.InstanceLabelKey:  m.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (m MySQL) OffshootLabels() map[string]string {
 	out := m.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularMySQL
-	out[meta_util.InstanceLabelKey] = m.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
+}
+
+func (m MySQL) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMySQL, kubedb.GroupName)
 }
 
 func (m MySQL) ResourceShortCode() string {

@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -29,6 +32,10 @@ func (_ MariaDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResou
 }
 
 var _ apis.ResourceInfo = &MariaDBOpsRequest{}
+
+func (m MariaDBOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMariaDBOpsRequest, ops.GroupName)
+}
 
 func (m MariaDBOpsRequest) ResourceShortCode() string {
 	return ResourceCodeMariaDBOpsRequest

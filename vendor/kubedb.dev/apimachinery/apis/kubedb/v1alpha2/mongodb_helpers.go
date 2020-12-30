@@ -129,8 +129,9 @@ func (m MongoDB) ConfigSvrRepSetName() string {
 
 func (m MongoDB) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: m.Name,
-		LabelDatabaseKind: ResourceKindMongoDB,
+		meta_util.NameLabelKey:      m.ResourceFQN(),
+		meta_util.InstanceLabelKey:  m.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
@@ -154,10 +155,7 @@ func (m MongoDB) MongosSelectors() map[string]string {
 
 func (m MongoDB) OffshootLabels() map[string]string {
 	out := m.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularMongoDB
-	out[meta_util.InstanceLabelKey] = m.Name
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
 }
 
@@ -171,6 +169,10 @@ func (m MongoDB) ConfigSvrLabels() map[string]string {
 
 func (m MongoDB) MongosLabels() map[string]string {
 	return meta_util.FilterKeys(kubedb.GroupName, m.OffshootLabels(), m.MongosSelectors())
+}
+
+func (m MongoDB) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMongoDB, kubedb.GroupName)
 }
 
 func (m MongoDB) ResourceShortCode() string {

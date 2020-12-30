@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -29,6 +32,10 @@ func (_ MySQLOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourc
 }
 
 var _ apis.ResourceInfo = &MySQLOpsRequest{}
+
+func (m MySQLOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMySQLOpsRequest, ops.GroupName)
+}
 
 func (m MySQLOpsRequest) ResourceShortCode() string {
 	return ResourceCodeMySQLOpsRequest

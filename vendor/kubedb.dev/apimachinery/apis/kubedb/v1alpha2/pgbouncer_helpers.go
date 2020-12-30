@@ -44,18 +44,20 @@ func (p PgBouncer) OffshootName() string {
 
 func (p PgBouncer) OffshootSelectors() map[string]string {
 	return map[string]string{
-		LabelDatabaseName: p.Name,
-		LabelDatabaseKind: ResourceKindPgBouncer,
+		meta_util.NameLabelKey:      p.ResourceFQN(),
+		meta_util.InstanceLabelKey:  p.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 }
 
 func (p PgBouncer) OffshootLabels() map[string]string {
 	out := p.OffshootSelectors()
-	out[meta_util.NameLabelKey] = ResourceSingularPgBouncer
-	out[meta_util.InstanceLabelKey] = p.Name
 	out[meta_util.ComponentLabelKey] = "connection-pooler"
-	out[meta_util.ManagedByLabelKey] = kubedb.GroupName
 	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
+}
+
+func (p PgBouncer) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPgBouncer, kubedb.GroupName)
 }
 
 func (p PgBouncer) ResourceShortCode() string {

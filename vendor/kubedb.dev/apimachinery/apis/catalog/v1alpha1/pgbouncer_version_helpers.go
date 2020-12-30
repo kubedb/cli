@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ PgBouncerVersion) CustomResourceDefinition() *apiextensions.CustomResour
 }
 
 var _ apis.ResourceInfo = &PgBouncerVersion{}
+
+func (p PgBouncerVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPgBouncerVersion, catalog.GroupName)
+}
 
 func (p PgBouncerVersion) ResourceShortCode() string {
 	return ResourceCodePgBouncerVersion

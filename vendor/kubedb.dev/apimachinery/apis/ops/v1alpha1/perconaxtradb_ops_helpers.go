@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ PerconaXtraDBOpsRequest) CustomResourceDefinition() *apiextensions.Custo
 }
 
 var _ apis.ResourceInfo = &PerconaXtraDBOpsRequest{}
+
+func (p PerconaXtraDBOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPerconaXtraDBOpsRequest, ops.GroupName)
+}
 
 func (p PerconaXtraDBOpsRequest) ResourceShortCode() string {
 	return ResourceCodePerconaXtraDBOpsRequest

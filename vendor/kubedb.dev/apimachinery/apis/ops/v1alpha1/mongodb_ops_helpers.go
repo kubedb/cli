@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ MongoDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResou
 }
 
 var _ apis.ResourceInfo = &MongoDBOpsRequest{}
+
+func (m MongoDBOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMongoDBOpsRequest, ops.GroupName)
+}
 
 func (m MongoDBOpsRequest) ResourceShortCode() string {
 	return ResourceCodeMongoDBOpsRequest

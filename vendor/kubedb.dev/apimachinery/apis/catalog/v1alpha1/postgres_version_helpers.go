@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourc
 }
 
 var _ apis.ResourceInfo = &PostgresVersion{}
+
+func (p PostgresVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPostgresVersion, catalog.GroupName)
+}
 
 func (p PostgresVersion) ResourceShortCode() string {
 	return ResourceCodePostgresVersion

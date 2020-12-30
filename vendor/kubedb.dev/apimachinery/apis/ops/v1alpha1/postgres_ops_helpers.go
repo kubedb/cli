@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ PostgresOpsRequest) CustomResourceDefinition() *apiextensions.CustomReso
 }
 
 var _ apis.ResourceInfo = &PostgresOpsRequest{}
+
+func (p PostgresOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPostgresOpsRequest, ops.GroupName)
+}
 
 func (p PostgresOpsRequest) ResourceShortCode() string {
 	return ResourceCodePostgresOpsRequest

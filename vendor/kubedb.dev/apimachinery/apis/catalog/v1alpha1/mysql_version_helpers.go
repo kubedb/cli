@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDe
 }
 
 var _ apis.ResourceInfo = &MySQLVersion{}
+
+func (m MySQLVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMySQLVersion, catalog.GroupName)
+}
 
 func (m MySQLVersion) ResourceShortCode() string {
 	return ResourceCodeMySQLVersion

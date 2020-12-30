@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ PgBouncerOpsRequest) CustomResourceDefinition() *apiextensions.CustomRes
 }
 
 var _ apis.ResourceInfo = &PgBouncerOpsRequest{}
+
+func (p PgBouncerOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPgBouncerOpsRequest, ops.GroupName)
+}
 
 func (p PgBouncerOpsRequest) ResourceShortCode() string {
 	return ResourceCodePgBouncerOpsRequest

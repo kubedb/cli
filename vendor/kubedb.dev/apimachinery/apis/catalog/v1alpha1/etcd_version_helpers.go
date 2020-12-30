@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDef
 }
 
 var _ apis.ResourceInfo = &EtcdVersion{}
+
+func (e EtcdVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralEtcdVersion, catalog.GroupName)
+}
 
 func (e EtcdVersion) ResourceShortCode() string {
 	return ResourceCodeEtcdVersion

@@ -21,6 +21,7 @@ const (
 )
 
 type ResourceInfo interface {
+	ResourceFQN() string
 	ResourceShortCode() string
 	ResourceKind() string
 	ResourceSingular() string

@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"fmt"
+
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -28,6 +31,10 @@ func (_ ProxySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourc
 }
 
 var _ apis.ResourceInfo = &ProxySQLVersion{}
+
+func (p ProxySQLVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralProxySQLVersion, catalog.GroupName)
+}
 
 func (p ProxySQLVersion) ResourceShortCode() string {
 	return ""

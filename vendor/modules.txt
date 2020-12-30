@@ -461,7 +461,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20201208053851-a1d7be95e006
+# kmodules.xyz/client-go v0.0.0-20201229202653-b029d8e7bcbb
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
@@ -490,7 +490,7 @@ kmodules.xyz/objectstore-api/api/v1
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.15.3-0.20201228183011-83fb66c2490b
+# kubedb.dev/apimachinery v0.15.3-0.20201229203022-a36050ca55a5
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
 kubedb.dev/apimachinery/apis/autoscaling/v1alpha1

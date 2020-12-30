@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResource
 }
 
 var _ apis.ResourceInfo = &MongoDBVersion{}
+
+func (m MongoDBVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMongoDBVersion, catalog.GroupName)
+}
 
 func (m MongoDBVersion) ResourceShortCode() string {
 	return ResourceCodeMongoDBVersion

@@ -20,43 +20,48 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MariaDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MariaDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDBVersion))
 }
 
 var _ apis.ResourceInfo = &MariaDBVersion{}
 
-func (p MariaDBVersion) ResourceShortCode() string {
+func (m MariaDBVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralMariaDBVersion, catalog.GroupName)
+}
+
+func (m MariaDBVersion) ResourceShortCode() string {
 	return ResourceCodeMariaDBVersion
 }
 
-func (p MariaDBVersion) ResourceKind() string {
+func (m MariaDBVersion) ResourceKind() string {
 	return ResourceKindMariaDBVersion
 }
 
-func (p MariaDBVersion) ResourceSingular() string {
+func (m MariaDBVersion) ResourceSingular() string {
 	return ResourceSingularMariaDBVersion
 }
 
-func (p MariaDBVersion) ResourcePlural() string {
+func (m MariaDBVersion) ResourcePlural() string {
 	return ResourcePluralMariaDBVersion
 }
 
-func (p MariaDBVersion) ValidateSpecs() error {
-	if p.Spec.Version == "" ||
-		p.Spec.DB.Image == "" ||
-		p.Spec.Exporter.Image == "" ||
-		p.Spec.InitContainer.Image == "" {
+func (m MariaDBVersion) ValidateSpecs() error {
+	if m.Spec.Version == "" ||
+		m.Spec.DB.Image == "" ||
+		m.Spec.Exporter.Image == "" ||
+		m.Spec.InitContainer.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for mariadbversion "%v":
 spec.version,
 spec.db.image,
 spec.exporter.image,
-spec.initContainer.image.`, p.Name)
+spec.initContainer.image.`, m.Name)
 	}
 	return nil
 }

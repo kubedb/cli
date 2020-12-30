@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -30,6 +31,10 @@ func (_ PerconaXtraDBVersion) CustomResourceDefinition() *apiextensions.CustomRe
 }
 
 var _ apis.ResourceInfo = &PerconaXtraDBVersion{}
+
+func (p PerconaXtraDBVersion) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralPerconaXtraDBVersion, catalog.GroupName)
+}
 
 func (p PerconaXtraDBVersion) ResourceShortCode() string {
 	return ResourceCodePerconaXtraDBVersion
