@@ -247,16 +247,6 @@ const (
 
 var (
 	defaultResourceLimits = core.ResourceList{
-		core.ResourceCPU:    resource.MustParse(".250"),
-		core.ResourceMemory: resource.MustParse("512Mi"),
-	}
-
-	defaultElasticsearchResourceLimits = core.ResourceList{
-		core.ResourceCPU:    resource.MustParse(".600"),
-		core.ResourceMemory: resource.MustParse("512Mi"),
-	}
-
-	defaultMySQLResourceLimits = core.ResourceList{
 		core.ResourceCPU:    resource.MustParse(".500"),
 		core.ResourceMemory: resource.MustParse("1024Mi"),
 	}
