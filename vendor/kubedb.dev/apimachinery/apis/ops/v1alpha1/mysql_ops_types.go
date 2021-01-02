@@ -117,7 +117,7 @@ type MySQLTLSSpec struct {
 
 	// Indicates that the database server need to be encrypted connections(ssl)
 	// +optional
-	RequireSSL bool `json:"requireSSL,omitempty" protobuf:"varint,2,opt,name=requireSSL"`
+	RequireSSL *bool `json:"requireSSL,omitempty" protobuf:"varint,2,opt,name=requireSSL"`
 }
 
 // MySQLOpsRequestStatus is the status for MySQLOpsRequest

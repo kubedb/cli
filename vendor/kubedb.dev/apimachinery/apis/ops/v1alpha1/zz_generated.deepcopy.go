@@ -1829,6 +1829,11 @@ func (in *MySQLReplicaReadinessCriteria) DeepCopy() *MySQLReplicaReadinessCriter
 func (in *MySQLTLSSpec) DeepCopyInto(out *MySQLTLSSpec) {
 	*out = *in
 	in.TLSSpec.DeepCopyInto(&out.TLSSpec)
+	if in.RequireSSL != nil {
+		in, out := &in.RequireSSL, &out.RequireSSL
+		*out = new(bool)
+		**out = **in
+	}
 	return
 }
 

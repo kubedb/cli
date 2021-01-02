@@ -1382,8 +1382,6 @@ kmodules.xyz/client-go v0.0.0-20201105071625-0b277310b9b8 h1:zs2+yI/Ola5HjdtfP29
 kmodules.xyz/client-go v0.0.0-20201105071625-0b277310b9b8/go.mod h1:WXDwZBmvrcLgGcuO9iZpI9jcfPuDFfWbxA4EnhAFtGw=
 kmodules.xyz/client-go v0.0.0-20201208053851-a1d7be95e006 h1:gNrNTwi0jViRqdszsb0W5CQF+ANNVFlvh/LO0A3R7dM=
 kmodules.xyz/client-go v0.0.0-20201208053851-a1d7be95e006/go.mod h1:WXDwZBmvrcLgGcuO9iZpI9jcfPuDFfWbxA4EnhAFtGw=
-kmodules.xyz/client-go v0.0.0-20201229202653-b029d8e7bcbb h1:0+O24HfkERssXHqDHVVc9nUnq8nowQVDm1YtRIMeQr8=
-kmodules.xyz/client-go v0.0.0-20201229202653-b029d8e7bcbb/go.mod h1:WXDwZBmvrcLgGcuO9iZpI9jcfPuDFfWbxA4EnhAFtGw=
 kmodules.xyz/client-go v0.0.0-20201230092550-8ca15cfcbefa h1:1a6/yWhBhxAXzvPsPXW4tg7l93pP2B9LsEZOe4ldGPE=
 kmodules.xyz/client-go v0.0.0-20201230092550-8ca15cfcbefa/go.mod h1:WXDwZBmvrcLgGcuO9iZpI9jcfPuDFfWbxA4EnhAFtGw=
 kmodules.xyz/constants v0.0.0-20200923054614-6b87dbbae4d6/go.mod h1:DbiFk1bJ1KEO94t1SlAn7tzc+Zz95rSXgyUKa2nzPmY=
@@ -1400,8 +1398,8 @@ kmodules.xyz/openshift v0.0.0-20201105073146-0da509a7d39f/go.mod h1:vFwB/f5rVH5Q
 kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8 h1:UJb5lHQVFKbmlgmRLq5IWJGtz3JqYYbyVG+dNdjC9Cc=
 kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8/go.mod h1:2eN8X5Wq7/AAgE5AWMAX8T0lE51HZiYEldG2RQuouX4=
 kmodules.xyz/webhook-runtime v0.0.0-20201105073856-2dc7382b88c6/go.mod h1:xLgewoOzwR5ZrVOHQ2SR0P4E7tgCyBWbYlUawEXgeF4=
-kubedb.dev/apimachinery v0.15.3-0.20210101042216-56a61c7fd5c4 h1:ujk8qh9DjXi4x975RXEd7cuIkbnkUumad7uxombqxnc=
-kubedb.dev/apimachinery v0.15.3-0.20210101042216-56a61c7fd5c4/go.mod h1:ItfbwnnF1VNpoUkUZA09VOsF59rMIKY7kKuT/0GOrXo=
+kubedb.dev/apimachinery v0.15.3-0.20210102043329-2469f17e2c68 h1:+xiQCBQv9VfrJg7KbbmhfB+Ewi/by5iOr4PoPPz+xj8=
+kubedb.dev/apimachinery v0.15.3-0.20210102043329-2469f17e2c68/go.mod h1:jfH9wMWLd+rgDagKSFegJ1OJE8FU3V3rc+0dBCdi1sk=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0/go.mod h1:b/QX9oBD/LhixY6NDh+IdGv17hgB+51fET1i2kPSmvk=
 modernc.org/mathutil v1.0.0/go.mod h1:wU0vUrJsVWBZ4P6e7xtFJEhFSNsfRLJ8H458uRjg03k=

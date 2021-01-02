@@ -12,8 +12,8 @@ spec:
     - datastore
     - kubedb
     - appscode
-    kind: VerticalAutoscaler
-    listKind: VerticalAutoscalerList
+    kind: MongoDBAutoscaler
+    listKind: MongoDBAutoscalerList
     plural: verticalautoscalers
     shortNames:
     - vascaler
@@ -32,41 +32,50 @@ spec:
             type: object
           spec:
             properties:
-              resourcePolicy:
+              configServer:
                 properties:
-                  containerPolicies:
-                    items:
-                      properties:
-                        containerName:
+                  compute:
+                    properties:
+                      containerControlledValues:
+                        type: string
+                      controlledResources:
+                        items:
                           type: string
-                        controlledResources:
-                          items:
-                            type: string
-                          type: array
-                        controlledValues:
-                          type: string
-                        maxAllowed:
-                          additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                            x-kubernetes-int-or-string: true
-                          type: object
-                        minAllowed:
-                          additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                            x-kubernetes-int-or-string: true
-                          type: object
-                        mode:
-                          type: string
-                      type: object
-                    type: array
+                        type: array
+                      disable:
+                        type: boolean
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        format: int64
+                        type: integer
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                    type: object
+                  storage:
+                    properties:
+                      scalingThreshold:
+                        type: integer
+                      usageThreshold:
+                        type: integer
+                    type: object
                 type: object
-              targetRef:
+              databaseRef:
                 properties:
                   apiGroup:
                     type: string
@@ -78,13 +87,180 @@ spec:
                 - kind
                 - name
                 type: object
-              updatePolicy:
+              mongos:
                 properties:
-                  updateMode:
-                    type: string
+                  compute:
+                    properties:
+                      containerControlledValues:
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      disable:
+                        type: boolean
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        format: int64
+                        type: integer
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                    type: object
+                  storage:
+                    properties:
+                      scalingThreshold:
+                        type: integer
+                      usageThreshold:
+                        type: integer
+                    type: object
+                type: object
+              replicaSet:
+                properties:
+                  compute:
+                    properties:
+                      containerControlledValues:
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      disable:
+                        type: boolean
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        format: int64
+                        type: integer
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                    type: object
+                  storage:
+                    properties:
+                      scalingThreshold:
+                        type: integer
+                      usageThreshold:
+                        type: integer
+                    type: object
+                type: object
+              shard:
+                properties:
+                  compute:
+                    properties:
+                      containerControlledValues:
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      disable:
+                        type: boolean
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        format: int64
+                        type: integer
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                    type: object
+                  storage:
+                    properties:
+                      scalingThreshold:
+                        type: integer
+                      usageThreshold:
+                        type: integer
+                    type: object
+                type: object
+              standalone:
+                properties:
+                  compute:
+                    properties:
+                      containerControlledValues:
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      disable:
+                        type: boolean
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        format: int64
+                        type: integer
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                    type: object
+                  storage:
+                    properties:
+                      scalingThreshold:
+                        type: integer
+                      usageThreshold:
+                        type: integer
+                    type: object
                 type: object
             required:
-            - targetRef
+            - databaseRef
             type: object
           status:
             properties:
@@ -113,50 +289,6 @@ spec:
                   - type
                   type: object
                 type: array
-              recommendation:
-                properties:
-                  containerRecommendations:
-                    items:
-                      properties:
-                        containerName:
-                          type: string
-                        lowerBound:
-                          additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                            x-kubernetes-int-or-string: true
-                          type: object
-                        target:
-                          additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                            x-kubernetes-int-or-string: true
-                          type: object
-                        uncappedTarget:
-                          additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                            x-kubernetes-int-or-string: true
-                          type: object
-                        upperBound:
-                          additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
-                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                            x-kubernetes-int-or-string: true
-                          type: object
-                      required:
-                      - target
-                      type: object
-                    type: array
-                type: object
             type: object
         required:
         - spec
