@@ -47,6 +47,9 @@ const (
 	DBCustomConfigName             = "custom-config"
 	DefaultVolumeClaimTemplateName = "data"
 
+	DBTLSVolume         = "tls-volume"
+	DBExporterTLSVolume = "exporter-tls-volume"
+
 	// =========================== Database key Constants ============================
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
 	ElasticsearchKey = ResourceSingularElasticsearch + "." + kubedb.GroupName
@@ -112,6 +115,12 @@ const (
 	MongoDBKeyFileSecretSuffix    = "key"
 	MongoDBRootUsername           = "root"
 	MongoDBCustomConfigFile       = "mongod.conf"
+	NodeTypeMongos                = "mongos"
+	NodeTypeShard                 = "shard"
+	NodeTypeConfig                = "configsvr"
+
+	ConfigDirectoryPath        = "/data/configdb"
+	InitialConfigDirectoryPath = "/configdb-readonly"
 
 	// =========================== MySQL Constants ============================
 	MySQLMetricsExporterConfigSecretSuffix = "metrics-exporter-config"

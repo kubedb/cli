@@ -263,3 +263,24 @@ func (m *MySQL) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, str
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
 }
+
+func MySQLRequireSSLArg() string {
+	return "--require-secure-transport=ON"
+}
+
+func MySQLExporterTLSArg() string {
+	return "--config.my-cnf=/etc/mysql/certs/exporter.cnf"
+}
+
+func (m *MySQL) MySQLTLSArgs() []string {
+	tlsArgs := []string{
+		"--ssl-capath=/etc/mysql/certs",
+		"--ssl-ca=/etc/mysql/certs/ca.crt",
+		"--ssl-cert=/etc/mysql/certs/server.crt",
+		"--ssl-key=/etc/mysql/certs/server.key",
+	}
+	if m.Spec.RequireSSL {
+		tlsArgs = append(tlsArgs, MySQLRequireSSLArg())
+	}
+	return tlsArgs
+}

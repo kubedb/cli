@@ -61,6 +61,24 @@ func (e Elasticsearch) OffshootSelectors() map[string]string {
 	}
 }
 
+func (e Elasticsearch) MasterSelectors() map[string]string {
+	selectors := e.OffshootSelectors()
+	selectors[ElasticsearchNodeRoleMaster] = ElasticsearchNodeRoleSet
+	return selectors
+}
+
+func (e Elasticsearch) DataSelectors() map[string]string {
+	selectors := e.OffshootSelectors()
+	selectors[ElasticsearchNodeRoleData] = ElasticsearchNodeRoleSet
+	return selectors
+}
+
+func (e Elasticsearch) IngestSelectors() map[string]string {
+	selectors := e.OffshootSelectors()
+	selectors[ElasticsearchNodeRoleIngest] = ElasticsearchNodeRoleSet
+	return selectors
+}
+
 func (e Elasticsearch) OffshootLabels() map[string]string {
 	out := e.OffshootSelectors()
 	out[meta_util.ComponentLabelKey] = ComponentDatabase
