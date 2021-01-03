@@ -90,6 +90,10 @@ func (m MySQL) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
 }
 
+func (m MySQL) PrimaryServiceDNS() string {
+	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
+}
+
 func (m MySQL) PeerName(idx int) string {
 	return fmt.Sprintf("%s-%d.%s.%s", m.OffshootName(), idx, m.GoverningServiceName(), m.Namespace)
 }
