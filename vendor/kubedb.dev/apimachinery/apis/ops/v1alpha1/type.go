@@ -56,6 +56,8 @@ const (
 	IssuingConditionUpdated      = "IssuingConditionUpdated"
 	CertificateIssuingSuccessful = "CertificateIssuingSuccessful"
 	TLSEnabling                  = "TLSEnabling"
+	Restart                      = "Restart"
+	RestartStatefulSet           = "RestartStatefulSet"
 
 	// MongoDB Constants
 	StartingBalancer            = "StartingBalancer"

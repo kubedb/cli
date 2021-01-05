@@ -94,6 +94,18 @@ func (m MySQL) PrimaryServiceDNS() string {
 	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
 }
 
+func (m MySQL) Hosts() []string {
+	replicas := 1
+	if m.Spec.Replicas != nil {
+		replicas = int(*m.Spec.Replicas)
+	}
+	hosts := make([]string, replicas)
+	for i := 0; i < replicas; i++ {
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc", m.Name, i, m.GoverningServiceName(), m.Namespace)
+	}
+	return hosts
+}
+
 func (m MySQL) PeerName(idx int) string {
 	return fmt.Sprintf("%s-%d.%s.%s", m.OffshootName(), idx, m.GoverningServiceName(), m.Namespace)
 }
