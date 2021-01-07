@@ -135,6 +135,10 @@ type ElasticsearchSpec struct {
 	// TerminationPolicy controls the delete operation for database
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,19,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+
+	// KernelSettings contains the additional kernel settings.
+	// +optional
+	KernelSettings *KernelSettings `json:"kernelSettings,omitempty" protobuf:"bytes,20,opt,name=kernelSettings"`
 }
 
 type ElasticsearchClusterTopology struct {

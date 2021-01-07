@@ -113,3 +113,13 @@ type NamedServiceTemplateSpec struct {
 	// +optional
 	ofst.ServiceTemplateSpec `json:",inline,omitempty" protobuf:"bytes,2,opt,name=serviceTemplateSpec"`
 }
+
+type KernelSettings struct {
+	// Privileged specifies the status whether the init container
+	// requires privileged access to perform the following commands.
+	// +optional
+	Privileged bool `json:"privileged,omitempty" protobuf:"varint,1,opt,name=privileged"`
+	// Sysctls hold a list of sysctls commands needs to apply to kernel.
+	// +optional
+	Sysctls []core.Sysctl `json:"sysctls,omitempty" protobuf:"bytes,2,rep,name=sysctls"`
+}

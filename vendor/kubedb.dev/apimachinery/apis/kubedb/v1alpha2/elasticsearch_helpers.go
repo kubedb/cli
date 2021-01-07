@@ -316,6 +316,20 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 		setDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceLimits)
 	}
 
+	// set default kernel settings
+	// -	Ref: https://www.elastic.co/guide/en/elasticsearch/reference/7.9/vm-max-map-count.html
+	if e.Spec.KernelSettings == nil {
+		e.Spec.KernelSettings = &KernelSettings{
+			Privileged: true,
+			Sysctls: []core.Sysctl{
+				{
+					Name:  "vm.max_map_count",
+					Value: "262144",
+				},
+			},
+		}
+	}
+
 	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
 	e.SetTLSDefaults(esVersion)
 	e.Spec.Monitor.SetDefaults()

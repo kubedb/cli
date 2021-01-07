@@ -16,6 +16,10 @@ limitations under the License.
 
 package apis
 
+import (
+	"kmodules.xyz/client-go/apiextensions"
+)
+
 const (
 	Finalizer = "kubedb.com"
 )
@@ -26,4 +30,5 @@ type ResourceInfo interface {
 	ResourceKind() string
 	ResourceSingular() string
 	ResourcePlural() string
+	CustomResourceDefinition() *apiextensions.CustomResourceDefinition
 }
