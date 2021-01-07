@@ -24,12 +24,16 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
+	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 func (_ Postgres) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -142,7 +146,7 @@ func (p Postgres) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (p *Postgres) SetDefaults() {
+func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 	if p == nil {
 		return
 	}
@@ -177,8 +181,49 @@ func (p *Postgres) SetDefaults() {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
 	}
 
+	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 	p.Spec.Monitor.SetDefaults()
 	setDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceLimits)
+}
+
+// setDefaultAffinity
+func (p *Postgres) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels map[string]string, topology *core_util.Topology) {
+	if podTemplate == nil {
+		return
+	} else if podTemplate.Spec.Affinity != nil {
+		// Update topologyKey fields according to Kubernetes version
+		topology.ConvertAffinity(podTemplate.Spec.Affinity)
+		return
+	}
+
+	podTemplate.Spec.Affinity = &core.Affinity{
+		PodAntiAffinity: &core.PodAntiAffinity{
+			PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+				// Prefer to not schedule multiple pods on the same node
+				{
+					Weight: 100,
+					PodAffinityTerm: core.PodAffinityTerm{
+						Namespaces: []string{p.Namespace},
+						LabelSelector: &metav1.LabelSelector{
+							MatchLabels: labels,
+						},
+						TopologyKey: core.LabelHostname,
+					},
+				},
+				// Prefer to not schedule multiple pods on the node with same zone
+				{
+					Weight: 50,
+					PodAffinityTerm: core.PodAffinityTerm{
+						Namespaces: []string{p.Namespace},
+						LabelSelector: &metav1.LabelSelector{
+							MatchLabels: labels,
+						},
+						TopologyKey: topology.LabelZone,
+					},
+				},
+			},
+		},
+	}
 }
 
 func (e *PostgresSpec) GetPersistentSecrets() []string {

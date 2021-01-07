@@ -282,6 +282,10 @@ message ElasticsearchSpec {
   // TerminationPolicy controls the delete operation for database
   // +optional
   optional string terminationPolicy = 19;
+
+  // KernelSettings contains the additional kernel settings.
+  // +optional
+  optional KernelSettings kernelSettings = 20;
 }
 
 message ElasticsearchStatus {
@@ -437,6 +441,17 @@ message InitSpec {
   optional ScriptSourceSpec script = 3;
 
   optional PostgresWALSourceSpec postgresWAL = 4;
+}
+
+message KernelSettings {
+  // Privileged specifies the status whether the init container
+  // requires privileged access to perform the following commands.
+  // +optional
+  optional bool privileged = 1;
+
+  // Sysctls hold a list of sysctls commands needs to apply to kernel.
+  // +optional
+  repeated k8s.io.api.core.v1.Sysctl sysctls = 2;
 }
 
 // LeaderElectionConfig contains essential attributes of leader election.
