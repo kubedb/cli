@@ -183,7 +183,7 @@ func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 	p.Spec.Monitor.SetDefaults()
-	setDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceLimits)
+	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 }
 
 // setDefaultAffinity

@@ -18991,7 +18991,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ElasticsearchNode(ref common.Refer
 							Format:      "int32",
 						},
 					},
-					"prefix": {
+					"suffix": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",

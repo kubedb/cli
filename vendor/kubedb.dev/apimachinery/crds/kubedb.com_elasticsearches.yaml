@@ -3042,8 +3042,6 @@ spec:
                       - type: integer
                       - type: string
                       x-kubernetes-int-or-string: true
-                    prefix:
-                      type: string
                     replicas:
                       format: int32
                       type: integer
@@ -3133,6 +3131,8 @@ spec:
                         volumeName:
                           type: string
                       type: object
+                    suffix:
+                      type: string
                   type: object
                 ingest:
                   properties:
@@ -3141,8 +3141,6 @@ spec:
                       - type: integer
                       - type: string
                       x-kubernetes-int-or-string: true
-                    prefix:
-                      type: string
                     replicas:
                       format: int32
                       type: integer
@@ -3232,6 +3230,8 @@ spec:
                         volumeName:
                           type: string
                       type: object
+                    suffix:
+                      type: string
                   type: object
                 master:
                   properties:
@@ -3240,8 +3240,6 @@ spec:
                       - type: integer
                       - type: string
                       x-kubernetes-int-or-string: true
-                    prefix:
-                      type: string
                     replicas:
                       format: int32
                       type: integer
@@ -3331,6 +3329,8 @@ spec:
                         volumeName:
                           type: string
                       type: object
+                    suffix:
+                      type: string
                   type: object
               required:
               - data
