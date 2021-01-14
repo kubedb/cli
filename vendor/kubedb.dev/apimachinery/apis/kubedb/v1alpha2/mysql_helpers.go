@@ -190,7 +190,6 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 		if m.Spec.Replicas == nil {
 			m.Spec.Replicas = pointer.Int32P(MySQLDefaultGroupSize)
 		}
-		m.Spec.setDefaultProbes()
 	} else {
 		if m.Spec.Replicas == nil {
 			m.Spec.Replicas = pointer.Int32P(1)
@@ -205,7 +204,7 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
-	setDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, defaultResourceLimits, defaultResourceLimits)
+	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 }
 
 // setDefaultAffinity
@@ -255,36 +254,6 @@ func (m *MySQL) SetTLSDefaults() {
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLServerCert), m.CertificateName(MySQLServerCert))
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLClientCert), m.CertificateName(MySQLClientCert))
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLMetricsExporterCert), m.CertificateName(MySQLMetricsExporterCert))
-}
-
-// setDefaultProbes sets defaults only when probe fields are nil.
-// In operator, check if the value of probe fields is "{}".
-// For "{}", ignore readinessprobe or livenessprobe in statefulset.
-// Ref: https://github.com/mattlord/Docker-InnoDB-Cluster/blob/master/healthcheck.sh#L10
-func (m *MySQLSpec) setDefaultProbes() {
-	probe := &core.Probe{
-		Handler: core.Handler{
-			Exec: &core.ExecAction{
-				Command: []string{
-					"bash",
-					"-c",
-					`
-export MYSQL_PWD=${MYSQL_ROOT_PASSWORD}
-mysql -h localhost -nsLNE -e "select member_state from performance_schema.replication_group_members where member_id=@@server_uuid;" 2>/dev/null | grep "ONLINE"
-`,
-				},
-			},
-		},
-		InitialDelaySeconds: 30,
-		PeriodSeconds:       5,
-	}
-
-	if m.PodTemplate.Spec.LivenessProbe == nil {
-		m.PodTemplate.Spec.LivenessProbe = probe
-	}
-	if m.PodTemplate.Spec.ReadinessProbe == nil {
-		m.PodTemplate.Spec.ReadinessProbe = probe
-	}
 }
 
 func (m *MySQLSpec) GetPersistentSecrets() []string {

@@ -146,7 +146,7 @@ message ElasticsearchNode {
   // Replicas represents number of replica for this specific type of node
   optional int32 replicas = 1;
 
-  optional string prefix = 2;
+  optional string suffix = 2;
 
   // Storage to specify how storage shall be used.
   optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 3;

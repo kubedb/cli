@@ -68,9 +68,9 @@ const (
 	ElasticsearchTransportPort                   = 9300
 	ElasticsearchTransportPortName               = "transport"
 	ElasticsearchMetricsPort                     = 9600
-	ElasticsearchIngestNodePrefix                = "ingest"
-	ElasticsearchDataNodePrefix                  = "data"
-	ElasticsearchMasterNodePrefix                = "master"
+	ElasticsearchIngestNodeSuffix                = "ingest"
+	ElasticsearchDataNodeSuffix                  = "data"
+	ElasticsearchMasterNodeSuffix                = "master"
 	ElasticsearchNodeRoleMaster                  = kubedb.GroupName + "/" + "role-master"
 	ElasticsearchNodeRoleIngest                  = kubedb.GroupName + "/" + "role-ingest"
 	ElasticsearchNodeRoleData                    = kubedb.GroupName + "/" + "role-data"
@@ -112,15 +112,47 @@ const (
 	MongoDBDatabasePortName       = "db"
 	MongoDBPrimaryServicePortName = "primary"
 	MongoDBDatabasePort           = 27017
-	MongoDBKeyFileSecretSuffix    = "key"
+	MongoDBKeyFileSecretSuffix    = "-key"
 	MongoDBRootUsername           = "root"
 	MongoDBCustomConfigFile       = "mongod.conf"
 	NodeTypeMongos                = "mongos"
 	NodeTypeShard                 = "shard"
 	NodeTypeConfig                = "configsvr"
 
-	ConfigDirectoryPath        = "/data/configdb"
-	InitialConfigDirectoryPath = "/configdb-readonly"
+	MongoDBWorkDirectoryName = "workdir"
+	MongoDBWorkDirectoryPath = "/work-dir"
+
+	MongoDBCertDirectoryName = "certdir"
+
+	MongoDBDataDirectoryName = "datadir"
+	MongoDBDataDirectoryPath = "/data/db"
+
+	MongoDBInitInstallContainerName   = "copy-config"
+	MongoDBInitBootstrapContainerName = "bootstrap"
+
+	MongoDBConfigDirectoryName        = "configdir"
+	MongoDBConfigDirectoryPath        = "/data/configdb"
+	MongoDBInitialConfigDirectoryPath = "/configdb-readonly"
+
+	MongoDBInitScriptDirectoryName = "init-scripts"
+	MongoDBInitScriptDirectoryPath = "/init-scripts"
+
+	MongoDBClientCertDirectoryName = "client-cert"
+	MongoDBClientCertDirectoryPath = "/client-cert"
+
+	MongoDBServerCertDirectoryName = "server-cert"
+	MongoDBServerCertDirectoryPath = "/server-cert"
+
+	MongoDBInitialKeyDirectoryName = "keydir"
+	MongoDBInitialKeyDirectoryPath = "/keydir-readonly"
+
+	MongoDBContainerName = ResourceSingularMongoDB
+
+	MongoDBDefaultVolumeClaimTemplateName = MongoDBDataDirectoryName
+
+	MongodbUser             = "root"
+	MongoDBKeyForKeyFile    = "key.txt"
+	MongoDBAuthSecretSuffix = "-auth"
 
 	// =========================== MySQL Constants ============================
 	MySQLMetricsExporterConfigSecretSuffix = "metrics-exporter-config"
@@ -255,7 +287,7 @@ const (
 )
 
 var (
-	defaultResourceLimits = core.ResourceList{
+	DefaultResourceLimits = core.ResourceList{
 		core.ResourceCPU:    resource.MustParse(".500"),
 		core.ResourceMemory: resource.MustParse("1024Mi"),
 	}
