@@ -490,7 +490,7 @@ kmodules.xyz/objectstore-api/api/v1
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20201105074402-a243b3a27fd8
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.16.0
+# kubedb.dev/apimachinery v0.16.1
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
 kubedb.dev/apimachinery/apis/autoscaling/v1alpha1

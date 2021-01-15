@@ -130,8 +130,10 @@ const (
 	MongoDBInitInstallContainerName   = "copy-config"
 	MongoDBInitBootstrapContainerName = "bootstrap"
 
-	MongoDBConfigDirectoryName        = "configdir"
-	MongoDBConfigDirectoryPath        = "/data/configdb"
+	MongoDBConfigDirectoryName = "config"
+	MongoDBConfigDirectoryPath = "/data/configdb"
+
+	MongoDBInitialConfigDirectoryName = "configdir"
 	MongoDBInitialConfigDirectoryPath = "/configdb-readonly"
 
 	MongoDBInitScriptDirectoryName = "init-scripts"
