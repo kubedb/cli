@@ -398,9 +398,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 			Alias:      string(ElasticsearchCACert),
 			SecretName: e.CertificateName(ElasticsearchCACert),
-			Subject: &kmapi.X509Subject{
-				Organizations: []string{KubeDBOrganization},
-			},
 		})
 	}
 
@@ -408,9 +405,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 	tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 		Alias:      string(ElasticsearchTransportCert),
 		SecretName: e.CertificateName(ElasticsearchTransportCert),
-		Subject: &kmapi.X509Subject{
-			Organizations: []string{KubeDBOrganization},
-		},
 	})
 
 	// If SSL is enabled, set missing certificate spec
@@ -419,9 +413,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 			Alias:      string(ElasticsearchHTTPCert),
 			SecretName: e.CertificateName(ElasticsearchHTTPCert),
-			Subject: &kmapi.X509Subject{
-				Organizations: []string{KubeDBOrganization},
-			},
 		})
 
 		// Set missing admin certificate spec, if authPlugin is either "OpenDistro" or "SearchGuard"
@@ -430,9 +421,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 				Alias:      string(ElasticsearchAdminCert),
 				SecretName: e.CertificateName(ElasticsearchAdminCert),
-				Subject: &kmapi.X509Subject{
-					Organizations: []string{KubeDBOrganization},
-				},
 			})
 		}
 
@@ -442,9 +430,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 				Alias:      string(ElasticsearchMetricsExporterCert),
 				SecretName: e.CertificateName(ElasticsearchMetricsExporterCert),
-				Subject: &kmapi.X509Subject{
-					Organizations: []string{KubeDBOrganization},
-				},
 			})
 		}
 
@@ -452,16 +437,22 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 			Alias:      string(ElasticsearchArchiverCert),
 			SecretName: e.CertificateName(ElasticsearchArchiverCert),
-			Subject: &kmapi.X509Subject{
-				Organizations: []string{KubeDBOrganization},
-			},
 		})
 	}
 
-	// Force overwrite the private key encoding type to PKCS#8
 	for id := range tlsConfig.Certificates {
+		// Force overwrite the private key encoding type to PKCS#8
 		tlsConfig.Certificates[id].PrivateKey = &kmapi.CertificatePrivateKey{
 			Encoding: kmapi.PKCS8,
+		}
+		// Set default subject to O:KubeDB, if missing.
+		// It isn't set from SetMissingSpecForCertificate(),
+		// Because the default organization(ie. kubedb) gets merged, even if
+		// the organizations[] isn't empty.
+		if tlsConfig.Certificates[id].Subject == nil {
+			tlsConfig.Certificates[id].Subject = &kmapi.X509Subject{
+				Organizations: []string{KubeDBOrganization},
+			}
 		}
 	}
 

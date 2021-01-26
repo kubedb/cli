@@ -79,7 +79,7 @@ type MongoDBReplicaReadinessCriteria struct {
 	OplogMaxLagSeconds int32 `json:"oplogMaxLagSeconds,omitempty" protobuf:"varint,1,opt,name=oplogMaxLagSeconds"`
 	// +kubebuilder:validation:Minimum:=0
 	// +kubebuilder:validation:Maximum:=100
-	DBSizeDiffPercentage int32 `json:"dbSizeDiffPercentage,omitempty" protobuf:"varint,2,opt,name=dbSizeDiffPercentage"`
+	ObjectsCountDiffPercentage int32 `json:"objectsCountDiffPercentage,omitempty" protobuf:"varint,2,opt,name=objectsCountDiffPercentage"`
 }
 
 type MongoDBUpgradeSpec struct {
