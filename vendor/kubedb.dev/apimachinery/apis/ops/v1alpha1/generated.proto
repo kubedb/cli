@@ -607,7 +607,7 @@ message MongoDBReplicaReadinessCriteria {
 
   // +kubebuilder:validation:Minimum:=0
   // +kubebuilder:validation:Maximum:=100
-  optional int32 dbSizeDiffPercentage = 2;
+  optional int32 objectsCountDiffPercentage = 2;
 }
 
 // MongoDBShardNode is the spec for mongodb Shard

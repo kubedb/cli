@@ -20550,7 +20550,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBReplicaReadinessCriteria(ref c
 							Format: "int32",
 						},
 					},
-					"dbSizeDiffPercentage": {
+					"objectsCountDiffPercentage": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"integer"},
 							Format: "int32",
