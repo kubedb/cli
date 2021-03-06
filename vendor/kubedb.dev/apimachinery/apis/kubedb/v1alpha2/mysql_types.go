@@ -149,15 +149,6 @@ type MySQLGroupSpec struct {
 	// Group name is a version 4 UUID
 	// ref: https://dev.mysql.com/doc/refman/5.7/en/group-replication-options.html#sysvar_group_replication_group_name
 	Name string `json:"name,omitempty" protobuf:"bytes,2,opt,name=name"`
-
-	// On a replication master and each replication slave, the --server-id
-	// option must be specified to establish a unique replication ID in the
-	// range from 1 to 2^32 − 1. “Unique”, means that each ID must be different
-	// from every other ID in use by any other replication master or slave.
-	// ref: https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_server_id
-	//
-	// So, BaseServerID is needed to calculate a unique server_id for each member.
-	BaseServerID *int64 `json:"baseServerID,omitempty" protobuf:"varint,3,opt,name=baseServerID"`
 }
 
 type MySQLStatus struct {

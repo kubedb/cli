@@ -366,10 +366,15 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AppReference":         schema_custom_resources_apis_appcatalog_v1alpha1_AppReference(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ClientConfig":         schema_custom_resources_apis_appcatalog_v1alpha1_ClientConfig(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ObjectReference":      schema_custom_resources_apis_appcatalog_v1alpha1_ObjectReference(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param":                schema_custom_resources_apis_appcatalog_v1alpha1_Param(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.RemoveKeyTransform":   schema_custom_resources_apis_appcatalog_v1alpha1_RemoveKeyTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.RenameKeyTransform":   schema_custom_resources_apis_appcatalog_v1alpha1_RenameKeyTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.SecretTransform":      schema_custom_resources_apis_appcatalog_v1alpha1_SecretTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ServiceReference":     schema_custom_resources_apis_appcatalog_v1alpha1_ServiceReference(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddon":           schema_custom_resources_apis_appcatalog_v1alpha1_StashAddon(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec":       schema_custom_resources_apis_appcatalog_v1alpha1_StashAddonSpec(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec":        schema_custom_resources_apis_appcatalog_v1alpha1_StashTaskSpec(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef":              schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec":                          schema_kmodulesxyz_monitoring_agent_api_api_v1_AgentSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusExporterSpec":             schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusExporterSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusSpec":                     schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusSpec(ref),
@@ -411,7 +416,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.EtcdStatus":                     schema_apimachinery_apis_kubedb_v1alpha2_EtcdStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec":                       schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KernelSettings":                 schema_apimachinery_apis_kubedb_v1alpha2_KernelSettings(ref),
-		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.LeaderElectionConfig":           schema_apimachinery_apis_kubedb_v1alpha2_LeaderElectionConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDB":                        schema_apimachinery_apis_kubedb_v1alpha2_MariaDB(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBList":                    schema_apimachinery_apis_kubedb_v1alpha2_MariaDBList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBSpec":                    schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref),
@@ -446,12 +450,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgBouncerList":                  schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgBouncerSpec":                  schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgBouncerStatus":                schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerStatus(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig":    schema_apimachinery_apis_kubedb_v1alpha2_PostgreLeaderElectionConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Postgres":                       schema_apimachinery_apis_kubedb_v1alpha2_Postgres(ref),
-		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresArchiverSpec":           schema_apimachinery_apis_kubedb_v1alpha2_PostgresArchiverSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresList":                   schema_apimachinery_apis_kubedb_v1alpha2_PostgresList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresSpec":                   schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus":                 schema_apimachinery_apis_kubedb_v1alpha2_PostgresStatus(ref),
-		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresWALSourceSpec":          schema_apimachinery_apis_kubedb_v1alpha2_PostgresWALSourceSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQL":                       schema_apimachinery_apis_kubedb_v1alpha2_ProxySQL(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLBackendSpec":            schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLBackendSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLList":                   schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLList(ref),
@@ -17170,6 +17173,32 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_ObjectReference(ref common
 	}
 }
 
+func schema_custom_resources_apis_appcatalog_v1alpha1_Param(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Param declares a value to use for the Param called Name.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+				Required: []string{"name", "value"},
+			},
+		},
+	}
+}
+
 func schema_custom_resources_apis_appcatalog_v1alpha1_RemoveKeyTransform(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -17304,6 +17333,121 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_ServiceReference(ref commo
 				Required: []string{"scheme", "name", "port"},
 			},
 		},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_StashAddon(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_StashAddonSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StashAddonSpec is the spec for app",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"addon": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_StashTaskSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StashTaskSpec is the spec for app",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"backupTask": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Backup task definition",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef"),
+						},
+					},
+					"restoreTask": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Restore task definition",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef"),
+						},
+					},
+				},
+				Required: []string{"backupTask", "restoreTask"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"params": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Params specifies a list of parameter to pass to the Task. Stash will use this parameters to resolve the task.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param"},
 	}
 }
 
@@ -19657,16 +19801,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref common.ReferenceCallb
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec"),
 						},
 					},
-					"postgresWAL": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresWALSourceSpec"),
-						},
-					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresWALSourceSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec"},
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec"},
 	}
 }
 
@@ -19701,41 +19840,6 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KernelSettings(ref common.Referenc
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.Sysctl"},
-	}
-}
-
-func schema_apimachinery_apis_kubedb_v1alpha2_LeaderElectionConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "LeaderElectionConfig contains essential attributes of leader election. ref: https://github.com/kubernetes/client-go/blob/6134db91200ea474868bc6775e62cc294a74c6c6/tools/leaderelection/leaderelection.go#L105-L114",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"leaseDurationSeconds": {
-						SchemaProps: spec.SchemaProps{
-							Description: "LeaseDuration is the duration in second that non-leader candidates will wait to force acquire leadership. This is measured against time of last observed ack. Default 15",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"renewDeadlineSeconds": {
-						SchemaProps: spec.SchemaProps{
-							Description: "RenewDeadline is the duration in second that the acting master will retry refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3. Default 10",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"retryPeriodSeconds": {
-						SchemaProps: spec.SchemaProps{
-							Description: "RetryPeriod is the duration in second the LeaderElector clients should wait between tries of actions. Normally, LeaseDuration / 3. Default 2",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-				},
-				Required: []string{"leaseDurationSeconds", "renewDeadlineSeconds", "retryPeriodSeconds"},
-			},
-		},
 	}
 }
 
@@ -19902,6 +20006,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref common.ReferenceCa
 									},
 								},
 							},
+						},
+					},
+					"requireSSL": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Indicates that the database server need to be encrypted connections(ssl)",
+							Type:        []string{"boolean"},
+							Format:      "",
 						},
 					},
 					"tls": {
@@ -20816,13 +20927,6 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLGroupSpec(ref common.Referenc
 							Format:      "",
 						},
 					},
-					"baseServerID": {
-						SchemaProps: spec.SchemaProps{
-							Description: "On a replication master and each replication slave, the --server-id option must be specified to establish a unique replication ID in the range from 1 to 2^32 − 1. “Unique”, means that each ID must be different from every other ID in use by any other replication master or slave. ref: https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_server_id\n\nSo, BaseServerID is needed to calculate a unique server_id for each member.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
 				},
 			},
 		},
@@ -21518,6 +21622,69 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerStatus(ref common.Referen
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_PostgreLeaderElectionConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgreLeaderElectionConfig contains essential attributes of leader election.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"leaseDurationSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LeaseDuration is the duration in second that non-leader candidates will wait to force acquire leadership. This is measured against time of last observed ack. Default 15 Deprecated",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"renewDeadlineSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RenewDeadline is the duration in second that the acting master will retry refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3. Default 10 Deprecated",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"retryPeriodSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetryPeriod is the duration in second the LeaderElector clients should wait between tries of actions. Normally, LeaseDuration / 3. Default 2 Deprecated",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maximumLagBeforeFailover": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaximumLagBeforeFailover is used as maximum lag tolerance for the cluster. when ever a replica is lagging more than MaximumLagBeforeFailover this node need to sync manually with the primary node. default value is 32MB",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"period": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Period between Node.Tick invocations",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"electionTick": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ElectionTick is the number of Node.Tick invocations that must pass between\n\telections. That is, if a follower does not receive any message from the\n leader of current term before ElectionTick has elapsed, it will become\n\tcandidate and start an election. ElectionTick must be greater than\n HeartbeatTick. We suggest ElectionTick = 10 * HeartbeatTick to avoid\n unnecessary leader switching. default value is 10.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"heartbeatTick": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HeartbeatTick is the number of Node.Tick invocations that must pass between heartbeats. That is, a leader sends heartbeat messages to maintain its leadership every HeartbeatTick ticks. default value is 1.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_Postgres(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -21558,25 +21725,6 @@ func schema_apimachinery_apis_kubedb_v1alpha2_Postgres(ref common.ReferenceCallb
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus"},
-	}
-}
-
-func schema_apimachinery_apis_kubedb_v1alpha2_PostgresArchiverSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"storage": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.Backend"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/objectstore-api/api/v1.Backend"},
 	}
 }
 
@@ -21660,16 +21808,10 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 							Format:      "",
 						},
 					},
-					"archiver": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Archive for wal files",
-							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresArchiverSpec"),
-						},
-					},
 					"leaderElection": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Leader election configuration",
-							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.LeaderElectionConfig"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig"),
 						},
 					},
 					"authSecret": {
@@ -21689,6 +21831,20 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 						SchemaProps: spec.SchemaProps{
 							Description: "Storage to specify how storage shall be used.",
 							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"clientAuthMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sslMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"init": {
@@ -21753,7 +21909,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.LeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresArchiverSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig"},
 	}
 }
 
@@ -21795,72 +21951,6 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresStatus(ref common.Referenc
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.Condition"},
-	}
-}
-
-func schema_apimachinery_apis_kubedb_v1alpha2_PostgresWALSourceSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"backupName": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"pitr": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RecoveryTarget"),
-						},
-					},
-					"storageSecretName": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"local": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.LocalSpec"),
-						},
-					},
-					"s3": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.S3Spec"),
-						},
-					},
-					"gcs": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.GCSSpec"),
-						},
-					},
-					"azure": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.AzureSpec"),
-						},
-					},
-					"swift": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.SwiftSpec"),
-						},
-					},
-					"b2": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.B2Spec"),
-						},
-					},
-					"rest": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/objectstore-api/api/v1.RestServerSpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/objectstore-api/api/v1.AzureSpec", "kmodules.xyz/objectstore-api/api/v1.B2Spec", "kmodules.xyz/objectstore-api/api/v1.GCSSpec", "kmodules.xyz/objectstore-api/api/v1.LocalSpec", "kmodules.xyz/objectstore-api/api/v1.RestServerSpec", "kmodules.xyz/objectstore-api/api/v1.S3Spec", "kmodules.xyz/objectstore-api/api/v1.SwiftSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RecoveryTarget"},
 	}
 }
 

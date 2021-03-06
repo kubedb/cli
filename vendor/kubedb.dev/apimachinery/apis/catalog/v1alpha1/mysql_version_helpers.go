@@ -55,13 +55,11 @@ func (m MySQLVersion) ResourcePlural() string {
 func (m MySQLVersion) ValidateSpecs() error {
 	if m.Spec.Version == "" ||
 		m.Spec.DB.Image == "" ||
-		m.Spec.Tools.Image == "" ||
 		m.Spec.Exporter.Image == "" ||
 		m.Spec.InitContainer.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for mysqlVersion "%v":
 spec.version,
 spec.db.image,
-spec.tools.image,
 spec.exporter.image,
 spec.initContainer.image.`, m.Name)
 	}

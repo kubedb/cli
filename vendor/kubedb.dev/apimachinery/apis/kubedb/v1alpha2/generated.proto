@@ -29,7 +29,6 @@ import "k8s.io/apimachinery/pkg/util/intstr/generated.proto";
 import "kmodules.xyz/client-go/api/v1/generated.proto";
 import "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1/generated.proto";
 import "kmodules.xyz/monitoring-agent-api/api/v1/generated.proto";
-import "kmodules.xyz/objectstore-api/api/v1/generated.proto";
 import "kmodules.xyz/offshoot-api/api/v1/generated.proto";
 
 // Package-wide variables from generator "generated".
@@ -439,8 +438,6 @@ message InitSpec {
   optional bool waitForInitialRestore = 2;
 
   optional ScriptSourceSpec script = 3;
-
-  optional PostgresWALSourceSpec postgresWAL = 4;
 }
 
 message KernelSettings {
@@ -452,25 +449,6 @@ message KernelSettings {
   // Sysctls hold a list of sysctls commands needs to apply to kernel.
   // +optional
   repeated k8s.io.api.core.v1.Sysctl sysctls = 2;
-}
-
-// LeaderElectionConfig contains essential attributes of leader election.
-// ref: https://github.com/kubernetes/client-go/blob/6134db91200ea474868bc6775e62cc294a74c6c6/tools/leaderelection/leaderelection.go#L105-L114
-message LeaderElectionConfig {
-  // LeaseDuration is the duration in second that non-leader candidates will
-  // wait to force acquire leadership. This is measured against time of
-  // last observed ack. Default 15
-  optional int32 leaseDurationSeconds = 1;
-
-  // RenewDeadline is the duration in second that the acting master will retry
-  // refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3.
-  // Default 10
-  optional int32 renewDeadlineSeconds = 2;
-
-  // RetryPeriod is the duration in second the LeaderElector clients should wait
-  // between tries of actions. Normally, LeaseDuration / 3.
-  // Default 2
-  optional int32 retryPeriodSeconds = 3;
 }
 
 // +kubebuilder:object:root=true
@@ -530,17 +508,21 @@ message MariaDBSpec {
   // +optional
   repeated NamedServiceTemplateSpec serviceTemplates = 10;
 
+  // Indicates that the database server need to be encrypted connections(ssl)
+  // +optional
+  optional bool requireSSL = 11;
+
   // TLS contains tls configurations
   // +optional
-  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 11;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 12;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 12;
+  optional bool halted = 13;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 13;
+  optional string terminationPolicy = 14;
 }
 
 message MariaDBStatus {
@@ -856,15 +838,6 @@ message MySQLGroupSpec {
   // Group name is a version 4 UUID
   // ref: https://dev.mysql.com/doc/refman/5.7/en/group-replication-options.html#sysvar_group_replication_group_name
   optional string name = 2;
-
-  // On a replication master and each replication slave, the --server-id
-  // option must be specified to establish a unique replication ID in the
-  // range from 1 to 2^32 − 1. “Unique”, means that each ID must be different
-  // from every other ID in use by any other replication master or slave.
-  // ref: https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_server_id
-  //
-  // So, BaseServerID is needed to calculate a unique server_id for each member.
-  optional int64 baseServerID = 3;
 }
 
 message MySQLList {
@@ -1117,6 +1090,60 @@ message PgBouncerStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
+// PostgreLeaderElectionConfig contains essential attributes of leader election.
+message PostgreLeaderElectionConfig {
+  // LeaseDuration is the duration in second that non-leader candidates will
+  // wait to force acquire leadership. This is measured against time of
+  // last observed ack. Default 15
+  // Deprecated
+  optional int32 leaseDurationSeconds = 1;
+
+  // RenewDeadline is the duration in second that the acting master will retry
+  // refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3.
+  // Default 10
+  // Deprecated
+  optional int32 renewDeadlineSeconds = 2;
+
+  // RetryPeriod is the duration in second the LeaderElector clients should wait
+  // between tries of actions. Normally, LeaseDuration / 3.
+  // Default 2
+  // Deprecated
+  optional int32 retryPeriodSeconds = 3;
+
+  // MaximumLagBeforeFailover is used as maximum lag tolerance for the cluster.
+  // when ever a replica is lagging more than MaximumLagBeforeFailover
+  // this node need to sync manually with the primary node. default value is 32MB
+  // +default=33554432
+  // +kubebuilder:default:=33554432
+  // +optional
+  optional uint64 maximumLagBeforeFailover = 4;
+
+  // Period between Node.Tick invocations
+  // +default="100ms"
+  // +kubebuilder:default:="100ms"
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration period = 5;
+
+  // ElectionTick is the number of Node.Tick invocations that must pass between
+  // 	elections. That is, if a follower does not receive any message from the
+  //  leader of current term before ElectionTick has elapsed, it will become
+  // 	candidate and start an election. ElectionTick must be greater than
+  //  HeartbeatTick. We suggest ElectionTick = 10 * HeartbeatTick to avoid
+  //  unnecessary leader switching. default value is 10.
+  // +default=10
+  // +kubebuilder:default:=10
+  // +optional
+  optional int32 electionTick = 6;
+
+  // HeartbeatTick is the number of Node.Tick invocations that must pass between
+  // heartbeats. That is, a leader sends heartbeat messages to maintain its
+  // leadership every HeartbeatTick ticks. default value is 1.
+  // +default=1
+  // +kubebuilder:default:=1
+  // +optional
+  optional int32 heartbeatTick = 7;
+}
+
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=postgreses,singular=postgres,shortName=pg,categories={datastore,kubedb,appscode,all}
 // +kubebuilder:subresource:status
@@ -1129,10 +1156,6 @@ message Postgres {
   optional PostgresSpec spec = 2;
 
   optional PostgresStatus status = 3;
-}
-
-message PostgresArchiverSpec {
-  optional kmodules.xyz.objectstore_api.api.v1.Backend storage = 1;
 }
 
 message PostgresList {
@@ -1155,25 +1178,28 @@ message PostgresSpec {
   // Streaming mode
   optional string streamingMode = 4;
 
-  // Archive for wal files
-  optional PostgresArchiverSpec archiver = 5;
-
   // Leader election configuration
   // +optional
-  optional LeaderElectionConfig leaderElection = 6;
+  optional PostgreLeaderElectionConfig leaderElection = 5;
 
   // Database authentication secret
-  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 7;
+  optional k8s.io.api.core.v1.LocalObjectReference authSecret = 6;
 
   // StorageType can be durable (default) or ephemeral
-  optional string storageType = 8;
+  optional string storageType = 7;
 
   // Storage to specify how storage shall be used.
-  optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 9;
+  optional k8s.io.api.core.v1.PersistentVolumeClaimSpec storage = 8;
+
+  // ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
+  optional string clientAuthMode = 9;
+
+  // SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
+  optional string sslMode = 10;
 
   // Init is used to initialize database
   // +optional
-  optional InitSpec init = 10;
+  optional InitSpec init = 11;
 
   // Monitor is used monitor database instance
   // +optional
@@ -1217,14 +1243,6 @@ message PostgresStatus {
   // Conditions applied to the database, such as approval or denial.
   // +optional
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
-}
-
-message PostgresWALSourceSpec {
-  optional string backupName = 1;
-
-  optional RecoveryTarget pitr = 2;
-
-  optional kmodules.xyz.objectstore_api.api.v1.Backend backend = 3;
 }
 
 // +kubebuilder:object:root=true

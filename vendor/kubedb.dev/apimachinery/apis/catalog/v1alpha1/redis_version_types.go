@@ -16,7 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+)
 
 const (
 	ResourceCodeRedisVersion     = "rdversion"
@@ -58,6 +61,9 @@ type RedisVersionSpec struct {
 	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
 	// PSP names
 	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,5,opt,name=podSecurityPolicies"`
+	// Stash defines backup and restore task definitions.
+	// +optional
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,6,opt,name=stash"`
 }
 
 // RedisVersionDatabase is the Redis Database image

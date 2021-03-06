@@ -1310,9 +1310,6 @@ spec:
                   member:
                     format: int32
                     type: integer
-                  memberWeight:
-                    format: int32
-                    type: integer
                 type: object
               restart:
                 type: object

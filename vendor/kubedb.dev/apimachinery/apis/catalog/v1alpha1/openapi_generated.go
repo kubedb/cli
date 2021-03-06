@@ -366,10 +366,15 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AppReference":                 schema_custom_resources_apis_appcatalog_v1alpha1_AppReference(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ClientConfig":                 schema_custom_resources_apis_appcatalog_v1alpha1_ClientConfig(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ObjectReference":              schema_custom_resources_apis_appcatalog_v1alpha1_ObjectReference(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param":                        schema_custom_resources_apis_appcatalog_v1alpha1_Param(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.RemoveKeyTransform":           schema_custom_resources_apis_appcatalog_v1alpha1_RemoveKeyTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.RenameKeyTransform":           schema_custom_resources_apis_appcatalog_v1alpha1_RenameKeyTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.SecretTransform":              schema_custom_resources_apis_appcatalog_v1alpha1_SecretTransform(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ServiceReference":             schema_custom_resources_apis_appcatalog_v1alpha1_ServiceReference(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddon":                   schema_custom_resources_apis_appcatalog_v1alpha1_StashAddon(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec":               schema_custom_resources_apis_appcatalog_v1alpha1_StashAddonSpec(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec":                schema_custom_resources_apis_appcatalog_v1alpha1_StashTaskSpec(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef":                      schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec":                                  schema_kmodulesxyz_monitoring_agent_api_api_v1_AgentSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusExporterSpec":                     schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusExporterSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusSpec":                             schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusSpec(ref),
@@ -404,13 +409,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionList":              schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy": schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionSpec":              schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref),
-		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionTools":             schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionTools(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersion":                           schema_apimachinery_apis_catalog_v1alpha1_EtcdVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionDatabase":                   schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionExporter":                   schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionExporter(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionList":                       schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionSpec":                       schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionSpec(ref),
-		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionTools":                      schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionTools(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersion":                        schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase":                schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter":                schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionExporter(ref),
@@ -431,7 +434,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionList":                    schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionPodSecurityPolicy":       schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionSpec":                    schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref),
-		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionTools":                   schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionTools(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints":               schema_apimachinery_apis_catalog_v1alpha1_MySQLUpgradeConstraints(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersion":                          schema_apimachinery_apis_catalog_v1alpha1_MySQLVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionDatabase":                  schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionDatabase(ref),
@@ -440,7 +442,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionList":                      schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionPodSecurityPolicy":         schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionSpec":                      schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref),
-		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionTools":                     schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionTools(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersion":                  schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionDatabase":          schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionExporter":          schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersionExporter(ref),
@@ -454,12 +455,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgBouncerVersionList":                  schema_apimachinery_apis_catalog_v1alpha1_PgBouncerVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgBouncerVersionSpec":                  schema_apimachinery_apis_catalog_v1alpha1_PgBouncerVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersion":                       schema_apimachinery_apis_catalog_v1alpha1_PostgresVersion(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator":            schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionCoordinator(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase":               schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter":               schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionExporter(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer":          schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionInitContainer(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionList":                   schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy":      schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionSpec":                   schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref),
-		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTools":                  schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionTools(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersion":                       schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersionExporter":               schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionExporter(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersionList":                   schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionList(ref),
@@ -17156,6 +17158,32 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_ObjectReference(ref common
 	}
 }
 
+func schema_custom_resources_apis_appcatalog_v1alpha1_Param(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Param declares a value to use for the Param called Name.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+				Required: []string{"name", "value"},
+			},
+		},
+	}
+}
+
 func schema_custom_resources_apis_appcatalog_v1alpha1_RemoveKeyTransform(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -17290,6 +17318,121 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_ServiceReference(ref commo
 				Required: []string{"scheme", "name", "port"},
 			},
 		},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_StashAddon(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_StashAddonSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StashAddonSpec is the spec for app",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"addon": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_StashTaskSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StashTaskSpec is the spec for app",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"backupTask": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Backup task definition",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef"),
+						},
+					},
+					"restoreTask": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Restore task definition",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef"),
+						},
+					},
+				},
+				Required: []string{"backupTask", "restoreTask"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"params": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Params specifies a list of parameter to pass to the Task. Stash will use this parameters to resolve the task.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param"},
 	}
 }
 
@@ -18952,9 +19095,16 @@ func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref comm
 							Format:      "",
 						},
 					},
+					"distribution": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distribution",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"authPlugin": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Authentication plugin used by Elasticsearch cluster.",
+							Description: "Authentication plugin used by Elasticsearch cluster Deprecated",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -18969,12 +19119,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref comm
 						SchemaProps: spec.SchemaProps{
 							Description: "Exporter Image",
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter"),
-						},
-					},
-					"tools": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Tools Image",
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionTools"),
 						},
 					},
 					"deprecated": {
@@ -18996,32 +19140,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy"),
 						},
 					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "authPlugin", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionTools"},
-	}
-}
-
-func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionTools(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ElasticsearchVersionTools is the image for the elasticsearch tools",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"image": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-				},
-				Required: []string{"image"},
-			},
-		},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy"},
 	}
 }
 
@@ -19176,12 +19306,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionSpec(ref common.Refere
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionExporter"),
 						},
 					},
-					"tools": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Tools Image",
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionTools"),
-						},
-					},
 					"deprecated": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.",
@@ -19189,32 +19313,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionSpec(ref common.Refere
 							Format:      "",
 						},
 					},
-				},
-				Required: []string{"version", "db", "exporter", "tools"},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionTools"},
-	}
-}
-
-func schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionTools(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdVersionTools is the image for the Etcd exporter",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"image": {
+					"stash": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
 				},
-				Required: []string{"image"},
+				Required: []string{"version", "db", "exporter"},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionExporter"},
 	}
 }
 
@@ -19428,12 +19538,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy"),
 						},
 					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy"},
 	}
 }
 
@@ -19809,6 +19925,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref common.Ref
 							Format:      "",
 						},
 					},
+					"distribution": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distribution",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"db": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database Image",
@@ -19819,12 +19942,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref common.Ref
 						SchemaProps: spec.SchemaProps{
 							Description: "Exporter Image",
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionExporter"),
-						},
-					},
-					"tools": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Tools Image",
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionTools"),
 						},
 					},
 					"deprecated": {
@@ -19852,32 +19969,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"),
 						},
 					},
-				},
-				Required: []string{"version", "db", "exporter", "tools", "initContainer", "podSecurityPolicies", "replicationModeDetector"},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionTools", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"},
-	}
-}
-
-func schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionTools(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "MongoDBVersionTools is the image for the mongodb tools",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"image": {
+					"stash": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
 				},
-				Required: []string{"image"},
+				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies", "replicationModeDetector"},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"},
 	}
 }
 
@@ -20086,6 +20189,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.Refer
 							Format:      "",
 						},
 					},
+					"distribution": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distribution",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"db": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database Image",
@@ -20096,12 +20206,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.Refer
 						SchemaProps: spec.SchemaProps{
 							Description: "Exporter Image",
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter"),
-						},
-					},
-					"tools": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Tools Image",
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionTools"),
 						},
 					},
 					"replicationModeDetector": {
@@ -20135,32 +20239,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints"),
 						},
 					},
-				},
-				Required: []string{"version", "db", "exporter", "tools", "replicationModeDetector", "initContainer", "podSecurityPolicies", "upgradeConstraints"},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionTools", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"},
-	}
-}
-
-func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionTools(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "MySQLVersionTools is the image for the MySQL tools",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"image": {
+					"stash": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
 				},
-				Required: []string{"image"},
+				Required: []string{"version", "db", "exporter", "replicationModeDetector", "initContainer", "podSecurityPolicies", "upgradeConstraints"},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"},
 	}
 }
 
@@ -20374,12 +20464,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersionSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionPodSecurityPolicy"),
 						},
 					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionPodSecurityPolicy"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionPodSecurityPolicy"},
 	}
 }
 
@@ -20588,6 +20684,26 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersion(ref common.Refere
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionCoordinator(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgresVersionCoordinator is the Postgres leader elector image",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionDatabase(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -20613,6 +20729,26 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionExporter(ref commo
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Description: "PostgresVersionExporter is the image for the Postgres exporter",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionInitContainer(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgresVersionInitContainer is the Postgres init container image",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"image": {
@@ -20709,6 +20845,19 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref common.Re
 							Format:      "",
 						},
 					},
+					"distribution": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distribution",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"initContainer": {
+						SchemaProps: spec.SchemaProps{
+							Description: "init container image",
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer"),
+						},
+					},
 					"db": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database Image",
@@ -20721,10 +20870,10 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter"),
 						},
 					},
-					"tools": {
+					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Tools Image",
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTools"),
+							Description: "Coordinator Image",
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator"),
 						},
 					},
 					"deprecated": {
@@ -20740,32 +20889,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy"),
 						},
 					},
-				},
-				Required: []string{"version", "db", "exporter", "tools", "podSecurityPolicies"},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTools"},
-	}
-}
-
-func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionTools(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "PostgresVersionTools is the image for the postgres tools",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"image": {
+					"stash": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
 				},
-				Required: []string{"image"},
+				Required: []string{"version", "db", "exporter", "podSecurityPolicies"},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy"},
 	}
 }
 
@@ -21146,12 +21281,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy"),
 						},
 					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stash defines backup and restore task definitions.",
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy"},
 	}
 }
 

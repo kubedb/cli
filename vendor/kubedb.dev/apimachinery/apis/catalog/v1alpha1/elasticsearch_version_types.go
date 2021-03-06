@@ -16,7 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+)
 
 const (
 	ResourceCodeElasticsearchVersion     = "esversion"
@@ -50,15 +53,15 @@ type ElasticsearchVersion struct {
 type ElasticsearchVersionSpec struct {
 	// Version
 	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
-	// Authentication plugin used by Elasticsearch cluster.
-	AuthPlugin ElasticsearchAuthPlugin `json:"authPlugin" protobuf:"bytes,2,opt,name=authPlugin,casttype=ElasticsearchAuthPlugin"`
+	// Distribution
+	Distribution ElasticsearchDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=ElasticsearchDistro"`
+	// Authentication plugin used by Elasticsearch cluster
+	// Deprecated
+	AuthPlugin ElasticsearchAuthPlugin `json:"authPlugin" protobuf:"bytes,3,opt,name=authPlugin,casttype=ElasticsearchAuthPlugin"`
 	// Database Image
-	DB ElasticsearchVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
+	DB ElasticsearchVersionDatabase `json:"db" protobuf:"bytes,4,opt,name=db"`
 	// Exporter Image
-	Exporter ElasticsearchVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
-	// Tools Image
-	// +optional
-	Tools ElasticsearchVersionTools `json:"tools,omitempty" protobuf:"bytes,5,opt,name=tools"`
+	Exporter ElasticsearchVersionExporter `json:"exporter" protobuf:"bytes,5,opt,name=exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
@@ -66,6 +69,9 @@ type ElasticsearchVersionSpec struct {
 	InitContainer ElasticsearchVersionInitContainer `json:"initContainer" protobuf:"bytes,7,opt,name=initContainer"`
 	// PSP names
 	PodSecurityPolicies ElasticsearchVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,8,opt,name=podSecurityPolicies"`
+	// Stash defines backup and restore task definitions.
+	// +optional
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,9,opt,name=stash"`
 }
 
 // ElasticsearchVersionDatabase is the Elasticsearch Database image
@@ -75,11 +81,6 @@ type ElasticsearchVersionDatabase struct {
 
 // ElasticsearchVersionExporter is the image for the Elasticsearch exporter
 type ElasticsearchVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
-}
-
-// ElasticsearchVersionTools is the image for the elasticsearch tools
-type ElasticsearchVersionTools struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
@@ -104,11 +105,20 @@ type ElasticsearchVersionList struct {
 	Items []ElasticsearchVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
 
-// +kubebuilder:validation:Enum=SearchGuard;X-Pack;OpenDistro
+// +kubebuilder:validation:Enum=OpenDistro;SearchGuard;X-Pack
 type ElasticsearchAuthPlugin string
 
 const (
+	ElasticsearchAuthPluginOpenDistro  ElasticsearchAuthPlugin = "OpenDistro"
 	ElasticsearchAuthPluginSearchGuard ElasticsearchAuthPlugin = "SearchGuard"
 	ElasticsearchAuthPluginXpack       ElasticsearchAuthPlugin = "X-Pack"
-	ElasticsearchAuthPluginOpenDistro  ElasticsearchAuthPlugin = "OpenDistro"
+)
+
+// +kubebuilder:validation:Enum=ElasticStack;OpenDistro;SearchGuard
+type ElasticsearchDistro string
+
+const (
+	ElasticsearchDistroElasticStack ElasticsearchDistro = "ElasticStack"
+	ElasticsearchDistroOpenDistro   ElasticsearchDistro = "OpenDistro"
+	ElasticsearchDistroSearchGuard  ElasticsearchDistro = "SearchGuard"
 )

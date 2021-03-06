@@ -26,6 +26,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -201,6 +202,30 @@ func (e *Elasticsearch) IngestStatefulSetName() string {
 		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.Ingest.Suffix)
 	}
 	return meta_util.NameWithSuffix(e.OffshootName(), ElasticsearchIngestNodeSuffix)
+}
+
+func (e *Elasticsearch) InitialMasterNodes() []string {
+	// For combined clusters
+	stsName := e.CombinedStatefulSetName()
+	replicas := int32(1)
+	if e.Spec.Replicas != nil {
+		replicas = pointer.Int32(e.Spec.Replicas)
+	}
+
+	// For topology cluster, overwrite the values
+	if e.Spec.Topology != nil {
+		stsName = e.MasterStatefulSetName()
+		if e.Spec.Topology.Master.Replicas != nil {
+			replicas = pointer.Int32(e.Spec.Topology.Master.Replicas)
+		}
+	}
+
+	var nodeNames []string
+	for i := int32(0); i < replicas; i++ {
+		nodeNames = append(nodeNames, fmt.Sprintf("%s-%d", stsName, i))
+	}
+
+	return nodeNames
 }
 
 type elasticsearchApp struct {

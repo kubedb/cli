@@ -28,6 +28,7 @@ import (
 func (in *GaleraArbitratorConfiguration) DeepCopyInto(out *GaleraArbitratorConfiguration) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
+	in.Stash.DeepCopyInto(&out.Stash)
 	return
 }
 
@@ -60,6 +61,7 @@ func (in *MongoDBConfiguration) DeepCopyInto(out *MongoDBConfiguration) {
 			(*out)[key] = val
 		}
 	}
+	in.Stash.DeepCopyInto(&out.Stash)
 	return
 }
 

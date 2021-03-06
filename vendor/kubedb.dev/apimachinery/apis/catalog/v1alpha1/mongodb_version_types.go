@@ -16,7 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+)
 
 const (
 	ResourceCodeMongoDBVersion     = "mgversion"
@@ -49,12 +52,12 @@ type MongoDBVersion struct {
 type MongoDBVersionSpec struct {
 	// Version
 	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	// Distribution
+	Distribution MongoDBDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=MongoDBDistro"`
 	// Database Image
-	DB MongoDBVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
+	DB MongoDBVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
 	// Exporter Image
-	Exporter MongoDBVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
-	// Tools Image
-	Tools MongoDBVersionTools `json:"tools" protobuf:"bytes,4,opt,name=tools"`
+	Exporter MongoDBVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,5,opt,name=deprecated"`
@@ -64,6 +67,9 @@ type MongoDBVersionSpec struct {
 	PodSecurityPolicies MongoDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
 	// ReplicationModeDetector Image
 	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector" protobuf:"bytes,8,opt,name=replicationModeDetector"`
+	// Stash defines backup and restore task definitions.
+	// +optional
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,9,opt,name=stash"`
 }
 
 // MongoDBVersionDatabase is the MongoDB Database image
@@ -73,11 +79,6 @@ type MongoDBVersionDatabase struct {
 
 // MongoDBVersionExporter is the image for the MongoDB exporter
 type MongoDBVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
-}
-
-// MongoDBVersionTools is the image for the mongodb tools
-type MongoDBVersionTools struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
@@ -100,3 +101,11 @@ type MongoDBVersionList struct {
 	// Items is a list of MongoDBVersion CRD objects
 	Items []MongoDBVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
+
+// +kubebuilder:validation:Enum=MongoDB;Percona
+type MongoDBDistro string
+
+const (
+	MongoDBDistroMongoDB MongoDBDistro = "MongoDB"
+	MongoDBDistroPercona MongoDBDistro = "Percona"
+)

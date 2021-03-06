@@ -26,6 +26,7 @@ import (
 	"gomodules.xyz/pointer"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -154,6 +155,10 @@ func (m MariaDB) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
+func (m MariaDB) PrimaryServiceDNS() string {
+	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
+}
+
 func (m *MariaDB) SetDefaults() {
 	if m == nil {
 		return
@@ -169,13 +174,18 @@ func (m *MariaDB) SetDefaults() {
 	if m.Spec.TerminationPolicy == "" {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
-
-	m.Spec.setDefaultProbes()
 	m.Spec.Monitor.SetDefaults()
+	m.SetTLSDefaults()
 	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 }
 
-func (m *MariaDBSpec) setDefaultProbes() {
+func (m *MariaDB) SetTLSDefaults() {
+	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MariaDBServerCert), m.CertificateName(MariaDBServerCert))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MariaDBArchiverCert), m.CertificateName(MariaDBArchiverCert))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MariaDBMetricsExporterCert), m.CertificateName(MariaDBMetricsExporterCert))
 }
 
 func (m *MariaDBSpec) GetPersistentSecrets() []string {
@@ -188,6 +198,25 @@ func (m *MariaDBSpec) GetPersistentSecrets() []string {
 		secrets = append(secrets, m.AuthSecret.Name)
 	}
 	return secrets
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (m *MariaDB) CertificateName(alias MariaDBCertificateAlias) string {
+	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// MustCertSecretName returns the secret name for a certificate alias
+func (m *MariaDB) MustCertSecretName(alias MariaDBCertificateAlias) string {
+	if m == nil {
+		panic("missing MariaDB database")
+	} else if m.Spec.TLS == nil {
+		panic(fmt.Errorf("MariaDB %s/%s is missing tls spec", m.Namespace, m.Name))
+	}
+	name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+	if !ok {
+		panic(fmt.Errorf("MariaDB %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
+	}
+	return name
 }
 
 func (m *MariaDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
