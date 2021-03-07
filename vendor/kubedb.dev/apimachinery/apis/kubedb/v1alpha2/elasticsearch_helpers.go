@@ -26,6 +26,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -203,6 +204,30 @@ func (e *Elasticsearch) IngestStatefulSetName() string {
 	return meta_util.NameWithSuffix(e.OffshootName(), ElasticsearchIngestNodeSuffix)
 }
 
+func (e *Elasticsearch) InitialMasterNodes() []string {
+	// For combined clusters
+	stsName := e.CombinedStatefulSetName()
+	replicas := int32(1)
+	if e.Spec.Replicas != nil {
+		replicas = pointer.Int32(e.Spec.Replicas)
+	}
+
+	// For topology cluster, overwrite the values
+	if e.Spec.Topology != nil {
+		stsName = e.MasterStatefulSetName()
+		if e.Spec.Topology.Master.Replicas != nil {
+			replicas = pointer.Int32(e.Spec.Topology.Master.Replicas)
+		}
+	}
+
+	var nodeNames []string
+	for i := int32(0); i < replicas; i++ {
+		nodeNames = append(nodeNames, fmt.Sprintf("%s-%d", stsName, i))
+	}
+
+	return nodeNames
+}
+
 type elasticsearchApp struct {
 	*Elasticsearch
 }
@@ -313,7 +338,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 		}
 		SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResourceLimits)
 	} else {
-		SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
 	}
 
 	// set default kernel settings
@@ -326,6 +351,15 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 					Name:  "vm.max_map_count",
 					Value: "262144",
 				},
+			},
+		}
+	}
+
+	if e.Spec.PodTemplate.Spec.Container.SecurityContext == nil {
+		e.Spec.PodTemplate.Spec.Container.SecurityContext = &core.SecurityContext{
+			Privileged: pointer.BoolP(false),
+			Capabilities: &core.Capabilities{
+				Add: []core.Capability{"IPC_LOCK", "SYS_RESOURCE"},
 			},
 		}
 	}

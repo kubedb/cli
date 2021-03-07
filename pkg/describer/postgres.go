@@ -78,8 +78,6 @@ func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels
 		}
 		w.Write(LEVEL_0, "Status:\t%s\n", string(item.Status.Phase))
 
-		describeArchiver(item.Spec.Archiver, w)
-
 		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
 		w.Write(LEVEL_0, "Paused:\t%v\n", kmapi.IsConditionTrue(item.Status.Conditions, api.DatabasePaused))

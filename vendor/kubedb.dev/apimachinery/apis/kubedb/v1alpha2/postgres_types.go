@@ -21,7 +21,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
-	store "kmodules.xyz/objectstore-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
@@ -64,25 +63,28 @@ type PostgresSpec struct {
 	// Streaming mode
 	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty" protobuf:"bytes,4,opt,name=streamingMode,casttype=PostgresStreamingMode"`
 
-	// Archive for wal files
-	Archiver *PostgresArchiverSpec `json:"archiver,omitempty" protobuf:"bytes,5,opt,name=archiver"`
-
 	// Leader election configuration
 	// +optional
-	LeaderElection *LeaderElectionConfig `json:"leaderElection,omitempty" protobuf:"bytes,6,opt,name=leaderElection"`
+	LeaderElection *PostgreLeaderElectionConfig `json:"leaderElection,omitempty" protobuf:"bytes,5,opt,name=leaderElection"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,7,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,6,opt,name=authSecret"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,8,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,7,opt,name=storageType,casttype=StorageType"`
 
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,9,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,8,opt,name=storage"`
+
+	// ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
+	ClientAuthMode PostgresClientAuthMode `json:"clientAuthMode,omitempty" protobuf:"bytes,9,opt,name=clientAuthMode,casttype=PostgresClientAuthMode"`
+
+	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
+	SSLMode PostgresSSLMode `json:"sslMode,omitempty" protobuf:"bytes,10,opt,name=sslMode,casttype=PostgresSSLMode"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,10,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,11,opt,name=init"`
 
 	// Monitor is used monitor database instance
 	// +optional
@@ -113,19 +115,67 @@ type PostgresSpec struct {
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
 
+// PostgreLeaderElectionConfig contains essential attributes of leader election.
+type PostgreLeaderElectionConfig struct {
+	// LeaseDuration is the duration in second that non-leader candidates will
+	// wait to force acquire leadership. This is measured against time of
+	// last observed ack. Default 15
+	// Deprecated
+	LeaseDurationSeconds int32 `json:"leaseDurationSeconds,omitempty" protobuf:"varint,1,opt,name=leaseDurationSeconds"`
+	// RenewDeadline is the duration in second that the acting master will retry
+	// refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3.
+	// Default 10
+	// Deprecated
+	RenewDeadlineSeconds int32 `json:"renewDeadlineSeconds,omitempty" protobuf:"varint,2,opt,name=renewDeadlineSeconds"`
+	// RetryPeriod is the duration in second the LeaderElector clients should wait
+	// between tries of actions. Normally, LeaseDuration / 3.
+	// Default 2
+	// Deprecated
+	RetryPeriodSeconds int32 `json:"retryPeriodSeconds,omitempty" protobuf:"varint,3,opt,name=retryPeriodSeconds"`
+
+	// MaximumLagBeforeFailover is used as maximum lag tolerance for the cluster.
+	// when ever a replica is lagging more than MaximumLagBeforeFailover
+	// this node need to sync manually with the primary node. default value is 32MB
+	// +default=33554432
+	// +kubebuilder:default:=33554432
+	// +optional
+	MaximumLagBeforeFailover uint64 `json:"maximumLagBeforeFailover,omitempty" protobuf:"varint,4,opt,name=maximumLagBeforeFailover"`
+
+	// Period between Node.Tick invocations
+	// +default="100ms"
+	// +kubebuilder:default:="100ms"
+	// +optional
+	Period metav1.Duration `json:"period,omitempty" protobuf:"bytes,5,opt,name=period"`
+
+	// ElectionTick is the number of Node.Tick invocations that must pass between
+	//	elections. That is, if a follower does not receive any message from the
+	//  leader of current term before ElectionTick has elapsed, it will become
+	//	candidate and start an election. ElectionTick must be greater than
+	//  HeartbeatTick. We suggest ElectionTick = 10 * HeartbeatTick to avoid
+	//  unnecessary leader switching. default value is 10.
+	// +default=10
+	// +kubebuilder:default:=10
+	// +optional
+	ElectionTick int32 `json:"electionTick,omitempty" protobuf:"varint,6,opt,name=electionTick"`
+
+	// HeartbeatTick is the number of Node.Tick invocations that must pass between
+	// heartbeats. That is, a leader sends heartbeat messages to maintain its
+	// leadership every HeartbeatTick ticks. default value is 1.
+	// +default=1
+	// +kubebuilder:default:=1
+	// +optional
+	HeartbeatTick int32 `json:"heartbeatTick,omitempty" protobuf:"varint,7,opt,name=heartbeatTick"`
+}
+
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
 type PostgresCertificateAlias string
 
 const (
 	PostgresServerCert          PostgresCertificateAlias = "server"
+	PostgresClientCert          PostgresCertificateAlias = "client"
 	PostgresArchiverCert        PostgresCertificateAlias = "archiver"
 	PostgresMetricsExporterCert PostgresCertificateAlias = "metrics-exporter"
 )
-
-type PostgresArchiverSpec struct {
-	Storage *store.Backend `json:"storage,omitempty" protobuf:"bytes,1,opt,name=storage"`
-	// wal_keep_segments
-}
 
 type PostgresStatus struct {
 	// Specifies the current phase of the database
@@ -147,12 +197,6 @@ type PostgresList struct {
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 	// Items is a list of Postgres CRD objects
 	Items []Postgres `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
-}
-
-type PostgresWALSourceSpec struct {
-	BackupName    string          `json:"backupName,omitempty" protobuf:"bytes,1,opt,name=backupName"`
-	PITR          *RecoveryTarget `json:"pitr,omitempty" protobuf:"bytes,2,opt,name=pitr"`
-	store.Backend `json:",inline,omitempty" protobuf:"bytes,3,opt,name=backend"`
 }
 
 type RecoveryTarget struct {
@@ -181,4 +225,57 @@ type PostgresStreamingMode string
 const (
 	SynchronousPostgresStreamingMode  PostgresStreamingMode = "Synchronous"
 	AsynchronousPostgresStreamingMode PostgresStreamingMode = "Asynchronous"
+)
+
+// ref: https://www.postgresql.org/docs/13/libpq-ssl.html
+// +kubebuilder:validation:Enum=disable;allow;prefer;require;verify-ca;verify-full
+type PostgresSSLMode string
+
+const (
+	// PostgresSSLModeDisable represents `disable` sslMode. It ensures that the server does not use TLS/SSL.
+	PostgresSSLModeDisable PostgresSSLMode = "disable"
+
+	// PostgresSSLModeAllow represents `allow` sslMode. 	I don't care about security,
+	// but I will pay the overhead of encryption if the server insists on it.
+	PostgresSSLModeAllow PostgresSSLMode = "allow"
+
+	// PostgresSSLModePrefer represents `preferSSL` sslMode.
+	// I don't care about encryption, but I wish to pay the overhead of encryption if the server supports it.
+	PostgresSSLModePrefer PostgresSSLMode = "prefer"
+
+	// PostgresSSLModeRequire represents `requiteSSL` sslmode. I want my data to be encrypted, and I accept the overhead.
+	// I trust that the network will make sure I always connect to the server I want.
+	PostgresSSLModeRequire PostgresSSLMode = "require"
+
+	// PostgresSSLModeVerifyCA represents `verify-ca` sslmode. I want my data encrypted, and I accept the overhead.
+	// I want to be sure that I connect to a server that I trust.
+	PostgresSSLModeVerifyCA PostgresSSLMode = "verify-ca"
+
+	// PostgresSSLModeVerifyFull represents `verify-full` sslmode. I want my data encrypted, and I accept the overhead.
+	// I want to be sure that I connect to a server I trust, and that it's the one I specify.
+	PostgresSSLModeVerifyFull PostgresSSLMode = "verify-full"
+)
+
+// PostgresClientAuthMode represents the ClientAuthMode of PostgreSQL clusters ( replicaset )
+// ref: https://www.postgresql.org/docs/12/auth-methods.html
+// +kubebuilder:validation:Enum=md5;scram;cert
+type PostgresClientAuthMode string
+
+const (
+	// ClientAuthModeMD5 uses a custom less secure challenge-response mechanism.
+	// It prevents password sniffing and avoids storing passwords on the server in plain text but provides no protection
+	// if an attacker manages to steal the password hash from the server.
+	// Also, the MD5 hash algorithm is nowadays no longer considered secure against determined attacks
+	ClientAuthModeMD5 PostgresClientAuthMode = "md5"
+
+	// ClientAuthModeScram performs SCRAM-SHA-256 authentication, as described in RFC 7677.
+	// It is a challenge-response scheme that prevents password sniffing on untrusted connections
+	// and supports storing passwords on the server in a cryptographically hashed form that is thought to be secure.
+	// This is the most secure of the currently provided methods, but it is not supported by older client libraries.
+	ClientAuthModeScram PostgresClientAuthMode = "scram"
+
+	// ClientAuthModeCert represents `cert clientcert=1` auth mode where client need to provide cert and private key for authentication.
+	// When server is config with this auth method. Client can't connect with postgreSQL server with password. They need
+	// to Send the client cert and client key certificate for authentication.
+	ClientAuthModeCert PostgresClientAuthMode = "cert"
 )

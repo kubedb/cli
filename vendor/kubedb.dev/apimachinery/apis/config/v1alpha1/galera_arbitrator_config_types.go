@@ -16,7 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+)
 
 const (
 	// Resource Kind for GaleraArbitratorConfiguration
@@ -49,4 +52,8 @@ type GaleraArbitratorConfiguration struct {
 	// trigger state snapshot dump (state backup) on one of the other nodes.
 	// Ref: https://galeracluster.com/library/documentation/mysql-wsrep-options.html#wsrep-sst-method
 	SSTMethod string `json:"sstMethod,omitempty" protobuf:"bytes,3,opt,name=sstMethod"`
+
+	// Stash defines backup and restore task definitions.
+	// +optional
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,4,opt,name=stash"`
 }

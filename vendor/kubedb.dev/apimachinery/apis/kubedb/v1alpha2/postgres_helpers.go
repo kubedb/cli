@@ -18,6 +18,7 @@ package v1alpha2
 
 import (
 	"fmt"
+	"time"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/kubedb"
@@ -28,6 +29,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -158,22 +160,14 @@ func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 		p.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
 
-	if p.Spec.Init != nil && p.Spec.Init.PostgresWAL != nil && p.Spec.Init.PostgresWAL.PITR != nil {
-		pitr := p.Spec.Init.PostgresWAL.PITR
-
-		if pitr.TargetInclusive == nil {
-			pitr.TargetInclusive = pointer.BoolP(true)
-		}
-
-		p.Spec.Init.PostgresWAL.PITR = pitr
-	}
-
 	if p.Spec.LeaderElection == nil {
-		// Default values: https://github.com/kubernetes/apiserver/blob/e85ad7b666fef0476185731329f4cff1536efff8/pkg/apis/config/v1alpha1/defaults.go#L26-L52
-		p.Spec.LeaderElection = &LeaderElectionConfig{
-			LeaseDurationSeconds: 15,
-			RenewDeadlineSeconds: 10,
-			RetryPeriodSeconds:   2,
+		p.Spec.LeaderElection = &PostgreLeaderElectionConfig{
+			//we have set this default to 33554432. if the difference between primary and replica is more then this,
+			//the replica node is going to manually sync itself.
+			Period:                   metav1.Duration{Duration: 100 * time.Millisecond},
+			MaximumLagBeforeFailover: 32 * 1024 * 1024,
+			ElectionTick:             10,
+			HeartbeatTick:            1,
 		}
 	}
 
@@ -181,9 +175,35 @@ func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
 	}
 
-	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
+	if p.Spec.TLS != nil {
+		if p.Spec.SSLMode == "" {
+			p.Spec.SSLMode = PostgresSSLModeVerifyFull
+		}
+		if p.Spec.ClientAuthMode == "" {
+			p.Spec.ClientAuthMode = ClientAuthModeMD5
+		}
+	} else {
+		if p.Spec.SSLMode == "" {
+			p.Spec.SSLMode = PostgresSSLModeDisable
+		}
+		if p.Spec.ClientAuthMode == "" {
+			p.Spec.ClientAuthMode = ClientAuthModeMD5
+		}
+	}
+
+	if p.Spec.PodTemplate.Spec.Container.SecurityContext == nil {
+		p.Spec.PodTemplate.Spec.Container.SecurityContext = &core.SecurityContext{
+			Privileged: pointer.BoolP(false),
+			Capabilities: &core.Capabilities{
+				Add: []core.Capability{"IPC_LOCK", "SYS_RESOURCE"},
+			},
+		}
+	}
+
 	p.Spec.Monitor.SetDefaults()
-	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
+	p.SetTLSDefaults()
+	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 }
 
 // setDefaultAffinity
@@ -226,14 +246,23 @@ func (p *Postgres) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels 
 	}
 }
 
-func (e *PostgresSpec) GetPersistentSecrets() []string {
-	if e == nil {
+func (p *Postgres) SetTLSDefaults() {
+	if p.Spec.TLS == nil || p.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PostgresServerCert), p.CertificateName(PostgresServerCert))
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PostgresClientCert), p.CertificateName(PostgresClientCert))
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PostgresMetricsExporterCert), p.CertificateName(PostgresMetricsExporterCert))
+}
+
+func (p *PostgresSpec) GetPersistentSecrets() []string {
+	if p == nil {
 		return nil
 	}
 
 	var secrets []string
-	if e.AuthSecret != nil {
-		secrets = append(secrets, e.AuthSecret.Name)
+	if p.AuthSecret != nil {
+		secrets = append(secrets, p.AuthSecret.Name)
 	}
 	return secrets
 }
@@ -242,4 +271,23 @@ func (p *Postgres) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, 
 	// Desire number of statefulSets
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (p *Postgres) CertificateName(alias PostgresCertificateAlias) string {
+	return meta_util.NameWithSuffix(p.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// MustCertSecretName returns the secret name for a certificate alias
+func (p *Postgres) MustCertSecretName(alias PostgresCertificateAlias) string {
+	if p == nil {
+		panic("missing Postgres database")
+	} else if p.Spec.TLS == nil {
+		panic(fmt.Errorf("Postgres %s/%s is missing tls spec", p.Namespace, p.Name))
+	}
+	name, ok := kmapi.GetCertificateSecretName(p.Spec.TLS.Certificates, string(alias))
+	if !ok {
+		panic(fmt.Errorf("Postgres %s/%s is missing secret name for %s certificate", p.Namespace, p.Name, alias))
+	}
+	return name
 }
