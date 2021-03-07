@@ -165,17 +165,11 @@ const (
 	MySQLGroupComPort                      = 33060
 	MySQLMaxGroupMembers                   = 9
 	// The recommended MySQL server version for group replication (GR)
-	MySQLGRRecommendedVersion       = "5.7.25"
-	MySQLDefaultGroupSize           = 3
-	MySQLDefaultBaseServerID  int64 = 1
-	// The server id for each group member must be unique and in the range [1, 2^32 - 1]
-	// And the maximum group size is 9. So MySQLMaxBaseServerID is the maximum safe value
-	// for BaseServerID calculated as max MySQL server_id value - max Replication Group size.
-	// xref: https://dev.mysql.com/doc/refman/5.7/en/replication-options.html
-	MySQLMaxBaseServerID int64 = ((1 << 32) - 1) - 9
-	MySQLRootUserName          = "MYSQL_ROOT_USERNAME"
-	MySQLRootPassword          = "MYSQL_ROOT_PASSWORD"
-	MySQLName                  = "MYSQL_NAME"
+	MySQLGRRecommendedVersion = "8.0.23"
+	MySQLDefaultGroupSize     = 3
+	MySQLRootUserName         = "MYSQL_ROOT_USERNAME"
+	MySQLRootPassword         = "MYSQL_ROOT_PASSWORD"
+	MySQLName                 = "MYSQL_NAME"
 
 	MySQLTLSConfigCustom     = "custom"
 	MySQLTLSConfigSkipVerify = "skip-verify"
@@ -195,7 +189,7 @@ const (
 	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
 
 	// =========================== MariaDB Constants ============================
-	MariaDBClusterRecommendedVersion    = "5.7"
+	MariaDBClusterRecommendedVersion    = "10.5"
 	MariaDBMaxClusterNameLength         = 32
 	MariaDBStandaloneReplicas           = 1
 	MariaDBDefaultClusterSize           = 3
@@ -213,6 +207,30 @@ const (
 	PostgresPodPrimary             = "primary"
 	PostgresPodStandby             = "standby"
 	PostgresLabelRole              = kubedb.GroupName + "/role"
+
+	PostgresCoordinatorContainerName = "pg-coordinator"
+	PostgresCoordinatorPort          = 2380
+	PostgresCoordinatorPortName      = "coordinator"
+
+	PostgresCoordinatorClientPort     = 2379
+	PostgresCoordinatorClientPortName = "coordinatclient"
+
+	PostgresRunScriptMountPath  = "/run_scripts"
+	PostgresRunScriptVolumeName = "scripts"
+
+	PostgresCurrentXlogLocation     = "pg_current_xlog_location"
+	PostgresLastXlogReceiveLocation = "pg_last_xlog_receive_location"
+	PostgresLastXlogReplayLocation  = "pg_last_xlog_replay_location"
+	PostgresXlogLocationDiff        = "pg_xlog_location_diff"
+
+	PostgresCurrentWalLSN         = "pg_current_wal_lsn"
+	PostgresLastWalReceivePostion = "pg_last_wal_receive_lsn"
+	PostgresLastWalReplayLSN      = "pg_last_wal_replay_lsn"
+	PostgresWalLSNDiff            = "pg_wal_lsn_diff"
+
+	PostgresKeyFileSecretSuffix = "key"
+	PostgresPEMSecretSuffix     = "pem"
+	PostgresDefaultUsername     = "postgres"
 
 	// =========================== ProxySQL Constants ============================
 	LabelProxySQLName        = ProxySQLKey + "/name"

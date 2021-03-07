@@ -68,6 +68,53 @@ spec:
                 required:
                 - databasePolicyName
                 type: object
+              stash:
+                properties:
+                  addon:
+                    properties:
+                      backupTask:
+                        properties:
+                          name:
+                            type: string
+                          params:
+                            items:
+                              properties:
+                                name:
+                                  type: string
+                                value:
+                                  type: string
+                              required:
+                              - name
+                              - value
+                              type: object
+                            type: array
+                        required:
+                        - name
+                        type: object
+                      restoreTask:
+                        properties:
+                          name:
+                            type: string
+                          params:
+                            items:
+                              properties:
+                                name:
+                                  type: string
+                                value:
+                                  type: string
+                              required:
+                              - name
+                              - value
+                              type: object
+                            type: array
+                        required:
+                        - name
+                        type: object
+                    required:
+                    - backupTask
+                    - restoreTask
+                    type: object
+                type: object
               version:
                 type: string
             required:

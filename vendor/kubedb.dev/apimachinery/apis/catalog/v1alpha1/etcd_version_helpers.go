@@ -55,12 +55,10 @@ func (e EtcdVersion) ResourcePlural() string {
 func (e EtcdVersion) ValidateSpecs() error {
 	if e.Spec.Version == "" ||
 		e.Spec.DB.Image == "" ||
-		e.Spec.Tools.Image == "" ||
 		e.Spec.Exporter.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for etcdVersion "%v":
 spec.version,
 spec.db.image,
-spec.tools.image,
 spec.exporter.image.`, e.Name)
 	}
 	return nil

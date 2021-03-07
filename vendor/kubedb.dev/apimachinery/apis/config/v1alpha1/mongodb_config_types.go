@@ -16,7 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+)
 
 const (
 	ResourceKindMongoConfiguration = "MongoConfiguration"
@@ -38,4 +41,8 @@ type MongoDBConfiguration struct {
 	// but only one replicaset, then ReplicaSets field contains only one key-value pair where the key is
 	// host-0 and the value is dsn of that replicaset.
 	ReplicaSets map[string]string `json:"replicaSets,omitempty" protobuf:"bytes,2,rep,name=replicaSets"`
+
+	// Stash defines backup and restore task definitions.
+	// +optional
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,3,opt,name=stash"`
 }

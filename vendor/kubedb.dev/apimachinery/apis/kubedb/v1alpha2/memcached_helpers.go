@@ -152,7 +152,7 @@ func (m *Memcached) SetDefaults() {
 	}
 
 	m.Spec.Monitor.SetDefaults()
-	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
+	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
 }
 
 func (m *MemcachedSpec) GetPersistentSecrets() []string {

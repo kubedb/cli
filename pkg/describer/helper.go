@@ -35,7 +35,6 @@ import (
 	"k8s.io/kubectl/pkg/util/slice"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
-	store "kmodules.xyz/objectstore-api/api/v1"
 )
 
 func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w describe.PrefixWriter) {
@@ -62,16 +61,6 @@ func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec
 	}
 }
 
-func describeArchiver(archiver *api.PostgresArchiverSpec, w describe.PrefixWriter) {
-	if archiver == nil {
-		return
-	}
-	w.WriteLine("Archiver:")
-	if archiver.Storage != nil {
-		describeSnapshotStorage(LEVEL_1, *archiver.Storage, w)
-	}
-}
-
 func describeInitialization(init *api.InitSpec, w describe.PrefixWriter) {
 	if init == nil {
 		return
@@ -84,36 +73,6 @@ func describeInitialization(init *api.InitSpec, w describe.PrefixWriter) {
 	}
 	if init.WaitForInitialRestore {
 		w.Write(LEVEL_1, "WaitForInitialRestore:\t%s\n", init.WaitForInitialRestore)
-	}
-	if init.PostgresWAL != nil {
-		w.Write(LEVEL_1, "Postgres WAL:\n")
-		describeSnapshotStorage(LEVEL_2, init.PostgresWAL.Backend, w)
-	}
-}
-
-func describeSnapshotStorage(level int, snapshot store.Backend, w describe.PrefixWriter) {
-	switch {
-	case snapshot.Local != nil:
-		describeVolume(level, snapshot.Local.VolumeSource, w)
-		w.Write(level, "Type:\tLocal\n")
-		w.Write(level, "path:\t%v\n", snapshot.Local.MountPath)
-	case snapshot.S3 != nil:
-		w.Write(level, "Type:\tS3\n")
-		w.Write(level, "endpoint:\t%v\n", snapshot.S3.Endpoint)
-		w.Write(level, "bucket:\t%v\n", snapshot.S3.Bucket)
-		w.Write(level, "prefix:\t%v\n", snapshot.S3.Prefix)
-	case snapshot.GCS != nil:
-		w.Write(level, "Type:\tGCS\n")
-		w.Write(level, "bucket:\t%v\n", snapshot.GCS.Bucket)
-		w.Write(level, "prefix:\t%v\n", snapshot.GCS.Prefix)
-	case snapshot.Azure != nil:
-		w.Write(level, "Type:\tAzure\n")
-		w.Write(level, "container:\t%v\n", snapshot.Azure.Container)
-		w.Write(level, "prefix:\t%v\n", snapshot.Azure.Prefix)
-	case snapshot.Swift != nil:
-		w.Write(level, "Type:\tSwift\n")
-		w.Write(level, "container:\t%v\n", snapshot.Swift.Container)
-		w.Write(level, "prefix:\t%v\n", snapshot.Swift.Prefix)
 	}
 }
 
@@ -137,7 +96,6 @@ func describeMonitor(monitor *mona.AgentSpec, w describe.PrefixWriter) {
 		if prom.ServiceMonitor.Interval != "" {
 			w.Write(LEVEL_0, "    Interval:\t%s\n", prom.ServiceMonitor.Interval)
 		}
-
 	}
 }
 

@@ -365,15 +365,15 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	}
 
 	if m.Spec.ShardTopology != nil {
-		SetDefaultResourceLimits(&m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Resources, DefaultResourceLimits)
-		SetDefaultResourceLimits(&m.Spec.ShardTopology.Shard.PodTemplate.Spec.Resources, DefaultResourceLimits)
-		SetDefaultResourceLimits(&m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.ShardTopology.Shard.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
 
-		if m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle == nil {
-			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle = new(core.Lifecycle)
+		if m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Lifecycle == nil {
+			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Lifecycle = new(core.Lifecycle)
 		}
 
-		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle.PreStop = &core.Handler{
+		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Lifecycle.PreStop = &core.Handler{
 			Exec: &core.ExecAction{
 				Command: []string{
 					"bash",
@@ -427,7 +427,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		// set default affinity (PodAntiAffinity)
 		m.setDefaultAffinity(m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 
-		SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
 	}
 
 	m.SetTLSDefaults()
@@ -438,44 +438,64 @@ func (m *MongoDB) SetTLSDefaults() {
 		return
 	}
 
+	defaultServerOrg := []string{KubeDBOrganization}
 	if m.Spec.ShardTopology != nil {
+		_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert))
+		if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
+			defaultServerOrg = cert.Subject.Organizations
+		}
+
 		m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 			Alias:      string(MongoDBServerCert),
 			SecretName: "",
 			Subject: &kmapi.X509Subject{
-				Organizations:       []string{KubeDBOrganization},
-				OrganizationalUnits: []string{string(MongoDBServerCert)},
+				Organizations: defaultServerOrg,
 			},
 		})
+
 		// reset secret name to empty string, since multiple secrets will be created for each StatefulSet.
 		m.Spec.TLS.Certificates = kmapi.SetSecretNameForCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert), "")
 	} else {
+		_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert))
+		if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
+			defaultServerOrg = cert.Subject.Organizations
+		}
 		m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 			Alias:      string(MongoDBServerCert),
 			SecretName: m.CertificateName(MongoDBServerCert, ""),
 			Subject: &kmapi.X509Subject{
-				Organizations:       []string{KubeDBOrganization},
-				OrganizationalUnits: []string{string(MongoDBServerCert)},
+				Organizations: defaultServerOrg,
 			},
 		})
+	}
+
+	defaultClientOrg := []string{KubeDBOrganization}
+	_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBClientCert))
+	if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
+		defaultClientOrg = cert.Subject.Organizations
 	}
 	m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 		Alias:      string(MongoDBClientCert),
 		SecretName: m.CertificateName(MongoDBClientCert, ""),
 		Subject: &kmapi.X509Subject{
-			Organizations:       []string{KubeDBOrganization},
-			OrganizationalUnits: []string{string(MongoDBClientCert)},
+			Organizations: defaultClientOrg,
 		},
 	})
+
+	defaultExporterOrg := []string{KubeDBOrganization}
+	_, cert = kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBMetricsExporterCert))
+	if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
+		defaultExporterOrg = cert.Subject.Organizations
+	}
 	m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 		Alias:      string(MongoDBMetricsExporterCert),
 		SecretName: m.CertificateName(MongoDBMetricsExporterCert, ""),
 		Subject: &kmapi.X509Subject{
-			Organizations:       []string{KubeDBOrganization},
-			OrganizationalUnits: []string{string(MongoDBMetricsExporterCert)},
+			Organizations: defaultExporterOrg,
 		},
 	})
 }
+
 func (m *MongoDB) getCmdForProbes(mgVersion *v1alpha1.MongoDBVersion) []string {
 	var sslArgs string
 	if m.Spec.SSLMode == SSLModeRequireSSL {
@@ -542,11 +562,11 @@ func (m *MongoDB) setDefaultProbes(podTemplate *ofst.PodTemplateSpec, mgVersion 
 		return
 	}
 
-	if podTemplate.Spec.LivenessProbe == nil {
-		podTemplate.Spec.LivenessProbe = m.GetDefaultLivenessProbeSpec(mgVersion)
+	if podTemplate.Spec.Container.LivenessProbe == nil {
+		podTemplate.Spec.Container.LivenessProbe = m.GetDefaultLivenessProbeSpec(mgVersion)
 	}
-	if podTemplate.Spec.ReadinessProbe == nil {
-		podTemplate.Spec.ReadinessProbe = m.GetDefaultReadinessProbeSpec(mgVersion)
+	if podTemplate.Spec.Container.ReadinessProbe == nil {
+		podTemplate.Spec.Container.ReadinessProbe = m.GetDefaultReadinessProbeSpec(mgVersion)
 	}
 }
 

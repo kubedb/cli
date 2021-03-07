@@ -24,6 +24,7 @@ package kubedb.dev.apimachinery.apis.config.v1alpha1;
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
+import "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1/generated.proto";
 
 // Package-wide variables from generator "generated".
 option go_package = "v1alpha1";
@@ -50,6 +51,10 @@ message GaleraArbitratorConfiguration {
   // trigger state snapshot dump (state backup) on one of the other nodes.
   // Ref: https://galeracluster.com/library/documentation/mysql-wsrep-options.html#wsrep-sst-method
   optional string sstMethod = 3;
+
+  // Stash defines backup and restore task definitions.
+  // +optional
+  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 4;
 }
 
 // MongoDBConfiguration defines a MongoDB app configuration.
@@ -64,5 +69,9 @@ message MongoDBConfiguration {
   // but only one replicaset, then ReplicaSets field contains only one key-value pair where the key is
   // host-0 and the value is dsn of that replicaset.
   map<string, string> replicaSets = 2;
+
+  // Stash defines backup and restore task definitions.
+  // +optional
+  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 3;
 }
 

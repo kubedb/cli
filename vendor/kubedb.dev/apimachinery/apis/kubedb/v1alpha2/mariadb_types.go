@@ -86,17 +86,21 @@ type MariaDBSpec struct {
 	// +optional
 	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,10,rep,name=serviceTemplates"`
 
+	// Indicates that the database server need to be encrypted connections(ssl)
+	// +optional
+	RequireSSL bool `json:"requireSSL,omitempty" protobuf:"varint,11,opt,name=requireSSL"`
+
 	// TLS contains tls configurations
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,11,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,12,opt,name=tls"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,12,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,13,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,13,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,14,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter

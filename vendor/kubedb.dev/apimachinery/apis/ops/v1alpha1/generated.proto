@@ -672,9 +672,6 @@ message MySQLCustomConfigurationSpec {
 message MySQLHorizontalScalingSpec {
   // Number of nodes/members of the group
   optional int32 member = 1;
-
-  // specifies the weight of the current member/Node
-  optional int32 memberWeight = 2;
 }
 
 // +kubebuilder:object:root=true

@@ -16,7 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+)
 
 const (
 	ResourceCodePerconaXtraDBVersion     = "pxversion"
@@ -61,6 +64,9 @@ type PerconaXtraDBVersionSpec struct {
 	InitContainer PerconaXtraDBVersionInitContainer `json:"initContainer" protobuf:"bytes,5,opt,name=initContainer"`
 	// PSP names
 	PodSecurityPolicies PerconaXtraDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,6,opt,name=podSecurityPolicies"`
+	// Stash defines backup and restore task definitions.
+	// +optional
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,7,opt,name=stash"`
 }
 
 // PerconaXtraDBVersionDatabase is the perconaxtradb image

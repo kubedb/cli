@@ -27,31 +27,13 @@ type InitSpec struct {
 	// that database is not mistakenly reset when recovered using disaster recovery tools.
 	Initialized bool `json:"initialized,omitempty" protobuf:"varint,1,opt,name=initialized"`
 	// Wait for initial DataRestore condition
-	WaitForInitialRestore bool                   `json:"waitForInitialRestore,omitempty" protobuf:"varint,2,opt,name=waitForInitialRestore"`
-	Script                *ScriptSourceSpec      `json:"script,omitempty" protobuf:"bytes,3,opt,name=script"`
-	PostgresWAL           *PostgresWALSourceSpec `json:"postgresWAL,omitempty" protobuf:"bytes,4,opt,name=postgresWAL"`
+	WaitForInitialRestore bool              `json:"waitForInitialRestore,omitempty" protobuf:"varint,2,opt,name=waitForInitialRestore"`
+	Script                *ScriptSourceSpec `json:"script,omitempty" protobuf:"bytes,3,opt,name=script"`
 }
 
 type ScriptSourceSpec struct {
 	ScriptPath        string `json:"scriptPath,omitempty" protobuf:"bytes,1,opt,name=scriptPath"`
 	core.VolumeSource `json:",inline,omitempty" protobuf:"bytes,2,opt,name=volumeSource"`
-}
-
-// LeaderElectionConfig contains essential attributes of leader election.
-// ref: https://github.com/kubernetes/client-go/blob/6134db91200ea474868bc6775e62cc294a74c6c6/tools/leaderelection/leaderelection.go#L105-L114
-type LeaderElectionConfig struct {
-	// LeaseDuration is the duration in second that non-leader candidates will
-	// wait to force acquire leadership. This is measured against time of
-	// last observed ack. Default 15
-	LeaseDurationSeconds int32 `json:"leaseDurationSeconds" protobuf:"varint,1,opt,name=leaseDurationSeconds"`
-	// RenewDeadline is the duration in second that the acting master will retry
-	// refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3.
-	// Default 10
-	RenewDeadlineSeconds int32 `json:"renewDeadlineSeconds" protobuf:"varint,2,opt,name=renewDeadlineSeconds"`
-	// RetryPeriod is the duration in second the LeaderElector clients should wait
-	// between tries of actions. Normally, LeaseDuration / 3.
-	// Default 2
-	RetryPeriodSeconds int32 `json:"retryPeriodSeconds" protobuf:"varint,3,opt,name=retryPeriodSeconds"`
 }
 
 // +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted
