@@ -88,56 +88,6 @@ message ContainerRuntimeSettings {
   repeated k8s.io.api.core.v1.EnvVar env = 9;
 }
 
-message ContainerTemplate {
-  // Arguments to the entrypoint.
-  // The docker image's CMD is used if this is not provided.
-  // Variable references $(VAR_NAME) are expanded using the container's environment. If a variable
-  // cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax
-  // can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,
-  // regardless of whether the variable exists or not.
-  // Cannot be updated.
-  // More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
-  // +optional
-  repeated string args = 1;
-
-  // List of environment variables to set in the container.
-  // Cannot be updated.
-  // +optional
-  repeated k8s.io.api.core.v1.EnvVar env = 2;
-
-  // Compute Resources required by the sidecar container.
-  optional k8s.io.api.core.v1.ResourceRequirements resources = 3;
-
-  // Periodic probe of container liveness.
-  // Container will be restarted if the probe fails.
-  // Controllers may set default LivenessProbe if no liveness probe is provided.
-  // To ignore defaulting, set the value to empty LivenessProbe "{}".
-  // Cannot be updated.
-  // More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
-  // +optional
-  optional k8s.io.api.core.v1.Probe livenessProbe = 4;
-
-  // Periodic probe of container service readiness.
-  // Container will be removed from service endpoints if the probe fails.
-  // Cannot be updated.
-  // Controllers may set default ReadinessProbe if no readyness probe is provided.
-  // To ignore defaulting, set the value to empty ReadynessProbe "{}".
-  // More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
-  // +optional
-  optional k8s.io.api.core.v1.Probe readinessProbe = 5;
-
-  // Actions that the management system should take in response to container lifecycle events.
-  // Cannot be updated.
-  // +optional
-  optional k8s.io.api.core.v1.Lifecycle lifecycle = 6;
-
-  // Security options the pod should run with.
-  // More info: https://kubernetes.io/docs/concepts/policy/security-context/
-  // More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  // +optional
-  optional k8s.io.api.core.v1.SecurityContext securityContext = 7;
-}
-
 // https://linux.die.net/man/1/ionice
 message IONiceSettings {
   optional int32 class = 1;
@@ -445,8 +395,55 @@ message PodSpec {
   // +patchStrategy=merge
   repeated k8s.io.api.core.v1.Container initContainers = 16;
 
+  // Arguments to the entrypoint.
+  // The docker image's CMD is used if this is not provided.
+  // Variable references $(VAR_NAME) are expanded using the container's environment. If a variable
+  // cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax
+  // can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,
+  // regardless of whether the variable exists or not.
+  // Cannot be updated.
+  // More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
   // +optional
-  optional ContainerTemplate container = 17;
+  repeated string args = 17;
+
+  // List of environment variables to set in the container.
+  // Cannot be updated.
+  // +optional
+  repeated k8s.io.api.core.v1.EnvVar env = 18;
+
+  // Compute Resources required by the sidecar container.
+  // Deprecated
+  // +optional
+  optional k8s.io.api.core.v1.ResourceRequirements resources = 19;
+
+  // Periodic probe of container liveness.
+  // Container will be restarted if the probe fails.
+  // Controllers may set default LivenessProbe if no liveness probe is provided.
+  // To ignore defaulting, set the value to empty LivenessProbe "{}".
+  // Cannot be updated.
+  // More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+  // +optional
+  optional k8s.io.api.core.v1.Probe livenessProbe = 20;
+
+  // Periodic probe of container service readiness.
+  // Container will be removed from service endpoints if the probe fails.
+  // Cannot be updated.
+  // Controllers may set default ReadinessProbe if no readyness probe is provided.
+  // To ignore defaulting, set the value to empty ReadynessProbe "{}".
+  // More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
+  // +optional
+  optional k8s.io.api.core.v1.Probe readinessProbe = 21;
+
+  // Actions that the management system should take in response to container lifecycle events.
+  // Cannot be updated.
+  // +optional
+  optional k8s.io.api.core.v1.Lifecycle lifecycle = 22;
+
+  // Security options the pod should run with.
+  // More info: https://kubernetes.io/docs/concepts/policy/security-context/
+  // More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  // +optional
+  optional k8s.io.api.core.v1.SecurityContext containerSecurityContext = 23;
 }
 
 // PodTemplateSpec describes the data a pod should have when created from a template

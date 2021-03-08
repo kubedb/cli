@@ -201,10 +201,9 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 	}
 
 	m.Spec.Monitor.SetDefaults()
-
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
-	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 }
 
 // setDefaultAffinity
