@@ -173,7 +173,7 @@ func (p *PerconaXtraDB) SetDefaults() {
 
 	p.Spec.setDefaultProbes()
 	p.Spec.Monitor.SetDefaults()
-	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 }
 
 // setDefaultProbes sets defaults only when probe fields are nil.
@@ -213,8 +213,8 @@ fi
 		InitialDelaySeconds: 30,
 		PeriodSeconds:       10,
 	}
-	if p.PodTemplate.Spec.Container.ReadinessProbe == nil {
-		p.PodTemplate.Spec.Container.ReadinessProbe = readinessProbe
+	if p.PodTemplate.Spec.ReadinessProbe == nil {
+		p.PodTemplate.Spec.ReadinessProbe = readinessProbe
 	}
 }
 

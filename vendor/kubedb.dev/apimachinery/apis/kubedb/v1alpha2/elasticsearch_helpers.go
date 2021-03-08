@@ -338,7 +338,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 		}
 		SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResourceLimits)
 	} else {
-		SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 	}
 
 	// set default kernel settings
@@ -355,8 +355,8 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 		}
 	}
 
-	if e.Spec.PodTemplate.Spec.Container.SecurityContext == nil {
-		e.Spec.PodTemplate.Spec.Container.SecurityContext = &core.SecurityContext{
+	if e.Spec.PodTemplate.Spec.ContainerSecurityContext == nil {
+		e.Spec.PodTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{
 			Privileged: pointer.BoolP(false),
 			Capabilities: &core.Capabilities{
 				Add: []core.Capability{"IPC_LOCK", "SYS_RESOURCE"},

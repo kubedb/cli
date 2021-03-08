@@ -165,11 +165,6 @@ type PodSpec struct {
 	// Application (database) Container Specific Settings //
 	////////////////////////////////////////////////////////
 
-	// +optional
-	Container ContainerTemplate `json:"container" protobuf:"bytes,17,opt,name=container"`
-}
-
-type ContainerTemplate struct {
 	// Arguments to the entrypoint.
 	// The docker image's CMD is used if this is not provided.
 	// Variable references $(VAR_NAME) are expanded using the container's environment. If a variable
@@ -179,15 +174,17 @@ type ContainerTemplate struct {
 	// Cannot be updated.
 	// More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell
 	// +optional
-	Args []string `json:"args,omitempty" protobuf:"bytes,1,rep,name=args"`
+	Args []string `json:"args,omitempty" protobuf:"bytes,17,rep,name=args"`
 
 	// List of environment variables to set in the container.
 	// Cannot be updated.
 	// +optional
-	Env []core.EnvVar `json:"env,omitempty" protobuf:"bytes,2,rep,name=env"`
+	Env []core.EnvVar `json:"env,omitempty" protobuf:"bytes,18,rep,name=env"`
 
 	// Compute Resources required by the sidecar container.
-	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,3,opt,name=resources"`
+	// Deprecated
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,19,opt,name=resources"`
 
 	// Periodic probe of container liveness.
 	// Container will be restarted if the probe fails.
@@ -196,7 +193,7 @@ type ContainerTemplate struct {
 	// Cannot be updated.
 	// More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 	// +optional
-	LivenessProbe *core.Probe `json:"livenessProbe,omitempty" protobuf:"bytes,4,opt,name=livenessProbe"`
+	LivenessProbe *core.Probe `json:"livenessProbe,omitempty" protobuf:"bytes,20,opt,name=livenessProbe"`
 
 	// Periodic probe of container service readiness.
 	// Container will be removed from service endpoints if the probe fails.
@@ -205,18 +202,18 @@ type ContainerTemplate struct {
 	// To ignore defaulting, set the value to empty ReadynessProbe "{}".
 	// More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
 	// +optional
-	ReadinessProbe *core.Probe `json:"readinessProbe,omitempty" protobuf:"bytes,5,opt,name=readinessProbe"`
+	ReadinessProbe *core.Probe `json:"readinessProbe,omitempty" protobuf:"bytes,21,opt,name=readinessProbe"`
 
 	// Actions that the management system should take in response to container lifecycle events.
 	// Cannot be updated.
 	// +optional
-	Lifecycle *core.Lifecycle `json:"lifecycle,omitempty" protobuf:"bytes,6,opt,name=lifecycle"`
+	Lifecycle *core.Lifecycle `json:"lifecycle,omitempty" protobuf:"bytes,22,opt,name=lifecycle"`
 
 	// Security options the pod should run with.
 	// More info: https://kubernetes.io/docs/concepts/policy/security-context/
 	// More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 	// +optional
-	SecurityContext *core.SecurityContext `json:"securityContext,omitempty" protobuf:"bytes,7,opt,name=securityContext"`
+	ContainerSecurityContext *core.SecurityContext `json:"containerSecurityContext,omitempty" protobuf:"bytes,23,opt,name=containerSecurityContext"`
 }
 
 // ServiceTemplateSpec describes the data a service should have when created from a template

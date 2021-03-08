@@ -191,8 +191,8 @@ func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 		}
 	}
 
-	if p.Spec.PodTemplate.Spec.Container.SecurityContext == nil {
-		p.Spec.PodTemplate.Spec.Container.SecurityContext = &core.SecurityContext{
+	if p.Spec.PodTemplate.Spec.ContainerSecurityContext == nil {
+		p.Spec.PodTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{
 			Privileged: pointer.BoolP(false),
 			Capabilities: &core.Capabilities{
 				Add: []core.Capability{"IPC_LOCK", "SYS_RESOURCE"},
@@ -202,7 +202,7 @@ func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 
 	p.Spec.Monitor.SetDefaults()
 	p.SetTLSDefaults()
-	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 }
 

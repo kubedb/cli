@@ -202,7 +202,7 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	r.Spec.Monitor.SetDefaults()
 
 	r.SetTLSDefaults()
-	SetDefaultResourceLimits(&r.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+	SetDefaultResourceLimits(&r.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 }
 
 func (r *Redis) SetTLSDefaults() {

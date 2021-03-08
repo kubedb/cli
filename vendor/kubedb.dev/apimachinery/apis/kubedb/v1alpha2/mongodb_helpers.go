@@ -365,15 +365,15 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	}
 
 	if m.Spec.ShardTopology != nil {
-		SetDefaultResourceLimits(&m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
-		SetDefaultResourceLimits(&m.Spec.ShardTopology.Shard.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
-		SetDefaultResourceLimits(&m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.ShardTopology.Shard.PodTemplate.Spec.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.ShardTopology.ConfigServer.PodTemplate.Spec.Resources, DefaultResourceLimits)
 
-		if m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Lifecycle == nil {
-			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Lifecycle = new(core.Lifecycle)
+		if m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle == nil {
+			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle = new(core.Lifecycle)
 		}
 
-		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Container.Lifecycle.PreStop = &core.Handler{
+		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle.PreStop = &core.Handler{
 			Exec: &core.ExecAction{
 				Command: []string{
 					"bash",
@@ -427,7 +427,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		// set default affinity (PodAntiAffinity)
 		m.setDefaultAffinity(m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 
-		SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Container.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
 	}
 
 	m.SetTLSDefaults()
@@ -562,11 +562,11 @@ func (m *MongoDB) setDefaultProbes(podTemplate *ofst.PodTemplateSpec, mgVersion 
 		return
 	}
 
-	if podTemplate.Spec.Container.LivenessProbe == nil {
-		podTemplate.Spec.Container.LivenessProbe = m.GetDefaultLivenessProbeSpec(mgVersion)
+	if podTemplate.Spec.LivenessProbe == nil {
+		podTemplate.Spec.LivenessProbe = m.GetDefaultLivenessProbeSpec(mgVersion)
 	}
-	if podTemplate.Spec.Container.ReadinessProbe == nil {
-		podTemplate.Spec.Container.ReadinessProbe = m.GetDefaultReadinessProbeSpec(mgVersion)
+	if podTemplate.Spec.ReadinessProbe == nil {
+		podTemplate.Spec.ReadinessProbe = m.GetDefaultReadinessProbeSpec(mgVersion)
 	}
 }
 
