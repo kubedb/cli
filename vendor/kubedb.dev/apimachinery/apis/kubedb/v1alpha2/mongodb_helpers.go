@@ -431,6 +431,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	}
 
 	m.SetTLSDefaults()
+	m.Spec.Monitor.SetDefaults()
 }
 
 func (m *MongoDB) SetTLSDefaults() {
