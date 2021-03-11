@@ -193,11 +193,14 @@ func (p *Postgres) SetDefaults(topology *core_util.Topology) {
 
 	if p.Spec.PodTemplate.Spec.ContainerSecurityContext == nil {
 		p.Spec.PodTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{
+			RunAsUser:  pointer.Int64P(PostgresUID),
 			Privileged: pointer.BoolP(false),
 			Capabilities: &core.Capabilities{
 				Add: []core.Capability{"IPC_LOCK", "SYS_RESOURCE"},
 			},
 		}
+	} else {
+		p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsUser = pointer.Int64P(PostgresUID)
 	}
 
 	p.Spec.Monitor.SetDefaults()

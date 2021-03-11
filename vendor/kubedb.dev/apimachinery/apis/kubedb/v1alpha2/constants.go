@@ -189,7 +189,6 @@ const (
 	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
 
 	// =========================== MariaDB Constants ============================
-	MariaDBClusterRecommendedVersion    = "10.5"
 	MariaDBMaxClusterNameLength         = 32
 	MariaDBStandaloneReplicas           = 1
 	MariaDBDefaultClusterSize           = 3
@@ -231,6 +230,8 @@ const (
 	PostgresKeyFileSecretSuffix = "key"
 	PostgresPEMSecretSuffix     = "pem"
 	PostgresDefaultUsername     = "postgres"
+
+	PostgresUID = 70
 
 	// =========================== ProxySQL Constants ============================
 	LabelProxySQLName        = ProxySQLKey + "/name"
