@@ -17,12 +17,13 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strings"
 
 	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
@@ -155,11 +156,24 @@ func (e *Elasticsearch) CertSecretVolumeMountPath(configDir string, alias Elasti
 	return filepath.Join(configDir, "certs", string(alias))
 }
 
-// returns the secret name for the  user credentials (ie. username, password)
+// returns the default secret name for the  user credentials (ie. username, password)
 // If username contains underscore (_), it will be replaced by hyphen (‐) for
 // the Kubernetes naming convention.
-func (e *Elasticsearch) UserCredSecretName(userName string) string {
+func (e *Elasticsearch) DefaultUserCredSecretName(userName string) string {
 	return meta_util.NameWithSuffix(e.Name, strings.ReplaceAll(fmt.Sprintf("%s-cred", userName), "_", "-"))
+}
+
+// Return the secret name for the given user.
+// Return error, if the secret name is missing.
+func (e *Elasticsearch) GetUserCredSecretName(username string) (string, error) {
+	userSpec, err := getElasticsearchUser(e.Spec.InternalUsers, username)
+	if err != nil {
+		return "", err
+	}
+	if userSpec.SecretName == "" {
+		return "", errors.New("secretName cannot be empty")
+	}
+	return userSpec.SecretName, nil
 }
 
 // returns the secret name for the default elasticsearch configuration
@@ -282,7 +296,7 @@ func (e Elasticsearch) StatsServiceLabels() map[string]string {
 	return lbl
 }
 
-func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, topology *core_util.Topology) {
+func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, topology *core_util.Topology) {
 	if e == nil {
 		return
 	}
@@ -297,24 +311,6 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 
 	if e.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		e.Spec.PodTemplate.Spec.ServiceAccountName = e.OffshootName()
-	}
-
-	// Set default values for internal admin user
-	if e.Spec.InternalUsers != nil {
-		var userSpec ElasticsearchUserSpec
-
-		// load values
-		if value, exist := e.Spec.InternalUsers[string(ElasticsearchInternalUserAdmin)]; exist {
-			userSpec = value
-		}
-
-		// set defaults
-		userSpec.Reserved = true
-		userSpec.BackendRoles = []string{"admin"}
-
-		// overwrite values
-		e.Spec.InternalUsers[string(ElasticsearchInternalUserAdmin)] = userSpec
-
 	}
 
 	// set default elasticsearch node name prefix
@@ -366,6 +362,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *v1alpha1.ElasticsearchVersion, to
 
 	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
 	e.SetTLSDefaults(esVersion)
+	e.setDefaultInternalUsersAndRoleMappings(esVersion)
 	e.Spec.Monitor.SetDefaults()
 }
 
@@ -412,8 +409,96 @@ func (e *Elasticsearch) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, la
 	}
 }
 
+// Set Default internal users settings
+func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalog.ElasticsearchVersion) {
+	// The internalUsers feature only works with searchGuard and openDistro
+	if esVersion.Spec.Distribution == catalog.ElasticsearchDistroOpenDistro ||
+		esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard {
+
+		inUsers := e.Spec.InternalUsers
+		// If not set, create empty map
+		if inUsers == nil {
+			inUsers = make(map[string]ElasticsearchUserSpec)
+		}
+
+		// "Admin" user
+		if userSpec, exists := inUsers[string(ElasticsearchInternalUserAdmin)]; !exists {
+			inUsers[string(ElasticsearchInternalUserAdmin)] = ElasticsearchUserSpec{
+				Reserved:     true,
+				BackendRoles: []string{"admin"},
+			}
+		} else {
+			// upsert "admin" role, if missing
+			// Admin user must have the admin role
+			userSpec.BackendRoles = upsertStringSlice(userSpec.BackendRoles, "admin")
+			inUsers[string(ElasticsearchInternalUserAdmin)] = userSpec
+		}
+
+		// "Kibanaserver", "Kibanaro", "Logstash", "Readall", "Snapshotrestore"
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserKibanaserver), ElasticsearchUserSpec{Reserved: true})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserKibanaro), ElasticsearchUserSpec{})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserLogstash), ElasticsearchUserSpec{})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserReadall), ElasticsearchUserSpec{})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserSnapshotrestore), ElasticsearchUserSpec{})
+		// "MetricsExporter", Only if the monitoring is enabled.
+		if e.Spec.Monitor != nil {
+			setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserMetricsExporter), ElasticsearchUserSpec{})
+		}
+
+		// Set missing user secret names
+		for username, userSpec := range inUsers {
+			// For admin user, spec.authSecret.Name must have high precedence over default field
+			if username == string(ElasticsearchInternalUserAdmin) && e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
+				userSpec.SecretName = e.Spec.AuthSecret.Name
+			} else if userSpec.SecretName == "" {
+				userSpec.SecretName = e.DefaultUserCredSecretName(username)
+			}
+			inUsers[username] = userSpec
+		}
+
+		// If monitoring is enabled,
+		// The "metric_exporter" user needs to have "readall_monitor" role mapped to itself.
+		if e.Spec.Monitor != nil {
+			rolesMapping := e.Spec.RolesMapping
+			if rolesMapping == nil {
+				rolesMapping = make(map[string]ElasticsearchRoleMapSpec)
+			}
+			var monitorRole string
+			if esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard {
+				// readall_and_monitor role name varies in ES version
+				// 	V7        = "SGS_READALL_AND_MONITOR"
+				//	V6        = "sg_readall_and_monitor"
+				if strings.HasPrefix(esVersion.Spec.Version, "6.") {
+					monitorRole = ElasticsearchSearchGuardReadallMonitorRoleV6
+					// Delete unsupported role, if any
+					delete(rolesMapping, string(ElasticsearchSearchGuardReadallMonitorRoleV7))
+				} else {
+					monitorRole = ElasticsearchSearchGuardReadallMonitorRoleV7
+					// Delete unsupported role, if any
+					// Required during upgrade process, from v6 --> v7
+					delete(rolesMapping, string(ElasticsearchSearchGuardReadallMonitorRoleV6))
+				}
+			} else {
+				monitorRole = ElasticsearchOpendistroReadallMonitorRole
+			}
+
+			// Create rolesMapping if not exists.
+			if value, exist := rolesMapping[monitorRole]; exist {
+				value.Users = upsertStringSlice(value.Users, string(ElasticsearchInternalUserMetricsExporter))
+				rolesMapping[monitorRole] = value
+			} else {
+				rolesMapping[monitorRole] = ElasticsearchRoleMapSpec{
+					Users: []string{string(ElasticsearchInternalUserMetricsExporter)},
+				}
+			}
+			e.Spec.RolesMapping = rolesMapping
+		}
+		e.Spec.InternalUsers = inUsers
+	}
+}
+
 // set default tls configuration (ie. alias, secretName)
-func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion) {
+func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) {
 	// If security is disabled (ie. DisableSecurity: true), ignore.
 	if e.Spec.DisableSecurity {
 		return
@@ -450,8 +535,8 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *v1alpha1.ElasticsearchVersion)
 		})
 
 		// Set missing admin certificate spec, if authPlugin is either "OpenDistro" or "SearchGuard"
-		if esVersion.Spec.AuthPlugin == v1alpha1.ElasticsearchAuthPluginOpenDistro ||
-			esVersion.Spec.AuthPlugin == v1alpha1.ElasticsearchAuthPluginSearchGuard {
+		if esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard ||
+			esVersion.Spec.Distribution == catalog.ElasticsearchDistroOpenDistro {
 			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
 				Alias:      string(ElasticsearchAdminCert),
 				SecretName: e.CertificateName(ElasticsearchAdminCert),
@@ -524,7 +609,8 @@ func (e *Elasticsearch) GetPersistentSecrets() []string {
 			if user == string(ElasticsearchInternalUserAdmin) || user == string(ElasticsearchInternalUserElastic) {
 				continue
 			}
-			secrets = append(secrets, e.UserCredSecretName(user))
+			secretName, _ := e.GetUserCredSecretName(user)
+			secrets = append(secrets, secretName)
 		}
 	}
 	return secrets
@@ -537,4 +623,30 @@ func (e *Elasticsearch) ReplicasAreReady(lister appslister.StatefulSetLister) (b
 		expectedItems = 3
 	}
 	return checkReplicas(lister.StatefulSets(e.Namespace), labels.SelectorFromSet(e.OffshootLabels()), expectedItems)
+}
+
+// returns true if the user exists.
+// otherwise false.
+func hasElasticsearchUser(userList map[string]ElasticsearchUserSpec, username string) bool {
+	if _, exist := userList[username]; exist {
+		return true
+	}
+	return false
+}
+
+// Set user if missing
+func setMissingElasticsearchUser(userList map[string]ElasticsearchUserSpec, username string, userSpec ElasticsearchUserSpec) {
+	if hasElasticsearchUser(userList, username) {
+		return
+	}
+	userList[username] = userSpec
+}
+
+// Returns userSpec if exists
+func getElasticsearchUser(userList map[string]ElasticsearchUserSpec, username string) (*ElasticsearchUserSpec, error) {
+	if !hasElasticsearchUser(userList, username) {
+		return nil, errors.New("user is missing")
+	}
+	userSpec := userList[username]
+	return &userSpec, nil
 }
