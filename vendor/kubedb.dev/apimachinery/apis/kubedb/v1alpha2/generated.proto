@@ -307,9 +307,10 @@ message ElasticsearchStatus {
 // The `json` tags (camel case) are used while taking input from users.
 // The `yaml` tags (snake case) are used by the operator to generate internal_users.yml file.
 message ElasticsearchUserSpec {
-  // Specifies the hash of the password.
+  // Specifies the k8s secret name that holds the user credentials.
+  // Default to "<resource-name>-<username>-cred".
   // +optional
-  optional string hash = 1;
+  optional string secretName = 1;
 
   // Specifies the reserved status.
   // Resources that have this set to true can’t be changed using the REST API or Kibana.

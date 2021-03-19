@@ -439,18 +439,29 @@ func (m *MongoDB) SetTLSDefaults() {
 		return
 	}
 
+	// At least one of the Organization (O), Organizational Unit (OU), or Domain Component (DC)
+	// attributes in the client certificate must differ from the server certificates.
+	// ref: https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/#client-x-509-certificate
+
 	defaultServerOrg := []string{KubeDBOrganization}
+	defaultServerOrgUnit := []string{string(MongoDBServerCert)}
 	if m.Spec.ShardTopology != nil {
 		_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert))
-		if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
-			defaultServerOrg = cert.Subject.Organizations
+		if cert != nil && cert.Subject != nil {
+			if cert.Subject.Organizations != nil {
+				defaultServerOrg = cert.Subject.Organizations
+			}
+			if cert.Subject.OrganizationalUnits != nil {
+				defaultServerOrgUnit = cert.Subject.OrganizationalUnits
+			}
 		}
 
 		m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 			Alias:      string(MongoDBServerCert),
 			SecretName: "",
 			Subject: &kmapi.X509Subject{
-				Organizations: defaultServerOrg,
+				Organizations:       defaultServerOrg,
+				OrganizationalUnits: defaultServerOrgUnit,
 			},
 		})
 
@@ -458,41 +469,62 @@ func (m *MongoDB) SetTLSDefaults() {
 		m.Spec.TLS.Certificates = kmapi.SetSecretNameForCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert), "")
 	} else {
 		_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert))
-		if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
-			defaultServerOrg = cert.Subject.Organizations
+		if cert != nil && cert.Subject != nil {
+			if cert.Subject.Organizations != nil {
+				defaultServerOrg = cert.Subject.Organizations
+			}
+			if cert.Subject.OrganizationalUnits != nil {
+				defaultServerOrgUnit = cert.Subject.OrganizationalUnits
+			}
 		}
+
 		m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 			Alias:      string(MongoDBServerCert),
 			SecretName: m.CertificateName(MongoDBServerCert, ""),
 			Subject: &kmapi.X509Subject{
-				Organizations: defaultServerOrg,
+				Organizations:       defaultServerOrg,
+				OrganizationalUnits: defaultServerOrgUnit,
 			},
 		})
 	}
 
 	defaultClientOrg := []string{KubeDBOrganization}
+	defaultClientOrgUnit := []string{string(MongoDBClientCert)}
 	_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBClientCert))
-	if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
-		defaultClientOrg = cert.Subject.Organizations
+	if cert != nil && cert.Subject != nil {
+		if cert.Subject.Organizations != nil {
+			defaultClientOrg = cert.Subject.Organizations
+		}
+		if cert.Subject.OrganizationalUnits != nil {
+			defaultClientOrgUnit = cert.Subject.OrganizationalUnits
+		}
 	}
 	m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 		Alias:      string(MongoDBClientCert),
 		SecretName: m.CertificateName(MongoDBClientCert, ""),
 		Subject: &kmapi.X509Subject{
-			Organizations: defaultClientOrg,
+			Organizations:       defaultClientOrg,
+			OrganizationalUnits: defaultClientOrgUnit,
 		},
 	})
 
 	defaultExporterOrg := []string{KubeDBOrganization}
+	defaultExporterOrgUnit := []string{string(MongoDBMetricsExporterCert)}
 	_, cert = kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBMetricsExporterCert))
-	if cert != nil && cert.Subject != nil && cert.Subject.Organizations != nil {
-		defaultExporterOrg = cert.Subject.Organizations
+	if cert != nil && cert.Subject != nil {
+		if cert.Subject.Organizations != nil {
+			defaultExporterOrg = cert.Subject.Organizations
+		}
+		if cert.Subject.OrganizationalUnits != nil {
+			defaultExporterOrgUnit = cert.Subject.OrganizationalUnits
+		}
 	}
 	m.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(m.Spec.TLS.Certificates, kmapi.CertificateSpec{
 		Alias:      string(MongoDBMetricsExporterCert),
 		SecretName: m.CertificateName(MongoDBMetricsExporterCert, ""),
 		Subject: &kmapi.X509Subject{
-			Organizations: defaultExporterOrg,
+			Organizations:       defaultExporterOrg,
+			OrganizationalUnits: defaultExporterOrgUnit,
 		},
 	})
 }

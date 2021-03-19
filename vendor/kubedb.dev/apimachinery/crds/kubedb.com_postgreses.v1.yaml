@@ -2333,6 +2333,18 @@ spec:
                           items:
                             type: string
                           type: array
+                        issuerRef:
+                          properties:
+                            apiGroup:
+                              type: string
+                            kind:
+                              type: string
+                            name:
+                              type: string
+                          required:
+                          - kind
+                          - name
+                          type: object
                         privateKey:
                           properties:
                             encoding:

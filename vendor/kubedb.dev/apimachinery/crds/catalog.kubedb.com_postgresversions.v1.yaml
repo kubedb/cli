@@ -24,6 +24,9 @@ spec:
     - jsonPath: .spec.version
       name: Version
       type: string
+    - jsonPath: .spec.distribution
+      name: Distribution
+      type: string
     - jsonPath: .spec.db.image
       name: DB_IMAGE
       type: string

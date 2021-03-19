@@ -91,6 +91,10 @@ const (
 	ElasticsearchInitConfigMergerContainerName   = "config-merger"
 	ElasticsearchContainerName                   = "elasticsearch"
 	ElasticsearchExporterContainerName           = "exporter"
+	ElasticsearchSearchGuardRolesMappingFileName = "sg_roles_mapping.yml"
+	ElasticsearchSearchGuardInternalUserFileName = "sg_internal_users.yml"
+	ElasticsearchOpendistroRolesMappingFileName  = "roles_mapping.yml"
+	ElasticsearchOpendistroInternalUserFileName  = "internal_users.yml"
 
 	// Ref:
 	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size

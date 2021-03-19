@@ -10,6 +10,9 @@ spec:
   - JSONPath: .spec.version
     name: Version
     type: string
+  - JSONPath: .spec.distribution
+    name: Distribution
+    type: string
   - JSONPath: .spec.db.image
     name: DB_IMAGE
     type: string

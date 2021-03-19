@@ -103,3 +103,20 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultLimits core
 		}
 	}
 }
+
+// Upsert elements to string slice
+func upsertStringSlice(inSlice []string, values ...string) []string {
+	upsert := func(m string) {
+		for _, v := range inSlice {
+			if v == m {
+				return
+			}
+		}
+		inSlice = append(inSlice, m)
+	}
+
+	for _, value := range values {
+		upsert(value)
+	}
+	return inSlice
+}
