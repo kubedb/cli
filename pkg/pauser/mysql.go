@@ -13,28 +13,27 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-type ElasticsearchPauser struct {
+type MySQLPauser struct {
 	dbClient cs.KubedbV1alpha2Interface
 }
 
-func NewElasticsearchPauser(clientConfig *rest.Config) (*ElasticsearchPauser, error) {
-	// Create DB client
-	dbClient, err := cs.NewForConfig(clientConfig)
+func NewMySQLPauser(clientConfig *rest.Config) (*MySQLPauser, error) {
+	k, err := cs.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	return &ElasticsearchPauser{
-		dbClient: dbClient,
+	return &MySQLPauser{
+		dbClient: k,
 	}, nil
 }
 
-func (e *ElasticsearchPauser) Pause(name, namespace string) error {
-	db, err := e.dbClient.Elasticsearches(namespace).Get(context.TODO(), name, metav1.GetOptions{})
+func (e *MySQLPauser) Pause(name, namespace string) error {
+	db, err := e.dbClient.MySQLs(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
-	_, err = dbutil.UpdateElasticsearchStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.ElasticsearchStatus) (types.UID, *api.ElasticsearchStatus) {
+	_, err = dbutil.UpdateMySQLStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MySQLStatus) (types.UID, *api.MySQLStatus) {
 		status.Conditions = kmapi.SetCondition(status.Conditions, kmapi.NewCondition(
 			api.DatabasePaused,
 			"Paused by KubeDB CLI tool",

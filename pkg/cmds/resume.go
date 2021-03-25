@@ -33,29 +33,27 @@ import (
 
 var (
 	resumeLong = templates.LongDesc(`
-		Pause the community-operator's watch for the objects.
-		The community-operator will ignore the 
+		Resume the community-operator's watch for the objects.
+		The community-operator will continue to process the object. 
     `)
 
 	resumeExample = templates.Examples(`
-		# Describe a elasticsearch
-		kubedb describe elasticsearches elasticsearch-demo
+		# Resume an elasticsearch
+		dba resume elasticsearch elasticsearch-demo
 
-		# Describe a postgres
-		kubedb describe pg/postgres-demo
+		# Resume a postgres
+		dba resume pg/postgres-demo
 
-		# Describe all postgreses
-		kubedb describe pg
+		# Resume all postgres
+		dba resume postgreses
 
  		Valid resource types include:
-    		* all
-    		* etcds
-    		* elasticsearches
-    		* postgreses
-    		* mysqls
-    		* mongodbs
-    		* redises
-    		* memcacheds
+    		* elasticsearch
+			* mongodb
+			* mariadb
+			* mysql
+			* postgres
+			* redis
 `)
 )
 
@@ -88,7 +86,7 @@ func NewCmdResume(parent string, f cmdutil.Factory, streams genericclioptions.IO
 
 	cmd := &cobra.Command{
 		Use:     "resume (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)",
-		Short:   i18n.T("Show details of a specific resource or group of resources"),
+		Short:   i18n.T("Resume processing of an object."),
 		Long:    resumeLong + "\n\n" + cmdutil.SuggestAPIResources("kubectl"),
 		Example: resumeExample,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -173,10 +171,8 @@ func (o *ResumeOptions) Run() error {
 			allErrs = append(allErrs, err)
 			errs.Insert(err.Error())
 		}
-	}
 
-	if len(allErrs) == 0 {
-		fmt.Fprint(o.Out, "Successfully Resumed.")
+		fmt.Fprint(o.Out, fmt.Sprintf("Successfully resumed %s/%s.\n", info.Namespace, info.Name))
 	}
 	return utilerrors.NewAggregate(allErrs)
 }

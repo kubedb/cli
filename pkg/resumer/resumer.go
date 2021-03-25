@@ -25,9 +25,17 @@ func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *me
 	switch mapping.GroupVersionKind.Kind {
 	case api.ResourceKindElasticsearch:
 		return NewElasticsearchResumer(clientConfig)
+	case api.ResourceKindMongoDB:
+		return NewMongoDBResumer(clientConfig)
+	case api.ResourceKindMySQL:
+		return NewMySQLResumer(clientConfig)
+	case api.ResourceKindMariaDB:
+		return NewMariaDBResumer(clientConfig)
+	case api.ResourceKindPostgres:
+		return NewPostgresResumer(clientConfig)
+	case api.ResourceKindRedis:
+		return NewRedisResumer(clientConfig)
 	default:
-		return nil, errors.New("unknown kind")
+		return nil, errors.New("unknown object kind")
 	}
-
-	return nil, nil
 }

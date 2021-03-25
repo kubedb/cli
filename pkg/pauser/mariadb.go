@@ -13,28 +13,27 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-type ElasticsearchPauser struct {
+type MariaDBPauser struct {
 	dbClient cs.KubedbV1alpha2Interface
 }
 
-func NewElasticsearchPauser(clientConfig *rest.Config) (*ElasticsearchPauser, error) {
-	// Create DB client
-	dbClient, err := cs.NewForConfig(clientConfig)
+func NewMariaDBPauser(clientConfig *rest.Config) (*MariaDBPauser, error) {
+	k, err := cs.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	return &ElasticsearchPauser{
-		dbClient: dbClient,
+	return &MariaDBPauser{
+		dbClient: k,
 	}, nil
 }
 
-func (e *ElasticsearchPauser) Pause(name, namespace string) error {
-	db, err := e.dbClient.Elasticsearches(namespace).Get(context.TODO(), name, metav1.GetOptions{})
+func (e *MariaDBPauser) Pause(name, namespace string) error {
+	db, err := e.dbClient.MariaDBs(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
-	_, err = dbutil.UpdateElasticsearchStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.ElasticsearchStatus) (types.UID, *api.ElasticsearchStatus) {
+	_, err = dbutil.UpdateMariaDBStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MariaDBStatus) (types.UID, *api.MariaDBStatus) {
 		status.Conditions = kmapi.SetCondition(status.Conditions, kmapi.NewCondition(
 			api.DatabasePaused,
 			"Paused by KubeDB CLI tool",

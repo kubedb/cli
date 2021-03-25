@@ -25,9 +25,17 @@ func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *met
 	switch mapping.GroupVersionKind.Kind {
 	case api.ResourceKindElasticsearch:
 		return NewElasticsearchPauser(clientConfig)
+	case api.ResourceKindMongoDB:
+		return NewMongoDBPauser(clientConfig)
+	case api.ResourceKindMySQL:
+		return NewMySQLPauser(clientConfig)
+	case api.ResourceKindMariaDB:
+		return NewMariaDBPauser(clientConfig)
+	case api.ResourceKindPostgres:
+		return NewPostgresPauser(clientConfig)
+	case api.ResourceKindRedis:
+		return NewRedisPauser(clientConfig)
 	default:
 		return nil, errors.New("unknown kind")
 	}
-
-	return nil, nil
 }

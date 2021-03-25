@@ -33,30 +33,27 @@ import (
 
 var (
 	pauseLong = templates.LongDesc(`
-		Show details of a specific resource or group of resources.
-		This command joins many API calls together to form a detailed description of a
-		given resource or group of resources.
+		Pause the community-operator's watch for the objects.
+		The community-operator will stop to process the object. 
     `)
 
 	pauseExample = templates.Examples(`
-		# Describe a elasticsearch
-		kubedb describe elasticsearches elasticsearch-demo
+		# Pause an elasticsearch
+		dba pause elasticsearch elasticsearch-demo
 
-		# Describe a postgres
-		kubedb describe pg/postgres-demo
+		# Pause a postgres
+		dba pause pg/postgres-demo
 
-		# Describe all postgreses
-		kubedb describe pg
+		# Pause all postgres
+		dba pause postgreses
 
  		Valid resource types include:
-    		* all
-    		* etcds
-    		* elasticsearches
-    		* postgreses
-    		* mysqls
-    		* mongodbs
-    		* redises
-    		* memcacheds
+    		* elasticsearch
+			* mongodb
+			* mariadb
+			* mysql
+			* postgres
+			* redis
 `)
 )
 
@@ -94,6 +91,7 @@ func NewCmdPause(parent string, f cmdutil.Factory, streams genericclioptions.IOS
 		Example: pauseExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			cmdutil.CheckErr(o.Complete(f, cmd, args))
+			cmdutil.CheckErr(o.Validate(args))
 			cmdutil.CheckErr(o.Run())
 		},
 		DisableFlagsInUseLine: true,
@@ -179,10 +177,9 @@ func (o *PauseOptions) Run() error {
 			allErrs = append(allErrs, err)
 			errs.Insert(err.Error())
 		}
+
+		fmt.Fprint(o.Out, fmt.Sprintf("Successfully paused %s/%s.\n", info.Namespace, info.Name))
 	}
 
-	if len(allErrs) == 0 {
-		fmt.Fprint(o.Out, "Successfully Paused.")
-	}
 	return utilerrors.NewAggregate(allErrs)
 }
