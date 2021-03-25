@@ -65,8 +65,6 @@ github.com/gogo/protobuf/sortkeys
 # github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 ## explicit
 github.com/golang/glog
-# github.com/golang/groupcache v0.0.0-20191227052852-215e87163ea7
-github.com/golang/groupcache/lru
 # github.com/golang/protobuf v1.4.3 => github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/jsonpb
 github.com/golang/protobuf/proto
@@ -206,8 +204,6 @@ gomodules.xyz/version
 # gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
 ## explicit
 gomodules.xyz/x/analytics
-gomodules.xyz/x/context
-gomodules.xyz/x/log
 gomodules.xyz/x/log/golog
 gomodules.xyz/x/version
 # google.golang.org/appengine v1.6.6
@@ -425,8 +421,6 @@ k8s.io/client-go/tools/clientcmd/api/latest
 k8s.io/client-go/tools/clientcmd/api/v1
 k8s.io/client-go/tools/metrics
 k8s.io/client-go/tools/pager
-k8s.io/client-go/tools/record
-k8s.io/client-go/tools/record/util
 k8s.io/client-go/tools/reference
 k8s.io/client-go/tools/remotecommand
 k8s.io/client-go/transport
@@ -528,7 +522,6 @@ kubedb.dev/apimachinery/client/clientset/versioned/scheme
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util
 kubedb.dev/apimachinery/crds
-kubedb.dev/apimachinery/pkg/eventer
 # sigs.k8s.io/kustomize v2.0.3+incompatible
 sigs.k8s.io/kustomize/pkg/commands/build
 sigs.k8s.io/kustomize/pkg/constants
