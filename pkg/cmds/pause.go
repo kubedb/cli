@@ -86,7 +86,7 @@ func NewCmdPause(parent string, f cmdutil.Factory, streams genericclioptions.IOS
 
 	cmd := &cobra.Command{
 		Use:     "pause (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)",
-		Short:   i18n.T("Show details of a specific resource or group of resources"),
+		Short:   i18n.T("Pause the processing of an object."),
 		Long:    pauseLong + "\n\n" + cmdutil.SuggestAPIResources("kubectl"),
 		Example: pauseExample,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -154,7 +154,7 @@ func (o *PauseOptions) Run() error {
 	}
 
 	if len(infos) == 0 {
-		fmt.Fprint(o.Out, fmt.Sprintf("No resources found in %s namespace.\n", o.Namespace))
+		fmt.Fprintf(o.Out, "No resources found in %s namespace.\n", o.Namespace)
 		return nil
 	}
 
@@ -178,7 +178,7 @@ func (o *PauseOptions) Run() error {
 			errs.Insert(err.Error())
 		}
 
-		fmt.Fprint(o.Out, fmt.Sprintf("Successfully paused %s/%s.\n", info.Namespace, info.Name))
+		fmt.Fprintf(o.Out, "Successfully paused %s/%s.\n", info.Namespace, info.Name)
 	}
 
 	return utilerrors.NewAggregate(allErrs)

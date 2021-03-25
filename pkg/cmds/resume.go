@@ -152,6 +152,11 @@ func (o *ResumeOptions) Run() error {
 		return utilerrors.NewAggregate(allErrs)
 	}
 
+	if len(infos) == 0 {
+		fmt.Fprintf(o.Out, "No resources found in %s namespace.\n", o.Namespace)
+		return nil
+	}
+
 	errs := sets.NewString()
 	for _, info := range infos {
 		rsr, err := resumer.NewResumer(o.Factory, info.Mapping)
@@ -172,7 +177,7 @@ func (o *ResumeOptions) Run() error {
 			errs.Insert(err.Error())
 		}
 
-		fmt.Fprint(o.Out, fmt.Sprintf("Successfully resumed %s/%s.\n", info.Namespace, info.Name))
+		fmt.Fprintf(o.Out, "Successfully resumed %s/%s.\n", info.Namespace, info.Name)
 	}
 	return utilerrors.NewAggregate(allErrs)
 }
