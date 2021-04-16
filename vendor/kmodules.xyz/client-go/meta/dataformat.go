@@ -7,7 +7,7 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-func DecodeObject(in map[string]interface{}, out interface{}) error {
+func DecodeObject(in interface{}, out interface{}) error {
 	config := &mapstructure.DecoderConfig{
 		Metadata: nil,
 		TagName:  "json",

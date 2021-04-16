@@ -255,18 +255,16 @@ func (m *MariaDB) CertificateName(alias MariaDBCertificateAlias) string {
 	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-// MustCertSecretName returns the secret name for a certificate alias
-func (m *MariaDB) MustCertSecretName(alias MariaDBCertificateAlias) string {
-	if m == nil {
-		panic("missing MariaDB database")
-	} else if m.Spec.TLS == nil {
-		panic(fmt.Errorf("MariaDB %s/%s is missing tls spec", m.Namespace, m.Name))
+// GetCertSecretName returns the secret name for a certificate alias if any,
+// otherwise returns default certificate secret name for the given alias.
+func (m *MariaDB) GetCertSecretName(alias MariaDBCertificateAlias) string {
+	if m.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
 	}
-	name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
-	if !ok {
-		panic(fmt.Errorf("MariaDB %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
-	}
-	return name
+	return m.CertificateName(alias)
 }
 
 func (m *MariaDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {

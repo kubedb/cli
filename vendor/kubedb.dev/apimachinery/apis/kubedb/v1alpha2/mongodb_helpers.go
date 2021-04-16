@@ -700,13 +700,8 @@ func (m *MongoDB) CertificateName(alias MongoDBCertificateAlias, stsName string)
 	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-// MustCertSecretName returns the secret name for a certificate alias
-func (m *MongoDB) MustCertSecretName(alias MongoDBCertificateAlias, stsName string) string {
-	if m == nil {
-		panic("missing MongoDB database")
-	} else if m.Spec.TLS == nil {
-		panic(fmt.Errorf("MongoDB %s/%s is missing tls spec", m.Namespace, m.Name))
-	}
+// GetCertSecretName returns the secret name for a certificate alias
+func (m *MongoDB) GetCertSecretName(alias MongoDBCertificateAlias, stsName string) string {
 	if m.Spec.ShardTopology != nil && alias == MongoDBServerCert {
 		if stsName == "" {
 			panic(fmt.Sprintf("StatefulSet name required to compute %s certificate name for MongoDB %s/%s", alias, m.Namespace, m.Name))
@@ -714,10 +709,11 @@ func (m *MongoDB) MustCertSecretName(alias MongoDBCertificateAlias, stsName stri
 		return m.CertificateName(alias, stsName)
 	}
 	name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
-	if !ok {
-		panic(fmt.Errorf("MongoDB %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
+	if ok {
+		return name
 	}
-	return name
+
+	return m.CertificateName(alias, stsName)
 }
 
 func (m *MongoDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {

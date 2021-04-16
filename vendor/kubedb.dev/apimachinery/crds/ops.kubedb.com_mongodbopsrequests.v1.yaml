@@ -6657,8 +6657,23 @@ spec:
                         type: integer
                     type: object
                 type: object
+              readinessCriteria:
+                properties:
+                  objectsCountDiffPercentage:
+                    format: int32
+                    maximum: 100
+                    minimum: 0
+                    type: integer
+                  oplogMaxLagSeconds:
+                    format: int32
+                    minimum: 0
+                    type: integer
+                type: object
               restart:
                 type: object
+              timeoutSeconds:
+                format: int32
+                type: integer
               tls:
                 properties:
                   certificates:
@@ -6774,18 +6789,6 @@ spec:
                 type: string
               upgrade:
                 properties:
-                  readinessCriteria:
-                    properties:
-                      objectsCountDiffPercentage:
-                        format: int32
-                        maximum: 100
-                        minimum: 0
-                        type: integer
-                      oplogMaxLagSeconds:
-                        format: int32
-                        minimum: 0
-                        type: integer
-                    type: object
                   targetVersion:
                     type: string
                 type: object
@@ -6847,18 +6850,6 @@ spec:
                           pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                           x-kubernetes-int-or-string: true
                         type: object
-                    type: object
-                  readinessCriteria:
-                    properties:
-                      objectsCountDiffPercentage:
-                        format: int32
-                        maximum: 100
-                        minimum: 0
-                        type: integer
-                      oplogMaxLagSeconds:
-                        format: int32
-                        minimum: 0
-                        type: integer
                     type: object
                   replicaSet:
                     properties:
@@ -6981,6 +6972,7 @@ spec:
                 type: integer
               phase:
                 enum:
+                - Pending
                 - Progressing
                 - Successful
                 - WaitingForApproval
