@@ -19,6 +19,7 @@ package discovery
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/golang/glog"
 	"github.com/pkg/errors"
@@ -120,6 +121,40 @@ func ExistsGroupKind(client discovery.DiscoveryInterface, group, kind string) bo
 		}
 	}
 	return false
+}
+
+func ExistsGroupKinds(client discovery.DiscoveryInterface, gk schema.GroupKind, otherGks ...schema.GroupKind) bool {
+	desired := make(map[schema.GroupKind]bool, 1+len(otherGks))
+	desired[gk] = false
+	for _, other := range otherGks {
+		desired[other] = false
+	}
+
+	if resourceList, err := client.ServerPreferredResources(); discovery.IsGroupDiscoveryFailedError(err) || err == nil {
+		for _, resources := range resourceList {
+			gv, err := schema.ParseGroupVersion(resources.GroupVersion)
+			if err != nil {
+				return false
+			}
+			for _, resource := range resources.APIResources {
+				x := schema.GroupKind{
+					Group: gv.Group,
+					Kind:  resource.Kind,
+				}
+				if _, found := desired[x]; found {
+					desired[x] = true
+				}
+			}
+		}
+	}
+
+	for gk, found := range desired {
+		if !found {
+			log.Printf("%+v not found", gk)
+			return false
+		}
+	}
+	return true
 }
 
 type KnownBug struct {

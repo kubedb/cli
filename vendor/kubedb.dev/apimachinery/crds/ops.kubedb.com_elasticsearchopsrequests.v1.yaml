@@ -354,6 +354,7 @@ spec:
                 type: integer
               phase:
                 enum:
+                - Pending
                 - Progressing
                 - Successful
                 - WaitingForApproval

@@ -583,6 +583,12 @@ message MongoDBOpsRequestSpec {
 
   // Specifies information necessary for restarting database
   optional RestartSpec restart = 9;
+
+  // Specifies the Readiness Criteria
+  optional MongoDBReplicaReadinessCriteria readinessCriteria = 10;
+
+  // Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+  optional int32 timeoutSeconds = 11;
 }
 
 // MongoDBOpsRequestStatus is the status for MongoDBOpsRequest
@@ -600,7 +606,7 @@ message MongoDBOpsRequestStatus {
 }
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod
-// after updating, horizontal scaling etc.
+// after restarting the pod
 message MongoDBReplicaReadinessCriteria {
   // +kubebuilder:validation:Minimum:=0
   optional int32 oplogMaxLagSeconds = 1;
@@ -620,8 +626,6 @@ message MongoDBShardNode {
 message MongoDBUpgradeSpec {
   // Specifies the target version name from catalog
   optional string targetVersion = 1;
-
-  optional MongoDBReplicaReadinessCriteria readinessCriteria = 2;
 }
 
 // MongoDBVerticalScalingSpec is the spec for mongodb vertical scaling
@@ -637,8 +641,6 @@ message MongoDBVerticalScalingSpec {
   optional k8s.io.api.core.v1.ResourceRequirements shard = 4;
 
   optional k8s.io.api.core.v1.ResourceRequirements exporter = 5;
-
-  optional MongoDBReplicaReadinessCriteria readinessCriteria = 7;
 }
 
 // MongoDBVolumeExpansionSpec is the spec for mongodb volume expansion
