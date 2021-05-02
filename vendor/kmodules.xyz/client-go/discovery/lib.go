@@ -19,7 +19,6 @@ package discovery
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/golang/glog"
 	"github.com/pkg/errors"
@@ -148,9 +147,8 @@ func ExistsGroupKinds(client discovery.DiscoveryInterface, gk schema.GroupKind, 
 		}
 	}
 
-	for gk, found := range desired {
+	for _, found := range desired {
 		if !found {
-			log.Printf("%+v not found", gk)
 			return false
 		}
 	}
