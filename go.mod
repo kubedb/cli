@@ -19,9 +19,6 @@ require (
 	kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f
 	kmodules.xyz/custom-resources v0.0.0-20210502220303-115fa584b8d1
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210503020053-730829ef4ddb
-	kmodules.xyz/objectstore-api v0.0.0-20210502215550-f5d0292dff17 // indirect
-	kmodules.xyz/offshoot-api v0.0.0-20210502215616-234104e66819 // indirect
-	kmodules.xyz/prober v0.0.0-20210502215750-20bdd29d9c85 // indirect
 	kubedb.dev/apimachinery v0.18.0
 	stash.appscode.dev/apimachinery v0.12.1
 )
@@ -114,7 +111,7 @@ replace google.golang.org/genproto => google.golang.org/genproto v0.0.0-20201110
 
 replace google.golang.org/grpc => google.golang.org/grpc v1.27.1
 
-replace helm.sh/helm/v3 => github.com/kubepack/helm/v3 v3.1.0-rc.1.0.20210427034123-21364f60dbb1
+replace helm.sh/helm/v3 => github.com/kubepack/helm/v3 v3.1.0-rc.1.0.20210503022716-7e2d4913a125
 
 replace k8s.io/api => k8s.io/api v0.21.0
 
