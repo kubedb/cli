@@ -571,11 +571,11 @@ kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
 # kmodules.xyz/monitoring-agent-api v0.0.0-20210503020053-730829ef4ddb
 kmodules.xyz/monitoring-agent-api/api/v1
-# kmodules.xyz/objectstore-api v0.0.0-20210502215550-f5d0292dff17
+# kmodules.xyz/objectstore-api v0.0.0-20210218144135-bfabb80e0362
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20210502215616-234104e66819
+# kmodules.xyz/offshoot-api v0.0.0-20210308072215-581e7685cd02
 kmodules.xyz/offshoot-api/api/v1
-# kmodules.xyz/prober v0.0.0-20210502215750-20bdd29d9c85
+# kmodules.xyz/prober v0.0.0-20210218144026-43e923722d81
 kmodules.xyz/prober/api/v1
 # kubedb.dev/apimachinery v0.18.0
 kubedb.dev/apimachinery/apis
