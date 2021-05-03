@@ -182,7 +182,6 @@ type PodSpec struct {
 	Env []core.EnvVar `json:"env,omitempty" protobuf:"bytes,18,rep,name=env"`
 
 	// Compute Resources required by the sidecar container.
-	// Deprecated
 	// +optional
 	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,19,opt,name=resources"`
 

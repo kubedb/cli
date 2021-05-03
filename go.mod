@@ -16,9 +16,12 @@ require (
 	k8s.io/component-base v0.21.0
 	k8s.io/kubectl v0.21.0
 	k8s.io/kubernetes v1.21.0 // indirect
-	kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f
-	kmodules.xyz/custom-resources v0.0.0-20210502220303-115fa584b8d1
-	kmodules.xyz/monitoring-agent-api v0.0.0-20210503020053-730829ef4ddb
+	kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5
+	kmodules.xyz/custom-resources v0.0.0-20210503065135-5267be335cb4
+	kmodules.xyz/monitoring-agent-api v0.0.0-20210503064631-e2d5686a9acd
+	kmodules.xyz/objectstore-api v0.0.0-20210503064721-4fadb098d198 // indirect
+	kmodules.xyz/offshoot-api v0.0.0-20210503065102-3250bbdedc8f // indirect
+	kmodules.xyz/prober v0.0.0-20210503064856-dbee486876b6 // indirect
 	kubedb.dev/apimachinery v0.18.0
 	stash.appscode.dev/apimachinery v0.12.1
 )

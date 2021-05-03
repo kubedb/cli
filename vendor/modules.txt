@@ -545,7 +545,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210502215034-b73197efff3f
+# kmodules.xyz/client-go v0.0.0-20210503064222-c8c59295a3a5
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
@@ -559,7 +559,7 @@ kmodules.xyz/client-go/meta
 kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
-# kmodules.xyz/custom-resources v0.0.0-20210502220303-115fa584b8d1
+# kmodules.xyz/custom-resources v0.0.0-20210503065135-5267be335cb4
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/apis/metrics
@@ -569,13 +569,13 @@ kmodules.xyz/custom-resources/client/clientset/versioned/scheme
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.0.0-20210503020053-730829ef4ddb
+# kmodules.xyz/monitoring-agent-api v0.0.0-20210503064631-e2d5686a9acd
 kmodules.xyz/monitoring-agent-api/api/v1
-# kmodules.xyz/objectstore-api v0.0.0-20210218144135-bfabb80e0362
+# kmodules.xyz/objectstore-api v0.0.0-20210503064721-4fadb098d198
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20210308072215-581e7685cd02
+# kmodules.xyz/offshoot-api v0.0.0-20210503065102-3250bbdedc8f
 kmodules.xyz/offshoot-api/api/v1
-# kmodules.xyz/prober v0.0.0-20210218144026-43e923722d81
+# kmodules.xyz/prober v0.0.0-20210503064856-dbee486876b6
 kmodules.xyz/prober/api/v1
 # kubedb.dev/apimachinery v0.18.0
 kubedb.dev/apimachinery/apis
