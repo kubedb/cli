@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/spf13/cobra v1.1.1
+	github.com/spf13/cobra v1.1.3
 	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 	gomodules.xyz/runtime v0.2.0
 	gomodules.xyz/x v0.0.3
@@ -17,8 +17,11 @@ require (
 	k8s.io/kubectl v0.21.0
 	k8s.io/kubernetes v1.21.0 // indirect
 	kmodules.xyz/client-go v0.0.0-20210504024435-1eb80721e9b8
-	kmodules.xyz/custom-resources v0.0.0-20210504014735-4cd8925c7e05
-	kmodules.xyz/monitoring-agent-api v0.0.0-20210504014332-2b384915c1a3
+	kmodules.xyz/custom-resources v0.0.0-20210504034124-54c54fcdb690
+	kmodules.xyz/monitoring-agent-api v0.0.0-20210504040241-261c2428d207
+	kmodules.xyz/objectstore-api v0.0.0-20210504041638-b9e00ab1eab3 // indirect
+	kmodules.xyz/offshoot-api v0.0.0-20210504040651-7951e351f0f5 // indirect
+	kmodules.xyz/prober v0.0.0-20210504042421-eca494e828bc // indirect
 	kubedb.dev/apimachinery v0.18.0
 	stash.appscode.dev/apimachinery v0.12.1
 )
