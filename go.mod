@@ -1,6 +1,6 @@
 module kubedb.dev/cli
 
-go 1.12
+go 1.15
 
 require (
 	github.com/fatih/camelcase v1.0.0
@@ -12,23 +12,16 @@ require (
 	k8s.io/api v0.21.0
 	k8s.io/apimachinery v0.21.0
 	k8s.io/cli-runtime v0.21.0
-	k8s.io/client-go v12.0.0+incompatible
+	k8s.io/client-go v0.21.0
 	k8s.io/component-base v0.21.0
 	k8s.io/kubectl v0.21.0
-	k8s.io/kubernetes v1.21.0 // indirect
 	kmodules.xyz/client-go v0.0.0-20210504024435-1eb80721e9b8
 	kmodules.xyz/custom-resources v0.0.0-20210504034124-54c54fcdb690
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210504040241-261c2428d207
-	kmodules.xyz/objectstore-api v0.0.0-20210504041638-b9e00ab1eab3 // indirect
-	kmodules.xyz/offshoot-api v0.0.0-20210504040651-7951e351f0f5 // indirect
-	kmodules.xyz/prober v0.0.0-20210504042421-eca494e828bc // indirect
-	kubedb.dev/apimachinery v0.18.0
-	stash.appscode.dev/apimachinery v0.12.1
+	kubedb.dev/apimachinery v0.18.1-0.20210504170625-e725873d4e41
+	stash.appscode.dev/apimachinery v0.13.1-0.20210504142328-ae1654642a82
+
 )
-
-replace git.apache.org/thrift.git => github.com/apache/thrift v0.13.0
-
-replace github.com/Azure/go-autorest/autorest/azure/auth => github.com/Azure/go-autorest/autorest/azure/auth v0.2.0
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
 
