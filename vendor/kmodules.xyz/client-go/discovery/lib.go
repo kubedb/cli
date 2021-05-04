@@ -20,13 +20,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/glog"
 	"github.com/pkg/errors"
 	"gomodules.xyz/version"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/klog/v2"
 )
 
 func GetVersion(client discovery.DiscoveryInterface) (string, error) {
@@ -201,7 +201,7 @@ func IsSupportedVersion(kc kubernetes.Interface, constraint string, blackListedV
 	if err != nil {
 		return err
 	}
-	glog.Infof("Kubernetes version: %#v\n", info)
+	klog.Infof("Kubernetes version: %#v\n", info)
 
 	gv, err := version.NewVersion(info.GitVersion)
 	if err != nil {

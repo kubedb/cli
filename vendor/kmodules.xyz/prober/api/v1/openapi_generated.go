@@ -53,9 +53,8 @@ func schema_kmodulesxyz_prober_api_v1_FormEntry(ref common.ReferenceCallback) co
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
+										Type:   []string{"string"},
+										Format: "",
 									},
 								},
 							},
@@ -84,7 +83,6 @@ func schema_kmodulesxyz_prober_api_v1_HTTPPostAction(ref common.ReferenceCallbac
 					"port": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
 						},
 					},
@@ -109,8 +107,7 @@ func schema_kmodulesxyz_prober_api_v1_HTTPPostAction(ref common.ReferenceCallbac
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("k8s.io/api/core/v1.HTTPHeader"),
+										Ref: ref("k8s.io/api/core/v1.HTTPHeader"),
 									},
 								},
 							},
@@ -130,8 +127,7 @@ func schema_kmodulesxyz_prober_api_v1_HTTPPostAction(ref common.ReferenceCallbac
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/prober/api/v1.FormEntry"),
+										Ref: ref("kmodules.xyz/prober/api/v1.FormEntry"),
 									},
 								},
 							},

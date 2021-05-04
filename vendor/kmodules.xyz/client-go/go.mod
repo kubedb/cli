@@ -11,15 +11,13 @@ require (
 	github.com/gabriel-vasile/mimetype v1.2.0
 	github.com/go-openapi/spec v0.19.5
 	github.com/gogo/protobuf v1.3.2
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/go-cmp v0.5.4
 	github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
-	github.com/imdario/mergo v0.3.6
+	github.com/imdario/mergo v0.3.5
 	github.com/jpillora/go-ogle-analytics v0.0.0-20161213085824-14b04e0594ef
 	github.com/json-iterator/go v1.1.10
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/mitchellh/mapstructure v1.1.2
-	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/pflag v1.0.5
@@ -28,10 +26,9 @@ require (
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	gomodules.xyz/jsonpatch/v2 v2.1.0
-	gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
+	gomodules.xyz/pointer v0.0.0-20201105040656-991dd254b680
 	gomodules.xyz/version v0.1.0
-	gomodules.xyz/x v0.0.0-20201105065653-91c568df6331
-	google.golang.org/appengine v1.6.5 // indirect
+	gomodules.xyz/x v0.0.2
 	k8s.io/api v0.21.0
 	k8s.io/apiextensions-apiserver v0.21.0
 	k8s.io/apimachinery v0.21.0
