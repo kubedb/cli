@@ -92,6 +92,39 @@ spec:
             metrics:
               items:
                 properties:
+                  containerResource:
+                    properties:
+                      container:
+                        type: string
+                      name:
+                        type: string
+                      target:
+                        properties:
+                          averageUtilization:
+                            format: int32
+                            type: integer
+                          averageValue:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                          type:
+                            type: string
+                          value:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                        required:
+                        - type
+                        type: object
+                    required:
+                    - container
+                    - name
+                    - target
+                    type: object
                   external:
                     properties:
                       metric:
@@ -357,6 +390,35 @@ spec:
             currentMetrics:
               items:
                 properties:
+                  containerResource:
+                    properties:
+                      container:
+                        type: string
+                      current:
+                        properties:
+                          averageUtilization:
+                            format: int32
+                            type: integer
+                          averageValue:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                          value:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                        type: object
+                      name:
+                        type: string
+                    required:
+                    - container
+                    - current
+                    - name
+                    type: object
                   external:
                     properties:
                       current:

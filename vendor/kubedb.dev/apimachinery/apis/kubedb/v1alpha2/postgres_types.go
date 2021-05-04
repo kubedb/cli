@@ -142,7 +142,6 @@ type PostgreLeaderElectionConfig struct {
 	MaximumLagBeforeFailover uint64 `json:"maximumLagBeforeFailover,omitempty" protobuf:"varint,4,opt,name=maximumLagBeforeFailover"`
 
 	// Period between Node.Tick invocations
-	// +default="100ms"
 	// +kubebuilder:default:="100ms"
 	// +optional
 	Period metav1.Duration `json:"period,omitempty" protobuf:"bytes,5,opt,name=period"`
