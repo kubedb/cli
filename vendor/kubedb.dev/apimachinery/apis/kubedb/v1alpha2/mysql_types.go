@@ -31,11 +31,12 @@ const (
 	ResourcePluralMySQL   = "mysqls"
 )
 
-// +kubebuilder:validation:Enum=GroupReplication
+// +kubebuilder:validation:Enum=GroupReplication;InnoDBCluster
 type MySQLClusterMode string
 
 const (
-	MySQLClusterModeGroup MySQLClusterMode = "GroupReplication"
+	MySQLClusterModeGroup  MySQLClusterMode = "GroupReplication"
+	InnoDBClusterModeGroup MySQLClusterMode = "InnoDBCluster"
 )
 
 // +kubebuilder:validation:Enum=Single-Primary;Multi-Primary

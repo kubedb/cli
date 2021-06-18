@@ -149,8 +149,52 @@ func (in *Elasticsearch) DeepCopyObject() runtime.Object {
 func (in *ElasticsearchClusterTopology) DeepCopyInto(out *ElasticsearchClusterTopology) {
 	*out = *in
 	in.Master.DeepCopyInto(&out.Master)
-	in.Data.DeepCopyInto(&out.Data)
 	in.Ingest.DeepCopyInto(&out.Ingest)
+	if in.Data != nil {
+		in, out := &in.Data, &out.Data
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DataContent != nil {
+		in, out := &in.DataContent, &out.DataContent
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DataHot != nil {
+		in, out := &in.DataHot, &out.DataHot
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DataWarm != nil {
+		in, out := &in.DataWarm, &out.DataWarm
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DataCold != nil {
+		in, out := &in.DataCold, &out.DataCold
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.DataFrozen != nil {
+		in, out := &in.DataFrozen, &out.DataFrozen
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ML != nil {
+		in, out := &in.ML, &out.ML
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Transform != nil {
+		in, out := &in.Transform, &out.Transform
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Coordinating != nil {
+		in, out := &in.Coordinating, &out.Coordinating
+		*out = new(ElasticsearchNode)
+		(*in).DeepCopyInto(*out)
+	}
 	return
 }
 

@@ -58,6 +58,7 @@ const (
 	TLSEnabling                  = "TLSEnabling"
 	Restart                      = "Restart"
 	RestartStatefulSet           = "RestartStatefulSet"
+	CertificateSynced            = "CertificateSynced"
 
 	// MongoDB Constants
 	StartingBalancer            = "StartingBalancer"
@@ -135,6 +136,43 @@ const (
 	//Stash Constants
 	PauseBackupConfiguration  = "PauseBackupConfiguration"
 	ResumeBackupConfiguration = "ResumeBackupConfiguration"
+	//Postgres Constants
+	UpdatePrimaryPodImage = "UpdatePrimaryImage"
+	UpdateStandbyPodImage = "UpdateStandbyPodImage"
+	// PausePgCoordinator is used when need to pause postgres failover with pg coordinator.
+	// This is useful when we don't want failover for a certain period.
+	PausePgCoordinator = "PausePgCoordinator"
+	// ResumePgCoordinator is used when need to resume postgres failover with pg coordinator.
+	// This is set when we are done with all the process necessary to do failover again.
+	ResumePgCoordinator = "ResumePgCoordinator"
+	// DataDirectoryInitialized condition is used in major upgrade ops request.
+	// In major upgrade we need to initialized new directory wit initDB to run pg_upgrade.
+	DataDirectoryInitialized = "DataDirectoryInitialized"
+	// PgUpgraded is set when pg_upgrade command ran successfully.
+	// This is used in major upgrade.
+	PgUpgraded = "PgUpgraded"
+	// ReplacedDataDirectory condition is used in major upgrade. After pg_upgrade we need to replace old data directory with new one.
+	// after replace data directory successfully set this condition true.
+	ReplacedDataDirectory                   = "ReplacedDataDirectory"
+	PgCoordinatorStatusResumeDefaultPrimary = "ResumeDefaultPrimary"
+	PostgresPrimaryPodReady                 = "PostgresPrimaryPodReady"
+	RestartPrimaryPods                      = "RestartPrimaryPods"
+	RestartStandbyPods                      = "RestartStandbyPods"
+	// TransferLeaderShipToFirstNode is set when we need to set the pod-0 as primary.
+	// This condition is set after pod-0 restart process done.
+	TransferLeaderShipToFirstNode = "TransferPrimaryRoleToDefault"
+	// TransferLeaderShipToFirstNodeBeforeCoordinatorPaused is set when we need to set the pod-0 as primary Before pgcoordinator paused
+	// This is the initial step where we need to set pod-0 as primary. the condition is set before the pod-0 restart process.
+	TransferLeaderShipToFirstNodeBeforeCoordinatorPaused = "TransferLeaderShipToFirstNodeBeforeCoordinatorPaused"
+	// CopiedOldBinaries condition is used when we are done copying old postgres binary.
+	// This is needed when we are doing major upgrade.
+	CopiedOldBinaries      = "CopiedOldBinaries"
+	UpdateStatefulSetImage = "UpdateStatefulSetImage"
+	// ResumePrimaryPgCoordinator condition is set when we have set pg-coordinator status to NonTranferableResume this is useful when primary need to run after restart.
+	ResumePrimaryPgCoordinator = "NonTransferableResumePgCoordinator"
+
+	ReconfigurePrimaryPod  = "ReconfigurePrimaryPod"
+	ReconfigureStandbyPods = "ReconfigureStandbyPods"
 )
 
 // +kubebuilder:validation:Enum=Pending;Progressing;Successful;WaitingForApproval;Failed;Approved;Denied

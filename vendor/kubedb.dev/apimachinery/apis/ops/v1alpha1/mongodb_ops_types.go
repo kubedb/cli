@@ -21,7 +21,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
-	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 const (
@@ -73,7 +72,7 @@ type MongoDBOpsRequestSpec struct {
 	// Specifies the Readiness Criteria
 	ReadinessCriteria *MongoDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,10,opt,name=readinessCriteria"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
-	TimeoutSeconds *int32 `json:"timeoutSeconds,omitempty" protobuf:"varint,11,opt,name=timeoutSeconds"`
+	Timeout *metav1.Duration `json:"timeout,omitempty" protobuf:"bytes,11,opt,name=timeout"`
 }
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod
@@ -142,9 +141,6 @@ type MongoDBCustomConfigurationSpec struct {
 }
 
 type MongoDBCustomConfiguration struct {
-	// PodTemplate is an optional configuration for pods used to expose database
-	// +optional
-	PodTemplate        ofst.PodTemplateSpec       `json:"podTemplate,omitempty" protobuf:"bytes,1,opt,name=podTemplate"`
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,2,opt,name=configSecret"`
 	InlineConfig       string                     `json:"inlineConfig,omitempty" protobuf:"bytes,3,opt,name=inlineConfig"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,4,opt,name=removeCustomConfig"`

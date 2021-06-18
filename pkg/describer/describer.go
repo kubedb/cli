@@ -30,7 +30,6 @@ import (
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	"kubedb.dev/cli/pkg/events"
 
-	"github.com/golang/glog"
 	appsv1 "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -43,6 +42,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	coreclient "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
+	"k8s.io/klog/v2"
 	"k8s.io/kubectl/pkg/describe"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
@@ -117,7 +117,7 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]describe.Reso
 func DescriberFor(kind schema.GroupKind, clientConfig *rest.Config) (describe.ResourceDescriber, bool) {
 	describers, err := describerMap(clientConfig)
 	if err != nil {
-		glog.V(1).Info(err)
+		klog.V(1).Info(err)
 		return nil, false
 	}
 

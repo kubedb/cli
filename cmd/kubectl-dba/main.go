@@ -23,16 +23,17 @@ import (
 
 	"kubedb.dev/cli/pkg/cmds"
 
-	"gomodules.xyz/kglog"
+	"gomodules.xyz/logs"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	kglog.InitLogs()
-	defer kglog.FlushLogs()
 
 	cmd := cmds.NewKubeDBCommand(os.Stdin, os.Stdout, os.Stderr)
+	logs.Init(cmd, false)
+	defer logs.FlushLogs()
+
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
