@@ -129,9 +129,25 @@ message Elasticsearch {
 message ElasticsearchClusterTopology {
   optional ElasticsearchNode master = 1;
 
-  optional ElasticsearchNode data = 2;
+  optional ElasticsearchNode ingest = 2;
 
-  optional ElasticsearchNode ingest = 3;
+  optional ElasticsearchNode data = 3;
+
+  optional ElasticsearchNode dataContent = 4;
+
+  optional ElasticsearchNode dataHot = 5;
+
+  optional ElasticsearchNode dataWarm = 6;
+
+  optional ElasticsearchNode dataCold = 7;
+
+  optional ElasticsearchNode dataFrozen = 8;
+
+  optional ElasticsearchNode ml = 9;
+
+  optional ElasticsearchNode transform = 10;
+
+  optional ElasticsearchNode coordinating = 11;
 }
 
 message ElasticsearchList {

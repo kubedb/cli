@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
@@ -65,20 +66,16 @@ type MariaDBOpsRequestSpec struct {
 	// Specifies information necessary for custom configuration of MariaDB
 	Configuration *MariaDBCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *MariaDBTLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
-}
-
-// MariaDBReplicaReadinessCriteria is the criteria for checking readiness of a MariaDB pod
-// after updating, horizontal scaling etc.
-type MariaDBReplicaReadinessCriteria struct {
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty" protobuf:"bytes,10,opt,name=timeout"`
 }
 
 type MariaDBUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                           `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
-	ReadinessCriteria *MariaDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+	TargetVersion string `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
 }
 
 type MariaDBHorizontalScalingSpec struct {
@@ -95,15 +92,27 @@ type MariaDBVerticalScalingSpec struct {
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion
 type MariaDBVolumeExpansionSpec struct {
+	MariaDB *resource.Quantity `json:"mariadb,omitempty" protobuf:"bytes,1,opt,name=mariadb"`
 }
 
 type MariaDBCustomConfigurationSpec struct {
+	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,1,opt,name=configSecret"`
+	InlineConfig       string                     `json:"inlineConfig,omitempty" protobuf:"bytes,2,opt,name=inlineConfig"`
+	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,3,opt,name=removeCustomConfig"`
 }
 
 type MariaDBCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
 	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
 	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+}
+
+type MariaDBTLSSpec struct {
+	TLSSpec `json:",inline,omitempty" protobuf:"bytes,1,opt,name=tLSSpec"`
+
+	// Indicates that the database server need to be encrypted connections(ssl)
+	// +optional
+	RequireSSL *bool `json:"requireSSL,omitempty" protobuf:"varint,2,opt,name=requireSSL"`
 }
 
 // MariaDBOpsRequestStatus is the status for MariaDBOpsRequest

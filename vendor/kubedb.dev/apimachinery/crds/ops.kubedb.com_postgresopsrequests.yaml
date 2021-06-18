@@ -44,6 +44,16 @@ spec:
         spec:
           properties:
             configuration:
+              properties:
+                configSecret:
+                  properties:
+                    name:
+                      type: string
+                  type: object
+                inlineConfig:
+                  type: string
+                removeCustomConfig:
+                  type: boolean
               type: object
             databaseRef:
               properties:
@@ -51,9 +61,15 @@ spec:
                   type: string
               type: object
             horizontalScaling:
+              properties:
+                replicas:
+                  format: int32
+                  type: integer
               type: object
             restart:
               type: object
+            timeout:
+              type: string
             tls:
               properties:
                 certificates:
@@ -140,6 +156,12 @@ spec:
                     - alias
                     type: object
                   type: array
+                clientAuthMode:
+                  enum:
+                  - md5
+                  - scram
+                  - cert
+                  type: string
                 issuerRef:
                   properties:
                     apiGroup:
@@ -156,6 +178,15 @@ spec:
                   type: boolean
                 rotateCertificates:
                   type: boolean
+                sslMode:
+                  enum:
+                  - disable
+                  - allow
+                  - prefer
+                  - require
+                  - verify-ca
+                  - verify-full
+                  type: string
               type: object
             type:
               enum:
@@ -169,17 +200,58 @@ spec:
               type: string
             upgrade:
               properties:
-                readinessCriteria:
-                  type: object
                 targetVersion:
                   type: string
               type: object
             verticalScaling:
               properties:
-                readinessCriteria:
+                exporter:
+                  properties:
+                    limits:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      type: object
+                    requests:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      type: object
+                  type: object
+                postgres:
+                  properties:
+                    limits:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      type: object
+                    requests:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      type: object
                   type: object
               type: object
             volumeExpansion:
+              properties:
+                postgres:
+                  anyOf:
+                  - type: integer
+                  - type: string
+                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                  x-kubernetes-int-or-string: true
               type: object
           required:
           - databaseRef

@@ -119,6 +119,9 @@ message ElasticsearchOpsRequestSpec {
 
   // Specifies information necessary for restarting database
   optional RestartSpec restart = 9;
+
+  // Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration timeout = 10;
 }
 
 // ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest
@@ -298,6 +301,11 @@ message MariaDBCustomConfiguration {
 }
 
 message MariaDBCustomConfigurationSpec {
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 1;
+
+  optional string inlineConfig = 2;
+
+  optional bool removeCustomConfig = 3;
 }
 
 message MariaDBHorizontalScalingSpec {
@@ -354,10 +362,13 @@ message MariaDBOpsRequestSpec {
   optional MariaDBCustomConfigurationSpec configuration = 7;
 
   // Specifies information necessary for configuring TLS
-  optional TLSSpec tls = 8;
+  optional MariaDBTLSSpec tls = 8;
 
   // Specifies information necessary for restarting database
   optional RestartSpec restart = 9;
+
+  // Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration timeout = 10;
 }
 
 // MariaDBOpsRequestStatus is the status for MariaDBOpsRequest
@@ -374,16 +385,17 @@ message MariaDBOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
-// MariaDBReplicaReadinessCriteria is the criteria for checking readiness of a MariaDB pod
-// after updating, horizontal scaling etc.
-message MariaDBReplicaReadinessCriteria {
+message MariaDBTLSSpec {
+  optional TLSSpec tLSSpec = 1;
+
+  // Indicates that the database server need to be encrypted connections(ssl)
+  // +optional
+  optional bool requireSSL = 2;
 }
 
 message MariaDBUpgradeSpec {
   // Specifies the target version name from catalog
   optional string targetVersion = 1;
-
-  optional MariaDBReplicaReadinessCriteria readinessCriteria = 2;
 }
 
 message MariaDBVerticalScalingSpec {
@@ -394,6 +406,7 @@ message MariaDBVerticalScalingSpec {
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion
 message MariaDBVolumeExpansionSpec {
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity mariadb = 1;
 }
 
 message MemcachedCustomConfiguration {
@@ -499,10 +512,6 @@ message MemcachedVolumeExpansionSpec {
 }
 
 message MongoDBCustomConfiguration {
-  // PodTemplate is an optional configuration for pods used to expose database
-  // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 1;
-
   optional k8s.io.api.core.v1.LocalObjectReference configSecret = 2;
 
   optional string inlineConfig = 3;
@@ -588,7 +597,7 @@ message MongoDBOpsRequestSpec {
   optional MongoDBReplicaReadinessCriteria readinessCriteria = 10;
 
   // Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
-  optional int32 timeoutSeconds = 11;
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration timeout = 11;
 }
 
 // MongoDBOpsRequestStatus is the status for MongoDBOpsRequest
@@ -660,10 +669,6 @@ message MongosNode {
 }
 
 message MySQLCustomConfigurationSpec {
-  // PodTemplate is an optional configuration for pods used to expose database
-  // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 1;
-
   optional k8s.io.api.core.v1.LocalObjectReference configSecret = 2;
 
   optional string inlineConfig = 3;
@@ -989,10 +994,16 @@ message PostgresCustomConfiguration {
 }
 
 message PostgresCustomConfigurationSpec {
+  optional k8s.io.api.core.v1.LocalObjectReference configSecret = 2;
+
+  optional string inlineConfig = 3;
+
+  optional bool removeCustomConfig = 4;
 }
 
 // HorizontalScaling is the spec for Postgres horizontal scaling
 message PostgresHorizontalScalingSpec {
+  optional int32 replicas = 1;
 }
 
 // +kubebuilder:object:root=true
@@ -1041,10 +1052,13 @@ message PostgresOpsRequestSpec {
   optional PostgresCustomConfigurationSpec configuration = 7;
 
   // Specifies information necessary for configuring TLS
-  optional TLSSpec tls = 8;
+  optional PostgresTLSSpec tls = 8;
 
   // Specifies information necessary for restarting database
   optional RestartSpec restart = 9;
+
+  // Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Duration timeout = 10;
 }
 
 // PostgresOpsRequestStatus is the status for PostgresOpsRequest
@@ -1061,25 +1075,34 @@ message PostgresOpsRequestStatus {
   repeated kmodules.xyz.client_go.api.v1.Condition conditions = 3;
 }
 
-// PostgresReplicaReadinessCriteria is the criteria for checking readiness of a Postgres pod
-// after updating, horizontal scaling etc.
-message PostgresReplicaReadinessCriteria {
+message PostgresTLSSpec {
+  optional TLSSpec tLSSpec = 1;
+
+  // SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
+  // +optional
+  optional string sslMode = 2;
+
+  // ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
+  // +optional
+  optional string clientAuthMode = 3;
 }
 
 message PostgresUpgradeSpec {
   // Specifies the target version name from catalog
   optional string targetVersion = 1;
-
-  optional PostgresReplicaReadinessCriteria readinessCriteria = 2;
 }
 
 // PostgresVerticalScalingSpec is the spec for Postgres vertical scaling
 message PostgresVerticalScalingSpec {
-  optional PostgresReplicaReadinessCriteria readinessCriteria = 1;
+  optional k8s.io.api.core.v1.ResourceRequirements postgres = 1;
+
+  optional k8s.io.api.core.v1.ResourceRequirements exporter = 2;
 }
 
 // PostgresVolumeExpansionSpec is the spec for Postgres volume expansion
 message PostgresVolumeExpansionSpec {
+  // volume specification for Postgres
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity postgres = 1;
 }
 
 message ProxySQLCustomConfiguration {

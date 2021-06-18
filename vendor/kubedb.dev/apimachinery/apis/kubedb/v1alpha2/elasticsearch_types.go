@@ -142,9 +142,17 @@ type ElasticsearchSpec struct {
 }
 
 type ElasticsearchClusterTopology struct {
-	Master ElasticsearchNode `json:"master" protobuf:"bytes,1,opt,name=master"`
-	Data   ElasticsearchNode `json:"data" protobuf:"bytes,2,opt,name=data"`
-	Ingest ElasticsearchNode `json:"ingest" protobuf:"bytes,3,opt,name=ingest"`
+	Master       ElasticsearchNode  `json:"master" protobuf:"bytes,1,opt,name=master"`
+	Ingest       ElasticsearchNode  `json:"ingest" protobuf:"bytes,2,opt,name=ingest"`
+	Data         *ElasticsearchNode `json:"data,omitempty" protobuf:"bytes,3,opt,name=data"`
+	DataContent  *ElasticsearchNode `json:"dataContent,omitempty" protobuf:"bytes,4,opt,name=dataContent"`
+	DataHot      *ElasticsearchNode `json:"dataHot,omitempty" protobuf:"bytes,5,opt,name=dataHot"`
+	DataWarm     *ElasticsearchNode `json:"dataWarm,omitempty" protobuf:"bytes,6,opt,name=dataWarm"`
+	DataCold     *ElasticsearchNode `json:"dataCold,omitempty" protobuf:"bytes,7,opt,name=dataCold"`
+	DataFrozen   *ElasticsearchNode `json:"dataFrozen,omitempty" protobuf:"bytes,8,opt,name=dataFrozen"`
+	ML           *ElasticsearchNode `json:"ml,omitempty" protobuf:"bytes,9,opt,name=ml"`
+	Transform    *ElasticsearchNode `json:"transform,omitempty" protobuf:"bytes,10,opt,name=transform"`
+	Coordinating *ElasticsearchNode `json:"coordinating,omitempty" protobuf:"bytes,11,opt,name=coordinating"`
 }
 
 type ElasticsearchNode struct {
@@ -296,3 +304,20 @@ type ElasticsearchList struct {
 	// Items is a list of Elasticsearch CRD objects
 	Items []Elasticsearch `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
+
+type ElasticsearchNodeRoleType string
+
+const (
+	ElasticsearchNodeRoleTypeMaster              ElasticsearchNodeRoleType = "master"
+	ElasticsearchNodeRoleTypeData                ElasticsearchNodeRoleType = "data"
+	ElasticsearchNodeRoleTypeDataContent         ElasticsearchNodeRoleType = "data-content"
+	ElasticsearchNodeRoleTypeDataHot             ElasticsearchNodeRoleType = "data-hot"
+	ElasticsearchNodeRoleTypeDataWarm            ElasticsearchNodeRoleType = "data-warm"
+	ElasticsearchNodeRoleTypeDataCold            ElasticsearchNodeRoleType = "data-cold"
+	ElasticsearchNodeRoleTypeDataFrozen          ElasticsearchNodeRoleType = "data-frozen"
+	ElasticsearchNodeRoleTypeIngest              ElasticsearchNodeRoleType = "ingest"
+	ElasticsearchNodeRoleTypeML                  ElasticsearchNodeRoleType = "ml"
+	ElasticsearchNodeRoleTypeRemoteClusterClient ElasticsearchNodeRoleType = "remote-cluster-client"
+	ElasticsearchNodeRoleTypeTransform           ElasticsearchNodeRoleType = "transform"
+	ElasticsearchNodeRoleTypeCoordinating        ElasticsearchNodeRoleType = "coordinating"
+)

@@ -63,21 +63,31 @@ func (e Elasticsearch) OffshootSelectors() map[string]string {
 	}
 }
 
+func (e Elasticsearch) NodeRoleSpecificLabelKey(roleType ElasticsearchNodeRoleType) string {
+	return kubedb.GroupName + "/role-" + string(roleType)
+}
+
 func (e Elasticsearch) MasterSelectors() map[string]string {
 	selectors := e.OffshootSelectors()
-	selectors[ElasticsearchNodeRoleMaster] = ElasticsearchNodeRoleSet
+	selectors[e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeMaster)] = ElasticsearchNodeRoleSet
 	return selectors
 }
 
 func (e Elasticsearch) DataSelectors() map[string]string {
 	selectors := e.OffshootSelectors()
-	selectors[ElasticsearchNodeRoleData] = ElasticsearchNodeRoleSet
+	selectors[e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeData)] = ElasticsearchNodeRoleSet
 	return selectors
 }
 
 func (e Elasticsearch) IngestSelectors() map[string]string {
 	selectors := e.OffshootSelectors()
-	selectors[ElasticsearchNodeRoleIngest] = ElasticsearchNodeRoleSet
+	selectors[e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeIngest)] = ElasticsearchNodeRoleSet
+	return selectors
+}
+
+func (e Elasticsearch) NodeRoleSpecificSelectors(roleType ElasticsearchNodeRoleType) map[string]string {
+	selectors := e.OffshootSelectors()
+	selectors[e.NodeRoleSpecificLabelKey(roleType)] = ElasticsearchNodeRoleSet
 	return selectors
 }
 
@@ -199,21 +209,77 @@ func (e *Elasticsearch) MasterStatefulSetName() string {
 	if e.Spec.Topology.Master.Suffix != "" {
 		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.Master.Suffix)
 	}
-	return meta_util.NameWithSuffix(e.OffshootName(), ElasticsearchMasterNodeSuffix)
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeMaster))
 }
 
 func (e *Elasticsearch) DataStatefulSetName() string {
 	if e.Spec.Topology.Data.Suffix != "" {
 		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.Data.Suffix)
 	}
-	return meta_util.NameWithSuffix(e.OffshootName(), ElasticsearchDataNodeSuffix)
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeData))
 }
 
 func (e *Elasticsearch) IngestStatefulSetName() string {
 	if e.Spec.Topology.Ingest.Suffix != "" {
 		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.Ingest.Suffix)
 	}
-	return meta_util.NameWithSuffix(e.OffshootName(), ElasticsearchIngestNodeSuffix)
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeIngest))
+}
+
+func (e *Elasticsearch) DataContentStatefulSetName() string {
+	if e.Spec.Topology.DataContent.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.DataContent.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeDataContent))
+}
+
+func (e *Elasticsearch) DataFrozenStatefulSetName() string {
+	if e.Spec.Topology.DataFrozen.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.DataFrozen.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeDataFrozen))
+}
+
+func (e *Elasticsearch) DataColdStatefulSetName() string {
+	if e.Spec.Topology.DataCold.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.DataCold.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeDataCold))
+}
+
+func (e *Elasticsearch) DataHotStatefulSetName() string {
+	if e.Spec.Topology.DataHot.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.DataHot.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeDataHot))
+}
+
+func (e *Elasticsearch) DataWarmStatefulSetName() string {
+	if e.Spec.Topology.DataWarm.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.DataWarm.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeDataWarm))
+}
+
+func (e *Elasticsearch) MLStatefulSetName() string {
+	if e.Spec.Topology.ML.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.ML.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeML))
+}
+
+func (e *Elasticsearch) TransformStatefulSetName() string {
+	if e.Spec.Topology.Transform.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.Transform.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeTransform))
+}
+
+func (e *Elasticsearch) CoordinatingStatefulSetName() string {
+	if e.Spec.Topology.Coordinating.Suffix != "" {
+		return meta_util.NameWithSuffix(e.OffshootName(), e.Spec.Topology.Coordinating.Suffix)
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), string(ElasticsearchNodeRoleTypeCoordinating))
 }
 
 func (e *Elasticsearch) InitialMasterNodes() []string {
@@ -313,26 +379,128 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 
 	// set default elasticsearch node name prefix
 	if e.Spec.Topology != nil {
-
+		// Required nodes, must exist!
 		// Default to "ingest"
 		if e.Spec.Topology.Ingest.Suffix == "" {
-			e.Spec.Topology.Ingest.Suffix = ElasticsearchIngestNodeSuffix
+			e.Spec.Topology.Ingest.Suffix = string(ElasticsearchNodeRoleTypeIngest)
 		}
-		SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, DefaultResourceLimits)
-
-		// Default to "data"
-		if e.Spec.Topology.Data.Suffix == "" {
-			e.Spec.Topology.Data.Suffix = ElasticsearchDataNodeSuffix
+		SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, DefaultResources)
+		if e.Spec.Topology.Ingest.Replicas != nil {
+			e.Spec.Topology.Ingest.Replicas = pointer.Int32P(1)
 		}
-		SetDefaultResourceLimits(&e.Spec.Topology.Data.Resources, DefaultResourceLimits)
 
+		// Required nodes, must exist!
 		// Default to "master"
 		if e.Spec.Topology.Master.Suffix == "" {
-			e.Spec.Topology.Master.Suffix = ElasticsearchMasterNodeSuffix
+			e.Spec.Topology.Master.Suffix = string(ElasticsearchNodeRoleTypeMaster)
 		}
-		SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResources)
+		if e.Spec.Topology.Master.Replicas != nil {
+			e.Spec.Topology.Master.Replicas = pointer.Int32P(1)
+		}
+
+		// Optional nodes, when other type of data nodes are not empty.
+		// Otherwise required nodes.
+		if e.Spec.Topology.Data != nil {
+			// Default to "data"
+			if e.Spec.Topology.Data.Suffix == "" {
+				e.Spec.Topology.Data.Suffix = string(ElasticsearchNodeRoleTypeData)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.Data.Resources, DefaultResources)
+			if e.Spec.Topology.Data.Replicas == nil {
+				e.Spec.Topology.Data.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.DataHot != nil {
+			// Default to "data-hot"
+			if e.Spec.Topology.DataHot.Suffix == "" {
+				e.Spec.Topology.DataHot.Suffix = string(ElasticsearchNodeRoleTypeDataHot)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.DataHot.Resources, DefaultResources)
+			if e.Spec.Topology.DataHot.Replicas == nil {
+				e.Spec.Topology.DataHot.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.DataWarm != nil {
+			// Default to "data-warm"
+			if e.Spec.Topology.DataWarm.Suffix == "" {
+				e.Spec.Topology.DataWarm.Suffix = string(ElasticsearchNodeRoleTypeDataWarm)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.DataWarm.Resources, DefaultResources)
+			if e.Spec.Topology.DataWarm.Replicas == nil {
+				e.Spec.Topology.DataWarm.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.DataCold != nil {
+			// Default to "data-warm"
+			if e.Spec.Topology.DataCold.Suffix == "" {
+				e.Spec.Topology.DataCold.Suffix = string(ElasticsearchNodeRoleTypeDataCold)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.DataCold.Resources, DefaultResources)
+			if e.Spec.Topology.DataCold.Replicas == nil {
+				e.Spec.Topology.DataCold.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.DataFrozen != nil {
+			// Default to "data-frozen"
+			if e.Spec.Topology.DataFrozen.Suffix == "" {
+				e.Spec.Topology.DataFrozen.Suffix = string(ElasticsearchNodeRoleTypeDataFrozen)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.DataFrozen.Resources, DefaultResources)
+			if e.Spec.Topology.DataFrozen.Replicas == nil {
+				e.Spec.Topology.DataFrozen.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.DataContent != nil {
+			// Default to "data-content"
+			if e.Spec.Topology.DataContent.Suffix == "" {
+				e.Spec.Topology.DataContent.Suffix = string(ElasticsearchNodeRoleTypeDataContent)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.DataContent.Resources, DefaultResources)
+			if e.Spec.Topology.DataContent.Replicas == nil {
+				e.Spec.Topology.DataContent.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.ML != nil {
+			// Default to "ml"
+			if e.Spec.Topology.ML.Suffix == "" {
+				e.Spec.Topology.ML.Suffix = string(ElasticsearchNodeRoleTypeML)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.ML.Resources, DefaultResources)
+			if e.Spec.Topology.ML.Replicas == nil {
+				e.Spec.Topology.ML.Replicas = pointer.Int32P(1)
+			}
+		}
+
+		// Optional, can be empty
+		if e.Spec.Topology.Transform != nil {
+			// Default to "transform"
+			if e.Spec.Topology.Transform.Suffix == "" {
+				e.Spec.Topology.Transform.Suffix = string(ElasticsearchNodeRoleTypeTransform)
+			}
+			SetDefaultResourceLimits(&e.Spec.Topology.Transform.Resources, DefaultResources)
+			if e.Spec.Topology.Transform.Replicas == nil {
+				e.Spec.Topology.Transform.Replicas = pointer.Int32P(1)
+			}
+		}
+
 	} else {
-		SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
+		SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResources)
+		if e.Spec.Replicas == nil {
+			e.Spec.Replicas = pointer.Int32P(1)
+		}
 	}
 
 	// set default kernel settings
@@ -415,6 +583,11 @@ func (e *Elasticsearch) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, la
 
 // Set Default internal users settings
 func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalog.ElasticsearchVersion) {
+	// If security is disabled (ie. DisableSecurity: true), ignore.
+	if e.Spec.DisableSecurity {
+		return
+	}
+
 	// The internalUsers feature only works with searchGuard and openDistro
 	if esVersion.Spec.Distribution == catalog.ElasticsearchDistroOpenDistro ||
 		esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard {
@@ -452,8 +625,17 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 		// Set missing user secret names
 		for username, userSpec := range inUsers {
 			// For admin user, spec.authSecret.Name must have high precedence over default field
-			if username == string(ElasticsearchInternalUserAdmin) && e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
-				userSpec.SecretName = e.Spec.AuthSecret.Name
+			if username == string(ElasticsearchInternalUserAdmin) {
+				if e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
+					userSpec.SecretName = e.Spec.AuthSecret.Name
+				} else {
+					if userSpec.SecretName == "" {
+						userSpec.SecretName = e.DefaultUserCredSecretName(username)
+					}
+					e.Spec.AuthSecret = &core.LocalObjectReference{
+						Name: userSpec.SecretName,
+					}
+				}
 			} else if userSpec.SecretName == "" {
 				userSpec.SecretName = e.DefaultUserCredSecretName(username)
 			}
@@ -653,4 +835,39 @@ func getElasticsearchUser(userList map[string]ElasticsearchUserSpec, username st
 	}
 	userSpec := userList[username]
 	return &userSpec, nil
+}
+
+// ToMap returns ClusterTopology in a Map
+func (esTopology *ElasticsearchClusterTopology) ToMap() map[ElasticsearchNodeRoleType]ElasticsearchNode {
+	topology := make(map[ElasticsearchNodeRoleType]ElasticsearchNode)
+	topology[ElasticsearchNodeRoleTypeMaster] = esTopology.Master
+	topology[ElasticsearchNodeRoleTypeIngest] = esTopology.Ingest
+	if esTopology.Data != nil {
+		topology[ElasticsearchNodeRoleTypeData] = *esTopology.Data
+	}
+	if esTopology.DataHot != nil {
+		topology[ElasticsearchNodeRoleTypeDataHot] = *esTopology.DataHot
+	}
+	if esTopology.DataWarm != nil {
+		topology[ElasticsearchNodeRoleTypeDataWarm] = *esTopology.DataWarm
+	}
+	if esTopology.DataCold != nil {
+		topology[ElasticsearchNodeRoleTypeDataCold] = *esTopology.DataCold
+	}
+	if esTopology.DataFrozen != nil {
+		topology[ElasticsearchNodeRoleTypeDataFrozen] = *esTopology.DataFrozen
+	}
+	if esTopology.DataContent != nil {
+		topology[ElasticsearchNodeRoleTypeDataContent] = *esTopology.DataContent
+	}
+	if esTopology.ML != nil {
+		topology[ElasticsearchNodeRoleTypeML] = *esTopology.ML
+	}
+	if esTopology.Transform != nil {
+		topology[ElasticsearchNodeRoleTypeTransform] = *esTopology.Transform
+	}
+	if esTopology.Coordinating != nil {
+		topology[ElasticsearchNodeRoleTypeCoordinating] = *esTopology.Coordinating
+	}
+	return topology
 }

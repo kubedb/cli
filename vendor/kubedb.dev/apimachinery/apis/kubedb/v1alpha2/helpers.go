@@ -63,7 +63,7 @@ func GetServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias
 	return ofst.ServiceTemplateSpec{}
 }
 
-func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultLimits core.ResourceList) {
+func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources core.ResourceRequirements) {
 	// if request is set,
 	//		- limit set:
 	//			- return max(limit,request)
@@ -71,7 +71,7 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultLimits core
 	//		- return limit
 	// else
 	//		- return default
-	fn := func(name core.ResourceName, defaultValue resource.Quantity) resource.Quantity {
+	calLimit := func(name core.ResourceName, defaultValue resource.Quantity) resource.Quantity {
 		if r, ok := req.Requests[name]; ok {
 			// l is greater than r == 1.
 			if l, exist := req.Limits[name]; exist && l.Cmp(r) == 1 {
@@ -84,6 +84,24 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultLimits core
 		}
 		return defaultValue
 	}
+	// if request is not set,
+	//		- if limit exists:
+	//				- copy limit
+	//		- else
+	//				- set default
+	// else
+	// 		- return request
+	// endif
+	calRequest := func(name core.ResourceName, defaultValue resource.Quantity) resource.Quantity {
+		if r, ok := req.Requests[name]; !ok {
+			if l, exist := req.Limits[name]; exist {
+				return l
+			}
+			return defaultValue
+		} else {
+			return r
+		}
+	}
 
 	if req.Limits == nil {
 		req.Limits = core.ResourceList{}
@@ -92,15 +110,14 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultLimits core
 		req.Requests = core.ResourceList{}
 	}
 
-	// for: cpu & memory
-	//		- calculate limit
-	//		- if request not set, set to limit
-	for resourceName := range defaultLimits {
-		req.Limits[resourceName] = fn(resourceName, defaultLimits[resourceName])
+	// Calculate the limits first
+	for l := range defaultResources.Limits {
+		req.Limits[l] = calLimit(l, defaultResources.Limits[l])
+	}
 
-		if _, ok := req.Requests[resourceName]; !ok {
-			req.Requests[resourceName] = req.Limits[resourceName]
-		}
+	// Once the limit is calculated, Calculate requests
+	for r := range defaultResources.Requests {
+		req.Requests[r] = calRequest(r, defaultResources.Requests[r])
 	}
 }
 

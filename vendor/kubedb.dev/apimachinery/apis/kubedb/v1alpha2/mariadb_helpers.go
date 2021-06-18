@@ -186,7 +186,7 @@ func (m *MariaDB) SetDefaults(topology *core_util.Topology) {
 	m.Spec.Monitor.SetDefaults()
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
-	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResourceLimits)
+	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 
 // setDefaultAffinity
@@ -267,8 +267,16 @@ func (m *MariaDB) GetCertSecretName(alias MariaDBCertificateAlias) string {
 	return m.CertificateName(alias)
 }
 
+func (m *MariaDB) AuthSecretName() string {
+	return meta_util.NameWithSuffix(m.Name, "auth")
+}
+
 func (m *MariaDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
 	// Desire number of statefulSets
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
+}
+
+func (m *MariaDB) InlineConfigSecretName() string {
+	return meta_util.NameWithSuffix(m.Name, "inline")
 }

@@ -2615,6 +2615,7 @@ spec:
                 mode:
                   enum:
                   - GroupReplication
+                  - InnoDBCluster
                   type: string
               type: object
             useAddressType:

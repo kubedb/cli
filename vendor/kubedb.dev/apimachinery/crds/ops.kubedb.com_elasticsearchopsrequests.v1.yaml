@@ -69,6 +69,8 @@ spec:
                 type: object
               restart:
                 type: object
+              timeout:
+                type: string
               tls:
                 properties:
                   certificates:

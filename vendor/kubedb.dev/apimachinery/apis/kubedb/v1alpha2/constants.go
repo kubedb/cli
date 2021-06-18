@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"time"
+
 	"kubedb.dev/apimachinery/apis/kubedb"
 
 	core "k8s.io/api/core/v1"
@@ -39,6 +41,7 @@ const (
 	RoleStats             = "stats"
 	DefaultStatsPath      = "/metrics"
 	DefaultPasswordLength = 16
+	HealthCheckInterval   = 10 * time.Second
 
 	ContainerExporterName = "exporter"
 	LocalHost             = "localhost"
@@ -68,12 +71,6 @@ const (
 	ElasticsearchTransportPort                   = 9300
 	ElasticsearchTransportPortName               = "transport"
 	ElasticsearchMetricsPort                     = 9600
-	ElasticsearchIngestNodeSuffix                = "ingest"
-	ElasticsearchDataNodeSuffix                  = "data"
-	ElasticsearchMasterNodeSuffix                = "master"
-	ElasticsearchNodeRoleMaster                  = kubedb.GroupName + "/" + "role-master"
-	ElasticsearchNodeRoleIngest                  = kubedb.GroupName + "/" + "role-ingest"
-	ElasticsearchNodeRoleData                    = kubedb.GroupName + "/" + "role-data"
 	ElasticsearchNodeRoleSet                     = "set"
 	ElasticsearchConfigDir                       = "/usr/share/elasticsearch/config"
 	ElasticsearchTempConfigDir                   = "/elasticsearch/temp-config"
@@ -199,8 +196,11 @@ const (
 	MariaDBDataMountPath                = "/var/lib/mysql"
 	MariaDBDataLostFoundPath            = MariaDBDataMountPath + "lost+found"
 	MariaDBInitDBMountPath              = "/docker-entrypoint-initdb.d"
-	MariaDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
-	MariaDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
+	MariaDBCustomConfigMountPath        = "/etc/mysql/conf.d/"
+	MariaDBClusterCustomConfigMountPath = "/etc/mysql/custom.conf.d/"
+	MariaDBCustomConfigVolumeName       = "custom-config"
+	MariaDBTLSConfigCustom              = "custom"
+	MariaDBInitContainerName            = "mariadb-init"
 
 	// =========================== PostgreSQL Constants ============================
 	PostgresDatabasePortName       = "db"
@@ -234,6 +234,15 @@ const (
 	PostgresKeyFileSecretSuffix = "key"
 	PostgresPEMSecretSuffix     = "pem"
 	PostgresDefaultUsername     = "postgres"
+	PostgresPgCoordinatorStatus = "Coordinator/Status"
+	// to pause the failover for postgres. this is helpful for ops request
+	PostgresPgCoordinatorStatusPause = "Pause"
+	// to resume the failover for postgres. this is helpful for ops request
+	PostgresPgCoordinatorStatusResume = "Resume"
+
+	// when we need to resume pg-coordinator as non transferable we are going to set this state.
+	// this is useful when we have set a node as primary and you don't want other node rather then this node to become primary.
+	PostgresPgCoordinatorStatusResumeNonTransferable = "NonTransferableResume"
 
 	// =========================== ProxySQL Constants ============================
 	LabelProxySQLName        = ProxySQLKey + "/name"
@@ -246,7 +255,6 @@ const (
 	ProxySQLAdminPortName          = "admin"
 	ProxySQLDataMountPath          = "/var/lib/proxysql"
 	ProxySQLCustomConfigMountPath  = "/etc/custom-config"
-
 	// =========================== Redis Constants ============================
 	RedisShardKey               = RedisKey + "/shard"
 	RedisDatabasePortName       = "db"
@@ -310,8 +318,13 @@ const (
 )
 
 var (
-	DefaultResourceLimits = core.ResourceList{
-		core.ResourceCPU:    resource.MustParse(".500"),
-		core.ResourceMemory: resource.MustParse("1024Mi"),
+	DefaultResources = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceMemory: resource.MustParse("1024Mi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("1024Mi"),
+		},
 	}
 )
