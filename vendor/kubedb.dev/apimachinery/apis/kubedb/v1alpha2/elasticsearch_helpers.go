@@ -385,7 +385,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			e.Spec.Topology.Ingest.Suffix = string(ElasticsearchNodeRoleTypeIngest)
 		}
 		SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, DefaultResources)
-		if e.Spec.Topology.Ingest.Replicas != nil {
+		if e.Spec.Topology.Ingest.Replicas == nil {
 			e.Spec.Topology.Ingest.Replicas = pointer.Int32P(1)
 		}
 
@@ -395,7 +395,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			e.Spec.Topology.Master.Suffix = string(ElasticsearchNodeRoleTypeMaster)
 		}
 		SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResources)
-		if e.Spec.Topology.Master.Replicas != nil {
+		if e.Spec.Topology.Master.Replicas == nil {
 			e.Spec.Topology.Master.Replicas = pointer.Int32P(1)
 		}
 
