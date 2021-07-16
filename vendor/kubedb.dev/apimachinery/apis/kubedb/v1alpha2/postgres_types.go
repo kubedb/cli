@@ -164,6 +164,12 @@ type PostgreLeaderElectionConfig struct {
 	// +kubebuilder:default:=1
 	// +optional
 	HeartbeatTick int32 `json:"heartbeatTick,omitempty" protobuf:"varint,7,opt,name=heartbeatTick"`
+
+	// Compute Resources required by pg-coordinator container.
+	// Cannot be updated.
+	// More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter

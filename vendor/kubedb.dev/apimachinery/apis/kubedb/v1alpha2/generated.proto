@@ -1165,6 +1165,12 @@ message PostgreLeaderElectionConfig {
   // +kubebuilder:default:=1
   // +optional
   optional int32 heartbeatTick = 7;
+
+  // Compute Resources required by pg-coordinator container.
+  // Cannot be updated.
+  // More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  // +optional
+  optional k8s.io.api.core.v1.ResourceRequirements resources = 8;
 }
 
 // +kubebuilder:object:root=true

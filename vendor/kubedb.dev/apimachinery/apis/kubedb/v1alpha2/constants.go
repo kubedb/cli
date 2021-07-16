@@ -70,7 +70,8 @@ const (
 	ElasticsearchRestPortName                    = "http"
 	ElasticsearchTransportPort                   = 9300
 	ElasticsearchTransportPortName               = "transport"
-	ElasticsearchMetricsPort                     = 9600
+	ElasticsearchPerformanceAnalyzerPort         = 9600
+	ElasticsearchPerformanceAnalyzerPortName     = "analyzer"
 	ElasticsearchNodeRoleSet                     = "set"
 	ElasticsearchConfigDir                       = "/usr/share/elasticsearch/config"
 	ElasticsearchTempConfigDir                   = "/elasticsearch/temp-config"

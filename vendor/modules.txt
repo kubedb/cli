@@ -210,6 +210,8 @@ gomodules.xyz/jsonpatch/v2
 # gomodules.xyz/logs v0.0.2
 ## explicit
 gomodules.xyz/logs
+# gomodules.xyz/mergo v0.3.13-0.20210702100041-9d62ff8ece4d
+gomodules.xyz/mergo
 # gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
 ## explicit
 gomodules.xyz/pointer
@@ -562,7 +564,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210617233340-13d22e91512b
+# kmodules.xyz/client-go v0.0.0-20210715065708-d4f0cc74ead1
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -576,7 +578,7 @@ kmodules.xyz/client-go/meta
 kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
-# kmodules.xyz/custom-resources v0.0.0-20210618003440-c6bb400da153
+# kmodules.xyz/custom-resources v0.0.0-20210715200638-d7eae69a48fb
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -599,7 +601,7 @@ kmodules.xyz/objectstore-api/api/v1
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.19.0
+# kubedb.dev/apimachinery v0.19.1-0.20210716040829-24bc990a1ae3
 ## explicit
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -698,7 +700,7 @@ sigs.k8s.io/structured-merge-diff/v4/typed
 sigs.k8s.io/structured-merge-diff/v4/value
 # sigs.k8s.io/yaml v1.2.0
 sigs.k8s.io/yaml
-# stash.appscode.dev/apimachinery v0.14.1
+# stash.appscode.dev/apimachinery v0.14.2-0.20210715200631-5399637188c0
 ## explicit
 stash.appscode.dev/apimachinery/apis/repositories
 stash.appscode.dev/apimachinery/apis/repositories/v1alpha1
