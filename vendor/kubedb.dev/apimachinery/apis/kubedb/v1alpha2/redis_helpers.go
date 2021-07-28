@@ -269,18 +269,16 @@ func (r *Redis) CertificateName(alias RedisCertificateAlias) string {
 	return meta_util.NameWithSuffix(r.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-// MustCertSecretName returns the secret name for a certificate alias
-func (r *Redis) MustCertSecretName(alias RedisCertificateAlias) string {
-	if r == nil {
-		panic("missing Redis database")
-	} else if r.Spec.TLS == nil {
-		panic(fmt.Errorf("Redis %s/%s is missing tls spec", r.Namespace, r.Name))
+// GetCertSecretName returns the secret name for a certificate alias if any provide,
+// otherwise returns default certificate secret name for the given alias.
+func (r *Redis) GetCertSecretName(alias RedisCertificateAlias) string {
+	if r.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(r.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
 	}
-	name, ok := kmapi.GetCertificateSecretName(r.Spec.TLS.Certificates, string(alias))
-	if !ok {
-		panic(fmt.Errorf("Redis %s/%s is missing secret name for %s certificate", r.Namespace, r.Name, alias))
-	}
-	return name
+	return r.CertificateName(alias)
 }
 
 func (r *Redis) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
