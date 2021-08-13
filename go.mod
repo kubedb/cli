@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/appscode/go v0.0.0-20201105063637-5613f3b8169f
+	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
 	github.com/fatih/camelcase v1.0.0
 	github.com/spf13/cobra v1.1.3
 	gomodules.xyz/logs v0.0.4
