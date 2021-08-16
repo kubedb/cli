@@ -4,12 +4,10 @@ go 1.15
 
 require (
 	github.com/fatih/camelcase v1.0.0
-	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/spf13/cobra v1.1.3
 	gomodules.xyz/logs v0.0.4
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
-	gomodules.xyz/sets v0.2.0 // indirect
 	gomodules.xyz/x v0.0.7
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -17,11 +15,10 @@ require (
 	k8s.io/client-go v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20210816181051-625868881acd
+	kmodules.xyz/client-go v0.0.0-20210816193105-1158390a19cd
 	kmodules.xyz/custom-resources v0.0.0-20210812193424-1631fae03a1a
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210618110729-9cd872c66513
-	kmodules.xyz/offshoot-api v0.0.0-20210804100837-d0388be3e60d // indirect
-	kubedb.dev/apimachinery v0.19.1-0.20210816164326-d5e158ef832d
+	kubedb.dev/apimachinery v0.19.1-0.20210816203511-5465bfd48209
 	stash.appscode.dev/apimachinery v0.14.2-0.20210715200631-5399637188c0
 )
 
