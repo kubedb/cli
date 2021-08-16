@@ -223,7 +223,7 @@ message ElasticsearchSpec {
   // Elasticsearch topology for node specification
   optional ElasticsearchClusterTopology topology = 3;
 
-  // To enable ssl in transport & http layer
+  // To enable ssl for http layer
   optional bool enableSSL = 4;
 
   // disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user.
@@ -251,24 +251,37 @@ message ElasticsearchSpec {
   // If specified, this file will be used as configuration file otherwise default configuration file will be used.
   optional k8s.io.api.core.v1.LocalObjectReference configSecret = 11;
 
+  // SecureConfigSecret is an optional field to provide secure settings for database.
+  // 	- Ref: https://www.elastic.co/guide/en/elasticsearch/reference/7.14/secure-settings.html
+  // Secure settings are store at "ES_CONFIG_DIR/elasticsearch.keystore" file (contents are encoded with password),
+  // once the keystore created.
+  // Expects a k8s secret name with data format:
+  // 	data:
+  // 		key: value
+  // 		password: KEYSTORE_PASSWORD
+  // 		s3.client.default.access_key: ACCESS_KEY
+  // 		s3.client.default.secret_key: SECRET_KEY
+  // +optional
+  optional k8s.io.api.core.v1.LocalObjectReference secureConfigSecret = 12;
+
   // PodTemplate is an optional configuration for pods used to expose database
   // +optional
-  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 12;
+  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 13;
 
   // ServiceTemplates is an optional configuration for services used to expose database
   // +optional
-  repeated NamedServiceTemplateSpec serviceTemplates = 13;
+  repeated NamedServiceTemplateSpec serviceTemplates = 14;
 
   // An eviction is allowed if at most "maxUnavailable" pods selected by
   // "selector" are unavailable after the eviction, i.e. even in absence of
   // the evicted pod. For example, one can prevent all voluntary evictions
   // by specifying 0. This is a mutually exclusive setting with "minAvailable".
   // +optional
-  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 14;
+  optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxUnavailable = 15;
 
   // TLS contains tls configurations
   // +optional
-  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 15;
+  optional kmodules.xyz.client_go.api.v1.TLSConfig tls = 16;
 
   // InternalUsers contains internal user configurations.
   // Expected Input format:
@@ -278,7 +291,7 @@ message ElasticsearchSpec {
   //   <username2>:
   // 		...
   // +optional
-  map<string, ElasticsearchUserSpec> internalUsers = 16;
+  map<string, ElasticsearchUserSpec> internalUsers = 17;
 
   // RolesMapping contains roles mapping configurations.
   // Expected Input format:
@@ -288,19 +301,19 @@ message ElasticsearchSpec {
   //   <role2>:
   // 		...
   // +optional
-  map<string, ElasticsearchRoleMapSpec> rolesMapping = 17;
+  map<string, ElasticsearchRoleMapSpec> rolesMapping = 18;
 
   // Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
   // +optional
-  optional bool halted = 18;
+  optional bool halted = 19;
 
   // TerminationPolicy controls the delete operation for database
   // +optional
-  optional string terminationPolicy = 19;
+  optional string terminationPolicy = 20;
 
   // KernelSettings contains the additional kernel settings.
   // +optional
-  optional KernelSettings kernelSettings = 20;
+  optional KernelSettings kernelSettings = 21;
 }
 
 message ElasticsearchStatus {

@@ -347,6 +347,11 @@ func (in *ElasticsearchSpec) DeepCopyInto(out *ElasticsearchSpec) {
 		*out = new(v1.LocalObjectReference)
 		**out = **in
 	}
+	if in.SecureConfigSecret != nil {
+		in, out := &in.SecureConfigSecret, &out.SecureConfigSecret
+		*out = new(v1.LocalObjectReference)
+		**out = **in
+	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	if in.ServiceTemplates != nil {
 		in, out := &in.ServiceTemplates, &out.ServiceTemplates

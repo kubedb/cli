@@ -23,30 +23,30 @@ import (
 	"sort"
 )
 
-// sets.Int32 is a set of int32s, implemented via map[int32]struct{} for minimal memory consumption.
-type Int32 map[int32]Empty
+// sets.Float64 is a set of float64s, implemented via map[float64]struct{} for minimal memory consumption.
+type Float64 map[float64]Empty
 
-// NewInt32 creates a Int32 from a list of values.
-func NewInt32(items ...int32) Int32 {
-	ss := make(Int32, len(items))
+// NewFloat64 creates a Float64 from a list of values.
+func NewFloat64(items ...float64) Float64 {
+	ss := make(Float64, len(items))
 	ss.Insert(items...)
 	return ss
 }
 
-// Int32KeySet creates a Int32 from a keys of a map[int32](? extends interface{}).
+// Float64KeySet creates a Float64 from a keys of a map[float64](? extends interface{}).
 // If the value passed in is not actually a map, this will panic.
-func Int32KeySet(theMap interface{}) Int32 {
+func Float64KeySet(theMap interface{}) Float64 {
 	v := reflect.ValueOf(theMap)
-	ret := Int32{}
+	ret := Float64{}
 
 	for _, keyValue := range v.MapKeys() {
-		ret.Insert(keyValue.Interface().(int32))
+		ret.Insert(keyValue.Interface().(float64))
 	}
 	return ret
 }
 
 // Insert adds items to the set.
-func (s Int32) Insert(items ...int32) Int32 {
+func (s Float64) Insert(items ...float64) Float64 {
 	for _, item := range items {
 		s[item] = Empty{}
 	}
@@ -54,7 +54,7 @@ func (s Int32) Insert(items ...int32) Int32 {
 }
 
 // Delete removes all items from the set.
-func (s Int32) Delete(items ...int32) Int32 {
+func (s Float64) Delete(items ...float64) Float64 {
 	for _, item := range items {
 		delete(s, item)
 	}
@@ -62,13 +62,13 @@ func (s Int32) Delete(items ...int32) Int32 {
 }
 
 // Has returns true if and only if item is contained in the set.
-func (s Int32) Has(item int32) bool {
+func (s Float64) Has(item float64) bool {
 	_, contained := s[item]
 	return contained
 }
 
 // HasAll returns true if and only if all items are contained in the set.
-func (s Int32) HasAll(items ...int32) bool {
+func (s Float64) HasAll(items ...float64) bool {
 	for _, item := range items {
 		if !s.Has(item) {
 			return false
@@ -78,7 +78,7 @@ func (s Int32) HasAll(items ...int32) bool {
 }
 
 // HasAny returns true if any items are contained in the set.
-func (s Int32) HasAny(items ...int32) bool {
+func (s Float64) HasAny(items ...float64) bool {
 	for _, item := range items {
 		if s.Has(item) {
 			return true
@@ -93,8 +93,8 @@ func (s Int32) HasAny(items ...int32) bool {
 // s2 = {a1, a2, a4, a5}
 // s1.Difference(s2) = {a3}
 // s2.Difference(s1) = {a4, a5}
-func (s Int32) Difference(s2 Int32) Int32 {
-	result := NewInt32()
+func (s Float64) Difference(s2 Float64) Float64 {
+	result := NewFloat64()
 	for key := range s {
 		if !s2.Has(key) {
 			result.Insert(key)
@@ -109,8 +109,8 @@ func (s Int32) Difference(s2 Int32) Int32 {
 // s2 = {a3, a4}
 // s1.Union(s2) = {a1, a2, a3, a4}
 // s2.Union(s1) = {a1, a2, a3, a4}
-func (s1 Int32) Union(s2 Int32) Int32 {
-	result := NewInt32()
+func (s1 Float64) Union(s2 Float64) Float64 {
+	result := NewFloat64()
 	for key := range s1 {
 		result.Insert(key)
 	}
@@ -125,9 +125,9 @@ func (s1 Int32) Union(s2 Int32) Int32 {
 // s1 = {a1, a2}
 // s2 = {a2, a3}
 // s1.Intersection(s2) = {a2}
-func (s1 Int32) Intersection(s2 Int32) Int32 {
-	var walk, other Int32
-	result := NewInt32()
+func (s1 Float64) Intersection(s2 Float64) Float64 {
+	var walk, other Float64
+	result := NewFloat64()
 	if s1.Len() < s2.Len() {
 		walk = s1
 		other = s2
@@ -144,7 +144,7 @@ func (s1 Int32) Intersection(s2 Int32) Int32 {
 }
 
 // IsSuperset returns true if and only if s1 is a superset of s2.
-func (s1 Int32) IsSuperset(s2 Int32) bool {
+func (s1 Float64) IsSuperset(s2 Float64) bool {
 	for item := range s2 {
 		if !s1.Has(item) {
 			return false
@@ -156,29 +156,29 @@ func (s1 Int32) IsSuperset(s2 Int32) bool {
 // Equal returns true if and only if s1 is equal (as a set) to s2.
 // Two sets are equal if their membership is identical.
 // (In practice, this means same elements, order doesn't matter)
-func (s1 Int32) Equal(s2 Int32) bool {
+func (s1 Float64) Equal(s2 Float64) bool {
 	return len(s1) == len(s2) && s1.IsSuperset(s2)
 }
 
-type sortableSliceOfInt32 []int32
+type sortableSliceOfFloat64 []float64
 
-func (s sortableSliceOfInt32) Len() int           { return len(s) }
-func (s sortableSliceOfInt32) Less(i, j int) bool { return lessInt32(s[i], s[j]) }
-func (s sortableSliceOfInt32) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s sortableSliceOfFloat64) Len() int           { return len(s) }
+func (s sortableSliceOfFloat64) Less(i, j int) bool { return lessFloat64(s[i], s[j]) }
+func (s sortableSliceOfFloat64) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
-// List returns the contents as a sorted int32 slice.
-func (s Int32) List() []int32 {
-	res := make(sortableSliceOfInt32, 0, len(s))
+// List returns the contents as a sorted float64 slice.
+func (s Float64) List() []float64 {
+	res := make(sortableSliceOfFloat64, 0, len(s))
 	for key := range s {
 		res = append(res, key)
 	}
 	sort.Sort(res)
-	return []int32(res)
+	return []float64(res)
 }
 
 // UnsortedList returns the slice with contents in random order.
-func (s Int32) UnsortedList() []int32 {
-	res := make([]int32, 0, len(s))
+func (s Float64) UnsortedList() []float64 {
+	res := make([]float64, 0, len(s))
 	for key := range s {
 		res = append(res, key)
 	}
@@ -186,20 +186,20 @@ func (s Int32) UnsortedList() []int32 {
 }
 
 // Returns a single element from the set.
-func (s Int32) PopAny() (int32, bool) {
+func (s Float64) PopAny() (float64, bool) {
 	for key := range s {
 		s.Delete(key)
 		return key, true
 	}
-	var zeroValue int32
+	var zeroValue float64
 	return zeroValue, false
 }
 
 // Len returns the size of the set.
-func (s Int32) Len() int {
+func (s Float64) Len() int {
 	return len(s)
 }
 
-func lessInt32(lhs, rhs int32) bool {
+func lessFloat64(lhs, rhs float64) bool {
 	return lhs < rhs
 }

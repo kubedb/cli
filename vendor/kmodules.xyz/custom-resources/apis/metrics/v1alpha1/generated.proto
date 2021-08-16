@@ -148,6 +148,9 @@ message MetricValue {
   //
   // in above examples phase, replicas, maxUnavailable, cpu, memory, dateTime are Parameter's key
   // those values will come from corresponding Parameter's value
+  //
+  // Some expression evaluation functions are used for calculating resource requests and limits.
+  // Those functions are stated here: https://github.com/kmodules/resource-metrics/blob/master/eval.go
   // +optional
   optional string valueFromExpression = 3;
 }
