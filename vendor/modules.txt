@@ -101,7 +101,6 @@ github.com/inconshreveable/mousetrap
 # github.com/jpillora/go-ogle-analytics v0.0.0-20161213085824-14b04e0594ef
 github.com/jpillora/go-ogle-analytics
 # github.com/json-iterator/go v1.1.11
-## explicit
 github.com/json-iterator/go
 # github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de
 github.com/liggitt/tabwriter
@@ -220,7 +219,6 @@ gomodules.xyz/pointer
 ## explicit
 gomodules.xyz/runtime
 # gomodules.xyz/sets v0.2.0
-## explicit
 gomodules.xyz/sets
 # gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
 gomodules.xyz/wait
@@ -566,7 +564,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210816181051-625868881acd
+# kmodules.xyz/client-go v0.0.0-20210816193105-1158390a19cd
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -600,11 +598,10 @@ kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.0.0-20210618005912-71f8a80f48f9
 kmodules.xyz/objectstore-api/api/v1
 # kmodules.xyz/offshoot-api v0.0.0-20210804100837-d0388be3e60d
-## explicit
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.19.1-0.20210816164326-d5e158ef832d
+# kubedb.dev/apimachinery v0.19.1-0.20210816203511-5465bfd48209
 ## explicit
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
