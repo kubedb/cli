@@ -61,7 +61,7 @@ type ElasticsearchSpec struct {
 	// Elasticsearch topology for node specification
 	Topology *ElasticsearchClusterTopology `json:"topology,omitempty" protobuf:"bytes,3,opt,name=topology"`
 
-	// To enable ssl in transport & http layer
+	// To enable ssl for http layer
 	EnableSSL bool `json:"enableSSL,omitempty" protobuf:"varint,4,opt,name=enableSSL"`
 
 	// disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user.
@@ -89,24 +89,37 @@ type ElasticsearchSpec struct {
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,11,opt,name=configSecret"`
 
+	// SecureConfigSecret is an optional field to provide secure settings for database.
+	//	- Ref: https://www.elastic.co/guide/en/elasticsearch/reference/7.14/secure-settings.html
+	// Secure settings are store at "ES_CONFIG_DIR/elasticsearch.keystore" file (contents are encoded with password),
+	// once the keystore created.
+	// Expects a k8s secret name with data format:
+	//	data:
+	//		key: value
+	//		password: KEYSTORE_PASSWORD
+	//		s3.client.default.access_key: ACCESS_KEY
+	//		s3.client.default.secret_key: SECRET_KEY
+	// +optional
+	SecureConfigSecret *core.LocalObjectReference `json:"secureConfigSecret,omitempty" protobuf:"bytes,12,opt,name=secureConfigSecret"`
+
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,12,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,13,opt,name=podTemplate"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,13,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,14,rep,name=serviceTemplates"`
 
 	// An eviction is allowed if at most "maxUnavailable" pods selected by
 	// "selector" are unavailable after the eviction, i.e. even in absence of
 	// the evicted pod. For example, one can prevent all voluntary evictions
 	// by specifying 0. This is a mutually exclusive setting with "minAvailable".
 	// +optional
-	MaxUnavailable *intstr.IntOrString `json:"maxUnavailable,omitempty" protobuf:"bytes,14,opt,name=maxUnavailable"`
+	MaxUnavailable *intstr.IntOrString `json:"maxUnavailable,omitempty" protobuf:"bytes,15,opt,name=maxUnavailable"`
 
 	// TLS contains tls configurations
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,16,opt,name=tls"`
 
 	// InternalUsers contains internal user configurations.
 	// Expected Input format:
@@ -116,7 +129,7 @@ type ElasticsearchSpec struct {
 	//   <username2>:
 	//		...
 	// +optional
-	InternalUsers map[string]ElasticsearchUserSpec `json:"internalUsers,omitempty" protobuf:"bytes,16,rep,name=internalUsers"`
+	InternalUsers map[string]ElasticsearchUserSpec `json:"internalUsers,omitempty" protobuf:"bytes,17,rep,name=internalUsers"`
 
 	// RolesMapping contains roles mapping configurations.
 	// Expected Input format:
@@ -126,19 +139,19 @@ type ElasticsearchSpec struct {
 	//   <role2>:
 	//		...
 	// +optional
-	RolesMapping map[string]ElasticsearchRoleMapSpec `json:"rolesMapping,omitempty" protobuf:"bytes,17,rep,name=rolesMapping"`
+	RolesMapping map[string]ElasticsearchRoleMapSpec `json:"rolesMapping,omitempty" protobuf:"bytes,18,rep,name=rolesMapping"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,18,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,19,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,19,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,20,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 
 	// KernelSettings contains the additional kernel settings.
 	// +optional
-	KernelSettings *KernelSettings `json:"kernelSettings,omitempty" protobuf:"bytes,20,opt,name=kernelSettings"`
+	KernelSettings *KernelSettings `json:"kernelSettings,omitempty" protobuf:"bytes,21,opt,name=kernelSettings"`
 }
 
 type ElasticsearchClusterTopology struct {

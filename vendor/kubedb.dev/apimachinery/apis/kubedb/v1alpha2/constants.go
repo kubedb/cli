@@ -74,6 +74,7 @@ const (
 	ElasticsearchPerformanceAnalyzerPortName     = "analyzer"
 	ElasticsearchNodeRoleSet                     = "set"
 	ElasticsearchConfigDir                       = "/usr/share/elasticsearch/config"
+	ElasticsearchSecureSettingsDir               = "/elasticsearch/secure-settings"
 	ElasticsearchTempConfigDir                   = "/elasticsearch/temp-config"
 	ElasticsearchCustomConfigDir                 = "/elasticsearch/custom-config"
 	ElasticsearchDataDir                         = "/usr/share/elasticsearch/data"

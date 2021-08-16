@@ -299,6 +299,9 @@ type MetricValue struct {
 	//
 	// in above examples phase, replicas, maxUnavailable, cpu, memory, dateTime are Parameter's key
 	// those values will come from corresponding Parameter's value
+	//
+	// Some expression evaluation functions are used for calculating resource requests and limits.
+	// Those functions are stated here: https://github.com/kmodules/resource-metrics/blob/master/eval.go
 	// +optional
 	ValueFromExpression string `json:"valueFromExpression,omitempty" protobuf:"bytes,3,opt,name=valueFromExpression"`
 }

@@ -100,7 +100,8 @@ github.com/imdario/mergo
 github.com/inconshreveable/mousetrap
 # github.com/jpillora/go-ogle-analytics v0.0.0-20161213085824-14b04e0594ef
 github.com/jpillora/go-ogle-analytics
-# github.com/json-iterator/go v1.1.10
+# github.com/json-iterator/go v1.1.11
+## explicit
 github.com/json-iterator/go
 # github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de
 github.com/liggitt/tabwriter
@@ -201,28 +202,29 @@ golang.org/x/text/width
 golang.org/x/time/rate
 # gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f
 gomodules.xyz/clock
-# gomodules.xyz/flags v0.1.0
+# gomodules.xyz/flags v0.1.2
 gomodules.xyz/flags
 # gomodules.xyz/homedir v0.0.0-20201104190528-bcd4d5d94b84
 gomodules.xyz/homedir
 # gomodules.xyz/jsonpatch/v2 v2.2.0
 gomodules.xyz/jsonpatch/v2
-# gomodules.xyz/logs v0.0.3
+# gomodules.xyz/logs v0.0.4
 ## explicit
 gomodules.xyz/logs
 # gomodules.xyz/mergo v0.3.13-0.20210702100041-9d62ff8ece4d
 gomodules.xyz/mergo
-# gomodules.xyz/pointer v0.0.0-20201105071923-daf60fa55209
+# gomodules.xyz/pointer v0.1.0
 ## explicit
 gomodules.xyz/pointer
 # gomodules.xyz/runtime v0.2.0
 ## explicit
 gomodules.xyz/runtime
-# gomodules.xyz/sets v0.0.0-20210218105342-2efe2fb519a2
+# gomodules.xyz/sets v0.2.0
+## explicit
 gomodules.xyz/sets
 # gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
 gomodules.xyz/wait
-# gomodules.xyz/x v0.0.5
+# gomodules.xyz/x v0.0.7
 ## explicit
 gomodules.xyz/x/analytics
 gomodules.xyz/x/version
@@ -564,7 +566,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210719120358-dd0503cf99cf
+# kmodules.xyz/client-go v0.0.0-20210816181051-625868881acd
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -578,7 +580,7 @@ kmodules.xyz/client-go/meta
 kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
-# kmodules.xyz/custom-resources v0.0.0-20210727045435-83db827677cf
+# kmodules.xyz/custom-resources v0.0.0-20210812193424-1631fae03a1a
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -597,11 +599,12 @@ kmodules.xyz/custom-resources/crds
 kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.0.0-20210618005912-71f8a80f48f9
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20210618005544-5217a24765da
+# kmodules.xyz/offshoot-api v0.0.0-20210804100837-d0388be3e60d
+## explicit
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.19.1-0.20210727050623-2c8e7ea7a215
+# kubedb.dev/apimachinery v0.19.1-0.20210816164326-d5e158ef832d
 ## explicit
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
