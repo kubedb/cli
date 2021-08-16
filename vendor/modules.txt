@@ -595,13 +595,14 @@ kmodules.xyz/custom-resources/crds
 # kmodules.xyz/monitoring-agent-api v0.0.0-20210618110729-9cd872c66513
 ## explicit
 kmodules.xyz/monitoring-agent-api/api/v1
-# kmodules.xyz/objectstore-api v0.0.0-20210618005912-71f8a80f48f9
+# kmodules.xyz/objectstore-api v0.0.0-20210816212508-b1e60a2fd3a0
+## explicit
 kmodules.xyz/objectstore-api/api/v1
 # kmodules.xyz/offshoot-api v0.0.0-20210804100837-d0388be3e60d
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.19.1-0.20210816203511-5465bfd48209
+# kubedb.dev/apimachinery v0.19.1-0.20210816213826-3327d4c103df
 ## explicit
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
