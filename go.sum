@@ -119,7 +119,6 @@ github.com/cockroachdb/datadriven v0.0.0-20190809214429-80d97fb3cbaa/go.mod h1:z
 github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd/go.mod h1:sE/e/2PUdi/liOCUjSTXgM1o87ZssimdTWN964YiIeI=
 github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 h1:sDMmm+q/3+BukdIpxwO365v/Rbspp2Nt5XntgQRXq8Q=
 github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0/go.mod h1:4Zcjuz89kmFXt9morQgcfYZAYZ5n8WHjt81YYWIwtTM=
-github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe h1:69JI97HlzP+PH5Mi1thcGlDoBr6PS2Oe+l3mNmAkbs4=
 github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe/go.mod h1:VQx0hjo2oUeQkQUET7wRwradO6f+fN5jzXgB/zROxxE=
 github.com/container-storage-interface/spec v1.3.0/go.mod h1:6URME8mwIBbpVyZV93Ce5St17xBiQJQY67NDsuohiy4=
 github.com/containerd/cgroups v0.0.0-20200531161412-0dbf7f05ba59/go.mod h1:pA0z1pT8KYB3TCXK/ocprsh7MAkoW8bZVzPdih9snmM=
@@ -998,6 +997,7 @@ gomodules.xyz/encoding v0.0.2/go.mod h1:ZD+5Llh/9P/xTqoiurjs2w3XfAV2jNtsh04FbucI
 gomodules.xyz/flags v0.1.0/go.mod h1:H9lmar5MMXuxHBrSgrGZt4q2gkD+8GCm/3Fs2FCE2zA=
 gomodules.xyz/flags v0.1.2 h1:z/XHHGmduLYY/aSkzcQWJgXWIs3TCTSTLkmwtCjoizg=
 gomodules.xyz/flags v0.1.2/go.mod h1:CIzWYc2zYDs5lQyGJsjhqKgIj+LriNLpiYuX8Pk34gc=
+gomodules.xyz/go-sh v0.1.0 h1:1BJAuGREh2RhePt7HRrpmjnkbgfpXlCzc42SiyZ5dkc=
 gomodules.xyz/go-sh v0.1.0/go.mod h1:N8IrjNiYppUI/rxENYrWD6FOrSxSyEZnIekPEWM7LP0=
 gomodules.xyz/homedir v0.0.0-20201104190528-bcd4d5d94b84 h1:RH11GBm37fGstaCcoFB5KtcUijofDS0yxcdkCS6vx/A=
 gomodules.xyz/homedir v0.0.0-20201104190528-bcd4d5d94b84/go.mod h1:rNt5O0KsgdJjAD/UXuxhO2N3b5TegqEk1T8HG9eraH4=

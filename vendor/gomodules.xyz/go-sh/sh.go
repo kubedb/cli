@@ -166,7 +166,7 @@ func newEnviron(env map[string]string, inherit bool) []string { //map[string]str
 	environ := make([]string, 0, len(env))
 	if inherit {
 		for _, line := range os.Environ() {
-			for k, _ := range env {
+			for k := range env {
 				if strings.HasPrefix(line, k+"=") {
 					goto CONTINUE
 				}
@@ -191,7 +191,7 @@ func (s *Session) appendCmd(cmd string, args []string, cwd Dir, env map[string]s
 			env[k] = v
 		}
 	}
-	environ := newEnviron(s.Env, true) // true: inherit sys-env
+	environ := newEnviron(env, true) // true: inherit sys-env
 	v, ok := s.alias[cmd]
 	if ok {
 		cmd = v[0]

@@ -1,16 +1,15 @@
-## go-sh
-[![wercker status](https://app.wercker.com/status/009acbd4f00ccc6de7e2554e12a50d84/s "wercker status")](https://app.wercker.com/project/bykey/009acbd4f00ccc6de7e2554e12a50d84)
-[![Go Walker](http://gowalker.org/api/v1/badge)](http://gowalker.org/github.com/codeskyblue/go-sh)
+[![CI](https://github.com/gomodules/go-sh/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/gomodules/go-sh/actions/workflows/ci.yml)
+[![PkgGoDev](https://pkg.go.dev/badge/gomodules.xyz/go-sh)](https://pkg.go.dev/gomodules.xyz/go-sh)
 
-*If you depend on the old api, see tag: v.0.1*
+# go-sh
 
-install: `go get github.com/codeskyblue/go-sh`
+install: `go get gomodules.xyz/go-sh`
 
 Pipe Example:
 
 	package main
 
-	import "github.com/codeskyblue/go-sh"
+	import "gomodules.xyz/go-sh"
 
 	func main() {
 		sh.Command("echo", "hello\tworld").Command("cut", "-f2").Run()
@@ -82,7 +81,7 @@ By default, pipeline returns error only if the last command exit with a non-zero
 By default, pipelines's std-error is set to last command's std-error. However, you can also combine std-errors of all commands into pipeline's std-error using `session.PipeStdErrors = true`.
 
 for more information, it better to see docs.
-[![Go Walker](http://gowalker.org/api/v1/badge)](http://gowalker.org/github.com/codeskyblue/go-sh)
+[![Go Walker](http://gowalker.org/api/v1/badge)](http://gowalker.org/gomodules.xyz/go-sh)
 
 ### contribute
 If you love this project, starring it will encourage the coder. Pull requests are welcome.

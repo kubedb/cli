@@ -24,12 +24,12 @@ import (
 	"os"
 	"path/filepath"
 
-	apiv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
-	shell "github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
+	shell "gomodules.xyz/go-sh"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -78,7 +78,7 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.MongoDBDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MongoDBDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -113,7 +113,7 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("use --file or --command to apply supported commands to a mongodb object's pods")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.MongoDBDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MongoDBDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -147,7 +147,8 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type mongodbOpts struct {
-	db       *apiv1alpha2.MongoDB
+	db       *api.MongoDB
+	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -177,8 +178,13 @@ func newMongodbOpts(f cmdutil.Factory, dbName, namespace string) (*mongodbOpts, 
 		return nil, err
 	}
 
-	if db.Status.Phase != apiv1alpha2.DatabasePhaseReady {
+	if db.Status.Phase != api.DatabasePhaseReady {
 		return nil, fmt.Errorf("mongodb %s/%s is not ready", namespace, dbName)
+	}
+
+	dbVersion, err := dbClient.CatalogV1alpha1().MongoDBVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
 	}
 
 	secret, err := client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
@@ -188,6 +194,7 @@ func newMongodbOpts(f cmdutil.Factory, dbName, namespace string) (*mongodbOpts, 
 
 	return &mongodbOpts{
 		db:       db,
+		dbImage:  dbVersion.Spec.DB.Image,
 		config:   config,
 		client:   client,
 		dbClient: dbClient,
@@ -214,7 +221,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.GetCertSecretName(apiv1alpha2.MongoDBClientCert, "")
+		secretName := db.GetCertSecretName(api.MongoDBClientCert, "")
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
@@ -256,7 +263,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 			fmt.Sprintf("--tlsCertificateKeyFile=%v", pemFile))
 	}
 
-	dockerCommand = append(dockerCommand, "mongo:latest")
+	dockerCommand = append(dockerCommand, opts.dbImage)
 	finalCommand := append(dockerCommand, mongoCommand...)
 	if mongoExtraFlags != nil {
 		finalCommand = append(finalCommand, mongoExtraFlags...)
@@ -302,7 +309,7 @@ func (opts *mongodbOpts) applyCommand(localPort int, command string) error {
 func (opts *mongodbOpts) applyFile(localPort int, fileName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 	tempFileName := "/home/mongo.js"
 

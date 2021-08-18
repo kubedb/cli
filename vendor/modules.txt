@@ -34,9 +34,6 @@ github.com/chai2010/gettext-go/gettext/plural
 github.com/chai2010/gettext-go/gettext/po
 # github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0
 github.com/codegangsta/inject
-# github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
-## explicit
-github.com/codeskyblue/go-sh
 # github.com/cpuguy83/go-md2man/v2 v2.0.0
 github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/davecgh/go-spew v1.1.1
@@ -211,6 +208,9 @@ golang.org/x/time/rate
 gomodules.xyz/clock
 # gomodules.xyz/flags v0.1.2
 gomodules.xyz/flags
+# gomodules.xyz/go-sh v0.1.0
+## explicit
+gomodules.xyz/go-sh
 # gomodules.xyz/homedir v0.0.0-20201104190528-bcd4d5d94b84
 gomodules.xyz/homedir
 # gomodules.xyz/jsonpatch/v2 v2.2.0

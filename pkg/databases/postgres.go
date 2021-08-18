@@ -25,12 +25,12 @@ import (
 	"os"
 	"path/filepath"
 
-	apiv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
-	shell "github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
+	shell "gomodules.xyz/go-sh"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -82,7 +82,7 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.PostgresDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -116,7 +116,7 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("use --file or --command to apply supported commands to a postgres object's pods")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.PostgresDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
@@ -151,7 +151,8 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type postgresOpts struct {
-	db       *apiv1alpha2.Postgres
+	db       *api.Postgres
+	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -185,8 +186,13 @@ func newPostgresOpts(f cmdutil.Factory, dbName, namespace, postgresDBName string
 		return nil, err
 	}
 
-	if db.Status.Phase != apiv1alpha2.DatabasePhaseReady {
+	if db.Status.Phase != api.DatabasePhaseReady {
 		return nil, fmt.Errorf("postgres %s/%s is not ready", namespace, dbName)
+	}
+
+	dbVersion, err := dbClient.CatalogV1alpha1().PostgresVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
 	}
 
 	secret, err := client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
@@ -196,6 +202,7 @@ func newPostgresOpts(f cmdutil.Factory, dbName, namespace, postgresDBName string
 
 	return &postgresOpts{
 		db:             db,
+		dbImage:        dbVersion.Spec.DB.Image,
 		config:         config,
 		client:         client,
 		dbClient:       dbClient,
@@ -225,7 +232,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(apiv1alpha2.PostgresClientCert)
+		secretName := db.CertificateName(api.PostgresClientCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
@@ -263,7 +270,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		)
 	}
 
-	dockerCommand = append(dockerCommand, "postgres:11.1-alpine")
+	dockerCommand = append(dockerCommand, opts.dbImage)
 	finalCommand := append(dockerCommand, postgresCommand...)
 	if postgresExtraFlags != nil {
 		finalCommand = append(finalCommand, postgresExtraFlags...)

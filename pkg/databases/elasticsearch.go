@@ -23,12 +23,12 @@ import (
 	"log"
 	"os"
 
-	apiv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
-	shell "github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
+	shell "gomodules.xyz/go-sh"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -64,7 +64,21 @@ func NewElasticSearchCMD(f cmdutil.Factory) *cobra.Command {
 	var esConnectCmd = &cobra.Command{
 		Use:   "connect",
 		Short: "Connect to a elasticsearch object's pod",
-		Long:  `Use this cmd to exec into a elasticsearch object's primary pod.`,
+		Long: `Use this cmd to run api calls to your elasticsearch database. 
+
+This command connects you to a shell to run curl commands. 
+
+It exports the following environment variables to run api calls to your database:
+USERNAME
+PASSWORD
+ADDRESS
+CACERT
+CERT
+KEY
+
+example curl command to run on the shell:
+
+$ curl --cacert $CACERT --cert $CERT --key $KEY  -u $USERNAME:$PASSWORD $ADDRESS/_cluster/health?pretty`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("enter elasticsearch object's name as an argument")
@@ -75,7 +89,7 @@ func NewElasticSearchCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.ElasticsearchRestPort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.ElasticsearchRestPort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -96,7 +110,7 @@ func NewElasticSearchCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type elasticsearchOpts struct {
-	db       *apiv1alpha2.Elasticsearch
+	db       *api.Elasticsearch
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -126,7 +140,7 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace string) (*elastic
 		return nil, err
 	}
 
-	if db.Status.Phase != apiv1alpha2.DatabasePhaseReady {
+	if db.Status.Phase != api.DatabasePhaseReady {
 		return nil, fmt.Errorf("elasticsearch %s/%s is not ready", namespace, dbName)
 	}
 
@@ -158,7 +172,7 @@ func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags,
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
 	if db.Spec.EnableSSL {
-		secretName := db.CertificateName(apiv1alpha2.ElasticsearchAdminCert)
+		secretName := db.CertificateName(api.ElasticsearchAdminCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err

@@ -26,12 +26,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	apiv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
-	shell "github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
+	shell "gomodules.xyz/go-sh"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
@@ -109,7 +109,7 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("use --file or --command to apply supported commands to a redis object's pods")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.RedisDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.RedisDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
@@ -145,7 +145,7 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type redisOpts struct {
-	db       *apiv1alpha2.Redis
+	db       *api.Redis
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -177,7 +177,7 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string, keys, args []stri
 		return nil, err
 	}
 
-	if db.Status.Phase != apiv1alpha2.DatabasePhaseReady {
+	if db.Status.Phase != api.DatabasePhaseReady {
 		return nil, fmt.Errorf("redis %s/%s is not ready", namespace, dbName)
 	}
 
@@ -192,20 +192,20 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string, keys, args []stri
 	}, nil
 }
 
-func (opts *redisOpts) getShellCommand(dockerFlags, redisExtraFlags []interface{}) *shell.Session {
+func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface{}) *shell.Session {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 	sh.Stderr = opts.errWriter
 
 	db := opts.db
 	podName := db.Name + "-0"
-	if db.Spec.Mode == apiv1alpha2.RedisModeCluster {
+	if db.Spec.Mode == api.RedisModeCluster {
 		podName = db.StatefulSetNameWithShard(0) + "-0"
 	}
 	kubectlCommand := []interface{}{
 		"exec", "-n", db.Namespace, podName,
 	}
-	kubectlCommand = append(kubectlCommand, dockerFlags...)
+	kubectlCommand = append(kubectlCommand, kubectlFlags...)
 
 	redisCommand := []interface{}{
 		"--", "redis-cli", "-n", "0", "-c",
@@ -229,10 +229,10 @@ func (opts *redisOpts) getShellCommand(dockerFlags, redisExtraFlags []interface{
 }
 
 func (opts *redisOpts) connect() error {
-	dockerFlag := []interface{}{
+	kubectlFlag := []interface{}{
 		"-it",
 	}
-	shSession := opts.getShellCommand(dockerFlag, nil)
+	shSession := opts.getShellCommand(kubectlFlag, nil)
 
 	err := shSession.Run()
 	if err != nil {

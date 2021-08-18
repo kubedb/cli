@@ -24,12 +24,12 @@ import (
 	"os"
 	"path/filepath"
 
-	apiv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
-	shell "github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
+	shell "gomodules.xyz/go-sh"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -79,7 +79,7 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.MySQLDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -113,7 +113,7 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("use --file or --command to apply supported commands to a mariadb object's pods")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.MySQLDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
@@ -148,7 +148,8 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type mariadbOpts struct {
-	db       *apiv1alpha2.MariaDB
+	db       *api.MariaDB
+	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -178,8 +179,13 @@ func newmariadbOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, 
 		return nil, err
 	}
 
-	if db.Status.Phase != apiv1alpha2.DatabasePhaseReady {
+	if db.Status.Phase != api.DatabasePhaseReady {
 		return nil, fmt.Errorf("mariadb %s/%s is not ready", namespace, dbName)
+	}
+
+	dbVersion, err := dbClient.CatalogV1alpha1().MariaDBVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
 	}
 
 	secret, err := client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
@@ -189,6 +195,7 @@ func newmariadbOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, 
 
 	return &mariadbOpts{
 		db:       db,
+		dbImage:  dbVersion.Spec.DB.Image,
 		config:   config,
 		client:   client,
 		dbClient: dbClient,
@@ -215,7 +222,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(apiv1alpha2.MariaDBArchiverCert)
+		secretName := db.CertificateName(api.MariaDBArchiverCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
@@ -260,12 +267,11 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		)
 	}
 
-	dockerCommand = append(dockerCommand, "mysql")
+	dockerCommand = append(dockerCommand, opts.dbImage)
 	finalCommand := append(dockerCommand, mysqlCommand...)
 	if mysqlExtraFlags != nil {
 		finalCommand = append(finalCommand, mysqlExtraFlags...)
 	}
-	fmt.Println(mysqlCommand)
 	return sh.Command("docker", finalCommand...).SetStdin(os.Stdin), nil
 }
 
@@ -307,7 +313,7 @@ func (opts *mariadbOpts) applyCommand(localPort int, command, mysqlDBName string
 func (opts *mariadbOpts) applyFile(localPort int, fileName, mysqlDBName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 	tempFileName := "/tmp/my.sql"
 

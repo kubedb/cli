@@ -23,12 +23,12 @@ import (
 	"os"
 	"strconv"
 
-	apiv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
-	shell "github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
+	shell "gomodules.xyz/go-sh"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
@@ -73,7 +73,7 @@ func NewMemcachedCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, apiv1alpha2.MemcachedDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MemcachedDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -94,7 +94,7 @@ func NewMemcachedCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type memcachedOpts struct {
-	db       *apiv1alpha2.Memcached
+	db       *api.Memcached
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -121,7 +121,7 @@ func newMemcachedOpts(f cmdutil.Factory, dbName, namespace string) (*memcachedOp
 		return nil, err
 	}
 
-	if db.Status.Phase != apiv1alpha2.DatabasePhaseReady {
+	if db.Status.Phase != api.DatabasePhaseReady {
 		return nil, fmt.Errorf("memcached %s/%s is not ready", namespace, dbName)
 	}
 
