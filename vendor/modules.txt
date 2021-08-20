@@ -65,6 +65,9 @@ github.com/go-openapi/swag
 # github.com/gogo/protobuf v1.3.2 => github.com/gogo/protobuf v1.3.2
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
+# github.com/golang/glog v0.0.0-20210429001901-424d2337a529
+## explicit
+github.com/golang/glog
 # github.com/golang/protobuf v1.5.2 => github.com/golang/protobuf v1.4.3
 github.com/golang/protobuf/jsonpb
 github.com/golang/protobuf/proto
@@ -533,7 +536,6 @@ k8s.io/client-go/util/workqueue
 # k8s.io/component-base v0.21.1 => k8s.io/component-base v0.21.1
 k8s.io/component-base/version
 # k8s.io/klog/v2 v2.8.0
-## explicit
 k8s.io/klog/v2
 # k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7 => k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 k8s.io/kube-openapi/pkg/common
@@ -710,6 +712,7 @@ sigs.k8s.io/structured-merge-diff/v4/value
 sigs.k8s.io/yaml
 # stash.appscode.dev/apimachinery v0.14.2-0.20210715200631-5399637188c0
 ## explicit
+stash.appscode.dev/apimachinery/apis
 stash.appscode.dev/apimachinery/apis/repositories
 stash.appscode.dev/apimachinery/apis/repositories/v1alpha1
 stash.appscode.dev/apimachinery/apis/stash
@@ -720,6 +723,7 @@ stash.appscode.dev/apimachinery/client/clientset/versioned/scheme
 stash.appscode.dev/apimachinery/client/clientset/versioned/typed/repositories/v1alpha1
 stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1alpha1
 stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1
+stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1/util
 stash.appscode.dev/apimachinery/crds
 # bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
 # cloud.google.com/go => cloud.google.com/go v0.54.0
