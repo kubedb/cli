@@ -63,6 +63,7 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdDescribe("kubedb", f, ioStreams),
 				NewCmdCompletion(),
 				v.NewCmdVersion(),
+				NewCmdShowCredentials("kubedb", f, ioStreams),
 			},
 		},
 		{
