@@ -48,6 +48,10 @@ func NewRestarter(restClientGetter genericclioptions.RESTClientGetter, mapping *
 		return NewMySQLRestarter(clientConfig)
 	case api.ResourceKindRedis:
 		return NewRedisRestarter(clientConfig)
+	case api.ResourceKindMariaDB:
+		return NewMariaDBRestarter(clientConfig)
+	case api.ResourceKindPostgres:
+		return NewPostgresRestarter(clientConfig)
 	default:
 		return nil, fmt.Errorf("unsupporterd kind %s", mapping.GroupVersionKind.Kind)
 	}
