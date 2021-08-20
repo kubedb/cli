@@ -20,11 +20,10 @@ import (
 	"context"
 	"fmt"
 
-	"k8s.io/client-go/kubernetes"
-
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
 
