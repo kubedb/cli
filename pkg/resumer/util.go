@@ -26,10 +26,10 @@ import (
 	scsutil "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1/util"
 )
 
-func ResumeBackupConfiguration(stashClient scs.StashV1beta1Interface, dbMeta metav1.ObjectMeta) error {
+func ResumeBackupConfiguration(stashClient scs.StashV1beta1Interface, dbMeta metav1.ObjectMeta) (bool, error) {
 	configs, err := stashClient.BackupConfigurations(dbMeta.Namespace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	var dbBackupConfig *stash.BackupConfiguration
@@ -46,9 +46,9 @@ func ResumeBackupConfiguration(stashClient scs.StashV1beta1Interface, dbMeta met
 			return configuration
 		}, metav1.UpdateOptions{})
 		if err != nil {
-			return err
+			return false, err
 		}
 	}
 
-	return nil
+	return dbBackupConfig != nil, nil
 }

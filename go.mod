@@ -5,16 +5,17 @@ go 1.15
 require (
 	github.com/appscode/go v0.0.0-20201105063637-5613f3b8169f
 	github.com/fatih/camelcase v1.0.0
-	github.com/golang/glog v0.0.0-20210429001901-424d2337a529
 	github.com/spf13/cobra v1.1.3
 	gomodules.xyz/logs v0.0.4
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
+	gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
 	gomodules.xyz/x v0.0.7
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
 	k8s.io/cli-runtime v0.21.1
 	k8s.io/client-go v0.21.1
+	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
 	kmodules.xyz/client-go v0.0.0-20210816193105-1158390a19cd
 	kmodules.xyz/custom-resources v0.0.0-20210812193424-1631fae03a1a

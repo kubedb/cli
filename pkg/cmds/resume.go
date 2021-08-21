@@ -173,7 +173,7 @@ func (o *ResumeOptions) Run() error {
 			errs.Insert(err.Error())
 			continue
 		}
-		err = rsr.Resume(info.Name, info.Namespace)
+		backupConfigFound, err := rsr.Resume(info.Name, info.Namespace)
 		if err != nil {
 			if errs.Has(err.Error()) {
 				continue
@@ -187,7 +187,7 @@ func (o *ResumeOptions) Run() error {
 		if o.onlyDb || resumeAll {
 			fmt.Fprintf(o.Out, "Successfully resumed %s/%s.\n", info.Namespace, info.Name)
 		}
-		if o.onlyBackup || resumeAll {
+		if (o.onlyBackup || resumeAll) && backupConfigFound {
 			fmt.Fprintf(o.Out, "Successfully resumed backupconfigurations of %s/%s.\n", info.Namespace, info.Name)
 		}
 	}

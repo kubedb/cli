@@ -56,10 +56,10 @@ func NewMariaDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*Mari
 	}, nil
 }
 
-func (e *MariaDBPauser) Pause(name, namespace string) error {
+func (e *MariaDBPauser) Pause(name, namespace string) (bool, error) {
 	db, err := e.dbClient.MariaDBs(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
-		return err
+		return false, nil
 	}
 
 	pauseAll := !(e.onlyBackup || e.onlyDb)
@@ -74,16 +74,13 @@ func (e *MariaDBPauser) Pause(name, namespace string) error {
 			return db.UID, status
 		}, metav1.UpdateOptions{})
 		if err != nil {
-			return err
+			return false, nil
 		}
 	}
 
 	if e.onlyBackup || pauseAll {
-		err = PauseBackupConfiguration(e.stashClient, db.ObjectMeta)
-		if err != nil {
-			return err
-		}
+		return PauseBackupConfiguration(e.stashClient, db.ObjectMeta)
 	}
 
-	return nil
+	return false, nil
 }

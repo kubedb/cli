@@ -26,7 +26,7 @@ import (
 )
 
 type Pauser interface {
-	Pause(string, string) error
+	Pause(string, string) (bool, error) // returns true if backupconfiguration is paused
 }
 
 func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping, onlyDb, onlyBackup bool) (Pauser, error) {

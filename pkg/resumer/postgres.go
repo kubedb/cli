@@ -18,11 +18,13 @@ package resumer
 
 import (
 	"context"
+	"time"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util"
 
+	"gomodules.xyz/wait"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
@@ -55,10 +57,10 @@ func NewPostgresResumer(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*Po
 	}, nil
 }
 
-func (e *PostgresResumer) Resume(name, namespace string) error {
+func (e *PostgresResumer) Resume(name, namespace string) (bool, error) {
 	db, err := e.dbClient.Postgreses(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
-		return err
+		return false, err
 	}
 	resumeAll := !(e.onlyBackup || e.onlyDb)
 
@@ -68,16 +70,28 @@ func (e *PostgresResumer) Resume(name, namespace string) error {
 			return db.UID, status
 		}, metav1.UpdateOptions{})
 		if err != nil {
-			return err
+			return false, err
 		}
 	}
 
+	backupConfigFound := false
 	if e.onlyBackup || resumeAll {
-		err = ResumeBackupConfiguration(e.stashClient, db.ObjectMeta)
+		backupConfigFound, err = ResumeBackupConfiguration(e.stashClient, db.ObjectMeta)
 		if err != nil {
-			return err
+			return false, err
 		}
 	}
 
-	return nil
+	return backupConfigFound, wait.PollImmediate(5*time.Second, 5*time.Minute, func() (done bool, err error) {
+		db, err = e.dbClient.Postgreses(namespace).Get(context.TODO(), name, metav1.GetOptions{})
+		if err != nil {
+			return false, err
+		}
+
+		if db.ObjectMeta.Generation == db.Status.ObservedGeneration {
+			return true, nil
+		}
+
+		return false, nil
+	})
 }

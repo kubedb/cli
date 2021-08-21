@@ -26,7 +26,7 @@ import (
 )
 
 type Resumer interface {
-	Resume(string, string) error
+	Resume(string, string) (bool, error) // returns true if backupconfiguration is resumed
 }
 
 func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping, onlyDb, onlyBackup bool) (Resumer, error) {

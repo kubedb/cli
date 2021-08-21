@@ -65,9 +65,6 @@ github.com/go-openapi/swag
 # github.com/gogo/protobuf v1.3.2 => github.com/gogo/protobuf v1.3.2
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/sortkeys
-# github.com/golang/glog v0.0.0-20210429001901-424d2337a529
-## explicit
-github.com/golang/glog
 # github.com/golang/protobuf v1.5.2 => github.com/golang/protobuf v1.4.3
 github.com/golang/protobuf/jsonpb
 github.com/golang/protobuf/proto
@@ -229,6 +226,7 @@ gomodules.xyz/runtime
 # gomodules.xyz/sets v0.2.0
 gomodules.xyz/sets
 # gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
+## explicit
 gomodules.xyz/wait
 # gomodules.xyz/x v0.0.7
 ## explicit
@@ -536,6 +534,7 @@ k8s.io/client-go/util/workqueue
 # k8s.io/component-base v0.21.1 => k8s.io/component-base v0.21.1
 k8s.io/component-base/version
 # k8s.io/klog/v2 v2.8.0
+## explicit
 k8s.io/klog/v2
 # k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7 => k8s.io/kube-openapi v0.0.0-20210305001622-591a79e4bda7
 k8s.io/kube-openapi/pkg/common

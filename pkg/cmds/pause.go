@@ -174,7 +174,7 @@ func (o *PauseOptions) Run() error {
 			errs.Insert(err.Error())
 			continue
 		}
-		err = psr.Pause(info.Name, info.Namespace)
+		backupConfigFound, err := psr.Pause(info.Name, info.Namespace)
 		if err != nil {
 			if errs.Has(err.Error()) {
 				continue
@@ -187,7 +187,7 @@ func (o *PauseOptions) Run() error {
 		if o.onlyDb || pauseAll {
 			fmt.Fprintf(o.Out, "Successfully paused %s/%s.\n", info.Namespace, info.Name)
 		}
-		if o.onlyBackup || pauseAll {
+		if (o.onlyBackup || pauseAll) && backupConfigFound {
 			fmt.Fprintf(o.Out, "Successfully paused backupconfigurations of %s/%s.\n", info.Namespace, info.Name)
 		}
 	}

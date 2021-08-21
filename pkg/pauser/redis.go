@@ -56,10 +56,10 @@ func NewRedisPauser(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*RedisP
 	}, nil
 }
 
-func (e *RedisPauser) Pause(name, namespace string) error {
+func (e *RedisPauser) Pause(name, namespace string) (bool, error) {
 	db, err := e.dbClient.Redises(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 	if err != nil {
-		return err
+		return false, nil
 	}
 
 	pauseAll := !(e.onlyBackup || e.onlyDb)
@@ -73,9 +73,13 @@ func (e *RedisPauser) Pause(name, namespace string) error {
 			return db.UID, status
 		}, metav1.UpdateOptions{})
 		if err != nil {
-			return err
+			return false, nil
 		}
 	}
 
-	return nil
+	if e.onlyBackup || pauseAll {
+		return PauseBackupConfiguration(e.stashClient, db.ObjectMeta)
+	}
+
+	return false, nil
 }
