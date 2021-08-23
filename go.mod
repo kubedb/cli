@@ -9,6 +9,7 @@ require (
 	gomodules.xyz/logs v0.0.4
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
+	gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
 	gomodules.xyz/x v0.0.7
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
