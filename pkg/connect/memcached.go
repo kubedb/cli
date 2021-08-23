@@ -127,6 +127,6 @@ func newMemcachedOpts(f cmdutil.Factory, dbName, namespace string) (*memcachedOp
 func (opts *memcachedOpts) connect(localPort int) error {
 	sh := shell.NewSession()
 	return sh.Command("docker", "run", "--network=host", "-it", "--entrypoint", "telnet",
-		alpineImg, "127.0.0.1", strconv.Itoa(localPort),
+		busyboxImg, "127.0.0.1", strconv.Itoa(localPort),
 	).SetStdin(os.Stdin).Run()
 }

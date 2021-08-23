@@ -18,7 +18,7 @@ package connect
 
 const (
 	alpineCurlImg = "curlimages/curl"
-	alpineImg     = "busybox"
+	busyboxImg    = "busybox"
 
 	pgCaFile   = "/tmp/root.crt"
 	pgCertFile = "/tmp/postgresql.crt"
