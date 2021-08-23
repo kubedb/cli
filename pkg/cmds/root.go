@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"io"
 
-	"kubedb.dev/cli/pkg/databases"
+	"kubedb.dev/cli/pkg/connect"
 
 	"github.com/spf13/cobra"
 	v "gomodules.xyz/x/version"
@@ -84,13 +84,13 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 		{
 			Message: "Database Connection Commands",
 			Commands: []*cobra.Command{
-				databases.NewMongoDBCMD(f),
-				databases.NewMySQLCMD(f),
-				databases.NewPostgresCMD(f),
-				databases.NewRedisCMD(f),
-				databases.NewMemcachedCMD(f),
-				databases.NewElasticSearchCMD(f),
-				databases.NewMariadbCMD(f),
+				connect.NewMongoDBCMD(f),
+				connect.NewMySQLCMD(f),
+				connect.NewPostgresCMD(f),
+				connect.NewRedisCMD(f),
+				connect.NewMemcachedCMD(f),
+				connect.NewElasticSearchCMD(f),
+				connect.NewMariadbCMD(f),
 			},
 		},
 	}

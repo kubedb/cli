@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package databases
+package connect
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -39,13 +40,13 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
+func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName        string
-		mariadbDBName string
-		namespace     string
-		fileName      string
-		command       string
+		dbName         string
+		postgresDBName string
+		namespace      string
+		fileName       string
+		command        string
 	)
 
 	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
@@ -53,33 +54,35 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var mdCmd = &cobra.Command{
-		Use: "mariadb",
+	var pgCmd = &cobra.Command{
+		Use: "postgres",
 		Aliases: []string{
-			"md",
+			"postgresql",
+			"pgsql",
+			"pg",
 		},
-		Short: "Use to operate mariadb pods",
-		Long: `Use this cmd to operate mariadb pods. Available sub-commands:
+		Short: "Use to operate postgres pods",
+		Long: `Use this cmd to operate postgres pods. Available sub-commands:
 				apply
 				connect`,
 		Run: func(cmd *cobra.Command, args []string) {},
 	}
 
-	var mdConnectCmd = &cobra.Command{
+	var pgConnectCmd = &cobra.Command{
 		Use:   "connect",
-		Short: "Connect to a mariadb object's pod",
-		Long:  `Use this cmd to exec into a mariadb object's primary pod.`,
+		Short: "Connect to a postgres object's pod",
+		Long:  `Use this cmd to exec into a postgres object's primary pod.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter mariadb object's name as an argument")
+				log.Fatal("Enter postgres object's name as an argument")
 			}
 			dbName = args[0]
-			opts, err := newmariadbOpts(f, dbName, namespace)
+			opts, err := newPostgresOpts(f, dbName, namespace, postgresDBName)
 			if err != nil {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -93,40 +96,40 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	var mdApplyCmd = &cobra.Command{
+	var pgApplyCmd = &cobra.Command{
 		Use:   "apply",
-		Short: "Apply SQL commands to a mariadb resource",
-		Long: `Use this cmd to apply SQL commands from a file to a mariadb object's primary pod.
-				Syntax: $ kubectl dba mariadb apply <mariadb-object-name> -n <namespace> -f <fileName>`,
+		Short: "Apply SQL commands to a postgres resource",
+		Long: `Use this cmd to apply SQL commands from a file to a postgres object's primary pod.
+				Syntax: $ kubectl dba postgres apply <postgres-object-name> -n <namespace> -f <fileName>`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter mariadb object's name as an argument. Your commands will be applied on a database inside it's primary pod")
+				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
 			}
 			dbName = args[0]
 
-			opts, err := newmariadbOpts(f, dbName, namespace)
+			opts, err := newPostgresOpts(f, dbName, namespace, postgresDBName)
 			if err != nil {
 				log.Fatalln(err)
 			}
 
 			if fileName == "" && command == "" {
-				log.Fatal("use --file or --command to apply supported commands to a mariadb object's pods")
+				log.Fatal("use --file or --command to apply supported commands to a postgres object's pods")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
 
 			if command != "" {
-				err = opts.applyCommand(tunnel.Local, command, mariadbDBName)
+				err = opts.applyCommand(tunnel.Local, command)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
 			if fileName != "" {
-				err = opts.applyFile(tunnel.Local, fileName, mariadbDBName)
+				err = opts.applyFile(tunnel.Local, fileName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -136,29 +139,33 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mdCmd.AddCommand(mdConnectCmd)
-	mdCmd.AddCommand(mdApplyCmd)
-	mdCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mariadb object to connect to.")
+	pgCmd.AddCommand(pgConnectCmd)
+	pgCmd.AddCommand(pgApplyCmd)
+	pgCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the postgres object to connect to.")
 
-	mdApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
-	mdApplyCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
-	mdApplyCmd.Flags().StringVarP(&mariadbDBName, "dbName", "d", "mysql", "name of the database inside mariadb to execute command")
+	pgApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
+	pgApplyCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
+	pgApplyCmd.Flags().StringVarP(&postgresDBName, "dbName", "d", "", "name of the database inside postgres to execute command")
 
-	return mdCmd
+	return pgCmd
 }
 
-type mariadbOpts struct {
-	db       *api.MariaDB
+type postgresOpts struct {
+	db       *api.Postgres
 	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
 
+	postgresDBName string
+
 	username string
 	pass     string
+
+	errWriter *bytes.Buffer
 }
 
-func newmariadbOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, error) {
+func newPostgresOpts(f cmdutil.Factory, dbName, namespace, postgresDBName string) (*postgresOpts, error) {
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -174,16 +181,16 @@ func newmariadbOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, 
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().MariaDBs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1alpha2().Postgreses(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
 
 	if db.Status.Phase != api.DatabasePhaseReady {
-		return nil, fmt.Errorf("mariadb %s/%s is not ready", namespace, dbName)
+		return nil, fmt.Errorf("postgres %s/%s is not ready", namespace, dbName)
 	}
 
-	dbVersion, err := dbClient.CatalogV1alpha1().MariaDBVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
+	dbVersion, err := dbClient.CatalogV1alpha1().PostgresVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -193,36 +200,39 @@ func newmariadbOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, 
 		return nil, err
 	}
 
-	return &mariadbOpts{
-		db:       db,
-		dbImage:  dbVersion.Spec.DB.Image,
-		config:   config,
-		client:   client,
-		dbClient: dbClient,
-		username: string(secret.Data[corev1.BasicAuthUsernameKey]),
-		pass:     string(secret.Data[corev1.BasicAuthPasswordKey]),
+	return &postgresOpts{
+		db:             db,
+		dbImage:        dbVersion.Spec.DB.Image,
+		config:         config,
+		client:         client,
+		dbClient:       dbClient,
+		username:       string(secret.Data[corev1.BasicAuthUsernameKey]),
+		pass:           string(secret.Data[corev1.BasicAuthPasswordKey]),
+		errWriter:      &bytes.Buffer{},
+		postgresDBName: postgresDBName,
 	}, nil
 }
 
-func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlExtraFlags []interface{}) (*shell.Session, error) {
+func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, postgresExtraFlags []interface{}) (*shell.Session, error) {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
+	sh.Stderr = opts.errWriter
 
 	db := opts.db
 	dockerCommand := []interface{}{
 		"run", "--network=host",
-		"-e", fmt.Sprintf("MYSQL_PWD=%s", opts.pass),
+		"-e", fmt.Sprintf("PGPASSWORD=%s", opts.pass),
 	}
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
-	mysqlCommand := []interface{}{
-		"mysql",
+	postgresCommand := []interface{}{
+		"psql",
 		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort),
-		fmt.Sprintf("--user=%s", opts.username),
+		fmt.Sprintf("--username=%s", opts.username),
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(api.MariaDBArchiverCert)
+		secretName := db.CertificateName(api.PostgresClientCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
@@ -232,7 +242,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(caFile, caCrt, 0644)
+		err = ioutil.WriteFile(pgCaFile, caCrt, 0644)
 		if err != nil {
 			return nil, err
 		}
@@ -241,7 +251,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(certFile, crt, 0644)
+		err = ioutil.WriteFile(pgCertFile, crt, 0644)
 		if err != nil {
 			return nil, err
 		}
@@ -250,32 +260,25 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(keyFile, key, 0644)
+		err = ioutil.WriteFile(pgKeyFile, key, 0600)
 		if err != nil {
 			return nil, err
 		}
 
 		dockerCommand = append(dockerCommand,
-			"-v", fmt.Sprintf("%s:%s", caFile, caFile),
-			"-v", fmt.Sprintf("%s:%s", certFile, certFile),
-			"-v", fmt.Sprintf("%s:%s", keyFile, keyFile),
-		)
-		mysqlCommand = append(mysqlCommand,
-			fmt.Sprintf("--ssl-ca=%v", caFile),
-			fmt.Sprintf("--ssl-cert=%v", certFile),
-			fmt.Sprintf("--ssl-key=%v", keyFile),
+			"-v", fmt.Sprintf("%s:%s", "/tmp/", "/root/.postgresql/"),
 		)
 	}
 
 	dockerCommand = append(dockerCommand, opts.dbImage)
-	finalCommand := append(dockerCommand, mysqlCommand...)
-	if mysqlExtraFlags != nil {
-		finalCommand = append(finalCommand, mysqlExtraFlags...)
+	finalCommand := append(dockerCommand, postgresCommand...)
+	if postgresExtraFlags != nil {
+		finalCommand = append(finalCommand, postgresExtraFlags...)
 	}
 	return sh.Command("docker", finalCommand...).SetStdin(os.Stdin), nil
 }
 
-func (opts *mariadbOpts) connect(localPort int) error {
+func (opts *postgresOpts) connect(localPort int) error {
 	dockerFlag := []interface{}{
 		"-it",
 	}
@@ -284,15 +287,25 @@ func (opts *mariadbOpts) connect(localPort int) error {
 		return err
 	}
 
-	return shSession.Run()
+	err = shSession.Run()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (opts *mariadbOpts) applyCommand(localPort int, command, mysqlDBName string) error {
-	mysqlExtraFlags := []interface{}{
-		mysqlDBName,
-		"-e", command,
+func (opts *postgresOpts) applyCommand(localPort int, command string) error {
+	dbFlag := ""
+	if opts.postgresDBName != "" {
+		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
+
 	}
-	shSession, err := opts.getDockerShellCommand(localPort, nil, mysqlExtraFlags)
+	postgresExtraFlags := []interface{}{
+		dbFlag,
+		fmt.Sprintf("--command=%s", command),
+	}
+	shSession, err := opts.getDockerShellCommand(localPort, nil, postgresExtraFlags)
 	if err != nil {
 		return err
 	}
@@ -305,26 +318,36 @@ func (opts *mariadbOpts) applyCommand(localPort int, command, mysqlDBName string
 	if string(out) != "" {
 		output = ", output:\n\n" + string(out)
 	}
+
+	errOutput := opts.errWriter.String()
+	if errOutput != "" {
+		return fmt.Errorf("failed to apply command, stderr: %s%s", errOutput, output)
+	}
 	fmt.Printf("command applied successfully%s", output)
 
 	return nil
 }
 
-func (opts *mariadbOpts) applyFile(localPort int, fileName, mysqlDBName string) error {
+func (opts *postgresOpts) applyFile(localPort int, fileName string) error {
+	dbFlag := ""
+	if opts.postgresDBName != "" {
+		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
+
+	}
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
 		return err
 	}
-	tempFileName := "/tmp/my.sql"
+	tempFileName := "/tmp/postgres.sql"
 
 	dockerFlag := []interface{}{
 		"-v", fmt.Sprintf("%s:%s", fileName, tempFileName),
 	}
-	mysqlExtraFlags := []interface{}{
-		mysqlDBName,
-		"-e", fmt.Sprintf("source %s", tempFileName),
+	postgresExtraFlags := []interface{}{
+		dbFlag,
+		fmt.Sprintf("--file=%v", tempFileName),
 	}
-	shSession, err := opts.getDockerShellCommand(localPort, dockerFlag, mysqlExtraFlags)
+	shSession, err := opts.getDockerShellCommand(localPort, dockerFlag, postgresExtraFlags)
 	if err != nil {
 		return err
 	}
@@ -338,6 +361,12 @@ func (opts *mariadbOpts) applyFile(localPort int, fileName, mysqlDBName string) 
 	if string(out) != "" {
 		output = ", output:\n\n" + string(out)
 	}
+
+	errOutput := opts.errWriter.String()
+	if errOutput != "" {
+		return fmt.Errorf("failed to apply file, stderr: %s%s", errOutput, output)
+	}
+
 	fmt.Printf("file %s applied successfully%s", fileName, output)
 
 	return nil
