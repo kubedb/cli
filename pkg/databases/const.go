@@ -17,8 +17,8 @@ limitations under the License.
 package databases
 
 const (
-	alpineCurlImg   = "curlimages/curl"
-	alpineTelnetImg = "mikesplain/telnet"
+	alpineCurlImg = "curlimages/curl"
+	alpineImg     = "busybox"
 
 	pgCaFile   = "/tmp/root.crt"
 	pgCertFile = "/tmp/postgresql.crt"
