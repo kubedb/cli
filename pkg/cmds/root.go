@@ -79,7 +79,15 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdResume("kubedb", f, ioStreams),
 			},
 		},
+		{
+			Message: "Database Connection Commands",
+			Commands: []*cobra.Command{
+				NewCmdConnect(f),
+				NewCmdExec(f),
+			},
+		},
 	}
+
 	groups.Add(rootCmd)
 	templates.ActsAsRootCommand(rootCmd, nil, groups...)
 
