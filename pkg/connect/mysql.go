@@ -39,13 +39,10 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewMySQLCMD(f cmdutil.Factory) *cobra.Command {
+func MySQLConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName      string
-		mysqlDBName string
-		namespace   string
-		fileName    string
-		command     string
+		dbName    string
+		namespace string
 	)
 
 	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
@@ -53,21 +50,12 @@ func NewMySQLCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var myCmd = &cobra.Command{
+	var myConnectCmd = &cobra.Command{
 		Use: "mysql",
 		Aliases: []string{
 			"my",
 		},
-		Short: "Use to operate mysql pods",
-		Long: `Use this cmd to operate mysql pods. Available sub-commands:
-				apply
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
-
-	var myConnectCmd = &cobra.Command{
-		Use:   "connect",
-		Short: "Connect to a mysql object's pod",
+		Short: "Connect to a mysql object",
 		Long:  `Use this cmd to exec into a mysql object's primary pod.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
@@ -93,11 +81,40 @@ func NewMySQLCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	var myApplyCmd = &cobra.Command{
-		Use:   "apply",
-		Short: "Apply SQL commands to a mysql resource",
-		Long: `Use this cmd to apply SQL commands from a file to a mysql object's primary pod.
-				Syntax: $ kubectl dba mysql apply <mysql-object-name> -n <namespace> -f <fileName>`,
+	myConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mysql object to connect to.")
+
+	return myConnectCmd
+}
+
+func MySQLExecCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName      string
+		mysqlDBName string
+		namespace   string
+		fileName    string
+		command     string
+	)
+
+	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		klog.Error(err, "failed to get current namespace")
+	}
+
+	var myExecCmd = &cobra.Command{
+		Use: "mysql",
+		Aliases: []string{
+			"my",
+		},
+		Short: "Execute SQL commands to a mysql resource",
+		Long: `Use this cmd to execute sql commands to a mysql object's primary pod.
+
+Examples:
+  # Execute a script named 'demo.sql' in 'my-demo' mysql database in 'demo' namespace
+  kubectl dba exec my my-demo -n demo -f demo.sql
+
+  # Execute a command in 'my-demo' mysql database in 'demo' namespace
+  kubectl dba exec my my-demo -c 'describe pet' -d kubedb"
+				`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mysql object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -110,7 +127,7 @@ func NewMySQLCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if fileName == "" && command == "" {
-				log.Fatal("use --file or --command to apply supported commands to a mysql object's pods")
+				log.Fatal("use --file or --command to execute supported commands to a mysql object")
 			}
 
 			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
@@ -119,14 +136,14 @@ func NewMySQLCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if command != "" {
-				err = opts.applyCommand(tunnel.Local, command, mysqlDBName)
+				err = opts.executeCommand(tunnel.Local, command, mysqlDBName)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
 			if fileName != "" {
-				err = opts.applyFile(tunnel.Local, fileName, mysqlDBName)
+				err = opts.executeFile(tunnel.Local, fileName, mysqlDBName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -136,15 +153,13 @@ func NewMySQLCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	myCmd.AddCommand(myConnectCmd)
-	myCmd.AddCommand(myApplyCmd)
-	myCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mysql object to connect to.")
+	myExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mysql object to connect to.")
 
-	myApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
-	myApplyCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
-	myApplyCmd.Flags().StringVarP(&mysqlDBName, "dbName", "d", "mysql", "name of the database inside mysql to execute command")
+	myExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
+	myExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
+	myExecCmd.Flags().StringVarP(&mysqlDBName, "dbName", "d", "mysql", "name of the database inside mysql to execute command")
 
-	return myCmd
+	return myExecCmd
 }
 
 type mysqlOpts struct {
@@ -287,7 +302,7 @@ func (opts *mysqlOpts) connect(localPort int) error {
 	return shSession.Run()
 }
 
-func (opts *mysqlOpts) applyCommand(localPort int, command, mysqlDBName string) error {
+func (opts *mysqlOpts) executeCommand(localPort int, command, mysqlDBName string) error {
 	mysqlExtraFlags := []interface{}{
 		mysqlDBName,
 		"-e", command,
@@ -299,7 +314,7 @@ func (opts *mysqlOpts) applyCommand(localPort int, command, mysqlDBName string) 
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -310,7 +325,7 @@ func (opts *mysqlOpts) applyCommand(localPort int, command, mysqlDBName string) 
 	return nil
 }
 
-func (opts *mysqlOpts) applyFile(localPort int, fileName, mysqlDBName string) error {
+func (opts *mysqlOpts) executeFile(localPort int, fileName, mysqlDBName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
 		return err
@@ -331,7 +346,7 @@ func (opts *mysqlOpts) applyFile(localPort int, fileName, mysqlDBName string) er
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
 	}
 
 	output := ""

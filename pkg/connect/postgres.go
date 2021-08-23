@@ -40,13 +40,11 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
+func PostgresConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName         string
 		postgresDBName string
 		namespace      string
-		fileName       string
-		command        string
 	)
 
 	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
@@ -54,23 +52,14 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var pgCmd = &cobra.Command{
+	var pgConnectCmd = &cobra.Command{
 		Use: "postgres",
 		Aliases: []string{
 			"postgresql",
 			"pgsql",
 			"pg",
 		},
-		Short: "Use to operate postgres pods",
-		Long: `Use this cmd to operate postgres pods. Available sub-commands:
-				apply
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
-
-	var pgConnectCmd = &cobra.Command{
-		Use:   "connect",
-		Short: "Connect to a postgres object's pod",
+		Short: "Connect to a postgres object",
 		Long:  `Use this cmd to exec into a postgres object's primary pod.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
@@ -96,11 +85,42 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	var pgApplyCmd = &cobra.Command{
-		Use:   "apply",
-		Short: "Apply SQL commands to a postgres resource",
-		Long: `Use this cmd to apply SQL commands from a file to a postgres object's primary pod.
-				Syntax: $ kubectl dba postgres apply <postgres-object-name> -n <namespace> -f <fileName>`,
+	pgConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the postgres object to connect to.")
+
+	return pgConnectCmd
+}
+
+func PostgresExecCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName         string
+		postgresDBName string
+		namespace      string
+		fileName       string
+		command        string
+	)
+
+	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		klog.Error(err, "failed to get current namespace")
+	}
+
+	var pgExecCmd = &cobra.Command{
+		Use: "postgres",
+		Aliases: []string{
+			"postgresql",
+			"pgsql",
+			"pg",
+		},
+		Short: "Execute SQL commands to a postgres resource",
+		Long: `Use this cmd to execute postgresql commands to a postgres object's primary pod.
+
+Examples:
+  # Execute a script named 'demo.sql' in 'pg-demo' postgres database in 'demo' namespace
+  kubectl dba exec pg pg-demo -n demo -f demo.sql
+
+  # Execute a command in 'pg-demo' postgres database in 'demo' namespace
+  kubectl dba exec pg pg-demo -c '\l' -d kubedb"
+				`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -113,7 +133,7 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if fileName == "" && command == "" {
-				log.Fatal("use --file or --command to apply supported commands to a postgres object's pods")
+				log.Fatal("use --file or --command to execute supported commands to a postgres object")
 			}
 
 			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
@@ -122,14 +142,14 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if command != "" {
-				err = opts.applyCommand(tunnel.Local, command)
+				err = opts.executeCommand(tunnel.Local, command)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
 			if fileName != "" {
-				err = opts.applyFile(tunnel.Local, fileName)
+				err = opts.executeFile(tunnel.Local, fileName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -139,15 +159,13 @@ func NewPostgresCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	pgCmd.AddCommand(pgConnectCmd)
-	pgCmd.AddCommand(pgApplyCmd)
-	pgCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the postgres object to connect to.")
+	pgExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the postgres object to connect to.")
 
-	pgApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
-	pgApplyCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
-	pgApplyCmd.Flags().StringVarP(&postgresDBName, "dbName", "d", "", "name of the database inside postgres to execute command")
+	pgExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
+	pgExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
+	pgExecCmd.Flags().StringVarP(&postgresDBName, "dbName", "d", "", "name of the database inside postgres to execute command")
 
-	return pgCmd
+	return pgExecCmd
 }
 
 type postgresOpts struct {
@@ -295,7 +313,7 @@ func (opts *postgresOpts) connect(localPort int) error {
 	return nil
 }
 
-func (opts *postgresOpts) applyCommand(localPort int, command string) error {
+func (opts *postgresOpts) executeCommand(localPort int, command string) error {
 	dbFlag := ""
 	if opts.postgresDBName != "" {
 		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
@@ -312,7 +330,7 @@ func (opts *postgresOpts) applyCommand(localPort int, command string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -321,14 +339,14 @@ func (opts *postgresOpts) applyCommand(localPort int, command string) error {
 
 	errOutput := opts.errWriter.String()
 	if errOutput != "" {
-		return fmt.Errorf("failed to apply command, stderr: %s%s", errOutput, output)
+		return fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
 	}
 	fmt.Printf("command applied successfully%s", output)
 
 	return nil
 }
 
-func (opts *postgresOpts) applyFile(localPort int, fileName string) error {
+func (opts *postgresOpts) executeFile(localPort int, fileName string) error {
 	dbFlag := ""
 	if opts.postgresDBName != "" {
 		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
@@ -354,7 +372,7 @@ func (opts *postgresOpts) applyFile(localPort int, fileName string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
 	}
 
 	output := ""
@@ -364,7 +382,7 @@ func (opts *postgresOpts) applyFile(localPort int, fileName string) error {
 
 	errOutput := opts.errWriter.String()
 	if errOutput != "" {
-		return fmt.Errorf("failed to apply file, stderr: %s%s", errOutput, output)
+		return fmt.Errorf("failed to execute file, stderr: %s%s", errOutput, output)
 	}
 
 	fmt.Printf("file %s applied successfully%s", fileName, output)

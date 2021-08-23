@@ -40,12 +40,10 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
+func RedisConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName    string
 		namespace string
-		fileName  string
-		command   string
 		keys      []string
 		argv      []string
 	)
@@ -55,20 +53,11 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var rdCmd = &cobra.Command{
+	var rdConnectCmd = &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
 		},
-		Short: "Use to operate redis pods",
-		Long: `Use this cmd to operate redis pods. Available sub-commands:
-				apply
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
-
-	var rdConnectCmd = &cobra.Command{
-		Use:   "connect",
 		Short: "Connect to a redis object's pod",
 		Long:  `Use this cmd to exec into a redis object's primary pod.`,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -89,11 +78,44 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	var rdApplyCmd = &cobra.Command{
-		Use:   "apply",
-		Short: "Apply SQL commands to a redis resource",
-		Long: `Use this cmd to apply SQL commands from a file to a redis object's primary pod.
-				Syntax: $ kubectl dba redis apply <redis-object-name> -n <namespace> -f <fileName>`,
+	rdConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the redis object to connect to.")
+
+	return rdConnectCmd
+}
+
+func RedisExecCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName    string
+		namespace string
+		fileName  string
+		command   string
+		keys      []string
+		argv      []string
+	)
+
+	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		klog.Error(err, "failed to get current namespace")
+	}
+
+	var rdExecCmd = &cobra.Command{
+		Use: "redis",
+		Aliases: []string{
+			"rd",
+		},
+		Short: "Execute SQL commands to a redis resource",
+		Long: `Use this cmd to execute redis commands to a redis object's primary pod.
+
+Examples:
+  # Execute a script named 'demo.lua' in 'rd-demo' redis database in 'demo' namespace
+  kubectl dba exec rd rd-demo -n demo -f demo.lua
+
+  # Execute a script named 'demo.lua' that has KEYS and ARGS set, in 'rd-demo' redis database in 'demo' namespace
+  kubectl dba exec rd rd-demo -n demo -f demo.lua  -k "key1" -a "arg1"
+
+  # Execute a command in 'rd-demo' redis database in 'demo' namespace
+  kubectl dba exec rd rd-demo -c 'set x y'
+				`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -106,7 +128,7 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if fileName == "" && command == "" {
-				log.Fatal("use --file or --command to apply supported commands to a redis object's pods")
+				log.Fatal("use --file or --command to execute supported commands to a redis object's pods")
 			}
 
 			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.RedisDatabasePort)
@@ -115,14 +137,14 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if command != "" {
-				err = opts.applyCommand(command)
+				err = opts.executeCommand(command)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
 			if fileName != "" {
-				err = opts.applyFile(fileName)
+				err = opts.executeFile(fileName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -132,16 +154,13 @@ func NewRedisCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	rdCmd.AddCommand(rdConnectCmd)
-	rdCmd.AddCommand(rdApplyCmd)
-	rdCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the redis object to connect to.")
+	rdExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the redis object to connect to.")
+	rdExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to lua script file")
+	rdExecCmd.Flags().StringArrayVarP(&keys, "keys", "k", []string{}, "keys to pass to the lua script, used in script as KEYS[*] and the flag can be specified multiple times with different keys. ")
+	rdExecCmd.Flags().StringArrayVarP(&argv, "argv", "a", []string{}, "args to pass to the lua script, used in script as ARGV[*] and the flag can be specified multiple times with different args. ")
+	rdExecCmd.Flags().StringVarP(&command, "command", "c", "", "single command to execute")
 
-	rdApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to lua script file")
-	rdApplyCmd.Flags().StringArrayVarP(&keys, "keys", "k", []string{}, "keys to pass to the lua script, used in script as KEYS[*] and the flag can be specified multiple times with different keys. ")
-	rdApplyCmd.Flags().StringArrayVarP(&argv, "argv", "a", []string{}, "args to pass to the lua script, used in script as ARGV[*] and the flag can be specified multiple times with different args. ")
-	rdApplyCmd.Flags().StringVarP(&command, "command", "c", "", "single command to execute")
-
-	return rdCmd
+	return rdExecCmd
 }
 
 type redisOpts struct {
@@ -242,7 +261,7 @@ func (opts *redisOpts) connect() error {
 	return nil
 }
 
-func (opts *redisOpts) applyCommand(command string) error {
+func (opts *redisOpts) executeCommand(command string) error {
 	if len(opts.keys) != 0 || len(opts.args) != 0 {
 		return fmt.Errorf("argv and keys flags are only allowed with lua files, please provide lua file with --file")
 	}
@@ -254,7 +273,7 @@ func (opts *redisOpts) applyCommand(command string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -263,14 +282,14 @@ func (opts *redisOpts) applyCommand(command string) error {
 
 	errOutput := opts.errWriter.String()
 	if errOutput != "" {
-		return fmt.Errorf("failed to apply command, stderr: %s%s", errOutput, output)
+		return fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
 	}
 	fmt.Printf("command applied successfully%s", output)
 
 	return nil
 }
 
-func (opts *redisOpts) applyFile(fileName string) error {
+func (opts *redisOpts) executeFile(fileName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
 		return err
@@ -294,7 +313,7 @@ func (opts *redisOpts) applyFile(fileName string) error {
 	out, err := shSession.Output()
 	if err != nil {
 		fmt.Println(opts.errWriter.String())
-		return fmt.Errorf("failed to apply file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
 	}
 
 	output := ""
@@ -304,7 +323,7 @@ func (opts *redisOpts) applyFile(fileName string) error {
 
 	errOutput := opts.errWriter.String()
 	if errOutput != "" {
-		return fmt.Errorf("failed to apply file, stderr: %s%s", errOutput, output)
+		return fmt.Errorf("failed to execute file, stderr: %s%s", errOutput, output)
 	}
 
 	fmt.Printf("file %s applied successfully%s", fileName, output)

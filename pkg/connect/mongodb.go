@@ -39,12 +39,10 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
+func MongoDBConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName    string
 		namespace string
-		fileName  string
-		command   string
 	)
 
 	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
@@ -52,22 +50,17 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var mgCmd = &cobra.Command{
+	var mgConnectCmd = &cobra.Command{
 		Use: "mongodb",
 		Aliases: []string{
 			"mg",
+			"mongo",
 		},
-		Short: "Use to operate mongodb pods",
-		Long: `Use this cmd to operate mongodb pods. Available sub-commands:
-				apply
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
+		Short: "Connect to a mongodb object",
+		Long: `Use this cmd to exec into a mongodb object's primary pod.
+example:
 
-	var mgConnectCmd = &cobra.Command{
-		Use:   "connect",
-		Short: "Connect to a mongodb object's pod",
-		Long:  `Use this cmd to exec into a mongodb object's primary pod.`,
+kubectl dba connect mg <db-name> -n <db-namespace>`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mongodb object's name as an argument")
@@ -92,11 +85,39 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	var mgApplyCmd = &cobra.Command{
-		Use:   "apply",
-		Short: "Apply commands to a mongodb resource",
-		Long: `Use this cmd to apply mongodb commands from a file to a mongodb object's primary pod.
-				Syntax: $ kubectl dba mongodb apply <mongodb-object-name> -n <namespace> -f <fileName>
+	mgConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mongodb object to connect to.")
+
+	return mgConnectCmd
+}
+
+func MongoDBExecCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName    string
+		namespace string
+		fileName  string
+		command   string
+	)
+
+	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		klog.Error(err, "failed to get current namespace")
+	}
+
+	var mgExecCmd = &cobra.Command{
+		Use: "mongodb",
+		Aliases: []string{
+			"mg",
+			"mongo",
+		},
+		Short: "Execute commands to a mongodb resource",
+		Long: `Use this cmd to execute mongodb commands to a mongodb object's primary pod.
+
+Examples:
+  # Execute a script named 'mongo.js' in 'mg-rs' mongodb database in 'demo' namespace
+  kubectl dba exec mg mg-rs -n demo -f mongo.js
+
+  # Execute a command in 'mg-rs' mongodb database in 'demo' namespace
+  kubectl dba exec mg mg-rs -n demo -c "printjson(db.getCollectionNames())"
 				`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
@@ -110,7 +131,7 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if fileName == "" && command == "" {
-				log.Fatal("use --file or --command to apply supported commands to a mongodb object's pods")
+				log.Fatal("use --file or --command to execute supported commands to a mongodb object")
 			}
 
 			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MongoDBDatabasePort)
@@ -119,14 +140,14 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if command != "" {
-				err = opts.applyCommand(tunnel.Local, command)
+				err = opts.executeCommand(tunnel.Local, command)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
 			if fileName != "" {
-				err = opts.applyFile(tunnel.Local, fileName)
+				err = opts.executeFile(tunnel.Local, fileName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -136,14 +157,11 @@ func NewMongoDBCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mgCmd.AddCommand(mgConnectCmd)
-	mgCmd.AddCommand(mgApplyCmd)
-	mgCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mongodb object to connect to.")
+	mgExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mongodb object to connect to.")
+	mgExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path of the script file")
+	mgExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
 
-	mgApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
-	mgApplyCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
-
-	return mgCmd
+	return mgExecCmd
 }
 
 type mongodbOpts struct {
@@ -284,7 +302,7 @@ func (opts *mongodbOpts) connect(localPort int) error {
 	return shSession.Run()
 }
 
-func (opts *mongodbOpts) applyCommand(localPort int, command string) error {
+func (opts *mongodbOpts) executeCommand(localPort int, command string) error {
 	mongoExtraFlags := []interface{}{
 		"--eval", command,
 	}
@@ -295,7 +313,7 @@ func (opts *mongodbOpts) applyCommand(localPort int, command string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -306,7 +324,7 @@ func (opts *mongodbOpts) applyCommand(localPort int, command string) error {
 	return nil
 }
 
-func (opts *mongodbOpts) applyFile(localPort int, fileName string) error {
+func (opts *mongodbOpts) executeFile(localPort int, fileName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
 		return err
@@ -326,7 +344,7 @@ func (opts *mongodbOpts) applyFile(localPort int, fileName string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
 	}
 
 	output := ""

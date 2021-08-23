@@ -37,7 +37,7 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewMemcachedCMD(f cmdutil.Factory) *cobra.Command {
+func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName    string
 		namespace string
@@ -48,20 +48,12 @@ func NewMemcachedCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var mcCmd = &cobra.Command{
+	var mcConnectCmd = &cobra.Command{
 		Use: "memcached",
 		Aliases: []string{
 			"mc",
 		},
-		Short: "Use to operate memcached pods",
-		Long: `Use this cmd to operate memcached pods. Available sub-commands:
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
-
-	var mcConnectCmd = &cobra.Command{
-		Use:   "connect",
-		Short: "Connect to a memcached object's pod",
+		Short: "Connect to a telnet shell to run command against a memcached database",
 		Long:  `Use this cmd to exec into a memcached object's primary pod.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
@@ -87,10 +79,9 @@ func NewMemcachedCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mcCmd.AddCommand(mcConnectCmd)
-	mcCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the memcached object to connect to.")
+	mcConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the memcached object to connect to.")
 
-	return mcCmd
+	return mcConnectCmd
 }
 
 type memcachedOpts struct {

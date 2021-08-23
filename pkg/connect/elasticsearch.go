@@ -39,7 +39,7 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewElasticSearchCMD(f cmdutil.Factory) *cobra.Command {
+func ElasticSearchConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName    string
 		namespace string
@@ -50,35 +50,34 @@ func NewElasticSearchCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var esCmd = &cobra.Command{
+	var esConnectCmd = &cobra.Command{
 		Use: "elasticsearch",
 		Aliases: []string{
 			"es",
 		},
-		Short: "Use to operate elasticsearch pods",
-		Long: `Use this cmd to operate elasticsearch pods. Available sub-commands:
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
-
-	var esConnectCmd = &cobra.Command{
-		Use:   "connect",
-		Short: "Connect to a elasticsearch object's pod",
+		Short: "Connect to a shell to run elasticsearch api calls",
 		Long: `Use this cmd to run api calls to your elasticsearch database. 
 
 This command connects you to a shell to run curl commands. 
 
 It exports the following environment variables to run api calls to your database:
-USERNAME
-PASSWORD
-ADDRESS
-CACERT
-CERT
-KEY
+  $USERNAME
+  $PASSWORD
+  $ADDRESS
+  $CACERT
+  $CERT
+  $KEY
 
-example curl command to run on the shell:
+Example connect command:
+  # connect to a shell with curl access to the database of name es-demo in demo namespace
+  kubectl dba connect es es-demo -n demo
 
-$ curl --cacert $CACERT --cert $CERT --key $KEY  -u $USERNAME:$PASSWORD $ADDRESS/_cluster/health?pretty`,
+Example curl commands:
+  # curl command to run on the connected elasticsearch database:
+  curl -u $USERNAME:$PASSWORD $ADDRESS/_cluster/health?pretty
+
+  # curl command to run on the connected tls secured elasticsearch database:
+  curl --cacert $CACERT --cert $CERT --key $KEY  -u $USERNAME:$PASSWORD $ADDRESS/_cluster/health?pretty`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("enter elasticsearch object's name as an argument")
@@ -103,10 +102,9 @@ $ curl --cacert $CACERT --cert $CERT --key $KEY  -u $USERNAME:$PASSWORD $ADDRESS
 		},
 	}
 
-	esCmd.AddCommand(esConnectCmd)
-	esCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the elasticsearch object to connect to.")
+	esConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the elasticsearch object to connect to.")
 
-	return esCmd
+	return esConnectCmd
 }
 
 type elasticsearchOpts struct {

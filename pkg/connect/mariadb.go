@@ -39,13 +39,10 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
+func MariadbConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName        string
-		mariadbDBName string
-		namespace     string
-		fileName      string
-		command       string
+		dbName    string
+		namespace string
 	)
 
 	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
@@ -53,22 +50,13 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 		klog.Error(err, "failed to get current namespace")
 	}
 
-	var mdCmd = &cobra.Command{
+	var mdConnectCmd = &cobra.Command{
 		Use: "mariadb",
 		Aliases: []string{
 			"md",
 		},
-		Short: "Use to operate mariadb pods",
-		Long: `Use this cmd to operate mariadb pods. Available sub-commands:
-				apply
-				connect`,
-		Run: func(cmd *cobra.Command, args []string) {},
-	}
-
-	var mdConnectCmd = &cobra.Command{
-		Use:   "connect",
-		Short: "Connect to a mariadb object's pod",
-		Long:  `Use this cmd to exec into a mariadb object's primary pod.`,
+		Short: "Connect to a mariadb object",
+		Long:  `Use this command to connect to a mariadb object's primary pod.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mariadb object's name as an argument")
@@ -93,11 +81,40 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	var mdApplyCmd = &cobra.Command{
-		Use:   "apply",
-		Short: "Apply SQL commands to a mariadb resource",
-		Long: `Use this cmd to apply SQL commands from a file to a mariadb object's primary pod.
-				Syntax: $ kubectl dba mariadb apply <mariadb-object-name> -n <namespace> -f <fileName>`,
+	mdConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mariadb object to connect to.")
+
+	return mdConnectCmd
+}
+
+func MariadbExecCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName        string
+		mariadbDBName string
+		namespace     string
+		fileName      string
+		command       string
+	)
+
+	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		klog.Error(err, "failed to get current namespace")
+	}
+
+	var mdExecCmd = &cobra.Command{
+		Use: "mariadb",
+		Aliases: []string{
+			"md",
+		},
+		Short: "Execute SQL commands to a mariadb resource",
+		Long: `Use this cmd to execute sql commands to a mariadb object's primary pod.
+
+Examples:
+  # Execute a script named 'demo.sql' in 'md-demo' mariadb database in 'demo' namespace
+  kubectl dba exec md md-demo -n demo -f demo.sql
+
+  # Execute a command in 'md-demo' mariadb database in 'demo' namespace
+  kubectl dba exec md md-demo -c 'describe pet' -d kubedb"
+				`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mariadb object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -110,7 +127,7 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if fileName == "" && command == "" {
-				log.Fatal("use --file or --command to apply supported commands to a mariadb object's pods")
+				log.Fatal("use --file or --command to execute supported commands to a mariadb object")
 			}
 
 			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
@@ -119,14 +136,14 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if command != "" {
-				err = opts.applyCommand(tunnel.Local, command, mariadbDBName)
+				err = opts.executeCommand(tunnel.Local, command, mariadbDBName)
 				if err != nil {
 					log.Fatal(err)
 				}
 			}
 
 			if fileName != "" {
-				err = opts.applyFile(tunnel.Local, fileName, mariadbDBName)
+				err = opts.executeFile(tunnel.Local, fileName, mariadbDBName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -136,15 +153,13 @@ func NewMariadbCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mdCmd.AddCommand(mdConnectCmd)
-	mdCmd.AddCommand(mdApplyCmd)
-	mdCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mariadb object to connect to.")
+	mdExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mariadb object to connect to.")
 
-	mdApplyCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
-	mdApplyCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
-	mdApplyCmd.Flags().StringVarP(&mariadbDBName, "dbName", "d", "mysql", "name of the database inside mariadb to execute command")
+	mdExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
+	mdExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
+	mdExecCmd.Flags().StringVarP(&mariadbDBName, "dbName", "d", "mysql", "name of the database inside mariadb to execute command")
 
-	return mdCmd
+	return mdExecCmd
 }
 
 type mariadbOpts struct {
@@ -287,7 +302,7 @@ func (opts *mariadbOpts) connect(localPort int) error {
 	return shSession.Run()
 }
 
-func (opts *mariadbOpts) applyCommand(localPort int, command, mysqlDBName string) error {
+func (opts *mariadbOpts) executeCommand(localPort int, command, mysqlDBName string) error {
 	mysqlExtraFlags := []interface{}{
 		mysqlDBName,
 		"-e", command,
@@ -299,7 +314,7 @@ func (opts *mariadbOpts) applyCommand(localPort int, command, mysqlDBName string
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -310,7 +325,7 @@ func (opts *mariadbOpts) applyCommand(localPort int, command, mysqlDBName string
 	return nil
 }
 
-func (opts *mariadbOpts) applyFile(localPort int, fileName, mysqlDBName string) error {
+func (opts *mariadbOpts) executeFile(localPort int, fileName, mysqlDBName string) error {
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {
 		return err
@@ -331,7 +346,7 @@ func (opts *mariadbOpts) applyFile(localPort int, fileName, mysqlDBName string) 
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to apply file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
 	}
 
 	output := ""
