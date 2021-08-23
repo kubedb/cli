@@ -33,20 +33,18 @@ import (
 
 var (
 	showCredLong = templates.LongDesc(`
-		Restart the pods of the database smartly.
-		This command creates an Ops Request that will
-		restart the database pods.
+		Prints credentials for the database.
     `)
 
 	showCredExample = templates.Examples(`
-		# Restart a mongodb database
-		dba restart mongodb mg-demo
+		# Print credentials of a mongodb database
+		dba show-credentials mongodb mg-demo
 
-		# Restart all mongodb databases
-		dba restart mongodb
+		# Print credentials of all mongodb databases
+		dba show-credentials mongodb
 
-		# Restart a postgres database
-		dba restart pg/postgres-demo
+		# Print credentials of a postgres database
+		dba show-credentials pg/postgres-demo
 
  		Valid resource types include:
     		* elasticsearch
@@ -87,7 +85,7 @@ func NewCmdShowCredentials(parent string, f cmdutil.Factory, streams genericclio
 
 	cmd := &cobra.Command{
 		Use:     "show-credentials (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME)",
-		Short:   i18n.T("Smartly restart the pods of the database."),
+		Short:   i18n.T("Prints credentials of the database."),
 		Long:    showCredLong + "\n\n" + cmdutil.SuggestAPIResources("kubectl"),
 		Example: showCredExample,
 		Run: func(cmd *cobra.Command, args []string) {
