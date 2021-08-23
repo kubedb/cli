@@ -18,7 +18,6 @@ package resumer
 
 import (
 	"context"
-	"time"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
@@ -82,7 +81,7 @@ func (e *MariaDBResumer) Resume(name, namespace string) (bool, error) {
 		}
 	}
 
-	return backupConfigFound, wait.PollImmediate(5*time.Second, 5*time.Minute, func() (done bool, err error) {
+	return backupConfigFound, wait.PollImmediate(ResumeInterval, ResumeTimeout, func() (done bool, err error) {
 		db, err = e.dbClient.MariaDBs(namespace).Get(context.TODO(), name, metav1.GetOptions{})
 		if err != nil {
 			return false, err
