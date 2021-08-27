@@ -126,12 +126,11 @@ const (
 	ElasticsearchAuthPluginXpack       ElasticsearchAuthPlugin = "X-Pack"
 )
 
-// +kubebuilder:validation:Enum=ElasticStack;OpenDistro;SearchGuard;KubeDB
+// +kubebuilder:validation:Enum=ElasticStack;OpenDistro;SearchGuard
 type ElasticsearchDistro string
 
 const (
 	ElasticsearchDistroElasticStack ElasticsearchDistro = "ElasticStack"
 	ElasticsearchDistroOpenDistro   ElasticsearchDistro = "OpenDistro"
 	ElasticsearchDistroSearchGuard  ElasticsearchDistro = "SearchGuard"
-	ElasticsearchDistroKubeDB       ElasticsearchDistro = "KubeDB"
 )

@@ -268,8 +268,6 @@ const (
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"
 	RedisRootUsername        = "root"
-	EnvRedisUser             = "USERNAME"
-	EnvRedisPassword         = "REDISCLI_AUTH"
 
 	// =========================== PgBouncer Constants ============================
 	PgBouncerUpstreamServerCA       = "upstream-server-ca.crt"
