@@ -19,7 +19,7 @@ require (
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
 	kmodules.xyz/client-go v0.0.0-20210827153326-54ead9c6225f
-	kmodules.xyz/custom-resources v0.0.0-20210812193424-1631fae03a1a
+	kmodules.xyz/custom-resources v0.0.0-20210824055127-e5a3d2d6c161
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210827175850-d00b079c067b
 	kmodules.xyz/objectstore-api v0.0.0-20210817052835-df749235585e // indirect
 	kubedb.dev/apimachinery v0.19.1-0.20210816225014-a8eb885ccaa2

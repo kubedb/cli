@@ -134,11 +134,15 @@ message MetricValue {
   // int() returns 1 if the expression is true otherwise 0,
   // example: int(phase == 'Running')
   //
-  // percentage(a, b) returns the value of (a * b%)
-  // example: percentage(replicas, maxUnavailable)
+  // percentage(percent, total, roundUp) returns the value of (percent * total%) when `percent` contains the percent(%) value.
+  // If percent represents an Integer value, then it will simply return it.
+  // roundUp is an optional field. By default, its value is false. If roundUp is set as `true`, the resultant value will be rounded up.
+  // example: (i) percentage("25%", 4) will return 1.
+  //         (ii) percentage("25%", 1 , true) will return 1 as roundUp is set as true.
+  //        (iii) percentage(2, 4) will return 2 as percent is representing an Integer value.
   //
-  // cpuCores() returns the cpu in unit core
-  // example: cpuCores(cpu), for cpu value 150m, it will return 0.15
+  // cpu_cores() returns the cpu in unit core
+  // example: cpu_cores(cpu), for cpu value 150m, it will return 0.15
   //
   // bytes() returns the memory size in byte
   // example: bytes(memory), for memory value 1 ki, it will return 1024
