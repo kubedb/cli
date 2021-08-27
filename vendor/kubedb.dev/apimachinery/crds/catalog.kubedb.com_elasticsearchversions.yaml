@@ -68,7 +68,6 @@ spec:
                 - ElasticStack
                 - OpenDistro
                 - SearchGuard
-                - KubeDB
                 type: string
               exporter:
                 properties:
