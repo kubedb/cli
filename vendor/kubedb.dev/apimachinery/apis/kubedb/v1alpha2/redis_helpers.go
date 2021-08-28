@@ -215,7 +215,15 @@ func (r *Redis) SetTLSDefaults() {
 }
 
 func (r *RedisSpec) GetPersistentSecrets() []string {
-	return nil
+	if r == nil {
+		return nil
+	}
+
+	var secrets []string
+	if r.AuthSecret != nil {
+		secrets = append(secrets, r.AuthSecret.Name)
+	}
+	return secrets
 }
 
 func (r *Redis) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels map[string]string, topology *core_util.Topology) {

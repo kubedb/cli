@@ -30,3 +30,13 @@ func (agent *AgentSpec) SetDefaults() {
 		}
 	}
 }
+
+func IsKnownAgentType(at AgentType) bool {
+	switch at {
+	case AgentPrometheus,
+		AgentPrometheusOperator,
+		AgentPrometheusBuiltin:
+		return true
+	}
+	return false
+}
