@@ -62,11 +62,27 @@ message ElasticsearchHorizontalScalingTopologySpec {
   // Number of master nodes
   optional int32 master = 1;
 
-  // Number of data nodes
-  optional int32 data = 2;
-
   // Number of ingest nodes
-  optional int32 ingest = 3;
+  optional int32 ingest = 2;
+
+  // Number of data nodes
+  optional int32 data = 3;
+
+  optional int32 dataContent = 4;
+
+  optional int32 dataHot = 5;
+
+  optional int32 dataWarm = 6;
+
+  optional int32 dataCold = 7;
+
+  optional int32 dataFrozen = 8;
+
+  optional int32 ml = 9;
+
+  optional int32 transform = 10;
+
+  optional int32 coordinating = 11;
 }
 
 // +kubebuilder:object:root=true
@@ -159,14 +175,27 @@ message ElasticsearchVerticalScalingSpec {
 
 // ElasticsearchVerticalScalingTopologySpec is the resource spec in the cluster topology mode
 message ElasticsearchVerticalScalingTopologySpec {
-  // Resource spec for master nodes
   optional k8s.io.api.core.v1.ResourceRequirements master = 1;
 
-  // Resource spec for data nodes
-  optional k8s.io.api.core.v1.ResourceRequirements data = 2;
+  optional k8s.io.api.core.v1.ResourceRequirements ingest = 2;
 
-  // Resource spec for ingest nodes
-  optional k8s.io.api.core.v1.ResourceRequirements ingest = 3;
+  optional k8s.io.api.core.v1.ResourceRequirements data = 3;
+
+  optional k8s.io.api.core.v1.ResourceRequirements dataContent = 4;
+
+  optional k8s.io.api.core.v1.ResourceRequirements dataHot = 5;
+
+  optional k8s.io.api.core.v1.ResourceRequirements dataWarm = 6;
+
+  optional k8s.io.api.core.v1.ResourceRequirements dataCold = 7;
+
+  optional k8s.io.api.core.v1.ResourceRequirements dataFrozen = 8;
+
+  optional k8s.io.api.core.v1.ResourceRequirements ml = 9;
+
+  optional k8s.io.api.core.v1.ResourceRequirements transform = 10;
+
+  optional k8s.io.api.core.v1.ResourceRequirements coordinating = 11;
 }
 
 // ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
@@ -183,11 +212,27 @@ message ElasticsearchVolumeExpansionTopologySpec {
   // volume specification for master nodes
   optional k8s.io.apimachinery.pkg.api.resource.Quantity master = 1;
 
-  // volume specification for data nodes
-  optional k8s.io.apimachinery.pkg.api.resource.Quantity data = 2;
-
   // volume specification for ingest nodes
-  optional k8s.io.apimachinery.pkg.api.resource.Quantity ingest = 3;
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity ingest = 2;
+
+  // volume specification for data nodes
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity data = 3;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity dataContent = 4;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity dataHot = 5;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity dataWarm = 6;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity dataCold = 7;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity dataFrozen = 8;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity ml = 9;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity transform = 10;
+
+  optional k8s.io.apimachinery.pkg.api.resource.Quantity coordinating = 11;
 }
 
 message EtcdCustomConfiguration {
