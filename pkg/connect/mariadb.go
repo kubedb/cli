@@ -41,14 +41,8 @@ import (
 
 func MariadbConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
+		dbName string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var mdConnectCmd = &cobra.Command{
 		Use: "mariadb",
@@ -62,6 +56,11 @@ func MariadbConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("Enter mariadb object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 			opts, err := newmariadbOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
@@ -81,8 +80,6 @@ func MariadbConnectCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mdConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mariadb object to connect to.")
-
 	return mdConnectCmd
 }
 
@@ -90,15 +87,9 @@ func MariadbExecCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName        string
 		mariadbDBName string
-		namespace     string
 		fileName      string
 		command       string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var mdExecCmd = &cobra.Command{
 		Use: "mariadb",
@@ -121,6 +112,10 @@ Examples:
 			}
 			dbName = args[0]
 
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 			opts, err := newmariadbOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
@@ -152,8 +147,6 @@ Examples:
 			tunnel.Close()
 		},
 	}
-
-	mdExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mariadb object to connect to.")
 
 	mdExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
 	mdExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")

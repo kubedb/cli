@@ -41,14 +41,8 @@ import (
 
 func MongoDBConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
+		dbName string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var mgConnectCmd = &cobra.Command{
 		Use: "mongodb",
@@ -66,6 +60,12 @@ kubectl dba connect mg <db-name> -n <db-namespace>`,
 				log.Fatal("Enter mongodb object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
 			opts, err := newMongodbOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
@@ -85,23 +85,15 @@ kubectl dba connect mg <db-name> -n <db-namespace>`,
 		},
 	}
 
-	mgConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mongodb object to connect to.")
-
 	return mgConnectCmd
 }
 
 func MongoDBExecCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
-		fileName  string
-		command   string
+		dbName   string
+		fileName string
+		command  string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var mgExecCmd = &cobra.Command{
 		Use: "mongodb",
@@ -124,6 +116,11 @@ Examples:
 				log.Fatal("Enter mongodb object's name as an argument. Your commands will be applied on a database inside it's primary pod")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 
 			opts, err := newMongodbOpts(f, dbName, namespace)
 			if err != nil {
@@ -157,7 +154,6 @@ Examples:
 		},
 	}
 
-	mgExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mongodb object to connect to.")
 	mgExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path of the script file")
 	mgExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")
 

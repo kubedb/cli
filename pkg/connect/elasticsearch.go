@@ -41,14 +41,8 @@ import (
 
 func ElasticSearchConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
+		dbName string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var esConnectCmd = &cobra.Command{
 		Use: "elasticsearch",
@@ -83,6 +77,11 @@ Example curl commands:
 				log.Fatal("enter elasticsearch object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 			opts, err := newElasticsearchOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
@@ -101,8 +100,6 @@ Example curl commands:
 			tunnel.Close()
 		},
 	}
-
-	esConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the elasticsearch object to connect to.")
 
 	return esConnectCmd
 }

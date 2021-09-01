@@ -1162,8 +1162,9 @@ k8s.io/utils v0.0.0-20201110183641-67b214c5f920/go.mod h1:jPW/WVKK9YHAvNhRxK0md/
 kmodules.xyz/apiversion v0.2.0/go.mod h1:oPX8g8LvlPdPX3Yc5YvCzJHQnw3YF/X4/jdW0b1am80=
 kmodules.xyz/client-go v0.0.0-20210617233340-13d22e91512b/go.mod h1:A6GAK6xP5zBuWK6A/vUkkjKzcuywkms7fIxRf5wblO4=
 kmodules.xyz/client-go v0.0.0-20210715065708-d4f0cc74ead1/go.mod h1:E/vGngai00UtVwP8R4PWpPUBF/EZa6Ub9WS5+tVcs4M=
-kmodules.xyz/client-go v0.0.0-20210827153326-54ead9c6225f h1:yesFlt5yHpnklVxbVZWOQD2lWB5ETu85e1FGHdAorwg=
 kmodules.xyz/client-go v0.0.0-20210827153326-54ead9c6225f/go.mod h1:0gkPeALtYjB27OHt4rd6+ZmMgoVTHVLtEJQeU23/gtA=
+kmodules.xyz/client-go v0.0.0-20210831030638-b1d662179991 h1:4DhBAGy8RbnPnZL7YICYkKr6usJmQWPSIKL5R27dLFM=
+kmodules.xyz/client-go v0.0.0-20210831030638-b1d662179991/go.mod h1:0gkPeALtYjB27OHt4rd6+ZmMgoVTHVLtEJQeU23/gtA=
 kmodules.xyz/constants v0.0.0-20210218100002-2c304bfda278/go.mod h1:DbiFk1bJ1KEO94t1SlAn7tzc+Zz95rSXgyUKa2nzPmY=
 kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4/go.mod h1:IIkUctlfoptoci0BOrsUf8ya+MOG5uaeh1PE4uzaIbA=
 kmodules.xyz/custom-resources v0.0.0-20210618003440-c6bb400da153/go.mod h1:/NLuNSf299U0XVuNEh2swtw3EczWFRL3Sx24WhNoWCM=

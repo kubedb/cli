@@ -39,14 +39,8 @@ import (
 
 func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
+		dbName string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var mcConnectCmd = &cobra.Command{
 		Use: "memcached",
@@ -60,6 +54,11 @@ func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("enter memcached object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 			opts, err := newMemcachedOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
@@ -78,8 +77,6 @@ func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
 			tunnel.Close()
 		},
 	}
-
-	mcConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the memcached object to connect to.")
 
 	return mcConnectCmd
 }
