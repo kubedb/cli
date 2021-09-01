@@ -44,13 +44,7 @@ func PostgresConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName         string
 		postgresDBName string
-		namespace      string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var pgConnectCmd = &cobra.Command{
 		Use: "postgres",
@@ -66,6 +60,12 @@ func PostgresConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("Enter postgres object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
 			opts, err := newPostgresOpts(f, dbName, namespace, postgresDBName)
 			if err != nil {
 				log.Fatalln(err)
@@ -85,8 +85,6 @@ func PostgresConnectCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	pgConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the postgres object to connect to.")
-
 	return pgConnectCmd
 }
 
@@ -94,15 +92,9 @@ func PostgresExecCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName         string
 		postgresDBName string
-		namespace      string
 		fileName       string
 		command        string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var pgExecCmd = &cobra.Command{
 		Use: "postgres",
@@ -126,6 +118,11 @@ Examples:
 				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 
 			opts, err := newPostgresOpts(f, dbName, namespace, postgresDBName)
 			if err != nil {
@@ -158,8 +155,6 @@ Examples:
 			tunnel.Close()
 		},
 	}
-
-	pgExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the postgres object to connect to.")
 
 	pgExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
 	pgExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")

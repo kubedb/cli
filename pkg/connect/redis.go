@@ -42,16 +42,10 @@ import (
 
 func RedisConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
-		keys      []string
-		argv      []string
+		dbName string
+		keys   []string
+		argv   []string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var rdConnectCmd = &cobra.Command{
 		Use: "redis",
@@ -65,6 +59,12 @@ func RedisConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("Enter redis object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
 			opts, err := newRedisOpts(f, dbName, namespace, keys, argv)
 			if err != nil {
 				log.Fatalln(err)
@@ -74,29 +74,20 @@ func RedisConnectCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal(err)
 			}
-
 		},
 	}
-
-	rdConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the redis object to connect to.")
 
 	return rdConnectCmd
 }
 
 func RedisExecCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
-		fileName  string
-		command   string
-		keys      []string
-		argv      []string
+		dbName   string
+		fileName string
+		command  string
+		keys     []string
+		argv     []string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var rdExecCmd = &cobra.Command{
 		Use: "redis",
@@ -121,6 +112,11 @@ Examples:
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 
 			opts, err := newRedisOpts(f, dbName, namespace, keys, argv)
 			if err != nil {
@@ -154,7 +150,6 @@ Examples:
 		},
 	}
 
-	rdExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the redis object to connect to.")
 	rdExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to lua script file")
 	rdExecCmd.Flags().StringArrayVarP(&keys, "keys", "k", []string{}, "keys to pass to the lua script, used in script as KEYS[*] and the flag can be specified multiple times with different keys. ")
 	rdExecCmd.Flags().StringArrayVarP(&argv, "argv", "a", []string{}, "args to pass to the lua script, used in script as ARGV[*] and the flag can be specified multiple times with different args. ")

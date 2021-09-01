@@ -41,14 +41,8 @@ import (
 
 func MySQLConnectCMD(f cmdutil.Factory) *cobra.Command {
 	var (
-		dbName    string
-		namespace string
+		dbName string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var myConnectCmd = &cobra.Command{
 		Use: "mysql",
@@ -62,6 +56,12 @@ func MySQLConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("Enter mysql object's name as an argument")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
 			opts, err := newmysqlOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
@@ -81,8 +81,6 @@ func MySQLConnectCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	myConnectCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mysql object to connect to.")
-
 	return myConnectCmd
 }
 
@@ -90,15 +88,9 @@ func MySQLExecCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName      string
 		mysqlDBName string
-		namespace   string
 		fileName    string
 		command     string
 	)
-
-	currentNamespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		klog.Error(err, "failed to get current namespace")
-	}
 
 	var myExecCmd = &cobra.Command{
 		Use: "mysql",
@@ -120,6 +112,11 @@ Examples:
 				log.Fatal("Enter mysql object's name as an argument. Your commands will be applied on a database inside it's primary pod")
 			}
 			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 
 			opts, err := newmysqlOpts(f, dbName, namespace)
 			if err != nil {
@@ -152,8 +149,6 @@ Examples:
 			tunnel.Close()
 		},
 	}
-
-	myExecCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", currentNamespace, "namespace of the mysql object to connect to.")
 
 	myExecCmd.Flags().StringVarP(&fileName, "file", "f", "", "path to command file")
 	myExecCmd.Flags().StringVarP(&command, "command", "c", "", "command to execute")

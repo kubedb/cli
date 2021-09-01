@@ -538,6 +538,8 @@ k8s.io/client-go/util/jsonpath
 k8s.io/client-go/util/keyutil
 k8s.io/client-go/util/workqueue
 # k8s.io/component-base v0.21.1 => k8s.io/component-base v0.21.1
+## explicit
+k8s.io/component-base/cli/flag
 k8s.io/component-base/version
 # k8s.io/klog/v2 v2.8.0
 ## explicit
@@ -576,7 +578,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210827153326-54ead9c6225f
+# kmodules.xyz/client-go v0.0.0-20210831030638-b1d662179991
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1

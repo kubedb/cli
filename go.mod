@@ -16,9 +16,10 @@ require (
 	k8s.io/apimachinery v0.21.1
 	k8s.io/cli-runtime v0.21.1
 	k8s.io/client-go v0.21.1
+	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20210827153326-54ead9c6225f
+	kmodules.xyz/client-go v0.0.0-20210831030638-b1d662179991
 	kmodules.xyz/custom-resources v0.0.0-20210824055127-e5a3d2d6c161
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210828012421-78a792a84818
 	kmodules.xyz/objectstore-api v0.0.0-20210817052835-df749235585e // indirect
