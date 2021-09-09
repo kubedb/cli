@@ -1740,7 +1740,6 @@ func (in *PgBouncerStatus) DeepCopy() *PgBouncerStatus {
 func (in *PostgreLeaderElectionConfig) DeepCopyInto(out *PostgreLeaderElectionConfig) {
 	*out = *in
 	out.Period = in.Period
-	in.Resources.DeepCopyInto(&out.Resources)
 	return
 }
 
@@ -1836,7 +1835,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 	if in.LeaderElection != nil {
 		in, out := &in.LeaderElection, &out.LeaderElection
 		*out = new(PostgreLeaderElectionConfig)
-		(*in).DeepCopyInto(*out)
+		**out = **in
 	}
 	if in.AuthSecret != nil {
 		in, out := &in.AuthSecret, &out.AuthSecret
