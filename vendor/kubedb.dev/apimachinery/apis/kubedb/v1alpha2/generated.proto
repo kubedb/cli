@@ -95,6 +95,21 @@ message ConnectionPoolConfig {
   optional string ignoreStartupParameters = 14;
 }
 
+// CoordinatorSpec defines attributes of the coordinator container
+message CoordinatorSpec {
+  // Compute Resources required by coordinator container.
+  // Cannot be updated.
+  // More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  // +optional
+  optional k8s.io.api.core.v1.ResourceRequirements resources = 1;
+
+  // Security options the coordinator container should run with.
+  // More info: https://kubernetes.io/docs/concepts/policy/security-context/
+  // More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  // +optional
+  optional k8s.io.api.core.v1.SecurityContext securityContext = 2;
+}
+
 message Databases {
   // Alias to uniquely identify a target database running inside a specific Postgres instance.
   optional string alias = 1;
@@ -553,6 +568,10 @@ message MariaDBSpec {
   // TerminationPolicy controls the delete operation for database
   // +optional
   optional string terminationPolicy = 14;
+
+  // Coordinator defines attributes of the coordinator container
+  // +optional
+  optional CoordinatorSpec coordinator = 15;
 }
 
 message MariaDBStatus {
@@ -820,6 +839,10 @@ message MongoDBSpec {
   // StorageEngine can be wiredTiger (default) or inMemory
   // See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
   optional string storageEngine = 19;
+
+  // Coordinator defines attributes of the coordinator container
+  // +optional
+  optional CoordinatorSpec coordinator = 20;
 }
 
 message MongoDBStatus {
@@ -940,6 +963,10 @@ message MySQLSpec {
   // +optional
   // +default="DNS"
   optional string useAddressType = 17;
+
+  // Coordinator defines attributes of the coordinator container
+  // +optional
+  optional CoordinatorSpec coordinator = 18;
 }
 
 message MySQLStatus {
@@ -1270,6 +1297,10 @@ message PostgresSpec {
   // TerminationPolicy controls the delete operation for database
   // +optional
   optional string terminationPolicy = 18;
+
+  // Coordinator defines attributes of the coordinator container
+  // +optional
+  optional CoordinatorSpec coordinator = 19;
 }
 
 message PostgresStatus {
@@ -1470,6 +1501,10 @@ message RedisSpec {
   // TerminationPolicy controls the delete operation for database
   // +optional
   optional string terminationPolicy = 15;
+
+  // Coordinator defines attributes of the coordinator container
+  // +optional
+  optional CoordinatorSpec coordinator = 16;
 }
 
 message RedisStatus {

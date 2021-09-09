@@ -166,13 +166,28 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 
 	if p.Spec.LeaderElection == nil {
 		p.Spec.LeaderElection = &PostgreLeaderElectionConfig{
+			// The upper limit of election timeout is 50000ms (50s), which should only be used when deploying a
+			// globally-distributed etcd cluster. A reasonable round-trip time for the continental United States is around 130-150ms,
+			// and the time between US and Japan is around 350-400ms. If the network has uneven performance or regular packet
+			// delays/loss then it is possible that a couple of retries may be necessary to successfully send a packet.
+			// So 5s is a safe upper limit of global round-trip time. As the election timeout should be an order of magnitude
+			// bigger than broadcast time, in the case of ~5s for a globally distributed cluster, then 50 seconds becomes
+			// a reasonable maximum.
+			Period: metav1.Duration{Duration: 300 * time.Millisecond},
+			// the amount of HeartbeatTick can be missed before the failOver
+			ElectionTick: 10,
+			// this value should be one.
+			HeartbeatTick: 1,
 			//we have set this default to 33554432. if the difference between primary and replica is more then this,
 			//the replica node is going to manually sync itself.
-			Period:                   metav1.Duration{Duration: 100 * time.Millisecond},
 			MaximumLagBeforeFailover: 32 * 1024 * 1024,
-			ElectionTick:             10,
-			HeartbeatTick:            1,
 		}
+	}
+	if len(p.Spec.Coordinator.Resources.Limits) == 0 {
+		p.Spec.Coordinator.Resources.Limits = p.Spec.LeaderElection.Resources.Limits
+	}
+	if len(p.Spec.Coordinator.Resources.Requests) == 0 {
+		p.Spec.Coordinator.Resources.Requests = p.Spec.LeaderElection.Resources.Requests
 	}
 
 	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {

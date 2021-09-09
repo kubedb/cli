@@ -122,3 +122,18 @@ type KernelSettings struct {
 	// +optional
 	Sysctls []core.Sysctl `json:"sysctls,omitempty" protobuf:"bytes,2,rep,name=sysctls"`
 }
+
+// CoordinatorSpec defines attributes of the coordinator container
+type CoordinatorSpec struct {
+	// Compute Resources required by coordinator container.
+	// Cannot be updated.
+	// More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,1,opt,name=resources"`
+
+	// Security options the coordinator container should run with.
+	// More info: https://kubernetes.io/docs/concepts/policy/security-context/
+	// More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+	// +optional
+	SecurityContext *core.SecurityContext `json:"securityContext,omitempty" protobuf:"bytes,2,opt,name=securityContext"`
+}

@@ -196,6 +196,11 @@ message MariaDBVersion {
   optional MariaDBVersionSpec spec = 2;
 }
 
+// MariaDBVersionCoordinator is the MariaDB Coordinator image
+message MariaDBVersionCoordinator {
+  optional string image = 1;
+}
+
 // MariaDBVersionDatabase is the mariadb image
 message MariaDBVersionDatabase {
   optional string image = 1;
@@ -235,20 +240,23 @@ message MariaDBVersionSpec {
   // Exporter Image
   optional MariaDBVersionExporter exporter = 3;
 
+  // Coordinator Image
+  optional MariaDBVersionCoordinator coordinator = 4;
+
   // Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
   // +optional
-  optional bool deprecated = 4;
+  optional bool deprecated = 5;
 
   // Init container Image
   // TODO: remove if not needed
-  optional MariaDBVersionInitContainer initContainer = 5;
+  optional MariaDBVersionInitContainer initContainer = 6;
 
   // PSP names
-  optional MariaDBVersionPodSecurityPolicy podSecurityPolicies = 6;
+  optional MariaDBVersionPodSecurityPolicy podSecurityPolicies = 7;
 
   // Stash defines backup and restore task definitions.
   // +optional
-  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 7;
+  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 8;
 }
 
 // +kubebuilder:object:root=true
