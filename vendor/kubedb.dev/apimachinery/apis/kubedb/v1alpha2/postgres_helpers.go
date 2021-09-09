@@ -183,12 +183,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 			MaximumLagBeforeFailover: 32 * 1024 * 1024,
 		}
 	}
-	if len(p.Spec.Coordinator.Resources.Limits) == 0 {
-		p.Spec.Coordinator.Resources.Limits = p.Spec.LeaderElection.Resources.Limits
-	}
-	if len(p.Spec.Coordinator.Resources.Requests) == 0 {
-		p.Spec.Coordinator.Resources.Requests = p.Spec.LeaderElection.Resources.Requests
-	}
+	SetDefaultResourceLimits(&p.Spec.Coordinator.Resources, CoordinatorDefaultResources)
 
 	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
