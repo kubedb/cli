@@ -11,7 +11,7 @@ require (
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
 	gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
-	gomodules.xyz/x v0.0.7
+	gomodules.xyz/x v0.0.8
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
 	k8s.io/cli-runtime v0.21.1
@@ -19,11 +19,11 @@ require (
 	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20210831030638-b1d662179991
-	kmodules.xyz/custom-resources v0.0.0-20210824055127-e5a3d2d6c161
-	kmodules.xyz/monitoring-agent-api v0.0.0-20210828012421-78a792a84818
-	kmodules.xyz/objectstore-api v0.0.0-20210817052835-df749235585e // indirect
-	kubedb.dev/apimachinery v0.20.1-0.20210828012852-356e942f35d1
+	kmodules.xyz/client-go v0.0.0-20210909114628-15cac6c74063
+	kmodules.xyz/custom-resources v0.0.0-20210829135624-c63be82e13c0
+	kmodules.xyz/monitoring-agent-api v0.0.0-20210902163558-0323c6034f70
+	kmodules.xyz/objectstore-api v0.0.0-20210829122106-d39859fc2d56 // indirect
+	kubedb.dev/apimachinery v0.20.1-0.20210909120507-76460f615ab2
 	stash.appscode.dev/apimachinery v0.14.2-0.20210715200631-5399637188c0
 )
 

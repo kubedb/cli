@@ -129,6 +129,10 @@ type MySQLSpec struct {
 	// +optional
 	// +default="DNS"
 	UseAddressType AddressType `json:"useAddressType,omitempty" protobuf:"bytes,17,opt,name=useAddressType,casttype=AddressType"`
+
+	// Coordinator defines attributes of the coordinator container
+	// +optional
+	Coordinator CoordinatorSpec `json:"coordinator,omitempty" protobuf:"bytes,18,opt,name=coordinator"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

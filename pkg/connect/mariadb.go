@@ -230,7 +230,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(api.MariaDBArchiverCert)
+		secretName := db.CertificateName(api.MariaDBClientCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err

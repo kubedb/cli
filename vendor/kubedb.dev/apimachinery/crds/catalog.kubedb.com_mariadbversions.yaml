@@ -45,6 +45,13 @@ spec:
             type: object
           spec:
             properties:
+              coordinator:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               db:
                 properties:
                   image:

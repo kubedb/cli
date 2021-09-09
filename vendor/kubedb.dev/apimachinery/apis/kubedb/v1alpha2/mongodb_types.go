@@ -118,6 +118,10 @@ type MongoDBSpec struct {
 	// StorageEngine can be wiredTiger (default) or inMemory
 	// See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
 	StorageEngine StorageEngine `json:"storageEngine,omitempty" protobuf:"bytes,19,opt,name=storageEngine,casttype=StorageEngine"`
+
+	// Coordinator defines attributes of the coordinator container
+	// +optional
+	Coordinator CoordinatorSpec `json:"coordinator,omitempty" protobuf:"bytes,20,opt,name=coordinator"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

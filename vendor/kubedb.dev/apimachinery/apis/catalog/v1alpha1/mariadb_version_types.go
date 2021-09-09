@@ -56,17 +56,19 @@ type MariaDBVersionSpec struct {
 	DB MariaDBVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
 	// Exporter Image
 	Exporter MariaDBVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	// Coordinator Image
+	Coordinator MariaDBVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,4,opt,name=coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,5,opt,name=deprecated"`
 	// Init container Image
 	// TODO: remove if not needed
-	InitContainer MariaDBVersionInitContainer `json:"initContainer" protobuf:"bytes,5,opt,name=initContainer"`
+	InitContainer MariaDBVersionInitContainer `json:"initContainer" protobuf:"bytes,6,opt,name=initContainer"`
 	// PSP names
-	PodSecurityPolicies MariaDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,6,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies MariaDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,7,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,8,opt,name=stash"`
 }
 
 // MariaDBVersionDatabase is the mariadb image
@@ -81,6 +83,11 @@ type MariaDBVersionExporter struct {
 
 // MariaDBVersionInitContainer is the MariaDB Container initializer
 type MariaDBVersionInitContainer struct {
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+}
+
+// MariaDBVersionCoordinator is the MariaDB Coordinator image
+type MariaDBVersionCoordinator struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
