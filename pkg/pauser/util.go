@@ -19,6 +19,7 @@ package pauser
 import (
 	"context"
 
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"stash.appscode.dev/apimachinery/apis"
 	stash "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -29,6 +30,9 @@ import (
 func PauseBackupConfiguration(stashClient scs.StashV1beta1Interface, dbMeta metav1.ObjectMeta) (bool, error) {
 	configs, err := stashClient.BackupConfigurations(dbMeta.Namespace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
+		if errors.IsNotFound(err) {
+			return false, nil
+		}
 		return false, err
 	}
 
