@@ -482,8 +482,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersionProxysql":               schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionProxysql(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersionSpec":                   schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersion":                          schema_apimachinery_apis_catalog_v1alpha1_RedisVersion(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionCoordinator":               schema_apimachinery_apis_catalog_v1alpha1_RedisVersionCoordinator(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase":                  schema_apimachinery_apis_catalog_v1alpha1_RedisVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter":                  schema_apimachinery_apis_catalog_v1alpha1_RedisVersionExporter(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionInitContainer":             schema_apimachinery_apis_catalog_v1alpha1_RedisVersionInitContainer(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionList":                      schema_apimachinery_apis_catalog_v1alpha1_RedisVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy":         schema_apimachinery_apis_catalog_v1alpha1_RedisVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionSpec":                      schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref),
@@ -22632,6 +22634,27 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersion(ref common.Reference
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionCoordinator(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RedisVersionCoordinator is the Redis coordinator image",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionDatabase(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -22658,6 +22681,27 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionExporter(ref common.R
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Description: "RedisVersionExporter is the image for the Redis exporter",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionInitContainer(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RedisVersionInitContainer is the Redis init container image",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"image": {
@@ -22759,6 +22803,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref common.Refer
 							Format:      "",
 						},
 					},
+					"initContainer": {
+						SchemaProps: spec.SchemaProps{
+							Description: "init container image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionInitContainer"),
+						},
+					},
 					"db": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database Image",
@@ -22771,6 +22822,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref common.Refer
 							Description: "Exporter Image",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter"),
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Coordinator Image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionCoordinator"),
 						},
 					},
 					"deprecated": {
@@ -22799,7 +22857,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy"},
 	}
 }
 

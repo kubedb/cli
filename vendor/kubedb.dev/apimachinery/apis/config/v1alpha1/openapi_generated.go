@@ -412,6 +412,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                        schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.GaleraArbitratorConfiguration":  schema_apimachinery_apis_config_v1alpha1_GaleraArbitratorConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.MongoDBConfiguration":           schema_apimachinery_apis_config_v1alpha1_MongoDBConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/config/v1alpha1.RedisConfiguration":             schema_apimachinery_apis_config_v1alpha1_RedisConfiguration(ref),
 	}
 }
 
@@ -20128,5 +20129,47 @@ func schema_apimachinery_apis_config_v1alpha1_MongoDBConfiguration(ref common.Re
 		},
 		Dependencies: []string{
 			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"},
+	}
+}
+
+func schema_apimachinery_apis_config_v1alpha1_RedisConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RedisConfiguration defines a Redis appBinding configuration.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clientCertSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientCertSecret is the client secret name which needs to provide when the Redis client need to authenticate with client key and cert. It will be used when `tls-auth-clients` value is set to `required` or `yes`.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"stash": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stash defines backup and restore task definitions.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"},
 	}
 }

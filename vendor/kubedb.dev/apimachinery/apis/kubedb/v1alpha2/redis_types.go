@@ -31,12 +31,13 @@ const (
 	ResourcePluralRedis   = "redises"
 )
 
-// +kubebuilder:validation:Enum=Standalone;Cluster
+// +kubebuilder:validation:Enum=Standalone;Cluster;Sentinel
 type RedisMode string
 
 const (
 	RedisModeStandalone RedisMode = "Standalone"
 	RedisModeCluster    RedisMode = "Cluster"
+	RedisModeSentinel   RedisMode = "Sentinel"
 )
 
 // Redis defines a Redis database.
@@ -69,53 +70,55 @@ type RedisSpec struct {
 	// start in cluster mode
 	Mode RedisMode `json:"mode,omitempty" protobuf:"bytes,3,opt,name=mode,casttype=RedisMode"`
 
+	SentinelRef *RedisSentinelRef `json:"sentinelRef,omitempty" protobuf:"bytes,4,opt,name=sentinelRef"`
+
 	// Redis cluster configuration for running redis servers in cluster mode. Required if Mode is set to "Cluster"
-	Cluster *RedisClusterSpec `json:"cluster,omitempty" protobuf:"bytes,4,opt,name=cluster"`
+	Cluster *RedisClusterSpec `json:"cluster,omitempty" protobuf:"bytes,5,opt,name=cluster"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,5,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,6,opt,name=storageType,casttype=StorageType"`
 
 	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,6,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,7,opt,name=storage"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,7,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,8,opt,name=authSecret"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,8,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,9,opt,name=init"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,9,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,10,opt,name=monitor"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e redis.conf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,10,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,11,opt,name=configSecret"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,11,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,12,opt,name=podTemplate"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,12,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,13,rep,name=serviceTemplates"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,13,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,14,opt,name=tls"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,14,opt,name=halted"`
+	Halted bool `json:"halted,omitempty" protobuf:"varint,15,opt,name=halted"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,15,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,16,opt,name=terminationPolicy,casttype=TerminationPolicy"`
 
 	// Coordinator defines attributes of the coordinator container
 	// +optional
-	Coordinator CoordinatorSpec `json:"coordinator,omitempty" protobuf:"bytes,16,opt,name=coordinator"`
+	Coordinator CoordinatorSpec `json:"coordinator,omitempty" protobuf:"bytes,17,opt,name=coordinator"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter
@@ -133,6 +136,14 @@ type RedisClusterSpec struct {
 
 	// Number of replica(s) per master node. If not specified, defaults to 1.
 	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+}
+
+type RedisSentinelRef struct {
+	// Name of the refereed sentinel
+	Name string `json:"name,omitempty" protobuf:"bytes,1,opt,name=name"`
+
+	// Namespace where refereed sentinel has been deployed
+	Namespace string `json:"namespace,omitempty" protobuf:"bytes,2,opt,name=namespace"`
 }
 
 type RedisStatus struct {

@@ -261,6 +261,10 @@ const (
 	RedisDatabasePort           = 6379
 	RedisGossipPortName         = "gossip"
 	RedisGossipPort             = 16379
+	RedisSentinelPortName       = "sentinel"
+	RedisScriptVolumeName       = "script-vol"
+	RedisScriptVolumePath       = "/scripts"
+	RedisSentinelPort           = 26379
 
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"

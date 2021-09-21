@@ -39,3 +39,5 @@ type PostgresExpansion interface{}
 type ProxySQLExpansion interface{}
 
 type RedisExpansion interface{}
+
+type RedisSentinelExpansion interface{}
