@@ -52,22 +52,36 @@ type RedisVersion struct {
 type RedisVersionSpec struct {
 	// Version
 	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	//init container image
+	InitContainer RedisVersionInitContainer `json:"initContainer,omitempty" protobuf:"bytes,2,opt,name=initContainer"`
 	// Database Image
-	DB RedisVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
+	DB RedisVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
 	// Exporter Image
-	Exporter RedisVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	Exporter RedisVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
+	// Coordinator Image
+	Coordinator RedisVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,5,opt,name=coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
 	// PSP names
-	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,5,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,6,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,8,opt,name=stash"`
+}
+
+// RedisVersionInitContainer is the Redis init container image
+type RedisVersionInitContainer struct {
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
 // RedisVersionDatabase is the Redis Database image
 type RedisVersionDatabase struct {
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+}
+
+// RedisVersionCoordinator is the Redis coordinator image
+type RedisVersionCoordinator struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 

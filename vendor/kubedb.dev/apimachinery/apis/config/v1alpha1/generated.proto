@@ -21,6 +21,7 @@ syntax = "proto2";
 
 package kubedb.dev.apimachinery.apis.config.v1alpha1;
 
+import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
@@ -73,5 +74,17 @@ message MongoDBConfiguration {
   // Stash defines backup and restore task definitions.
   // +optional
   optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 3;
+}
+
+// RedisConfiguration defines a Redis appBinding configuration.
+message RedisConfiguration {
+  // ClientCertSecret is the client secret name which needs to provide when the Redis client need to authenticate with client key and cert.
+  // It will be used when `tls-auth-clients` value is set to `required` or `yes`.
+  // +optional
+  optional k8s.io.api.core.v1.LocalObjectReference clientCertSecret = 1;
+
+  // Stash defines backup and restore task definitions.
+  // +optional
+  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 2;
 }
 

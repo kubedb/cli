@@ -743,6 +743,11 @@ message RedisVersion {
   optional RedisVersionSpec spec = 2;
 }
 
+// RedisVersionCoordinator is the Redis coordinator image
+message RedisVersionCoordinator {
+  optional string image = 1;
+}
+
 // RedisVersionDatabase is the Redis Database image
 message RedisVersionDatabase {
   optional string image = 1;
@@ -750,6 +755,11 @@ message RedisVersionDatabase {
 
 // RedisVersionExporter is the image for the Redis exporter
 message RedisVersionExporter {
+  optional string image = 1;
+}
+
+// RedisVersionInitContainer is the Redis init container image
+message RedisVersionInitContainer {
   optional string image = 1;
 }
 
@@ -771,22 +781,28 @@ message RedisVersionSpec {
   // Version
   optional string version = 1;
 
+  // init container image
+  optional RedisVersionInitContainer initContainer = 2;
+
   // Database Image
-  optional RedisVersionDatabase db = 2;
+  optional RedisVersionDatabase db = 3;
 
   // Exporter Image
-  optional RedisVersionExporter exporter = 3;
+  optional RedisVersionExporter exporter = 4;
+
+  // Coordinator Image
+  optional RedisVersionCoordinator coordinator = 5;
 
   // Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
   // +optional
-  optional bool deprecated = 4;
+  optional bool deprecated = 6;
 
   // PSP names
-  optional RedisVersionPodSecurityPolicy podSecurityPolicies = 5;
+  optional RedisVersionPodSecurityPolicy podSecurityPolicies = 7;
 
   // Stash defines backup and restore task definitions.
   // +optional
-  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 6;
+  optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 8;
 }
 
 // ReplicationModeDetector is the image for the MySQL replication mode detector

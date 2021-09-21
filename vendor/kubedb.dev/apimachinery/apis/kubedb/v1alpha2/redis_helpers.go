@@ -89,6 +89,10 @@ func (r Redis) ServiceName() string {
 	return r.OffshootName()
 }
 
+func (r Redis) StandbyServiceName() string {
+	return meta_util.NameWithPrefix(r.ServiceName(), "standby")
+}
+
 func (r Redis) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(r.ServiceName(), "pods")
 }
