@@ -54,4 +54,5 @@ const (
 	FailedToAddTLSConfig                   = "FailedToAddTLSConfig"
 	SuccessfullyIssuedCertificates         = "SuccessfullyIssuedCertificates"
 	FailedToIssueCertificates              = "FailedToIssueCertificates"
+	SuccessfullyReconfiguredTLS            = "SuccessfullyReconfiguredTLS"
 )
