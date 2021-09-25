@@ -22316,6 +22316,12 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBVolumeExpansionSpec(ref common
 				Description: "MongoDBVolumeExpansionSpec is the spec for mongodb volume expansion",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"standalone": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),

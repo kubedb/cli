@@ -699,6 +699,9 @@ message MongoDBVerticalScalingSpec {
 
 // MongoDBVolumeExpansionSpec is the spec for mongodb volume expansion
 message MongoDBVolumeExpansionSpec {
+  // +kubebuilder:default:="Online"
+  optional string mode = 5;
+
   optional k8s.io.apimachinery.pkg.api.resource.Quantity standalone = 1;
 
   optional k8s.io.apimachinery.pkg.api.resource.Quantity replicaSet = 4;

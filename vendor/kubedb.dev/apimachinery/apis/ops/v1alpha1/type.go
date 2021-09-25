@@ -215,6 +215,16 @@ const (
 	OpsRequestTypeReconfigureTLSs OpsRequestType = "ReconfigureTLS"
 )
 
+// +kubebuilder:validation:Enum=Offline;Online
+type VolumeExpansionMode string
+
+const (
+	// used to define a Online volume expansion mode
+	VolumeExpansionModeOnline VolumeExpansionMode = "Online"
+	// used to define a Offline volume expansion mode
+	VolumeExpansionModeOffline VolumeExpansionMode = "Offline"
+)
+
 type RestartSpec struct {
 }
 
