@@ -1172,8 +1172,8 @@ kmodules.xyz/constants v0.0.0-20210218100002-2c304bfda278/go.mod h1:DbiFk1bJ1KEO
 kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4/go.mod h1:IIkUctlfoptoci0BOrsUf8ya+MOG5uaeh1PE4uzaIbA=
 kmodules.xyz/custom-resources v0.0.0-20210618003440-c6bb400da153/go.mod h1:/NLuNSf299U0XVuNEh2swtw3EczWFRL3Sx24WhNoWCM=
 kmodules.xyz/custom-resources v0.0.0-20210824055127-e5a3d2d6c161/go.mod h1:VYtz1fgHgLqCk+sdSUGBClfZfJ6z4873wB5MYOXxpS8=
-kmodules.xyz/custom-resources v0.0.0-20211007064058-70fba50e58a4 h1:mRmwqv3kQTzL9/kccHztRJFZU2Ks2MHhIxBJi3yQi6w=
-kmodules.xyz/custom-resources v0.0.0-20211007064058-70fba50e58a4/go.mod h1:pGabego8q4oi/2sNjhdtFkgVaVw4AyGv14GO6VtAjTw=
+kmodules.xyz/custom-resources v0.0.0-20211007080833-72bd9e8cae6e h1:0IEUFAJPgwPx3+Zb1BMcHLywKhJtXMk6YCHNsjWJwYQ=
+kmodules.xyz/custom-resources v0.0.0-20211007080833-72bd9e8cae6e/go.mod h1:pGabego8q4oi/2sNjhdtFkgVaVw4AyGv14GO6VtAjTw=
 kmodules.xyz/monitoring-agent-api v0.0.0-20210618005119-a8c212adc2bf/go.mod h1:QsbPe5SefM7XmLzJgdMX/1iXxwqAC1Do1eHa98TCq3k=
 kmodules.xyz/monitoring-agent-api v0.0.0-20210902163558-0323c6034f70/go.mod h1:08pBqfEuy29EjhaMrHB2XFy2iekoFi7AjaXcJS+xAck=
 kmodules.xyz/monitoring-agent-api v0.0.0-20210928135619-38ca075a2dbd h1:G1HkRXnQx2H63HFRrY+4oWPJg78W2RnzepJqjm8KT/M=
