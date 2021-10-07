@@ -449,7 +449,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQL":                          schema_apimachinery_apis_kubedb_v1alpha2_MySQL(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLClusterTopology":           schema_apimachinery_apis_kubedb_v1alpha2_MySQLClusterTopology(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLGroupSpec":                 schema_apimachinery_apis_kubedb_v1alpha2_MySQLGroupSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLInnoDBClusterSpec":         schema_apimachinery_apis_kubedb_v1alpha2_MySQLInnoDBClusterSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLList":                      schema_apimachinery_apis_kubedb_v1alpha2_MySQLList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLRouterSpec":                schema_apimachinery_apis_kubedb_v1alpha2_MySQLRouterSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLSpec":                      schema_apimachinery_apis_kubedb_v1alpha2_MySQLSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLStatus":                    schema_apimachinery_apis_kubedb_v1alpha2_MySQLStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec":       schema_apimachinery_apis_kubedb_v1alpha2_NamedServiceTemplateSpec(ref),
@@ -22338,11 +22340,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLClusterTopology(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLGroupSpec"),
 						},
 					},
+					"innoDBCluster": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InnoDBCluster replication info for MySQL InnodbCluster",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLInnoDBClusterSpec"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLGroupSpec"},
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLGroupSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLInnoDBClusterSpec"},
 	}
 }
 
@@ -22369,6 +22377,32 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLGroupSpec(ref common.Referenc
 				},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MySQLInnoDBClusterSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"router": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLRouterSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLRouterSpec"},
 	}
 }
 
@@ -22417,6 +22451,32 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLList(ref common.ReferenceCall
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQL"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MySQLRouterSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose MySQL router",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"},
 	}
 }
 

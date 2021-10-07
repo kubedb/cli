@@ -162,9 +162,13 @@ const (
 	// =========================== MySQL Constants ============================
 	MySQLMetricsExporterConfigSecretSuffix = "metrics-exporter-config"
 	MySQLDatabasePortName                  = "db"
+	MySQLRouterReadWritePortName           = "rw"
+	MySQLRouterReadOnlyPortName            = "ro"
 	MySQLPrimaryServicePortName            = "primary"
 	MySQLStandbyServicePortName            = "standby"
 	MySQLDatabasePort                      = 3306
+	MySQLRouterReadWritePort               = 6446
+	MySQLRouterReadOnlyPort                = 6447
 	MySQLGroupComPort                      = 33060
 	MySQLMaxGroupMembers                   = 9
 	// The recommended MySQL server version for group replication (GR)
@@ -179,6 +183,12 @@ const (
 	MySQLTLSConfigTrue       = "true"
 	MySQLTLSConfigFalse      = "false"
 	MySQLTLSConfigPreferred  = "preferred"
+
+	MySQLRouterContainerName = "mysql-router"
+
+	MySQLComponentKey    = MySQLKey + "/component"
+	MySQLComponentDB     = "database"
+	MySQLComponentRouter = "router"
 
 	// =========================== PerconaXtraDB Constants ============================
 	PerconaXtraDBClusterRecommendedVersion    = "5.7"
@@ -217,7 +227,6 @@ const (
 	PostgresDatabasePort             = 5432
 	PostgresPodPrimary               = "primary"
 	PostgresPodStandby               = "standby"
-	PostgresLabelRole                = kubedb.GroupName + "/role"
 	EnvPostgresUser                  = "POSTGRES_USER"
 	EnvPostgresPassword              = "POSTGRES_PASSWORD"
 	PostgresCoordinatorContainerName = "pg-coordinator"
@@ -297,6 +306,8 @@ const (
 	DatabaseAcceptingConnection = "AcceptingConnection"
 	// used for Databases that report status OK (also implies that we can connect to it)
 	DatabaseReady = "Ready"
+	// used for database that reports ok when all the instances are available
+	ServerReady = "ServerReady"
 	// used for Databases that are paused
 	DatabasePaused = "Paused"
 	// used for Databases that are halted

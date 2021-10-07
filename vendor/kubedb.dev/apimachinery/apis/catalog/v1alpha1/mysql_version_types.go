@@ -59,8 +59,12 @@ type MySQLVersionSpec struct {
 	DB MySQLVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
 	// Exporter Image
 	Exporter MySQLVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
+	// Coordinator Image
+	// +optional
+	Coordinator MySQLVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,13,opt,name=coordinator"`
 	// ReplicationModeDetector Image
-	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector" protobuf:"bytes,5,opt,name=replicationModeDetector"`
+	// +optional
+	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector,omitempty" protobuf:"bytes,5,opt,name=replicationModeDetector"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
@@ -73,6 +77,11 @@ type MySQLVersionSpec struct {
 	// Stash defines backup and restore task definitions.
 	// +optional
 	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,10,opt,name=stash"`
+	// Router image
+	// +optional
+	Router MySQLVersionRouter `json:"router,omitempty" protobuf:"bytes,11,opt,name=router"`
+	// +optional
+	RouterInitContainer MySQLVersionRouterInitContainer `json:"routerInitContainer,omitempty" protobuf:"bytes,12,opt,name=routerInitContainer"`
 }
 
 // MySQLVersionDatabase is the MySQL Database image
@@ -85,8 +94,24 @@ type MySQLVersionExporter struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 
+// MySQLVersionCoordinator is the image for coordinator
+type MySQLVersionCoordinator struct {
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+}
+
 // MySQLVersionInitContainer is the MySQL Container initializer
 type MySQLVersionInitContainer struct {
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+}
+
+// MySQLVersionRouter is the MySQL Router lightweight middleware
+//that provides transparent routing between your application and back-end MySQL Servers
+type MySQLVersionRouter struct {
+	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+}
+
+// MySQLVersionRouterInitContainer is mysql router init container
+type MySQLVersionRouterInitContainer struct {
 	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
 }
 

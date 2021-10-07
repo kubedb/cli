@@ -448,11 +448,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionSpec":                    schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints":               schema_apimachinery_apis_catalog_v1alpha1_MySQLUpgradeConstraints(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersion":                          schema_apimachinery_apis_catalog_v1alpha1_MySQLVersion(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionCoordinator":               schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionCoordinator(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionDatabase":                  schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter":                  schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionExporter(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionInitContainer":             schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionInitContainer(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionList":                      schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionPodSecurityPolicy":         schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionPodSecurityPolicy(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionRouter":                    schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionRouter(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionRouterInitContainer":       schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionRouterInitContainer(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionSpec":                      schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersion":                  schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionDatabase":          schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersionDatabase(ref),
@@ -21447,6 +21450,27 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersion(ref common.Reference
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionCoordinator(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MySQLVersionCoordinator is the image for coordinator",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionDatabase(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -21580,6 +21604,48 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionPodSecurityPolicy(ref
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionRouter(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MySQLVersionRouter is the MySQL Router lightweight middleware that provides transparent routing between your application and back-end MySQL Servers",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionRouterInitContainer(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MySQLVersionRouterInitContainer is mysql router init container",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -21614,6 +21680,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.Refer
 							Description: "Exporter Image",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter"),
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Coordinator Image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionCoordinator"),
 						},
 					},
 					"replicationModeDetector": {
@@ -21658,12 +21731,25 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.Refer
 							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
+					"router": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Router image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionRouter"),
+						},
+					},
+					"routerInitContainer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionRouterInitContainer"),
+						},
+					},
 				},
-				Required: []string{"version", "db", "exporter", "replicationModeDetector", "initContainer", "podSecurityPolicies", "upgradeConstraints"},
+				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies", "upgradeConstraints"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLUpgradeConstraints", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionRouter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MySQLVersionRouterInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector"},
 	}
 }
 
