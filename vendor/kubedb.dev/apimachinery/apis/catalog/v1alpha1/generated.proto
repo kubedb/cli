@@ -407,6 +407,11 @@ message MySQLVersion {
   optional MySQLVersionSpec spec = 2;
 }
 
+// MySQLVersionCoordinator is the image for coordinator
+message MySQLVersionCoordinator {
+  optional string image = 1;
+}
+
 // MySQLVersionDatabase is the MySQL Database image
 message MySQLVersionDatabase {
   optional string image = 1;
@@ -435,6 +440,17 @@ message MySQLVersionPodSecurityPolicy {
   optional string databasePolicyName = 1;
 }
 
+// MySQLVersionRouter is the MySQL Router lightweight middleware
+// that provides transparent routing between your application and back-end MySQL Servers
+message MySQLVersionRouter {
+  optional string image = 1;
+}
+
+// MySQLVersionRouterInitContainer is mysql router init container
+message MySQLVersionRouterInitContainer {
+  optional string image = 1;
+}
+
 // MySQLVersionSpec is the spec for MySQL version
 message MySQLVersionSpec {
   // Version
@@ -449,7 +465,12 @@ message MySQLVersionSpec {
   // Exporter Image
   optional MySQLVersionExporter exporter = 4;
 
+  // Coordinator Image
+  // +optional
+  optional MySQLVersionCoordinator coordinator = 13;
+
   // ReplicationModeDetector Image
+  // +optional
   optional ReplicationModeDetector replicationModeDetector = 5;
 
   // Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
@@ -468,6 +489,13 @@ message MySQLVersionSpec {
   // Stash defines backup and restore task definitions.
   // +optional
   optional kmodules.xyz.custom_resources.apis.appcatalog.v1alpha1.StashAddonSpec stash = 10;
+
+  // Router image
+  // +optional
+  optional MySQLVersionRouter router = 11;
+
+  // +optional
+  optional MySQLVersionRouterInitContainer routerInitContainer = 12;
 }
 
 // +kubebuilder:object:root=true

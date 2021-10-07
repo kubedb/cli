@@ -881,11 +881,16 @@ message MySQLClusterTopology {
 
   // Group replication info for MySQL
   optional MySQLGroupSpec group = 2;
+
+  // InnoDBCluster replication info for MySQL InnodbCluster
+  // +optional
+  optional MySQLInnoDBClusterSpec innoDBCluster = 3;
 }
 
 message MySQLGroupSpec {
   // TODO: "Multi-Primary" needs to be implemented
   // Group Replication can be deployed in either "Single-Primary" or "Multi-Primary" mode
+  // +kubebuilder:default=Single-Primary
   optional string mode = 1;
 
   // Group name is a version 4 UUID
@@ -893,11 +898,30 @@ message MySQLGroupSpec {
   optional string name = 2;
 }
 
+message MySQLInnoDBClusterSpec {
+  // +kubebuilder:default=Single-Primary
+  // +optional
+  optional string mode = 1;
+
+  optional MySQLRouterSpec router = 2;
+}
+
 message MySQLList {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
 
   // Items is a list of MySQL TPR objects
   repeated MySQL items = 2;
+}
+
+message MySQLRouterSpec {
+  // +optional
+  // +kubebuilder:default:=1
+  // +kubebuilder:validation:Minimum:=1
+  optional int32 replicas = 3;
+
+  // PodTemplate is an optional configuration for pods used to expose MySQL router
+  // +optional
+  optional kmodules.xyz.offshoot_api.api.v1.PodTemplateSpec podTemplate = 2;
 }
 
 message MySQLSpec {

@@ -76,7 +76,7 @@ github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
 # github.com/google/btree v1.0.0
 github.com/google/btree
-# github.com/google/go-cmp v0.5.5
+# github.com/google/go-cmp v0.5.6
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
@@ -581,7 +581,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210921150324-f005c6dfcb32
+# kmodules.xyz/client-go v0.0.0-20210928133955-8df5bb467db6
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -596,7 +596,7 @@ kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
 kmodules.xyz/client-go/tools/portforward
-# kmodules.xyz/custom-resources v0.0.0-20210829135624-c63be82e13c0
+# kmodules.xyz/custom-resources v0.0.0-20211007064058-70fba50e58a4
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -610,18 +610,18 @@ kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alph
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/auditor/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.0.0-20210902163558-0323c6034f70
+# kmodules.xyz/monitoring-agent-api v0.0.0-20210928135619-38ca075a2dbd
 ## explicit
 kmodules.xyz/monitoring-agent-api/api/v1
 kmodules.xyz/monitoring-agent-api/api/v1alpha1
-# kmodules.xyz/objectstore-api v0.0.0-20210829122106-d39859fc2d56
+# kmodules.xyz/objectstore-api v0.0.0-20210928135706-fdf68f88ea6e
 ## explicit
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20210804100837-d0388be3e60d
+# kmodules.xyz/offshoot-api v0.0.0-20210829122105-6f4d481b0c61
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.22.0
+# kubedb.dev/apimachinery v0.22.1-0.20211006103425-47b42be0bc35
 ## explicit
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -796,3 +796,4 @@ stash.appscode.dev/apimachinery/crds
 # k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 # sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad
 # github.com/satori/go.uuid => github.com/gofrs/uuid v4.0.0+incompatible
+# github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt v3.2.1+incompatible

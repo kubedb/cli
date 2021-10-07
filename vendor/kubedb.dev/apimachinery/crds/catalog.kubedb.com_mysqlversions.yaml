@@ -48,6 +48,13 @@ spec:
             type: object
           spec:
             properties:
+              coordinator:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               db:
                 properties:
                   image:
@@ -84,6 +91,20 @@ spec:
                 - databasePolicyName
                 type: object
               replicationModeDetector:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
+              router:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
+              routerInitContainer:
                 properties:
                   image:
                     type: string
@@ -169,7 +190,6 @@ spec:
             - exporter
             - initContainer
             - podSecurityPolicies
-            - replicationModeDetector
             - upgradeConstraints
             - version
             type: object

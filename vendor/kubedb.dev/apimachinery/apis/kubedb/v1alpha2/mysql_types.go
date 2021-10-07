@@ -39,12 +39,12 @@ const (
 	InnoDBClusterModeGroup MySQLClusterMode = "InnoDBCluster"
 )
 
-// +kubebuilder:validation:Enum=Single-Primary;Multi-Primary
+// +kubebuilder:validation:Enum=Single-Primary
 type MySQLGroupMode string
 
 const (
 	MySQLGroupModeSinglePrimary MySQLGroupMode = "Single-Primary"
-	MySQLGroupModeMultiPrimary  MySQLGroupMode = "Multi-Primary"
+	// MySQLGroupModeMultiPrimary  MySQLGroupMode = "Multi-Primary"
 )
 
 // Mysql defines a Mysql database.
@@ -142,6 +142,7 @@ const (
 	MySQLServerCert          MySQLCertificateAlias = "server"
 	MySQLClientCert          MySQLCertificateAlias = "client"
 	MySQLMetricsExporterCert MySQLCertificateAlias = "metrics-exporter"
+	MySQLRouterCert          MySQLCertificateAlias = "router"
 )
 
 type MySQLClusterTopology struct {
@@ -151,16 +152,40 @@ type MySQLClusterTopology struct {
 
 	// Group replication info for MySQL
 	Group *MySQLGroupSpec `json:"group,omitempty" protobuf:"bytes,2,opt,name=group"`
+
+	// InnoDBCluster replication info for MySQL InnodbCluster
+	// +optional
+	InnoDBCluster *MySQLInnoDBClusterSpec `json:"innoDBCluster,omitempty" protobuf:"bytes,3,opt,name=innoDBCluster"`
 }
 
 type MySQLGroupSpec struct {
 	// TODO: "Multi-Primary" needs to be implemented
 	// Group Replication can be deployed in either "Single-Primary" or "Multi-Primary" mode
+	// +kubebuilder:default=Single-Primary
 	Mode *MySQLGroupMode `json:"mode,omitempty" protobuf:"bytes,1,opt,name=mode,casttype=MySQLGroupMode"`
 
 	// Group name is a version 4 UUID
 	// ref: https://dev.mysql.com/doc/refman/5.7/en/group-replication-options.html#sysvar_group_replication_group_name
 	Name string `json:"name,omitempty" protobuf:"bytes,2,opt,name=name"`
+}
+
+type MySQLInnoDBClusterSpec struct {
+	// +kubebuilder:default=Single-Primary
+	// +optional
+	Mode *MySQLGroupMode `json:"mode,omitempty" protobuf:"bytes,1,opt,name=mode,casttype=MySQLGroupMode"`
+
+	Router MySQLRouterSpec `json:"router,omitempty" protobuf:"bytes,2,opt,name=router"`
+}
+
+type MySQLRouterSpec struct {
+	// +optional
+	// +kubebuilder:default:=1
+	// +kubebuilder:validation:Minimum:=1
+	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,3,opt,name=replicas"`
+
+	// PodTemplate is an optional configuration for pods used to expose MySQL router
+	// +optional
+	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,2,opt,name=podTemplate"`
 }
 
 type MySQLStatus struct {
