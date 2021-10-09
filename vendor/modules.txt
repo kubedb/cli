@@ -50,7 +50,7 @@ github.com/exponent-io/jsonpath
 github.com/fatih/camelcase
 # github.com/fatih/structs v1.1.0
 github.com/fatih/structs
-# github.com/form3tech-oss/jwt-go v3.2.2+incompatible
+# github.com/form3tech-oss/jwt-go v3.2.2+incompatible => github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 github.com/form3tech-oss/jwt-go
 # github.com/go-errors/errors v1.0.1
 github.com/go-errors/errors
@@ -796,4 +796,5 @@ stash.appscode.dev/apimachinery/crds
 # k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 # sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad
 # github.com/satori/go.uuid => github.com/gofrs/uuid v4.0.0+incompatible
-# github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt v3.2.1+incompatible
+# github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt v3.2.2+incompatible
+# github.com/form3tech-oss/jwt-go => github.com/form3tech-oss/jwt-go v3.2.5+incompatible

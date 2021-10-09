@@ -133,4 +133,6 @@ replace sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.2021
 
 replace github.com/satori/go.uuid => github.com/gofrs/uuid v4.0.0+incompatible
 
-replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt v3.2.1+incompatible
+replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt v3.2.2+incompatible
+
+replace github.com/form3tech-oss/jwt-go => github.com/form3tech-oss/jwt-go v3.2.5+incompatible
