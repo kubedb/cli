@@ -7,10 +7,10 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/spf13/cobra v1.1.3
 	gomodules.xyz/go-sh v0.1.0
-	gomodules.xyz/logs v0.0.4
+	gomodules.xyz/logs v0.0.6
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
-	gomodules.xyz/wait v0.0.0-20210218105358-639bd9211545
+	gomodules.xyz/wait v0.2.0
 	gomodules.xyz/x v0.0.8
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
