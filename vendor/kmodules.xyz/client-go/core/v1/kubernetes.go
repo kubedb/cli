@@ -108,6 +108,15 @@ func UpsertContainers(containers []core.Container, addons []core.Container) []co
 	return out
 }
 
+func DeleteContainer(containers []core.Container, name string) []core.Container {
+	for i, v := range containers {
+		if v.Name == name {
+			return append(containers[:i], containers[i+1:]...)
+		}
+	}
+	return containers
+}
+
 func UpsertVolume(volumes []core.Volume, nv ...core.Volume) []core.Volume {
 	upsert := func(v core.Volume) {
 		for i, vol := range volumes {

@@ -19,7 +19,7 @@ require (
 	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20210928133955-8df5bb467db6
+	kmodules.xyz/client-go v0.0.0-20211023080224-88313b8deed7
 	kmodules.xyz/custom-resources v0.0.0-20211007080833-72bd9e8cae6e
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210928135619-38ca075a2dbd
 	kmodules.xyz/objectstore-api v0.0.0-20210928135706-fdf68f88ea6e // indirect
@@ -131,7 +131,7 @@ replace k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 
 replace sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad
 
-replace github.com/satori/go.uuid => github.com/gofrs/uuid v4.0.0+incompatible
+replace github.com/satori/go.uuid => github.com/gomodules/uuid v4.0.0+incompatible
 
 replace github.com/dgrijalva/jwt-go => github.com/gomodules/jwt v3.2.2+incompatible
 
