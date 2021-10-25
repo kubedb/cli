@@ -581,7 +581,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20210928133955-8df5bb467db6
+# kmodules.xyz/client-go v0.0.0-20211023080224-88313b8deed7
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -795,7 +795,7 @@ stash.appscode.dev/apimachinery/crds
 # k8s.io/kubernetes => github.com/kmodules/kubernetes v1.22.0-alpha.0.0.20210617232219-a432af45d932
 # k8s.io/utils => k8s.io/utils v0.0.0-20201110183641-67b214c5f920
 # sigs.k8s.io/application => github.com/kmodules/application v0.8.4-0.20210427030912-90eeee3bc4ad
-# github.com/satori/go.uuid => github.com/gofrs/uuid v4.0.0+incompatible
+# github.com/satori/go.uuid => github.com/gomodules/uuid v4.0.0+incompatible
 # github.com/dgrijalva/jwt-go => github.com/gomodules/jwt v3.2.2+incompatible
 # github.com/form3tech-oss/jwt-go => github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 # github.com/golang-jwt/jwt => github.com/golang-jwt/jwt v3.2.2+incompatible
