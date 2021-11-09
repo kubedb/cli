@@ -99,8 +99,9 @@ type PostgresHorizontalScalingSpec struct {
 
 // PostgresVerticalScalingSpec is the spec for Postgres vertical scaling
 type PostgresVerticalScalingSpec struct {
-	Postgres *core.ResourceRequirements `json:"postgres,omitempty" protobuf:"bytes,1,opt,name=postgres"`
-	Exporter *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	Postgres    *core.ResourceRequirements `json:"postgres,omitempty" protobuf:"bytes,1,opt,name=postgres"`
+	Exporter    *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty" protobuf:"bytes,3,opt,name=coordinator"`
 }
 
 // PostgresVolumeExpansionSpec is the spec for Postgres volume expansion

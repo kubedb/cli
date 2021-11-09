@@ -106,7 +106,6 @@ message ElasticsearchVersionSpec {
   optional string distribution = 2;
 
   // Authentication plugin used by Elasticsearch cluster
-  // Deprecated
   optional string authPlugin = 3;
 
   // Database Image

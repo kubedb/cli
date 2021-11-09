@@ -51,9 +51,20 @@ func (e Etcd) OffshootSelectors() map[string]string {
 }
 
 func (e Etcd) OffshootLabels() map[string]string {
-	out := e.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, e.Labels)
+	return e.offshootLabels(e.OffshootSelectors(), nil)
+}
+
+func (e Etcd) PodLabels() map[string]string {
+	return e.offshootLabels(e.OffshootSelectors(), e.Spec.PodTemplate.Labels)
+}
+
+func (e Etcd) PodControllerLabels() map[string]string {
+	return e.offshootLabels(e.OffshootSelectors(), e.Spec.PodTemplate.Controller.Labels)
+}
+
+func (e Etcd) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(e.Labels, overwrite))
 }
 
 func (e Etcd) ResourceFQN() string {

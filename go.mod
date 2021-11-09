@@ -19,12 +19,11 @@ require (
 	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20211028132207-0cf6ea46b030
+	kmodules.xyz/client-go v0.0.0-20211107190155-5bb4090d2728
 	kmodules.xyz/custom-resources v0.0.0-20211007080833-72bd9e8cae6e
 	kmodules.xyz/monitoring-agent-api v0.0.0-20210928135619-38ca075a2dbd
-	kmodules.xyz/objectstore-api v0.0.0-20210928135706-fdf68f88ea6e // indirect
-	kubedb.dev/apimachinery v0.22.1-0.20211006103425-47b42be0bc35
-	stash.appscode.dev/apimachinery v0.14.2-0.20210715200631-5399637188c0
+	kubedb.dev/apimachinery v0.22.1-0.20211108134937-bbd2a36b4e8d
+	stash.appscode.dev/apimachinery v0.16.0
 )
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d

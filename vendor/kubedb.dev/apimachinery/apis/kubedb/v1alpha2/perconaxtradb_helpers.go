@@ -52,9 +52,20 @@ func (p PerconaXtraDB) OffshootSelectors() map[string]string {
 }
 
 func (p PerconaXtraDB) OffshootLabels() map[string]string {
-	out := p.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
+	return p.offshootLabels(p.OffshootSelectors(), nil)
+}
+
+func (p PerconaXtraDB) PodLabels() map[string]string {
+	return p.offshootLabels(p.OffshootSelectors(), p.Spec.PodTemplate.Labels)
+}
+
+func (p PerconaXtraDB) PodControllerLabels() map[string]string {
+	return p.offshootLabels(p.OffshootSelectors(), p.Spec.PodTemplate.Controller.Labels)
+}
+
+func (p PerconaXtraDB) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(p.Labels, overwrite))
 }
 
 func (p PerconaXtraDB) ResourceFQN() string {

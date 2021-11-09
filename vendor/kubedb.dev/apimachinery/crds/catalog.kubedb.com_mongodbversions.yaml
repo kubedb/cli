@@ -59,8 +59,10 @@ spec:
                 type: boolean
               distribution:
                 enum:
-                - MongoDB
+                - Official
                 - Percona
+                - KubeDB
+                - MongoDB
                 type: string
               exporter:
                 properties:

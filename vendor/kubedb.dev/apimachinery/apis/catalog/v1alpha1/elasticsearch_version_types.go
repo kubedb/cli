@@ -56,7 +56,6 @@ type ElasticsearchVersionSpec struct {
 	// Distribution
 	Distribution ElasticsearchDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=ElasticsearchDistro"`
 	// Authentication plugin used by Elasticsearch cluster
-	// Deprecated
 	AuthPlugin ElasticsearchAuthPlugin `json:"authPlugin" protobuf:"bytes,3,opt,name=authPlugin,casttype=ElasticsearchAuthPlugin"`
 	// Database Image
 	DB ElasticsearchVersionDatabase `json:"db" protobuf:"bytes,4,opt,name=db"`
@@ -117,16 +116,17 @@ type ElasticsearchSecurityContext struct {
 	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty" protobuf:"varint,2,opt,name=runAsAnyNonRoot"`
 }
 
-// +kubebuilder:validation:Enum=OpenDistro;SearchGuard;X-Pack
+// +kubebuilder:validation:Enum=OpenDistro;SearchGuard;X-Pack;OpenSearch
 type ElasticsearchAuthPlugin string
 
 const (
 	ElasticsearchAuthPluginOpenDistro  ElasticsearchAuthPlugin = "OpenDistro"
+	ElasticsearchAuthPluginOpenSearch  ElasticsearchAuthPlugin = "OpenSearch"
 	ElasticsearchAuthPluginSearchGuard ElasticsearchAuthPlugin = "SearchGuard"
 	ElasticsearchAuthPluginXpack       ElasticsearchAuthPlugin = "X-Pack"
 )
 
-// +kubebuilder:validation:Enum=ElasticStack;OpenDistro;SearchGuard;KubeDB
+// +kubebuilder:validation:Enum=ElasticStack;OpenDistro;SearchGuard;OpenSearch;KubeDB
 type ElasticsearchDistro string
 
 const (
@@ -134,4 +134,5 @@ const (
 	ElasticsearchDistroOpenDistro   ElasticsearchDistro = "OpenDistro"
 	ElasticsearchDistroSearchGuard  ElasticsearchDistro = "SearchGuard"
 	ElasticsearchDistroKubeDB       ElasticsearchDistro = "KubeDB"
+	ElasticsearchDistroOpenSearch   ElasticsearchDistro = "OpenSearch"
 )

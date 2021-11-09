@@ -111,9 +111,6 @@ type PostgresVersionList struct {
 	Items []PostgresVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
 }
 
-// +kubebuilder:validation:Enum=PostgreSQL;TimescaleDB
-type PostgresDistro string
-
 // PostgresSecurityContext is the additional features for the Postgres
 type PostgresSecurityContext struct {
 	// RunAsUser is default UID for the DB container. It is by default 999 for debian based image and 70 for alpine based image.
@@ -126,7 +123,12 @@ type PostgresSecurityContext struct {
 	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty" protobuf:"varint,2,opt,name=runAsAnyNonRoot"`
 }
 
+// +kubebuilder:validation:Enum=Official;TimescaleDB;PostGIS;KubeDB;PostgreSQL
+type PostgresDistro string
+
 const (
-	PostgresDistroPostgres    PostgresDistro = "PostgreSQL"
+	PostgresDistroOfficial    PostgresDistro = "Official"
 	PostgresDistroTimescaleDB PostgresDistro = "TimescaleDB"
+	PostgresDistroPostGIS     PostgresDistro = "PostGIS"
+	PostgresDistroKubeDB      PostgresDistro = "KubeDB"
 )

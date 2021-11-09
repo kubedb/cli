@@ -48,39 +48,52 @@ func (m MySQL) OffshootName() string {
 }
 
 func (m MySQL) OffshootSelectors() map[string]string {
-	selectors := map[string]string{
-		meta_util.NameLabelKey:      m.ResourceFQN(),
-		meta_util.InstanceLabelKey:  m.Name,
-		meta_util.ManagedByLabelKey: kubedb.GroupName,
-	}
-	if m.IsInnoDBCluster() {
-		selectors[MySQLComponentKey] = MySQLComponentDB
-	}
-	return selectors
+	return m.offshootSelectors(MySQLComponentDB)
 }
 
 func (m MySQL) RouterOffshootSelectors() map[string]string {
+	return m.offshootSelectors(MySQLComponentRouter)
+}
+
+func (m MySQL) offshootSelectors(component string) map[string]string {
 	selectors := map[string]string{
 		meta_util.NameLabelKey:      m.ResourceFQN(),
 		meta_util.InstanceLabelKey:  m.Name,
 		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 	if m.IsInnoDBCluster() {
-		selectors[MySQLComponentKey] = MySQLComponentRouter
+		selectors[MySQLComponentKey] = component
 	}
 	return selectors
 }
 
-func (m MySQL) RouterOffshootLabels() map[string]string {
-	out := m.RouterOffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
+func (m MySQL) OffshootLabels() map[string]string {
+	return m.offshootLabels(m.OffshootSelectors(), nil)
 }
 
-func (m MySQL) OffshootLabels() map[string]string {
-	out := m.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
+func (m MySQL) PodLabels() map[string]string {
+	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Labels)
+}
+
+func (m MySQL) PodControllerLabels() map[string]string {
+	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Controller.Labels)
+}
+
+func (m MySQL) RouterOffshootLabels() map[string]string {
+	return m.offshootLabels(m.RouterOffshootSelectors(), nil)
+}
+
+func (m MySQL) RouterPodLabels() map[string]string {
+	return m.offshootLabels(m.RouterOffshootLabels(), m.Spec.Topology.InnoDBCluster.Router.PodTemplate.Labels)
+}
+
+func (m MySQL) RouterPodControllerLabels() map[string]string {
+	return m.offshootLabels(m.RouterOffshootLabels(), m.Spec.Topology.InnoDBCluster.Router.PodTemplate.Controller.Labels)
+}
+
+func (m MySQL) offshootLabels(selector, override map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(m.Labels, override))
 }
 
 func (m MySQL) ResourceFQN() string {
@@ -196,13 +209,13 @@ func (m MySQL) StatsServiceLabels() map[string]string {
 func (m *MySQL) UsesGroupReplication() bool {
 	return m.Spec.Topology != nil &&
 		m.Spec.Topology.Mode != nil &&
-		*m.Spec.Topology.Mode == MySQLClusterModeGroup
+		*m.Spec.Topology.Mode == MySQLClusterModeGroupReplication
 }
 
 func (m *MySQL) IsInnoDBCluster() bool {
 	return m.Spec.Topology != nil &&
 		m.Spec.Topology.Mode != nil &&
-		*m.Spec.Topology.Mode == InnoDBClusterModeGroup
+		*m.Spec.Topology.Mode == MySQLClusterModeInnoDBCluster
 }
 
 func (m *MySQL) SetDefaults(topology *core_util.Topology) {
