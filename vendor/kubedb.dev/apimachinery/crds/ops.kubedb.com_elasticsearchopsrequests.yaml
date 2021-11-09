@@ -43,6 +43,25 @@ spec:
           spec:
             properties:
               configuration:
+                properties:
+                  applyConfig:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  configSecret:
+                    properties:
+                      name:
+                        type: string
+                    type: object
+                  removeCustomConfig:
+                    type: boolean
+                  removeSecureCustomConfig:
+                    type: boolean
+                  secureConfigSecret:
+                    properties:
+                      name:
+                        type: string
+                    type: object
                 type: object
               databaseRef:
                 properties:

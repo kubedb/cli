@@ -61,9 +61,21 @@ func (p Postgres) OffshootSelectors() map[string]string {
 }
 
 func (p Postgres) OffshootLabels() map[string]string {
-	out := p.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, p.Labels)
+	return p.offshootLabels(p.OffshootSelectors(), nil)
+}
+
+func (p Postgres) PodLabels() map[string]string {
+	return p.offshootLabels(p.OffshootSelectors(), p.Spec.PodTemplate.Labels)
+}
+
+func (p Postgres) PodControllerLabels() map[string]string {
+	return p.offshootLabels(p.OffshootSelectors(), p.Spec.PodTemplate.Controller.Labels)
+}
+
+func (p Postgres) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	// out := p.OffshootSelectors()
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(p.Labels, overwrite))
 }
 
 func (p Postgres) ResourceFQN() string {
@@ -178,9 +190,9 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 			ElectionTick: 10,
 			// this value should be one.
 			HeartbeatTick: 1,
-			//we have set this default to 33554432. if the difference between primary and replica is more then this,
+			//we have set this default to 67108864. if the difference between primary and replica is more then this,
 			//the replica node is going to manually sync itself.
-			MaximumLagBeforeFailover: 32 * 1024 * 1024,
+			MaximumLagBeforeFailover: 64 * 1024 * 1024,
 		}
 	}
 	SetDefaultResourceLimits(&p.Spec.Coordinator.Resources, CoordinatorDefaultResources)

@@ -56,9 +56,20 @@ func (m MariaDB) OffshootSelectors() map[string]string {
 }
 
 func (m MariaDB) OffshootLabels() map[string]string {
-	out := m.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
+	return m.offshootLabels(m.OffshootSelectors(), nil)
+}
+
+func (m MariaDB) PodLabels() map[string]string {
+	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Labels)
+}
+
+func (m MariaDB) PodControllerLabels() map[string]string {
+	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Controller.Labels)
+}
+
+func (m MariaDB) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(m.Labels, overwrite))
 }
 
 func (m MariaDB) ResourceFQN() string {

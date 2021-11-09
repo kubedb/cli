@@ -154,21 +154,30 @@ func (m MongoDB) MongosSelectors() map[string]string {
 }
 
 func (m MongoDB) OffshootLabels() map[string]string {
-	out := m.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, m.Labels)
+	return m.offshootLabels(m.OffshootSelectors(), nil)
+}
+
+func (m MongoDB) PodLabels(podTemplateLabels, overwrite map[string]string) map[string]string {
+	pLabels := m.offshootLabels(m.OffshootSelectors(), podTemplateLabels)
+	pLabels = meta_util.OverwriteKeys(pLabels, overwrite)
+	return pLabels
+}
+
+func (m MongoDB) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(m.Labels, overwrite))
 }
 
 func (m MongoDB) ShardLabels(nodeNum int32) map[string]string {
-	return meta_util.FilterKeys(kubedb.GroupName, m.OffshootLabels(), m.ShardSelectors(nodeNum))
+	return meta_util.OverwriteKeys(m.OffshootLabels(), m.ShardSelectors(nodeNum))
 }
 
 func (m MongoDB) ConfigSvrLabels() map[string]string {
-	return meta_util.FilterKeys(kubedb.GroupName, m.OffshootLabels(), m.ConfigSvrSelectors())
+	return meta_util.OverwriteKeys(m.OffshootLabels(), m.ConfigSvrSelectors())
 }
 
 func (m MongoDB) MongosLabels() map[string]string {
-	return meta_util.FilterKeys(kubedb.GroupName, m.OffshootLabels(), m.MongosSelectors())
+	return meta_util.OverwriteKeys(m.OffshootLabels(), m.MongosSelectors())
 }
 
 func (m MongoDB) ResourceFQN() string {

@@ -60,9 +60,20 @@ func (r Redis) OffshootSelectors() map[string]string {
 }
 
 func (r Redis) OffshootLabels() map[string]string {
-	out := r.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, r.Labels)
+	return r.offshootLabels(r.OffshootSelectors(), nil)
+}
+
+func (r Redis) PodLabels() map[string]string {
+	return r.offshootLabels(r.OffshootSelectors(), r.Spec.PodTemplate.Labels)
+}
+
+func (r Redis) PodControllerLabels() map[string]string {
+	return r.offshootLabels(r.OffshootSelectors(), r.Spec.PodTemplate.Controller.Labels)
+}
+
+func (r Redis) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(r.Labels, overwrite))
 }
 
 func (r Redis) ResourceFQN() string {
@@ -98,7 +109,11 @@ func (r Redis) GoverningServiceName() string {
 }
 
 func (r Redis) ConfigSecretName() string {
-	return r.OffshootName()
+	return meta_util.NameWithSuffix(r.OffshootName(), "config")
+}
+
+func (r Redis) CustomConfigSecretName() string {
+	return meta_util.NameWithSuffix(r.OffshootName(), "custom-config")
 }
 
 func (r Redis) BaseNameForShard() string {

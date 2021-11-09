@@ -86,8 +86,9 @@ type MariaDBHorizontalScalingSpec struct {
 }
 
 type MariaDBVerticalScalingSpec struct {
-	MariaDB  *core.ResourceRequirements `json:"mariadb,omitempty" protobuf:"bytes,1,opt,name=mariadb"`
-	Exporter *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	MariaDB     *core.ResourceRequirements `json:"mariadb,omitempty" protobuf:"bytes,1,opt,name=mariadb"`
+	Exporter    *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty" protobuf:"bytes,3,opt,name=coordinator"`
 }
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion

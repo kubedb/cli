@@ -55,12 +55,16 @@ func (e Elasticsearch) OffshootName() string {
 	return e.Name
 }
 
-func (e Elasticsearch) OffshootSelectors() map[string]string {
-	return map[string]string{
+func (e Elasticsearch) OffshootSelectors(overwrites ...map[string]string) map[string]string {
+	selector := map[string]string{
 		meta_util.NameLabelKey:      e.ResourceFQN(),
 		meta_util.InstanceLabelKey:  e.Name,
 		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
+	for _, overwrite := range overwrites {
+		selector = meta_util.OverwriteKeys(selector, overwrite)
+	}
+	return selector
 }
 
 func (e Elasticsearch) NodeRoleSpecificLabelKey(roleType ElasticsearchNodeRoleType) string {
@@ -92,9 +96,28 @@ func (e Elasticsearch) NodeRoleSpecificSelectors(roleType ElasticsearchNodeRoleT
 }
 
 func (e Elasticsearch) OffshootLabels() map[string]string {
-	out := e.OffshootSelectors()
-	out[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, out, e.Labels)
+	return e.offshootLabels(e.OffshootSelectors(), nil)
+}
+
+func (e Elasticsearch) PodLabels(overwrites ...map[string]string) map[string]string {
+	pLabels := e.offshootLabels(e.OffshootSelectors(), e.Spec.PodTemplate.Labels)
+	for _, overwrite := range overwrites {
+		pLabels = meta_util.OverwriteKeys(pLabels, overwrite)
+	}
+	return pLabels
+}
+
+func (e Elasticsearch) PodControllerLabels(overwrites ...map[string]string) map[string]string {
+	pcLabels := e.offshootLabels(e.OffshootSelectors(), e.Spec.PodTemplate.Controller.Labels)
+	for _, overwrite := range overwrites {
+		pcLabels = meta_util.OverwriteKeys(pcLabels, overwrite)
+	}
+	return pcLabels
+}
+
+func (e Elasticsearch) offshootLabels(selector, overwrite map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(e.Labels, overwrite))
 }
 
 func (e Elasticsearch) ResourceFQN() string {
@@ -588,9 +611,10 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 		return
 	}
 
-	// The internalUsers feature only works with searchGuard and openDistro
-	if esVersion.Spec.Distribution == catalog.ElasticsearchDistroOpenDistro ||
-		esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard {
+	// The internalUsers feature only works with searchGuard, openSearch, and openDistro
+	if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenDistro ||
+		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginSearchGuard ||
+		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenSearch {
 
 		inUsers := e.Spec.InternalUsers
 		// If not set, create empty map
@@ -650,7 +674,7 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 				rolesMapping = make(map[string]ElasticsearchRoleMapSpec)
 			}
 			var monitorRole string
-			if esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard {
+			if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginSearchGuard {
 				// readall_and_monitor role name varies in ES version
 				// 	V7        = "SGS_READALL_AND_MONITOR"
 				//	V6        = "sg_readall_and_monitor"
@@ -664,8 +688,10 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 					// Required during upgrade process, from v6 --> v7
 					delete(rolesMapping, string(ElasticsearchSearchGuardReadallMonitorRoleV6))
 				}
-			} else {
+			} else if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenDistro {
 				monitorRole = ElasticsearchOpendistroReadallMonitorRole
+			} else {
+				monitorRole = ElasticsearchOpenSearchReadallMonitorRole
 			}
 
 			// Create rolesMapping if not exists.
@@ -712,6 +738,17 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) 
 		SecretName: e.CertificateName(ElasticsearchTransportCert),
 	})
 
+	// Set missing admin certificate spec, if authPlugin is "OpenDistro", "SearchGuard", or "OpenSearch"
+	// Create the admin certificate, even if the enable.SSL is false. This is necessary to securityadmin.sh command.
+	if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginSearchGuard ||
+		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenDistro ||
+		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenSearch {
+		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
+			Alias:      string(ElasticsearchAdminCert),
+			SecretName: e.CertificateName(ElasticsearchAdminCert),
+		})
+	}
+
 	// If SSL is enabled, set missing certificate spec
 	if e.Spec.EnableSSL {
 		// http
@@ -719,15 +756,6 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) 
 			Alias:      string(ElasticsearchHTTPCert),
 			SecretName: e.CertificateName(ElasticsearchHTTPCert),
 		})
-
-		// Set missing admin certificate spec, if authPlugin is either "OpenDistro" or "SearchGuard"
-		if esVersion.Spec.Distribution == catalog.ElasticsearchDistroSearchGuard ||
-			esVersion.Spec.Distribution == catalog.ElasticsearchDistroOpenDistro {
-			tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
-				Alias:      string(ElasticsearchAdminCert),
-				SecretName: e.CertificateName(ElasticsearchAdminCert),
-			})
-		}
 
 		// Set missing metrics-exporter certificate, if monitoring is enabled.
 		if e.Spec.Monitor != nil {

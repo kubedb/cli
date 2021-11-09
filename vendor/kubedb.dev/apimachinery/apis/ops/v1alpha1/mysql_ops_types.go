@@ -69,9 +69,6 @@ type MySQLOpsRequestSpec struct {
 	TLS *MySQLTLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
-
-	// Specifies the current ordinal of the StatefulSet
-	StatefulSetOrdinal *int32 `json:"statefulSetOrdinal,omitempty" protobuf:"varint,10,opt,name=statefulSetOrdinal"`
 }
 
 // MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
@@ -91,8 +88,9 @@ type MySQLHorizontalScalingSpec struct {
 }
 
 type MySQLVerticalScalingSpec struct {
-	MySQL    *core.ResourceRequirements `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
-	Exporter *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	MySQL       *core.ResourceRequirements `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
+	Exporter    *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty" protobuf:"bytes,3,opt,name=coordinator"`
 }
 
 // MySQLVolumeExpansionSpec is the spec for MySQL volume expansion

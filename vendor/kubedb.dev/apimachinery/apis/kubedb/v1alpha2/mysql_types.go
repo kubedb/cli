@@ -35,8 +35,8 @@ const (
 type MySQLClusterMode string
 
 const (
-	MySQLClusterModeGroup  MySQLClusterMode = "GroupReplication"
-	InnoDBClusterModeGroup MySQLClusterMode = "InnoDBCluster"
+	MySQLClusterModeGroupReplication MySQLClusterMode = "GroupReplication"
+	MySQLClusterModeInnoDBCluster    MySQLClusterMode = "InnoDBCluster"
 )
 
 // +kubebuilder:validation:Enum=Single-Primary

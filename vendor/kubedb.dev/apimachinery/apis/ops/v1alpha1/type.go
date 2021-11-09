@@ -125,6 +125,9 @@ const (
 	UpdateDataNodeResources            = "UpdateDataNodeResources"
 	UpdateIngestNodeResources          = "UpdateIngestNodeResources"
 	UpdateCombinedNodeResources        = "UpdateCombinedNodeResources"
+	PrepareCustomConfig                = "PrepareCustomConfig"
+	PrepareSecureCustomConfig          = "PrepareSecureCustomConfig"
+	ReconfigureSecurityAdmin           = "ReconfigureSecurityAdmin"
 
 	//Redis Constants
 	PatchedSecret  = "patchedSecret"
