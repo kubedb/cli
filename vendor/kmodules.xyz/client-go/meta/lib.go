@@ -117,16 +117,22 @@ func MergeKeys(out, in map[string]string) map[string]string {
 	return out
 }
 
-func OverwriteKeys(out, in map[string]string) map[string]string {
-	if len(in) == 0 {
+func OverwriteKeys(out map[string]string, ins ...map[string]string) map[string]string {
+	if len(ins) == 0 {
 		return out
 	}
 	if out == nil {
-		out = make(map[string]string, len(in))
+		n := 0
+		for _, in := range ins {
+			n += len(in)
+		}
+		out = make(map[string]string, n)
 	}
 
-	for k, v := range in {
-		out[k] = v
+	for _, in := range ins {
+		for k, v := range in {
+			out[k] = v
+		}
 	}
 	return out
 }
