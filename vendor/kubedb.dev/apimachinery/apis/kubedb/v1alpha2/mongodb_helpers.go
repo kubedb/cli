@@ -34,7 +34,6 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
-	v1 "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
@@ -136,19 +135,19 @@ func (m MongoDB) OffshootSelectors() map[string]string {
 }
 
 func (m MongoDB) ShardSelectors(nodeNum int32) map[string]string {
-	return v1.UpsertMap(m.OffshootSelectors(), map[string]string{
+	return meta_util.OverwriteKeys(m.OffshootSelectors(), map[string]string{
 		MongoDBShardLabelKey: m.ShardNodeName(nodeNum),
 	})
 }
 
 func (m MongoDB) ConfigSvrSelectors() map[string]string {
-	return v1.UpsertMap(m.OffshootSelectors(), map[string]string{
+	return meta_util.OverwriteKeys(m.OffshootSelectors(), map[string]string{
 		MongoDBConfigLabelKey: m.ConfigSvrNodeName(),
 	})
 }
 
 func (m MongoDB) MongosSelectors() map[string]string {
-	return v1.UpsertMap(m.OffshootSelectors(), map[string]string{
+	return meta_util.OverwriteKeys(m.OffshootSelectors(), map[string]string{
 		MongoDBMongosLabelKey: m.MongosNodeName(),
 	})
 }
@@ -157,15 +156,22 @@ func (m MongoDB) OffshootLabels() map[string]string {
 	return m.offshootLabels(m.OffshootSelectors(), nil)
 }
 
-func (m MongoDB) PodLabels(podTemplateLabels, overwrite map[string]string) map[string]string {
-	pLabels := m.offshootLabels(m.OffshootSelectors(), podTemplateLabels)
-	pLabels = meta_util.OverwriteKeys(pLabels, overwrite)
-	return pLabels
+func (m MongoDB) PodLabels(podTemplateLabels map[string]string, extraLabels ...map[string]string) map[string]string {
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), podTemplateLabels)
 }
 
-func (m MongoDB) offshootLabels(selector, overwrite map[string]string) map[string]string {
+func (m MongoDB) PodControllerLabels(podControllerLabels map[string]string, extraLabels ...map[string]string) map[string]string {
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), podControllerLabels)
+}
+
+func (m MongoDB) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(m.Spec.ServiceTemplates, alias)
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+func (m MongoDB) offshootLabels(selector, override map[string]string) map[string]string {
 	selector[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(m.Labels, overwrite))
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
 func (m MongoDB) ShardLabels(nodeNum int32) map[string]string {
@@ -341,9 +347,7 @@ func (m MongoDB) StatsService() mona.StatsAccessor {
 }
 
 func (m MongoDB) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(kubedb.GroupName, m.OffshootSelectors(), m.Labels)
-	lbl[LabelRole] = RoleStats
-	return lbl
+	return m.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
 func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core_util.Topology) {

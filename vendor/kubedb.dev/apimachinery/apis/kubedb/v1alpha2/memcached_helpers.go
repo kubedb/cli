@@ -61,9 +61,14 @@ func (m Memcached) PodControllerLabels() map[string]string {
 	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Controller.Labels)
 }
 
-func (m Memcached) offshootLabels(selector, overwrite map[string]string) map[string]string {
+func (m Memcached) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(m.Spec.ServiceTemplates, alias)
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+func (m Memcached) offshootLabels(selector, override map[string]string) map[string]string {
 	selector[meta_util.ComponentLabelKey] = ComponentDatabase
-	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(m.Labels, overwrite))
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
 func (m Memcached) ResourceFQN() string {
@@ -143,9 +148,7 @@ func (m Memcached) StatsService() mona.StatsAccessor {
 }
 
 func (m Memcached) StatsServiceLabels() map[string]string {
-	lbl := meta_util.FilterKeys(kubedb.GroupName, m.OffshootSelectors(), m.Labels)
-	lbl[LabelRole] = RoleStats
-	return lbl
+	return m.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
 func (m *Memcached) SetDefaults() {
