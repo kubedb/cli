@@ -1,0 +1,82 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: mysqlqueries.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: MySQLQueries
+    listKind: MySQLQueriesList
+    plural: mysqlqueries
+    singular: mysqlqueries
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              queries:
+                items:
+                  properties:
+                    db:
+                      type: string
+                    insertId:
+                      format: int64
+                      type: integer
+                    lastInsertId:
+                      format: int64
+                      type: integer
+                    lockTimeInMilli:
+                      type: string
+                    queryTimeInMilli:
+                      type: string
+                    rows_examined:
+                      format: int64
+                      type: integer
+                    rows_sent:
+                      format: int64
+                      type: integer
+                    serverId:
+                      format: int64
+                      type: integer
+                    sqlText:
+                      type: string
+                    startTime:
+                      type: string
+                    threadId:
+                      format: int64
+                      type: integer
+                    userHost:
+                      type: string
+                  required:
+                  - db
+                  - insertId
+                  - lastInsertId
+                  - lockTimeInMilli
+                  - queryTimeInMilli
+                  - rows_examined
+                  - rows_sent
+                  - serverId
+                  - sqlText
+                  - startTime
+                  - threadId
+                  - userHost
+                  type: object
+                type: array
+            required:
+            - queries
+            type: object
+        type: object
+    served: true
+    storage: true

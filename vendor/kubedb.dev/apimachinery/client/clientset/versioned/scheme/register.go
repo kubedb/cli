@@ -25,6 +25,7 @@ import (
 	kubedbv1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
 	kubedbv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsv1alpha1 "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+	uiv1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -43,6 +44,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	kubedbv1alpha1.AddToScheme,
 	kubedbv1alpha2.AddToScheme,
 	opsv1alpha1.AddToScheme,
+	uiv1alpha1.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition
