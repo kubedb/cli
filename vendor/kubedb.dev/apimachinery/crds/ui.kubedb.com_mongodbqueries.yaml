@@ -1,0 +1,74 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: mongodbqueries.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: MongoDBQueries
+    listKind: MongoDBQueriesList
+    plural: mongodbqueries
+    singular: mongodbqueries
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              queries:
+                items:
+                  properties:
+                    avgExecutionTimeInMS:
+                      format: int64
+                      type: integer
+                    collectionName:
+                      type: string
+                    command:
+                      type: string
+                    count:
+                      format: int64
+                      type: integer
+                    databaseName:
+                      type: string
+                    maxExecutionTimeInMS:
+                      format: int64
+                      type: integer
+                    minExecutionTimeInMS:
+                      format: int64
+                      type: integer
+                    operation:
+                      enum:
+                      - QUERY
+                      - INSERT
+                      - UPDATE
+                      - DELETE
+                      - GETMORE
+                      type: string
+                  required:
+                  - avgExecutionTimeInMS
+                  - collectionName
+                  - command
+                  - count
+                  - databaseName
+                  - maxExecutionTimeInMS
+                  - minExecutionTimeInMS
+                  - operation
+                  type: object
+                type: array
+            required:
+            - queries
+            type: object
+        type: object
+    served: true
+    storage: true

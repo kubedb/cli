@@ -21,6 +21,7 @@ import (
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	apps_util "kmodules.xyz/client-go/apps/v1"
@@ -119,6 +120,33 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 	for r := range defaultResources.Requests {
 		req.Requests[r] = calRequest(r, defaultResources.Requests[r])
 	}
+}
+
+func GetDatabasePods(db metav1.Object, stsLister appslister.StatefulSetLister, pods []core.Pod) ([]core.Pod, error) {
+	var dbPods []core.Pod
+
+	for i := range pods {
+		owner := metav1.GetControllerOf(&pods[i])
+		if owner == nil {
+			continue
+		}
+
+		// If the Pod is not control by a StatefulSet, then it is not a KubeDB database Pod
+		if owner.Kind == ResourceKindStatefulSet {
+			// Find the controlling StatefulSet
+			sts, err := stsLister.StatefulSets(db.GetNamespace()).Get(owner.Name)
+			if err != nil {
+				return nil, err
+			}
+
+			// Check if the StatefulSet is controlled by the database
+			if metav1.IsControlledBy(sts, db) {
+				dbPods = append(dbPods, pods[i])
+			}
+		}
+	}
+
+	return dbPods, nil
 }
 
 // Upsert elements to string slice

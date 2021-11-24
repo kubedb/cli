@@ -1,0 +1,49 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: mongodbschemaoverviews.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: MongoDBSchemaOverview
+    listKind: MongoDBSchemaOverviewList
+    plural: mongodbschemaoverviews
+    singular: mongodbschemaoverview
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              collections:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    size:
+                      items:
+                        format: int32
+                        type: integer
+                      type: array
+                  required:
+                  - name
+                  - size
+                  type: object
+                type: array
+            required:
+            - collections
+            type: object
+        type: object
+    served: true
+    storage: true

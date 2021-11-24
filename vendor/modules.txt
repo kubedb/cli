@@ -581,7 +581,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20211116191353-a321f503ea3a
+# kmodules.xyz/client-go v0.0.0-20211122091731-6c471b24a4ea
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -596,7 +596,7 @@ kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
 kmodules.xyz/client-go/tools/portforward
-# kmodules.xyz/custom-resources v0.0.0-20211025144742-7ab2db03cce8
+# kmodules.xyz/custom-resources v0.0.0-20211122142737-3bf3dbd8ac52
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -614,14 +614,15 @@ kmodules.xyz/custom-resources/crds
 ## explicit
 kmodules.xyz/monitoring-agent-api/api/v1
 kmodules.xyz/monitoring-agent-api/api/v1alpha1
-# kmodules.xyz/objectstore-api v0.0.0-20211025143832-b9135743b78b
+# kmodules.xyz/objectstore-api v0.0.0-20211116180107-8720be0c9bf7
 ## explicit
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20211103060642-3e217667cf41
+# kmodules.xyz/offshoot-api v0.0.0-20211116180130-806cde7fb795
+## explicit
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.23.0
+# kubedb.dev/apimachinery v0.23.1-0.20211122140200-fe94664c6645
 ## explicit
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -635,6 +636,8 @@ kubedb.dev/apimachinery/apis/kubedb/v1alpha1
 kubedb.dev/apimachinery/apis/kubedb/v1alpha2
 kubedb.dev/apimachinery/apis/ops
 kubedb.dev/apimachinery/apis/ops/v1alpha1
+kubedb.dev/apimachinery/apis/ui
+kubedb.dev/apimachinery/apis/ui/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned
 kubedb.dev/apimachinery/client/clientset/versioned/scheme
 kubedb.dev/apimachinery/client/clientset/versioned/typed/autoscaling/v1alpha1
@@ -644,9 +647,11 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2
 kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util
 kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1
+kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
 # sigs.k8s.io/controller-runtime v0.9.0
 sigs.k8s.io/controller-runtime/pkg/client/apiutil
+sigs.k8s.io/controller-runtime/pkg/scheme
 # sigs.k8s.io/kustomize/api v0.8.8
 sigs.k8s.io/kustomize/api/builtins
 sigs.k8s.io/kustomize/api/filesys
