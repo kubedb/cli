@@ -22,10 +22,9 @@ require (
 	kmodules.xyz/client-go v0.0.0-20211122091731-6c471b24a4ea
 	kmodules.xyz/custom-resources v0.0.0-20211122142737-3bf3dbd8ac52
 	kmodules.xyz/monitoring-agent-api v0.0.0-20211117051609-520052fe6ff6
-	kmodules.xyz/objectstore-api v0.0.0-20211116180107-8720be0c9bf7 // indirect
 	kmodules.xyz/offshoot-api v0.0.0-20211116180130-806cde7fb795 // indirect
 	kubedb.dev/apimachinery v0.24.0
-	stash.appscode.dev/apimachinery v0.16.0
+	stash.appscode.dev/apimachinery v0.17.0
 )
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
