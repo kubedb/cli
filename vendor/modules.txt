@@ -581,7 +581,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20211122091731-6c471b24a4ea
+# kmodules.xyz/client-go v0.0.0-20211127071251-7e4808453833
 ## explicit
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
