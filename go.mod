@@ -19,7 +19,7 @@ require (
 	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.8.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20211122091731-6c471b24a4ea
+	kmodules.xyz/client-go v0.0.0-20211127071251-7e4808453833
 	kmodules.xyz/custom-resources v0.0.0-20211122142737-3bf3dbd8ac52
 	kmodules.xyz/monitoring-agent-api v0.0.0-20211117051609-520052fe6ff6
 	kmodules.xyz/offshoot-api v0.0.0-20211116180130-806cde7fb795 // indirect
