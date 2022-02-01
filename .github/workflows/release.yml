@@ -37,6 +37,7 @@ jobs:
         with:
           files: |
             bin/kubectl-dba-darwin-amd64.tar.gz
+            bin/kubectl-dba-darwin-arm64.tar.gz
             bin/kubectl-dba-linux-amd64.tar.gz
             bin/kubectl-dba-linux-arm.tar.gz
             bin/kubectl-dba-linux-arm64.tar.gz

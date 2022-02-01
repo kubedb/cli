@@ -47,7 +47,7 @@ SRC_PKGS := cmd pkg
 SRC_DIRS := $(SRC_PKGS) hack/gendocs # directories which hold app source (not vendored)
 
 DOCKER_PLATFORMS := linux/amd64 linux/arm linux/arm64
-BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64
+BIN_PLATFORMS    := $(DOCKER_PLATFORMS) windows/amd64 darwin/amd64 darwin/arm64
 
 # Used internally.  Users should pass GOOS and/or GOARCH.
 OS   := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
@@ -301,15 +301,16 @@ clean:
 
 .PHONY: gen-krew-manifest
 gen-krew-manifest:
-	@if [ "$(version_strategy)" != "tag" ]; then       \
-		echo "apply tag to generate krew manifest.";   \
-		exit 1;                                        \
+	@if [ "$(version_strategy)" != "tag" ]; then \
+		echo "apply tag to generate krew manifest."; \
+		exit 1; \
 	fi
-	@sed                                               \
-      -e 's|{VERSION}|$(VERSION)|g'                                                                       \
+	@sed \
+      -e 's|{VERSION}|$(VERSION)|g' \
       -e 's|{SHA256SUM_DARWIN_AMD64}|$(shell sha256sum bin/$(BIN)-darwin-amd64.tar.gz | cut -d' ' -f1)|g' \
-      -e 's|{SHA256SUM_LINUX_AMD64}|$(shell sha256sum bin/$(BIN)-linux-amd64.tar.gz | cut -d' ' -f1)|g'   \
-      -e 's|{SHA256SUM_LINUX_ARM}|$(shell sha256sum bin/$(BIN)-linux-arm.tar.gz | cut -d' ' -f1)|g'       \
-      -e 's|{SHA256SUM_LINUX_ARM64}|$(shell sha256sum bin/$(BIN)-linux-arm64.tar.gz | cut -d' ' -f1)|g'   \
-      -e 's|{SHA256SUM_WINDOWS_AMD64}|$(shell sha256sum bin/$(BIN)-windows-amd64.zip | cut -d' ' -f1)|g'  \
+      -e 's|{SHA256SUM_DARWIN_ARM64}|$(shell sha256sum bin/$(BIN)-darwin-arm64.tar.gz | cut -d' ' -f1)|g' \
+      -e 's|{SHA256SUM_LINUX_AMD64}|$(shell sha256sum bin/$(BIN)-linux-amd64.tar.gz | cut -d' ' -f1)|g' \
+      -e 's|{SHA256SUM_LINUX_ARM}|$(shell sha256sum bin/$(BIN)-linux-arm.tar.gz | cut -d' ' -f1)|g' \
+      -e 's|{SHA256SUM_LINUX_ARM64}|$(shell sha256sum bin/$(BIN)-linux-arm64.tar.gz | cut -d' ' -f1)|g' \
+      -e 's|{SHA256SUM_WINDOWS_AMD64}|$(shell sha256sum bin/$(BIN)-windows-amd64.zip | cut -d' ' -f1)|g' \
       hack/krew/plugin.yaml
