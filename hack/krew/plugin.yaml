@@ -21,6 +21,16 @@ spec:
       bin: kubectl-dba-darwin-amd64
     - selector:
         matchLabels:
+          os: darwin
+          arch: arm64
+      uri: https://github.com/kubedb/cli/releases/download/{VERSION}/kubectl-dba-darwin-arm64.tar.gz
+      sha256: {SHA256SUM_DARWIN_ARM64}
+      files:
+        - from: "*"
+          to: "."
+      bin: kubectl-dba-darwin-arm64
+    - selector:
+        matchLabels:
           os: linux
           arch: amd64
       uri: https://github.com/kubedb/cli/releases/download/{VERSION}/kubectl-dba-linux-amd64.tar.gz
