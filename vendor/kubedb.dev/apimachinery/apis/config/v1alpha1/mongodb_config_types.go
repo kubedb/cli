@@ -34,15 +34,15 @@ type MongoDBConfiguration struct {
 	metav1.TypeMeta `json:",inline,omitempty"`
 
 	// ConfigServer is the dsn of config server of mongodb sharding. The dsn includes the port no too.
-	ConfigServer string `json:"configServer,omitempty" protobuf:"bytes,1,opt,name=configServer"`
+	ConfigServer string `json:"configServer,omitempty"`
 
 	// ReplicaSets contains the dsn of each replicaset of sharding. The DSNs are in key-value pair, where
 	// the keys are host-0, host-1 etc, and the values are DSN of each replicaset. If there is no sharding
 	// but only one replicaset, then ReplicaSets field contains only one key-value pair where the key is
 	// host-0 and the value is dsn of that replicaset.
-	ReplicaSets map[string]string `json:"replicaSets,omitempty" protobuf:"bytes,2,rep,name=replicaSets"`
+	ReplicaSets map[string]string `json:"replicaSets,omitempty"`
 
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,3,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 }

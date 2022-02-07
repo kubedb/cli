@@ -137,6 +137,10 @@ func (m MySQL) PrimaryServiceDNS() string {
 	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
 }
 
+func (m MySQL) StandbyServiceDNS() string {
+	return fmt.Sprintf("%s.%s.svc", m.StandbyServiceName(), m.Namespace)
+}
+
 func (m MySQL) Hosts() []string {
 	replicas := 1
 	if m.Spec.Replicas != nil {
@@ -212,13 +216,19 @@ func (m MySQL) StatsServiceLabels() map[string]string {
 func (m *MySQL) UsesGroupReplication() bool {
 	return m.Spec.Topology != nil &&
 		m.Spec.Topology.Mode != nil &&
-		*m.Spec.Topology.Mode == MySQLClusterModeGroupReplication
+		*m.Spec.Topology.Mode == MySQLModeGroupReplication
 }
 
 func (m *MySQL) IsInnoDBCluster() bool {
 	return m.Spec.Topology != nil &&
 		m.Spec.Topology.Mode != nil &&
-		*m.Spec.Topology.Mode == MySQLClusterModeInnoDBCluster
+		*m.Spec.Topology.Mode == MySQLModeInnoDBCluster
+}
+
+func (m *MySQL) IsReadReplica() bool {
+	return m.Spec.Topology != nil &&
+		m.Spec.Topology.Mode != nil &&
+		*m.Spec.Topology.Mode == MySQLModeReadReplica
 }
 
 func (m *MySQL) SetDefaults(topology *core_util.Topology) {
@@ -249,7 +259,7 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 	m.Spec.Monitor.SetDefaults()
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
-	SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 
 // setDefaultAffinity
@@ -299,7 +309,6 @@ func (m *MySQL) SetTLSDefaults() {
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLServerCert), m.CertificateName(MySQLServerCert))
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLClientCert), m.CertificateName(MySQLClientCert))
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLMetricsExporterCert), m.CertificateName(MySQLMetricsExporterCert))
-	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLRouterCert), m.CertificateName(MySQLRouterCert))
 }
 
 func (m *MySQLSpec) GetPersistentSecrets() []string {

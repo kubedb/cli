@@ -31,10 +31,14 @@ spec:
                   properties:
                     indexName:
                       type: string
-                    primaryStoreSizeInBytes:
+                    primaryStoreSizeBytes:
                       type: string
-                    totalStoreSizeInBytes:
+                    totalStoreSizeBytes:
                       type: string
+                  required:
+                  - indexName
+                  - primaryStoreSizeBytes
+                  - totalStoreSizeBytes
                   type: object
                 type: array
             required:

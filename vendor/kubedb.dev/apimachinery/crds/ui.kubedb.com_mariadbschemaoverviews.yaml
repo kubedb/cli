@@ -33,7 +33,7 @@ spec:
                       type: string
                     tableName:
                       type: string
-                    tableSizeInBytes:
+                    tableSizeBytes:
                       type: string
                   type: object
                 type: array

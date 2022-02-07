@@ -45,52 +45,52 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MongoDBVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MongoDBVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MongoDBVersionSpec `json:"spec,omitempty"`
 }
 
 // MongoDBVersionSpec is the spec for mongodb version
 type MongoDBVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Distribution
-	Distribution MongoDBDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=MongoDBDistro"`
+	Distribution MongoDBDistro `json:"distribution,omitempty"`
 	// Database Image
-	DB MongoDBVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
+	DB MongoDBVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter MongoDBVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
+	Exporter MongoDBVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,5,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// Init container Image
-	InitContainer MongoDBVersionInitContainer `json:"initContainer" protobuf:"bytes,6,opt,name=initContainer"`
+	InitContainer MongoDBVersionInitContainer `json:"initContainer"`
 	// PSP names
-	PodSecurityPolicies MongoDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies MongoDBVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// ReplicationModeDetector Image
-	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector" protobuf:"bytes,8,opt,name=replicationModeDetector"`
+	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,9,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 }
 
 // MongoDBVersionDatabase is the MongoDB Database image
 type MongoDBVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MongoDBVersionExporter is the image for the MongoDB exporter
 type MongoDBVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MongoDBVersionInitContainer is the Elasticsearch Container initializer
 type MongoDBVersionInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MongoDBVersionPodSecurityPolicy is the MongoDB pod security policies
 type MongoDBVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -98,9 +98,9 @@ type MongoDBVersionPodSecurityPolicy struct {
 // MongoDBVersionList is a list of MongoDBVersions
 type MongoDBVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MongoDBVersion CRD objects
-	Items []MongoDBVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MongoDBVersion `json:"items,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Official;Percona;KubeDB;MongoDB

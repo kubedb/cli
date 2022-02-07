@@ -18,11 +18,11 @@ package v1alpha1
 
 // GenericSchemaOverviewSpec defines the desired state of GenericSchemaOverview
 type GenericSchemaOverviewSpec struct {
-	Databases []GenericDatabaseSpec `json:"databases" protobuf:"bytes,1,rep,name=databases"`
+	Databases []GenericDatabaseSpec `json:"databases"`
 }
 
 type GenericDatabaseSpec struct {
-	DatabaseName     string `json:"databaseName,omitempty" protobuf:"bytes,1,opt,name=databaseName"`
-	TableName        string `json:"tableName,omitempty" protobuf:"bytes,2,opt,name=tableName"`
-	TableSizeInBytes string `json:"tableSizeInBytes,omitempty" protobuf:"bytes,3,opt,name=tableSizeInBytes"`
+	DatabaseName   string `json:"databaseName,omitempty"`
+	TableName      string `json:"tableName,omitempty"`
+	TableSizeBytes string `json:"tableSizeBytes,omitempty"`
 }

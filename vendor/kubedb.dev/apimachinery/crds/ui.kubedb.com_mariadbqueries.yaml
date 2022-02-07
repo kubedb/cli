@@ -37,17 +37,17 @@ spec:
                     lastInsertId:
                       format: int64
                       type: integer
-                    lockTimeInMilli:
+                    lockTimeMilliSeconds:
                       type: string
-                    queryTimeInMilli:
+                    queryTimeMilliSeconds:
                       type: string
-                    rows_examined:
-                      format: int64
-                      type: integer
-                    rows_sent:
-                      format: int64
-                      type: integer
                     rowsAffected:
+                      format: int64
+                      type: integer
+                    rowsExamined:
+                      format: int64
+                      type: integer
+                    rowsSent:
                       format: int64
                       type: integer
                     serverId:
@@ -56,6 +56,7 @@ spec:
                     sqlText:
                       type: string
                     startTime:
+                      format: date-time
                       type: string
                     threadId:
                       format: int64
@@ -64,17 +65,11 @@ spec:
                       type: string
                   required:
                   - db
-                  - insertId
-                  - lastInsertId
-                  - lockTimeInMilli
-                  - queryTimeInMilli
-                  - rowsAffected
-                  - rows_examined
-                  - rows_sent
-                  - serverId
-                  - sqlText
+                  - lockTimeMilliSeconds
+                  - queryTimeMilliSeconds
+                  - rowsExamined
+                  - rowsSent
                   - startTime
-                  - threadId
                   - userHost
                   type: object
                 type: array

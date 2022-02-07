@@ -167,7 +167,7 @@ func (p *ProxySQL) SetDefaults() {
 	}
 
 	p.Spec.Monitor.SetDefaults()
-	SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 
 func (p *ProxySQLSpec) GetPersistentSecrets() []string {

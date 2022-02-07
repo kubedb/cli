@@ -25,15 +25,15 @@ type InitSpec struct {
 	// Initialized indicates that this database has been initialized.
 	// This will be set by the operator when status.conditions["Provisioned"] is set to ensure
 	// that database is not mistakenly reset when recovered using disaster recovery tools.
-	Initialized bool `json:"initialized,omitempty" protobuf:"varint,1,opt,name=initialized"`
+	Initialized bool `json:"initialized,omitempty"`
 	// Wait for initial DataRestore condition
-	WaitForInitialRestore bool              `json:"waitForInitialRestore,omitempty" protobuf:"varint,2,opt,name=waitForInitialRestore"`
-	Script                *ScriptSourceSpec `json:"script,omitempty" protobuf:"bytes,3,opt,name=script"`
+	WaitForInitialRestore bool              `json:"waitForInitialRestore,omitempty"`
+	Script                *ScriptSourceSpec `json:"script,omitempty"`
 }
 
 type ScriptSourceSpec struct {
-	ScriptPath        string `json:"scriptPath,omitempty" protobuf:"bytes,1,opt,name=scriptPath"`
-	core.VolumeSource `json:",inline,omitempty" protobuf:"bytes,2,opt,name=volumeSource"`
+	ScriptPath        string `json:"scriptPath,omitempty"`
+	core.VolumeSource `json:",inline,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted
@@ -106,21 +106,21 @@ func (a AddressType) IsIP() bool {
 
 type NamedServiceTemplateSpec struct {
 	// Alias represents the identifier of the service.
-	Alias ServiceAlias `json:"alias" protobuf:"bytes,1,opt,name=alias"`
+	Alias ServiceAlias `json:"alias"`
 
 	// ServiceTemplate is an optional configuration for a service used to expose database
 	// +optional
-	ofst.ServiceTemplateSpec `json:",inline,omitempty" protobuf:"bytes,2,opt,name=serviceTemplateSpec"`
+	ofst.ServiceTemplateSpec `json:",inline,omitempty"`
 }
 
 type KernelSettings struct {
 	// Privileged specifies the status whether the init container
 	// requires privileged access to perform the following commands.
 	// +optional
-	Privileged bool `json:"privileged,omitempty" protobuf:"varint,1,opt,name=privileged"`
+	Privileged bool `json:"privileged,omitempty"`
 	// Sysctls hold a list of sysctls commands needs to apply to kernel.
 	// +optional
-	Sysctls []core.Sysctl `json:"sysctls,omitempty" protobuf:"bytes,2,rep,name=sysctls"`
+	Sysctls []core.Sysctl `json:"sysctls,omitempty"`
 }
 
 // CoordinatorSpec defines attributes of the coordinator container
@@ -129,11 +129,11 @@ type CoordinatorSpec struct {
 	// Cannot be updated.
 	// More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 	// +optional
-	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,1,opt,name=resources"`
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
 
 	// Security options the coordinator container should run with.
 	// More info: https://kubernetes.io/docs/concepts/policy/security-context/
 	// More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 	// +optional
-	SecurityContext *core.SecurityContext `json:"securityContext,omitempty" protobuf:"bytes,2,opt,name=securityContext"`
+	SecurityContext *core.SecurityContext `json:"securityContext,omitempty"`
 }

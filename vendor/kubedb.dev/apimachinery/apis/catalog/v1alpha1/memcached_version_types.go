@@ -41,38 +41,38 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MemcachedVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MemcachedVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MemcachedVersionSpec `json:"spec,omitempty"`
 }
 
 // MemcachedVersionSpec is the spec for memcached version
 type MemcachedVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Database Image
-	DB MemcachedVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
+	DB MemcachedVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter MemcachedVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	Exporter MemcachedVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// PSP names
-	PodSecurityPolicies MemcachedVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,5,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies MemcachedVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 }
 
 // MemcachedVersionDatabase is the Memcached Database image
 type MemcachedVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MemcachedVersionExporter is the image for the Memcached exporter
 type MemcachedVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MemcachedVersionPodSecurityPolicy is the Memcached pod security policies
 type MemcachedVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -80,7 +80,7 @@ type MemcachedVersionPodSecurityPolicy struct {
 // MemcachedVersionList is a list of MemcachedVersions
 type MemcachedVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MemcachedVersion CRD objects
-	Items []MemcachedVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MemcachedVersion `json:"items,omitempty"`
 }

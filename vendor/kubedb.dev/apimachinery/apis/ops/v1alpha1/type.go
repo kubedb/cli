@@ -59,6 +59,8 @@ const (
 	Restart                      = "Restart"
 	RestartStatefulSet           = "RestartStatefulSet"
 	CertificateSynced            = "CertificateSynced"
+	Reconciled                   = "Reconciled"
+	RestartStatefulSetPods       = "RestartStatefulSetPods"
 
 	// MongoDB Constants
 	StartingBalancer            = "StartingBalancer"
@@ -100,22 +102,38 @@ const (
 	RestartMongos               = "RestartMongos"
 	RestartConfigServer         = "RestartConfigServer"
 	RestartShard                = "RestartShard"
+	DeleteStatefulSets          = "DeleteStatefulSets"
+	DatabaseReady               = "DatabaseReady"
 
 	// Elasticsearch Constant
-	OrphanStatefulSetPods              = "OrphanStatefulSetPods"
-	ReadyStatefulSets                  = "ReadyStatefulSets"
-	ScaleDownCombinedNode              = "ScaleDownCombinedNode"
-	ScaleDownDataNode                  = "ScaleDownDataNode"
-	ScaleDownIngestNode                = "ScaleDownIngestNode"
-	ScaleDownMasterNode                = "ScaleDownMasterNode"
-	ScaleUpCombinedNode                = "ScaleUpCombinedNode"
-	ScaleUpDataNode                    = "ScaleUpDataNode"
-	ScaleUpIngestNode                  = "ScaleUpIngestNode"
-	ScaleUpMasterNode                  = "ScaleUpMasterNode"
-	UpdateCombinedNodePVCs             = "UpdateCombinedNodePVCs"
-	UpdateDataNodePVCs                 = "UpdateDataNodePVCs"
-	UpdateIngestNodePVCs               = "UpdateIngestNodePVCs"
-	UpdateMasterNodePVCs               = "UpdateMasterNodePVCs"
+	OrphanStatefulSetPods      = "OrphanStatefulSetPods"
+	ReadyStatefulSets          = "ReadyStatefulSets"
+	ScaleMasterNode            = "ScaleMasterNode"
+	ScaleDataNode              = "ScaleDataNode"
+	ScaleDataHotNode           = "ScaleDataHotNode"
+	ScaleDataWarmNode          = "ScaleDataWarmNode"
+	ScaleDataColdNode          = "ScaleDataColdNode"
+	ScaleDataFrozenNode        = "ScaleDataFrozenNode"
+	ScaleDataContentNode       = "ScaleDataContentNode"
+	ScaleMLNode                = "ScaleMLNode"
+	ScaleTransformNode         = "ScaleTransformNode"
+	ScaleCoordinatingNode      = "ScaleCoordinatingNode"
+	ScaleIngestNode            = "ScaleIngestNode"
+	ScaleCombinedNode          = "ScaleCombinedNode"
+	UpdateCombinedNodePVCs     = "UpdateCombinedNodePVCs"
+	UpdateMasterNodePVCs       = "UpdateMasterNodePVCs"
+	UpdateIngestNodePVCs       = "UpdateIngestNodePVCs"
+	UpdateDataNodePVCs         = "UpdateDataNodePVCs"
+	UpdateDataContentNodePVCs  = "UpdateDataContentNodePVCs"
+	UpdateDataHotNodePVCs      = "UpdateDataHotNodePVCs"
+	UpdateDataWarmNodePVCs     = "UpdateDataWarmNodePVCs"
+	UpdateDataColdNodePVCs     = "UpdateDataColdNodePVCs"
+	UpdateDataFrozenNodePVCs   = "UpdateDataFrozenNodePVCs"
+	UpdateMLNodePVCs           = "UpdateMLNodePVCs"
+	UpdateTransformNodePVCs    = "UpdateTransformNodePVCs"
+	UpdateCoordinatingNodePVCs = "UpdateCoordinatingNodePVCs"
+	UpdateElasticsearchCR      = "UpdateElasticsearchCR"
+
 	UpdateNodeResources                = "UpdateNodeResources"
 	UpdateMasterStatefulSetResources   = "UpdateMasterStatefulSetResources"
 	UpdateDataStatefulSetResources     = "UpdateDataStatefulSetResources"
@@ -176,6 +194,9 @@ const (
 
 	ReconfigurePrimaryPod  = "ReconfigurePrimaryPod"
 	ReconfigureStandbyPods = "ReconfigureStandbyPods"
+
+	// MySQL/MariaDB Constants
+	TempIniFilesPath = "/tmp/kubedb-custom-ini-files"
 )
 
 // +kubebuilder:validation:Enum=Pending;Progressing;Successful;WaitingForApproval;Failed;Approved;Denied
@@ -198,12 +219,14 @@ const (
 	OpsRequestDenied OpsRequestPhase = "Denied"
 )
 
-// +kubebuilder:validation:Enum=Upgrade;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision
 type OpsRequestType string
 
 const (
-	// used for Upgrade operation
+	// Deprecated. Use UpdateVersion
 	OpsRequestTypeUpgrade OpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	OpsRequestTypeUpdateVersion OpsRequestType = "UpdateVersion"
 	// used for HorizontalScaling operation
 	OpsRequestTypeHorizontalScaling OpsRequestType = "HorizontalScaling"
 	// used for VerticalScaling operation
@@ -216,6 +239,8 @@ const (
 	OpsRequestTypeReconfigure OpsRequestType = "Reconfigure"
 	// used for ReconfigureTLS operation
 	OpsRequestTypeReconfigureTLSs OpsRequestType = "ReconfigureTLS"
+	// used for Reprovision operation
+	OpsRequestTypeReprovision OpsRequestType = "Reprovision"
 )
 
 // +kubebuilder:validation:Enum=Offline;Online
@@ -231,16 +256,19 @@ const (
 type RestartSpec struct {
 }
 
+type Reprovision struct {
+}
+
 type TLSSpec struct {
 	// TLSConfig contains updated tls configurations for client and server.
 	// +optional
-	kmapi.TLSConfig `json:",inline,omitempty" protobuf:"bytes,1,opt,name=tLSConfig"`
+	kmapi.TLSConfig `json:",inline,omitempty"`
 
 	// RotateCertificates tells operator to initiate certificate rotation
 	// +optional
-	RotateCertificates bool `json:"rotateCertificates,omitempty" protobuf:"varint,2,opt,name=rotateCertificates"`
+	RotateCertificates bool `json:"rotateCertificates,omitempty"`
 
 	// Remove tells operator to remove TLS configuration
 	// +optional
-	Remove bool `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+	Remove bool `json:"remove,omitempty"`
 }

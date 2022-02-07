@@ -17,4 +17,5 @@ limitations under the License.
 // +k8s:deepcopy-gen=package
 // +k8s:conversion-gen=kmodules.xyz/monitoring-agent-api/api/v1
 // +k8s:openapi-gen=true
+// +gencrdrefdocs:force=true
 package v1alpha1 // import "kmodules.xyz/monitoring-agent-api/api/v1alpha1"

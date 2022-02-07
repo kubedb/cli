@@ -43,31 +43,31 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PgBouncerVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PgBouncerVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PgBouncerVersionSpec `json:"spec,omitempty"`
 }
 
 // PgBouncerVersionSpec is the spec for pgbouncer version
 type PgBouncerVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Database Image
-	Server PgBouncerServerVersion `json:"server" protobuf:"bytes,2,opt,name=server"`
+	Server PgBouncerServerVersion `json:"server"`
 	// Exporter Image
-	Exporter PgBouncerVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	Exporter PgBouncerVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 }
 
 // PgBouncerServerVersion is the PgBouncer Database image
 type PgBouncerServerVersion struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PostgresVersionExporter is the image for the Postgres exporter
 type PgBouncerVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -75,7 +75,7 @@ type PgBouncerVersionExporter struct {
 // PgBouncerVersionList is a list of PgBouncerVersions
 type PgBouncerVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of PgBouncerVersion CRD objects
-	Items []PgBouncerVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []PgBouncerVersion `json:"items,omitempty"`
 }

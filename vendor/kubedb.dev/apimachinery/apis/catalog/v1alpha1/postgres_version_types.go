@@ -45,60 +45,60 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PostgresVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PostgresVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PostgresVersionSpec `json:"spec,omitempty"`
 }
 
 // PostgresVersionSpec is the spec for postgres version
 type PostgresVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Distribution
-	Distribution PostgresDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=PostgresDistro"`
+	Distribution PostgresDistro `json:"distribution,omitempty"`
 	//init container image
-	InitContainer PostgresVersionInitContainer `json:"initContainer,omitempty" protobuf:"bytes,3,opt,name=initContainer"`
+	InitContainer PostgresVersionInitContainer `json:"initContainer,omitempty"`
 	// Database Image
-	DB PostgresVersionDatabase `json:"db" protobuf:"bytes,4,opt,name=db"`
+	DB PostgresVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter PostgresVersionExporter `json:"exporter" protobuf:"bytes,5,opt,name=exporter"`
+	Exporter PostgresVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator PostgresVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,6,opt,name=coordinator"`
+	Coordinator PostgresVersionCoordinator `json:"coordinator,omitempty"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,7,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// PSP names
-	PodSecurityPolicies PostgresVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,8,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies PostgresVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,9,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// SecurityContext is for the additional config for postgres DB container
 	// +optional
-	SecurityContext PostgresSecurityContext `json:"securityContext" protobuf:"bytes,10,opt,name=securityContext"`
+	SecurityContext PostgresSecurityContext `json:"securityContext"`
 }
 
 // PostgresVersionInitContainer is the Postgres init container image
 type PostgresVersionInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PostgresVersionDatabase is the Postgres Database image
 type PostgresVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PostgresVersionCoordinator is the Postgres leader elector image
 type PostgresVersionCoordinator struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PostgresVersionExporter is the image for the Postgres exporter
 type PostgresVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PostgresVersionPodSecurityPolicy is the Postgres pod security policies
 type PostgresVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -106,9 +106,9 @@ type PostgresVersionPodSecurityPolicy struct {
 // PostgresVersionList is a list of PostgresVersions
 type PostgresVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of PostgresVersion CRD objects
-	Items []PostgresVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []PostgresVersion `json:"items,omitempty"`
 }
 
 // PostgresSecurityContext is the additional features for the Postgres
@@ -116,11 +116,11 @@ type PostgresSecurityContext struct {
 	// RunAsUser is default UID for the DB container. It is by default 999 for debian based image and 70 for alpine based image.
 	// postgres UID 999 for debian images https://github.com/docker-library/postgres/blob/14f13e4b399ed1848fa24c2c1f5bd40c25732bdd/13/Dockerfile#L15
 	// postgres UID 70  for alpine images https://github.com/docker-library/postgres/blob/14f13e4b399ed1848fa24c2c1f5bd40c25732bdd/13/alpine/Dockerfile#L6
-	RunAsUser *int64 `json:"runAsUser,omitempty" protobuf:"varint,1,opt,name=runAsUser"`
+	RunAsUser *int64 `json:"runAsUser,omitempty"`
 
 	// RunAsAnyNonRoot will be true if user can change the default db container user to other than postgres user.
 	// It will be always false for alpine images https://hub.docker.com/_/postgres/ # section : Arbitrary --user Notes
-	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty" protobuf:"varint,2,opt,name=runAsAnyNonRoot"`
+	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Official;TimescaleDB;PostGIS;KubeDB;PostgreSQL

@@ -45,83 +45,94 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MongoDB struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MongoDBSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            MongoDBStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MongoDBSpec   `json:"spec,omitempty"`
+	Status            MongoDBStatus `json:"status,omitempty"`
 }
 
 type MongoDBSpec struct {
 	// Version of MongoDB to be deployed.
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 
 	// Number of instances to deploy for a MongoDB database.
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// MongoDB replica set
-	ReplicaSet *MongoDBReplicaSet `json:"replicaSet,omitempty" protobuf:"bytes,3,opt,name=replicaSet"`
+	ReplicaSet *MongoDBReplicaSet `json:"replicaSet,omitempty"`
 
 	// MongoDB sharding topology.
-	ShardTopology *MongoDBShardingTopology `json:"shardTopology,omitempty" protobuf:"bytes,4,opt,name=shardTopology"`
+	ShardTopology *MongoDBShardingTopology `json:"shardTopology,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,5,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,6,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// EphemeralStorage spec to specify the configuration of ephemeral storage type.
+	EphemeralStorage *core.EmptyDirVolumeSource `json:"ephemeralStorage,omitempty"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,7,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// ClusterAuthMode for replicaset or sharding. (default will be x509 if sslmode is not `disabled`.)
 	// See available ClusterAuthMode: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-clusterauthmode
-	ClusterAuthMode ClusterAuthMode `json:"clusterAuthMode,omitempty" protobuf:"bytes,8,opt,name=clusterAuthMode,casttype=ClusterAuthMode"`
+	ClusterAuthMode ClusterAuthMode `json:"clusterAuthMode,omitempty"`
 
 	// SSLMode for both standalone and clusters. (default, disabled.)
 	// See more options: https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-sslmode
-	SSLMode SSLMode `json:"sslMode,omitempty" protobuf:"bytes,9,opt,name=sslMode,casttype=SSLMode"`
+	SSLMode SSLMode `json:"sslMode,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,10,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,11,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,12,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,13,opt,name=podTemplate"`
+	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,14,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,15,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// Secret for KeyFileSecret. Contains keyfile `key.txt` if spec.clusterAuthMode == keyFile || sendKeyFile
-	KeyFileSecret *core.LocalObjectReference `json:"keyFileSecret,omitempty" protobuf:"bytes,16,opt,name=keyFileSecret"`
+	KeyFileSecret *core.LocalObjectReference `json:"keyFileSecret,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,17,opt,name=halted"`
+	Halted bool `json:"halted,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 
 	// StorageEngine can be wiredTiger (default) or inMemory
 	// See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/
-	StorageEngine StorageEngine `json:"storageEngine,omitempty" protobuf:"bytes,19,opt,name=storageEngine,casttype=StorageEngine"`
+	StorageEngine StorageEngine `json:"storageEngine,omitempty"`
 
 	// Coordinator defines attributes of the coordinator container
 	// +optional
-	Coordinator CoordinatorSpec `json:"coordinator,omitempty" protobuf:"bytes,20,opt,name=coordinator"`
+	Coordinator CoordinatorSpec `json:"coordinator,omitempty"`
+
+	// AllowedSchemas defines the types of database schemas that MAY refer to
+	// a database instance and the trusted namespaces where those schema resources MAY be
+	// present.
+	//
+	// +kubebuilder:default={namespaces:{from: Same}}
+	// +optional
+	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter
@@ -191,83 +202,89 @@ const (
 
 type MongoDBReplicaSet struct {
 	// Name of replicaset
-	Name string `json:"name" protobuf:"bytes,1,opt,name=name"`
+	Name string `json:"name"`
 }
 
 type MongoDBShardingTopology struct {
 	// Shard component of mongodb.
 	// More info: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
-	Shard MongoDBShardNode `json:"shard" protobuf:"bytes,1,opt,name=shard"`
+	Shard MongoDBShardNode `json:"shard"`
 
 	// Config Server (metadata) component of mongodb.
 	// More info: https://docs.mongodb.com/manual/core/sharded-cluster-config-servers/
-	ConfigServer MongoDBConfigNode `json:"configServer" protobuf:"bytes,2,opt,name=configServer"`
+	ConfigServer MongoDBConfigNode `json:"configServer"`
 
 	// Mongos (router) component of mongodb.
 	// More info: https://docs.mongodb.com/manual/core/sharded-cluster-query-router/
-	Mongos MongoDBMongosNode `json:"mongos" protobuf:"bytes,3,opt,name=mongos"`
+	Mongos MongoDBMongosNode `json:"mongos"`
 }
 
 type MongoDBShardNode struct {
 	// Shards represents number of shards for shard type of node
 	// More info: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
-	Shards int32 `json:"shards" protobuf:"varint,1,opt,name=shards"`
+	Shards int32 `json:"shards"`
 
 	// MongoDB sharding node configs
-	MongoDBNode `json:",inline" protobuf:"bytes,2,opt,name=mongoDBNode"`
+	MongoDBNode `json:",inline"`
 
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,3,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// EphemeralStorage spec to specify the configuration of ephemeral storage type.
+	EphemeralStorage *core.EmptyDirVolumeSource `json:"ephemeralStorage,omitempty"`
 }
 
 type MongoDBConfigNode struct {
 	// MongoDB config server node configs
-	MongoDBNode `json:",inline" protobuf:"bytes,1,opt,name=mongoDBNode"`
+	MongoDBNode `json:",inline"`
 
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,2,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// EphemeralStorage spec to specify the configuration of ephemeral storage type.
+	EphemeralStorage *core.EmptyDirVolumeSource `json:"ephemeralStorage,omitempty"`
 }
 
 type MongoDBMongosNode struct {
 	// MongoDB mongos node configs
-	MongoDBNode `json:",inline" protobuf:"bytes,1,opt,name=mongoDBNode"`
+	MongoDBNode `json:",inline"`
 }
 
 type MongoDBNode struct {
 	// Replicas represents number of replicas of this specific node.
 	// If current node has replicaset enabled, then replicas is the amount of replicaset nodes.
-	Replicas int32 `json:"replicas" protobuf:"varint,1,opt,name=replicas"`
+	Replicas int32 `json:"replicas"`
 
 	// Prefix is the name prefix of this node.
-	Prefix string `json:"prefix,omitempty" protobuf:"bytes,2,opt,name=prefix"`
+	Prefix string `json:"prefix,omitempty"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,3,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,4,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 }
 
 type MongoDBStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type MongoDBList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MongoDB TPR objects
-	Items []MongoDB `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MongoDB `json:"items,omitempty"`
 }

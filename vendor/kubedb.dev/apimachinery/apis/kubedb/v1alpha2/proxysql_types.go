@@ -53,48 +53,48 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type ProxySQL struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              ProxySQLSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            ProxySQLStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              ProxySQLSpec   `json:"spec,omitempty"`
+	Status            ProxySQLStatus `json:"status,omitempty"`
 }
 
 type ProxySQLSpec struct {
 	// Version of ProxySQL to be deployed.
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 
 	// Number of instances to deploy for ProxySQL. Currently we support only replicas = 1.
 	// TODO: If replicas > 1, proxysql will be clustered
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// Mode specifies the type of MySQL/Percona-XtraDB/MariaDB cluster for which proxysql
 	// will be configured. It must be either "Galera" or "GroupReplication"
-	Mode *LoadBalanceMode `json:"mode,omitempty" protobuf:"bytes,3,opt,name=mode,casttype=LoadBalanceMode"`
+	Mode *LoadBalanceMode `json:"mode,omitempty"`
 
 	// Backend specifies the information about backend MySQL/Percona-XtraDB/MariaDB servers
-	Backend *ProxySQLBackendSpec `json:"backend,omitempty" protobuf:"bytes,4,opt,name=backend"`
+	Backend *ProxySQLBackendSpec `json:"backend,omitempty"`
 
 	// ProxySQL secret containing username and password for root user and proxysql user
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,5,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// Monitor is used monitor proxysql instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,6,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,7,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose proxysql
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,8,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,9,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,10,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
@@ -110,30 +110,30 @@ type ProxySQLBackendSpec struct {
 	// Ref lets one to locate the typed referenced object
 	// (in our case, it is the MySQL/Percona-XtraDB/ProxySQL object)
 	// inside the same namespace.
-	Ref *core.TypedLocalObjectReference `json:"ref,omitempty" protobuf:"bytes,7,opt,name=ref"`
+	Ref *core.TypedLocalObjectReference `json:"ref,omitempty"`
 
 	// Number of backend servers.
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,8,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 }
 
 type ProxySQLStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type ProxySQLList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of ProxySQL TPR objects
-	Items []ProxySQL `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []ProxySQL `json:"items,omitempty"`
 }

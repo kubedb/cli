@@ -46,48 +46,48 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type Elasticsearch struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              ElasticsearchSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            ElasticsearchStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              ElasticsearchSpec   `json:"spec,omitempty"`
+	Status            ElasticsearchStatus `json:"status,omitempty"`
 }
 
 type ElasticsearchSpec struct {
 	// Version of Elasticsearch to be deployed.
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 
 	// Number of instances to deploy for a Elasticsearch database.
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// Elasticsearch topology for node specification
-	Topology *ElasticsearchClusterTopology `json:"topology,omitempty" protobuf:"bytes,3,opt,name=topology"`
+	Topology *ElasticsearchClusterTopology `json:"topology,omitempty"`
 
 	// To enable ssl for http layer
-	EnableSSL bool `json:"enableSSL,omitempty" protobuf:"varint,4,opt,name=enableSSL"`
+	EnableSSL bool `json:"enableSSL,omitempty"`
 
 	// disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user.
 	// If unset, default is false
-	DisableSecurity bool `json:"disableSecurity,omitempty" protobuf:"varint,5,opt,name=disableSecurity"`
+	DisableSecurity bool `json:"disableSecurity,omitempty"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,6,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,7,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,8,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,9,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,10,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database.
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,11,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// SecureConfigSecret is an optional field to provide secure settings for database.
 	//	- Ref: https://www.elastic.co/guide/en/elasticsearch/reference/7.14/secure-settings.html
@@ -100,26 +100,26 @@ type ElasticsearchSpec struct {
 	//		s3.client.default.access_key: ACCESS_KEY
 	//		s3.client.default.secret_key: SECRET_KEY
 	// +optional
-	SecureConfigSecret *core.LocalObjectReference `json:"secureConfigSecret,omitempty" protobuf:"bytes,12,opt,name=secureConfigSecret"`
+	SecureConfigSecret *core.LocalObjectReference `json:"secureConfigSecret,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,13,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,14,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// An eviction is allowed if at most "maxUnavailable" pods selected by
 	// "selector" are unavailable after the eviction, i.e. even in absence of
 	// the evicted pod. For example, one can prevent all voluntary evictions
 	// by specifying 0. This is a mutually exclusive setting with "minAvailable".
 	// +optional
-	MaxUnavailable *intstr.IntOrString `json:"maxUnavailable,omitempty" protobuf:"bytes,15,opt,name=maxUnavailable"`
+	MaxUnavailable *intstr.IntOrString `json:"maxUnavailable,omitempty"`
 
 	// TLS contains tls configurations
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,16,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// InternalUsers contains internal user configurations.
 	// Expected Input format:
@@ -129,7 +129,7 @@ type ElasticsearchSpec struct {
 	//   <username2>:
 	//		...
 	// +optional
-	InternalUsers map[string]ElasticsearchUserSpec `json:"internalUsers,omitempty" protobuf:"bytes,17,rep,name=internalUsers"`
+	InternalUsers map[string]ElasticsearchUserSpec `json:"internalUsers,omitempty"`
 
 	// RolesMapping contains roles mapping configurations.
 	// Expected Input format:
@@ -139,49 +139,49 @@ type ElasticsearchSpec struct {
 	//   <role2>:
 	//		...
 	// +optional
-	RolesMapping map[string]ElasticsearchRoleMapSpec `json:"rolesMapping,omitempty" protobuf:"bytes,18,rep,name=rolesMapping"`
+	RolesMapping map[string]ElasticsearchRoleMapSpec `json:"rolesMapping,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,19,opt,name=halted"`
+	Halted bool `json:"halted,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,20,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 
 	// KernelSettings contains the additional kernel settings.
 	// +optional
-	KernelSettings *KernelSettings `json:"kernelSettings,omitempty" protobuf:"bytes,21,opt,name=kernelSettings"`
+	KernelSettings *KernelSettings `json:"kernelSettings,omitempty"`
 }
 
 type ElasticsearchClusterTopology struct {
-	Master       ElasticsearchNode  `json:"master" protobuf:"bytes,1,opt,name=master"`
-	Ingest       ElasticsearchNode  `json:"ingest" protobuf:"bytes,2,opt,name=ingest"`
-	Data         *ElasticsearchNode `json:"data,omitempty" protobuf:"bytes,3,opt,name=data"`
-	DataContent  *ElasticsearchNode `json:"dataContent,omitempty" protobuf:"bytes,4,opt,name=dataContent"`
-	DataHot      *ElasticsearchNode `json:"dataHot,omitempty" protobuf:"bytes,5,opt,name=dataHot"`
-	DataWarm     *ElasticsearchNode `json:"dataWarm,omitempty" protobuf:"bytes,6,opt,name=dataWarm"`
-	DataCold     *ElasticsearchNode `json:"dataCold,omitempty" protobuf:"bytes,7,opt,name=dataCold"`
-	DataFrozen   *ElasticsearchNode `json:"dataFrozen,omitempty" protobuf:"bytes,8,opt,name=dataFrozen"`
-	ML           *ElasticsearchNode `json:"ml,omitempty" protobuf:"bytes,9,opt,name=ml"`
-	Transform    *ElasticsearchNode `json:"transform,omitempty" protobuf:"bytes,10,opt,name=transform"`
-	Coordinating *ElasticsearchNode `json:"coordinating,omitempty" protobuf:"bytes,11,opt,name=coordinating"`
+	Master       ElasticsearchNode  `json:"master"`
+	Ingest       ElasticsearchNode  `json:"ingest"`
+	Data         *ElasticsearchNode `json:"data,omitempty"`
+	DataContent  *ElasticsearchNode `json:"dataContent,omitempty"`
+	DataHot      *ElasticsearchNode `json:"dataHot,omitempty"`
+	DataWarm     *ElasticsearchNode `json:"dataWarm,omitempty"`
+	DataCold     *ElasticsearchNode `json:"dataCold,omitempty"`
+	DataFrozen   *ElasticsearchNode `json:"dataFrozen,omitempty"`
+	ML           *ElasticsearchNode `json:"ml,omitempty"`
+	Transform    *ElasticsearchNode `json:"transform,omitempty"`
+	Coordinating *ElasticsearchNode `json:"coordinating,omitempty"`
 }
 
 type ElasticsearchNode struct {
 	// Replicas represents number of replica for this specific type of node
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,1,opt,name=replicas"`
-	Suffix   string `json:"suffix,omitempty" protobuf:"bytes,2,opt,name=suffix"`
+	Replicas *int32 `json:"replicas,omitempty"`
+	Suffix   string `json:"suffix,omitempty"`
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,3,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 	// Compute Resources required by the sidecar container.
-	Resources core.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,4,opt,name=resources"`
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
 	// An eviction is allowed if at most "maxUnavailable" pods selected by
 	// "selector" are unavailable after the eviction, i.e. even in absence of
 	// the evicted pod. For example, one can prevent all voluntary evictions
 	// by specifying 0. This is a mutually exclusive setting with "minAvailable".
 	// +optional
-	MaxUnavailable *intstr.IntOrString `json:"maxUnavailable,omitempty" protobuf:"bytes,5,opt,name=maxUnavailable"`
+	MaxUnavailable *intstr.IntOrString `json:"maxUnavailable,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=ca;transport;http;admin;archiver;metrics-exporter
@@ -221,43 +221,43 @@ type ElasticsearchUserSpec struct {
 	// Specifies the k8s secret name that holds the user credentials.
 	// Default to "<resource-name>-<username>-cred".
 	// +optional
-	SecretName string `json:"secretName,omitempty" yaml:"-" protobuf:"bytes,1,opt,name=secretName"`
+	SecretName string `json:"secretName,omitempty" yaml:"-"`
 
 	// Specifies the reserved status.
 	// Resources that have this set to true can’t be changed using the REST API or Kibana.
 	// Default to "false".
 	// +optional
-	Reserved bool `json:"reserved,omitempty" yaml:"reserved,omitempty" protobuf:"varint,2,opt,name=reserved"`
+	Reserved bool `json:"reserved,omitempty" yaml:"reserved,omitempty"`
 
 	// Specifies the hidden status.
 	// Resources that have this set to true are not returned by the REST API
 	// and not visible in Kibana.
 	// Default to "false".
 	// +optional
-	Hidden bool `json:"hidden,omitempty" yaml:"hidden,omitempty" protobuf:"varint,3,opt,name=hidden"`
+	Hidden bool `json:"hidden,omitempty" yaml:"hidden,omitempty"`
 
 	// Specifies a list of backend roles assigned to this user.
 	// Backend roles can come from the internal user database,
 	// LDAP groups, JSON web token claims or SAML assertions.
 	// +optional
-	BackendRoles []string `json:"backendRoles,omitempty" yaml:"backend_roles,omitempty" protobuf:"bytes,4,rep,name=backendRoles"`
+	BackendRoles []string `json:"backendRoles,omitempty" yaml:"backend_roles,omitempty"`
 
 	// Specifies a list of searchguard security plugin roles assigned to this user.
 	// +optional
-	SearchGuardRoles []string `json:"searchGuardRoles,omitempty" yaml:"search_guard_roles,omitempty" protobuf:"bytes,5,rep,name=searchGuardRoles"`
+	SearchGuardRoles []string `json:"searchGuardRoles,omitempty" yaml:"search_guard_roles,omitempty"`
 
 	// Specifies a list of opendistro security plugin roles assigned to this user.
 	// +optional
-	OpendistroSecurityRoles []string `json:"opendistroSecurityRoles,omitempty" yaml:"opendistro_security_roles,omitempty" protobuf:"bytes,6,rep,name=opendistroSecurityRoles"`
+	OpendistroSecurityRoles []string `json:"opendistroSecurityRoles,omitempty" yaml:"opendistro_security_roles,omitempty"`
 
 	// Specifies one or more custom attributes,
 	// which can be used in index names and DLS queries.
 	// +optional
-	Attributes map[string]string `json:"attributes,omitempty" yaml:"attributes,omitempty" protobuf:"bytes,7,rep,name=attributes"`
+	Attributes map[string]string `json:"attributes,omitempty" yaml:"attributes,omitempty"`
 
 	// Specifies the description of the user
 	// +optional
-	Description string `json:"description,omitempty" yaml:"description,omitempty" protobuf:"bytes,8,opt,name=description"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 }
 
 // Specifies the role mapping structure.
@@ -269,53 +269,53 @@ type ElasticsearchRoleMapSpec struct {
 	// Resources that have this set to true can’t be changed using the REST API or Kibana.
 	// Default to "false".
 	// +optional
-	Reserved bool `json:"reserved,omitempty" yaml:"reserved,omitempty" protobuf:"bytes,1,opt,name=reserved"`
+	Reserved bool `json:"reserved,omitempty" yaml:"reserved,omitempty"`
 
 	// Specifies the hidden status.
 	// Resources that have this set to true are not returned by the REST API
 	// and not visible in Kibana.
 	// Default to "false".
 	// +optional
-	Hidden bool `json:"hidden,omitempty" yaml:"hidden,omitempty" protobuf:"bytes,2,opt,name=hidden"`
+	Hidden bool `json:"hidden,omitempty" yaml:"hidden,omitempty"`
 
 	// Specifies a list of backend roles assigned to this role.
 	// Backend roles can come from the internal user database,
 	// LDAP groups, JSON web token claims or SAML assertions.
 	// +optional
-	BackendRoles []string `json:"backendRoles,omitempty" yaml:"backend_roles,omitempty" protobuf:"bytes,3,opt,name=backendRoles"`
+	BackendRoles []string `json:"backendRoles,omitempty" yaml:"backend_roles,omitempty"`
 
 	// Specifies a list of hosts assigned to this role.
 	// +optional
-	Hosts []string `json:"hosts,omitempty" yaml:"hosts,omitempty" protobuf:"bytes,4,opt,name=hosts"`
+	Hosts []string `json:"hosts,omitempty" yaml:"hosts,omitempty"`
 
 	// Specifies a list of users assigned to this role.
 	// +optional
-	Users []string `json:"users,omitempty" yaml:"users,omitempty" protobuf:"bytes,5,opt,name=users"`
+	Users []string `json:"users,omitempty" yaml:"users,omitempty"`
 
 	// Specifies a list of backend roles (migrated from ES-version6) assigned to this role.
-	AndBackendRoles []string `json:"andBackendRoles,omitempty" yaml:"and_backend_roles,omitempty" protobuf:"bytes,6,opt,name=andBackendRoles"`
+	AndBackendRoles []string `json:"andBackendRoles,omitempty" yaml:"and_backend_roles,omitempty"`
 }
 
 type ElasticsearchStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type ElasticsearchList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Elasticsearch CRD objects
-	Items []Elasticsearch `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []Elasticsearch `json:"items,omitempty"`
 }
 
 type ElasticsearchNodeRoleType string

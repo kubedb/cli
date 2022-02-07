@@ -41,132 +41,132 @@ const (
 // +kubebuilder:skipversion
 type Postgres struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PostgresSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            PostgresStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PostgresSpec   `json:"spec,omitempty"`
+	Status            PostgresStatus `json:"status,omitempty"`
 }
 
 type PostgresSpec struct {
 	// Version of Postgres to be deployed.
-	Version types.StrYo `json:"version" protobuf:"bytes,1,opt,name=version,casttype=gomodules.xyz/encoding/json/types.StrYo"`
+	Version types.StrYo `json:"version"`
 
 	// Number of instances to deploy for a Postgres database.
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// Standby mode
-	StandbyMode *PostgresStandbyMode `json:"standbyMode,omitempty" protobuf:"bytes,3,opt,name=standbyMode,casttype=PostgresStandbyMode"`
+	StandbyMode *PostgresStandbyMode `json:"standbyMode,omitempty"`
 
 	// Streaming mode
-	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty" protobuf:"bytes,4,opt,name=streamingMode,casttype=PostgresStreamingMode"`
+	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty"`
 
 	// Archive for wal files
-	Archiver *PostgresArchiverSpec `json:"archiver,omitempty" protobuf:"bytes,5,opt,name=archiver"`
+	Archiver *PostgresArchiverSpec `json:"archiver,omitempty"`
 
 	// Leader election configuration
 	// +optional
-	LeaderElection *LeaderElectionConfig `json:"leaderElection,omitempty" protobuf:"bytes,6,opt,name=leaderElection"`
+	LeaderElection *LeaderElectionConfig `json:"leaderElection,omitempty"`
 
 	// Database authentication secret
-	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty" protobuf:"bytes,7,opt,name=databaseSecret"`
+	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,8,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,9,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,10,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// BackupSchedule spec to specify how database backup will be taken
 	// +optional
-	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty" protobuf:"bytes,11,opt,name=backupSchedule"`
+	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,12,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSource is an optional field to provide custom configuration file for database (i.e postgresql.conf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,13,opt,name=configSource"`
+	ConfigSource *core.VolumeSource `json:"configSource,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,14,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplate is an optional configuration for service used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,15,opt,name=serviceTemplate"`
+	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty"`
 
 	// ReplicaServiceTemplate is an optional configuration for service used to expose postgres replicas
 	// +optional
-	ReplicaServiceTemplate ofst.ServiceTemplateSpec `json:"replicaServiceTemplate,omitempty" protobuf:"bytes,16,opt,name=replicaServiceTemplate"`
+	ReplicaServiceTemplate ofst.ServiceTemplateSpec `json:"replicaServiceTemplate,omitempty"`
 
 	// updateStrategy indicates the StatefulSetUpdateStrategy that will be
 	// employed to update Pods in the StatefulSet when a revision is made to
 	// Template.
-	UpdateStrategy apps.StatefulSetUpdateStrategy `json:"updateStrategy,omitempty" protobuf:"bytes,17,opt,name=updateStrategy"`
+	UpdateStrategy apps.StatefulSetUpdateStrategy `json:"updateStrategy,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 }
 
 type PostgresArchiverSpec struct {
-	Storage *store.Backend `json:"storage,omitempty" protobuf:"bytes,1,opt,name=storage"`
+	Storage *store.Backend `json:"storage,omitempty"`
 	// wal_keep_segments
 }
 
 type PostgresStatus struct {
-	Phase  DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
-	Reason string        `json:"reason,omitempty" protobuf:"bytes,2,opt,name=reason"`
+	Phase  DatabasePhase `json:"phase,omitempty"`
+	Reason string        `json:"reason,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration *types.IntHash `json:"observedGeneration,omitempty" protobuf:"bytes,3,opt,name=observedGeneration"`
+	ObservedGeneration *types.IntHash `json:"observedGeneration,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type PostgresList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Postgres CRD objects
-	Items []Postgres `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []Postgres `json:"items,omitempty"`
 }
 
 // Following structures are used for audit summary report
 type PostgresTableInfo struct {
-	TotalRow int64 `json:"totalRow" protobuf:"varint,1,opt,name=totalRow"`
-	MaxID    int64 `json:"maxId" protobuf:"varint,2,opt,name=maxId"`
-	NextID   int64 `json:"nextId" protobuf:"varint,3,opt,name=nextId"`
+	TotalRow int64 `json:"totalRow"`
+	MaxID    int64 `json:"maxId"`
+	NextID   int64 `json:"nextId"`
 }
 
 type PostgresSchemaInfo struct {
-	Table map[string]*PostgresTableInfo `json:"table" protobuf:"bytes,1,rep,name=table"`
+	Table map[string]*PostgresTableInfo `json:"table"`
 }
 
 type PostgresSummary struct {
-	Schema map[string]*PostgresSchemaInfo `json:"schema" protobuf:"bytes,1,rep,name=schema"`
+	Schema map[string]*PostgresSchemaInfo `json:"schema"`
 }
 
 type PostgresWALSourceSpec struct {
-	BackupName    string          `json:"backupName,omitempty" protobuf:"bytes,1,opt,name=backupName"`
-	PITR          *RecoveryTarget `json:"pitr,omitempty" protobuf:"bytes,2,opt,name=pitr"`
-	store.Backend `json:",inline,omitempty" protobuf:"bytes,3,opt,name=backend"`
+	BackupName    string          `json:"backupName,omitempty"`
+	PITR          *RecoveryTarget `json:"pitr,omitempty"`
+	store.Backend `json:",inline,omitempty"`
 }
 
 type RecoveryTarget struct {
 	// TargetTime specifies the time stamp up to which recovery will proceed.
-	TargetTime string `json:"targetTime,omitempty" protobuf:"bytes,1,opt,name=targetTime"`
+	TargetTime string `json:"targetTime,omitempty"`
 	// TargetTimeline specifies recovering into a particular timeline.
 	// The default is to recover along the same timeline that was current when the base backup was taken.
-	TargetTimeline string `json:"targetTimeline,omitempty" protobuf:"bytes,2,opt,name=targetTimeline"`
+	TargetTimeline string `json:"targetTimeline,omitempty"`
 	// TargetXID specifies the transaction ID up to which recovery will proceed.
-	TargetXID string `json:"targetXID,omitempty" protobuf:"bytes,3,opt,name=targetXID"`
+	TargetXID string `json:"targetXID,omitempty"`
 	// TargetInclusive specifies whether to include ongoing transaction in given target point.
-	TargetInclusive *bool `json:"targetInclusive,omitempty" protobuf:"varint,4,opt,name=targetInclusive"`
+	TargetInclusive *bool `json:"targetInclusive,omitempty"`
 }
 
 type PostgresStandbyMode string

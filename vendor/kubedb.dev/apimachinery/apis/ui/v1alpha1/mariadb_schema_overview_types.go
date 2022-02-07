@@ -33,9 +33,9 @@ type MariaDBSchemaOverviewSpec = GenericSchemaOverviewSpec
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MariaDBSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MariaDBSchemaOverviewSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec MariaDBSchemaOverviewSpec `json:"spec,omitempty"`
 }
 
 // MariaDBSchemaOverviewList contains a list of MariaDBSchemaOverview
@@ -43,8 +43,8 @@ type MariaDBSchemaOverview struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MariaDBSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []MariaDBSchemaOverview `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []MariaDBSchemaOverview `json:"items"`
 }
 
 func init() {

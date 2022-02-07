@@ -44,53 +44,53 @@ type MongoDBAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
 	// +optional
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// Specification of the behavior of the autoscaler.
 	// More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.
-	Spec MongoDBAutoscalerSpec `json:"spec" protobuf:"bytes,2,name=spec"`
+	Spec MongoDBAutoscalerSpec `json:"spec"`
 
 	// Current information about the autoscaler.
 	// +optional
-	Status MongoDBAutoscalerStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	Status MongoDBAutoscalerStatus `json:"status,omitempty"`
 }
 
 // MongoDBAutoscalerSpec is the specification of the behavior of the autoscaler.
 type MongoDBAutoscalerSpec struct {
-	DatabaseRef *core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
-	Compute *MongoDBComputeAutoscalerSpec `json:"compute,omitempty" protobuf:"bytes,2,opt,name=compute"`
-	Storage *MongoDBStorageAutoscalerSpec `json:"storage,omitempty" protobuf:"bytes,3,opt,name=storage"`
+	Compute *MongoDBComputeAutoscalerSpec `json:"compute,omitempty"`
+	Storage *MongoDBStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
 type MongoDBComputeAutoscalerSpec struct {
-	Standalone       *ComputeAutoscalerSpec `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
-	ReplicaSet       *ComputeAutoscalerSpec `json:"replicaSet,omitempty" protobuf:"bytes,2,opt,name=replicaSet"`
-	ConfigServer     *ComputeAutoscalerSpec `json:"configServer,omitempty" protobuf:"bytes,3,opt,name=configServer"`
-	Shard            *ComputeAutoscalerSpec `json:"shard,omitempty" protobuf:"bytes,4,opt,name=shard"`
-	Mongos           *ComputeAutoscalerSpec `json:"mongos,omitempty" protobuf:"bytes,5,opt,name=mongos"`
-	DisableScaleDown bool                   `json:"disableScaleDown,omitempty" protobuf:"varint,6,opt,name=disableScaleDown"`
+	Standalone       *ComputeAutoscalerSpec `json:"standalone,omitempty"`
+	ReplicaSet       *ComputeAutoscalerSpec `json:"replicaSet,omitempty"`
+	ConfigServer     *ComputeAutoscalerSpec `json:"configServer,omitempty"`
+	Shard            *ComputeAutoscalerSpec `json:"shard,omitempty"`
+	Mongos           *ComputeAutoscalerSpec `json:"mongos,omitempty"`
+	DisableScaleDown bool                   `json:"disableScaleDown,omitempty"`
 }
 
 type MongoDBStorageAutoscalerSpec struct {
-	Standalone   *StorageAutoscalerSpec `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
-	ReplicaSet   *StorageAutoscalerSpec `json:"replicaSet,omitempty" protobuf:"bytes,2,opt,name=replicaSet"`
-	ConfigServer *StorageAutoscalerSpec `json:"configServer,omitempty" protobuf:"bytes,3,opt,name=configServer"`
-	Shard        *StorageAutoscalerSpec `json:"shard,omitempty" protobuf:"bytes,4,opt,name=shard"`
+	Standalone   *StorageAutoscalerSpec `json:"standalone,omitempty"`
+	ReplicaSet   *StorageAutoscalerSpec `json:"replicaSet,omitempty"`
+	ConfigServer *StorageAutoscalerSpec `json:"configServer,omitempty"`
+	Shard        *StorageAutoscalerSpec `json:"shard,omitempty"`
 }
 
 // MongoDBAutoscalerStatus describes the runtime state of the autoscaler.
 type MongoDBAutoscalerStatus struct {
 	// observedGeneration is the most recent generation observed by this autoscaler.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,1,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 
 	// Conditions is the set of conditions required for this autoscaler to scale its target,
 	// and indicates whether or not those conditions are met.
 	// +optional
 	// +patchMergeKey=type
 	// +patchStrategy=merge
-	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,2,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
 // MongoDBAutoscalerConditionType are the valid conditions of
@@ -112,8 +112,8 @@ type MongoDBAutoscalerList struct {
 	metav1.TypeMeta `json:",inline"`
 	// metadata is the standard list metadata.
 	// +optional
-	metav1.ListMeta `json:"metadata" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata"`
 
 	// items is the list of mongodb database autoscaler objects.
-	Items []MongoDBAutoscaler `json:"items" protobuf:"bytes,2,rep,name=items"`
+	Items []MongoDBAutoscaler `json:"items"`
 }

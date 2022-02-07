@@ -28,14 +28,14 @@ const (
 
 // RedisQueriesSpec defines the desired state of RedisQueries
 type RedisQueriesSpec struct {
-	Queries []RedisQuerySpec `json:"queries" protobuf:"bytes,1,rep,name=queries"`
+	Queries []RedisQuerySpec `json:"queries"`
 }
 
 type RedisQuerySpec struct {
-	QueryId                int64    `json:"queryId" protobuf:"varint,1,opt,name=queryId"`
-	QueryTimestamp         int64    `json:"queryTimestamp" protobuf:"varint,2,opt,name=queryTimestamp"`
-	ExecTimeInMircoSeconds int64    `json:"execTimeInMircoSeconds" protobuf:"varint,3,opt,name=execTimeInMircoSeconds"`
-	Args                   []string `json:"args" protobuf:"bytes,4,rep,name=args"`
+	QueryId              int64        `json:"queryId"`
+	QueryTimestamp       *metav1.Time `json:"queryTimestamp"`
+	ExecTimeMicroSeconds int64        `json:"execTimeMicroSeconds"`
+	Args                 []string     `json:"args"`
 }
 
 // RedisQueries is the Schema for the RedisQueries API
@@ -43,9 +43,9 @@ type RedisQuerySpec struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type RedisQueries struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec RedisQueriesSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec RedisQueriesSpec `json:"spec,omitempty"`
 }
 
 // RedisQueriesList contains a list of RedisQueries
@@ -53,8 +53,8 @@ type RedisQueries struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type RedisQueriesList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []RedisQueries `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []RedisQueries `json:"items"`
 }
 
 func init() {

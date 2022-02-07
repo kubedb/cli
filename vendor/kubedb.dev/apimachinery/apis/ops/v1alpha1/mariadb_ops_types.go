@@ -44,88 +44,107 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MariaDBOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MariaDBOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            MariaDBOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MariaDBOpsRequestSpec   `json:"spec,omitempty"`
+	Status            MariaDBOpsRequestStatus `json:"status,omitempty"`
 }
 
 // MariaDBOpsRequestSpec is the spec for MariaDBOpsRequest
 type MariaDBOpsRequestSpec struct {
 	// Specifies the MariaDB reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MariaDB
-	Upgrade *MariaDBUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *MariaDBUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *MariaDBHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *MariaDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *MariaDBVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *MariaDBVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *MariaDBVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *MariaDBVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of MariaDB
-	Configuration *MariaDBCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *MariaDBCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *MariaDBTLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *MariaDBTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
-	Timeout *metav1.Duration `json:"timeout,omitempty" protobuf:"bytes,10,opt,name=timeout"`
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 }
 
 type MariaDBUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion string `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
+	TargetVersion string `json:"targetVersion,omitempty"`
 }
 
 type MariaDBHorizontalScalingSpec struct {
 	// Number of nodes/members of the group
-	Member *int32 `json:"member,omitempty" protobuf:"varint,1,opt,name=member"`
+	Member *int32 `json:"member,omitempty"`
 	// specifies the weight of the current member/Node
-	MemberWeight int32 `json:"memberWeight,omitempty" protobuf:"varint,2,opt,name=memberWeight"`
+	MemberWeight int32 `json:"memberWeight,omitempty"`
 }
 
 type MariaDBVerticalScalingSpec struct {
-	MariaDB     *core.ResourceRequirements `json:"mariadb,omitempty" protobuf:"bytes,1,opt,name=mariadb"`
-	Exporter    *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
-	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty" protobuf:"bytes,3,opt,name=coordinator"`
+	MariaDB     *core.ResourceRequirements `json:"mariadb,omitempty"`
+	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
+	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
 }
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion
 type MariaDBVolumeExpansionSpec struct {
-	MariaDB *resource.Quantity `json:"mariadb,omitempty" protobuf:"bytes,1,opt,name=mariadb"`
+	MariaDB *resource.Quantity   `json:"mariadb,omitempty"`
+	Mode    *VolumeExpansionMode `json:"mode,omitempty"`
 }
 
 type MariaDBCustomConfigurationSpec struct {
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,1,opt,name=configSecret"`
-	InlineConfig       string                     `json:"inlineConfig,omitempty" protobuf:"bytes,2,opt,name=inlineConfig"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,3,opt,name=removeCustomConfig"`
+	// ConfigSecret is an optional field to provide custom configuration file for database.
+	// +optional
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+	// Deprecated
+	InlineConfig string `json:"inlineConfig,omitempty"`
+	// If set to "true", the user provided configuration will be removed.
+	// MariaDB will start will default configuration that is generated by the operator.
+	// +optional
+	RemoveCustomConfig bool `json:"removeCustomConfig,omitempty"`
+	// ApplyConfig is an optional field to provide MariaDB configuration.
+	// Provided configuration will be applied to config files stored in ConfigSecret.
+	// If the ConfigSecret is missing, the operator will create a new k8s secret by the
+	// following naming convention: {db-name}-user-config .
+	// Expected input format:
+	//	applyConfig:
+	//		file-name.cnf: |
+	//			[mysqld]
+	//			key1: value1
+	//			key2: value2
+	// +optional
+	ApplyConfig map[string]string `json:"applyConfig,omitempty"`
 }
 
 type MariaDBCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
-	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
-	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
+	Data      map[string]string          `json:"data,omitempty"`
+	Remove    bool                       `json:"remove,omitempty"`
 }
 
 type MariaDBTLSSpec struct {
-	TLSSpec `json:",inline,omitempty" protobuf:"bytes,1,opt,name=tLSSpec"`
+	TLSSpec `json:",inline,omitempty"`
 
 	// Indicates that the database server need to be encrypted connections(ssl)
 	// +optional
-	RequireSSL *bool `json:"requireSSL,omitempty" protobuf:"varint,2,opt,name=requireSSL"`
+	RequireSSL *bool `json:"requireSSL,omitempty"`
 }
 
 // MariaDBOpsRequestStatus is the status for MariaDBOpsRequest
 type MariaDBOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -133,7 +152,7 @@ type MariaDBOpsRequestStatus struct {
 // MariaDBOpsRequestList is a list of MariaDBOpsRequests
 type MariaDBOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MariaDBOpsRequest CRD objects
-	Items []MariaDBOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MariaDBOpsRequest `json:"items,omitempty"`
 }

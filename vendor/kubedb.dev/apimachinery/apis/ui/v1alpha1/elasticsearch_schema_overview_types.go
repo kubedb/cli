@@ -28,13 +28,13 @@ const (
 
 // ElasticsearchSchemaOverviewSpec defines the desired state of ElasticsearchSchemaOverview
 type ElasticsearchSchemaOverviewSpec struct {
-	Indices []ElasticsearchIndexSpec `json:"indices" protobuf:"bytes,1,rep,name=indices"`
+	Indices []ElasticsearchIndexSpec `json:"indices"`
 }
 
 type ElasticsearchIndexSpec struct {
-	IndexName               string `json:"indexName,omitempty" protobuf:"bytes,1,opt,name=indexName"`
-	PrimaryStoreSizeInBytes string `json:"primaryStoreSizeInBytes,omitempty" protobuf:"bytes,2,opt,name=primaryStoreSizeInBytes"`
-	TotalStoreSizeInBytes   string `json:"totalStoreSizeInBytes,omitempty" protobuf:"bytes,3,opt,name=totalStoreSizeInBytes"`
+	IndexName             string `json:"indexName"`
+	PrimaryStoreSizeBytes string `json:"primaryStoreSizeBytes"`
+	TotalStoreSizeBytes   string `json:"totalStoreSizeBytes"`
 }
 
 // ElasticsearchSchemaOverview is the Schema for the elasticsearchindices API
@@ -42,9 +42,9 @@ type ElasticsearchIndexSpec struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ElasticsearchSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec ElasticsearchSchemaOverviewSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec ElasticsearchSchemaOverviewSpec `json:"spec,omitempty"`
 }
 
 // ElasticsearchSchemaOverviewList contains a list of ElasticsearchSchemaOverview
@@ -52,8 +52,8 @@ type ElasticsearchSchemaOverview struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ElasticsearchSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []ElasticsearchSchemaOverview `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []ElasticsearchSchemaOverview `json:"items"`
 }
 
 func init() {

@@ -45,31 +45,31 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type RedisOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              RedisOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            RedisOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              RedisOpsRequestSpec   `json:"spec,omitempty"`
+	Status            RedisOpsRequestStatus `json:"status,omitempty"`
 }
 
 // RedisOpsRequestSpec is the spec for RedisOpsRequest
 type RedisOpsRequestSpec struct {
 	// Specifies the Redis reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Redis
-	Upgrade *RedisUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *RedisUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *RedisHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *RedisHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *RedisVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *RedisVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *RedisVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *RedisVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of Redis
-	Configuration *RedisCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *RedisCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
 }
 
 // RedisReplicaReadinessCriteria is the criteria for checking readiness of a Redis pod
@@ -79,48 +79,48 @@ type RedisReplicaReadinessCriteria struct {
 
 type RedisUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                         `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
-	ReadinessCriteria *RedisReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+	TargetVersion     string                         `json:"targetVersion,omitempty"`
+	ReadinessCriteria *RedisReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 type RedisHorizontalScalingSpec struct {
 	// Number of Masters in the cluster
-	Master *int32 `json:"master,omitempty" protobuf:"varint,1,opt,name=master"`
+	Master *int32 `json:"master,omitempty"`
 	// specifies the number of replica for the master
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 }
 
 // RedisVerticalScalingSpec is the spec for Redis vertical scaling
 type RedisVerticalScalingSpec struct {
-	Redis       *core.ResourceRequirements `json:"redis,omitempty" protobuf:"bytes,1,opt,name=redis"`
-	Exporter    *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
-	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty" protobuf:"bytes,3,opt,name=coordinator"`
+	Redis       *core.ResourceRequirements `json:"redis,omitempty"`
+	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
+	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
 }
 
 // RedisVolumeExpansionSpec is the spec for Redis volume expansion
 type RedisVolumeExpansionSpec struct {
-	Redis *resource.Quantity `json:"redis,omitempty" protobuf:"bytes,1,opt,name=redis"`
+	Redis *resource.Quantity `json:"redis,omitempty"`
 }
 
 type RedisCustomConfigurationSpec struct {
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate        ofst.PodTemplateSpec       `json:"podTemplate,omitempty" protobuf:"bytes,1,opt,name=podTemplate"`
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,2,opt,name=configSecret"`
-	InlineConfig       string                     `json:"inlineConfig,omitempty" protobuf:"bytes,3,opt,name=inlineConfig"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,4,opt,name=removeCustomConfig"`
+	PodTemplate        ofst.PodTemplateSpec       `json:"podTemplate,omitempty"`
+	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
+	InlineConfig       string                     `json:"inlineConfig,omitempty"`
+	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
 }
 
 // RedisOpsRequestStatus is the status for RedisOpsRequest
 type RedisOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -128,7 +128,7 @@ type RedisOpsRequestStatus struct {
 // RedisOpsRequestList is a list of RedisOpsRequests
 type RedisOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of RedisOpsRequest CRD objects
-	Items []RedisOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []RedisOpsRequest `json:"items,omitempty"`
 }

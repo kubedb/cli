@@ -45,61 +45,61 @@ type ElasticsearchAutoscaler struct {
 	// metadata is the standard object metadata.
 	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
 	// +optional
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// spec is the specification for the behaviour of the autoscaler.
 	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status.
 	// +optional
-	Spec ElasticsearchAutoscalerSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec ElasticsearchAutoscalerSpec `json:"spec,omitempty"`
 
 	// status is the current information about the autoscaler.
 	// +optional
-	Status ElasticsearchAutoscalerStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	Status ElasticsearchAutoscalerStatus `json:"status,omitempty"`
 }
 
 // ElasticsearchAutoscalerSpec is the specification of the behavior of the autoscaler.
 type ElasticsearchAutoscalerSpec struct {
-	DatabaseRef *core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
-	Compute *ElasticsearchComputeAutoscalerSpec `json:"compute,omitempty" protobuf:"bytes,2,opt,name=compute"`
-	Storage *ElasticsearchStorageAutoscalerSpec `json:"storage,omitempty" protobuf:"bytes,3,opt,name=storage"`
+	Compute *ElasticsearchComputeAutoscalerSpec `json:"compute,omitempty"`
+	Storage *ElasticsearchStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
 type ElasticsearchComputeAutoscalerSpec struct {
-	Node             *ComputeAutoscalerSpec                      `json:"node,omitempty" protobuf:"bytes,1,opt,name=node"`
-	Topology         *ElasticsearchComputeTopologyAutoscalerSpec `json:"topology,omitempty" protobuf:"bytes,2,opt,name=topology"`
-	DisableScaleDown bool                                        `json:"disableScaleDown,omitempty" protobuf:"varint,3,opt,name=disableScaleDown"`
+	Node             *ComputeAutoscalerSpec                      `json:"node,omitempty"`
+	Topology         *ElasticsearchComputeTopologyAutoscalerSpec `json:"topology,omitempty"`
+	DisableScaleDown bool                                        `json:"disableScaleDown,omitempty"`
 }
 
 type ElasticsearchComputeTopologyAutoscalerSpec struct {
-	Master *ComputeAutoscalerSpec `json:"master,omitempty" protobuf:"bytes,1,opt,name=master"`
-	Data   *ComputeAutoscalerSpec `json:"data,omitempty" protobuf:"bytes,2,opt,name=data"`
-	Ingest *ComputeAutoscalerSpec `json:"ingest,omitempty" protobuf:"bytes,3,opt,name=ingest"`
+	Master *ComputeAutoscalerSpec `json:"master,omitempty"`
+	Data   *ComputeAutoscalerSpec `json:"data,omitempty"`
+	Ingest *ComputeAutoscalerSpec `json:"ingest,omitempty"`
 }
 
 type ElasticsearchStorageAutoscalerSpec struct {
-	Node     *StorageAutoscalerSpec                      `json:"node,omitempty" protobuf:"bytes,1,opt,name=node"`
-	Topology *ElasticsearchStorageTopologyAutoscalerSpec `json:"topology,omitempty" protobuf:"bytes,2,opt,name=topology"`
+	Node     *StorageAutoscalerSpec                      `json:"node,omitempty"`
+	Topology *ElasticsearchStorageTopologyAutoscalerSpec `json:"topology,omitempty"`
 }
 
 type ElasticsearchStorageTopologyAutoscalerSpec struct {
-	Master *StorageAutoscalerSpec `json:"master,omitempty" protobuf:"bytes,1,opt,name=master"`
-	Data   *StorageAutoscalerSpec `json:"data,omitempty" protobuf:"bytes,2,opt,name=data"`
-	Ingest *StorageAutoscalerSpec `json:"ingest,omitempty" protobuf:"bytes,3,opt,name=ingest"`
+	Master *StorageAutoscalerSpec `json:"master,omitempty"`
+	Data   *StorageAutoscalerSpec `json:"data,omitempty"`
+	Ingest *StorageAutoscalerSpec `json:"ingest,omitempty"`
 }
 
 // ElasticsearchAutoscalerStatus describes the runtime state of the autoscaler.
 type ElasticsearchAutoscalerStatus struct {
 	// observedGeneration is the most recent generation observed by this autoscaler.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,1,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 
 	// Conditions is the set of conditions required for this autoscaler to scale its target,
 	// and indicates whether or not those conditions are met.
 	// +optional
 	// +patchMergeKey=type
 	// +patchStrategy=merge
-	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,2,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
 // ElasticsearchAutoscalerConditionType are the valid conditions of
@@ -121,8 +121,8 @@ type ElasticsearchAutoscalerList struct {
 	metav1.TypeMeta `json:",inline"`
 	// metadata is the standard list metadata.
 	// +optional
-	metav1.ListMeta `json:"metadata" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata"`
 
 	// items is the list of elasticsearch database autoscaler objects.
-	Items []ElasticsearchAutoscaler `json:"items" protobuf:"bytes,2,rep,name=items"`
+	Items []ElasticsearchAutoscaler `json:"items"`
 }

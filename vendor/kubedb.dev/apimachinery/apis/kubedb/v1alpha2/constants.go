@@ -124,6 +124,7 @@ const (
 	MongoDBRootUsername           = "root"
 	MongoDBCustomConfigFile       = "mongod.conf"
 	MongoDBReplicaSetConfig       = "replicaset.json"
+	MongoDBConfigurationJSFile    = "configuration.js"
 	NodeTypeMongos                = "mongos"
 	NodeTypeShard                 = "shard"
 	NodeTypeConfig                = "configsvr"
@@ -232,6 +233,7 @@ const (
 	MariaDBRunScriptVolumeMountPath     = "/run-script"
 	MariaDBInitScriptVolumeName         = "init-scripts"
 	MariaDBInitScriptVolumeMountPath    = "/scripts"
+	MariaDBContainerName                = ResourceSingularMariaDB
 
 	// =========================== PostgreSQL Constants ============================
 	PostgresDatabasePortName         = "db"

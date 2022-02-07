@@ -28,13 +28,15 @@ const (
 	BackupSession  = "BACKUP_SESSION"
 	RestoreSession = "RESTORE_SESSION"
 
-	RepositoryName       = "REPOSITORY_NAME"
-	RepositoryProvider   = "REPOSITORY_PROVIDER"
-	RepositorySecretName = "REPOSITORY_SECRET_NAME"
-	RepositoryBucket     = "REPOSITORY_BUCKET"
-	RepositoryPrefix     = "REPOSITORY_PREFIX"
-	RepositoryEndpoint   = "REPOSITORY_ENDPOINT"
-	RepositoryRegion     = "REPOSITORY_REGION"
+	RepositoryName            = "REPOSITORY_NAME"
+	RepositoryNamespace       = "REPOSITORY_NAMESPACE"
+	RepositoryProvider        = "REPOSITORY_PROVIDER"
+	RepositorySecretName      = "REPOSITORY_SECRET_NAME"
+	RepositorySecretNamespace = "REPOSITORY_SECRET_NAMESPACE"
+	RepositoryBucket          = "REPOSITORY_BUCKET"
+	RepositoryPrefix          = "REPOSITORY_PREFIX"
+	RepositoryEndpoint        = "REPOSITORY_ENDPOINT"
+	RepositoryRegion          = "REPOSITORY_REGION"
 
 	Hostname       = "HOSTNAME"
 	SourceHostname = "SOURCE_HOSTNAME"
@@ -154,10 +156,9 @@ const (
 )
 
 const (
-	CallerWebhook       = "webhook"
-	CallerController    = "controller"
-	PushgatewayLocalURL = "http://localhost:56789"
-	DefaultHost         = "host-0"
+	CallerWebhook    = "webhook"
+	CallerController = "controller"
+	DefaultHost      = "host-0"
 )
 
 // ==================== Prometheus metrics related constants ============
@@ -186,6 +187,12 @@ const (
 const (
 	// RepositoryFound indicates whether the respective Repository object was found or not.
 	RepositoryFound = "RepositoryFound"
+	// ValidationPassed indicates the validation conditions of the CRD are passed or not.
+	ValidationPassed = "ValidationPassed"
+	// ResourceValidationPassed indicates that the condition transitioned to this state because the CRD meets validation criteria
+	ResourceValidationPassed = "ResourceValidationPassed"
+	// ResourceValidationFailed indicates that the condition transitioned to this state because the CRD does not meet validation criteria
+	ResourceValidationFailed = "ResourceValidationFailed"
 	// BackendSecretFound indicates whether the respective backend secret was found or not.
 	BackendSecretFound = "BackendSecretFound"
 
@@ -217,7 +224,6 @@ const (
 	GlobalPreRestoreHookSucceeded = "GlobalPreRestoreHookSucceeded"
 	// GlobalPostRestoreHookSucceeded indicates whether the global PostRestoreHook was executed successfully or not
 	GlobalPostRestoreHookSucceeded = "GlobalPostRestoreHookSucceeded"
-
 	// BackendRepositoryInitialized indicates that whether backend repository was initialized or not
 	BackendRepositoryInitialized = "BackendRepositoryInitialized"
 	// RetentionPolicyApplied indicates that whether the retention policies were applied or not
