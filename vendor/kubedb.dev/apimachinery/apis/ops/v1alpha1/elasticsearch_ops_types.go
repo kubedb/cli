@@ -44,126 +44,128 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type ElasticsearchOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              ElasticsearchOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            ElasticsearchOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              ElasticsearchOpsRequestSpec   `json:"spec,omitempty"`
+	Status            ElasticsearchOpsRequestStatus `json:"status,omitempty"`
 }
 
 // ElasticsearchOpsRequestSpec is the spec for ElasticsearchOpsRequest
 type ElasticsearchOpsRequestSpec struct {
 	// Specifies the Elasticsearch reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Elasticsearch
-	Upgrade *ElasticsearchUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *ElasticsearchUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *ElasticsearchHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *ElasticsearchHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *ElasticsearchVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *ElasticsearchVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *ElasticsearchVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *ElasticsearchVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of Elasticsearch
-	Configuration *ElasticsearchCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *ElasticsearchCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
-	Timeout *metav1.Duration `json:"timeout,omitempty" protobuf:"bytes,10,opt,name=timeout"`
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 }
 
 type ElasticsearchUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion string `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
+	TargetVersion string `json:"targetVersion,omitempty"`
 }
 
 // ElasticsearchHorizontalScalingSpec contains the horizontal scaling information of an Elasticsearch cluster
 type ElasticsearchHorizontalScalingSpec struct {
 	// Number of combined (i.e. master, data, ingest) node
-	Node *int32 `json:"node,omitempty" protobuf:"varint,1,opt,name=node"`
+	Node *int32 `json:"node,omitempty"`
 	// Node topology specification
-	Topology *ElasticsearchHorizontalScalingTopologySpec `json:"topology,omitempty" protobuf:"bytes,2,opt,name=topology"`
+	Topology *ElasticsearchHorizontalScalingTopologySpec `json:"topology,omitempty"`
 }
 
 // ElasticsearchHorizontalScalingTopologySpec contains the horizontal scaling information in cluster topology mode
 type ElasticsearchHorizontalScalingTopologySpec struct {
 	// Number of master nodes
-	Master *int32 `json:"master,omitempty" protobuf:"varint,1,opt,name=master"`
+	Master *int32 `json:"master,omitempty"`
 	// Number of ingest nodes
-	Ingest *int32 `json:"ingest,omitempty" protobuf:"varint,2,opt,name=ingest"`
+	Ingest *int32 `json:"ingest,omitempty"`
 	// Number of data nodes
-	Data         *int32 `json:"data,omitempty" protobuf:"varint,3,opt,name=data"`
-	DataContent  *int32 `json:"dataContent,omitempty" protobuf:"varint,4,opt,name=dataContent"`
-	DataHot      *int32 `json:"dataHot,omitempty" protobuf:"varint,5,opt,name=dataHot"`
-	DataWarm     *int32 `json:"dataWarm,omitempty" protobuf:"varint,6,opt,name=dataWarm"`
-	DataCold     *int32 `json:"dataCold,omitempty" protobuf:"varint,7,opt,name=dataCold"`
-	DataFrozen   *int32 `json:"dataFrozen,omitempty" protobuf:"varint,8,opt,name=dataFrozen"`
-	ML           *int32 `json:"ml,omitempty" protobuf:"varint,9,opt,name=ml"`
-	Transform    *int32 `json:"transform,omitempty" protobuf:"varint,10,opt,name=transform"`
-	Coordinating *int32 `json:"coordinating,omitempty" protobuf:"varint,11,opt,name=coordinating"`
+	Data         *int32 `json:"data,omitempty"`
+	DataContent  *int32 `json:"dataContent,omitempty"`
+	DataHot      *int32 `json:"dataHot,omitempty"`
+	DataWarm     *int32 `json:"dataWarm,omitempty"`
+	DataCold     *int32 `json:"dataCold,omitempty"`
+	DataFrozen   *int32 `json:"dataFrozen,omitempty"`
+	ML           *int32 `json:"ml,omitempty"`
+	Transform    *int32 `json:"transform,omitempty"`
+	Coordinating *int32 `json:"coordinating,omitempty"`
 }
 
 // ElasticsearchVerticalScalingSpec is the spec for Elasticsearch vertical scaling
 type ElasticsearchVerticalScalingSpec struct {
 	// Resource spec for combined nodes
-	Node *core.ResourceRequirements `json:"node,omitempty" protobuf:"bytes,1,opt,name=node"`
+	Node *core.ResourceRequirements `json:"node,omitempty"`
 	// Resource spec for exporter sidecar
-	Exporter *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
+	Exporter *core.ResourceRequirements `json:"exporter,omitempty"`
 	// Specifies the resource spec for cluster in topology mode
-	Topology *ElasticsearchVerticalScalingTopologySpec `json:"topology,omitempty" protobuf:"bytes,3,opt,name=topology"`
+	Topology *ElasticsearchVerticalScalingTopologySpec `json:"topology,omitempty"`
 }
 
 // ElasticsearchVerticalScalingTopologySpec is the resource spec in the cluster topology mode
 type ElasticsearchVerticalScalingTopologySpec struct {
-	Master       *core.ResourceRequirements `json:"master,omitempty" protobuf:"bytes,1,opt,name=master"`
-	Ingest       *core.ResourceRequirements `json:"ingest,omitempty" protobuf:"bytes,2,opt,name=ingest"`
-	Data         *core.ResourceRequirements `json:"data,omitempty" protobuf:"bytes,3,opt,name=data"`
-	DataContent  *core.ResourceRequirements `json:"dataContent,omitempty" protobuf:"bytes,4,opt,name=dataContent"`
-	DataHot      *core.ResourceRequirements `json:"dataHot,omitempty" protobuf:"bytes,5,opt,name=dataHot"`
-	DataWarm     *core.ResourceRequirements `json:"dataWarm,omitempty" protobuf:"bytes,6,opt,name=dataWarm"`
-	DataCold     *core.ResourceRequirements `json:"dataCold,omitempty" protobuf:"bytes,7,opt,name=dataCold"`
-	DataFrozen   *core.ResourceRequirements `json:"dataFrozen,omitempty" protobuf:"bytes,8,opt,name=dataFrozen"`
-	ML           *core.ResourceRequirements `json:"ml,omitempty" protobuf:"bytes,9,opt,name=ml"`
-	Transform    *core.ResourceRequirements `json:"transform,omitempty" protobuf:"bytes,10,opt,name=transform"`
-	Coordinating *core.ResourceRequirements `json:"coordinating,omitempty" protobuf:"bytes,11,opt,name=coordinating"`
+	Master       *core.ResourceRequirements `json:"master,omitempty"`
+	Ingest       *core.ResourceRequirements `json:"ingest,omitempty"`
+	Data         *core.ResourceRequirements `json:"data,omitempty"`
+	DataContent  *core.ResourceRequirements `json:"dataContent,omitempty"`
+	DataHot      *core.ResourceRequirements `json:"dataHot,omitempty"`
+	DataWarm     *core.ResourceRequirements `json:"dataWarm,omitempty"`
+	DataCold     *core.ResourceRequirements `json:"dataCold,omitempty"`
+	DataFrozen   *core.ResourceRequirements `json:"dataFrozen,omitempty"`
+	ML           *core.ResourceRequirements `json:"ml,omitempty"`
+	Transform    *core.ResourceRequirements `json:"transform,omitempty"`
+	Coordinating *core.ResourceRequirements `json:"coordinating,omitempty"`
 }
 
 // ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
 type ElasticsearchVolumeExpansionSpec struct {
+	// +kubebuilder:default:="Online"
+	Mode *VolumeExpansionMode `json:"mode,omitempty"`
 	// volume specification for combined nodes
-	Node *resource.Quantity `json:"node,omitempty" protobuf:"bytes,1,opt,name=node"`
+	Node *resource.Quantity `json:"node,omitempty"`
 	// volume specification for nodes in cluster topology
-	Topology *ElasticsearchVolumeExpansionTopologySpec `json:"topology,omitempty" protobuf:"bytes,2,opt,name=topology"`
+	Topology *ElasticsearchVolumeExpansionTopologySpec `json:"topology,omitempty"`
 }
 
 // ElasticsearchVolumeExpansionTopologySpec is the spec for Elasticsearch volume expansion in topology mode
 type ElasticsearchVolumeExpansionTopologySpec struct {
 	// volume specification for master nodes
-	Master *resource.Quantity `json:"master,omitempty" protobuf:"bytes,1,opt,name=master"`
+	Master *resource.Quantity `json:"master,omitempty"`
 	// volume specification for ingest nodes
-	Ingest *resource.Quantity `json:"ingest,omitempty" protobuf:"bytes,2,opt,name=ingest"`
+	Ingest *resource.Quantity `json:"ingest,omitempty"`
 	// volume specification for data nodes
-	Data         *resource.Quantity `json:"data,omitempty" protobuf:"bytes,3,opt,name=data"`
-	DataContent  *resource.Quantity `json:"dataContent,omitempty" protobuf:"bytes,4,opt,name=dataContent"`
-	DataHot      *resource.Quantity `json:"dataHot,omitempty" protobuf:"bytes,5,opt,name=dataHot"`
-	DataWarm     *resource.Quantity `json:"dataWarm,omitempty" protobuf:"bytes,6,opt,name=dataWarm"`
-	DataCold     *resource.Quantity `json:"dataCold,omitempty" protobuf:"bytes,7,opt,name=dataCold"`
-	DataFrozen   *resource.Quantity `json:"dataFrozen,omitempty" protobuf:"bytes,8,opt,name=dataFrozen"`
-	ML           *resource.Quantity `json:"ml,omitempty" protobuf:"bytes,9,opt,name=ml"`
-	Transform    *resource.Quantity `json:"transform,omitempty" protobuf:"bytes,10,opt,name=transform"`
-	Coordinating *resource.Quantity `json:"coordinating,omitempty" protobuf:"bytes,11,opt,name=coordinating"`
+	Data         *resource.Quantity `json:"data,omitempty"`
+	DataContent  *resource.Quantity `json:"dataContent,omitempty"`
+	DataHot      *resource.Quantity `json:"dataHot,omitempty"`
+	DataWarm     *resource.Quantity `json:"dataWarm,omitempty"`
+	DataCold     *resource.Quantity `json:"dataCold,omitempty"`
+	DataFrozen   *resource.Quantity `json:"dataFrozen,omitempty"`
+	ML           *resource.Quantity `json:"ml,omitempty"`
+	Transform    *resource.Quantity `json:"transform,omitempty"`
+	Coordinating *resource.Quantity `json:"coordinating,omitempty"`
 }
 
 // ElasticsearchCustomConfigurationSpec is the spec for Reconfiguring the Elasticsearch Settings
 type ElasticsearchCustomConfigurationSpec struct {
 	// ConfigSecret is an optional field to provide custom configuration file for database.
 	// +optional
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,1,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 	// SecureConfigSecret is an optional field to provide secure settings for database.
 	//	- Ref: https://www.elastic.co/guide/en/elasticsearch/reference/7.14/secure-settings.html
 	// +optional
-	SecureConfigSecret *core.LocalObjectReference `json:"secureConfigSecret,omitempty" protobuf:"bytes,2,opt,name=secureConfigSecret"`
+	SecureConfigSecret *core.LocalObjectReference `json:"secureConfigSecret,omitempty"`
 	// ApplyConfig is an optional field to provide Elasticsearch configuration.
 	// Provided configuration will be applied to config files stored in ConfigSecret.
 	// If the ConfigSecret is missing, the operator will create a new k8s secret by the
@@ -177,35 +179,35 @@ type ElasticsearchCustomConfigurationSpec struct {
 	//				write:
 	//					size: 30
 	// +optional
-	ApplyConfig map[string]string `json:"applyConfig,omitempty" protobuf:"bytes,3,rep,name=applyConfig"`
+	ApplyConfig map[string]string `json:"applyConfig,omitempty"`
 	// If set to "true", the user provided configuration will be removed.
 	// The Elasticsearch cluster will start will default configuration that is generated by the operator.
 	// +optional
-	RemoveCustomConfig bool `json:"removeCustomConfig,omitempty" protobuf:"varint,4,opt,name=removeCustomConfig"`
+	RemoveCustomConfig bool `json:"removeCustomConfig,omitempty"`
 	// If set to "true", the user provided secure settings will be removed.
 	// The elasticsearch.keystore will start will default password (i.e. "").
 	// +optional
-	RemoveSecureCustomConfig bool `json:"removeSecureCustomConfig,omitempty" protobuf:"varint,5,opt,name=removeSecureCustomConfig"`
+	RemoveSecureCustomConfig bool `json:"removeSecureCustomConfig,omitempty"`
 }
 
 type ElasticsearchCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
-	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
-	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
+	Data      map[string]string          `json:"data,omitempty"`
+	Remove    bool                       `json:"remove,omitempty"`
 }
 
 // ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest
 type ElasticsearchOpsRequestStatus struct {
 	// Specifies the current phase of the ops request
 	// +optional
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -213,7 +215,7 @@ type ElasticsearchOpsRequestStatus struct {
 // ElasticsearchOpsRequestList is a list of ElasticsearchOpsRequests
 type ElasticsearchOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of ElasticsearchOpsRequest CRD objects
-	Items []ElasticsearchOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []ElasticsearchOpsRequest `json:"items,omitempty"`
 }

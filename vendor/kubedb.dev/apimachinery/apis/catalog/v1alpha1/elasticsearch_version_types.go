@@ -45,56 +45,67 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type ElasticsearchVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              ElasticsearchVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              ElasticsearchVersionSpec `json:"spec,omitempty"`
 }
 
 // ElasticsearchVersionSpec is the spec for elasticsearch version
 type ElasticsearchVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Distribution
-	Distribution ElasticsearchDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=ElasticsearchDistro"`
+	Distribution ElasticsearchDistro `json:"distribution,omitempty"`
 	// Authentication plugin used by Elasticsearch cluster
-	AuthPlugin ElasticsearchAuthPlugin `json:"authPlugin" protobuf:"bytes,3,opt,name=authPlugin,casttype=ElasticsearchAuthPlugin"`
+	AuthPlugin ElasticsearchAuthPlugin `json:"authPlugin"`
 	// Database Image
-	DB ElasticsearchVersionDatabase `json:"db" protobuf:"bytes,4,opt,name=db"`
+	DB ElasticsearchVersionDatabase `json:"db"`
+	// Dashboard Image
+	// +optional
+	Dashboard ElasticsearchDashboardVersionDatabase `json:"dashboard,omitempty"`
 	// Exporter Image
-	Exporter ElasticsearchVersionExporter `json:"exporter" protobuf:"bytes,5,opt,name=exporter"`
+	Exporter ElasticsearchVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// Init container Image
-	InitContainer ElasticsearchVersionInitContainer `json:"initContainer" protobuf:"bytes,7,opt,name=initContainer"`
+	InitContainer ElasticsearchVersionInitContainer `json:"initContainer"`
+	// Init container Image
+	// +optional
+	DashboardInitContainer ElasticsearchVersionDashboardInitContainer `json:"dashboardInitContainer,omitempty"`
 	// PSP names
-	PodSecurityPolicies ElasticsearchVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,8,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies ElasticsearchVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,9,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// SecurityContext is for the additional security information for the Elasticsearch container
 	// +optional
-	SecurityContext ElasticsearchSecurityContext `json:"securityContext" protobuf:"bytes,10,opt,name=securityContext"`
+	SecurityContext ElasticsearchSecurityContext `json:"securityContext"`
 }
 
 // ElasticsearchVersionDatabase is the Elasticsearch Database image
 type ElasticsearchVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // ElasticsearchVersionExporter is the image for the Elasticsearch exporter
 type ElasticsearchVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // ElasticsearchVersionInitContainer is the Elasticsearch Container initializer
 type ElasticsearchVersionInitContainer struct {
-	Image   string `json:"image" protobuf:"bytes,1,opt,name=image"`
-	YQImage string `json:"yqImage" protobuf:"bytes,2,opt,name=yqImage"`
+	Image   string `json:"image"`
+	YQImage string `json:"yqImage"`
+}
+
+// ElasticsearchVersionDashboardInitContainer is the ElasticsearchDashboard Container initializer
+type ElasticsearchVersionDashboardInitContainer struct {
+	YQImage string `json:"yqImage"`
 }
 
 // ElasticsearchVersionPodSecurityPolicy is the Elasticsearch pod security policies
 type ElasticsearchVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -102,18 +113,23 @@ type ElasticsearchVersionPodSecurityPolicy struct {
 // ElasticsearchVersionList is a list of ElasticsearchVersions
 type ElasticsearchVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of ElasticsearchVersion CRD objects
-	Items []ElasticsearchVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []ElasticsearchVersion `json:"items,omitempty"`
 }
 
 // ElasticsearchSecurityContext provides additional securityContext settings for the Elasticsearch Image
 type ElasticsearchSecurityContext struct {
 	// RunAsUser is default UID for the DB container. It defaults to 1000.
-	RunAsUser *int64 `json:"runAsUser,omitempty" protobuf:"varint,1,opt,name=runAsUser"`
+	RunAsUser *int64 `json:"runAsUser,omitempty"`
 
 	// RunAsAnyNonRoot will be true if user can change the default UID to other than 1000.
-	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty" protobuf:"varint,2,opt,name=runAsAnyNonRoot"`
+	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty"`
+}
+
+// ElasticsearchDashboardVersionDatabase is the Elasticsearch Dashboard image
+type ElasticsearchDashboardVersionDatabase struct {
+	Image string `json:"image"`
 }
 
 // +kubebuilder:validation:Enum=OpenDistro;SearchGuard;X-Pack;OpenSearch

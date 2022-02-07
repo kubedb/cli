@@ -43,31 +43,31 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type EtcdOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              EtcdOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            EtcdOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              EtcdOpsRequestSpec   `json:"spec,omitempty"`
+	Status            EtcdOpsRequestStatus `json:"status,omitempty"`
 }
 
 // EtcdOpsRequestSpec is the spec for EtcdOpsRequest
 type EtcdOpsRequestSpec struct {
 	// Specifies the Etcd reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Etcd
-	Upgrade *EtcdUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *EtcdUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *EtcdHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *EtcdHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *EtcdVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *EtcdVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *EtcdVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *EtcdVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of Etcd
-	Configuration *EtcdCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *EtcdCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
 }
 
 // EtcdReplicaReadinessCriteria is the criteria for checking readiness of a Etcd pod
@@ -77,8 +77,8 @@ type EtcdReplicaReadinessCriteria struct {
 
 type EtcdUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                        `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
-	ReadinessCriteria *EtcdReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+	TargetVersion     string                        `json:"targetVersion,omitempty"`
+	ReadinessCriteria *EtcdReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // HorizontalScaling is the spec for Etcd horizontal scaling
@@ -87,7 +87,7 @@ type EtcdHorizontalScalingSpec struct {
 
 // EtcdVerticalScalingSpec is the spec for Etcd vertical scaling
 type EtcdVerticalScalingSpec struct {
-	ReadinessCriteria *EtcdReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,1,opt,name=readinessCriteria"`
+	ReadinessCriteria *EtcdReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // EtcdVolumeExpansionSpec is the spec for Etcd volume expansion
@@ -98,21 +98,21 @@ type EtcdCustomConfigurationSpec struct {
 }
 
 type EtcdCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
-	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
-	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
+	Data      map[string]string          `json:"data,omitempty"`
+	Remove    bool                       `json:"remove,omitempty"`
 }
 
 // EtcdOpsRequestStatus is the status for EtcdOpsRequest
 type EtcdOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -120,7 +120,7 @@ type EtcdOpsRequestStatus struct {
 // EtcdOpsRequestList is a list of EtcdOpsRequests
 type EtcdOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of EtcdOpsRequest CRD objects
-	Items []EtcdOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []EtcdOpsRequest `json:"items,omitempty"`
 }

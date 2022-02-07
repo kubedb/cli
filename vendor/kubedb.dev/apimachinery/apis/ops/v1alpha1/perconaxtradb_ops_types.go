@@ -43,31 +43,31 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PerconaXtraDBOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PerconaXtraDBOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            PerconaXtraDBOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PerconaXtraDBOpsRequestSpec   `json:"spec,omitempty"`
+	Status            PerconaXtraDBOpsRequestStatus `json:"status,omitempty"`
 }
 
 // PerconaXtraDBOpsRequestSpec is the spec for PerconaXtraDBOpsRequest
 type PerconaXtraDBOpsRequestSpec struct {
 	// Specifies the PerconaXtraDB reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PerconaXtraDB
-	Upgrade *PerconaXtraDBUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *PerconaXtraDBUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *PerconaXtraDBHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *PerconaXtraDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *PerconaXtraDBVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *PerconaXtraDBVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *PerconaXtraDBVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *PerconaXtraDBVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of PerconaXtraDB
-	Configuration *PerconaXtraDBCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *PerconaXtraDBCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
 }
 
 // PerconaXtraDBReplicaReadinessCriteria is the criteria for checking readiness of a PerconaXtraDB pod
@@ -77,8 +77,8 @@ type PerconaXtraDBReplicaReadinessCriteria struct {
 
 type PerconaXtraDBUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                                 `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
-	ReadinessCriteria *PerconaXtraDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+	TargetVersion     string                                 `json:"targetVersion,omitempty"`
+	ReadinessCriteria *PerconaXtraDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // HorizontalScaling is the spec for PerconaXtraDB horizontal scaling
@@ -87,7 +87,7 @@ type PerconaXtraDBHorizontalScalingSpec struct {
 
 // PerconaXtraDBVerticalScalingSpec is the spec for PerconaXtraDB vertical scaling
 type PerconaXtraDBVerticalScalingSpec struct {
-	ReadinessCriteria *PerconaXtraDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,1,opt,name=readinessCriteria"`
+	ReadinessCriteria *PerconaXtraDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // PerconaXtraDBVolumeExpansionSpec is the spec for PerconaXtraDB volume expansion
@@ -98,21 +98,21 @@ type PerconaXtraDBCustomConfigurationSpec struct {
 }
 
 type PerconaXtraDBCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
-	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
-	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
+	Data      map[string]string          `json:"data,omitempty"`
+	Remove    bool                       `json:"remove,omitempty"`
 }
 
 // PerconaXtraDBOpsRequestStatus is the status for PerconaXtraDBOpsRequest
 type PerconaXtraDBOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -120,7 +120,7 @@ type PerconaXtraDBOpsRequestStatus struct {
 // PerconaXtraDBOpsRequestList is a list of PerconaXtraDBOpsRequests
 type PerconaXtraDBOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of PerconaXtraDBOpsRequest CRD objects
-	Items []PerconaXtraDBOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []PerconaXtraDBOpsRequest `json:"items,omitempty"`
 }

@@ -190,12 +190,14 @@ spec:
               type:
                 enum:
                 - Upgrade
+                - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
                 - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - ReconfigureTLS
+                - Reprovision
                 type: string
               upgrade:
                 properties:
@@ -264,6 +266,11 @@ spec:
                 type: object
               volumeExpansion:
                 properties:
+                  mode:
+                    enum:
+                    - Offline
+                    - Online
+                    type: string
                   postgres:
                     anyOf:
                     - type: integer

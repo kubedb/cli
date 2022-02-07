@@ -28,15 +28,15 @@ const (
 
 // PostgresSettingsSpec defines the desired state of PostgresSettings
 type PostgresSettingsSpec struct {
-	Settings []PGSetting `json:"settings" protobuf:"bytes,1,rep,name=settings"`
+	Settings []PGSetting `json:"settings"`
 }
 
 type PGSetting struct {
-	Name         string `json:"name" protobuf:"bytes,1,opt,name=name"`
-	CurrentValue string `json:"currentValue" protobuf:"bytes,2,opt,name=currentValue"`
-	DefaultValue string `json:"defaultValue" protobuf:"bytes,3,opt,name=defaultValue"`
-	Unit         string `json:"unit" protobuf:"bytes,4,opt,name=unit"`
-	Source       string `json:"source" protobuf:"bytes,5,opt,name=source"`
+	Name         string `json:"name"`
+	CurrentValue string `json:"currentValue"`
+	DefaultValue string `json:"defaultValue"`
+	Unit         string `json:"unit,omitempty"`
+	Source       string `json:"source,omitempty"`
 }
 
 // PostgresSettings is the Schema for the PostgresSettingss API
@@ -44,9 +44,9 @@ type PGSetting struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PostgresSettings struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec PostgresSettingsSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec PostgresSettingsSpec `json:"spec,omitempty"`
 }
 
 // PostgresSettingsList contains a list of PostgresSettings
@@ -54,8 +54,8 @@ type PostgresSettings struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PostgresSettingsList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []PostgresSettings `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []PostgresSettings `json:"items"`
 }
 
 func init() {

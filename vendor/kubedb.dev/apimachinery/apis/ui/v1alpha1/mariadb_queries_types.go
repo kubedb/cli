@@ -28,23 +28,23 @@ const (
 
 // MariaDBQueriesSpec defines the desired state of MariaDBQueries
 type MariaDBQueriesSpec struct {
-	Queries []MariaDBQuerySpec `json:"queries" protobuf:"bytes,1,rep,name=queries"`
+	Queries []MariaDBQuerySpec `json:"queries"`
 }
 
 type MariaDBQuerySpec struct {
-	StartTime        string `json:"startTime" protobuf:"bytes,1,opt,name=startTime"`
-	UserHost         string `json:"userHost" protobuf:"bytes,2,opt,name=userHost"`
-	QueryTimeInMilli string `json:"queryTimeInMilli" protobuf:"bytes,3,opt,name=queryTimeInMilli"`
-	LockTimeInMilli  string `json:"lockTimeInMilli" protobuf:"bytes,4,opt,name=lockTimeInMilli"`
-	RowsSent         int64  `json:"rows_sent" protobuf:"varint,5,opt,name=rows_sent,json=rowsSent"`
-	RowsExamined     int64  `json:"rows_examined" protobuf:"varint,6,opt,name=rows_examined,json=rowsExamined"`
-	DB               string `json:"db" protobuf:"bytes,7,opt,name=db"`
-	LastInsertId     int64  `json:"lastInsertId" protobuf:"varint,8,opt,name=lastInsertId"`
-	InsertId         int64  `json:"insertId" protobuf:"varint,9,opt,name=insertId"`
-	ServerId         int64  `json:"serverId" protobuf:"varint,10,opt,name=serverId"`
-	SQLText          string `json:"sqlText" protobuf:"bytes,11,opt,name=sqlText"`
-	ThreadId         int64  `json:"threadId" protobuf:"varint,12,opt,name=threadId"`
-	RowsAffected     int64  `json:"rowsAffected" protobuf:"varint,13,opt,name=rowsAffected"`
+	StartTime             *metav1.Time `json:"startTime"`
+	UserHost              string       `json:"userHost"`
+	QueryTimeMilliSeconds string       `json:"queryTimeMilliSeconds"`
+	LockTimeMilliSeconds  string       `json:"lockTimeMilliSeconds"`
+	RowsSent              int64        `json:"rowsSent"`
+	RowsExamined          int64        `json:"rowsExamined"`
+	DB                    string       `json:"db"`
+	LastInsertId          int64        `json:"lastInsertId,omitempty"`
+	InsertId              int64        `json:"insertId,omitempty"`
+	ServerId              int64        `json:"serverId,omitempty"`
+	SQLText               string       `json:"sqlText,omitempty"`
+	ThreadId              int64        `json:"threadId,omitempty"`
+	RowsAffected          int64        `json:"rowsAffected,omitempty"`
 }
 
 // MariaDBQueries is the Schema for the mariadbslowqueries API
@@ -52,9 +52,9 @@ type MariaDBQuerySpec struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MariaDBQueries struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MariaDBQueriesSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec MariaDBQueriesSpec `json:"spec,omitempty"`
 }
 
 // MariaDBQueriesList contains a list of MariaDBQueries
@@ -62,8 +62,8 @@ type MariaDBQueries struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MariaDBQueriesList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []MariaDBQueries `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []MariaDBQueries `json:"items"`
 }
 
 func init() {

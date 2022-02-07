@@ -32,10 +32,10 @@ const (
 	ResourcePluralMySQL   = "mysqls"
 )
 
-type MySQLClusterMode string
+type MySQLMode string
 
 const (
-	MySQLClusterModeGroup MySQLClusterMode = "GroupReplication"
+	MySQLModeGroup MySQLMode = "GroupReplication"
 )
 
 type MySQLGroupMode string
@@ -53,83 +53,83 @@ const (
 // +kubebuilder:skipversion
 type MySQL struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MySQLSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            MySQLStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MySQLSpec   `json:"spec,omitempty"`
+	Status            MySQLStatus `json:"status,omitempty"`
 }
 
 type MySQLSpec struct {
 	// Version of MySQL to be deployed.
-	Version types.StrYo `json:"version" protobuf:"bytes,1,opt,name=version,casttype=gomodules.xyz/encoding/json/types.StrYo"`
+	Version types.StrYo `json:"version"`
 
 	// Number of instances to deploy for a MySQL database. In case of MySQL group
 	// replication, max allowed value is 9 (default 3).
 	// (see ref: https://dev.mysql.com/doc/refman/5.7/en/group-replication-frequently-asked-questions.html)
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// MySQL cluster topology
-	Topology *MySQLClusterTopology `json:"topology,omitempty" protobuf:"bytes,3,opt,name=topology"`
+	Topology *MySQLTopology `json:"topology,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,4,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,5,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// Database authentication secret
-	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty" protobuf:"bytes,6,opt,name=databaseSecret"`
+	DatabaseSecret *core.SecretVolumeSource `json:"databaseSecret,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,7,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// BackupSchedule spec to specify how database backup will be taken
 	// +optional
-	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty" protobuf:"bytes,8,opt,name=backupSchedule"`
+	BackupSchedule *BackupScheduleSpec `json:"backupSchedule,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,9,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSource is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSource *core.VolumeSource `json:"configSource,omitempty" protobuf:"bytes,10,opt,name=configSource"`
+	ConfigSource *core.VolumeSource `json:"configSource,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,11,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplate is an optional configuration for service used to expose database
 	// +optional
-	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty" protobuf:"bytes,12,opt,name=serviceTemplate"`
+	ServiceTemplate ofst.ServiceTemplateSpec `json:"serviceTemplate,omitempty"`
 
 	// updateStrategy indicates the StatefulSetUpdateStrategy that will be
 	// employed to update Pods in the StatefulSet when a revision is made to
 	// Template.
-	UpdateStrategy apps.StatefulSetUpdateStrategy `json:"updateStrategy,omitempty" protobuf:"bytes,13,opt,name=updateStrategy"`
+	UpdateStrategy apps.StatefulSetUpdateStrategy `json:"updateStrategy,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,14,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 }
 
-type MySQLClusterTopology struct {
+type MySQLTopology struct {
 	// If set to -
 	// "GroupReplication", GroupSpec is required and MySQL servers will start  a replication group
-	Mode *MySQLClusterMode `json:"mode,omitempty" protobuf:"bytes,1,opt,name=mode,casttype=MySQLClusterMode"`
+	Mode *MySQLMode `json:"mode,omitempty"`
 
 	// Group replication info for MySQL
-	Group *MySQLGroupSpec `json:"group,omitempty" protobuf:"bytes,2,opt,name=group"`
+	Group *MySQLGroupSpec `json:"group,omitempty"`
 }
 
 type MySQLGroupSpec struct {
 	// TODO: "Multi-Primary" needs to be implemented
 	// Group Replication can be deployed in either "Single-Primary" or "Multi-Primary" mode
-	Mode *MySQLGroupMode `json:"mode,omitempty" protobuf:"bytes,1,opt,name=mode,casttype=MySQLGroupMode"`
+	Mode *MySQLGroupMode `json:"mode,omitempty"`
 
 	// Group name is a version 4 UUID
 	// ref: https://dev.mysql.com/doc/refman/5.7/en/group-replication-options.html#sysvar_group_replication_group_name
-	Name string `json:"name,omitempty" protobuf:"bytes,2,opt,name=name"`
+	Name string `json:"name,omitempty"`
 
 	// On a replication master and each replication slave, the --server-id
 	// option must be specified to establish a unique replication ID in the
@@ -138,23 +138,23 @@ type MySQLGroupSpec struct {
 	// ref: https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_server_id
 	//
 	// So, BaseServerID is needed to calculate a unique server_id for each member.
-	BaseServerID *uint `json:"baseServerID,omitempty" protobuf:"varint,3,opt,name=baseServerID"`
+	BaseServerID *uint `json:"baseServerID,omitempty"`
 }
 
 type MySQLStatus struct {
-	Phase  DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
-	Reason string        `json:"reason,omitempty" protobuf:"bytes,2,opt,name=reason"`
+	Phase  DatabasePhase `json:"phase,omitempty"`
+	Reason string        `json:"reason,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration *types.IntHash `json:"observedGeneration,omitempty" protobuf:"bytes,3,opt,name=observedGeneration"`
+	ObservedGeneration *types.IntHash `json:"observedGeneration,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type MySQLList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MySQL TPR objects
-	Items []MySQL `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MySQL `json:"items,omitempty"`
 }

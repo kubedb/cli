@@ -44,34 +44,34 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type EtcdVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              EtcdVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              EtcdVersionSpec `json:"spec,omitempty"`
 }
 
 // EtcdVersionSpec is the spec for postgres version
 type EtcdVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Database Image
-	DB EtcdVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
+	DB EtcdVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter EtcdVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	Exporter EtcdVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,5,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 }
 
 // EtcdVersionDatabase is the Etcd Database image
 type EtcdVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // EtcdVersionExporter is the image for the Etcd exporter
 type EtcdVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -79,7 +79,7 @@ type EtcdVersionExporter struct {
 // EtcdVersionList is a list of EtcdVersions
 type EtcdVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of EtcdVersion CRD objects
-	Items []EtcdVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []EtcdVersion `json:"items,omitempty"`
 }

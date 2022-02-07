@@ -28,12 +28,14 @@ const (
 
 // MongoDBSchemaOverviewSpec defines the desired state of MongoDBSchemaOverview
 type MongoDBSchemaOverviewSpec struct {
-	Collections []MongoDBCollectionSpec `json:"collections" protobuf:"bytes,1,rep,name=collections"`
+	Collections []MongoDBCollectionSpec `json:"collections"`
 }
 
 type MongoDBCollectionSpec struct {
-	Name      string  `json:"name" protobuf:"bytes,1,opt,name=name"`
-	TotalSize []int32 `json:"size" protobuf:"varint,2,rep,name=size"`
+	Name string `json:"name"`
+
+	// Slice is used to store shards specific collection size for Sharded MongoDB
+	TotalSize []int32 `json:"size"`
 }
 
 // MongoDBSchemaOverview is the Schema for the MongoDBSchemaOverviews API
@@ -41,9 +43,9 @@ type MongoDBCollectionSpec struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MongoDBSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MongoDBSchemaOverviewSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec MongoDBSchemaOverviewSpec `json:"spec,omitempty"`
 }
 
 // MongoDBSchemaOverviewList contains a list of MongoDBSchemaOverview
@@ -51,8 +53,8 @@ type MongoDBSchemaOverview struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MongoDBSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []MongoDBSchemaOverview `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []MongoDBSchemaOverview `json:"items"`
 }
 
 func init() {

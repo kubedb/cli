@@ -28,14 +28,14 @@ const (
 
 // RedisSchemaOverviewSpec defines the desired state of RedisSchemaOverview
 type RedisSchemaOverviewSpec struct {
-	Databases []RedisDatabaseSpec `json:"databases" protobuf:"bytes,1,rep,name=databases"`
+	Databases []RedisDatabaseSpec `json:"databases"`
 }
 
 type RedisDatabaseSpec struct {
-	DBId    string `json:"dbId,omitempty" protobuf:"bytes,1,opt,name=dbId"`
-	Keys    string `json:"keys,omitempty" protobuf:"bytes,2,opt,name=keys"`
-	Expires string `json:"expires,omitempty" protobuf:"bytes,3,opt,name=expires"`
-	AvgTTL  string `json:"avgTTL,omitempty" protobuf:"bytes,4,opt,name=avgTTL"`
+	DBId               string       `json:"dbId"`
+	Keys               string       `json:"keys"`
+	Expires            *metav1.Time `json:"expires,omitempty"`
+	AvgTTLMilliSeconds string       `json:"avgTTLMilliSeconds,omitempty"`
 }
 
 // RedisSchemaOverview is the Schema for the RedisSchemaOverviews API
@@ -43,9 +43,9 @@ type RedisDatabaseSpec struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type RedisSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec RedisSchemaOverviewSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec RedisSchemaOverviewSpec `json:"spec,omitempty"`
 }
 
 // RedisSchemaOverviewList contains a list of RedisSchemaOverview
@@ -53,8 +53,8 @@ type RedisSchemaOverview struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type RedisSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []RedisSchemaOverview `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []RedisSchemaOverview `json:"items"`
 }
 
 func init() {

@@ -43,31 +43,31 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PgBouncerOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PgBouncerOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            PgBouncerOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PgBouncerOpsRequestSpec   `json:"spec,omitempty"`
+	Status            PgBouncerOpsRequestStatus `json:"status,omitempty"`
 }
 
 // PgBouncerOpsRequestSpec is the spec for PgBouncerOpsRequest
 type PgBouncerOpsRequestSpec struct {
 	// Specifies the PgBouncer reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PgBouncer
-	Upgrade *PgBouncerUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *PgBouncerUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *PgBouncerHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *PgBouncerHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *PgBouncerVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *PgBouncerVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *PgBouncerVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *PgBouncerVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of PgBouncer
-	Configuration *PgBouncerCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *PgBouncerCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
 }
 
 // PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
@@ -77,8 +77,8 @@ type PgBouncerReplicaReadinessCriteria struct {
 
 type PgBouncerUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                             `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
-	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+	TargetVersion     string                             `json:"targetVersion,omitempty"`
+	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // HorizontalScaling is the spec for PgBouncer horizontal scaling
@@ -87,7 +87,7 @@ type PgBouncerHorizontalScalingSpec struct {
 
 // PgBouncerVerticalScalingSpec is the spec for PgBouncer vertical scaling
 type PgBouncerVerticalScalingSpec struct {
-	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,1,opt,name=readinessCriteria"`
+	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // PgBouncerVolumeExpansionSpec is the spec for PgBouncer volume expansion
@@ -98,21 +98,21 @@ type PgBouncerCustomConfigurationSpec struct {
 }
 
 type PgBouncerCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty" protobuf:"bytes,1,opt,name=configMap"`
-	Data      map[string]string          `json:"data,omitempty" protobuf:"bytes,2,rep,name=data"`
-	Remove    bool                       `json:"remove,omitempty" protobuf:"varint,3,opt,name=remove"`
+	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
+	Data      map[string]string          `json:"data,omitempty"`
+	Remove    bool                       `json:"remove,omitempty"`
 }
 
 // PgBouncerOpsRequestStatus is the status for PgBouncerOpsRequest
 type PgBouncerOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -120,7 +120,7 @@ type PgBouncerOpsRequestStatus struct {
 // PgBouncerOpsRequestList is a list of PgBouncerOpsRequests
 type PgBouncerOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of PgBouncerOpsRequest CRD objects
-	Items []PgBouncerOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []PgBouncerOpsRequest `json:"items,omitempty"`
 }

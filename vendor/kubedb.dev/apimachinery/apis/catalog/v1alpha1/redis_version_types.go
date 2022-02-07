@@ -44,55 +44,55 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type RedisVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              RedisVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              RedisVersionSpec `json:"spec,omitempty"`
 }
 
 // RedisVersionSpec is the spec for redis version
 type RedisVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	//init container image
-	InitContainer RedisVersionInitContainer `json:"initContainer,omitempty" protobuf:"bytes,2,opt,name=initContainer"`
+	InitContainer RedisVersionInitContainer `json:"initContainer,omitempty"`
 	// Database Image
-	DB RedisVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
+	DB RedisVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter RedisVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
+	Exporter RedisVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator RedisVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,5,opt,name=coordinator"`
+	Coordinator RedisVersionCoordinator `json:"coordinator,omitempty"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// PSP names
-	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies RedisVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,8,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 }
 
 // RedisVersionInitContainer is the Redis init container image
 type RedisVersionInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // RedisVersionDatabase is the Redis Database image
 type RedisVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // RedisVersionCoordinator is the Redis coordinator image
 type RedisVersionCoordinator struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // RedisVersionExporter is the image for the Redis exporter
 type RedisVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // RedisVersionPodSecurityPolicy is the Redis pod security policies
 type RedisVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -100,7 +100,7 @@ type RedisVersionPodSecurityPolicy struct {
 // RedisVersionList is a list of RedisVersions
 type RedisVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of RedisVersion CRD objects
-	Items []RedisVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []RedisVersion `json:"items,omitempty"`
 }

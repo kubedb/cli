@@ -45,100 +45,100 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MySQLVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MySQLVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MySQLVersionSpec `json:"spec,omitempty"`
 }
 
 // MySQLVersionSpec is the spec for MySQL version
 type MySQLVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Distribution
-	Distribution MySQLDistro `json:"distribution,omitempty" protobuf:"bytes,2,opt,name=distribution,casttype=MySQLDistro"`
+	Distribution MySQLDistro `json:"distribution,omitempty"`
 	// Database Image
-	DB MySQLVersionDatabase `json:"db" protobuf:"bytes,3,opt,name=db"`
+	DB MySQLVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter MySQLVersionExporter `json:"exporter" protobuf:"bytes,4,opt,name=exporter"`
+	Exporter MySQLVersionExporter `json:"exporter"`
 	// Coordinator Image
 	// +optional
-	Coordinator MySQLVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,13,opt,name=coordinator"`
+	Coordinator MySQLVersionCoordinator `json:"coordinator,omitempty"`
 	// ReplicationModeDetector Image
 	// +optional
-	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector,omitempty" protobuf:"bytes,5,opt,name=replicationModeDetector"`
+	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector,omitempty"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,6,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// Init container Image
-	InitContainer MySQLVersionInitContainer `json:"initContainer" protobuf:"bytes,7,opt,name=initContainer"`
+	InitContainer MySQLVersionInitContainer `json:"initContainer"`
 	// PSP names
-	PodSecurityPolicies MySQLVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,8,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies MySQLVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	//upgrade constraints
-	UpgradeConstraints MySQLUpgradeConstraints `json:"upgradeConstraints" protobuf:"bytes,9,opt,name=upgradeConstraints"`
+	UpgradeConstraints MySQLUpgradeConstraints `json:"upgradeConstraints"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,10,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// Router image
 	// +optional
-	Router MySQLVersionRouter `json:"router,omitempty" protobuf:"bytes,11,opt,name=router"`
+	Router MySQLVersionRouter `json:"router,omitempty"`
 	// +optional
-	RouterInitContainer MySQLVersionRouterInitContainer `json:"routerInitContainer,omitempty" protobuf:"bytes,12,opt,name=routerInitContainer"`
+	RouterInitContainer MySQLVersionRouterInitContainer `json:"routerInitContainer,omitempty"`
 }
 
 // MySQLVersionDatabase is the MySQL Database image
 type MySQLVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MySQLVersionExporter is the image for the MySQL exporter
 type MySQLVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MySQLVersionCoordinator is the image for coordinator
 type MySQLVersionCoordinator struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MySQLVersionInitContainer is the MySQL Container initializer
 type MySQLVersionInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MySQLVersionRouter is the MySQL Router lightweight middleware
 //that provides transparent routing between your application and back-end MySQL Servers
 type MySQLVersionRouter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MySQLVersionRouterInitContainer is mysql router init container
 type MySQLVersionRouterInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MySQLVersionPodSecurityPolicy is the MySQL pod security policies
 type MySQLVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 type MySQLUpgradeConstraints struct {
 	// List of all accepted versions for uprade request
-	Allowlist Allowlist `json:"allowlist,omitempty" protobuf:"bytes,1,opt,name=allowlist"`
+	Allowlist Allowlist `json:"allowlist,omitempty"`
 	// List of all rejected versions for uprade request
-	Denylist Denylist `json:"denylist,omitempty" protobuf:"bytes,2,opt,name=denylist"`
+	Denylist Denylist `json:"denylist,omitempty"`
 }
 
 type Allowlist struct {
 	// List of all accepted versions for upgrade request of a Standalone server. empty indicates all accepted
-	Standalone []string `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
+	Standalone []string `json:"standalone,omitempty"`
 	// List of all accepted versions for upgrade request of a GroupReplication cluster. empty indicates all accepted
-	GroupReplication []string `json:"groupReplication,omitempty" protobuf:"bytes,2,opt,name=groupReplication"`
+	GroupReplication []string `json:"groupReplication,omitempty"`
 }
 
 type Denylist struct {
 	// List of all rejected versions for upgrade request of a Standalone server
-	Standalone []string `json:"standalone,omitempty" protobuf:"bytes,1,opt,name=standalone"`
+	Standalone []string `json:"standalone,omitempty"`
 	// List of all rejected versions for upgrade request of a GroupReplication cluster
-	GroupReplication []string `json:"groupReplication,omitempty" protobuf:"bytes,2,opt,name=groupReplication"`
+	GroupReplication []string `json:"groupReplication,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -146,9 +146,9 @@ type Denylist struct {
 // MySQLVersionList is a list of MySQLVersions
 type MySQLVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MySQLVersion CRD objects
-	Items []MySQLVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MySQLVersion `json:"items,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Official;Oracle;Percona;KubeDB;MySQL

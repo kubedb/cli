@@ -719,8 +719,8 @@ func Convert_v1alpha1_MySQLSpec_To_v1alpha2_MySQLSpec(in *MySQLSpec, out *v1alph
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	if in.Topology != nil {
 		in, out := &in.Topology, &out.Topology
-		*out = new(v1alpha2.MySQLClusterTopology)
-		if err := Convert_v1alpha1_MySQLClusterTopology_To_v1alpha2_MySQLClusterTopology(*in, *out, s); err != nil {
+		*out = new(v1alpha2.MySQLTopology)
+		if err := Convert_v1alpha1_MySQLTopology_To_v1alpha2_MySQLTopology(*in, *out, s); err != nil {
 			return err
 		}
 	} else {
@@ -780,8 +780,8 @@ func Convert_v1alpha2_MySQLSpec_To_v1alpha1_MySQLSpec(in *v1alpha2.MySQLSpec, ou
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	if in.Topology != nil {
 		in, out := &in.Topology, &out.Topology
-		*out = new(MySQLClusterTopology)
-		if err := Convert_v1alpha2_MySQLClusterTopology_To_v1alpha1_MySQLClusterTopology(*in, *out, s); err != nil {
+		*out = new(MySQLTopology)
+		if err := Convert_v1alpha2_MySQLTopology_To_v1alpha1_MySQLTopology(*in, *out, s); err != nil {
 			return err
 		}
 	} else {
@@ -1070,7 +1070,7 @@ func Convert_v1alpha1_RedisSpec_To_v1alpha2_RedisSpec(in *RedisSpec, out *v1alph
 			}
 		} else if in.ConfigSource.ConfigMap != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
-				Name: "FIXIT_" + in.ConfigSource.ConfigMap.Name,
+				Name: "FIX_CONVERT_TO_SECRET_" + in.ConfigSource.ConfigMap.Name,
 			}
 		}
 	}

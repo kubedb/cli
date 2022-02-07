@@ -45,60 +45,60 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PerconaXtraDB struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PerconaXtraDBSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            PerconaXtraDBStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PerconaXtraDBSpec   `json:"spec,omitempty"`
+	Status            PerconaXtraDBStatus `json:"status,omitempty"`
 }
 
 type PerconaXtraDBSpec struct {
 	// Version of PerconaXtraDB to be deployed.
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 
 	// Number of instances to deploy for PerconaXtraDB.
 	// Replicas: 1		-->		Deploy standalone PerconaXtraDB
 	// Replicas: > 1	-->		Deploy PerconaXtraDB cluster with specified number of masters
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,3,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,4,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,5,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,6,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,7,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e custom-mysql.cnf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,8,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,9,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,10,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,11,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,12,opt,name=halted"`
+	Halted bool `json:"halted,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,13,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
@@ -113,21 +113,21 @@ const (
 type PerconaXtraDBStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type PerconaXtraDBList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of PerconaXtraDB TPR objects
-	Items []PerconaXtraDB `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []PerconaXtraDB `json:"items,omitempty"`
 }

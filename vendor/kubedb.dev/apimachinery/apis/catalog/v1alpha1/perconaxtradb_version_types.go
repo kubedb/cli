@@ -44,49 +44,49 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PerconaXtraDBVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PerconaXtraDBVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PerconaXtraDBVersionSpec `json:"spec,omitempty"`
 }
 
 // PerconaXtraDBVersionSpec is the spec for PerconaXtraDB version
 type PerconaXtraDBVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Database Image
-	DB PerconaXtraDBVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
+	DB PerconaXtraDBVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter PerconaXtraDBVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	Exporter PerconaXtraDBVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,4,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// Init container Image
 	// TODO: remove if not needed
-	InitContainer PerconaXtraDBVersionInitContainer `json:"initContainer" protobuf:"bytes,5,opt,name=initContainer"`
+	InitContainer PerconaXtraDBVersionInitContainer `json:"initContainer"`
 	// PSP names
-	PodSecurityPolicies PerconaXtraDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,6,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies PerconaXtraDBVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,7,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 }
 
 // PerconaXtraDBVersionDatabase is the perconaxtradb image
 type PerconaXtraDBVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PerconaXtraDBVersionExporter is the image for the PerconaXtraDB exporter
 type PerconaXtraDBVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PerconaXtraDBVersionInitContainer is the PerconaXtraDB Container initializer
 type PerconaXtraDBVersionInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // PerconaXtraDBVersionPodSecurityPolicy is the PerconaXtraDB pod security policies
 type PerconaXtraDBVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -94,7 +94,7 @@ type PerconaXtraDBVersionPodSecurityPolicy struct {
 // PerconaXtraDBVersionList is a list of PerconaXtraDBVersions
 type PerconaXtraDBVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of PerconaXtraDBVersion CRD objects
-	Items []PerconaXtraDBVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []PerconaXtraDBVersion `json:"items,omitempty"`
 }

@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -50,47 +52,48 @@ const (
 
 type ComputeAutoscalerSpec struct {
 	// Whether compute autoscaler is enabled. The default is Off".
-	Trigger AutoscalerTrigger `json:"trigger,omitempty" protobuf:"bytes,9,opt,name=trigger,casttype=AutoscalerTrigger"`
+	Trigger AutoscalerTrigger `json:"trigger,omitempty"`
 	// Specifies the minimal amount of resources that will be recommended.
 	// The default is no minimum.
 	// +optional
-	MinAllowed core.ResourceList `json:"minAllowed,omitempty" protobuf:"bytes,2,rep,name=minAllowed,casttype=k8s.io/api/core/v1.ResourceList,castkey=k8s.io/api/core/v1.ResourceName"`
+	MinAllowed core.ResourceList `json:"minAllowed,omitempty"`
 	// Specifies the maximum amount of resources that will be recommended.
 	// The default is no maximum.
 	// +optional
-	MaxAllowed core.ResourceList `json:"maxAllowed,omitempty" protobuf:"bytes,3,rep,name=maxAllowed,casttype=k8s.io/api/core/v1.ResourceList,castkey=k8s.io/api/core/v1.ResourceName"`
+	MaxAllowed core.ResourceList `json:"maxAllowed,omitempty"`
 
 	// Specifies the type of recommendations that will be computed
 	// (and possibly applied) by VPA.
 	// If not specified, the default of [ResourceCPU, ResourceMemory] will be used.
 	// +optional
 	// +patchStrategy=merge
-	ControlledResources []core.ResourceName `json:"controlledResources,omitempty" patchStrategy:"merge" protobuf:"bytes,5,rep,name=controlledResources,casttype=k8s.io/api/core/v1.ResourceName"`
+	ControlledResources []core.ResourceName `json:"controlledResources,omitempty" patchStrategy:"merge"`
 
 	// Specifies which resource values should be controlled.
 	// The default is "RequestsAndLimits".
 	// +optional
-	ContainerControlledValues *ContainerControlledValues `json:"containerControlledValues,omitempty" protobuf:"bytes,6,opt,name=containerControlledValues,casttype=ContainerControlledValues"`
+	ContainerControlledValues *ContainerControlledValues `json:"containerControlledValues,omitempty"`
 
 	// Specifies the minimum resource difference in percentage
 	// The default is 10%.
 	// +optional
-	ResourceDiffPercentage int32 `json:"resourceDiffPercentage,omitempty" protobuf:"varint,7,opt,name=resourceDiffPercentage"`
+	ResourceDiffPercentage int32 `json:"resourceDiffPercentage,omitempty"`
 
 	// Specifies the minimum pod life time
 	// The default is 12h.
 	// +optional
-	PodLifeTimeThreshold metav1.Duration `json:"podLifeTimeThreshold,omitempty" protobuf:"bytes,10,opt,name=podLifeTimeThreshold"`
+	PodLifeTimeThreshold metav1.Duration `json:"podLifeTimeThreshold,omitempty"`
 
 	// Specifies the percentage of the Memory that will be passed as inMemorySizeGB
 	// The default is 70%.
 	// +optional
-	InMemoryScalingThreshold int32 `json:"inMemoryScalingThreshold,omitempty" protobuf:"varint,11,opt,name=inMemoryScalingThreshold"`
+	InMemoryScalingThreshold int32 `json:"inMemoryScalingThreshold,omitempty"`
 }
 
 type StorageAutoscalerSpec struct {
 	// Whether compute autoscaler is enabled. The default is Off".
-	Trigger          AutoscalerTrigger `json:"trigger,omitempty" protobuf:"bytes,1,opt,name=trigger,casttype=AutoscalerTrigger"`
-	UsageThreshold   int32             `json:"usageThreshold,omitempty" protobuf:"varint,2,opt,name=usageThreshold"`
-	ScalingThreshold int32             `json:"scalingThreshold,omitempty" protobuf:"varint,3,opt,name=scalingThreshold"`
+	Trigger          AutoscalerTrigger           `json:"trigger,omitempty"`
+	UsageThreshold   int32                       `json:"usageThreshold,omitempty"`
+	ScalingThreshold int32                       `json:"scalingThreshold,omitempty"`
+	ExpansionMode    *opsapi.VolumeExpansionMode `json:"expansionMode,omitempty"`
 }

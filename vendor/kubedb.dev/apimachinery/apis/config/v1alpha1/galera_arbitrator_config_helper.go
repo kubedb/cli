@@ -25,7 +25,7 @@ const (
 	GarbdListenPort = 4444
 
 	// GarbdXtrabackupSSTMethod is the name of the method or script that is
-	// used during a State Snapshot Transfer to Galera Arbitrator Daemon (garbd).
+	// used during a State SnapshotID Transfer to Galera Arbitrator Daemon (garbd).
 	GarbdXtrabackupSSTMethod = "xtrabackup-v2"
 
 	// GarbdXtrabackupSSTRequestSuffix denotes the suffix of sst request string for xtrabackup

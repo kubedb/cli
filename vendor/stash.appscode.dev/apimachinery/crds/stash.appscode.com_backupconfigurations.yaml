@@ -30,6 +30,9 @@ spec:
     - jsonPath: .spec.paused
       name: Paused
       type: boolean
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -684,9 +687,13 @@ spec:
                   information
                 properties:
                   name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                     type: string
+                  namespace:
+                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                    type: string
+                required:
+                - name
                 type: object
               retentionPolicy:
                 description: RetentionPolicy indicates the policy to follow to clean
@@ -2948,6 +2955,13 @@ spec:
                   generation, which is updated on mutation by the API Server.
                 format: int64
                 type: integer
+              phase:
+                description: Phase indicates phase of this BackupConfiguration.
+                enum:
+                - Invalid
+                - Ready
+                - NotReady
+                type: string
             type: object
         type: object
     served: true

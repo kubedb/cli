@@ -169,6 +169,8 @@ spec:
                     minimum: 0
                     type: integer
                 type: object
+              reprovision:
+                type: object
               restart:
                 type: object
               timeout:
@@ -279,12 +281,14 @@ spec:
               type:
                 enum:
                 - Upgrade
+                - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
                 - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - ReconfigureTLS
+                - Reprovision
                 type: string
               upgrade:
                 properties:

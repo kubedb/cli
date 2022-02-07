@@ -30,6 +30,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	intstr "k8s.io/apimachinery/pkg/util/intstr"
 	common "k8s.io/kube-openapi/pkg/common"
+	apiv1 "kmodules.xyz/client-go/api/v1"
 )
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
@@ -362,10 +363,15 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/version.Info":                                        schema_k8sio_apimachinery_pkg_version_Info(ref),
 		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                         schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                               schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                               schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                     schema_kmodulesxyz_client_go_api_v1_Condition(ref),
+		"kmodules.xyz/client-go/api/v1.ObjectID":                                      schema_kmodulesxyz_client_go_api_v1_ObjectID(ref),
+		"kmodules.xyz/client-go/api/v1.ObjectInfo":                                    schema_kmodulesxyz_client_go_api_v1_ObjectInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ObjectReference":                               schema_kmodulesxyz_client_go_api_v1_ObjectReference(ref),
 		"kmodules.xyz/client-go/api/v1.ResourceID":                                    schema_kmodulesxyz_client_go_api_v1_ResourceID(ref),
 		"kmodules.xyz/client-go/api/v1.TLSConfig":                                     schema_kmodulesxyz_client_go_api_v1_TLSConfig(ref),
+		"kmodules.xyz/client-go/api/v1.TimeOfDay":                                     schema_kmodulesxyz_client_go_api_v1_TimeOfDay(ref),
+		"kmodules.xyz/client-go/api/v1.TypedObjectReference":                          schema_kmodulesxyz_client_go_api_v1_TypedObjectReference(ref),
 		"kmodules.xyz/client-go/api/v1.X509Subject":                                   schema_kmodulesxyz_client_go_api_v1_X509Subject(ref),
 		"kmodules.xyz/client-go/api/v1.stringSetMerger":                               schema_kmodulesxyz_client_go_api_v1_stringSetMerger(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AddKeyTransform":      schema_custom_resources_apis_appcatalog_v1alpha1_AddKeyTransform(ref),
@@ -410,26 +416,24 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServicePort":                                schema_kmodulesxyz_offshoot_api_api_v1_ServicePort(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ServiceSpec":                                schema_kmodulesxyz_offshoot_api_api_v1_ServiceSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                        schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo":                   schema_apimachinery_apis_ui_v1alpha1_DBConnectionInfo(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials":                      schema_apimachinery_apis_ui_v1alpha1_DBCredentials(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchClusterHealth":         schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchIndexSpec":             schema_apimachinery_apis_ui_v1alpha1_ElasticsearchIndexSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsight":               schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsight(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsightList":           schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsightSpec":           schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchNodesStatSpec":         schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchNodesStats":            schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStats(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchNodesStatsList":        schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatsList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchNodesStatsSpec":        schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatsSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchNodesStatsStatus":      schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatsStatus(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverview":              schema_apimachinery_apis_ui_v1alpha1_ElasticsearchOverview(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverviewList":          schema_apimachinery_apis_ui_v1alpha1_ElasticsearchOverviewList(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverviewSpec":          schema_apimachinery_apis_ui_v1alpha1_ElasticsearchOverviewSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchSchemaOverview":        schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverview(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchSchemaOverviewList":    schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverviewList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchSchemaOverviewSpec":    schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverviewSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.GenericDatabaseSpec":                schema_apimachinery_apis_ui_v1alpha1_GenericDatabaseSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.GenericSchemaOverviewSpec":          schema_apimachinery_apis_ui_v1alpha1_GenericSchemaOverviewSpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverview":                    schema_apimachinery_apis_ui_v1alpha1_MariaDBOverview(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverviewList":                schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewList(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverviewSpec":                schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsight":                     schema_apimachinery_apis_ui_v1alpha1_MariaDBInsight(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightList":                 schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightSpec":                 schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBQueries":                     schema_apimachinery_apis_ui_v1alpha1_MariaDBQueries(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBQueriesList":                 schema_apimachinery_apis_ui_v1alpha1_MariaDBQueriesList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBQueriesSpec":                 schema_apimachinery_apis_ui_v1alpha1_MariaDBQueriesSpec(ref),
@@ -439,9 +443,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBCollectionSpec":              schema_apimachinery_apis_ui_v1alpha1_MongoDBCollectionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBConnectionsInfo":             schema_apimachinery_apis_ui_v1alpha1_MongoDBConnectionsInfo(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBDatabaseStats":               schema_apimachinery_apis_ui_v1alpha1_MongoDBDatabaseStats(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverview":                    schema_apimachinery_apis_ui_v1alpha1_MongoDBOverview(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverviewList":                schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewList(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverviewSpec":                schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsight":                     schema_apimachinery_apis_ui_v1alpha1_MongoDBInsight(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsightList":                 schema_apimachinery_apis_ui_v1alpha1_MongoDBInsightList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsightSpec":                 schema_apimachinery_apis_ui_v1alpha1_MongoDBInsightSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBQueries":                     schema_apimachinery_apis_ui_v1alpha1_MongoDBQueries(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBQueriesList":                 schema_apimachinery_apis_ui_v1alpha1_MongoDBQueriesList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBQueriesSpec":                 schema_apimachinery_apis_ui_v1alpha1_MongoDBQueriesSpec(ref),
@@ -451,9 +455,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBSchemaOverviewList":          schema_apimachinery_apis_ui_v1alpha1_MongoDBSchemaOverviewList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBSchemaOverviewSpec":          schema_apimachinery_apis_ui_v1alpha1_MongoDBSchemaOverviewSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBShardsInfo":                  schema_apimachinery_apis_ui_v1alpha1_MongoDBShardsInfo(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverview":                      schema_apimachinery_apis_ui_v1alpha1_MySQLOverview(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverviewList":                  schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewList(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverviewSpec":                  schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsight":                       schema_apimachinery_apis_ui_v1alpha1_MySQLInsight(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsightList":                   schema_apimachinery_apis_ui_v1alpha1_MySQLInsightList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsightSpec":                   schema_apimachinery_apis_ui_v1alpha1_MySQLInsightSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLQueries":                       schema_apimachinery_apis_ui_v1alpha1_MySQLQueries(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLQueriesList":                   schema_apimachinery_apis_ui_v1alpha1_MySQLQueriesList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLQueriesSpec":                   schema_apimachinery_apis_ui_v1alpha1_MySQLQueriesSpec(ref),
@@ -485,12 +489,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.NodesStatsTranslogStats":            schema_apimachinery_apis_ui_v1alpha1_NodesStatsTranslogStats(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.NodesStatsWarmerStats":              schema_apimachinery_apis_ui_v1alpha1_NodesStatsWarmerStats(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PGSetting":                          schema_apimachinery_apis_ui_v1alpha1_PGSetting(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresBackupInfo":                 schema_apimachinery_apis_ui_v1alpha1_PostgresBackupInfo(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresConnectionInfo":             schema_apimachinery_apis_ui_v1alpha1_PostgresConnectionInfo(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverview":                   schema_apimachinery_apis_ui_v1alpha1_PostgresOverview(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverviewList":               schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewList(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverviewSpec":               schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewSpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverviewStatus":             schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewStatus(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsight":                    schema_apimachinery_apis_ui_v1alpha1_PostgresInsight(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsightList":                schema_apimachinery_apis_ui_v1alpha1_PostgresInsightList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsightSpec":                schema_apimachinery_apis_ui_v1alpha1_PostgresInsightSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresQueries":                    schema_apimachinery_apis_ui_v1alpha1_PostgresQueries(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresQueriesList":                schema_apimachinery_apis_ui_v1alpha1_PostgresQueriesList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresQueriesSpec":                schema_apimachinery_apis_ui_v1alpha1_PostgresQueriesSpec(ref),
@@ -503,9 +505,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresSettingsSpec":               schema_apimachinery_apis_ui_v1alpha1_PostgresSettingsSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresVacuumInfo":                 schema_apimachinery_apis_ui_v1alpha1_PostgresVacuumInfo(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisDatabaseSpec":                  schema_apimachinery_apis_ui_v1alpha1_RedisDatabaseSpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverview":                      schema_apimachinery_apis_ui_v1alpha1_RedisOverview(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverviewList":                  schema_apimachinery_apis_ui_v1alpha1_RedisOverviewList(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverviewSpec":                  schema_apimachinery_apis_ui_v1alpha1_RedisOverviewSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsight":                       schema_apimachinery_apis_ui_v1alpha1_RedisInsight(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightList":                   schema_apimachinery_apis_ui_v1alpha1_RedisInsightList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightSpec":                   schema_apimachinery_apis_ui_v1alpha1_RedisInsightSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisQueries":                       schema_apimachinery_apis_ui_v1alpha1_RedisQueries(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisQueriesList":                   schema_apimachinery_apis_ui_v1alpha1_RedisQueriesList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisQueriesSpec":                   schema_apimachinery_apis_ui_v1alpha1_RedisQueriesSpec(ref),
@@ -513,7 +515,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisSchemaOverview":                schema_apimachinery_apis_ui_v1alpha1_RedisSchemaOverview(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisSchemaOverviewList":            schema_apimachinery_apis_ui_v1alpha1_RedisSchemaOverviewList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisSchemaOverviewSpec":            schema_apimachinery_apis_ui_v1alpha1_RedisSchemaOverviewSpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.SecurityReport":                     schema_apimachinery_apis_ui_v1alpha1_SecurityReport(ref),
 	}
 }
 
@@ -17731,6 +17732,44 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 	}
 }
 
+func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"uid": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"displayName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"provider": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+				Required: []string{"uid"},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_client_go_api_v1_Condition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -17789,6 +17828,69 @@ func schema_kmodulesxyz_client_go_api_v1_Condition(ref common.ReferenceCallback)
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ObjectID(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ObjectInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"resource": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.ResourceID"),
+						},
+					},
+					"ref": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+				},
+				Required: []string{"resource", "ref"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/client-go/api/v1.ResourceID"},
 	}
 }
 
@@ -17903,6 +18005,59 @@ func schema_kmodulesxyz_client_go_api_v1_TLSConfig(ref common.ReferenceCallback)
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec"},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_TimeOfDay(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TimeOfDay is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.",
+				Type:        apiv1.TimeOfDay{}.OpenAPISchemaType(),
+				Format:      apiv1.TimeOfDay{}.OpenAPISchemaFormat(),
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_TypedObjectReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TypedObjectReference represents an typed namespaced object.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"apiGroup": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
 	}
 }
 
@@ -18087,14 +18242,14 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_AddKeysFromTransform(ref c
 					"secretRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "The reference to the Secret that should be merged into the credentials Secret.",
-							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ObjectReference"),
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ObjectReference"},
+			"k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
@@ -18486,6 +18641,13 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_ServiceReference(ref commo
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies which scheme to use, for example: http, https If specified, then it will applied as prefix in this format: scheme:// If not specified, then nothing will be prefixed",
 							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "`namespace` is the namespace of the service.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -20133,60 +20295,6 @@ func schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref common.Refer
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_DBConnectionInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"url": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"port": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
-						},
-					},
-				},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_DBCredentials(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"username": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"password": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"certificate": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-				},
-			},
-		},
-	}
-}
-
 func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -20195,104 +20303,89 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref common.
 				Properties: map[string]spec.Schema{
 					"activePrimaryShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"activeShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"activeShardsPercentAsNumber": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"clusterName": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"delayedUnassignedShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"initializingShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"numberOfDataNodes": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"numberOfInFlightFetch": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"numberOfNodes": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"numberOfPendingTasks": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"relocatingShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
-					"status": {
+					"clusterStatus": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"unassignedShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
-					"taskMaxWaitingInQueueMillis": {
+					"taskMaxWaitingInQueueMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 				},
-				Required: []string{"activePrimaryShards", "activeShards", "activeShardsPercentAsNumber", "clusterName", "delayedUnassignedShards", "initializingShards", "numberOfDataNodes", "numberOfInFlightFetch", "numberOfNodes", "numberOfPendingTasks", "relocatingShards", "status", "unassignedShards", "taskMaxWaitingInQueueMillis"},
 			},
 		},
 	}
@@ -20306,23 +20399,240 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchIndexSpec(ref common.Refe
 				Properties: map[string]spec.Schema{
 					"indexName": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
-					"primaryStoreSizeInBytes": {
+					"primaryStoreSizeBytes": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
-					"totalStoreSizeInBytes": {
+					"totalStoreSizeBytes": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"indexName", "primaryStoreSizeBytes", "totalStoreSizeBytes"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsightSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsightSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsight"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsight"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ElasticsearchInsightSpec defines the desired state of ElasticsearchInsight",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"activePrimaryShards": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"activeShards": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"activeShardsPercentAsNumber": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"clusterName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"delayedUnassignedShards": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"initializingShards": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"numberOfDataNodes": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"numberOfInFlightFetch": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"numberOfNodes": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"numberOfPendingTasks": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"relocatingShards": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"clusterStatus": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"unassignedShards": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"taskMaxWaitingInQueueMilliSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+				},
+				Required: []string{"version", "status", "mode"},
 			},
 		},
 	}
@@ -20337,9 +20647,7 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatSpec(ref common.
 					"timestamp": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Time the node stats were collected for this response in Unix",
-							Default:     0,
-							Type:        []string{"integer"},
-							Format:      "int64",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
 					"name": {
@@ -20350,7 +20658,7 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatSpec(ref common.
 							Format:      "",
 						},
 					},
-					"transport_addr": {
+					"transportAddr": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Transport address for the node",
 							Default:     "",
@@ -20402,11 +20710,11 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatSpec(ref common.
 						},
 					},
 				},
-				Required: []string{"timestamp", "name", "transport_addr", "host", "ip", "roles", "indices", "os"},
+				Required: []string{"timestamp", "name", "transportAddr", "host", "ip", "roles", "indices", "os"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.NodesStatsIndex", "kubedb.dev/apimachinery/apis/ui/v1alpha1.NodesStatsNodeOS"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kubedb.dev/apimachinery/apis/ui/v1alpha1.NodesStatsIndex", "kubedb.dev/apimachinery/apis/ui/v1alpha1.NodesStatsNodeOS"},
 	}
 }
 
@@ -20541,155 +20849,6 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchNodesStatsStatus(ref comm
 				Type:        []string{"object"},
 			},
 		},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchOverview(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
-						},
-					},
-					"spec": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverviewSpec"),
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchStatus"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverviewSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchOverviewList(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
-						},
-					},
-					"items": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverview"),
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"items"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchOverview"},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ElasticsearchOverviewSpec defines the desired state of ElasticsearchOverview",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"version": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"mode": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"connectionInfo": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo"),
-						},
-					},
-					"credentials": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials"),
-						},
-					},
-					"clusterHealth": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchClusterHealth"),
-						},
-					},
-				},
-				Required: []string{"version", "status", "mode"},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchClusterHealth"},
 	}
 }
 
@@ -20828,7 +20987,7 @@ func schema_apimachinery_apis_ui_v1alpha1_GenericDatabaseSpec(ref common.Referen
 							Format: "",
 						},
 					},
-					"tableSizeInBytes": {
+					"tableSizeBytes": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
@@ -20868,7 +21027,7 @@ func schema_apimachinery_apis_ui_v1alpha1_GenericSchemaOverviewSpec(ref common.R
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverview(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MariaDBInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -20897,7 +21056,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverview(ref common.ReferenceCa
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverviewSpec"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightSpec"),
 						},
 					},
 					"status": {
@@ -20910,11 +21069,11 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverview(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverviewSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightSpec"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -20947,7 +21106,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewList(ref common.Referen
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverview"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsight"),
 									},
 								},
 							},
@@ -20958,15 +21117,15 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewList(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBOverview"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsight"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "MariaDBOverviewSpec defines the desired state of MariaDBOverview",
+				Description: "MariaDBInsightSpec defines the desired state of MariaDBInsight",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"version": {
@@ -20990,37 +21149,28 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewSpec(ref common.Referen
 							Format:  "",
 						},
 					},
-					"connectionsInfo": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo"),
-						},
-					},
-					"credentials": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials"),
-						},
-					},
 					"maxConnections": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
 						},
 					},
 					"maxUsedConnections": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
 						},
 					},
 					"questions": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
 						},
 					},
-					"longQueryTimeThreshold": {
+					"longQueryTimeThresholdSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"number"},
 							Format: "double",
@@ -21069,11 +21219,9 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBOverviewSpec(ref common.Referen
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode", "questions"},
+				Required: []string{"version", "status", "mode", "maxConnections", "maxUsedConnections", "questions"},
 			},
 		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials"},
 	}
 }
 
@@ -21202,9 +21350,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBQuerySpec(ref common.ReferenceC
 				Properties: map[string]spec.Schema{
 					"startTime": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
 					"userHost": {
@@ -21214,28 +21360,28 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBQuerySpec(ref common.ReferenceC
 							Format:  "",
 						},
 					},
-					"queryTimeInMilli": {
+					"queryTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
 						},
 					},
-					"lockTimeInMilli": {
+					"lockTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
 						},
 					},
-					"rows_sent": {
+					"rowsSent": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"integer"},
 							Format:  "int64",
 						},
 					},
-					"rows_examined": {
+					"rowsExamined": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"integer"},
@@ -21251,50 +21397,46 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBQuerySpec(ref common.ReferenceC
 					},
 					"lastInsertId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"insertId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"serverId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"sqlText": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"threadId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"rowsAffected": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"startTime", "userHost", "queryTimeInMilli", "lockTimeInMilli", "rows_sent", "rows_examined", "db", "lastInsertId", "insertId", "serverId", "sqlText", "threadId", "rowsAffected"},
+				Required: []string{"startTime", "userHost", "queryTimeMilliSeconds", "lockTimeMilliSeconds", "rowsSent", "rowsExamined", "db"},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -21401,7 +21543,8 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBCollectionSpec(ref common.Refer
 					},
 					"size": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
+							Description: "Slice is used to store shards specific collection size for Sharded MongoDB",
+							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
@@ -21502,7 +21645,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBDatabaseStats(ref common.Refere
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverview(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MongoDBInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -21531,7 +21674,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverview(ref common.ReferenceCa
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverviewSpec"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsightSpec"),
 						},
 					},
 					"status": {
@@ -21544,11 +21687,11 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverview(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverviewSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsightSpec"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MongoDBInsightList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -21581,7 +21724,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewList(ref common.Referen
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverview"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsight"),
 									},
 								},
 							},
@@ -21592,31 +21735,17 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewList(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBOverview"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsight"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MongoDBInsightSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "MongoDBOverviewSpec defines the desired state of MongoDBOverview",
+				Description: "MongoDBInsightSpec defines the desired state of MongoDBInsight",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"namespace": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
 					"version": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
@@ -21636,16 +21765,6 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewSpec(ref common.Referen
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
-						},
-					},
-					"connectionInfo": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo"),
-						},
-					},
-					"credentials": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials"),
 						},
 					},
 					"connections": {
@@ -21668,31 +21787,12 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBOverviewSpec(ref common.Referen
 							Ref: ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBReplicaSetInfo"),
 						},
 					},
-					"resources": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"object"},
-							AdditionalProperties: &spec.SchemaOrBool{
-								Allows: true,
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
-									},
-								},
-							},
-						},
-					},
-					"securityReport": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.SecurityReport"),
-						},
-					},
 				},
-				Required: []string{"name", "namespace", "version", "type", "status", "connectionInfo", "credentials", "connections", "dbStats", "resources", "securityReport"},
+				Required: []string{"version", "type", "status"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/api/resource.Quantity", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBConnectionsInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBDatabaseStats", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBReplicaSetInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBShardsInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.SecurityReport"},
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBConnectionsInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBDatabaseStats", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBReplicaSetInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBShardsInfo"},
 	}
 }
 
@@ -21854,29 +21954,26 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBQuerySpec(ref common.ReferenceC
 							Format:  "int64",
 						},
 					},
-					"avgExecutionTimeInMS": {
+					"avgExecutionTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
-					"minExecutionTimeInMS": {
+					"minExecutionTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
-					"maxExecutionTimeInMS": {
+					"maxExecutionTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"operation", "databaseName", "collectionName", "command", "count", "avgExecutionTimeInMS", "minExecutionTimeInMS", "maxExecutionTimeInMS"},
+				Required: []string{"operation", "databaseName", "collectionName", "command", "count"},
 			},
 		},
 	}
@@ -22048,26 +22145,24 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBShardsInfo(ref common.Reference
 					},
 					"balancerEnabled": {
 						SchemaProps: spec.SchemaProps{
-							Default: false,
-							Type:    []string{"boolean"},
-							Format:  "",
+							Type:   []string{"boolean"},
+							Format: "",
 						},
 					},
 					"chunksBalanced": {
 						SchemaProps: spec.SchemaProps{
-							Default: false,
-							Type:    []string{"boolean"},
-							Format:  "",
+							Type:   []string{"boolean"},
+							Format: "",
 						},
 					},
 				},
-				Required: []string{"numberOfShards", "replicasPerShards", "numberOfChunks", "balancerEnabled", "chunksBalanced"},
+				Required: []string{"numberOfShards", "replicasPerShards", "numberOfChunks"},
 			},
 		},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MySQLOverview(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MySQLInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -22096,7 +22191,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLOverview(ref common.ReferenceCall
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverviewSpec"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsightSpec"),
 						},
 					},
 					"status": {
@@ -22109,11 +22204,11 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLOverview(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverviewSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsightSpec"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MySQLInsightList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -22146,7 +22241,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewList(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverview"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsight"),
 									},
 								},
 							},
@@ -22157,15 +22252,15 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewList(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLOverview"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsight"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_MySQLInsightSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "MySQLOverviewSpec defines the desired state of MySQLOverview",
+				Description: "MySQLInsightSpec defines the desired state of MySQLInsight",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"version": {
@@ -22189,37 +22284,28 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewSpec(ref common.Reference
 							Format:  "",
 						},
 					},
-					"connectionsInfo": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo"),
-						},
-					},
-					"credentials": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials"),
-						},
-					},
 					"maxConnections": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
 						},
 					},
 					"maxUsedConnections": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
 						},
 					},
 					"questions": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
 						},
 					},
-					"longQueryTimeThreshold": {
+					"longQueryTimeThresholdSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"number"},
 							Format: "double",
@@ -22268,11 +22354,9 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLOverviewSpec(ref common.Reference
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode", "questions"},
+				Required: []string{"version", "status", "mode", "maxConnections", "maxUsedConnections", "questions"},
 			},
 		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DBConnectionInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DBCredentials"},
 	}
 }
 
@@ -22401,9 +22485,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLQuerySpec(ref common.ReferenceCal
 				Properties: map[string]spec.Schema{
 					"startTime": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
 					"userHost": {
@@ -22413,28 +22495,28 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLQuerySpec(ref common.ReferenceCal
 							Format:  "",
 						},
 					},
-					"queryTimeInMilli": {
+					"queryTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
 						},
 					},
-					"lockTimeInMilli": {
+					"lockTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
 						},
 					},
-					"rows_sent": {
+					"rowsSent": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"integer"},
 							Format:  "int64",
 						},
 					},
-					"rows_examined": {
+					"rowsExamined": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"integer"},
@@ -22450,43 +22532,40 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLQuerySpec(ref common.ReferenceCal
 					},
 					"lastInsertId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"insertId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"serverId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"sqlText": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"threadId": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"startTime", "userHost", "queryTimeInMilli", "lockTimeInMilli", "rows_sent", "rows_examined", "db", "lastInsertId", "insertId", "serverId", "sqlText", "threadId"},
+				Required: []string{"startTime", "userHost", "queryTimeMilliSeconds", "lockTimeMilliSeconds", "rowsSent", "rowsExamined", "db"},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -24033,30 +24112,18 @@ func schema_apimachinery_apis_ui_v1alpha1_PGSetting(ref common.ReferenceCallback
 					},
 					"unit": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"source": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 				},
-				Required: []string{"name", "currentValue", "defaultValue", "unit", "source"},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_PostgresBackupInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
+				Required: []string{"name", "currentValue", "defaultValue"},
 			},
 		},
 	}
@@ -24089,7 +24156,7 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresConnectionInfo(ref common.Refe
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_PostgresOverview(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_PostgresInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -24118,7 +24185,7 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresOverview(ref common.ReferenceC
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverviewSpec"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsightSpec"),
 						},
 					},
 					"status": {
@@ -24131,11 +24198,11 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresOverview(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverviewSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsightSpec"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_PostgresInsightList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -24168,7 +24235,7 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewList(ref common.Refere
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverview"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsight"),
 									},
 								},
 							},
@@ -24179,25 +24246,18 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewList(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresOverview"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsight"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_PostgresInsightSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "PostgresOverviewSpec defines the desired state of PostgresOverview",
+				Description: "PostgresInsightSpec defines the desired state of PostgresInsight",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"version": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"connectionURL": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
@@ -24237,12 +24297,6 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewSpec(ref common.Refere
 							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresConnectionInfo"),
 						},
 					},
-					"backupInfo": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresBackupInfo"),
-						},
-					},
 					"vacuumInfo": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
@@ -24250,22 +24304,11 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewSpec(ref common.Refere
 						},
 					},
 				},
-				Required: []string{"version", "connectionURL", "status", "mode"},
+				Required: []string{"version", "status", "mode"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresBackupInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresConnectionInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresReplicationStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresVacuumInfo"},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_PostgresOverviewStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "PostgresOverviewStatus defines the observed state of PostgresOverview",
-				Type:        []string{"object"},
-			},
-		},
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresConnectionInfo", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresReplicationStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresVacuumInfo"},
 	}
 }
 
@@ -24427,21 +24470,21 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresQuerySpec(ref common.Reference
 							Format:  "int64",
 						},
 					},
-					"totalTime": {
+					"totalTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"number"},
 							Format:  "double",
 						},
 					},
-					"minTime": {
+					"minTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"number"},
 							Format:  "double",
 						},
 					},
-					"maxTime": {
+					"maxTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"number"},
@@ -24450,104 +24493,90 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresQuerySpec(ref common.Reference
 					},
 					"sharedBlksHit": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"sharedBlksRead": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"sharedBlksDirtied": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"sharedBlksWritten": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"localBlksHit": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"localBlksRead": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"localBlksDirtied": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"localBlksWritten": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"tempBlksRead": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"tempBlksWritten": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
-					"blkReadTime": {
+					"blkReadTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"number"},
-							Format:  "double",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"blkWriteTime": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"number"},
-							Format:  "double",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"bufferHitPercentage": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"localBufferHitPercentage": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 				},
-				Required: []string{"userOID", "databaseOID", "query", "calls", "rows", "totalTime", "minTime", "maxTime", "sharedBlksHit", "sharedBlksRead", "sharedBlksDirtied", "sharedBlksWritten", "localBlksHit", "localBlksRead", "localBlksDirtied", "localBlksWritten", "tempBlksRead", "tempBlksWritten", "blkReadTime", "blkWriteTime", "bufferHitPercentage", "localBufferHitPercentage"},
+				Required: []string{"userOID", "databaseOID", "query", "calls", "rows", "totalTimeMilliSeconds", "minTimeMilliSeconds", "maxTimeMilliSeconds"},
 			},
 		},
 	}
@@ -24575,27 +24604,24 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresReplicationStatus(ref common.R
 					},
 					"writeLag": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"flushLag": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"replayLag": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"applicationName", "state", "writeLag", "flushLag", "replayLag"},
+				Required: []string{"applicationName", "state"},
 			},
 		},
 	}
@@ -24841,35 +24867,39 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisDatabaseSpec(ref common.Reference
 				Properties: map[string]spec.Schema{
 					"dbId": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"keys": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"expires": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
-					"avgTTL": {
+					"avgTTLMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
 						},
 					},
 				},
+				Required: []string{"dbId", "keys"},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_RedisOverview(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_RedisInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -24898,7 +24928,7 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisOverview(ref common.ReferenceCall
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverviewSpec"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightSpec"),
 						},
 					},
 					"status": {
@@ -24911,11 +24941,11 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisOverview(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverviewSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightSpec"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_RedisOverviewList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_RedisInsightList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -24948,7 +24978,7 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisOverviewList(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverview"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsight"),
 									},
 								},
 							},
@@ -24959,15 +24989,15 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisOverviewList(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisOverview"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsight"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_RedisOverviewSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_RedisInsightSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "RedisOverviewSpec defines the desired state of RedisOverview",
+				Description: "RedisInsightSpec defines the desired state of RedisInsight",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"version": {
@@ -24993,83 +25023,72 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisOverviewSpec(ref common.Reference
 					},
 					"evictionPolicy": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"maxClients": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"connectedClients": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"blockedClients": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"totalKeys": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"expiredKeys": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"evictedKeys": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"receivedConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"rejectedConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
-					"slowLogThresholdMicroSec": {
+					"slowLogThresholdMicroSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"slowLogMaxLen": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode", "evictionPolicy", "maxClients", "connectedClients", "blockedClients", "totalKeys", "expiredKeys", "evictedKeys", "receivedConnections", "rejectedConnections", "slowLogThresholdMicroSec", "slowLogMaxLen"},
+				Required: []string{"version", "status", "mode"},
 			},
 		},
 	}
@@ -25207,12 +25226,10 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisQuerySpec(ref common.ReferenceCal
 					},
 					"queryTimestamp": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
-					"execTimeInMircoSeconds": {
+					"execTimeMicroSeconds": {
 						SchemaProps: spec.SchemaProps{
 							Default: 0,
 							Type:    []string{"integer"},
@@ -25234,9 +25251,11 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisQuerySpec(ref common.ReferenceCal
 						},
 					},
 				},
-				Required: []string{"queryId", "queryTimestamp", "execTimeInMircoSeconds", "args"},
+				Required: []string{"queryId", "queryTimestamp", "execTimeMicroSeconds", "args"},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -25354,39 +25373,5 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisSchemaOverviewSpec(ref common.Ref
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisDatabaseSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_SecurityReport(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"tlsSecured": {
-						SchemaProps: spec.SchemaProps{
-							Default: false,
-							Type:    []string{"boolean"},
-							Format:  "",
-						},
-					},
-					"backupEnabled": {
-						SchemaProps: spec.SchemaProps{
-							Default: false,
-							Type:    []string{"boolean"},
-							Format:  "",
-						},
-					},
-					"monitoringEnabled": {
-						SchemaProps: spec.SchemaProps{
-							Default: false,
-							Type:    []string{"boolean"},
-							Format:  "",
-						},
-					},
-				},
-				Required: []string{"tlsSecured", "backupEnabled", "monitoringEnabled"},
-			},
-		},
 	}
 }

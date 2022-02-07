@@ -5,26 +5,25 @@ go 1.15
 require (
 	github.com/appscode/go v0.0.0-20201105063637-5613f3b8169f
 	github.com/fatih/camelcase v1.0.0
-	github.com/spf13/cobra v1.1.3
+	github.com/spf13/cobra v1.2.1
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/logs v0.0.6
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
 	gomodules.xyz/wait v0.2.0
-	gomodules.xyz/x v0.0.8
+	gomodules.xyz/x v0.0.10
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
 	k8s.io/cli-runtime v0.21.1
 	k8s.io/client-go v0.21.1
 	k8s.io/component-base v0.21.1
-	k8s.io/klog/v2 v2.8.0
+	k8s.io/klog/v2 v2.9.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20211127071251-7e4808453833
-	kmodules.xyz/custom-resources v0.0.0-20211122142737-3bf3dbd8ac52
-	kmodules.xyz/monitoring-agent-api v0.0.0-20211117051609-520052fe6ff6
-	kmodules.xyz/offshoot-api v0.0.0-20211116180130-806cde7fb795 // indirect
-	kubedb.dev/apimachinery v0.24.0
-	stash.appscode.dev/apimachinery v0.17.0
+	kmodules.xyz/client-go v0.0.0-20220203031013-1de48437aaf3
+	kmodules.xyz/custom-resources v0.0.0-20220126201139-be014631db0c
+	kmodules.xyz/monitoring-agent-api v0.0.0-20211207173549-028e6430395e
+	kubedb.dev/apimachinery v0.24.1-0.20220202063936-5d665ff166f6
+	stash.appscode.dev/apimachinery v0.17.1-0.20220207211309-7c80de5c81b1
 )
 
 replace bitbucket.org/ww/goautoneg => gomodules.xyz/goautoneg v0.0.0-20120707110453-a547fc61f48d
@@ -115,7 +114,7 @@ replace k8s.io/api => k8s.io/api v0.21.1
 
 replace k8s.io/apimachinery => github.com/kmodules/apimachinery v0.21.2-rc.0.0.20210617231004-332981b97d2d
 
-replace k8s.io/apiserver => github.com/kmodules/apiserver v0.21.2-0.20210716212718-83e5493ac170
+replace k8s.io/apiserver => github.com/kmodules/apiserver v0.21.2-0.20220112070009-e3f6e88991d9
 
 replace k8s.io/cli-runtime => k8s.io/cli-runtime v0.21.1
 

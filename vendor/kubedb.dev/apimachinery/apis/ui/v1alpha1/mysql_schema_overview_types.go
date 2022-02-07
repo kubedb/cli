@@ -33,9 +33,9 @@ type MySQLSchemaOverviewSpec = GenericSchemaOverviewSpec
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MySQLSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec MySQLSchemaOverviewSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	Spec MySQLSchemaOverviewSpec `json:"spec,omitempty"`
 }
 
 // MySQLSchemaOverviewList contains a list of MySQLSchemaOverview
@@ -43,8 +43,8 @@ type MySQLSchemaOverview struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MySQLSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []MySQLSchemaOverview `json:"items" protobuf:"bytes,2,rep,name=items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []MySQLSchemaOverview `json:"items"`
 }
 
 func init() {

@@ -29,14 +29,18 @@ spec:
               databases:
                 items:
                   properties:
-                    avgTTL:
+                    avgTTLMilliSeconds:
                       type: string
                     dbId:
                       type: string
                     expires:
+                      format: date-time
                       type: string
                     keys:
                       type: string
+                  required:
+                  - dbId
+                  - keys
                   type: object
                 type: array
             required:

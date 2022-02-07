@@ -45,87 +45,87 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type Etcd struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              EtcdSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            EtcdStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              EtcdSpec   `json:"spec,omitempty"`
+	Status            EtcdStatus `json:"status,omitempty"`
 }
 
 type EtcdSpec struct {
 	// Version of Etcd to be deployed.
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 
 	// Number of instances to deploy for a Etcd database.
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,3,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,4,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,5,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,6,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,8,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// etcd cluster TLS configuration
-	TLS *TLSPolicy `json:"tls,omitempty" protobuf:"bytes,9,opt,name=tls"`
+	TLS *TLSPolicy `json:"tls,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,10,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,11,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,12,opt,name=halted"`
+	Halted bool `json:"halted,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,13,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 }
 
 type TLSPolicy struct {
-	Member         *MemberSecret `json:"member,omitempty" protobuf:"bytes,1,opt,name=member"`
-	OperatorSecret string        `json:"operatorSecret,omitempty" protobuf:"bytes,2,opt,name=operatorSecret"`
+	Member         *MemberSecret `json:"member,omitempty"`
+	OperatorSecret string        `json:"operatorSecret,omitempty"`
 }
 
 type MemberSecret struct {
 	// PeerSecret is the secret containing TLS certs used by each etcd member pod
 	// for the communication between etcd peers.
-	PeerSecret string `json:"peerSecret,omitempty" protobuf:"bytes,1,opt,name=peerSecret"`
+	PeerSecret string `json:"peerSecret,omitempty"`
 	// ServerSecret is the secret containing TLS certs used by each etcd member pod
 	// for the communication between etcd server and its clients.
-	ServerSecret string `json:"serverSecret,omitempty" protobuf:"bytes,2,opt,name=serverSecret"`
+	ServerSecret string `json:"serverSecret,omitempty"`
 }
 
 type EtcdStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type EtcdList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Etcd TPR objects
-	Items []Etcd `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []Etcd `json:"items,omitempty"`
 }

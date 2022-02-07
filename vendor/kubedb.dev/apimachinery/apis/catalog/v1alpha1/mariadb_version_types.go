@@ -44,56 +44,56 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MariaDBVersion struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MariaDBVersionSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MariaDBVersionSpec `json:"spec,omitempty"`
 }
 
 // MariaDBVersionSpec is the spec for MariaDB version
 type MariaDBVersionSpec struct {
 	// Version
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 	// Database Image
-	DB MariaDBVersionDatabase `json:"db" protobuf:"bytes,2,opt,name=db"`
+	DB MariaDBVersionDatabase `json:"db"`
 	// Exporter Image
-	Exporter MariaDBVersionExporter `json:"exporter" protobuf:"bytes,3,opt,name=exporter"`
+	Exporter MariaDBVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator MariaDBVersionCoordinator `json:"coordinator,omitempty" protobuf:"bytes,4,opt,name=coordinator"`
+	Coordinator MariaDBVersionCoordinator `json:"coordinator,omitempty"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
-	Deprecated bool `json:"deprecated,omitempty" protobuf:"varint,5,opt,name=deprecated"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// Init container Image
 	// TODO: remove if not needed
-	InitContainer MariaDBVersionInitContainer `json:"initContainer" protobuf:"bytes,6,opt,name=initContainer"`
+	InitContainer MariaDBVersionInitContainer `json:"initContainer"`
 	// PSP names
-	PodSecurityPolicies MariaDBVersionPodSecurityPolicy `json:"podSecurityPolicies" protobuf:"bytes,7,opt,name=podSecurityPolicies"`
+	PodSecurityPolicies MariaDBVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty" protobuf:"bytes,8,opt,name=stash"`
+	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 }
 
 // MariaDBVersionDatabase is the mariadb image
 type MariaDBVersionDatabase struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MariaDBVersionExporter is the image for the MariaDB exporter
 type MariaDBVersionExporter struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MariaDBVersionInitContainer is the MariaDB Container initializer
 type MariaDBVersionInitContainer struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MariaDBVersionCoordinator is the MariaDB Coordinator image
 type MariaDBVersionCoordinator struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }
 
 // MariaDBVersionPodSecurityPolicy is the MariaDB pod security policies
 type MariaDBVersionPodSecurityPolicy struct {
-	DatabasePolicyName string `json:"databasePolicyName" protobuf:"bytes,1,opt,name=databasePolicyName"`
+	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -101,7 +101,7 @@ type MariaDBVersionPodSecurityPolicy struct {
 // MariaDBVersionList is a list of MariaDBVersions
 type MariaDBVersionList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MariaDBVersion CRD objects
-	Items []MariaDBVersion `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MariaDBVersion `json:"items,omitempty"`
 }

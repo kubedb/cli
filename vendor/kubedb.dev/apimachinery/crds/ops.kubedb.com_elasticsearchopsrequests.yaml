@@ -220,12 +220,14 @@ spec:
               type:
                 enum:
                 - Upgrade
+                - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
                 - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - ReconfigureTLS
+                - Reprovision
                 type: string
               upgrade:
                 properties:
@@ -487,6 +489,12 @@ spec:
                 type: object
               volumeExpansion:
                 properties:
+                  mode:
+                    default: Online
+                    enum:
+                    - Offline
+                    - Online
+                    type: string
                   node:
                     anyOf:
                     - type: integer

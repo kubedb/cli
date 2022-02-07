@@ -29,14 +29,15 @@ spec:
               queries:
                 items:
                   properties:
-                    blkReadTime:
+                    blkReadTimeMilliSeconds:
                       format: double
                       type: number
                     blkWriteTime:
                       format: double
                       type: number
                     bufferHitPercentage:
-                      type: string
+                      format: double
+                      type: number
                     calls:
                       format: int64
                       type: integer
@@ -56,11 +57,12 @@ spec:
                       format: int64
                       type: integer
                     localBufferHitPercentage:
-                      type: string
-                    maxTime:
                       format: double
                       type: number
-                    minTime:
+                    maxTimeMilliSeconds:
+                      format: double
+                      type: number
+                    minTimeMilliSeconds:
                       format: double
                       type: number
                     query:
@@ -86,34 +88,20 @@ spec:
                     tempBlksWritten:
                       format: int64
                       type: integer
-                    totalTime:
+                    totalTimeMilliSeconds:
                       format: double
                       type: number
                     userOID:
                       format: int64
                       type: integer
                   required:
-                  - blkReadTime
-                  - blkWriteTime
-                  - bufferHitPercentage
                   - calls
                   - databaseOID
-                  - localBlksDirtied
-                  - localBlksHit
-                  - localBlksRead
-                  - localBlksWritten
-                  - localBufferHitPercentage
-                  - maxTime
-                  - minTime
+                  - maxTimeMilliSeconds
+                  - minTimeMilliSeconds
                   - query
                   - rows
-                  - sharedBlksDirtied
-                  - sharedBlksHit
-                  - sharedBlksRead
-                  - sharedBlksWritten
-                  - tempBlksRead
-                  - tempBlksWritten
-                  - totalTime
+                  - totalTimeMilliSeconds
                   - userOID
                   type: object
                 type: array

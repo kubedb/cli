@@ -18,5 +18,5 @@ package v1alpha1
 
 // ReplicationModeDetector is the image for the MySQL replication mode detector
 type ReplicationModeDetector struct {
-	Image string `json:"image" protobuf:"bytes,1,opt,name=image"`
+	Image string `json:"image"`
 }

@@ -67,6 +67,8 @@ spec:
                 type: object
               restart:
                 type: object
+              timeout:
+                type: string
               tls:
                 properties:
                   certificates:
@@ -175,12 +177,14 @@ spec:
               type:
                 enum:
                 - Upgrade
+                - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
                 - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - ReconfigureTLS
+                - Reprovision
                 type: string
               upgrade:
                 properties:

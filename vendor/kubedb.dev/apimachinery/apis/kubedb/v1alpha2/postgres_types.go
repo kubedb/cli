@@ -45,78 +45,93 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type Postgres struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              PostgresSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            PostgresStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              PostgresSpec   `json:"spec,omitempty"`
+	Status            PostgresStatus `json:"status,omitempty"`
 }
 
 type PostgresSpec struct {
 	// Version of Postgres to be deployed.
-	Version string `json:"version" protobuf:"bytes,1,opt,name=version"`
+	Version string `json:"version"`
 
 	// Number of instances to deploy for a Postgres database.
-	Replicas *int32 `json:"replicas,omitempty" protobuf:"varint,2,opt,name=replicas"`
+	Replicas *int32 `json:"replicas,omitempty"`
 
 	// Standby mode
-	StandbyMode *PostgresStandbyMode `json:"standbyMode,omitempty" protobuf:"bytes,3,opt,name=standbyMode,casttype=PostgresStandbyMode"`
+	StandbyMode *PostgresStandbyMode `json:"standbyMode,omitempty"`
 
 	// Streaming mode
-	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty" protobuf:"bytes,4,opt,name=streamingMode,casttype=PostgresStreamingMode"`
+	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty"`
 
 	// Leader election configuration
 	// +optional
-	LeaderElection *PostgreLeaderElectionConfig `json:"leaderElection,omitempty" protobuf:"bytes,5,opt,name=leaderElection"`
+	LeaderElection *PostgreLeaderElectionConfig `json:"leaderElection,omitempty"`
 
 	// Database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty" protobuf:"bytes,6,opt,name=authSecret"`
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty" protobuf:"bytes,7,opt,name=storageType,casttype=StorageType"`
+	StorageType StorageType `json:"storageType,omitempty"`
 
 	// Storage to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty" protobuf:"bytes,8,opt,name=storage"`
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
-	ClientAuthMode PostgresClientAuthMode `json:"clientAuthMode,omitempty" protobuf:"bytes,9,opt,name=clientAuthMode,casttype=PostgresClientAuthMode"`
+	ClientAuthMode PostgresClientAuthMode `json:"clientAuthMode,omitempty"`
 
 	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
-	SSLMode PostgresSSLMode `json:"sslMode,omitempty" protobuf:"bytes,10,opt,name=sslMode,casttype=PostgresSSLMode"`
+	SSLMode PostgresSSLMode `json:"sslMode,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
-	Init *InitSpec `json:"init,omitempty" protobuf:"bytes,11,opt,name=init"`
+	Init *InitSpec `json:"init,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty" protobuf:"bytes,12,opt,name=monitor"`
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e postgresql.conf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,13,opt,name=configSecret"`
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty" protobuf:"bytes,14,opt,name=podTemplate"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty" protobuf:"bytes,15,rep,name=serviceTemplates"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty" protobuf:"bytes,16,opt,name=tls"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
-	Halted bool `json:"halted,omitempty" protobuf:"varint,17,opt,name=halted"`
+	Halted bool `json:"halted,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty" protobuf:"bytes,18,opt,name=terminationPolicy,casttype=TerminationPolicy"`
+	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 
 	// Coordinator defines attributes of the coordinator container
 	// +optional
-	Coordinator CoordinatorSpec `json:"coordinator,omitempty" protobuf:"bytes,19,opt,name=coordinator"`
+	Coordinator CoordinatorSpec `json:"coordinator,omitempty"`
+
+	// EnforceFsGroup Is Used when the storageClass's CSI Driver doesn't support FsGroup properties properly.
+	// If It's true then The Init Container will run as RootUser and
+	// the init-container will set user's permission for the mounted pvc volume with which coordinator and postgres containers are going to run.
+	// In postgres it is /var/pv
+	// +optional
+	EnforceFsGroup bool `json:"enforceFsGroup,omitempty"`
+
+	// AllowedSchemas defines the types of database schemas that MAY refer to
+	// a database instance and the trusted namespaces where those schema resources MAY be
+	// present.
+	//
+	// +kubebuilder:default={namespaces:{from: Same}}
+	// +optional
+	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
 }
 
 // PostgreLeaderElectionConfig contains essential attributes of leader election.
@@ -125,17 +140,17 @@ type PostgreLeaderElectionConfig struct {
 	// wait to force acquire leadership. This is measured against time of
 	// last observed ack. Default 15
 	// Deprecated
-	LeaseDurationSeconds int32 `json:"leaseDurationSeconds,omitempty" protobuf:"varint,1,opt,name=leaseDurationSeconds"`
+	LeaseDurationSeconds int32 `json:"leaseDurationSeconds,omitempty"`
 	// RenewDeadline is the duration in second that the acting master will retry
 	// refreshing leadership before giving up. Normally, LeaseDuration * 2 / 3.
 	// Default 10
 	// Deprecated
-	RenewDeadlineSeconds int32 `json:"renewDeadlineSeconds,omitempty" protobuf:"varint,2,opt,name=renewDeadlineSeconds"`
+	RenewDeadlineSeconds int32 `json:"renewDeadlineSeconds,omitempty"`
 	// RetryPeriod is the duration in second the LeaderElector clients should wait
 	// between tries of actions. Normally, LeaseDuration / 3.
 	// Default 2
 	// Deprecated
-	RetryPeriodSeconds int32 `json:"retryPeriodSeconds,omitempty" protobuf:"varint,3,opt,name=retryPeriodSeconds"`
+	RetryPeriodSeconds int32 `json:"retryPeriodSeconds,omitempty"`
 
 	// MaximumLagBeforeFailover is used as maximum lag tolerance for the cluster.
 	// when ever a replica is lagging more than MaximumLagBeforeFailover
@@ -143,12 +158,12 @@ type PostgreLeaderElectionConfig struct {
 	// +default=33554432
 	// +kubebuilder:default:=33554432
 	// +optional
-	MaximumLagBeforeFailover uint64 `json:"maximumLagBeforeFailover,omitempty" protobuf:"varint,4,opt,name=maximumLagBeforeFailover"`
+	MaximumLagBeforeFailover uint64 `json:"maximumLagBeforeFailover,omitempty"`
 
 	// Period between Node.Tick invocations
 	// +kubebuilder:default:="100ms"
 	// +optional
-	Period metav1.Duration `json:"period,omitempty" protobuf:"bytes,5,opt,name=period"`
+	Period metav1.Duration `json:"period,omitempty"`
 
 	// ElectionTick is the number of Node.Tick invocations that must pass between
 	//	elections. That is, if a follower does not receive any message from the
@@ -159,7 +174,7 @@ type PostgreLeaderElectionConfig struct {
 	// +default=10
 	// +kubebuilder:default:=10
 	// +optional
-	ElectionTick int32 `json:"electionTick,omitempty" protobuf:"varint,6,opt,name=electionTick"`
+	ElectionTick int32 `json:"electionTick,omitempty"`
 
 	// HeartbeatTick is the number of Node.Tick invocations that must pass between
 	// heartbeats. That is, a leader sends heartbeat messages to maintain its
@@ -167,7 +182,7 @@ type PostgreLeaderElectionConfig struct {
 	// +default=1
 	// +kubebuilder:default:=1
 	// +optional
-	HeartbeatTick int32 `json:"heartbeatTick,omitempty" protobuf:"varint,7,opt,name=heartbeatTick"`
+	HeartbeatTick int32 `json:"heartbeatTick,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
@@ -183,35 +198,35 @@ const (
 type PostgresStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DatabasePhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=DatabasePhase"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type PostgresList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of Postgres CRD objects
-	Items []Postgres `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []Postgres `json:"items,omitempty"`
 }
 
 type RecoveryTarget struct {
 	// TargetTime specifies the time stamp up to which recovery will proceed.
-	TargetTime string `json:"targetTime,omitempty" protobuf:"bytes,1,opt,name=targetTime"`
+	TargetTime string `json:"targetTime,omitempty"`
 	// TargetTimeline specifies recovering into a particular timeline.
 	// The default is to recover along the same timeline that was current when the base backup was taken.
-	TargetTimeline string `json:"targetTimeline,omitempty" protobuf:"bytes,2,opt,name=targetTimeline"`
+	TargetTimeline string `json:"targetTimeline,omitempty"`
 	// TargetXID specifies the transaction ID up to which recovery will proceed.
-	TargetXID string `json:"targetXID,omitempty" protobuf:"bytes,3,opt,name=targetXID"`
+	TargetXID string `json:"targetXID,omitempty"`
 	// TargetInclusive specifies whether to include ongoing transaction in given target point.
-	TargetInclusive *bool `json:"targetInclusive,omitempty" protobuf:"varint,4,opt,name=targetInclusive"`
+	TargetInclusive *bool `json:"targetInclusive,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Hot;Warm

@@ -24,9 +24,11 @@ import (
 	autoscalingv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/autoscaling/v1alpha1"
 	catalogv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/config/v1alpha1"
+	dashboardv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/dashboard/v1alpha1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	kubedbv1alpha2 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	opsv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
+	schemav1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/schema/v1alpha1"
 	uiv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1"
 
 	discovery "k8s.io/client-go/discovery"
@@ -39,9 +41,11 @@ type Interface interface {
 	AutoscalingV1alpha1() autoscalingv1alpha1.AutoscalingV1alpha1Interface
 	CatalogV1alpha1() catalogv1alpha1.CatalogV1alpha1Interface
 	ConfigV1alpha1() configv1alpha1.ConfigV1alpha1Interface
+	DashboardV1alpha1() dashboardv1alpha1.DashboardV1alpha1Interface
 	KubedbV1alpha1() kubedbv1alpha1.KubedbV1alpha1Interface
 	KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface
 	OpsV1alpha1() opsv1alpha1.OpsV1alpha1Interface
+	SchemaV1alpha1() schemav1alpha1.SchemaV1alpha1Interface
 	UiV1alpha1() uiv1alpha1.UiV1alpha1Interface
 }
 
@@ -52,9 +56,11 @@ type Clientset struct {
 	autoscalingV1alpha1 *autoscalingv1alpha1.AutoscalingV1alpha1Client
 	catalogV1alpha1     *catalogv1alpha1.CatalogV1alpha1Client
 	configV1alpha1      *configv1alpha1.ConfigV1alpha1Client
+	dashboardV1alpha1   *dashboardv1alpha1.DashboardV1alpha1Client
 	kubedbV1alpha1      *kubedbv1alpha1.KubedbV1alpha1Client
 	kubedbV1alpha2      *kubedbv1alpha2.KubedbV1alpha2Client
 	opsV1alpha1         *opsv1alpha1.OpsV1alpha1Client
+	schemaV1alpha1      *schemav1alpha1.SchemaV1alpha1Client
 	uiV1alpha1          *uiv1alpha1.UiV1alpha1Client
 }
 
@@ -73,6 +79,11 @@ func (c *Clientset) ConfigV1alpha1() configv1alpha1.ConfigV1alpha1Interface {
 	return c.configV1alpha1
 }
 
+// DashboardV1alpha1 retrieves the DashboardV1alpha1Client
+func (c *Clientset) DashboardV1alpha1() dashboardv1alpha1.DashboardV1alpha1Interface {
+	return c.dashboardV1alpha1
+}
+
 // KubedbV1alpha1 retrieves the KubedbV1alpha1Client
 func (c *Clientset) KubedbV1alpha1() kubedbv1alpha1.KubedbV1alpha1Interface {
 	return c.kubedbV1alpha1
@@ -86,6 +97,11 @@ func (c *Clientset) KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface {
 // OpsV1alpha1 retrieves the OpsV1alpha1Client
 func (c *Clientset) OpsV1alpha1() opsv1alpha1.OpsV1alpha1Interface {
 	return c.opsV1alpha1
+}
+
+// SchemaV1alpha1 retrieves the SchemaV1alpha1Client
+func (c *Clientset) SchemaV1alpha1() schemav1alpha1.SchemaV1alpha1Interface {
+	return c.schemaV1alpha1
 }
 
 // UiV1alpha1 retrieves the UiV1alpha1Client
@@ -126,6 +142,10 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	if err != nil {
 		return nil, err
 	}
+	cs.dashboardV1alpha1, err = dashboardv1alpha1.NewForConfig(&configShallowCopy)
+	if err != nil {
+		return nil, err
+	}
 	cs.kubedbV1alpha1, err = kubedbv1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
@@ -135,6 +155,10 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 		return nil, err
 	}
 	cs.opsV1alpha1, err = opsv1alpha1.NewForConfig(&configShallowCopy)
+	if err != nil {
+		return nil, err
+	}
+	cs.schemaV1alpha1, err = schemav1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -157,9 +181,11 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 	cs.autoscalingV1alpha1 = autoscalingv1alpha1.NewForConfigOrDie(c)
 	cs.catalogV1alpha1 = catalogv1alpha1.NewForConfigOrDie(c)
 	cs.configV1alpha1 = configv1alpha1.NewForConfigOrDie(c)
+	cs.dashboardV1alpha1 = dashboardv1alpha1.NewForConfigOrDie(c)
 	cs.kubedbV1alpha1 = kubedbv1alpha1.NewForConfigOrDie(c)
 	cs.kubedbV1alpha2 = kubedbv1alpha2.NewForConfigOrDie(c)
 	cs.opsV1alpha1 = opsv1alpha1.NewForConfigOrDie(c)
+	cs.schemaV1alpha1 = schemav1alpha1.NewForConfigOrDie(c)
 	cs.uiV1alpha1 = uiv1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
@@ -172,9 +198,11 @@ func New(c rest.Interface) *Clientset {
 	cs.autoscalingV1alpha1 = autoscalingv1alpha1.New(c)
 	cs.catalogV1alpha1 = catalogv1alpha1.New(c)
 	cs.configV1alpha1 = configv1alpha1.New(c)
+	cs.dashboardV1alpha1 = dashboardv1alpha1.New(c)
 	cs.kubedbV1alpha1 = kubedbv1alpha1.New(c)
 	cs.kubedbV1alpha2 = kubedbv1alpha2.New(c)
 	cs.opsV1alpha1 = opsv1alpha1.New(c)
+	cs.schemaV1alpha1 = schemav1alpha1.New(c)
 	cs.uiV1alpha1 = uiv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)

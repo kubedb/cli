@@ -44,31 +44,33 @@ const (
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type MySQLOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
-	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-	Spec              MySQLOpsRequestSpec   `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
-	Status            MySQLOpsRequestStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              MySQLOpsRequestSpec   `json:"spec,omitempty"`
+	Status            MySQLOpsRequestStatus `json:"status,omitempty"`
 }
 
 // MySQLOpsRequestSpec is the spec for MySQLOpsRequest
 type MySQLOpsRequestSpec struct {
 	// Specifies the MySQL reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef" protobuf:"bytes,1,opt,name=databaseRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type" protobuf:"bytes,2,opt,name=type,casttype=OpsRequestType"`
+	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MySQL
-	Upgrade *MySQLUpgradeSpec `json:"upgrade,omitempty" protobuf:"bytes,3,opt,name=upgrade"`
+	Upgrade *MySQLUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
-	HorizontalScaling *MySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty" protobuf:"bytes,4,opt,name=horizontalScaling"`
+	HorizontalScaling *MySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
-	VerticalScaling *MySQLVerticalScalingSpec `json:"verticalScaling,omitempty" protobuf:"bytes,5,opt,name=verticalScaling"`
+	VerticalScaling *MySQLVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
-	VolumeExpansion *MySQLVolumeExpansionSpec `json:"volumeExpansion,omitempty" protobuf:"bytes,6,opt,name=volumeExpansion"`
+	VolumeExpansion *MySQLVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of MySQL
-	Configuration *MySQLCustomConfigurationSpec `json:"configuration,omitempty" protobuf:"bytes,7,opt,name=configuration"`
+	Configuration *MySQLCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *MySQLTLSSpec `json:"tls,omitempty" protobuf:"bytes,8,opt,name=tls"`
+	TLS *MySQLTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
-	Restart *RestartSpec `json:"restart,omitempty" protobuf:"bytes,9,opt,name=restart"`
+	Restart *RestartSpec `json:"restart,omitempty"`
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 }
 
 // MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
@@ -78,50 +80,50 @@ type MySQLReplicaReadinessCriteria struct {
 
 type MySQLUpgradeSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                         `json:"targetVersion,omitempty" protobuf:"bytes,1,opt,name=targetVersion"`
-	ReadinessCriteria *MySQLReplicaReadinessCriteria `json:"readinessCriteria,omitempty" protobuf:"bytes,2,opt,name=readinessCriteria"`
+	TargetVersion     string                         `json:"targetVersion,omitempty"`
+	ReadinessCriteria *MySQLReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 type MySQLHorizontalScalingSpec struct {
 	// Number of nodes/members of the group
-	Member *int32 `json:"member,omitempty" protobuf:"varint,1,opt,name=member"`
+	Member *int32 `json:"member,omitempty"`
 }
 
 type MySQLVerticalScalingSpec struct {
-	MySQL       *core.ResourceRequirements `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
-	Exporter    *core.ResourceRequirements `json:"exporter,omitempty" protobuf:"bytes,2,opt,name=exporter"`
-	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty" protobuf:"bytes,3,opt,name=coordinator"`
+	MySQL       *core.ResourceRequirements `json:"mysql,omitempty"`
+	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
+	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
 }
 
 // MySQLVolumeExpansionSpec is the spec for MySQL volume expansion
 type MySQLVolumeExpansionSpec struct {
-	MySQL *resource.Quantity `json:"mysql,omitempty" protobuf:"bytes,1,opt,name=mysql"`
+	MySQL *resource.Quantity `json:"mysql,omitempty"`
 }
 
 type MySQLCustomConfigurationSpec struct {
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty" protobuf:"bytes,2,opt,name=configSecret"`
-	InlineConfig       string                     `json:"inlineConfig,omitempty" protobuf:"bytes,3,opt,name=inlineConfig"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty" protobuf:"varint,4,opt,name=removeCustomConfig"`
+	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
+	InlineConfig       string                     `json:"inlineConfig,omitempty"`
+	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
 }
 
 type MySQLTLSSpec struct {
-	TLSSpec `json:",inline,omitempty" protobuf:"bytes,1,opt,name=tLSSpec"`
+	TLSSpec `json:",inline,omitempty"`
 
 	// Indicates that the database server need to be encrypted connections(ssl)
 	// +optional
-	RequireSSL *bool `json:"requireSSL,omitempty" protobuf:"varint,2,opt,name=requireSSL"`
+	RequireSSL *bool `json:"requireSSL,omitempty"`
 }
 
 // MySQLOpsRequestStatus is the status for MySQLOpsRequest
 type MySQLOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty" protobuf:"bytes,1,opt,name=phase,casttype=OpsRequestPhase"`
+	Phase OpsRequestPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty" protobuf:"varint,2,opt,name=observedGeneration"`
+	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty" protobuf:"bytes,3,rep,name=conditions"`
+	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -129,7 +131,7 @@ type MySQLOpsRequestStatus struct {
 // MySQLOpsRequestList is a list of MySQLOpsRequests
 type MySQLOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of MySQLOpsRequest CRD objects
-	Items []MySQLOpsRequest `json:"items,omitempty" protobuf:"bytes,2,rep,name=items"`
+	Items []MySQLOpsRequest `json:"items,omitempty"`
 }
