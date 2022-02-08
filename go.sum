@@ -1212,8 +1212,9 @@ kmodules.xyz/constants v0.0.0-20210218100002-2c304bfda278/go.mod h1:DbiFk1bJ1KEO
 kmodules.xyz/crd-schema-fuzz v0.0.0-20210618002152-fae23aef5fb4/go.mod h1:IIkUctlfoptoci0BOrsUf8ya+MOG5uaeh1PE4uzaIbA=
 kmodules.xyz/custom-resources v0.0.0-20211122142737-3bf3dbd8ac52/go.mod h1:yHLFe4wVYxepTnN00CFUf29xH+jEHDokq6d2fbp9pks=
 kmodules.xyz/custom-resources v0.0.0-20220104123914-3c036dd7c1cd/go.mod h1:/XjDeILFV2wBota5kHo21DMvOt08nSAk1vm6buCuwt4=
-kmodules.xyz/custom-resources v0.0.0-20220126201139-be014631db0c h1:SZzZ57uOh6nCIRMmGC1F0vyZr8fTmDm6gQAAh9GY1wY=
 kmodules.xyz/custom-resources v0.0.0-20220126201139-be014631db0c/go.mod h1:/XjDeILFV2wBota5kHo21DMvOt08nSAk1vm6buCuwt4=
+kmodules.xyz/custom-resources v0.0.0-20220208103158-61b298634e43 h1:mwW2DgP7sAMambZe7Met/e9nrBYnzYgM/lupbm7jgGM=
+kmodules.xyz/custom-resources v0.0.0-20220208103158-61b298634e43/go.mod h1:/XjDeILFV2wBota5kHo21DMvOt08nSAk1vm6buCuwt4=
 kmodules.xyz/monitoring-agent-api v0.0.0-20210928135619-38ca075a2dbd/go.mod h1:08pBqfEuy29EjhaMrHB2XFy2iekoFi7AjaXcJS+xAck=
 kmodules.xyz/monitoring-agent-api v0.0.0-20211207173549-028e6430395e h1:9T40j7mVns/tGKcy39Q3aWIoHc7YQrr1ZvEVIuvTJsA=
 kmodules.xyz/monitoring-agent-api v0.0.0-20211207173549-028e6430395e/go.mod h1:pMat/DczEAlpNXI53di7FklmlQ594rzXwK3tdIyht2c=

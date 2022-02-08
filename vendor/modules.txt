@@ -625,7 +625,7 @@ kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
 kmodules.xyz/client-go/tools/portforward
-# kmodules.xyz/custom-resources v0.0.0-20220126201139-be014631db0c
+# kmodules.xyz/custom-resources v0.0.0-20220208103158-61b298634e43
 ## explicit
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
