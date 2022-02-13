@@ -25,6 +25,7 @@ import (
 
 	"gomodules.xyz/logs"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	"k8s.io/klog/v2"
 )
 
 func main() {
@@ -35,6 +36,6 @@ func main() {
 	defer logs.FlushLogs()
 
 	if err := cmd.Execute(); err != nil {
-		os.Exit(1)
+		klog.Warningln(err)
 	}
 }
