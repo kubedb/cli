@@ -71,6 +71,10 @@ type RedisSentinelSpec struct {
 	// Database authentication secret
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
+	// If disable Auth true then don't create any auth secret
+	// +optional
+	DisableAuth bool `json:"disableAuth,omitempty"`
+
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
 	Halted bool `json:"halted,omitempty"`

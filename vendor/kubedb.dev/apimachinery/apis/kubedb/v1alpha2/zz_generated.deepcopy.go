@@ -325,6 +325,11 @@ func (in *ElasticsearchNode) DeepCopyInto(out *ElasticsearchNode) {
 		*out = new(int32)
 		**out = **in
 	}
+	if in.HeapSizePercentage != nil {
+		in, out := &in.HeapSizePercentage, &out.HeapSizePercentage
+		*out = new(int32)
+		**out = **in
+	}
 	if in.Storage != nil {
 		in, out := &in.Storage, &out.Storage
 		*out = new(corev1.PersistentVolumeClaimSpec)
@@ -464,6 +469,11 @@ func (in *ElasticsearchSpec) DeepCopyInto(out *ElasticsearchSpec) {
 		in, out := &in.KernelSettings, &out.KernelSettings
 		*out = new(KernelSettings)
 		(*in).DeepCopyInto(*out)
+	}
+	if in.HeapSizePercentage != nil {
+		in, out := &in.HeapSizePercentage, &out.HeapSizePercentage
+		*out = new(int32)
+		**out = **in
 	}
 	return
 }

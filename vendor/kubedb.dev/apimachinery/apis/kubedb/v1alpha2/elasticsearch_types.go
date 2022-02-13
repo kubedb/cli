@@ -56,9 +56,11 @@ type ElasticsearchSpec struct {
 	Version string `json:"version"`
 
 	// Number of instances to deploy for a Elasticsearch database.
+	// +optional
 	Replicas *int32 `json:"replicas,omitempty"`
 
 	// Elasticsearch topology for node specification
+	// +optional
 	Topology *ElasticsearchClusterTopology `json:"topology,omitempty"`
 
 	// To enable ssl for http layer
@@ -66,9 +68,11 @@ type ElasticsearchSpec struct {
 
 	// disable security of authPlugin (ie, xpack or searchguard). It disables authentication security of user.
 	// If unset, default is false
+	// +optional
 	DisableSecurity bool `json:"disableSecurity,omitempty"`
 
 	// Database authentication secret
+	// +optional
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
@@ -87,6 +91,7 @@ type ElasticsearchSpec struct {
 
 	// ConfigSecret is an optional field to provide custom configuration file for database.
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// SecureConfigSecret is an optional field to provide secure settings for database.
@@ -152,6 +157,15 @@ type ElasticsearchSpec struct {
 	// KernelSettings contains the additional kernel settings.
 	// +optional
 	KernelSettings *KernelSettings `json:"kernelSettings,omitempty"`
+
+	// HeapSizePercentage specifies both the initial heap allocation (xms) percentage and the maximum heap allocation (xmx) percentage.
+	// Elasticsearch bootstrap fails, if -Xms and -Xmx are not equal.
+	// Error: initial heap size [X] not equal to maximum heap size [Y]; this can cause resize pauses.
+	// It will be applied to all nodes. If the node level `heapSizePercentage` is specified,  this global value will be overwritten.
+	// It defaults to 50% of memory limit.
+	// +optional
+	// +kubebuilder:default:=50
+	HeapSizePercentage *int32 `json:"heapSizePercentage,omitempty"`
 }
 
 type ElasticsearchClusterTopology struct {
@@ -170,11 +184,19 @@ type ElasticsearchClusterTopology struct {
 
 type ElasticsearchNode struct {
 	// Replicas represents number of replica for this specific type of node
+	// +optional
 	Replicas *int32 `json:"replicas,omitempty"`
-	Suffix   string `json:"suffix,omitempty"`
+	// +optional
+	Suffix string `json:"suffix,omitempty"`
+	// HeapSizePercentage specifies both the initial heap allocation (-Xms) percentage and the maximum heap allocation (-Xmx) percentage.
+	// Node level values have higher precedence than global values.
+	// +optional
+	HeapSizePercentage *int32 `json:"heapSizePercentage,omitempty"`
 	// Storage to specify how storage shall be used.
+	// +optional
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 	// Compute Resources required by the sidecar container.
+	// +optional
 	Resources core.ResourceRequirements `json:"resources,omitempty"`
 	// An eviction is allowed if at most "maxUnavailable" pods selected by
 	// "selector" are unavailable after the eviction, i.e. even in absence of
