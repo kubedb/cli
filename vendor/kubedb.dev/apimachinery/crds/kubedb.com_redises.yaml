@@ -212,6 +212,8 @@ spec:
                         type: object
                     type: object
                 type: object
+              disableAuth:
+                type: boolean
               halted:
                 type: boolean
               init:

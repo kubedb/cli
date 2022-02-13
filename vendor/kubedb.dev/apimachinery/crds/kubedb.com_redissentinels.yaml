@@ -48,6 +48,8 @@ spec:
                   name:
                     type: string
                 type: object
+              disableAuth:
+                type: boolean
               halted:
                 type: boolean
               monitor:

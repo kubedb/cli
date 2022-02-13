@@ -84,6 +84,10 @@ type RedisSpec struct {
 	// Database authentication secret
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
+	// If disable Auth true then don't create any auth secret
+	// +optional
+	DisableAuth bool `json:"disableAuth,omitempty"`
+
 	// Init is used to initialize database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`
