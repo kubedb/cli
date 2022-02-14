@@ -42,7 +42,7 @@ github.com/appscode/go/crypto/rand
 # github.com/beorn7/perks v1.0.1
 ## explicit; go 1.11
 github.com/beorn7/perks/quantile
-# github.com/cespare/xxhash/v2 v2.1.1
+# github.com/cespare/xxhash/v2 v2.1.2
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
 # github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5
@@ -261,8 +261,8 @@ go.starlark.net/resolve
 go.starlark.net/starlark
 go.starlark.net/starlarkstruct
 go.starlark.net/syntax
-# golang.org/x/crypto v0.0.0-20210314154223-e6e6c4f2bb5b
-## explicit; go 1.11
+# golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e
+## explicit; go 1.17
 golang.org/x/crypto/pkcs12
 golang.org/x/crypto/pkcs12/internal/rc2
 # golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
@@ -750,7 +750,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
 ## explicit; go 1.15
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.24.1-0.20220213104801-cd7f1a25bb7f
+# kubedb.dev/apimachinery v0.24.1-0.20220213164510-c6db524e70fd
 ## explicit; go 1.17
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
