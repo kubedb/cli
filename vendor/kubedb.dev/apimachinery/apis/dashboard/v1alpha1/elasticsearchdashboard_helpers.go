@@ -71,8 +71,8 @@ func (ed ElasticsearchDashboard) ResourcePlural() string {
 	return ResourceElasticsearchDashboards
 }
 
-// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
-func (ed *ElasticsearchDashboard) CertificateName(alias ElasticsearchDashboardCertificateAlias) string {
+// DefaultCertificateSecretName returns the default certificate name and/or certificate secret name for a certificate alias
+func (ed *ElasticsearchDashboard) DefaultCertificateSecretName(alias ElasticsearchDashboardCertificateAlias) string {
 	return meta_util.NameWithSuffix(ed.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
@@ -107,7 +107,7 @@ func (ed ElasticsearchDashboard) ClientCertificateCN(alias ElasticsearchDashboar
 }
 
 func (ed *ElasticsearchDashboard) GetDatabaseClientCertName(databaseName string) string {
-	return fmt.Sprintf("%s-%s", databaseName, ed.GetCertSecretName(DefaultElasticsearchClientCertAlias))
+	return fmt.Sprintf("%s-%s", databaseName, ed.CertificateSecretName(DefaultElasticsearchClientCertAlias))
 }
 
 func (ed *ElasticsearchDashboard) OffshootSelectors(extraSelectors ...map[string]string) map[string]string {
@@ -197,17 +197,25 @@ func (ed *ElasticsearchDashboard) GetConnectionScheme() string {
 	return scheme
 }
 
-// GetCertSecretName returns the secret name for a certificate alias if any,
+// CertificateSecretName returns the secret name for a certificate alias if any,
 // otherwise returns default certificate secret name for the given alias.
 
-func (ed *ElasticsearchDashboard) GetCertSecretName(alias ElasticsearchDashboardCertificateAlias) string {
+func (ed *ElasticsearchDashboard) CertificateSecretName(alias ElasticsearchDashboardCertificateAlias) string {
 	if ed.Spec.TLS != nil {
 		name, ok := kmapi.GetCertificateSecretName(ed.Spec.TLS.Certificates, string(alias))
 		if ok {
 			return name
 		}
 	}
-	return ed.CertificateName(alias)
+	return ed.DefaultCertificateSecretName(alias)
+}
+
+func (ed ElasticsearchDashboard) DefaultConfigSecretName() string {
+	return meta_util.NameWithSuffix(ed.Name, "config")
+}
+
+func (ed ElasticsearchDashboard) CustomConfigSecretName() string {
+	return ed.Spec.ConfigSecret.Name
 }
 
 func (ed *ElasticsearchDashboard) CertSecretExists(alias ElasticsearchDashboardCertificateAlias) bool {

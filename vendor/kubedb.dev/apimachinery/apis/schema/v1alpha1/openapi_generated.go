@@ -439,11 +439,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/schema/v1alpha1.PostgresDatabaseInfo":           schema_apimachinery_apis_schema_v1alpha1_PostgresDatabaseInfo(ref),
 		"kubedb.dev/apimachinery/apis/schema/v1alpha1.PostgresDatabaseList":           schema_apimachinery_apis_schema_v1alpha1_PostgresDatabaseList(ref),
 		"kubedb.dev/apimachinery/apis/schema/v1alpha1.PostgresDatabaseSpec":           schema_apimachinery_apis_schema_v1alpha1_PostgresDatabaseSpec(ref),
-		"kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabase":                  schema_apimachinery_apis_schema_v1alpha1_RedisDatabase(ref),
-		"kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseConfiguration":     schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseConfiguration(ref),
-		"kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseInfo":              schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseInfo(ref),
-		"kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseList":              schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseList(ref),
-		"kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseSpec":              schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseSpec(ref),
 		"kubedb.dev/apimachinery/apis/schema/v1alpha1.ScriptSourceSpec":               schema_apimachinery_apis_schema_v1alpha1_ScriptSourceSpec(ref),
 		"kubedb.dev/apimachinery/apis/schema/v1alpha1.SnapshotSourceSpec":             schema_apimachinery_apis_schema_v1alpha1_SnapshotSourceSpec(ref),
 		"kubedb.dev/apimachinery/apis/schema/v1alpha1.VaultSecretEngineRole":          schema_apimachinery_apis_schema_v1alpha1_VaultSecretEngineRole(ref),
@@ -20986,17 +20981,11 @@ func schema_apimachinery_apis_schema_v1alpha1_PostgresDatabaseConfiguration(ref 
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"dBName": {
+					"name": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
-						},
-					},
-					"tablespace": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
 						},
 					},
 					"params": {
@@ -21013,7 +21002,7 @@ func schema_apimachinery_apis_schema_v1alpha1_PostgresDatabaseConfiguration(ref 
 						},
 					},
 				},
-				Required: []string{"dBName"},
+				Required: []string{"name"},
 			},
 		},
 		Dependencies: []string{
@@ -21145,189 +21134,6 @@ func schema_apimachinery_apis_schema_v1alpha1_PostgresDatabaseSpec(ref common.Re
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/schema/v1alpha1.InitSpec", "kubedb.dev/apimachinery/apis/schema/v1alpha1.PostgresDatabaseInfo", "kubedb.dev/apimachinery/apis/schema/v1alpha1.VaultSecretEngineRole"},
-	}
-}
-
-func schema_apimachinery_apis_schema_v1alpha1_RedisDatabase(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
-						},
-					},
-					"spec": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseSpec"),
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.DatabaseStatus"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/schema/v1alpha1.DatabaseStatus", "kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseSpec"},
-	}
-}
-
-func schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"serverRef": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ServerRef refers to a KubeDB managed database instance",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
-						},
-					},
-					"config": {
-						SchemaProps: spec.SchemaProps{
-							Description: "DatabaseConfig defines various configuration options for a database",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseConfiguration"),
-						},
-					},
-				},
-				Required: []string{"serverRef", "config"},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseConfiguration"},
-	}
-}
-
-func schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseList(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
-						},
-					},
-					"items": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabase"),
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"items"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabase"},
-	}
-}
-
-func schema_apimachinery_apis_schema_v1alpha1_RedisDatabaseSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "RedisDatabaseSpec defines the desired state of RedisDatabase",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"database": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Database defines various configuration options for a database",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseInfo"),
-						},
-					},
-					"vaultRef": {
-						SchemaProps: spec.SchemaProps{
-							Description: "VaultRef refers to a KubeVault managed vault server",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
-						},
-					},
-					"accessPolicy": {
-						SchemaProps: spec.SchemaProps{
-							Description: "AccessPolicy contains the serviceAccount details and TTL values of the vault-created secret",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.VaultSecretEngineRole"),
-						},
-					},
-					"init": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Init contains info about the init script or snapshot info",
-							Ref:         ref("kubedb.dev/apimachinery/apis/schema/v1alpha1.InitSpec"),
-						},
-					},
-					"deletionPolicy": {
-						SchemaProps: spec.SchemaProps{
-							Description: "DeletionPolicy controls the delete operation for database",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-				},
-				Required: []string{"database", "vaultRef", "accessPolicy"},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/schema/v1alpha1.InitSpec", "kubedb.dev/apimachinery/apis/schema/v1alpha1.RedisDatabaseInfo", "kubedb.dev/apimachinery/apis/schema/v1alpha1.VaultSecretEngineRole"},
 	}
 }
 

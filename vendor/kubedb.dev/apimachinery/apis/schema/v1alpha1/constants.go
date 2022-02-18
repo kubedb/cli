@@ -17,6 +17,13 @@ limitations under the License.
 package v1alpha1
 
 const (
+	DatabaseNameAdmin  = "admin"
+	DatabaseNameConfig = "config"
+	DatabaseNameLocal  = "local"
+	DatabaseForEntry   = "kubedb_system"
+)
+
+const (
 	// DeletionPolicyDelete allows the created objects to be deleted
 	DeletionPolicyDelete DeletionPolicy = "Delete"
 	// DeletionPolicyDoNotDelete Rejects attempt to delete using ValidationWebhook.

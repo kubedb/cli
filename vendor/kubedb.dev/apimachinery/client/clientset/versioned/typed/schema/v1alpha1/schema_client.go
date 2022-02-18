@@ -31,7 +31,6 @@ type SchemaV1alpha1Interface interface {
 	MongoDBDatabasesGetter
 	MySQLDatabasesGetter
 	PostgresDatabasesGetter
-	RedisDatabasesGetter
 }
 
 // SchemaV1alpha1Client is used to interact with features provided by the schema.kubedb.com group.
@@ -53,10 +52,6 @@ func (c *SchemaV1alpha1Client) MySQLDatabases(namespace string) MySQLDatabaseInt
 
 func (c *SchemaV1alpha1Client) PostgresDatabases(namespace string) PostgresDatabaseInterface {
 	return newPostgresDatabases(c, namespace)
-}
-
-func (c *SchemaV1alpha1Client) RedisDatabases(namespace string) RedisDatabaseInterface {
-	return newRedisDatabases(c, namespace)
 }
 
 // NewForConfig creates a new SchemaV1alpha1Client for the given config.

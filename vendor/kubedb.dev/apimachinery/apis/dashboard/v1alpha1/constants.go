@@ -37,20 +37,42 @@ var (
 )
 
 const (
-	ES_USER_ENV                         = "ELASTICSEARCH_USERNAME"
-	ES_PASSWORD_ENV                     = "ELASTICSEARCH_PASSWORD"
-	CaCertKey                           = "ca.crt"
+	ES_USER_ENV     = "ELASTICSEARCH_USERNAME"
+	ES_PASSWORD_ENV = "ELASTICSEARCH_PASSWORD"
+
+	ElasticsearchDashboardPortServer            = "server"
+	ElasticsearchDashboardKibanaConfigDir       = "/usr/share/kibana/config"
+	ElasticsearchDashboardConfigMergeCommand    = "/usr/local/bin/dashboard-config-merger.sh"
+	ElasticsearchDashboardKibanaTempConfigDir   = "/kibana/temp-config"
+	ElasticsearchDashboardKibanaCustomConfigDir = "/kibana/custom-config"
+
+	KibanaStatusEndpoint = "/api/status"
+	KibanaConfigFileName = "kibana.yml"
+
+	DashboardDeploymentAvailable           = "MinimumReplicasAvailable"
+	DashboardDeploymentNotAvailable        = "MinimumReplicasNotAvailable"
+	DashboardServiceReady                  = "ServiceAcceptingRequests"
+	DashboardServiceNotReady               = "ServiceNotAcceptingRequests"
+	DashboardAcceptingConnectionRequest    = "DashboardAcceptingConnectionRequests"
+	DashboardNotAcceptingConnectionRequest = "DashboardNotAcceptingConnectionRequests"
+	DashboardReadinessCheckSucceeded       = "DashboardReadinessCheckSucceeded"
+	DashboardReadinessCheckFailed          = "DashboardReadinessCheckFailed"
+
+	DashboardStateGreen  = "ServerHealthGood"
+	DashboardStateYellow = "ServerHealthCritical"
+	DashboardStateRed    = "ServerUnhealthy"
+
+	DBNotFound = "DatabaseNotFound"
+	DBNotReady = "DatabaseNotReady"
+
 	ComponentDashboard                  = "dashboard"
-	KibanaStatusEndpoint                = "/api/status"
-	KibanaConfigFileName                = "kibana.yml"
+	CaCertKey                           = "ca.crt"
 	DefaultElasticsearchClientCertAlias = "archiver"
 	HealthCheckInterval                 = 10 * time.Second
 	GlobalHost                          = "0.0.0.0"
-	ElasticsearchDashboardPortServer    = "server"
 )
 
 var (
-	ElasticsearchDashboardKibanaConfigDir        = "/usr/share/kibana/config"
 	ElasticsearchDashboardPropagationPolicy      = meta.DeletePropagationForeground
 	ElasticsearchDashboardDefaultPort            = (int32)(5601)
 	ElasticsearchDashboardGracefulDeletionPeriod = (int64)(time.Duration(3 * time.Second))

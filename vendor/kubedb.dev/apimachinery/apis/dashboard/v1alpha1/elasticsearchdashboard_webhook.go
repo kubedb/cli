@@ -91,12 +91,12 @@ func (ed *ElasticsearchDashboard) Default() {
 		if ed.Spec.TLS.IssuerRef == nil {
 			ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
 				Alias:      string(ElasticsearchDashboardCACert),
-				SecretName: ed.CertificateName(ElasticsearchDashboardCACert),
+				SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardCACert),
 			})
 		}
 		ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
 			Alias:      string(ElasticsearchDashboardKibanaServerCert),
-			SecretName: ed.CertificateName(ElasticsearchDashboardKibanaServerCert),
+			SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardKibanaServerCert),
 		})
 	}
 }

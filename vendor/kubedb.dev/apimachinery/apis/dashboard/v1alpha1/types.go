@@ -41,20 +41,6 @@ const (
 	DashboardConditionServerHealthy        DashboardConditionType = "ServerHealthy"
 )
 
-const (
-	DashboardDeploymentAvailable           = "MinimumReplicasAvailable"
-	DashboardDeploymentNotAvailable        = "MinimumReplicasNotAvailable"
-	DashboardServiceReady                  = "ServiceAcceptingRequests"
-	DashboardServiceNotReady               = "ServiceNotAcceptingRequests"
-	DashboardAcceptingConnectionRequest    = "DashboardAcceptingConnectionRequests"
-	DashboardNotAcceptingConnectionRequest = "DashboardNotAcceptingConnectionRequests"
-	DashboardReadinessCheckSucceeded       = "DashboardReadinessCheckSucceeded"
-	DashboardReadinessCheckFailed          = "DashboardReadinessCheckFailed"
-	DashboardStateGreen                    = "ServerHealthGood"
-	DashboardStateYellow                   = "ServerHealthCritical"
-	DashboardStateRed                      = "ServerUnhealthy"
-)
-
 // +kubebuilder:validation:Enum=Available;OK;Warning;Error
 type DashboardStatus string
 
@@ -65,14 +51,20 @@ const (
 	StatusError   DashboardStatus = "Error"
 )
 
-// +kubebuilder:validation:Enum=ca;database-client;kibana-server;dashboard-config
+// +kubebuilder:validation:Enum=ca;database-client;kibana-server
 type ElasticsearchDashboardCertificateAlias string
 
 const (
 	ElasticsearchDashboardCACert           ElasticsearchDashboardCertificateAlias = "ca"
 	ElasticsearchDatabaseClient            ElasticsearchDashboardCertificateAlias = "database-client"
 	ElasticsearchDashboardKibanaServerCert ElasticsearchDashboardCertificateAlias = "kibana-server"
-	ElasticsearchDashboardConfig           ElasticsearchDashboardCertificateAlias = "dashboard-config"
+)
+
+// +kubebuilder:validation:Enum=config
+type ElasticsearchDashboardConfigAlias string
+
+const (
+	ElasticsearchDashboardDefaultConfig ElasticsearchDashboardConfigAlias = "config"
 )
 
 // +kubebuilder:validation:Enum=primary;stats
@@ -90,4 +82,15 @@ const (
 	StateGreen  DashboardServerState = "green"
 	StateYellow DashboardServerState = "yellow"
 	StateRed    DashboardServerState = "red"
+)
+
+// +kubebuilder:validation:Enum=dashboard-custom-config;dashboard-temp-config;dashboard-config;kibana-server;database-client
+type DashboardVolumeName string
+
+const (
+	DashboardVolumeCustomConfig            DashboardVolumeName = "dashboard-custom-config"
+	DashboardVolumeOperatorGeneratedConfig DashboardVolumeName = "dashboard-temp-config"
+	DashboardVolumeConfig                  DashboardVolumeName = "dashboard-config"
+	DashboardVolumeKibanaServer            DashboardVolumeName = "kibana-server"
+	DashboardVolumeDatabaseClient          DashboardVolumeName = "database-client"
 )

@@ -158,7 +158,10 @@ func (m MySQL) PeerName(idx int) string {
 }
 
 func (m MySQL) GetAuthSecretName() string {
-	return m.Spec.AuthSecret.Name
+	if m.Spec.AuthSecret != nil {
+		return m.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(m.Name, "auth")
 }
 
 type mysqlApp struct {
@@ -183,6 +186,10 @@ type mysqlStatsService struct {
 
 func (m mysqlStatsService) GetNamespace() string {
 	return m.MySQL.GetNamespace()
+}
+
+func (m MySQL) GetNameSpacedName() string {
+	return m.Namespace + "/" + m.Name
 }
 
 func (m mysqlStatsService) ServiceName() string {

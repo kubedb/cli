@@ -122,7 +122,7 @@ func ValidateMySQLDatabaseUpdate(newobj *MySQLDatabase, oldobj *MySQLDatabase) e
 		}
 	}
 	if newobj.Spec.Init != nil && oldobj.Spec.Init != nil {
-		if !gocmp.Equal(newobj.Spec.Init, oldobj.Spec.Init) {
+		if !gocmp.Equal(newobj.Spec.Init.Script, oldobj.Spec.Init.Script) || !gocmp.Equal(newobj.Spec.Init.Snapshot, oldobj.Spec.Init.Snapshot) {
 			allErrs = append(allErrs, field.Invalid(field.NewPath("spec.init"), newobj.Name, "cannot change init"))
 		}
 	}
