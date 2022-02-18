@@ -56,10 +56,13 @@ func GetPhase(obj Interface) DatabaseSchemaPhase {
 	}
 	// we are here means, SecretAccessRequest is approved and not expired. Now handle Init-Restore cases.
 
+	if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeAppBindingFound)) {
+		return DatabaseSchemaPhaseInProgress
+	}
+
 	if kmapi.HasCondition(conditions, string(DatabaseSchemaConditionTypeRepositoryFound)) {
 		//  ----------------------------- Restore case -----------------------------
 		if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRepositoryFound)) ||
-			!kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeAppBindingFound)) ||
 			!kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRestoreCompleted)) {
 			return DatabaseSchemaPhaseInProgress
 		}
