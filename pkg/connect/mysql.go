@@ -40,11 +40,9 @@ import (
 )
 
 func MySQLConnectCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName string
-	)
+	var dbName string
 
-	var myConnectCmd = &cobra.Command{
+	myConnectCmd := &cobra.Command{
 		Use: "mysql",
 		Aliases: []string{
 			"my",
@@ -92,7 +90,7 @@ func MySQLExecCMD(f cmdutil.Factory) *cobra.Command {
 		command     string
 	)
 
-	var myExecCmd = &cobra.Command{
+	myExecCmd := &cobra.Command{
 		Use: "mysql",
 		Aliases: []string{
 			"my",
@@ -242,7 +240,7 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(caFile, caCrt, 0644)
+		err = ioutil.WriteFile(caFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -251,7 +249,7 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(certFile, crt, 0644)
+		err = ioutil.WriteFile(certFile, crt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -260,7 +258,7 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(keyFile, key, 0644)
+		err = ioutil.WriteFile(keyFile, key, 0o644)
 		if err != nil {
 			return nil, err
 		}

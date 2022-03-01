@@ -46,7 +46,7 @@ func PostgresConnectCMD(f cmdutil.Factory) *cobra.Command {
 		postgresDBName string
 	)
 
-	var pgConnectCmd = &cobra.Command{
+	pgConnectCmd := &cobra.Command{
 		Use: "postgres",
 		Aliases: []string{
 			"postgresql",
@@ -96,7 +96,7 @@ func PostgresExecCMD(f cmdutil.Factory) *cobra.Command {
 		command        string
 	)
 
-	var pgExecCmd = &cobra.Command{
+	pgExecCmd := &cobra.Command{
 		Use: "postgres",
 		Aliases: []string{
 			"postgresql",
@@ -255,7 +255,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(pgCaFile, caCrt, 0644)
+		err = ioutil.WriteFile(pgCaFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -264,7 +264,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(pgCertFile, crt, 0644)
+		err = ioutil.WriteFile(pgCertFile, crt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -273,7 +273,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(pgKeyFile, key, 0600)
+		err = ioutil.WriteFile(pgKeyFile, key, 0o600)
 		if err != nil {
 			return nil, err
 		}
@@ -312,7 +312,6 @@ func (opts *postgresOpts) executeCommand(localPort int, command string) error {
 	dbFlag := ""
 	if opts.postgresDBName != "" {
 		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
-
 	}
 	postgresExtraFlags := []interface{}{
 		dbFlag,
@@ -345,7 +344,6 @@ func (opts *postgresOpts) executeFile(localPort int, fileName string) error {
 	dbFlag := ""
 	if opts.postgresDBName != "" {
 		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
-
 	}
 	fileName, err := filepath.Abs(fileName)
 	if err != nil {

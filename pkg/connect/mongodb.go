@@ -40,11 +40,9 @@ import (
 )
 
 func MongoDBConnectCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName string
-	)
+	var dbName string
 
-	var mgConnectCmd = &cobra.Command{
+	mgConnectCmd := &cobra.Command{
 		Use: "mongodb",
 		Aliases: []string{
 			"mg",
@@ -95,7 +93,7 @@ func MongoDBExecCMD(f cmdutil.Factory) *cobra.Command {
 		command  string
 	)
 
-	var mgExecCmd = &cobra.Command{
+	mgExecCmd := &cobra.Command{
 		Use: "mongodb",
 		Aliases: []string{
 			"mg",
@@ -245,7 +243,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(caFile, caCrt, 0644)
+		err = ioutil.WriteFile(caFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -262,7 +260,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 
 		pem := append(crt[:], []byte("\n")...)
 		pem = append(pem, key...)
-		err = ioutil.WriteFile(pemFile, pem, 0644)
+		err = ioutil.WriteFile(pemFile, pem, 0o644)
 		if err != nil {
 			return nil, err
 		}

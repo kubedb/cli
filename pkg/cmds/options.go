@@ -24,11 +24,9 @@ import (
 	"k8s.io/kubectl/pkg/util/templates"
 )
 
-var (
-	optionsExample = templates.Examples(i18n.T(`
+var optionsExample = templates.Examples(i18n.T(`
 		# Print flags inherited by all commands
 		kubectl dba options`))
-)
 
 // NewCmdOptions implements the options command
 func NewCmdOptions(out io.Writer) *cobra.Command {
