@@ -38,11 +38,9 @@ import (
 )
 
 func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName string
-	)
+	var dbName string
 
-	var mcConnectCmd = &cobra.Command{
+	mcConnectCmd := &cobra.Command{
 		Use: "memcached",
 		Aliases: []string{
 			"mc",

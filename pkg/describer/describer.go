@@ -655,7 +655,6 @@ func printAnnotationsMultiline(level int, w describe.PrefixWriter, title string,
 // printAnnotationsMultilineWithIndent prints multiple annotations with a user-defined alignment.
 // If annotation string is too long, we omit chars more than 200 length.
 func printAnnotationsMultilineWithIndent(level int, w describe.PrefixWriter, initialIndent, title, innerIndent string, annotations map[string]string, skip sets.String) {
-
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
 	if len(annotations) == 0 {

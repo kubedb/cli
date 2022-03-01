@@ -25,11 +25,9 @@ import (
 	"k8s.io/kubectl/pkg/util/templates"
 )
 
-var (
-	execLong = templates.LongDesc(`
+var execLong = templates.LongDesc(`
 		Execute commands or scripts to a database.
     `)
-)
 
 func NewCmdExec(f cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{

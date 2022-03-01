@@ -25,11 +25,9 @@ import (
 	"k8s.io/kubectl/pkg/util/templates"
 )
 
-var (
-	connectLong = templates.LongDesc(`
+var connectLong = templates.LongDesc(`
 		Connect to a database. 
     `)
-)
 
 func NewCmdConnect(f cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{

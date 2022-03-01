@@ -47,7 +47,7 @@ func RedisConnectCMD(f cmdutil.Factory) *cobra.Command {
 		argv   []string
 	)
 
-	var rdConnectCmd = &cobra.Command{
+	rdConnectCmd := &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
@@ -89,7 +89,7 @@ func RedisExecCMD(f cmdutil.Factory) *cobra.Command {
 		argv     []string
 	)
 
-	var rdExecCmd = &cobra.Command{
+	rdExecCmd := &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
