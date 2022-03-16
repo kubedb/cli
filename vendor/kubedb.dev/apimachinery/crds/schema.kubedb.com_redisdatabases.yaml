@@ -4,14 +4,14 @@ metadata:
   creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
-  name: postgresdatabases.schema.kubedb.com
+  name: redisdatabases.schema.kubedb.com
 spec:
   group: schema.kubedb.com
   names:
-    kind: PostgresDatabase
-    listKind: PostgresDatabaseList
-    plural: postgresdatabases
-    singular: postgresdatabase
+    kind: RedisDatabase
+    listKind: RedisDatabaseList
+    plural: redisdatabases
+    singular: redisdatabase
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -67,25 +67,6 @@ spec:
               database:
                 properties:
                   config:
-                    properties:
-                      dBName:
-                        type: string
-                      params:
-                        items:
-                          properties:
-                            configParameter:
-                              type: string
-                            value:
-                              type: string
-                          required:
-                          - configParameter
-                          - value
-                          type: object
-                        type: array
-                      tablespace:
-                        type: string
-                    required:
-                    - dBName
                     type: object
                   serverRef:
                     properties:

@@ -22,15 +22,15 @@ import (
 )
 
 const (
-	ResourceKindPostgresDatabase = "PostgresDatabase"
-	ResourcePostgresDatabase     = "postgresdatabase"
-	ResourcePostgresDatabases    = "postgresdatabases"
+	ResourceKindRedisDatabase = "RedisDatabase"
+	ResourceRedisDatabase     = "redisdatabase"
+	ResourceRedisDatabases    = "redisdatabases"
 )
 
-// PostgresDatabaseSpec defines the desired state of PostgresDatabase
-type PostgresDatabaseSpec struct {
+// RedisDatabaseSpec defines the desired state of RedisDatabase
+type RedisDatabaseSpec struct {
 	// Database defines various configuration options for a database
-	Database PostgresDatabaseInfo `json:"database"`
+	Database RedisDatabaseInfo `json:"database"`
 
 	// VaultRef refers to a KubeVault managed vault server
 	VaultRef kmapi.ObjectReference `json:"vaultRef"`
@@ -48,26 +48,18 @@ type PostgresDatabaseSpec struct {
 	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 }
 
-type PostgresDatabaseInfo struct {
+type RedisDatabaseInfo struct {
 	// ServerRef refers to a KubeDB managed database instance
 	ServerRef kmapi.ObjectReference `json:"serverRef"`
 
 	// DatabaseConfig defines various configuration options for a database
-	Config PostgresDatabaseConfiguration `json:"config"`
+	Config RedisDatabaseConfiguration `json:"config"`
 }
 
-type PostgresDatabaseConfiguration struct {
-	DBName     string  `json:"dBName"`
-	Tablespace *string `json:"tablespace,omitempty"`
-	Params     []Param `json:"params,omitempty"`
+type RedisDatabaseConfiguration struct {
 }
 
-type Param struct {
-	ConfigParameter string  `json:"configParameter"`
-	Value           *string `json:"value"`
-}
-
-// PostgresDatabase is the Schema for the postgresdatabases API
+// RedisDatabase is the Schema for the redisdatabases API
 
 // +genclient
 // +k8s:openapi-gen=true
@@ -78,24 +70,24 @@ type Param struct {
 // +kubebuilder:printcolumn:name="DB_NAME",type="string",JSONPath=".spec.database.config.name"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
-type PostgresDatabase struct {
+type RedisDatabase struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   PostgresDatabaseSpec `json:"spec,omitempty"`
-	Status DatabaseStatus       `json:"status,omitempty"`
+	Spec   RedisDatabaseSpec `json:"spec,omitempty"`
+	Status DatabaseStatus    `json:"status,omitempty"`
 }
 
-// PostgresDatabaseList contains a list of PostgresDatabase
+// RedisDatabaseList contains a list of RedisDatabase
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:object:root=true
-type PostgresDatabaseList struct {
+type RedisDatabaseList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []PostgresDatabase `json:"items"`
+	Items           []RedisDatabase `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&PostgresDatabase{}, &PostgresDatabaseList{})
+	SchemeBuilder.Register(&RedisDatabase{}, &RedisDatabaseList{})
 }
