@@ -25,3 +25,5 @@ type MongoDBDatabaseExpansion interface{}
 type MySQLDatabaseExpansion interface{}
 
 type PostgresDatabaseExpansion interface{}
+
+type RedisDatabaseExpansion interface{}

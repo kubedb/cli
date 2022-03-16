@@ -1,5 +1,5 @@
 /*
-Copyright 2017 The Kubernetes Authors.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package signals
+package v1alpha1
 
 import (
-	"os"
+	"kubedb.dev/apimachinery/crds"
+
+	"kmodules.xyz/client-go/apiextensions"
 )
 
-var shutdownSignals = []os.Signal{os.Interrupt}
+func (_ RedisDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourceRedisDatabases))
+}
+
+var _ Interface = &RedisDatabase{}
+
+func (in *RedisDatabase) GetInit() *InitSpec {
+	return in.Spec.Init
+}
+
+func (in *RedisDatabase) GetStatus() DatabaseStatus {
+	return in.Status
+}
