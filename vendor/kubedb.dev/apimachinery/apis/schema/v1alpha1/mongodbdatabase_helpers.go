@@ -49,12 +49,15 @@ func (in *MongoDBDatabase) GetStatus() DatabaseStatus {
 func (in *MongoDBDatabase) GetMongoInitVolumeNameForPod() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix+"-vol")
 }
+
 func (in *MongoDBDatabase) GetMongoInitJobName() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix+"-job")
 }
+
 func (in *MongoDBDatabase) GetMongoInitScriptContainerName() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix)
 }
+
 func (in *MongoDBDatabase) GetMongoRestoreSessionName() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix+"-rs")
 }
@@ -62,9 +65,11 @@ func (in *MongoDBDatabase) GetMongoRestoreSessionName() string {
 func (in *MongoDBDatabase) GetMongoAdminRoleName() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix+"-role")
 }
+
 func (in *MongoDBDatabase) GetMongoAdminSecretAccessRequestName() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix+"-req")
 }
+
 func (in *MongoDBDatabase) GetMongoAdminServiceAccountName() string {
 	return meta.NameWithSuffix(in.GetName(), MongoSuffix+"-sa")
 }

@@ -103,7 +103,7 @@ const (
 	MongoDBValidateVaultRefChangeError     = "cannot change vault reference"
 )
 
-//ValidateDelete implements webhook.Validator so a webhook will be registered for the type
+// ValidateDelete implements webhook.Validator so a webhook will be registered for the type
 func (in *MongoDBDatabase) ValidateDelete() error {
 	mongodbdatabaselog.Info("validate delete", "name", in.Name)
 	if in.Spec.DeletionPolicy == DeletionPolicyDoNotDelete {

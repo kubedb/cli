@@ -72,8 +72,7 @@ type PerconaXtraDBOpsRequestSpec struct {
 
 // PerconaXtraDBReplicaReadinessCriteria is the criteria for checking readiness of a PerconaXtraDB pod
 // after updating, horizontal scaling etc.
-type PerconaXtraDBReplicaReadinessCriteria struct {
-}
+type PerconaXtraDBReplicaReadinessCriteria struct{}
 
 type PerconaXtraDBUpgradeSpec struct {
 	// Specifies the target version name from catalog
@@ -82,8 +81,7 @@ type PerconaXtraDBUpgradeSpec struct {
 }
 
 // HorizontalScaling is the spec for PerconaXtraDB horizontal scaling
-type PerconaXtraDBHorizontalScalingSpec struct {
-}
+type PerconaXtraDBHorizontalScalingSpec struct{}
 
 // PerconaXtraDBVerticalScalingSpec is the spec for PerconaXtraDB vertical scaling
 type PerconaXtraDBVerticalScalingSpec struct {
@@ -91,11 +89,9 @@ type PerconaXtraDBVerticalScalingSpec struct {
 }
 
 // PerconaXtraDBVolumeExpansionSpec is the spec for PerconaXtraDB volume expansion
-type PerconaXtraDBVolumeExpansionSpec struct {
-}
+type PerconaXtraDBVolumeExpansionSpec struct{}
 
-type PerconaXtraDBCustomConfigurationSpec struct {
-}
+type PerconaXtraDBCustomConfigurationSpec struct{}
 
 type PerconaXtraDBCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`

@@ -65,6 +65,7 @@ spec:
               version:
                 type: string
             required:
+            - evictionPolicy
             - mode
             - status
             - version

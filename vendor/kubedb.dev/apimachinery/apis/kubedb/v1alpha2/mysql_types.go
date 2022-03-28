@@ -213,7 +213,7 @@ type MySQLRouterSpec struct {
 }
 
 type MySQLReadReplicaSpec struct {
-	//SourceRef specifies the  source object
+	// SourceRef specifies the  source object
 	SourceRef core.ObjectReference `json:"sourceRef" protobuf:"bytes,1,opt,name=sourceRef"`
 }
 

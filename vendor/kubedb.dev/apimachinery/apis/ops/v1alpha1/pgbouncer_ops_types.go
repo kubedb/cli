@@ -72,8 +72,7 @@ type PgBouncerOpsRequestSpec struct {
 
 // PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
 // after updating, horizontal scaling etc.
-type PgBouncerReplicaReadinessCriteria struct {
-}
+type PgBouncerReplicaReadinessCriteria struct{}
 
 type PgBouncerUpgradeSpec struct {
 	// Specifies the target version name from catalog
@@ -82,8 +81,7 @@ type PgBouncerUpgradeSpec struct {
 }
 
 // HorizontalScaling is the spec for PgBouncer horizontal scaling
-type PgBouncerHorizontalScalingSpec struct {
-}
+type PgBouncerHorizontalScalingSpec struct{}
 
 // PgBouncerVerticalScalingSpec is the spec for PgBouncer vertical scaling
 type PgBouncerVerticalScalingSpec struct {
@@ -91,11 +89,9 @@ type PgBouncerVerticalScalingSpec struct {
 }
 
 // PgBouncerVolumeExpansionSpec is the spec for PgBouncer volume expansion
-type PgBouncerVolumeExpansionSpec struct {
-}
+type PgBouncerVolumeExpansionSpec struct{}
 
-type PgBouncerCustomConfigurationSpec struct {
-}
+type PgBouncerCustomConfigurationSpec struct{}
 
 type PgBouncerCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`

@@ -58,7 +58,6 @@ spec:
                   required:
                   - collectionName
                   - command
-                  - count
                   - databaseName
                   - operation
                   type: object

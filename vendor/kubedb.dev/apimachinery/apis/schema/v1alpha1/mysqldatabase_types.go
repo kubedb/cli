@@ -60,19 +60,19 @@ type MySQLDatabaseConfiguration struct {
 	// Name is target database name
 	Name string `json:"name"`
 
-	//CharacterSet is the target database character set
+	// CharacterSet is the target database character set
 	// +optional
 	CharacterSet string `json:"characterSet,omitempty"`
 
-	//Collation is the target database collation
+	// Collation is the target database collation
 	// +optional
 	Collation string `json:"collation,omitempty"`
 
-	//Encryption is the target databae encryption mode
+	// Encryption is the target databae encryption mode
 	// +optional
 	Encryption string `json:"encryption,omitempty"`
 
-	//ReadOnly is the target database read only mode
+	// ReadOnly is the target database read only mode
 	// +optional
 	ReadOnly int32 `json:"readOnly,omitempty"`
 }

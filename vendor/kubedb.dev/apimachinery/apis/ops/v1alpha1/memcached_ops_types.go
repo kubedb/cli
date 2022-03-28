@@ -72,8 +72,7 @@ type MemcachedOpsRequestSpec struct {
 
 // MemcachedReplicaReadinessCriteria is the criteria for checking readiness of a Memcached pod
 // after updating, horizontal scaling etc.
-type MemcachedReplicaReadinessCriteria struct {
-}
+type MemcachedReplicaReadinessCriteria struct{}
 
 type MemcachedUpgradeSpec struct {
 	// Specifies the target version name from catalog
@@ -82,8 +81,7 @@ type MemcachedUpgradeSpec struct {
 }
 
 // HorizontalScaling is the spec for Memcached horizontal scaling
-type MemcachedHorizontalScalingSpec struct {
-}
+type MemcachedHorizontalScalingSpec struct{}
 
 // MemcachedVerticalScalingSpec is the spec for Memcached vertical scaling
 type MemcachedVerticalScalingSpec struct {
@@ -91,11 +89,9 @@ type MemcachedVerticalScalingSpec struct {
 }
 
 // MemcachedVolumeExpansionSpec is the spec for Memcached volume expansion
-type MemcachedVolumeExpansionSpec struct {
-}
+type MemcachedVolumeExpansionSpec struct{}
 
-type MemcachedCustomConfigurationSpec struct {
-}
+type MemcachedCustomConfigurationSpec struct{}
 
 type MemcachedCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`

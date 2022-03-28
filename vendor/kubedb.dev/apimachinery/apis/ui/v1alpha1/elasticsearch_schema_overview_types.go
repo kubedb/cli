@@ -32,9 +32,9 @@ type ElasticsearchSchemaOverviewSpec struct {
 }
 
 type ElasticsearchIndexSpec struct {
-	IndexName             string `json:"indexName"`
-	PrimaryStoreSizeBytes string `json:"primaryStoreSizeBytes"`
-	TotalStoreSizeBytes   string `json:"totalStoreSizeBytes"`
+	IndexName             *string `json:"indexName,omitempty"`
+	PrimaryStoreSizeBytes *string `json:"primaryStoreSizeBytes,omitempty"`
+	TotalStoreSizeBytes   *string `json:"totalStoreSizeBytes,omitempty"`
 }
 
 // ElasticsearchSchemaOverview is the Schema for the elasticsearchindices API

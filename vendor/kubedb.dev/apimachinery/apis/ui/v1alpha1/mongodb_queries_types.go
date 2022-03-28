@@ -36,10 +36,10 @@ type MongoDBQuerySpec struct {
 	DatabaseName                 string           `json:"databaseName"`
 	CollectionName               string           `json:"collectionName"`
 	Command                      string           `json:"command"`
-	Count                        int64            `json:"count"`
-	AvgExecutionTimeMilliSeconds int64            `json:"avgExecutionTimeMilliSeconds,omitempty"`
-	MinExecutionTimeMilliSeconds int64            `json:"minExecutionTimeMilliSeconds,omitempty"`
-	MaxExecutionTimeMilliSeconds int64            `json:"maxExecutionTimeMilliSeconds,omitempty"`
+	Count                        *int64           `json:"count,omitempty"`
+	AvgExecutionTimeMilliSeconds *int64           `json:"avgExecutionTimeMilliSeconds,omitempty"`
+	MinExecutionTimeMilliSeconds *int64           `json:"minExecutionTimeMilliSeconds,omitempty"`
+	MaxExecutionTimeMilliSeconds *int64           `json:"maxExecutionTimeMilliSeconds,omitempty"`
 }
 
 // MongoDBQueries is the Schema for the MongoDBQueriess API

@@ -72,8 +72,7 @@ type EtcdOpsRequestSpec struct {
 
 // EtcdReplicaReadinessCriteria is the criteria for checking readiness of a Etcd pod
 // after updating, horizontal scaling etc.
-type EtcdReplicaReadinessCriteria struct {
-}
+type EtcdReplicaReadinessCriteria struct{}
 
 type EtcdUpgradeSpec struct {
 	// Specifies the target version name from catalog
@@ -82,8 +81,7 @@ type EtcdUpgradeSpec struct {
 }
 
 // HorizontalScaling is the spec for Etcd horizontal scaling
-type EtcdHorizontalScalingSpec struct {
-}
+type EtcdHorizontalScalingSpec struct{}
 
 // EtcdVerticalScalingSpec is the spec for Etcd vertical scaling
 type EtcdVerticalScalingSpec struct {
@@ -91,11 +89,9 @@ type EtcdVerticalScalingSpec struct {
 }
 
 // EtcdVolumeExpansionSpec is the spec for Etcd volume expansion
-type EtcdVolumeExpansionSpec struct {
-}
+type EtcdVolumeExpansionSpec struct{}
 
-type EtcdCustomConfigurationSpec struct {
-}
+type EtcdCustomConfigurationSpec struct{}
 
 type EtcdCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`

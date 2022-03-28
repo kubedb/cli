@@ -40,29 +40,29 @@ type MongoDBInsightSpec struct {
 }
 
 type MongoDBDatabaseStats struct {
-	TotalCollections int32 `json:"totalCollections"`
-	DataSize         int64 `json:"dataSize"`
-	TotalIndexes     int32 `json:"totalIndexes"`
-	IndexSize        int64 `json:"indexSize"`
+	TotalCollections *int32 `json:"totalCollections,omitempty"`
+	DataSize         *int64 `json:"dataSize,omitempty"`
+	TotalIndexes     *int32 `json:"totalIndexes,omitempty"`
+	IndexSize        *int64 `json:"indexSize,omitempty"`
 }
 
 type MongoDBConnectionsInfo struct {
-	CurrentConnections   int32 `json:"currentConnections"`
-	TotalConnections     int32 `json:"totalConnections"`
-	AvailableConnections int32 `json:"availableConnections"`
-	ActiveConnections    int32 `json:"activeConnections"`
+	CurrentConnections   *int32 `json:"currentConnections,omitempty"`
+	TotalConnections     *int32 `json:"totalConnections,omitempty"`
+	AvailableConnections *int32 `json:"availableConnections,omitempty"`
+	ActiveConnections    *int32 `json:"activeConnections,omitempty"`
 }
 
 type MongoDBReplicaSetInfo struct {
-	NumberOfReplicas int32 `json:"numberOfReplicas"`
+	NumberOfReplicas *int32 `json:"numberOfReplicas,omitempty"`
 }
 
 type MongoDBShardsInfo struct {
-	NumberOfShards    int32 `json:"numberOfShards"`
-	ReplicasPerShards int32 `json:"replicasPerShards"`
-	NumberOfChunks    int32 `json:"numberOfChunks"`
-	BalancerEnabled   bool  `json:"balancerEnabled,omitempty"`
-	ChunksBalanced    bool  `json:"chunksBalanced,omitempty"`
+	NumberOfShards    *int32 `json:"numberOfShards,omitempty"`
+	ReplicasPerShards *int32 `json:"replicasPerShards,omitempty"`
+	NumberOfChunks    *int32 `json:"numberOfChunks,omitempty"`
+	BalancerEnabled   *bool  `json:"balancerEnabled,omitempty"`
+	ChunksBalanced    *bool  `json:"chunksBalanced,omitempty"`
 }
 
 // MongoDBInsight is the Schema for the MongoDBInsights API

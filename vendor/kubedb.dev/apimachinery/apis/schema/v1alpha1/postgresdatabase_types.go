@@ -57,9 +57,8 @@ type PostgresDatabaseInfo struct {
 }
 
 type PostgresDatabaseConfiguration struct {
-	DBName     string  `json:"dBName"`
-	Tablespace *string `json:"tablespace,omitempty"`
-	Params     []Param `json:"params,omitempty"`
+	Name   string  `json:"name"`
+	Params []Param `json:"params,omitempty"`
 }
 
 type Param struct {

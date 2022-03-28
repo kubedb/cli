@@ -71,8 +71,7 @@ type ProxySQLOpsRequestSpec struct {
 
 // ProxySQLReplicaReadinessCriteria is the criteria for checking readiness of a ProxySQL pod
 // after updating, horizontal scaling etc.
-type ProxySQLReplicaReadinessCriteria struct {
-}
+type ProxySQLReplicaReadinessCriteria struct{}
 
 type ProxySQLUpgradeSpec struct {
 	// Specifies the target version name from catalog
@@ -81,8 +80,7 @@ type ProxySQLUpgradeSpec struct {
 }
 
 // HorizontalScaling is the spec for ProxySQL horizontal scaling
-type ProxySQLHorizontalScalingSpec struct {
-}
+type ProxySQLHorizontalScalingSpec struct{}
 
 // ProxySQLVerticalScalingSpec is the spec for ProxySQL vertical scaling
 type ProxySQLVerticalScalingSpec struct {
@@ -90,11 +88,9 @@ type ProxySQLVerticalScalingSpec struct {
 }
 
 // ProxySQLVolumeExpansionSpec is the spec for ProxySQL volume expansion
-type ProxySQLVolumeExpansionSpec struct {
-}
+type ProxySQLVolumeExpansionSpec struct{}
 
-type ProxySQLCustomConfigurationSpec struct {
-}
+type ProxySQLCustomConfigurationSpec struct{}
 
 type ProxySQLCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`

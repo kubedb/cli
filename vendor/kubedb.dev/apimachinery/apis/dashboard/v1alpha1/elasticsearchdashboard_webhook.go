@@ -68,7 +68,6 @@ var _ webhook.Defaulter = &ElasticsearchDashboard{}
 
 // Default implements webhook.Defaulter so a webhook will be registered for the type
 func (ed *ElasticsearchDashboard) Default() {
-
 	if ed.Spec.Replicas == nil {
 		ed.Spec.Replicas = pointer.Int32P(1)
 		edLog.Info(".Spec.Replicas have been set to default")
@@ -91,12 +90,12 @@ func (ed *ElasticsearchDashboard) Default() {
 		if ed.Spec.TLS.IssuerRef == nil {
 			ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
 				Alias:      string(ElasticsearchDashboardCACert),
-				SecretName: ed.CertificateName(ElasticsearchDashboardCACert),
+				SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardCACert),
 			})
 		}
 		ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
 			Alias:      string(ElasticsearchDashboardKibanaServerCert),
-			SecretName: ed.CertificateName(ElasticsearchDashboardKibanaServerCert),
+			SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardKibanaServerCert),
 		})
 	}
 }
@@ -114,7 +113,6 @@ func (ed *ElasticsearchDashboard) ValidateCreate() error {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (ed *ElasticsearchDashboard) ValidateUpdate(old runtime.Object) error {
-
 	// Skip validation, if UPDATE operation is called after deletion.
 	// Case: Removing Finalizer
 	if ed.DeletionTimestamp != nil {
@@ -145,10 +143,9 @@ func (ed *ElasticsearchDashboard) ValidateDelete() error {
 }
 
 func (ed *ElasticsearchDashboard) Validate() error {
-
 	var allErr field.ErrorList
 
-	//database ref is required
+	// database ref is required
 	if ed.Spec.DatabaseRef == nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("databaseref"), ed.Name,
 			"spec.databaseref can't be empty"))

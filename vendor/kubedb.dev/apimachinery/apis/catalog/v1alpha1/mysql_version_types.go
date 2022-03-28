@@ -72,7 +72,7 @@ type MySQLVersionSpec struct {
 	InitContainer MySQLVersionInitContainer `json:"initContainer"`
 	// PSP names
 	PodSecurityPolicies MySQLVersionPodSecurityPolicy `json:"podSecurityPolicies"`
-	//upgrade constraints
+	// upgrade constraints
 	UpgradeConstraints MySQLUpgradeConstraints `json:"upgradeConstraints"`
 	// Stash defines backup and restore task definitions.
 	// +optional
@@ -105,7 +105,7 @@ type MySQLVersionInitContainer struct {
 }
 
 // MySQLVersionRouter is the MySQL Router lightweight middleware
-//that provides transparent routing between your application and back-end MySQL Servers
+// that provides transparent routing between your application and back-end MySQL Servers
 type MySQLVersionRouter struct {
 	Image string `json:"image"`
 }

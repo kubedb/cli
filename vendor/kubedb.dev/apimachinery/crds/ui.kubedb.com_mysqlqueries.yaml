@@ -64,8 +64,6 @@ spec:
                   - db
                   - lockTimeMilliSeconds
                   - queryTimeMilliSeconds
-                  - rowsExamined
-                  - rowsSent
                   - startTime
                   - userHost
                   type: object
