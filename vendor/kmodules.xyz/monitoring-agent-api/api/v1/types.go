@@ -24,6 +24,12 @@ import (
 	core "k8s.io/api/core/v1"
 )
 
+const (
+	DefaultPrometheusKey   = "monitoring.appscode.com/is-default-prometheus"
+	DefaultAlertmanagerKey = "monitoring.appscode.com/is-default-alertmanager"
+	DefaultGrafanaKey      = "monitoring.appscode.com/is-default-grafana"
+)
+
 type AgentType string
 
 const (
