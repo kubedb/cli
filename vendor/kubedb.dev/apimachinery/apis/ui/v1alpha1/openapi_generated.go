@@ -20303,20 +20303,20 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref common.
 				Properties: map[string]spec.Schema{
 					"activePrimaryShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"activeShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"activeShardsPercentAsNumber": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"clusterName": {
@@ -20327,44 +20327,44 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref common.
 					},
 					"delayedUnassignedShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"initializingShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfDataNodes": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfInFlightFetch": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfNodes": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfPendingTasks": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"relocatingShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"clusterStatus": {
@@ -20375,14 +20375,14 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref common.
 					},
 					"unassignedShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"taskMaxWaitingInQueueMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 				},
@@ -20399,27 +20399,23 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchIndexSpec(ref common.Refe
 				Properties: map[string]spec.Schema{
 					"indexName": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"primaryStoreSizeBytes": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"totalStoreSizeBytes": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 				},
-				Required: []string{"indexName", "primaryStoreSizeBytes", "totalStoreSizeBytes"},
 			},
 		},
 	}
@@ -20549,20 +20545,20 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightSpec(ref common.Re
 					},
 					"activePrimaryShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"activeShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"activeShardsPercentAsNumber": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"clusterName": {
@@ -20573,44 +20569,44 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightSpec(ref common.Re
 					},
 					"delayedUnassignedShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"initializingShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfDataNodes": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfInFlightFetch": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfNodes": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"numberOfPendingTasks": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"relocatingShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"clusterStatus": {
@@ -20621,14 +20617,14 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsightSpec(ref common.Re
 					},
 					"unassignedShards": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"taskMaxWaitingInQueueMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 				},
@@ -21151,23 +21147,20 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightSpec(ref common.Referenc
 					},
 					"maxConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"maxUsedConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"questions": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"longQueryTimeThresholdSeconds": {
@@ -21219,7 +21212,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightSpec(ref common.Referenc
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode", "maxConnections", "maxUsedConnections", "questions"},
+				Required: []string{"version", "status", "mode"},
 			},
 		},
 	}
@@ -21376,16 +21369,14 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBQuerySpec(ref common.ReferenceC
 					},
 					"rowsSent": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"rowsExamined": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"db": {
@@ -21432,7 +21423,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBQuerySpec(ref common.ReferenceC
 						},
 					},
 				},
-				Required: []string{"startTime", "userHost", "queryTimeMilliSeconds", "lockTimeMilliSeconds", "rowsSent", "rowsExamined", "db"},
+				Required: []string{"startTime", "userHost", "queryTimeMilliSeconds", "lockTimeMilliSeconds", "db"},
 			},
 		},
 		Dependencies: []string{
@@ -21571,34 +21562,29 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBConnectionsInfo(ref common.Refe
 				Properties: map[string]spec.Schema{
 					"currentConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"totalConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"availableConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"activeConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 				},
-				Required: []string{"currentConnections", "totalConnections", "availableConnections", "activeConnections"},
 			},
 		},
 	}
@@ -21612,34 +21598,29 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBDatabaseStats(ref common.Refere
 				Properties: map[string]spec.Schema{
 					"totalCollections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"dataSize": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"totalIndexes": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"indexSize": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"totalCollections", "dataSize", "totalIndexes", "indexSize"},
 			},
 		},
 	}
@@ -21949,9 +21930,8 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBQuerySpec(ref common.ReferenceC
 					},
 					"count": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"avgExecutionTimeMilliSeconds": {
@@ -21973,7 +21953,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBQuerySpec(ref common.ReferenceC
 						},
 					},
 				},
-				Required: []string{"operation", "databaseName", "collectionName", "command", "count"},
+				Required: []string{"operation", "databaseName", "collectionName", "command"},
 			},
 		},
 	}
@@ -21987,13 +21967,11 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBReplicaSetInfo(ref common.Refer
 				Properties: map[string]spec.Schema{
 					"numberOfReplicas": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 				},
-				Required: []string{"numberOfReplicas"},
 			},
 		},
 	}
@@ -22124,23 +22102,20 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBShardsInfo(ref common.Reference
 				Properties: map[string]spec.Schema{
 					"numberOfShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"replicasPerShards": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"numberOfChunks": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"balancerEnabled": {
@@ -22156,7 +22131,6 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBShardsInfo(ref common.Reference
 						},
 					},
 				},
-				Required: []string{"numberOfShards", "replicasPerShards", "numberOfChunks"},
 			},
 		},
 	}
@@ -22286,23 +22260,20 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLInsightSpec(ref common.ReferenceC
 					},
 					"maxConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"maxUsedConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"questions": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
+							Type:   []string{"integer"},
+							Format: "int32",
 						},
 					},
 					"longQueryTimeThresholdSeconds": {
@@ -22354,7 +22325,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLInsightSpec(ref common.ReferenceC
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode", "maxConnections", "maxUsedConnections", "questions"},
+				Required: []string{"version", "status", "mode"},
 			},
 		},
 	}
@@ -22511,16 +22482,14 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLQuerySpec(ref common.ReferenceCal
 					},
 					"rowsSent": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"rowsExamined": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"db": {
@@ -22561,7 +22530,7 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLQuerySpec(ref common.ReferenceCal
 						},
 					},
 				},
-				Required: []string{"startTime", "userHost", "queryTimeMilliSeconds", "lockTimeMilliSeconds", "rowsSent", "rowsExamined", "db"},
+				Required: []string{"startTime", "userHost", "queryTimeMilliSeconds", "lockTimeMilliSeconds", "db"},
 			},
 		},
 		Dependencies: []string{
@@ -24137,20 +24106,17 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresConnectionInfo(ref common.Refe
 				Properties: map[string]spec.Schema{
 					"maxConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"activeConnections": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"maxConnections", "activeConnections"},
 			},
 		},
 	}
@@ -24304,7 +24270,7 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresInsightSpec(ref common.Referen
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode"},
+				Required: []string{"version", "status", "mode", "replicationStatus"},
 			},
 		},
 		Dependencies: []string{
@@ -24458,37 +24424,32 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresQuerySpec(ref common.Reference
 					},
 					"calls": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"rows": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"totalTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"number"},
-							Format:  "double",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"minTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"number"},
-							Format:  "double",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"maxTimeMilliSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"number"},
-							Format:  "double",
+							Type:   []string{"number"},
+							Format: "double",
 						},
 					},
 					"sharedBlksHit": {
@@ -24576,7 +24537,7 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresQuerySpec(ref common.Reference
 						},
 					},
 				},
-				Required: []string{"userOID", "databaseOID", "query", "calls", "rows", "totalTimeMilliSeconds", "minTimeMilliSeconds", "maxTimeMilliSeconds"},
+				Required: []string{"userOID", "databaseOID", "query"},
 			},
 		},
 	}
@@ -24847,13 +24808,12 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresVacuumInfo(ref common.Referenc
 					},
 					"activeVacuumProcess": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 				},
-				Required: []string{"autoVacuum", "activeVacuumProcess"},
+				Required: []string{"autoVacuum"},
 			},
 		},
 	}
@@ -25023,8 +24983,9 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisInsightSpec(ref common.ReferenceC
 					},
 					"evictionPolicy": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"maxClients": {
@@ -25088,7 +25049,7 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisInsightSpec(ref common.ReferenceC
 						},
 					},
 				},
-				Required: []string{"version", "status", "mode"},
+				Required: []string{"version", "status", "mode", "evictionPolicy"},
 			},
 		},
 	}
@@ -25231,9 +25192,8 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisQuerySpec(ref common.ReferenceCal
 					},
 					"execTimeMicroSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int64",
+							Type:   []string{"integer"},
+							Format: "int64",
 						},
 					},
 					"args": {
@@ -25251,7 +25211,7 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisQuerySpec(ref common.ReferenceCal
 						},
 					},
 				},
-				Required: []string{"queryId", "queryTimestamp", "execTimeMicroSeconds", "args"},
+				Required: []string{"queryId", "queryTimestamp", "args"},
 			},
 		},
 		Dependencies: []string{

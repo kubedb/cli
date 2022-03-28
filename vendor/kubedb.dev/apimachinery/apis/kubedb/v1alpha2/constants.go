@@ -282,7 +282,7 @@ const (
 	ProxySQLCustomConfigMountPath  = "/etc/custom-config"
 	// =========================== Redis Constants ============================
 	RedisConfigKey = "redis.conf" // RedisConfigKey is going to create for the customize redis configuration
-	//DefaultConfigKey is going to create for the default redis configuration
+	// DefaultConfigKey is going to create for the default redis configuration
 	DefaultConfigKey            = "default.conf"
 	RedisShardKey               = RedisKey + "/shard"
 	RedisDatabasePortName       = "db"

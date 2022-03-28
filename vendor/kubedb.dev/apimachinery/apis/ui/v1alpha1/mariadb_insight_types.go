@@ -30,20 +30,20 @@ const (
 
 // MariaDBInsightSpec defines the desired state of MariaDBInsight
 type MariaDBInsightSpec struct {
-	Version                       string  `json:"version"`
-	Status                        string  `json:"status"`
-	Mode                          string  `json:"mode"`
-	MaxConnections                int32   `json:"maxConnections"`
-	MaxUsedConnections            int32   `json:"maxUsedConnections"`
-	Questions                     int32   `json:"questions"`
-	LongQueryTimeThresholdSeconds float64 `json:"longQueryTimeThresholdSeconds,omitempty"`
-	NumberOfSlowQueries           int32   `json:"numberOfSlowQueries,omitempty"`
-	AbortedClients                int32   `json:"abortedClients,omitempty"`
-	AbortedConnections            int32   `json:"abortedConnections,omitempty"`
-	ThreadsCached                 int32   `json:"threadsCached,omitempty"`
-	ThreadsConnected              int32   `json:"threadsConnected,omitempty"`
-	ThreadsCreated                int32   `json:"threadsCreated,omitempty"`
-	ThreadsRunning                int32   `json:"threadsRunning,omitempty"`
+	Version                       string   `json:"version"`
+	Status                        string   `json:"status"`
+	Mode                          string   `json:"mode"`
+	MaxConnections                *int32   `json:"maxConnections,omitempty"`
+	MaxUsedConnections            *int32   `json:"maxUsedConnections,omitempty"`
+	Questions                     *int32   `json:"questions,omitempty"`
+	LongQueryTimeThresholdSeconds *float64 `json:"longQueryTimeThresholdSeconds,omitempty"`
+	NumberOfSlowQueries           *int32   `json:"numberOfSlowQueries,omitempty"`
+	AbortedClients                *int32   `json:"abortedClients,omitempty"`
+	AbortedConnections            *int32   `json:"abortedConnections,omitempty"`
+	ThreadsCached                 *int32   `json:"threadsCached,omitempty"`
+	ThreadsConnected              *int32   `json:"threadsConnected,omitempty"`
+	ThreadsCreated                *int32   `json:"threadsCreated,omitempty"`
+	ThreadsRunning                *int32   `json:"threadsRunning,omitempty"`
 }
 
 // MariaDBInsight is the Schema for the mariaDBinsights API

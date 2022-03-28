@@ -52,7 +52,7 @@ type RedisVersion struct {
 type RedisVersionSpec struct {
 	// Version
 	Version string `json:"version"`
-	//init container image
+	// init container image
 	InitContainer RedisVersionInitContainer `json:"initContainer,omitempty"`
 	// Database Image
 	DB RedisVersionDatabase `json:"db"`

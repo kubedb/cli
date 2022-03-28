@@ -55,7 +55,7 @@ type PostgresVersionSpec struct {
 	Version string `json:"version"`
 	// Distribution
 	Distribution PostgresDistro `json:"distribution,omitempty"`
-	//init container image
+	// init container image
 	InitContainer PostgresVersionInitContainer `json:"initContainer,omitempty"`
 	// Database Image
 	DB PostgresVersionDatabase `json:"db"`

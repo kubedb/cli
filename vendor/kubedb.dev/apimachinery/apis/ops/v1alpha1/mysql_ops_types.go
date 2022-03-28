@@ -75,8 +75,7 @@ type MySQLOpsRequestSpec struct {
 
 // MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
 // after updating, horizontal scaling etc.
-type MySQLReplicaReadinessCriteria struct {
-}
+type MySQLReplicaReadinessCriteria struct{}
 
 type MySQLUpgradeSpec struct {
 	// Specifies the target version name from catalog

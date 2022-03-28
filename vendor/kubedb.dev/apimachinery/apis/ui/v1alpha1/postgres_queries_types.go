@@ -32,28 +32,28 @@ type PostgresQueriesSpec struct {
 }
 
 type PostgresQuerySpec struct {
-	UserOID                  int64   `json:"userOID"`
-	DatabaseOID              int64   `json:"databaseOID"`
-	Query                    string  `json:"query"`
-	Calls                    int64   `json:"calls"`
-	Rows                     int64   `json:"rows"`
-	TotalTimeMilliSeconds    float64 `json:"totalTimeMilliSeconds"`
-	MinTimeMilliSeconds      float64 `json:"minTimeMilliSeconds"`
-	MaxTimeMilliSeconds      float64 `json:"maxTimeMilliSeconds"`
-	SharedBlksHit            int64   `json:"sharedBlksHit,omitempty"`
-	SharedBlksRead           int64   `json:"sharedBlksRead,omitempty"`
-	SharedBlksDirtied        int64   `json:"sharedBlksDirtied,omitempty"`
-	SharedBlksWritten        int64   `json:"sharedBlksWritten,omitempty"`
-	LocalBlksHit             int64   `json:"localBlksHit,omitempty"`
-	LocalBlksRead            int64   `json:"localBlksRead,omitempty"`
-	LocalBlksDirtied         int64   `json:"localBlksDirtied,omitempty"`
-	LocalBlksWritten         int64   `json:"localBlksWritten,omitempty"`
-	TempBlksRead             int64   `json:"tempBlksRead,omitempty"`
-	TempBlksWritten          int64   `json:"tempBlksWritten,omitempty"`
-	BlkReadTimeMilliSeconds  float64 `json:"blkReadTimeMilliSeconds,omitempty"`
-	BlkWriteTime             float64 `json:"blkWriteTime,omitempty"`
-	BufferHitPercentage      float64 `json:"bufferHitPercentage,omitempty"`
-	LocalBufferHitPercentage float64 `json:"localBufferHitPercentage,omitempty"`
+	UserOID                  int64    `json:"userOID"`
+	DatabaseOID              int64    `json:"databaseOID"`
+	Query                    string   `json:"query"`
+	Calls                    *int64   `json:"calls,omitempty"`
+	Rows                     *int64   `json:"rows,omitempty"`
+	TotalTimeMilliSeconds    *float64 `json:"totalTimeMilliSeconds,omitempty"`
+	MinTimeMilliSeconds      *float64 `json:"minTimeMilliSeconds,omitempty"`
+	MaxTimeMilliSeconds      *float64 `json:"maxTimeMilliSeconds,omitempty"`
+	SharedBlksHit            *int64   `json:"sharedBlksHit,omitempty"`
+	SharedBlksRead           *int64   `json:"sharedBlksRead,omitempty"`
+	SharedBlksDirtied        *int64   `json:"sharedBlksDirtied,omitempty"`
+	SharedBlksWritten        *int64   `json:"sharedBlksWritten,omitempty"`
+	LocalBlksHit             *int64   `json:"localBlksHit,omitempty"`
+	LocalBlksRead            *int64   `json:"localBlksRead,omitempty"`
+	LocalBlksDirtied         *int64   `json:"localBlksDirtied,omitempty"`
+	LocalBlksWritten         *int64   `json:"localBlksWritten,omitempty"`
+	TempBlksRead             *int64   `json:"tempBlksRead,omitempty"`
+	TempBlksWritten          *int64   `json:"tempBlksWritten,omitempty"`
+	BlkReadTimeMilliSeconds  *float64 `json:"blkReadTimeMilliSeconds,omitempty"`
+	BlkWriteTime             *float64 `json:"blkWriteTime,omitempty"`
+	BufferHitPercentage      *float64 `json:"bufferHitPercentage,omitempty"`
+	LocalBufferHitPercentage *float64 `json:"localBufferHitPercentage,omitempty"`
 }
 
 // PostgresQueries is the Schema for the PostgresQueries API

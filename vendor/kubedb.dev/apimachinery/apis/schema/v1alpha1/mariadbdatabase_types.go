@@ -56,8 +56,7 @@ type MariaDBDatabaseInfo struct {
 	Config MariaDBDatabaseConfiguration `json:"config"`
 }
 
-type MariaDBDatabaseConfiguration struct {
-}
+type MariaDBDatabaseConfiguration struct{}
 
 // MariaDBDatabase is the Schema for the mariadbdatabases API
 

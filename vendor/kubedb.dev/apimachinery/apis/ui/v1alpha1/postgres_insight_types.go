@@ -33,19 +33,19 @@ type PostgresInsightSpec struct {
 	Version           string                      `json:"version"`
 	Status            string                      `json:"status"`
 	Mode              string                      `json:"mode"`
-	ReplicationStatus []PostgresReplicationStatus `json:"replicationStatus,omitempty"`
+	ReplicationStatus []PostgresReplicationStatus `json:"replicationStatus"`
 	ConnectionInfo    PostgresConnectionInfo      `json:"connectionInfo,omitempty"`
 	VacuumInfo        PostgresVacuumInfo          `json:"vacuumInfo,omitempty"`
 }
 
 type PostgresVacuumInfo struct {
 	AutoVacuum          string `json:"autoVacuum"`
-	ActiveVacuumProcess int64  `json:"activeVacuumProcess"`
+	ActiveVacuumProcess *int64 `json:"activeVacuumProcess,omitempty"`
 }
 
 type PostgresConnectionInfo struct {
-	MaxConnections    int64 `json:"maxConnections"`
-	ActiveConnections int64 `json:"activeConnections"`
+	MaxConnections    *int64 `json:"maxConnections,omitempty"`
+	ActiveConnections *int64 `json:"activeConnections,omitempty"`
 }
 
 // Ref: https://www.postgresql.org/docs/10/monitoring-stats.html#PG-STAT-REPLICATION-VIEW
@@ -53,9 +53,9 @@ type PostgresConnectionInfo struct {
 type PostgresReplicationStatus struct {
 	ApplicationName string `json:"applicationName"`
 	State           string `json:"state"`
-	WriteLag        int64  `json:"writeLag,omitempty"`
-	FlushLag        int64  `json:"flushLag,omitempty"`
-	ReplayLag       int64  `json:"replayLag,omitempty"`
+	WriteLag        *int64 `json:"writeLag,omitempty"`
+	FlushLag        *int64 `json:"flushLag,omitempty"`
+	ReplayLag       *int64 `json:"replayLag,omitempty"`
 }
 
 // PostgresInsight is the Schema for the postgresinsights API

@@ -33,17 +33,17 @@ type RedisInsightSpec struct {
 	Version                      string `json:"version"`
 	Status                       string `json:"status"`
 	Mode                         string `json:"mode"`
-	EvictionPolicy               string `json:"evictionPolicy,omitempty"`
-	MaxClients                   int64  `json:"maxClients,omitempty"`
-	ConnectedClients             int64  `json:"connectedClients,omitempty"`
-	BlockedClients               int64  `json:"blockedClients,omitempty"`
-	TotalKeys                    int64  `json:"totalKeys,omitempty"`
-	ExpiredKeys                  int64  `json:"expiredKeys,omitempty"`
-	EvictedKeys                  int64  `json:"evictedKeys,omitempty"`
-	ReceivedConnections          int64  `json:"receivedConnections,omitempty"`
-	RejectedConnections          int64  `json:"rejectedConnections,omitempty"`
-	SlowLogThresholdMicroSeconds int64  `json:"slowLogThresholdMicroSeconds,omitempty"`
-	SlowLogMaxLen                int64  `json:"slowLogMaxLen,omitempty"`
+	EvictionPolicy               string `json:"evictionPolicy"`
+	MaxClients                   *int64 `json:"maxClients,omitempty"`
+	ConnectedClients             *int64 `json:"connectedClients,omitempty"`
+	BlockedClients               *int64 `json:"blockedClients,omitempty"`
+	TotalKeys                    *int64 `json:"totalKeys,omitempty"`
+	ExpiredKeys                  *int64 `json:"expiredKeys,omitempty"`
+	EvictedKeys                  *int64 `json:"evictedKeys,omitempty"`
+	ReceivedConnections          *int64 `json:"receivedConnections,omitempty"`
+	RejectedConnections          *int64 `json:"rejectedConnections,omitempty"`
+	SlowLogThresholdMicroSeconds *int64 `json:"slowLogThresholdMicroSeconds,omitempty"`
+	SlowLogMaxLen                *int64 `json:"slowLogMaxLen,omitempty"`
 }
 
 // RedisInsight is the Schema for the redisinsights API

@@ -27,49 +27,49 @@ spec:
           spec:
             properties:
               activePrimaryShards:
-                format: int32
-                type: integer
+                format: double
+                type: number
               activeShards:
-                format: int32
-                type: integer
+                format: double
+                type: number
               activeShardsPercentAsNumber:
-                format: int32
-                type: integer
+                format: double
+                type: number
               clusterName:
                 type: string
               clusterStatus:
                 type: string
               delayedUnassignedShards:
-                format: int32
-                type: integer
+                format: double
+                type: number
               initializingShards:
-                format: int32
-                type: integer
+                format: double
+                type: number
               mode:
                 type: string
               numberOfDataNodes:
-                format: int32
-                type: integer
+                format: double
+                type: number
               numberOfInFlightFetch:
-                format: int32
-                type: integer
+                format: double
+                type: number
               numberOfNodes:
-                format: int32
-                type: integer
+                format: double
+                type: number
               numberOfPendingTasks:
-                format: int32
-                type: integer
+                format: double
+                type: number
               relocatingShards:
-                format: int32
-                type: integer
+                format: double
+                type: number
               status:
                 type: string
               taskMaxWaitingInQueueMilliSeconds:
-                format: int32
-                type: integer
+                format: double
+                type: number
               unassignedShards:
-                format: int32
-                type: integer
+                format: double
+                type: number
               version:
                 type: string
             required:

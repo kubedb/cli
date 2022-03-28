@@ -147,17 +147,17 @@ const (
 	PrepareSecureCustomConfig          = "PrepareSecureCustomConfig"
 	ReconfigureSecurityAdmin           = "ReconfigureSecurityAdmin"
 
-	//Redis Constants
+	// Redis Constants
 	PatchedSecret  = "patchedSecret"
 	ConfigKeyRedis = "redis.conf"
 	RedisTLSArg    = "--tls-port 6379"
 	DBReady        = "DBReady"
 	RestartedPods  = "RestartedPods"
 
-	//Stash Constants
+	// Stash Constants
 	PauseBackupConfiguration  = "PauseBackupConfiguration"
 	ResumeBackupConfiguration = "ResumeBackupConfiguration"
-	//Postgres Constants
+	// Postgres Constants
 	UpdatePrimaryPodImage = "UpdatePrimaryImage"
 	UpdateStandbyPodImage = "UpdateStandbyPodImage"
 	// PausePgCoordinator is used when need to pause postgres failover with pg coordinator.
@@ -253,11 +253,9 @@ const (
 	VolumeExpansionModeOffline VolumeExpansionMode = "Offline"
 )
 
-type RestartSpec struct {
-}
+type RestartSpec struct{}
 
-type Reprovision struct {
-}
+type Reprovision struct{}
 
 type TLSSpec struct {
 	// TLSConfig contains updated tls configurations for client and server.

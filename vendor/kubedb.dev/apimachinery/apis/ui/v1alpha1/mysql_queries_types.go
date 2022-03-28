@@ -36,14 +36,14 @@ type MySQLQuerySpec struct {
 	UserHost              string       `json:"userHost"`
 	QueryTimeMilliSeconds string       `json:"queryTimeMilliSeconds"`
 	LockTimeMilliSeconds  string       `json:"lockTimeMilliSeconds"`
-	RowsSent              int64        `json:"rowsSent"`
-	RowsExamined          int64        `json:"rowsExamined"`
+	RowsSent              *int64       `json:"rowsSent,omitempty"`
+	RowsExamined          *int64       `json:"rowsExamined,omitempty"`
 	DB                    string       `json:"db"`
-	LastInsertId          int64        `json:"lastInsertId,omitempty"`
-	InsertId              int64        `json:"insertId,omitempty"`
-	ServerId              int64        `json:"serverId,omitempty"`
+	LastInsertId          *int64       `json:"lastInsertId,omitempty"`
+	InsertId              *int64       `json:"insertId,omitempty"`
+	ServerId              *int64       `json:"serverId,omitempty"`
 	SQLText               string       `json:"sqlText,omitempty"`
-	ThreadId              int64        `json:"threadId,omitempty"`
+	ThreadId              *int64       `json:"threadId,omitempty"`
 }
 
 // MySQLQueries is the Schema for the MySQLQueries API

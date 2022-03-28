@@ -22,7 +22,7 @@ type GenericSchemaOverviewSpec struct {
 }
 
 type GenericDatabaseSpec struct {
-	DatabaseName   string `json:"databaseName,omitempty"`
-	TableName      string `json:"tableName,omitempty"`
-	TableSizeBytes string `json:"tableSizeBytes,omitempty"`
+	DatabaseName   *string `json:"databaseName,omitempty"`
+	TableName      *string `json:"tableName,omitempty"`
+	TableSizeBytes *string `json:"tableSizeBytes,omitempty"`
 }

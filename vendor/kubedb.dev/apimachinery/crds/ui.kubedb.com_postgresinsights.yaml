@@ -34,9 +34,6 @@ spec:
                   maxConnections:
                     format: int64
                     type: integer
-                required:
-                - activeConnections
-                - maxConnections
                 type: object
               mode:
                 type: string
@@ -71,13 +68,13 @@ spec:
                   autoVacuum:
                     type: string
                 required:
-                - activeVacuumProcess
                 - autoVacuum
                 type: object
               version:
                 type: string
             required:
             - mode
+            - replicationStatus
             - status
             - version
             type: object

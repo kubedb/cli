@@ -74,8 +74,7 @@ type RedisOpsRequestSpec struct {
 
 // RedisReplicaReadinessCriteria is the criteria for checking readiness of a Redis pod
 // after updating, horizontal scaling etc.
-type RedisReplicaReadinessCriteria struct {
-}
+type RedisReplicaReadinessCriteria struct{}
 
 type RedisUpgradeSpec struct {
 	// Specifies the target version name from catalog
