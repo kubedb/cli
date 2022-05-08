@@ -17,9 +17,16 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"kubedb.dev/apimachinery/crds"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kmodules.xyz/client-go/apiextensions"
+	"kmodules.xyz/client-go/meta"
+)
+
+const (
+	MariaDBSuffix string = dbapi.ResourceSingularMariaDB
 )
 
 func (_ MariaDBDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -34,4 +41,85 @@ func (in *MariaDBDatabase) GetInit() *InitSpec {
 
 func (in *MariaDBDatabase) GetStatus() DatabaseStatus {
 	return in.Status
+}
+
+// GetAppBindingMeta returns meta info of the appbinding which has been created by schema manager
+func (in *MariaDBDatabase) GetAppBindingMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-apbng"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetVaultSecretEngineMeta returns meta info of the secret engine which has been created by schema manager
+func (in *MariaDBDatabase) GetVaultSecretEngineMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-engine"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetMySQLRoleMeta returns meta info of the MySQL role which has been created by schema manager
+func (in *MariaDBDatabase) GetMySQLRoleMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-role"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetSecretAccessRequestMeta returns meta info of the secret access request which has been created by schema manager
+func (in *MariaDBDatabase) GetSecretAccessRequestMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-req"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetInitJobMeta returns meta info of the init job which has been created by schema manager
+func (in *MariaDBDatabase) GetInitJobMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-job"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetMySQLAuthSecretMeta returns meta info of the mysql auth secret
+func (in *MariaDBDatabase) GetMySQLAuthSecretMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      in.Spec.Database.ServerRef.Name + "-auth",
+		Namespace: in.Spec.Database.ServerRef.Namespace,
+	}
+	return meta
+}
+
+// GetRestoreSessionMeta returns meta info of the restore session which has been created by schema manager
+func (in *MariaDBDatabase) GetRestoreSessionMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-rs"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetRepositoryMeta returns meta info of the repository which has been created by schema manager
+func (in *MariaDBDatabase) GetRepositoryMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-rp"),
+		Namespace: in.Namespace,
+	}
+	return meta
+}
+
+// GetRepositorySecretMeta returns meta info of the repository which has been created by schema manager
+func (in *MariaDBDatabase) GetRepositorySecretMeta() metav1.ObjectMeta {
+	meta := metav1.ObjectMeta{
+		Name:      meta.NameWithSuffix(in.Name, MariaDBSuffix+"-rp-sec"),
+		Namespace: in.Namespace,
+	}
+	return meta
 }

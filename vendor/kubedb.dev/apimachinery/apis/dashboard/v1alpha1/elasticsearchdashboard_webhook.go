@@ -36,19 +36,23 @@ import (
 )
 
 var forbiddenEnvVars = []string{
-	"ELASTICSEARCH_USERNAME",
-	"ELASTICSEARCH_PASSWORD",
-	"server.name",
-	"server.port",
-	"server.host",
-	"server.ssl.enabled",
-	"server.ssl.certificate",
-	"server.ssl.key",
-	"server.ssl.certificateAuthorities",
-	"elasticsearch.hosts",
-	"elasticsearch.username",
-	"elasticsearch.password",
-	"elasticsearch.ssl.certificateAuthorities",
+	ES_USER_ENV,
+	ES_PASSWORD_ENV,
+	ES_USER_KEY,
+	ES_PASSWORD_KEY,
+	OS_USER_KEY,
+	OS_PASSWORD_KEY,
+	DashboardServerHostKey,
+	DashboardServerNameKey,
+	DashboardServerPortKey,
+	DashboardServerSSLCaKey,
+	DashboardServerSSLCertKey,
+	DashboardServerSSLKey,
+	DashboardServerSSLEnabledKey,
+	ElasticsearchSSLCaKey,
+	ElasticsearchHostsKey,
+	OpensearchHostsKey,
+	OpensearchSSLCaKey,
 }
 
 // log is for logging in this package.
@@ -73,14 +77,12 @@ func (ed *ElasticsearchDashboard) Default() {
 		edLog.Info(".Spec.Replicas have been set to default")
 	}
 
-	if ed.Spec.PodTemplate.Spec.Resources.Size() == 0 {
-		apis.SetDefaultResourceLimits(&ed.Spec.PodTemplate.Spec.Resources, DefaultResources)
-		edLog.Info("Spec.PodTemplate.Spec.Resources have been set to default")
-	}
+	apis.SetDefaultResourceLimits(&ed.Spec.PodTemplate.Spec.Resources, DashboardsDefaultResources)
+	edLog.Info(".PodTemplate.Spec.Resources have been set to default")
 
 	if len(ed.Spec.TerminationPolicy) == 0 {
-		ed.Spec.TerminationPolicy = api.TerminationPolicyDoNotTerminate
-		edLog.Info(".Spec.TerminationPolicy have been set to TerminationPolicyDoNotTerminate")
+		ed.Spec.TerminationPolicy = api.TerminationPolicyWipeOut
+		edLog.Info(".Spec.TerminationPolicy have been set to TerminationPolicyWipeOut")
 	}
 
 	if ed.Spec.EnableSSL {
@@ -94,8 +96,8 @@ func (ed *ElasticsearchDashboard) Default() {
 			})
 		}
 		ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
-			Alias:      string(ElasticsearchDashboardKibanaServerCert),
-			SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardKibanaServerCert),
+			Alias:      string(ElasticsearchDashboardServerCert),
+			SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardServerCert),
 		})
 	}
 }

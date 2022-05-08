@@ -21,6 +21,7 @@ const (
 	DatabaseNameConfig = "config"
 	DatabaseNameLocal  = "local"
 	DatabaseForEntry   = "kubedb_system"
+	SYSDatabase        = "sys"
 )
 
 const (

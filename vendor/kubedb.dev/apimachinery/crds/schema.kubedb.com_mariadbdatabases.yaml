@@ -67,6 +67,17 @@ spec:
               database:
                 properties:
                   config:
+                    properties:
+                      characterSet:
+                        type: string
+                      collation:
+                        type: string
+                      comment:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - name
                     type: object
                   serverRef:
                     properties:

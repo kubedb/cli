@@ -30,11 +30,10 @@ const (
 
 // ElasticsearchInsightSpec defines the desired state of ElasticsearchInsight
 type ElasticsearchInsightSpec struct {
-	Version string `json:"version"`
-	Status  string `json:"status"`
-	Mode    string `json:"mode"`
-
-	ClusterHealth ElasticsearchClusterHealth `json:",inline"`
+	Version                    string `json:"version"`
+	Status                     string `json:"status"`
+	Mode                       string `json:"mode"`
+	ElasticsearchClusterHealth `json:",inline"`
 }
 
 type ElasticsearchClusterHealth struct {

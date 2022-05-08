@@ -12,7 +12,7 @@ require (
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.2.0
 	gomodules.xyz/wait v0.2.0
-	gomodules.xyz/x v0.0.13
+	gomodules.xyz/x v0.0.14
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
 	k8s.io/cli-runtime v0.21.1
@@ -20,11 +20,11 @@ require (
 	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.9.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20220317213815-2a6d5a5784f2
-	kmodules.xyz/custom-resources v0.0.0-20220317220154-7beb809b1f5e
+	kmodules.xyz/client-go v0.0.0-20220427165208-36281a681909
+	kmodules.xyz/custom-resources v0.0.0-20220422215041-237eae1d7ddd
 	kmodules.xyz/monitoring-agent-api v0.0.0-20220319222118-0290ed5b75e1
-	kubedb.dev/apimachinery v0.26.0
-	stash.appscode.dev/apimachinery v0.18.0
+	kubedb.dev/apimachinery v0.26.1-0.20220508053725-74c4fc13ef02
+	stash.appscode.dev/apimachinery v0.20.0
 )
 
 require github.com/josharian/intern v1.0.0 // indirect
@@ -113,7 +113,7 @@ require (
 	gomodules.xyz/flags v0.1.3 // indirect
 	gomodules.xyz/homedir v0.1.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
-	gomodules.xyz/mergo v0.3.13-0.20210702100041-9d62ff8ece4d // indirect
+	gomodules.xyz/mergo v0.3.13-0.20220214162359-48efe39fd402 // indirect
 	gomodules.xyz/password-generator v0.2.7 // indirect
 	gomodules.xyz/sets v0.2.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
@@ -126,8 +126,8 @@ require (
 	k8s.io/kubernetes v1.21.1 // indirect
 	k8s.io/utils v0.0.0-20210930125809-cb0fa318a74b // indirect
 	kmodules.xyz/objectstore-api v0.0.0-20220317220441-f1d593d0a778 // indirect
-	kmodules.xyz/offshoot-api v0.0.0-20220323112402-3b0fd2ea77d6 // indirect
-	kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027 // indirect
+	kmodules.xyz/offshoot-api v0.0.0-20220420055916-fefb02c26514 // indirect
+	kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad // indirect
 	sigs.k8s.io/controller-runtime v0.9.0 // indirect
 	sigs.k8s.io/kustomize/api v0.8.8 // indirect
 	sigs.k8s.io/kustomize/kyaml v0.10.17 // indirect

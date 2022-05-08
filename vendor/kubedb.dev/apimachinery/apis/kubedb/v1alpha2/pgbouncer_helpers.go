@@ -168,6 +168,27 @@ func (p *PgBouncer) SetDefaults() {
 	if p == nil {
 		return
 	}
+
+	if p.Spec.TerminationPolicy == "" {
+		p.Spec.TerminationPolicy = PgBouncerTerminationPolicyDelete
+	}
+
+	if p.Spec.TLS != nil {
+		if p.Spec.SSLMode == "" {
+			p.Spec.SSLMode = PgBouncerSSLModeVerifyFull
+		}
+		if p.Spec.ConnectionPool.AuthType == "" {
+			p.Spec.ConnectionPool.AuthType = PgBouncerClientAuthModeMD5
+		}
+	} else {
+		if p.Spec.SSLMode == "" {
+			p.Spec.SSLMode = PgBouncerSSLModeDisable
+		}
+		if p.Spec.ConnectionPool.AuthType == "" {
+			p.Spec.ConnectionPool.AuthType = PgBouncerClientAuthModeMD5
+		}
+	}
+
 	p.Spec.Monitor.SetDefaults()
 
 	p.SetTLSDefaults()
@@ -189,18 +210,28 @@ func (p *PgBouncer) CertificateName(alias PgBouncerCertificateAlias) string {
 	return meta_util.NameWithSuffix(p.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-// MustCertSecretName returns the secret name for a certificate alias
-func (p *PgBouncer) MustCertSecretName(alias PgBouncerCertificateAlias) string {
-	if p == nil {
-		panic("missing PgBouncer database")
-	} else if p.Spec.TLS == nil {
-		panic(fmt.Errorf("PgBouncer %s/%s is missing tls spec", p.Namespace, p.Name))
+// GetPersistentSecrets returns auth secret and config secret of a pgbouncer object
+func (p *PgBouncer) GetPersistentSecrets() []string {
+	if p != nil {
+		return nil
 	}
-	name, ok := kmapi.GetCertificateSecretName(p.Spec.TLS.Certificates, string(alias))
-	if !ok {
-		panic(fmt.Errorf("PgBouncer %s/%s is missing secret name for %s certificate", p.Namespace, p.Name, alias))
+	var secrets []string
+	secrets = append(secrets, p.AuthSecretName())
+	secrets = append(secrets, p.ConfigSecretName())
+
+	return secrets
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any provide,
+// otherwise returns default certificate secret name for the given alias.
+func (p *PgBouncer) GetCertSecretName(alias PgBouncerCertificateAlias) string {
+	if p.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(p.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
 	}
-	return name
+	return p.CertificateName(alias)
 }
 
 func (p *PgBouncer) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {

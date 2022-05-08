@@ -338,7 +338,7 @@ gomodules.xyz/jsonpatch/v2
 # gomodules.xyz/logs v0.0.6
 ## explicit; go 1.16
 gomodules.xyz/logs
-# gomodules.xyz/mergo v0.3.13-0.20210702100041-9d62ff8ece4d
+# gomodules.xyz/mergo v0.3.13-0.20220214162359-48efe39fd402
 ## explicit; go 1.13
 gomodules.xyz/mergo
 # gomodules.xyz/password-generator v0.2.7
@@ -356,7 +356,7 @@ gomodules.xyz/sets
 # gomodules.xyz/wait v0.2.0
 ## explicit; go 1.14
 gomodules.xyz/wait
-# gomodules.xyz/x v0.0.13
+# gomodules.xyz/x v0.0.14
 ## explicit; go 1.17
 gomodules.xyz/x/analytics
 gomodules.xyz/x/arrays
@@ -717,7 +717,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20220317213815-2a6d5a5784f2
+# kmodules.xyz/client-go v0.0.0-20220427165208-36281a681909
 ## explicit; go 1.17
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -731,7 +731,7 @@ kmodules.xyz/client-go/tools/analytics
 kmodules.xyz/client-go/tools/cli
 kmodules.xyz/client-go/tools/clusterid
 kmodules.xyz/client-go/tools/portforward
-# kmodules.xyz/custom-resources v0.0.0-20220317220154-7beb809b1f5e
+# kmodules.xyz/custom-resources v0.0.0-20220422215041-237eae1d7ddd
 ## explicit; go 1.17
 kmodules.xyz/custom-resources/apis/appcatalog
 kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1
@@ -752,13 +752,13 @@ kmodules.xyz/monitoring-agent-api/api/v1alpha1
 # kmodules.xyz/objectstore-api v0.0.0-20220317220441-f1d593d0a778
 ## explicit; go 1.15
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.0.0-20220323112402-3b0fd2ea77d6
+# kmodules.xyz/offshoot-api v0.0.0-20220420055916-fefb02c26514
 ## explicit; go 1.15
 kmodules.xyz/offshoot-api/api/v1
-# kmodules.xyz/prober v0.0.0-20210618020259-5836fb959027
+# kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad
 ## explicit; go 1.15
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.26.0
+# kubedb.dev/apimachinery v0.26.1-0.20220508053725-74c4fc13ef02
 ## explicit; go 1.17
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -916,7 +916,7 @@ sigs.k8s.io/structured-merge-diff/v4/value
 # sigs.k8s.io/yaml v1.3.0
 ## explicit; go 1.12
 sigs.k8s.io/yaml
-# stash.appscode.dev/apimachinery v0.18.0
+# stash.appscode.dev/apimachinery v0.20.0
 ## explicit; go 1.17
 stash.appscode.dev/apimachinery/apis
 stash.appscode.dev/apimachinery/apis/repositories

@@ -55,10 +55,10 @@ func (p PgBouncerVersion) ResourcePlural() string {
 func (p PgBouncerVersion) ValidateSpecs() error {
 	if p.Spec.Version == "" ||
 		p.Spec.Exporter.Image == "" ||
-		p.Spec.Server.Image == "" {
+		p.Spec.PgBouncer.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for pgbouncerversion "%v":
 spec.version,
-spec.server.image,
+spec.pgBouncer.image,
 spec.exporter.image.`, p.Name)
 	}
 	return nil

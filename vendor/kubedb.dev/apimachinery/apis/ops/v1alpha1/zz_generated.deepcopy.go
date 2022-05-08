@@ -1472,6 +1472,11 @@ func (in *MongoDBCustomConfigurationSpec) DeepCopyInto(out *MongoDBCustomConfigu
 		*out = new(MongoDBCustomConfiguration)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.Arbiter != nil {
+		in, out := &in.Arbiter, &out.Arbiter
+		*out = new(MongoDBCustomConfiguration)
+		(*in).DeepCopyInto(*out)
+	}
 	return
 }
 
@@ -1745,6 +1750,11 @@ func (in *MongoDBVerticalScalingSpec) DeepCopyInto(out *MongoDBVerticalScalingSp
 	}
 	if in.Shard != nil {
 		in, out := &in.Shard, &out.Shard
+		*out = new(v1.ResourceRequirements)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Arbiter != nil {
+		in, out := &in.Arbiter, &out.Arbiter
 		*out = new(v1.ResourceRequirements)
 		(*in).DeepCopyInto(*out)
 	}

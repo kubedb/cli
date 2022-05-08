@@ -56,7 +56,22 @@ type MariaDBDatabaseInfo struct {
 	Config MariaDBDatabaseConfiguration `json:"config"`
 }
 
-type MariaDBDatabaseConfiguration struct{}
+type MariaDBDatabaseConfiguration struct {
+	// Name is target database name
+	Name string `json:"name"`
+
+	// CharacterSet is the target database character set
+	// +optional
+	CharacterSet string `json:"characterSet,omitempty"`
+
+	// Collation is the target database collation
+	// +optional
+	Collation string `json:"collation,omitempty"`
+
+	// Comment is the additional comment to the mariadb Database
+	// +optional
+	Comment string `json:"comment,omitempty"`
+}
 
 // MariaDBDatabase is the Schema for the mariadbdatabases API
 

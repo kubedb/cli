@@ -21,31 +21,47 @@ import (
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
-
-var DefaultResources = core.ResourceRequirements{
-	Requests: core.ResourceList{
-		core.ResourceCPU:    resource.MustParse(".500"),
-		core.ResourceMemory: resource.MustParse("1024Mi"),
-	},
-	Limits: core.ResourceList{
-		core.ResourceMemory: resource.MustParse("1024Mi"),
-	},
-}
 
 const (
 	ES_USER_ENV     = "ELASTICSEARCH_USERNAME"
 	ES_PASSWORD_ENV = "ELASTICSEARCH_PASSWORD"
+	ES_USER_KEY     = "elasticsearch.username"
+	ES_PASSWORD_KEY = "elasticsearch.password"
+	OS_USER_KEY     = "opensearch.username"
+	OS_PASSWORD_KEY = "opensearch.password"
 
-	ElasticsearchDashboardPortServer            = "server"
-	ElasticsearchDashboardKibanaConfigDir       = "/usr/share/kibana/config"
-	ElasticsearchDashboardConfigMergeCommand    = "/usr/local/bin/dashboard-config-merger.sh"
-	ElasticsearchDashboardKibanaTempConfigDir   = "/kibana/temp-config"
-	ElasticsearchDashboardKibanaCustomConfigDir = "/kibana/custom-config"
+	ElasticsearchDashboardPortServer         = "server"
+	ElasticsearchDashboardConfigMergeCommand = "/usr/local/bin/dashboard-config-merger.sh"
 
-	KibanaStatusEndpoint = "/api/status"
-	KibanaConfigFileName = "kibana.yml"
+	KibanaConfigDir       = "/usr/share/kibana/config"
+	KibanaTempConfigDir   = "/kibana/temp-config"
+	KibanaCustomConfigDir = "/kibana/custom-config"
+	KibanaStatusEndpoint  = "/api/status"
+	KibanaConfigFileName  = "kibana.yml"
+
+	OpensearchDashboardsConfigDir       = "/usr/share/opensearch-dashboards/config"
+	OpensearchDashboardsTempConfigDir   = "/opensearch-dashboards/temp-config"
+	OpensearchDashboardsCustomConfigDir = "/opensearch-dashboards/custom-config"
+	OpensearchDashboardsStatusEndpoint  = "/api/status"
+	OpensearchDasboardsConfigFileName   = "opensearch_dashboards.yml"
+
+	ElasticsearchHostsKey = "elasticsearch.hosts"
+	ElasticsearchSSLCaKey = "elasticsearch.ssl.certificateAuthorities"
+
+	OpensearchHostsKey        = "opensearch.hosts"
+	OpensearchSSLCaKey        = "opensearch.ssl.certificateAuthorities"
+	OpensearchCookieSecureKey = "opensearch_security.cookie.secure"
+
+	DashboardServerNameKey       = "server.name"
+	DashboardServerPortKey       = "server.port"
+	DashboardServerHostKey       = "server.host"
+	DashboardServerSSLEnabledKey = "server.ssl.enabled"
+	DashboardServerSSLCertKey    = "server.ssl.certificate"
+	DashboardServerSSLKey        = "server.ssl.key"
+	DashboardServerSSLCaKey      = "server.ssl.certificateAuthorities"
+	DashboardNodeOptionsKey      = "node.options"
+	DashboardMaxOldSpaceFlag     = "--max-old-space-size"
 
 	DashboardDeploymentAvailable           = "MinimumReplicasAvailable"
 	DashboardDeploymentNotAvailable        = "MinimumReplicasNotAvailable"
@@ -55,6 +71,7 @@ const (
 	DashboardNotAcceptingConnectionRequest = "DashboardNotAcceptingConnectionRequests"
 	DashboardReadinessCheckSucceeded       = "DashboardReadinessCheckSucceeded"
 	DashboardReadinessCheckFailed          = "DashboardReadinessCheckFailed"
+	DashboardOnDeletion                    = "DashboardOnDeletion"
 
 	DashboardStateGreen  = "ServerHealthGood"
 	DashboardStateYellow = "ServerHealthCritical"
@@ -68,10 +85,21 @@ const (
 	DefaultElasticsearchClientCertAlias = "archiver"
 	HealthCheckInterval                 = 10 * time.Second
 	GlobalHost                          = "0.0.0.0"
+
+	ElasticsearchDashboardRESTPort     = 5601
+	ElasticsearchDashboardRESTPortName = "http"
 )
 
 var (
-	ElasticsearchDashboardPropagationPolicy      = meta.DeletePropagationForeground
-	ElasticsearchDashboardDefaultPort            = (int32)(5601)
 	ElasticsearchDashboardGracefulDeletionPeriod = (int64)(time.Duration(3 * time.Second))
+
+	DashboardsDefaultResources = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".100"),
+			core.ResourceMemory: resource.MustParse("512Mi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("512Mi"),
+		},
+	}
 )

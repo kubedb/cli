@@ -1,11 +1,11 @@
 /*
 Copyright AppsCode Inc. and Contributors
 
-Licensed under the Apache License, Version 2.0 (the "License");
+Licensed under the AppsCode Free Trial License 1.0.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    https://github.com/appscode/licenses/raw/1.0.0/AppsCode-Free-Trial-1.0.0.md
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,71 +29,61 @@ import (
 )
 
 // log is for logging in this package.
-var mysqldatabaselog = logf.Log.WithName("mysqldatabase-resource")
+var mariadbdatabaselog = logf.Log.WithName("mariadbdatabase-resource")
 
-func (in *MySQLDatabase) SetupWebhookWithManager(mgr manager.Manager) error {
+func (r *MariaDBDatabase) SetupWebhookWithManager(mgr manager.Manager) error {
 	return builder.WebhookManagedBy(mgr).
-		For(in).
+		For(r).
 		Complete()
 }
 
-// +kubebuilder:webhook:path=/mutate-schema-kubedb-com-v1alpha1-mysqldatabase,mutating=true,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=mysqldatabases,verbs=create;update,versions=v1alpha1,name=mmysqldatabase.kb.io,admissionReviewVersions={v1,v1beta1}
+// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 
-var _ webhook.Defaulter = &MySQLDatabase{}
+//+kubebuilder:webhook:path=/mutate-schema-kubedb-com-v1alpha1-mariadbdatabase,mutating=true,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=mariadbdatabases,verbs=create;update,versions=v1alpha1,name=mmariadbdatabase.kb.io,admissionReviewVersions={v1,v1beta1}
+
+var _ webhook.Defaulter = &MariaDBDatabase{}
 
 // Default implements webhook.Defaulter so a webhook will be registered for the type
-func (in *MySQLDatabase) Default() {
-	mysqldatabaselog.Info("default", "name", in.Name)
+func (r *MariaDBDatabase) Default() {
+	mariadbdatabaselog.Info("default", "name", r.Name)
 
-	if in.Spec.Init != nil {
-		if in.Spec.Init.Snapshot != nil {
-			if in.Spec.Init.Snapshot.SnapshotID == "" {
-				in.Spec.Init.Snapshot.SnapshotID = "latest"
+	if r.Spec.Init != nil {
+		if r.Spec.Init.Snapshot != nil {
+			if r.Spec.Init.Snapshot.SnapshotID == "" {
+				r.Spec.Init.Snapshot.SnapshotID = "latest"
 			}
 		}
 	}
-	val := in.Spec.Database.Config.Encryption
-	if val == "enable" || val == MySQLEncryptionEnabled {
-		in.Spec.Database.Config.Encryption = MySQLEncryptionEnabled
-	} else {
-		in.Spec.Database.Config.Encryption = MySQLEncryptionDisabled
-	}
-	if in.Spec.Database.Config.ReadOnly != 1 {
-		in.Spec.Database.Config.ReadOnly = 0
-	}
-	if in.Spec.Database.Config.CharacterSet == "" {
-		in.Spec.Database.Config.CharacterSet = "utf8"
+	if r.Spec.Database.Config.CharacterSet == "" {
+		r.Spec.Database.Config.CharacterSet = "utf8mb4"
 	}
 }
 
-// +kubebuilder:webhook:path=/validate-schema-kubedb-com-v1alpha1-mysqldatabase,mutating=false,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=mysqldatabases,verbs=create;update;delete,versions=v1alpha1,name=vmysqldatabase.kb.io,admissionReviewVersions={v1,v1beta1}
+//+kubebuilder:webhook:path=/validate-schema-kubedb-com-v1alpha1-mariadbdatabase,mutating=false,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=mariadbdatabases,verbs=create;update;delete,versions=v1alpha1,name=vmariadbdatabase.kb.io,admissionReviewVersions={v1,v1beta1}
 
-var _ webhook.Validator = &MySQLDatabase{}
+var _ webhook.Validator = &MariaDBDatabase{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (in *MySQLDatabase) ValidateCreate() error {
-	mysqldatabaselog.Info("validate create", "name", in.Name)
+func (r *MariaDBDatabase) ValidateCreate() error {
+	mariadbdatabaselog.Info("validate create", "name", r.Name)
 	var allErrs field.ErrorList
-	//if in.Spec.Database.Config.ReadOnly == 1 { //todo handle this case if possible
-	//	allErrs = append(allErrs, field.Invalid(field.NewPath("spec.database.config"), in.Name, "Cannot create readOnly database"))
-	//}
-	if err := in.ValidateMySQLDatabase(); err != nil {
-		allErrs = append(allErrs, field.Invalid(field.NewPath(""), in.Name, err.Error()))
+	if err := r.ValidateMariaDBDatabase(); err != nil {
+		allErrs = append(allErrs, field.Invalid(field.NewPath(""), r.Name, err.Error()))
 	}
 	if len(allErrs) == 0 {
 		return nil
 	}
-	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MySQLDatabase"}, in.Name, allErrs)
+	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MariaDBDatabase"}, r.Name, allErrs)
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (in *MySQLDatabase) ValidateUpdate(old runtime.Object) error {
-	mysqldatabaselog.Info("validate update", "name", in.Name)
-	oldobj := old.(*MySQLDatabase)
-	return ValidateMySQLDatabaseUpdate(in, oldobj)
+func (r *MariaDBDatabase) ValidateUpdate(old runtime.Object) error {
+	mariadbdatabaselog.Info("validate update", "name", r.Name)
+	oldobj := old.(*MariaDBDatabase)
+	return ValidateMariaDBDatabaseUpdate(r, oldobj)
 }
 
-func ValidateMySQLDatabaseUpdate(newobj *MySQLDatabase, oldobj *MySQLDatabase) error {
+func ValidateMariaDBDatabaseUpdate(newobj *MariaDBDatabase, oldobj *MariaDBDatabase) error {
 	if newobj.Finalizers == nil {
 		return nil
 	}
@@ -125,43 +115,40 @@ func ValidateMySQLDatabaseUpdate(newobj *MySQLDatabase, oldobj *MySQLDatabase) e
 			allErrs = append(allErrs, field.Invalid(field.NewPath("spec.init"), newobj.Name, "cannot change init"))
 		}
 	}
-	er := newobj.ValidateMySQLDatabase()
+	er := newobj.ValidateMariaDBDatabase()
 	if er != nil {
 		allErrs = append(allErrs, field.Invalid(field.NewPath("spec"), newobj.Name, er.Error()))
 	}
 	if len(allErrs) == 0 {
 		return nil
 	}
-	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MySQLDatabase"}, newobj.Name, allErrs)
+	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MariaDBDatabase"}, newobj.Name, allErrs)
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (in *MySQLDatabase) ValidateDelete() error {
-	mysqldatabaselog.Info("validate delete", "name", in.Name)
-	if in.Spec.DeletionPolicy == DeletionPolicyDoNotDelete {
-		return field.Invalid(field.NewPath("spec").Child("terminationPolicy"), in.Name, `cannot delete object when terminationPolicy is set to "DoNotDelete"`)
-	}
-	if in.Spec.Database.Config.ReadOnly == 1 {
-		return field.Invalid(field.NewPath("spec").Child("databaseConfig.readOnly"), in.Name, `schema manger cannot be deleted : database is read only enabled`)
+func (r *MariaDBDatabase) ValidateDelete() error {
+	mariadbdatabaselog.Info("validate delete", "name", r.Name)
+	if r.Spec.DeletionPolicy == DeletionPolicyDoNotDelete {
+		return field.Invalid(field.NewPath("spec").Child("terminationPolicy"), r.Name, `cannot delete object when terminationPolicy is set to "DoNotDelete"`)
 	}
 	return nil
 }
 
-func (in *MySQLDatabase) ValidateMySQLDatabase() error {
+func (in *MariaDBDatabase) ValidateMariaDBDatabase() error {
 	var allErrs field.ErrorList
 	if err := in.validateInitailizationSchema(); err != nil {
 		allErrs = append(allErrs, err)
 	}
-	if err := in.validateMySQLDatabaseConfig(); err != nil {
+	if err := in.validateMariaDBDatabaseConfig(); err != nil {
 		allErrs = append(allErrs, err)
 	}
 	if len(allErrs) == 0 {
 		return nil
 	}
-	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MySQLDatabase"}, in.Name, allErrs)
+	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MariaDBDatabase"}, in.Name, allErrs)
 }
 
-func (in *MySQLDatabase) validateInitailizationSchema() *field.Error {
+func (in *MariaDBDatabase) validateInitailizationSchema() *field.Error {
 	path := field.NewPath("spec.init")
 	if in.Spec.Init != nil {
 		if in.Spec.Init.Script != nil && in.Spec.Init.Snapshot != nil {
@@ -171,10 +158,10 @@ func (in *MySQLDatabase) validateInitailizationSchema() *field.Error {
 	return nil
 }
 
-func (in *MySQLDatabase) validateMySQLDatabaseConfig() *field.Error {
+func (in *MariaDBDatabase) validateMariaDBDatabaseConfig() *field.Error {
 	path := field.NewPath("spec").Child("database.config").Child("name")
 	name := in.Spec.Database.Config.Name
-	if name == "sys" {
+	if name == SYSDatabase {
 		return field.Invalid(path, in.Name, `cannot use "sys" as the database name`)
 	}
 	if name == "performance_schema" {
@@ -194,21 +181,6 @@ func (in *MySQLDatabase) validateMySQLDatabaseConfig() *field.Error {
 	}
 	if name == DatabaseNameConfig {
 		return field.Invalid(path, in.Name, `cannot use "config" as the database name`)
-	}
-	path = field.NewPath("spec").Child("database.config")
-	val := in.Spec.Database.Config.ReadOnly
-	if val == 1 {
-		if in.Spec.Init != nil {
-			if (in.Spec.Init.Script != nil || in.Spec.Init.Snapshot != nil) && in.Status.Phase != DatabaseSchemaPhaseCurrent {
-				return field.Invalid(path.Child("readOnly"), in.Name, `cannot make the database readonly , init/restore yet to be applied`)
-			}
-		}
-	} else if in.Spec.Database.Config.Encryption == MySQLEncryptionEnabled {
-		if in.Spec.Init != nil {
-			if (in.Spec.Init.Script != nil || in.Spec.Init.Snapshot != nil) && in.Status.Phase != DatabaseSchemaPhaseCurrent {
-				return field.Invalid(path.Child("encryption"), in.Name, `cannot make the database encryption enables , init/restore yet to be applied`)
-			}
-		}
 	}
 	return nil
 }
