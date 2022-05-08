@@ -15,8 +15,8 @@ func ClientID() string {
 	id, err := ioutil.ReadFile(filename)
 	if os.IsNotExist(err) {
 		id := uuid.New().String()
-		if e2 := os.MkdirAll(dir, 0755); e2 == nil {
-			ioutil.WriteFile(filename, []byte(id), 0644)
+		if e2 := os.MkdirAll(dir, 0o755); e2 == nil {
+			ioutil.WriteFile(filename, []byte(id), 0o644)
 		}
 		return id
 	}

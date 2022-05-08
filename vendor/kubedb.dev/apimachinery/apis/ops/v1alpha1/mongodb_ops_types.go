@@ -123,6 +123,7 @@ type MongoDBVerticalScalingSpec struct {
 	Mongos       *core.ResourceRequirements `json:"mongos,omitempty"`
 	ConfigServer *core.ResourceRequirements `json:"configServer,omitempty"`
 	Shard        *core.ResourceRequirements `json:"shard,omitempty"`
+	Arbiter      *core.ResourceRequirements `json:"arbiter,omitempty"`
 	Exporter     *core.ResourceRequirements `json:"exporter,omitempty"`
 	Coordinator  *core.ResourceRequirements `json:"coordinator,omitempty"`
 }
@@ -143,6 +144,7 @@ type MongoDBCustomConfigurationSpec struct {
 	Mongos       *MongoDBCustomConfiguration `json:"mongos,omitempty"`
 	ConfigServer *MongoDBCustomConfiguration `json:"configServer,omitempty"`
 	Shard        *MongoDBCustomConfiguration `json:"shard,omitempty"`
+	Arbiter      *MongoDBCustomConfiguration `json:"arbiter,omitempty"`
 }
 
 type MongoDBCustomConfiguration struct {

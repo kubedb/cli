@@ -144,7 +144,7 @@ func (in *MongoDBDatabase) validateMongoDBDatabaseSchemaName() *field.Error {
 	path := field.NewPath("spec").Child("database").Child("config").Child("name")
 	name := in.Spec.Database.Config.Name
 
-	if name == MongoDatabaseNameForEntry || name == "admin" || name == "config" || name == "local" {
+	if name == MongoDatabaseNameForEntry || name == DatabaseNameAdmin || name == DatabaseNameConfig || name == DatabaseNameLocal {
 		str := fmt.Sprintf("cannot use \"%v\" as the database name", name)
 		return field.Invalid(path, in.Name, str)
 	}

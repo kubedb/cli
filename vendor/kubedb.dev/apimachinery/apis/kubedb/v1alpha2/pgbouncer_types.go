@@ -75,9 +75,14 @@ type PgBouncerSpec struct {
 	// Monitor is used monitor database instance.
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
+	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
+	SSLMode PgBouncerSSLMode `json:"sslMode,omitempty"`
 	// TLS contains tls configurations for client and server.
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
+	// TerminationPolicy controls the delete operation for database
+	// +optional
+	TerminationPolicy PgBouncerTerminationPolicy `json:"terminationPolicy,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
@@ -141,7 +146,7 @@ type ConnectionPoolConfig struct {
 	AdminUsers []string `json:"adminUsers,omitempty"`
 	// AuthType specifies how to authenticate users. Default: md5 (md5+plain text).
 	// +optional
-	AuthType string `json:"authType,omitempty"`
+	AuthType PgBouncerClientAuthMode `json:"authType,omitempty"`
 	// AuthUser looks up any user not specified in auth_file from pg_shadow. Default: not set.
 	// +optional
 	AuthUser string `json:"authUser,omitempty"`
@@ -171,3 +176,87 @@ type PgBouncerStatus struct {
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=disable;allow;prefer;require;verify-ca;verify-full
+type PgBouncerSSLMode string
+
+const (
+	// PgBouncerSSLModeDisable represents `disable` sslMode. It ensures that the server does not use TLS/SSL.
+	PgBouncerSSLModeDisable PgBouncerSSLMode = "disable"
+
+	// PgBouncerSSLModeAllow represents `allow` sslMode. 	I don't care about security,
+	// but I will pay the overhead of encryption if the server insists on it.
+	PgBouncerSSLModeAllow PgBouncerSSLMode = "allow"
+
+	// PgBouncerSSLModePrefer represents `preferSSL` sslMode.
+	// I don't care about encryption, but I wish to pay the overhead of encryption if the server supports it.
+	PgBouncerSSLModePrefer PgBouncerSSLMode = "prefer"
+
+	// PgBouncerSSLModeRequire represents `requiteSSL` sslmode. I want my data to be encrypted, and I accept the overhead.
+	// I trust that the network will make sure I always connect to the server I want.
+	PgBouncerSSLModeRequire PgBouncerSSLMode = "require"
+
+	// PgBouncerSSLModeVerifyCA represents `verify-ca` sslmode. I want my data encrypted, and I accept the overhead.
+	// I want to be sure that I connect to a server that I trust.
+	PgBouncerSSLModeVerifyCA PgBouncerSSLMode = "verify-ca"
+
+	// PgBouncerSSLModeVerifyFull represents `verify-full` sslmode. I want my data encrypted, and I accept the overhead.
+	// I want to be sure that I connect to a server I trust, and that it's the one I specify.
+	PgBouncerSSLModeVerifyFull PgBouncerSSLMode = "verify-full"
+)
+
+// PgBouncerClientAuthMode represents the ClientAuthMode of PgBouncer clusters ( replicaset )
+// +kubebuilder:validation:Enum=md5;scram;cert;plain;trust;any;hba;pam
+type PgBouncerClientAuthMode string
+
+const (
+	// ClientAuthModeMD5 uses a custom less secure challenge-response mechanism.
+	// It prevents password sniffing and avoids storing passwords on the server in plain text but provides no protection
+	// if an attacker manages to steal the password hash from the server.
+	// Also, the MD5 hash algorithm is nowadays no longer considered secure against determined attacks
+	PgBouncerClientAuthModeMD5 PgBouncerClientAuthMode = "md5"
+
+	// ClientAuthModeScram performs SCRAM-SHA-256 authentication, as described in RFC 7677.
+	// It is a challenge-response scheme that prevents password sniffing on untrusted connections
+	// and supports storing passwords on the server in a cryptographically hashed form that is thought to be secure.
+	// This is the most secure of the currently provided methods, but it is not supported by older client libraries.
+	PgBouncerClientAuthModeScram PgBouncerClientAuthMode = "scram"
+
+	// ClientAuthModeCert represents `cert clientcert=1` auth mode where client need to provide cert and private key for authentication.
+	// When server is config with this auth method. Client can't connect with pgbouncer server with password. They need
+	// to Send the client cert and client key certificate for authentication.
+	PgBouncerClientAuthModeCert PgBouncerClientAuthMode = "cert"
+
+	// ClientAuthModePlain sent the clear-text password over the wire. (Deprecated).
+	PgBouncerClientAuthModePlain PgBouncerClientAuthMode = "plain"
+
+	// ClientAuthModeTrust represents no authentication. The user name must still exist in auth_file
+	PgBouncerClientAuthModeTrust PgBouncerClientAuthMode = "trust"
+
+	// ClientAuthModeAny acts like the trust method, but the user name given is ignored.
+	// Requires that all databases are configured to log in as a specific user.
+	// Additionally, the console database allows any user to log in as admin.
+	PgBouncerClientAuthModeAny PgBouncerClientAuthMode = "any"
+
+	// ClientAuthModeHba uses auth_hba_file to load the actual authentication type.
+	// This allows different authentication methods for different access paths,
+	// for example: connections over Unix socket use the peer auth method, connections over TCP must use TLS.
+	PgBouncerClientAuthModeHba PgBouncerClientAuthMode = "hba"
+
+	// ClientAuthModePam uses to authenticate users, auth_file is ignored.
+	// This method is not compatible with databases using the auth_user option.
+	// The service name reported to PAM is “pgbouncer”. pam is not supported in the HBA configuration file.
+	PgBouncerClientAuthModePam PgBouncerClientAuthMode = "pam"
+)
+
+// +kubebuilder:validation:Enum=Delete;WipeOut;DoNotTerminate
+type PgBouncerTerminationPolicy string
+
+const (
+	// Deletes database pods, service, pvcs but leave the stash backup data intact.
+	PgBouncerTerminationPolicyDelete PgBouncerTerminationPolicy = "Delete"
+	// Deletes database pods, service, pvcs and stash backup data.
+	PgBouncerTerminationPolicyWipeOut PgBouncerTerminationPolicy = "WipeOut"
+	// Rejects attempt to delete database using ValidationWebhook.
+	PgBouncerTerminationPolicyDoNotTerminate PgBouncerTerminationPolicy = "DoNotTerminate"
+)

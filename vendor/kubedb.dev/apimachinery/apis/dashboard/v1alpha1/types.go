@@ -55,9 +55,9 @@ const (
 type ElasticsearchDashboardCertificateAlias string
 
 const (
-	ElasticsearchDashboardCACert           ElasticsearchDashboardCertificateAlias = "ca"
-	ElasticsearchDatabaseClient            ElasticsearchDashboardCertificateAlias = "database-client"
-	ElasticsearchDashboardKibanaServerCert ElasticsearchDashboardCertificateAlias = "kibana-server"
+	ElasticsearchDashboardCACert     ElasticsearchDashboardCertificateAlias = "ca"
+	ElasticsearchDatabaseClientCert  ElasticsearchDashboardCertificateAlias = "database-client"
+	ElasticsearchDashboardServerCert ElasticsearchDashboardCertificateAlias = "server"
 )
 
 // +kubebuilder:validation:Enum=config
@@ -91,6 +91,6 @@ const (
 	DashboardVolumeCustomConfig            DashboardVolumeName = "dashboard-custom-config"
 	DashboardVolumeOperatorGeneratedConfig DashboardVolumeName = "dashboard-temp-config"
 	DashboardVolumeConfig                  DashboardVolumeName = "dashboard-config"
-	DashboardVolumeKibanaServer            DashboardVolumeName = "kibana-server"
+	DashboardVolumeServerTLS               DashboardVolumeName = "server-tls"
 	DashboardVolumeDatabaseClient          DashboardVolumeName = "database-client"
 )

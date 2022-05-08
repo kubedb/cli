@@ -133,6 +133,12 @@ type MongoDBSpec struct {
 	// +kubebuilder:default={namespaces:{from: Same}}
 	// +optional
 	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
+
+	// Mongo Arbiter component of mongodb.
+	// More info: https://docs.mongodb.com/manual/core/replica-set-arbiter/
+	// +optional
+	// +nullable
+	Arbiter *MongoArbiterNode `json:"arbiter"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter
@@ -248,6 +254,16 @@ type MongoDBConfigNode struct {
 type MongoDBMongosNode struct {
 	// MongoDB mongos node configs
 	MongoDBNode `json:",inline"`
+}
+
+type MongoArbiterNode struct {
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
+	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 }
 
 type MongoDBNode struct {

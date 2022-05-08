@@ -38,7 +38,7 @@ const (
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:path=pgbouncerversions,singular=pgbouncerversion,scope=Cluster,shortName=pbversion,categories={datastore,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
-// +kubebuilder:printcolumn:name="SERVER_IMAGE",type="string",JSONPath=".spec.server.image"
+// +kubebuilder:printcolumn:name="PGBOUNCER_IMAGE",type="string",JSONPath=".spec.pgBouncer.image"
 // +kubebuilder:printcolumn:name="Deprecated",type="boolean",JSONPath=".spec.deprecated"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type PgBouncerVersion struct {
@@ -51,8 +51,10 @@ type PgBouncerVersion struct {
 type PgBouncerVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+	// init container image
+	InitContainer PgBouncerVersionInitContainer `json:"initContainer,omitempty"`
 	// Database Image
-	Server PgBouncerServerVersion `json:"server"`
+	PgBouncer PgBouncerVersionDatabase `json:"pgBouncer"`
 	// Exporter Image
 	Exporter PgBouncerVersionExporter `json:"exporter"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
@@ -60,12 +62,17 @@ type PgBouncerVersionSpec struct {
 	Deprecated bool `json:"deprecated,omitempty"`
 }
 
-// PgBouncerServerVersion is the PgBouncer Database image
-type PgBouncerServerVersion struct {
+// PgBouncerVersionInitContainer is the PgBouncer init container image
+type PgBouncerVersionInitContainer struct {
 	Image string `json:"image"`
 }
 
-// PostgresVersionExporter is the image for the Postgres exporter
+// PgBouncerVersionDatabase is the PgBouncer Database image
+type PgBouncerVersionDatabase struct {
+	Image string `json:"image"`
+}
+
+// PgBouncerVersionExporter is the image for the PgBouncer exporter
 type PgBouncerVersionExporter struct {
 	Image string `json:"image"`
 }

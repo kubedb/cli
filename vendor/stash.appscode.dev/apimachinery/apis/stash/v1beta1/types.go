@@ -62,7 +62,7 @@ type BackupTarget struct {
 	// Specify the volumes that contains the target directories
 	// +optional
 	VolumeMounts []core.VolumeMount `json:"volumeMounts,omitempty"`
-	//replicas are the desired number of replicas whose data should be backed up.
+	// replicas are the desired number of replicas whose data should be backed up.
 	// If unspecified, defaults to 1.
 	// +optional
 	Replicas *int32 `json:"replicas,omitempty"`
@@ -140,6 +140,8 @@ type TargetRef struct {
 	APIVersion string `json:"apiVersion,omitempty"`
 	Kind       string `json:"kind,omitempty"`
 	Name       string `json:"name,omitempty"`
+	// +optional
+	Namespace string `json:"namespace,omitempty"`
 }
 
 type ExecutionOrder string

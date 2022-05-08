@@ -26,6 +26,7 @@ import (
 	"gomodules.xyz/pointer"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -167,7 +168,17 @@ func (p *ProxySQL) SetDefaults() {
 	}
 
 	p.Spec.Monitor.SetDefaults()
+	p.SetTLSDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
+}
+
+func (m *ProxySQL) SetTLSDefaults() {
+	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(ProxySQLServerCert), m.CertificateName(ProxySQLServerCert))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(ProxySQLClientCert), m.CertificateName(ProxySQLClientCert))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(ProxySQLMetricsExporterCert), m.CertificateName(ProxySQLMetricsExporterCert))
 }
 
 func (p *ProxySQLSpec) GetPersistentSecrets() []string {
@@ -186,4 +197,21 @@ func (p *ProxySQL) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, 
 	// Desire number of statefulSets
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any,
+// otherwise returns default certificate secret name for the given alias.
+func (m *ProxySQL) GetCertSecretName(alias ProxySQLCertificateAlias) string {
+	if m.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return m.CertificateName(alias)
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (m *ProxySQL) CertificateName(alias ProxySQLCertificateAlias) string {
+	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
