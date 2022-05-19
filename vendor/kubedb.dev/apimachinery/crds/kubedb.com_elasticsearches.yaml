@@ -769,14 +769,26 @@ spec:
                       type: array
                     description:
                       type: string
+                    email:
+                      type: string
+                    full_name:
+                      type: string
                     hidden:
                       type: boolean
+                    metadata:
+                      additionalProperties:
+                        type: string
+                      type: object
                     opendistroSecurityRoles:
                       items:
                         type: string
                       type: array
                     reserved:
                       type: boolean
+                    roles:
+                      items:
+                        type: string
+                      type: array
                     searchGuardRoles:
                       items:
                         type: string
@@ -3914,6 +3926,7 @@ spec:
                 - Critical
                 - NotReady
                 - Halted
+                - Unknown
                 type: string
             type: object
         type: object

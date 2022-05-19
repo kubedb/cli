@@ -8,9 +8,16 @@ metadata:
 spec:
   group: schema.kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: MongoDBDatabase
     listKind: MongoDBDatabaseList
     plural: mongodbdatabases
+    shortNames:
+    - mgschema
     singular: mongodbdatabase
   scope: Namespaced
   versions:

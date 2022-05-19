@@ -717,7 +717,7 @@ k8s.io/utils/exec
 k8s.io/utils/integer
 k8s.io/utils/pointer
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.0.0-20220427165208-36281a681909
+# kmodules.xyz/client-go v0.0.0-20220512223652-dc247aa7f6df
 ## explicit; go 1.17
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -745,7 +745,7 @@ kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alph
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/auditor/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.0.0-20220319222118-0290ed5b75e1
+# kmodules.xyz/monitoring-agent-api v0.0.0-20220519191512-5a48a0a1d3f8
 ## explicit; go 1.17
 kmodules.xyz/monitoring-agent-api/api/v1
 kmodules.xyz/monitoring-agent-api/api/v1alpha1
@@ -758,7 +758,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.0.0-20220317043828-5ae0114adcad
 ## explicit; go 1.15
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.26.1-0.20220508053725-74c4fc13ef02
+# kubedb.dev/apimachinery v0.26.1-0.20220519193141-3634eb14c9ac
 ## explicit; go 1.17
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -916,7 +916,7 @@ sigs.k8s.io/structured-merge-diff/v4/value
 # sigs.k8s.io/yaml v1.3.0
 ## explicit; go 1.12
 sigs.k8s.io/yaml
-# stash.appscode.dev/apimachinery v0.20.0
+# stash.appscode.dev/apimachinery v0.20.1
 ## explicit; go 1.17
 stash.appscode.dev/apimachinery/apis
 stash.appscode.dev/apimachinery/apis/repositories

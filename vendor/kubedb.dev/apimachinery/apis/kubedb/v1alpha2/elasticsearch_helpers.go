@@ -27,6 +27,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"github.com/Masterminds/semver/v3"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -595,7 +596,53 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 		return
 	}
 
-	// The internalUsers feature only works with searchGuard, openSearch, and openDistro
+	version, err := semver.NewVersion(esVersion.Spec.Version)
+	if err != nil {
+		return
+	}
+	// set missing internal users for Xpack,
+	// internal users are supported for version>=7.8.x
+	if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginXpack &&
+		(version.Major() >= 8 || (version.Major() == 7 && version.Minor() >= 8)) {
+		inUsers := e.Spec.InternalUsers
+		// If not set, create empty map
+		if inUsers == nil {
+			inUsers = make(map[string]ElasticsearchUserSpec)
+		}
+
+		// "elastic" user
+		if userSpec, exists := inUsers[string(ElasticsearchInternalUserElastic)]; !exists {
+			inUsers[string(ElasticsearchInternalUserElastic)] = ElasticsearchUserSpec{
+				BackendRoles: []string{"superuser"},
+			}
+		} else {
+			// upsert "superuser" role, if missing
+			// elastic user must have the superuser role
+			userSpec.BackendRoles = upsertStringSlice(userSpec.BackendRoles, "superuser")
+			inUsers[string(ElasticsearchInternalUserElastic)] = userSpec
+		}
+
+		// "Kibana_system", "logstash_system", "beats_system", "apm_system", "remote_monitoring_user" user
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserKibanaSystem), ElasticsearchUserSpec{
+			BackendRoles: []string{"kibana_system"},
+		})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserBeatsSystem), ElasticsearchUserSpec{
+			BackendRoles: []string{"beats_system"},
+		})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserApmSystem), ElasticsearchUserSpec{
+			BackendRoles: []string{"apm_system"},
+		})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserRemoteMonitoringUser), ElasticsearchUserSpec{
+			BackendRoles: []string{"remote_monitoring_collector", "remote_monitoring_agent"},
+		})
+		setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserLogstashSystem), ElasticsearchUserSpec{
+			BackendRoles: []string{"logstash_system"},
+		})
+
+		e.Spec.InternalUsers = inUsers
+	}
+
+	// set missing internal users and roles for OpenDistro, SearchGuard & OpenSearch
 	if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenDistro ||
 		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginSearchGuard ||
 		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenSearch {
@@ -628,26 +675,6 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 		// "MetricsExporter", Only if the monitoring is enabled.
 		if e.Spec.Monitor != nil {
 			setMissingElasticsearchUser(inUsers, string(ElasticsearchInternalUserMetricsExporter), ElasticsearchUserSpec{})
-		}
-
-		// Set missing user secret names
-		for username, userSpec := range inUsers {
-			// For admin user, spec.authSecret.Name must have high precedence over default field
-			if username == string(ElasticsearchInternalUserAdmin) {
-				if e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
-					userSpec.SecretName = e.Spec.AuthSecret.Name
-				} else {
-					if userSpec.SecretName == "" {
-						userSpec.SecretName = e.DefaultUserCredSecretName(username)
-					}
-					e.Spec.AuthSecret = &core.LocalObjectReference{
-						Name: userSpec.SecretName,
-					}
-				}
-			} else if userSpec.SecretName == "" {
-				userSpec.SecretName = e.DefaultUserCredSecretName(username)
-			}
-			inUsers[username] = userSpec
 		}
 
 		// If monitoring is enabled,
@@ -691,6 +718,28 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 		}
 		e.Spec.InternalUsers = inUsers
 	}
+
+	inUsers := e.Spec.InternalUsers
+	// Set missing user secret names
+	for username, userSpec := range inUsers {
+		// For admin user, spec.authSecret.Name must have high precedence over default field
+		if username == string(ElasticsearchInternalUserAdmin) || username == string(ElasticsearchInternalUserElastic) {
+			if e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
+				userSpec.SecretName = e.Spec.AuthSecret.Name
+			} else {
+				if userSpec.SecretName == "" {
+					userSpec.SecretName = e.DefaultUserCredSecretName(username)
+				}
+				e.Spec.AuthSecret = &core.LocalObjectReference{
+					Name: userSpec.SecretName,
+				}
+			}
+		} else if userSpec.SecretName == "" {
+			userSpec.SecretName = e.DefaultUserCredSecretName(username)
+		}
+		inUsers[username] = userSpec
+	}
+	e.Spec.InternalUsers = inUsers
 }
 
 // set default tls configuration (ie. alias, secretName)
@@ -752,10 +801,13 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) 
 
 		// archiver
 		tlsConfig.Certificates = kmapi.SetMissingSpecForCertificate(tlsConfig.Certificates, kmapi.CertificateSpec{
-			Alias:      string(ElasticsearchArchiverCert),
-			SecretName: e.CertificateName(ElasticsearchArchiverCert),
+			Alias:      string(ElasticsearchClientCert),
+			SecretName: e.CertificateName(ElasticsearchClientCert),
 		})
 	}
+
+	// remove archiverCert from old spec if exists
+	tlsConfig.Certificates = kmapi.RemoveCertificate(tlsConfig.Certificates, string(ElasticsearchArchiverCert))
 
 	for id := range tlsConfig.Certificates {
 		// Force overwrite the private key encoding type to PKCS#8

@@ -20,11 +20,11 @@ require (
 	k8s.io/component-base v0.21.1
 	k8s.io/klog/v2 v2.9.0
 	k8s.io/kubectl v0.21.1
-	kmodules.xyz/client-go v0.0.0-20220427165208-36281a681909
+	kmodules.xyz/client-go v0.0.0-20220512223652-dc247aa7f6df
 	kmodules.xyz/custom-resources v0.0.0-20220422215041-237eae1d7ddd
-	kmodules.xyz/monitoring-agent-api v0.0.0-20220319222118-0290ed5b75e1
-	kubedb.dev/apimachinery v0.26.1-0.20220508053725-74c4fc13ef02
-	stash.appscode.dev/apimachinery v0.20.0
+	kmodules.xyz/monitoring-agent-api v0.0.0-20220519191512-5a48a0a1d3f8
+	kubedb.dev/apimachinery v0.26.1-0.20220519193141-3634eb14c9ac
+	stash.appscode.dev/apimachinery v0.20.1
 )
 
 require github.com/josharian/intern v1.0.0 // indirect

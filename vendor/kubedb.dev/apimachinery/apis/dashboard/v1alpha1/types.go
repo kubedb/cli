@@ -75,13 +75,16 @@ const (
 	StatsServiceAlias   ServiceAlias = "stats"
 )
 
-// +kubebuilder:validation:Enum=green;yellow;red
+// +kubebuilder:validation:Enum=green;yellow;red;available;degraded;unavailable
 type DashboardServerState string
 
 const (
-	StateGreen  DashboardServerState = "green"
-	StateYellow DashboardServerState = "yellow"
-	StateRed    DashboardServerState = "red"
+	StateGreen       DashboardServerState = "green"
+	StateYellow      DashboardServerState = "yellow"
+	StateRed         DashboardServerState = "red"
+	StateAvailable   DashboardServerState = "available"
+	StateDegraded    DashboardServerState = "degraded"
+	StateUnavailable DashboardServerState = "unavailable"
 )
 
 // +kubebuilder:validation:Enum=dashboard-custom-config;dashboard-temp-config;dashboard-config;kibana-server;database-client

@@ -8,9 +8,16 @@ metadata:
 spec:
   group: schema.kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: PostgresDatabase
     listKind: PostgresDatabaseList
     plural: postgresdatabases
+    shortNames:
+    - pgschema
     singular: postgresdatabase
   scope: Namespaced
   versions:

@@ -97,3 +97,13 @@ func ValidateEnvVar(envs []core.EnvVar, forbiddenEnvs []string, resourceType str
 	}
 	return nil
 }
+
+func ValidateInternalUsers(users map[string]api.ElasticsearchUserSpec, allowedInternalUsers []string, resourceType string) error {
+	for user := range users {
+		present, _ := arrays.Contains(allowedInternalUsers, user)
+		if !present {
+			return fmt.Errorf("Internal user %s is forbidden to use in %s spec", user, resourceType)
+		}
+	}
+	return nil
+}

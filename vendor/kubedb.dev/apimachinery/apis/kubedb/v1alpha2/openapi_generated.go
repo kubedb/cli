@@ -495,6 +495,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisSpec":                      schema_apimachinery_apis_kubedb_v1alpha2_RedisSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisStatus":                    schema_apimachinery_apis_kubedb_v1alpha2_RedisStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec":               schema_apimachinery_apis_kubedb_v1alpha2_ScriptSourceSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SemiSyncSpec":                   schema_apimachinery_apis_kubedb_v1alpha2_SemiSyncSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.TLSPolicy":                      schema_apimachinery_apis_kubedb_v1alpha2_TLSPolicy(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.elasticsearchApp":               schema_apimachinery_apis_kubedb_v1alpha2_elasticsearchApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.elasticsearchStatsService":      schema_apimachinery_apis_kubedb_v1alpha2_elasticsearchStatsService(ref),
@@ -21150,9 +21151,54 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ElasticsearchUserSpec(ref common.R
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "Specifies the security plugin internal user structure. Both 'json' and 'yaml' tags are used in structure metadata. The `json` tags (camel case) are used while taking input from users. The `yaml` tags (snake case) are used by the operator to generate internal_users.yml file.",
+				Description: "ElasticsearchUserSpec specifies the security plugin internal user structure. Both 'json' and 'yaml' tags are used in structure metadata. The `json` tags (camel case) are used while taking input from users. The `yaml` tags (snake case) are used by the operator to generate internal_users.yml file. For Elastic-Stack built-in users, there is no yaml files, instead the operator is responsible for creating/syncing the users. For the fields that are only used by operator, the metadata yaml tag is kept empty (\"-\") so that they do not interrupt in other distributions YAML generation.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"full_name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies The full name of the user Only applicable for xpack authplugin",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies Arbitrary metadata that you want to associate with the user Only applicable for xpack authplugin",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"email": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the email of the user. Only applicable for xpack authplugin",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"roles": {
+						SchemaProps: spec.SchemaProps{
+							Description: "A set of roles the user has. The roles determine the user’s access permissions. To create a user without any roles, specify an empty list: [] Only applicable for xpack authplugin",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
 					"secretName": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies the k8s secret name that holds the user credentials. Default to \"<resource-name>-<username>-cred\".",
@@ -23079,11 +23125,16 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLTopology(ref common.Reference
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLReadReplicaSpec"),
 						},
 					},
+					"semiSync": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SemiSyncSpec"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLGroupSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLInnoDBClusterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLReadReplicaSpec"},
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLGroupSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLInnoDBClusterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SemiSyncSpec"},
 	}
 }
 
@@ -25047,6 +25098,41 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ScriptSourceSpec(ref common.Refere
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource", "k8s.io/api/core/v1.AzureDiskVolumeSource", "k8s.io/api/core/v1.AzureFileVolumeSource", "k8s.io/api/core/v1.CSIVolumeSource", "k8s.io/api/core/v1.CephFSVolumeSource", "k8s.io/api/core/v1.CinderVolumeSource", "k8s.io/api/core/v1.ConfigMapVolumeSource", "k8s.io/api/core/v1.DownwardAPIVolumeSource", "k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.EphemeralVolumeSource", "k8s.io/api/core/v1.FCVolumeSource", "k8s.io/api/core/v1.FlexVolumeSource", "k8s.io/api/core/v1.FlockerVolumeSource", "k8s.io/api/core/v1.GCEPersistentDiskVolumeSource", "k8s.io/api/core/v1.GitRepoVolumeSource", "k8s.io/api/core/v1.GlusterfsVolumeSource", "k8s.io/api/core/v1.HostPathVolumeSource", "k8s.io/api/core/v1.ISCSIVolumeSource", "k8s.io/api/core/v1.NFSVolumeSource", "k8s.io/api/core/v1.PersistentVolumeClaimVolumeSource", "k8s.io/api/core/v1.PhotonPersistentDiskVolumeSource", "k8s.io/api/core/v1.PortworxVolumeSource", "k8s.io/api/core/v1.ProjectedVolumeSource", "k8s.io/api/core/v1.QuobyteVolumeSource", "k8s.io/api/core/v1.RBDVolumeSource", "k8s.io/api/core/v1.ScaleIOVolumeSource", "k8s.io/api/core/v1.SecretVolumeSource", "k8s.io/api/core/v1.StorageOSVolumeSource", "k8s.io/api/core/v1.VsphereVirtualDiskVolumeSource"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_SemiSyncSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"sourceWaitForReplicaCount": {
+						SchemaProps: spec.SchemaProps{
+							Description: "count of slave to wait for before commit",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"sourceTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"errantTransactionRecoveryPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "recovery method if the slave has any errant transaction",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"errantTransactionRecoveryPolicy"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
 	}
 }
 

@@ -4387,6 +4387,7 @@ spec:
                     - GroupReplication
                     - InnoDBCluster
                     - ReadReplica
+                    - SemiSync
                     type: string
                   readReplica:
                     properties:
@@ -4409,6 +4410,24 @@ spec:
                         type: object
                     required:
                     - sourceRef
+                    type: object
+                  semiSync:
+                    properties:
+                      errantTransactionRecoveryPolicy:
+                        default: PseudoTransaction
+                        enum:
+                        - Clone
+                        - PseudoTransaction
+                        type: string
+                      sourceTimeout:
+                        default: 24h
+                        type: string
+                      sourceWaitForReplicaCount:
+                        default: 1
+                        minimum: 1
+                        type: integer
+                    required:
+                    - errantTransactionRecoveryPolicy
                     type: object
                 type: object
               useAddressType:
@@ -4462,6 +4481,7 @@ spec:
                 - Critical
                 - NotReady
                 - Halted
+                - Unknown
                 type: string
             type: object
         type: object

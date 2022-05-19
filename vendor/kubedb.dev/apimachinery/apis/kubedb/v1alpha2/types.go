@@ -36,7 +36,7 @@ type ScriptSourceSpec struct {
 	core.VolumeSource `json:",inline,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted
+// +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted;Unknown
 type DatabasePhase string
 
 const (
@@ -52,6 +52,8 @@ const (
 	DatabasePhaseNotReady DatabasePhase = "NotReady"
 	// used for Databases that are halted
 	DatabasePhaseHalted DatabasePhase = "Halted"
+	// used for Databases for which Phase can't be calculated
+	DatabasePhaseUnknown DatabasePhase = "Unknown"
 )
 
 // +kubebuilder:validation:Enum=Durable;Ephemeral
