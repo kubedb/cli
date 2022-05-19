@@ -17,10 +17,16 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
+
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"kubedb.dev/apimachinery/crds"
 
+	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"kmodules.xyz/client-go/apiextensions"
 	"kmodules.xyz/client-go/meta"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
@@ -84,4 +90,55 @@ func (in *MongoDBDatabase) GetMongoAppBindingName() string {
 
 func (in *MongoDBDatabase) GetAuthSecretName(dbServerName string) string {
 	return meta.NameWithSuffix(dbServerName, "auth")
+}
+
+func (in *MongoDBDatabase) CheckDoubleOptIn(ctx context.Context, client client.Client) (bool, error) {
+	// Get updated MongoDBDatabase object
+	var schema MongoDBDatabase
+	err := client.Get(ctx, types.NamespacedName{
+		Namespace: in.GetNamespace(),
+		Name:      in.GetName(),
+	}, &schema)
+	if err != nil {
+		return false, err
+	}
+
+	// Get the database server
+	var mongo dbapi.MongoDB
+	err = client.Get(ctx, types.NamespacedName{
+		Namespace: schema.Spec.Database.ServerRef.Namespace,
+		Name:      schema.Spec.Database.ServerRef.Name,
+	}, &mongo)
+	if err != nil {
+		return false, err
+	}
+
+	if mongo.Spec.AllowedSchemas == nil {
+		return false, nil
+	}
+
+	// Get namespace object of the schema
+	var nsSchema core.Namespace
+	err = client.Get(ctx, types.NamespacedName{
+		Name: schema.GetNamespace(),
+	}, &nsSchema)
+	if err != nil {
+		return false, err
+	}
+
+	// Get namespace object of the Database server
+	var nsDB core.Namespace
+	err = client.Get(ctx, types.NamespacedName{
+		Name: schema.Spec.Database.ServerRef.Namespace,
+	}, &nsDB)
+	if err != nil {
+		return false, err
+	}
+
+	possible, err := CheckIfDoubleOptInPossible(schema.ObjectMeta, nsSchema.ObjectMeta, nsDB.ObjectMeta, mongo.Spec.AllowedSchemas)
+	if err != nil {
+		return false, err
+	}
+
+	return possible, nil
 }

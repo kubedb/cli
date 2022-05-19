@@ -8,9 +8,16 @@ metadata:
 spec:
   group: schema.kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: MySQLDatabase
     listKind: MySQLDatabaseList
     plural: mysqldatabases
+    shortNames:
+    - myschema
     singular: mysqldatabase
   scope: Namespaced
   versions:

@@ -31,13 +31,14 @@ const (
 	ResourcePluralMySQL   = "mysqls"
 )
 
-// +kubebuilder:validation:Enum=GroupReplication;InnoDBCluster;ReadReplica
+// +kubebuilder:validation:Enum=GroupReplication;InnoDBCluster;ReadReplica;SemiSync
 type MySQLMode string
 
 const (
 	MySQLModeGroupReplication MySQLMode = "GroupReplication"
 	MySQLModeInnoDBCluster    MySQLMode = "InnoDBCluster"
 	MySQLModeReadReplica      MySQLMode = "ReadReplica"
+	MySQLModeSemiSync         MySQLMode = "SemiSync"
 )
 
 // +kubebuilder:validation:Enum=Single-Primary
@@ -180,6 +181,29 @@ type MySQLTopology struct {
 	// and it will take reference of  appbinding of the source
 	// +optional
 	ReadReplica *MySQLReadReplicaSpec `json:"readReplica,omitempty"`
+	// +optional
+	SemiSync *SemiSyncSpec `json:"semiSync,omitempty"`
+}
+
+// +kubebuilder:validation:Enum= Clone;PseudoTransaction
+
+type ErrantTransactionRecoveryPolicy string
+
+const (
+	ErrantTransactionRecoveryPolicyClone             ErrantTransactionRecoveryPolicy = "Clone"
+	ErrantTransactionRecoveryPolicyPseudoTransaction ErrantTransactionRecoveryPolicy = "PseudoTransaction"
+)
+
+type SemiSyncSpec struct {
+	// count of slave to wait for before commit
+	// +kubebuilder:default=1
+	//+kubebuilder:validation:Minimum=1
+	SourceWaitForReplicaCount int `json:"sourceWaitForReplicaCount,omitempty"`
+	// +kubebuilder:default="24h"
+	SourceTimeout metav1.Duration `json:"sourceTimeout,omitempty"`
+	// recovery method if the slave has any errant transaction
+	// +kubebuilder:default=PseudoTransaction
+	ErrantTransactionRecoveryPolicy *ErrantTransactionRecoveryPolicy `json:"errantTransactionRecoveryPolicy"`
 }
 
 type MySQLGroupSpec struct {

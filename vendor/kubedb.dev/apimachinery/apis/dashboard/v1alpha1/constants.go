@@ -96,10 +96,10 @@ var (
 	DashboardsDefaultResources = core.ResourceRequirements{
 		Requests: core.ResourceList{
 			core.ResourceCPU:    resource.MustParse(".100"),
-			core.ResourceMemory: resource.MustParse("512Mi"),
+			core.ResourceMemory: resource.MustParse("1Gi"),
 		},
 		Limits: core.ResourceList{
-			core.ResourceMemory: resource.MustParse("512Mi"),
+			core.ResourceMemory: resource.MustParse("1Gi"),
 		},
 	}
 )

@@ -215,3 +215,9 @@ func (m *ProxySQL) GetCertSecretName(alias ProxySQLCertificateAlias) string {
 func (m *ProxySQL) CertificateName(alias ProxySQLCertificateAlias) string {
 	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
+
+// IsCluster returns boolean true if the proxysql is in cluster mode, otherwise false
+func (m *ProxySQL) IsCluster() bool {
+	r := m.Spec.Replicas
+	return *r > 1
+}

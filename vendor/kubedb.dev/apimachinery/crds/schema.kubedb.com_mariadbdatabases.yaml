@@ -8,9 +8,16 @@ metadata:
 spec:
   group: schema.kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: MariaDBDatabase
     listKind: MariaDBDatabaseList
     plural: mariadbdatabases
+    shortNames:
+    - mdschema
     singular: mariadbdatabase
   scope: Namespaced
   versions:
