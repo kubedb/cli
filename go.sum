@@ -1287,8 +1287,8 @@ kmodules.xyz/resource-metrics v0.0.8/go.mod h1:M7rWuo2qh3BpHhogiEVPnvGY9Xx4Pfygq
 kmodules.xyz/schema-checker v0.2.0/go.mod h1:J1QUIFsqW0h/WNrIGzzy3UopTzg+RmMJXxvAZfmYDb4=
 kmodules.xyz/schema-checker v0.2.1/go.mod h1:1R2s4FH23Rz73DnfT8paWGNeMQpT7ia3KoyF8X4HCGU=
 kmodules.xyz/webhook-runtime v0.0.0-20220317222714-0ddfc9e4c221/go.mod h1:Q+4LHbCHVlkKxpEgaDa/EyZb5p/Bpj767zInBwyyitc=
-kubedb.dev/apimachinery v0.26.1-0.20220519193141-3634eb14c9ac h1:xdQ7eCssD8CrmofM/8hWgkhP96f21wYvE2dCQikjzvE=
-kubedb.dev/apimachinery v0.26.1-0.20220519193141-3634eb14c9ac/go.mod h1:atLQjkN5sVQc7WJJCyxTt0AD8ZODyZYUxudYAQIxL2Y=
+kubedb.dev/apimachinery v0.27.0 h1:+qrUhjnI5iXGQrBA5m6UUTBU75OxVtMY8k2V4UIoQJU=
+kubedb.dev/apimachinery v0.27.0/go.mod h1:atLQjkN5sVQc7WJJCyxTt0AD8ZODyZYUxudYAQIxL2Y=
 modernc.org/cc v1.0.0/go.mod h1:1Sk4//wdnYJiUIxnW8ddKpaOJCF37yAdqYnkxUpaYxw=
 modernc.org/golex v1.0.0/go.mod h1:b/QX9oBD/LhixY6NDh+IdGv17hgB+51fET1i2kPSmvk=
 modernc.org/mathutil v1.0.0/go.mod h1:wU0vUrJsVWBZ4P6e7xtFJEhFSNsfRLJ8H458uRjg03k=
