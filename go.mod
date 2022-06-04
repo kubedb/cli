@@ -23,7 +23,7 @@ require (
 	kmodules.xyz/custom-resources v0.24.0
 	kmodules.xyz/monitoring-agent-api v0.24.0
 	kubedb.dev/apimachinery v0.27.1-0.20220604010336-666ce9c7cf9f
-	stash.appscode.dev/apimachinery v0.20.2-0.20220603211838-fe59f49badc1
+	stash.appscode.dev/apimachinery v0.20.2-0.20220603214858-b90c85f4fd8c
 )
 
 require (
@@ -127,6 +127,12 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
+replace sigs.k8s.io/controller-runtime => github.com/kmodules/controller-runtime v0.12.2-0.20220603144237-6cd001896bf3
+
 replace github.com/imdario/mergo => github.com/imdario/mergo v0.3.5
 
 replace k8s.io/apimachinery => github.com/kmodules/apimachinery v0.24.2-rc.0.0.20220603191800-1c7484099dee
+
+replace k8s.io/apiserver => github.com/kmodules/apiserver v0.0.0-20220603223637-59dad1716c43
+
+replace k8s.io/kubernetes => github.com/kmodules/kubernetes v1.25.0-alpha.0.0.20220603172133-1c9d09d1b3b8
