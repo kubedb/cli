@@ -25,7 +25,7 @@ import (
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	ops "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
 
-	"github.com/appscode/go/crypto/rand"
+	"gomodules.xyz/x/crypto/rand"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/rest"

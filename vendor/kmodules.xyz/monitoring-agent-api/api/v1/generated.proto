@@ -24,7 +24,7 @@ package kmodules.xyz.monitoring_agent_api.api.v1;
 import "k8s.io/api/core/v1/generated.proto";
 
 // Package-wide variables from generator "generated".
-option go_package = "v1";
+option go_package = "kmodules.xyz/monitoring-agent-api/api/v1";
 
 message AgentSpec {
   optional string agent = 1;

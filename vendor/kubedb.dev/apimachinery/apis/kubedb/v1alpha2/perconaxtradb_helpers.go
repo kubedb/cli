@@ -219,7 +219,7 @@ fi
 	}
 
 	readinessProbe := &core.Probe{
-		Handler: core.Handler{
+		ProbeHandler: core.ProbeHandler{
 			Exec: &core.ExecAction{
 				Command: readynessProbeCmd,
 			},

@@ -510,7 +510,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 			m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle = new(core.Lifecycle)
 		}
 
-		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle.PreStop = &core.Handler{
+		m.Spec.ShardTopology.Mongos.PodTemplate.Spec.Lifecycle.PreStop = &core.LifecycleHandler{
 			Exec: &core.ExecAction{
 				Command: []string{
 					"bash",
@@ -706,7 +706,7 @@ func (m *MongoDB) getCmdForProbes(mgVersion *v1alpha1.MongoDBVersion, isArbiter 
 
 func (m *MongoDB) GetDefaultLivenessProbeSpec(mgVersion *v1alpha1.MongoDBVersion, isArbiter ...bool) *core.Probe {
 	return &core.Probe{
-		Handler: core.Handler{
+		ProbeHandler: core.ProbeHandler{
 			Exec: &core.ExecAction{
 				Command: m.getCmdForProbes(mgVersion, isArbiter...),
 			},
@@ -720,7 +720,7 @@ func (m *MongoDB) GetDefaultLivenessProbeSpec(mgVersion *v1alpha1.MongoDBVersion
 
 func (m *MongoDB) GetDefaultReadinessProbeSpec(mgVersion *v1alpha1.MongoDBVersion, isArbiter ...bool) *core.Probe {
 	return &core.Probe{
-		Handler: core.Handler{
+		ProbeHandler: core.ProbeHandler{
 			Exec: &core.ExecAction{
 				Command: m.getCmdForProbes(mgVersion, isArbiter...),
 			},

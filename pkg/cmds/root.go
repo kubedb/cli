@@ -27,7 +27,6 @@ import (
 	cliflag "k8s.io/component-base/cli/flag"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	"k8s.io/kubectl/pkg/util/templates"
-	"kmodules.xyz/client-go/tools/cli"
 )
 
 // NewKubeDBCommand creates the `kubedb` command and its nested children.
@@ -39,9 +38,6 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
       kubectl plugin for KubeDB by AppsCode - Kubernetes ready production-grade Databases
 
       Find more information at https://kubedb.com`),
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			cli.SendAnalytics(cmd, v.Version.Version)
-		},
 		Run:               runHelp,
 		DisableAutoGenTag: true,
 	}
@@ -52,8 +48,6 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	// Normalize all flags that are coming from other packages or pre-configurations
 	// a.k.a. change all "_" to "-". e.g. glog package
 	flags.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
-
-	flags.BoolVar(&cli.EnableAnalytics, "enable-analytics", cli.EnableAnalytics, "Send analytical events to Google Analytics")
 
 	kubeConfigFlags := genericclioptions.NewConfigFlags(true).WithDeprecatedPasswordFlag()
 	kubeConfigFlags.AddFlags(flags)

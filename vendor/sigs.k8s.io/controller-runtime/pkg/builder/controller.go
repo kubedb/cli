@@ -23,6 +23,7 @@ import (
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/klog/v2"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
@@ -34,18 +35,18 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
-// Supporting mocking out functions for testing
+// Supporting mocking out functions for testing.
 var newController = controller.New
 var getGvk = apiutil.GVKForObject
 
 // project represents other forms that the we can use to
-// send/receive a given resource (metadata-only, unstructured, etc)
+// send/receive a given resource (metadata-only, unstructured, etc).
 type objectProjection int
 
 const (
-	// projectAsNormal doesn't change the object from the form given
+	// projectAsNormal doesn't change the object from the form given.
 	projectAsNormal objectProjection = iota
-	// projectAsMetadata turns this into an metadata-only watch
+	// projectAsMetadata turns this into an metadata-only watch.
 	projectAsMetadata
 )
 
@@ -61,7 +62,7 @@ type Builder struct {
 	name             string
 }
 
-// ControllerManagedBy returns a new controller builder that will be started by the provided Manager
+// ControllerManagedBy returns a new controller builder that will be started by the provided Manager.
 func ControllerManagedBy(m manager.Manager) *Builder {
 	return &Builder{mgr: m}
 }
@@ -77,7 +78,7 @@ type ForInput struct {
 // For defines the type of Object being *reconciled*, and configures the ControllerManagedBy to respond to create / delete /
 // update events by *reconciling the object*.
 // This is the equivalent of calling
-// Watches(&source.Kind{Type: apiType}, &handler.EnqueueRequestForObject{})
+// Watches(&source.Kind{Type: apiType}, &handler.EnqueueRequestForObject{}).
 func (blder *Builder) For(object client.Object, opts ...ForOption) *Builder {
 	if blder.forInput.object != nil {
 		blder.forInput.err = fmt.Errorf("For(...) should only be called once, could not assign multiple objects for reconciliation")
@@ -101,7 +102,7 @@ type OwnsInput struct {
 
 // Owns defines types of Objects being *generated* by the ControllerManagedBy, and configures the ControllerManagedBy to respond to
 // create / delete / update events by *reconciling the owner object*.  This is the equivalent of calling
-// Watches(&source.Kind{Type: <ForType-forInput>}, &handler.EnqueueRequestForOwner{OwnerType: apiType, IsController: true})
+// Watches(&source.Kind{Type: <ForType-forInput>}, &handler.EnqueueRequestForOwner{OwnerType: apiType, IsController: true}).
 func (blder *Builder) Owns(object client.Object, opts ...OwnsOption) *Builder {
 	input := OwnsInput{object: object}
 	for _, opt := range opts {
@@ -148,9 +149,9 @@ func (blder *Builder) WithOptions(options controller.Options) *Builder {
 	return blder
 }
 
-// WithLogger overrides the controller options's logger used.
-func (blder *Builder) WithLogger(log logr.Logger) *Builder {
-	blder.ctrlOptions.Log = log
+// WithLogConstructor overrides the controller options's LogConstructor.
+func (blder *Builder) WithLogConstructor(logConstructor func(*reconcile.Request) logr.Logger) *Builder {
+	blder.ctrlOptions.LogConstructor = logConstructor
 	return blder
 }
 
@@ -304,13 +305,31 @@ func (blder *Builder) doController(r reconcile.Reconciler) error {
 		ctrlOptions.CacheSyncTimeout = *globalOpts.CacheSyncTimeout
 	}
 
+	controllerName := blder.getControllerName(gvk)
+
 	// Setup the logger.
-	if ctrlOptions.Log == nil {
-		ctrlOptions.Log = blder.mgr.GetLogger()
+	if ctrlOptions.LogConstructor == nil {
+		log = blder.mgr.GetLogger().WithValues(
+			"controller", controllerName,
+			"controllerGroup", gvk.Group,
+			"controllerKind", gvk.Kind,
+		)
+
+		lowerCamelCaseKind := strings.ToLower(gvk.Kind[:1]) + gvk.Kind[1:]
+
+		ctrlOptions.LogConstructor = func(req *reconcile.Request) logr.Logger {
+			log := log
+			if req != nil {
+				log = log.WithValues(
+					lowerCamelCaseKind, klog.KRef(req.Namespace, req.Name),
+					"namespace", req.Namespace, "name", req.Name,
+				)
+			}
+			return log
+		}
 	}
-	ctrlOptions.Log = ctrlOptions.Log.WithValues("reconciler group", gvk.Group, "reconciler kind", gvk.Kind)
 
 	// Build the controller and return.
-	blder.ctrl, err = newController(blder.getControllerName(gvk), blder.mgr, ctrlOptions)
+	blder.ctrl, err = newController(controllerName, blder.mgr, ctrlOptions)
 	return err
 }
