@@ -71,10 +71,14 @@ type MongoDBOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for reprovisioning database
 	Reprovision *Reprovision `json:"reprovision,omitempty"`
+
 	// Specifies the Readiness Criteria
 	ReadinessCriteria *MongoDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default:="IfReady"
+	Apply ApplyOption `json:"apply,omitempty"`
 }
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod

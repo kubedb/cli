@@ -31,7 +31,7 @@ const (
 	ResourcePluralPerconaXtraDB   = "perconaxtradbs"
 )
 
-// PerconaXtraDB defines a percona variation of Mysql database.
+// PerconaXtraDB defines a Percona XtraDB Cluster.
 
 // +genclient
 // +k8s:openapi-gen=true
@@ -51,12 +51,14 @@ type PerconaXtraDB struct {
 }
 
 type PerconaXtraDBSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of PerconaXtraDB to be deployed.
 	Version string `json:"version"`
 
-	// Number of instances to deploy for PerconaXtraDB.
-	// Replicas: 1		-->		Deploy standalone PerconaXtraDB
-	// Replicas: > 1	-->		Deploy PerconaXtraDB cluster with specified number of masters
+	// Replicas defines the number of instances to deploy for PerconaXtraDB.
 	Replicas *int32 `json:"replicas,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
@@ -65,7 +67,7 @@ type PerconaXtraDBSpec struct {
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
-	// Database authentication secret
+	// AuthSecret specifies database authentication secret
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
 	// Init is used to initialize database
@@ -88,7 +90,11 @@ type PerconaXtraDBSpec struct {
 	// +optional
 	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
-	// TLS contains tls configurations for client and server.
+	// Indicates that the database server need to be encrypted connections(ssl)
+	// +optional
+	RequireSSL bool `json:"requireSSL,omitempty"`
+
+	// TLS contains tls configurations
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
@@ -99,15 +105,34 @@ type PerconaXtraDBSpec struct {
 	// TerminationPolicy controls the delete operation for database
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+
+	// Coordinator defines attributes of the coordinator container
+	// +optional
+	Coordinator CoordinatorSpec `json:"coordinator,omitempty"`
+
+	// AllowedSchemas defines the types of database schemas that MAY refer to
+	// a database instance and the trusted namespaces where those schema resources MAY be
+	// present.
+	//
+	// +kubebuilder:default={namespaces:{from: Same}}
+	// +optional
+	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
+
+	// +optional
+	HealthCheck HealthCheckSpec `json:"healthCheck"`
+
+	// SystemUserSecrets contains the system user credentials
+	// +optional
+	SystemUserSecrets *SystemUserSecretsSpec `json:"systemUserSecrets,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=server;archiver;metrics-exporter
+// +kubebuilder:validation:Enum=server;client;metrics-exporter
 type PerconaXtraDBCertificateAlias string
 
 const (
-	PerconaXtraDBServerCert          PerconaXtraDBCertificateAlias = "server"
-	PerconaXtraDBArchiverCert        PerconaXtraDBCertificateAlias = "archiver"
-	PerconaXtraDBMetricsExporterCert PerconaXtraDBCertificateAlias = "metrics-exporter"
+	PerconaXtraDBServerCert   PerconaXtraDBCertificateAlias = "server"
+	PerconaXtraDBClientCert   PerconaXtraDBCertificateAlias = "client"
+	PerconaXtraDBExporterCert PerconaXtraDBCertificateAlias = "metrics-exporter"
 )
 
 type PerconaXtraDBStatus struct {

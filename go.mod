@@ -12,17 +12,17 @@ require (
 	gomodules.xyz/runtime v0.3.0
 	gomodules.xyz/wait v0.2.0
 	gomodules.xyz/x v0.0.14
-	k8s.io/api v0.24.1
-	k8s.io/apimachinery v0.24.1
-	k8s.io/cli-runtime v0.24.1
-	k8s.io/client-go v0.24.1
-	k8s.io/component-base v0.24.1
-	k8s.io/klog/v2 v2.60.1
-	k8s.io/kubectl v0.24.1
-	kmodules.xyz/client-go v0.24.0
-	kmodules.xyz/custom-resources v0.24.0
+	k8s.io/api v0.24.3
+	k8s.io/apimachinery v0.24.3
+	k8s.io/cli-runtime v0.24.3
+	k8s.io/client-go v0.24.3
+	k8s.io/component-base v0.24.3
+	k8s.io/klog/v2 v2.70.1
+	k8s.io/kubectl v0.24.3
+	kmodules.xyz/client-go v0.24.5
+	kmodules.xyz/custom-resources v0.24.1
 	kmodules.xyz/monitoring-agent-api v0.24.0
-	kubedb.dev/apimachinery v0.27.1-0.20220604010336-666ce9c7cf9f
+	kubedb.dev/apimachinery v0.27.1-0.20220802063205-a89b3bc243f9
 	stash.appscode.dev/apimachinery v0.22.0
 )
 
@@ -95,6 +95,9 @@ require (
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/multierr v1.8.0 // indirect
+	go.uber.org/zap v1.21.0 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/net v0.0.0-20220531201128-c960675eff93 // indirect
 	golang.org/x/oauth2 v0.0.0-20220524215830-622c5d57e401 // indirect
@@ -102,11 +105,11 @@ require (
 	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467 // indirect
 	golang.org/x/time v0.0.0-20220411224347-583f2d630306 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
-	gomodules.xyz/encoding v0.0.5 // indirect
+	gomodules.xyz/encoding v0.0.7 // indirect
 	gomodules.xyz/flags v0.1.3 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
 	gomodules.xyz/mergo v0.3.13 // indirect
-	gomodules.xyz/password-generator v0.2.7 // indirect
+	gomodules.xyz/password-generator v0.2.8 // indirect
 	gomodules.xyz/sets v0.2.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
@@ -117,15 +120,17 @@ require (
 	k8s.io/kube-openapi v0.0.0-20220413171646-5e7f5fdc6da6 // indirect
 	k8s.io/utils v0.0.0-20220210201930-3a6ce19ff2f9 // indirect
 	kmodules.xyz/objectstore-api v0.24.0 // indirect
-	kmodules.xyz/offshoot-api v0.24.1 // indirect
+	kmodules.xyz/offshoot-api v0.24.2 // indirect
 	kmodules.xyz/prober v0.24.0 // indirect
-	sigs.k8s.io/controller-runtime v0.12.1 // indirect
+	sigs.k8s.io/controller-runtime v0.12.3 // indirect
 	sigs.k8s.io/json v0.0.0-20220525155127-227cbc7cc124 // indirect
 	sigs.k8s.io/kustomize/api v0.11.4 // indirect
 	sigs.k8s.io/kustomize/kyaml v0.13.6 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.1 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
+
+replace github.com/Masterminds/sprig/v3 => github.com/gomodules/sprig/v3 v3.2.3-0.20220405051441-0a8a99bac1b8
 
 replace sigs.k8s.io/controller-runtime => github.com/kmodules/controller-runtime v0.12.2-0.20220603144237-6cd001896bf3
 
@@ -136,3 +141,18 @@ replace k8s.io/apimachinery => github.com/kmodules/apimachinery v0.24.2-rc.0.0.2
 replace k8s.io/apiserver => github.com/kmodules/apiserver v0.0.0-20220603223637-59dad1716c43
 
 replace k8s.io/kubernetes => github.com/kmodules/kubernetes v1.25.0-alpha.0.0.20220603172133-1c9d09d1b3b8
+
+replace (
+	go.opentelemetry.io/contrib => go.opentelemetry.io/contrib v0.20.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.20.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp => go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.20.0
+	go.opentelemetry.io/otel => go.opentelemetry.io/otel v0.20.0
+	go.opentelemetry.io/otel/exporters/otlp => go.opentelemetry.io/otel/exporters/otlp v0.20.0
+	go.opentelemetry.io/otel/metric => go.opentelemetry.io/otel/metric v0.20.0
+	go.opentelemetry.io/otel/oteltest => go.opentelemetry.io/otel/oteltest v0.20.0
+	go.opentelemetry.io/otel/sdk => go.opentelemetry.io/otel/sdk v0.20.0
+	go.opentelemetry.io/otel/sdk/export/metric => go.opentelemetry.io/otel/sdk/export/metric v0.20.0
+	go.opentelemetry.io/otel/sdk/metric => go.opentelemetry.io/otel/sdk/metric v0.20.0
+	go.opentelemetry.io/otel/trace => go.opentelemetry.io/otel/trace v0.20.0
+	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.7.0
+)

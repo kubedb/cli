@@ -19,7 +19,6 @@ package v1alpha1
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -54,7 +53,7 @@ type ElasticsearchAutoscaler struct {
 
 	// status is the current information about the autoscaler.
 	// +optional
-	Status ElasticsearchAutoscalerStatus `json:"status,omitempty"`
+	Status AutoscalerStatus `json:"status,omitempty"`
 }
 
 // ElasticsearchAutoscalerSpec is the specification of the behavior of the autoscaler.
@@ -87,33 +86,6 @@ type ElasticsearchStorageTopologyAutoscalerSpec struct {
 	Data   *StorageAutoscalerSpec `json:"data,omitempty"`
 	Ingest *StorageAutoscalerSpec `json:"ingest,omitempty"`
 }
-
-// ElasticsearchAutoscalerStatus describes the runtime state of the autoscaler.
-type ElasticsearchAutoscalerStatus struct {
-	// observedGeneration is the most recent generation observed by this autoscaler.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
-
-	// Conditions is the set of conditions required for this autoscaler to scale its target,
-	// and indicates whether or not those conditions are met.
-	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
-	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
-}
-
-// ElasticsearchAutoscalerConditionType are the valid conditions of
-// a ElasticsearchAutoscaler.
-type ElasticsearchAutoscalerConditionType string
-
-var (
-	// ConfigDeprecated indicates that this VPA configuration is deprecated
-	// and will stop being supported soon.
-	ElasticsearchAutoscalerConfigDeprecated ElasticsearchAutoscalerConditionType = "ConfigDeprecated"
-	// ConfigUnsupported indicates that this VPA configuration is unsupported
-	// and recommendations will not be provided for it.
-	ElasticsearchAutoscalerConfigUnsupported ElasticsearchAutoscalerConditionType = "ConfigUnsupported"
-)
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // ElasticsearchAutoscalerList is a list of ElasticsearchAutoscaler objects.

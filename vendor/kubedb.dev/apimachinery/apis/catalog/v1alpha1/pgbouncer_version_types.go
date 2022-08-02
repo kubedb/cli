@@ -60,6 +60,8 @@ type PgBouncerVersionSpec struct {
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
+	// upgrade constraints
+	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
 }
 
 // PgBouncerVersionInitContainer is the PgBouncer init container image

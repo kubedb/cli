@@ -60,6 +60,10 @@ type Redis struct {
 }
 
 type RedisSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Redis to be deployed.
 	Version string `json:"version"`
 
@@ -131,6 +135,9 @@ type RedisSpec struct {
 	// +kubebuilder:default={namespaces:{from: Same}}
 	// +optional
 	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
+
+	// +optional
+	HealthCheck HealthCheckSpec `json:"healthCheck,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

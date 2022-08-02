@@ -80,6 +80,8 @@ type ElasticsearchVersionSpec struct {
 	// SecurityContext is for the additional security information for the Elasticsearch container
 	// +optional
 	SecurityContext ElasticsearchSecurityContext `json:"securityContext"`
+	// upgrade constraints
+	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
 }
 
 // ElasticsearchVersionDatabase is the Elasticsearch Database image

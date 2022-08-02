@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -58,19 +59,83 @@ type ProxySQL struct {
 	Status            ProxySQLStatus `json:"status,omitempty"`
 }
 
+type MySQLUser struct {
+	Username string `json:"username"`
+
+	// +optional
+	Active *int `json:"active,omitempty"`
+
+	// +optional
+	UseSSL int `json:"use_ssl,omitempty"`
+
+	// +optional
+	DefaultHostgroup int `json:"default_hostgroup,omitempty"`
+
+	// +optional
+	DefaultSchema string `json:"default_schema,omitempty"`
+
+	// +optional
+	SchemaLocked int `json:"schema_locked,omitempty"`
+
+	// +optional
+	TransactionPersistent *int `json:"transaction_persistent,omitempty"`
+
+	// +optional
+	FastForward int `json:"fast_forward,omitempty"`
+
+	// +optional
+	Backend *int `json:"backend,omitempty"`
+
+	// +optional
+	Frontend *int `json:"frontend,omitempty"`
+
+	// +optional
+	MaxConnections *int32 `json:"max_connections,omitempty"`
+
+	// +optional
+	Attributes string `json:"attributes,omitempty"`
+
+	// +optional
+	Comment string `json:"comment,omitempty"`
+}
+
+type ProxySQLConfiguration struct {
+	// +optional
+	MySQLUsers []MySQLUser `json:"mysqlUsers,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	MySQLQueryRules []*runtime.RawExtension `json:"mysqlQueryRules,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	MySQLVariables *runtime.RawExtension `json:"mysqlVariables,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	AdminVariables *runtime.RawExtension `json:"adminVariables,omitempty"`
+}
+
 type ProxySQLSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
+	// +optional
+	// SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the
+	// ProxySQL server . Password changes are also synced in proxysql when it is enabled.
+	SyncUsers bool `json:"syncUsers,omitempty"`
+
+	// +optional
+	// InitConfiguration contains information with which the proxysql will bootstrap (only 4 tables are configurable)
+	InitConfiguration *ProxySQLConfiguration `json:"initConfig,omitempty"`
+
 	// Version of ProxySQL to be deployed.
 	Version string `json:"version"`
 
 	// Number of instances to deploy for ProxySQL. Currently we support only replicas = 1.
 	// TODO: If replicas > 1, proxysql will be clustered
 	Replicas *int32 `json:"replicas,omitempty"`
-
-	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty"`
-
-	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// Mode specifies the type of MySQL/Percona-XtraDB/MariaDB cluster for which proxysql
 	// will be configured. It must be either "Galera" or "GroupReplication"
@@ -105,6 +170,9 @@ type ProxySQLSpec struct {
 	// TerminationPolicy controls the delete operation for database
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+
+	//+optional
+	HealthCheck HealthCheckSpec `json:"healthCheck"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter

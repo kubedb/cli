@@ -68,6 +68,17 @@ spec:
                 required:
                 - image
                 type: object
+              upgradeConstraints:
+                properties:
+                  allowlist:
+                    items:
+                      type: string
+                    type: array
+                  denylist:
+                    items:
+                      type: string
+                    type: array
+                type: object
               version:
                 type: string
             required:

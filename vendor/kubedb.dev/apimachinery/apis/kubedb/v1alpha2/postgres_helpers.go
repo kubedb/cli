@@ -256,6 +256,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 
 	p.Spec.Monitor.SetDefaults()
 	p.SetTLSDefaults()
+	p.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 }
@@ -359,6 +360,28 @@ func GetSharedBufferSizeForPostgres(resource *resource.Quantity) string {
 		ret = minSharedBuffer
 	}
 
+	// check If the ret value need to convert into MB
+	// why need this? -> PostgreSQL officially stores shared_buffers as an int32 that's why if the value is greater than 2147483648B.
+	// It's going to through and error that the value is going to cross the limit.
+
 	sharedBuffer := fmt.Sprintf("%sB", strconv.FormatInt(ret, 10))
+	if ret > SharedBuffersGbAsByte {
+		// convert the ret as MB devide by SharedBuffersMbAsByte
+		ret /= SharedBuffersMbAsByte
+		sharedBuffer = fmt.Sprintf("%sMB", strconv.FormatInt(ret, 10))
+	}
+
 	return sharedBuffer
+}
+
+func (m *Postgres) SetHealthCheckerDefaults() {
+	if m.Spec.HealthCheck.PeriodSeconds == nil {
+		m.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthCheck.TimeoutSeconds == nil {
+		m.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthCheck.FailureThreshold == nil {
+		m.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
 }

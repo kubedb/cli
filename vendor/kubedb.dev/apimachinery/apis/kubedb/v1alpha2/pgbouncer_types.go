@@ -52,37 +52,54 @@ type PgBouncer struct {
 }
 
 type PgBouncerSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of PgBouncer to be deployed.
 	Version string `json:"version"`
+
 	// Number of instances to deploy for a PgBouncer instance.
 	// +optional
 	Replicas *int32 `json:"replicas,omitempty"`
+
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
 	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+
 	// PodTemplate is an optional configuration for pods.
 	// +optional
 	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+
 	// Databases to proxy by connection pooling.
 	// +optional
 	Databases []Databases `json:"databases,omitempty"`
+
 	// ConnectionPoolConfig defines Connection pool configuration.
 	// +optional
 	ConnectionPool *ConnectionPoolConfig `json:"connectionPool,omitempty"`
+
 	// UserListSecretRef is a secret with a list of PgBouncer user and passwords.
 	// +optional
 	UserListSecretRef *core.LocalObjectReference `json:"userListSecretRef,omitempty"`
+
 	// Monitor is used monitor database instance.
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
+
 	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
 	SSLMode PgBouncerSSLMode `json:"sslMode,omitempty"`
+
 	// TLS contains tls configurations for client and server.
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
+
 	// TerminationPolicy controls the delete operation for database
 	// +optional
 	TerminationPolicy PgBouncerTerminationPolicy `json:"terminationPolicy,omitempty"`
+
+	// +optional
+	HealthCheck HealthCheckSpec `json:"healthCheck,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter

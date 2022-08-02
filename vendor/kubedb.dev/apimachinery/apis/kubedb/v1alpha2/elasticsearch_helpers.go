@@ -392,7 +392,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		if e.Spec.Topology.Ingest.Suffix == "" {
 			e.Spec.Topology.Ingest.Suffix = string(ElasticsearchNodeRoleTypeIngest)
 		}
-		apis.SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, DefaultResources)
+		apis.SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, DefaultResourcesElasticSearch)
 		if e.Spec.Topology.Ingest.Replicas == nil {
 			e.Spec.Topology.Ingest.Replicas = pointer.Int32P(1)
 		}
@@ -402,7 +402,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		if e.Spec.Topology.Master.Suffix == "" {
 			e.Spec.Topology.Master.Suffix = string(ElasticsearchNodeRoleTypeMaster)
 		}
-		apis.SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResources)
+		apis.SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResourcesElasticSearch)
 		if e.Spec.Topology.Master.Replicas == nil {
 			e.Spec.Topology.Master.Replicas = pointer.Int32P(1)
 		}
@@ -414,7 +414,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.Data.Suffix == "" {
 				e.Spec.Topology.Data.Suffix = string(ElasticsearchNodeRoleTypeData)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.Data.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.Data.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.Data.Replicas == nil {
 				e.Spec.Topology.Data.Replicas = pointer.Int32P(1)
 			}
@@ -426,7 +426,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataHot.Suffix == "" {
 				e.Spec.Topology.DataHot.Suffix = string(ElasticsearchNodeRoleTypeDataHot)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataHot.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataHot.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataHot.Replicas == nil {
 				e.Spec.Topology.DataHot.Replicas = pointer.Int32P(1)
 			}
@@ -438,7 +438,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataWarm.Suffix == "" {
 				e.Spec.Topology.DataWarm.Suffix = string(ElasticsearchNodeRoleTypeDataWarm)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataWarm.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataWarm.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataWarm.Replicas == nil {
 				e.Spec.Topology.DataWarm.Replicas = pointer.Int32P(1)
 			}
@@ -450,7 +450,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataCold.Suffix == "" {
 				e.Spec.Topology.DataCold.Suffix = string(ElasticsearchNodeRoleTypeDataCold)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataCold.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataCold.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataCold.Replicas == nil {
 				e.Spec.Topology.DataCold.Replicas = pointer.Int32P(1)
 			}
@@ -462,7 +462,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataFrozen.Suffix == "" {
 				e.Spec.Topology.DataFrozen.Suffix = string(ElasticsearchNodeRoleTypeDataFrozen)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataFrozen.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataFrozen.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataFrozen.Replicas == nil {
 				e.Spec.Topology.DataFrozen.Replicas = pointer.Int32P(1)
 			}
@@ -474,7 +474,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataContent.Suffix == "" {
 				e.Spec.Topology.DataContent.Suffix = string(ElasticsearchNodeRoleTypeDataContent)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataContent.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataContent.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataContent.Replicas == nil {
 				e.Spec.Topology.DataContent.Replicas = pointer.Int32P(1)
 			}
@@ -486,7 +486,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.ML.Suffix == "" {
 				e.Spec.Topology.ML.Suffix = string(ElasticsearchNodeRoleTypeML)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.ML.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.ML.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.ML.Replicas == nil {
 				e.Spec.Topology.ML.Replicas = pointer.Int32P(1)
 			}
@@ -498,14 +498,14 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.Transform.Suffix == "" {
 				e.Spec.Topology.Transform.Suffix = string(ElasticsearchNodeRoleTypeTransform)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.Transform.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.Transform.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.Transform.Replicas == nil {
 				e.Spec.Topology.Transform.Replicas = pointer.Int32P(1)
 			}
 		}
 
 	} else {
-		apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResources)
+		apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResourcesElasticSearch)
 		if e.Spec.Replicas == nil {
 			e.Spec.Replicas = pointer.Int32P(1)
 		}
@@ -826,6 +826,18 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) 
 	}
 
 	e.Spec.TLS = tlsConfig
+}
+
+func (e *Elasticsearch) SetHealthCheckerDefaults() {
+	if e.Spec.HealthCheck.PeriodSeconds == nil {
+		e.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if e.Spec.HealthCheck.TimeoutSeconds == nil {
+		e.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if e.Spec.HealthCheck.FailureThreshold == nil {
+		e.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
 }
 
 func (e *Elasticsearch) GetMatchExpressions() []metav1.LabelSelectorRequirement {

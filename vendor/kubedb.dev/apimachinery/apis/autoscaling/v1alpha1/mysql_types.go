@@ -20,7 +20,6 @@ import (
 	"k8s.io/api/autoscaling/v2beta2"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -55,7 +54,7 @@ type MySQLAutoscaler struct {
 
 	// status is the current information about the autoscaler.
 	// +optional
-	Status MySQLAutoscalerStatus `json:"status,omitempty"`
+	Status AutoscalerStatus `json:"status,omitempty"`
 }
 
 // MySQLAutoscalerSpec describes the desired functionality of the MySQLAutoscaler.
@@ -144,34 +143,6 @@ type MySQLScalingPolicy struct {
 	// PeriodSeconds specifies the window of time for which the policy should hold true.
 	// PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
 	PeriodSeconds int32 `json:"periodSeconds"`
-}
-
-// MySQLAutoscalerStatus describes the current status of a horizontal pod autoscaler.
-type MySQLAutoscalerStatus struct {
-	// observedGeneration is the most recent generation observed by this autoscaler.
-	// +optional
-	ObservedGeneration *int64 `json:"observedGeneration,omitempty"`
-
-	// lastScaleTime is the last time the MySQLAutoscaler scaled the number of pods,
-	// used by the autoscaler to control how often the number of pods is changed.
-	// +optional
-	LastScaleTime *metav1.Time `json:"lastScaleTime,omitempty"`
-
-	// currentReplicas is current number of replicas of pods managed by this autoscaler,
-	// as last seen by the autoscaler.
-	CurrentReplicas int32 `json:"currentReplicas"`
-
-	// desiredReplicas is the desired number of replicas of pods managed by this autoscaler,
-	// as last calculated by the autoscaler.
-	DesiredReplicas int32 `json:"desiredReplicas"`
-
-	// currentMetrics is the last read state of the metrics used by this autoscaler.
-	// +optional
-	CurrentMetrics []v2beta2.MetricStatus `json:"currentMetrics"`
-
-	// conditions is the set of conditions required for this autoscaler to scale its target,
-	// and indicates whether or not those conditions are met.
-	Conditions []kmapi.Condition `json:"conditions"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

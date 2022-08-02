@@ -17,8 +17,11 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
@@ -50,7 +53,7 @@ type ProxySQLOpsRequest struct {
 // ProxySQLOpsRequestSpec is the spec for ProxySQLOpsRequest
 type ProxySQLOpsRequestSpec struct {
 	// Specifies the ProxySQL reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
+	ProxyRef core.LocalObjectReference `json:"proxyRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type OpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading ProxySQL
@@ -67,6 +70,8 @@ type ProxySQLOpsRequestSpec struct {
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 }
 
 // ProxySQLReplicaReadinessCriteria is the criteria for checking readiness of a ProxySQL pod
@@ -80,7 +85,10 @@ type ProxySQLUpgradeSpec struct {
 }
 
 // HorizontalScaling is the spec for ProxySQL horizontal scaling
-type ProxySQLHorizontalScalingSpec struct{}
+type ProxySQLHorizontalScalingSpec struct {
+	// Number of nodes/members of the group
+	Member *int32 `json:"member,omitempty"`
+}
 
 // ProxySQLVerticalScalingSpec is the spec for ProxySQL vertical scaling
 type ProxySQLVerticalScalingSpec struct {
@@ -89,8 +97,6 @@ type ProxySQLVerticalScalingSpec struct {
 
 // ProxySQLVolumeExpansionSpec is the spec for ProxySQL volume expansion
 type ProxySQLVolumeExpansionSpec struct{}
-
-type ProxySQLCustomConfigurationSpec struct{}
 
 type ProxySQLCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
@@ -116,6 +122,43 @@ type ProxySQLOpsRequestStatus struct {
 type ProxySQLOpsRequestList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
+
+	//+optional
 	// Items is a list of ProxySQLOpsRequest CRD objects
 	Items []ProxySQLOpsRequest `json:"items,omitempty"`
 }
+
+type ProxySQLCustomConfigurationSpec struct {
+	//+optional
+	MySQLUsers *MySQLUsers `json:"mysqlUsers,omitempty"`
+
+	//+optional
+	MySQLQueryRules *MySQLQueryRules `json:"mysqlQueryRules,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	AdminVariables *runtime.RawExtension `json:"adminVariables,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	MySQLVariables *runtime.RawExtension `json:"mysqlVariables,omitempty"`
+}
+
+type MySQLUsers struct {
+	Users       []v1alpha2.MySQLUser `json:"users"`
+	RequestType OperationType        `json:"reqType"`
+}
+
+type MySQLQueryRules struct {
+	// +kubebuilder:pruning:PreserveUnknownFields
+	Rules       []*runtime.RawExtension `json:"rules"`
+	RequestType OperationType           `json:"reqType"`
+}
+
+type OperationType string
+
+const (
+	ProxySQLConfigurationAdd    OperationType = "add"
+	ProxySQLConfigurationDelete OperationType = "delete"
+	ProxySQLConfigurationUpdate OperationType = "update"
+)

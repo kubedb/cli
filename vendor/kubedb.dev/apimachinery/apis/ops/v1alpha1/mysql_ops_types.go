@@ -97,6 +97,8 @@ type MySQLVerticalScalingSpec struct {
 // MySQLVolumeExpansionSpec is the spec for MySQL volume expansion
 type MySQLVolumeExpansionSpec struct {
 	MySQL *resource.Quantity `json:"mysql,omitempty"`
+	// +kubebuilder:default:="Online"
+	Mode *VolumeExpansionMode `json:"mode,omitempty"`
 }
 
 type MySQLCustomConfigurationSpec struct {

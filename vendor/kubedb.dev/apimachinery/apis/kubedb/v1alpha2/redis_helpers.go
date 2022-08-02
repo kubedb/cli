@@ -223,9 +223,21 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	r.setDefaultAffinity(&r.Spec.PodTemplate, labels, topology)
 
 	r.Spec.Monitor.SetDefaults()
-
 	r.SetTLSDefaults()
+	r.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&r.Spec.PodTemplate.Spec.Resources, DefaultResources)
+}
+
+func (r *Redis) SetHealthCheckerDefaults() {
+	if r.Spec.HealthCheck.PeriodSeconds == nil {
+		r.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if r.Spec.HealthCheck.TimeoutSeconds == nil {
+		r.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if r.Spec.HealthCheck.FailureThreshold == nil {
+		r.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
 }
 
 func (r *Redis) SetTLSDefaults() {

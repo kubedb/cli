@@ -408,6 +408,33 @@ func (m MongoDB) MongosHosts() []string {
 	return hosts
 }
 
+func (m *MongoDB) GetURL(stsName string) string {
+	if m.Spec.ShardTopology != nil {
+		if strings.HasSuffix(stsName, NodeTypeConfig) {
+			return strings.Join(m.ConfigSvrHosts(), ",")
+		}
+		if strings.HasSuffix(stsName, NodeTypeMongos) {
+			return strings.Join(m.MongosHosts(), ",")
+		}
+		shardStr := func() string {
+			idx := strings.LastIndex(stsName, NodeTypeShard)
+			return stsName[idx+len(NodeTypeShard):]
+		}()
+		shardNum := func() int32 {
+			num := int32(0)
+			for i := 0; i < len(shardStr); i++ {
+				num = num*10 + int32(shardStr[i]-'0')
+			}
+			return num
+		}()
+		// if stsName="shard12", shardStr will be "12", & shardNum will be 12
+		if strings.HasSuffix(stsName, NodeTypeShard+shardStr) {
+			return strings.Join(m.ShardHosts(shardNum), ",")
+		}
+	}
+	return strings.Join(m.Hosts(), ",")
+}
+
 type mongoDBApp struct {
 	*MongoDB
 }
@@ -581,7 +608,20 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	}
 
 	m.SetTLSDefaults()
+	m.SetHealthCheckerDefaults()
 	m.Spec.Monitor.SetDefaults()
+}
+
+func (m *MongoDB) SetHealthCheckerDefaults() {
+	if m.Spec.HealthCheck.PeriodSeconds == nil {
+		m.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthCheck.TimeoutSeconds == nil {
+		m.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthCheck.FailureThreshold == nil {
+		m.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
 }
 
 func (m *MongoDB) SetTLSDefaults() {

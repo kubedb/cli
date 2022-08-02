@@ -69,6 +69,10 @@ type MySQL struct {
 }
 
 type MySQLSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of MySQL to be deployed.
 	Version string `json:"version"`
 
@@ -136,8 +140,8 @@ type MySQLSpec struct {
 	// +optional
 	Coordinator CoordinatorSpec `json:"coordinator,omitempty"`
 
-	// AllowedSchemas defines the types of database schemas that MAY refer to
-	// a database instance and the trusted namespaces where those schema resources MAY be
+	// AllowedSchemas defines the types of database schemas that may refer to
+	// a database instance and the trusted namespaces where those schema resources may be
 	// present.
 	//
 	// +kubebuilder:default={namespaces:{from: Same}}
@@ -152,6 +156,10 @@ type MySQLSpec struct {
 	// +kubebuilder:default={namespaces:{from: Same}}
 	// +optional
 	AllowedReadReplicas *AllowedConsumers `json:"allowedReadReplicas,omitempty"`
+
+	// HealthCheckSpec defines attributes of the health check
+	//+optional
+	HealthCheck HealthCheckSpec `json:"healthCheck"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

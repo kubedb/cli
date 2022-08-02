@@ -43,16 +43,84 @@ spec:
           spec:
             properties:
               configuration:
+                properties:
+                  adminVariables:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                  mysqlQueryRules:
+                    properties:
+                      reqType:
+                        type: string
+                      rules:
+                        items:
+                          type: object
+                        type: array
+                        x-kubernetes-preserve-unknown-fields: true
+                    required:
+                    - reqType
+                    - rules
+                    type: object
+                  mysqlUsers:
+                    properties:
+                      reqType:
+                        type: string
+                      users:
+                        items:
+                          properties:
+                            active:
+                              type: integer
+                            attributes:
+                              type: string
+                            backend:
+                              type: integer
+                            comment:
+                              type: string
+                            default_hostgroup:
+                              type: integer
+                            default_schema:
+                              type: string
+                            fast_forward:
+                              type: integer
+                            frontend:
+                              type: integer
+                            max_connections:
+                              format: int32
+                              type: integer
+                            schema_locked:
+                              type: integer
+                            transaction_persistent:
+                              type: integer
+                            use_ssl:
+                              type: integer
+                            username:
+                              type: string
+                          required:
+                          - username
+                          type: object
+                        type: array
+                    required:
+                    - reqType
+                    - users
+                    type: object
+                  mysqlVariables:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
                 type: object
-              databaseRef:
+              horizontalScaling:
+                properties:
+                  member:
+                    format: int32
+                    type: integer
+                type: object
+              proxyRef:
                 properties:
                   name:
                     type: string
                 type: object
-              horizontalScaling:
-                type: object
               restart:
                 type: object
+              timeout:
+                type: string
               tls:
                 properties:
                   certificates:
@@ -183,7 +251,7 @@ spec:
               volumeExpansion:
                 type: object
             required:
-            - databaseRef
+            - proxyRef
             - type
             type: object
           status:
@@ -225,6 +293,7 @@ spec:
                 - Failed
                 - Approved
                 - Denied
+                - Skipped
                 type: string
             type: object
         type: object

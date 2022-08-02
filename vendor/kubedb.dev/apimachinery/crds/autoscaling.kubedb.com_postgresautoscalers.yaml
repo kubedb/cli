@@ -361,6 +361,82 @@ spec:
             type: object
           status:
             properties:
+              checkpoints:
+                items:
+                  properties:
+                    cpuHistogram:
+                      properties:
+                        bucketWeights:
+                          items:
+                            properties:
+                              index:
+                                type: integer
+                              weight:
+                                format: int32
+                                type: integer
+                            required:
+                            - index
+                            - weight
+                            type: object
+                          type: array
+                          x-kubernetes-preserve-unknown-fields: true
+                        referenceTimestamp:
+                          format: date-time
+                          nullable: true
+                          type: string
+                        totalWeight:
+                          format: double
+                          type: number
+                      type: object
+                    firstSampleStart:
+                      format: date-time
+                      nullable: true
+                      type: string
+                    lastSampleStart:
+                      format: date-time
+                      nullable: true
+                      type: string
+                    lastUpdateTime:
+                      format: date-time
+                      nullable: true
+                      type: string
+                    memoryHistogram:
+                      properties:
+                        bucketWeights:
+                          items:
+                            properties:
+                              index:
+                                type: integer
+                              weight:
+                                format: int32
+                                type: integer
+                            required:
+                            - index
+                            - weight
+                            type: object
+                          type: array
+                          x-kubernetes-preserve-unknown-fields: true
+                        referenceTimestamp:
+                          format: date-time
+                          nullable: true
+                          type: string
+                        totalWeight:
+                          format: double
+                          type: number
+                      type: object
+                    ref:
+                      properties:
+                        containerName:
+                          type: string
+                        vpaObjectName:
+                          type: string
+                      type: object
+                    totalSamplesCount:
+                      type: integer
+                    version:
+                      type: string
+                  type: object
+                type: array
               conditions:
                 items:
                   properties:
@@ -386,261 +462,86 @@ spec:
                   - type
                   type: object
                 type: array
-              currentMetrics:
-                items:
-                  properties:
-                    containerResource:
-                      properties:
-                        container:
-                          type: string
-                        current:
-                          properties:
-                            averageUtilization:
-                              format: int32
-                              type: integer
-                            averageValue:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                            value:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                          type: object
-                        name:
-                          type: string
-                      required:
-                      - container
-                      - current
-                      - name
-                      type: object
-                    external:
-                      properties:
-                        current:
-                          properties:
-                            averageUtilization:
-                              format: int32
-                              type: integer
-                            averageValue:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                            value:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                          type: object
-                        metric:
-                          properties:
-                            name:
-                              type: string
-                            selector:
-                              properties:
-                                matchExpressions:
-                                  items:
-                                    properties:
-                                      key:
-                                        type: string
-                                      operator:
-                                        type: string
-                                      values:
-                                        items:
-                                          type: string
-                                        type: array
-                                    required:
-                                    - key
-                                    - operator
-                                    type: object
-                                  type: array
-                                matchLabels:
-                                  additionalProperties:
-                                    type: string
-                                  type: object
-                              type: object
-                          required:
-                          - name
-                          type: object
-                      required:
-                      - current
-                      - metric
-                      type: object
-                    object:
-                      properties:
-                        current:
-                          properties:
-                            averageUtilization:
-                              format: int32
-                              type: integer
-                            averageValue:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                            value:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                          type: object
-                        describedObject:
-                          properties:
-                            apiVersion:
-                              type: string
-                            kind:
-                              type: string
-                            name:
-                              type: string
-                          required:
-                          - kind
-                          - name
-                          type: object
-                        metric:
-                          properties:
-                            name:
-                              type: string
-                            selector:
-                              properties:
-                                matchExpressions:
-                                  items:
-                                    properties:
-                                      key:
-                                        type: string
-                                      operator:
-                                        type: string
-                                      values:
-                                        items:
-                                          type: string
-                                        type: array
-                                    required:
-                                    - key
-                                    - operator
-                                    type: object
-                                  type: array
-                                matchLabels:
-                                  additionalProperties:
-                                    type: string
-                                  type: object
-                              type: object
-                          required:
-                          - name
-                          type: object
-                      required:
-                      - current
-                      - describedObject
-                      - metric
-                      type: object
-                    pods:
-                      properties:
-                        current:
-                          properties:
-                            averageUtilization:
-                              format: int32
-                              type: integer
-                            averageValue:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                            value:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                          type: object
-                        metric:
-                          properties:
-                            name:
-                              type: string
-                            selector:
-                              properties:
-                                matchExpressions:
-                                  items:
-                                    properties:
-                                      key:
-                                        type: string
-                                      operator:
-                                        type: string
-                                      values:
-                                        items:
-                                          type: string
-                                        type: array
-                                    required:
-                                    - key
-                                    - operator
-                                    type: object
-                                  type: array
-                                matchLabels:
-                                  additionalProperties:
-                                    type: string
-                                  type: object
-                              type: object
-                          required:
-                          - name
-                          type: object
-                      required:
-                      - current
-                      - metric
-                      type: object
-                    resource:
-                      properties:
-                        current:
-                          properties:
-                            averageUtilization:
-                              format: int32
-                              type: integer
-                            averageValue:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                            value:
-                              anyOf:
-                              - type: integer
-                              - type: string
-                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                              x-kubernetes-int-or-string: true
-                          type: object
-                        name:
-                          type: string
-                      required:
-                      - current
-                      - name
-                      type: object
-                    type:
-                      type: string
-                  required:
-                  - type
-                  type: object
-                type: array
-              currentReplicas:
-                format: int32
-                type: integer
-              desiredReplicas:
-                format: int32
-                type: integer
-              lastScaleTime:
-                format: date-time
-                type: string
               observedGeneration:
                 format: int64
                 type: integer
-            required:
-            - conditions
-            - currentReplicas
-            - desiredReplicas
+              phase:
+                enum:
+                - InProgress
+                - Current
+                - Terminating
+                - Failed
+                type: string
+              vpas:
+                items:
+                  properties:
+                    conditions:
+                      items:
+                        properties:
+                          lastTransitionTime:
+                            format: date-time
+                            type: string
+                          message:
+                            type: string
+                          reason:
+                            type: string
+                          status:
+                            type: string
+                          type:
+                            type: string
+                        required:
+                        - status
+                        - type
+                        type: object
+                      type: array
+                    recommendation:
+                      properties:
+                        containerRecommendations:
+                          items:
+                            properties:
+                              containerName:
+                                type: string
+                              lowerBound:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                              target:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                              uncappedTarget:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                              upperBound:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                            required:
+                            - target
+                            type: object
+                          type: array
+                      type: object
+                    vpaName:
+                      type: string
+                  type: object
+                type: array
             type: object
         type: object
     served: true
