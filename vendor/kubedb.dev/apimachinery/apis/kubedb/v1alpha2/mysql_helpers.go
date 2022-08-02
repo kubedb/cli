@@ -272,6 +272,7 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 	m.Spec.Monitor.SetDefaults()
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
+	m.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 
@@ -324,6 +325,18 @@ func (m *MySQL) SetTLSDefaults() {
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MySQLMetricsExporterCert), m.CertificateName(MySQLMetricsExporterCert))
 }
 
+func (m *MySQL) SetHealthCheckerDefaults() {
+	if m.Spec.HealthCheck.PeriodSeconds == nil {
+		m.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthCheck.TimeoutSeconds == nil {
+		m.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthCheck.FailureThreshold == nil {
+		m.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
+}
+
 func (m *MySQLSpec) GetPersistentSecrets() []string {
 	if m == nil {
 		return nil
@@ -341,18 +354,16 @@ func (m *MySQL) CertificateName(alias MySQLCertificateAlias) string {
 	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-// MustCertSecretName returns the secret name for a certificate alias
-func (m *MySQL) MustCertSecretName(alias MySQLCertificateAlias) string {
-	if m == nil {
-		panic("missing MySQL database")
-	} else if m.Spec.TLS == nil {
-		panic(fmt.Errorf("MySQL %s/%s is missing tls spec", m.Namespace, m.Name))
+// GetCertSecretName returns the secret name for a certificate alias if any
+// otherwise returns default certificate secret name for the given alias.
+func (m *MySQL) GetCertSecretName(alias MySQLCertificateAlias) string {
+	if m.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
 	}
-	name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
-	if !ok {
-		panic(fmt.Errorf("MySQL %s/%s is missing secret name for %s certificate", m.Namespace, m.Name, alias))
-	}
-	return name
+	return m.CertificateName(alias)
 }
 
 func (m *MySQL) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {

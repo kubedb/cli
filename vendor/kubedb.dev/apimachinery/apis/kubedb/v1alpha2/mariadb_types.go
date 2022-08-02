@@ -51,6 +51,10 @@ type MariaDB struct {
 }
 
 type MariaDBSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of MariaDB to be deployed.
 	Version string `json:"version"`
 
@@ -113,15 +117,18 @@ type MariaDBSpec struct {
 	// +kubebuilder:default={namespaces:{from: Same}}
 	// +optional
 	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
+
+	// +optional
+	HealthCheck HealthCheckSpec `json:"healthCheck"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
 type MariaDBCertificateAlias string
 
 const (
-	MariaDBServerCert          MariaDBCertificateAlias = "server"
-	MariaDBClientCert          MariaDBCertificateAlias = "client"
-	MariaDBMetricsExporterCert MariaDBCertificateAlias = "metrics-exporter"
+	MariaDBServerCert   MariaDBCertificateAlias = "server"
+	MariaDBClientCert   MariaDBCertificateAlias = "client"
+	MariaDBExporterCert MariaDBCertificateAlias = "metrics-exporter"
 )
 
 type MariaDBStatus struct {

@@ -39,14 +39,23 @@ spec:
                   node:
                     properties:
                       containerControlledValues:
+                        enum:
+                        - RequestsAndLimits
+                        - RequestsOnly
                         type: string
                       controlledResources:
                         items:
                           type: string
                         type: array
-                      inMemoryScalingThreshold:
-                        format: int32
-                        type: integer
+                      inMemoryStorage:
+                        properties:
+                          scalingFactorPercentage:
+                            format: int32
+                            type: integer
+                          usageThresholdPercentage:
+                            format: int32
+                            type: integer
+                        type: object
                       maxAllowed:
                         additionalProperties:
                           anyOf:
@@ -76,14 +85,23 @@ spec:
                       data:
                         properties:
                           containerControlledValues:
+                            enum:
+                            - RequestsAndLimits
+                            - RequestsOnly
                             type: string
                           controlledResources:
                             items:
                               type: string
                             type: array
-                          inMemoryScalingThreshold:
-                            format: int32
-                            type: integer
+                          inMemoryStorage:
+                            properties:
+                              scalingFactorPercentage:
+                                format: int32
+                                type: integer
+                              usageThresholdPercentage:
+                                format: int32
+                                type: integer
+                            type: object
                           maxAllowed:
                             additionalProperties:
                               anyOf:
@@ -111,14 +129,23 @@ spec:
                       ingest:
                         properties:
                           containerControlledValues:
+                            enum:
+                            - RequestsAndLimits
+                            - RequestsOnly
                             type: string
                           controlledResources:
                             items:
                               type: string
                             type: array
-                          inMemoryScalingThreshold:
-                            format: int32
-                            type: integer
+                          inMemoryStorage:
+                            properties:
+                              scalingFactorPercentage:
+                                format: int32
+                                type: integer
+                              usageThresholdPercentage:
+                                format: int32
+                                type: integer
+                            type: object
                           maxAllowed:
                             additionalProperties:
                               anyOf:
@@ -146,14 +173,23 @@ spec:
                       master:
                         properties:
                           containerControlledValues:
+                            enum:
+                            - RequestsAndLimits
+                            - RequestsOnly
                             type: string
                           controlledResources:
                             items:
                               type: string
                             type: array
-                          inMemoryScalingThreshold:
-                            format: int32
-                            type: integer
+                          inMemoryStorage:
+                            properties:
+                              scalingFactorPercentage:
+                                format: int32
+                                type: integer
+                              usageThresholdPercentage:
+                                format: int32
+                                type: integer
+                            type: object
                           maxAllowed:
                             additionalProperties:
                               anyOf:
@@ -260,6 +296,82 @@ spec:
             type: object
           status:
             properties:
+              checkpoints:
+                items:
+                  properties:
+                    cpuHistogram:
+                      properties:
+                        bucketWeights:
+                          items:
+                            properties:
+                              index:
+                                type: integer
+                              weight:
+                                format: int32
+                                type: integer
+                            required:
+                            - index
+                            - weight
+                            type: object
+                          type: array
+                          x-kubernetes-preserve-unknown-fields: true
+                        referenceTimestamp:
+                          format: date-time
+                          nullable: true
+                          type: string
+                        totalWeight:
+                          format: double
+                          type: number
+                      type: object
+                    firstSampleStart:
+                      format: date-time
+                      nullable: true
+                      type: string
+                    lastSampleStart:
+                      format: date-time
+                      nullable: true
+                      type: string
+                    lastUpdateTime:
+                      format: date-time
+                      nullable: true
+                      type: string
+                    memoryHistogram:
+                      properties:
+                        bucketWeights:
+                          items:
+                            properties:
+                              index:
+                                type: integer
+                              weight:
+                                format: int32
+                                type: integer
+                            required:
+                            - index
+                            - weight
+                            type: object
+                          type: array
+                          x-kubernetes-preserve-unknown-fields: true
+                        referenceTimestamp:
+                          format: date-time
+                          nullable: true
+                          type: string
+                        totalWeight:
+                          format: double
+                          type: number
+                      type: object
+                    ref:
+                      properties:
+                        containerName:
+                          type: string
+                        vpaObjectName:
+                          type: string
+                      type: object
+                    totalSamplesCount:
+                      type: integer
+                    version:
+                      type: string
+                  type: object
+                type: array
               conditions:
                 items:
                   properties:
@@ -288,6 +400,83 @@ spec:
               observedGeneration:
                 format: int64
                 type: integer
+              phase:
+                enum:
+                - InProgress
+                - Current
+                - Terminating
+                - Failed
+                type: string
+              vpas:
+                items:
+                  properties:
+                    conditions:
+                      items:
+                        properties:
+                          lastTransitionTime:
+                            format: date-time
+                            type: string
+                          message:
+                            type: string
+                          reason:
+                            type: string
+                          status:
+                            type: string
+                          type:
+                            type: string
+                        required:
+                        - status
+                        - type
+                        type: object
+                      type: array
+                    recommendation:
+                      properties:
+                        containerRecommendations:
+                          items:
+                            properties:
+                              containerName:
+                                type: string
+                              lowerBound:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                              target:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                              uncappedTarget:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                              upperBound:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                type: object
+                            required:
+                            - target
+                            type: object
+                          type: array
+                      type: object
+                    vpaName:
+                      type: string
+                  type: object
+                type: array
             type: object
         type: object
     served: true

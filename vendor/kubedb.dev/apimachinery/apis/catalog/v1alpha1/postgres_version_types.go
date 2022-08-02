@@ -74,6 +74,8 @@ type PostgresVersionSpec struct {
 	// SecurityContext is for the additional config for postgres DB container
 	// +optional
 	SecurityContext PostgresSecurityContext `json:"securityContext"`
+	// upgrade constraints
+	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
 }
 
 // PostgresVersionInitContainer is the Postgres init container image
@@ -83,7 +85,8 @@ type PostgresVersionInitContainer struct {
 
 // PostgresVersionDatabase is the Postgres Database image
 type PostgresVersionDatabase struct {
-	Image string `json:"image"`
+	Image  string `json:"image"`
+	BaseOS string `json:"baseOS,omitempty"`
 }
 
 // PostgresVersionCoordinator is the Postgres leader elector image

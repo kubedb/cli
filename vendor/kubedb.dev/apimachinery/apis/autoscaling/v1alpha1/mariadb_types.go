@@ -19,11 +19,10 @@ package v1alpha1
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
-	ResourceCodeMariaDBAutoscaler     = "mdautoscaler"
+	ResourceCodeMariaDBAutoscaler     = "mdscaler"
 	ResourceKindMariaDBAutoscaler     = "MariaDBAutoscaler"
 	ResourceSingularMariaDBAutoscaler = "mariadbautoscaler"
 	ResourcePluralMariaDBAutoscaler   = "mariadbautoscalers"
@@ -38,7 +37,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=mariadbautoscalers,singular=mariadbautoscaler,shortName=mdautoscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=mariadbautoscalers,singular=mariadbautoscaler,shortName=mdscaler,categories={datastore,kubedb,appscode}
 // +kubebuilder:subresource:status
 type MariaDBAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`
@@ -52,7 +51,7 @@ type MariaDBAutoscaler struct {
 
 	// Current information about the autoscaler.
 	// +optional
-	Status MariaDBAutoscalerStatus `json:"status,omitempty"`
+	Status AutoscalerStatus `json:"status,omitempty"`
 }
 
 // MariaDBAutoscalerSpec is the specification of the behavior of the autoscaler.
@@ -71,33 +70,6 @@ type MariaDBComputeAutoscalerSpec struct {
 type MariaDBStorageAutoscalerSpec struct {
 	MariaDB *StorageAutoscalerSpec `json:"mariadb,omitempty"`
 }
-
-// MariaDBAutoscalerStatus describes the runtime state of the autoscaler.
-type MariaDBAutoscalerStatus struct {
-	// observedGeneration is the most recent generation observed by this autoscaler.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
-
-	// Conditions is the set of conditions required for this autoscaler to scale its target,
-	// and indicates whether or not those conditions are met.
-	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
-	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
-}
-
-// MariaDBAutoscalerConditionType are the valid conditions of
-// a MariaDBAutoscaler.
-type MariaDBAutoscalerConditionType string
-
-var (
-	// ConfigDeprecated indicates that this VPA configuration is deprecated
-	// and will stop being supported soon.
-	MariaDBAutoscalerConfigDeprecated MariaDBAutoscalerConditionType = "ConfigDeprecated"
-	// ConfigUnsupported indicates that this VPA configuration is unsupported
-	// and recommendations will not be provided for it.
-	MariaDBAutoscalerConfigUnsupported MariaDBAutoscalerConditionType = "ConfigUnsupported"
-)
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // MariaDBAutoscalerList is a list of MariaDBAutoscaler objects.

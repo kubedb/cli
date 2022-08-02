@@ -73,7 +73,7 @@ type MySQLVersionSpec struct {
 	// PSP names
 	PodSecurityPolicies MySQLVersionPodSecurityPolicy `json:"podSecurityPolicies"`
 	// upgrade constraints
-	UpgradeConstraints MySQLUpgradeConstraints `json:"upgradeConstraints"`
+	UpgradeConstraints MySQLUpgradeConstraints `json:"upgradeConstraints,omitempty"`
 	// Stash defines backup and restore task definitions.
 	// +optional
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
@@ -121,20 +121,20 @@ type MySQLVersionPodSecurityPolicy struct {
 }
 
 type MySQLUpgradeConstraints struct {
-	// List of all accepted versions for uprade request
-	Allowlist Allowlist `json:"allowlist,omitempty"`
-	// List of all rejected versions for uprade request
-	Denylist Denylist `json:"denylist,omitempty"`
+	// List of all accepted versions for upgrade request
+	Allowlist MySQLVersionAllowlist `json:"allowlist,omitempty"`
+	// List of all rejected versions for upgrade request
+	Denylist MySQLVersionDenylist `json:"denylist,omitempty"`
 }
 
-type Allowlist struct {
+type MySQLVersionAllowlist struct {
 	// List of all accepted versions for upgrade request of a Standalone server. empty indicates all accepted
 	Standalone []string `json:"standalone,omitempty"`
 	// List of all accepted versions for upgrade request of a GroupReplication cluster. empty indicates all accepted
 	GroupReplication []string `json:"groupReplication,omitempty"`
 }
 
-type Denylist struct {
+type MySQLVersionDenylist struct {
 	// List of all rejected versions for upgrade request of a Standalone server
 	Standalone []string `json:"standalone,omitempty"`
 	// List of all rejected versions for upgrade request of a GroupReplication cluster

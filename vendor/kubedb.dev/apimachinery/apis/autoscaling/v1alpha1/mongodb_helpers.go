@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/catalog"
+	"kubedb.dev/apimachinery/apis/autoscaling"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -33,7 +33,7 @@ func (_ MongoDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResou
 var _ apis.ResourceInfo = &MongoDBAutoscaler{}
 
 func (m MongoDBAutoscaler) ResourceFQN() string {
-	return fmt.Sprintf("%s.%s", ResourcePluralMongoDBAutoscaler, catalog.GroupName)
+	return fmt.Sprintf("%s.%s", ResourcePluralMongoDBAutoscaler, autoscaling.GroupName)
 }
 
 func (m MongoDBAutoscaler) ResourceShortCode() string {
@@ -54,4 +54,14 @@ func (m MongoDBAutoscaler) ResourcePlural() string {
 
 func (m MongoDBAutoscaler) ValidateSpecs() error {
 	return nil
+}
+
+var _ StatusAccessor = &MongoDBAutoscaler{}
+
+func (e *MongoDBAutoscaler) GetStatus() AutoscalerStatus {
+	return e.Status
+}
+
+func (e *MongoDBAutoscaler) SetStatus(s AutoscalerStatus) {
+	e.Status = s
 }

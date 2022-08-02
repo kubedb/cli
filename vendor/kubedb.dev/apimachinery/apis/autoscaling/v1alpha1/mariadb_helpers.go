@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/catalog"
+	"kubedb.dev/apimachinery/apis/autoscaling"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -33,7 +33,7 @@ func (_ MariaDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResou
 var _ apis.ResourceInfo = &MariaDBAutoscaler{}
 
 func (m MariaDBAutoscaler) ResourceFQN() string {
-	return fmt.Sprintf("%s.%s", ResourcePluralMariaDBAutoscaler, catalog.GroupName)
+	return fmt.Sprintf("%s.%s", ResourcePluralMariaDBAutoscaler, autoscaling.GroupName)
 }
 
 func (m MariaDBAutoscaler) ResourceShortCode() string {
@@ -54,4 +54,14 @@ func (m MariaDBAutoscaler) ResourcePlural() string {
 
 func (m MariaDBAutoscaler) ValidateSpecs() error {
 	return nil
+}
+
+var _ StatusAccessor = &MariaDBAutoscaler{}
+
+func (e *MariaDBAutoscaler) GetStatus() AutoscalerStatus {
+	return e.Status
+}
+
+func (e *MariaDBAutoscaler) SetStatus(s AutoscalerStatus) {
+	e.Status = s
 }

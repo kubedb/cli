@@ -17,13 +17,14 @@ limitations under the License.
 package v1alpha1
 
 import (
+	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
-	ResourceCodeMongoDBAutoscaler     = "mgautoscaler"
+	ResourceCodeMongoDBAutoscaler     = "mgscaler"
 	ResourceKindMongoDBAutoscaler     = "MongoDBAutoscaler"
 	ResourceSingularMongoDBAutoscaler = "mongodbautoscaler"
 	ResourcePluralMongoDBAutoscaler   = "mongodbautoscalers"
@@ -38,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=mongodbautoscalers,singular=mongodbautoscaler,shortName=mgautoscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=mongodbautoscalers,singular=mongodbautoscaler,shortName=mgscaler,categories={datastore,kubedb,appscode}
 // +kubebuilder:subresource:status
 type MongoDBAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`
@@ -52,12 +53,15 @@ type MongoDBAutoscaler struct {
 
 	// Current information about the autoscaler.
 	// +optional
-	Status MongoDBAutoscalerStatus `json:"status,omitempty"`
+	Status AutoscalerStatus `json:"status,omitempty"`
 }
 
 // MongoDBAutoscalerSpec is the specification of the behavior of the autoscaler.
 type MongoDBAutoscalerSpec struct {
 	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
+
+	// This field will be used to control the behaviour of ops-manager
+	OpsRequestOptions *MongoDBOpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *MongoDBComputeAutoscalerSpec `json:"compute,omitempty"`
 	Storage *MongoDBStorageAutoscalerSpec `json:"storage,omitempty"`
@@ -79,32 +83,17 @@ type MongoDBStorageAutoscalerSpec struct {
 	Shard        *StorageAutoscalerSpec `json:"shard,omitempty"`
 }
 
-// MongoDBAutoscalerStatus describes the runtime state of the autoscaler.
-type MongoDBAutoscalerStatus struct {
-	// observedGeneration is the most recent generation observed by this autoscaler.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
+type MongoDBOpsRequestOptions struct {
+	// Specifies the Readiness Criteria
+	ReadinessCriteria *opsapi.MongoDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 
-	// Conditions is the set of conditions required for this autoscaler to scale its target,
-	// and indicates whether or not those conditions are met.
-	// +optional
-	// +patchMergeKey=type
-	// +patchStrategy=merge
-	Conditions []kmapi.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
+
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default:="IfReady"
+	Apply opsapi.ApplyOption `json:"apply,omitempty"`
 }
-
-// MongoDBAutoscalerConditionType are the valid conditions of
-// a MongoDBAutoscaler.
-type MongoDBAutoscalerConditionType string
-
-var (
-	// ConfigDeprecated indicates that this VPA configuration is deprecated
-	// and will stop being supported soon.
-	MongoDBAutoscalerConfigDeprecated MongoDBAutoscalerConditionType = "ConfigDeprecated"
-	// ConfigUnsupported indicates that this VPA configuration is unsupported
-	// and recommendations will not be provided for it.
-	MongoDBAutoscalerConfigUnsupported MongoDBAutoscalerConditionType = "ConfigUnsupported"
-)
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // MongoDBAutoscalerList is a list of MongoDBAutoscaler objects.

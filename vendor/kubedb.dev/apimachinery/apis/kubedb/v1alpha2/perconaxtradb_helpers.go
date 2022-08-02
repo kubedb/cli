@@ -18,6 +18,7 @@ package v1alpha2
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/kubedb"
@@ -25,12 +26,16 @@ import (
 
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
+	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 func (_ PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -95,10 +100,6 @@ func (p PerconaXtraDB) ResourcePlural() string {
 
 func (p PerconaXtraDB) ServiceName() string {
 	return p.OffshootName()
-}
-
-func (p PerconaXtraDB) IsCluster() bool {
-	return pointer.Int32(p.Spec.Replicas) > 1
 }
 
 func (p PerconaXtraDB) GoverningServiceName() string {
@@ -169,13 +170,17 @@ func (p PerconaXtraDB) StatsServiceLabels() map[string]string {
 	return p.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
-func (p *PerconaXtraDB) SetDefaults() {
+func (p PerconaXtraDB) PrimaryServiceDNS() string {
+	return fmt.Sprintf("%s.%s.svc", p.ServiceName(), p.Namespace)
+}
+
+func (p *PerconaXtraDB) SetDefaults(topology *core_util.Topology) {
 	if p == nil {
 		return
 	}
 
 	if p.Spec.Replicas == nil {
-		p.Spec.Replicas = pointer.Int32P(1)
+		p.Spec.Replicas = pointer.Int32P(3)
 	}
 
 	if p.Spec.StorageType == "" {
@@ -185,53 +190,78 @@ func (p *PerconaXtraDB) SetDefaults() {
 		p.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
 
-	p.Spec.setDefaultProbes()
+	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
+		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
+	}
+
 	p.Spec.Monitor.SetDefaults()
+	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
+	p.SetTLSDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 
-// setDefaultProbes sets defaults only when probe fields are nil.
-// In operator, check if the value of probe fields is "{}".
-// For "{}", ignore readinessprobe or livenessprobe in statefulset.
-// Ref: https://github.com/mattlord/Docker-InnoDB-Cluster/blob/master/healthcheck.sh#L10
-func (p *PerconaXtraDBSpec) setDefaultProbes() {
-	if p == nil {
+// setDefaultAffinity
+func (p *PerconaXtraDB) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels map[string]string, topology *core_util.Topology) {
+	if podTemplate == nil {
+		return
+	} else if podTemplate.Spec.Affinity != nil {
+		// Update topologyKey fields according to Kubernetes version
+		topology.ConvertAffinity(podTemplate.Spec.Affinity)
 		return
 	}
 
-	var readynessProbeCmd []string
-	if pointer.Int32(p.Replicas) > 1 {
-		readynessProbeCmd = []string{
-			"/cluster-check.sh",
-		}
-	} else {
-		readynessProbeCmd = []string{
-			"bash",
-			"-c",
-			`export MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
-ping_resp=$(mysqladmin -uroot ping)
-if [[ "$ping_resp" != "mysqld is alive" ]]; then
-    echo "[ERROR] server is not ready. PING_RESPONSE: $ping_resp"
-    exit 1
-fi
-`,
-		}
-	}
-
-	readinessProbe := &core.Probe{
-		ProbeHandler: core.ProbeHandler{
-			Exec: &core.ExecAction{
-				Command: readynessProbeCmd,
+	podTemplate.Spec.Affinity = &core.Affinity{
+		PodAntiAffinity: &core.PodAntiAffinity{
+			PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+				// Prefer to not schedule multiple pods on the same node
+				{
+					Weight: 100,
+					PodAffinityTerm: core.PodAffinityTerm{
+						Namespaces: []string{p.Namespace},
+						LabelSelector: &metav1.LabelSelector{
+							MatchLabels: labels,
+						},
+						TopologyKey: core.LabelHostname,
+					},
+				},
+				// Prefer to not schedule multiple pods on the node with same zone
+				{
+					Weight: 50,
+					PodAffinityTerm: core.PodAffinityTerm{
+						Namespaces: []string{p.Namespace},
+						LabelSelector: &metav1.LabelSelector{
+							MatchLabels: labels,
+						},
+						TopologyKey: topology.LabelZone,
+					},
+				},
 			},
 		},
-		InitialDelaySeconds: 30,
-		PeriodSeconds:       10,
-	}
-	if p.PodTemplate.Spec.ReadinessProbe == nil {
-		p.PodTemplate.Spec.ReadinessProbe = readinessProbe
 	}
 }
 
+func (p *PerconaXtraDB) SetHealthCheckerDefaults() {
+	if p.Spec.HealthCheck.PeriodSeconds == nil {
+		p.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if p.Spec.HealthCheck.TimeoutSeconds == nil {
+		p.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if p.Spec.HealthCheck.FailureThreshold == nil {
+		p.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
+}
+
+func (p *PerconaXtraDB) SetTLSDefaults() {
+	if p.Spec.TLS == nil || p.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PerconaXtraDBServerCert), p.CertificateName(PerconaXtraDBServerCert))
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PerconaXtraDBClientCert), p.CertificateName(PerconaXtraDBClientCert))
+	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PerconaXtraDBExporterCert), p.CertificateName(PerconaXtraDBExporterCert))
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
 func (p *PerconaXtraDBSpec) GetPersistentSecrets() []string {
 	if p == nil {
 		return nil
@@ -244,8 +274,45 @@ func (p *PerconaXtraDBSpec) GetPersistentSecrets() []string {
 	return secrets
 }
 
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (p *PerconaXtraDB) CertificateName(alias PerconaXtraDBCertificateAlias) string {
+	return meta_util.NameWithSuffix(p.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any,
+// otherwise returns default certificate secret name for the given alias.
+func (p *PerconaXtraDB) GetCertSecretName(alias PerconaXtraDBCertificateAlias) string {
+	if p.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(p.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return p.CertificateName(alias)
+}
+
+func (p *PerconaXtraDB) AuthSecretName() string {
+	return meta_util.NameWithSuffix(p.Name, "auth")
+}
+
+func (p *PerconaXtraDB) ReplicationSecretName() string {
+	return meta_util.NameWithSuffix(p.Name, "replication")
+}
+
+func (p *PerconaXtraDB) MonitorSecretName() string {
+	return meta_util.NameWithSuffix(p.Name, "monitor")
+}
+
 func (p *PerconaXtraDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
 	// Desire number of statefulSets
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
+}
+
+func (p *PerconaXtraDB) CertMountPath(alias PerconaXtraDBCertificateAlias) string {
+	return filepath.Join(PerconaXtraDBCertMountPath, string(alias))
+}
+
+func (p *PerconaXtraDB) CertFilePath(certAlias PerconaXtraDBCertificateAlias, certFileName string) string {
+	return filepath.Join(p.CertMountPath(certAlias), certFileName)
 }

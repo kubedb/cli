@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"gomodules.xyz/pointer"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -176,7 +177,20 @@ func (rs *RedisSentinel) SetDefaults(topology *core_util.Topology) {
 
 	rs.Spec.Monitor.SetDefaults()
 	rs.SetTLSDefaults()
+	rs.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&rs.Spec.PodTemplate.Spec.Resources, DefaultResources)
+}
+
+func (rs *RedisSentinel) SetHealthCheckerDefaults() {
+	if rs.Spec.HealthCheck.PeriodSeconds == nil {
+		rs.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	}
+	if rs.Spec.HealthCheck.TimeoutSeconds == nil {
+		rs.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if rs.Spec.HealthCheck.FailureThreshold == nil {
+		rs.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	}
 }
 
 func (rs *RedisSentinel) SetTLSDefaults() {
@@ -188,14 +202,14 @@ func (rs *RedisSentinel) SetTLSDefaults() {
 	rs.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(rs.Spec.TLS.Certificates, string(RedisMetricsExporterCert), rs.CertificateName(RedisMetricsExporterCert))
 }
 
-func (r *RedisSentinel) GetPersistentSecrets() []string {
-	if r == nil {
+func (rs *RedisSentinel) GetPersistentSecrets() []string {
+	if rs == nil {
 		return nil
 	}
 
 	var secrets []string
-	if r.Spec.AuthSecret != nil {
-		secrets = append(secrets, r.Spec.AuthSecret.Name)
+	if rs.Spec.AuthSecret != nil {
+		secrets = append(secrets, rs.Spec.AuthSecret.Name)
 	}
 	return secrets
 }

@@ -54,6 +54,8 @@ const (
 	DBTLSVolume         = "tls-volume"
 	DBExporterTLSVolume = "exporter-tls-volume"
 
+	CACert = "ca.crt"
+
 	// =========================== Database key Constants ============================
 	PostgresKey      = ResourceSingularPostgres + "." + kubedb.GroupName
 	ElasticsearchKey = ResourceSingularElasticsearch + "." + kubedb.GroupName
@@ -81,6 +83,7 @@ const (
 	ElasticsearchCustomConfigDir                 = "/elasticsearch/custom-config"
 	ElasticsearchDataDir                         = "/usr/share/elasticsearch/data"
 	ElasticsearchOpenSearchDataDir               = "/usr/share/opensearch/data"
+	ElasticsearchTempDir                         = "/tmp"
 	ElasticsearchOpendistroSecurityConfigDir     = "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
 	ElasticsearchOpenSearchSecurityConfigDir     = "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
 	ElasticsearchSearchGuardSecurityConfigDir    = "/usr/share/elasticsearch/plugins/search-guard-%v/sgconfig"
@@ -101,6 +104,13 @@ const (
 	ElasticsearchOpendistroInternalUserFileName  = "internal_users.yml"
 	ElasticsearchJavaOptsEnv                     = "ES_JAVA_OPTS"
 	ElasticsearchOpenSearchJavaOptsEnv           = "OPENSEARCH_JAVA_OPTS"
+	ElasticsearchVolumeConfig                    = "esconfig"
+	ElasticsearchVolumeTempConfig                = "temp-config"
+	ElasticsearchVolumeSecurityConfig            = "security-config"
+	ElasticsearchVolumeSecureSettings            = "secure-settings"
+	ElasticsearchVolumeCustomConfig              = "custom-config"
+	ElasticsearchVolumeData                      = "data"
+	ElasticsearchVolumeTemp                      = "temp"
 
 	// Ref:
 	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size
@@ -184,8 +194,13 @@ const (
 	MySQLDatabasePort                      = 3306
 	MySQLRouterReadWritePort               = 6446
 	MySQLRouterReadOnlyPort                = 6447
-	MySQLGroupComPort                      = 33060
-	MySQLMaxGroupMembers                   = 9
+
+	MySQLCoordinatorClientPort = 2379
+	MySQLCoordinatorPort       = 2380
+	MySQLCoordinatorStatus     = "Coordinator/Status"
+
+	MySQLGroupComPort    = 33060
+	MySQLMaxGroupMembers = 9
 	// The recommended MySQL server version for group replication (GR)
 	MySQLGRRecommendedVersion = "8.0.23"
 	MySQLDefaultGroupSize     = 3
@@ -199,8 +214,12 @@ const (
 	MySQLTLSConfigFalse      = "false"
 	MySQLTLSConfigPreferred  = "preferred"
 
-	MySQLRouterContainerName           = "mysql-router"
-	MySQLCoordinatorContainerName      = "mysql-coordinator"
+	MySQLContainerName            = "mysql"
+	MySQLRouterContainerName      = "mysql-router"
+	MySQLRouterInitContainerName  = "mysql-router-init"
+	MySQLCoordinatorContainerName = "mysql-coordinator"
+	MySQLInitContainerName        = "mysql-init"
+
 	MySQLRouterInitScriptDirectoryName = "init-scripts"
 	MySQLRouterInitScriptDirectoryPath = "/scripts"
 	MySQLRouterConfigDirectoryName     = "router-config-secret"
@@ -213,36 +232,90 @@ const (
 	MySQLComponentDB     = "database"
 	MySQLComponentRouter = "router"
 
+	// mysql volume and volume Mounts
+
+	MySQLVolumeNameTemp      = "tmp"
+	MySQLVolumeMountPathTemp = "/tmp"
+
+	MySQLVolumeNameData      = "data"
+	MySQLVolumeMountPathData = "/var/lib/mysql"
+
+	MySQLVolumeNameInitialScript      = "initial-script"
+	MySQLVolumeMountPathInitialScript = "/docker-entrypoint-initdb.d"
+
+	MySQLVolumeNameInitScript      = "init-scripts"
+	MySQLVolumeMountPathInitScript = "/scripts"
+
+	MySQLVolumeNameCustomConfig      = "custom-config"
+	MySQLVolumeMountPathCustomConfig = "/etc/mysql/conf.d"
+
+	MySQLVolumeNameTLS      = "tls-volume"
+	MySQLVolumeMountPathTLS = "/etc/mysql/certs"
+
+	MySQLVolumeNameExporterTLS      = "exporter-tls-volume"
+	MySQLVolumeMountPathExporterTLS = "/etc/mysql/certs"
+
+	MySQLVolumeNameSourceCA      = "source-ca"
+	MySQLVolumeMountPathSourceCA = "/etc/mysql/server/certs"
+
 	// =========================== PerconaXtraDB Constants ============================
-	PerconaXtraDBClusterRecommendedVersion    = "5.7"
-	PerconaXtraDBMaxClusterNameLength         = 32
-	PerconaXtraDBStandaloneReplicas           = 1
-	PerconaXtraDBDefaultClusterSize           = 3
-	PerconaXtraDBDataMountPath                = "/var/lib/mysql"
-	PerconaXtraDBDataLostFoundPath            = PerconaXtraDBDataMountPath + "lost+found"
-	PerconaXtraDBInitDBMountPath              = "/docker-entrypoint-initdb.d"
-	PerconaXtraDBCustomConfigMountPath        = "/etc/percona-server.conf.d/"
-	PerconaXtraDBClusterCustomConfigMountPath = "/etc/percona-xtradb-cluster.conf.d/"
+	PerconaXtraDBClusterRecommendedVersion     = "5.7"
+	PerconaXtraDBMaxClusterNameLength          = 32
+	PerconaXtraDBStandaloneReplicas            = 1
+	PerconaXtraDBDefaultClusterSize            = 3
+	PerconaXtraDBDataMountPath                 = "/var/lib/mysql"
+	PerconaXtraDBDataLostFoundPath             = PerconaXtraDBDataMountPath + "/lost+found"
+	PerconaXtraDBInitDBVolumeName              = "initial-script"
+	PerconaXtraDBInitDBMountPath               = "/docker-entrypoint-initdb.d"
+	PerconaXtraDBCustomConfigMountPath         = "/etc/percona-server.conf.d/"
+	PerconaXtraDBClusterCustomConfigMountPath  = "/etc/mysql/custom.conf.d/"
+	PerconaXtraDBCustomConfigVolumeName        = "custom-config"
+	PerconaXtraDBTLSConfigCustom               = "custom"
+	PerconaXtraDBInitContainerName             = "px-init"
+	PerconaXtraDBCoordinatorContainerName      = "px-coordinator"
+	PerconaXtraDBRunScriptVolumeName           = "run-script"
+	PerconaXtraDBRunScriptVolumeMountPath      = "/run-script"
+	PerconaXtraDBInitScriptVolumeName          = "init-scripts"
+	PerconaXtraDBInitScriptVolumeMountPath     = "/scripts"
+	PerconaXtraDBContainerName                 = ResourceSingularPerconaXtraDB
+	PerconaXtraDBCertMountPath                 = "/etc/mysql/certs"
+	PerconaXtraDBExporterConfigFileName        = "exporter.cnf"
+	PerconaXtraDBGaleraClusterPrimaryComponent = "Primary"
+	PerconaXtraDBServerTLSVolumeName           = "tls-server-config"
+	PerconaXtraDBClientTLSVolumeName           = "tls-client-config"
+	PerconaXtraDBExporterTLSVolumeName         = "tls-metrics-exporter-config"
+	PerconaXtraDBMetricsExporterTLSVolumeName  = "metrics-exporter-config"
+	PerconaXtraDBMetricsExporterConfigPath     = "/etc/mysql/config/exporter"
+	PerconaXtraDBDataVolumeName                = "data"
 
 	// =========================== MariaDB Constants ============================
-	MariaDBMaxClusterNameLength         = 32
-	MariaDBStandaloneReplicas           = 1
-	MariaDBDefaultClusterSize           = 3
-	MariaDBDataMountPath                = "/var/lib/mysql"
-	MariaDBDataLostFoundPath            = MariaDBDataMountPath + "lost+found"
-	MariaDBInitDBVolumeName             = "initial-script"
-	MariaDBInitDBMountPath              = "/docker-entrypoint-initdb.d"
-	MariaDBCustomConfigMountPath        = "/etc/mysql/conf.d/"
-	MariaDBClusterCustomConfigMountPath = "/etc/mysql/custom.conf.d/"
-	MariaDBCustomConfigVolumeName       = "custom-config"
-	MariaDBTLSConfigCustom              = "custom"
-	MariaDBInitContainerName            = "mariadb-init"
-	MariaDBCoordinatorContainerName     = "md-coordinator"
-	MariaDBRunScriptVolumeName          = "run-script"
-	MariaDBRunScriptVolumeMountPath     = "/run-script"
-	MariaDBInitScriptVolumeName         = "init-scripts"
-	MariaDBInitScriptVolumeMountPath    = "/scripts"
-	MariaDBContainerName                = ResourceSingularMariaDB
+	MariaDBMaxClusterNameLength          = 32
+	MariaDBStandaloneReplicas            = 1
+	MariaDBDefaultClusterSize            = 3
+	MariaDBDataMountPath                 = "/var/lib/mysql"
+	MariaDBDataLostFoundPath             = MariaDBDataMountPath + "/lost+found"
+	MariaDBInitDBVolumeName              = "initial-script"
+	MariaDBInitDBMountPath               = "/docker-entrypoint-initdb.d"
+	MariaDBCustomConfigMountPath         = "/etc/mysql/conf.d/"
+	MariaDBClusterCustomConfigMountPath  = "/etc/mysql/custom.conf.d/"
+	MariaDBCustomConfigVolumeName        = "custom-config"
+	MariaDBTLSConfigCustom               = "custom"
+	MariaDBInitContainerName             = "mariadb-init"
+	MariaDBCoordinatorContainerName      = "md-coordinator"
+	MariaDBRunScriptVolumeName           = "run-script"
+	MariaDBRunScriptVolumeMountPath      = "/run-script"
+	MariaDBInitScriptVolumeName          = "init-scripts"
+	MariaDBInitScriptVolumeMountPath     = "/scripts"
+	MariaDBContainerName                 = ResourceSingularMariaDB
+	MariaDBCertMountPath                 = "/etc/mysql/certs"
+	MariaDBExporterConfigFileName        = "exporter.cnf"
+	MariaDBGaleraClusterPrimaryComponent = "Primary"
+	MariaDBServerTLSVolumeName           = "tls-server-config"
+	MariaDBClientTLSVolumeName           = "tls-client-config"
+	MariaDBExporterTLSVolumeName         = "tls-metrics-exporter-config"
+	MariaDBMetricsExporterTLSVolumeName  = "metrics-exporter-config"
+	MariaDBMetricsExporterConfigPath     = "/etc/mysql/config/exporter"
+	MariaDBDataVolumeName                = "data"
 
 	// =========================== PostgreSQL Constants ============================
 	PostgresDatabasePortName         = "db"
@@ -263,8 +336,22 @@ const (
 	RaftMetricsExporterPort     = 23790
 	RaftMetricsExporterPortName = "raft-metrics"
 
-	PostgresRunScriptMountPath  = "/run_scripts"
-	PostgresRunScriptVolumeName = "scripts"
+	PostgresInitVolumeName           = "initial-script"
+	PostgresInitDir                  = "/var/initdb"
+	PostgresSharedMemoryVolumeName   = "shared-memory"
+	PostgresSharedMemoryDir          = "/dev/shm"
+	PostgresDataVolumeName           = "data"
+	PostgresDataDir                  = "/var/pv"
+	PostgresCustomConfigVolumeName   = "custom-config"
+	PostgresCustomConfigDir          = "/etc/config"
+	PostgresRunScriptsVolumeName     = "run-scripts"
+	PostgresRunScriptsDir            = "/run_scripts"
+	PostgresRoleScriptsVolumeName    = "role-scripts"
+	PostgresRoleScriptsDir           = "/role_scripts"
+	PostgresSharedScriptsVolumeName  = "scripts"
+	PostgresSharedScriptsDir         = "/scripts"
+	PostgresSharedTlsVolumeName      = "certs"
+	PostgresSharedTlsVolumeMountPath = "/tls/certs"
 
 	PostgresKeyFileSecretSuffix = "key"
 	PostgresPEMSecretSuffix     = "pem"
@@ -279,6 +366,8 @@ const (
 	// this is useful when we have set a node as primary and you don't want other node rather then this node to become primary.
 	PostgresPgCoordinatorStatusResumeNonTransferable = "NonTransferableResume"
 
+	SharedBuffersGbAsByte = 1024 * 1024 * 1024
+	SharedBuffersMbAsByte = 1024 * 1024
 	// =========================== ProxySQL Constants ============================
 	LabelProxySQLName        = ProxySQLKey + "/name"
 	LabelProxySQLLoadBalance = ProxySQLKey + "/load-balance"
@@ -300,17 +389,26 @@ const (
 	// =========================== Redis Constants ============================
 	RedisConfigKey = "redis.conf" // RedisConfigKey is going to create for the customize redis configuration
 	// DefaultConfigKey is going to create for the default redis configuration
+	RedisContainerName          = ResourceSingularRedis
 	DefaultConfigKey            = "default.conf"
 	RedisShardKey               = RedisKey + "/shard"
 	RedisDatabasePortName       = "db"
 	RedisPrimaryServicePortName = "primary"
 	RedisDatabasePort           = 6379
+	RedisSentinelPort           = 26379
 	RedisGossipPortName         = "gossip"
 	RedisGossipPort             = 16379
 	RedisSentinelPortName       = "sentinel"
-	RedisScriptVolumeName       = "script-vol"
-	RedisScriptVolumePath       = "/scripts"
-	RedisSentinelPort           = 26379
+
+	RedisScriptVolumeName      = "script-vol"
+	RedisScriptVolumePath      = "/scripts"
+	RedisDataVolumeName        = "data"
+	RedisDataVolumePath        = "/data"
+	RedisTLSVolumeName         = "tls-volume"
+	RedisExporterTLSVolumeName = "exporter-tls-volume"
+	RedisTLSVolumePath         = "/certs"
+	RedisConfigVolumeName      = "redis-config"
+	RedisConfigVolumePath      = "/usr/local/etc/redis/"
 
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"
@@ -360,9 +458,14 @@ const (
 	DatabaseHealthCheckPaused = "HealthCheckPaused"
 	// used for Databases whose internal user credentials are synced
 	InternalUsersSynced = "InternalUsersSynced"
+	// user for databases that have read access
+	DatabaseReadAccess = "DatabaseReadAccess"
+	// user for databases that have write access
+	DatabaseWriteAccess = "DatabaseWriteAccess"
 
 	// Condition reasons
 	DataRestoreStartedByExternalInitializer    = "DataRestoreStartedByExternalInitializer"
+	DataRestoreInterrupted                     = "DataRestoreInterrupted"
 	DatabaseSuccessfullyRestored               = "SuccessfullyDataRestored"
 	FailedToRestoreData                        = "FailedToRestoreData"
 	AllReplicasAreReady                        = "AllReplicasReady"
@@ -374,6 +477,10 @@ const (
 	DatabaseProvisioningStartedSuccessfully    = "DatabaseProvisioningStartedSuccessfully"
 	DatabaseSuccessfullyProvisioned            = "DatabaseSuccessfullyProvisioned"
 	DatabaseHaltedSuccessfully                 = "DatabaseHaltedSuccessfully"
+	DatabaseReadAccessCheckSucceeded           = "DatabaseReadAccessCheckSucceeded"
+	DatabaseWriteAccessCheckSucceeded          = "DatabaseWriteAccessCheckSucceeded"
+	DatabaseReadAccessCheckFailed              = "DatabaseReadAccessCheckFailed"
+	DatabaseWriteAccessCheckFailed             = "DatabaseReadAccessCheckFailed"
 	InternalUsersCredentialSyncFailed          = "InternalUsersCredentialsSyncFailed"
 	InternalUsersCredentialsSyncedSuccessfully = "InternalUsersCredentialsSyncedSuccessfully"
 )
@@ -401,6 +508,18 @@ var (
 		},
 		Limits: core.ResourceList{
 			core.ResourceMemory: resource.MustParse("256Mi"),
+		},
+	}
+
+	// DefaultResourcesElasticSearch must be used for elasticsearch
+	// to avoid OOMKILLED while deploying ES V8
+	DefaultResourcesElasticSearch = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceMemory: resource.MustParse("1.5Gi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("1.5Gi"),
 		},
 	}
 )

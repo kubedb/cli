@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
-	"kubedb.dev/apimachinery/apis/catalog"
+	"kubedb.dev/apimachinery/apis/autoscaling"
 	"kubedb.dev/apimachinery/crds"
 
 	"kmodules.xyz/client-go/apiextensions"
@@ -33,7 +33,7 @@ func (_ PostgresAutoscaler) CustomResourceDefinition() *apiextensions.CustomReso
 var _ apis.ResourceInfo = &PostgresAutoscaler{}
 
 func (p PostgresAutoscaler) ResourceFQN() string {
-	return fmt.Sprintf("%s.%s", ResourcePluralPostgresAutoscaler, catalog.GroupName)
+	return fmt.Sprintf("%s.%s", ResourcePluralPostgresAutoscaler, autoscaling.GroupName)
 }
 
 func (p PostgresAutoscaler) ResourceShortCode() string {
@@ -54,4 +54,14 @@ func (p PostgresAutoscaler) ResourcePlural() string {
 
 func (p PostgresAutoscaler) ValidateSpecs() error {
 	return nil
+}
+
+var _ StatusAccessor = &PostgresAutoscaler{}
+
+func (e *PostgresAutoscaler) GetStatus() AutoscalerStatus {
+	return e.Status
+}
+
+func (e *PostgresAutoscaler) SetStatus(s AutoscalerStatus) {
+	e.Status = s
 }

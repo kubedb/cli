@@ -69,6 +69,8 @@ type MariaDBVersionSpec struct {
 	// Stash defines backup and restore task definitions.
 	// +optional
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+	// upgrade constraints
+	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
 }
 
 // MariaDBVersionDatabase is the mariadb image

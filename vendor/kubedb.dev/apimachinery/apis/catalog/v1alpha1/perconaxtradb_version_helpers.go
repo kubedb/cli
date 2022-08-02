@@ -56,12 +56,14 @@ func (p PerconaXtraDBVersion) ValidateSpecs() error {
 	if p.Spec.Version == "" ||
 		p.Spec.DB.Image == "" ||
 		p.Spec.Exporter.Image == "" ||
-		p.Spec.InitContainer.Image == "" {
+		p.Spec.InitContainer.Image == "" ||
+		p.Spec.Coordinator.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for perconaxtradbversion "%v":
 spec.version,
 spec.db.image,
 spec.exporter.image,
-spec.initContainer.image.`, p.Name)
+spec.initContainer.image,
+spec.coordinator.image.`, p.Name)
 	}
 	return nil
 }
