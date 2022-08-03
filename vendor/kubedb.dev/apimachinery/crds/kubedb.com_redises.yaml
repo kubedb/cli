@@ -223,10 +223,13 @@ spec:
                 type: boolean
               halted:
                 type: boolean
-              healthCheck:
+              healthChecker:
+                default:
+                  failureThreshold: 1
+                  periodSeconds: 10
+                  timeoutSeconds: 10
                 properties:
                   disableWriteCheck:
-                    default: false
                     type: boolean
                   failureThreshold:
                     default: 1

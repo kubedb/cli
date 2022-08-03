@@ -168,11 +168,13 @@ type ElasticsearchSpec struct {
 	// It will be applied to all nodes. If the node level `heapSizePercentage` is specified,  this global value will be overwritten.
 	// It defaults to 50% of memory limit.
 	// +optional
-	// +kubebuilder:default:=50
+	// +kubebuilder:default=50
 	HeapSizePercentage *int32 `json:"heapSizePercentage,omitempty"`
 
+	// HealthChecker defines attributes of the health checker
 	// +optional
-	HealthCheck HealthCheckSpec `json:"healthCheck"`
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker HealthCheckSpec `json:"healthChecker"`
 }
 
 type ElasticsearchClusterTopology struct {

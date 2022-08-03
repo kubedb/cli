@@ -182,14 +182,14 @@ func (rs *RedisSentinel) SetDefaults(topology *core_util.Topology) {
 }
 
 func (rs *RedisSentinel) SetHealthCheckerDefaults() {
-	if rs.Spec.HealthCheck.PeriodSeconds == nil {
-		rs.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	if rs.Spec.HealthChecker.PeriodSeconds == nil {
+		rs.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
 	}
-	if rs.Spec.HealthCheck.TimeoutSeconds == nil {
-		rs.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	if rs.Spec.HealthChecker.TimeoutSeconds == nil {
+		rs.Spec.HealthChecker.TimeoutSeconds = pointer.Int32P(10)
 	}
-	if rs.Spec.HealthCheck.FailureThreshold == nil {
-		rs.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	if rs.Spec.HealthChecker.FailureThreshold == nil {
+		rs.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
 	}
 }
 

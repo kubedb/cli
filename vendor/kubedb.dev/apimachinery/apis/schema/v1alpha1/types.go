@@ -49,7 +49,7 @@ type ScriptSourceSpec struct {
 
 type SnapshotSourceSpec struct {
 	Repository kmapi.TypedObjectReference `json:"repository,omitempty"`
-	// +kubebuilder:default:="latest"
+	// +kubebuilder:default="latest"
 	SnapshotID string `json:"snapshotID,omitempty"`
 }
 
