@@ -829,14 +829,14 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) 
 }
 
 func (e *Elasticsearch) SetHealthCheckerDefaults() {
-	if e.Spec.HealthCheck.PeriodSeconds == nil {
-		e.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	if e.Spec.HealthChecker.PeriodSeconds == nil {
+		e.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
 	}
-	if e.Spec.HealthCheck.TimeoutSeconds == nil {
-		e.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	if e.Spec.HealthChecker.TimeoutSeconds == nil {
+		e.Spec.HealthChecker.TimeoutSeconds = pointer.Int32P(10)
 	}
-	if e.Spec.HealthCheck.FailureThreshold == nil {
-		e.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	if e.Spec.HealthChecker.FailureThreshold == nil {
+		e.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
 	}
 }
 

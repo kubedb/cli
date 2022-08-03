@@ -136,10 +136,13 @@ spec:
                   - databaseRef
                   type: object
                 type: array
-              healthCheck:
+              healthChecker:
+                default:
+                  failureThreshold: 1
+                  periodSeconds: 10
+                  timeoutSeconds: 10
                 properties:
                   disableWriteCheck:
-                    default: false
                     type: boolean
                   failureThreshold:
                     default: 1

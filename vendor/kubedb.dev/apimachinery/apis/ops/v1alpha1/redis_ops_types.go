@@ -100,7 +100,7 @@ type RedisVerticalScalingSpec struct {
 
 // RedisVolumeExpansionSpec is the spec for Redis volume expansion
 type RedisVolumeExpansionSpec struct {
-	// +kubebuilder:default:="Online"
+	// +kubebuilder:default="Online"
 	Mode  *VolumeExpansionMode `json:"mode,omitempty"`
 	Redis *resource.Quantity   `json:"redis,omitempty"`
 }

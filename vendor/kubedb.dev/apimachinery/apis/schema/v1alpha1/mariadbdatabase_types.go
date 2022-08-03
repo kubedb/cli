@@ -44,7 +44,7 @@ type MariaDBDatabaseSpec struct {
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	// +kubebuilder:default:="Delete"
+	// +kubebuilder:default="Delete"
 	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 }
 

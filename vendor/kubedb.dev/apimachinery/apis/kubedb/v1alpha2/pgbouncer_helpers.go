@@ -242,13 +242,13 @@ func (p *PgBouncer) ReplicasAreReady(lister appslister.StatefulSetLister) (bool,
 }
 
 func (p *PgBouncer) SetHealthCheckerDefaults() {
-	if p.Spec.HealthCheck.PeriodSeconds == nil {
-		p.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	if p.Spec.HealthChecker.PeriodSeconds == nil {
+		p.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
 	}
-	if p.Spec.HealthCheck.TimeoutSeconds == nil {
-		p.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	if p.Spec.HealthChecker.TimeoutSeconds == nil {
+		p.Spec.HealthChecker.TimeoutSeconds = pointer.Int32P(10)
 	}
-	if p.Spec.HealthCheck.FailureThreshold == nil {
-		p.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	if p.Spec.HealthChecker.FailureThreshold == nil {
+		p.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
 	}
 }

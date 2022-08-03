@@ -145,23 +145,22 @@ type HealthCheckSpec struct {
 	// How often (in seconds) to perform the health check.
 	// Default to 10 seconds. Minimum value is 1.
 	// +optional
-	// +kubebuilder:default:=10
+	// +kubebuilder:default=10
 	PeriodSeconds *int32 `json:"periodSeconds,omitempty"`
 	// Number of seconds after which the probe times out.
 	// Defaults to 10 second. Minimum value is 1.
 	// It should be less than the periodSeconds.
 	// +optional
-	// +kubebuilder:default:=10
+	// +kubebuilder:default=10
 	TimeoutSeconds *int32 `json:"timeoutSeconds,omitempty"`
 	// Minimum consecutive failures for the health check to be considered failed after having succeeded.
 	// Defaults to 1. Minimum value is 1.
 	// +optional
-	// +kubebuilder:default:=1
+	// +kubebuilder:default=1
 	FailureThreshold *int32 `json:"failureThreshold,omitempty"`
 	// Whether to disable write check on database.
 	// Defaults to false.
 	// +optional
-	// +kubebuilder:default:=false
 	DisableWriteCheck bool `json:"disableWriteCheck,omitempty"`
 }
 

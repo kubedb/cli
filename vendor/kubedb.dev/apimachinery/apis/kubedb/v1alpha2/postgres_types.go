@@ -137,8 +137,10 @@ type PostgresSpec struct {
 	// +optional
 	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
 
+	// HealthChecker defines attributes of the health checker
 	// +optional
-	HealthCheck HealthCheckSpec `json:"healthCheck"`
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker HealthCheckSpec `json:"healthChecker"`
 }
 
 // PostgreLeaderElectionConfig contains essential attributes of leader election.
@@ -163,12 +165,12 @@ type PostgreLeaderElectionConfig struct {
 	// when ever a replica is lagging more than MaximumLagBeforeFailover
 	// this node need to sync manually with the primary node. default value is 32MB
 	// +default=33554432
-	// +kubebuilder:default:=33554432
+	// +kubebuilder:default=33554432
 	// +optional
 	MaximumLagBeforeFailover uint64 `json:"maximumLagBeforeFailover,omitempty"`
 
 	// Period between Node.Tick invocations
-	// +kubebuilder:default:="100ms"
+	// +kubebuilder:default="100ms"
 	// +optional
 	Period metav1.Duration `json:"period,omitempty"`
 
@@ -179,7 +181,7 @@ type PostgreLeaderElectionConfig struct {
 	//  HeartbeatTick. We suggest ElectionTick = 10 * HeartbeatTick to avoid
 	//  unnecessary leader switching. default value is 10.
 	// +default=10
-	// +kubebuilder:default:=10
+	// +kubebuilder:default=10
 	// +optional
 	ElectionTick int32 `json:"electionTick,omitempty"`
 
@@ -187,7 +189,7 @@ type PostgreLeaderElectionConfig struct {
 	// heartbeats. That is, a leader sends heartbeat messages to maintain its
 	// leadership every HeartbeatTick ticks. default value is 1.
 	// +default=1
-	// +kubebuilder:default:=1
+	// +kubebuilder:default=1
 	// +optional
 	HeartbeatTick int32 `json:"heartbeatTick,omitempty"`
 }

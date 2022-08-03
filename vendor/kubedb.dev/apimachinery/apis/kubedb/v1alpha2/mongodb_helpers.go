@@ -613,14 +613,14 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 }
 
 func (m *MongoDB) SetHealthCheckerDefaults() {
-	if m.Spec.HealthCheck.PeriodSeconds == nil {
-		m.Spec.HealthCheck.PeriodSeconds = pointer.Int32P(10)
+	if m.Spec.HealthChecker.PeriodSeconds == nil {
+		m.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
 	}
-	if m.Spec.HealthCheck.TimeoutSeconds == nil {
-		m.Spec.HealthCheck.TimeoutSeconds = pointer.Int32P(10)
+	if m.Spec.HealthChecker.TimeoutSeconds == nil {
+		m.Spec.HealthChecker.TimeoutSeconds = pointer.Int32P(10)
 	}
-	if m.Spec.HealthCheck.FailureThreshold == nil {
-		m.Spec.HealthCheck.FailureThreshold = pointer.Int32P(1)
+	if m.Spec.HealthChecker.FailureThreshold == nil {
+		m.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
 	}
 }
 

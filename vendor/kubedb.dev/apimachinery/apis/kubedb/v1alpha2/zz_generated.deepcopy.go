@@ -492,7 +492,7 @@ func (in *ElasticsearchSpec) DeepCopyInto(out *ElasticsearchSpec) {
 		*out = new(int32)
 		**out = **in
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -904,7 +904,7 @@ func (in *MariaDBSpec) DeepCopyInto(out *MariaDBSpec) {
 		*out = new(AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -1383,7 +1383,7 @@ func (in *MongoDBSpec) DeepCopyInto(out *MongoDBSpec) {
 		*out = new(MongoArbiterNode)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -1630,7 +1630,7 @@ func (in *MySQLSpec) DeepCopyInto(out *MySQLSpec) {
 		*out = new(AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -1880,7 +1880,7 @@ func (in *PerconaXtraDBSpec) DeepCopyInto(out *PerconaXtraDBSpec) {
 		*out = new(AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	if in.SystemUserSecrets != nil {
 		in, out := &in.SystemUserSecrets, &out.SystemUserSecrets
 		*out = new(SystemUserSecretsSpec)
@@ -2027,7 +2027,7 @@ func (in *PgBouncerSpec) DeepCopyInto(out *PgBouncerSpec) {
 		*out = new(clientgoapiv1.TLSConfig)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -2210,7 +2210,7 @@ func (in *PostgresSpec) DeepCopyInto(out *PostgresSpec) {
 		*out = new(AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -2430,7 +2430,7 @@ func (in *ProxySQLSpec) DeepCopyInto(out *ProxySQLSpec) {
 		*out = new(clientgoapiv1.TLSConfig)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -2689,7 +2689,7 @@ func (in *RedisSentinelSpec) DeepCopyInto(out *RedisSentinelSpec) {
 		*out = new(apiv1.AgentSpec)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
@@ -2789,7 +2789,7 @@ func (in *RedisSpec) DeepCopyInto(out *RedisSpec) {
 		*out = new(AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
-	in.HealthCheck.DeepCopyInto(&out.HealthCheck)
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 

@@ -91,7 +91,7 @@ type MongoDBOpsRequestOptions struct {
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
-	// +kubebuilder:default:="IfReady"
+	// +kubebuilder:default="IfReady"
 	Apply opsapi.ApplyOption `json:"apply,omitempty"`
 }
 

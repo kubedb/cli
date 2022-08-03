@@ -91,8 +91,10 @@ type RedisSentinelSpec struct {
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
 
+	// HealthChecker defines attributes of the health checker
 	// +optional
-	HealthCheck HealthCheckSpec `json:"healthCheck,omitempty"`
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker HealthCheckSpec `json:"healthChecker"`
 }
 
 type RedisSentinelStatus struct {

@@ -118,8 +118,10 @@ type PerconaXtraDBSpec struct {
 	// +optional
 	AllowedSchemas *AllowedConsumers `json:"allowedSchemas,omitempty"`
 
+	// HealthChecker defines attributes of the health checker
 	// +optional
-	HealthCheck HealthCheckSpec `json:"healthCheck"`
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker HealthCheckSpec `json:"healthChecker"`
 
 	// SystemUserSecrets contains the system user credentials
 	// +optional

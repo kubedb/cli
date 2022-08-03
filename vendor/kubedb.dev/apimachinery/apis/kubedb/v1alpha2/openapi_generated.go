@@ -21498,10 +21498,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ElasticsearchSpec(ref common.Refer
 							Format:      "int32",
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -22269,10 +22270,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref common.ReferenceCa
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"),
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -23128,10 +23130,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MongoDBSpec(ref common.ReferenceCa
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoArbiterNode"),
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -23525,9 +23528,9 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MySQLSpec(ref common.ReferenceCall
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"),
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Description: "HealthCheckSpec defines attributes of the health check",
+							Description: "HealthChecker defines attributes of the health checker",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
@@ -23976,10 +23979,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PerconaXtraDBSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"),
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 					"systemUserSecrets": {
@@ -24234,10 +24238,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerSpec(ref common.Reference
 							Format:      "",
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -24611,10 +24616,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"),
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -24944,10 +24950,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLSpec(ref common.ReferenceC
 							Format:      "",
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -25382,10 +25389,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RedisSentinelSpec(ref common.Refer
 							Format:      "",
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},
@@ -25583,10 +25591,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RedisSpec(ref common.ReferenceCall
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"),
 						},
 					},
-					"healthCheck": {
+					"healthChecker": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.HealthCheckSpec"),
 						},
 					},
 				},

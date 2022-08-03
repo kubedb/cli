@@ -131,7 +131,7 @@ type MySQLSpec struct {
 
 	// Indicated whether to use DNS or IP address to address pods in a db cluster.
 	// If IP address is used, HostNetwork will be used. Defaults to DNS.
-	// +kubebuilder:default:=DNS
+	// +kubebuilder:default=DNS
 	// +optional
 	// +default="DNS"
 	UseAddressType AddressType `json:"useAddressType,omitempty"`
@@ -157,9 +157,10 @@ type MySQLSpec struct {
 	// +optional
 	AllowedReadReplicas *AllowedConsumers `json:"allowedReadReplicas,omitempty"`
 
-	// HealthCheckSpec defines attributes of the health check
-	//+optional
-	HealthCheck HealthCheckSpec `json:"healthCheck"`
+	// HealthChecker defines attributes of the health checker
+	// +optional
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker HealthCheckSpec `json:"healthChecker"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter
@@ -235,7 +236,7 @@ type MySQLInnoDBClusterSpec struct {
 
 type MySQLRouterSpec struct {
 	// +optional
-	// +kubebuilder:default:=1
+	// +kubebuilder:default=1
 	// +kubebuilder:validation:Minimum:=1
 	Replicas *int32 `json:"replicas,omitempty"`
 
