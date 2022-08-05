@@ -24,8 +24,8 @@ import (
 
 const (
 	ResourceKindMariaDBInsight = "MariaDBInsight"
-	ResourceMariaDBInsight     = "mariaDBinsight"
-	ResourceMariaDBInsights    = "mariaDBinsights"
+	ResourceMariaDBInsight     = "mariadbinsight"
+	ResourceMariaDBInsights    = "mariadbinsights"
 )
 
 // MariaDBInsightSpec defines the desired state of MariaDBInsight
