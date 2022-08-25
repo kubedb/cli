@@ -19,6 +19,7 @@ package validator
 import (
 	"context"
 	"fmt"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"strings"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
@@ -129,7 +130,7 @@ func ValidateInternalUsers(users map[string]api.ElasticsearchUserSpec, allowedIn
 	return nil
 }
 
-func ValidateHealth(health *api.HealthCheckSpec) error {
+func ValidateHealth(health *kmapi.HealthCheckSpec) error {
 	if health.PeriodSeconds != nil && *health.PeriodSeconds <= 0 {
 		return fmt.Errorf(`spec.healthCheck.periodSeconds: can not be less than 1`)
 	}

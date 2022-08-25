@@ -367,9 +367,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                                        schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                                        schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                              schema_kmodulesxyz_client_go_api_v1_Condition(ref),
+		"kmodules.xyz/client-go/api/v1.HealthCheckSpec":                                        schema_kmodulesxyz_client_go_api_v1_HealthCheckSpec(ref),
 		"kmodules.xyz/client-go/api/v1.ObjectID":                                               schema_kmodulesxyz_client_go_api_v1_ObjectID(ref),
 		"kmodules.xyz/client-go/api/v1.ObjectInfo":                                             schema_kmodulesxyz_client_go_api_v1_ObjectInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ObjectReference":                                        schema_kmodulesxyz_client_go_api_v1_ObjectReference(ref),
+		"kmodules.xyz/client-go/api/v1.ReadonlyHealthCheckSpec":                                schema_kmodulesxyz_client_go_api_v1_ReadonlyHealthCheckSpec(ref),
 		"kmodules.xyz/client-go/api/v1.ResourceID":                                             schema_kmodulesxyz_client_go_api_v1_ResourceID(ref),
 		"kmodules.xyz/client-go/api/v1.TLSConfig":                                              schema_kmodulesxyz_client_go_api_v1_TLSConfig(ref),
 		"kmodules.xyz/client-go/api/v1.TimeOfDay":                                              schema_kmodulesxyz_client_go_api_v1_TimeOfDay(ref),
@@ -426,7 +428,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequest":                    schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestList":                schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestSpec":                schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestStatus":              schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpgradeSpec":                   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingTopologySpec":   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingTopologySpec(ref),
@@ -438,7 +439,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequest":                             schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestList":                         schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec":                         schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestStatus":                       schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria":               schema_apimachinery_apis_ops_v1alpha1_EtcdReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpgradeSpec":                            schema_apimachinery_apis_ops_v1alpha1_EtcdUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec":                    schema_apimachinery_apis_ops_v1alpha1_EtcdVerticalScalingSpec(ref),
@@ -449,7 +449,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequest":                          schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestList":                      schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestSpec":                      schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestStatus":                    schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec":                             schema_apimachinery_apis_ops_v1alpha1_MariaDBTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpgradeSpec":                         schema_apimachinery_apis_ops_v1alpha1_MariaDBUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_MariaDBVerticalScalingSpec(ref),
@@ -460,7 +459,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequest":                        schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestList":                    schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestSpec":                    schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestStatus":                  schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedReplicaReadinessCriteria":          schema_apimachinery_apis_ops_v1alpha1_MemcachedReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpgradeSpec":                       schema_apimachinery_apis_ops_v1alpha1_MemcachedUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVerticalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_MemcachedVerticalScalingSpec(ref),
@@ -471,7 +469,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequest":                          schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestList":                      schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestSpec":                      schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestStatus":                    schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria":            schema_apimachinery_apis_ops_v1alpha1_MongoDBReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBShardNode":                           schema_apimachinery_apis_ops_v1alpha1_MongoDBShardNode(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpgradeSpec":                         schema_apimachinery_apis_ops_v1alpha1_MongoDBUpgradeSpec(ref),
@@ -483,7 +480,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequest":                            schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestList":                        schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestSpec":                        schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestStatus":                      schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLQueryRules":                            schema_apimachinery_apis_ops_v1alpha1_MySQLQueryRules(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_MySQLReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec":                               schema_apimachinery_apis_ops_v1alpha1_MySQLTLSSpec(ref),
@@ -491,13 +487,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUsers":                                 schema_apimachinery_apis_ops_v1alpha1_MySQLUsers(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_MySQLVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MySQLVolumeExpansionSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus":                           schema_apimachinery_apis_ops_v1alpha1_OpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfiguration":           schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfigurationSpec":       schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBHorizontalScalingSpec":         schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequest":                    schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestList":                schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestSpec":                schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestStatus":              schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBReplicaReadinessCriteria":      schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpgradeSpec":                   schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBVerticalScalingSpec(ref),
@@ -508,7 +504,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequest":                        schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestList":                    schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestSpec":                    schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestStatus":                  schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerReplicaReadinessCriteria":          schema_apimachinery_apis_ops_v1alpha1_PgBouncerReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpgradeSpec":                       schema_apimachinery_apis_ops_v1alpha1_PgBouncerUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVerticalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_PgBouncerVerticalScalingSpec(ref),
@@ -519,7 +514,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequest":                         schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestList":                     schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestSpec":                     schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestStatus":                   schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresTLSSpec":                            schema_apimachinery_apis_ops_v1alpha1_PostgresTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpgradeSpec":                        schema_apimachinery_apis_ops_v1alpha1_PostgresUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVerticalScalingSpec":                schema_apimachinery_apis_ops_v1alpha1_PostgresVerticalScalingSpec(ref),
@@ -530,7 +524,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequest":                         schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestList":                     schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestSpec":                     schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestStatus":                   schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLReplicaReadinessCriteria":           schema_apimachinery_apis_ops_v1alpha1_ProxySQLReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpgradeSpec":                        schema_apimachinery_apis_ops_v1alpha1_ProxySQLUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVerticalScalingSpec":                schema_apimachinery_apis_ops_v1alpha1_ProxySQLVerticalScalingSpec(ref),
@@ -540,7 +533,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequest":                            schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestList":                        schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestSpec":                        schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestStatus":                      schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_RedisReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpgradeSpec":                           schema_apimachinery_apis_ops_v1alpha1_RedisUpgradeSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_RedisVerticalScalingSpec(ref),
@@ -18160,6 +18152,47 @@ func schema_kmodulesxyz_client_go_api_v1_Condition(ref common.ReferenceCallback)
 	}
 }
 
+func schema_kmodulesxyz_client_go_api_v1_HealthCheckSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "HealthCheckSpec defines attributes of the health check",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"periodSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "How often (in seconds) to perform the health check. Default to 10 seconds. Minimum value is 1.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"timeoutSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of seconds after which the probe times out. Defaults to 10 second. Minimum value is 1. It should be less than the periodSeconds.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"failureThreshold": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Minimum consecutive failures for the health check to be considered failed after having succeeded. Defaults to 1. Minimum value is 1.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"disableWriteCheck": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Whether to disable write check on database. Defaults to false.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_client_go_api_v1_ObjectID(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -18247,6 +18280,40 @@ func schema_kmodulesxyz_client_go_api_v1_ObjectReference(ref common.ReferenceCal
 					},
 				},
 				Required: []string{"name"},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ReadonlyHealthCheckSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ReadonlyHealthCheckSpec defines attributes of the health check using only read-only checks",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"periodSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "How often (in seconds) to perform the health check. Default to 10 seconds. Minimum value is 1.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"timeoutSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of seconds after which the probe times out. Defaults to 10 second. Minimum value is 1. It should be less than the periodSeconds.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"failureThreshold": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Minimum consecutive failures for the health check to be considered failed after having succeeded. Defaults to 1. Minimum value is 1.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -21027,14 +21094,14 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequest(ref common.Re
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
 	}
 }
 
@@ -21157,55 +21224,19 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref commo
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ElasticsearchOpsRequestStatus is the status for ElasticsearchOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the current phase of the ops request",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -21533,14 +21564,14 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequest(ref common.ReferenceCa
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
 	}
 }
 
@@ -21657,54 +21688,19 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.Referen
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdOpsRequestStatus is the status for EtcdOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -21927,14 +21923,14 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequest(ref common.Referenc
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
 	}
 }
 
@@ -22057,54 +22053,19 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref common.Refe
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "MariaDBOpsRequestStatus is the status for MariaDBOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -22333,14 +22294,14 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequest(ref common.Refere
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
 	}
 }
 
@@ -22457,54 +22418,19 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "MemcachedOpsRequestStatus is the status for MemcachedOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -22738,14 +22664,14 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequest(ref common.Referenc
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
 	}
 }
 
@@ -22893,48 +22819,6 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "MongoDBOpsRequestStatus is the status for MongoDBOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -23207,14 +23091,14 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequest(ref common.ReferenceC
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
 	}
 }
 
@@ -23337,54 +23221,19 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "MySQLOpsRequestStatus is the status for MySQLOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -23604,6 +23453,48 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLVolumeExpansionSpec(ref common.R
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_OpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the current phase of the ops request",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the request, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBCustomConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -23700,14 +23591,14 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequest(ref common.Re
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestSpec"},
 	}
 }
 
@@ -23824,54 +23715,19 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref commo
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "PerconaXtraDBOpsRequestStatus is the status for PerconaXtraDBOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -24039,14 +23895,14 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequest(ref common.Refere
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestSpec"},
 	}
 }
 
@@ -24163,54 +24019,19 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "PgBouncerOpsRequestStatus is the status for PgBouncerOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -24407,14 +24228,14 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequest(ref common.Referen
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestSpec"},
 	}
 }
 
@@ -24537,54 +24358,19 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref common.Ref
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "PostgresOpsRequestStatus is the status for PostgresOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -24855,14 +24641,14 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequest(ref common.Referen
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestSpec"},
 	}
 }
 
@@ -24985,54 +24771,19 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestSpec(ref common.Ref
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"proxyRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ProxySQLOpsRequestStatus is the status for ProxySQLOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 
@@ -25203,14 +24954,14 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequest(ref common.ReferenceC
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestStatus"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisOpsRequestSpec"},
 	}
 }
 
@@ -25333,54 +25084,19 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestSpec(ref common.Refere
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"databaseRef", "type"},
 			},
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "RedisOpsRequestStatus is the status for RedisOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"observedGeneration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
-							Type:        []string{"integer"},
-							Format:      "int64",
-						},
-					},
-					"conditions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Conditions applied to the request, such as approval or denial.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Condition"},
 	}
 }
 

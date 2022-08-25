@@ -42,6 +42,12 @@ spec:
             type: object
           spec:
             properties:
+              apply:
+                default: IfReady
+                enum:
+                - IfReady
+                - Always
+                type: string
               configuration:
                 properties:
                   applyConfig:

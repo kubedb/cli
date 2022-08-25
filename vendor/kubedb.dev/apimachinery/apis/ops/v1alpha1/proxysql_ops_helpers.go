@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kmodules.xyz/client-go/apiextensions"
 )
 
@@ -50,4 +51,26 @@ func (p ProxySQLOpsRequest) ResourceSingular() string {
 
 func (p ProxySQLOpsRequest) ResourcePlural() string {
 	return ResourcePluralProxySQLOpsRequest
+}
+
+var _ Accessor = &ProxySQLOpsRequest{}
+
+func (e *ProxySQLOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return e.ObjectMeta
+}
+
+func (e *ProxySQLOpsRequest) GetRequestType() OpsRequestType {
+	return e.Spec.Type
+}
+
+func (e *ProxySQLOpsRequest) GetDBRefName() string {
+	return e.Spec.ProxyRef.Name
+}
+
+func (e *ProxySQLOpsRequest) GetStatus() OpsRequestStatus {
+	return e.Status
+}
+
+func (e *ProxySQLOpsRequest) SetStatus(s OpsRequestStatus) {
+	e.Status = s
 }

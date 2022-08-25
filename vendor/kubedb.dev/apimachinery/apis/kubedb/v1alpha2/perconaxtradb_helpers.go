@@ -180,7 +180,7 @@ func (p *PerconaXtraDB) SetDefaults(topology *core_util.Topology) {
 	}
 
 	if p.Spec.Replicas == nil {
-		p.Spec.Replicas = pointer.Int32P(3)
+		p.Spec.Replicas = pointer.Int32P(PerconaXtraDBDefaultClusterSize)
 	}
 
 	if p.Spec.StorageType == "" {
@@ -193,6 +193,24 @@ func (p *PerconaXtraDB) SetDefaults(topology *core_util.Topology) {
 	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
 	}
+
+	if p.Spec.PodTemplate.Spec.SecurityContext == nil {
+		p.Spec.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{
+			RunAsUser:  pointer.Int64P(PerconaXtraDBMySQLUserGroupID),
+			RunAsGroup: pointer.Int64P(PerconaXtraDBMySQLUserGroupID),
+		}
+	} else {
+		if p.Spec.PodTemplate.Spec.SecurityContext.RunAsUser == nil {
+			p.Spec.PodTemplate.Spec.SecurityContext.RunAsUser = pointer.Int64P(PerconaXtraDBMySQLUserGroupID)
+		}
+		if p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup == nil {
+			p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup = pointer.Int64P(PerconaXtraDBMySQLUserGroupID)
+		}
+	}
+	// Need to set FSGroup equal to  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup.
+	// So that /var/pv directory have the group permission for the RunAsGroup user GID.
+	// Otherwise, We will get write permission denied.
+	p.Spec.PodTemplate.Spec.SecurityContext.FSGroup = p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup
 
 	p.Spec.Monitor.SetDefaults()
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)

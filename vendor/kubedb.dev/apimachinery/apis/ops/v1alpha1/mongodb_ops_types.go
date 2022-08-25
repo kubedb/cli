@@ -20,7 +20,6 @@ import (
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -45,8 +44,8 @@ const (
 type MongoDBOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              MongoDBOpsRequestSpec   `json:"spec,omitempty"`
-	Status            MongoDBOpsRequestStatus `json:"status,omitempty"`
+	Spec              MongoDBOpsRequestSpec `json:"spec,omitempty"`
+	Status            OpsRequestStatus      `json:"status,omitempty"`
 }
 
 // MongoDBOpsRequestSpec is the spec for MongoDBOpsRequest
@@ -158,18 +157,6 @@ type MongoDBCustomConfiguration struct {
 
 	ApplyConfig        map[string]string `json:"applyConfig,omitempty"`
 	RemoveCustomConfig bool              `json:"removeCustomConfig,omitempty"`
-}
-
-// MongoDBOpsRequestStatus is the status for MongoDBOpsRequest
-type MongoDBOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty"`
-	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
-	// resource's generation, which is updated on mutation by the API Server.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
-	// Conditions applied to the request, such as approval or denial.
-	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

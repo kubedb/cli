@@ -22,7 +22,6 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -46,8 +45,8 @@ const (
 type ProxySQLOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              ProxySQLOpsRequestSpec   `json:"spec,omitempty"`
-	Status            ProxySQLOpsRequestStatus `json:"status,omitempty"`
+	Spec              ProxySQLOpsRequestSpec `json:"spec,omitempty"`
+	Status            OpsRequestStatus       `json:"status,omitempty"`
 }
 
 // ProxySQLOpsRequestSpec is the spec for ProxySQLOpsRequest
@@ -72,6 +71,9 @@ type ProxySQLOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default="IfReady"
+	Apply ApplyOption `json:"apply,omitempty"`
 }
 
 // ProxySQLReplicaReadinessCriteria is the criteria for checking readiness of a ProxySQL pod
@@ -102,18 +104,6 @@ type ProxySQLCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
 	Data      map[string]string          `json:"data,omitempty"`
 	Remove    bool                       `json:"remove,omitempty"`
-}
-
-// ProxySQLOpsRequestStatus is the status for ProxySQLOpsRequest
-type ProxySQLOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty"`
-	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
-	// resource's generation, which is updated on mutation by the API Server.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
-	// Conditions applied to the request, such as approval or denial.
-	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

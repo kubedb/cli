@@ -22,7 +22,6 @@ import (
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
 const (
@@ -47,8 +46,8 @@ const (
 type PostgresOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              PostgresOpsRequestSpec   `json:"spec,omitempty"`
-	Status            PostgresOpsRequestStatus `json:"status,omitempty"`
+	Spec              PostgresOpsRequestSpec `json:"spec,omitempty"`
+	Status            OpsRequestStatus       `json:"status,omitempty"`
 }
 type PostgresTLSSpec struct {
 	TLSSpec `json:",inline,omitempty"`
@@ -85,6 +84,9 @@ type PostgresOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default="IfReady"
+	Apply ApplyOption `json:"apply,omitempty"`
 }
 
 type PostgresUpgradeSpec struct {
@@ -121,18 +123,6 @@ type PostgresCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
 	Data      map[string]string          `json:"data,omitempty"`
 	Remove    bool                       `json:"remove,omitempty"`
-}
-
-// PostgresOpsRequestStatus is the status for PostgresOpsRequest
-type PostgresOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty"`
-	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
-	// resource's generation, which is updated on mutation by the API Server.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
-	// Conditions applied to the request, such as approval or denial.
-	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
