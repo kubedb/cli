@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
 )
@@ -75,4 +76,26 @@ func (m MariaDBOpsRequest) OffshootSelectors() map[string]string {
 func (m MariaDBOpsRequest) OffshootLabels() map[string]string {
 	out := m.OffshootSelectors()
 	return meta_util.FilterKeys(GenericKey, out, m.Labels)
+}
+
+var _ Accessor = &MariaDBOpsRequest{}
+
+func (e *MariaDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return e.ObjectMeta
+}
+
+func (e *MariaDBOpsRequest) GetRequestType() OpsRequestType {
+	return e.Spec.Type
+}
+
+func (e *MariaDBOpsRequest) GetDBRefName() string {
+	return e.Spec.DatabaseRef.Name
+}
+
+func (e *MariaDBOpsRequest) GetStatus() OpsRequestStatus {
+	return e.Status
+}
+
+func (e *MariaDBOpsRequest) SetStatus(s OpsRequestStatus) {
+	e.Status = s
 }

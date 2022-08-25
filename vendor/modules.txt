@@ -733,7 +733,7 @@ k8s.io/utils/net
 k8s.io/utils/pointer
 k8s.io/utils/strings/slices
 k8s.io/utils/trace
-# kmodules.xyz/client-go v0.24.5
+# kmodules.xyz/client-go v0.24.6
 ## explicit; go 1.18
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -771,7 +771,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.24.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.28.0
+# kubedb.dev/apimachinery v0.28.4-0.20220825144447-722a1bc1c19e
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling

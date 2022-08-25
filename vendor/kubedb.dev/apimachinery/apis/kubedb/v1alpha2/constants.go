@@ -240,8 +240,8 @@ const (
 	MySQLVolumeNameData      = "data"
 	MySQLVolumeMountPathData = "/var/lib/mysql"
 
-	MySQLVolumeNameInitialScript      = "initial-script"
-	MySQLVolumeMountPathInitialScript = "/docker-entrypoint-initdb.d"
+	MySQLVolumeNameUserInitScript      = "initial-script"
+	MySQLVolumeMountPathUserInitScript = "/docker-entrypoint-initdb.d"
 
 	MySQLVolumeNameInitScript      = "init-scripts"
 	MySQLVolumeMountPathInitScript = "/scripts"
@@ -287,6 +287,7 @@ const (
 	PerconaXtraDBMetricsExporterTLSVolumeName  = "metrics-exporter-config"
 	PerconaXtraDBMetricsExporterConfigPath     = "/etc/mysql/config/exporter"
 	PerconaXtraDBDataVolumeName                = "data"
+	PerconaXtraDBMySQLUserGroupID              = 1001
 
 	// =========================== MariaDB Constants ============================
 	MariaDBMaxClusterNameLength          = 32

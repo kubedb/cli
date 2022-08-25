@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kmodules.xyz/client-go/apiextensions"
 )
 
@@ -54,4 +55,26 @@ func (e EtcdOpsRequest) ResourcePlural() string {
 
 func (e EtcdOpsRequest) ValidateSpecs() error {
 	return nil
+}
+
+var _ Accessor = &EtcdOpsRequest{}
+
+func (e *EtcdOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return e.ObjectMeta
+}
+
+func (e *EtcdOpsRequest) GetRequestType() OpsRequestType {
+	return e.Spec.Type
+}
+
+func (e *EtcdOpsRequest) GetDBRefName() string {
+	return e.Spec.DatabaseRef.Name
+}
+
+func (e *EtcdOpsRequest) GetStatus() OpsRequestStatus {
+	return e.Status
+}
+
+func (e *EtcdOpsRequest) SetStatus(s OpsRequestStatus) {
+	e.Status = s
 }

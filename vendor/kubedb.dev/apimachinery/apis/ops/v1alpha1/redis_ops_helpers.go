@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/ops"
 	"kubedb.dev/apimachinery/crds"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kmodules.xyz/client-go/apiextensions"
 )
 
@@ -54,4 +55,26 @@ func (r RedisOpsRequest) ResourcePlural() string {
 
 func (r RedisOpsRequest) ValidateSpecs() error {
 	return nil
+}
+
+var _ Accessor = &RedisOpsRequest{}
+
+func (e *RedisOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return e.ObjectMeta
+}
+
+func (e *RedisOpsRequest) GetRequestType() OpsRequestType {
+	return e.Spec.Type
+}
+
+func (e *RedisOpsRequest) GetDBRefName() string {
+	return e.Spec.DatabaseRef.Name
+}
+
+func (e *RedisOpsRequest) GetStatus() OpsRequestStatus {
+	return e.Status
+}
+
+func (e *RedisOpsRequest) SetStatus(s OpsRequestStatus) {
+	e.Status = s
 }

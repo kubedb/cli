@@ -160,7 +160,7 @@ type MySQLSpec struct {
 	// HealthChecker defines attributes of the health checker
 	// +optional
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
-	HealthChecker HealthCheckSpec `json:"healthChecker"`
+	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

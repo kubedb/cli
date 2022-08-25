@@ -20,7 +20,6 @@ import (
 	core "k8s.io/api/core/v1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
@@ -46,8 +45,8 @@ const (
 type RedisOpsRequest struct {
 	metav1.TypeMeta   `json:",inline,omitempty"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              RedisOpsRequestSpec   `json:"spec,omitempty"`
-	Status            RedisOpsRequestStatus `json:"status,omitempty"`
+	Spec              RedisOpsRequestSpec `json:"spec,omitempty"`
+	Status            OpsRequestStatus    `json:"status,omitempty"`
 }
 
 // RedisOpsRequestSpec is the spec for RedisOpsRequest
@@ -72,6 +71,9 @@ type RedisOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default="IfReady"
+	Apply ApplyOption `json:"apply,omitempty"`
 }
 
 // RedisReplicaReadinessCriteria is the criteria for checking readiness of a Redis pod
@@ -112,18 +114,6 @@ type RedisCustomConfigurationSpec struct {
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
 	InlineConfig       string                     `json:"inlineConfig,omitempty"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
-}
-
-// RedisOpsRequestStatus is the status for RedisOpsRequest
-type RedisOpsRequestStatus struct {
-	Phase OpsRequestPhase `json:"phase,omitempty"`
-	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
-	// resource's generation, which is updated on mutation by the API Server.
-	// +optional
-	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
-	// Conditions applied to the request, such as approval or denial.
-	// +optional
-	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
