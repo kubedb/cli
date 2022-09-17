@@ -60,7 +60,7 @@ var _ webhook.Validator = &MariaDBAutoscaler{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
 func (in *MariaDBAutoscaler) ValidateCreate() error {
-	mongoLog.Info("validate create", "name", in.Name)
+	mariaLog.Info("validate create", "name", in.Name)
 	return in.validate()
 }
 

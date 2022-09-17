@@ -60,6 +60,7 @@ spec:
                       rules:
                         items:
                           type: object
+                          x-kubernetes-preserve-unknown-fields: true
                         type: array
                         x-kubernetes-preserve-unknown-fields: true
                     required:
@@ -123,6 +124,7 @@ spec:
                   name:
                     type: string
                 type: object
+                x-kubernetes-map-type: atomic
               restart:
                 type: object
               timeout:
@@ -160,6 +162,7 @@ spec:
                           - kind
                           - name
                           type: object
+                          x-kubernetes-map-type: atomic
                         privateKey:
                           properties:
                             encoding:
@@ -225,6 +228,7 @@ spec:
                     - kind
                     - name
                     type: object
+                    x-kubernetes-map-type: atomic
                   remove:
                     type: boolean
                   rotateCertificates:

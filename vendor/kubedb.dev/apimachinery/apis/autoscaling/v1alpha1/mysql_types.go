@@ -17,7 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"k8s.io/api/autoscaling/v2beta2"
+	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -29,9 +30,9 @@ const (
 	ResourcePluralMySQLAutoscaler   = "mysqlautoscalers"
 )
 
-// MySQLAutoscaler is the configuration for a horizontal pod
-// autoscaler, which automatically manages the replica count of any resource
-// implementing the scale subresource based on the metrics specified.
+// MySQLAutoscaler holds the configuration for autoscaling a mysql database.
+// which automatically manages pod resources based on historical and
+// real time resource utilization.
 
 // +genclient
 // +k8s:openapi-gen=true
@@ -59,90 +60,33 @@ type MySQLAutoscaler struct {
 
 // MySQLAutoscalerSpec describes the desired functionality of the MySQLAutoscaler.
 type MySQLAutoscalerSpec struct {
-	// scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
-	// should be collected, as well as to actually change the replica count.
-	ScaleTargetRef core.LocalObjectReference `json:"scaleTargetRef"`
-	// minReplicas is the lower limit for the number of replicas to which the autoscaler
-	// can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
-	// alpha feature gate HPAScaleToZero is enabled and at least one Object or External
-	// metric is configured.  Scaling is active as long as at least one metric value is
-	// available.
-	// +optional
-	MinReplicas *int32 `json:"minReplicas,omitempty"`
-	// maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up.
-	// It cannot be less that minReplicas.
-	MaxReplicas int32 `json:"maxReplicas"`
-	// metrics contains the specifications for which to use to calculate the
-	// desired replica count (the maximum replica count across all metrics will
-	// be used).  The desired replica count is calculated multiplying the
-	// ratio between the target value and the current value by the current
-	// number of pods.  Ergo, metrics used must decrease as the pod count is
-	// increased, and vice-versa.  See the individual metric source types for
-	// more information about how each type of metric must respond.
-	// If not set, the default metric will be set to 80% average CPU utilization.
-	// +optional
-	Metrics []v2beta2.MetricSpec `json:"metrics,omitempty"`
+	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
-	// behavior configures the scaling behavior of the target
-	// in both Up and Down directions (scaleUp and scaleDown fields respectively).
-	// If not set, the default MySQLScalingRules for scale up and scale down are used.
-	// +optional
-	Behavior *MySQLAutoscalerBehavior `json:"behavior,omitempty"`
+	// This field will be used to control the behaviour of ops-manager
+	OpsRequestOptions *MySQLOpsRequestOptions `json:"opsRequestOptions,omitempty"`
+
+	Compute *MySQLComputeAutoscalerSpec `json:"compute,omitempty"`
+	Storage *MySQLStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
-// MySQLAutoscalerBehavior configures the scaling behavior of the target
-// in both Up and Down directions (scaleUp and scaleDown fields respectively).
-type MySQLAutoscalerBehavior struct {
-	// scaleUp is scaling policy for scaling Up.
-	// If not set, the default value is the higher of:
-	//   * increase no more than 4 pods per 60 seconds
-	//   * double the number of pods per 60 seconds
-	// No stabilization is used.
-	// +optional
-	ScaleUp *MySQLScalingRules `json:"scaleUp,omitempty"`
-	// scaleDown is scaling policy for scaling Down.
-	// If not set, the default value is to allow to scale down to minReplicas pods, with a
-	// 300 second stabilization window (i.e., the highest recommendation for
-	// the last 300sec is used).
-	// +optional
-	ScaleDown *MySQLScalingRules `json:"scaleDown,omitempty"`
+type MySQLComputeAutoscalerSpec struct {
+	MySQL *ComputeAutoscalerSpec `json:"mysql,omitempty"`
 }
 
-// MySQLScalingRules configures the scaling behavior for one direction.
-// These Rules are applied after calculating DesiredReplicas from metrics for the HPA.
-// They can limit the scaling velocity by specifying scaling policies.
-// They can prevent flapping by specifying the stabilization window, so that the
-// number of replicas is not set instantly, instead, the safest value from the stabilization
-// window is chosen.
-type MySQLScalingRules struct {
-	// StabilizationWindowSeconds is the number of seconds for which past recommendations should be
-	// considered while scaling up or scaling down.
-	// StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour).
-	// If not set, use the default values:
-	// - For scale up: 0 (i.e. no stabilization is done).
-	// - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
-	// +optional
-	StabilizationWindowSeconds *int32 `json:"stabilizationWindowSeconds"`
-	// selectPolicy is used to specify which policy should be used.
-	// If not set, the default value MaxPolicySelect is used.
-	// +optional
-	SelectPolicy *v2beta2.ScalingPolicySelect `json:"selectPolicy,omitempty"`
-	// policies is a list of potential scaling polices which can be used during scaling.
-	// At least one policy must be specified, otherwise the MySQLScalingRules will be discarded as invalid
-	// +optional
-	Policies []MySQLScalingPolicy `json:"policies,omitempty"`
+type MySQLStorageAutoscalerSpec struct {
+	MySQL *StorageAutoscalerSpec `json:"mysql,omitempty"`
 }
 
-// MySQLScalingPolicy is a single policy which must hold true for a specified past interval.
-type MySQLScalingPolicy struct {
-	// Type is used to specify the scaling policy.
-	Type v2beta2.HPAScalingPolicyType `json:"type"`
-	// Value contains the amount of change which is permitted by the policy.
-	// It must be greater than zero
-	Value int32 `json:"value"`
-	// PeriodSeconds specifies the window of time for which the policy should hold true.
-	// PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
-	PeriodSeconds int32 `json:"periodSeconds"`
+type MySQLOpsRequestOptions struct {
+	// Specifies the Readiness Criteria
+	ReadinessCriteria *opsapi.MySQLReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
+
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
+
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default="IfReady"
+	Apply opsapi.ApplyOption `json:"apply,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

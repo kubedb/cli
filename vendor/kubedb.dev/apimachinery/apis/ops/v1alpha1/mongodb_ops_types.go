@@ -111,11 +111,16 @@ type MongosNode struct {
 	Replicas int32 `json:"replicas,omitempty"`
 }
 
+type HiddenNode struct {
+	Replicas int32 `json:"replicas,omitempty"`
+}
+
 // HorizontalScaling is the spec for mongodb horizontal scaling
 type MongoDBHorizontalScalingSpec struct {
 	Shard        *MongoDBShardNode `json:"shard,omitempty"`
 	ConfigServer *ConfigNode       `json:"configServer,omitempty"`
 	Mongos       *MongosNode       `json:"mongos,omitempty"`
+	Hidden       *HiddenNode       `json:"hidden,omitempty"`
 	Replicas     *int32            `json:"replicas,omitempty"`
 }
 
@@ -127,6 +132,7 @@ type MongoDBVerticalScalingSpec struct {
 	ConfigServer *core.ResourceRequirements `json:"configServer,omitempty"`
 	Shard        *core.ResourceRequirements `json:"shard,omitempty"`
 	Arbiter      *core.ResourceRequirements `json:"arbiter,omitempty"`
+	Hidden       *core.ResourceRequirements `json:"hidden,omitempty"`
 	Exporter     *core.ResourceRequirements `json:"exporter,omitempty"`
 	Coordinator  *core.ResourceRequirements `json:"coordinator,omitempty"`
 }
@@ -139,6 +145,7 @@ type MongoDBVolumeExpansionSpec struct {
 	ReplicaSet   *resource.Quantity   `json:"replicaSet,omitempty"`
 	ConfigServer *resource.Quantity   `json:"configServer,omitempty"`
 	Shard        *resource.Quantity   `json:"shard,omitempty"`
+	Hidden       *resource.Quantity   `json:"hidden,omitempty"`
 }
 
 type MongoDBCustomConfigurationSpec struct {
@@ -148,6 +155,7 @@ type MongoDBCustomConfigurationSpec struct {
 	ConfigServer *MongoDBCustomConfiguration `json:"configServer,omitempty"`
 	Shard        *MongoDBCustomConfiguration `json:"shard,omitempty"`
 	Arbiter      *MongoDBCustomConfiguration `json:"arbiter,omitempty"`
+	Hidden       *MongoDBCustomConfiguration `json:"hidden,omitempty"`
 }
 
 type MongoDBCustomConfiguration struct {

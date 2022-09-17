@@ -29,6 +29,7 @@ import (
 	kubedbv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	kubedbv1alpha2 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	opsv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
+	postgresv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/postgres/v1alpha1"
 	schemav1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/schema/v1alpha1"
 	uiv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1"
 
@@ -46,6 +47,7 @@ type Interface interface {
 	KubedbV1alpha1() kubedbv1alpha1.KubedbV1alpha1Interface
 	KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface
 	OpsV1alpha1() opsv1alpha1.OpsV1alpha1Interface
+	PostgresV1alpha1() postgresv1alpha1.PostgresV1alpha1Interface
 	SchemaV1alpha1() schemav1alpha1.SchemaV1alpha1Interface
 	UiV1alpha1() uiv1alpha1.UiV1alpha1Interface
 }
@@ -61,6 +63,7 @@ type Clientset struct {
 	kubedbV1alpha1      *kubedbv1alpha1.KubedbV1alpha1Client
 	kubedbV1alpha2      *kubedbv1alpha2.KubedbV1alpha2Client
 	opsV1alpha1         *opsv1alpha1.OpsV1alpha1Client
+	postgresV1alpha1    *postgresv1alpha1.PostgresV1alpha1Client
 	schemaV1alpha1      *schemav1alpha1.SchemaV1alpha1Client
 	uiV1alpha1          *uiv1alpha1.UiV1alpha1Client
 }
@@ -98,6 +101,11 @@ func (c *Clientset) KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface {
 // OpsV1alpha1 retrieves the OpsV1alpha1Client
 func (c *Clientset) OpsV1alpha1() opsv1alpha1.OpsV1alpha1Interface {
 	return c.opsV1alpha1
+}
+
+// PostgresV1alpha1 retrieves the PostgresV1alpha1Client
+func (c *Clientset) PostgresV1alpha1() postgresv1alpha1.PostgresV1alpha1Interface {
+	return c.postgresV1alpha1
 }
 
 // SchemaV1alpha1 retrieves the SchemaV1alpha1Client
@@ -182,6 +190,10 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 	if err != nil {
 		return nil, err
 	}
+	cs.postgresV1alpha1, err = postgresv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
 	cs.schemaV1alpha1, err = schemav1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
@@ -218,6 +230,7 @@ func New(c rest.Interface) *Clientset {
 	cs.kubedbV1alpha1 = kubedbv1alpha1.New(c)
 	cs.kubedbV1alpha2 = kubedbv1alpha2.New(c)
 	cs.opsV1alpha1 = opsv1alpha1.New(c)
+	cs.postgresV1alpha1 = postgresv1alpha1.New(c)
 	cs.schemaV1alpha1 = schemav1alpha1.New(c)
 	cs.uiV1alpha1 = uiv1alpha1.New(c)
 

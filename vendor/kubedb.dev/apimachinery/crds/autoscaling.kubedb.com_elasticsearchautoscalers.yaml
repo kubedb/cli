@@ -34,8 +34,6 @@ spec:
             properties:
               compute:
                 properties:
-                  disableScaleDown:
-                    type: boolean
                   node:
                     properties:
                       containerControlledValues:
@@ -221,6 +219,7 @@ spec:
                   name:
                     type: string
                 type: object
+                x-kubernetes-map-type: atomic
               storage:
                 properties:
                   node:
