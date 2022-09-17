@@ -74,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProxySQLOpsRequestList{},
 		&RedisOpsRequest{},
 		&RedisOpsRequestList{},
+		&RedisSentinelOpsRequest{},
+		&RedisSentinelOpsRequestList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

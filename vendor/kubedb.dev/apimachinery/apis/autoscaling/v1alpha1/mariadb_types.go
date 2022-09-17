@@ -63,8 +63,7 @@ type MariaDBAutoscalerSpec struct {
 }
 
 type MariaDBComputeAutoscalerSpec struct {
-	MariaDB          *ComputeAutoscalerSpec `json:"mariadb,omitempty"`
-	DisableScaleDown bool                   `json:"disableScaleDown,omitempty"`
+	MariaDB *ComputeAutoscalerSpec `json:"mariadb,omitempty"`
 }
 
 type MariaDBStorageAutoscalerSpec struct {

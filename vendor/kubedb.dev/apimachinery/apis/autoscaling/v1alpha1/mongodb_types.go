@@ -68,12 +68,11 @@ type MongoDBAutoscalerSpec struct {
 }
 
 type MongoDBComputeAutoscalerSpec struct {
-	Standalone       *ComputeAutoscalerSpec `json:"standalone,omitempty"`
-	ReplicaSet       *ComputeAutoscalerSpec `json:"replicaSet,omitempty"`
-	ConfigServer     *ComputeAutoscalerSpec `json:"configServer,omitempty"`
-	Shard            *ComputeAutoscalerSpec `json:"shard,omitempty"`
-	Mongos           *ComputeAutoscalerSpec `json:"mongos,omitempty"`
-	DisableScaleDown bool                   `json:"disableScaleDown,omitempty"`
+	Standalone   *ComputeAutoscalerSpec `json:"standalone,omitempty"`
+	ReplicaSet   *ComputeAutoscalerSpec `json:"replicaSet,omitempty"`
+	ConfigServer *ComputeAutoscalerSpec `json:"configServer,omitempty"`
+	Shard        *ComputeAutoscalerSpec `json:"shard,omitempty"`
+	Mongos       *ComputeAutoscalerSpec `json:"mongos,omitempty"`
 }
 
 type MongoDBStorageAutoscalerSpec struct {

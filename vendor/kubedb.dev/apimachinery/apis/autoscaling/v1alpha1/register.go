@@ -74,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProxySQLAutoscalerList{},
 		&RedisAutoscaler{},
 		&RedisAutoscalerList{},
+		&RedisSentinelAutoscaler{},
+		&RedisSentinelAutoscalerList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

@@ -65,9 +65,8 @@ type ElasticsearchAutoscalerSpec struct {
 }
 
 type ElasticsearchComputeAutoscalerSpec struct {
-	Node             *ComputeAutoscalerSpec                      `json:"node,omitempty"`
-	Topology         *ElasticsearchComputeTopologyAutoscalerSpec `json:"topology,omitempty"`
-	DisableScaleDown bool                                        `json:"disableScaleDown,omitempty"`
+	Node     *ComputeAutoscalerSpec                      `json:"node,omitempty"`
+	Topology *ElasticsearchComputeTopologyAutoscalerSpec `json:"topology,omitempty"`
 }
 
 type ElasticsearchComputeTopologyAutoscalerSpec struct {

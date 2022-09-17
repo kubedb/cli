@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"k8s.io/api/autoscaling/v2beta2"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -29,9 +28,9 @@ const (
 	ResourcePluralPerconaXtraDBAutoscaler   = "perconaxtradbautoscalers"
 )
 
-// PerconaXtraDBAutoscaler is the configuration for a horizontal pod
-// autoscaler, which automatically manages the replica count of any resource
-// implementing the scale subresource based on the metrics specified.
+// PerconaXtraDBAutoscaler is the configuration for a perconaxtradb
+// autoscaler, which automatically manages pod resources based on historical and
+//// real time resource utilization.
 
 // +genclient
 // +k8s:openapi-gen=true
@@ -42,118 +41,43 @@ const (
 // +kubebuilder:subresource:status
 type PerconaXtraDBAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`
-	// metadata is the standard object metadata.
-	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+	// Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	// spec is the specification for the behaviour of the autoscaler.
-	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status.
-	// +optional
-	Spec PerconaXtraDBAutoscalerSpec `json:"spec,omitempty"`
+	// Specification of the behavior of the autoscaler.
+	// More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.
+	Spec PerconaXtraDBAutoscalerSpec `json:"spec"`
 
-	// status is the current information about the autoscaler.
+	// Current information about the autoscaler.
 	// +optional
 	Status AutoscalerStatus `json:"status,omitempty"`
 }
 
-// PerconaXtraDBAutoscalerSpec describes the desired functionality of the PerconaXtraDBAutoscaler.
+// PerconaXtraDBAutoscalerSpec  is the specification of the behavior of the autoscaler.
 type PerconaXtraDBAutoscalerSpec struct {
-	// scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
-	// should be collected, as well as to actually change the replica count.
-	ScaleTargetRef core.LocalObjectReference `json:"scaleTargetRef"`
-	// minReplicas is the lower limit for the number of replicas to which the autoscaler
-	// can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
-	// alpha feature gate HPAScaleToZero is enabled and at least one Object or External
-	// metric is configured.  Scaling is active as long as at least one metric value is
-	// available.
-	// +optional
-	MinReplicas *int32 `json:"minReplicas,omitempty"`
-	// maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up.
-	// It cannot be less that minReplicas.
-	MaxReplicas int32 `json:"maxReplicas"`
-	// metrics contains the specifications for which to use to calculate the
-	// desired replica count (the maximum replica count across all metrics will
-	// be used).  The desired replica count is calculated multiplying the
-	// ratio between the target value and the current value by the current
-	// number of pods.  Ergo, metrics used must decrease as the pod count is
-	// increased, and vice-versa.  See the individual metric source types for
-	// more information about how each type of metric must respond.
-	// If not set, the default metric will be set to 80% average CPU utilization.
-	// +optional
-	Metrics []v2beta2.MetricSpec `json:"metrics,omitempty"`
+	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
-	// behavior configures the scaling behavior of the target
-	// in both Up and Down directions (scaleUp and scaleDown fields respectively).
-	// If not set, the default PerconaXtraDBScalingRules for scale up and scale down are used.
-	// +optional
-	Behavior *PerconaXtraDBAutoscalerBehavior `json:"behavior,omitempty"`
+	Compute *PerconaXtraDBComputeAutoscalerSpec `json:"compute,omitempty"`
+	Storage *PerconaXtraDBStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
-// PerconaXtraDBAutoscalerBehavior configures the scaling behavior of the target
-// in both Up and Down directions (scaleUp and scaleDown fields respectively).
-type PerconaXtraDBAutoscalerBehavior struct {
-	// scaleUp is scaling policy for scaling Up.
-	// If not set, the default value is the higher of:
-	//   * increase no more than 4 pods per 60 seconds
-	//   * double the number of pods per 60 seconds
-	// No stabilization is used.
-	// +optional
-	ScaleUp *PerconaXtraDBScalingRules `json:"scaleUp,omitempty"`
-	// scaleDown is scaling policy for scaling Down.
-	// If not set, the default value is to allow to scale down to minReplicas pods, with a
-	// 300 second stabilization window (i.e., the highest recommendation for
-	// the last 300sec is used).
-	// +optional
-	ScaleDown *PerconaXtraDBScalingRules `json:"scaleDown,omitempty"`
+type PerconaXtraDBComputeAutoscalerSpec struct {
+	PerconaXtraDB *ComputeAutoscalerSpec `json:"perconaxtradb,omitempty"`
 }
 
-// PerconaXtraDBScalingRules configures the scaling behavior for one direction.
-// These Rules are applied after calculating DesiredReplicas from metrics for the HPA.
-// They can limit the scaling velocity by specifying scaling policies.
-// They can prevent flapping by specifying the stabilization window, so that the
-// number of replicas is not set instantly, instead, the safest value from the stabilization
-// window is chosen.
-type PerconaXtraDBScalingRules struct {
-	// StabilizationWindowSeconds is the number of seconds for which past recommendations should be
-	// considered while scaling up or scaling down.
-	// StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour).
-	// If not set, use the default values:
-	// - For scale up: 0 (i.e. no stabilization is done).
-	// - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
-	// +optional
-	StabilizationWindowSeconds *int32 `json:"stabilizationWindowSeconds"`
-	// selectPolicy is used to specify which policy should be used.
-	// If not set, the default value MaxPolicySelect is used.
-	// +optional
-	SelectPolicy *v2beta2.ScalingPolicySelect `json:"selectPolicy,omitempty"`
-	// policies is a list of potential scaling polices which can be used during scaling.
-	// At least one policy must be specified, otherwise the PerconaXtraDBScalingRules will be discarded as invalid
-	// +optional
-	Policies []PerconaXtraDBScalingPolicy `json:"policies,omitempty"`
-}
-
-// PerconaXtraDBScalingPolicy is a single policy which must hold true for a specified past interval.
-type PerconaXtraDBScalingPolicy struct {
-	// Type is used to specify the scaling policy.
-	Type v2beta2.HPAScalingPolicyType `json:"type"`
-	// Value contains the amount of change which is permitted by the policy.
-	// It must be greater than zero
-	Value int32 `json:"value"`
-	// PeriodSeconds specifies the window of time for which the policy should hold true.
-	// PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
-	PeriodSeconds int32 `json:"periodSeconds"`
+type PerconaXtraDBStorageAutoscalerSpec struct {
+	PerconaXtraDB *StorageAutoscalerSpec `json:"perconaxtradb,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-// PerconaXtraDBAutoscalerList is a list of horizontal pod autoscaler objects.
+// PerconaXtraDBAutoscalerList is a list of PerconaXtraDBAutoscaler objects.
 type PerconaXtraDBAutoscalerList struct {
 	metav1.TypeMeta `json:",inline"`
 	// metadata is the standard list metadata.
 	// +optional
-	metav1.ListMeta `json:"metadata,omitempty"`
+	metav1.ListMeta `json:"metadata"`
 
-	// items is the list of horizontal pod autoscaler objects.
+	// items is the list of perconaxtradb autoscaler objects.
 	Items []PerconaXtraDBAutoscaler `json:"items"`
 }

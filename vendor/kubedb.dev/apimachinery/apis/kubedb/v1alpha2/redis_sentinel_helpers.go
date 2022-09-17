@@ -101,6 +101,10 @@ func (rs RedisSentinel) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(rs.OffshootName(), "pods")
 }
 
+func (r RedisSentinel) Address() string {
+	return fmt.Sprintf("%v.%v.svc:%d", r.Name, r.Namespace, RedisSentinelPort)
+}
+
 func (rs RedisSentinel) ConfigSecretName() string {
 	return rs.OffshootName()
 }

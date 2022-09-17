@@ -141,6 +141,7 @@ const (
 	NodeTypeShard                 = "shard"
 	NodeTypeConfig                = "configsvr"
 	NodeTypeArbiter               = "arbiter"
+	NodeTypeHidden                = "hidden"
 	NodeTypeReplica               = "replica"
 	NodeTypeStandalone            = "standalone"
 
@@ -391,6 +392,7 @@ const (
 	RedisConfigKey = "redis.conf" // RedisConfigKey is going to create for the customize redis configuration
 	// DefaultConfigKey is going to create for the default redis configuration
 	RedisContainerName          = ResourceSingularRedis
+	RedisSentinelContainerName  = "redissentinel"
 	DefaultConfigKey            = "default.conf"
 	RedisShardKey               = RedisKey + "/shard"
 	RedisDatabasePortName       = "db"
@@ -408,8 +410,14 @@ const (
 	RedisTLSVolumeName         = "tls-volume"
 	RedisExporterTLSVolumeName = "exporter-tls-volume"
 	RedisTLSVolumePath         = "/certs"
+	RedisSentinelTLSVolumeName = "sentinel-tls-volume"
+	RedisSentinelTLSVolumePath = "/sentinel-certs"
 	RedisConfigVolumeName      = "redis-config"
 	RedisConfigVolumePath      = "/usr/local/etc/redis/"
+
+	RedisNodeFlagMaster = "master"
+	RedisNodeFlagNoAddr = "noaddr"
+	RedisNodeFlagSlave  = "slave"
 
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"

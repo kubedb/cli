@@ -61,6 +61,7 @@ spec:
                           name:
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       inlineConfig:
                         type: string
                       removeCustomConfig:
@@ -77,6 +78,24 @@ spec:
                           name:
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
+                      inlineConfig:
+                        type: string
+                      removeCustomConfig:
+                        type: boolean
+                    type: object
+                  hidden:
+                    properties:
+                      applyConfig:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      configSecret:
+                        properties:
+                          name:
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       inlineConfig:
                         type: string
                       removeCustomConfig:
@@ -93,6 +112,7 @@ spec:
                           name:
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       inlineConfig:
                         type: string
                       removeCustomConfig:
@@ -109,6 +129,7 @@ spec:
                           name:
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       inlineConfig:
                         type: string
                       removeCustomConfig:
@@ -125,6 +146,7 @@ spec:
                           name:
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       inlineConfig:
                         type: string
                       removeCustomConfig:
@@ -141,6 +163,7 @@ spec:
                           name:
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       inlineConfig:
                         type: string
                       removeCustomConfig:
@@ -152,9 +175,16 @@ spec:
                   name:
                     type: string
                 type: object
+                x-kubernetes-map-type: atomic
               horizontalScaling:
                 properties:
                   configServer:
+                    properties:
+                      replicas:
+                        format: int32
+                        type: integer
+                    type: object
+                  hidden:
                     properties:
                       replicas:
                         format: int32
@@ -230,6 +260,7 @@ spec:
                           - kind
                           - name
                           type: object
+                          x-kubernetes-map-type: atomic
                         privateKey:
                           properties:
                             encoding:
@@ -295,6 +326,7 @@ spec:
                     - kind
                     - name
                     type: object
+                    x-kubernetes-map-type: atomic
                   remove:
                     type: boolean
                   rotateCertificates:
@@ -395,6 +427,25 @@ spec:
                           x-kubernetes-int-or-string: true
                         type: object
                     type: object
+                  hidden:
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                    type: object
                   mongos:
                     properties:
                       limits:
@@ -475,6 +526,12 @@ spec:
               volumeExpansion:
                 properties:
                   configServer:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  hidden:
                     anyOf:
                     - type: integer
                     - type: string
