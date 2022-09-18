@@ -30,7 +30,8 @@ const (
 
 // GaleraArbitratorConfiguration defines Galera ARBitrator Daemon (garbd) configuration.
 // Ref: https://galeracluster.com/library/documentation/arbitrator.html
-// 		https://galeracluster.com/library/documentation/backup-cluster.html
+//
+//	https://galeracluster.com/library/documentation/backup-cluster.html
 type GaleraArbitratorConfiguration struct {
 	metav1.TypeMeta `json:",inline,omitempty"`
 

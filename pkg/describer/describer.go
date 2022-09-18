@@ -641,12 +641,14 @@ func tabbedString(f func(io.Writer) error) (string, error) {
 }
 
 // printAnnotationsMultilineWithFilter prints filtered multiple annotations with a proper alignment.
+//
 //nolint:unparam
 func printAnnotationsMultilineWithFilter(level int, w describe.PrefixWriter, title string, annotations map[string]string, skip sets.String) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, skip)
 }
 
 // printAnnotationsMultiline prints multiple annotations with a proper alignment.
+//
 //nolint:unparam
 func printAnnotationsMultiline(level int, w describe.PrefixWriter, title string, annotations map[string]string) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, sets.NewString())
