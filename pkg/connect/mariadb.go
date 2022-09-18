@@ -19,7 +19,6 @@ package connect
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -238,7 +237,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(caFile, caCrt, 0o644)
+		err = os.WriteFile(caFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -247,7 +246,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(certFile, crt, 0o644)
+		err = os.WriteFile(certFile, crt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -256,7 +255,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(keyFile, key, 0o644)
+		err = os.WriteFile(keyFile, key, 0o644)
 		if err != nil {
 			return nil, err
 		}

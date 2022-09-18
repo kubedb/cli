@@ -421,7 +421,7 @@ func (m MongoDB) HostsOnlyCoreMembers() []string {
 }
 
 // ShardDSN = <shardReplName>/<host1:port>,<host2:port>,<host3:port>
-//// Here, host1 = <pod-name>.<governing-serviceName>.svc
+// Here, host1 = <pod-name>.<governing-serviceName>.svc
 func (m MongoDB) ShardDSN(nodeNum int32) string {
 	if m.Spec.ShardTopology == nil {
 		return ""
@@ -466,7 +466,7 @@ func (m MongoDB) ShardHostsOnlyCoreMembers(nodeNum int32) []string {
 }
 
 // ConfigSvrDSN = <configSvrReplName>/<host1:port>,<host2:port>,<host3:port>
-//// Here, host1 = <pod-name>.<governing-serviceName>.svc
+// Here, host1 = <pod-name>.<governing-serviceName>.svc
 func (m MongoDB) ConfigSvrDSN() string {
 	if m.Spec.ShardTopology == nil {
 		return ""

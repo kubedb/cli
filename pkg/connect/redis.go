@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -289,7 +288,7 @@ func (opts *redisOpts) executeFile(fileName string) error {
 	if err != nil {
 		return err
 	}
-	fileData, err := ioutil.ReadFile(fileName)
+	fileData, err := os.ReadFile(fileName)
 	if err != nil {
 		return err
 	}

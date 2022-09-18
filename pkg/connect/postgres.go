@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -255,7 +254,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(pgCaFile, caCrt, 0o644)
+		err = os.WriteFile(pgCaFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -264,7 +263,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(pgCertFile, crt, 0o644)
+		err = os.WriteFile(pgCertFile, crt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -273,7 +272,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(pgKeyFile, key, 0o600)
+		err = os.WriteFile(pgKeyFile, key, 0o600)
 		if err != nil {
 			return nil, err
 		}

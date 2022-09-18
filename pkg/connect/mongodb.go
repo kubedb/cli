@@ -19,7 +19,6 @@ package connect
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -243,7 +242,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 		if !ok {
 			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
-		err = ioutil.WriteFile(caFile, caCrt, 0o644)
+		err = os.WriteFile(caFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
@@ -260,7 +259,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 
 		pem := append(crt[:], []byte("\n")...)
 		pem = append(pem, key...)
-		err = ioutil.WriteFile(pemFile, pem, 0o644)
+		err = os.WriteFile(pemFile, pem, 0o644)
 		if err != nil {
 			return nil, err
 		}
