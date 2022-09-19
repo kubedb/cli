@@ -19,12 +19,14 @@ require (
 	k8s.io/component-base v0.25.1
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.1
-	kmodules.xyz/client-go v0.25.3
+	kmodules.xyz/client-go v0.25.6
 	kmodules.xyz/custom-resources v0.25.0
 	kmodules.xyz/monitoring-agent-api v0.25.0
 	kubedb.dev/apimachinery v0.28.4-0.20220918140426-7263b50309d2
 	stash.appscode.dev/apimachinery v0.22.1-0.20220918134206-55dff33147a0
 )
+
+require kmodules.xyz/apiversion v0.2.0 // indirect
 
 require (
 	cloud.google.com/go v0.99.0 // indirect
