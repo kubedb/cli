@@ -242,7 +242,7 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 	}
 }
 
-func showSecret(client kubernetes.Interface, namespace string, secrets map[string]*core.LocalObjectReference, w describe.PrefixWriter) {
+func showSecret(client kubernetes.Interface, namespace string, secrets map[string]*api.SecretReference, w describe.PrefixWriter) {
 	sc := client.CoreV1().Secrets(namespace)
 
 	for key, sv := range secrets {

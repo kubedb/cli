@@ -104,6 +104,11 @@ type BackupConfigurationSpec struct {
 	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
 	TimeOut string `json:"timeOut,omitempty"`
+
+	// RetryConfig specify a configuration for retry a backup if it fails.
+	// By default, Stash does not retry any failed backup.
+	// +optional
+	RetryConfig *RetryConfig `json:"retryConfig,omitempty"`
 }
 
 // Hooks describes actions that Stash should take in response to backup sessions. For the PostBackup

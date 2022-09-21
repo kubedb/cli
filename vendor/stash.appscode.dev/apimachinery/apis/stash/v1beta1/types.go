@@ -150,3 +150,13 @@ const (
 	Parallel   ExecutionOrder = "Parallel"
 	Sequential ExecutionOrder = "Sequential"
 )
+
+type RetryConfig struct {
+	// MaxRetry specifies the maximum number of attempts Stash should retry. Default value: 1
+	// +kubebuilder:default=1
+	MaxRetry int32 `json:"maxRetry,omitempty"`
+
+	// The number of seconds to wait before next retry. If you don't specify this field, Stash will retry immediately.
+	// +optional
+	Delay int32 `json:"delay,omitempty"`
+}

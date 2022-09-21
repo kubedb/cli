@@ -50,6 +50,8 @@ spec:
             properties:
               authSecret:
                 properties:
+                  externallyManaged:
+                    type: boolean
                   name:
                     type: string
                 type: object
@@ -2839,6 +2841,12 @@ spec:
             type: object
           status:
             properties:
+              authSecret:
+                properties:
+                  lastUpdateTimestamp:
+                    format: date-time
+                    type: string
+                type: object
               conditions:
                 items:
                   properties:
