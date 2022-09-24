@@ -765,7 +765,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.28.4-0.20220918140426-7263b50309d2
+# kubedb.dev/apimachinery v0.28.4-0.20220924164625-f5eabfc23811
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -939,7 +939,7 @@ sigs.k8s.io/structured-merge-diff/v4/value
 # sigs.k8s.io/yaml v1.3.0
 ## explicit; go 1.12
 sigs.k8s.io/yaml
-# stash.appscode.dev/apimachinery v0.22.1-0.20220918134206-55dff33147a0
+# stash.appscode.dev/apimachinery v0.22.1-0.20220924053358-8821fa34c13f
 ## explicit; go 1.18
 stash.appscode.dev/apimachinery/apis
 stash.appscode.dev/apimachinery/apis/repositories

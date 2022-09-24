@@ -89,6 +89,11 @@ type BackupBlueprintSpec struct {
 	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
 	TimeOut string `json:"timeOut,omitempty"`
+
+	// RetryConfig specify a configuration for retry a backup if it fails.
+	// By default, Stash does not retry any failed backup.
+	// +optional
+	RetryConfig *RetryConfig `json:"retryConfig,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

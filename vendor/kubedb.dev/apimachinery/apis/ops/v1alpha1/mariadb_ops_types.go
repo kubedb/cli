@@ -75,6 +75,9 @@ type MariaDBOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
+// MariaDBReplicaReadinessCriteria is the criteria for checking readiness of an MariaDB database
+type MariaDBReplicaReadinessCriteria struct{}
+
 type MariaDBUpgradeSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion string `json:"targetVersion,omitempty"`

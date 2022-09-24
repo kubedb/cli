@@ -91,6 +91,11 @@ type BackupBatchSpec struct {
 	// if backup does not complete within this time limit. By default, Stash don't set any timeout for backup.
 	// +optional
 	TimeOut string `json:"timeOut,omitempty"`
+
+	// RetryConfig specify a configuration for retry a backup if it fails.
+	// By default, Stash does not retry any failed backup.
+	// +optional
+	RetryConfig *RetryConfig `json:"retryConfig,omitempty"`
 }
 
 type BackupBatchStatus struct {

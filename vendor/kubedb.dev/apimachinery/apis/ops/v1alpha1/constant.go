@@ -46,7 +46,7 @@ const (
 	FailedToReconfigureDB                  = "FailedToReconfigureDB"
 	SuccessfullyRestartedDBMembers         = "SuccessfullyRestartedDBMembers"
 	FailToRestartDBMembers                 = "FailToRestartDBMembers"
-	SuccessfullyRestatedStatefulSet        = "SuccessfullyRestatedStatefulSet"
+	SuccessfullyRestartedStatefulSet       = "SuccessfullyRestartedStatefulSet"
 	FailedToRestartStatefulSet             = "FailedToRestartStatefulSet"
 	SuccessfullyRemovedTLSConfig           = "SuccessfullyRemovedTLSConfig"
 	FailedToRemoveTLSConfig                = "FailedToRemoveTLSConfig"

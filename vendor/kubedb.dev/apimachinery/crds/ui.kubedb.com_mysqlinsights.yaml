@@ -72,6 +72,12 @@ spec:
             type: object
           status:
             properties:
+              authSecret:
+                properties:
+                  lastUpdateTimestamp:
+                    format: date-time
+                    type: string
+                type: object
               conditions:
                 items:
                   properties:

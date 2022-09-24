@@ -67,8 +67,9 @@ type PerconaXtraDBSpec struct {
 	// Storage spec to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
-	// AuthSecret specifies database authentication secret
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
+	// Database authentication secret
+	// +optional
+	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
@@ -148,6 +149,8 @@ type PerconaXtraDBStatus struct {
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
+	// +optional
+	AuthSecret *Age `json:"authSecret,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

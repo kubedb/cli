@@ -75,6 +75,9 @@ type PerconaXtraDBOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
+// PerconaXtraDBReplicaReadinessCriteria is the criteria for checking readiness of an PerconaXtraDB database
+type PerconaXtraDBReplicaReadinessCriteria struct{}
+
 type PerconaXtraDBUpgradeSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion string `json:"targetVersion,omitempty"`

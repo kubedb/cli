@@ -86,7 +86,7 @@ func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
-		secrets := make(map[string]*core.LocalObjectReference)
+		secrets := make(map[string]*api.SecretReference)
 		if item.Spec.AuthSecret != nil {
 			secrets["Auth"] = item.Spec.AuthSecret
 		}

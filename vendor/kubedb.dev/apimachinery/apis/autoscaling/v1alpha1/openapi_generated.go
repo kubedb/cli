@@ -432,6 +432,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchAutoscalerSpec":                schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchComputeAutoscalerSpec":         schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchComputeTopologyAutoscalerSpec": schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchComputeTopologyAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchOpsRequestOptions":             schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchStorageAutoscalerSpec":         schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchStorageTopologyAutoscalerSpec": schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchStorageTopologyAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.EtcdAutoscaler":                             schema_apimachinery_apis_autoscaling_v1alpha1_EtcdAutoscaler(ref),
@@ -445,6 +446,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBAutoscalerList":                      schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBAutoscalerSpec":                      schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBComputeAutoscalerSpec":               schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBComputeAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBOpsRequestOptions":                   schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBStorageAutoscalerSpec":               schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedAutoscaler":                        schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedAutoscalerBehavior":                schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedAutoscalerBehavior(ref),
@@ -468,6 +470,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBAutoscalerList":                schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBAutoscalerSpec":                schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBComputeAutoscalerSpec":         schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBComputeAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBOpsRequestOptions":             schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBStorageAutoscalerSpec":         schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PgBouncerAutoscaler":                        schema_apimachinery_apis_autoscaling_v1alpha1_PgBouncerAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PgBouncerAutoscalerBehavior":                schema_apimachinery_apis_autoscaling_v1alpha1_PgBouncerAutoscalerBehavior(ref),
@@ -21309,6 +21312,12 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchAutoscalerSpec(r
 							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "This field will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchOpsRequestOptions"),
+						},
+					},
 					"compute": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchComputeAutoscalerSpec"),
@@ -21324,7 +21333,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchAutoscalerSpec(r
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ElasticsearchStorageAutoscalerSpec"},
 	}
 }
 
@@ -21378,6 +21387,39 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchComputeTopologyA
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"readinessCriteria": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the Readiness Criteria",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchReplicaReadinessCriteria"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchReplicaReadinessCriteria"},
 	}
 }
 
@@ -21856,6 +21898,12 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBAutoscalerSpec(ref com
 							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "This field will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBOpsRequestOptions"),
+						},
+					},
 					"compute": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBComputeAutoscalerSpec"),
@@ -21871,7 +21919,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBAutoscalerSpec(ref com
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MariaDBStorageAutoscalerSpec"},
 	}
 }
 
@@ -21891,6 +21939,39 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBComputeAutoscalerSpec(
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"readinessCriteria": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the Readiness Criteria",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBReplicaReadinessCriteria"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBReplicaReadinessCriteria"},
 	}
 }
 
@@ -22744,6 +22825,12 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscalerSpec(r
 							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "This field will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBOpsRequestOptions"),
+						},
+					},
 					"compute": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBComputeAutoscalerSpec"),
@@ -22759,7 +22846,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscalerSpec(r
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBStorageAutoscalerSpec"},
 	}
 }
 
@@ -22779,6 +22866,39 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBComputeAutoscale
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"readinessCriteria": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the Readiness Criteria",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBReplicaReadinessCriteria"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBReplicaReadinessCriteria"},
 	}
 }
 

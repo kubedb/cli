@@ -166,7 +166,7 @@ type RestoreSessionStatus struct {
 	// SessionDeadline specifies the deadline of restore process. RestoreSession will be
 	// considered Failed if restore does not complete within this deadline
 	// +optional
-	SessionDeadline metav1.Time `json:"sessionDeadline,omitempty"`
+	SessionDeadline *metav1.Time `json:"sessionDeadline,omitempty"`
 }
 
 type HostRestoreStats struct {

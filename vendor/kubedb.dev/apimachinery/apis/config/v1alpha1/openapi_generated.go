@@ -20765,7 +20765,7 @@ func schema_apimachinery_apis_config_v1alpha1_GaleraArbitratorConfiguration(ref 
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "GaleraArbitratorConfiguration defines Galera ARBitrator Daemon (garbd) configuration. Ref: https://galeracluster.com/library/documentation/arbitrator.html\n\t\thttps://galeracluster.com/library/documentation/backup-cluster.html",
+				Description: "GaleraArbitratorConfiguration defines Galera ARBitrator Daemon (garbd) configuration. Ref: https://galeracluster.com/library/documentation/arbitrator.html\n\n\thttps://galeracluster.com/library/documentation/backup-cluster.html",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"kind": {

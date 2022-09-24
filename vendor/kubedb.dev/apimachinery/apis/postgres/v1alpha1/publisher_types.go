@@ -120,7 +120,7 @@ const (
 
 	PublisherConditionTypeAllTablesFound PublisherConditionType = "AllTablesFound"
 	PublisherMessageAllTablesNotFound    PublisherMessage       = "All tables are not found"
-	PublisherMessageAllTablesFound       PublisherMessage       = "All tables are not found"
+	PublisherMessageAllTablesFound       PublisherMessage       = "All tables are found"
 
 	PublisherConditionTypePublicationSuccessful PublisherConditionType = "PublicationSuccessful"
 	PublisherMessagePublicationIsSuccessful     PublisherMessage       = "Publication is successful"

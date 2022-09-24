@@ -730,8 +730,10 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 				if userSpec.SecretName == "" {
 					userSpec.SecretName = e.DefaultUserCredSecretName(username)
 				}
-				e.Spec.AuthSecret = &core.LocalObjectReference{
-					Name: userSpec.SecretName,
+				e.Spec.AuthSecret = &SecretReference{
+					LocalObjectReference: core.LocalObjectReference{
+						Name: userSpec.SecretName,
+					},
 				}
 			}
 		} else if userSpec.SecretName == "" {

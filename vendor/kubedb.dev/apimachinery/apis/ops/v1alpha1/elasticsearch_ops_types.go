@@ -75,6 +75,9 @@ type ElasticsearchOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
+// ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of an Elasticsearch database
+type ElasticsearchReplicaReadinessCriteria struct{}
+
 type ElasticsearchUpgradeSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion string `json:"targetVersion,omitempty"`

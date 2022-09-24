@@ -19,6 +19,8 @@ package v1alpha1
 import (
 	"errors"
 
+	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -46,11 +48,24 @@ func (in *PerconaXtraDBAutoscaler) Default() {
 }
 
 func (in *PerconaXtraDBAutoscaler) setDefaults() {
+	in.setOpsReqOptsDefaults()
+
 	if in.Spec.Storage != nil {
 		setDefaultStorageValues(in.Spec.Storage.PerconaXtraDB)
 	}
 	if in.Spec.Compute != nil {
 		setDefaultComputeValues(in.Spec.Compute.PerconaXtraDB)
+	}
+}
+
+func (in *PerconaXtraDBAutoscaler) setOpsReqOptsDefaults() {
+	if in.Spec.OpsRequestOptions == nil {
+		in.Spec.OpsRequestOptions = &PerconaXtraDBOpsRequestOptions{}
+	}
+	// Timeout is defaulted to 600s in ops-manager retries.go (to retry 120 times with 5sec pause between each)
+	// OplogMaxLagSeconds & ObjectsCountDiffPercentage are defaults to 0
+	if in.Spec.OpsRequestOptions.Apply == "" {
+		in.Spec.OpsRequestOptions.Apply = opsapi.ApplyOptionIfReady
 	}
 }
 

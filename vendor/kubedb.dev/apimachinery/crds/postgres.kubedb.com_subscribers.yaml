@@ -18,7 +18,7 @@ spec:
     plural: subscribers
     shortNames:
     - sub
-    singular: subsriber
+    singular: subscriber
   scope: Namespaced
   versions:
   - additionalPrinterColumns:

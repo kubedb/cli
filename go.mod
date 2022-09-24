@@ -22,11 +22,9 @@ require (
 	kmodules.xyz/client-go v0.25.6
 	kmodules.xyz/custom-resources v0.25.0
 	kmodules.xyz/monitoring-agent-api v0.25.0
-	kubedb.dev/apimachinery v0.28.4-0.20220918140426-7263b50309d2
-	stash.appscode.dev/apimachinery v0.22.1-0.20220918134206-55dff33147a0
+	kubedb.dev/apimachinery v0.28.4-0.20220924164625-f5eabfc23811
+	stash.appscode.dev/apimachinery v0.22.1-0.20220924053358-8821fa34c13f
 )
-
-require kmodules.xyz/apiversion v0.2.0 // indirect
 
 require (
 	cloud.google.com/go v0.99.0 // indirect
@@ -118,6 +116,7 @@ require (
 	k8s.io/apiextensions-apiserver v0.25.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20220803164354-a70c9af30aea // indirect
 	k8s.io/utils v0.0.0-20220823124924-e9cbc92d1a73 // indirect
+	kmodules.xyz/apiversion v0.2.0 // indirect
 	kmodules.xyz/objectstore-api v0.25.0 // indirect
 	kmodules.xyz/offshoot-api v0.25.0 // indirect
 	kmodules.xyz/prober v0.25.0 // indirect
