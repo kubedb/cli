@@ -52,15 +52,13 @@ type PgBouncerOpsRequestSpec struct {
 	// Specifies the PgBouncer reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type PgBouncerOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PgBouncer
 	Upgrade *PgBouncerUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *PgBouncerHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *PgBouncerVerticalScalingSpec `json:"verticalScaling,omitempty"`
-	// Specifies information necessary for volume expansion
-	VolumeExpansion *PgBouncerVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of PgBouncer
 	Configuration *PgBouncerCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
@@ -71,6 +69,24 @@ type PgBouncerOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
+type PgBouncerOpsRequestType string
+
+const (
+	// used for UpdateVersion operation
+	PgBouncerOpsRequestTypeUpdateVersion PgBouncerOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	PgBouncerOpsRequestTypeHorizontalScaling PgBouncerOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	PgBouncerOpsRequestTypeVerticalScaling PgBouncerOpsRequestType = "VerticalScaling"
+	// used for Restart operation
+	PgBouncerOpsRequestTypeRestart PgBouncerOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	PgBouncerOpsRequestTypeReconfigure PgBouncerOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	PgBouncerOpsRequestTypeReconfigureTLSs PgBouncerOpsRequestType = "ReconfigureTLS"
+)
 
 // PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
 // after updating, horizontal scaling etc.
@@ -89,9 +105,6 @@ type PgBouncerHorizontalScalingSpec struct{}
 type PgBouncerVerticalScalingSpec struct {
 	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
-
-// PgBouncerVolumeExpansionSpec is the spec for PgBouncer volume expansion
-type PgBouncerVolumeExpansionSpec struct{}
 
 type PgBouncerCustomConfigurationSpec struct{}
 

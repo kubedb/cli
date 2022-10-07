@@ -92,6 +92,13 @@ func (e Etcd) ResourcePlural() string {
 	return ResourcePluralEtcd
 }
 
+func (e Etcd) GetAuthSecretName() string {
+	if e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
+		return e.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), "auth")
+}
+
 func (e Etcd) ClientServiceName() string {
 	return e.OffshootName() + "-client"
 }

@@ -101,6 +101,13 @@ func (p Postgres) ResourcePlural() string {
 	return ResourcePluralPostgres
 }
 
+func (p Postgres) GetAuthSecretName() string {
+	if p.Spec.AuthSecret != nil && p.Spec.AuthSecret.Name != "" {
+		return p.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
+}
+
 func (p Postgres) ServiceName() string {
 	return p.OffshootName()
 }

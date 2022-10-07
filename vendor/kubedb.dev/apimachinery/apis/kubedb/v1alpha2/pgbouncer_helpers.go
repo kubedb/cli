@@ -101,8 +101,8 @@ func (p PgBouncer) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(p.ServiceName(), "pods")
 }
 
-func (p PgBouncer) AuthSecretName() string {
-	return meta_util.NameWithSuffix(p.ServiceName(), "auth")
+func (p PgBouncer) GetAuthSecretName() string {
+	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
 }
 
 func (p PgBouncer) ConfigSecretName() string {
@@ -217,7 +217,7 @@ func (p *PgBouncer) GetPersistentSecrets() []string {
 		return nil
 	}
 	var secrets []string
-	secrets = append(secrets, p.AuthSecretName())
+	secrets = append(secrets, p.GetAuthSecretName())
 	secrets = append(secrets, p.ConfigSecretName())
 
 	return secrets

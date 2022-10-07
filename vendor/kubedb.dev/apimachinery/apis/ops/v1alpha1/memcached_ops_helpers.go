@@ -63,8 +63,8 @@ func (e *MemcachedOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *MemcachedOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *MemcachedOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *MemcachedOpsRequest) GetDBRefName() string {

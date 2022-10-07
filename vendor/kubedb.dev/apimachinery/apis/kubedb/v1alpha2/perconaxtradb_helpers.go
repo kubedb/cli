@@ -111,7 +111,10 @@ func (p PerconaXtraDB) PeerName(idx int) string {
 }
 
 func (p PerconaXtraDB) GetAuthSecretName() string {
-	return p.Spec.AuthSecret.Name
+	if p.Spec.AuthSecret != nil && p.Spec.AuthSecret.Name != "" {
+		return p.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
 }
 
 func (p PerconaXtraDB) ClusterName() string {
@@ -307,10 +310,6 @@ func (p *PerconaXtraDB) GetCertSecretName(alias PerconaXtraDBCertificateAlias) s
 		}
 	}
 	return p.CertificateName(alias)
-}
-
-func (p *PerconaXtraDB) AuthSecretName() string {
-	return meta_util.NameWithSuffix(p.Name, "auth")
 }
 
 func (p *PerconaXtraDB) ReplicationSecretName() string {

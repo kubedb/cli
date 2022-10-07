@@ -2502,15 +2502,12 @@ spec:
                 type: object
               type:
                 enum:
-                - Upgrade
                 - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
-                - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - ReconfigureTLS
-                - Reprovision
                 type: string
               upgrade:
                 properties:
@@ -2578,21 +2575,6 @@ spec:
                           x-kubernetes-int-or-string: true
                         type: object
                     type: object
-                type: object
-              volumeExpansion:
-                properties:
-                  mode:
-                    default: Online
-                    enum:
-                    - Offline
-                    - Online
-                    type: string
-                  redissentinel:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
                 type: object
             required:
             - databaseRef

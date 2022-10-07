@@ -54,7 +54,7 @@ type RedisOpsRequestSpec struct {
 	// Specifies the Redis reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type RedisOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Redis
 	Upgrade *RedisUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -66,14 +66,63 @@ type RedisOpsRequestSpec struct {
 	// Specifies information necessary for custom configuration of Redis
 	Configuration *RedisCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty"`
+	TLS *RedisTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Specifies information necessary for replacing sentinel instances
+	Sentinel *RedisSentinelSpec `json:"sentinel,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
+}
+
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;ReplaceSentinel
+type RedisOpsRequestType string
+
+const (
+	// used for UpdateVersion operation
+	RedisOpsRequestTypeUpdateVersion RedisOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	RedisOpsRequestTypeHorizontalScaling RedisOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	RedisOpsRequestTypeVerticalScaling RedisOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	RedisOpsRequestTypeVolumeExpansion RedisOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	RedisOpsRequestTypeRestart RedisOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	RedisOpsRequestTypeReconfigure RedisOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	RedisOpsRequestTypeReconfigureTLSs RedisOpsRequestType = "ReconfigureTLS"
+	// used for Replace Redis Sentinel monitoring
+	RedisOpsRequestTypeReplaceSentinel RedisOpsRequestType = "ReplaceSentinel"
+)
+
+type RedisTLSSpec struct {
+	*TLSSpec `json:",inline"`
+	// This field is only needed in Redis Sentinel Mode when we add or remove TLS. In Redis Sentinel Mode, both redis instances and
+	// sentinel instances either have TLS or don't have TLS. So when want to add TLS to Redis in Sentinel Mode, current sentinel instances don't
+	// have TLS enabled, so we need to give a new Sentinel Reference which has TLS enabled and which will monitor the Redis instances when we
+	// add TLS to it
+	// +optional
+	Sentinel *RedisSentinelSpec `json:"sentinel,omitempty"`
+}
+
+type RedisSentinelSpec struct {
+	// Sentinel Ref for new Sentinel which will replace the old sentinel
+	Ref *RedisSentinelRef `json:"ref"`
+	// +optional
+	RemoveUnusedSentinel bool `json:"removeUnusedSentinel,omitempty"`
+}
+
+type RedisSentinelRef struct {
+	// Name of the refereed sentinel
+	Name string `json:"name,omitempty"`
+
+	// Namespace where refereed sentinel has been deployed
+	Namespace string `json:"namespace,omitempty"`
 }
 
 // RedisReplicaReadinessCriteria is the criteria for checking readiness of a Redis pod

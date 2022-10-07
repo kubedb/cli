@@ -351,6 +351,13 @@ func (m MongoDB) ResourcePlural() string {
 	return ResourcePluralMongoDB
 }
 
+func (m MongoDB) GetAuthSecretName() string {
+	if m.Spec.AuthSecret != nil && m.Spec.AuthSecret.Name != "" {
+		return m.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
+}
+
 func (m MongoDB) ServiceName() string {
 	return m.OffshootName()
 }

@@ -331,6 +331,7 @@ const (
 	PostgresCoordinatorContainerName = "pg-coordinator"
 	PostgresCoordinatorPort          = 2380
 	PostgresCoordinatorPortName      = "coordinator"
+	PostgresContainerName            = ResourceSingularPostgres
 
 	PostgresCoordinatorClientPort     = 2379
 	PostgresCoordinatorClientPortName = "coordinatclient"

@@ -59,8 +59,8 @@ func (e *ProxySQLOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *ProxySQLOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *ProxySQLOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *ProxySQLOpsRequest) GetDBRefName() string {

@@ -94,6 +94,13 @@ func (p ProxySQL) ResourcePlural() string {
 	return ResourcePluralProxySQL
 }
 
+func (p ProxySQL) GetAuthSecretName() string {
+	if p.Spec.AuthSecret != nil && p.Spec.AuthSecret.Name != "" {
+		return p.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
+}
+
 func (p ProxySQL) ServiceName() string {
 	return p.OffshootName()
 }

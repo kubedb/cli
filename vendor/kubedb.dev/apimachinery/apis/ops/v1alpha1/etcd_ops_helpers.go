@@ -63,8 +63,8 @@ func (e *EtcdOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *EtcdOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *EtcdOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *EtcdOpsRequest) GetDBRefName() string {

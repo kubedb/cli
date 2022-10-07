@@ -63,8 +63,8 @@ func (e *ElasticsearchOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *ElasticsearchOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *ElasticsearchOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *ElasticsearchOpsRequest) GetDBRefName() string {

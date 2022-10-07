@@ -66,7 +66,7 @@ type PostgresOpsRequestSpec struct {
 	// Specifies the Postgres reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type PostgresOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Postgres
 	Upgrade *PostgresUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -77,7 +77,6 @@ type PostgresOpsRequestSpec struct {
 	VolumeExpansion *PostgresVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of Postgres
 	Configuration *PostgresCustomConfigurationSpec `json:"configuration,omitempty"`
-
 	// Specifies information necessary for configuring TLS
 	TLS *PostgresTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
@@ -88,6 +87,28 @@ type PostgresOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+type PostgresOpsRequestType string
+
+const (
+	// Deprecated. Use UpdateVersion
+	PostgresOpsRequestTypeUpgrade PostgresOpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	PostgresOpsRequestTypeUpdateVersion PostgresOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	PostgresOpsRequestTypeHorizontalScaling PostgresOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	PostgresOpsRequestTypeVerticalScaling PostgresOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	PostgresOpsRequestTypeVolumeExpansion PostgresOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	PostgresOpsRequestTypeRestart PostgresOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	PostgresOpsRequestTypeReconfigure PostgresOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	PostgresOpsRequestTypeReconfigureTLSs PostgresOpsRequestType = "ReconfigureTLS"
+)
 
 type PostgresUpgradeSpec struct {
 	// Specifies the target version name from catalog

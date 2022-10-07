@@ -52,7 +52,7 @@ type MemcachedOpsRequestSpec struct {
 	// Specifies the Memcached reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type MemcachedOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Memcached
 	Upgrade *MemcachedUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -71,6 +71,28 @@ type MemcachedOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+type MemcachedOpsRequestType string
+
+const (
+	// Deprecated. Use UpdateVersion
+	MemcachedOpsRequestTypeUpgrade MemcachedOpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	MemcachedOpsRequestTypeUpdateVersion MemcachedOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	MemcachedOpsRequestTypeHorizontalScaling MemcachedOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	MemcachedOpsRequestTypeVerticalScaling MemcachedOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	MemcachedOpsRequestTypeVolumeExpansion MemcachedOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	MemcachedOpsRequestTypeRestart MemcachedOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	MemcachedOpsRequestTypeReconfigure MemcachedOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	MemcachedOpsRequestTypeReconfigureTLSs MemcachedOpsRequestType = "ReconfigureTLS"
+)
 
 // MemcachedReplicaReadinessCriteria is the criteria for checking readiness of a Memcached pod
 // after updating, horizontal scaling etc.

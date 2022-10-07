@@ -53,7 +53,7 @@ type ElasticsearchOpsRequestSpec struct {
 	// Specifies the Elasticsearch reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type ElasticsearchOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Elasticsearch
 	Upgrade *ElasticsearchUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -74,6 +74,28 @@ type ElasticsearchOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+type ElasticsearchOpsRequestType string
+
+const (
+	// Deprecated. Use UpdateVersion
+	ElasticsearchOpsRequestTypeUpgrade ElasticsearchOpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	ElasticsearchOpsRequestTypeUpdateVersion ElasticsearchOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	ElasticsearchOpsRequestTypeHorizontalScaling ElasticsearchOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	ElasticsearchOpsRequestTypeVerticalScaling ElasticsearchOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	ElasticsearchOpsRequestTypeVolumeExpansion ElasticsearchOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	ElasticsearchOpsRequestTypeRestart ElasticsearchOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	ElasticsearchOpsRequestTypeReconfigure ElasticsearchOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	ElasticsearchOpsRequestTypeReconfigureTLSs ElasticsearchOpsRequestType = "ReconfigureTLS"
+)
 
 // ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of an Elasticsearch database
 type ElasticsearchReplicaReadinessCriteria struct{}

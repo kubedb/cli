@@ -54,15 +54,13 @@ type RedisSentinelOpsRequestSpec struct {
 	// Specifies the RedisSentinel reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type RedisSentinelOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading RedisSentinel
 	Upgrade *RedisSentinelUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *RedisSentinelHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *RedisSentinelVerticalScalingSpec `json:"verticalScaling,omitempty"`
-	// Specifies information necessary for volume expansion
-	VolumeExpansion *RedisSentinelVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of RedisSentinel
 	Configuration *RedisSentinelCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
@@ -75,6 +73,24 @@ type RedisSentinelOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
+type RedisSentinelOpsRequestType string
+
+const (
+	// used for UpdateVersion operation
+	RedisSentinelOpsRequestTypeUpdateVersion RedisSentinelOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	RedisSentinelOpsRequestTypeHorizontalScaling RedisSentinelOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	RedisSentinelOpsRequestTypeVerticalScaling RedisSentinelOpsRequestType = "VerticalScaling"
+	// used for Restart operation
+	RedisSentinelOpsRequestTypeRestart RedisSentinelOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	RedisSentinelOpsRequestTypeReconfigure RedisSentinelOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	RedisSentinelOpsRequestTypeReconfigureTLSs RedisSentinelOpsRequestType = "ReconfigureTLS"
+)
 
 // RedisSentinelReplicaReadinessCriteria is the criteria for checking readiness of a RedisSentinel pod
 // after updating, horizontal scaling etc.
