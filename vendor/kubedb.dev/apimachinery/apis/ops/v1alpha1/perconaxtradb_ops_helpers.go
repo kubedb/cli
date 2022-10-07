@@ -63,8 +63,8 @@ func (e *PerconaXtraDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *PerconaXtraDBOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *PerconaXtraDBOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *PerconaXtraDBOpsRequest) GetDBRefName() string {

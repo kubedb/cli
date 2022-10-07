@@ -56,6 +56,7 @@ func (in *MongoDBAutoscaler) setDefaults() {
 		setDefaultStorageValues(in.Spec.Storage.ReplicaSet)
 		setDefaultStorageValues(in.Spec.Storage.Shard)
 		setDefaultStorageValues(in.Spec.Storage.ConfigServer)
+		setDefaultStorageValues(in.Spec.Storage.Hidden)
 	}
 
 	if in.Spec.Compute != nil {
@@ -64,6 +65,8 @@ func (in *MongoDBAutoscaler) setDefaults() {
 		setDefaultComputeValues(in.Spec.Compute.Shard)
 		setDefaultComputeValues(in.Spec.Compute.ConfigServer)
 		setDefaultComputeValues(in.Spec.Compute.Mongos)
+		setDefaultComputeValues(in.Spec.Compute.Arbiter)
+		setDefaultComputeValues(in.Spec.Compute.Hidden)
 	}
 }
 
@@ -85,6 +88,8 @@ func (in *MongoDBAutoscaler) SetDefaults(db *dbapi.MongoDB) {
 		setInMemoryDefaults(in.Spec.Compute.Shard, db.Spec.StorageEngine)
 		setInMemoryDefaults(in.Spec.Compute.ConfigServer, db.Spec.StorageEngine)
 		setInMemoryDefaults(in.Spec.Compute.Mongos, db.Spec.StorageEngine)
+		// no need for Defaulting the Arbiter & Hidden Node.
+		// As arbiter is not a data-node.  And hidden doesn't have the impact of storageEngine (it can't be InMemory).
 	}
 }
 
@@ -151,6 +156,12 @@ func (in *MongoDBAutoscaler) ValidateFields(mg *dbapi.MongoDB) error {
 			if cm.Mongos != nil {
 				return errors.New("Spec.Compute.Mongos is invalid for Standalone mongoDB")
 			}
+			if cm.Arbiter != nil {
+				return errors.New("Spec.Compute.Arbiter is invalid for Standalone mongoDB")
+			}
+			if cm.Hidden != nil {
+				return errors.New("Spec.Compute.Hidden is invalid for Standalone mongoDB")
+			}
 		}
 	}
 
@@ -182,6 +193,9 @@ func (in *MongoDBAutoscaler) ValidateFields(mg *dbapi.MongoDB) error {
 			}
 			if st.ConfigServer != nil {
 				return errors.New("Spec.Storage.ConfigServer is invalid for Standalone mongoDB")
+			}
+			if st.Hidden != nil {
+				return errors.New("Spec.Storage.Hidden is invalid for Standalone mongoDB")
 			}
 		}
 	}

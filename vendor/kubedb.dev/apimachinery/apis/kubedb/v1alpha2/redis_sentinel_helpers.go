@@ -97,6 +97,13 @@ func (rs RedisSentinel) ResourcePlural() string {
 	return ResourcePluralRedisSentinel
 }
 
+func (rs RedisSentinel) GetAuthSecretName() string {
+	if rs.Spec.AuthSecret != nil && rs.Spec.AuthSecret.Name != "" {
+		return rs.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(rs.OffshootName(), "auth")
+}
+
 func (rs RedisSentinel) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(rs.OffshootName(), "pods")
 }

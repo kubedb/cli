@@ -64,8 +64,8 @@ func (e *MySQLOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *MySQLOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *MySQLOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *MySQLOpsRequest) GetDBRefName() string {

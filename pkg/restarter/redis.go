@@ -68,7 +68,7 @@ func (e *RedisRestarter) Restart(name, namespace string) (string, error) {
 			Namespace: namespace,
 		},
 		Spec: v1alpha1.RedisOpsRequestSpec{
-			Type: v1alpha1.OpsRequestTypeRestart,
+			Type: v1alpha1.RedisOpsRequestTypeRestart,
 			DatabaseRef: v1.LocalObjectReference{
 				Name: name,
 			},

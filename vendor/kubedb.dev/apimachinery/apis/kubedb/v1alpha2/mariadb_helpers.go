@@ -115,7 +115,10 @@ func (m MariaDB) PeerName(idx int) string {
 }
 
 func (m MariaDB) GetAuthSecretName() string {
-	return m.Spec.AuthSecret.Name
+	if m.Spec.AuthSecret != nil && m.Spec.AuthSecret.Name != "" {
+		return m.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
 }
 
 func (m MariaDB) ClusterName() string {
@@ -293,10 +296,6 @@ func (m *MariaDB) GetCertSecretName(alias MariaDBCertificateAlias) string {
 		}
 	}
 	return m.CertificateName(alias)
-}
-
-func (m *MariaDB) AuthSecretName() string {
-	return meta_util.NameWithSuffix(m.Name, "auth")
 }
 
 func (m *MariaDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {

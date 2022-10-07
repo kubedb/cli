@@ -16,8 +16,6 @@ spec:
     kind: RedisSentinel
     listKind: RedisSentinelList
     plural: redissentinels
-    shortNames:
-    - rds
     singular: redissentinel
   scope: Namespaced
   versions:

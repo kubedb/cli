@@ -68,7 +68,7 @@ func (e *PostgresRestarter) Restart(name, namespace string) (string, error) {
 			Namespace: namespace,
 		},
 		Spec: v1alpha1.PostgresOpsRequestSpec{
-			Type: v1alpha1.OpsRequestTypeRestart,
+			Type: v1alpha1.PostgresOpsRequestTypeRestart,
 			DatabaseRef: v1.LocalObjectReference{
 				Name: name,
 			},

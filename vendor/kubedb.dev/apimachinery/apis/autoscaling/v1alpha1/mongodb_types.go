@@ -73,6 +73,8 @@ type MongoDBComputeAutoscalerSpec struct {
 	ConfigServer *ComputeAutoscalerSpec `json:"configServer,omitempty"`
 	Shard        *ComputeAutoscalerSpec `json:"shard,omitempty"`
 	Mongos       *ComputeAutoscalerSpec `json:"mongos,omitempty"`
+	Arbiter      *ComputeAutoscalerSpec `json:"arbiter,omitempty"`
+	Hidden       *ComputeAutoscalerSpec `json:"hidden,omitempty"`
 }
 
 type MongoDBStorageAutoscalerSpec struct {
@@ -80,6 +82,7 @@ type MongoDBStorageAutoscalerSpec struct {
 	ReplicaSet   *StorageAutoscalerSpec `json:"replicaSet,omitempty"`
 	ConfigServer *StorageAutoscalerSpec `json:"configServer,omitempty"`
 	Shard        *StorageAutoscalerSpec `json:"shard,omitempty"`
+	Hidden       *StorageAutoscalerSpec `json:"hidden,omitempty"`
 }
 
 type MongoDBOpsRequestOptions struct {

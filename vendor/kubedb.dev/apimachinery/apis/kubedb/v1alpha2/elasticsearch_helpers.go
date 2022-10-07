@@ -127,6 +127,13 @@ func (e Elasticsearch) ResourcePlural() string {
 	return ResourcePluralElasticsearch
 }
 
+func (e Elasticsearch) GetAuthSecretName() string {
+	if e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
+		return e.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(e.OffshootName(), "auth")
+}
+
 func (e Elasticsearch) ServiceName() string {
 	return e.OffshootName()
 }

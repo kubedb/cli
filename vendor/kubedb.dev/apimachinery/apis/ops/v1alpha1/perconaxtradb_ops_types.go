@@ -53,7 +53,7 @@ type PerconaXtraDBOpsRequestSpec struct {
 	// Specifies the PerconaXtraDB reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type PerconaXtraDBOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PerconaXtraDB
 	Upgrade *PerconaXtraDBUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -74,6 +74,28 @@ type PerconaXtraDBOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+type PerconaXtraDBOpsRequestType string
+
+const (
+	// Deprecated. Use UpdateVersion
+	PerconaXtraDBOpsRequestTypeUpgrade PerconaXtraDBOpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	PerconaXtraDBOpsRequestTypeUpdateVersion PerconaXtraDBOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	PerconaXtraDBOpsRequestTypeHorizontalScaling PerconaXtraDBOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	PerconaXtraDBOpsRequestTypeVerticalScaling PerconaXtraDBOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	PerconaXtraDBOpsRequestTypeVolumeExpansion PerconaXtraDBOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	PerconaXtraDBOpsRequestTypeRestart PerconaXtraDBOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	PerconaXtraDBOpsRequestTypeReconfigure PerconaXtraDBOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	PerconaXtraDBOpsRequestTypeReconfigureTLSs PerconaXtraDBOpsRequestType = "ReconfigureTLS"
+)
 
 // PerconaXtraDBReplicaReadinessCriteria is the criteria for checking readiness of an PerconaXtraDB database
 type PerconaXtraDBReplicaReadinessCriteria struct{}

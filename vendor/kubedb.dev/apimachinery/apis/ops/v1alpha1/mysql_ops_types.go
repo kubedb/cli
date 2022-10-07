@@ -53,7 +53,7 @@ type MySQLOpsRequestSpec struct {
 	// Specifies the MySQL reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type MySQLOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MySQL
 	Upgrade *MySQLUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -74,6 +74,28 @@ type MySQLOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+type MySQLOpsRequestType string
+
+const (
+	// Deprecated. Use UpdateVersion
+	MySQLOpsRequestTypeUpgrade MySQLOpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	MySQLOpsRequestTypeUpdateVersion MySQLOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	MySQLOpsRequestTypeHorizontalScaling MySQLOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	MySQLOpsRequestTypeVerticalScaling MySQLOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	MySQLOpsRequestTypeVolumeExpansion MySQLOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	MySQLOpsRequestTypeRestart MySQLOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	MySQLOpsRequestTypeReconfigure MySQLOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	MySQLOpsRequestTypeReconfigureTLSs MySQLOpsRequestType = "ReconfigureTLS"
+)
 
 // MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
 // after updating, horizontal scaling etc.

@@ -236,15 +236,12 @@ spec:
                 type: object
               type:
                 enum:
-                - Upgrade
                 - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
-                - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - ReconfigureTLS
-                - Reprovision
                 type: string
               upgrade:
                 properties:
@@ -257,8 +254,6 @@ spec:
                 properties:
                   readinessCriteria:
                     type: object
-                type: object
-              volumeExpansion:
                 type: object
             required:
             - proxyRef

@@ -63,8 +63,8 @@ func (e *PostgresOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e *PostgresOpsRequest) GetRequestType() OpsRequestType {
-	return e.Spec.Type
+func (e *PostgresOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *PostgresOpsRequest) GetDBRefName() string {

@@ -158,10 +158,10 @@ func (m MySQL) PeerName(idx int) string {
 }
 
 func (m MySQL) GetAuthSecretName() string {
-	if m.Spec.AuthSecret != nil {
+	if m.Spec.AuthSecret != nil && m.Spec.AuthSecret.Name != "" {
 		return m.Spec.AuthSecret.Name
 	}
-	return meta_util.NameWithSuffix(m.Name, "auth")
+	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
 }
 
 type mysqlApp struct {

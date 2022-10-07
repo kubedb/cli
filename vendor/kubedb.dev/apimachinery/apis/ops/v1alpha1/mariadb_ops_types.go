@@ -53,7 +53,7 @@ type MariaDBOpsRequestSpec struct {
 	// Specifies the MariaDB reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type MariaDBOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MariaDB
 	Upgrade *MariaDBUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
@@ -74,6 +74,28 @@ type MariaDBOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+type MariaDBOpsRequestType string
+
+const (
+	// Deprecated. Use UpdateVersion
+	MariaDBOpsRequestTypeUpgrade MariaDBOpsRequestType = "Upgrade"
+	// used for UpdateVersion operation
+	MariaDBOpsRequestTypeUpdateVersion MariaDBOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	MariaDBOpsRequestTypeHorizontalScaling MariaDBOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	MariaDBOpsRequestTypeVerticalScaling MariaDBOpsRequestType = "VerticalScaling"
+	// used for VolumeExpansion operation
+	MariaDBOpsRequestTypeVolumeExpansion MariaDBOpsRequestType = "VolumeExpansion"
+	// used for Restart operation
+	MariaDBOpsRequestTypeRestart MariaDBOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	MariaDBOpsRequestTypeReconfigure MariaDBOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	MariaDBOpsRequestTypeReconfigureTLSs MariaDBOpsRequestType = "ReconfigureTLS"
+)
 
 // MariaDBReplicaReadinessCriteria is the criteria for checking readiness of an MariaDB database
 type MariaDBReplicaReadinessCriteria struct{}

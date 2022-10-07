@@ -3797,10 +3797,10 @@ spec:
                   if it fails. By default, Stash does not retry any failed backup.
                 properties:
                   delay:
-                    description: The number of seconds to wait before next retry.
-                      If you don't specify this field, Stash will retry immediately.
-                    format: int32
-                    type: integer
+                    description: 'The amount of time to wait before next retry. If
+                      you don''t specify this field, Stash will retry immediately.
+                      Format: 30s, 2m, 1h etc.'
+                    type: string
                   maxRetry:
                     default: 1
                     description: 'MaxRetry specifies the maximum number of attempts

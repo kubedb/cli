@@ -70,7 +70,7 @@ type RestoreBatchSpec struct {
 	// TimeOut specifies the maximum duration of restore. RestoreBatch will be considered Failed
 	// if restore does not complete within this time limit. By default, Stash don't set any timeout for restore.
 	// +optional
-	TimeOut string `json:"timeOut,omitempty"`
+	TimeOut *metav1.Duration `json:"timeOut,omitempty"`
 }
 
 type RestoreBatchStatus struct {

@@ -54,15 +54,13 @@ type ProxySQLOpsRequestSpec struct {
 	// Specifies the ProxySQL reference
 	ProxyRef core.LocalObjectReference `json:"proxyRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
-	Type OpsRequestType `json:"type"`
+	Type ProxySQLOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading ProxySQL
 	Upgrade *ProxySQLUpgradeSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *ProxySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *ProxySQLVerticalScalingSpec `json:"verticalScaling,omitempty"`
-	// Specifies information necessary for volume expansion
-	VolumeExpansion *ProxySQLVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of ProxySQL
 	Configuration *ProxySQLCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
@@ -75,6 +73,24 @@ type ProxySQLOpsRequestSpec struct {
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
+type ProxySQLOpsRequestType string
+
+const (
+	// used for UpdateVersion operation
+	ProxySQLOpsRequestTypeUpdateVersion ProxySQLOpsRequestType = "UpdateVersion"
+	// used for HorizontalScaling operation
+	ProxySQLOpsRequestTypeHorizontalScaling ProxySQLOpsRequestType = "HorizontalScaling"
+	// used for VerticalScaling operation
+	ProxySQLOpsRequestTypeVerticalScaling ProxySQLOpsRequestType = "VerticalScaling"
+	// used for Restart operation
+	ProxySQLOpsRequestTypeRestart ProxySQLOpsRequestType = "Restart"
+	// used for Reconfigure operation
+	ProxySQLOpsRequestTypeReconfigure ProxySQLOpsRequestType = "Reconfigure"
+	// used for ReconfigureTLS operation
+	ProxySQLOpsRequestTypeReconfigureTLSs ProxySQLOpsRequestType = "ReconfigureTLS"
+)
 
 // ProxySQLReplicaReadinessCriteria is the criteria for checking readiness of a ProxySQL pod
 // after updating, horizontal scaling etc.
@@ -96,9 +112,6 @@ type ProxySQLHorizontalScalingSpec struct {
 type ProxySQLVerticalScalingSpec struct {
 	ReadinessCriteria *ProxySQLReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
-
-// ProxySQLVolumeExpansionSpec is the spec for ProxySQL volume expansion
-type ProxySQLVolumeExpansionSpec struct{}
 
 type ProxySQLCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
