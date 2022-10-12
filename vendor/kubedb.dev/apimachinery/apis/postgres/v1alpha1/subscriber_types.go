@@ -129,6 +129,10 @@ const (
 	SubscriberMessageDBServerCritical     SubscriberMessage       = "Database Server is critical"
 	SubscriberMessageDBServerReady        SubscriberMessage       = "Database Server is Ready"
 
+	SubscriberConditionTypeDatabaseIsFound SubscriberConditionType = "DatabaseIsFound"
+	SubscriberMessageDatabaseIsFound       SubscriberMessage       = "Database is found"
+	SubscriberMessageDatabaseIsNotFound    SubscriberMessage       = "Database is not found"
+
 	SubscriberConditionTypeAllPublisherReady SubscriberConditionType = "AllPublisherReady"
 	SubscriberMessageAllPublisherAreReady    SubscriberMessage       = "All Publisher are ready"
 	SubscriberMessageAllPublisherAreNotReady SubscriberMessage       = "All Publisher are not ready"

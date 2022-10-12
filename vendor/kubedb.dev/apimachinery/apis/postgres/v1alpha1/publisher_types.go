@@ -118,6 +118,10 @@ const (
 	PublisherMessageDBServerCritical     PublisherMessage       = "Database Server is critical"
 	PublisherMessageDBServerReady        PublisherMessage       = "Database Server is Ready"
 
+	PublisherConditionTypeDatabaseIsFound PublisherConditionType = "DatabaseIsFound"
+	PublisherMessageDatabaseIsFound       PublisherMessage       = "Database is found"
+	PublisherMessageDatabaseIsNotFound    PublisherMessage       = "Database is not found"
+
 	PublisherConditionTypeAllTablesFound PublisherConditionType = "AllTablesFound"
 	PublisherMessageAllTablesNotFound    PublisherMessage       = "All tables are not found"
 	PublisherMessageAllTablesFound       PublisherMessage       = "All tables are found"

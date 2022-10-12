@@ -96,25 +96,6 @@ spec:
                   timeout:
                     type: string
                 type: object
-              storage:
-                properties:
-                  sentinel:
-                    properties:
-                      expansionMode:
-                        enum:
-                        - Offline
-                        - Online
-                        type: string
-                      scalingThreshold:
-                        format: int32
-                        type: integer
-                      trigger:
-                        type: string
-                      usageThreshold:
-                        format: int32
-                        type: integer
-                    type: object
-                type: object
             required:
             - databaseRef
             type: object
