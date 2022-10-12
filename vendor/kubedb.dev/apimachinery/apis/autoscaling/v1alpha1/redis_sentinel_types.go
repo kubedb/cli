@@ -66,15 +66,10 @@ type RedisSentinelAutoscalerSpec struct {
 	OpsRequestOptions *RedisSentinelOpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *RedisSentinelComputeAutoscalerSpec `json:"compute,omitempty"`
-	Storage *RedisSentinelStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
 type RedisSentinelComputeAutoscalerSpec struct {
 	Sentinel *ComputeAutoscalerSpec `json:"sentinel,omitempty"`
-}
-
-type RedisSentinelStorageAutoscalerSpec struct {
-	Sentinel *StorageAutoscalerSpec `json:"sentinel,omitempty"`
 }
 
 type RedisSentinelOpsRequestOptions struct {

@@ -504,7 +504,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelAutoscalerSpec":                schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelComputeAutoscalerSpec":         schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelOpsRequestOptions":             schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelOpsRequestOptions(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelStorageAutoscalerSpec":         schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisStorageAutoscalerSpec":                 schema_apimachinery_apis_autoscaling_v1alpha1_RedisStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec":                      schema_apimachinery_apis_autoscaling_v1alpha1_StorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.VPAStatus":                                  schema_apimachinery_apis_autoscaling_v1alpha1_VPAStatus(ref),
@@ -24166,17 +24165,12 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelAutoscalerSpec(r
 							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelComputeAutoscalerSpec"),
 						},
 					},
-					"storage": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelStorageAutoscalerSpec"),
-						},
-					},
 				},
 				Required: []string{"databaseRef"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelOpsRequestOptions"},
 	}
 }
 
@@ -24223,25 +24217,6 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelOpsRequestOption
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelStorageAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"sentinel": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"},
 	}
 }
 

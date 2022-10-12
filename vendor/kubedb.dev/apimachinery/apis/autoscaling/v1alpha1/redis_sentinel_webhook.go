@@ -50,10 +50,6 @@ func (in *RedisSentinelAutoscaler) Default() {
 func (in *RedisSentinelAutoscaler) setDefaults() {
 	in.setOpsReqOptsDefaults()
 
-	if in.Spec.Storage != nil {
-		setDefaultStorageValues(in.Spec.Storage.Sentinel)
-	}
-
 	if in.Spec.Compute != nil {
 		setDefaultComputeValues(in.Spec.Compute.Sentinel)
 	}
