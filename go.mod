@@ -106,7 +106,7 @@ require (
 	gomodules.xyz/flags v0.1.3 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
 	gomodules.xyz/mergo v0.3.13 // indirect
-	gomodules.xyz/password-generator v0.2.8 // indirect
+	gomodules.xyz/password-generator v0.2.9 // indirect
 	gomodules.xyz/sets v0.2.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
