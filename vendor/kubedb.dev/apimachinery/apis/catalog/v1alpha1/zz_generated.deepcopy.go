@@ -1631,7 +1631,11 @@ func (in *ProxySQLVersionProxysql) DeepCopy() *ProxySQLVersionProxysql {
 func (in *ProxySQLVersionSpec) DeepCopyInto(out *ProxySQLVersionSpec) {
 	*out = *in
 	out.Proxysql = in.Proxysql
-	out.Exporter = in.Exporter
+	if in.Exporter != nil {
+		in, out := &in.Exporter, &out.Exporter
+		*out = new(ProxySQLVersionExporter)
+		**out = **in
+	}
 	out.PodSecurityPolicies = in.PodSecurityPolicies
 	in.UpgradeConstraints.DeepCopyInto(&out.UpgradeConstraints)
 	return

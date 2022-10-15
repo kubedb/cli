@@ -23569,7 +23569,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionSpec(ref common.Re
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Exporter Image",
-							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersionExporter"),
 						},
 					},
@@ -23595,7 +23594,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionSpec(ref common.Re
 						},
 					},
 				},
-				Required: []string{"version", "proxysql", "exporter", "podSecurityPolicies"},
+				Required: []string{"version", "proxysql", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
