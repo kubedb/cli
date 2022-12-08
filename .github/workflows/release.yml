@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
