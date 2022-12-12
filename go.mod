@@ -22,7 +22,7 @@ require (
 	kmodules.xyz/client-go v0.25.13
 	kmodules.xyz/custom-resources v0.25.1
 	kmodules.xyz/monitoring-agent-api v0.25.0
-	kubedb.dev/apimachinery v0.29.2-0.20221212163700-c051e05358a6
+	kubedb.dev/apimachinery v0.30.0-rc.0
 	stash.appscode.dev/apimachinery v0.24.0
 )
 
