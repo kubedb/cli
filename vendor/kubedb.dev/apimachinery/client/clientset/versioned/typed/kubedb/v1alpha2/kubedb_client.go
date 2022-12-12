@@ -31,6 +31,7 @@ type KubedbV1alpha2Interface interface {
 	RESTClient() rest.Interface
 	ElasticsearchesGetter
 	EtcdsGetter
+	KafkasGetter
 	MariaDBsGetter
 	MemcachedsGetter
 	MongoDBsGetter
@@ -54,6 +55,10 @@ func (c *KubedbV1alpha2Client) Elasticsearches(namespace string) ElasticsearchIn
 
 func (c *KubedbV1alpha2Client) Etcds(namespace string) EtcdInterface {
 	return newEtcds(c, namespace)
+}
+
+func (c *KubedbV1alpha2Client) Kafkas(namespace string) KafkaInterface {
+	return newKafkas(c, namespace)
 }
 
 func (c *KubedbV1alpha2Client) MariaDBs(namespace string) MariaDBInterface {

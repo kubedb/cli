@@ -880,7 +880,7 @@ func (m *MongoDB) GetDefaultReadinessProbeSpec(mgVersion *v1alpha1.MongoDBVersio
 		FailureThreshold: 3,
 		PeriodSeconds:    10,
 		SuccessThreshold: 1,
-		TimeoutSeconds:   1,
+		TimeoutSeconds:   5,
 	}
 }
 

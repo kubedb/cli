@@ -74,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProxySQLVersionList{},
 		&RedisVersion{},
 		&RedisVersionList{},
+		&KafkaVersion{},
+		&KafkaVersionList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

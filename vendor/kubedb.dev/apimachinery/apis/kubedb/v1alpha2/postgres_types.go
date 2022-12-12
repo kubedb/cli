@@ -193,6 +193,18 @@ type PostgreLeaderElectionConfig struct {
 	// +kubebuilder:default=1
 	// +optional
 	HeartbeatTick int32 `json:"heartbeatTick,omitempty"`
+
+	// TransferLeadershipInterval retry interval for transfer leadership
+	// to the healthiest node
+	// +kubebuilder:default="1000ms"
+	// +optional
+	TransferLeadershipInterval *metav1.Duration `json:"transferLeadershipInterval,omitempty"`
+
+	// TransferLeadershipTimeout retry timeout for transfer leadership
+	// to the healthiest node
+	// +kubebuilder:default="120s"
+	// +optional
+	TransferLeadershipTimeout *metav1.Duration `json:"transferLeadershipTimeout,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
