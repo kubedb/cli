@@ -25026,16 +25026,16 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLVerticalScalingSpec(ref commo
 				Description: "ProxySQLVerticalScalingSpec is the spec for ProxySQL vertical scaling",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"readinessCriteria": {
+					"proxysql": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLReplicaReadinessCriteria"),
+							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLReplicaReadinessCriteria"},
+			"k8s.io/api/core/v1.ResourceRequirements"},
 	}
 }
 

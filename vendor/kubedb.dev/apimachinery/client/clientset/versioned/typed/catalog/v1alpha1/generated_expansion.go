@@ -22,6 +22,8 @@ type ElasticsearchVersionExpansion interface{}
 
 type EtcdVersionExpansion interface{}
 
+type KafkaVersionExpansion interface{}
+
 type MariaDBVersionExpansion interface{}
 
 type MemcachedVersionExpansion interface{}

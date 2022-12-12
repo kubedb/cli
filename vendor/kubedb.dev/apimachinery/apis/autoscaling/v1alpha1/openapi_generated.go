@@ -487,11 +487,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PostgresOpsRequestOptions":                  schema_apimachinery_apis_autoscaling_v1alpha1_PostgresOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PostgresStorageAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_PostgresStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscaler":                         schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscaler(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscalerBehavior":                 schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerBehavior(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscalerList":                     schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscalerSpec":                     schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerSpec(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingPolicy":                      schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLScalingPolicy(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingRules":                       schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLScalingRules(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLComputeAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLComputeAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLOpsRequestOptions":                  schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RecommendedContainerResources":              schema_apimachinery_apis_autoscaling_v1alpha1_RecommendedContainerResources(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RecommendedPodResources":                    schema_apimachinery_apis_autoscaling_v1alpha1_RecommendedPodResources(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisAutoscaler":                            schema_apimachinery_apis_autoscaling_v1alpha1_RedisAutoscaler(ref),
@@ -23520,33 +23519,6 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscaler(ref common
 	}
 }
 
-func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerBehavior(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ProxySQLAutoscalerBehavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively).",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"scaleUp": {
-						SchemaProps: spec.SchemaProps{
-							Description: "scaleUp is scaling policy for scaling Up. If not set, the default value is the higher of:\n  * increase no more than 4 pods per 60 seconds\n  * double the number of pods per 60 seconds\nNo stabilization is used.",
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingRules"),
-						},
-					},
-					"scaleDown": {
-						SchemaProps: spec.SchemaProps{
-							Description: "scaleDown is scaling policy for scaling Down. If not set, the default value is to allow to scale down to minReplicas pods, with a 300 second stabilization window (i.e., the highest recommendation for the last 300sec is used).",
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingRules"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingRules"},
-	}
-}
-
 func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -23602,138 +23574,77 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerSpec(ref co
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "ProxySQLAutoscalerSpec describes the desired functionality of the ProxySQLAutoscaler.",
+				Description: "ProxySQLAutoscalerSpec is the specification of the behavior of the autoscaler.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"scaleTargetRef": {
+					"proxyRef": {
 						SchemaProps: spec.SchemaProps{
-							Description: "scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics should be collected, as well as to actually change the replica count.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
-					"minReplicas": {
+					"opsRequestOptions": {
 						SchemaProps: spec.SchemaProps{
-							Description: "minReplicas is the lower limit for the number of replicas to which the autoscaler can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the alpha feature gate HPAScaleToZero is enabled and at least one Object or External metric is configured.  Scaling is active as long as at least one metric value is available.",
-							Type:        []string{"integer"},
-							Format:      "int32",
+							Description: "This field will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLOpsRequestOptions"),
 						},
 					},
-					"maxReplicas": {
+					"compute": {
 						SchemaProps: spec.SchemaProps{
-							Description: "maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up. It cannot be less that minReplicas.",
-							Default:     0,
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"metrics": {
-						SchemaProps: spec.SchemaProps{
-							Description: "metrics contains the specifications for which to use to calculate the desired replica count (the maximum replica count across all metrics will be used).  The desired replica count is calculated multiplying the ratio between the target value and the current value by the current number of pods.  Ergo, metrics used must decrease as the pod count is increased, and vice-versa.  See the individual metric source types for more information about how each type of metric must respond. If not set, the default metric will be set to 80% average CPU utilization.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("k8s.io/api/autoscaling/v2beta2.MetricSpec"),
-									},
-								},
-							},
-						},
-					},
-					"behavior": {
-						SchemaProps: spec.SchemaProps{
-							Description: "behavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively). If not set, the default ProxySQLScalingRules for scale up and scale down are used.",
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscalerBehavior"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLComputeAutoscalerSpec"),
 						},
 					},
 				},
-				Required: []string{"scaleTargetRef", "maxReplicas"},
+				Required: []string{"proxyRef"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/autoscaling/v2beta2.MetricSpec", "k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscalerBehavior"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLOpsRequestOptions"},
 	}
 }
 
-func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLScalingPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLComputeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "ProxySQLScalingPolicy is a single policy which must hold true for a specified past interval.",
-				Type:        []string{"object"},
+				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"type": {
+					"proxysql": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Type is used to specify the scaling policy.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"value": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Value contains the amount of change which is permitted by the policy. It must be greater than zero",
-							Default:     0,
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"periodSeconds": {
-						SchemaProps: spec.SchemaProps{
-							Description: "PeriodSeconds specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).",
-							Default:     0,
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-				},
-				Required: []string{"type", "value", "periodSeconds"},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLScalingRules(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ProxySQLScalingRules configures the scaling behavior for one direction. These Rules are applied after calculating DesiredReplicas from metrics for the HPA. They can limit the scaling velocity by specifying scaling policies. They can prevent flapping by specifying the stabilization window, so that the number of replicas is not set instantly, instead, the safest value from the stabilization window is chosen.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"stabilizationWindowSeconds": {
-						SchemaProps: spec.SchemaProps{
-							Description: "StabilizationWindowSeconds is the number of seconds for which past recommendations should be considered while scaling up or scaling down. StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long).",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"selectPolicy": {
-						SchemaProps: spec.SchemaProps{
-							Description: "selectPolicy is used to specify which policy should be used. If not set, the default value MaxPolicySelect is used.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"policies": {
-						SchemaProps: spec.SchemaProps{
-							Description: "policies is a list of potential scaling polices which can be used during scaling. At least one policy must be specified, otherwise the ProxySQLScalingRules will be discarded as invalid",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingPolicy"),
-									},
-								},
-							},
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLScalingPolicy"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
 	}
 }
 

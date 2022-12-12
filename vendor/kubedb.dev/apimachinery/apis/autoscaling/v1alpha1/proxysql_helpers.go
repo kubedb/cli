@@ -37,7 +37,7 @@ func (p ProxySQLAutoscaler) ResourceFQN() string {
 }
 
 func (p ProxySQLAutoscaler) ResourceShortCode() string {
-	return ""
+	return ResourceCodeProxySQLAutoscaler
 }
 
 func (p ProxySQLAutoscaler) ResourceKind() string {

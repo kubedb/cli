@@ -991,6 +991,12 @@ spec:
                   retryPeriodSeconds:
                     format: int32
                     type: integer
+                  transferLeadershipInterval:
+                    default: 1000ms
+                    type: string
+                  transferLeadershipTimeout:
+                    default: 120s
+                    type: string
                 type: object
               monitor:
                 properties:

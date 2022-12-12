@@ -22,6 +22,8 @@ type ElasticsearchExpansion interface{}
 
 type EtcdExpansion interface{}
 
+type KafkaExpansion interface{}
+
 type MariaDBExpansion interface{}
 
 type MemcachedExpansion interface{}

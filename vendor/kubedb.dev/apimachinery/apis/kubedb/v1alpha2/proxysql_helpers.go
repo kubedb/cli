@@ -79,7 +79,7 @@ func (p ProxySQL) ResourceFQN() string {
 }
 
 func (p ProxySQL) ResourceShortCode() string {
-	return ""
+	return ResourceCodeProxySQL
 }
 
 func (p ProxySQL) ResourceKind() string {

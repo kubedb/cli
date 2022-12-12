@@ -38,7 +38,7 @@ func (p ProxySQLOpsRequest) ResourceFQN() string {
 }
 
 func (p ProxySQLOpsRequest) ResourceShortCode() string {
-	return ""
+	return ResourceCodeProxySQLOpsRequest
 }
 
 func (p ProxySQLOpsRequest) ResourceKind() string {

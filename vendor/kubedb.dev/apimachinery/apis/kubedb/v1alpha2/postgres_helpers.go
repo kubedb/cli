@@ -203,6 +203,12 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 			MaximumLagBeforeFailover: 64 * 1024 * 1024,
 		}
 	}
+	if p.Spec.LeaderElection.TransferLeadershipInterval == nil {
+		p.Spec.LeaderElection.TransferLeadershipInterval = &metav1.Duration{Duration: 1 * time.Second}
+	}
+	if p.Spec.LeaderElection.TransferLeadershipTimeout == nil {
+		p.Spec.LeaderElection.TransferLeadershipTimeout = &metav1.Duration{Duration: 120 * time.Second}
+	}
 	apis.SetDefaultResourceLimits(&p.Spec.Coordinator.Resources, CoordinatorDefaultResources)
 
 	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
@@ -356,10 +362,10 @@ func (p *Postgres) GetCertSecretName(alias PostgresCertificateAlias) string {
 // return the 25% of the input in Bytes
 func GetSharedBufferSizeForPostgres(resource *resource.Quantity) string {
 	// no more than 25% of main memory (RAM)
-	minSharedBuffer := int64(128 * 1024)
+	minSharedBuffer := int64(128)
 	ret := minSharedBuffer
 	if resource != nil {
-		ret = resource.Value() / 4
+		ret = resource.Value() / (4 * 1024)
 	}
 	// the shared buffer value can't be less then this
 	// 128 KB  is the minimum
@@ -371,10 +377,10 @@ func GetSharedBufferSizeForPostgres(resource *resource.Quantity) string {
 	// why need this? -> PostgreSQL officially stores shared_buffers as an int32 that's why if the value is greater than 2147483648B.
 	// It's going to through and error that the value is going to cross the limit.
 
-	sharedBuffer := fmt.Sprintf("%sB", strconv.FormatInt(ret, 10))
-	if ret > SharedBuffersGbAsByte {
+	sharedBuffer := fmt.Sprintf("%skB", strconv.FormatInt(ret, 10))
+	if ret > SharedBuffersGbAsKiloByte {
 		// convert the ret as MB devide by SharedBuffersMbAsByte
-		ret /= SharedBuffersMbAsByte
+		ret /= SharedBuffersMbAsKiloByte
 		sharedBuffer = fmt.Sprintf("%sMB", strconv.FormatInt(ret, 10))
 	}
 
