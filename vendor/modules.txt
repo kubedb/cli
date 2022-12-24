@@ -321,7 +321,7 @@ gomodules.xyz/logs
 # gomodules.xyz/mergo v0.3.13
 ## explicit; go 1.13
 gomodules.xyz/mergo
-# gomodules.xyz/password-generator v0.2.8
+# gomodules.xyz/password-generator v0.2.9
 ## explicit; go 1.15
 gomodules.xyz/password-generator
 # gomodules.xyz/pointer v0.1.0
