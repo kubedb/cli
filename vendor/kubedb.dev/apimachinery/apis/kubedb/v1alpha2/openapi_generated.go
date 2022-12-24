@@ -21132,38 +21132,23 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ConnectionPoolConfig(ref common.Re
 					},
 					"maxDBConnections": {
 						SchemaProps: spec.SchemaProps{
-							Description: "MaxDBConnections is the maximum number of connections allowed per-database. Default: unlimited.",
+							Description: "MaxDBConnections is the maximum number of connections allowed per-database. Default: 0 (unlimited).",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
 					},
 					"maxUserConnections": {
 						SchemaProps: spec.SchemaProps{
-							Description: "MaxUserConnections is the maximum number of users allowed per-database. Default: unlimited.",
+							Description: "MaxUserConnections is the maximum number of users allowed per-database. Default: 0 (unlimited).",
 							Type:        []string{"integer"},
 							Format:      "int64",
 						},
 					},
 					"statsPeriodSeconds": {
 						SchemaProps: spec.SchemaProps{
-							Description: "StatsPeriodSeconds sets how often the averages shown in various SHOW commands are updated and how often aggregated statistics are written to the log.",
+							Description: "StatsPeriodSeconds sets how often the averages shown in various SHOW commands are updated and how often aggregated statistics are written to the log. Default: 60",
 							Type:        []string{"integer"},
 							Format:      "int64",
-						},
-					},
-					"adminUsers": {
-						SchemaProps: spec.SchemaProps{
-							Description: "AdminUsers specifies an array of users who can act as PgBouncer administrators.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
 						},
 					},
 					"authType": {
@@ -21173,16 +21158,9 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ConnectionPoolConfig(ref common.Re
 							Format:      "",
 						},
 					},
-					"authUser": {
-						SchemaProps: spec.SchemaProps{
-							Description: "AuthUser looks up any user not specified in auth_file from pg_shadow. Default: not set.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
 					"ignoreStartupParameters": {
 						SchemaProps: spec.SchemaProps{
-							Description: "IgnoreStartupParameters specifies comma-separated startup parameters that pgbouncer knows are handled by admin and it can ignore them.",
+							Description: "IgnoreStartupParameters specifies comma-separated startup parameters that pgbouncer knows are handled by admin and it can ignore them. Default: empty",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -21278,18 +21256,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_Databases(ref common.ReferenceCall
 							Format:      "",
 						},
 					},
-					"authSecretRef": {
-						SchemaProps: spec.SchemaProps{
-							Description: "AuthSecretRef points to a secret that contains the credentials (username and password) of an existing user of this database. It is used to bind a single user to this specific database connection.",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
 				},
 				Required: []string{"alias", "databaseRef", "databaseName"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AppReference"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.AppReference"},
 	}
 }
 
@@ -24867,9 +24839,15 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerSpec(ref common.Reference
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConnectionPoolConfig"),
 						},
 					},
-					"userListSecretRef": {
+					"authSecret": {
 						SchemaProps: spec.SchemaProps{
-							Description: "UserListSecretRef is a secret with a list of PgBouncer user and passwords.",
+							Description: "Database authentication secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
@@ -24911,7 +24889,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgBouncerSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConnectionPoolConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Databases", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConnectionPoolConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Databases", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 

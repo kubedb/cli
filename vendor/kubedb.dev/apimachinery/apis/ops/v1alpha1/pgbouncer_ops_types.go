@@ -50,7 +50,7 @@ type PgBouncerOpsRequest struct {
 // PgBouncerOpsRequestSpec is the spec for PgBouncerOpsRequest
 type PgBouncerOpsRequestSpec struct {
 	// Specifies the PgBouncer reference
-	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
+	ServerRef core.LocalObjectReference `json:"serverRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type PgBouncerOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PgBouncer

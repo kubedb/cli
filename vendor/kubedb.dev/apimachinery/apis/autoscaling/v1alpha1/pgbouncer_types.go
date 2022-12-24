@@ -61,7 +61,7 @@ type PgBouncerAutoscaler struct {
 type PgBouncerAutoscalerSpec struct {
 	// scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
 	// should be collected, as well as to actually change the replica count.
-	ScaleTargetRef core.LocalObjectReference `json:"scaleTargetRef"`
+	ServerRef core.LocalObjectReference `json:"serverRef"`
 	// minReplicas is the lower limit for the number of replicas to which the autoscaler
 	// can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
 	// alpha feature gate HPAScaleToZero is enabled and at least one Object or External

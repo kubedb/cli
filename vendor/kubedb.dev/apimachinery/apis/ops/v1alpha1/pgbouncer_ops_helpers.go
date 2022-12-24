@@ -68,7 +68,7 @@ func (e *PgBouncerOpsRequest) GetRequestType() string {
 }
 
 func (e *PgBouncerOpsRequest) GetDBRefName() string {
-	return e.Spec.DatabaseRef.Name
+	return e.Spec.ServerRef.Name
 }
 
 func (e *PgBouncerOpsRequest) GetStatus() OpsRequestStatus {
