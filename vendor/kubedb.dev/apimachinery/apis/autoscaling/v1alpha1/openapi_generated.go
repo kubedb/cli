@@ -23199,7 +23199,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PgBouncerAutoscalerSpec(ref c
 				Description: "PgBouncerAutoscalerSpec describes the desired functionality of the PgBouncerAutoscaler.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"scaleTargetRef": {
+					"serverRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics should be collected, as well as to actually change the replica count.",
 							Default:     map[string]interface{}{},
@@ -23242,7 +23242,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PgBouncerAutoscalerSpec(ref c
 						},
 					},
 				},
-				Required: []string{"scaleTargetRef", "maxReplicas"},
+				Required: []string{"serverRef", "maxReplicas"},
 			},
 		},
 		Dependencies: []string{

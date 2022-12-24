@@ -24305,7 +24305,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref common.Re
 				Description: "PgBouncerOpsRequestSpec is the spec for PgBouncerOpsRequest",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"databaseRef": {
+					"serverRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies the PgBouncer reference",
 							Default:     map[string]interface{}{},
@@ -24364,7 +24364,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref common.Re
 						},
 					},
 				},
-				Required: []string{"databaseRef", "type"},
+				Required: []string{"serverRef", "type"},
 			},
 		},
 		Dependencies: []string{

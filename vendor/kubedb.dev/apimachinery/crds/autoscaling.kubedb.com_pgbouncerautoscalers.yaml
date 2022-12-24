@@ -353,7 +353,7 @@ spec:
               minReplicas:
                 format: int32
                 type: integer
-              scaleTargetRef:
+              serverRef:
                 properties:
                   name:
                     type: string
@@ -361,7 +361,7 @@ spec:
                 x-kubernetes-map-type: atomic
             required:
             - maxReplicas
-            - scaleTargetRef
+            - serverRef
             type: object
           status:
             properties:

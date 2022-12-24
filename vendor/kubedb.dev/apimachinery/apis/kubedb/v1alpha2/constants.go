@@ -434,24 +434,26 @@ const (
 
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"
-	RedisRootUsername        = "root"
+	RedisRootUsername        = "default"
 	EnvRedisUser             = "USERNAME"
 	EnvRedisPassword         = "REDISCLI_AUTH"
 
 	// =========================== PgBouncer Constants ============================
-	PgBouncerUpstreamServerCA         = "upstream-server-ca.crt"
-	PgBouncerUpstreamServerClientCert = "upstream-server-client.crt"
-	PgBouncerUpstreamServerClientKey  = "upstream-server-client.key"
-	PgBouncerClientCrt                = "client.crt"
-	PgBouncerClientKey                = "client.key"
-	PgBouncerCACrt                    = "ca.crt"
-	PgBouncerTLSCrt                   = "tls.crt"
-	PgBouncerTLSKey                   = "tls.key"
-	PgBouncerDatabasePortName         = "db"
-	PgBouncerPrimaryServicePortName   = "primary"
-	PgBouncerDatabasePort             = 5432
-	PgBouncerConfigFile               = "pgbouncer.ini"
-	PgBouncerAdminUsername            = "kubedb"
+	PgBouncerUpstreamServerCA               = "upstream-server-ca.crt"
+	PgBouncerUpstreamServerClientCert       = "upstream-server-client.crt"
+	PgBouncerUpstreamServerClientKey        = "upstream-server-client.key"
+	PgBouncerClientCrt                      = "client.crt"
+	PgBouncerClientKey                      = "client.key"
+	PgBouncerCACrt                          = "ca.crt"
+	PgBouncerTLSCrt                         = "tls.crt"
+	PgBouncerTLSKey                         = "tls.key"
+	PgBouncerDatabasePortName               = "db"
+	PgBouncerPrimaryServicePortName         = "primary"
+	PgBouncerDatabasePort                   = 5432
+	PgBouncerConfigFile                     = "pgbouncer.ini"
+	PgBouncerAdminUsername                  = "pgbouncer"
+	PgBouncerDefaultPoolMode                = "session"
+	PgBouncerDefaultIgnoreStartupParameters = "empty"
 )
 
 // List of possible condition types for a KubeDB object

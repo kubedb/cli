@@ -48,59 +48,74 @@ spec:
             type: object
           spec:
             properties:
+              authSecret:
+                properties:
+                  externallyManaged:
+                    type: boolean
+                  name:
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
               autoOps:
                 properties:
                   disabled:
                     type: boolean
                 type: object
+              configSecret:
+                properties:
+                  name:
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
               connectionPool:
                 properties:
-                  adminUsers:
-                    items:
-                      type: string
-                    type: array
                   authType:
+                    default: md5
                     enum:
                     - md5
                     - scram
                     - cert
-                    - plain
-                    - trust
-                    - any
-                    - hba
-                    - pam
-                    type: string
-                  authUser:
                     type: string
                   defaultPoolSize:
+                    default: 20
                     format: int64
                     type: integer
                   ignoreStartupParameters:
+                    default: empty
                     type: string
                   maxClientConnections:
+                    default: 100
                     format: int64
                     type: integer
                   maxDBConnections:
+                    default: 0
                     format: int64
                     type: integer
                   maxUserConnections:
+                    default: 0
                     format: int64
                     type: integer
                   minPoolSize:
+                    default: 0
                     format: int64
                     type: integer
                   poolMode:
+                    default: session
                     type: string
                   port:
+                    default: 54342
                     format: int32
                     type: integer
                   reservePoolSize:
+                    default: 0
                     format: int64
                     type: integer
                   reservePoolTimeoutSeconds:
+                    default: 5
                     format: int64
                     type: integer
                   statsPeriodSeconds:
+                    default: 60
                     format: int64
                     type: integer
                 type: object
@@ -109,12 +124,6 @@ spec:
                   properties:
                     alias:
                       type: string
-                    authSecretRef:
-                      properties:
-                        name:
-                          type: string
-                      type: object
-                      x-kubernetes-map-type: atomic
                     databaseName:
                       type: string
                     databaseRef:
@@ -2837,12 +2846,6 @@ spec:
                     type: object
                     x-kubernetes-map-type: atomic
                 type: object
-              userListSecretRef:
-                properties:
-                  name:
-                    type: string
-                type: object
-                x-kubernetes-map-type: atomic
               version:
                 type: string
             required:

@@ -79,9 +79,13 @@ type PgBouncerSpec struct {
 	// +optional
 	ConnectionPool *ConnectionPoolConfig `json:"connectionPool,omitempty"`
 
-	// UserListSecretRef is a secret with a list of PgBouncer user and passwords.
+	// Database authentication secret
 	// +optional
-	UserListSecretRef *core.LocalObjectReference `json:"userListSecretRef,omitempty"`
+	AuthSecret *SecretReference `json:"authSecret,omitempty"`
+
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mongod.cnf).
+	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
 	// Monitor is used monitor database instance.
 	// +optional
@@ -120,59 +124,66 @@ type Databases struct {
 	DatabaseRef appcat.AppReference `json:"databaseRef"`
 	// DatabaseName is the name of the target database inside a Postgres instance.
 	DatabaseName string `json:"databaseName"`
-	// AuthSecretRef points to a secret that contains the credentials
-	// (username and password) of an existing user of this database.
-	// It is used to bind a single user to this specific database connection.
-	// +optional
-	AuthSecretRef *core.LocalObjectReference `json:"authSecretRef,omitempty"`
 }
 
 type ConnectionPoolConfig struct {
 	// Port is the port number on which PgBouncer listens to clients. Default: 5432.
+	// +kubebuilder:default=54342
 	// +optional
 	Port *int32 `json:"port,omitempty"`
 	// PoolMode is the pooling mechanism type. Default: session.
+	// +kubebuilder:default="session"
 	// +optional
 	PoolMode string `json:"poolMode,omitempty"`
 	// MaxClientConnections is the maximum number of allowed client connections. Default: 100.
+	// +kubebuilder:default=100
 	// +optional
 	MaxClientConnections *int64 `json:"maxClientConnections,omitempty"`
 	// DefaultPoolSize specifies how many server connections to allow per user/database pair. Default: 20.
+	// +kubebuilder:default=20
 	// +optional
 	DefaultPoolSize *int64 `json:"defaultPoolSize,omitempty"`
 	// MinPoolSize is used to add more server connections to pool if below this number. Default: 0 (disabled).
+	// +kubebuilder:default=0
 	// +optional
 	MinPoolSize *int64 `json:"minPoolSize,omitempty"`
 	// ReservePoolSize specifies how many additional connections to allow to a pool. 0 disables. Default: 0 (disabled).
+	// +kubebuilder:default=0
 	// +optional
 	ReservePoolSize *int64 `json:"reservePoolSize,omitempty"`
 	// ReservePoolTimeoutSeconds is the number of seconds in which if a client has not been serviced,
 	// pgbouncer enables use of additional connections from reserve pool. 0 disables. Default: 5.0.
+	// +kubebuilder:default=5
 	// +optional
 	ReservePoolTimeoutSeconds *int64 `json:"reservePoolTimeoutSeconds,omitempty"`
-	// MaxDBConnections is the maximum number of connections allowed per-database. Default: unlimited.
+	// MaxDBConnections is the maximum number of connections allowed per-database. Default: 0 (unlimited).
+	// +kubebuilder:default=0
 	// +optional
 	MaxDBConnections *int64 `json:"maxDBConnections,omitempty"`
-	// MaxUserConnections is the maximum number of users allowed per-database. Default: unlimited.
+	// MaxUserConnections is the maximum number of users allowed per-database. Default: 0 (unlimited).
+	// +kubebuilder:default=0
 	// +optional
 	MaxUserConnections *int64 `json:"maxUserConnections,omitempty"`
 	// StatsPeriodSeconds sets how often the averages shown in various SHOW commands are updated
-	// and how often aggregated statistics are written to the log.
+	// and how often aggregated statistics are written to the log. Default: 60
+	// +kubebuilder:default=60
 	// +optional
 	StatsPeriodSeconds *int64 `json:"statsPeriodSeconds,omitempty"`
-	// AdminUsers specifies an array of users who can act as PgBouncer administrators.
-	// +optional
-	AdminUsers []string `json:"adminUsers,omitempty"`
 	// AuthType specifies how to authenticate users. Default: md5 (md5+plain text).
+	// +kubebuilder:default=md5
 	// +optional
 	AuthType PgBouncerClientAuthMode `json:"authType,omitempty"`
-	// AuthUser looks up any user not specified in auth_file from pg_shadow. Default: not set.
-	// +optional
-	AuthUser string `json:"authUser,omitempty"`
 	// IgnoreStartupParameters specifies comma-separated startup parameters that
-	// pgbouncer knows are handled by admin and it can ignore them.
+	// pgbouncer knows are handled by admin and it can ignore them. Default: empty
+	// +kubebuilder:default="empty"
 	// +optional
 	IgnoreStartupParameters string `json:"ignoreStartupParameters,omitempty"`
+	// AdminUsers specifies an array of users who can act as PgBouncer administrators.
+	// +optional
+	// AdminUsers []string `json:"adminUsers,omitempty"`
+	// AuthUser looks up any user not specified in auth_file from pg_shadow. Default: not set.
+	// +optional
+	// AuthUser string `json:"authUser,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -225,7 +236,8 @@ const (
 )
 
 // PgBouncerClientAuthMode represents the ClientAuthMode of PgBouncer clusters ( replicaset )
-// +kubebuilder:validation:Enum=md5;scram;cert;plain;trust;any;hba;pam
+// We are allowing md5, scram, cert as ClientAuthMode
+// +kubebuilder:validation:Enum=md5;scram;cert;
 type PgBouncerClientAuthMode string
 
 const (
@@ -245,27 +257,6 @@ const (
 	// When server is config with this auth method. Client can't connect with pgbouncer server with password. They need
 	// to Send the client cert and client key certificate for authentication.
 	PgBouncerClientAuthModeCert PgBouncerClientAuthMode = "cert"
-
-	// ClientAuthModePlain sent the clear-text password over the wire. (Deprecated).
-	PgBouncerClientAuthModePlain PgBouncerClientAuthMode = "plain"
-
-	// ClientAuthModeTrust represents no authentication. The user name must still exist in auth_file
-	PgBouncerClientAuthModeTrust PgBouncerClientAuthMode = "trust"
-
-	// ClientAuthModeAny acts like the trust method, but the user name given is ignored.
-	// Requires that all databases are configured to log in as a specific user.
-	// Additionally, the console database allows any user to log in as admin.
-	PgBouncerClientAuthModeAny PgBouncerClientAuthMode = "any"
-
-	// ClientAuthModeHba uses auth_hba_file to load the actual authentication type.
-	// This allows different authentication methods for different access paths,
-	// for example: connections over Unix socket use the peer auth method, connections over TCP must use TLS.
-	PgBouncerClientAuthModeHba PgBouncerClientAuthMode = "hba"
-
-	// ClientAuthModePam uses to authenticate users, auth_file is ignored.
-	// This method is not compatible with databases using the auth_user option.
-	// The service name reported to PAM is “pgbouncer”. pam is not supported in the HBA configuration file.
-	PgBouncerClientAuthModePam PgBouncerClientAuthMode = "pam"
 )
 
 // +kubebuilder:validation:Enum=Delete;WipeOut;DoNotTerminate
