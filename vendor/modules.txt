@@ -767,7 +767,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.30.0-rc.1.0.20221224061557-c221f8b7d588
+# kubedb.dev/apimachinery v0.30.0
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
