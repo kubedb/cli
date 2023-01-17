@@ -19,10 +19,10 @@ require (
 	k8s.io/component-base v0.25.3
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.1
-	kmodules.xyz/client-go v0.25.14
+	kmodules.xyz/client-go v0.25.16
 	kmodules.xyz/custom-resources v0.25.1
 	kmodules.xyz/monitoring-agent-api v0.25.0
-	kubedb.dev/apimachinery v0.30.0
+	kubedb.dev/apimachinery v0.30.1
 	stash.appscode.dev/apimachinery v0.24.0
 )
 
