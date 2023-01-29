@@ -992,10 +992,10 @@ spec:
                     format: int32
                     type: integer
                   transferLeadershipInterval:
-                    default: 1000ms
+                    default: 1s
                     type: string
                   transferLeadershipTimeout:
-                    default: 120s
+                    default: 60s
                     type: string
                 type: object
               monitor:

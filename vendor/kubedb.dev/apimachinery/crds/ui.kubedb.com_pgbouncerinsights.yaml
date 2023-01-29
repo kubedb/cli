@@ -1,0 +1,135 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: pgbouncerinsights.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: PgBouncerInsight
+    listKind: PgBouncerInsightList
+    plural: pgbouncerinsights
+    singular: pgbouncerinsight
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              maxConnections:
+                format: int32
+                type: integer
+              podInsights:
+                items:
+                  properties:
+                    averageQueryCount:
+                      format: int32
+                      type: integer
+                    averageQueryTimeMS:
+                      format: int32
+                      type: integer
+                    databases:
+                      format: int32
+                      type: integer
+                    freeClients:
+                      format: int32
+                      type: integer
+                    freeServers:
+                      format: int32
+                      type: integer
+                    loginClients:
+                      format: int32
+                      type: integer
+                    podName:
+                      type: string
+                    pools:
+                      format: int32
+                      type: integer
+                    totalQueryCount:
+                      format: int32
+                      type: integer
+                    totalQueryTimeMS:
+                      format: int32
+                      type: integer
+                    usedClients:
+                      format: int32
+                      type: integer
+                    usedServers:
+                      format: int32
+                      type: integer
+                    users:
+                      format: int32
+                      type: integer
+                  required:
+                  - podName
+                  type: object
+                type: array
+              sslMode:
+                enum:
+                - disabled
+                - allowSSL
+                - preferSSL
+                - requireSSL
+                type: string
+              status:
+                type: string
+              version:
+                type: string
+            required:
+            - status
+            - version
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      type: integer
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                format: int64
+                type: integer
+              phase:
+                enum:
+                - Provisioning
+                - DataRestoring
+                - Ready
+                - Critical
+                - NotReady
+                - Halted
+                - Unknown
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true

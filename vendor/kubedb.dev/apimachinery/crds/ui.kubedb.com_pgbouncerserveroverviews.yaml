@@ -1,0 +1,88 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: pgbouncerserveroverviews.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: PgBouncerServerOverview
+    listKind: PgBouncerServerOverviewList
+    plural: pgbouncerserveroverviews
+    singular: pgbouncerserveroverview
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              servers:
+                items:
+                  properties:
+                    address:
+                      type: string
+                    applicationName:
+                      type: string
+                    closeNeeded:
+                      format: int32
+                      type: integer
+                    connectTime:
+                      format: date-time
+                      type: string
+                    database:
+                      type: string
+                    link:
+                      type: string
+                    localAddress:
+                      type: string
+                    localPort:
+                      format: int32
+                      type: integer
+                    podName:
+                      type: string
+                    port:
+                      format: int32
+                      type: integer
+                    ptr:
+                      type: string
+                    remotePid:
+                      type: string
+                    requestTime:
+                      format: date-time
+                      type: string
+                    state:
+                      type: string
+                    tls:
+                      type: string
+                    user:
+                      type: string
+                  required:
+                  - address
+                  - applicationName
+                  - database
+                  - link
+                  - localAddress
+                  - podName
+                  - ptr
+                  - remotePid
+                  - state
+                  - tls
+                  - user
+                  type: object
+                type: array
+            required:
+            - servers
+            type: object
+        type: object
+    served: true
+    storage: true

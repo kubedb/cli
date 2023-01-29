@@ -1,0 +1,99 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: pgbouncerpools.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: PgBouncerPools
+    listKind: PgBouncerPoolsList
+    plural: pgbouncerpools
+    singular: pgbouncerpools
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              pools:
+                items:
+                  properties:
+                    clientConnectionsActive:
+                      format: int32
+                      type: integer
+                    clientConnectionsWaiting:
+                      format: int32
+                      type: integer
+                    clientsActiveCancelReq:
+                      format: int32
+                      type: integer
+                    clientsWaitingCancelReq:
+                      format: int32
+                      type: integer
+                    database:
+                      type: string
+                    maxWait:
+                      type: string
+                    mode:
+                      type: string
+                    podName:
+                      type: string
+                    serverConnectionsActive:
+                      format: int32
+                      type: integer
+                    serversActiveCancel:
+                      format: int32
+                      type: integer
+                    serversBeingCanceled:
+                      format: int32
+                      type: integer
+                    serversIdle:
+                      format: int32
+                      type: integer
+                    serversLogin:
+                      format: int32
+                      type: integer
+                    serversTested:
+                      format: int32
+                      type: integer
+                    serversUsed:
+                      format: int32
+                      type: integer
+                    user:
+                      type: string
+                  required:
+                  - clientConnectionsActive
+                  - clientConnectionsWaiting
+                  - clientsActiveCancelReq
+                  - clientsWaitingCancelReq
+                  - database
+                  - maxWait
+                  - mode
+                  - podName
+                  - serverConnectionsActive
+                  - serversActiveCancel
+                  - serversBeingCanceled
+                  - serversIdle
+                  - serversLogin
+                  - serversTested
+                  - serversUsed
+                  - user
+                  type: object
+                type: array
+            required:
+            - pools
+            type: object
+        type: object
+    served: true
+    storage: true

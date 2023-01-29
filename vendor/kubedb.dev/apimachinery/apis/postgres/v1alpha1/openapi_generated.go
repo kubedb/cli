@@ -373,7 +373,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/client-go/api/v1.ObjectID":                                      schema_kmodulesxyz_client_go_api_v1_ObjectID(ref),
 		"kmodules.xyz/client-go/api/v1.ObjectInfo":                                    schema_kmodulesxyz_client_go_api_v1_ObjectInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ObjectReference":                               schema_kmodulesxyz_client_go_api_v1_ObjectReference(ref),
-		"kmodules.xyz/client-go/api/v1.PullSecrets":                                   schema_kmodulesxyz_client_go_api_v1_PullSecrets(ref),
+		"kmodules.xyz/client-go/api/v1.PullCredentials":                               schema_kmodulesxyz_client_go_api_v1_PullCredentials(ref),
 		"kmodules.xyz/client-go/api/v1.ReadonlyHealthCheckSpec":                       schema_kmodulesxyz_client_go_api_v1_ReadonlyHealthCheckSpec(ref),
 		"kmodules.xyz/client-go/api/v1.ResourceID":                                    schema_kmodulesxyz_client_go_api_v1_ResourceID(ref),
 		"kmodules.xyz/client-go/api/v1.TLSConfig":                                     schema_kmodulesxyz_client_go_api_v1_TLSConfig(ref),
@@ -18144,8 +18144,9 @@ func schema_kmodulesxyz_client_go_api_v1_ImageInfo(ref common.ReferenceCallback)
 				Properties: map[string]spec.Schema{
 					"image": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"lineages": {
@@ -18161,17 +18162,17 @@ func schema_kmodulesxyz_client_go_api_v1_ImageInfo(ref common.ReferenceCallback)
 							},
 						},
 					},
-					"pullSecrets": {
+					"pullCredentials": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/client-go/api/v1.PullSecrets"),
+							Ref: ref("kmodules.xyz/client-go/api/v1.PullCredentials"),
 						},
 					},
 				},
-				Required: []string{"pullSecrets"},
+				Required: []string{"image"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.Lineage", "kmodules.xyz/client-go/api/v1.PullSecrets"},
+			"kmodules.xyz/client-go/api/v1.Lineage", "kmodules.xyz/client-go/api/v1.PullCredentials"},
 	}
 }
 
@@ -18308,7 +18309,7 @@ func schema_kmodulesxyz_client_go_api_v1_ObjectReference(ref common.ReferenceCal
 	}
 }
 
-func schema_kmodulesxyz_client_go_api_v1_PullSecrets(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_kmodulesxyz_client_go_api_v1_PullCredentials(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -18316,11 +18317,18 @@ func schema_kmodulesxyz_client_go_api_v1_PullSecrets(ref common.ReferenceCallbac
 				Properties: map[string]spec.Schema{
 					"namespace": {
 						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"serviceAccountName": {
+						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
 						},
 					},
-					"refs": {
+					"secretRefs": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
 							Items: &spec.SchemaOrArray{
@@ -18334,6 +18342,7 @@ func schema_kmodulesxyz_client_go_api_v1_PullSecrets(ref common.ReferenceCallbac
 						},
 					},
 				},
+				Required: []string{"namespace"},
 			},
 		},
 		Dependencies: []string{
