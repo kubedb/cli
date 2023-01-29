@@ -196,13 +196,13 @@ type PostgreLeaderElectionConfig struct {
 
 	// TransferLeadershipInterval retry interval for transfer leadership
 	// to the healthiest node
-	// +kubebuilder:default="1000ms"
+	// +kubebuilder:default="1s"
 	// +optional
 	TransferLeadershipInterval *metav1.Duration `json:"transferLeadershipInterval,omitempty"`
 
 	// TransferLeadershipTimeout retry timeout for transfer leadership
 	// to the healthiest node
-	// +kubebuilder:default="120s"
+	// +kubebuilder:default="60s"
 	// +optional
 	TransferLeadershipTimeout *metav1.Duration `json:"transferLeadershipTimeout,omitempty"`
 }

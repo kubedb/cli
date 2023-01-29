@@ -22,8 +22,15 @@ require (
 	kmodules.xyz/client-go v0.25.17
 	kmodules.xyz/custom-resources v0.25.1
 	kmodules.xyz/monitoring-agent-api v0.25.0
-	kubedb.dev/apimachinery v0.30.1
+	kubedb.dev/apimachinery v0.31.0
 	stash.appscode.dev/apimachinery v0.24.0
+)
+
+require (
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/onsi/ginkgo/v2 v2.4.0 // indirect
+	github.com/onsi/gomega v1.24.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.1 // indirect
 )
 
 require (

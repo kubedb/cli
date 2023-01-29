@@ -207,7 +207,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 		p.Spec.LeaderElection.TransferLeadershipInterval = &metav1.Duration{Duration: 1 * time.Second}
 	}
 	if p.Spec.LeaderElection.TransferLeadershipTimeout == nil {
-		p.Spec.LeaderElection.TransferLeadershipTimeout = &metav1.Duration{Duration: 120 * time.Second}
+		p.Spec.LeaderElection.TransferLeadershipTimeout = &metav1.Duration{Duration: 60 * time.Second}
 	}
 	apis.SetDefaultResourceLimits(&p.Spec.Coordinator.Resources, CoordinatorDefaultResources)
 

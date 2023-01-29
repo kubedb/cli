@@ -1,0 +1,52 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: pgbouncersettings.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: PgBouncerSettings
+    listKind: PgBouncerSettingsList
+    plural: pgbouncersettings
+    singular: pgbouncersettings
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              settings:
+                items:
+                  properties:
+                    changeable:
+                      type: boolean
+                    currentValue:
+                      type: string
+                    defaultValue:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - changeable
+                  - currentValue
+                  - defaultValue
+                  - name
+                  type: object
+                type: array
+            required:
+            - settings
+            type: object
+        type: object
+    served: true
+    storage: true
