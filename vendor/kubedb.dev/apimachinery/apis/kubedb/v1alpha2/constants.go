@@ -86,6 +86,7 @@ const (
 	ElasticsearchTempDir                         = "/tmp"
 	ElasticsearchOpendistroSecurityConfigDir     = "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
 	ElasticsearchOpenSearchSecurityConfigDir     = "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+	ElasticsearchOpenSearchSecurityConfigDirV2   = "/usr/share/opensearch/config/opensearch-security"
 	ElasticsearchSearchGuardSecurityConfigDir    = "/usr/share/elasticsearch/plugins/search-guard-%v/sgconfig"
 	ElasticsearchOpendistroReadallMonitorRole    = "readall_and_monitor"
 	ElasticsearchOpenSearchReadallMonitorRole    = "readall_and_monitor"

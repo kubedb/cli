@@ -24522,6 +24522,20 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresHorizontalScalingSpec(ref com
 							Format: "int32",
 						},
 					},
+					"standbyMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standby mode",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"streamingMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Streaming mode",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},

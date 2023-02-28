@@ -17,14 +17,17 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"context"
 	"fmt"
 
+	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	apps_util "kmodules.xyz/client-go/apps/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func checkReplicas(lister appslister.StatefulSetNamespaceLister, selector labels.Selector, expectedItems int) (bool, string, error) {
@@ -105,4 +108,25 @@ func upsertStringSlice(inSlice []string, values ...string) []string {
 		upsert(value)
 	}
 	return inSlice
+}
+
+func UsesAcmeIssuer(kc client.Client, ns string, issuerRef core.TypedLocalObjectReference) (bool, error) {
+	switch issuerRef.Kind {
+	case cm_api.IssuerKind:
+		var issuer cm_api.Issuer
+		err := kc.Get(context.TODO(), client.ObjectKey{Namespace: ns, Name: issuerRef.Name}, &issuer)
+		if err != nil {
+			return false, err
+		}
+		return issuer.Spec.ACME != nil, nil
+	case cm_api.ClusterIssuerKind:
+		var issuer cm_api.ClusterIssuer
+		err := kc.Get(context.TODO(), client.ObjectKey{Name: issuerRef.Name}, &issuer)
+		if err != nil {
+			return false, err
+		}
+		return issuer.Spec.ACME != nil, nil
+	default:
+		return false, fmt.Errorf("invalid issuer %+v", issuerRef)
+	}
 }

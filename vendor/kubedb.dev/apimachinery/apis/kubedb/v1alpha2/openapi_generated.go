@@ -22764,6 +22764,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref common.ReferenceCa
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
 						},
 					},
+					"wsrepSSTMethod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "WsrepSSTMethod is used to define the STATE-SNAPSHOT-TRANSFER method to be used in the Galera cluster default value : mariabackup",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"init": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Init is used to initialize database",

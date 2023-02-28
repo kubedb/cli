@@ -20,10 +20,12 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -172,7 +174,7 @@ func (p PgBouncer) ReplicasServiceName() string {
 	return fmt.Sprintf("%v-replicas", p.Name)
 }
 
-func (p *PgBouncer) SetDefaults() {
+func (p *PgBouncer) SetDefaults(pgBouncerVersion *catalog.PgBouncerVersion, usesAcme bool) {
 	if p == nil {
 		return
 	}
@@ -193,20 +195,25 @@ func (p *PgBouncer) SetDefaults() {
 		}
 	}
 
-	p.Spec.Monitor.SetDefaults()
+	p.SetSecurityContext(pgBouncerVersion)
+	if p.Spec.TLS != nil {
+		p.SetTLSDefaults(usesAcme)
+	}
 
-	p.SetTLSDefaults()
+	p.Spec.Monitor.SetDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 
-func (p *PgBouncer) SetTLSDefaults() {
+func (p *PgBouncer) SetTLSDefaults(usesAcme bool) {
 	if p.Spec.TLS == nil || p.Spec.TLS.IssuerRef == nil {
 		return
 	}
 
 	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerServerCert), p.CertificateName(PgBouncerServerCert))
-	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerClientCert), p.CertificateName(PgBouncerClientCert))
-	p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerMetricsExporterCert), p.CertificateName(PgBouncerMetricsExporterCert))
+	if !usesAcme {
+		p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerClientCert), p.CertificateName(PgBouncerClientCert))
+		p.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(p.Spec.TLS.Certificates, string(PgBouncerMetricsExporterCert), p.CertificateName(PgBouncerMetricsExporterCert))
+	}
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
@@ -216,7 +223,7 @@ func (p *PgBouncer) CertificateName(alias PgBouncerCertificateAlias) string {
 
 // GetPersistentSecrets returns auth secret and config secret of a pgbouncer object
 func (p *PgBouncer) GetPersistentSecrets() []string {
-	if p != nil {
+	if p == nil {
 		return nil
 	}
 	var secrets []string
@@ -297,4 +304,40 @@ func (p *PgBouncer) setConnectionPoolConfigDefaults() {
 	if p.Spec.ConnectionPool.IgnoreStartupParameters == "" {
 		p.Spec.ConnectionPool.IgnoreStartupParameters = PgBouncerDefaultIgnoreStartupParameters
 	}
+}
+
+func (p *PgBouncer) SetSecurityContext(pgBouncerVersion *catalog.PgBouncerVersion) {
+	if p.Spec.PodTemplate.Spec.ContainerSecurityContext == nil {
+		p.Spec.PodTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{
+			RunAsUser:  pgBouncerVersion.Spec.SecurityContext.RunAsUser,
+			RunAsGroup: pgBouncerVersion.Spec.SecurityContext.RunAsUser,
+			Privileged: pointer.BoolP(false),
+		}
+	} else {
+		if p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsUser == nil {
+			p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsUser = pgBouncerVersion.Spec.SecurityContext.RunAsUser
+		}
+		if p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup == nil {
+			p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup = p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsUser
+		}
+	}
+
+	if p.Spec.PodTemplate.Spec.SecurityContext == nil {
+		p.Spec.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{
+			RunAsUser:  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsUser,
+			RunAsGroup: p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup,
+		}
+	} else {
+		if p.Spec.PodTemplate.Spec.SecurityContext.RunAsUser == nil {
+			p.Spec.PodTemplate.Spec.SecurityContext.RunAsUser = p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsUser
+		}
+		if p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup == nil {
+			p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup = p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup
+		}
+	}
+
+	// Need to set FSGroup equal to  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup.
+	// So that /var/pv directory have the group permission for the RunAsGroup user GID.
+	// Otherwise, We will get write permission denied.
+	p.Spec.PodTemplate.Spec.SecurityContext.FSGroup = p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup
 }

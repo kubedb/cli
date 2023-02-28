@@ -54,19 +54,20 @@ spec:
                 required:
                 - image
                 type: object
-              initContainer:
-                properties:
-                  image:
-                    type: string
-                required:
-                - image
-                type: object
               pgBouncer:
                 properties:
                   image:
                     type: string
                 required:
                 - image
+                type: object
+              securityContext:
+                properties:
+                  runAsAnyNonRoot:
+                    type: boolean
+                  runAsUser:
+                    format: int64
+                    type: integer
                 type: object
               upgradeConstraints:
                 properties:
