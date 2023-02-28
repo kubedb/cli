@@ -2703,6 +2703,16 @@ func (in *PostgresHorizontalScalingSpec) DeepCopyInto(out *PostgresHorizontalSca
 		*out = new(int32)
 		**out = **in
 	}
+	if in.StandbyMode != nil {
+		in, out := &in.StandbyMode, &out.StandbyMode
+		*out = new(PostgresStandbyMode)
+		**out = **in
+	}
+	if in.StreamingMode != nil {
+		in, out := &in.StreamingMode, &out.StreamingMode
+		*out = new(PostgresStreamingMode)
+		**out = **in
+	}
 	return
 }
 

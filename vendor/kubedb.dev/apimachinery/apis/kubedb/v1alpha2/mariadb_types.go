@@ -71,6 +71,11 @@ type MariaDBSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
+	// WsrepSSTMethod is used to define the STATE-SNAPSHOT-TRANSFER method to be used in the Galera cluster
+	// default value : mariabackup
+	// +optional
+	WsrepSSTMethod GaleraWsrepSSTMethod `json:"wsrepSSTMethod,omitempty"`
+
 	// Init is used to initialize database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`
@@ -132,6 +137,14 @@ const (
 	MariaDBServerCert   MariaDBCertificateAlias = "server"
 	MariaDBClientCert   MariaDBCertificateAlias = "client"
 	MariaDBExporterCert MariaDBCertificateAlias = "metrics-exporter"
+)
+
+// +kubebuilder:validation:Enum=rsync;mariabackup
+type GaleraWsrepSSTMethod string
+
+const (
+	GaleraWsrepSSTMethodRsync       GaleraWsrepSSTMethod = "rsync"
+	GaleraWsrepSSTMethodMariabackup GaleraWsrepSSTMethod = "mariabackup"
 )
 
 type MariaDBStatus struct {

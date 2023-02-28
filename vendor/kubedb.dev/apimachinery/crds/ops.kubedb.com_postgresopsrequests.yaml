@@ -72,6 +72,18 @@ spec:
                   replicas:
                     format: int32
                     type: integer
+                  standbyMode:
+                    default: Warm
+                    enum:
+                    - Hot
+                    - Warm
+                    type: string
+                  streamingMode:
+                    default: Asynchronous
+                    enum:
+                    - Synchronous
+                    - Asynchronous
+                    type: string
                 type: object
               restart:
                 type: object

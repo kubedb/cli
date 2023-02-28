@@ -115,9 +115,32 @@ type PostgresUpgradeSpec struct {
 	TargetVersion string `json:"targetVersion,omitempty"`
 }
 
+// +kubebuilder:validation:Enum=Synchronous;Asynchronous
+type PostgresStreamingMode string
+
+const (
+	SynchronousPostgresStreamingMode  PostgresStreamingMode = "Synchronous"
+	AsynchronousPostgresStreamingMode PostgresStreamingMode = "Asynchronous"
+)
+
+// +kubebuilder:validation:Enum=Hot;Warm
+type PostgresStandbyMode string
+
+const (
+	HotPostgresStandbyMode  PostgresStandbyMode = "Hot"
+	WarmPostgresStandbyMode PostgresStandbyMode = "Warm"
+)
+
 // HorizontalScaling is the spec for Postgres horizontal scaling
 type PostgresHorizontalScalingSpec struct {
 	Replicas *int32 `json:"replicas,omitempty"`
+	// Standby mode
+	// +kubebuilder:default="Warm"
+	StandbyMode *PostgresStandbyMode `json:"standbyMode,omitempty"`
+
+	// Streaming mode
+	// +kubebuilder:default="Asynchronous"
+	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty"`
 }
 
 // PostgresVerticalScalingSpec is the spec for Postgres vertical scaling
