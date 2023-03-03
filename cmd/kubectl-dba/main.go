@@ -17,9 +17,7 @@ limitations under the License.
 package main
 
 import (
-	"math/rand"
 	"os"
-	"time"
 
 	"kubedb.dev/cli/pkg/cmds"
 
@@ -29,8 +27,6 @@ import (
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-
 	cmd := cmds.NewKubeDBCommand(os.Stdin, os.Stdout, os.Stderr)
 	logs.Init(cmd, false)
 	defer logs.FlushLogs()
