@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ ProxySQLOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p ProxySQLOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralProxySQLOpsRequest))
 }
 
@@ -55,22 +55,26 @@ func (p ProxySQLOpsRequest) ResourcePlural() string {
 
 var _ Accessor = &ProxySQLOpsRequest{}
 
-func (e *ProxySQLOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return e.ObjectMeta
+func (p *ProxySQLOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return p.ObjectMeta
 }
 
-func (e *ProxySQLOpsRequest) GetRequestType() string {
-	return string(e.Spec.Type)
+func (p ProxySQLOpsRequest) GetRequestType() any {
+	return p.Spec.Type
 }
 
-func (e *ProxySQLOpsRequest) GetDBRefName() string {
-	return e.Spec.ProxyRef.Name
+func (p ProxySQLOpsRequest) GetUpdateVersionSpec() *ProxySQLUpdateVersionSpec {
+	return p.Spec.UpdateVersion
 }
 
-func (e *ProxySQLOpsRequest) GetStatus() OpsRequestStatus {
-	return e.Status
+func (p *ProxySQLOpsRequest) GetDBRefName() string {
+	return p.Spec.ProxyRef.Name
 }
 
-func (e *ProxySQLOpsRequest) SetStatus(s OpsRequestStatus) {
-	e.Status = s
+func (p *ProxySQLOpsRequest) GetStatus() OpsRequestStatus {
+	return p.Status
+}
+
+func (p *ProxySQLOpsRequest) SetStatus(s OpsRequestStatus) {
+	p.Status = s
 }

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+//go:generate go-enum --mustparse --names --values
 package v1alpha1
 
 import (
@@ -57,7 +58,7 @@ type ProxySQLOpsRequestSpec struct {
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type ProxySQLOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading ProxySQL
-	Upgrade *ProxySQLUpgradeSpec `json:"upgrade,omitempty"`
+	UpdateVersion *ProxySQLUpdateVersionSpec `json:"updateVersion,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *ProxySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -76,28 +77,14 @@ type ProxySQLOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, Restart, Reconfigure, ReconfigureTLS)
 type ProxySQLOpsRequestType string
-
-const (
-	// used for UpdateVersion operation
-	ProxySQLOpsRequestTypeUpdateVersion ProxySQLOpsRequestType = "UpdateVersion"
-	// used for HorizontalScaling operation
-	ProxySQLOpsRequestTypeHorizontalScaling ProxySQLOpsRequestType = "HorizontalScaling"
-	// used for VerticalScaling operation
-	ProxySQLOpsRequestTypeVerticalScaling ProxySQLOpsRequestType = "VerticalScaling"
-	// used for Restart operation
-	ProxySQLOpsRequestTypeRestart ProxySQLOpsRequestType = "Restart"
-	// used for Reconfigure operation
-	ProxySQLOpsRequestTypeReconfigure ProxySQLOpsRequestType = "Reconfigure"
-	// used for ReconfigureTLS operation
-	ProxySQLOpsRequestTypeReconfigureTLSs ProxySQLOpsRequestType = "ReconfigureTLS"
-)
 
 // ProxySQLReplicaReadinessCriteria is the criteria for checking readiness of a ProxySQL pod
 // after updating, horizontal scaling etc.
 type ProxySQLReplicaReadinessCriteria struct{}
 
-type ProxySQLUpgradeSpec struct {
+type ProxySQLUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion     string                            `json:"targetVersion,omitempty"`
 	ReadinessCriteria *ProxySQLReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`

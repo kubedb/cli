@@ -176,6 +176,13 @@ spec:
                 - Reconfigure
                 - ReconfigureTLS
                 type: string
+              updateVersion:
+                properties:
+                  readinessCriteria:
+                    type: object
+                  targetVersion:
+                    type: string
+                type: object
               upgrade:
                 properties:
                   readinessCriteria:

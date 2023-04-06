@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+//go:generate go-enum --mustparse --names --values
 package v1alpha1
 
 import (
@@ -56,7 +57,7 @@ type RedisSentinelOpsRequestSpec struct {
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type RedisSentinelOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading RedisSentinel
-	Upgrade *RedisSentinelUpgradeSpec `json:"upgrade,omitempty"`
+	UpdateVersion *RedisSentinelUpdateVersionSpec `json:"updateVersion,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *RedisSentinelHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -75,28 +76,14 @@ type RedisSentinelOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, Restart, Reconfigure, ReconfigureTLS)
 type RedisSentinelOpsRequestType string
-
-const (
-	// used for UpdateVersion operation
-	RedisSentinelOpsRequestTypeUpdateVersion RedisSentinelOpsRequestType = "UpdateVersion"
-	// used for HorizontalScaling operation
-	RedisSentinelOpsRequestTypeHorizontalScaling RedisSentinelOpsRequestType = "HorizontalScaling"
-	// used for VerticalScaling operation
-	RedisSentinelOpsRequestTypeVerticalScaling RedisSentinelOpsRequestType = "VerticalScaling"
-	// used for Restart operation
-	RedisSentinelOpsRequestTypeRestart RedisSentinelOpsRequestType = "Restart"
-	// used for Reconfigure operation
-	RedisSentinelOpsRequestTypeReconfigure RedisSentinelOpsRequestType = "Reconfigure"
-	// used for ReconfigureTLS operation
-	RedisSentinelOpsRequestTypeReconfigureTLSs RedisSentinelOpsRequestType = "ReconfigureTLS"
-)
 
 // RedisSentinelReplicaReadinessCriteria is the criteria for checking readiness of a RedisSentinel pod
 // after updating, horizontal scaling etc.
 type RedisSentinelReplicaReadinessCriteria struct{}
 
-type RedisSentinelUpgradeSpec struct {
+type RedisSentinelUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion     string                                 `json:"targetVersion,omitempty"`
 	ReadinessCriteria *RedisSentinelReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`

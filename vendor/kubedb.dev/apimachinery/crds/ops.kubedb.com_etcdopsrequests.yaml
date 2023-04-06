@@ -175,7 +175,7 @@ spec:
                 - Reconfigure
                 - ReconfigureTLS
                 type: string
-              upgrade:
+              updateVersion:
                 properties:
                   readinessCriteria:
                     type: object

@@ -932,6 +932,11 @@ func (in *KafkaSpec) DeepCopyInto(out *KafkaSpec) {
 		}
 	}
 	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
+	if in.Monitor != nil {
+		in, out := &in.Monitor, &out.Monitor
+		*out = new(apiv1.AgentSpec)
+		(*in).DeepCopyInto(*out)
+	}
 	return
 }
 

@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -167,6 +168,10 @@ func (m mariadbStatsService) Path() string {
 
 func (m mariadbStatsService) Scheme() string {
 	return ""
+}
+
+func (m mariadbStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
 }
 
 func (m MariaDB) StatsService() mona.StatsAccessor {

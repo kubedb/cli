@@ -205,6 +205,10 @@ github.com/peterbourgon/diskv
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
+# github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.59.1
+## explicit; go 1.17
+github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring
+github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1
 # github.com/prometheus/client_golang v1.13.0
 ## explicit; go 1.17
 github.com/prometheus/client_golang/prometheus
@@ -267,14 +271,13 @@ golang.org/x/crypto/pkcs12/internal/rc2
 # golang.org/x/net v0.7.0
 ## explicit; go 1.17
 golang.org/x/net/context
-golang.org/x/net/context/ctxhttp
 golang.org/x/net/http/httpguts
 golang.org/x/net/http2
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
-# golang.org/x/oauth2 v0.1.0
+# golang.org/x/oauth2 v0.5.0
 ## explicit; go 1.17
 golang.org/x/oauth2
 golang.org/x/oauth2/authhandler
@@ -743,7 +746,7 @@ k8s.io/utils/trace
 # kmodules.xyz/apiversion v0.2.0
 ## explicit; go 1.14
 kmodules.xyz/apiversion
-# kmodules.xyz/client-go v0.25.17
+# kmodules.xyz/client-go v0.25.18
 ## explicit; go 1.18
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -768,7 +771,7 @@ kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alph
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/auditor/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.25.0
+# kmodules.xyz/monitoring-agent-api v0.25.1
 ## explicit; go 1.18
 kmodules.xyz/monitoring-agent-api/api/v1
 kmodules.xyz/monitoring-agent-api/api/v1alpha1
@@ -781,7 +784,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.32.0
+# kubedb.dev/apimachinery v0.33.0
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -958,7 +961,7 @@ sigs.k8s.io/structured-merge-diff/v4/value
 # sigs.k8s.io/yaml v1.3.0
 ## explicit; go 1.12
 sigs.k8s.io/yaml
-# stash.appscode.dev/apimachinery v0.24.0
+# stash.appscode.dev/apimachinery v0.27.0
 ## explicit; go 1.18
 stash.appscode.dev/apimachinery/apis
 stash.appscode.dev/apimachinery/apis/repositories

@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -181,6 +182,10 @@ func (p perconaXtraDBStatsService) Path() string {
 
 func (p perconaXtraDBStatsService) Scheme() string {
 	return ""
+}
+
+func (p perconaXtraDBStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
 }
 
 func (p PerconaXtraDB) StatsService() mona.StatsAccessor {

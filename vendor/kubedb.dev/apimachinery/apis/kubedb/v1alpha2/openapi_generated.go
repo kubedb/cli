@@ -521,6 +521,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.elasticsearchStatsService":      schema_apimachinery_apis_kubedb_v1alpha2_elasticsearchStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.etcdApp":                        schema_apimachinery_apis_kubedb_v1alpha2_etcdApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.etcdStatsService":               schema_apimachinery_apis_kubedb_v1alpha2_etcdStatsService(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.kafkaStatsService":              schema_apimachinery_apis_kubedb_v1alpha2_kafkaStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mariadbApp":                     schema_apimachinery_apis_kubedb_v1alpha2_mariadbApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mariadbStatsService":            schema_apimachinery_apis_kubedb_v1alpha2_mariadbStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.memcachedApp":                   schema_apimachinery_apis_kubedb_v1alpha2_memcachedApp(ref),
@@ -22536,12 +22537,18 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KafkaSpec(ref common.ReferenceCall
 							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
 						},
 					},
+					"monitor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Monitor is used monitor database instance",
+							Ref:         ref("kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -26690,6 +26697,26 @@ func schema_apimachinery_apis_kubedb_v1alpha2_etcdStatsService(ref common.Refere
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Etcd"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_kafkaStatsService(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Kafka": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Kafka"),
+						},
+					},
+				},
+				Required: []string{"Kafka"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Kafka"},
 	}
 }
 

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+//go:generate go-enum --mustparse --names --values
 package v1alpha1
 
 import (
@@ -54,8 +55,11 @@ type MongoDBOpsRequestSpec struct {
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type MongoDBOpsRequestType `json:"type"`
-	// Specifies information necessary for upgrading mongodb
-	Upgrade *MongoDBUpgradeSpec `json:"upgrade,omitempty"`
+	// Specifies information necessary for upgrading MongoDB
+	UpdateVersion *MongoDBUpdateVersionSpec `json:"updateVersion,omitempty"`
+	// Specifies information necessary for upgrading MongoDB
+	// Deprecated: use UpdateVersion
+	Upgrade *MongoDBUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *MongoDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -81,28 +85,8 @@ type MongoDBOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision
+// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision)
 type MongoDBOpsRequestType string
-
-const (
-	// Deprecated. Use UpdateVersion
-	MongoDBOpsRequestTypeUpgrade MongoDBOpsRequestType = "Upgrade"
-	// used for UpdateVersion operation
-	MongoDBOpsRequestTypeUpdateVersion MongoDBOpsRequestType = "UpdateVersion"
-	// used for HorizontalScaling operation
-	MongoDBOpsRequestTypeHorizontalScaling MongoDBOpsRequestType = "HorizontalScaling"
-	// used for VerticalScaling operation
-	MongoDBOpsRequestTypeVerticalScaling MongoDBOpsRequestType = "VerticalScaling"
-	// used for VolumeExpansion operation
-	MongoDBOpsRequestTypeVolumeExpansion MongoDBOpsRequestType = "VolumeExpansion"
-	// used for Restart operation
-	MongoDBOpsRequestTypeRestart MongoDBOpsRequestType = "Restart"
-	// used for Reconfigure operation
-	MongoDBOpsRequestTypeReconfigure MongoDBOpsRequestType = "Reconfigure"
-	// used for ReconfigureTLS operation
-	MongoDBOpsRequestTypeReconfigureTLSs MongoDBOpsRequestType = "ReconfigureTLS"
-	// used for Reprovision operation
-	MongoDBOpsRequestTypeReprovision MongoDBOpsRequestType = "Reprovision"
-)
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod
 // after restarting the pod
@@ -114,7 +98,7 @@ type MongoDBReplicaReadinessCriteria struct {
 	ObjectsCountDiffPercentage int32 `json:"objectsCountDiffPercentage,omitempty"`
 }
 
-type MongoDBUpgradeSpec struct {
+type MongoDBUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion string `json:"targetVersion,omitempty"`
 }

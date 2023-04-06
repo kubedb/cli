@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PerconaXtraDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p PerconaXtraDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPerconaXtraDBOpsRequest))
 }
 
@@ -59,22 +59,33 @@ func (p PerconaXtraDBOpsRequest) ValidateSpecs() error {
 
 var _ Accessor = &PerconaXtraDBOpsRequest{}
 
-func (e *PerconaXtraDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return e.ObjectMeta
+func (p *PerconaXtraDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return p.ObjectMeta
 }
 
-func (e *PerconaXtraDBOpsRequest) GetRequestType() string {
-	return string(e.Spec.Type)
+func (p PerconaXtraDBOpsRequest) GetRequestType() any {
+	switch p.Spec.Type {
+	case PerconaXtraDBOpsRequestTypeUpgrade:
+		return PerconaXtraDBOpsRequestTypeUpdateVersion
+	}
+	return p.Spec.Type
 }
 
-func (e *PerconaXtraDBOpsRequest) GetDBRefName() string {
-	return e.Spec.DatabaseRef.Name
+func (p PerconaXtraDBOpsRequest) GetUpdateVersionSpec() *PerconaXtraDBUpdateVersionSpec {
+	if p.Spec.UpdateVersion != nil {
+		return p.Spec.UpdateVersion
+	}
+	return p.Spec.Upgrade
 }
 
-func (e *PerconaXtraDBOpsRequest) GetStatus() OpsRequestStatus {
-	return e.Status
+func (p *PerconaXtraDBOpsRequest) GetDBRefName() string {
+	return p.Spec.DatabaseRef.Name
 }
 
-func (e *PerconaXtraDBOpsRequest) SetStatus(s OpsRequestStatus) {
-	e.Status = s
+func (p *PerconaXtraDBOpsRequest) GetStatus() OpsRequestStatus {
+	return p.Status
+}
+
+func (p *PerconaXtraDBOpsRequest) SetStatus(s OpsRequestStatus) {
+	p.Status = s
 }

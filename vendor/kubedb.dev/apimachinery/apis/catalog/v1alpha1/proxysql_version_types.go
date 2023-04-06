@@ -57,8 +57,8 @@ type ProxySQLVersionSpec struct {
 	Deprecated bool `json:"deprecated,omitempty"`
 	// PSP names
 	PodSecurityPolicies ProxySQLVersionPodSecurityPolicy `json:"podSecurityPolicies"`
-	// upgrade constraints
-	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // ProxySQLVersionProxysql is the proxysql image
