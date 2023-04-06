@@ -68,8 +68,8 @@ type RedisVersionSpec struct {
 	// Stash defines backup and restore task definitions.
 	// +optional
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
-	// upgrade constraints
-	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // RedisVersionInitContainer is the Redis init container image

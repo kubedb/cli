@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MongoDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MongoDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMongoDBOpsRequest))
 }
 
@@ -59,22 +59,33 @@ func (m MongoDBOpsRequest) ValidateSpecs() error {
 
 var _ Accessor = &MongoDBOpsRequest{}
 
-func (e *MongoDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return e.ObjectMeta
+func (m *MongoDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
 }
 
-func (e *MongoDBOpsRequest) GetRequestType() string {
-	return string(e.Spec.Type)
+func (m MongoDBOpsRequest) GetRequestType() any {
+	switch m.Spec.Type {
+	case MongoDBOpsRequestTypeUpgrade:
+		return MongoDBOpsRequestTypeUpdateVersion
+	}
+	return m.Spec.Type
 }
 
-func (e *MongoDBOpsRequest) GetDBRefName() string {
-	return e.Spec.DatabaseRef.Name
+func (m MongoDBOpsRequest) GetUpdateVersionSpec() *MongoDBUpdateVersionSpec {
+	if m.Spec.UpdateVersion != nil {
+		return m.Spec.UpdateVersion
+	}
+	return m.Spec.Upgrade
 }
 
-func (e *MongoDBOpsRequest) GetStatus() OpsRequestStatus {
-	return e.Status
+func (m *MongoDBOpsRequest) GetDBRefName() string {
+	return m.Spec.DatabaseRef.Name
 }
 
-func (e *MongoDBOpsRequest) SetStatus(s OpsRequestStatus) {
-	e.Status = s
+func (m *MongoDBOpsRequest) GetStatus() OpsRequestStatus {
+	return m.Status
+}
+
+func (m *MongoDBOpsRequest) SetStatus(s OpsRequestStatus) {
+	m.Status = s
 }

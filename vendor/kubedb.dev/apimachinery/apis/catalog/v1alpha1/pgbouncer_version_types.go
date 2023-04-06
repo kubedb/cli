@@ -61,8 +61,8 @@ type PgBouncerVersionSpec struct {
 	// SecurityContext is for the additional config for pgbouncer DB container
 	// +optional
 	SecurityContext PgBouncerSecurityContext `json:"securityContext"`
-	// upgrade constraints
-	UpgradeConstraints UpgradeConstraints `json:"upgradeConstraints,omitempty"`
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // PgBouncerVersionInitContainer is the PgBouncer init container image

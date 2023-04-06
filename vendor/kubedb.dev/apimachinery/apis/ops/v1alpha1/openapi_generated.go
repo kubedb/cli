@@ -432,7 +432,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestList":                schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchOpsRequestSpec":                schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchReplicaReadinessCriteria":      schema_apimachinery_apis_ops_v1alpha1_ElasticsearchReplicaReadinessCriteria(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpgradeSpec":                   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec":             schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingTopologySpec":   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingTopologySpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionSpec":           schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref),
@@ -444,7 +444,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestList":                         schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec":                         schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria":               schema_apimachinery_apis_ops_v1alpha1_EtcdReplicaReadinessCriteria(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpgradeSpec":                            schema_apimachinery_apis_ops_v1alpha1_EtcdUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec":                      schema_apimachinery_apis_ops_v1alpha1_EtcdUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec":                    schema_apimachinery_apis_ops_v1alpha1_EtcdVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec":                    schema_apimachinery_apis_ops_v1alpha1_EtcdVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.HiddenNode":                                 schema_apimachinery_apis_ops_v1alpha1_HiddenNode(ref),
@@ -456,7 +456,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBOpsRequestSpec":                      schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBReplicaReadinessCriteria":            schema_apimachinery_apis_ops_v1alpha1_MariaDBReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec":                             schema_apimachinery_apis_ops_v1alpha1_MariaDBTLSSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpgradeSpec":                         schema_apimachinery_apis_ops_v1alpha1_MariaDBUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MariaDBUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_MariaDBVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVolumeExpansionSpec":                 schema_apimachinery_apis_ops_v1alpha1_MariaDBVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedCustomConfiguration":               schema_apimachinery_apis_ops_v1alpha1_MemcachedCustomConfiguration(ref),
@@ -466,7 +466,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestList":                    schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedOpsRequestSpec":                    schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedReplicaReadinessCriteria":          schema_apimachinery_apis_ops_v1alpha1_MemcachedReplicaReadinessCriteria(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpgradeSpec":                       schema_apimachinery_apis_ops_v1alpha1_MemcachedUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpdateVersionSpec":                 schema_apimachinery_apis_ops_v1alpha1_MemcachedUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVerticalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_MemcachedVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVolumeExpansionSpec":               schema_apimachinery_apis_ops_v1alpha1_MemcachedVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBCustomConfiguration":                 schema_apimachinery_apis_ops_v1alpha1_MongoDBCustomConfiguration(ref),
@@ -477,7 +477,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBOpsRequestSpec":                      schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria":            schema_apimachinery_apis_ops_v1alpha1_MongoDBReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBShardNode":                           schema_apimachinery_apis_ops_v1alpha1_MongoDBShardNode(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpgradeSpec":                         schema_apimachinery_apis_ops_v1alpha1_MongoDBUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MongoDBUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_MongoDBVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec":                 schema_apimachinery_apis_ops_v1alpha1_MongoDBVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongosNode":                                 schema_apimachinery_apis_ops_v1alpha1_MongosNode(ref),
@@ -489,7 +489,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLQueryRules":                            schema_apimachinery_apis_ops_v1alpha1_MySQLQueryRules(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_MySQLReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec":                               schema_apimachinery_apis_ops_v1alpha1_MySQLTLSSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpgradeSpec":                           schema_apimachinery_apis_ops_v1alpha1_MySQLUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_MySQLUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUsers":                                 schema_apimachinery_apis_ops_v1alpha1_MySQLUsers(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_MySQLVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MySQLVolumeExpansionSpec(ref),
@@ -501,7 +501,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBOpsRequestSpec":                schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBReplicaReadinessCriteria":      schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBTLSSpec":                       schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBTLSSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpgradeSpec":                   schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpdateVersionSpec":             schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVolumeExpansionSpec":           schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerCustomConfiguration":               schema_apimachinery_apis_ops_v1alpha1_PgBouncerCustomConfiguration(ref),
@@ -511,7 +511,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestList":                    schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerOpsRequestSpec":                    schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerReplicaReadinessCriteria":          schema_apimachinery_apis_ops_v1alpha1_PgBouncerReplicaReadinessCriteria(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpgradeSpec":                       schema_apimachinery_apis_ops_v1alpha1_PgBouncerUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpdateVersionSpec":                 schema_apimachinery_apis_ops_v1alpha1_PgBouncerUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVerticalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_PgBouncerVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfiguration":                schema_apimachinery_apis_ops_v1alpha1_PostgresCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfigurationSpec":            schema_apimachinery_apis_ops_v1alpha1_PostgresCustomConfigurationSpec(ref),
@@ -520,7 +520,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestList":                     schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresOpsRequestSpec":                     schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresTLSSpec":                            schema_apimachinery_apis_ops_v1alpha1_PostgresTLSSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpgradeSpec":                        schema_apimachinery_apis_ops_v1alpha1_PostgresUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpdateVersionSpec":                  schema_apimachinery_apis_ops_v1alpha1_PostgresUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVerticalScalingSpec":                schema_apimachinery_apis_ops_v1alpha1_PostgresVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVolumeExpansionSpec":                schema_apimachinery_apis_ops_v1alpha1_PostgresVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLCustomConfiguration":                schema_apimachinery_apis_ops_v1alpha1_ProxySQLCustomConfiguration(ref),
@@ -530,7 +530,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestList":                     schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLOpsRequestSpec":                     schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLReplicaReadinessCriteria":           schema_apimachinery_apis_ops_v1alpha1_ProxySQLReplicaReadinessCriteria(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpgradeSpec":                        schema_apimachinery_apis_ops_v1alpha1_ProxySQLUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpdateVersionSpec":                  schema_apimachinery_apis_ops_v1alpha1_ProxySQLUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVerticalScalingSpec":                schema_apimachinery_apis_ops_v1alpha1_ProxySQLVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisCustomConfigurationSpec":               schema_apimachinery_apis_ops_v1alpha1_RedisCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisHorizontalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_RedisHorizontalScalingSpec(ref),
@@ -546,11 +546,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelRef":                           schema_apimachinery_apis_ops_v1alpha1_RedisSentinelRef(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelReplicaReadinessCriteria":      schema_apimachinery_apis_ops_v1alpha1_RedisSentinelReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelSpec":                          schema_apimachinery_apis_ops_v1alpha1_RedisSentinelSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelUpgradeSpec":                   schema_apimachinery_apis_ops_v1alpha1_RedisSentinelUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelUpdateVersionSpec":             schema_apimachinery_apis_ops_v1alpha1_RedisSentinelUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelVolumeExpansionSpec":           schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisTLSSpec":                               schema_apimachinery_apis_ops_v1alpha1_RedisTLSSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpgradeSpec":                           schema_apimachinery_apis_ops_v1alpha1_RedisUpgradeSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_RedisUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_RedisVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_RedisVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision":                                schema_apimachinery_apis_ops_v1alpha1_Reprovision(ref),
@@ -21374,10 +21374,16 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref commo
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Elasticsearch",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec"),
+						},
+					},
+					"upgrade": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading Elasticsearch Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -21434,7 +21440,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref commo
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -21449,7 +21455,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchReplicaReadinessCriteria
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -21855,10 +21861,10 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.Referen
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Etcd",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -21909,7 +21915,7 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -21924,7 +21930,7 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdReplicaReadinessCriteria(ref comm
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_EtcdUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_EtcdUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -22232,10 +22238,16 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref common.Refe
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading MariaDB",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec"),
+						},
+					},
+					"upgrade": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading MariaDB Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -22292,7 +22304,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -22362,7 +22374,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBTLSSpec(ref common.ReferenceCa
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_MariaDBUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_MariaDBUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -22614,10 +22626,16 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref common.Re
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Memcached",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpdateVersionSpec"),
+						},
+					},
+					"upgrade": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading Memcached Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -22668,7 +22686,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref common.Re
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -22683,7 +22701,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedReplicaReadinessCriteria(ref
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_MemcachedUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_MemcachedUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -22994,10 +23012,16 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 							Format:      "",
 						},
 					},
+					"updateVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading MongoDB",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec"),
+						},
+					},
 					"upgrade": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading mongodb",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpgradeSpec"),
+							Description: "Specifies information necessary for upgrading MongoDB Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -23066,7 +23090,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -23120,7 +23144,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBShardNode(ref common.Reference
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_MongoDBUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_MongoDBUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -23431,10 +23455,16 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading MySQL",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec"),
+						},
+					},
+					"upgrade": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading MySQL Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -23491,7 +23521,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -23595,7 +23625,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLTLSSpec(ref common.ReferenceCall
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_MySQLUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_MySQLUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -23946,10 +23976,16 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref commo
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading PerconaXtraDB",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpdateVersionSpec"),
+						},
+					},
+					"upgrade": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading PerconaXtraDB Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -24006,7 +24042,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref commo
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -24077,7 +24113,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBTLSSpec(ref common.Refer
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -24329,10 +24365,10 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref common.Re
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"UpdateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading PgBouncer",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -24377,7 +24413,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerOpsRequestSpec(ref common.Re
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -24392,7 +24428,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerReplicaReadinessCriteria(ref
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_PgBouncerUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_PgBouncerUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -24659,10 +24695,16 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref common.Ref
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Postgres",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpdateVersionSpec"),
+						},
+					},
+					"upgrade": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading Postgres Deprecated: use UpdateVersion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -24719,7 +24761,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -24785,7 +24827,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresTLSSpec(ref common.ReferenceC
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_PostgresUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_PostgresUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -25072,10 +25114,10 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestSpec(ref common.Ref
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading ProxySQL",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -25126,7 +25168,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLOpsRequestSpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ProxySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -25141,7 +25183,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLReplicaReadinessCriteria(ref 
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_ProxySQLUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_ProxySQLUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -25368,10 +25410,10 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestSpec(ref common.Refere
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Redis",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -25434,7 +25476,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisOpsRequestSpec(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -25623,10 +25665,10 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelOpsRequestSpec(ref commo
 							Format:      "",
 						},
 					},
-					"upgrade": {
+					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading RedisSentinel",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelUpgradeSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelUpdateVersionSpec"),
 						},
 					},
 					"horizontalScaling": {
@@ -25677,7 +25719,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelOpsRequestSpec(ref commo
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelUpgradeSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RedisSentinelVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -25745,7 +25787,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelSpec(ref common.Referenc
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -25881,7 +25923,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisTLSSpec(ref common.ReferenceCall
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_RedisUpgradeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ops_v1alpha1_RedisUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{

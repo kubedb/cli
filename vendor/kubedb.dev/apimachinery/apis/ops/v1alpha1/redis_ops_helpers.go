@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ RedisOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (r RedisOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRedisOpsRequest))
 }
 
@@ -59,22 +59,26 @@ func (r RedisOpsRequest) ValidateSpecs() error {
 
 var _ Accessor = &RedisOpsRequest{}
 
-func (e *RedisOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return e.ObjectMeta
+func (r *RedisOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return r.ObjectMeta
 }
 
-func (e *RedisOpsRequest) GetRequestType() string {
-	return string(e.Spec.Type)
+func (r RedisOpsRequest) GetRequestType() any {
+	return r.Spec.Type
 }
 
-func (e *RedisOpsRequest) GetDBRefName() string {
-	return e.Spec.DatabaseRef.Name
+func (r RedisOpsRequest) GetUpdateVersionSpec() *RedisUpdateVersionSpec {
+	return r.Spec.UpdateVersion
 }
 
-func (e *RedisOpsRequest) GetStatus() OpsRequestStatus {
-	return e.Status
+func (r *RedisOpsRequest) GetDBRefName() string {
+	return r.Spec.DatabaseRef.Name
 }
 
-func (e *RedisOpsRequest) SetStatus(s OpsRequestStatus) {
-	e.Status = s
+func (r *RedisOpsRequest) GetStatus() OpsRequestStatus {
+	return r.Status
+}
+
+func (r *RedisOpsRequest) SetStatus(s OpsRequestStatus) {
+	r.Status = s
 }

@@ -161,7 +161,7 @@ spec:
                     - restoreTask
                     type: object
                 type: object
-              upgradeConstraints:
+              updateConstraints:
                 properties:
                   allowlist:
                     properties:

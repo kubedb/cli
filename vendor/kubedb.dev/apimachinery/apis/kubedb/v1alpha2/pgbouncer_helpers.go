@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -160,6 +161,10 @@ func (p pgbouncerStatsService) Path() string {
 
 func (p pgbouncerStatsService) Scheme() string {
 	return ""
+}
+
+func (p pgbouncerStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
 }
 
 func (p PgBouncer) StatsService() mona.StatsAccessor {

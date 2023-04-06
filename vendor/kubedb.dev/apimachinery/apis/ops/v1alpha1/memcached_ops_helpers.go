@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MemcachedOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MemcachedOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMemcachedOpsRequest))
 }
 
@@ -59,22 +59,33 @@ func (m MemcachedOpsRequest) ValidateSpecs() error {
 
 var _ Accessor = &MemcachedOpsRequest{}
 
-func (e *MemcachedOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return e.ObjectMeta
+func (m *MemcachedOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
 }
 
-func (e *MemcachedOpsRequest) GetRequestType() string {
-	return string(e.Spec.Type)
+func (m MemcachedOpsRequest) GetRequestType() any {
+	switch m.Spec.Type {
+	case MemcachedOpsRequestTypeUpgrade:
+		return MemcachedOpsRequestTypeUpdateVersion
+	}
+	return m.Spec.Type
 }
 
-func (e *MemcachedOpsRequest) GetDBRefName() string {
-	return e.Spec.DatabaseRef.Name
+func (m MemcachedOpsRequest) GetUpdateVersionSpec() *MemcachedUpdateVersionSpec {
+	if m.Spec.UpdateVersion != nil {
+		return m.Spec.UpdateVersion
+	}
+	return m.Spec.Upgrade
 }
 
-func (e *MemcachedOpsRequest) GetStatus() OpsRequestStatus {
-	return e.Status
+func (m *MemcachedOpsRequest) GetDBRefName() string {
+	return m.Spec.DatabaseRef.Name
 }
 
-func (e *MemcachedOpsRequest) SetStatus(s OpsRequestStatus) {
-	e.Status = s
+func (m *MemcachedOpsRequest) GetStatus() OpsRequestStatus {
+	return m.Status
+}
+
+func (m *MemcachedOpsRequest) SetStatus(s OpsRequestStatus) {
+	m.Status = s
 }

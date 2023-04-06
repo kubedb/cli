@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+//go:generate go-enum --mustparse --names --values
 package v1alpha1
 
 import (
@@ -55,7 +56,10 @@ type MariaDBOpsRequestSpec struct {
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type MariaDBOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MariaDB
-	Upgrade *MariaDBUpgradeSpec `json:"upgrade,omitempty"`
+	UpdateVersion *MariaDBUpdateVersionSpec `json:"updateVersion,omitempty"`
+	// Specifies information necessary for upgrading MariaDB
+	// Deprecated: use UpdateVersion
+	Upgrade *MariaDBUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *MariaDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -76,31 +80,13 @@ type MariaDBOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
+// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
 type MariaDBOpsRequestType string
-
-const (
-	// Deprecated. Use UpdateVersion
-	MariaDBOpsRequestTypeUpgrade MariaDBOpsRequestType = "Upgrade"
-	// used for UpdateVersion operation
-	MariaDBOpsRequestTypeUpdateVersion MariaDBOpsRequestType = "UpdateVersion"
-	// used for HorizontalScaling operation
-	MariaDBOpsRequestTypeHorizontalScaling MariaDBOpsRequestType = "HorizontalScaling"
-	// used for VerticalScaling operation
-	MariaDBOpsRequestTypeVerticalScaling MariaDBOpsRequestType = "VerticalScaling"
-	// used for VolumeExpansion operation
-	MariaDBOpsRequestTypeVolumeExpansion MariaDBOpsRequestType = "VolumeExpansion"
-	// used for Restart operation
-	MariaDBOpsRequestTypeRestart MariaDBOpsRequestType = "Restart"
-	// used for Reconfigure operation
-	MariaDBOpsRequestTypeReconfigure MariaDBOpsRequestType = "Reconfigure"
-	// used for ReconfigureTLS operation
-	MariaDBOpsRequestTypeReconfigureTLSs MariaDBOpsRequestType = "ReconfigureTLS"
-)
 
 // MariaDBReplicaReadinessCriteria is the criteria for checking readiness of an MariaDB database
 type MariaDBReplicaReadinessCriteria struct{}
 
-type MariaDBUpgradeSpec struct {
+type MariaDBUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion string `json:"targetVersion,omitempty"`
 }

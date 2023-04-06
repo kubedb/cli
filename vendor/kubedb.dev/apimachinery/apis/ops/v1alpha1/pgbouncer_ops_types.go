@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+//go:generate go-enum --mustparse --names --values
 package v1alpha1
 
 import (
@@ -54,7 +55,7 @@ type PgBouncerOpsRequestSpec struct {
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type PgBouncerOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PgBouncer
-	Upgrade *PgBouncerUpgradeSpec `json:"upgrade,omitempty"`
+	UpdateVersion *PgBouncerUpdateVersionSpec `json:"UpdateVersion,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *PgBouncerHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -71,28 +72,14 @@ type PgBouncerOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, Restart, Reconfigure, ReconfigureTLS)
 type PgBouncerOpsRequestType string
-
-const (
-	// used for UpdateVersion operation
-	PgBouncerOpsRequestTypeUpdateVersion PgBouncerOpsRequestType = "UpdateVersion"
-	// used for HorizontalScaling operation
-	PgBouncerOpsRequestTypeHorizontalScaling PgBouncerOpsRequestType = "HorizontalScaling"
-	// used for VerticalScaling operation
-	PgBouncerOpsRequestTypeVerticalScaling PgBouncerOpsRequestType = "VerticalScaling"
-	// used for Restart operation
-	PgBouncerOpsRequestTypeRestart PgBouncerOpsRequestType = "Restart"
-	// used for Reconfigure operation
-	PgBouncerOpsRequestTypeReconfigure PgBouncerOpsRequestType = "Reconfigure"
-	// used for ReconfigureTLS operation
-	PgBouncerOpsRequestTypeReconfigureTLSs PgBouncerOpsRequestType = "ReconfigureTLS"
-)
 
 // PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
 // after updating, horizontal scaling etc.
 type PgBouncerReplicaReadinessCriteria struct{}
 
-type PgBouncerUpgradeSpec struct {
+type PgBouncerUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion     string                             `json:"targetVersion,omitempty"`
 	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`

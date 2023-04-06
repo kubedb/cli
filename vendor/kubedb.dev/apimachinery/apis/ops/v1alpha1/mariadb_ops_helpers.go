@@ -28,7 +28,7 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 )
 
-func (_ MariaDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (m MariaDBOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDBOpsRequest))
 }
 
@@ -80,22 +80,33 @@ func (m MariaDBOpsRequest) OffshootLabels() map[string]string {
 
 var _ Accessor = &MariaDBOpsRequest{}
 
-func (e *MariaDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return e.ObjectMeta
+func (m *MariaDBOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
 }
 
-func (e *MariaDBOpsRequest) GetRequestType() string {
-	return string(e.Spec.Type)
+func (m MariaDBOpsRequest) GetRequestType() any {
+	switch m.Spec.Type {
+	case MariaDBOpsRequestTypeUpgrade:
+		return MariaDBOpsRequestTypeUpdateVersion
+	}
+	return m.Spec.Type
 }
 
-func (e *MariaDBOpsRequest) GetDBRefName() string {
-	return e.Spec.DatabaseRef.Name
+func (m MariaDBOpsRequest) GetUpdateVersionSpec() *MariaDBUpdateVersionSpec {
+	if m.Spec.UpdateVersion != nil {
+		return m.Spec.UpdateVersion
+	}
+	return m.Spec.Upgrade
 }
 
-func (e *MariaDBOpsRequest) GetStatus() OpsRequestStatus {
-	return e.Status
+func (m *MariaDBOpsRequest) GetDBRefName() string {
+	return m.Spec.DatabaseRef.Name
 }
 
-func (e *MariaDBOpsRequest) SetStatus(s OpsRequestStatus) {
-	e.Status = s
+func (m *MariaDBOpsRequest) GetStatus() OpsRequestStatus {
+	return m.Status
+}
+
+func (m *MariaDBOpsRequest) SetStatus(s OpsRequestStatus) {
+	m.Status = s
 }

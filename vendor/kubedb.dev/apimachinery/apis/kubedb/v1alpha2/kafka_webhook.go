@@ -73,6 +73,13 @@ func (k *Kafka) ValidateDelete() error {
 	kafkalog.Info("validate delete", "name", k.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
+	var allErr field.ErrorList
+	if k.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
+			k.Name,
+			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
+		return apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "Kafka"}, k.Name, allErr)
+	}
 	return nil
 }
 
@@ -184,6 +191,8 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 
 var availableVersions = []string{
 	"3.3.0",
+	"3.3.2",
+	"3.4.0",
 }
 
 func validateVersion(db *Kafka) error {

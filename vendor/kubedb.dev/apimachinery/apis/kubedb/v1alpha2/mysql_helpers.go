@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -210,6 +211,10 @@ func (m mysqlStatsService) Path() string {
 
 func (m mysqlStatsService) Scheme() string {
 	return ""
+}
+
+func (m mysqlStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
 }
 
 func (m MySQL) StatsService() mona.StatsAccessor {

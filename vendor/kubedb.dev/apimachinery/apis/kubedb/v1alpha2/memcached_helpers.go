@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -141,6 +142,10 @@ func (m memcachedStatsService) Path() string {
 
 func (m memcachedStatsService) Scheme() string {
 	return ""
+}
+
+func (m memcachedStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
 }
 
 func (m Memcached) StatsService() mona.StatsAccessor {
