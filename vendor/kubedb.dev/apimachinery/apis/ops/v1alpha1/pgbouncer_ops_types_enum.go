@@ -61,7 +61,8 @@ func (x PgBouncerOpsRequestType) String() string {
 	return string(x)
 }
 
-// String implements the Stringer interface.
+// IsValid provides a quick way to determine if the typed value is
+// part of the allowed enumerated values
 func (x PgBouncerOpsRequestType) IsValid() bool {
 	_, err := ParsePgBouncerOpsRequestType(string(x))
 	return err == nil

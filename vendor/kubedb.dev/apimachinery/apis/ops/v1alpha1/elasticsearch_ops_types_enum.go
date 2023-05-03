@@ -69,7 +69,8 @@ func (x ElasticsearchOpsRequestType) String() string {
 	return string(x)
 }
 
-// String implements the Stringer interface.
+// IsValid provides a quick way to determine if the typed value is
+// part of the allowed enumerated values
 func (x ElasticsearchOpsRequestType) IsValid() bool {
 	_, err := ParseElasticsearchOpsRequestType(string(x))
 	return err == nil
