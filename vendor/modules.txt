@@ -778,13 +778,13 @@ kmodules.xyz/monitoring-agent-api/api/v1alpha1
 # kmodules.xyz/objectstore-api v0.25.1-0.20221104003322-f0289b5b6ca2
 ## explicit; go 1.18
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.25.0
+# kmodules.xyz/offshoot-api v0.25.3
 ## explicit; go 1.18
 kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.33.0
+# kubedb.dev/apimachinery v0.33.2-0.20230503123451-70ebcf524ed7
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling

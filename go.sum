@@ -1304,12 +1304,12 @@ kmodules.xyz/monitoring-agent-api v0.25.1 h1:E1H8U/vMfYQ8wevmJv6Lcj0Z4DF7cH3hZ2x
 kmodules.xyz/monitoring-agent-api v0.25.1/go.mod h1:IphGzRWbuV00B3TLalcBs6+IlchSZVTwKDty+J3LLz4=
 kmodules.xyz/objectstore-api v0.25.1-0.20221104003322-f0289b5b6ca2 h1:efc0glYeBw+ok5s5ZecKdB9zgnRo/IvsLlSaQUPQjZE=
 kmodules.xyz/objectstore-api v0.25.1-0.20221104003322-f0289b5b6ca2/go.mod h1:X5aCkyU91p9TOn4jcWw0cfcJL0HCKd/Z6FJHdzKz1ZU=
-kmodules.xyz/offshoot-api v0.25.0 h1:Svq9da/+sg5afOjpgo9vx2J/Lu90Mo0aFxkdQmgKnGI=
-kmodules.xyz/offshoot-api v0.25.0/go.mod h1:ysEBn7LJuT3+s8ynAQA/OG0BSsJugXa6KGtDLMRjlKo=
+kmodules.xyz/offshoot-api v0.25.3 h1:KOGzW+TRHJvZ/KauvVQfKHztHF3HTHQ0ibbCHB3sWRg=
+kmodules.xyz/offshoot-api v0.25.3/go.mod h1:PUk4EuJFhhyQykCflHj7EgXcljGIqs9vi0IN0RpxtY4=
 kmodules.xyz/prober v0.25.0 h1:R5uRLHJEvEtEoogj+vaTAob0Btph6+PX5IlS6hPh8PA=
 kmodules.xyz/prober v0.25.0/go.mod h1:z4RTnjaajNQa/vPltsiOnO3xI716I/ziD2ac2Exm+1M=
-kubedb.dev/apimachinery v0.33.0 h1:xf/IAl5VKI4DL5DbgXZ8Zn3dMsRlAvLT/qmdPl10nps=
-kubedb.dev/apimachinery v0.33.0/go.mod h1:NeUOOmIS8E0TdDCSJcyYrbbs7wvebSXGO9ddredvgRs=
+kubedb.dev/apimachinery v0.33.2-0.20230503123451-70ebcf524ed7 h1:v5dONAxkaDy9rBdvVpu1oX6hNijjdValKvMgalFQgGI=
+kubedb.dev/apimachinery v0.33.2-0.20230503123451-70ebcf524ed7/go.mod h1:uanD/CoIJz9Zc+so9VvD4+f1KN6MH2CrPjeHcE2ybWE=
 rsc.io/binaryregexp v0.2.0/go.mod h1:qTv7/COck+e2FymRvadv62gMdZztPaShugOCi3I+8D8=
 rsc.io/quote/v3 v3.1.0/go.mod h1:yEA65RcK8LyAZtP9Kv3t0HmxON59tX3rD+tICJqUlj0=
 rsc.io/sampler v1.3.0/go.mod h1:T1hPZKmBbMNahiBKFy5HrXp6adAjACjK9JXDnKaTXpA=

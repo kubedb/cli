@@ -61,7 +61,8 @@ func (x RedisSentinelOpsRequestType) String() string {
 	return string(x)
 }
 
-// String implements the Stringer interface.
+// IsValid provides a quick way to determine if the typed value is
+// part of the allowed enumerated values
 func (x RedisSentinelOpsRequestType) IsValid() bool {
 	_, err := ParseRedisSentinelOpsRequestType(string(x))
 	return err == nil
