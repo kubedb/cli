@@ -21,6 +21,7 @@ import (
 
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"kubedb.dev/apimachinery/crds"
+	"kubedb.dev/apimachinery/pkg/double_optin"
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -135,7 +136,7 @@ func (in *MongoDBDatabase) CheckDoubleOptIn(ctx context.Context, client client.C
 		return false, err
 	}
 
-	possible, err := CheckIfDoubleOptInPossible(schema.ObjectMeta, nsSchema.ObjectMeta, nsDB.ObjectMeta, mongo.Spec.AllowedSchemas)
+	possible, err := double_optin.CheckIfDoubleOptInPossible(schema.ObjectMeta, nsSchema.ObjectMeta, nsDB.ObjectMeta, mongo.Spec.AllowedSchemas)
 	if err != nil {
 		return false, err
 	}

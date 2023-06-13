@@ -49,7 +49,6 @@ func (p ProxySQL) OffshootSelectors() map[string]string {
 		meta_util.NameLabelKey:      p.ResourceFQN(),
 		meta_util.InstanceLabelKey:  p.Name,
 		meta_util.ManagedByLabelKey: kubedb.GroupName,
-		LabelProxySQLLoadBalance:    string(*p.Spec.Mode),
 	}
 }
 
@@ -171,7 +170,7 @@ func (p *ProxySQL) SetDefaults(usesAcme bool) {
 		return
 	}
 
-	if p == nil || p.Spec.Mode == nil || p.Spec.Backend == nil {
+	if p == nil || p.Spec.Backend == nil {
 		return
 	}
 

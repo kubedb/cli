@@ -22,6 +22,7 @@ import (
 
 	kdm "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"kubedb.dev/apimachinery/crds"
+	"kubedb.dev/apimachinery/pkg/double_optin"
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -152,7 +153,7 @@ func (in *PostgresDatabase) CheckDoubleOptIn(ctx context.Context, client client.
 		return false, err
 	}
 
-	possible, err := CheckIfDoubleOptInPossible(schema.ObjectMeta, nsSchema.ObjectMeta, nsDB.ObjectMeta, pg.Spec.AllowedSchemas)
+	possible, err := double_optin.CheckIfDoubleOptInPossible(schema.ObjectMeta, nsSchema.ObjectMeta, nsDB.ObjectMeta, pg.Spec.AllowedSchemas)
 	if err != nil {
 		return false, err
 	}

@@ -137,10 +137,6 @@ type ProxySQLSpec struct {
 	// TODO: If replicas > 1, proxysql will be clustered
 	Replicas *int32 `json:"replicas,omitempty"`
 
-	// Mode specifies the type of MySQL/Percona-XtraDB/MariaDB cluster for which proxysql
-	// will be configured. It must be either "Galera" or "GroupReplication"
-	Mode *LoadBalanceMode `json:"mode,omitempty"`
-
 	// Backend refers to the AppBinding of the backend MySQL/MariaDB/Percona-XtraDB server
 	Backend *core.LocalObjectReference `json:"backend,omitempty"`
 

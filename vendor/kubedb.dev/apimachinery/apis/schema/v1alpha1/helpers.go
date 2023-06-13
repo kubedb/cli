@@ -17,11 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
-
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
@@ -113,68 +108,4 @@ func GetSchemaDoubleOptInLabelKey() string {
 
 func GetSchemaDoubleOptInLabelValue() string {
 	return "enabled"
-}
-
-// CheckIfDoubleOptInPossible is the intended function to be called from operator
-// It checks if the namespace, where SchemaDatabase is applied, is allowed.
-// It also checks the labels of schemaDatabase, to decide if that is allowed or not.
-func CheckIfDoubleOptInPossible(schemaMeta metav1.ObjectMeta, schemaNSMeta metav1.ObjectMeta, dbNSMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
-	if consumers == nil {
-		return false, nil
-	}
-	matchNamespace, err := IsInAllowedNamespaces(schemaNSMeta, dbNSMeta, consumers)
-	if err != nil {
-		return false, err
-	}
-	matchLabels, err := IsMatchByLabels(schemaMeta, consumers)
-	if err != nil {
-		return false, err
-	}
-	return matchNamespace && matchLabels, nil
-}
-
-func IsInAllowedNamespaces(schemaNSMeta metav1.ObjectMeta, dbNSMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
-	if consumers.Namespaces == nil || consumers.Namespaces.From == nil {
-		return false, nil
-	}
-
-	if *consumers.Namespaces.From == dbapi.NamespacesFromAll {
-		return true, nil
-	}
-	if *consumers.Namespaces.From == dbapi.NamespacesFromSame {
-		return schemaNSMeta.GetName() == dbNSMeta.GetName(), nil
-	}
-	if *consumers.Namespaces.From == dbapi.NamespacesFromSelector {
-		if consumers.Namespaces.Selector == nil {
-			// this says, Select namespace from the Selector, but the Namespace.Selector field is nil. So, no way to select namespace here.
-			return false, nil
-		}
-		ret, err := selectorMatches(consumers.Namespaces.Selector, schemaNSMeta.GetLabels())
-		if err != nil {
-			return false, err
-		}
-		return ret, nil
-	}
-	return false, nil
-}
-
-func IsMatchByLabels(schemaMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
-	if consumers.Selector != nil {
-		ret, err := selectorMatches(consumers.Selector, schemaMeta.Labels)
-		if err != nil {
-			return false, err
-		}
-		return ret, nil
-	}
-	// if Selector is not given, all the Schemas are allowed of the selected namespace
-	return true, nil
-}
-
-func selectorMatches(ls *metav1.LabelSelector, srcLabels map[string]string) (bool, error) {
-	selector, err := metav1.LabelSelectorAsSelector(ls)
-	if err != nil {
-		klog.Infoln("invalid selector: ", ls)
-		return false, err
-	}
-	return selector.Matches(labels.Set(srcLabels)), nil
 }

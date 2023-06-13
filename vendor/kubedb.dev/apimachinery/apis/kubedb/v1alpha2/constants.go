@@ -379,8 +379,9 @@ const (
 	SharedBuffersMbAsKiloByte = 1024
 
 	// =========================== ProxySQL Constants ============================
-	LabelProxySQLName        = ProxySQLKey + "/name"
-	LabelProxySQLLoadBalance = ProxySQLKey + "/load-balance"
+	LabelProxySQLName                  = ProxySQLKey + "/name"
+	LabelProxySQLLoadBalance           = ProxySQLKey + "/load-balance"
+	LabelProxySQLLoadBalanceStandalone = "Standalone"
 
 	ProxySQLContainerName          = ResourceSingularProxySQL
 	ProxySQLDatabasePort           = 6033

@@ -143,11 +143,6 @@ spec:
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                 type: object
-              mode:
-                enum:
-                - Galera
-                - GroupReplication
-                type: string
               monitor:
                 properties:
                   agent:
