@@ -782,7 +782,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.33.2-0.20230503123451-70ebcf524ed7
+# kubedb.dev/apimachinery v0.34.0-rc.0
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/autoscaling
@@ -816,6 +816,7 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/postgres/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned/typed/schema/v1alpha1
 kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
+kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/validator
 # sigs.k8s.io/controller-runtime v0.13.1 => github.com/kmodules/controller-runtime v0.13.1-0.20220917045846-a0df7cc5e5ee
 ## explicit; go 1.17

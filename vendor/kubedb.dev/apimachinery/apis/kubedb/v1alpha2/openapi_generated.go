@@ -25992,13 +25992,6 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLSpec(ref common.ReferenceC
 							Format:      "int32",
 						},
 					},
-					"mode": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Mode specifies the type of MySQL/Percona-XtraDB/MariaDB cluster for which proxysql will be configured. It must be either \"Galera\" or \"GroupReplication\"",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
 					"backend": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Backend refers to the AppBinding of the backend MySQL/MariaDB/Percona-XtraDB server",

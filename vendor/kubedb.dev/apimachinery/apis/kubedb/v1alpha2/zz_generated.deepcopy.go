@@ -2638,11 +2638,6 @@ func (in *ProxySQLSpec) DeepCopyInto(out *ProxySQLSpec) {
 		*out = new(int32)
 		**out = **in
 	}
-	if in.Mode != nil {
-		in, out := &in.Mode, &out.Mode
-		*out = new(LoadBalanceMode)
-		**out = **in
-	}
 	if in.Backend != nil {
 		in, out := &in.Backend, &out.Backend
 		*out = new(corev1.LocalObjectReference)
