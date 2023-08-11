@@ -89,6 +89,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdExec(f),
 			},
 		},
+		{
+			Message: "Insert and Verify data in Database",
+			Commands: []*cobra.Command{
+				NewCmdData(f),
+			},
+		},
 	}
 
 	filters := []string{"options"}
