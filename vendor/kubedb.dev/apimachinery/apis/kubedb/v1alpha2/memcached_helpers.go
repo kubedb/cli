@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -34,6 +35,10 @@ import (
 
 func (_ Memcached) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMemcached))
+}
+
+func (m *Memcached) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(m, SchemeGroupVersion.WithKind(ResourceKindMemcached))
 }
 
 var _ apis.ResourceInfo = &Memcached{}

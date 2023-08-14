@@ -46,6 +46,10 @@ func (_ Postgres) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPostgres))
 }
 
+func (p *Postgres) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(p, SchemeGroupVersion.WithKind(ResourceKindPostgres))
+}
+
 var _ apis.ResourceInfo = &Postgres{}
 
 func (p Postgres) OffshootName() string {

@@ -51,6 +51,10 @@ func (_ Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceD
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralElasticsearch))
 }
 
+func (e *Elasticsearch) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(e, SchemeGroupVersion.WithKind(ResourceKindElasticsearch))
+}
+
 var _ apis.ResourceInfo = &Elasticsearch{}
 
 func (e Elasticsearch) OffshootName() string {

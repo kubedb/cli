@@ -43,6 +43,10 @@ func (_ MariaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinit
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDB))
 }
 
+func (m *MariaDB) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(m, SchemeGroupVersion.WithKind(ResourceKindMariaDB))
+}
+
 var _ apis.ResourceInfo = &MariaDB{}
 
 func (m MariaDB) OffshootName() string {

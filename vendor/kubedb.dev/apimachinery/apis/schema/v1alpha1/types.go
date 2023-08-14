@@ -83,8 +83,3 @@ type VaultSecretEngineRole struct {
 
 // +kubebuilder:validation:Enum=Pending;InProgress;Terminating;Current;Failed;Expired
 type DatabaseSchemaPhase string
-
-type (
-	DatabaseSchemaConditionType string
-	DatabaseSchemaMessage       string
-)

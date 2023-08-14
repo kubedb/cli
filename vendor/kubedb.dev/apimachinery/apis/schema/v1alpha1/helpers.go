@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	kmapi "kmodules.xyz/client-go/api/v1"
+	cutil "kmodules.xyz/client-go/conditions"
 )
 
 func GetPhase(obj Interface) DatabaseSchemaPhase {
@@ -29,36 +30,36 @@ func GetPhase(obj Interface) DatabaseSchemaPhase {
 	if CheckIfSecretExpired(conditions) {
 		return DatabaseSchemaPhaseExpired
 	}
-	if kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeDBCreationUnsuccessful)) {
+	if cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeDBCreationUnsuccessful)) {
 		return DatabaseSchemaPhaseFailed
 	}
 
 	// If Database or vault is not in ready state, Phase is 'Pending'
-	if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeDBServerReady)) ||
-		!kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeVaultReady)) {
+	if !cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeDBServerReady)) ||
+		!cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeVaultReady)) {
 		return DatabaseSchemaPhasePending
 	}
 
-	if kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeDoubleOptInNotPossible)) {
+	if cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeDoubleOptInNotPossible)) {
 		return DatabaseSchemaPhaseFailed
 	}
 
 	// If SecretEngine or Role is not in ready state, Phase is 'InProgress'
-	if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeSecretEngineReady)) ||
-		!kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRoleReady)) ||
-		!kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeSecretAccessRequestReady)) {
+	if !cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeSecretEngineReady)) ||
+		!cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRoleReady)) ||
+		!cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeSecretAccessRequestReady)) {
 		return DatabaseSchemaPhaseInProgress
 	}
 	// we are here means, SecretAccessRequest is approved and not expired. Now handle Init-Restore cases.
 
-	if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeAppBindingFound)) {
+	if !cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeAppBindingFound)) {
 		return DatabaseSchemaPhaseInProgress
 	}
 
-	if kmapi.HasCondition(conditions, string(DatabaseSchemaConditionTypeRepositoryFound)) {
+	if cutil.HasCondition(conditions, string(DatabaseSchemaConditionTypeRepositoryFound)) {
 		//  ----------------------------- Restore case -----------------------------
-		if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRepositoryFound)) ||
-			!kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRestoreCompleted)) {
+		if !cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRepositoryFound)) ||
+			!cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeRestoreCompleted)) {
 			return DatabaseSchemaPhaseInProgress
 		}
 		if CheckIfRestoreFailed(conditions) {
@@ -66,9 +67,9 @@ func GetPhase(obj Interface) DatabaseSchemaPhase {
 		} else {
 			return DatabaseSchemaPhaseCurrent
 		}
-	} else if kmapi.HasCondition(conditions, string(DatabaseSchemaConditionTypeInitScriptCompleted)) {
+	} else if cutil.HasCondition(conditions, string(DatabaseSchemaConditionTypeInitScriptCompleted)) {
 		//  ----------------------------- Init case -----------------------------
-		if !kmapi.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeInitScriptCompleted)) {
+		if !cutil.IsConditionTrue(conditions, string(DatabaseSchemaConditionTypeInitScriptCompleted)) {
 			return DatabaseSchemaPhaseInProgress
 		}
 		if CheckIfInitScriptFailed(conditions) {
@@ -81,17 +82,17 @@ func GetPhase(obj Interface) DatabaseSchemaPhase {
 }
 
 func CheckIfInitScriptFailed(conditions []kmapi.Condition) bool {
-	_, cond := kmapi.GetCondition(conditions, string(DatabaseSchemaConditionTypeInitScriptCompleted))
+	_, cond := cutil.GetCondition(conditions, string(DatabaseSchemaConditionTypeInitScriptCompleted))
 	return cond.Message == string(DatabaseSchemaMessageInitScriptFailed)
 }
 
 func CheckIfRestoreFailed(conditions []kmapi.Condition) bool {
-	_, cond := kmapi.GetCondition(conditions, string(DatabaseSchemaConditionTypeRestoreCompleted))
+	_, cond := cutil.GetCondition(conditions, string(DatabaseSchemaConditionTypeRestoreCompleted))
 	return cond.Message == string(DatabaseSchemaMessageRestoreSessionFailed)
 }
 
 func CheckIfSecretExpired(conditions []kmapi.Condition) bool {
-	i, cond := kmapi.GetCondition(conditions, string(DatabaseSchemaConditionTypeSecretAccessRequestReady))
+	i, cond := cutil.GetCondition(conditions, string(DatabaseSchemaConditionTypeSecretAccessRequestReady))
 	if i == -1 {
 		return false
 	}
