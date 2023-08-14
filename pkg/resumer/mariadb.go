@@ -27,7 +27,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
-	kmapi "kmodules.xyz/client-go/api/v1"
+	condutil "kmodules.xyz/client-go/conditions"
 	scs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
 )
 
@@ -66,7 +66,7 @@ func (e *MariaDBResumer) Resume(name, namespace string) (bool, error) {
 
 	if e.onlyDb || resumeAll {
 		_, err = dbutil.UpdateMariaDBStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MariaDBStatus) (types.UID, *api.MariaDBStatus) {
-			status.Conditions = kmapi.RemoveCondition(status.Conditions, api.DatabasePaused)
+			status.Conditions = condutil.RemoveCondition(status.Conditions, api.DatabasePaused)
 			return db.UID, status
 		}, metav1.UpdateOptions{})
 		if err != nil {

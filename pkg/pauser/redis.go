@@ -26,7 +26,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
-	kmapi "kmodules.xyz/client-go/api/v1"
+	condutil "kmodules.xyz/client-go/conditions"
 	scs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
 )
 
@@ -65,7 +65,7 @@ func (e *RedisPauser) Pause(name, namespace string) (bool, error) {
 	pauseAll := !(e.onlyBackup || e.onlyDb)
 	if e.onlyDb || pauseAll {
 		_, err = dbutil.UpdateRedisStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.RedisStatus) (types.UID, *api.RedisStatus) {
-			status.Conditions = kmapi.SetCondition(status.Conditions, kmapi.NewCondition(
+			status.Conditions = condutil.SetCondition(status.Conditions, condutil.NewCondition(
 				api.DatabasePaused,
 				"Paused by KubeDB CLI tool",
 				db.Generation,
