@@ -22,18 +22,15 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
-	"kubedb.dev/cli/pkg/lib"
+	_ "kubedb.dev/db-client-go/redis"
 
 	"github.com/spf13/cobra"
 	shell "gomodules.xyz/go-sh"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
-	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
@@ -44,7 +41,7 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		rows   int
 	)
 
-	rdConnectCmd := &cobra.Command{
+	rdInsertCmd := &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
@@ -71,11 +68,11 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal(err)
 			}
-
 		},
 	}
+	rdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
 
-	return rdConnectCmd
+	return rdInsertCmd
 }
 
 func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
@@ -117,12 +114,11 @@ Examples:
 			if err != nil {
 				log.Fatalln(err)
 			}
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.RedisDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't creat tunnel, error: ", err)
-			}
 
-			tunnel.Close()
+			err = opts.verifyRedisKeys()
+			if err != nil {
+				log.Fatalln(err)
+			}
 		},
 	}
 
@@ -133,23 +129,13 @@ Examples:
 
 type redisOpts struct {
 	db       *api.Redis
-	config   *rest.Config
-	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
 
 	errWriter *bytes.Buffer
-
-	keys []string
-	args []string
 }
 
 func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, error) {
 	config, err := f.ToRESTConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	client, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
@@ -170,14 +156,38 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, erro
 
 	return &redisOpts{
 		db:        db,
-		config:    config,
-		client:    client,
 		dbClient:  dbClient,
 		errWriter: &bytes.Buffer{},
 	}, nil
 }
 
+var script = `
+for i = 1, ARGV[1], 1 do
+    redis.call("SET", "key"..i, tostring({}):sub(10))
+end
+
+return "Ok!"
+`
+
 func (opts *redisOpts) insertDataToDatabase(rows int) error {
+	redisExtraFlags := []interface{}{
+		"eval", script, "0", fmt.Sprintf("%d", rows),
+	}
+	shSession := opts.getShellCommand(nil, redisExtraFlags)
+	out, err := shSession.Output()
+	if err != nil {
+		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+	}
+	output := ""
+	if string(out) != "" {
+		output = ", output:\n\n" + string(out)
+	}
+
+	errOutput := opts.errWriter.String()
+	if errOutput != "" {
+		return fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
+	}
+	fmt.Printf("command applied successfully%s", output)
 	return nil
 }
 
@@ -197,7 +207,7 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 	kubectlCommand = append(kubectlCommand, kubectlFlags...)
 
 	redisCommand := []interface{}{
-		"--", "redis-cli", "-n", "0", "-c", "redis",
+		"--", "redis-cli",
 	}
 
 	if db.Spec.TLS != nil {
@@ -209,7 +219,6 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 		)
 	}
 
-	kubectlCommand = append(kubectlCommand, "redis")
 	finalCommand := append(kubectlCommand, redisCommand...)
 	if redisExtraFlags != nil {
 		finalCommand = append(finalCommand, redisExtraFlags...)
@@ -217,53 +226,6 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 	return sh.Command("kubectl", finalCommand...).SetStdin(os.Stdin)
 }
 
-func (opts *redisOpts) connect() error {
-	kubectlFlag := []interface{}{
-		"-it",
-	}
-	shSession := opts.getShellCommand(kubectlFlag, nil)
-
-	err := shSession.Run()
-	if err != nil {
-		return err
-	}
-
+func (opts *redisOpts) verifyRedisKeys() error {
 	return nil
-}
-
-func (opts *redisOpts) executeCommand(command string) error {
-	if len(opts.keys) != 0 || len(opts.args) != 0 {
-		return fmt.Errorf("argv and keys flags are only allowed with lua files, please provide lua file with --file")
-	}
-
-	commands := strings.Split(command, " ")
-	redisExtraFlags := convertToInterfaceArray(commands)
-
-	shSession := opts.getShellCommand(nil, redisExtraFlags)
-
-	out, err := shSession.Output()
-	if err != nil {
-		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
-	}
-	output := ""
-	if string(out) != "" {
-		output = ", output:\n\n" + string(out)
-	}
-
-	errOutput := opts.errWriter.String()
-	if errOutput != "" {
-		return fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
-	}
-	fmt.Printf("command applied successfully%s", output)
-
-	return nil
-}
-
-func convertToInterfaceArray(strs []string) []interface{} {
-	interfaceArray := make([]interface{}, len(strs))
-	for i := range strs {
-		interfaceArray[i] = strs[i]
-	}
-
-	return interfaceArray
 }

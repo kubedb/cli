@@ -23,13 +23,8 @@ require (
 	kmodules.xyz/custom-resources v0.25.2
 	kmodules.xyz/monitoring-agent-api v0.25.1
 	kubedb.dev/apimachinery v0.34.0
+	kubedb.dev/db-client-go v0.0.7
 	stash.appscode.dev/apimachinery v0.30.0
-)
-
-require (
-	github.com/onsi/ginkgo/v2 v2.4.0 // indirect
-	github.com/onsi/gomega v1.24.0 // indirect
-	github.com/rogpeppe/go-internal v1.8.1 // indirect
 )
 
 require (
@@ -50,6 +45,7 @@ require (
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/emicklei/go-restful/v3 v3.9.0 // indirect
 	github.com/evanphx/json-patch v5.6.0+incompatible // indirect
 	github.com/evanphx/json-patch/v5 v5.6.0 // indirect
@@ -94,6 +90,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
+	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	github.com/russross/blackfriday v1.5.2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect

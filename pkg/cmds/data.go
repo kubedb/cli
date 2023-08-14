@@ -47,7 +47,7 @@ func NewCmdData(f cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                   "data",
 		Short:                 i18n.T("Insert of verify data in a database"),
-		Long:                  execLong,
+		Long:                  dataLong,
 		Example:               dataExample,
 		Run:                   func(cmd *cobra.Command, args []string) {},
 		DisableFlagsInUseLine: true,
