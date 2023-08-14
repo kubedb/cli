@@ -43,6 +43,10 @@ func (_ PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceD
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPerconaXtraDB))
 }
 
+func (p *PerconaXtraDB) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(p, SchemeGroupVersion.WithKind(ResourceKindPerconaXtraDB))
+}
+
 var _ apis.ResourceInfo = &PerconaXtraDB{}
 
 func (p PerconaXtraDB) OffshootName() string {

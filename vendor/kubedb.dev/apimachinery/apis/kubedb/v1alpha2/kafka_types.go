@@ -83,6 +83,11 @@ type KafkaSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e config.properties).
+	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	// +optional
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
 	// Keystore encryption secret
 	// +optional
 	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`
@@ -107,6 +112,10 @@ type KafkaSpec struct {
 	// +optional
 	// +kubebuilder:default={periodSeconds: 20, timeoutSeconds: 10, failureThreshold: 3}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
+
+	// CruiseControl is used to re-balance Kafka cluster
+	// +optional
+	CruiseControl *KafkaCruiseControl `json:"cruiseControl,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
@@ -153,6 +162,37 @@ type KafkaStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
+type KafkaCruiseControl struct {
+	// Configuration for cruise-control
+	// +optional
+	ConfigSecret *SecretReference `json:"configSecret,omitempty"`
+
+	// Replicas represents number of replica for this specific type of node
+	// +optional
+	Replicas *int32 `json:"replicas,omitempty"`
+
+	// Suffix to append with node name
+	// +optional
+	Suffix string `json:"suffix,omitempty"`
+
+	// Compute Resources required by the sidecar container.
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
+
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	BrokerCapacity *KafkaBrokerCapacity `json:"brokerCapacity,omitempty"`
+}
+
+type KafkaBrokerCapacity struct {
+	InBoundNetwork  string `json:"inBoundNetwork,omitempty"`
+	OutBoundNetwork string `json:"outBoundNetwork,omitempty"`
+}
+
 // +kubebuilder:validation:Enum=Provisioning;Ready;NotReady;Critical
 type KafkaPhase string
 
@@ -172,13 +212,14 @@ const (
 	KafkaNodeRoleCombined   KafkaNodeRoleType = "combined"
 )
 
-// +kubebuilder:validation:Enum=BROKER;CONTROLLER;INTERNAL
+// +kubebuilder:validation:Enum=BROKER;CONTROLLER;INTERNAL;CC
 type KafkaListenerType string
 
 const (
 	KafkaListenerBroker     KafkaListenerType = "BROKER"
 	KafkaListenerController KafkaListenerType = "CONTROLLER"
 	KafkaListenerInternal   KafkaListenerType = "INTERNAL"
+	KafkaListenerCC         KafkaListenerType = "CC"
 )
 
 // +kubebuilder:validation:Enum=ca;transport;http;client;server

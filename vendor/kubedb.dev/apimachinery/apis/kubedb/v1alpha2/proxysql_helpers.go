@@ -25,6 +25,7 @@ import (
 
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -36,6 +37,10 @@ import (
 
 func (_ ProxySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralProxySQL))
+}
+
+func (p *ProxySQL) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(p, SchemeGroupVersion.WithKind(ResourceKindProxySQL))
 }
 
 var _ apis.ResourceInfo = &ProxySQL{}

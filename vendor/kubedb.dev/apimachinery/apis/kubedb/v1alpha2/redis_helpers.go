@@ -46,6 +46,10 @@ func (r Redis) CustomResourceDefinition() *apiextensions.CustomResourceDefinitio
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRedis))
 }
 
+func (r *Redis) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(r, SchemeGroupVersion.WithKind(ResourceKindRedis))
+}
+
 var _ apis.ResourceInfo = &Redis{}
 
 func (r Redis) OffshootName() string {

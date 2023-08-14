@@ -27,6 +27,7 @@ import (
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -38,6 +39,10 @@ import (
 
 func (p PgBouncer) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPgBouncer))
+}
+
+func (p *PgBouncer) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(p, SchemeGroupVersion.WithKind(ResourceKindPgBouncer))
 }
 
 var _ apis.ResourceInfo = &PgBouncer{}
