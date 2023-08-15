@@ -33,6 +33,9 @@ var (
 	    # Insert 100 rows in mysql table
 		dba data insert mysql mysql-demo -n demo --rows=100
 
+		# Verify that postgres has at least 100 rows data
+		dba data verify postgres sample-postgres -n demo --rows=100
+
  		Valid resource types include:
     		* elasticsearch
 			* mongodb

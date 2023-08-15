@@ -81,24 +81,13 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		rows   int
 	)
 
-	rdExecCmd := &cobra.Command{
+	rdVerifyCmd := &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
 		},
-		Short: "Execute SQL commands to a redis resource",
-		Long: `Use this cmd to execute redis commands to a redis object's primary pod.
-
-Examples:
-  # Execute a script named 'demo.lua' in 'rd-demo' redis database in 'demo' namespace
-  kubectl dba exec rd rd-demo -n demo -f demo.lua
-
-  # Execute a script named 'demo.lua' that has KEYS and ARGS set, in 'rd-demo' redis database in 'demo' namespace
-  kubectl dba exec rd rd-demo -n demo -f demo.lua  -k "key1" -a "arg1"
-
-  # Execute a command in 'rd-demo' redis database in 'demo' namespace
-  kubectl dba exec rd rd-demo -c 'set x y'
-				`,
+		Short: "Verify rows in a redis database",
+		Long:  `Use this cmd to verify data in a redis object`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -122,9 +111,9 @@ Examples:
 		},
 	}
 
-	rdExecCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	rdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
 
-	return rdExecCmd
+	return rdVerifyCmd
 }
 
 type redisOpts struct {
@@ -163,15 +152,15 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, erro
 
 var script = `
 for i = 1, ARGV[1], 1 do
-    redis.call("SET", "key"..i, tostring({}):sub(10))
+    redis.call("SET", "{"..ARGV[2].."}key"..i, tostring({}):sub(10))
 end
 
-return "Ok!"
+return "Success!"
 `
 
 func (opts *redisOpts) insertDataToDatabase(rows int) error {
 	redisExtraFlags := []interface{}{
-		"eval", script, "0", fmt.Sprintf("%d", rows),
+		"eval", script, "0", fmt.Sprintf("%d", rows), "aadhee",
 	}
 	shSession := opts.getShellCommand(nil, redisExtraFlags)
 	out, err := shSession.Output()
@@ -187,7 +176,11 @@ func (opts *redisOpts) insertDataToDatabase(rows int) error {
 	if errOutput != "" {
 		return fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
 	}
-	fmt.Printf("command applied successfully%s", output)
+	fmt.Printf("%s.%d keys inserted successfully", output, rows)
+	return nil
+}
+
+func (opts *redisOpts) verifyRedisKeys() error {
 	return nil
 }
 
@@ -198,17 +191,16 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 
 	db := opts.db
 	podName := db.Name + "-0"
+	redisCommand := []interface{}{
+		"--", "redis-cli",
+	}
 	if db.Spec.Mode == api.RedisModeCluster {
 		podName = db.StatefulSetNameWithShard(0) + "-0"
 	}
 	kubectlCommand := []interface{}{
-		"exec", "-n", db.Namespace, podName,
+		"exec", "-n", db.Namespace, podName, "-c", "redis",
 	}
 	kubectlCommand = append(kubectlCommand, kubectlFlags...)
-
-	redisCommand := []interface{}{
-		"--", "redis-cli",
-	}
 
 	if db.Spec.TLS != nil {
 		redisCommand = append(redisCommand,
@@ -224,8 +216,4 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 		finalCommand = append(finalCommand, redisExtraFlags...)
 	}
 	return sh.Command("kubectl", finalCommand...).SetStdin(os.Stdin)
-}
-
-func (opts *redisOpts) verifyRedisKeys() error {
-	return nil
 }
