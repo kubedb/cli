@@ -57,6 +57,9 @@ func NewCmdData(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
+	// kubectl dba data insert -n demo rd-demo --rows=100
+	// kubectl dba data verify -n demo rd-demo --rows=100
+
 	cmd.AddCommand(InsertDataCMD(f))
 	cmd.AddCommand(VerifyDataCMD(f))
 
