@@ -76,6 +76,7 @@ return "Success!"
 `
 
 const redisKeyPrefix = "kubedb"
+const successfulScriptReturn = "Success!"
 
 func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
@@ -88,8 +89,9 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"rd",
 		},
-		Short: "Insert data to a redis object's pod",
-		Long:  `Use this cmd to insert data into a redis object's primary pod.`,
+		Short:   "Insert data to a redis database",
+		Long:    `Use this cmd to insert data into a redis database`,
+		Example: `kubectl dba insert redis -n demo sample-redis --rows 500`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument")
@@ -129,7 +131,7 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 	if err != nil {
 		return err
 	}
-	if output != "Success!" {
+	if output != successfulScriptReturn {
 		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
 	}
 	fmt.Printf("\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
@@ -158,7 +160,7 @@ func (opts *redisOpts) insertDataInRedisCluster(rows int) error {
 		if err != nil {
 			return err
 		}
-		if output != "Success!" {
+		if output != successfulScriptReturn {
 			fmt.Printf("Error. Can not insert data in master %s. Output: %s\n", node.host, output)
 		}
 	}
@@ -177,8 +179,9 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"rd",
 		},
-		Short: "Verify rows in a redis database",
-		Long:  `Use this cmd to verify data in a redis object`,
+		Short:   "Verify rows in a redis database",
+		Long:    `Use this cmd to verify data in a redis object`,
+		Example: `kubectl dba verify redis -n demo sample-redis --rows 500`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -258,8 +261,9 @@ func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"rd",
 		},
-		Short: "Delete data from redis database",
-		Long:  `Use this cmd to delete inserted data in a redis object`,
+		Short:   "Delete data from redis database",
+		Long:    `Use this cmd to delete inserted data in a redis object`,
+		Example: `kubectl dba drop redis -n demo sample-redis`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -300,7 +304,7 @@ func (opts *redisOpts) dropRedisData() error {
 	if output != "Success!" {
 		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
 	}
-	fmt.Printf("\nAll the CLI inserted keys DELETED drom redis database %s/%s successfully\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess: All the CLI inserted keys DELETED drom redis database %s/%s/\n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -322,7 +326,7 @@ func (opts *redisOpts) dropRedisClusterData() error {
 			fmt.Printf("Error. Can not insert data in master %s. Output: %s\n", node.host, output)
 		}
 	}
-	fmt.Printf("\nAll the CLI inserted keys DELETED from redis database %s/%s successfully\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess: All the CLI inserted keys DELETED from redis database %s/%s.\n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
