@@ -62,6 +62,7 @@ func NewCmdData(f cmdutil.Factory) *cobra.Command {
 
 	cmd.AddCommand(InsertDataCMD(f))
 	cmd.AddCommand(VerifyDataCMD(f))
+	cmd.AddCommand(DropDataCMD(f))
 
 	return cmd
 }
@@ -100,6 +101,25 @@ func VerifyDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.VerifyRedisDataCMD(f))
+
+	return cmd
+}
+
+var dropLong = templates.LongDesc(`
+		Drop inserted data in a database.
+    `)
+
+func DropDataCMD(f cmdutil.Factory) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                   "drop",
+		Short:                 i18n.T("Drop data in a database"),
+		Long:                  dropLong,
+		Run:                   func(cmd *cobra.Command, args []string) {},
+		DisableFlagsInUseLine: true,
+		DisableAutoGenTag:     true,
+	}
+
+	cmd.AddCommand(data.DropRedisDataCMD(f))
 
 	return cmd
 }

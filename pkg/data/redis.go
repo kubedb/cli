@@ -41,8 +41,25 @@ import (
 
 var dataInsertScript = `
 for i = 1, ARGV[1], 1 do
-    redis.call("SET", "{"..ARGV[2].."}-key"..i, tostring({}):sub(10))
+    redis.call("SET", "kubedb:{"..ARGV[2].."}-key"..i, tostring({}):sub(10))
 end
+
+return "Success!"
+`
+
+var dataDeleteScript = `
+local cursor = 0
+local calls = 0
+local dels = 0
+repeat
+    local result = redis.call('SCAN', cursor, 'MATCH', ARGV[1])
+    calls = calls + 1
+    for _,key in ipairs(result[2]) do
+        redis.call('DEL', key)
+        dels = dels + 1
+    end
+    cursor = tonumber(result[1])
+until cursor == 0
 
 return "Success!"
 `
@@ -129,6 +146,43 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	rdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+
+	return rdVerifyCmd
+}
+func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName string
+	)
+
+	rdVerifyCmd := &cobra.Command{
+		Use: "redis",
+		Aliases: []string{
+			"rd",
+		},
+		Short: "Delete data from redis database",
+		Long:  `Use this cmd to delete inserted data in a redis object`,
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
+			}
+			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
+			opts, err := newRedisOpts(f, dbName, namespace)
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			err = opts.dropRedisData()
+			if err != nil {
+				log.Fatalln(err)
+			}
+		},
+	}
 
 	return rdVerifyCmd
 }
@@ -253,6 +307,26 @@ func (opts *redisOpts) insertDataInRedisCluster(rows int) error {
 		}
 	}
 	fmt.Printf("\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
+	return nil
+}
+func (opts *redisOpts) dropRedisData() error {
+	//if opts.db.Spec.Mode == api.RedisModeCluster {
+	//	return opts.verifyDataInRedisCluster(rows)
+	//}
+	fmt.Println("Helllllllll")
+	redisCommand := []interface{}{
+		"eval", dataDeleteScript, "0", "kubedb",
+	}
+	output, err := opts.execCommand("", redisCommand)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Hello")
+	fmt.Printf(output)
+	if output != "Success!" {
+		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
+	}
+	fmt.Printf("\nAll the inserted keys deleted in redis database %s/%s successfully\n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
