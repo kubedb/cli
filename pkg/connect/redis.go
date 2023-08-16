@@ -211,12 +211,9 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 	sh.Stderr = opts.errWriter
 
 	db := opts.db
-	podName := db.Name + "-0"
-	if db.Spec.Mode == api.RedisModeCluster {
-		podName = db.StatefulSetNameWithShard(0) + "-0"
-	}
+	svcName := fmt.Sprintf("svc/%s", db.Name)
 	kubectlCommand := []interface{}{
-		"exec", "-n", db.Namespace, podName,
+		"exec", "-n", db.Namespace, svcName,
 	}
 	kubectlCommand = append(kubectlCommand, kubectlFlags...)
 
