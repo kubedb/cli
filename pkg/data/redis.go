@@ -39,6 +39,19 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
+var dataInsertScript = `
+for i = 1, ARGV[1], 1 do
+    redis.call("SET", "{"..ARGV[2].."}-key"..i, tostring({}):sub(10))
+end
+
+return "Success!"
+`
+
+type MasterNode struct {
+	host string
+	slot int64
+}
+
 func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName string
@@ -154,14 +167,6 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, erro
 	}, nil
 }
 
-var script = `
-for i = 1, ARGV[1], 1 do
-    redis.call("SET", "{"..ARGV[2].."}-key"..i, tostring({}):sub(10))
-end
-
-return "Success!"
-`
-
 func (opts *redisOpts) verifyRedisKeys() error {
 	return nil
 }
@@ -180,9 +185,9 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 	for _, node := range masterNodes {
 		hash := slotKey[node.slot]
 		redisExtraFlags := []interface{}{
-			"eval", script, "0", keysPerMaster, hash,
+			"eval", dataInsertScript, "0", keysPerMaster, hash,
 		}
-		shSession := opts.getShellCommand(node.ip, redisExtraFlags)
+		shSession := opts.getShellCommand(node.host, redisExtraFlags)
 		out, err := shSession.Output()
 		if err != nil {
 			return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
@@ -194,9 +199,9 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 		}
 
 		if strings.TrimSpace(string(out)) == "Success!" {
-			fmt.Printf("Successfully insert %s keys in master %s\n", keysPerMaster, node.ip)
+			fmt.Printf("Successfully insert %s keys in master %s\n", keysPerMaster, node.host)
 		} else {
-			fmt.Printf("Error. Can not insert kyes in master %s. Output: %s\n", node.ip, string(out))
+			fmt.Printf("Error. Can not insert kyes in master %s. Output: %s\n", node.host, string(out))
 		}
 
 	}
@@ -205,30 +210,27 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 	return nil
 }
 
-type MasterNode struct {
-	ip   string
-	slot int64
-}
-
 func (opts *redisOpts) getMasterNodes() ([]MasterNode, error) {
 	if opts.db.Spec.Mode == api.RedisModeCluster {
 		return opts.getClusterMasterNodes()
 	}
-	role, err := opts.getNodeRole()
+	role, err := opts.getRedisInfo("master")
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("Role : %s\n", role)
 	var curNode MasterNode
 	if role == "master" {
 		curNode.slot = 0
-		curNode.ip = fmt.Sprintf("%s-0.%s.%s.svc", opts.db.Name, opts.db.GoverningServiceName(), opts.db.Namespace)
+		curNode.host = fmt.Sprintf("%s-0.%s.%s.svc", opts.db.Name, opts.db.GoverningServiceName(), opts.db.Namespace)
 	} else {
 		curNode.slot = 0
-		master, err := opts.getMasterNode()
+		master, err := opts.getRedisInfo("master_host")
 		if err != nil {
 			return nil, err
 		}
-		curNode.ip = master
+		curNode.host = master
+		fmt.Println(curNode.host)
 	}
 	return []MasterNode{curNode}, nil
 }
@@ -262,7 +264,7 @@ func (opts *redisOpts) getClusterMasterNodes() ([]MasterNode, error) {
 				currentNode.slot = int64(start)
 				break
 			}
-			currentNode.ip = strings.TrimSuffix(parts[1], ":6379@16379")
+			currentNode.host = strings.TrimSuffix(parts[1], ":6379@16379")
 			masterNodes = append(masterNodes, currentNode)
 		}
 
@@ -270,7 +272,7 @@ func (opts *redisOpts) getClusterMasterNodes() ([]MasterNode, error) {
 	return masterNodes, nil
 }
 
-func (opts *redisOpts) getMasterNode() (string, error) {
+func (opts *redisOpts) getRedisInfo(field string) (string, error) {
 	redisExtraFlags := []interface{}{
 		"info",
 	}
@@ -282,36 +284,14 @@ func (opts *redisOpts) getMasterNode() (string, error) {
 	infos := strings.Split(strings.TrimSpace(string(out)), "\n")
 	for _, info := range infos {
 		info = strings.Trim(info, "\r")
-		if strings.Contains(info, "master_host") {
-			// The role line will be in this format "role:master".
+		if strings.Contains(info, field) {
+			// The role line will be in this format "role:master". "master_host:<>"
 			// So we are splitting it with ":" and taking the second value after splitting.
 			role := strings.Split(info, ":")[1]
 			return role, nil
 		}
 	}
-	return "", fmt.Errorf("failed to get pod role")
-}
-
-func (opts *redisOpts) getNodeRole() (string, error) {
-	redisExtraFlags := []interface{}{
-		"info",
-	}
-	shSession := opts.getShellCommand("", redisExtraFlags)
-	out, err := shSession.Output()
-	if err != nil {
-		return "", fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
-	}
-	infos := strings.Split(strings.TrimSpace(string(out)), "\n")
-	for _, info := range infos {
-		info = strings.Trim(info, "\r")
-		if strings.Contains(info, "role") {
-			// The role line will be in this format "role:master".
-			// So we are splitting it with ":" and taking the second value after splitting.
-			role := strings.Split(info, ":")[1]
-			return role, nil
-		}
-	}
-	return "", fmt.Errorf("failed to get pod role")
+	return "", fmt.Errorf("failed to get information")
 }
 
 func (opts *redisOpts) getNodesConf() (string, error) {
