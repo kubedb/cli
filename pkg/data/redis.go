@@ -121,7 +121,7 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			err = opts.verifyRedisKeys()
+			err = opts.verifyRedisData(rows)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -167,7 +167,43 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, erro
 	}, nil
 }
 
-func (opts *redisOpts) verifyRedisKeys() error {
+func (opts *redisOpts) verifyRedisData(rows int) error {
+	if opts.db.Spec.Mode == api.RedisModeCluster {
+		return opts.verifyDataInRedisCluster(rows)
+	}
+	redisCommand := []interface{}{
+		"dbsize",
+	}
+	output, err := opts.execCommand("", redisCommand)
+	if err != nil {
+		return err
+	}
+	totalKeys, err := strconv.Atoi(output)
+	fmt.Printf("\nVerification successful. Redis database %s/%s contains %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
+	return nil
+}
+
+func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
+	masterNodes, err := opts.getClusterMasterNodes()
+	if err != nil {
+		return err
+	}
+	var totalKeys = 0
+	for _, node := range masterNodes {
+		redisCommand := []interface{}{
+			"dbsize",
+		}
+		output, err := opts.execCommand(node.host, redisCommand)
+		if err != nil {
+			return err
+		}
+		keys, err := strconv.Atoi(output)
+		if err != nil {
+			return err
+		}
+		totalKeys += keys
+	}
+	fmt.Printf("\nVerification successful. Redis database %s/%s contains %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
 	return nil
 }
 
@@ -179,11 +215,14 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 	redisCommand := []interface{}{
 		"eval", dataInsertScript, "0", fmt.Sprintf("%d", rows), "kubedb",
 	}
-	err := opts.execCommand("", redisCommand)
+	output, err := opts.execCommand("", redisCommand)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("\n\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
+	if output != "Success!" {
+		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
+	}
+	fmt.Printf("\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -205,33 +244,30 @@ func (opts *redisOpts) insertDataInRedisCluster(rows int) error {
 			"eval", dataInsertScript, "0", fmt.Sprintf("%d", keysPerMaster+extraKey), keyHash,
 		}
 		extraKey = 0
-		err = opts.execCommand(node.host, redisCommand)
+		output, err := opts.execCommand(node.host, redisCommand)
 		if err != nil {
 			return err
 		}
+		if output != "Success!" {
+			fmt.Printf("Error. Can not insert data in master %s. Output: %s\n", node.host, output)
+		}
 	}
-	fmt.Printf("\n\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
-func (opts *redisOpts) execCommand(host string, command []interface{}) error {
+func (opts *redisOpts) execCommand(host string, command []interface{}) (string, error) {
 	shSession := opts.getShellCommand(host, command)
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+		return "", fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
 	}
 
 	errOutput := opts.errWriter.String()
 	if errOutput != "" {
-		return fmt.Errorf("failed to execute command, stderr: %s \n output:%s", errOutput, string(out))
+		return "", fmt.Errorf("failed to execute command, stderr: %s \n output:%s", errOutput, string(out))
 	}
-
-	if strings.TrimSpace(string(out)) == "Success!" {
-		fmt.Printf("Successfully insert %s keys in master %s\n", command[3], host)
-	} else {
-		fmt.Printf("Error. Can not insert kyes in master %s. Output: %s\n", host, string(out))
-	}
-	return nil
+	return strings.TrimSpace(string(out)), nil
 }
 
 func (opts *redisOpts) getClusterMasterNodes() ([]MasterNode, error) {
