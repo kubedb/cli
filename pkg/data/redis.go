@@ -310,23 +310,42 @@ func (opts *redisOpts) insertDataInRedisCluster(rows int) error {
 	return nil
 }
 func (opts *redisOpts) dropRedisData() error {
-	//if opts.db.Spec.Mode == api.RedisModeCluster {
-	//	return opts.verifyDataInRedisCluster(rows)
-	//}
-	fmt.Println("Helllllllll")
+	if opts.db.Spec.Mode == api.RedisModeCluster {
+		return opts.dropRedisClusterData()
+	}
 	redisCommand := []interface{}{
-		"eval", dataDeleteScript, "0", "kubedb",
+		"eval", dataDeleteScript, "0", "kubedb*",
 	}
 	output, err := opts.execCommand("", redisCommand)
 	if err != nil {
 		return err
 	}
-	fmt.Println("Hello")
-	fmt.Printf(output)
 	if output != "Success!" {
 		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
 	}
-	fmt.Printf("\nAll the inserted keys deleted in redis database %s/%s successfully\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nAll the inserted keys DELETED drom redis database %s/%s successfully\n", opts.db.Namespace, opts.db.Name)
+	return nil
+}
+
+func (opts *redisOpts) dropRedisClusterData() error {
+	masterNodes, err := opts.getClusterMasterNodes()
+	if err != nil {
+		return err
+	}
+
+	for _, node := range masterNodes {
+		redisCommand := []interface{}{
+			"eval", dataDeleteScript, "0", "kubedb*",
+		}
+		output, err := opts.execCommand(node.host, redisCommand)
+		if err != nil {
+			return err
+		}
+		if output != "Success!" {
+			fmt.Printf("Error. Can not insert data in master %s. Output: %s\n", node.host, output)
+		}
+	}
+	fmt.Printf("\nAll the inserted keys DELETED from redis database %s/%s successfully\n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
