@@ -42,6 +42,10 @@ func (_ MySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinitio
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQL))
 }
 
+func (m *MySQL) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(m, SchemeGroupVersion.WithKind(ResourceKindMySQL))
+}
+
 var _ apis.ResourceInfo = &MySQL{}
 
 func (m MySQL) OffshootName() string {

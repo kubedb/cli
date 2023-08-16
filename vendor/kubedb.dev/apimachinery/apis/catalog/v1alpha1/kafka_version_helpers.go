@@ -54,7 +54,8 @@ func (r KafkaVersion) ResourcePlural() string {
 
 func (r KafkaVersion) ValidateSpecs() error {
 	if r.Spec.Version == "" ||
-		r.Spec.DB.Image == "" {
+		r.Spec.DB.Image == "" ||
+		r.Spec.CruiseControl.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for kafkaVersion "%v":
 							spec.version,
 							spec.db.image`, r.Name)

@@ -39,6 +39,10 @@ func (k *Kafka) CustomResourceDefinition() *apiextensions.CustomResourceDefiniti
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralKafka))
 }
 
+func (k *Kafka) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(k, SchemeGroupVersion.WithKind(ResourceKindKafka))
+}
+
 func (k *Kafka) ResourceShortCode() string {
 	return ResourceCodeKafka
 }
@@ -82,6 +86,10 @@ func (k *Kafka) GoverningServiceNameController() string {
 
 func (k *Kafka) GoverningServiceNameBroker() string {
 	return meta_util.NameWithSuffix(k.ServiceName(), KafkaNodeRolesBrokers)
+}
+
+func (k *Kafka) GoverningServiceNameCruiseControl() string {
+	return meta_util.NameWithSuffix(k.ServiceName(), KafkaNodeRolesCruiseControl)
 }
 
 func (k *Kafka) StandbyServiceName() string {
@@ -212,6 +220,10 @@ func (k *Kafka) ConfigSecretName(role KafkaNodeRoleType) string {
 		return meta_util.NameWithSuffix(k.OffshootName(), "broker-config")
 	}
 	return meta_util.NameWithSuffix(k.OffshootName(), "config")
+}
+
+func (k *Kafka) CruiseControlConfigSecretName() string {
+	return meta_util.NameWithSuffix(k.OffshootName(), "cruise-control-config")
 }
 
 func (k *Kafka) DefaultUserCredSecretName(username string) string {
@@ -357,4 +369,8 @@ func (k *Kafka) GetConnectionScheme() string {
 		scheme = "https"
 	}
 	return scheme
+}
+
+func (k *Kafka) GetCruiseControlClientID() string {
+	return meta_util.NameWithSuffix(k.Name, "cruise-control")
 }

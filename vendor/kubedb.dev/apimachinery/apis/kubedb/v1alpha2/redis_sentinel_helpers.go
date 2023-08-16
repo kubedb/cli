@@ -42,6 +42,10 @@ func (rs RedisSentinel) CustomResourceDefinition() *apiextensions.CustomResource
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRedisSentinel))
 }
 
+func (rs *RedisSentinel) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(rs, SchemeGroupVersion.WithKind(ResourceKindRedisSentinel))
+}
+
 var _ apis.ResourceInfo = &RedisSentinel{}
 
 func (rs RedisSentinel) OffshootName() string {

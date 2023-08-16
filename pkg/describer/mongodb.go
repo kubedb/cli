@@ -31,7 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/describe"
-	kmapi "kmodules.xyz/client-go/api/v1"
+	condutil "kmodules.xyz/client-go/conditions"
 	"kmodules.xyz/client-go/discovery"
 	appcat_cs "kmodules.xyz/custom-resources/client/clientset/versioned"
 	stashV1beta1 "stash.appscode.dev/apimachinery/apis/stash/v1beta1"
@@ -80,7 +80,7 @@ func (d *MongoDBDescriber) describeMongoDB(item *api.MongoDB, selector labels.Se
 
 		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
-		w.Write(LEVEL_0, "Paused:\t%v\n", kmapi.IsConditionTrue(item.Status.Conditions, api.DatabasePaused))
+		w.Write(LEVEL_0, "Paused:\t%v\n", condutil.IsConditionTrue(item.Status.Conditions, api.DatabasePaused))
 		w.Write(LEVEL_0, "Halted:\t%v\n", item.Spec.Halted)
 		w.Write(LEVEL_0, "Termination Policy:\t%v\n", item.Spec.TerminationPolicy)
 
