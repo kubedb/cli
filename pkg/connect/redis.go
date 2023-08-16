@@ -213,7 +213,7 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 	db := opts.db
 	svcName := fmt.Sprintf("svc/%s", db.Name)
 	kubectlCommand := []interface{}{
-		"exec", "-n", db.Namespace, svcName,
+		"exec", "-n", db.Namespace, svcName, "-c", "redis",
 	}
 	kubectlCommand = append(kubectlCommand, kubectlFlags...)
 
