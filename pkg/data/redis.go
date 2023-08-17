@@ -53,10 +53,15 @@ type MasterNode struct {
 var dataInsertScript = `
 for i = 1, ARGV[1], 1 do
 	local str = tostring({}):sub(10)
-    redis.call("SET", "kubedb:"..str.."{"..ARGV[2].."}-key"..i, str)
+    redis.call("SET", "kubedb-cli:"..str.."{"..ARGV[2].."}-key"..i, str)
 end
 
 return "Success!"
+`
+
+var dataVerifyScript = `
+local keys = redis.call('KEYS', ARGV[1])
+return table.getn(keys)
 `
 
 var dataDeleteScript = `
@@ -77,7 +82,7 @@ return "Success!"
 `
 
 const (
-	redisKeyPrefix         = "kubedb"
+	redisKeyPrefix         = "kubedb-cli"
 	successfulScriptReturn = "Success!"
 )
 
@@ -137,7 +142,7 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 	if output != successfulScriptReturn {
 		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
 	}
-	fmt.Printf("\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! %d keys inserted in redis database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -167,7 +172,7 @@ func (opts *redisOpts) insertDataInRedisCluster(rows int) error {
 			fmt.Printf("Error. Can not insert data in master %s. Output: %s\n", node.host, output)
 		}
 	}
-	fmt.Printf("\n%d keys inserted in redis database %s/%s successfully\n", rows, opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! %d keys inserted in redis database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -221,7 +226,7 @@ func (opts *redisOpts) verifyRedisData(rows int) error {
 		return opts.verifyDataInRedisCluster(rows)
 	}
 	redisCommand := []interface{}{
-		"dbsize",
+		"eval", dataVerifyScript, "0", fmt.Sprintf("%s*", redisKeyPrefix),
 	}
 	output, err := opts.execCommand("", redisCommand)
 	if err != nil {
@@ -232,9 +237,9 @@ func (opts *redisOpts) verifyRedisData(rows int) error {
 		return err
 	}
 	if totalKeys >= rows {
-		fmt.Printf("\nSuccess!. Redis database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
+		fmt.Printf("\nSuccess! Redis database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
 	} else {
-		fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
+		fmt.Printf("\nError! Expected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
 	}
 	return nil
 }
@@ -247,7 +252,7 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 	totalKeys := 0
 	for _, node := range masterNodes {
 		redisCommand := []interface{}{
-			"dbsize",
+			"eval", dataVerifyScript, "0", fmt.Sprintf("%s*", redisKeyPrefix),
 		}
 		output, err := opts.execCommand(node.host, redisCommand)
 		if err != nil {
@@ -259,10 +264,10 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 		}
 		totalKeys += keys
 	}
-	if totalKeys >= rows {
-		fmt.Printf("\nSuccess!. Redis database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
+	if totalKeys == rows {
+		fmt.Printf("\nSuccess! Redis database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
 	} else {
-		fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
+		fmt.Printf("\nError! Expected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
 	}
 	return nil
 }
