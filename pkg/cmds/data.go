@@ -111,6 +111,7 @@ func InsertDataCMD(f cmdutil.Factory) *cobra.Command {
 var verifyLong = templates.LongDesc(`
 		Verify data in a database.
     `)
+
 var verifyExample = templates.Examples(`
 		# Verify if there is 100 rows a postgres table
 		kubectl dba data verify postgres sample-pg -n demo --rows=100
@@ -146,6 +147,7 @@ func VerifyDataCMD(f cmdutil.Factory) *cobra.Command {
 var dropLong = templates.LongDesc(`
 		Drop data in a database.
     `)
+
 var dropExample = templates.Examples(`
 		# Drop all the cli inserted data from mariadb
 		kubectl dba data drop mariadb -n demo sample-maria

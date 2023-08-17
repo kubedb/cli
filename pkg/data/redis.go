@@ -21,7 +21,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"kubedb.dev/cli/pkg/data/redisutil"
 	"log"
 	"os"
 	"strconv"
@@ -29,6 +28,7 @@ import (
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
+	"kubedb.dev/cli/pkg/data/redisutil"
 	_ "kubedb.dev/db-client-go/redis"
 
 	"github.com/spf13/cobra"
@@ -75,8 +75,10 @@ until cursor == 0
 return "Success!"
 `
 
-const redisKeyPrefix = "kubedb"
-const successfulScriptReturn = "Success!"
+const (
+	redisKeyPrefix         = "kubedb"
+	successfulScriptReturn = "Success!"
+)
 
 func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
@@ -222,6 +224,9 @@ func (opts *redisOpts) verifyRedisData(rows int) error {
 		return err
 	}
 	totalKeys, err := strconv.Atoi(output)
+	if err != nil {
+		return err
+	}
 	fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
 
 	return nil
@@ -232,7 +237,7 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 	if err != nil {
 		return err
 	}
-	var totalKeys = 0
+	totalKeys := 0
 	for _, node := range masterNodes {
 		redisCommand := []interface{}{
 			"dbsize",
@@ -252,9 +257,7 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 }
 
 func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName string
-	)
+	var dbName string
 
 	rdVerifyCmd := &cobra.Command{
 		Use: "redis",
