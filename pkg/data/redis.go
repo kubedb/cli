@@ -200,6 +200,9 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			if rows <= 0 {
+				log.Fatal("Inserted rows must be greater than 0")
+			}
 
 			err = opts.verifyRedisData(rows)
 			if err != nil {
@@ -228,8 +231,11 @@ func (opts *redisOpts) verifyRedisData(rows int) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
-
+	if totalKeys >= rows {
+		fmt.Printf("\nSuccess!. Redis database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
+	} else {
+		fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
+	}
 	return nil
 }
 
@@ -253,7 +259,11 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 		}
 		totalKeys += keys
 	}
-	fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
+	if totalKeys >= rows {
+		fmt.Printf("\nSuccess!. Redis database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
+	} else {
+		fmt.Printf("\nExpected keys: %d .Redis database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
+	}
 	return nil
 }
 
@@ -306,9 +316,9 @@ func (opts *redisOpts) dropRedisData() error {
 		return err
 	}
 	if output != "Success!" {
-		fmt.Printf("Error. Can not insert data in master node. Output: %s\n", output)
+		fmt.Printf("Error. Can not drop data from master node. Output: %s\n", output)
 	}
-	fmt.Printf("\nSuccess: All the CLI inserted keys DELETED drom redis database %s/%s/\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! All the CLI inserted keys DELETED drom redis database %s/%s/\n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -327,10 +337,10 @@ func (opts *redisOpts) dropRedisClusterData() error {
 			return err
 		}
 		if output != "Success!" {
-			fmt.Printf("Error. Can not insert data in master %s. Output: %s\n", node.host, output)
+			fmt.Printf("Error. Can not drop data from master %s. Output: %s\n", node.host, output)
 		}
 	}
-	fmt.Printf("\nSuccess: All the CLI inserted keys DELETED from redis database %s/%s.\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! All the CLI inserted keys DELETED from redis database %s/%s.\n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -424,7 +434,7 @@ func (opts *redisOpts) getClusterNodesConf() (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-func (opts *redisOpts) getShellCommand(podIP string, redisCommmand []interface{}) *shell.Session {
+func (opts *redisOpts) getShellCommand(podIP string, redisCommand []interface{}) *shell.Session {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 	sh.Stderr = opts.errWriter
@@ -451,8 +461,8 @@ func (opts *redisOpts) getShellCommand(podIP string, redisCommmand []interface{}
 	}
 
 	finalCommand := append(kubectlCommand, redisBaseCommand...)
-	if redisCommmand != nil {
-		finalCommand = append(finalCommand, redisCommmand...)
+	if redisCommand != nil {
+		finalCommand = append(finalCommand, redisCommand...)
 	}
 	return sh.Command("kubectl", finalCommand...).SetStdin(os.Stdin)
 }
