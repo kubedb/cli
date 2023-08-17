@@ -52,7 +52,8 @@ type MasterNode struct {
 
 var dataInsertScript = `
 for i = 1, ARGV[1], 1 do
-    redis.call("SET", "kubedb:{"..ARGV[2].."}-key"..i, tostring({}):sub(10))
+	local str = tostring({}):sub(10)
+    redis.call("SET", "kubedb:"..str.."{"..ARGV[2].."}-key"..i, str)
 end
 
 return "Success!"
