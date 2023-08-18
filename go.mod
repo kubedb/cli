@@ -3,6 +3,7 @@ module kubedb.dev/cli
 go 1.18
 
 require (
+	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/spf13/cobra v1.7.0
@@ -25,7 +26,7 @@ require (
 	kmodules.xyz/monitoring-agent-api v0.25.1
 	kubedb.dev/apimachinery v0.34.1-0.20230814034200-4ce21bc51a16
 	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
-	stash.appscode.dev/apimachinery v0.30.1-0.20230814025143-fcb8a9106d3c
+	stash.appscode.dev/apimachinery v0.31.0
 )
 
 require github.com/onsi/gomega v1.24.2 // indirect
@@ -40,7 +41,6 @@ require (
 	github.com/Azure/go-autorest/logger v0.2.1 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/MakeNowJust/heredoc v1.0.0 // indirect
-	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cert-manager/cert-manager v1.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

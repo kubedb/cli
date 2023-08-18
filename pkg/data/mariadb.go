@@ -89,7 +89,7 @@ func InsertMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	mdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return mdInsertCmd
 }
@@ -173,7 +173,7 @@ func VerifyMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	mdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	mdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return mdVerifyCmd
 }

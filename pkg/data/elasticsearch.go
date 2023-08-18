@@ -35,7 +35,6 @@ import (
 	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	"kmodules.xyz/client-go/tools/portforward"
-	//"sigs.k8s.io/controller-runtime/pkg/manager"
 )
 
 const (
@@ -91,6 +90,10 @@ func InsertElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
+			if rows <= 0 {
+				log.Fatal("rows need to be greater than 0")
+			}
+
 			err = opts.insertDataInDatabase(rows)
 			if err != nil {
 				log.Fatal(err)
@@ -98,7 +101,7 @@ func InsertElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	esInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	esInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return esInsertCmd
 }
@@ -115,7 +118,7 @@ func VerifyElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 			"es",
 		},
 		Short:   "Verify rows in a elasticsearch database",
-		Long:    `Use this cmd to verify data in a elasticsearc object`,
+		Long:    `Use this cmd to verify data in a elasticsearch object`,
 		Example: `kubectl dba verify -n demo es es-quickstart  --rows 1000`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
@@ -144,6 +147,10 @@ func VerifyElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
+			if rows <= 0 {
+				log.Fatal("rows need to be greater than 0")
+			}
+
 			err = opts.verifyElasticsearchData(rows)
 			if err != nil {
 				log.Fatal(err)
@@ -151,7 +158,7 @@ func VerifyElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	esVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	esVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return esVerifyCmd
 }
@@ -269,7 +276,7 @@ func (opts *elasticsearchOpts) insertDataInDatabase(rows int) error {
 			"name": name,
 		}
 		if err := opts.esClient.PutData(idx, id, body); err != nil {
-			fmt.Printf("Failed to put data in the index %s for elasticsearch %s/%s", idx, opts.db.Namespace, opts.db.Name)
+			fmt.Printf("Failed to insert data in the index %s for elasticsearch %s/%s", idx, opts.db.Namespace, opts.db.Name)
 			return err
 		}
 	}

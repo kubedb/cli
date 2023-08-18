@@ -41,12 +41,6 @@ import (
 	"kmodules.xyz/client-go/tools/portforward"
 )
 
-const (
-	caFile   = "/tmp/ca.crt"
-	certFile = "/tmp/client.crt"
-	keyFile  = "/tmp/client.key"
-)
-
 func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName string
@@ -95,7 +89,7 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	myInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	myInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return myInsertCmd
 }
@@ -179,7 +173,7 @@ func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	myVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	myVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return myVerifyCmd
 }

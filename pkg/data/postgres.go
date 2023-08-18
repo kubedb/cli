@@ -83,15 +83,15 @@ func InsertPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
+			defer tunnel.Close()
 			err = opts.insertDataExecCmd(tunnel, rows)
 			if err != nil {
 				log.Fatal(err)
 			}
-			tunnel.Close()
 		},
 	}
 
-	pgInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	pgInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return pgInsertCmd
 }
@@ -158,15 +158,15 @@ func VerifyPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
+			defer tunnel.Close()
 
 			err = opts.verifyDataExecCmd(tunnel, rows)
 			if err != nil {
 				log.Fatal(err)
 			}
-			tunnel.Close()
 		},
 	}
-	pgVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	pgVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return pgVerifyCmd
 }
@@ -230,12 +230,12 @@ func DropPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
+			defer tunnel.Close()
 
 			err = opts.dropDataExecCmd(tunnel)
 			if err != nil {
 				log.Fatal(err)
 			}
-			tunnel.Close()
 		},
 	}
 
@@ -255,7 +255,7 @@ func (opts *postgresOpts) dropDataExecCmd(tunnel *portforward.Tunnel) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("\nSuccess: All the CLI inserted rows DELETED from postgres database %s/%s/\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess: All the CLI inserted rows DELETED from postgres database %s/%s \n", opts.db.Namespace, opts.db.Name)
 
 	return nil
 }

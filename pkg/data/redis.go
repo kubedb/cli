@@ -122,7 +122,7 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 			}
 		},
 	}
-	rdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	rdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return rdInsertCmd
 }
@@ -216,7 +216,7 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	rdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	rdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return rdVerifyCmd
 }
@@ -275,7 +275,7 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 	var dbName string
 
-	rdVerifyCmd := &cobra.Command{
+	rdDropCmd := &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
@@ -306,7 +306,7 @@ func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	return rdVerifyCmd
+	return rdDropCmd
 }
 
 func (opts *redisOpts) dropRedisData() error {
@@ -323,7 +323,7 @@ func (opts *redisOpts) dropRedisData() error {
 	if output != "Success!" {
 		fmt.Printf("Error. Can not drop data from master node. Output: %s\n", output)
 	}
-	fmt.Printf("\nSuccess! All the CLI inserted keys DELETED drom redis database %s/%s/\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! All the CLI inserted keys DELETED from redis database %s/%s \n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
