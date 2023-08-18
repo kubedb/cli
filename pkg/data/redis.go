@@ -323,7 +323,7 @@ func (opts *redisOpts) dropRedisData() error {
 	if output != "Success!" {
 		fmt.Printf("Error. Can not drop data from master node. Output: %s\n", output)
 	}
-	fmt.Printf("\nSuccess! All the CLI inserted keys DELETED drom redis database %s/%s/\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! All the CLI inserted keys DELETED from redis database %s/%s \n", opts.db.Namespace, opts.db.Name)
 	return nil
 }
 

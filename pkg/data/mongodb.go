@@ -58,8 +58,9 @@ func InsertMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"mg",
 		},
-		Short: "Insert data to mongodb",
-		Long:  `Use this cmd to insert data into a mongodb database.`,
+		Short:   "Insert data to mongodb",
+		Long:    `Use this cmd to insert data into a mongodb database.`,
+		Example: `kubectl dba data insert mg -n demo mg-rs --rows 500`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mongodb object's name as an argument")
@@ -76,12 +77,16 @@ func InsertMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
+			if rows <= 0 {
+				log.Fatal("rows need to be greater than 0")
+			}
+
 			command := fmt.Sprintf("for(var i=1;i<=%d;i++){db[\"%s\"].insert({_id:\"doc\"+i,actor:\"%s\"})}", rows, mgCollectionName, actor)
 			_, err = opts.executeCommand(command)
 			if err != nil {
 				log.Fatal(err)
 			}
-			klog.Infof("Successfully inserted %d documents to %s/%s mongodb. \n", rows, namespace, dbName)
+			fmt.Printf("\nSuccess! %d documents inserted in MongoDB database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
 		},
 	}
 	insertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
@@ -100,8 +105,9 @@ func VerifyMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"mg",
 		},
-		Short: "Verify data to a mongodb resource",
-		Long:  `Use this cmd to verify data existence in a mongodb object`,
+		Short:   "Verify data to a mongodb resource",
+		Long:    `Use this cmd to verify data existence in a mongodb object`,
+		Example: `kubectl dba data verify mg -n demo mg-rs --rows 500`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mongodb object's name as an argument")
@@ -116,6 +122,10 @@ func VerifyMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 			opts, err := newMongoDBOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatal(err)
+			}
+
+			if rows <= 0 {
+				log.Fatal("rows need to be greater than 0")
 			}
 
 			command := fmt.Sprintf("db.runCommand({find:\"%s\",filter:{\"actor\":\"%s\"},batchSize:10000})", mgCollectionName, actor)
@@ -145,8 +155,9 @@ func DropMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"mg",
 		},
-		Short: "Drop data from mongodb",
-		Long:  `Use this cmd to drop data from a mongodb database.`,
+		Short:   "Drop data from mongodb",
+		Long:    `Use this cmd to drop data from a mongodb database.`,
+		Example: `kubectl dba data drop mg -n demo mg-rs`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mongodb object's name as an argument")
@@ -168,7 +179,7 @@ func DropMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal(err)
 			}
-			klog.Infof("Successfully dropped %s collection from %s/%s mongodb. \n", mgCollectionName, namespace, dbName)
+			fmt.Printf("\nSuccess! All the CLI inserted documents DELETED from MongoDB database %s/%s \n", opts.db.Namespace, opts.db.Name)
 		},
 	}
 
@@ -288,9 +299,9 @@ func (opts *mongoDBOpts) verifyOutput(out []byte, rows int) error {
 		matched = matched + 1
 	}
 	if matched == rows {
-		klog.Infof("Successfully verify all the %d documents in %s/%s. \n", rows, opts.db.Namespace, opts.db.Name)
+		fmt.Printf("\nSuccess! MongoDB database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, rows)
 	} else {
-		klog.Infof("Oops!! Documents to verify: %d, but matched %d. \n", rows, matched)
+		fmt.Printf("\nError! Expected keys: %d .MongoDB database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, matched)
 	}
 	return nil
 }
