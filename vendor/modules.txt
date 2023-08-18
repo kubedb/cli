@@ -59,6 +59,9 @@ github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
+# github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f
+## explicit
+github.com/dgryski/go-rendezvous
 # github.com/emicklei/go-restful/v3 v3.9.0
 ## explicit; go 1.13
 github.com/emicklei/go-restful/v3
@@ -234,8 +237,16 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/rogpeppe/go-internal v1.8.1
-## explicit; go 1.16
+# github.com/redis/go-redis/v9 v9.0.5
+## explicit; go 1.18
+github.com/redis/go-redis/v9
+github.com/redis/go-redis/v9/internal
+github.com/redis/go-redis/v9/internal/hashtag
+github.com/redis/go-redis/v9/internal/hscan
+github.com/redis/go-redis/v9/internal/pool
+github.com/redis/go-redis/v9/internal/proto
+github.com/redis/go-redis/v9/internal/rand
+github.com/redis/go-redis/v9/internal/util
 # github.com/russross/blackfriday v1.5.2
 ## explicit
 github.com/russross/blackfriday
@@ -836,6 +847,9 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/validator
+# kubedb.dev/db-client-go v0.0.7
+## explicit; go 1.18
+kubedb.dev/db-client-go/redis
 # sigs.k8s.io/controller-runtime v0.13.1 => github.com/kmodules/controller-runtime v0.13.1-0.20230725210630-f8273f9c4412
 ## explicit; go 1.17
 sigs.k8s.io/controller-runtime
