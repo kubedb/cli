@@ -41,29 +41,23 @@ import (
 	"kmodules.xyz/client-go/tools/portforward"
 )
 
-const (
-	caFile   = "/tmp/ca.crt"
-	certFile = "/tmp/client.crt"
-	keyFile  = "/tmp/client.key"
-)
-
-func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
+func InsertMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName string
 		rows   int
 	)
 
-	myInsertCmd := &cobra.Command{
-		Use: "mysql",
+	mdInsertCmd := &cobra.Command{
+		Use: "mariadb",
 		Aliases: []string{
-			"my",
+			"md",
 		},
-		Short:   "Connect to a mysql object",
-		Long:    `Use this cmd to exec into a mysql object's primary pod.`,
-		Example: `kubectl dba insert mysql -n demo sample-mysql --rows 1000`,
+		Short:   "Connect to a mariadb object",
+		Long:    `Use this cmd to exec into a mariadb object's primary pod.`,
+		Example: `kubectl dba insert mariadb -n demo sample-mariadb --rows 1000`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter mysql object's name as an argument")
+				log.Fatal("Enter mariadb object's name as an argument")
 			}
 			dbName = args[0]
 
@@ -72,7 +66,7 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			opts, err := newMySQLOpts(f, dbName, namespace)
+			opts, err := newMariaDBOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -95,12 +89,12 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	myInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	mdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
 
-	return myInsertCmd
+	return mdInsertCmd
 }
 
-func (opts *mysqlOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
+func (opts *mariadbOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
 	command := `
 		USE mysql;
 		CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
@@ -132,27 +126,27 @@ func (opts *mysqlOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int) e
 		return err
 	}
 
-	fmt.Printf("\nSuccess! %d keys inserted in mysql database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! %d keys inserted in MariaDB database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
-func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
+func VerifyMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName string
 		rows   int
 	)
 
-	myVerifyCmd := &cobra.Command{
-		Use: "mysql",
+	mdVerifyCmd := &cobra.Command{
+		Use: "mariadb",
 		Aliases: []string{
-			"my",
+			"md",
 		},
-		Short:   "Verify rows in a MySQL database",
-		Long:    `Use this cmd to verify data in a mysql object`,
-		Example: `kubectl dba verify mysql -n demo sample-mysql --rows 1000`,
+		Short:   "Verify rows in a MariaDB database",
+		Long:    `Use this cmd to verify data in a mariadb object`,
+		Example: `kubectl dba verify mariadb -n demo sample-mariadb --rows 1000`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter mysql object's name as an argument.")
+				log.Fatal("Enter mariadb object's name as an argument.")
 			}
 			dbName = args[0]
 
@@ -161,7 +155,7 @@ func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			opts, err := newMySQLOpts(f, dbName, namespace)
+			opts, err := newMariaDBOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -179,12 +173,12 @@ func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	myVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	mdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
 
-	return myVerifyCmd
+	return mdVerifyCmd
 }
 
-func (opts *mysqlOpts) verifyDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
+func (opts *mariadbOpts) verifyDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
 	if rows <= 0 {
 		return fmt.Errorf("rows need to be greater than 0")
 	}
@@ -205,27 +199,27 @@ func (opts *mysqlOpts) verifyDataExecCmd(tunnel *portforward.Tunnel, rows int) e
 		return err
 	}
 	if totalKeys >= rows {
-		fmt.Printf("\nSuccess! MySQL database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
+		fmt.Printf("\nSuccess! MariaDB database %s/%s contains: %d keys\n", opts.db.Namespace, opts.db.Name, totalKeys)
 	} else {
-		fmt.Printf("\nError! Expected keys: %d . MySQL database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
+		fmt.Printf("\nError! Expected keys: %d . MariaDB database %s/%s contains: %d keys\n", rows, opts.db.Namespace, opts.db.Name, totalKeys)
 	}
 	return nil
 }
 
-func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
+func DropMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 	var dbName string
 
-	myDropCmd := &cobra.Command{
-		Use: "mysql",
+	mdDropCmd := &cobra.Command{
+		Use: "mariadb",
 		Aliases: []string{
-			"my",
+			"md",
 		},
-		Short:   "Verify rows in a MySQL database",
-		Long:    `Use this cmd to verify data in a mysql object`,
-		Example: `kubectl dba drop mysql -n demo sample-mysql`,
+		Short:   "Verify rows in a MariaDB database",
+		Long:    `Use this cmd to verify data in a mariadb object`,
+		Example: `kubectl dba drop mariadb -n demo sample-mariadb`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter mysql object's name as an argument.")
+				log.Fatal("Enter mariadb object's name as an argument.")
 			}
 			dbName = args[0]
 
@@ -234,7 +228,7 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			opts, err := newMySQLOpts(f, dbName, namespace)
+			opts, err := newMariaDBOpts(f, dbName, namespace)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -252,10 +246,10 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	return myDropCmd
+	return mdDropCmd
 }
 
-func (opts *mysqlOpts) dropDataExecCmd(tunnel *portforward.Tunnel) error {
+func (opts *mariadbOpts) dropDataExecCmd(tunnel *portforward.Tunnel) error {
 	command := ` 
 		USE mysql;
 		DROP TABLE IF EXISTS kubedb_table;
@@ -264,13 +258,13 @@ func (opts *mysqlOpts) dropDataExecCmd(tunnel *portforward.Tunnel) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("\nSuccess: All the CLI inserted rows DELETED from MySQL database %s/%s.\n", opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess: All the CLI inserted rows DELETED from MariaDB database %s/%s.\n", opts.db.Namespace, opts.db.Name)
 
 	return nil
 }
 
-type mysqlOpts struct {
-	db        *api.MySQL
+type mariadbOpts struct {
+	db        *api.MariaDB
 	dbImage   string
 	config    *rest.Config
 	client    *kubernetes.Clientset
@@ -279,7 +273,7 @@ type mysqlOpts struct {
 	errWriter *bytes.Buffer
 }
 
-func newMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, error) {
+func newMariaDBOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, error) {
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -295,16 +289,16 @@ func newMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().MySQLs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1alpha2().MariaDBs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
 
 	if db.Status.Phase != api.DatabasePhaseReady {
-		return nil, fmt.Errorf("mysql %s/%s is not ready", namespace, dbName)
+		return nil, fmt.Errorf("mariadb %s/%s is not ready", namespace, dbName)
 	}
 
-	dbVersion, err := dbClient.CatalogV1alpha1().MySQLVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
+	dbVersion, err := dbClient.CatalogV1alpha1().MariaDBVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -314,7 +308,7 @@ func newMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 		return nil, err
 	}
 
-	return &mysqlOpts{
+	return &mariadbOpts{
 		db:        db,
 		dbImage:   dbVersion.Spec.DB.Image,
 		config:    config,
@@ -325,7 +319,7 @@ func newMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 	}, nil
 }
 
-func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlExtraFlags []interface{}) (*shell.Session, error) {
+func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mariadbExtraFlags []interface{}) (*shell.Session, error) {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 
@@ -336,14 +330,14 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 	}
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
-	mysqlCommand := []interface{}{
+	mariadbCommand := []interface{}{
 		"mysql",
 		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort),
 		fmt.Sprintf("--user=%s", opts.username),
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(api.MySQLClientCert)
+		secretName := db.CertificateName(api.MariaDBClientCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err
@@ -381,7 +375,7 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 			"-v", fmt.Sprintf("%s:%s", certFile, certFile),
 			"-v", fmt.Sprintf("%s:%s", keyFile, keyFile),
 		)
-		mysqlCommand = append(mysqlCommand,
+		mariadbCommand = append(mariadbCommand,
 			fmt.Sprintf("--ssl-ca=%v", caFile),
 			fmt.Sprintf("--ssl-cert=%v", certFile),
 			fmt.Sprintf("--ssl-key=%v", keyFile),
@@ -389,19 +383,19 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 	}
 
 	dockerCommand = append(dockerCommand, opts.dbImage)
-	finalCommand := append(dockerCommand, mysqlCommand...)
-	if mysqlExtraFlags != nil {
-		finalCommand = append(finalCommand, mysqlExtraFlags...)
+	finalCommand := append(dockerCommand, mariadbCommand...)
+	if mariadbExtraFlags != nil {
+		finalCommand = append(finalCommand, mariadbExtraFlags...)
 	}
 	return sh.Command("docker", finalCommand...).SetStdin(os.Stdin), nil
 }
 
-func (opts *mysqlOpts) executeCommand(localPort int, command string) (string, error) {
-	mysqlExtraFlags := []interface{}{
+func (opts *mariadbOpts) executeCommand(localPort int, command string) (string, error) {
+	mariadbExtraFlags := []interface{}{
 		"-e", command,
 	}
 
-	shSession, err := opts.getDockerShellCommand(localPort, nil, mysqlExtraFlags)
+	shSession, err := opts.getDockerShellCommand(localPort, nil, mariadbExtraFlags)
 	if err != nil {
 		return "", err
 	}
