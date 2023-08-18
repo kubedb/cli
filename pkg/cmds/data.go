@@ -101,6 +101,7 @@ func InsertDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.InsertRedisDataCMD(f))
+	cmd.AddCommand(data.InsertMySQLDataCMD(f))
 
 	return cmd
 }
@@ -137,6 +138,7 @@ func VerifyDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.VerifyRedisDataCMD(f))
+	cmd.AddCommand(data.VerifyMySQLDataCMD(f))
 
 	return cmd
 }
@@ -173,6 +175,7 @@ func DropDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.DropRedisDataCMD(f))
+	cmd.AddCommand(data.DropMySQLDataCMD(f))
 
 	return cmd
 }
