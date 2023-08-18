@@ -30,3 +30,9 @@ type UpdateConstraints struct {
 	// An empty list indicates no version is rejected.
 	Denylist []string `json:"denylist,omitempty"`
 }
+
+// GitSyncer is the image for the kubernetes/git-sync
+// https://github.com/kubernetes/git-sync
+type GitSyncer struct {
+	Image string `json:"image"`
+}

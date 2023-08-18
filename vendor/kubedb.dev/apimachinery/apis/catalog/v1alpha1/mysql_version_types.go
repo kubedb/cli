@@ -82,6 +82,8 @@ type MySQLVersionSpec struct {
 	Router MySQLVersionRouter `json:"router,omitempty"`
 	// +optional
 	RouterInitContainer MySQLVersionRouterInitContainer `json:"routerInitContainer,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // MySQLVersionDatabase is the MySQL Database image

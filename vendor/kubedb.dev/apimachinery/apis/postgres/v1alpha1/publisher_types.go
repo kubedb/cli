@@ -126,6 +126,10 @@ const (
 	PublisherMessageAllTablesNotFound    PublisherMessage       = "All tables are not found"
 	PublisherMessageAllTablesFound       PublisherMessage       = "All tables are found"
 
+	PublisherConditionTypeReplicaIdentityFound PublisherConditionType = "ReplicaIdentityFound"
+	PublisherMessageReplicaIdentityNotFound    PublisherMessage       = "Replica identity is not found"
+	PublisherMessageReplicaIdentityFound       PublisherMessage       = "Replica identity is found"
+
 	PublisherConditionTypePublicationSuccessful PublisherConditionType = "PublicationSuccessful"
 	PublisherMessagePublicationIsSuccessful     PublisherMessage       = "Publication is successful"
 	PublisherMessagePublicationIsNotSuccessful  PublisherMessage       = "Publication is not successful"

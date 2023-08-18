@@ -621,7 +621,6 @@ const (
 	KafkaTransactionSateLogMinISR        = "transaction.state.log.min.isr"
 	KafkaLogCleanerMinLagSec             = "log.cleaner.min.compaction.lag.ms"
 	KafkaLogCleanerBackoffMS             = "log.cleaner.backoff.ms"
-	KafkaListenerNameRackRaft            = "listener.name.internal.rack-raft.enabled"
 
 	KafkaCCKubernetesMode                 = "cruise.control.metrics.reporter.kubernetes.mode"
 	KafkaCCBootstrapServers               = "cruise.control.metrics.reporter.bootstrap.servers"

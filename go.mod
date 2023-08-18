@@ -21,10 +21,10 @@ require (
 	k8s.io/component-base v0.25.3
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.1
-	kmodules.xyz/client-go v0.25.29
+	kmodules.xyz/client-go v0.25.30
 	kmodules.xyz/custom-resources v0.25.2
 	kmodules.xyz/monitoring-agent-api v0.25.1
-	kubedb.dev/apimachinery v0.34.1-0.20230814034200-4ce21bc51a16
+	kubedb.dev/apimachinery v0.34.1-0.20230818145217-8e2aab0c176e
 	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
 	stash.appscode.dev/apimachinery v0.31.0
 )
@@ -153,7 +153,7 @@ replace sigs.k8s.io/controller-runtime => github.com/kmodules/controller-runtime
 
 replace github.com/imdario/mergo => github.com/imdario/mergo v0.3.6
 
-replace k8s.io/apiserver => github.com/kmodules/apiserver v0.25.2-0.20230712090038-ce87ebac4a3d
+replace k8s.io/apiserver => github.com/kmodules/apiserver v0.25.2-0.20230817060727-aa2afd31b825
 
 replace k8s.io/kubernetes => github.com/kmodules/kubernetes v1.26.0-alpha.0.0.20220917022409-54ac9f3f1315
 
