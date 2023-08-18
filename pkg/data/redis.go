@@ -122,7 +122,7 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 			}
 		},
 	}
-	rdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	rdInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return rdInsertCmd
 }
@@ -216,7 +216,7 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	rdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	rdVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return rdVerifyCmd
 }

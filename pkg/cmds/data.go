@@ -100,10 +100,11 @@ func InsertDataCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
-	cmd.AddCommand(data.InsertRedisDataCMD(f))
-	cmd.AddCommand(data.InsertPostgresDataCMD(f))
-	cmd.AddCommand(data.InsertMySQLDataCMD(f))
 	cmd.AddCommand(data.InsertMariaDBDataCMD(f))
+	cmd.AddCommand(data.InsertMongoDBDataCMD(f))
+	cmd.AddCommand(data.InsertMySQLDataCMD(f))
+	cmd.AddCommand(data.InsertPostgresDataCMD(f))
+	cmd.AddCommand(data.InsertRedisDataCMD(f))
 
 	return cmd
 }
@@ -139,10 +140,11 @@ func VerifyDataCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
-	cmd.AddCommand(data.VerifyRedisDataCMD(f))
-	cmd.AddCommand(data.VerifyPostgresDataCMD(f))
-	cmd.AddCommand(data.VerifyMySQLDataCMD(f))
 	cmd.AddCommand(data.VerifyMariaDBDataCMD(f))
+	cmd.AddCommand(data.VerifyMongoDBDataCMD(f))
+	cmd.AddCommand(data.VerifyMySQLDataCMD(f))
+	cmd.AddCommand(data.VerifyPostgresDataCMD(f))
+	cmd.AddCommand(data.VerifyRedisDataCMD(f))
 
 	return cmd
 }
@@ -178,10 +180,11 @@ func DropDataCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
-	cmd.AddCommand(data.DropRedisDataCMD(f))
-	cmd.AddCommand(data.DropPostgresDataCMD(f))
-	cmd.AddCommand(data.DropMySQLDataCMD(f))
 	cmd.AddCommand(data.DropMariaDBDataCMD(f))
+	cmd.AddCommand(data.DropMongoDBDataCMD(f))
+	cmd.AddCommand(data.DropMySQLDataCMD(f))
+	cmd.AddCommand(data.DropPostgresDataCMD(f))
+	cmd.AddCommand(data.DropRedisDataCMD(f))
 
 	return cmd
 }

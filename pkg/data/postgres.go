@@ -91,7 +91,7 @@ func InsertPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	pgInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	pgInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return pgInsertCmd
 }
@@ -166,7 +166,7 @@ func VerifyPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			tunnel.Close()
 		},
 	}
-	pgVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	pgVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return pgVerifyCmd
 }
