@@ -25,8 +25,8 @@ require (
 	kmodules.xyz/custom-resources v0.25.2
 	kmodules.xyz/monitoring-agent-api v0.25.1
 	kubedb.dev/apimachinery v0.34.1-0.20230814034200-4ce21bc51a16
-	kubedb.dev/db-client-go v0.0.7
-	stash.appscode.dev/apimachinery v0.30.1-0.20230814025143-fcb8a9106d3c
+	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
+	stash.appscode.dev/apimachinery v0.31.0
 )
 
 require github.com/onsi/gomega v1.24.2 // indirect
@@ -49,6 +49,11 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.1.0 // indirect
+	github.com/elastic/go-elasticsearch/v5 v5.6.1 // indirect
+	github.com/elastic/go-elasticsearch/v6 v6.8.10 // indirect
+	github.com/elastic/go-elasticsearch/v7 v7.15.1 // indirect
+	github.com/elastic/go-elasticsearch/v8 v8.4.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.9.0 // indirect
 	github.com/evanphx/json-patch v5.6.0+incompatible // indirect
 	github.com/evanphx/json-patch/v5 v5.6.0 // indirect
@@ -86,9 +91,12 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/opensearch-project/opensearch-go v1.1.0 // indirect
+	github.com/opensearch-project/opensearch-go/v2 v2.2.0 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.59.1 // indirect
+	github.com/prometheus-operator/prometheus-operator/pkg/client v0.59.1 // indirect
 	github.com/prometheus/client_golang v1.13.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
@@ -121,12 +129,15 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apiextensions-apiserver v0.25.3 // indirect
+	k8s.io/kube-aggregator v0.25.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20221012153701-172d655c2280 // indirect
+	k8s.io/metrics v0.25.1 // indirect
 	k8s.io/utils v0.0.0-20221012122500-cfd413dd9e85 // indirect
 	kmodules.xyz/apiversion v0.2.0 // indirect
 	kmodules.xyz/objectstore-api v0.25.1 // indirect
 	kmodules.xyz/offshoot-api v0.25.4 // indirect
 	kmodules.xyz/prober v0.25.0 // indirect
+	kubeops.dev/sidekick v0.0.2-0.20230113102427-9848f83b2f0f // indirect
 	sigs.k8s.io/controller-runtime v0.13.1 // indirect
 	sigs.k8s.io/gateway-api v0.4.3 // indirect
 	sigs.k8s.io/json v0.0.0-20220713155537-f223a00ba0e2 // indirect

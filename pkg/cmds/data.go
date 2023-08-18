@@ -100,6 +100,7 @@ func InsertDataCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
+	cmd.AddCommand(data.InsertElasticsearchDataCMD(f))
 	cmd.AddCommand(data.InsertMariaDBDataCMD(f))
 	cmd.AddCommand(data.InsertMongoDBDataCMD(f))
 	cmd.AddCommand(data.InsertMySQLDataCMD(f))
@@ -140,6 +141,7 @@ func VerifyDataCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
+	cmd.AddCommand(data.VerifyElasticsearchDataCMD(f))
 	cmd.AddCommand(data.VerifyMariaDBDataCMD(f))
 	cmd.AddCommand(data.VerifyMongoDBDataCMD(f))
 	cmd.AddCommand(data.VerifyMySQLDataCMD(f))
@@ -180,6 +182,7 @@ func DropDataCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
+	cmd.AddCommand(data.DropElasticsearchDataCMD(f))
 	cmd.AddCommand(data.DropMariaDBDataCMD(f))
 	cmd.AddCommand(data.DropMongoDBDataCMD(f))
 	cmd.AddCommand(data.DropMySQLDataCMD(f))

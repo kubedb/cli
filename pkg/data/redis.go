@@ -275,7 +275,7 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 	var dbName string
 
-	rdVerifyCmd := &cobra.Command{
+	rdDropCmd := &cobra.Command{
 		Use: "redis",
 		Aliases: []string{
 			"rd",
@@ -306,7 +306,7 @@ func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	return rdVerifyCmd
+	return rdDropCmd
 }
 
 func (opts *redisOpts) dropRedisData() error {
