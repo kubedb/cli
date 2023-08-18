@@ -193,6 +193,8 @@ var availableVersions = []string{
 	"3.3.0",
 	"3.3.2",
 	"3.4.0",
+	"3.4.1",
+	"3.5.1",
 }
 
 func validateVersion(db *Kafka) error {

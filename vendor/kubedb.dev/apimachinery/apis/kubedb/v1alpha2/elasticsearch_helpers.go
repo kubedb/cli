@@ -33,6 +33,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	appslister "k8s.io/client-go/listers/apps/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -412,6 +413,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		if e.Spec.Topology.Ingest.Replicas == nil {
 			e.Spec.Topology.Ingest.Replicas = pointer.Int32P(1)
 		}
+		if e.Spec.Topology.Ingest.MaxUnavailable == nil && *e.Spec.Topology.Ingest.Replicas > 1 {
+			e.Spec.Topology.Ingest.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
+		}
 
 		// Required nodes, must exist!
 		// Default to "master"
@@ -421,6 +425,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		apis.SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResourcesElasticSearch)
 		if e.Spec.Topology.Master.Replicas == nil {
 			e.Spec.Topology.Master.Replicas = pointer.Int32P(1)
+		}
+		if e.Spec.Topology.Master.MaxUnavailable == nil && *e.Spec.Topology.Master.Replicas > 1 {
+			e.Spec.Topology.Master.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
 		}
 
 		// Optional nodes, when other type of data nodes are not empty.
@@ -434,6 +441,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.Data.Replicas == nil {
 				e.Spec.Topology.Data.Replicas = pointer.Int32P(1)
 			}
+			if e.Spec.Topology.Data.MaxUnavailable == nil && *e.Spec.Topology.Data.Replicas > 1 {
+				e.Spec.Topology.Data.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
+			}
 		}
 
 		// Optional, can be empty
@@ -445,6 +455,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataHot.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataHot.Replicas == nil {
 				e.Spec.Topology.DataHot.Replicas = pointer.Int32P(1)
+			}
+			if e.Spec.Topology.DataHot.MaxUnavailable == nil && *e.Spec.Topology.DataHot.Replicas > 1 {
+				e.Spec.Topology.DataHot.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
 			}
 		}
 
@@ -458,6 +471,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataWarm.Replicas == nil {
 				e.Spec.Topology.DataWarm.Replicas = pointer.Int32P(1)
 			}
+			if e.Spec.Topology.DataWarm.MaxUnavailable == nil && *e.Spec.Topology.DataWarm.Replicas > 1 {
+				e.Spec.Topology.DataWarm.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
+			}
 		}
 
 		// Optional, can be empty
@@ -469,6 +485,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataCold.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataCold.Replicas == nil {
 				e.Spec.Topology.DataCold.Replicas = pointer.Int32P(1)
+			}
+			if e.Spec.Topology.DataCold.MaxUnavailable == nil && *e.Spec.Topology.DataCold.Replicas > 1 {
+				e.Spec.Topology.DataCold.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
 			}
 		}
 
@@ -482,6 +501,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataFrozen.Replicas == nil {
 				e.Spec.Topology.DataFrozen.Replicas = pointer.Int32P(1)
 			}
+			if e.Spec.Topology.DataFrozen.MaxUnavailable == nil && *e.Spec.Topology.DataFrozen.Replicas > 1 {
+				e.Spec.Topology.DataFrozen.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
+			}
 		}
 
 		// Optional, can be empty
@@ -493,6 +515,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataContent.Resources, DefaultResourcesElasticSearch)
 			if e.Spec.Topology.DataContent.Replicas == nil {
 				e.Spec.Topology.DataContent.Replicas = pointer.Int32P(1)
+			}
+			if e.Spec.Topology.DataContent.MaxUnavailable == nil && *e.Spec.Topology.DataContent.Replicas > 1 {
+				e.Spec.Topology.DataContent.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
 			}
 		}
 
@@ -506,6 +531,9 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.ML.Replicas == nil {
 				e.Spec.Topology.ML.Replicas = pointer.Int32P(1)
 			}
+			if e.Spec.Topology.ML.MaxUnavailable == nil && *e.Spec.Topology.ML.Replicas > 1 {
+				e.Spec.Topology.ML.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
+			}
 		}
 
 		// Optional, can be empty
@@ -518,12 +546,18 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.Transform.Replicas == nil {
 				e.Spec.Topology.Transform.Replicas = pointer.Int32P(1)
 			}
+			if e.Spec.Topology.Transform.MaxUnavailable == nil && *e.Spec.Topology.Transform.Replicas > 1 {
+				e.Spec.Topology.Transform.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
+			}
 		}
 
 	} else {
 		apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResourcesElasticSearch)
 		if e.Spec.Replicas == nil {
 			e.Spec.Replicas = pointer.Int32P(1)
+		}
+		if e.Spec.MaxUnavailable == nil && *e.Spec.Replicas > 1 {
+			e.Spec.MaxUnavailable = &intstr.IntOrString{IntVal: 1}
 		}
 	}
 

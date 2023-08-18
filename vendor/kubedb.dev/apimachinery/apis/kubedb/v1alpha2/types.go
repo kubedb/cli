@@ -35,6 +35,27 @@ type InitSpec struct {
 type ScriptSourceSpec struct {
 	ScriptPath        string `json:"scriptPath,omitempty"`
 	core.VolumeSource `json:",inline,omitempty"`
+	Git               *GitRepo `json:"git,omitempty"`
+}
+
+type GitRepo struct {
+	// https://github.com/kubernetes/git-sync/tree/master
+	Args []string `json:"args"`
+	// List of environment variables to set in the container.
+	// Cannot be updated.
+	// +optional
+	Env []core.EnvVar `json:"env,omitempty"`
+	// Security options the pod should run with.
+	// More info: https://kubernetes.io/docs/concepts/policy/security-context/
+	// More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+	// +optional
+	SecurityContext *core.SecurityContext `json:"securityContext,omitempty"`
+	// Compute Resources required by the sidecar container.
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
+	// Authentication secret for git repository
+	// +optional
+	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted;Unknown
