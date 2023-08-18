@@ -101,6 +101,7 @@ func InsertDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.InsertRedisDataCMD(f))
+	cmd.AddCommand(data.InsertPostgresDataCMD(f))
 	cmd.AddCommand(data.InsertMySQLDataCMD(f))
 	cmd.AddCommand(data.InsertMariaDBDataCMD(f))
 
@@ -139,6 +140,7 @@ func VerifyDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.VerifyRedisDataCMD(f))
+	cmd.AddCommand(data.VerifyPostgresDataCMD(f))
 	cmd.AddCommand(data.VerifyMySQLDataCMD(f))
 	cmd.AddCommand(data.VerifyMariaDBDataCMD(f))
 
@@ -177,6 +179,7 @@ func DropDataCMD(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(data.DropRedisDataCMD(f))
+	cmd.AddCommand(data.DropPostgresDataCMD(f))
 	cmd.AddCommand(data.DropMySQLDataCMD(f))
 	cmd.AddCommand(data.DropMariaDBDataCMD(f))
 
