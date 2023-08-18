@@ -44,7 +44,6 @@ const (
 	mgPEMFile        = "/var/run/mongodb/tls/client.pem"
 	mgTempPEMFile    = "/tmp/client.pem"
 	mgCollectionName = "kubedb-testing"
-	actor            = "kubedb-cli"
 )
 
 func InsertMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {

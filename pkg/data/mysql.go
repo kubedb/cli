@@ -41,12 +41,6 @@ import (
 	"kmodules.xyz/client-go/tools/portforward"
 )
 
-const (
-	caFile   = "/tmp/ca.crt"
-	certFile = "/tmp/client.crt"
-	keyFile  = "/tmp/client.key"
-)
-
 func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName string

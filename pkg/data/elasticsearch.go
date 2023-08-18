@@ -101,7 +101,7 @@ func InsertElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	esInsertCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	esInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
 
 	return esInsertCmd
 }
@@ -158,7 +158,7 @@ func VerifyElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	esVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 10, "rows in ")
+	esVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
 
 	return esVerifyCmd
 }
