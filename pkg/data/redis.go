@@ -99,7 +99,7 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 		Short:   "Insert data to a redis database",
 		Long:    `Use this cmd to insert data into a redis database`,
-		Example: `kubectl dba insert redis -n demo sample-redis --rows 500`,
+		Example: `kubectl dba data insert redis -n demo sample-redis --rows 500`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument")
@@ -189,7 +189,7 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 		Short:   "Verify rows in a redis database",
 		Long:    `Use this cmd to verify data in a redis object`,
-		Example: `kubectl dba verify redis -n demo sample-redis --rows 500`,
+		Example: `kubectl dba data verify redis -n demo sample-redis --rows 500`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")
@@ -282,7 +282,7 @@ func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 		},
 		Short:   "Delete data from redis database",
 		Long:    `Use this cmd to delete inserted data in a redis object`,
-		Example: `kubectl dba drop redis -n demo sample-redis`,
+		Example: `kubectl dba data drop redis -n demo sample-redis`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter redis object's name as an argument. Your commands will be applied on a database inside it's primary pod")

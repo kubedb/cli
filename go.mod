@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/fatih/camelcase v1.0.0
+	github.com/go-sql-driver/mysql v1.6.0
 	github.com/spf13/cobra v1.7.0
 	golang.org/x/text v0.9.0
 	gomodules.xyz/go-sh v0.1.0
