@@ -1362,8 +1362,8 @@ kmodules.xyz/offshoot-api v0.25.4 h1:IjJNvkphcdYUG8XO/pBwXpuP8W+jxAWJZ3yH8vgI/as
 kmodules.xyz/offshoot-api v0.25.4/go.mod h1:PUk4EuJFhhyQykCflHj7EgXcljGIqs9vi0IN0RpxtY4=
 kmodules.xyz/prober v0.25.0 h1:R5uRLHJEvEtEoogj+vaTAob0Btph6+PX5IlS6hPh8PA=
 kmodules.xyz/prober v0.25.0/go.mod h1:z4RTnjaajNQa/vPltsiOnO3xI716I/ziD2ac2Exm+1M=
-kubedb.dev/apimachinery v0.34.1-0.20230818145217-8e2aab0c176e h1:pKnsgibgJTZpwk3Caa/Oy1NtU4rShbJtnsZHIFaWOj8=
-kubedb.dev/apimachinery v0.34.1-0.20230818145217-8e2aab0c176e/go.mod h1:K4tmJODPLOBgYGA/4N8Cx4ZwX1ZtZF8E+O1NIRWwyzA=
+kubedb.dev/apimachinery v0.35.0 h1:Lqmus61rBYErVt3z2Wm8/4Iu/LQfwnwG/mMvJb4gQIc=
+kubedb.dev/apimachinery v0.35.0/go.mod h1:K4tmJODPLOBgYGA/4N8Cx4ZwX1ZtZF8E+O1NIRWwyzA=
 kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef h1:1efGdivo8V46zH0umhrmSbJ1eBwqZcqQ6kMcKHe5+d0=
 kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef/go.mod h1:rjVBtbrycRJg1SAa/YMNmQerbhTt+4CXW737rNG6wAM=
 kubeops.dev/sidekick v0.0.2-0.20230113102427-9848f83b2f0f h1:V1NpsZCaCZETsPggWcyfRophrEX9wneX9O0YTdxo1zk=
