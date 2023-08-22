@@ -71,10 +71,6 @@ func InsertMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			if rows <= 0 {
-				log.Fatal("Inserted rows must be greater than 0")
-			}
-
 			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
@@ -82,6 +78,9 @@ func InsertMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 
 			defer tunnel.Close()
 
+			if rows < 1 || rows > maxRows {
+				log.Fatalf("rows need to be between 1 and %d", maxRows)
+			}
 			err = opts.insertDataExecCmd(tunnel, rows)
 			if err != nil {
 				log.Fatal(err)

@@ -115,6 +115,9 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			if rows < 1 || rows > maxRows {
+				log.Fatalf("rows need to be between 1 and %d", maxRows)
+			}
 
 			err = opts.insertDataInDatabase(rows)
 			if err != nil {

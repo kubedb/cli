@@ -90,10 +90,9 @@ func InsertElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			if rows <= 0 {
-				log.Fatal("rows need to be greater than 0")
+			if rows < 1 || rows > maxRows {
+				log.Fatalf("rows need to be between 1 and %d", maxRows)
 			}
-
 			err = opts.insertDataInDatabase(rows)
 			if err != nil {
 				log.Fatal(err)

@@ -25,3 +25,7 @@ const (
 const (
 	actor = "kubedb-cli"
 )
+
+const (
+	maxRows = 100000
+)
