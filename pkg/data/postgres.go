@@ -19,18 +19,18 @@ package data
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"log"
-	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
-	"kubedb.dev/cli/pkg/lib"
 
 	"github.com/spf13/cobra"
-	shell "gomodules.xyz/go-sh"
+	core "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -38,227 +38,14 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
-	"kmodules.xyz/client-go/tools/portforward"
 )
 
 const (
-	pgCaFile   = "/tmp/root.crt"
-	pgCertFile = "/tmp/postgresql.crt"
-	pgKeyFile  = "/tmp/postgresql.key"
+	pgCaFile   = "/tls/certs/client/ca.crt"
+	pgCertFile = "/tls/certs/client/client.crt"
+	pgKeyFile  = "/tls/certs/client/client.key"
+	rowLimit   = 100000
 )
-
-func InsertPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName string
-		rows   int
-	)
-
-	pgInsertCmd := &cobra.Command{
-		Use: "postgres",
-		Aliases: []string{
-			"postgresql",
-			"pgsql",
-			"pg",
-		},
-		Short:   "Insert data to a postgres object's pod",
-		Long:    `Use this cmd to insert data into a postgres object's primary pod.`,
-		Example: `kubectl dba insert postgres -n demo sample-postgres --rows 500`,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
-			}
-			dbName = args[0]
-
-			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-			if err != nil {
-				klog.Error(err, "failed to get current namespace")
-			}
-
-			opts, err := newPostgresOpts(f, dbName, namespace)
-			if err != nil {
-				log.Fatalln(err)
-			}
-
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't create tunnel, error: ", err)
-			}
-			defer tunnel.Close()
-			err = opts.insertDataExecCmd(tunnel, rows)
-			if err != nil {
-				log.Fatal(err)
-			}
-		},
-	}
-
-	pgInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
-
-	return pgInsertCmd
-}
-
-func (opts *postgresOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
-	if rows <= 0 {
-		return fmt.Errorf("rows need to be greater than 0")
-	}
-
-	command := `
-	DO $$ BEGIN
-		IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'appscode_kubedb_postgres_test_table') THEN
-			CREATE TABLE appscode_kubedb_postgres_test_table (value int not null);
-		END IF;
-	END $$;
-	` + "\n" +
-		fmt.Sprintf("INSERT INTO appscode_kubedb_postgres_test_table (value) values (generate_series(1,%v));", rows)
-
-	out, err := opts.executeCommand(tunnel.Local, command)
-	if err != nil {
-		return err
-	}
-	if strings.Contains(strings.TrimSpace(out), strconv.Itoa(rows)) {
-		fmt.Printf("\nSuccess! %d keys inserted in postgres database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
-	} else {
-		fmt.Printf("Error. Can not insert data properly in master %s\n. Output: %v\n", opts.db.Name, out)
-	}
-	return nil
-}
-
-func VerifyPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName string
-		rows   int
-	)
-
-	pgVerifyCmd := &cobra.Command{
-		Use: "postgres",
-		Aliases: []string{
-			"postgresql",
-			"pgsql",
-			"pg",
-		},
-		Short:   "Verify rows in a postgres database",
-		Long:    `Use this cmd to verify data in a postgres object`,
-		Example: `kubectl dba verify pg -n demo sample-postgres --rows 500`,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
-			}
-			dbName = args[0]
-
-			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-			if err != nil {
-				klog.Error(err, "failed to get current namespace")
-			}
-
-			opts, err := newPostgresOpts(f, dbName, namespace)
-			if err != nil {
-				log.Fatalln(err)
-			}
-
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't create tunnel, error: ", err)
-			}
-			defer tunnel.Close()
-
-			err = opts.verifyDataExecCmd(tunnel, rows)
-			if err != nil {
-				log.Fatal(err)
-			}
-		},
-	}
-	pgVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
-
-	return pgVerifyCmd
-}
-
-func (opts *postgresOpts) verifyDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
-	if rows <= 0 {
-		return fmt.Errorf("rows need to be greater than 0")
-	}
-
-	command := "SELECT COUNT(*) FROM appscode_kubedb_postgres_test_table;"
-	out, err := opts.executeCommand(tunnel.Local, command)
-	if err != nil {
-		return err
-	}
-
-	output := strings.Split(out, "\n")
-
-	found := strings.TrimSpace(output[2])
-	totalRows, err := strconv.Atoi(found)
-	if err != nil {
-		return err
-	}
-	if totalRows == rows {
-		fmt.Printf("\nSuccess! Postgres database %s/%s contains: %d Rows\n", opts.db.Namespace, opts.db.Name, totalRows)
-	} else {
-		fmt.Printf("\nError! Expected keys: %d .Postgres database %s/%s contains: %d Rows\n", rows, opts.db.Namespace, opts.db.Name, totalRows)
-	}
-	return nil
-}
-
-func DropPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
-	var dbName string
-
-	pgDropCmd := &cobra.Command{
-		Use: "postgres",
-		Aliases: []string{
-			"postgresql",
-			"pgsql",
-			"pg",
-		},
-		Short:   "Delete data from postgres database",
-		Long:    `Use this cmd to delete inserted data in a postgres object`,
-		Example: `kubectl dba drop pg -n demo sample-postgres`,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
-			}
-			dbName = args[0]
-
-			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-			if err != nil {
-				klog.Error(err, "failed to get current namespace")
-			}
-
-			opts, err := newPostgresOpts(f, dbName, namespace)
-			if err != nil {
-				log.Fatalln(err)
-			}
-
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.PostgresDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't creat tunnel, error: ", err)
-			}
-			defer tunnel.Close()
-
-			err = opts.dropDataExecCmd(tunnel)
-			if err != nil {
-				log.Fatal(err)
-			}
-		},
-	}
-
-	return pgDropCmd
-}
-
-func (opts *postgresOpts) dropDataExecCmd(tunnel *portforward.Tunnel) error {
-	command := `
-	DO $$ BEGIN
-		IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'appscode_kubedb_postgres_test_table') THEN
-			DROP TABLE appscode_kubedb_postgres_test_table;
-		END IF;
-	END $$;
-    `
-
-	_, err := opts.executeCommand(tunnel.Local, command)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("\nSuccess: All the CLI inserted rows DELETED from postgres database %s/%s \n", opts.db.Namespace, opts.db.Name)
-
-	return nil
-}
 
 type postgresOpts struct {
 	db       *api.Postgres
@@ -320,91 +107,254 @@ func newPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*postgresOpts
 	}, nil
 }
 
-func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, postgresExtraFlags []interface{}) (*shell.Session, error) {
-	sh := shell.NewSession()
-	sh.ShowCMD = false
-	sh.Stderr = opts.errWriter
+func InsertPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName string
+		rows   int
+	)
 
-	db := opts.db
-	dockerCommand := []interface{}{
-		"run", "--network=host",
-		"-e", fmt.Sprintf("PGPASSWORD=%s", opts.pass),
-	}
-	dockerCommand = append(dockerCommand, dockerFlags...)
+	pgInsertCmd := &cobra.Command{
+		Use: "postgres",
+		Aliases: []string{
+			"postgresql",
+			"pgsql",
+			"pg",
+		},
+		Short:   "Insert data to a postgres object's pod",
+		Long:    `Use this cmd to insert data into a postgres object's primary pod.`,
+		Example: `kubectl dba insert postgres -n demo sample-postgres --rows 500`,
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
+			}
+			dbName = args[0]
 
-	postgresCommand := []interface{}{
-		"psql",
-		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort),
-		fmt.Sprintf("--username=%s", opts.username),
-	}
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
 
-	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(api.PostgresClientCert)
-		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
-		if err != nil {
-			return nil, err
-		}
+			opts, err := newPostgresOpts(f, dbName, namespace)
+			if err != nil {
+				log.Fatalln(err)
+			}
 
-		caCrt, ok := certSecret.Data[corev1.ServiceAccountRootCAKey]
-		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
-		}
-		err = os.WriteFile(pgCaFile, caCrt, 0o644)
-		if err != nil {
-			return nil, err
-		}
+			if rows <= 0 {
+				log.Fatal("rows need to be greater than 0")
+			}
 
-		crt, ok := certSecret.Data[corev1.TLSCertKey]
-		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
-		}
-		err = os.WriteFile(pgCertFile, crt, 0o644)
-		if err != nil {
-			return nil, err
-		}
-
-		key, ok := certSecret.Data[corev1.TLSPrivateKeyKey]
-		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
-		}
-		err = os.WriteFile(pgKeyFile, key, 0o600)
-		if err != nil {
-			return nil, err
-		}
-
-		dockerCommand = append(dockerCommand,
-			"-v", fmt.Sprintf("%s:%s", "/tmp/", "/root/.postgresql/"),
-		)
+			if rows <= rowLimit {
+				command := fmt.Sprintf(`create table if not exists appscode_kubedb_postgres_test_table (values int not null);insert into appscode_kubedb_postgres_test_table (values) values(generate_series(1,%v))`, rows)
+				err = opts.insertDataExecCmd(command, rows)
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				log.Printf("Atmost %v rows can be inserted per operation", rowLimit)
+			}
+		},
 	}
 
-	dockerCommand = append(dockerCommand, opts.dbImage)
-	finalCommand := append(dockerCommand, postgresCommand...)
-	if postgresExtraFlags != nil {
-		finalCommand = append(finalCommand, postgresExtraFlags...)
-	}
-	return sh.Command("docker", finalCommand...).SetStdin(os.Stdin), nil
+	pgInsertCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to insert")
+
+	return pgInsertCmd
 }
 
-func (opts *postgresOpts) executeCommand(localPort int, command string) (string, error) {
-	postgresExtraFlags := []interface{}{
-		fmt.Sprintf("--command=%s", command),
+func (opts *postgresOpts) insertDataExecCmd(command string, rows int) error {
+	if rows <= 0 {
+		return fmt.Errorf("rows need to be greater than 0")
 	}
-	shSession, err := opts.getDockerShellCommand(localPort, nil, postgresExtraFlags)
+
+	output, err := opts.execCommand(command)
+	if err != nil {
+		return err
+	}
+	out := string(output)
+	if strings.Contains(strings.TrimSpace(out), strconv.Itoa(rows)) {
+		fmt.Printf("\nSuccess! %d keys inserted in postgres database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
+	} else {
+		fmt.Printf("Error. Can not insert data properly in master %s\n. Output: %v\n", opts.db.Name, out)
+	}
+	return nil
+}
+
+func VerifyPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
+	var (
+		dbName string
+		rows   int
+	)
+
+	pgVerifyCmd := &cobra.Command{
+		Use: "postgres",
+		Aliases: []string{
+			"postgresql",
+			"pgsql",
+			"pg",
+		},
+		Short:   "Verify rows in a postgres database",
+		Long:    `Use this cmd to verify data in a postgres object`,
+		Example: `kubectl dba verify pg -n demo sample-postgres --rows 500`,
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
+			}
+			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
+			opts, err := newPostgresOpts(f, dbName, namespace)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			command := `SELECT COUNT(*) FROM appscode_kubedb_postgres_test_table`
+			err = opts.verifyDataExecCmd(command, rows)
+			if err != nil {
+				log.Fatal(err)
+			}
+		},
+	}
+	pgVerifyCmd.Flags().IntVarP(&rows, "rows", "r", 100, "number of rows to verify")
+
+	return pgVerifyCmd
+}
+
+func (opts *postgresOpts) verifyDataExecCmd(command string, rows int) error {
+	if rows <= 0 {
+		return fmt.Errorf("rows need to be greater than 0")
+	}
+
+	o, err := opts.execCommand(command)
+	if err != nil {
+		return err
+	}
+	out := string(o)
+	output := strings.Split(out, "\n")
+
+	found := strings.TrimSpace(output[2])
+	totalRows, err := strconv.Atoi(found)
+	if err != nil {
+		return err
+	}
+	if totalRows == rows {
+		fmt.Printf("\nSuccess! Postgres database %s/%s contains: %d Rows\n", opts.db.Namespace, opts.db.Name, totalRows)
+	} else {
+		fmt.Printf("\nError! Expected keys: %d .Postgres database %s/%s contains: %d Rows\n", rows, opts.db.Namespace, opts.db.Name, totalRows)
+	}
+	return nil
+}
+
+func DropPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
+	var dbName string
+
+	pgDropCmd := &cobra.Command{
+		Use: "postgres",
+		Aliases: []string{
+			"postgresql",
+			"pgsql",
+			"pg",
+		},
+		Short:   "Delete data from postgres database",
+		Long:    `Use this cmd to delete inserted data in a postgres object`,
+		Example: `kubectl dba drop pg -n demo sample-postgres`,
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				log.Fatal("Enter postgres object's name as an argument. Your commands will be applied on a database inside it's primary pod")
+			}
+			dbName = args[0]
+
+			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+			if err != nil {
+				klog.Error(err, "failed to get current namespace")
+			}
+
+			opts, err := newPostgresOpts(f, dbName, namespace)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			command := `DROP TABLE if exists appscode_kubedb_postgres_test_table`
+			err = opts.dropDataExecCmd(command)
+			if err != nil {
+				log.Fatal(err)
+			}
+		},
+	}
+
+	return pgDropCmd
+}
+
+func (opts *postgresOpts) dropDataExecCmd(command string) error {
+	_, err := opts.execCommand(command)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("\nSuccess: All the CLI inserted rows DELETED from postgres database %s/%s \n", opts.db.Namespace, opts.db.Name)
+	return nil
+}
+
+func (opts *postgresOpts) execCommand(command string) ([]byte, error) {
+	cmd, err := opts.getShellCommand(command)
+	if err != nil {
+		return nil, err
+	}
+	output, err := opts.runCMD(cmd)
+	if err != nil {
+		return nil, err
+	}
+	return output, nil
+}
+
+func (opts *postgresOpts) getShellCommand(command string) (string, error) {
+	db := opts.db
+	svcName := fmt.Sprintf("svc/%s", db.Name)
+
+	cmd := ""
+	_, password, err := opts.GetPostgresAuthCredentials(db)
 	if err != nil {
 		return "", err
 	}
-	out, err := shSession.Output()
-	if err != nil {
-		return "", fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
-	}
-	output := ""
-	if string(out) != "" {
-		output = string(out)
-	}
-	errOutput := opts.errWriter.String()
-	if errOutput != "" {
-		return "", fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
+
+	if db.Spec.TLS != nil {
+		if db.Spec.ClientAuthMode == api.ClientAuthModeCert {
+			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGSSLCERT='%s' PGSSLKEY='%s' PGPASSWORD='%s' psql -d postgres -U postgres -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, pgCertFile, pgKeyFile, password, command)
+		} else {
+			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGPASSWORD='%s' psql -d postgres -U postgres -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, password, command)
+		}
+	} else {
+		cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE=%s PGPASSWORD='%s' psql -d postgres -U postgres -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, password, command)
 	}
 
-	return string(out), nil
+	return cmd, err
+}
+
+func (opts *postgresOpts) runCMD(cmd string) ([]byte, error) {
+	sh := exec.Command("/bin/sh", "-c", cmd)
+	stdout := bytes.NewBuffer(nil)
+	stderr := bytes.NewBuffer(nil)
+	sh.Stdout = stdout
+	sh.Stderr = stderr
+	err := sh.Run()
+	out := stdout.Bytes()
+	errOut := stderr.Bytes()
+	errOutput := string(errOut)
+	if errOutput != "" && !strings.Contains(errOutput, "NOTICE") {
+		return nil, fmt.Errorf("failed to execute command, stderr: %s", errOutput)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (fi *postgresOpts) GetPostgresAuthCredentials(db *api.Postgres) (string, string, error) {
+	if db.Spec.AuthSecret == nil {
+		return "", "", errors.New("no database secret")
+	}
+	secret, err := fi.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
+	if err != nil {
+		return "", "", err
+	}
+	return string(secret.Data[core.BasicAuthUsernameKey]), string(secret.Data[core.BasicAuthPasswordKey]), nil
 }
