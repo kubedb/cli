@@ -41,7 +41,10 @@ github.com/cert-manager/cert-manager/pkg/apis/certmanager
 github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1
 github.com/cert-manager/cert-manager/pkg/apis/meta
 github.com/cert-manager/cert-manager/pkg/apis/meta/v1
+github.com/cert-manager/cert-manager/pkg/client/clientset/versioned
 github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/scheme
+github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/typed/acme/v1
+github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/typed/certmanager/v1
 # github.com/cespare/xxhash/v2 v2.2.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
@@ -1421,6 +1424,9 @@ k8s.io/utils/trace
 # kmodules.xyz/apiversion v0.2.0
 ## explicit; go 1.14
 kmodules.xyz/apiversion
+# kmodules.xyz/cert-manager-util v0.25.0
+## explicit; go 1.18
+kmodules.xyz/cert-manager-util/certmanager/v1
 # kmodules.xyz/client-go v0.25.30
 ## explicit; go 1.18
 kmodules.xyz/client-go
@@ -1432,6 +1438,7 @@ kmodules.xyz/client-go/conditions
 kmodules.xyz/client-go/core/v1
 kmodules.xyz/client-go/discovery
 kmodules.xyz/client-go/meta
+kmodules.xyz/client-go/tools/exec
 kmodules.xyz/client-go/tools/portforward
 # kmodules.xyz/custom-resources v0.25.2
 ## explicit; go 1.18

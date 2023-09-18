@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/Masterminds/semver/v3 v3.2.1
+	github.com/cert-manager/cert-manager v1.9.1
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/spf13/cobra v1.7.0
@@ -21,11 +22,13 @@ require (
 	k8s.io/component-base v0.25.3
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.1
+	kmodules.xyz/cert-manager-util v0.25.0
 	kmodules.xyz/client-go v0.25.30
 	kmodules.xyz/custom-resources v0.25.2
 	kmodules.xyz/monitoring-agent-api v0.25.1
 	kubedb.dev/apimachinery v0.35.1
 	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
+	sigs.k8s.io/yaml v1.3.0
 	stash.appscode.dev/apimachinery v0.31.0
 )
 
@@ -40,7 +43,6 @@ require (
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/MakeNowJust/heredoc v1.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/cert-manager/cert-manager v1.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/chai2010/gettext-go v1.0.2 // indirect
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
@@ -143,7 +145,6 @@ require (
 	sigs.k8s.io/kustomize/api v0.12.1 // indirect
 	sigs.k8s.io/kustomize/kyaml v0.13.9 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
-	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
 replace github.com/Masterminds/sprig/v3 => github.com/gomodules/sprig/v3 v3.2.3-0.20220405051441-0a8a99bac1b8

@@ -95,6 +95,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdData(f),
 			},
 		},
+		{
+			Message: "Generate appbinding and secrets for remote Replica",
+			Commands: []*cobra.Command{
+				NewCmdGenApb(f),
+			},
+		},
 	}
 
 	filters := []string{"options"}
