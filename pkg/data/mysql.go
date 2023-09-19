@@ -19,26 +19,35 @@ package data
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"log"
-	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
-	"kubedb.dev/cli/pkg/lib"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/cobra"
-	shell "gomodules.xyz/go-sh"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
-	"kmodules.xyz/client-go/tools/portforward"
+)
+
+const (
+	myCaFile   = "/etc/mysql/certs/ca.crt"
+	myCertFile = "/etc/mysql/certs/client.crt"
+	myKeyFile  = "/etc/mysql/certs/client.key"
+)
+
+const (
+	maxRows = 100000
 )
 
 func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
@@ -71,18 +80,11 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			if rows <= 0 {
-				log.Fatal("Inserted rows must be greater than 0")
+			if rows < 1 || rows > maxRows {
+				log.Fatalf("rows need to be between 1 and %d", maxRows)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't create tunnel, error: ", err)
-			}
-
-			defer tunnel.Close()
-
-			err = opts.insertDataExecCmd(tunnel, rows)
+			err = opts.insertDataExecCmd(rows)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -94,7 +96,7 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 	return myInsertCmd
 }
 
-func (opts *mysqlOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
+func (opts *mysqlOpts) insertDataExecCmd(rows int) error {
 	command := `
 		USE mysql;
 		CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
@@ -121,7 +123,7 @@ func (opts *mysqlOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int) e
 		CALL insert_data(` + fmt.Sprintf("%v", rows) + `); 
 	`
 
-	_, err := opts.executeCommand(tunnel.Local, command)
+	_, err := opts.executeCommand(command)
 	if err != nil {
 		return err
 	}
@@ -160,13 +162,7 @@ func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't create tunnel, error: ", err)
-			}
-			defer tunnel.Close()
-
-			err = opts.verifyDataExecCmd(tunnel, rows)
+			err = opts.verifyDataExecCmd(rows)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -178,7 +174,7 @@ func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 	return myVerifyCmd
 }
 
-func (opts *mysqlOpts) verifyDataExecCmd(tunnel *portforward.Tunnel, rows int) error {
+func (opts *mysqlOpts) verifyDataExecCmd(rows int) error {
 	if rows <= 0 {
 		return fmt.Errorf("rows need to be greater than 0")
 	}
@@ -187,14 +183,15 @@ func (opts *mysqlOpts) verifyDataExecCmd(tunnel *portforward.Tunnel, rows int) e
 		USE mysql;
 		SELECT COUNT(*) FROM kubedb_table; 
 	`
-	out, err := opts.executeCommand(tunnel.Local, command)
+	o, err := opts.executeCommand(command)
 	if err != nil {
 		return err
 	}
 
+	out := string(o)
 	output := strings.Split(out, "\n")
 
-	totalKeys, err := strconv.Atoi(strings.TrimPrefix(output[1], " "))
+	totalKeys, err := strconv.Atoi(strings.TrimSpace(output[1]))
 	if err != nil {
 		return err
 	}
@@ -233,13 +230,7 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
-			if err != nil {
-				log.Fatal("couldn't create tunnel, error: ", err)
-			}
-			defer tunnel.Close()
-
-			err = opts.dropDataExecCmd(tunnel)
+			err = opts.dropDataExecCmd()
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -249,12 +240,12 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 	return myDropCmd
 }
 
-func (opts *mysqlOpts) dropDataExecCmd(tunnel *portforward.Tunnel) error {
+func (opts *mysqlOpts) dropDataExecCmd() error {
 	command := ` 
 		USE mysql;
 		DROP TABLE IF EXISTS kubedb_table;
 	`
-	_, err := opts.executeCommand(tunnel.Local, command)
+	_, err := opts.executeCommand(command)
 	if err != nil {
 		return err
 	}
@@ -319,101 +310,73 @@ func newMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 	}, nil
 }
 
-func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlExtraFlags []interface{}) (*shell.Session, error) {
-	sh := shell.NewSession()
-	sh.ShowCMD = false
-
+func (opts *mysqlOpts) getShellCommand(command string) (string, error) {
 	db := opts.db
-	dockerCommand := []interface{}{
-		"run", "--network=host",
-		"-e", fmt.Sprintf("MYSQL_PWD=%s", opts.pass),
-	}
-	dockerCommand = append(dockerCommand, dockerFlags...)
-
-	mysqlCommand := []interface{}{
-		"mysql",
-		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort),
-		fmt.Sprintf("--user=%s", opts.username),
-	}
-
-	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(api.MySQLClientCert)
-		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
-		if err != nil {
-			return nil, err
-		}
-
-		caCrt, ok := certSecret.Data[corev1.ServiceAccountRootCAKey]
-		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
-		}
-		err = os.WriteFile(caFile, caCrt, 0o644)
-		if err != nil {
-			return nil, err
-		}
-
-		crt, ok := certSecret.Data[corev1.TLSCertKey]
-		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
-		}
-		err = os.WriteFile(certFile, crt, 0o644)
-		if err != nil {
-			return nil, err
-		}
-
-		key, ok := certSecret.Data[corev1.TLSPrivateKeyKey]
-		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
-		}
-		err = os.WriteFile(keyFile, key, 0o644)
-		if err != nil {
-			return nil, err
-		}
-
-		dockerCommand = append(dockerCommand,
-			"-v", fmt.Sprintf("%s:%s", caFile, caFile),
-			"-v", fmt.Sprintf("%s:%s", certFile, certFile),
-			"-v", fmt.Sprintf("%s:%s", keyFile, keyFile),
-		)
-		mysqlCommand = append(mysqlCommand,
-			fmt.Sprintf("--ssl-ca=%v", caFile),
-			fmt.Sprintf("--ssl-cert=%v", certFile),
-			fmt.Sprintf("--ssl-key=%v", keyFile),
-		)
-	}
-
-	dockerCommand = append(dockerCommand, opts.dbImage)
-	finalCommand := append(dockerCommand, mysqlCommand...)
-	if mysqlExtraFlags != nil {
-		finalCommand = append(finalCommand, mysqlExtraFlags...)
-	}
-	return sh.Command("docker", finalCommand...).SetStdin(os.Stdin), nil
-}
-
-func (opts *mysqlOpts) executeCommand(localPort int, command string) (string, error) {
-	mysqlExtraFlags := []interface{}{
-		"-e", command,
-	}
-
-	shSession, err := opts.getDockerShellCommand(localPort, nil, mysqlExtraFlags)
+	cmd := ""
+	user, password, err := opts.GetMySQLAuthCredentials(db)
 	if err != nil {
 		return "", err
 	}
+	containerName := "mysql"
+	label := opts.db.OffshootLabels()
 
-	out, err := shSession.Output()
+	if *opts.db.Spec.Replicas > 1 {
+		label["kubedb.com/role"] = "primary"
+	}
+
+	pods, err := opts.client.CoreV1().Pods(db.Namespace).List(context.TODO(), metav1.ListOptions{
+		LabelSelector: labels.Set.String(label),
+	})
+	if err != nil || len(pods.Items) == 0 {
+		return "", err
+	}
+	if db.Spec.TLS != nil {
+		cmd = fmt.Sprintf("kubectl exec -n %s %s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, pods.Items[0].Name, containerName, user, password, "127.0.0.1", "3306", myCaFile, myCertFile, myKeyFile, api.ResourceSingularMySQL, command)
+	} else {
+		cmd = fmt.Sprintf("kubectl exec -n %s %s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, pods.Items[0].Name, containerName, user, password, api.ResourceSingularMySQL, command)
+	}
+
+	return cmd, err
+}
+
+func (opts *mysqlOpts) GetMySQLAuthCredentials(db *api.MySQL) (string, string, error) {
+	if db.Spec.AuthSecret == nil {
+		return "", "", errors.New("no database secret")
+	}
+	secret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
 	if err != nil {
-		return "", fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
+		return "", "", err
 	}
+	return string(secret.Data[corev1.BasicAuthUsernameKey]), string(secret.Data[corev1.BasicAuthPasswordKey]), nil
+}
 
-	output := ""
-	if string(out) != "" {
-		output = ", output:\n\n" + string(out)
+func (opts *mysqlOpts) executeCommand(command string) ([]byte, error) {
+	cmd, err := opts.getShellCommand(command)
+	if err != nil {
+		return nil, err
 	}
-
-	errOutput := opts.errWriter.String()
-	if errOutput != "" {
-		return "", fmt.Errorf("failed to execute command, stderr: %s%s", errOutput, output)
+	output, err := opts.runCMD(cmd)
+	if err != nil {
+		return nil, err
 	}
+	return output, nil
+}
 
-	return string(out), nil
+func (opts *mysqlOpts) runCMD(cmd string) ([]byte, error) {
+	sh := exec.Command("/bin/sh", "-c", cmd)
+	stdout := bytes.NewBuffer(nil)
+	stderr := bytes.NewBuffer(nil)
+	sh.Stdout = stdout
+	sh.Stderr = stderr
+	err := sh.Run()
+	out := stdout.Bytes()
+	errOut := stderr.Bytes()
+	errOutput := string(errOut)
+	if errOutput != "" && !strings.Contains(errOutput, "NOTICE") && !strings.Contains(errOutput, "Warning") {
+		return nil, fmt.Errorf("failed to execute command, stderr: %s", errOutput)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
