@@ -311,19 +311,19 @@ func (opts *postgresOpts) getShellCommand(command string) (string, error) {
 	svcName := fmt.Sprintf("svc/%s", db.Name)
 
 	cmd := ""
-	_, password, err := opts.GetPostgresAuthCredentials(db)
+	user, password, err := opts.GetPostgresAuthCredentials(db)
 	if err != nil {
 		return "", err
 	}
 
 	if db.Spec.TLS != nil {
 		if db.Spec.ClientAuthMode == api.ClientAuthModeCert {
-			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGSSLCERT='%s' PGSSLKEY='%s' PGPASSWORD='%s' psql -d postgres -U postgres -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, pgCertFile, pgKeyFile, password, command)
+			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGSSLCERT='%s' PGSSLKEY='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, pgCertFile, pgKeyFile, password, user, command)
 		} else {
-			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGPASSWORD='%s' psql -d postgres -U postgres -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, password, command)
+			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, password, user, command)
 		}
 	} else {
-		cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE=%s PGPASSWORD='%s' psql -d postgres -U postgres -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, password, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE=%s PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, password, user, command)
 	}
 
 	return cmd, err

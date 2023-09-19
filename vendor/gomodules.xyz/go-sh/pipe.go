@@ -2,7 +2,6 @@ package sh
 
 import (
 	"bytes"
-	"fmt"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -37,19 +36,15 @@ func (s *Session) UnmarshalXML(data interface{}) (err error) {
 
 // start command
 func (s *Session) Start() (err error) {
-
-	fmt.Println("Start")
 	s.started = true
 	var rd *io.PipeReader
 	var wr *io.PipeWriter
 	var length = len(s.cmds)
 	if s.ShowCMD {
-		fmt.Println("show cmd")
 		var cmds = make([]string, 0, 4)
 		for _, cmd := range s.cmds {
 			cmds = append(cmds, strings.Join(cmd.Args, " "))
 		}
-		fmt.Printf("CMDS = %+v \n", cmds)
 		s.writePrompt(strings.Join(cmds, " | "))
 	}
 	for index, cmd := range s.cmds {
