@@ -19,7 +19,6 @@ package data
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"os/exec"
@@ -30,7 +29,6 @@ import (
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/spf13/cobra"
-	core "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -49,15 +47,12 @@ const (
 
 type postgresOpts struct {
 	db       *api.Postgres
-	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
 
 	username string
 	pass     string
-
-	errWriter *bytes.Buffer
 }
 
 func newPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*postgresOpts, error) {
@@ -85,25 +80,18 @@ func newPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*postgresOpts
 		return nil, fmt.Errorf("postgres %s/%s is not ready", namespace, dbName)
 	}
 
-	dbVersion, err := dbClient.CatalogV1alpha1().PostgresVersions().Get(context.TODO(), db.Spec.Version, metav1.GetOptions{})
-	if err != nil {
-		return nil, err
-	}
-
 	secret, err := client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
 
 	return &postgresOpts{
-		db:        db,
-		dbImage:   dbVersion.Spec.DB.Image,
-		config:    config,
-		client:    client,
-		dbClient:  dbClient,
-		username:  string(secret.Data[corev1.BasicAuthUsernameKey]),
-		pass:      string(secret.Data[corev1.BasicAuthPasswordKey]),
-		errWriter: &bytes.Buffer{},
+		db:       db,
+		config:   config,
+		client:   client,
+		dbClient: dbClient,
+		username: string(secret.Data[corev1.BasicAuthUsernameKey]),
+		pass:     string(secret.Data[corev1.BasicAuthPasswordKey]),
 	}, nil
 }
 
@@ -144,13 +132,12 @@ func InsertPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			if rows <= rowLimit {
-				command := fmt.Sprintf(`create table if not exists appscode_kubedb_postgres_test_table (values int not null);insert into appscode_kubedb_postgres_test_table (values) values(generate_series(1,%v))`, rows)
-				err = opts.insertDataExecCmd(command, rows)
+				err = opts.insertDataExecCmd(rows)
 				if err != nil {
 					log.Fatal(err)
 				}
 			} else {
-				log.Printf("Atmost %v rows can be inserted per operation", rowLimit)
+				log.Printf("At most %v rows can be inserted per operation", rowLimit)
 			}
 		},
 	}
@@ -160,16 +147,15 @@ func InsertPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 	return pgInsertCmd
 }
 
-func (opts *postgresOpts) insertDataExecCmd(command string, rows int) error {
+func (opts *postgresOpts) insertDataExecCmd(rows int) error {
 	if rows <= 0 {
 		return fmt.Errorf("rows need to be greater than 0")
 	}
-
-	output, err := opts.execCommand(command)
+	command := fmt.Sprintf(`create table if not exists appscode_kubedb_postgres_test_table (values int not null);insert into appscode_kubedb_postgres_test_table (values) values(generate_series(1,%v))`, rows)
+	out, err := opts.execCommand(command)
 	if err != nil {
 		return err
 	}
-	out := string(output)
 	if strings.Contains(strings.TrimSpace(out), strconv.Itoa(rows)) {
 		fmt.Printf("\nSuccess! %d keys inserted in postgres database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
 	} else {
@@ -209,8 +195,8 @@ func VerifyPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			command := `SELECT COUNT(*) FROM appscode_kubedb_postgres_test_table`
-			err = opts.verifyDataExecCmd(command, rows)
+
+			err = opts.verifyDataExecCmd(rows)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -221,16 +207,15 @@ func VerifyPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 	return pgVerifyCmd
 }
 
-func (opts *postgresOpts) verifyDataExecCmd(command string, rows int) error {
+func (opts *postgresOpts) verifyDataExecCmd(rows int) error {
 	if rows <= 0 {
 		return fmt.Errorf("rows need to be greater than 0")
 	}
-
-	o, err := opts.execCommand(command)
+	command := `SELECT COUNT(*) FROM appscode_kubedb_postgres_test_table`
+	out, err := opts.execCommand(command)
 	if err != nil {
 		return err
 	}
-	out := string(o)
 	output := strings.Split(out, "\n")
 
 	found := strings.TrimSpace(output[2])
@@ -274,8 +259,8 @@ func DropPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			command := `DROP TABLE if exists appscode_kubedb_postgres_test_table`
-			err = opts.dropDataExecCmd(command)
+
+			err = opts.dropDataExecCmd()
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -285,7 +270,8 @@ func DropPostgresDataCMD(f cmdutil.Factory) *cobra.Command {
 	return pgDropCmd
 }
 
-func (opts *postgresOpts) dropDataExecCmd(command string) error {
+func (opts *postgresOpts) dropDataExecCmd() error {
+	command := `DROP TABLE if exists appscode_kubedb_postgres_test_table`
 	_, err := opts.execCommand(command)
 	if err != nil {
 		return err
@@ -294,39 +280,32 @@ func (opts *postgresOpts) dropDataExecCmd(command string) error {
 	return nil
 }
 
-func (opts *postgresOpts) execCommand(command string) ([]byte, error) {
-	cmd, err := opts.getShellCommand(command)
-	if err != nil {
-		return nil, err
-	}
+func (opts *postgresOpts) execCommand(command string) (string, error) {
+	cmd := opts.getShellCommand(command)
+
 	output, err := opts.runCMD(cmd)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return output, nil
+	return string(output), nil
 }
 
-func (opts *postgresOpts) getShellCommand(command string) (string, error) {
+func (opts *postgresOpts) getShellCommand(command string) string {
 	db := opts.db
 	svcName := fmt.Sprintf("svc/%s", db.Name)
 
 	cmd := ""
-	user, password, err := opts.GetPostgresAuthCredentials(db)
-	if err != nil {
-		return "", err
-	}
-
 	if db.Spec.TLS != nil {
 		if db.Spec.ClientAuthMode == api.ClientAuthModeCert {
-			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGSSLCERT='%s' PGSSLKEY='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, pgCertFile, pgKeyFile, password, user, command)
+			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGSSLCERT='%s' PGSSLKEY='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, pgCertFile, pgKeyFile, opts.pass, opts.username, command)
 		} else {
-			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, password, user, command)
+			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, opts.pass, opts.username, command)
 		}
 	} else {
-		cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE=%s PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, password, user, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE=%s PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, opts.pass, opts.username, command)
 	}
 
-	return cmd, err
+	return cmd
 }
 
 func (opts *postgresOpts) runCMD(cmd string) ([]byte, error) {
@@ -346,15 +325,4 @@ func (opts *postgresOpts) runCMD(cmd string) ([]byte, error) {
 		return nil, err
 	}
 	return out, nil
-}
-
-func (fi *postgresOpts) GetPostgresAuthCredentials(db *api.Postgres) (string, string, error) {
-	if db.Spec.AuthSecret == nil {
-		return "", "", errors.New("no database secret")
-	}
-	secret, err := fi.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), db.Spec.AuthSecret.Name, metav1.GetOptions{})
-	if err != nil {
-		return "", "", err
-	}
-	return string(secret.Data[core.BasicAuthUsernameKey]), string(secret.Data[core.BasicAuthPasswordKey]), nil
 }
