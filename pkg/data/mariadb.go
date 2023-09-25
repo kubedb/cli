@@ -109,7 +109,7 @@ func (opts *mariadbOpts) insertDataExecCmd(tunnel *portforward.Tunnel, rows int)
 			WHILE counter <= max_value DO
 				SET result = '';
 				SET i = 0;
-				WHILE i < 10 DO
+				WHILE i < 15 DO
 					SET result = CONCAT(result, SUBSTRING(characters, FLOOR(RAND() * 81) + 1, 1));
 					SET i = i + 1;
 				END WHILE;
