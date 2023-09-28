@@ -128,7 +128,7 @@ type Databases struct {
 
 type ConnectionPoolConfig struct {
 	// Port is the port number on which PgBouncer listens to clients. Default: 5432.
-	// +kubebuilder:default=54342
+	// +kubebuilder:default=5432
 	// +optional
 	Port *int32 `json:"port,omitempty"`
 	// PoolMode is the pooling mechanism type. Default: session.

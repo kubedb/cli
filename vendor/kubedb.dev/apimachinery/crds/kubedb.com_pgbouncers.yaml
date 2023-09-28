@@ -103,7 +103,7 @@ spec:
                     default: session
                     type: string
                   port:
-                    default: 54342
+                    default: 5432
                     format: int32
                     type: integer
                   reservePoolSize:
