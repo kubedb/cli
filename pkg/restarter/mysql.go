@@ -74,6 +74,7 @@ func (e *MySQLRestarter) Restart(name, namespace string) (string, error) {
 				Name: name,
 			},
 			Restart: &v1alpha1.RestartSpec{},
+			Apply:   v1alpha1.ApplyOptionAlways,
 		},
 	}
 	_, err = e.opsClient.MySQLOpsRequests(namespace).Create(context.TODO(), restartOpsRequest, metav1.CreateOptions{})
