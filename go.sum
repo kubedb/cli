@@ -1350,6 +1350,8 @@ k8s.io/utils v0.0.0-20221012122500-cfd413dd9e85 h1:cTdVh7LYu82xeClmfzGtgyspNh6Ux
 k8s.io/utils v0.0.0-20221012122500-cfd413dd9e85/go.mod h1:OLgZIPagt7ERELqWJFomSt595RzquPNLL48iOWgYOg0=
 kmodules.xyz/apiversion v0.2.0 h1:vAQYqZFm4xu4pbB1cAdHbFEPES6EQkcR4wc06xdTOWk=
 kmodules.xyz/apiversion v0.2.0/go.mod h1:oPX8g8LvlPdPX3Yc5YvCzJHQnw3YF/X4/jdW0b1am80=
+kmodules.xyz/cert-manager-util v0.25.0 h1:B/1sYzdrXatzDnpB+F9IIi6DdwJs2sPBm46VPAlDtxc=
+kmodules.xyz/cert-manager-util v0.25.0/go.mod h1:Zi1ZLUsrzsYs6ibdZddQCn+9VUqCuO9YqAq9QLI9RNM=
 kmodules.xyz/client-go v0.25.30 h1:4qOhs1kX0oNl9tcY98PEtiUlD6TZqK9CRfqzfhZApsk=
 kmodules.xyz/client-go v0.25.30/go.mod h1:r/Va2Y6t1G8X1sPRjrQC6FWB3oh/i6rjssmlfJnbCmg=
 kmodules.xyz/custom-resources v0.25.2 h1:+PJgUZvbbSgyNT7EX9gUZ3PIzY2LAW03TDW8cevvXqo=
