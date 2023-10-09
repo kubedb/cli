@@ -22,6 +22,8 @@ type ElasticsearchOpsRequestExpansion interface{}
 
 type EtcdOpsRequestExpansion interface{}
 
+type KafkaOpsRequestExpansion interface{}
+
 type MariaDBOpsRequestExpansion interface{}
 
 type MemcachedOpsRequestExpansion interface{}

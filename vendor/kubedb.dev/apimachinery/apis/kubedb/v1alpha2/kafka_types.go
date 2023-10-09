@@ -219,6 +219,7 @@ const (
 	KafkaListenerBroker     KafkaListenerType = "BROKER"
 	KafkaListenerController KafkaListenerType = "CONTROLLER"
 	KafkaListenerInternal   KafkaListenerType = "INTERNAL"
+	KafkaListenerExternal   KafkaListenerType = "EXTERNAL"
 	KafkaListenerCC         KafkaListenerType = "CC"
 )
 

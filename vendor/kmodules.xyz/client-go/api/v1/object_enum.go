@@ -8,7 +8,7 @@ package v1
 
 import (
 	"fmt"
-	strings "strings"
+	"strings"
 )
 
 const (
@@ -16,6 +16,8 @@ const (
 	EdgeLabelAuthn EdgeLabel = "authn"
 	// EdgeLabelAuthz is a EdgeLabel of type authz.
 	EdgeLabelAuthz EdgeLabel = "authz"
+	// EdgeLabelAuthSecret is a EdgeLabel of type auth_secret.
+	EdgeLabelAuthSecret EdgeLabel = "auth_secret"
 	// EdgeLabelBackupVia is a EdgeLabel of type backup_via.
 	EdgeLabelBackupVia EdgeLabel = "backup_via"
 	// EdgeLabelCatalog is a EdgeLabel of type catalog.
@@ -28,6 +30,8 @@ const (
 	EdgeLabelConnectVia EdgeLabel = "connect_via"
 	// EdgeLabelExposedBy is a EdgeLabel of type exposed_by.
 	EdgeLabelExposedBy EdgeLabel = "exposed_by"
+	// EdgeLabelEvent is a EdgeLabel of type event.
+	EdgeLabelEvent EdgeLabel = "event"
 	// EdgeLabelLocatedOn is a EdgeLabel of type located_on.
 	EdgeLabelLocatedOn EdgeLabel = "located_on"
 	// EdgeLabelMonitoredBy is a EdgeLabel of type monitored_by.
@@ -59,12 +63,14 @@ var ErrInvalidEdgeLabel = fmt.Errorf("not a valid EdgeLabel, try [%s]", strings.
 var _EdgeLabelNames = []string{
 	string(EdgeLabelAuthn),
 	string(EdgeLabelAuthz),
+	string(EdgeLabelAuthSecret),
 	string(EdgeLabelBackupVia),
 	string(EdgeLabelCatalog),
 	string(EdgeLabelCertIssuer),
 	string(EdgeLabelConfig),
 	string(EdgeLabelConnectVia),
 	string(EdgeLabelExposedBy),
+	string(EdgeLabelEvent),
 	string(EdgeLabelLocatedOn),
 	string(EdgeLabelMonitoredBy),
 	string(EdgeLabelOcmBind),
@@ -91,12 +97,14 @@ func EdgeLabelValues() []EdgeLabel {
 	return []EdgeLabel{
 		EdgeLabelAuthn,
 		EdgeLabelAuthz,
+		EdgeLabelAuthSecret,
 		EdgeLabelBackupVia,
 		EdgeLabelCatalog,
 		EdgeLabelCertIssuer,
 		EdgeLabelConfig,
 		EdgeLabelConnectVia,
 		EdgeLabelExposedBy,
+		EdgeLabelEvent,
 		EdgeLabelLocatedOn,
 		EdgeLabelMonitoredBy,
 		EdgeLabelOcmBind,
@@ -127,12 +135,14 @@ func (x EdgeLabel) IsValid() bool {
 var _EdgeLabelValue = map[string]EdgeLabel{
 	"authn":           EdgeLabelAuthn,
 	"authz":           EdgeLabelAuthz,
+	"auth_secret":     EdgeLabelAuthSecret,
 	"backup_via":      EdgeLabelBackupVia,
 	"catalog":         EdgeLabelCatalog,
 	"cert_issuer":     EdgeLabelCertIssuer,
 	"config":          EdgeLabelConfig,
 	"connect_via":     EdgeLabelConnectVia,
 	"exposed_by":      EdgeLabelExposedBy,
+	"event":           EdgeLabelEvent,
 	"located_on":      EdgeLabelLocatedOn,
 	"monitored_by":    EdgeLabelMonitoredBy,
 	"ocm_bind":        EdgeLabelOcmBind,

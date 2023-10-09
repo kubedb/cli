@@ -1185,6 +1185,10 @@ spec:
               monitor:
                 properties:
                   agent:
+                    enum:
+                    - prometheus.io/operator
+                    - prometheus.io
+                    - prometheus.io/builtin
                     type: string
                   prometheus:
                     properties:
@@ -6322,10 +6326,10 @@ spec:
                     enum:
                     - GroupReplication
                     - InnoDBCluster
-                    - ReadReplica
+                    - RemoteReplica
                     - SemiSync
                     type: string
-                  readReplica:
+                  remoteReplica:
                     properties:
                       sourceRef:
                         properties:

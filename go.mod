@@ -8,7 +8,7 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/spf13/cobra v1.7.0
-	golang.org/x/text v0.9.0
+	golang.org/x/text v0.13.0
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/logs v0.0.7
 	gomodules.xyz/pointer v0.1.0
@@ -23,13 +23,13 @@ require (
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.1
 	kmodules.xyz/cert-manager-util v0.25.0
-	kmodules.xyz/client-go v0.25.30
+	kmodules.xyz/client-go v0.25.38
 	kmodules.xyz/custom-resources v0.25.2
-	kmodules.xyz/monitoring-agent-api v0.25.1
-	kubedb.dev/apimachinery v0.35.1
+	kmodules.xyz/monitoring-agent-api v0.25.5
+	kubedb.dev/apimachinery v0.36.0
 	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
 	sigs.k8s.io/yaml v1.3.0
-	stash.appscode.dev/apimachinery v0.31.0
+	stash.appscode.dev/apimachinery v0.32.0
 )
 
 require (
@@ -111,11 +111,11 @@ require (
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/crypto v0.13.0 // indirect
+	golang.org/x/net v0.15.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/term v0.8.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/term v0.12.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.7 // indirect

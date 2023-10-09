@@ -363,6 +363,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                                              schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                                      schema_apimachinery_pkg_util_intstr_IntOrString(ref),
 		"k8s.io/apimachinery/pkg/version.Info":                                                 schema_k8sio_apimachinery_pkg_version_Info(ref),
+		"kmodules.xyz/client-go/api/v1.CAPIClusterInfo":                                        schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                                  schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                                        schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                                        schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
@@ -399,9 +400,23 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec":                 schema_custom_resources_apis_appcatalog_v1alpha1_StashTaskSpec(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef":                       schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec":                                   schema_kmodulesxyz_monitoring_agent_api_api_v1_AgentSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.AlertPreset":                                 schema_kmodulesxyz_monitoring_agent_api_api_v1_AlertPreset(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.BasicAuth":                                   schema_kmodulesxyz_monitoring_agent_api_api_v1_BasicAuth(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.DashboardSpec":                               schema_kmodulesxyz_monitoring_agent_api_api_v1_DashboardSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.GrafanaConfig":                               schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaConfig(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.GrafanaContext":                              schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaContext(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresets":                           schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresets(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresetsForm":                       schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresetsForm(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresetsSpec":                       schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresetsSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusConfig":                            schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusConfig(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusContext":                           schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusContext(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusExporterSpec":                      schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusExporterSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.PrometheusSpec":                              schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorLabels":                        schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorLabels(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorPreset":                        schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorPreset(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorSpec":                          schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.ServiceSpec":                                 schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.TLSConfig":                                   schema_kmodulesxyz_monitoring_agent_api_api_v1_TLSConfig(ref),
 		"kmodules.xyz/objectstore-api/api/v1.AzureSpec":                                        schema_kmodulesxyz_objectstore_api_api_v1_AzureSpec(ref),
 		"kmodules.xyz/objectstore-api/api/v1.B2Spec":                                           schema_kmodulesxyz_objectstore_api_api_v1_B2Spec(ref),
 		"kmodules.xyz/objectstore-api/api/v1.Backend":                                          schema_kmodulesxyz_objectstore_api_api_v1_Backend(ref),
@@ -452,6 +467,18 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec":                    schema_apimachinery_apis_ops_v1alpha1_EtcdVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec":                    schema_apimachinery_apis_ops_v1alpha1_EtcdVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.HiddenNode":                                 schema_apimachinery_apis_ops_v1alpha1_HiddenNode(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaCustomConfigurationSpec":               schema_apimachinery_apis_ops_v1alpha1_KafkaCustomConfigurationSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_KafkaHorizontalScalingSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingTopologySpec":         schema_apimachinery_apis_ops_v1alpha1_KafkaHorizontalScalingTopologySpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequest":                            schema_apimachinery_apis_ops_v1alpha1_KafkaOpsRequest(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequestList":                        schema_apimachinery_apis_ops_v1alpha1_KafkaOpsRequestList(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequestSpec":                        schema_apimachinery_apis_ops_v1alpha1_KafkaOpsRequestSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_KafkaReplicaReadinessCriteria(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_KafkaUpdateVersionSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingTopologySpec":           schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingTopologySpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionTopologySpec":           schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionTopologySpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfiguration":                 schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfigurationSpec":             schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_MariaDBHorizontalScalingSpec(ref),
@@ -17978,6 +18005,36 @@ func schema_k8sio_apimachinery_pkg_version_Info(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"provider": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"clusterName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -19439,6 +19496,320 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_AgentSpec(ref common.Referen
 	}
 }
 
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_AlertPreset(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"enabled": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"enabled"},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_BasicAuth(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"username": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"password": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"username", "password"},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_DashboardSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"datasource": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"folderID": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
+				},
+				Required: []string{"datasource", "folderID"},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"service": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.ServiceSpec"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.BasicAuth"),
+						},
+					},
+					"bearerToken": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.TLSConfig"),
+						},
+					},
+					"dashboard": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.DashboardSpec"),
+						},
+					},
+				},
+				Required: []string{"url", "service", "basicAuth", "bearerToken", "tls", "dashboard"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.BasicAuth", "kmodules.xyz/monitoring-agent-api/api/v1.DashboardSpec", "kmodules.xyz/monitoring-agent-api/api/v1.ServiceSpec", "kmodules.xyz/monitoring-agent-api/api/v1.TLSConfig"},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaContext(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"folderID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int64",
+						},
+					},
+					"datasource": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresets(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresetsSpec"),
+						},
+					},
+					"form": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresetsForm"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresetsForm", "kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresetsSpec"},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresetsForm(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alert": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.AlertPreset"),
+						},
+					},
+				},
+				Required: []string{"alert"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.AlertPreset"},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresetsSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"monitoring": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorPreset"),
+						},
+					},
+				},
+				Required: []string{"monitoring"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorPreset"},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"service": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.ServiceSpec"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.BasicAuth"),
+						},
+					},
+					"bearerToken": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.TLSConfig"),
+						},
+					},
+				},
+				Required: []string{"url", "service", "basicAuth", "bearerToken", "tls"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.BasicAuth", "kmodules.xyz/monitoring-agent-api/api/v1.ServiceSpec", "kmodules.xyz/monitoring-agent-api/api/v1.TLSConfig"},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusContext(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clusterUID": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"projectId": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"default": {
+						SchemaProps: spec.SchemaProps{
+							Default: false,
+							Type:    []string{"boolean"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"clusterUID", "default"},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusExporterSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -19533,6 +19904,61 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusSpec(ref common.Re
 	}
 }
 
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorLabels(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorPreset(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"agent": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"serviceMonitor": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorLabels"),
+						},
+					},
+				},
+				Required: []string{"agent", "serviceMonitor"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.ServiceMonitorLabels"},
+	}
+}
+
 func schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -19563,6 +19989,109 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorSpec(ref commo
 						},
 					},
 				},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"scheme": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"path": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"query": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"scheme", "name", "namespace", "port", "path", "query"},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_TLSConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"ca": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"cert": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"key": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"serverName": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"insecureSkipTLSVerify": {
+						SchemaProps: spec.SchemaProps{
+							Default: false,
+							Type:    []string{"boolean"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"ca", "cert", "key", "serverName", "insecureSkipTLSVerify"},
 			},
 		},
 	}
@@ -22463,6 +22992,430 @@ func schema_apimachinery_apis_ops_v1alpha1_HiddenNode(ref common.ReferenceCallba
 				},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaCustomConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaCustomConfigurationSpec is the spec for Reconfiguring the Kafka Settings",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for database.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"applyConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyConfig is an optional field to provide Kafka configuration. Provided configuration will be applied to config files stored in ConfigSecret. If the ConfigSecret is missing, the operator will create a new k8s secret by the following naming convention: {db-name}-user-config . Expected input format:\n\tapplyConfig:\n\t\tfile-name.properties: |\n\t\t\tkey=value\n\t\tserver.properties: |\n\t\t\tlog.retention.ms=10000",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"removeCustomConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If set to \"true\", the user provided configuration will be removed. The Kafka cluster will start will default configuration that is generated by the operator.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaHorizontalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaHorizontalScalingSpec contains the horizontal scaling information of a Kafka cluster",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"node": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of combined (i.e. broker, controller) node",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Node topology specification",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingTopologySpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingTopologySpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaHorizontalScalingTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaHorizontalScalingTopologySpec contains the horizontal scaling information in cluster topology mode",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"broker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of broker nodes",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"controller": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of controller nodes",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequestSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaOpsRequestList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaOpsRequestList is a list of KafkaOpsRequests",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Items is a list of KafkaOpsRequest CRD objects",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequest"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaOpsRequest"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaOpsRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaOpsRequestSpec is the spec for KafkaOpsRequest",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the Kafka reference",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"updateVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading Kafka",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaUpdateVersionSpec"),
+						},
+					},
+					"horizontalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for horizontal scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingSpec"),
+						},
+					},
+					"verticalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for vertical scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingSpec"),
+						},
+					},
+					"volumeExpansion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for volume expansion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionSpec"),
+						},
+					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for custom configuration of Kafka",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaCustomConfigurationSpec"),
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for configuring TLS",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"),
+						},
+					},
+					"restart": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for restarting database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"databaseRef", "type"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaReplicaReadinessCriteria(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaReplicaReadinessCriteria is the criteria for checking readiness of a Kafka pod after updating, horizontal scaling etc.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaUpdateVersionSpec contains the update version information of a kafka cluster",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"targetVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the target version name from catalog",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaVerticalScalingSpec contains the vertical scaling information of a Kafka cluster",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"node": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Resource spec for combined nodes",
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the resource spec for cluster in topology mode",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingTopologySpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ResourceRequirements", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingTopologySpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaVerticalScalingTopologySpec contains the vertical scaling information in cluster topology mode",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"broker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Resource spec for broker",
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"controller": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Resource spec for controller",
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ResourceRequirements"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KafkaVolumeExpansionSpec is the spec for Kafka volume expansion",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"node": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volume specification for combined nodes",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volume specification for kafka topology",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionTopologySpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionTopologySpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"broker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volume specification for broker",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"controller": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volume specification for controller",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 

@@ -519,11 +519,14 @@ const (
 	KafkaBrokerClientPortName          = "broker"
 	KafkaControllerClientPortName      = "controller"
 	KafkaPortNameInternal              = "internal"
+	KafkaPortNameExternal              = "external"
 	KafkaTopicNameHealth               = "kafka-health"
 	KafkaTopicDeletionThresholdOffset  = 1000
+	KafkaControllerMaxID               = 1000
 	KafkaRESTPort                      = 9092
 	KafkaControllerRESTPort            = 9093
 	KafkaInternalRESTPort              = 29092
+	KafkaExternalRESTPort              = 19092
 	KafkaCruiseControlRESTPort         = 9090
 	KafkaCruiseControlListenerPort     = 9094
 	KafkaCCDefaultInNetwork            = 500000

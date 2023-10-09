@@ -16,6 +16,8 @@ limitations under the License.
 
 package v1
 
+import "fmt"
+
 func (agent *AgentSpec) SetDefaults() {
 	if agent == nil {
 		return
@@ -39,4 +41,18 @@ func IsKnownAgentType(at AgentType) bool {
 		return true
 	}
 	return false
+}
+
+func TricksterBackend(isDefault bool, ownerID int64, clusterUID, projectId string) string {
+	if isDefault || projectId == "" {
+		return fmt.Sprintf("%d.%s", ownerID, clusterUID)
+	}
+	return fmt.Sprintf("%d.%s.%s", ownerID, clusterUID, projectId)
+}
+
+func GrafanaDatasource(isDefault bool, clusterName, projectId string) string {
+	if isDefault || projectId == "" {
+		return clusterName
+	}
+	return fmt.Sprintf("%s-%s", clusterName, projectId)
 }

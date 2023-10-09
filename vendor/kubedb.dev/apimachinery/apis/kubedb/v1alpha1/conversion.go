@@ -26,8 +26,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	apiv1 "kmodules.xyz/monitoring-agent-api/api/v1"
-	apiv1alpha1 "kmodules.xyz/monitoring-agent-api/api/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
@@ -59,6 +58,12 @@ func Convert_v1alpha2_InitSpec_To_v1alpha1_InitSpec(in *v1alpha2.InitSpec, out *
 	}
 	// WARNING: in.Initialized requires manual conversion: does not exist in peer-type
 	// WARNING: in.WaitForInitialRestore requires manual conversion: does not exist in peer-type
+	return nil
+}
+
+func Convert_v1alpha2_ScriptSourceSpec_To_v1alpha1_ScriptSourceSpec(in *v1alpha2.ScriptSourceSpec, out *ScriptSourceSpec, s conversion.Scope) error {
+	out.ScriptPath = in.ScriptPath
+	out.VolumeSource = in.VolumeSource
 	return nil
 }
 
@@ -107,15 +112,7 @@ func Convert_v1alpha1_ElasticsearchSpec_To_v1alpha2_ElasticsearchSpec(in *Elasti
 		out.Init = nil
 	}
 	// WARNING: in.BackupSchedule requires manual conversion: does not exist in peer-type
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -166,15 +163,7 @@ func Convert_v1alpha2_ElasticsearchSpec_To_v1alpha1_ElasticsearchSpec(in *v1alph
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	// WARNING: in.ConfigSecret requires manual conversion: does not exist in peer-type
 	// WARNING: in.SecureConfigSecret requires manual conversion: does not exist in peer-type
 	out.PodTemplate = in.PodTemplate
@@ -280,15 +269,7 @@ func Convert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(in *EtcdSpec, out *v1alpha2.
 		out.Init = nil
 	}
 	// WARNING: in.BackupSchedule requires manual conversion: does not exist in peer-type
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.TLS = (*v1alpha2.TLSPolicy)(unsafe.Pointer(in.TLS))
 	out.PodTemplate = in.PodTemplate
 	if !reflect.DeepEqual(in.ServiceTemplate, ofst.ServiceTemplateSpec{}) {
@@ -317,15 +298,7 @@ func Convert_v1alpha2_EtcdSpec_To_v1alpha1_EtcdSpec(in *v1alpha2.EtcdSpec, out *
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.TLS = (*TLSPolicy)(unsafe.Pointer(in.TLS))
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
@@ -371,15 +344,7 @@ func Convert_v1alpha1_MariaDBSpec_To_v1alpha2_MariaDBSpec(in *MariaDBSpec, out *
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -418,15 +383,7 @@ func Convert_v1alpha2_MariaDBSpec_To_v1alpha1_MariaDBSpec(in *v1alpha2.MariaDBSp
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	// WARNING: in.ConfigSecret requires manual conversion: does not exist in peer-type
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
@@ -456,15 +413,7 @@ func Convert_v1alpha2_MariaDBStatus_To_v1alpha1_MariaDBStatus(in *v1alpha2.Maria
 func Convert_v1alpha1_MemcachedSpec_To_v1alpha2_MemcachedSpec(in *MemcachedSpec, out *v1alpha2.MemcachedSpec, s conversion.Scope) error {
 	out.Version = string(in.Version)
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -491,15 +440,7 @@ func Convert_v1alpha1_MemcachedSpec_To_v1alpha2_MemcachedSpec(in *MemcachedSpec,
 func Convert_v1alpha2_MemcachedSpec_To_v1alpha1_MemcachedSpec(in *v1alpha2.MemcachedSpec, out *MemcachedSpec, s conversion.Scope) error {
 	out.Version = types.StrYo(in.Version)
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	// WARNING: in.ConfigSecret requires manual conversion: does not exist in peer-type
 	// WARNING: in.DataVolume requires manual conversion: does not exist in peer-type
 	out.PodTemplate = in.PodTemplate
@@ -575,15 +516,7 @@ func Convert_v1alpha1_MongoDBSpec_To_v1alpha2_MongoDBSpec(in *MongoDBSpec, out *
 		out.Init = nil
 	}
 	// WARNING: in.BackupSchedule requires manual conversion: does not exist in peer-type
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -642,15 +575,7 @@ func Convert_v1alpha2_MongoDBSpec_To_v1alpha1_MongoDBSpec(in *v1alpha2.MongoDBSp
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	// WARNING: in.ConfigSecret requires manual conversion: does not exist in peer-type
 	out.PodTemplate = (*ofst.PodTemplateSpec)(unsafe.Pointer(in.PodTemplate))
 	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
@@ -706,6 +631,29 @@ func Convert_v1alpha1_MongoDBReplicaSet_To_v1alpha2_MongoDBReplicaSet(in *MongoD
 	return nil
 }
 
+func Convert_v1alpha2_MongoDBConfigNode_To_v1alpha1_MongoDBConfigNode(in *v1alpha2.MongoDBConfigNode, out *MongoDBConfigNode, s conversion.Scope) error {
+	{
+		in, out := &in.MongoDBNode, &out.MongoDBNode
+		if err := Convert_v1alpha2_MongoDBNode_To_v1alpha1_MongoDBNode(in, out, s); err != nil {
+			return err
+		}
+	}
+	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	return nil
+}
+
+func Convert_v1alpha2_MongoDBShardNode_To_v1alpha1_MongoDBShardNode(in *v1alpha2.MongoDBShardNode, out *MongoDBShardNode, s conversion.Scope) error {
+	out.Shards = in.Shards
+	{
+		in, out := &in.MongoDBNode, &out.MongoDBNode
+		if err := Convert_v1alpha2_MongoDBNode_To_v1alpha1_MongoDBNode(in, out, s); err != nil {
+			return err
+		}
+	}
+	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	return nil
+}
+
 func Convert_v1alpha1_MongoDBStatus_To_v1alpha2_MongoDBStatus(in *MongoDBStatus, out *v1alpha2.MongoDBStatus, s conversion.Scope) error {
 	out.Phase = v1alpha2.DatabasePhase(in.Phase)
 	if in.ObservedGeneration != nil {
@@ -753,15 +701,7 @@ func Convert_v1alpha1_MySQLSpec_To_v1alpha2_MySQLSpec(in *MySQLSpec, out *v1alph
 		out.Init = nil
 	}
 	// WARNING: in.BackupSchedule requires manual conversion: does not exist in peer-type
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -809,15 +749,7 @@ func Convert_v1alpha2_MySQLSpec_To_v1alpha1_MySQLSpec(in *v1alpha2.MySQLSpec, ou
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	// WARNING: in.ConfigSecret requires manual conversion: does not exist in peer-type
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
@@ -826,6 +758,12 @@ func Convert_v1alpha2_MySQLSpec_To_v1alpha1_MySQLSpec(in *v1alpha2.MySQLSpec, ou
 	// WARNING: in.Halted requires manual conversion: does not exist in peer-type
 	out.TerminationPolicy = TerminationPolicy(in.TerminationPolicy)
 	// WARNING: in.UseAddressType requires manual conversion: does not exist in peer-type
+	return nil
+}
+
+func Convert_v1alpha2_MySQLTopology_To_v1alpha1_MySQLTopology(in *v1alpha2.MySQLTopology, out *MySQLTopology, s conversion.Scope) error {
+	out.Mode = (*MySQLMode)(unsafe.Pointer(in.Mode))
+	out.Group = (*MySQLGroupSpec)(unsafe.Pointer(in.Group))
 	return nil
 }
 
@@ -874,15 +812,8 @@ func Convert_v1alpha1_PerconaXtraDBSpec_To_v1alpha2_PerconaXtraDBSpec(in *Percon
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -921,15 +852,7 @@ func Convert_v1alpha2_PerconaXtraDBSpec_To_v1alpha1_PerconaXtraDBSpec(in *v1alph
 	} else {
 		out.Init = nil
 	}
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1alpha1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1_AgentSpec_To_v1alpha1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	// WARNING: in.ConfigSecret requires manual conversion: does not exist in peer-type
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
@@ -982,15 +905,7 @@ func Convert_v1alpha1_PostgresSpec_To_v1alpha2_PostgresSpec(in *PostgresSpec, ou
 		out.Init = nil
 	}
 	// WARNING: in.BackupSchedule requires manual conversion: does not exist in peer-type
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{
@@ -1068,15 +983,7 @@ func Convert_v1alpha1_RedisSpec_To_v1alpha2_RedisSpec(in *RedisSpec, out *v1alph
 	out.Cluster = (*v1alpha2.RedisClusterSpec)(unsafe.Pointer(in.Cluster))
 	out.StorageType = v1alpha2.StorageType(in.StorageType)
 	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
-	if in.Monitor != nil {
-		in, out := &in.Monitor, &out.Monitor
-		*out = new(apiv1.AgentSpec)
-		if err := apiv1alpha1.Convert_v1alpha1_AgentSpec_To_v1_AgentSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Monitor = nil
-	}
+	out.Monitor = (*mona.AgentSpec)(unsafe.Pointer(in.Monitor))
 	if in.ConfigSource != nil {
 		if in.ConfigSource.Secret != nil {
 			out.ConfigSecret = &v1.LocalObjectReference{

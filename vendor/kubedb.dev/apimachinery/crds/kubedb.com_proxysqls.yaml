@@ -146,6 +146,10 @@ spec:
               monitor:
                 properties:
                   agent:
+                    enum:
+                    - prometheus.io/operator
+                    - prometheus.io
+                    - prometheus.io/builtin
                     type: string
                   prometheus:
                     properties:

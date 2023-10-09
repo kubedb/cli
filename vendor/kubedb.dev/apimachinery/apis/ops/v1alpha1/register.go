@@ -58,6 +58,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ElasticsearchOpsRequestList{},
 		&EtcdOpsRequest{},
 		&EtcdOpsRequestList{},
+		&KafkaOpsRequest{},
+		&KafkaOpsRequestList{},
 		&MemcachedOpsRequest{},
 		&MemcachedOpsRequestList{},
 		&MongoDBOpsRequest{},
