@@ -31,13 +31,13 @@ const (
 	ResourcePluralMySQL   = "mysqls"
 )
 
-// +kubebuilder:validation:Enum=GroupReplication;InnoDBCluster;ReadReplica;SemiSync
+// +kubebuilder:validation:Enum=GroupReplication;InnoDBCluster;RemoteReplica;SemiSync
 type MySQLMode string
 
 const (
 	MySQLModeGroupReplication MySQLMode = "GroupReplication"
 	MySQLModeInnoDBCluster    MySQLMode = "InnoDBCluster"
-	MySQLModeReadReplica      MySQLMode = "ReadReplica"
+	MySQLModeRemoteReplica    MySQLMode = "RemoteReplica"
 	MySQLModeSemiSync         MySQLMode = "SemiSync"
 )
 
@@ -187,10 +187,10 @@ type MySQLTopology struct {
 	// +optional
 	InnoDBCluster *MySQLInnoDBClusterSpec `json:"innoDBCluster,omitempty"`
 
-	// ReadReplica implies that the instance will be a MySQL Read Only Replica
+	// RemoteReplica implies that the instance will be a MySQL Read Only Replica
 	// and it will take reference of  appbinding of the source
 	// +optional
-	ReadReplica *MySQLReadReplicaSpec `json:"readReplica,omitempty"`
+	RemoteReplica *RemoteReplicaSpec `json:"remoteReplica,omitempty"`
 	// +optional
 	SemiSync *SemiSyncSpec `json:"semiSync,omitempty"`
 }
@@ -244,11 +244,6 @@ type MySQLRouterSpec struct {
 	// PodTemplate is an optional configuration for pods used to expose MySQL router
 	// +optional
 	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
-}
-
-type MySQLReadReplicaSpec struct {
-	// SourceRef specifies the  source object
-	SourceRef core.ObjectReference `json:"sourceRef" protobuf:"bytes,1,opt,name=sourceRef"`
 }
 
 type MySQLStatus struct {

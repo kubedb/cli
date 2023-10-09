@@ -58,6 +58,11 @@ type GitRepo struct {
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 }
 
+type RemoteReplicaSpec struct {
+	// SourceRef specifies the  source object
+	SourceRef core.ObjectReference `json:"sourceRef" protobuf:"bytes,1,opt,name=sourceRef"`
+}
+
 // +kubebuilder:validation:Enum=Provisioning;DataRestoring;Ready;Critical;NotReady;Halted;Unknown
 type DatabasePhase string
 

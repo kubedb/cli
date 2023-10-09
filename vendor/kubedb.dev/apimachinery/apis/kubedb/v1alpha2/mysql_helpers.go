@@ -241,10 +241,10 @@ func (m *MySQL) IsInnoDBCluster() bool {
 		*m.Spec.Topology.Mode == MySQLModeInnoDBCluster
 }
 
-func (m *MySQL) IsReadReplica() bool {
+func (m *MySQL) IsRemoteReplica() bool {
 	return m.Spec.Topology != nil &&
 		m.Spec.Topology.Mode != nil &&
-		*m.Spec.Topology.Mode == MySQLModeReadReplica
+		*m.Spec.Topology.Mode == MySQLModeRemoteReplica
 }
 
 func (m *MySQL) IsSemiSync() bool {

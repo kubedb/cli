@@ -49,6 +49,13 @@ type Postgres struct {
 	Spec              PostgresSpec   `json:"spec,omitempty"`
 	Status            PostgresStatus `json:"status,omitempty"`
 }
+type PostgreSQLMode string
+
+const (
+	PostgreSQLModeStandAlone    PostgreSQLMode = "Standalone"
+	PostgreSQLModeRemoteReplica PostgreSQLMode = "RemoteReplica"
+	PostgreSQLModeCluster       PostgreSQLMode = "Cluster"
+)
 
 type PostgresSpec struct {
 	// AutoOps contains configuration of automatic ops-request-recommendation generation
@@ -66,6 +73,13 @@ type PostgresSpec struct {
 
 	// Streaming mode
 	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty"`
+
+	// + optional
+	Mode *PostgreSQLMode `json:"mode,omitempty"`
+	// RemoteReplica implies that the instance will be a MySQL Read Only Replica,
+	// and it will take reference of  appbinding of the source
+	// +optional
+	RemoteReplica *RemoteReplicaSpec `json:"remoteReplica,omitempty"`
 
 	// Leader election configuration
 	// +optional

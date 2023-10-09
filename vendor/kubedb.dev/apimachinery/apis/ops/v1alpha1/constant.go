@@ -161,6 +161,20 @@ const (
 	VolumeExpansionCoordinatingNode = "VolumeExpansionCoordinatingNode"
 )
 
+// Kafka Constants
+const (
+	ScaleUpBroker       = "ScaleUpBroker"
+	ScaleUpController   = "ScaleUpController"
+	ScaleUpCombined     = "ScaleUpCombined"
+	ScaleDownBroker     = "ScaleDownBroker"
+	ScaleDownController = "ScaleDownController"
+	ScaleDownCombined   = "ScaleDownCombined"
+
+	UpdateBrokerNodePVCs     = "UpdateBrokerNodePVCs"
+	UpdateControllerNodePVCs = "UpdateControllerNodePVCs"
+	UpdateCombinedNodePVCs   = "UpdateCombinedNodePVCs"
+)
+
 // MongoDB Constants
 const (
 	StartingBalancer  = "StartingBalancer"

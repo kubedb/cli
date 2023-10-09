@@ -407,3 +407,7 @@ func (m *Postgres) SetHealthCheckerDefaults() {
 		m.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
 	}
 }
+
+func (m *Postgres) IsRemoteReplica() bool {
+	return m.Spec.RemoteReplica != nil
+}

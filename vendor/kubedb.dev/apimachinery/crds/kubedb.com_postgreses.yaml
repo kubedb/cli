@@ -1157,9 +1157,15 @@ spec:
                     default: 60s
                     type: string
                 type: object
+              mode:
+                type: string
               monitor:
                 properties:
                   agent:
+                    enum:
+                    - prometheus.io/operator
+                    - prometheus.io
+                    - prometheus.io/builtin
                     type: string
                   prometheus:
                     properties:
@@ -3661,6 +3667,29 @@ spec:
                           type: object
                         type: array
                     type: object
+                type: object
+              remoteReplica:
+                properties:
+                  sourceRef:
+                    properties:
+                      apiVersion:
+                        type: string
+                      fieldPath:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                      resourceVersion:
+                        type: string
+                      uid:
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                required:
+                - sourceRef
                 type: object
               replicas:
                 format: int32
