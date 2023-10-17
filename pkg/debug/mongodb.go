@@ -154,7 +154,7 @@ func (opts *mongodbOpts) collectOperatorLogs() error {
 }
 
 func (opts *mongodbOpts) collectForAllDBPods() error {
-	dbLabels := labels.SelectorFromSet(opts.db.GetLabels()).String()
+	dbLabels := labels.SelectorFromSet(opts.db.OffshootLabels()).String()
 	pods, err := opts.podClient.CoreV1().Pods(opts.db.Namespace).List(context.TODO(), metav1.ListOptions{
 		LabelSelector: dbLabels,
 	})
