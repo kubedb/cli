@@ -96,6 +96,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 		{
+			Message: "Debug any Database issue",
+			Commands: []*cobra.Command{
+				NewCmdDebug(f),
+			},
+		},
+		{
 			Message: "Generate appbinding and secrets for remote Replica",
 			Commands: []*cobra.Command{
 				NewCmdGenApb(f),
