@@ -164,7 +164,7 @@ func (opts *mongodbOpts) collectForAllDBPods() error {
 
 	podYamlDir := path.Join(opts.dir, yamlsDir)
 	for _, pod := range pods.Items {
-		err = opts.writeLogs(pod.Name, pod.Namespace, mongoDBContainerName)
+		err = opts.writeLogsForSinglePod(pod)
 		if err != nil {
 			return err
 		}
@@ -174,6 +174,16 @@ func (opts *mongodbOpts) collectForAllDBPods() error {
 			return err
 		}
 
+	}
+	return nil
+}
+
+func (opts *mongodbOpts) writeLogsForSinglePod(pod corev1.Pod) error {
+	for _, c := range pod.Spec.Containers {
+		err := opts.writeLogs(pod.Name, pod.Namespace, c.Name)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -189,7 +199,7 @@ func (opts *mongodbOpts) writeLogs(podName, ns, container string) error {
 	}
 	defer podLogs.Close()
 
-	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+".log"))
+	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+"_"+container+".log"))
 	if err != nil {
 		return err
 	}

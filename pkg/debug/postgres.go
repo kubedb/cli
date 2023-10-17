@@ -70,7 +70,7 @@ func PostgresDebugCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			opts, err := newpostgresOpts(f, dbName, namespace, operatorNamespace)
+			opts, err := newPostgresOpts(f, dbName, namespace, operatorNamespace)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -96,7 +96,7 @@ func PostgresDebugCMD(f cmdutil.Factory) *cobra.Command {
 	return pgDebugCmd
 }
 
-func newpostgresOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*postgresOpts, error) {
+func newPostgresOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*postgresOpts, error) {
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -164,7 +164,7 @@ func (opts *postgresOpts) collectForAllDBPods() error {
 
 	podYamlDir := path.Join(opts.dir, yamlsDir)
 	for _, pod := range pods.Items {
-		err = opts.writeLogs(pod.Name, pod.Namespace, postgresContainerName)
+		err = opts.writeLogsForSinglePod(pod)
 		if err != nil {
 			return err
 		}
@@ -174,6 +174,16 @@ func (opts *postgresOpts) collectForAllDBPods() error {
 			return err
 		}
 
+	}
+	return nil
+}
+
+func (opts *postgresOpts) writeLogsForSinglePod(pod corev1.Pod) error {
+	for _, c := range pod.Spec.Containers {
+		err := opts.writeLogs(pod.Name, pod.Namespace, c.Name)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -189,7 +199,7 @@ func (opts *postgresOpts) writeLogs(podName, ns, container string) error {
 	}
 	defer podLogs.Close()
 
-	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+".log"))
+	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+"_"+container+".log"))
 	if err != nil {
 		return err
 	}

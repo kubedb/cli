@@ -70,7 +70,7 @@ func MariaDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			opts, err := newmariadbOpts(f, dbName, namespace, operatorNamespace)
+			opts, err := newMariadbOpts(f, dbName, namespace, operatorNamespace)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -96,7 +96,7 @@ func MariaDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 	return mdDebugCmd
 }
 
-func newmariadbOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*mariadbOpts, error) {
+func newMariadbOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*mariadbOpts, error) {
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -164,7 +164,7 @@ func (opts *mariadbOpts) collectForAllDBPods() error {
 
 	podYamlDir := path.Join(opts.dir, yamlsDir)
 	for _, pod := range pods.Items {
-		err = opts.writeLogs(pod.Name, pod.Namespace, mariadbContainerName)
+		err = opts.writeLogsForSinglePod(pod)
 		if err != nil {
 			return err
 		}
@@ -174,6 +174,16 @@ func (opts *mariadbOpts) collectForAllDBPods() error {
 			return err
 		}
 
+	}
+	return nil
+}
+
+func (opts *mariadbOpts) writeLogsForSinglePod(pod corev1.Pod) error {
+	for _, c := range pod.Spec.Containers {
+		err := opts.writeLogs(pod.Name, pod.Namespace, c.Name)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -189,7 +199,7 @@ func (opts *mariadbOpts) writeLogs(podName, ns, container string) error {
 	}
 	defer podLogs.Close()
 
-	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+".log"))
+	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+"_"+container+".log"))
 	if err != nil {
 		return err
 	}

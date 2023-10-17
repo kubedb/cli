@@ -22,11 +22,5 @@ const (
 	dirPerm  = 0o755
 	filePerm = 0o644
 
-	operatorContainerName      = "operator"
-	elasticsearchContainerName = "elasticsearch"
-	mariadbContainerName       = "mariadb"
-	mongoDBContainerName       = "mongodb"
-	mysqlContainerName         = "mysql"
-	postgresContainerName      = "postgres"
-	redisContainerName         = "redis"
+	operatorContainerName = "operator"
 )
