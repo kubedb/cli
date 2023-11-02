@@ -50,6 +50,11 @@ type dbOpts struct {
 	resource   string
 }
 
+const (
+	kubeDBGroup   = "kubedb.com"
+	kubeDBVersion = "v1alpha2"
+)
+
 func Run(f cmdutil.Factory, args []string, prom PromSvc) {
 	if len(args) < 2 {
 		log.Fatal("Enter db object's name as an argument")
@@ -71,7 +76,10 @@ func Run(f cmdutil.Factory, args []string, prom PromSvc) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	opts.work(p)
+	err = opts.work(p)
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func convertedResource(resource string) string {
@@ -104,10 +112,10 @@ func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, 
 
 	dc, err := dynamic.NewForConfig(config)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	dbRes := schema.GroupVersionResource{Group: "kubedb.com", Version: "v1alpha2", Resource: resource}
+	dbRes := schema.GroupVersionResource{Group: kubeDBGroup, Version: kubeDBVersion, Resource: resource}
 	db, err := dc.Resource(dbRes).Namespace(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
@@ -143,12 +151,12 @@ func (opts *dbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tun
 	return tunnel, nil
 }
 
-func (opts *dbOpts) work(p *portforward.Tunnel) {
+func (opts *dbOpts) work(p *portforward.Tunnel) error {
 	pc, err := promapi.NewClient(promapi.Config{
 		Address: fmt.Sprintf("http://localhost:%d", p.Local),
 	})
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	promAPI := promv1.NewAPI(pc)
@@ -160,7 +168,7 @@ func (opts *dbOpts) work(p *portforward.Tunnel) {
 		Step:  time.Minute * 2,
 	})
 	if err != nil {
-		panic(err)
+		return err
 	}
 	if len(warnings) > 0 {
 		fmt.Println("Warnings:", warnings)
@@ -175,4 +183,5 @@ func (opts *dbOpts) work(p *portforward.Tunnel) {
 		labels := sample.Metric
 		fmt.Printf("Alert Name: %s, Value: %s, Labels: %s\n", alertName, alertValue, labels)
 	}
+	return nil
 }
