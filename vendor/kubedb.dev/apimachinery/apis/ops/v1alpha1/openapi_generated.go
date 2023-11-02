@@ -22370,12 +22370,6 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchOpsRequestSpec(ref commo
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec"),
 						},
 					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading Elasticsearch Deprecated: use UpdateVersion",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec"),
-						},
-					},
 					"horizontalScaling": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for horizontal scaling",
@@ -23658,12 +23652,6 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref common.Refe
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec"),
 						},
 					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading MariaDB Deprecated: use UpdateVersion",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec"),
-						},
-					},
 					"horizontalScaling": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for horizontal scaling",
@@ -24046,12 +24034,6 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedOpsRequestSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpdateVersionSpec"),
 						},
 					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading Memcached Deprecated: use UpdateVersion",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedUpdateVersionSpec"),
-						},
-					},
 					"horizontalScaling": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for horizontal scaling",
@@ -24429,12 +24411,6 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading MongoDB",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec"),
-						},
-					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading MongoDB Deprecated: use UpdateVersion",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec"),
 						},
 					},
@@ -24872,12 +24848,6 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading MySQL",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec"),
-						},
-					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading MySQL Deprecated: use UpdateVersion",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec"),
 						},
 					},
@@ -25393,12 +25363,6 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBOpsRequestSpec(ref commo
 					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading PerconaXtraDB",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpdateVersionSpec"),
-						},
-					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading PerconaXtraDB Deprecated: use UpdateVersion",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBUpdateVersionSpec"),
 						},
 					},
@@ -26112,12 +26076,6 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresOpsRequestSpec(ref common.Ref
 					"updateVersion": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Postgres",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpdateVersionSpec"),
-						},
-					},
-					"upgrade": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading Postgres Deprecated: use UpdateVersion",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresUpdateVersionSpec"),
 						},
 					},

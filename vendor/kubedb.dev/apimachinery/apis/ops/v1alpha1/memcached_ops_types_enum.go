@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// MemcachedOpsRequestTypeUpgrade is a MemcachedOpsRequestType of type Upgrade.
-	MemcachedOpsRequestTypeUpgrade MemcachedOpsRequestType = "Upgrade"
 	// MemcachedOpsRequestTypeUpdateVersion is a MemcachedOpsRequestType of type UpdateVersion.
 	MemcachedOpsRequestTypeUpdateVersion MemcachedOpsRequestType = "UpdateVersion"
 	// MemcachedOpsRequestTypeHorizontalScaling is a MemcachedOpsRequestType of type HorizontalScaling.
@@ -33,7 +31,6 @@ const (
 var ErrInvalidMemcachedOpsRequestType = fmt.Errorf("not a valid MemcachedOpsRequestType, try [%s]", strings.Join(_MemcachedOpsRequestTypeNames, ", "))
 
 var _MemcachedOpsRequestTypeNames = []string{
-	string(MemcachedOpsRequestTypeUpgrade),
 	string(MemcachedOpsRequestTypeUpdateVersion),
 	string(MemcachedOpsRequestTypeHorizontalScaling),
 	string(MemcachedOpsRequestTypeVerticalScaling),
@@ -53,7 +50,6 @@ func MemcachedOpsRequestTypeNames() []string {
 // MemcachedOpsRequestTypeValues returns a list of the values for MemcachedOpsRequestType
 func MemcachedOpsRequestTypeValues() []MemcachedOpsRequestType {
 	return []MemcachedOpsRequestType{
-		MemcachedOpsRequestTypeUpgrade,
 		MemcachedOpsRequestTypeUpdateVersion,
 		MemcachedOpsRequestTypeHorizontalScaling,
 		MemcachedOpsRequestTypeVerticalScaling,
@@ -77,7 +73,6 @@ func (x MemcachedOpsRequestType) IsValid() bool {
 }
 
 var _MemcachedOpsRequestTypeValue = map[string]MemcachedOpsRequestType{
-	"Upgrade":           MemcachedOpsRequestTypeUpgrade,
 	"UpdateVersion":     MemcachedOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": MemcachedOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   MemcachedOpsRequestTypeVerticalScaling,

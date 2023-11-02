@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// MySQLOpsRequestTypeUpgrade is a MySQLOpsRequestType of type Upgrade.
-	MySQLOpsRequestTypeUpgrade MySQLOpsRequestType = "Upgrade"
 	// MySQLOpsRequestTypeUpdateVersion is a MySQLOpsRequestType of type UpdateVersion.
 	MySQLOpsRequestTypeUpdateVersion MySQLOpsRequestType = "UpdateVersion"
 	// MySQLOpsRequestTypeHorizontalScaling is a MySQLOpsRequestType of type HorizontalScaling.
@@ -33,7 +31,6 @@ const (
 var ErrInvalidMySQLOpsRequestType = fmt.Errorf("not a valid MySQLOpsRequestType, try [%s]", strings.Join(_MySQLOpsRequestTypeNames, ", "))
 
 var _MySQLOpsRequestTypeNames = []string{
-	string(MySQLOpsRequestTypeUpgrade),
 	string(MySQLOpsRequestTypeUpdateVersion),
 	string(MySQLOpsRequestTypeHorizontalScaling),
 	string(MySQLOpsRequestTypeVerticalScaling),
@@ -53,7 +50,6 @@ func MySQLOpsRequestTypeNames() []string {
 // MySQLOpsRequestTypeValues returns a list of the values for MySQLOpsRequestType
 func MySQLOpsRequestTypeValues() []MySQLOpsRequestType {
 	return []MySQLOpsRequestType{
-		MySQLOpsRequestTypeUpgrade,
 		MySQLOpsRequestTypeUpdateVersion,
 		MySQLOpsRequestTypeHorizontalScaling,
 		MySQLOpsRequestTypeVerticalScaling,
@@ -77,7 +73,6 @@ func (x MySQLOpsRequestType) IsValid() bool {
 }
 
 var _MySQLOpsRequestTypeValue = map[string]MySQLOpsRequestType{
-	"Upgrade":           MySQLOpsRequestTypeUpgrade,
 	"UpdateVersion":     MySQLOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": MySQLOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   MySQLOpsRequestTypeVerticalScaling,

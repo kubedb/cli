@@ -57,9 +57,6 @@ type MongoDBOpsRequestSpec struct {
 	Type MongoDBOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MongoDB
 	UpdateVersion *MongoDBUpdateVersionSpec `json:"updateVersion,omitempty"`
-	// Specifies information necessary for upgrading MongoDB
-	// Deprecated: use UpdateVersion
-	Upgrade *MongoDBUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *MongoDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -85,7 +82,7 @@ type MongoDBOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision
-// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision)
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision)
 type MongoDBOpsRequestType string
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod

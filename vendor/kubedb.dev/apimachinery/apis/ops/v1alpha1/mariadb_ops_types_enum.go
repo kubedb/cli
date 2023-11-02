@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// MariaDBOpsRequestTypeUpgrade is a MariaDBOpsRequestType of type Upgrade.
-	MariaDBOpsRequestTypeUpgrade MariaDBOpsRequestType = "Upgrade"
 	// MariaDBOpsRequestTypeUpdateVersion is a MariaDBOpsRequestType of type UpdateVersion.
 	MariaDBOpsRequestTypeUpdateVersion MariaDBOpsRequestType = "UpdateVersion"
 	// MariaDBOpsRequestTypeHorizontalScaling is a MariaDBOpsRequestType of type HorizontalScaling.
@@ -33,7 +31,6 @@ const (
 var ErrInvalidMariaDBOpsRequestType = fmt.Errorf("not a valid MariaDBOpsRequestType, try [%s]", strings.Join(_MariaDBOpsRequestTypeNames, ", "))
 
 var _MariaDBOpsRequestTypeNames = []string{
-	string(MariaDBOpsRequestTypeUpgrade),
 	string(MariaDBOpsRequestTypeUpdateVersion),
 	string(MariaDBOpsRequestTypeHorizontalScaling),
 	string(MariaDBOpsRequestTypeVerticalScaling),
@@ -53,7 +50,6 @@ func MariaDBOpsRequestTypeNames() []string {
 // MariaDBOpsRequestTypeValues returns a list of the values for MariaDBOpsRequestType
 func MariaDBOpsRequestTypeValues() []MariaDBOpsRequestType {
 	return []MariaDBOpsRequestType{
-		MariaDBOpsRequestTypeUpgrade,
 		MariaDBOpsRequestTypeUpdateVersion,
 		MariaDBOpsRequestTypeHorizontalScaling,
 		MariaDBOpsRequestTypeVerticalScaling,
@@ -77,7 +73,6 @@ func (x MariaDBOpsRequestType) IsValid() bool {
 }
 
 var _MariaDBOpsRequestTypeValue = map[string]MariaDBOpsRequestType{
-	"Upgrade":           MariaDBOpsRequestTypeUpgrade,
 	"UpdateVersion":     MariaDBOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": MariaDBOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   MariaDBOpsRequestTypeVerticalScaling,

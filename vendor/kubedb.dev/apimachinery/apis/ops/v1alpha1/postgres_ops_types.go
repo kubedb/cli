@@ -70,9 +70,6 @@ type PostgresOpsRequestSpec struct {
 	Type PostgresOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Postgres
 	UpdateVersion *PostgresUpdateVersionSpec `json:"updateVersion,omitempty"`
-	// Specifies information necessary for upgrading Postgres
-	// Deprecated: use UpdateVersion
-	Upgrade *PostgresUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *PostgresHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -93,7 +90,7 @@ type PostgresOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
-// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
 type PostgresOpsRequestType string
 
 type PostgresUpdateVersionSpec struct {

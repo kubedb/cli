@@ -183,13 +183,6 @@ spec:
                   targetVersion:
                     type: string
                 type: object
-              upgrade:
-                properties:
-                  readinessCriteria:
-                    type: object
-                  targetVersion:
-                    type: string
-                type: object
               verticalScaling:
                 properties:
                   readinessCriteria:

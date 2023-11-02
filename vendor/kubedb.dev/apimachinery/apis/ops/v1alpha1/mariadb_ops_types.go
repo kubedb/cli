@@ -57,9 +57,6 @@ type MariaDBOpsRequestSpec struct {
 	Type MariaDBOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MariaDB
 	UpdateVersion *MariaDBUpdateVersionSpec `json:"updateVersion,omitempty"`
-	// Specifies information necessary for upgrading MariaDB
-	// Deprecated: use UpdateVersion
-	Upgrade *MariaDBUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *MariaDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -80,7 +77,7 @@ type MariaDBOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
-// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
 type MariaDBOpsRequestType string
 
 // MariaDBReplicaReadinessCriteria is the criteria for checking readiness of an MariaDB database

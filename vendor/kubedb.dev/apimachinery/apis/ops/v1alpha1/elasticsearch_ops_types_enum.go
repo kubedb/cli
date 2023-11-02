@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// ElasticsearchOpsRequestTypeUpgrade is a ElasticsearchOpsRequestType of type Upgrade.
-	ElasticsearchOpsRequestTypeUpgrade ElasticsearchOpsRequestType = "Upgrade"
 	// ElasticsearchOpsRequestTypeUpdateVersion is a ElasticsearchOpsRequestType of type UpdateVersion.
 	ElasticsearchOpsRequestTypeUpdateVersion ElasticsearchOpsRequestType = "UpdateVersion"
 	// ElasticsearchOpsRequestTypeHorizontalScaling is a ElasticsearchOpsRequestType of type HorizontalScaling.
@@ -33,7 +31,6 @@ const (
 var ErrInvalidElasticsearchOpsRequestType = fmt.Errorf("not a valid ElasticsearchOpsRequestType, try [%s]", strings.Join(_ElasticsearchOpsRequestTypeNames, ", "))
 
 var _ElasticsearchOpsRequestTypeNames = []string{
-	string(ElasticsearchOpsRequestTypeUpgrade),
 	string(ElasticsearchOpsRequestTypeUpdateVersion),
 	string(ElasticsearchOpsRequestTypeHorizontalScaling),
 	string(ElasticsearchOpsRequestTypeVerticalScaling),
@@ -53,7 +50,6 @@ func ElasticsearchOpsRequestTypeNames() []string {
 // ElasticsearchOpsRequestTypeValues returns a list of the values for ElasticsearchOpsRequestType
 func ElasticsearchOpsRequestTypeValues() []ElasticsearchOpsRequestType {
 	return []ElasticsearchOpsRequestType{
-		ElasticsearchOpsRequestTypeUpgrade,
 		ElasticsearchOpsRequestTypeUpdateVersion,
 		ElasticsearchOpsRequestTypeHorizontalScaling,
 		ElasticsearchOpsRequestTypeVerticalScaling,
@@ -77,7 +73,6 @@ func (x ElasticsearchOpsRequestType) IsValid() bool {
 }
 
 var _ElasticsearchOpsRequestTypeValue = map[string]ElasticsearchOpsRequestType{
-	"Upgrade":           ElasticsearchOpsRequestTypeUpgrade,
 	"UpdateVersion":     ElasticsearchOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": ElasticsearchOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   ElasticsearchOpsRequestTypeVerticalScaling,

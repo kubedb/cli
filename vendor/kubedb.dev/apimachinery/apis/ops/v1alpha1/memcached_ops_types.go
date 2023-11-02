@@ -56,9 +56,6 @@ type MemcachedOpsRequestSpec struct {
 	Type MemcachedOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Memcached
 	UpdateVersion *MemcachedUpdateVersionSpec `json:"updateVersion,omitempty"`
-	// Specifies information necessary for upgrading Memcached
-	// Deprecated: use UpdateVersion
-	Upgrade *MemcachedUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *MemcachedHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -77,7 +74,7 @@ type MemcachedOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
-// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
 type MemcachedOpsRequestType string
 
 // MemcachedReplicaReadinessCriteria is the criteria for checking readiness of a Memcached pod

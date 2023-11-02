@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// PostgresOpsRequestTypeUpgrade is a PostgresOpsRequestType of type Upgrade.
-	PostgresOpsRequestTypeUpgrade PostgresOpsRequestType = "Upgrade"
 	// PostgresOpsRequestTypeUpdateVersion is a PostgresOpsRequestType of type UpdateVersion.
 	PostgresOpsRequestTypeUpdateVersion PostgresOpsRequestType = "UpdateVersion"
 	// PostgresOpsRequestTypeHorizontalScaling is a PostgresOpsRequestType of type HorizontalScaling.
@@ -33,7 +31,6 @@ const (
 var ErrInvalidPostgresOpsRequestType = fmt.Errorf("not a valid PostgresOpsRequestType, try [%s]", strings.Join(_PostgresOpsRequestTypeNames, ", "))
 
 var _PostgresOpsRequestTypeNames = []string{
-	string(PostgresOpsRequestTypeUpgrade),
 	string(PostgresOpsRequestTypeUpdateVersion),
 	string(PostgresOpsRequestTypeHorizontalScaling),
 	string(PostgresOpsRequestTypeVerticalScaling),
@@ -53,7 +50,6 @@ func PostgresOpsRequestTypeNames() []string {
 // PostgresOpsRequestTypeValues returns a list of the values for PostgresOpsRequestType
 func PostgresOpsRequestTypeValues() []PostgresOpsRequestType {
 	return []PostgresOpsRequestType{
-		PostgresOpsRequestTypeUpgrade,
 		PostgresOpsRequestTypeUpdateVersion,
 		PostgresOpsRequestTypeHorizontalScaling,
 		PostgresOpsRequestTypeVerticalScaling,
@@ -77,7 +73,6 @@ func (x PostgresOpsRequestType) IsValid() bool {
 }
 
 var _PostgresOpsRequestTypeValue = map[string]PostgresOpsRequestType{
-	"Upgrade":           PostgresOpsRequestTypeUpgrade,
 	"UpdateVersion":     PostgresOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": PostgresOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   PostgresOpsRequestTypeVerticalScaling,
