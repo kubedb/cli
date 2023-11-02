@@ -860,6 +860,8 @@ github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1beta1
 github.com/prometheus-operator/prometheus-operator/pkg/client/versioned/scheme
 # github.com/prometheus/client_golang v1.13.0
 ## explicit; go 1.17
+github.com/prometheus/client_golang/api
+github.com/prometheus/client_golang/api/prometheus/v1
 github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/collectors
 github.com/prometheus/client_golang/prometheus/internal
