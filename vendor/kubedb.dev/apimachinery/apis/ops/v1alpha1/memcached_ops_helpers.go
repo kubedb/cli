@@ -63,23 +63,12 @@ func (m *MemcachedOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return m.ObjectMeta
 }
 
-func (m MemcachedOpsRequest) GetRequestType() any {
-	switch m.Spec.Type {
-	case MemcachedOpsRequestTypeUpgrade:
-		return MemcachedOpsRequestTypeUpdateVersion
-	}
-	return m.Spec.Type
-}
-
-func (m MemcachedOpsRequest) GetUpdateVersionSpec() *MemcachedUpdateVersionSpec {
-	if m.Spec.UpdateVersion != nil {
-		return m.Spec.UpdateVersion
-	}
-	return m.Spec.Upgrade
-}
-
 func (m *MemcachedOpsRequest) GetDBRefName() string {
 	return m.Spec.DatabaseRef.Name
+}
+
+func (m *MemcachedOpsRequest) GetRequestType() any {
+	return m.Spec.Type
 }
 
 func (m *MemcachedOpsRequest) GetStatus() OpsRequestStatus {

@@ -57,9 +57,6 @@ type ElasticsearchOpsRequestSpec struct {
 	Type ElasticsearchOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading Elasticsearch
 	UpdateVersion *ElasticsearchUpdateVersionSpec `json:"updateVersion,omitempty"`
-	// Specifies information necessary for upgrading Elasticsearch
-	// Deprecated: use UpdateVersion
-	Upgrade *ElasticsearchUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *ElasticsearchHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -80,7 +77,7 @@ type ElasticsearchOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
-// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
 type ElasticsearchOpsRequestType string
 
 // ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of an Elasticsearch database

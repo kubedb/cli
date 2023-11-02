@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// MongoDBOpsRequestTypeUpgrade is a MongoDBOpsRequestType of type Upgrade.
-	MongoDBOpsRequestTypeUpgrade MongoDBOpsRequestType = "Upgrade"
 	// MongoDBOpsRequestTypeUpdateVersion is a MongoDBOpsRequestType of type UpdateVersion.
 	MongoDBOpsRequestTypeUpdateVersion MongoDBOpsRequestType = "UpdateVersion"
 	// MongoDBOpsRequestTypeHorizontalScaling is a MongoDBOpsRequestType of type HorizontalScaling.
@@ -35,7 +33,6 @@ const (
 var ErrInvalidMongoDBOpsRequestType = fmt.Errorf("not a valid MongoDBOpsRequestType, try [%s]", strings.Join(_MongoDBOpsRequestTypeNames, ", "))
 
 var _MongoDBOpsRequestTypeNames = []string{
-	string(MongoDBOpsRequestTypeUpgrade),
 	string(MongoDBOpsRequestTypeUpdateVersion),
 	string(MongoDBOpsRequestTypeHorizontalScaling),
 	string(MongoDBOpsRequestTypeVerticalScaling),
@@ -56,7 +53,6 @@ func MongoDBOpsRequestTypeNames() []string {
 // MongoDBOpsRequestTypeValues returns a list of the values for MongoDBOpsRequestType
 func MongoDBOpsRequestTypeValues() []MongoDBOpsRequestType {
 	return []MongoDBOpsRequestType{
-		MongoDBOpsRequestTypeUpgrade,
 		MongoDBOpsRequestTypeUpdateVersion,
 		MongoDBOpsRequestTypeHorizontalScaling,
 		MongoDBOpsRequestTypeVerticalScaling,
@@ -81,7 +77,6 @@ func (x MongoDBOpsRequestType) IsValid() bool {
 }
 
 var _MongoDBOpsRequestTypeValue = map[string]MongoDBOpsRequestType{
-	"Upgrade":           MongoDBOpsRequestTypeUpgrade,
 	"UpdateVersion":     MongoDBOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": MongoDBOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   MongoDBOpsRequestTypeVerticalScaling,

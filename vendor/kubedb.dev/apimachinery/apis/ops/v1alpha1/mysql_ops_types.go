@@ -57,9 +57,6 @@ type MySQLOpsRequestSpec struct {
 	Type MySQLOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading MySQL
 	UpdateVersion *MySQLUpdateVersionSpec `json:"updateVersion,omitempty"`
-	// Specifies information necessary for upgrading MySQL
-	// Deprecated: use UpdateVersion
-	Upgrade *MySQLUpdateVersionSpec `json:"upgrade,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *MySQLHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -80,7 +77,7 @@ type MySQLOpsRequestSpec struct {
 }
 
 // +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS
-// ENUM(Upgrade, UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS)
 type MySQLOpsRequestType string
 
 // MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod

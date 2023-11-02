@@ -244,11 +244,6 @@ spec:
                   targetVersion:
                     type: string
                 type: object
-              upgrade:
-                properties:
-                  targetVersion:
-                    type: string
-                type: object
               verticalScaling:
                 properties:
                   exporter:

@@ -63,16 +63,12 @@ func (e *EtcdOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e EtcdOpsRequest) GetRequestType() any {
-	return e.Spec.Type
-}
-
-func (e EtcdOpsRequest) GetUpdateVersionSpec() *EtcdUpdateVersionSpec {
-	return e.Spec.UpdateVersion
-}
-
 func (e *EtcdOpsRequest) GetDBRefName() string {
 	return e.Spec.DatabaseRef.Name
+}
+
+func (e *EtcdOpsRequest) GetRequestType() any {
+	return e.Spec.Type
 }
 
 func (e *EtcdOpsRequest) GetStatus() OpsRequestStatus {

@@ -63,23 +63,12 @@ func (e *ElasticsearchOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return e.ObjectMeta
 }
 
-func (e ElasticsearchOpsRequest) GetRequestType() any {
-	switch e.Spec.Type {
-	case ElasticsearchOpsRequestTypeUpgrade:
-		return ElasticsearchOpsRequestTypeUpdateVersion
-	}
-	return e.Spec.Type
-}
-
-func (e ElasticsearchOpsRequest) GetUpdateVersionSpec() *ElasticsearchUpdateVersionSpec {
-	if e.Spec.UpdateVersion != nil {
-		return e.Spec.UpdateVersion
-	}
-	return e.Spec.Upgrade
-}
-
 func (e *ElasticsearchOpsRequest) GetDBRefName() string {
 	return e.Spec.DatabaseRef.Name
+}
+
+func (e *ElasticsearchOpsRequest) GetRequestType() any {
+	return e.Spec.Type
 }
 
 func (e *ElasticsearchOpsRequest) GetStatus() OpsRequestStatus {

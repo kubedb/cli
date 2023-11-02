@@ -59,16 +59,12 @@ func (p *ProxySQLOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 	return p.ObjectMeta
 }
 
-func (p ProxySQLOpsRequest) GetRequestType() any {
-	return p.Spec.Type
-}
-
-func (p ProxySQLOpsRequest) GetUpdateVersionSpec() *ProxySQLUpdateVersionSpec {
-	return p.Spec.UpdateVersion
-}
-
 func (p *ProxySQLOpsRequest) GetDBRefName() string {
 	return p.Spec.ProxyRef.Name
+}
+
+func (p *ProxySQLOpsRequest) GetRequestType() any {
+	return p.Spec.Type
 }
 
 func (p *ProxySQLOpsRequest) GetStatus() OpsRequestStatus {

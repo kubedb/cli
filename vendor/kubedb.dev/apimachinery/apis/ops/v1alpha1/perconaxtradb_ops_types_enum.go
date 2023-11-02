@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	// PerconaXtraDBOpsRequestTypeUpgrade is a PerconaXtraDBOpsRequestType of type Upgrade.
-	PerconaXtraDBOpsRequestTypeUpgrade PerconaXtraDBOpsRequestType = "Upgrade"
 	// PerconaXtraDBOpsRequestTypeUpdateVersion is a PerconaXtraDBOpsRequestType of type UpdateVersion.
 	PerconaXtraDBOpsRequestTypeUpdateVersion PerconaXtraDBOpsRequestType = "UpdateVersion"
 	// PerconaXtraDBOpsRequestTypeHorizontalScaling is a PerconaXtraDBOpsRequestType of type HorizontalScaling.
@@ -33,7 +31,6 @@ const (
 var ErrInvalidPerconaXtraDBOpsRequestType = fmt.Errorf("not a valid PerconaXtraDBOpsRequestType, try [%s]", strings.Join(_PerconaXtraDBOpsRequestTypeNames, ", "))
 
 var _PerconaXtraDBOpsRequestTypeNames = []string{
-	string(PerconaXtraDBOpsRequestTypeUpgrade),
 	string(PerconaXtraDBOpsRequestTypeUpdateVersion),
 	string(PerconaXtraDBOpsRequestTypeHorizontalScaling),
 	string(PerconaXtraDBOpsRequestTypeVerticalScaling),
@@ -53,7 +50,6 @@ func PerconaXtraDBOpsRequestTypeNames() []string {
 // PerconaXtraDBOpsRequestTypeValues returns a list of the values for PerconaXtraDBOpsRequestType
 func PerconaXtraDBOpsRequestTypeValues() []PerconaXtraDBOpsRequestType {
 	return []PerconaXtraDBOpsRequestType{
-		PerconaXtraDBOpsRequestTypeUpgrade,
 		PerconaXtraDBOpsRequestTypeUpdateVersion,
 		PerconaXtraDBOpsRequestTypeHorizontalScaling,
 		PerconaXtraDBOpsRequestTypeVerticalScaling,
@@ -77,7 +73,6 @@ func (x PerconaXtraDBOpsRequestType) IsValid() bool {
 }
 
 var _PerconaXtraDBOpsRequestTypeValue = map[string]PerconaXtraDBOpsRequestType{
-	"Upgrade":           PerconaXtraDBOpsRequestTypeUpgrade,
 	"UpdateVersion":     PerconaXtraDBOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": PerconaXtraDBOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   PerconaXtraDBOpsRequestTypeVerticalScaling,
