@@ -43,7 +43,7 @@ type PromSvc struct {
 	Port      int
 }
 
-type mongodbOpts struct {
+type dbOpts struct {
 	db         client.Object
 	config     *rest.Config
 	kubeClient *kubernetes.Clientset
@@ -62,7 +62,7 @@ func Run(f cmdutil.Factory, args []string, prom PromSvc) {
 		_ = fmt.Errorf("failed to get current namespace")
 	}
 
-	opts, err := newMongodbOpts(f, dbName, namespace, convertedResource(resource))
+	opts, err := newDBOpts(f, dbName, namespace, convertedResource(resource))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -96,7 +96,7 @@ func convertedResource(resource string) string {
 	return res
 }
 
-func newMongodbOpts(f cmdutil.Factory, dbName, namespace, resource string) (*mongodbOpts, error) {
+func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, error) {
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -118,7 +118,7 @@ func newMongodbOpts(f cmdutil.Factory, dbName, namespace, resource string) (*mon
 		return nil, err
 	}
 
-	opts := &mongodbOpts{
+	opts := &dbOpts{
 		db:         db,
 		config:     config,
 		kubeClient: kubeClient,
@@ -127,7 +127,7 @@ func newMongodbOpts(f cmdutil.Factory, dbName, namespace, resource string) (*mon
 	return opts, nil
 }
 
-func (opts *mongodbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tunnel, error) {
+func (opts *dbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tunnel, error) {
 	tunnel := portforward.NewTunnel(portforward.TunnelOptions{
 		Client:    opts.kubeClient.CoreV1().RESTClient(),
 		Config:    opts.config,
@@ -143,7 +143,7 @@ func (opts *mongodbOpts) ForwardPort(resource string, prom PromSvc) (*portforwar
 	return tunnel, nil
 }
 
-func (opts *mongodbOpts) work(p *portforward.Tunnel) {
+func (opts *dbOpts) work(p *portforward.Tunnel) {
 	pc, err := promapi.NewClient(promapi.Config{
 		Address: fmt.Sprintf("http://localhost:%d", p.Local),
 	})
