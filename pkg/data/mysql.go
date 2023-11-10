@@ -80,6 +80,10 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("Inserted rows must be greater than 0")
 			}
 
+			if rows > 100000 {
+				log.Fatal("Inserted rows must be less than or equal 100000")
+			}
+
 			err = opts.insertDataExecCmd(rows)
 			if err != nil {
 				log.Fatal(err)
@@ -94,7 +98,8 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 
 func (opts *mysqlOpts) insertDataExecCmd(rows int) error {
 	command := `
-		USE mysql;
+		CREATE DATABASE IF NOT EXISTS MySQL;
+		USE MySQL;
 		CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
 		DROP PROCEDURE IF EXISTS insert_data;
 		DELIMITER //
@@ -124,7 +129,7 @@ func (opts *mysqlOpts) insertDataExecCmd(rows int) error {
 		return err
 	}
 
-	fmt.Printf("\nSuccess! %d keys inserted in mysql database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
+	fmt.Printf("\nSuccess! %d keys inserted in MySQL database %s/%s.\n", rows, opts.db.Namespace, opts.db.Name)
 	return nil
 }
 
@@ -176,7 +181,9 @@ func (opts *mysqlOpts) verifyDataExecCmd(rows int) error {
 	}
 
 	command := ` 
-		USE mysql;
+		CREATE DATABASE IF NOT EXISTS MySQL;
+		USE MySQL;
+		CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
 		SELECT COUNT(*) FROM kubedb_table; 
 	`
 	o, err := opts.executeCommand(command)
@@ -238,7 +245,7 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 
 func (opts *mysqlOpts) dropDataExecCmd() error {
 	command := ` 
-		USE mysql;
+		USE MySQL;
 		DROP TABLE IF EXISTS kubedb_table;
 	`
 	_, err := opts.executeCommand(command)
