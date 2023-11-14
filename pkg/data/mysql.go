@@ -41,9 +41,11 @@ import (
 )
 
 const (
-	myCaFile   = "/etc/mysql/certs/ca.crt"
-	myCertFile = "/etc/mysql/certs/client.crt"
-	myKeyFile  = "/etc/mysql/certs/client.key"
+	myCaFile           = "/etc/mysql/certs/ca.crt"
+	myCertFile         = "/etc/mysql/certs/client.crt"
+	myKeyFile          = "/etc/mysql/certs/client.key"
+	KubeDBDatabaseName = "kubedb_cli"
+	KubeDBTableName    = "kubedb_table"
 )
 
 func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
@@ -57,9 +59,9 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"my",
 		},
-		Short:   "Connect to a mysql object",
-		Long:    `Use this cmd to exec into a mysql object's primary pod.`,
-		Example: `kubectl dba insert mysql -n demo sample-mysql --rows 1000`,
+		Short:   "Insert data to mysql",
+		Long:    `Use this cmd to insert data into a mysql database.`,
+		Example: `kubectl dba data insert mysql -n demo sample-mysql --rows 1000`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mysql object's name as an argument")
@@ -97,10 +99,10 @@ func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 func (opts *mysqlOpts) insertDataExecCmd(rows int) error {
-	command := `
-		CREATE DATABASE IF NOT EXISTS MySQL;
-		USE MySQL;
-		CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
+	command := fmt.Sprintf(`
+		CREATE DATABASE IF NOT EXISTS %v;
+		USE %v;
+		CREATE TABLE IF NOT EXISTS %v (id VARCHAR(255) PRIMARY KEY);
 		DROP PROCEDURE IF EXISTS insert_data;
 		DELIMITER //
 		CREATE PROCEDURE insert_data(max_value INT)
@@ -121,8 +123,8 @@ func (opts *mysqlOpts) insertDataExecCmd(rows int) error {
 			END WHILE;
 		END //
 		DELIMITER ;
-		CALL insert_data(` + fmt.Sprintf("%v", rows) + `); 
-	`
+		CALL insert_data(`+fmt.Sprintf("%v", rows)+`); 
+	`, KubeDBDatabaseName, KubeDBDatabaseName, KubeDBTableName)
 
 	_, err := opts.executeCommand(command)
 	if err != nil {
@@ -144,9 +146,9 @@ func VerifyMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"my",
 		},
-		Short:   "Verify rows in a MySQL database",
+		Short:   "Verify rows to a mysql resource",
 		Long:    `Use this cmd to verify data in a mysql object`,
-		Example: `kubectl dba verify mysql -n demo sample-mysql --rows 1000`,
+		Example: `kubectl dba data verify mysql -n demo sample-mysql --rows 1000`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mysql object's name as an argument.")
@@ -180,12 +182,13 @@ func (opts *mysqlOpts) verifyDataExecCmd(rows int) error {
 		return fmt.Errorf("rows need to be greater than 0")
 	}
 
-	command := ` 
-		CREATE DATABASE IF NOT EXISTS MySQL;
-		USE MySQL;
-		CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
-		SELECT COUNT(*) FROM kubedb_table; 
-	`
+	command := fmt.Sprintf(` 
+        CREATE DATABASE IF NOT EXISTS %v;
+        USE %v;
+        CREATE TABLE IF NOT EXISTS kubedb_table (id VARCHAR(255) PRIMARY KEY);
+        SELECT COUNT(*) FROM kubedb_table; 
+    `, KubeDBDatabaseName, KubeDBDatabaseName)
+
 	o, err := opts.executeCommand(command)
 	if err != nil {
 		return err
@@ -214,9 +217,9 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 		Aliases: []string{
 			"my",
 		},
-		Short:   "Verify rows in a MySQL database",
-		Long:    `Use this cmd to verify data in a mysql object`,
-		Example: `kubectl dba drop mysql -n demo sample-mysql`,
+		Short:   " Drop data from mysql",
+		Long:    `Use this cmd to drop data from a mysql database`,
+		Example: `kubectl dba data drop mysql -n demo sample-mysql`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				log.Fatal("Enter mysql object's name as an argument.")
@@ -244,10 +247,10 @@ func DropMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 func (opts *mysqlOpts) dropDataExecCmd() error {
-	command := ` 
-		USE MySQL;
-		DROP TABLE IF EXISTS kubedb_table;
-	`
+	command := fmt.Sprintf(` 
+		USE %v;
+		DROP TABLE IF EXISTS %v;
+	`, KubeDBDatabaseName, KubeDBTableName)
 	_, err := opts.executeCommand(command)
 	if err != nil {
 		return err

@@ -17,11 +17,5 @@ limitations under the License.
 package data
 
 const (
-	caFile   = "/tmp/ca.crt"
-	certFile = "/tmp/client.crt"
-	keyFile  = "/tmp/client.key"
-)
-
-const (
 	actor = "kubedb-cli"
 )
