@@ -17,5 +17,8 @@ limitations under the License.
 package data
 
 const (
-	actor = "kubedb-cli"
+	KubeDBDatabaseName   = "kubedb_cli"
+	actor                = KubeDBDatabaseName
+	KubeDBTableName      = "kubedb_table"
+	KubeDBCollectionName = KubeDBTableName
 )

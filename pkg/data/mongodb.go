@@ -40,10 +40,9 @@ import (
 )
 
 const (
-	mgCAFile         = "/var/run/mongodb/tls/ca.crt"
-	mgPEMFile        = "/var/run/mongodb/tls/client.pem"
-	mgTempPEMFile    = "/tmp/client.pem"
-	mgCollectionName = "kubedb-testing"
+	mgCAFile      = "/var/run/mongodb/tls/ca.crt"
+	mgPEMFile     = "/var/run/mongodb/tls/client.pem"
+	mgTempPEMFile = "/tmp/client.pem"
 )
 
 func InsertMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
@@ -80,7 +79,7 @@ func InsertMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("rows need to be greater than 0")
 			}
 
-			command := fmt.Sprintf("for(var i=1;i<=%d;i++){db[\"%s\"].insert({_id:\"doc\"+i,actor:\"%s\"})}", rows, mgCollectionName, actor)
+			command := fmt.Sprintf("for(var i=1;i<=%d;i++){db[\"%s\"].insert({_id:\"doc\"+i,actor:\"%s\"})}", rows, KubeDBCollectionName, actor)
 			_, err = opts.executeCommand(command)
 			if err != nil {
 				log.Fatal(err)
@@ -127,7 +126,7 @@ func VerifyMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("rows need to be greater than 0")
 			}
 
-			command := fmt.Sprintf("db.runCommand({find:\"%s\",filter:{\"actor\":\"%s\"},batchSize:10000})", mgCollectionName, actor)
+			command := fmt.Sprintf("db.runCommand({find:\"%s\",filter:{\"actor\":\"%s\"},batchSize:10000})", KubeDBCollectionName, actor)
 			command = fmt.Sprintf("JSON.stringify(%s)", command)
 
 			out, err := opts.executeCommand(command)
@@ -173,7 +172,7 @@ func DropMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			command := fmt.Sprintf("db[\"%s\"].drop()", mgCollectionName)
+			command := fmt.Sprintf("db[\"%s\"].drop()", KubeDBCollectionName)
 			_, err = opts.executeCommand(command)
 			if err != nil {
 				log.Fatal(err)
@@ -345,7 +344,7 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 		mgCommand = append(mgCommand, c)
 	} else {
 		mgCommand = append(mgCommand,
-			"test", "--quiet",
+			KubeDBDatabaseName, "--quiet",
 			fmt.Sprintf("--username=%s", opts.username),
 			fmt.Sprintf("--password=%s", opts.pass),
 			"--authenticationDatabase=admin",
@@ -400,7 +399,7 @@ func (opts *mongoDBOpts) handleTLS() ([]interface{}, error) {
 	}
 
 	mgCommand := []interface{}{
-		"mongo", "test", "--quiet",
+		"mongo", KubeDBDatabaseName, "--quiet",
 		"--tls",
 		fmt.Sprintf("--tlsCAFile=%v", mgCAFile),
 		fmt.Sprintf("--tlsCertificateKeyFile=%v", mgPEMFile),

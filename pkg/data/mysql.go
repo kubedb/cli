@@ -41,11 +41,9 @@ import (
 )
 
 const (
-	myCaFile           = "/etc/mysql/certs/ca.crt"
-	myCertFile         = "/etc/mysql/certs/client.crt"
-	myKeyFile          = "/etc/mysql/certs/client.key"
-	KubeDBDatabaseName = "kubedb_cli"
-	KubeDBTableName    = "kubedb_table"
+	myCaFile   = "/etc/mysql/certs/ca.crt"
+	myCertFile = "/etc/mysql/certs/client.crt"
+	myKeyFile  = "/etc/mysql/certs/client.key"
 )
 
 func InsertMySQLDataCMD(f cmdutil.Factory) *cobra.Command {
