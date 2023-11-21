@@ -33,7 +33,6 @@ import (
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
@@ -315,23 +314,13 @@ func (opts *mariadbOpts) getShellCommand(command string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	containerName := "mariadb"
-	label := opts.db.OffshootLabels()
 
-	if *opts.db.Spec.Replicas > 1 {
-		label["kubedb.com/role"] = "primary"
-	}
-
-	pods, err := opts.client.CoreV1().Pods(db.Namespace).List(context.TODO(), metav1.ListOptions{
-		LabelSelector: labels.Set.String(label),
-	})
-	if err != nil || len(pods.Items) == 0 {
-		return "", err
-	}
 	if db.Spec.TLS != nil {
-		cmd = fmt.Sprintf("kubectl exec -n %s %s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, pods.Items[0].Name, containerName, user, password, "127.0.0.1", "3306", myCaFile, myCertFile, myKeyFile, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", myCaFile, myCertFile, myKeyFile, api.ResourceSingularMySQL, command)
 	} else {
-		cmd = fmt.Sprintf("kubectl exec -n %s %s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, pods.Items[0].Name, containerName, user, password, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, api.ResourceSingularMySQL, command)
 	}
 
 	return cmd, err
