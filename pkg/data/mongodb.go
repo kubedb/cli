@@ -23,6 +23,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
+	"strconv"
 	"strings"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
@@ -283,15 +285,27 @@ func (opts *mongoDBOpts) verifyOutput(out []byte, rows int) error {
 		return err
 	}
 
-	matched := 0
+	// first sort the ids
+	list := make([]string, 0)
+	for i := 0; i < len(docs.Cursor.FirstBatch); i++ {
+		d := docs.Cursor.FirstBatch[i].DocID
+		list = append(list, d)
+	}
+	sort.Slice(list, func(i, j int) bool {
+		numI, _ := strconv.Atoi(list[i][3:])
+		numJ, _ := strconv.Atoi(list[j][3:])
+		return numI < numJ // Compare based on the numerical part
+	})
+
+	// then, match with the targets
 	lim := len(docs.Cursor.FirstBatch)
 	if lim > rows {
 		lim = rows
 	}
+	matched := 0
 	for i := 0; i < lim; i++ {
-		d := docs.Cursor.FirstBatch[i].DocID
 		target := fmt.Sprintf("doc%d", i+1)
-		if d != target {
+		if list[i] != target {
 			break
 		}
 		matched = matched + 1
