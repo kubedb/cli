@@ -24,11 +24,14 @@ import (
 	amv "kubedb.dev/apimachinery/pkg/validator"
 
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	"kmodules.xyz/client-go/policy/secomp"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -70,6 +73,36 @@ func (ed *ElasticsearchDashboard) SetupWebhookWithManager(mgr manager.Manager) e
 
 var _ webhook.Defaulter = &ElasticsearchDashboard{}
 
+func (ed *ElasticsearchDashboard) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.ContainerSecurityContext == nil {
+		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
+	}
+	ed.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+}
+
+func (ed *ElasticsearchDashboard) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+	if sc.AllowPrivilegeEscalation == nil {
+		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.RunAsUser == nil {
+		sc.RunAsUser = pointer.Int64P(1000)
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+}
+
 // Default implements webhook.Defaulter so a webhook will be registered for the type
 func (ed *ElasticsearchDashboard) Default() {
 	if ed.Spec.Replicas == nil {
@@ -84,6 +117,8 @@ func (ed *ElasticsearchDashboard) Default() {
 		ed.Spec.TerminationPolicy = api.TerminationPolicyWipeOut
 		edLog.Info(".Spec.TerminationPolicy have been set to TerminationPolicyWipeOut")
 	}
+
+	ed.setDefaultContainerSecurityContext(&ed.Spec.PodTemplate)
 
 	if ed.Spec.EnableSSL {
 		if ed.Spec.TLS == nil {

@@ -31,6 +31,41 @@ type UpdateConstraints struct {
 	Denylist []string `json:"denylist,omitempty"`
 }
 
+type ArchiverSpec struct {
+	Walg  WalgSpec  `json:"walg,omitempty"`
+	Addon AddonSpec `json:"addon,omitempty"`
+}
+
+type WalgSpec struct {
+	Image string `json:"image"`
+}
+
+type AddonSpec struct {
+	Name  AddonType  `json:"name,omitempty"`
+	Tasks AddonTasks `json:"tasks,omitempty"`
+}
+
+// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon
+type AddonType string
+
+type AddonTasks struct {
+	VolumeSnapshot  VolumeSnapshot  `json:"volumeSnapshot,omitempty"`
+	ManifestBackup  ManifestBackup  `json:"manifestBackup,omitempty"`
+	ManifestRestore ManifestRestore `json:"manifestRestore,omitempty"`
+}
+
+type VolumeSnapshot struct {
+	Name string `json:"name"`
+}
+
+type ManifestBackup struct {
+	Name string `json:"name"`
+}
+
+type ManifestRestore struct {
+	Name string `json:"name"`
+}
+
 // GitSyncer is the image for the kubernetes/git-sync
 // https://github.com/kubernetes/git-sync
 type GitSyncer struct {

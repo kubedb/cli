@@ -71,6 +71,8 @@ type PerconaXtraDBVersionSpec struct {
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // PerconaXtraDBVersionDatabase is the perconaxtradb image

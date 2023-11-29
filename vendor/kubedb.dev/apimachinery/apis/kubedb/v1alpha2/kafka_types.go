@@ -218,8 +218,7 @@ type KafkaListenerType string
 const (
 	KafkaListenerBroker     KafkaListenerType = "BROKER"
 	KafkaListenerController KafkaListenerType = "CONTROLLER"
-	KafkaListenerInternal   KafkaListenerType = "INTERNAL"
-	KafkaListenerExternal   KafkaListenerType = "EXTERNAL"
+	KafkaListenerLocal      KafkaListenerType = "LOCAL"
 	KafkaListenerCC         KafkaListenerType = "CC"
 )
 

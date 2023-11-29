@@ -48,6 +48,48 @@ spec:
             type: object
           spec:
             properties:
+              archiver:
+                properties:
+                  addon:
+                    properties:
+                      name:
+                        enum:
+                        - mongodb-addon
+                        - postgres-addon
+                        type: string
+                      tasks:
+                        properties:
+                          manifestBackup:
+                            properties:
+                              name:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          manifestRestore:
+                            properties:
+                              name:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          volumeSnapshot:
+                            properties:
+                              name:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                        type: object
+                    type: object
+                  walg:
+                    properties:
+                      image:
+                        type: string
+                    required:
+                    - image
+                    type: object
+                type: object
               coordinator:
                 properties:
                   image:
@@ -75,6 +117,13 @@ spec:
                 - PostgreSQL
                 type: string
               exporter:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
+              gitSyncer:
                 properties:
                   image:
                     type: string

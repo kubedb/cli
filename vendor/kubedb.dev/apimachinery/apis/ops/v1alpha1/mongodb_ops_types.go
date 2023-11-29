@@ -71,6 +71,8 @@ type MongoDBOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for reprovisioning database
 	Reprovision *Reprovision `json:"reprovision,omitempty"`
+	// Specifies information necessary for setting up Archiver for database
+	Archiver *ArchiverOptions `json:"archiver,omitempty"`
 
 	// Specifies the Readiness Criteria
 	ReadinessCriteria *MongoDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`

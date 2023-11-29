@@ -16,7 +16,14 @@ limitations under the License.
 
 package v1
 
-import "fmt"
+import (
+	"fmt"
+
+	"kmodules.xyz/client-go/policy/secomp"
+
+	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
+)
 
 func (agent *AgentSpec) SetDefaults() {
 	if agent == nil {
@@ -30,7 +37,30 @@ func (agent *AgentSpec) SetDefaults() {
 		if agent.Prometheus.Exporter.Port == 0 {
 			agent.Prometheus.Exporter.Port = PrometheusExporterPortNumber
 		}
+		agent.SetSecurityContextDefaults()
 	}
+}
+
+func (agent *AgentSpec) SetSecurityContextDefaults() {
+	sc := agent.Prometheus.Exporter.SecurityContext
+	if sc == nil {
+		sc = &core.SecurityContext{}
+	}
+	if sc.AllowPrivilegeEscalation == nil {
+		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+	agent.Prometheus.Exporter.SecurityContext = sc
 }
 
 func IsKnownAgentType(at AgentType) bool {

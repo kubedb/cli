@@ -322,20 +322,20 @@ const (
 	MariaDBDataVolumeName                = "data"
 
 	// =========================== PostgreSQL Constants ============================
-	PostgresDatabasePortName         = "db"
-	PostgresPrimaryServicePortName   = "primary"
-	PostgresStandbyServicePortName   = "standby"
-	PostgresDatabasePort             = 5432
-	PostgresPodPrimary               = "primary"
-	PostgresPodStandby               = "standby"
-	EnvPostgresUser                  = "POSTGRES_USER"
-	EnvPostgresPassword              = "POSTGRES_PASSWORD"
-	PostgresRootUser                 = "postgres"
-	PostgresCoordinatorContainerName = "pg-coordinator"
-	PostgresCoordinatorPort          = 2380
-	PostgresCoordinatorPortName      = "coordinator"
-	PostgresContainerName            = ResourceSingularPostgres
-
+	PostgresDatabasePortName          = "db"
+	PostgresPrimaryServicePortName    = "primary"
+	PostgresStandbyServicePortName    = "standby"
+	PostgresDatabasePort              = 5432
+	PostgresPodPrimary                = "primary"
+	PostgresPodStandby                = "standby"
+	EnvPostgresUser                   = "POSTGRES_USER"
+	EnvPostgresPassword               = "POSTGRES_PASSWORD"
+	PostgresRootUser                  = "postgres"
+	PostgresCoordinatorContainerName  = "pg-coordinator"
+	PostgresCoordinatorPort           = 2380
+	PostgresCoordinatorPortName       = "coordinator"
+	PostgresContainerName             = ResourceSingularPostgres
+	PostgresInitContainerName         = "postgres-init-container"
 	PostgresCoordinatorClientPort     = 2379
 	PostgresCoordinatorClientPortName = "coordinatclient"
 
@@ -518,15 +518,13 @@ const (
 	KafkaPortNameCruiseControlREST     = "cc-rest"
 	KafkaBrokerClientPortName          = "broker"
 	KafkaControllerClientPortName      = "controller"
-	KafkaPortNameInternal              = "internal"
-	KafkaPortNameExternal              = "external"
+	KafkaPortNameLocal                 = "local"
 	KafkaTopicNameHealth               = "kafka-health"
 	KafkaTopicDeletionThresholdOffset  = 1000
-	KafkaControllerMaxID               = 1000
+	KafkaBrokerMaxID                   = 1000
 	KafkaRESTPort                      = 9092
 	KafkaControllerRESTPort            = 9093
-	KafkaInternalRESTPort              = 29092
-	KafkaExternalRESTPort              = 19092
+	KafkaLocalRESTPort                 = 29092
 	KafkaCruiseControlRESTPort         = 9090
 	KafkaCruiseControlListenerPort     = 9094
 	KafkaCCDefaultInNetwork            = 500000
@@ -690,4 +688,12 @@ var (
 			core.ResourceMemory: resource.MustParse("1.5Gi"),
 		},
 	}
+)
+
+const (
+	InitFromGit          = "init-from-git"
+	InitFromGitMountPath = "/git"
+	GitSecretVolume      = "git-secret"
+	GitSecretMountPath   = "/etc/git-secret"
+	GitSyncContainerName = "git-sync"
 )

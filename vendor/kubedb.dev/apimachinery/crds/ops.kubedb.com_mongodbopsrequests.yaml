@@ -48,6 +48,26 @@ spec:
                 - IfReady
                 - Always
                 type: string
+              archiver:
+                properties:
+                  operation:
+                    enum:
+                    - ConfigureArchiver
+                    - DisableArchiver
+                    type: string
+                  ref:
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                required:
+                - operation
+                - ref
+                type: object
               configuration:
                 properties:
                   arbiter:
