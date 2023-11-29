@@ -33,6 +33,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -264,9 +265,14 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
 
-	if m.UsesGroupReplication() {
+	if m.UsesGroupReplication() || m.IsInnoDBCluster() || m.IsSemiSync() {
 		if m.Spec.Replicas == nil {
 			m.Spec.Replicas = pointer.Int32P(MySQLDefaultGroupSize)
+		} else {
+			if m.Spec.Coordinator.SecurityContext == nil {
+				m.Spec.Coordinator.SecurityContext = &core.SecurityContext{}
+			}
+			m.assignDefaultContainerSecurityContext(m.Spec.Coordinator.SecurityContext)
 		}
 	} else {
 		if m.Spec.Replicas == nil {
@@ -278,11 +284,17 @@ func (m *MySQL) SetDefaults(topology *core_util.Topology) {
 		m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
 	}
 
+	m.setDefaultContainerSecurityContext(&m.Spec.PodTemplate)
+
 	m.Spec.Monitor.SetDefaults()
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
 	m.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	// If prometheus enabled, & RunAsUser not set. set the default 999
+	if m.Spec.Monitor != nil && m.Spec.Monitor.Prometheus != nil && m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+		m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(999)
+	}
 }
 
 // setDefaultAffinity
@@ -404,4 +416,34 @@ func (m *MySQL) MySQLTLSArgs() []string {
 
 func (m *MySQL) GetRouterName() string {
 	return fmt.Sprintf("%s-router", m.Name)
+}
+
+func (m *MySQL) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.ContainerSecurityContext == nil {
+		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
+	}
+	m.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+}
+
+func (m *MySQL) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+	if sc.AllowPrivilegeEscalation == nil {
+		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.RunAsUser == nil {
+		sc.RunAsUser = pointer.Int64P(999)
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
 }

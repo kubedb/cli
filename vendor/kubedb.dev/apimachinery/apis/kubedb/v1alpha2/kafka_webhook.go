@@ -86,6 +86,19 @@ func (k *Kafka) ValidateDelete() error {
 func (k *Kafka) ValidateCreateOrUpdate() error {
 	var allErr field.ErrorList
 	// TODO(user): fill in your validation logic upon object creation.
+	if k.Spec.EnableSSL {
+		if k.Spec.TLS == nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("enableSSL"),
+				k.Name,
+				".spec.tls can't be nil, if .spec.enableSSL is true"))
+		}
+	} else {
+		if k.Spec.TLS != nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("enableSSL"),
+				k.Name,
+				".spec.tls must be nil, if .spec.enableSSL is disabled"))
+		}
+	}
 	if k.Spec.Topology != nil {
 		if k.Spec.Topology.Controller == nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology").Child("controller"),
@@ -195,6 +208,7 @@ var availableVersions = []string{
 	"3.4.0",
 	"3.4.1",
 	"3.5.1",
+	"3.6.0",
 }
 
 func validateVersion(db *Kafka) error {

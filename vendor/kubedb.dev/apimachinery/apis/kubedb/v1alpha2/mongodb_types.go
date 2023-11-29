@@ -155,6 +155,10 @@ type MongoDBSpec struct {
 	// +optional
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
+
+	// Archiver controls database backup using Archiver CR
+	// +optional
+	Archiver *Archiver `json:"archiver,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client;metrics-exporter

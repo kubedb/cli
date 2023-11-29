@@ -102,3 +102,16 @@ type Accessor interface {
 	GetStatus() OpsRequestStatus
 	SetStatus(_ OpsRequestStatus)
 }
+
+// +kubebuilder:validation:Enum=ConfigureArchiver;DisableArchiver
+type ArchiverOperation string
+
+const (
+	ArchiverOperationConfigure ArchiverOperation = "ConfigureArchiver"
+	ArchiverOperationDisable   ArchiverOperation = "DisableArchiver"
+)
+
+type ArchiverOptions struct {
+	Operation ArchiverOperation     `json:"operation"`
+	Ref       kmapi.ObjectReference `json:"ref"`
+}

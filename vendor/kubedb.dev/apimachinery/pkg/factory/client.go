@@ -17,9 +17,11 @@ limitations under the License.
 package factory
 
 import (
+	archiverapi "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	kubedbscheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	cmscheme "github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/scheme"
+	snapshotapi "github.com/kubernetes-csi/external-snapshotter/client/v4/apis/volumesnapshot/v1"
 	promscheme "github.com/prometheus-operator/prometheus-operator/pkg/client/versioned/scheme"
 	crdscheme "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -29,6 +31,8 @@ import (
 	metricsscheme "k8s.io/metrics/pkg/client/clientset/versioned/scheme"
 	crscheme "kmodules.xyz/custom-resources/client/clientset/versioned/scheme"
 	sidekickapi "kubeops.dev/sidekick/apis/apps/v1alpha1"
+	stashcoreapi "kubestash.dev/apimachinery/apis/core/v1alpha1"
+	stashstorageapi "kubestash.dev/apimachinery/apis/storage/v1alpha1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	stashscheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
@@ -76,6 +80,26 @@ func NewUncachedClient(cfg *rest.Config) (client.Client, error) {
 	}
 	// prometheus
 	if err := promscheme.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	if err := archiverapi.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	if err := snapshotapi.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	if err := stashcoreapi.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	if err := stashstorageapi.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	if err := sidekickapi.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 

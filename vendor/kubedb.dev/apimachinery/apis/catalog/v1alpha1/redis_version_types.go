@@ -70,6 +70,8 @@ type RedisVersionSpec struct {
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // RedisVersionInitContainer is the Redis init container image

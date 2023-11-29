@@ -27,12 +27,15 @@ import (
 
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 func (k *Kafka) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -78,14 +81,6 @@ func (k *Kafka) ServiceName() string {
 
 func (k *Kafka) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(k.ServiceName(), "pods")
-}
-
-func (k *Kafka) GoverningServiceNameController() string {
-	return meta_util.NameWithSuffix(k.ServiceName(), KafkaNodeRolesController)
-}
-
-func (k *Kafka) GoverningServiceNameBroker() string {
-	return meta_util.NameWithSuffix(k.ServiceName(), KafkaNodeRolesBrokers)
 }
 
 func (k *Kafka) GoverningServiceNameCruiseControl() string {
@@ -320,10 +315,51 @@ func (k *Kafka) SetDefaults() {
 			k.Spec.Replicas = pointer.Int32P(1)
 		}
 	}
+
+	k.setDefaultContainerSecurityContext(&k.Spec.PodTemplate)
+	if k.Spec.CruiseControl != nil {
+		k.setDefaultContainerSecurityContext(&k.Spec.CruiseControl.PodTemplate)
+	}
+	k.Spec.Monitor.SetDefaults()
+	// If prometheus enabled, & RunAsUser not set. set the default 1001
+	if k.Spec.Monitor != nil && k.Spec.Monitor.Prometheus != nil && k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+		k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(1001)
+	}
+
 	if k.Spec.EnableSSL {
 		k.SetTLSDefaults()
 	}
 	k.SetHealthCheckerDefaults()
+}
+
+func (k *Kafka) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.ContainerSecurityContext == nil {
+		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
+	}
+	k.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+}
+
+func (k *Kafka) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+	if sc.AllowPrivilegeEscalation == nil {
+		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.RunAsUser == nil {
+		sc.RunAsUser = pointer.Int64P(1001)
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
 }
 
 func (k *Kafka) SetTLSDefaults() {

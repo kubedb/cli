@@ -82,6 +82,8 @@ type ElasticsearchVersionSpec struct {
 	SecurityContext ElasticsearchSecurityContext `json:"securityContext"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // ElasticsearchVersionDatabase is the Elasticsearch Database image

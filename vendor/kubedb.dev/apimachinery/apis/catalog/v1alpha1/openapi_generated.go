@@ -442,6 +442,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                                     schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.Volume":                                                  schema_kmodulesxyz_offshoot_api_api_v1_Volume(ref),
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                            schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.AddonSpec":                                  schema_apimachinery_apis_catalog_v1alpha1_AddonSpec(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.AddonTasks":                                 schema_apimachinery_apis_catalog_v1alpha1_AddonTasks(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec":                               schema_apimachinery_apis_catalog_v1alpha1_ArchiverSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.CruiseControlVersionDatabase":               schema_apimachinery_apis_catalog_v1alpha1_CruiseControlVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchDashboardVersionDatabase":      schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchDashboardVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchSecurityContext":               schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchSecurityContext(ref),
@@ -464,6 +467,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionList":                           schema_apimachinery_apis_catalog_v1alpha1_KafkaVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionPodSecurityPolicy":              schema_apimachinery_apis_catalog_v1alpha1_KafkaVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionSpec":                           schema_apimachinery_apis_catalog_v1alpha1_KafkaVersionSpec(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ManifestBackup":                             schema_apimachinery_apis_catalog_v1alpha1_ManifestBackup(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ManifestRestore":                            schema_apimachinery_apis_catalog_v1alpha1_ManifestRestore(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersion":                             schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator":                  schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionCoordinator(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase":                     schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionDatabase(ref),
@@ -538,6 +543,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionSpec":                           schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector":                    schema_apimachinery_apis_catalog_v1alpha1_ReplicationModeDetector(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints":                          schema_apimachinery_apis_catalog_v1alpha1_UpdateConstraints(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.VolumeSnapshot":                             schema_apimachinery_apis_catalog_v1alpha1_VolumeSnapshot(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.WalgSpec":                                   schema_apimachinery_apis_catalog_v1alpha1_WalgSpec(ref),
 	}
 }
 
@@ -20859,6 +20866,22 @@ func schema_kmodulesxyz_offshoot_api_api_v1_PodRuntimeSettings(ref common.Refere
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"podLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodLabels are the labels that will be attached with the respective Pod",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
 					"podAnnotations": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodAnnotations are the annotations that will be attached with the respective Pod",
@@ -21972,6 +21995,90 @@ func schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref common.ReferenceCal
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_AddonSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"tasks": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.AddonTasks"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.AddonTasks"},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_AddonTasks(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"volumeSnapshot": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.VolumeSnapshot"),
+						},
+					},
+					"manifestBackup": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ManifestBackup"),
+						},
+					},
+					"manifestRestore": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ManifestRestore"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ManifestBackup", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ManifestRestore", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.VolumeSnapshot"},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_ArchiverSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"walg": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.WalgSpec"),
+						},
+					},
+					"addon": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.AddonSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.AddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.WalgSpec"},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_CruiseControlVersionDatabase(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -22342,12 +22449,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
 				},
 				Required: []string{"version", "authPlugin", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchDashboardVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDashboardInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchDashboardVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDashboardInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -22525,12 +22638,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_EtcdVersionSpec(ref common.Refere
 							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionExporter"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.EtcdVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"},
 	}
 }
 
@@ -22749,6 +22868,46 @@ func schema_apimachinery_apis_catalog_v1alpha1_KafkaVersionSpec(ref common.Refer
 		},
 		Dependencies: []string{
 			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.CruiseControlVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_ManifestBackup(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_ManifestRestore(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
 	}
 }
 
@@ -23017,12 +23176,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -23481,12 +23646,25 @@ func schema_apimachinery_apis_catalog_v1alpha1_MongoDBVersionSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver defines the walg & stash-addon related specifications",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies", "replicationModeDetector"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MongoDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ReplicationModeDetector", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -24216,12 +24394,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersionSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PerconaXtraDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -24775,12 +24959,25 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver defines the walg & stash-addon related specifications",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -25259,12 +25456,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.RedisVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -25327,6 +25530,46 @@ func schema_apimachinery_apis_catalog_v1alpha1_UpdateConstraints(ref common.Refe
 						},
 					},
 				},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_VolumeSnapshot(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_WalgSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
 			},
 		},
 	}

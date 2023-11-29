@@ -307,6 +307,41 @@ spec:
                 type: object
               init:
                 properties:
+                  archiver:
+                    properties:
+                      encryptionSecret:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      fullDBRepository:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      manifestRepository:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      recoveryTimestamp:
+                        format: date-time
+                        type: string
+                    required:
+                    - recoveryTimestamp
+                    type: object
                   initialized:
                     type: boolean
                   script:

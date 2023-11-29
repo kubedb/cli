@@ -444,6 +444,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                               schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Age":                            schema_apimachinery_apis_kubedb_v1alpha2_Age(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers":               schema_apimachinery_apis_kubedb_v1alpha2_AllowedConsumers(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver":                       schema_apimachinery_apis_kubedb_v1alpha2_Archiver(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ArchiverRecovery":               schema_apimachinery_apis_kubedb_v1alpha2_ArchiverRecovery(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec":                    schema_apimachinery_apis_kubedb_v1alpha2_AutoOpsSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConnectionPoolConfig":           schema_apimachinery_apis_kubedb_v1alpha2_ConnectionPoolConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConsumerNamespaces":             schema_apimachinery_apis_kubedb_v1alpha2_ConsumerNamespaces(ref),
@@ -20885,6 +20887,22 @@ func schema_kmodulesxyz_offshoot_api_api_v1_PodRuntimeSettings(ref common.Refere
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"podLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodLabels are the labels that will be attached with the respective Pod",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
 					"podAnnotations": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodAnnotations are the annotations that will be attached with the respective Pod",
@@ -22043,6 +22061,72 @@ func schema_apimachinery_apis_kubedb_v1alpha2_AllowedConsumers(ref common.Refere
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConsumerNamespaces"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_Archiver(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"pause": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pause is used to stop the archiver backup for the database",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"ref": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ref is the name and namespace reference to the Archiver CR",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+				},
+				Required: []string{"ref"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_ArchiverRecovery(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"recoveryTimestamp": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"encryptionSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"manifestRepository": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"fullDBRepository": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FullDBRepository means db restore + manifest restore",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+				},
+				Required: []string{"recoveryTimestamp"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.ObjectReference"},
 	}
 }
 
@@ -23284,11 +23368,16 @@ func schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref common.ReferenceCallb
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec"),
 						},
 					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ArchiverRecovery"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec"},
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ArchiverRecovery", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ScriptSourceSpec"},
 	}
 }
 
@@ -23735,6 +23824,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KernelSettings(ref common.Referenc
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"disableDefaults": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DisableDefaults can be set to false to avoid defaulting via mutator",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 					"privileged": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Privileged specifies the status whether the init container requires privileged access to perform the following commands.",
@@ -24869,12 +24965,18 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MongoDBSpec(ref common.ReferenceCa
 							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
 						},
 					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver controls database backup using Archiver CR",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoArbiterNode", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBReplicaSet", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBShardingTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoHiddenNode", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoArbiterNode", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBReplicaSet", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBShardingTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoHiddenNode", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -26421,12 +26523,18 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
 						},
 					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver controls database backup using Archiver CR",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 

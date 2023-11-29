@@ -1,0 +1,5 @@
+/envsubst
+coverage.out
+/vendor
+.idea/
+.vscode/

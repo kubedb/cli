@@ -62,6 +62,8 @@ type EtcdVersionSpec struct {
 	// Stash defines backup and restore task definitions.
 	// +optional
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // EtcdVersionDatabase is the Etcd Database image
