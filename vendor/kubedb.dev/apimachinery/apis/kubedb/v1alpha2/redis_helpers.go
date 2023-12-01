@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
@@ -203,7 +204,7 @@ func (r Redis) StatsServiceLabels() map[string]string {
 	return r.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
-func (r *Redis) SetDefaults(topology *core_util.Topology) {
+func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion, topology *core_util.Topology) {
 	if r == nil {
 		return
 	}
@@ -228,7 +229,7 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	if r.Spec.TerminationPolicy == "" {
 		r.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
-	r.setDefaultContainerSecurityContext(&r.Spec.PodTemplate)
+	r.setDefaultContainerSecurityContext(rdVersion, &r.Spec.PodTemplate)
 	if r.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		r.Spec.PodTemplate.Spec.ServiceAccountName = r.OffshootName()
 	}
@@ -240,9 +241,8 @@ func (r *Redis) SetDefaults(topology *core_util.Topology) {
 	r.setDefaultAffinity(&r.Spec.PodTemplate, labels, topology)
 
 	r.Spec.Monitor.SetDefaults()
-	// If prometheus enabled, & RunAsUser not set. set the default 999
 	if r.Spec.Monitor != nil && r.Spec.Monitor.Prometheus != nil && r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(999)
+		r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = rdVersion.Spec.SecurityContext.RunAsUser
 	}
 	r.SetTLSDefaults()
 	r.SetHealthCheckerDefaults()
@@ -321,17 +321,23 @@ func (r *Redis) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels map
 	}
 }
 
-func (r *Redis) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+func (r *Redis) setDefaultContainerSecurityContext(rdVersion *catalog.RedisVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
 	if podTemplate.Spec.ContainerSecurityContext == nil {
 		podTemplate.Spec.ContainerSecurityContext = &corev1.SecurityContext{}
 	}
-	r.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &corev1.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = rdVersion.Spec.SecurityContext.RunAsUser
+	}
+	r.assignDefaultContainerSecurityContext(rdVersion, podTemplate.Spec.ContainerSecurityContext)
 }
 
-func (r *Redis) assignDefaultContainerSecurityContext(sc *corev1.SecurityContext) {
+func (r *Redis) assignDefaultContainerSecurityContext(rdVersion *catalog.RedisVersion, sc *corev1.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -344,7 +350,10 @@ func (r *Redis) assignDefaultContainerSecurityContext(sc *corev1.SecurityContext
 		sc.RunAsNonRoot = pointer.BoolP(true)
 	}
 	if sc.RunAsUser == nil {
-		sc.RunAsUser = pointer.Int64P(999)
+		sc.RunAsUser = rdVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = rdVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()

@@ -136,7 +136,7 @@ func (b *BackupConfiguration) getDefaultStorage(ctx context.Context, c client.Cl
 		}
 	}
 
-	backupconfigurationlog.Error(fmt.Errorf("no default BackupStorage is found"), "no usable default BackupStorage is found")
+	backupconfigurationlog.Error(fmt.Errorf("no default BackupStorage found"), "")
 	return nil
 }
 
@@ -178,7 +178,7 @@ func (b *BackupConfiguration) getDefaultRetentionPolicy(ctx context.Context, c c
 		}
 	}
 
-	backupconfigurationlog.Error(fmt.Errorf("no default RetentionPolicy is found"), "no usable default RetentionPolicy is found")
+	backupconfigurationlog.Error(fmt.Errorf("no default RetentionPolicy found"), "")
 	return nil
 }
 
@@ -300,6 +300,10 @@ func (b *BackupConfiguration) validateSessions(ctx context.Context, c client.Cli
 		}
 	}
 
+	if err := b.validateUniqueRepo(); err != nil {
+		return err
+	}
+
 	if err := b.validateUniqueRepoDir(ctx, c); err != nil {
 		return err
 	}
@@ -337,7 +341,7 @@ func (b *BackupConfiguration) validateAddonInfo(session Session) error {
 	}
 
 	if session.Addon.Name == "" {
-		return fmt.Errorf("addon name is empty for session: %q. Please provide a valid addon name", session.Addon.Name)
+		return fmt.Errorf("addon name is empty for session: %q. Please provide a valid addon name", session.Name)
 	}
 
 	if len(session.Addon.Tasks) == 0 {
@@ -385,6 +389,21 @@ func (b *BackupConfiguration) validateRepositories(ctx context.Context, c client
 		}
 	}
 
+	return nil
+}
+
+func (b *BackupConfiguration) validateUniqueRepo() error {
+	mapRepoToBackend := make(map[string]map[string]string)
+	for _, session := range b.Spec.Sessions {
+		for _, repo := range session.Repositories {
+			if repoInfo, ok := mapRepoToBackend[repo.Name]; ok && repoInfo[repo.Backend] == repo.Name {
+				return fmt.Errorf("repository %q can not be used from multiple sessions. Please choose a different repository", repo.Name)
+			}
+			mapRepoToBackend[repo.Name] = map[string]string{
+				repo.Backend: repo.Name,
+			}
+		}
+	}
 	return nil
 }
 

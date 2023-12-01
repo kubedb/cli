@@ -18,9 +18,6 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.appRef.Kind/.spec.appRef.name
-      name: App
-      type: string
     - jsonPath: .spec.repository
       name: Repository
       type: string

@@ -17,11 +17,13 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"context"
 	"fmt"
 	"path/filepath"
 	"strings"
 
 	"kubedb.dev/apimachinery/apis"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
@@ -29,6 +31,8 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -316,14 +320,21 @@ func (k *Kafka) SetDefaults() {
 		}
 	}
 
-	k.setDefaultContainerSecurityContext(&k.Spec.PodTemplate)
-	if k.Spec.CruiseControl != nil {
-		k.setDefaultContainerSecurityContext(&k.Spec.CruiseControl.PodTemplate)
+	var kfVersion catalog.KafkaVersion
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &kfVersion)
+	if err != nil {
+		klog.Errorf("can't get the kafka version object %s for %s \n", err.Error(), k.Spec.Version)
+		return
 	}
+
+	k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.PodTemplate)
+	if k.Spec.CruiseControl != nil {
+		k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.CruiseControl.PodTemplate)
+	}
+
 	k.Spec.Monitor.SetDefaults()
-	// If prometheus enabled, & RunAsUser not set. set the default 1001
 	if k.Spec.Monitor != nil && k.Spec.Monitor.Prometheus != nil && k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(1001)
+		k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = kfVersion.Spec.SecurityContext.RunAsUser
 	}
 
 	if k.Spec.EnableSSL {
@@ -332,17 +343,23 @@ func (k *Kafka) SetDefaults() {
 	k.SetHealthCheckerDefaults()
 }
 
-func (k *Kafka) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+func (k *Kafka) setDefaultContainerSecurityContext(kfVersion *catalog.KafkaVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
 	if podTemplate.Spec.ContainerSecurityContext == nil {
 		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
 	}
-	k.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = kfVersion.Spec.SecurityContext.RunAsUser
+	}
+	k.assignDefaultContainerSecurityContext(kfVersion, podTemplate.Spec.ContainerSecurityContext)
 }
 
-func (k *Kafka) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+func (k *Kafka) assignDefaultContainerSecurityContext(kfVersion *catalog.KafkaVersion, sc *core.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -355,7 +372,10 @@ func (k *Kafka) assignDefaultContainerSecurityContext(sc *core.SecurityContext) 
 		sc.RunAsNonRoot = pointer.BoolP(true)
 	}
 	if sc.RunAsUser == nil {
-		sc.RunAsUser = pointer.Int64P(1001)
+		sc.RunAsUser = kfVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = kfVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()

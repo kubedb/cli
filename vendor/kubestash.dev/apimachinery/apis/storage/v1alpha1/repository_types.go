@@ -31,8 +31,6 @@ const (
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:path=repositories,singular=repository,shortName=repo,categories={kubestash,appscode,all}
-// +kubebuilder:printcolumn:name="App",type="string",JSONPath=".spec.appRef.Kind/.spec.appRef.name"
-// +kubebuilder:printcolumn:name="BackupStorage",type="string",JSONPath=".spec.storageRef.namespace/.spec.storageRef.name"
 // +kubebuilder:printcolumn:name="Integrity",type="boolean",JSONPath=".status.integrity"
 // +kubebuilder:printcolumn:name="Snapshot-Count",type="integer",JSONPath=".status.snapshotCount"
 // +kubebuilder:printcolumn:name="Size",type="string",JSONPath=".status.size"
@@ -94,7 +92,7 @@ type RepositoryStatus struct {
 
 	// LastBackupTime specifies the timestamp when the last successful backup has been taken
 	// +optional
-	LastBackupTime string `json:"lastBackupTime,omitempty"`
+	LastBackupTime *metav1.Time `json:"lastBackupTime,omitempty"`
 
 	// Integrity specifies whether the backed up data of this Repository has been corrupted or not
 	// +optional

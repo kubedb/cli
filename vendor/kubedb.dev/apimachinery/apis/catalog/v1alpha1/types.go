@@ -71,3 +71,8 @@ type ManifestRestore struct {
 type GitSyncer struct {
 	Image string `json:"image"`
 }
+
+// SecurityContext is for the additional config for the DB container
+type SecurityContext struct {
+	RunAsUser *int64 `json:"runAsUser,omitempty"`
+}

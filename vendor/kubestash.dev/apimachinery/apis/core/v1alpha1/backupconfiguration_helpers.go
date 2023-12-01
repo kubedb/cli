@@ -98,7 +98,7 @@ func (b *BackupConfiguration) GetTargetRef() *kmapi.TypedObjectReference {
 	if b.Spec.Target == nil {
 		return &kmapi.TypedObjectReference{
 			APIGroup: "na",
-			Kind:     apis.TargetKindEmpty,
+			Kind:     apis.KindEmpty,
 			Name:     "na",
 		}
 	}
