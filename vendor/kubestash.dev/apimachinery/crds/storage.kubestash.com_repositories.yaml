@@ -21,12 +21,6 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.appRef.Kind/.spec.appRef.name
-      name: App
-      type: string
-    - jsonPath: .spec.storageRef.namespace/.spec.storageRef.name
-      name: BackupStorage
-      type: string
     - jsonPath: .status.integrity
       name: Integrity
       type: boolean
@@ -211,6 +205,7 @@ spec:
               lastBackupTime:
                 description: LastBackupTime specifies the timestamp when the last
                   successful backup has been taken
+                format: date-time
                 type: string
               phase:
                 description: Phase represents the current state of the Repository.

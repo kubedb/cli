@@ -67,6 +67,9 @@ type KafkaVersionSpec struct {
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// SecurityContext is for the additional config for the DB container
+	// +optional
+	SecurityContext SecurityContext `json:"securityContext"`
 }
 
 // KafkaVersionDatabase is the Kafka Database image

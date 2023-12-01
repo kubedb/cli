@@ -84,6 +84,9 @@ type MySQLVersionSpec struct {
 	RouterInitContainer MySQLVersionRouterInitContainer `json:"routerInitContainer,omitempty"`
 	// +optional
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
+	// SecurityContext is for the additional config for the DB container
+	// +optional
+	SecurityContext SecurityContext `json:"securityContext"`
 }
 
 // MySQLVersionDatabase is the MySQL Database image

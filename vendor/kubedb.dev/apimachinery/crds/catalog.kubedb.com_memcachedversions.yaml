@@ -68,6 +68,12 @@ spec:
                 required:
                 - databasePolicyName
                 type: object
+              securityContext:
+                properties:
+                  runAsUser:
+                    format: int64
+                    type: integer
+                type: object
               version:
                 type: string
             required:

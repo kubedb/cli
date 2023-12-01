@@ -19,9 +19,6 @@ package apis
 import "time"
 
 const (
-	RequeueTimeInterval = 10 * time.Second
-	OwnerKey            = ".metadata.controller"
-
 	KubeStashKey              = "kubestash.com"
 	KubeStashApp              = "kubestash.com/app"
 	KubeStashCleanupFinalizer = "kubestash.com/cleanup"
@@ -39,6 +36,8 @@ const (
 	KindReplicationController = "ReplicationController"
 	KindJob                   = "Job"
 	KindVolumeSnapshot        = "VolumeSnapshot"
+	KindNamespace             = "Namespace"
+	KindEmpty                 = ""
 )
 
 const (
@@ -71,8 +70,7 @@ const (
 
 // Keys for snapshots labels
 const (
-	KubeStashRepositoryName = "kubestash.com/repo-name"
-
+	KubeStashRepoName        = "kubestash.com/repo-name"
 	KubeStashAppRefKind      = "kubestash.com/app-ref-kind"
 	KubeStashAppRefNamespace = "kubestash.com/app-ref-namespace"
 	KubeStashAppRefName      = "kubestash.com/app-ref-name"
@@ -109,42 +107,9 @@ const (
 
 // Reconciliation related
 const (
-	Requeue      = true
-	DoNotRequeue = false
-)
-
-// Addon related
-const (
-	EnvComponentName = "COMPONENT_NAME"
-
-	ComponentPod             = "pod"
-	ComponentDeployment      = "deployment"
-	ComponentPVC             = "pvc"
-	ComponentDump            = "dump"
-	ComponentManifests       = "manifests"
-	ComponentVolumeSnapshots = "volumesnapshots"
-
-	DirRepository = "repository"
-)
-
-// Interim Volume Related Constant
-const (
-	KeyDBVersion = "DB_VERSION"
-
-	KeyInterimVolume  = "INTERIM_VOLUME"
-	InterimVolumeName = "kubestash-interim-volume"
-)
-
-// PersistentVolumeClaim related
-const (
-	KeyPodOrdinal = "POD_ORDINAL"
-	PVCName       = "PVC_NAME"
-)
-
-// Kubedump related
-const (
-	TargetKindEmpty = ""
-	KindNamespace   = "Namespace"
+	RequeueTimeInterval = 10 * time.Second
+	Requeue             = true
+	DoNotRequeue        = false
 )
 
 // Local Network Volume Accessor related
@@ -164,7 +129,25 @@ const (
 	KubeStashPopulatorContainer = "kubestash-populator"
 )
 
-// Snapshot version related constants
 const (
+	ComponentPod             = "pod"
+	ComponentDeployment      = "deployment"
+	ComponentPVC             = "pvc"
+	ComponentDump            = "dump"
+	ComponentWal             = "wal"
+	ComponentManifests       = "manifests"
+	ComponentVolumeSnapshots = "volumesnapshots"
+)
+
+const (
+	EnvComponentName = "COMPONENT_NAME"
+	KeyPodOrdinal    = "POD_ORDINAL"
+	KeyPVCName       = "PVC_NAME"
+	KeyDBVersion     = "DB_VERSION"
+	KeyInterimVolume = "INTERIM_VOLUME"
+
+	InterimVolumeName = "kubestash-interim-volume"
+	OwnerKey          = ".metadata.controller"
 	SnapshotVersionV1 = "v1"
+	DirRepository     = "repository"
 )

@@ -64,6 +64,9 @@ type EtcdVersionSpec struct {
 	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
 	// +optional
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
+	// SecurityContext is for the additional config for the DB container
+	// +optional
+	SecurityContext SecurityContext `json:"securityContext"`
 }
 
 // EtcdVersionDatabase is the Etcd Database image

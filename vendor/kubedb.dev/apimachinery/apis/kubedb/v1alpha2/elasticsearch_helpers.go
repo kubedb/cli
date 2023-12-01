@@ -386,17 +386,23 @@ func (e Elasticsearch) StatsServiceLabels() map[string]string {
 	return e.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
-func (e Elasticsearch) setContainerSecurityContextDefaults(podTemplate *ofst.PodTemplateSpec) {
+func (e Elasticsearch) setContainerSecurityContextDefaults(esVersion *catalog.ElasticsearchVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
 	if podTemplate.Spec.ContainerSecurityContext == nil {
 		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
 	}
-	e.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = esVersion.Spec.SecurityContext.RunAsUser
+	}
+	e.assignDefaultContainerSecurityContext(esVersion, podTemplate.Spec.ContainerSecurityContext)
 }
 
-func (e Elasticsearch) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+func (e Elasticsearch) assignDefaultContainerSecurityContext(esVersion *catalog.ElasticsearchVersion, sc *core.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -409,7 +415,10 @@ func (e Elasticsearch) assignDefaultContainerSecurityContext(sc *core.SecurityCo
 		sc.RunAsNonRoot = pointer.BoolP(true)
 	}
 	if sc.RunAsUser == nil {
-		sc.RunAsUser = pointer.Int64P(1000)
+		sc.RunAsUser = esVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = esVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
@@ -621,16 +630,16 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 	}
 
 	e.setDefaultAffinity(&e.Spec.PodTemplate, e.OffshootSelectors(), topology)
-	e.setContainerSecurityContextDefaults(&e.Spec.PodTemplate)
+	e.setContainerSecurityContextDefaults(esVersion, &e.Spec.PodTemplate)
 	e.setDefaultInternalUsersAndRoleMappings(esVersion)
-	e.SetMetricsExporterDefaults()
+	e.SetMetricsExporterDefaults(esVersion)
 	e.SetTLSDefaults(esVersion)
 }
 
-func (e *Elasticsearch) SetMetricsExporterDefaults() {
+func (e *Elasticsearch) SetMetricsExporterDefaults(esVersion *catalog.ElasticsearchVersion) {
 	e.Spec.Monitor.SetDefaults()
 	if e.Spec.Monitor != nil && e.Spec.Monitor.Prometheus != nil && e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(1000)
+		e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = esVersion.Spec.SecurityContext.RunAsUser
 	}
 }
 

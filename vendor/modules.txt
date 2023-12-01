@@ -1483,7 +1483,7 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.38.0-rc.0
+# kubedb.dev/apimachinery v0.38.0-rc.1
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1530,7 +1530,7 @@ kubedb.dev/db-client-go/redis
 ## explicit; go 1.18
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
-# kubestash.dev/apimachinery v0.2.0-rc.1
+# kubestash.dev/apimachinery v0.2.0
 ## explicit; go 1.20
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1

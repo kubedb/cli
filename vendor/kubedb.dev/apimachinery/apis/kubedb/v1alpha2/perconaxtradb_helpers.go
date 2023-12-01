@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
@@ -34,6 +35,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
@@ -204,7 +206,7 @@ func (p PerconaXtraDB) PrimaryServiceDNS() string {
 	return fmt.Sprintf("%s.%s.svc", p.ServiceName(), p.Namespace)
 }
 
-func (p *PerconaXtraDB) SetDefaults(topology *core_util.Topology) {
+func (p *PerconaXtraDB) SetDefaults(pVersion *v1alpha1.PerconaXtraDBVersion, topology *core_util.Topology) {
 	if p == nil {
 		return
 	}
@@ -224,28 +226,57 @@ func (p *PerconaXtraDB) SetDefaults(topology *core_util.Topology) {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
 	}
 
-	if p.Spec.PodTemplate.Spec.SecurityContext == nil {
-		p.Spec.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{
-			RunAsUser:  pointer.Int64P(PerconaXtraDBMySQLUserGroupID),
-			RunAsGroup: pointer.Int64P(PerconaXtraDBMySQLUserGroupID),
-		}
-	} else {
-		if p.Spec.PodTemplate.Spec.SecurityContext.RunAsUser == nil {
-			p.Spec.PodTemplate.Spec.SecurityContext.RunAsUser = pointer.Int64P(PerconaXtraDBMySQLUserGroupID)
-		}
-		if p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup == nil {
-			p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup = pointer.Int64P(PerconaXtraDBMySQLUserGroupID)
-		}
-	}
 	// Need to set FSGroup equal to  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup.
 	// So that /var/pv directory have the group permission for the RunAsGroup user GID.
 	// Otherwise, We will get write permission denied.
-	p.Spec.PodTemplate.Spec.SecurityContext.FSGroup = p.Spec.PodTemplate.Spec.SecurityContext.RunAsGroup
+	p.setDefaultContainerSecurityContext(pVersion, &p.Spec.PodTemplate)
 
 	p.Spec.Monitor.SetDefaults()
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 	p.SetTLSDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil && p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+		p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pVersion.Spec.SecurityContext.RunAsUser
+	}
+}
+
+func (p *PerconaXtraDB) setDefaultContainerSecurityContext(pVersion *v1alpha1.PerconaXtraDBVersion, podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.ContainerSecurityContext == nil {
+		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = pVersion.Spec.SecurityContext.RunAsUser
+	}
+	p.assignDefaultContainerSecurityContext(pVersion, podTemplate.Spec.ContainerSecurityContext)
+}
+
+func (p *PerconaXtraDB) assignDefaultContainerSecurityContext(pVersion *v1alpha1.PerconaXtraDBVersion, sc *core.SecurityContext) {
+	if sc.AllowPrivilegeEscalation == nil {
+		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.RunAsUser == nil {
+		sc.RunAsUser = pVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = pVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
 }
 
 // setDefaultAffinity

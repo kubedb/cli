@@ -72,6 +72,9 @@ type RedisVersionSpec struct {
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 	// +optional
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
+	// SecurityContext is for the additional config for the DB container
+	// +optional
+	SecurityContext SecurityContext `json:"securityContext"`
 }
 
 // RedisVersionInitContainer is the Redis init container image

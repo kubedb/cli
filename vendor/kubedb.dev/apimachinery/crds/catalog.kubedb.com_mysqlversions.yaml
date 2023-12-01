@@ -121,6 +121,12 @@ spec:
                 required:
                 - image
                 type: object
+              securityContext:
+                properties:
+                  runAsUser:
+                    format: int64
+                    type: integer
+                type: object
               stash:
                 properties:
                   addon:

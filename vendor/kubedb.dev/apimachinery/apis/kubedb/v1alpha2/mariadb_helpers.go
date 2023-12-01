@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 
 	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
@@ -191,7 +192,7 @@ func (m MariaDB) PrimaryServiceDNS() string {
 	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
 }
 
-func (m *MariaDB) SetDefaults(topology *core_util.Topology) {
+func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion, topology *core_util.Topology) {
 	if m == nil {
 		return
 	}
@@ -202,7 +203,7 @@ func (m *MariaDB) SetDefaults(topology *core_util.Topology) {
 		if m.Spec.Coordinator.SecurityContext == nil {
 			m.Spec.Coordinator.SecurityContext = &core.SecurityContext{}
 		}
-		m.assignDefaultContainerSecurityContext(m.Spec.Coordinator.SecurityContext)
+		m.assignDefaultContainerSecurityContext(mdVersion, m.Spec.Coordinator.SecurityContext)
 	}
 
 	if m.Spec.StorageType == "" {
@@ -216,30 +217,35 @@ func (m *MariaDB) SetDefaults(topology *core_util.Topology) {
 		m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
 	}
 
-	m.setDefaultContainerSecurityContext(&m.Spec.PodTemplate)
+	m.setDefaultContainerSecurityContext(mdVersion, &m.Spec.PodTemplate)
 
 	m.Spec.Monitor.SetDefaults()
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
 	m.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
-	// If prometheus enabled, & RunAsUser not set. set the default 999
 	if m.Spec.Monitor != nil && m.Spec.Monitor.Prometheus != nil && m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(999)
+		m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = mdVersion.Spec.SecurityContext.RunAsUser
 	}
 }
 
-func (m *MariaDB) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+func (m *MariaDB) setDefaultContainerSecurityContext(mdVersion *v1alpha1.MariaDBVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
 	if podTemplate.Spec.ContainerSecurityContext == nil {
 		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
 	}
-	m.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = mdVersion.Spec.SecurityContext.RunAsUser
+	}
+	m.assignDefaultContainerSecurityContext(mdVersion, podTemplate.Spec.ContainerSecurityContext)
 }
 
-func (m *MariaDB) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+func (m *MariaDB) assignDefaultContainerSecurityContext(mdVersion *v1alpha1.MariaDBVersion, sc *core.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -252,7 +258,10 @@ func (m *MariaDB) assignDefaultContainerSecurityContext(sc *core.SecurityContext
 		sc.RunAsNonRoot = pointer.BoolP(true)
 	}
 	if sc.RunAsUser == nil {
-		sc.RunAsUser = pointer.Int64P(999)
+		sc.RunAsUser = mdVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = mdVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()

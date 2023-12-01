@@ -211,6 +211,9 @@ func (p *PgBouncer) SetDefaults(pgBouncerVersion *catalog.PgBouncerVersion, uses
 	}
 
 	p.Spec.Monitor.SetDefaults()
+	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil && p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+		p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pgBouncerVersion.Spec.SecurityContext.RunAsUser
+	}
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
 }
 

@@ -65,8 +65,7 @@ const (
 	MongoDBMongosLabelKey = "mongodb.kubedb.com/node.mongos"
 	MongoDBTypeLabelKey   = "mongodb.kubedb.com/node.type"
 
-	MongoDBShardAffinityTemplateVar       = "SHARD_INDEX"
-	MongoDBUserID                   int64 = 999
+	MongoDBShardAffinityTemplateVar = "SHARD_INDEX"
 )
 
 type MongoShellScriptName string
@@ -686,14 +685,14 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		mongosLabels[MongoDBMongosLabelKey] = m.MongosNodeName()
 		m.setDefaultAffinity(&m.Spec.ShardTopology.Mongos.PodTemplate, mongosLabels, topology)
 
-		m.setDefaultSecurityContext(&m.Spec.ShardTopology.Shard.PodTemplate)
-		m.setDefaultSecurityContext(&m.Spec.ShardTopology.Mongos.PodTemplate)
-		m.setDefaultSecurityContext(&m.Spec.ShardTopology.ConfigServer.PodTemplate)
+		m.setDefaultSecurityContext(mgVersion, &m.Spec.ShardTopology.Shard.PodTemplate)
+		m.setDefaultSecurityContext(mgVersion, &m.Spec.ShardTopology.Mongos.PodTemplate)
+		m.setDefaultSecurityContext(mgVersion, &m.Spec.ShardTopology.ConfigServer.PodTemplate)
 		if m.Spec.Arbiter != nil {
-			m.setDefaultSecurityContext(&m.Spec.Arbiter.PodTemplate)
+			m.setDefaultSecurityContext(mgVersion, &m.Spec.Arbiter.PodTemplate)
 		}
 		if m.Spec.Hidden != nil {
-			m.setDefaultSecurityContext(&m.Spec.Hidden.PodTemplate)
+			m.setDefaultSecurityContext(mgVersion, &m.Spec.Hidden.PodTemplate)
 		}
 	} else {
 		if m.Spec.Replicas == nil {
@@ -713,38 +712,37 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		m.setDefaultAffinity(m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 
 		apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
-		m.setDefaultSecurityContext(m.Spec.PodTemplate)
+		m.setDefaultSecurityContext(mgVersion, m.Spec.PodTemplate)
 
 		if m.Spec.Arbiter != nil {
 			m.setDefaultProbes(&m.Spec.Arbiter.PodTemplate, mgVersion, true)
 			m.setDefaultAffinity(&m.Spec.Arbiter.PodTemplate, m.OffshootSelectors(), topology)
 			apis.SetDefaultResourceLimits(&m.Spec.Arbiter.PodTemplate.Spec.Resources, DefaultResources)
-			m.setDefaultSecurityContext(&m.Spec.Arbiter.PodTemplate)
+			m.setDefaultSecurityContext(mgVersion, &m.Spec.Arbiter.PodTemplate)
 		}
 		if m.Spec.Hidden != nil {
 			m.setDefaultProbes(&m.Spec.Hidden.PodTemplate, mgVersion)
 			m.setDefaultAffinity(&m.Spec.Hidden.PodTemplate, m.OffshootSelectors(), topology)
 			apis.SetDefaultResourceLimits(&m.Spec.Hidden.PodTemplate.Spec.Resources, DefaultResources)
-			m.setDefaultSecurityContext(&m.Spec.Hidden.PodTemplate)
+			m.setDefaultSecurityContext(mgVersion, &m.Spec.Hidden.PodTemplate)
 		}
 		if m.Spec.ReplicaSet != nil {
 			if m.Spec.Coordinator.SecurityContext == nil {
 				m.Spec.Coordinator.SecurityContext = &core.SecurityContext{}
 			}
-			m.assignDefaultContainerSecurityContext(m.Spec.Coordinator.SecurityContext) // modeDetector container
+			m.assignDefaultContainerSecurityContext(mgVersion, m.Spec.Coordinator.SecurityContext) // modeDetector container
 		}
 	}
 
 	m.SetTLSDefaults()
 	m.SetHealthCheckerDefaults()
 	m.Spec.Monitor.SetDefaults()
-	// If prometheus enabled, & RunAsUser not set. set the default 999
 	if m.Spec.Monitor != nil && m.Spec.Monitor.Prometheus != nil && m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pointer.Int64P(MongoDBUserID)
+		m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = mgVersion.Spec.SecurityContext.RunAsUser
 	}
 }
 
-func (m *MongoDB) setDefaultSecurityContext(podTemplate *ofst.PodTemplateSpec) {
+func (m *MongoDB) setDefaultSecurityContext(mgVersion *v1alpha1.MongoDBVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
@@ -755,12 +753,12 @@ func (m *MongoDB) setDefaultSecurityContext(podTemplate *ofst.PodTemplateSpec) {
 		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
 	}
 	if podTemplate.Spec.SecurityContext.FSGroup == nil {
-		podTemplate.Spec.SecurityContext.FSGroup = pointer.Int64P(MongoDBUserID)
+		podTemplate.Spec.SecurityContext.FSGroup = mgVersion.Spec.SecurityContext.RunAsUser
 	}
-	m.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+	m.assignDefaultContainerSecurityContext(mgVersion, podTemplate.Spec.ContainerSecurityContext)
 }
 
-func (m *MongoDB) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+func (m *MongoDB) assignDefaultContainerSecurityContext(mgVersion *v1alpha1.MongoDBVersion, sc *core.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -773,10 +771,10 @@ func (m *MongoDB) assignDefaultContainerSecurityContext(sc *core.SecurityContext
 		sc.RunAsNonRoot = pointer.BoolP(true)
 	}
 	if sc.RunAsUser == nil {
-		sc.RunAsUser = pointer.Int64P(MongoDBUserID)
+		sc.RunAsUser = mgVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.RunAsGroup == nil {
-		sc.RunAsGroup = pointer.Int64P(MongoDBUserID)
+		sc.RunAsGroup = mgVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
@@ -1009,28 +1007,6 @@ func (m *MongoDB) setDefaultAffinity(podTemplate *ofst.PodTemplateSpec, labels m
 				},
 			},
 		},
-	}
-}
-
-// setSecurityContext will set default PodSecurityContext.
-// These values will be applied only to newly created objects.
-// These defaultings should not be applied to DBs or dormantDBs,
-// that is managed by previous operators,
-func (m *MongoDBSpec) SetSecurityContext(podTemplate *ofst.PodTemplateSpec) {
-	if podTemplate == nil {
-		return
-	}
-	if podTemplate.Spec.SecurityContext == nil {
-		podTemplate.Spec.SecurityContext = new(core.PodSecurityContext)
-	}
-	if podTemplate.Spec.SecurityContext.FSGroup == nil {
-		podTemplate.Spec.SecurityContext.FSGroup = pointer.Int64P(MongoDBUserID)
-	}
-	if podTemplate.Spec.SecurityContext.RunAsNonRoot == nil {
-		podTemplate.Spec.SecurityContext.RunAsNonRoot = pointer.BoolP(true)
-	}
-	if podTemplate.Spec.SecurityContext.RunAsUser == nil {
-		podTemplate.Spec.SecurityContext.RunAsUser = pointer.Int64P(MongoDBUserID)
 	}
 }
 
