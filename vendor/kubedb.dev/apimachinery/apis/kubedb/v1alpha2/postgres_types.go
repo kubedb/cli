@@ -160,6 +160,16 @@ type PostgresSpec struct {
 	// Archiver controls database backup using Archiver CR
 	// +optional
 	Archiver *Archiver `json:"archiver,omitempty"`
+
+	// Arbiter controls spec for arbiter pods
+	// +optional
+	Arbiter *ArbiterSpec `json:"arbiter,omitempty"`
+}
+
+type ArbiterSpec struct {
+	// Compute Resources required by the sidecar container.
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
 }
 
 // PostgreLeaderElectionConfig contains essential attributes of leader election.

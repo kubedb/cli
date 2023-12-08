@@ -26291,6 +26291,11 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresVerticalScalingSpec(ref commo
 							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
 						},
 					},
+					"arbiter": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
 				},
 			},
 		},
@@ -26310,6 +26315,11 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresVolumeExpansionSpec(ref commo
 						SchemaProps: spec.SchemaProps{
 							Description: "volume specification for Postgres",
 							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"arbiter": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
 						},
 					},
 					"mode": {

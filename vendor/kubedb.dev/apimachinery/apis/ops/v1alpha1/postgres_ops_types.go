@@ -131,12 +131,14 @@ type PostgresVerticalScalingSpec struct {
 	Postgres    *core.ResourceRequirements `json:"postgres,omitempty"`
 	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
 	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
+	Arbiter     *core.ResourceRequirements `json:"arbiter,omitempty"`
 }
 
 // PostgresVolumeExpansionSpec is the spec for Postgres volume expansion
 type PostgresVolumeExpansionSpec struct {
 	// volume specification for Postgres
 	Postgres *resource.Quantity   `json:"postgres,omitempty"`
+	Arbiter  *resource.Quantity   `json:"arbiter,omitempty"`
 	Mode     *VolumeExpansionMode `json:"mode,omitempty"`
 }
 

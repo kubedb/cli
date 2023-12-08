@@ -3256,6 +3256,11 @@ func (in *PostgresVerticalScalingSpec) DeepCopyInto(out *PostgresVerticalScaling
 		*out = new(v1.ResourceRequirements)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.Arbiter != nil {
+		in, out := &in.Arbiter, &out.Arbiter
+		*out = new(v1.ResourceRequirements)
+		(*in).DeepCopyInto(*out)
+	}
 	return
 }
 
@@ -3274,6 +3279,11 @@ func (in *PostgresVolumeExpansionSpec) DeepCopyInto(out *PostgresVolumeExpansion
 	*out = *in
 	if in.Postgres != nil {
 		in, out := &in.Postgres, &out.Postgres
+		x := (*in).DeepCopy()
+		*out = &x
+	}
+	if in.Arbiter != nil {
+		in, out := &in.Arbiter, &out.Arbiter
 		x := (*in).DeepCopy()
 		*out = &x
 	}
