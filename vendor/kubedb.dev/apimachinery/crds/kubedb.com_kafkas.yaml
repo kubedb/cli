@@ -5244,6 +5244,11 @@ spec:
                 properties:
                   broker:
                     properties:
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -5350,9 +5355,30 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   controller:
                     properties:
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -5459,6 +5485,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                 type: object
               version:

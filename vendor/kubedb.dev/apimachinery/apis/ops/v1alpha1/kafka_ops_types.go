@@ -109,17 +109,11 @@ type KafkaHorizontalScalingTopologySpec struct {
 // KafkaVerticalScalingSpec contains the vertical scaling information of a Kafka cluster
 type KafkaVerticalScalingSpec struct {
 	// Resource spec for combined nodes
-	Node *core.ResourceRequirements `json:"node,omitempty"`
-	// Specifies the resource spec for cluster in topology mode
-	Topology *KafkaVerticalScalingTopologySpec `json:"topology,omitempty"`
-}
-
-// KafkaVerticalScalingTopologySpec contains the vertical scaling information in cluster topology mode
-type KafkaVerticalScalingTopologySpec struct {
+	Node *PodResources `json:"node,omitempty"`
 	// Resource spec for broker
-	Broker *core.ResourceRequirements `json:"broker,omitempty"`
+	Broker *PodResources `json:"broker,omitempty"`
 	// Resource spec for controller
-	Controller *core.ResourceRequirements `json:"controller,omitempty"`
+	Controller *PodResources `json:"controller,omitempty"`
 }
 
 // KafkaVolumeExpansionSpec is the spec for Kafka volume expansion
@@ -128,11 +122,6 @@ type KafkaVolumeExpansionSpec struct {
 	Mode *VolumeExpansionMode `json:"mode,omitempty"`
 	// volume specification for combined nodes
 	Node *resource.Quantity `json:"node,omitempty"`
-	// volume specification for kafka topology
-	Topology *KafkaVolumeExpansionTopologySpec `json:"topology,omitempty"`
-}
-
-type KafkaVolumeExpansionTopologySpec struct {
 	// volume specification for broker
 	Broker *resource.Quantity `json:"broker,omitempty"`
 	// volume specification for controller

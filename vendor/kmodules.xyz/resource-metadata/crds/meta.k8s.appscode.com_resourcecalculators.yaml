@@ -1,0 +1,175 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: resourcecalculators.meta.k8s.appscode.com
+spec:
+  group: meta.k8s.appscode.com
+  names:
+    kind: ResourceCalculator
+    listKind: ResourceCalculatorList
+    plural: resourcecalculators
+    singular: resourcecalculator
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          request:
+            properties:
+              edit:
+                type: boolean
+              resource:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          response:
+            properties:
+              apiType:
+                description: ResourceID identifies a resource
+                properties:
+                  group:
+                    type: string
+                  kind:
+                    description: Kind is the serialized kind of the resource.  It
+                      is normally CamelCase and singular.
+                    type: string
+                  name:
+                    description: 'Name is the plural name of the resource to serve.  It
+                      must match the name of the CustomResourceDefinition-registration
+                      too: plural.group and it must be all lowercase.'
+                    type: string
+                  scope:
+                    description: ResourceScope is an enum defining the different scopes
+                      available to a custom resource
+                    type: string
+                  version:
+                    type: string
+                required:
+                - group
+                type: object
+              appResource:
+                description: ResourceRequirements describes the compute resource requirements.
+                properties:
+                  limits:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Limits describes the maximum amount of compute resources
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    type: object
+                  requests:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Requests describes the minimum amount of compute
+                      resources required. If Requests is omitted for a container,
+                      it defaults to Limits if that is explicitly specified, otherwise
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    type: object
+                type: object
+              mode:
+                type: string
+              quota:
+                properties:
+                  decision:
+                    enum:
+                    - Allow
+                    - Deny
+                    type: string
+                  violations:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - decision
+                type: object
+              replicas:
+                format: int64
+                type: integer
+              roleReplicas:
+                additionalProperties:
+                  format: int64
+                  type: integer
+                type: object
+              roleResourceLimits:
+                additionalProperties:
+                  additionalProperties:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  description: ResourceList is a set of (resource name, quantity)
+                    pairs.
+                  type: object
+                type: object
+              roleResourceRequests:
+                additionalProperties:
+                  additionalProperties:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  description: ResourceList is a set of (resource name, quantity)
+                    pairs.
+                  type: object
+                type: object
+              totalResource:
+                description: ResourceRequirements describes the compute resource requirements.
+                properties:
+                  limits:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Limits describes the maximum amount of compute resources
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    type: object
+                  requests:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Requests describes the minimum amount of compute
+                      resources required. If Requests is omitted for a container,
+                      it defaults to Limits if that is explicitly specified, otherwise
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    type: object
+                type: object
+              version:
+                type: string
+            required:
+            - apiType
+            - quota
+            type: object
+        type: object
+    served: true
+    storage: true

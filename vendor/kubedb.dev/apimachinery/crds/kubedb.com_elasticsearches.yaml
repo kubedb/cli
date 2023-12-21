@@ -3895,6 +3895,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4001,6 +4006,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   data:
                     properties:
@@ -4012,6 +4033,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4118,6 +4144,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   dataCold:
                     properties:
@@ -4129,6 +4171,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4235,6 +4282,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   dataContent:
                     properties:
@@ -4246,6 +4309,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4352,6 +4420,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   dataFrozen:
                     properties:
@@ -4363,6 +4447,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4469,6 +4558,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   dataHot:
                     properties:
@@ -4480,6 +4585,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4586,6 +4696,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   dataWarm:
                     properties:
@@ -4597,6 +4723,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4703,6 +4834,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   ingest:
                     properties:
@@ -4714,6 +4861,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4820,6 +4972,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   master:
                     properties:
@@ -4831,6 +4999,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -4937,6 +5110,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   ml:
                     properties:
@@ -4948,6 +5137,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -5054,6 +5248,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                   transform:
                     properties:
@@ -5065,6 +5275,11 @@ spec:
                         - type: integer
                         - type: string
                         x-kubernetes-int-or-string: true
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       replicas:
                         format: int32
                         type: integer
@@ -5171,6 +5386,22 @@ spec:
                         type: object
                       suffix:
                         type: string
+                      tolerations:
+                        items:
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            tolerationSeconds:
+                              format: int64
+                              type: integer
+                            value:
+                              type: string
+                          type: object
+                        type: array
                     type: object
                 required:
                 - ingest

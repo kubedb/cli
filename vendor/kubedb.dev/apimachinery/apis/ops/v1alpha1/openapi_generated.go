@@ -444,6 +444,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                        schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ArchiverOptions":                            schema_apimachinery_apis_ops_v1alpha1_ArchiverOptions(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ConfigNode":                                 schema_apimachinery_apis_ops_v1alpha1_ConfigNode(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources":                         schema_apimachinery_apis_ops_v1alpha1_ContainerResources(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchCustomConfiguration":           schema_apimachinery_apis_ops_v1alpha1_ElasticsearchCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchCustomConfigurationSpec":       schema_apimachinery_apis_ops_v1alpha1_ElasticsearchCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchHorizontalScalingSpec":         schema_apimachinery_apis_ops_v1alpha1_ElasticsearchHorizontalScalingSpec(ref),
@@ -454,9 +455,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchReplicaReadinessCriteria":      schema_apimachinery_apis_ops_v1alpha1_ElasticsearchReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec":             schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec":           schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingTopologySpec":   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingTopologySpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionSpec":           schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionTopologySpec":   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionTopologySpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfiguration":                    schema_apimachinery_apis_ops_v1alpha1_EtcdCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec":                schema_apimachinery_apis_ops_v1alpha1_EtcdCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec":                  schema_apimachinery_apis_ops_v1alpha1_EtcdHorizontalScalingSpec(ref),
@@ -477,9 +476,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_KafkaReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_KafkaUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingTopologySpec":           schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingTopologySpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionTopologySpec":           schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionTopologySpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfiguration":                 schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfigurationSpec":             schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_MariaDBHorizontalScalingSpec(ref),
@@ -545,6 +542,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerReplicaReadinessCriteria":          schema_apimachinery_apis_ops_v1alpha1_PgBouncerReplicaReadinessCriteria(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerUpdateVersionSpec":                 schema_apimachinery_apis_ops_v1alpha1_PgBouncerUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerVerticalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_PgBouncerVerticalScalingSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources":                               schema_apimachinery_apis_ops_v1alpha1_PodResources(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfiguration":                schema_apimachinery_apis_ops_v1alpha1_PostgresCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresCustomConfigurationSpec":            schema_apimachinery_apis_ops_v1alpha1_PostgresCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PostgresHorizontalScalingSpec":              schema_apimachinery_apis_ops_v1alpha1_PostgresHorizontalScalingSpec(ref),
@@ -588,6 +586,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision":                                schema_apimachinery_apis_ops_v1alpha1_Reprovision(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec":                                schema_apimachinery_apis_ops_v1alpha1_RestartSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec":                                    schema_apimachinery_apis_ops_v1alpha1_TLSSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Topology":                                   schema_apimachinery_apis_ops_v1alpha1_Topology(ref),
 	}
 }
 
@@ -22085,6 +22084,28 @@ func schema_apimachinery_apis_ops_v1alpha1_ConfigNode(ref common.ReferenceCallba
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_ContainerResources(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ContainerResources is the spec for vertical scaling of containers",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Compute Resources required by the sidecar container.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ResourceRequirements"},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchCustomConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -22513,96 +22534,75 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingSpec(ref 
 					"node": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for combined nodes",
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for exporter sidecar",
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
-					"topology": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the resource spec for cluster in topology mode",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingTopologySpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingTopologySpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ElasticsearchVerticalScalingTopologySpec is the resource spec in the cluster topology mode",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
 					"master": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"ingest": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"data": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"dataContent": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"dataHot": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"dataWarm": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"dataCold": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"dataFrozen": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"ml": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"transform": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"coordinating": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -22625,27 +22625,6 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref 
 							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
 						},
 					},
-					"topology": {
-						SchemaProps: spec.SchemaProps{
-							Description: "volume specification for nodes in cluster topology",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionTopologySpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/api/resource.Quantity", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionTopologySpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ElasticsearchVolumeExpansionTopologySpec is the spec for Elasticsearch volume expansion in topology mode",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
 					"master": {
 						SchemaProps: spec.SchemaProps{
 							Description: "volume specification for master nodes",
@@ -23355,47 +23334,26 @@ func schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingSpec(ref common.R
 					"node": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for combined nodes",
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
-					"topology": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the resource spec for cluster in topology mode",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingTopologySpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingTopologySpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "KafkaVerticalScalingTopologySpec contains the vertical scaling information in cluster topology mode",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
 					"broker": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for broker",
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"controller": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for controller",
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -23418,26 +23376,6 @@ func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref common.R
 							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
 						},
 					},
-					"topology": {
-						SchemaProps: spec.SchemaProps{
-							Description: "volume specification for kafka topology",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionTopologySpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/api/resource.Quantity", "kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionTopologySpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionTopologySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
 					"broker": {
 						SchemaProps: spec.SchemaProps{
 							Description: "volume specification for broker",
@@ -23563,7 +23501,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBHorizontalScalingSpec(ref comm
 					},
 					"memberWeight": {
 						SchemaProps: spec.SchemaProps{
-							Description: "specifies the weight of the current member/Node",
+							Description: "specifies the weight of the current member/PodResources",
 							Type:        []string{"integer"},
 							Format:      "int32",
 						},
@@ -23848,24 +23786,24 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBVerticalScalingSpec(ref common
 				Properties: map[string]spec.Schema{
 					"mariadb": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -24613,54 +24551,54 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBVerticalScalingSpec(ref common
 				Properties: map[string]spec.Schema{
 					"standalone": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"replicaSet": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"mongos": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"configServer": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"shard": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"arbiter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"hidden": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -25129,24 +25067,24 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLVerticalScalingSpec(ref common.R
 				Properties: map[string]spec.Schema{
 					"mysql": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -25283,7 +25221,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBHorizontalScalingSpec(re
 					},
 					"memberWeight": {
 						SchemaProps: spec.SchemaProps{
-							Description: "specifies the weight of the current member/Node",
+							Description: "specifies the weight of the current member/PodResources",
 							Type:        []string{"integer"},
 							Format:      "int32",
 						},
@@ -25569,24 +25507,24 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBVerticalScalingSpec(ref 
 				Properties: map[string]spec.Schema{
 					"perconaxtradb": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -25900,6 +25838,39 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerVerticalScalingSpec(ref comm
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerReplicaReadinessCriteria"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_PodResources(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodResources is the spec for vertical scaling of pods",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"nodeSelectionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.Topology"),
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Compute Resources required by the sidecar container.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ResourceRequirements", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Topology"},
 	}
 }
 
@@ -26278,29 +26249,29 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresVerticalScalingSpec(ref commo
 				Properties: map[string]spec.Schema{
 					"postgres": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"arbiter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -26651,14 +26622,14 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLVerticalScalingSpec(ref commo
 				Properties: map[string]spec.Schema{
 					"proxysql": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -27255,24 +27226,24 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVerticalScalingSpec(ref 
 				Properties: map[string]spec.Schema{
 					"redissentinel": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -27391,24 +27362,24 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisVerticalScalingSpec(ref common.R
 				Properties: map[string]spec.Schema{
 					"redis": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -27503,5 +27474,33 @@ func schema_apimachinery_apis_ops_v1alpha1_TLSSpec(ref common.ReferenceCallback)
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_Topology(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Topology is the spec for placement of pods onto nodes",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"key": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"key", "value"},
+			},
+		},
 	}
 }

@@ -70,6 +70,9 @@ type RedisAutoscalerSpec struct {
 }
 
 type RedisComputeAutoscalerSpec struct {
+	// +optional
+	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+
 	Standalone *ComputeAutoscalerSpec `json:"standalone,omitempty"`
 	Cluster    *ComputeAutoscalerSpec `json:"cluster,omitempty"`
 	Sentinel   *ComputeAutoscalerSpec `json:"sentinel,omitempty"`

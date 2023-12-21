@@ -69,6 +69,9 @@ type RedisSentinelAutoscalerSpec struct {
 }
 
 type RedisSentinelComputeAutoscalerSpec struct {
+	// +optional
+	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+
 	Sentinel *ComputeAutoscalerSpec `json:"sentinel,omitempty"`
 }
 

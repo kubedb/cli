@@ -117,26 +117,20 @@ type ElasticsearchHorizontalScalingTopologySpec struct {
 // ElasticsearchVerticalScalingSpec is the spec for Elasticsearch vertical scaling
 type ElasticsearchVerticalScalingSpec struct {
 	// Resource spec for combined nodes
-	Node *core.ResourceRequirements `json:"node,omitempty"`
+	Node *PodResources `json:"node,omitempty"`
 	// Resource spec for exporter sidecar
-	Exporter *core.ResourceRequirements `json:"exporter,omitempty"`
-	// Specifies the resource spec for cluster in topology mode
-	Topology *ElasticsearchVerticalScalingTopologySpec `json:"topology,omitempty"`
-}
-
-// ElasticsearchVerticalScalingTopologySpec is the resource spec in the cluster topology mode
-type ElasticsearchVerticalScalingTopologySpec struct {
-	Master       *core.ResourceRequirements `json:"master,omitempty"`
-	Ingest       *core.ResourceRequirements `json:"ingest,omitempty"`
-	Data         *core.ResourceRequirements `json:"data,omitempty"`
-	DataContent  *core.ResourceRequirements `json:"dataContent,omitempty"`
-	DataHot      *core.ResourceRequirements `json:"dataHot,omitempty"`
-	DataWarm     *core.ResourceRequirements `json:"dataWarm,omitempty"`
-	DataCold     *core.ResourceRequirements `json:"dataCold,omitempty"`
-	DataFrozen   *core.ResourceRequirements `json:"dataFrozen,omitempty"`
-	ML           *core.ResourceRequirements `json:"ml,omitempty"`
-	Transform    *core.ResourceRequirements `json:"transform,omitempty"`
-	Coordinating *core.ResourceRequirements `json:"coordinating,omitempty"`
+	Exporter     *ContainerResources `json:"exporter,omitempty"`
+	Master       *PodResources       `json:"master,omitempty"`
+	Ingest       *PodResources       `json:"ingest,omitempty"`
+	Data         *PodResources       `json:"data,omitempty"`
+	DataContent  *PodResources       `json:"dataContent,omitempty"`
+	DataHot      *PodResources       `json:"dataHot,omitempty"`
+	DataWarm     *PodResources       `json:"dataWarm,omitempty"`
+	DataCold     *PodResources       `json:"dataCold,omitempty"`
+	DataFrozen   *PodResources       `json:"dataFrozen,omitempty"`
+	ML           *PodResources       `json:"ml,omitempty"`
+	Transform    *PodResources       `json:"transform,omitempty"`
+	Coordinating *PodResources       `json:"coordinating,omitempty"`
 }
 
 // ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
@@ -145,12 +139,6 @@ type ElasticsearchVolumeExpansionSpec struct {
 	Mode *VolumeExpansionMode `json:"mode,omitempty"`
 	// volume specification for combined nodes
 	Node *resource.Quantity `json:"node,omitempty"`
-	// volume specification for nodes in cluster topology
-	Topology *ElasticsearchVolumeExpansionTopologySpec `json:"topology,omitempty"`
-}
-
-// ElasticsearchVolumeExpansionTopologySpec is the spec for Elasticsearch volume expansion in topology mode
-type ElasticsearchVolumeExpansionTopologySpec struct {
 	// volume specification for master nodes
 	Master *resource.Quantity `json:"master,omitempty"`
 	// volume specification for ingest nodes

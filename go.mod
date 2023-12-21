@@ -18,7 +18,7 @@ require (
 	gomodules.xyz/wait v0.2.0
 	gomodules.xyz/x v0.0.15
 	k8s.io/api v0.25.3
-	k8s.io/apimachinery v0.25.3
+	k8s.io/apimachinery v0.25.4
 	k8s.io/cli-runtime v0.25.1
 	k8s.io/client-go v0.25.3
 	k8s.io/component-base v0.25.3
@@ -28,7 +28,7 @@ require (
 	kmodules.xyz/client-go v0.25.43
 	kmodules.xyz/custom-resources v0.25.2
 	kmodules.xyz/monitoring-agent-api v0.25.6
-	kubedb.dev/apimachinery v0.38.0
+	kubedb.dev/apimachinery v0.39.0
 	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
 	sigs.k8s.io/controller-runtime v0.13.1
 	sigs.k8s.io/yaml v1.3.0
@@ -103,7 +103,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.59.1 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/client v0.59.1 // indirect
-	github.com/prometheus/client_model v0.2.0 // indirect
+	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	github.com/russross/blackfriday v1.5.2 // indirect
@@ -142,7 +142,8 @@ require (
 	kmodules.xyz/objectstore-api v0.25.1 // indirect
 	kmodules.xyz/offshoot-api v0.25.5 // indirect
 	kmodules.xyz/prober v0.25.0 // indirect
-	kubeops.dev/sidekick v0.0.3 // indirect
+	kmodules.xyz/resource-metadata v0.17.42 // indirect
+	kubeops.dev/sidekick v0.0.4 // indirect
 	kubestash.dev/apimachinery v0.2.0 // indirect
 	sigs.k8s.io/gateway-api v0.4.3 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect

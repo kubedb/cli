@@ -68,6 +68,9 @@ type MariaDBAutoscalerSpec struct {
 }
 
 type MariaDBComputeAutoscalerSpec struct {
+	// +optional
+	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+
 	MariaDB *ComputeAutoscalerSpec `json:"mariadb,omitempty"`
 }
 

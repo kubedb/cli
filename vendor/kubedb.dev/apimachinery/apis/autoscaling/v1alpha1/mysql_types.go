@@ -70,6 +70,9 @@ type MySQLAutoscalerSpec struct {
 }
 
 type MySQLComputeAutoscalerSpec struct {
+	// +optional
+	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+
 	MySQL *ComputeAutoscalerSpec `json:"mysql,omitempty"`
 }
 
