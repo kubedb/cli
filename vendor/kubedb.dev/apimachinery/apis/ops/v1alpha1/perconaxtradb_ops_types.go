@@ -91,14 +91,14 @@ type PerconaXtraDBUpdateVersionSpec struct {
 type PerconaXtraDBHorizontalScalingSpec struct {
 	// Number of nodes/members of the group
 	Member *int32 `json:"member,omitempty"`
-	// specifies the weight of the current member/Node
+	// specifies the weight of the current member/PodResources
 	MemberWeight int32 `json:"memberWeight,omitempty"`
 }
 
 type PerconaXtraDBVerticalScalingSpec struct {
-	PerconaXtraDB *core.ResourceRequirements `json:"perconaxtradb,omitempty"`
-	Exporter      *core.ResourceRequirements `json:"exporter,omitempty"`
-	Coordinator   *core.ResourceRequirements `json:"coordinator,omitempty"`
+	PerconaXtraDB *PodResources       `json:"perconaxtradb,omitempty"`
+	Exporter      *ContainerResources `json:"exporter,omitempty"`
+	Coordinator   *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // PerconaXtraDBVolumeExpansionSpec is the spec for PerconaXtraDB volume expansion

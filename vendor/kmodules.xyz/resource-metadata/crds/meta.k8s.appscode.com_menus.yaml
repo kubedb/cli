@@ -1,0 +1,124 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: menus.meta.k8s.appscode.com
+spec:
+  group: meta.k8s.appscode.com
+  names:
+    kind: Menu
+    listKind: MenuList
+    plural: menus
+    singular: menu
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              home:
+                properties:
+                  apiGroup:
+                    type: string
+                  icons:
+                    description: Icons is an optional list of icons for an application.
+                      Icon information includes the source, size, and mime type.
+                    items:
+                      description: ImageSpec contains information about an image used
+                        as an icon.
+                      properties:
+                        size:
+                          description: (optional) The size of the image in pixels
+                            (e.g., 25x25).
+                          type: string
+                        src:
+                          description: The source for image represented as either
+                            an absolute URL to the image or a Data URL containing
+                            the image. Data URLs are defined in RFC 2397.
+                          type: string
+                        type:
+                          description: (optional) The mine type of the image (e.g.,
+                            "image/png").
+                          type: string
+                      required:
+                      - src
+                      type: object
+                    type: array
+                  layoutName:
+                    type: string
+                  name:
+                    type: string
+                  path:
+                    type: string
+                type: object
+              mode:
+                enum:
+                - Accordion
+                - Gallery
+                type: string
+              sections:
+                items:
+                  properties:
+                    apiGroup:
+                      type: string
+                    icons:
+                      description: Icons is an optional list of icons for an application.
+                        Icon information includes the source, size, and mime type.
+                      items:
+                        description: ImageSpec contains information about an image
+                          used as an icon.
+                        properties:
+                          size:
+                            description: (optional) The size of the image in pixels
+                              (e.g., 25x25).
+                            type: string
+                          src:
+                            description: The source for image represented as either
+                              an absolute URL to the image or a Data URL containing
+                              the image. Data URLs are defined in RFC 2397.
+                            type: string
+                          type:
+                            description: (optional) The mine type of the image (e.g.,
+                              "image/png").
+                            type: string
+                        required:
+                        - src
+                        type: object
+                      type: array
+                    items:
+                      items:
+                        additionalProperties: true
+                        type: object
+                      type: array
+                    layoutName:
+                      type: string
+                    name:
+                      type: string
+                    path:
+                      type: string
+                  required:
+                  - items
+                  type: object
+                type: array
+            required:
+            - mode
+            type: object
+        type: object
+    served: true
+    storage: true

@@ -96,9 +96,9 @@ type MySQLHorizontalScalingSpec struct {
 }
 
 type MySQLVerticalScalingSpec struct {
-	MySQL       *core.ResourceRequirements `json:"mysql,omitempty"`
-	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
-	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
+	MySQL       *PodResources       `json:"mysql,omitempty"`
+	Exporter    *ContainerResources `json:"exporter,omitempty"`
+	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // MySQLVolumeExpansionSpec is the spec for MySQL volume expansion

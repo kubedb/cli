@@ -98,7 +98,7 @@ type ProxySQLHorizontalScalingSpec struct {
 
 // ProxySQLVerticalScalingSpec is the spec for ProxySQL vertical scaling
 type ProxySQLVerticalScalingSpec struct {
-	ProxySQL *core.ResourceRequirements `json:"proxysql,omitempty"`
+	ProxySQL *PodResources `json:"proxysql,omitempty"`
 }
 
 type ProxySQLCustomConfiguration struct {

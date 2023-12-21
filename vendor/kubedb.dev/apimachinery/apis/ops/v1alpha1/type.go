@@ -17,8 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	nodemeta "kmodules.xyz/resource-metadata/apis/node/v1alpha1"
 )
 
 type OpsRequestStatus struct {
@@ -114,4 +116,27 @@ const (
 type ArchiverOptions struct {
 	Operation ArchiverOperation     `json:"operation"`
 	Ref       kmapi.ObjectReference `json:"ref"`
+}
+
+// ContainerResources is the spec for vertical scaling of containers
+type ContainerResources struct {
+	// Compute Resources required by the sidecar container.
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
+}
+
+// PodResources is the spec for vertical scaling of pods
+type PodResources struct {
+	// +optional
+	NodeSelectionPolicy nodemeta.NodeSelectionPolicy `json:"nodeSelectionPolicy,omitempty"`
+	Topology            *Topology                    `json:"topology,omitempty"`
+	// Compute Resources required by the sidecar container.
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
+}
+
+// Topology is the spec for placement of pods onto nodes
+type Topology struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }

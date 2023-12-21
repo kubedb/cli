@@ -88,7 +88,7 @@ func (in *MongoDBAutoscaler) SetDefaults(db *dbapi.MongoDB) {
 		setInMemoryDefaults(in.Spec.Compute.Shard, db.Spec.StorageEngine)
 		setInMemoryDefaults(in.Spec.Compute.ConfigServer, db.Spec.StorageEngine)
 		setInMemoryDefaults(in.Spec.Compute.Mongos, db.Spec.StorageEngine)
-		// no need for Defaulting the Arbiter & Hidden Node.
+		// no need for Defaulting the Arbiter & Hidden PodResources.
 		// As arbiter is not a data-node.  And hidden doesn't have the impact of storageEngine (it can't be InMemory).
 	}
 }

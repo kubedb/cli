@@ -96,9 +96,9 @@ type RedisSentinelHorizontalScalingSpec struct {
 
 // RedisSentinelVerticalScalingSpec is the spec for RedisSentinel vertical scaling
 type RedisSentinelVerticalScalingSpec struct {
-	RedisSentinel *core.ResourceRequirements `json:"redissentinel,omitempty"`
-	Exporter      *core.ResourceRequirements `json:"exporter,omitempty"`
-	Coordinator   *core.ResourceRequirements `json:"coordinator,omitempty"`
+	RedisSentinel *PodResources       `json:"redissentinel,omitempty"`
+	Exporter      *ContainerResources `json:"exporter,omitempty"`
+	Coordinator   *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // RedisSentinelVolumeExpansionSpec is the spec for RedisSentinel volume expansion

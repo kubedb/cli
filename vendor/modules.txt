@@ -872,7 +872,7 @@ github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/collectors
 github.com/prometheus/client_golang/prometheus/internal
 github.com/prometheus/client_golang/prometheus/promhttp
-# github.com/prometheus/client_model v0.2.0
+# github.com/prometheus/client_model v0.3.0
 ## explicit; go 1.9
 github.com/prometheus/client_model/go
 # github.com/prometheus/common v0.37.0
@@ -1152,7 +1152,7 @@ k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
-# k8s.io/apimachinery v0.25.3
+# k8s.io/apimachinery v0.25.4
 ## explicit; go 1.19
 k8s.io/apimachinery/pkg/api/equality
 k8s.io/apimachinery/pkg/api/errors
@@ -1483,7 +1483,12 @@ kmodules.xyz/offshoot-api/api/v1
 # kmodules.xyz/prober v0.25.0
 ## explicit; go 1.18
 kmodules.xyz/prober/api/v1
-# kubedb.dev/apimachinery v0.38.0
+# kmodules.xyz/resource-metadata v0.17.42
+## explicit; go 1.18
+kmodules.xyz/resource-metadata/apis/management
+kmodules.xyz/resource-metadata/apis/node/v1alpha1
+kmodules.xyz/resource-metadata/crds
+# kubedb.dev/apimachinery v0.39.0
 ## explicit; go 1.18
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1526,7 +1531,7 @@ kubedb.dev/apimachinery/pkg/validator
 ## explicit; go 1.18
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
-# kubeops.dev/sidekick v0.0.3
+# kubeops.dev/sidekick v0.0.4
 ## explicit; go 1.18
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1

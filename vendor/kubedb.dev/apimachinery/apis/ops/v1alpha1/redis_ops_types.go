@@ -127,9 +127,9 @@ type RedisHorizontalScalingSpec struct {
 
 // RedisVerticalScalingSpec is the spec for Redis vertical scaling
 type RedisVerticalScalingSpec struct {
-	Redis       *core.ResourceRequirements `json:"redis,omitempty"`
-	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
-	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
+	Redis       *PodResources       `json:"redis,omitempty"`
+	Exporter    *ContainerResources `json:"exporter,omitempty"`
+	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // RedisVolumeExpansionSpec is the spec for Redis volume expansion

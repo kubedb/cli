@@ -1,0 +1,177 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: resourcedashboards.ui.k8s.appscode.com
+spec:
+  group: ui.k8s.appscode.com
+  names:
+    kind: ResourceDashboard
+    listKind: ResourceDashboardList
+    plural: resourcedashboards
+    singular: resourcedashboard
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.phase
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              dashboards:
+                items:
+                  properties:
+                    if:
+                      properties:
+                        condition:
+                          type: string
+                        connected:
+                          properties:
+                            query:
+                              properties:
+                                byLabel:
+                                  description: ENUM(authn,authz,auth_secret,backup_via,catalog,cert_issuer,config,connect_via,exposed_by,event,located_on,monitored_by,ocm_bind,offshoot,ops,placed_into,policy,recommended_for,restore_into,scaled_by,source,storage,view)
+                                  enum:
+                                  - authn
+                                  - authz
+                                  - auth_secret
+                                  - backup_via
+                                  - catalog
+                                  - cert_issuer
+                                  - config
+                                  - connect_via
+                                  - exposed_by
+                                  - event
+                                  - located_on
+                                  - monitored_by
+                                  - ocm_bind
+                                  - offshoot
+                                  - ops
+                                  - placed_into
+                                  - policy
+                                  - recommended_for
+                                  - restore_into
+                                  - scaled_by
+                                  - source
+                                  - storage
+                                  - view
+                                  type: string
+                                raw:
+                                  type: string
+                                type:
+                                  enum:
+                                  - REST
+                                  - GraphQL
+                                  type: string
+                              required:
+                              - type
+                              type: object
+                            ref:
+                              description: GroupKind specifies a Group and a Kind,
+                                but does not force a version.  This is useful for
+                                identifying concepts during lookup stages without
+                                having partially valid types
+                              properties:
+                                group:
+                                  type: string
+                                kind:
+                                  type: string
+                              required:
+                              - group
+                              - kind
+                              type: object
+                          required:
+                          - query
+                          - ref
+                          type: object
+                      type: object
+                    panels:
+                      items:
+                        properties:
+                          title:
+                            type: string
+                          width:
+                            type: integer
+                        required:
+                        - title
+                        type: object
+                      type: array
+                    title:
+                      type: string
+                    vars:
+                      items:
+                        properties:
+                          name:
+                            type: string
+                          type:
+                            default: Source
+                            enum:
+                            - Source
+                            - Target
+                            type: string
+                          value:
+                            type: string
+                        required:
+                        - name
+                        - value
+                        type: object
+                      type: array
+                  type: object
+                type: array
+              provider:
+                enum:
+                - Grafana
+                type: string
+              resource:
+                description: ResourceID identifies a resource
+                properties:
+                  group:
+                    type: string
+                  kind:
+                    description: Kind is the serialized kind of the resource.  It
+                      is normally CamelCase and singular.
+                    type: string
+                  name:
+                    description: 'Name is the plural name of the resource to serve.  It
+                      must match the name of the CustomResourceDefinition-registration
+                      too: plural.group and it must be all lowercase.'
+                    type: string
+                  scope:
+                    description: ResourceScope is an enum defining the different scopes
+                      available to a custom resource
+                    type: string
+                  version:
+                    type: string
+                required:
+                - group
+                type: object
+            required:
+            - dashboards
+            - resource
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

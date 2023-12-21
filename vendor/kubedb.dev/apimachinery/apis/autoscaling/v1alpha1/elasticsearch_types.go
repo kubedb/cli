@@ -70,25 +70,36 @@ type ElasticsearchAutoscalerSpec struct {
 }
 
 type ElasticsearchComputeAutoscalerSpec struct {
-	Node     *ComputeAutoscalerSpec                      `json:"node,omitempty"`
-	Topology *ElasticsearchComputeTopologyAutoscalerSpec `json:"topology,omitempty"`
-}
+	// +optional
+	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
 
-type ElasticsearchComputeTopologyAutoscalerSpec struct {
-	Master *ComputeAutoscalerSpec `json:"master,omitempty"`
-	Data   *ComputeAutoscalerSpec `json:"data,omitempty"`
-	Ingest *ComputeAutoscalerSpec `json:"ingest,omitempty"`
+	Node         *ComputeAutoscalerSpec `json:"node,omitempty"`
+	Master       *ComputeAutoscalerSpec `json:"master,omitempty"`
+	Ingest       *ComputeAutoscalerSpec `json:"ingest,omitempty"`
+	Data         *ComputeAutoscalerSpec `json:"data,omitempty"`
+	DataContent  *ComputeAutoscalerSpec `json:"dataContent,omitempty"`
+	DataHot      *ComputeAutoscalerSpec `json:"dataHot,omitempty"`
+	DataWarm     *ComputeAutoscalerSpec `json:"dataWarm,omitempty"`
+	DataCold     *ComputeAutoscalerSpec `json:"dataCold,omitempty"`
+	DataFrozen   *ComputeAutoscalerSpec `json:"dataFrozen,omitempty"`
+	ML           *ComputeAutoscalerSpec `json:"ml,omitempty"`
+	Transform    *ComputeAutoscalerSpec `json:"transform,omitempty"`
+	Coordinating *ComputeAutoscalerSpec `json:"coordinating,omitempty"`
 }
 
 type ElasticsearchStorageAutoscalerSpec struct {
-	Node     *StorageAutoscalerSpec                      `json:"node,omitempty"`
-	Topology *ElasticsearchStorageTopologyAutoscalerSpec `json:"topology,omitempty"`
-}
-
-type ElasticsearchStorageTopologyAutoscalerSpec struct {
-	Master *StorageAutoscalerSpec `json:"master,omitempty"`
-	Data   *StorageAutoscalerSpec `json:"data,omitempty"`
-	Ingest *StorageAutoscalerSpec `json:"ingest,omitempty"`
+	Node         *StorageAutoscalerSpec `json:"node,omitempty"`
+	Master       *StorageAutoscalerSpec `json:"master,omitempty"`
+	Ingest       *StorageAutoscalerSpec `json:"ingest,omitempty"`
+	Data         *StorageAutoscalerSpec `json:"data,omitempty"`
+	DataContent  *StorageAutoscalerSpec `json:"dataContent,omitempty"`
+	DataHot      *StorageAutoscalerSpec `json:"dataHot,omitempty"`
+	DataWarm     *StorageAutoscalerSpec `json:"dataWarm,omitempty"`
+	DataCold     *StorageAutoscalerSpec `json:"dataCold,omitempty"`
+	DataFrozen   *StorageAutoscalerSpec `json:"dataFrozen,omitempty"`
+	ML           *StorageAutoscalerSpec `json:"ml,omitempty"`
+	Transform    *StorageAutoscalerSpec `json:"transform,omitempty"`
+	Coordinating *StorageAutoscalerSpec `json:"coordinating,omitempty"`
 }
 
 type ElasticsearchOpsRequestOptions struct {

@@ -1,0 +1,187 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: featuresets.ui.k8s.appscode.com
+spec:
+  group: ui.k8s.appscode.com
+  names:
+    kind: FeatureSet
+    listKind: FeatureSetList
+    plural: featuresets
+    singular: featureset
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.required
+      name: Required
+      type: boolean
+    - jsonPath: .status.enabled
+      name: Enabled
+      type: boolean
+    - jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              chart:
+                description: Chart specifies the chart that contains the respective
+                  resources for component features and the UI wizard.
+                properties:
+                  name:
+                    type: string
+                  sourceRef:
+                    description: TypedObjectReference represents an typed namespaced
+                      object.
+                    properties:
+                      apiGroup:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        type: string
+                      namespace:
+                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  version:
+                    type: string
+                required:
+                - name
+                - sourceRef
+                - version
+                type: object
+              description:
+                description: Description specifies a short description of the services
+                  this feature set provides.
+                type: string
+              icons:
+                description: Icons is an optional list of icons for an application.
+                  Icon information includes the source, size, and mime type. These
+                  icons will be used in UI.
+                items:
+                  description: ImageSpec contains information about an image used
+                    as an icon.
+                  properties:
+                    size:
+                      description: (optional) The size of the image in pixels (e.g.,
+                        25x25).
+                      type: string
+                    src:
+                      description: The source for image represented as either an absolute
+                        URL to the image or a Data URL containing the image. Data
+                        URLs are defined in RFC 2397.
+                      type: string
+                    type:
+                      description: (optional) The mine type of the image (e.g., "image/png").
+                      type: string
+                  required:
+                  - src
+                  type: object
+                type: array
+              recommended:
+                description: Required specify whether this feature set is mandatory
+                  or not for using the UI.
+                type: boolean
+              requiredFeatures:
+                description: RequiredFeatures specifies list of features that are
+                  necessary to consider this feature set as ready.
+                items:
+                  type: string
+                type: array
+              title:
+                description: Title specify the title of this feature set.
+                type: string
+            required:
+            - chart
+            - description
+            - title
+            type: object
+          status:
+            properties:
+              dependents:
+                description: Dependents specifies the feature sets which depend on
+                  this FeatureSet
+                properties:
+                  featureSets:
+                    description: FeatureSets specifies a list of FeatureSet names
+                      that depend on this FeatureSet
+                    items:
+                      properties:
+                        features:
+                          description: Features specifies the Feature names of the
+                            dependent FeatureSet
+                          items:
+                            type: string
+                          type: array
+                        name:
+                          description: Name specifies the name of the dependent FeatureSet
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              enabled:
+                description: Enabled specifies whether this feature set is enabled
+                  or not.
+                type: boolean
+              features:
+                description: Features specifies the status of the component features
+                  that belong to this feature set.
+                items:
+                  properties:
+                    enabled:
+                      description: Enabled specifies whether the component feature
+                        has been enabled or not.
+                      type: boolean
+                    managed:
+                      description: Managed specifies whether the component is managed
+                        by platform or not.
+                      type: boolean
+                    name:
+                      description: Name specify the name of the component feature.
+                      type: string
+                    ready:
+                      description: Ready specifies whether the component feature is
+                        ready or not.
+                      type: boolean
+                  required:
+                  - name
+                  type: object
+                type: array
+              note:
+                description: Note specifies the respective reason if the feature set
+                  is considered as disabled.
+                type: string
+              ready:
+                description: Ready specifies whether this feature set is ready not.
+                type: boolean
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

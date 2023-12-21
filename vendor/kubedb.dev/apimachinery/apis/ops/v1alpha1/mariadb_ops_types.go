@@ -91,14 +91,14 @@ type MariaDBUpdateVersionSpec struct {
 type MariaDBHorizontalScalingSpec struct {
 	// Number of nodes/members of the group
 	Member *int32 `json:"member,omitempty"`
-	// specifies the weight of the current member/Node
+	// specifies the weight of the current member/PodResources
 	MemberWeight int32 `json:"memberWeight,omitempty"`
 }
 
 type MariaDBVerticalScalingSpec struct {
-	MariaDB     *core.ResourceRequirements `json:"mariadb,omitempty"`
-	Exporter    *core.ResourceRequirements `json:"exporter,omitempty"`
-	Coordinator *core.ResourceRequirements `json:"coordinator,omitempty"`
+	MariaDB     *PodResources       `json:"mariadb,omitempty"`
+	Exporter    *ContainerResources `json:"exporter,omitempty"`
+	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion
