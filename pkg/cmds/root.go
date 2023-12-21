@@ -113,6 +113,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdGenApb(f),
 			},
 		},
+		{
+			Message: "Check availability of a grafana dashboard",
+			Commands: []*cobra.Command{
+				NewCmdDashboard(f),
+			},
+		},
 	}
 
 	filters := []string{"options"}
