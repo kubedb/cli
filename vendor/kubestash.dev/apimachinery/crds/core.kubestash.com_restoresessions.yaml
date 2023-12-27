@@ -20879,9 +20879,75 @@ spec:
                 description: ManifestOptions provide options to select particular
                   manifest object to restore
                 properties:
+                  mariaDB:
+                    description: MariaDB specifies the options for selecting particular
+                      MariaDB components to restore in manifest restore
+                    properties:
+                      authSecret:
+                        description: AuthSecret specifies whether to restore the AuthSecret
+                          manifest or not
+                        type: boolean
+                      authSecretName:
+                        description: AuthSecretName specifies new name of the AuthSecret
+                          yaml after restore
+                        type: string
+                      configSecret:
+                        description: ConfigSecret specifies whether to restore the
+                          ConfigSecret manifest or not
+                        type: boolean
+                      configSecretName:
+                        description: ConfigSecretName specifies new name of the ConfigSecret
+                          yaml after restore
+                        type: string
+                      db:
+                        description: DB specifies whether to restore the DB manifest
+                          or not
+                        type: boolean
+                      dbName:
+                        description: DBName specifies the new name of the DB yaml
+                          after restore
+                        type: string
+                      issuerRefName:
+                        description: IssuerRefName specifies new name of the IssuerRef
+                          after restore
+                        type: string
+                    type: object
                   mongoDB:
                     description: MongoDB specifies the options for selecting particular
                       MongoDB components to restore in manifest restore
+                    properties:
+                      authSecret:
+                        description: AuthSecret specifies whether to restore the AuthSecret
+                          manifest or not
+                        type: boolean
+                      authSecretName:
+                        description: AuthSecretName specifies new name of the AuthSecret
+                          yaml after restore
+                        type: string
+                      configSecret:
+                        description: ConfigSecret specifies whether to restore the
+                          ConfigSecret manifest or not
+                        type: boolean
+                      configSecretName:
+                        description: ConfigSecretName specifies new name of the ConfigSecret
+                          yaml after restore
+                        type: string
+                      db:
+                        description: DB specifies whether to restore the DB manifest
+                          or not
+                        type: boolean
+                      dbName:
+                        description: DBName specifies the new name of the DB yaml
+                          after restore
+                        type: string
+                      issuerRefName:
+                        description: IssuerRefName specifies new name of the IssuerRef
+                          after restore
+                        type: string
+                    type: object
+                  mySQL:
+                    description: MySQL specifies the options for selecting particular
+                      MySQL components to restore in manifest restore
                     properties:
                       authSecret:
                         description: AuthSecret specifies whether to restore the AuthSecret

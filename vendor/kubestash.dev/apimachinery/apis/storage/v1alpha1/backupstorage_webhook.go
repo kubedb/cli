@@ -20,13 +20,10 @@ import (
 	"context"
 	"fmt"
 	"k8s.io/apimachinery/pkg/runtime"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	restclient "k8s.io/client-go/rest"
 	"kubestash.dev/apimachinery/apis"
 	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 )
@@ -64,15 +61,16 @@ var _ webhook.Validator = &BackupStorage{}
 func (r *BackupStorage) ValidateCreate() error {
 	backupstoragelog.Info("validate create", "name", r.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client. Reason: %w", err)
-	}
+	c := apis.GetRuntimeClient()
 
 	if r.Spec.Default {
 		if err := r.validateSingleDefaultBackupStorageInSameNamespace(context.Background(), c); err != nil {
 			return err
 		}
+	}
+
+	if err := r.validateUsagePolicy(); err != nil {
+		return err
 	}
 
 	return r.validateUniqueDirectory(context.Background(), c)
@@ -82,18 +80,19 @@ func (r *BackupStorage) ValidateCreate() error {
 func (r *BackupStorage) ValidateUpdate(old runtime.Object) error {
 	backupstoragelog.Info("validate update", "name", r.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client. Reason: %w", err)
-	}
+	c := apis.GetRuntimeClient()
 
 	if r.Spec.Default {
-		if err = r.validateSingleDefaultBackupStorageInSameNamespace(context.Background(), c); err != nil {
+		if err := r.validateSingleDefaultBackupStorageInSameNamespace(context.Background(), c); err != nil {
 			return err
 		}
 	}
 
-	if err = r.validateUpdateStorage(old.(*BackupStorage)); err != nil {
+	if err := r.validateUsagePolicy(); err != nil {
+		return err
+	}
+
+	if err := r.validateUpdateStorage(old.(*BackupStorage)); err != nil {
 		return err
 	}
 
@@ -130,6 +129,14 @@ func (r *BackupStorage) validateSingleDefaultBackupStorageInSameNamespace(ctx co
 		}
 	}
 
+	return nil
+}
+
+func (r *BackupStorage) validateUsagePolicy() error {
+	if *r.Spec.UsagePolicy.AllowedNamespaces.From == apis.NamespacesFromSelector &&
+		r.Spec.UsagePolicy.AllowedNamespaces.Selector == nil {
+		return fmt.Errorf("selector cannot be empty for usage policy of type %q", apis.NamespacesFromSelector)
+	}
 	return nil
 }
 
@@ -207,27 +214,4 @@ func (r *BackupStorage) isPointToSameDir(bs BackupStorage) bool {
 	default:
 		return false
 	}
-}
-
-func getNewRuntimeClient() (client.Client, error) {
-	config, err := restclient.InClusterConfig()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get Kubernetes config. Reason: %w", err)
-	}
-	scheme := runtime.NewScheme()
-	utilruntime.Must(AddToScheme(scheme))
-
-	mapper, err := apiutil.NewDynamicRESTMapper(config)
-	if err != nil {
-		return nil, err
-	}
-
-	return client.New(config, client.Options{
-		Scheme: scheme,
-		Mapper: mapper,
-		Opts: client.WarningHandlerOptions{
-			SuppressWarnings:   false,
-			AllowDuplicateLogs: false,
-		},
-	})
 }

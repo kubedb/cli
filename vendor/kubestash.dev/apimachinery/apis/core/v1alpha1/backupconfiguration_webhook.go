@@ -23,16 +23,14 @@ import (
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	restclient "k8s.io/client-go/rest"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kubestash.dev/apimachinery/apis"
 	storageapi "kubestash.dev/apimachinery/apis/storage/v1alpha1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sync"
 )
 
 // log is for logging in this package.
@@ -54,10 +52,7 @@ var _ webhook.Defaulter = &BackupConfiguration{}
 func (b *BackupConfiguration) Default() {
 	backupconfigurationlog.Info("default", "name", b.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		backupconfigurationlog.Error(err, "failed to set Kubernetes client")
-	}
+	c := apis.GetRuntimeClient()
 
 	if len(b.Spec.Backends) == 0 {
 		b.setDefaultBackend(context.Background(), c)
@@ -191,50 +186,27 @@ var _ webhook.Validator = &BackupConfiguration{}
 func (b *BackupConfiguration) ValidateCreate() error {
 	backupconfigurationlog.Info("validate create", apis.KeyName, b.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client, Reason: %w", err)
-	}
+	c := apis.GetRuntimeClient()
 
-	if err = b.validateBackends(); err != nil {
+	if err := b.validateBackends(); err != nil {
 		return err
 	}
 
-	if err = b.validateSessions(context.Background(), c); err != nil {
+	if err := b.validateSessions(context.Background(), c); err != nil {
 		return err
 	}
 
-	if err = b.validateBackendsAgainstUsagePolicy(context.Background(), c); err != nil {
+	if err := b.validateBackendsAgainstUsagePolicy(context.Background(), c); err != nil {
 		return err
 	}
 
 	return b.validateHookTemplatesAgainstUsagePolicy(context.Background(), c)
 }
 
-func getNewRuntimeClient() (client.Client, error) {
-	config, err := restclient.InClusterConfig()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get Kubernetes config. Reason: %w", err)
-	}
-	scheme := runtime.NewScheme()
-	utilruntime.Must(storageapi.AddToScheme(scheme))
-	utilruntime.Must(core.AddToScheme(scheme))
-	utilruntime.Must(AddToScheme(scheme))
-
-	mapper, err := apiutil.NewDynamicRESTMapper(config)
-	if err != nil {
-		return nil, err
-	}
-
-	return client.New(config, client.Options{
-		Scheme: scheme,
-		Mapper: mapper,
-		Opts: client.WarningHandlerOptions{
-			SuppressWarnings:   false,
-			AllowDuplicateLogs: false,
-		},
-	})
-}
+var (
+	rc   client.Client
+	once sync.Once
+)
 
 func (b *BackupConfiguration) validateBackends() error {
 	if len(b.Spec.Backends) == 0 {
@@ -651,20 +623,16 @@ func (b *BackupConfiguration) getHookTemplatesFromHookInfo(hooks []HookInfo) []H
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (b *BackupConfiguration) ValidateUpdate(old runtime.Object) error {
 	backupconfigurationlog.Info("validate update", apis.KeyName, b.Name)
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client. Reason: %w", err)
-	}
-
-	if err = b.validateBackends(); err != nil {
+	c := apis.GetRuntimeClient()
+	if err := b.validateBackends(); err != nil {
 		return err
 	}
 
-	if err = b.validateSessions(context.Background(), c); err != nil {
+	if err := b.validateSessions(context.Background(), c); err != nil {
 		return err
 	}
 
-	if err = b.validateBackendsAgainstUsagePolicy(context.Background(), c); err != nil {
+	if err := b.validateBackendsAgainstUsagePolicy(context.Background(), c); err != nil {
 		return err
 	}
 

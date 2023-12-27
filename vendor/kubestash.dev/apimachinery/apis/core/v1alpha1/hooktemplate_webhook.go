@@ -67,6 +67,10 @@ func (r *HookTemplate) ValidateCreate() error {
 		return err
 	}
 
+	if err := r.validateUsagePolicy(); err != nil {
+		return err
+	}
+
 	return r.validateExecutorInfo()
 }
 
@@ -79,6 +83,10 @@ func (r *HookTemplate) ValidateUpdate(old runtime.Object) error {
 	}
 
 	if err := r.validateActionForNonFunctionExecutor(); err != nil {
+		return err
+	}
+
+	if err := r.validateUsagePolicy(); err != nil {
 		return err
 	}
 
@@ -131,6 +139,14 @@ func (r *HookTemplate) validateActionForNonFunctionExecutor() error {
 	if r.Spec.Executor.Type != HookExecutorFunction &&
 		r.Spec.Action == nil {
 		return fmt.Errorf("action can not be empty for pod or operator type executor")
+	}
+	return nil
+}
+
+func (r *HookTemplate) validateUsagePolicy() error {
+	if *r.Spec.UsagePolicy.AllowedNamespaces.From == apis.NamespacesFromSelector &&
+		r.Spec.UsagePolicy.AllowedNamespaces.Selector == nil {
+		return fmt.Errorf("selector cannot be empty for usage policy of type %q", apis.NamespacesFromSelector)
 	}
 	return nil
 }

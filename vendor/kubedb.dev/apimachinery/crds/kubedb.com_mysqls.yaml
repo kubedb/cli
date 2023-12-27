@@ -180,6 +180,22 @@ spec:
                     type: object
                     x-kubernetes-map-type: atomic
                 type: object
+              archiver:
+                properties:
+                  pause:
+                    type: boolean
+                  ref:
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                required:
+                - ref
+                type: object
               authSecret:
                 properties:
                   externallyManaged:

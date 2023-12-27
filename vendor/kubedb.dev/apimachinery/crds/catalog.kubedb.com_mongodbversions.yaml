@@ -56,6 +56,7 @@ spec:
                         enum:
                         - mongodb-addon
                         - postgres-addon
+                        - mysql-addon
                         type: string
                       tasks:
                         properties:

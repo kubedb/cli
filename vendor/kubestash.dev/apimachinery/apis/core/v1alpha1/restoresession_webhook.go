@@ -23,6 +23,7 @@ import (
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"kubestash.dev/apimachinery/apis"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -49,32 +50,22 @@ var _ webhook.Validator = &RestoreSession{}
 func (r *RestoreSession) ValidateCreate() error {
 	restoresessionlog.Info("validate create", "name", r.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client, Reason: %w", err)
-	}
-
 	if err := r.ValidateDataSource(); err != nil {
 		return err
 	}
 
-	return r.validateHookTemplatesAgainstUsagePolicy(context.Background(), c)
+	return r.validateHookTemplatesAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *RestoreSession) ValidateUpdate(old runtime.Object) error {
 	restoresessionlog.Info("validate update", "name", r.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client, Reason: %w", err)
-	}
-
 	if err := r.ValidateDataSource(); err != nil {
 		return err
 	}
 
-	return r.validateHookTemplatesAgainstUsagePolicy(context.Background(), c)
+	return r.validateHookTemplatesAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type

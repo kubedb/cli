@@ -70,7 +70,7 @@ type ProxySQLAutoscalerSpec struct {
 
 type ProxySQLComputeAutoscalerSpec struct {
 	// +optional
-	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	ProxySQL *ComputeAutoscalerSpec `json:"proxysql,omitempty"`
 }

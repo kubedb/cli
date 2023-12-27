@@ -69,7 +69,7 @@ type MongoDBAutoscalerSpec struct {
 
 type MongoDBComputeAutoscalerSpec struct {
 	// +optional
-	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	Standalone   *ComputeAutoscalerSpec `json:"standalone,omitempty"`
 	ReplicaSet   *ComputeAutoscalerSpec `json:"replicaSet,omitempty"`

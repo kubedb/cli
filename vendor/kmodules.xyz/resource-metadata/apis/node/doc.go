@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package management
+package node
 
 const (
-	GroupName = "management.k8s.appscode.com"
+	GroupName = "node.k8s.appscode.com"
 )

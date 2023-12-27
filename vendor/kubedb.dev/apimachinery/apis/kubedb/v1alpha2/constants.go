@@ -660,6 +660,15 @@ const (
 )
 
 var (
+	DefaultInitContainerResource = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".200"),
+			core.ResourceMemory: resource.MustParse("256Mi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("512Mi"),
+		},
+	}
 	DefaultResources = core.ResourceRequirements{
 		Requests: core.ResourceList{
 			core.ResourceCPU:    resource.MustParse(".500"),

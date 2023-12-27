@@ -69,7 +69,7 @@ type PerconaXtraDBAutoscalerSpec struct {
 
 type PerconaXtraDBComputeAutoscalerSpec struct {
 	// +optional
-	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	PerconaXtraDB *ComputeAutoscalerSpec `json:"perconaxtradb,omitempty"`
 }
