@@ -21,11 +21,11 @@ import "time"
 // Compute Autoscaler
 const (
 	// Ignore change priority that is smaller than 10%.
-	DefaultResourceDiffPercentage = 10
+	DefaultResourceDiffPercentage = 50
 
 	// Pods that live for at least that long can be evicted even if their
 	// request is within the [MinRecommended...MaxRecommended] range.
-	DefaultPodLifeTimeThreshold = time.Hour * 12
+	DefaultPodLifeTimeThreshold = time.Minute * 15
 
 	DefaultInMemoryStorageUsageThresholdPercentage = 70
 	DefaultInMemoryStorageScalingFactorPercentage  = 50

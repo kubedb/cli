@@ -71,7 +71,7 @@ type PostgresAutoscalerSpec struct {
 
 type PostgresComputeAutoscalerSpec struct {
 	// +optional
-	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	Postgres *ComputeAutoscalerSpec `json:"postgres,omitempty"`
 }

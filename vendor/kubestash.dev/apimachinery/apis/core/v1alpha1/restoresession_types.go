@@ -90,6 +90,14 @@ type ManifestRestoreOptions struct {
 	// Postgres specifies the options for selecting particular Postgres components to restore in manifest restore
 	// +optional
 	Postgres *KubeDBManifestOptions `json:"postgres,omitempty"`
+
+	// MySQL specifies the options for selecting particular MySQL components to restore in manifest restore
+	// +optional
+	MySQL *KubeDBManifestOptions `json:"mySQL,omitempty"`
+
+	// MariaDB specifies the options for selecting particular MariaDB components to restore in manifest restore
+	// +optional
+	MariaDB *KubeDBManifestOptions `json:"mariaDB,omitempty"`
 }
 
 type KubeDBManifestOptions struct {

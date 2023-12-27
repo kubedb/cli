@@ -17,9 +17,28 @@ limitations under the License.
 package apis
 
 import (
-	"encoding/json"
-	"gomodules.xyz/envsubst"
+	"sync"
+
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
+
+var (
+	once sync.Once
+	kc   client.Client
+)
+
+func GetRuntimeClient() client.Client {
+	if kc == nil {
+		panic("runtime client is not initialized!")
+	}
+	return kc
+}
+
+func SetRuntimeClient(client client.Client) {
+	once.Do(func() {
+		kc = client
+	})
+}
 
 func UpsertLabels(oldLabels, newLabels map[string]string) map[string]string {
 	if oldLabels == nil {
@@ -29,17 +48,4 @@ func UpsertLabels(oldLabels, newLabels map[string]string) map[string]string {
 		oldLabels[k] = v
 	}
 	return oldLabels
-}
-
-func ResolveWithInputs(obj interface{}, inputs map[string]string) error {
-	// convert to JSON, apply replacements and convert back to struct
-	jsonObj, err := json.Marshal(obj)
-	if err != nil {
-		return err
-	}
-	resolved, err := envsubst.EvalMap(string(jsonObj), inputs)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal([]byte(resolved), obj)
 }

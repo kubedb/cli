@@ -71,7 +71,7 @@ type ElasticsearchAutoscalerSpec struct {
 
 type ElasticsearchComputeAutoscalerSpec struct {
 	// +optional
-	NodeTopologyRef *core.LocalObjectReference `json:"nodeTopologyRef,omitempty"`
+	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	Node         *ComputeAutoscalerSpec `json:"node,omitempty"`
 	Master       *ComputeAutoscalerSpec `json:"master,omitempty"`

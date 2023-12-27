@@ -20,4 +20,6 @@ package v1alpha1
 
 type MongoDBArchiverExpansion interface{}
 
+type MySQLArchiverExpansion interface{}
+
 type PostgresArchiverExpansion interface{}

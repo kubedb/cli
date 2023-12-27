@@ -78,7 +78,7 @@ type PostgresVersionSpec struct {
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 	// +optional
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
-	// Archiver defines the walg & stash-addon related specifications
+	// Archiver defines the walg & kube-stash-addon related specifications
 	Archiver ArchiverSpec `json:"archiver,omitempty"`
 }
 

@@ -52,9 +52,9 @@ type NodeTopologySpec struct {
 
 type NodeGroup struct {
 	TopologyValue string `json:"topologyValue"`
-	// Capacity represents the total resources of a node.
+	// Allocatable represents the total resources of a node.
 	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
-	Capacity core.ResourceList `json:"capacity"`
+	Allocatable core.ResourceList `json:"allocatable"`
 }
 
 // +kubebuilder:validation:Enum=LabelSelector;Taint

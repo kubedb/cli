@@ -33,3 +33,7 @@ func (_ MongoDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourc
 func (_ PostgresArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPostgresArchiver))
 }
+
+func (_ MySQLArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQLArchiver))
+}

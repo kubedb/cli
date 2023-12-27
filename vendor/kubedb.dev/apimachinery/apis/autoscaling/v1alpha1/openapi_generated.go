@@ -486,6 +486,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MySQLComputeAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_MySQLComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MySQLOpsRequestOptions":                  schema_apimachinery_apis_autoscaling_v1alpha1_MySQLOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MySQLStorageAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_MySQLStorageAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology":                            schema_apimachinery_apis_autoscaling_v1alpha1_NodeTopology(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBAutoscaler":                 schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBAutoscalerList":             schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.PerconaXtraDBAutoscalerSpec":             schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBAutoscalerSpec(ref),
@@ -22252,14 +22253,14 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ComputeAutoscalerSpec(ref com
 					},
 					"resourceDiffPercentage": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the minimum resource difference in percentage. The default is 10%. If the difference between current & recommended resource is less than ResourceDiffPercentage, Autoscaler Operator will ignore the updating.",
+							Description: "Specifies the minimum resource difference in percentage. The default is 50%. If the difference between current & recommended resource is less than ResourceDiffPercentage, Autoscaler Operator will ignore the updating.",
 							Type:        []string{"integer"},
 							Format:      "int32",
 						},
 					},
 					"podLifeTimeThreshold": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the minimum pod life time. The default is 12h. If the resource Request is inside the recommended range & there is no quickOOM (out-of-memory), we can still update the pod, if that pod's lifeTime is greater than this threshold.",
+							Description: "Specifies the minimum pod life time. The default is 15m. If the resource Request is inside the recommended range & there is no quickOOM (out-of-memory), we can still update the pod, if that pod's lifeTime is greater than this threshold.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -22473,9 +22474,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchComputeAutoscale
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"node": {
@@ -22542,7 +22543,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ElasticsearchComputeAutoscale
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -23106,9 +23107,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBComputeAutoscalerSpec(
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"mariadb": {
@@ -23120,7 +23121,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MariaDBComputeAutoscalerSpec(
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -23586,9 +23587,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MongoDBComputeAutoscalerSpec(
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"standalone": {
@@ -23630,7 +23631,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MongoDBComputeAutoscalerSpec(
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -23849,9 +23850,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MySQLComputeAutoscalerSpec(re
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"mysql": {
@@ -23863,7 +23864,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MySQLComputeAutoscalerSpec(re
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -23916,6 +23917,39 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MySQLStorageAutoscalerSpec(re
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_NodeTopology(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the NodeTopology object",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scaleUpDiffPercentage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ScaleUpDiffPercentage describes in which difference (between recommended resource and the capacity of the nodePool) the opsReq should be triggered while scaling up Defaults to 15",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"scaleDownDiffPercentage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ScaleDownDiffPercentage describes in which difference (between recommended resource and the capacity of the nodePool) the opsReq should be triggered while scaling down Defaults to 25",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
 	}
 }
 
@@ -24063,9 +24097,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBComputeAutoscale
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"perconaxtradb": {
@@ -24077,7 +24111,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PerconaXtraDBComputeAutoscale
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -24604,9 +24638,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PostgresComputeAutoscalerSpec
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"postgres": {
@@ -24618,7 +24652,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_PostgresComputeAutoscalerSpec
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -24806,9 +24840,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLComputeAutoscalerSpec
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"proxysql": {
@@ -24820,7 +24854,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLComputeAutoscalerSpec
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -25106,9 +25140,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_RedisComputeAutoscalerSpec(re
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"standalone": {
@@ -25130,7 +25164,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_RedisComputeAutoscalerSpec(re
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 
@@ -25299,9 +25333,9 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelComputeAutoscale
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"nodeTopologyRef": {
+					"nodeTopology": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
 						},
 					},
 					"sentinel": {
@@ -25313,7 +25347,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelComputeAutoscale
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"},
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 

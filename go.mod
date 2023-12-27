@@ -25,10 +25,10 @@ require (
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.1
 	kmodules.xyz/cert-manager-util v0.25.0
-	kmodules.xyz/client-go v0.25.43
+	kmodules.xyz/client-go v0.25.44
 	kmodules.xyz/custom-resources v0.25.2
 	kmodules.xyz/monitoring-agent-api v0.25.6
-	kubedb.dev/apimachinery v0.39.0
+	kubedb.dev/apimachinery v0.40.0
 	kubedb.dev/db-client-go v0.0.8-0.20230818101900-6ddd035705ef
 	sigs.k8s.io/controller-runtime v0.13.1
 	sigs.k8s.io/yaml v1.3.0
@@ -122,7 +122,6 @@ require (
 	golang.org/x/time v0.3.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.7 // indirect
-	gomodules.xyz/envsubst v0.2.0 // indirect
 	gomodules.xyz/flags v0.1.3 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
 	gomodules.xyz/mergo v0.3.13 // indirect
@@ -142,9 +141,9 @@ require (
 	kmodules.xyz/objectstore-api v0.25.1 // indirect
 	kmodules.xyz/offshoot-api v0.25.5 // indirect
 	kmodules.xyz/prober v0.25.0 // indirect
-	kmodules.xyz/resource-metadata v0.17.42 // indirect
+	kmodules.xyz/resource-metadata v0.17.44 // indirect
 	kubeops.dev/sidekick v0.0.4 // indirect
-	kubestash.dev/apimachinery v0.2.0 // indirect
+	kubestash.dev/apimachinery v0.3.0 // indirect
 	sigs.k8s.io/gateway-api v0.4.3 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.12.1 // indirect

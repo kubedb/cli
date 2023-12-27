@@ -80,10 +80,7 @@ var _ webhook.Validator = &RetentionPolicy{}
 func (r *RetentionPolicy) ValidateCreate() error {
 	retentionpolicylog.Info("validate create", "name", r.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client. Reason: %w", err)
-	}
+	c := apis.GetRuntimeClient()
 
 	if err := r.validateMaxRetentionPeriodFormat(); err != nil {
 		return err
@@ -92,6 +89,11 @@ func (r *RetentionPolicy) ValidateCreate() error {
 	if err := r.validateProvidedPolicy(); err != nil {
 		return err
 	}
+
+	if err := r.validateUsagePolicy(); err != nil {
+		return err
+	}
+
 	return r.validateSingleDefaultRetentionPolicyInSameNamespace(context.Background(), c)
 }
 
@@ -99,10 +101,7 @@ func (r *RetentionPolicy) ValidateCreate() error {
 func (r *RetentionPolicy) ValidateUpdate(old runtime.Object) error {
 	retentionpolicylog.Info("validate update", "name", r.Name)
 
-	c, err := getNewRuntimeClient()
-	if err != nil {
-		return fmt.Errorf("failed to set Kubernetes client. Reason: %w", err)
-	}
+	c := apis.GetRuntimeClient()
 
 	if err := r.validateMaxRetentionPeriodFormat(); err != nil {
 		return err
@@ -111,6 +110,11 @@ func (r *RetentionPolicy) ValidateUpdate(old runtime.Object) error {
 	if err := r.validateProvidedPolicy(); err != nil {
 		return err
 	}
+
+	if err := r.validateUsagePolicy(); err != nil {
+		return err
+	}
+
 	return r.validateSingleDefaultRetentionPolicyInSameNamespace(context.Background(), c)
 }
 
@@ -133,6 +137,10 @@ func (r *RetentionPolicy) validateProvidedPolicy() error {
 }
 
 func (r *RetentionPolicy) validateSingleDefaultRetentionPolicyInSameNamespace(ctx context.Context, c client.Client) error {
+	if !r.Spec.Default {
+		return nil
+	}
+
 	rpList := RetentionPolicyList{}
 	if err := c.List(ctx, &rpList, client.InNamespace(r.Namespace)); err != nil {
 		return err
@@ -154,6 +162,14 @@ func (r *RetentionPolicy) isSameRetentionPolicy(rp RetentionPolicy) bool {
 		return true
 	}
 	return false
+}
+
+func (r *RetentionPolicy) validateUsagePolicy() error {
+	if *r.Spec.UsagePolicy.AllowedNamespaces.From == apis.NamespacesFromSelector &&
+		r.Spec.UsagePolicy.AllowedNamespaces.Selector == nil {
+		return fmt.Errorf("selector cannot be empty for usage policy of type %q", apis.NamespacesFromSelector)
+	}
+	return nil
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type

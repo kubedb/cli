@@ -30,6 +30,7 @@ import (
 type ArchiverV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	MongoDBArchiversGetter
+	MySQLArchiversGetter
 	PostgresArchiversGetter
 }
 
@@ -40,6 +41,10 @@ type ArchiverV1alpha1Client struct {
 
 func (c *ArchiverV1alpha1Client) MongoDBArchivers(namespace string) MongoDBArchiverInterface {
 	return newMongoDBArchivers(c, namespace)
+}
+
+func (c *ArchiverV1alpha1Client) MySQLArchivers(namespace string) MySQLArchiverInterface {
+	return newMySQLArchivers(c, namespace)
 }
 
 func (c *ArchiverV1alpha1Client) PostgresArchivers(namespace string) PostgresArchiverInterface {

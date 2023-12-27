@@ -45,7 +45,7 @@ type AddonSpec struct {
 	Tasks AddonTasks `json:"tasks,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon
+// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon;mysql-addon
 type AddonType string
 
 type AddonTasks struct {

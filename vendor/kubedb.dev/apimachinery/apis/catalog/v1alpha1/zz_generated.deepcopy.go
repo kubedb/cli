@@ -1273,6 +1273,7 @@ func (in *MySQLVersionSpec) DeepCopyInto(out *MySQLVersionSpec) {
 	out.RouterInitContainer = in.RouterInitContainer
 	out.GitSyncer = in.GitSyncer
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
+	out.Archiver = in.Archiver
 	return
 }
 
