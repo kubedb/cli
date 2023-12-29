@@ -52,7 +52,9 @@ func getLabelNames(labelSelector string) []string {
 	commaSeparated := strings.Split(unQuoted, ",")
 	for _, s := range commaSeparated {
 		labelName := excludeNonAlphanumericUnderscore(s)
-		labelNames = append(labelNames, labelName)
+		if labelName != "" {
+			labelNames = append(labelNames, labelName)
+		}
 	}
 	return labelNames
 }

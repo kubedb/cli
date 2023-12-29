@@ -57,21 +57,7 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 
 	dashboardData := getDashboard(url)
 
-	var queries []queryInformation
-	if panels, ok := dashboardData["panels"].([]interface{}); ok {
-		for _, panel := range panels {
-			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
-				for _, target := range targets {
-					if expr, ok := target.(map[string]interface{})["expr"]; ok {
-						if expr != "" {
-							query := expr.(string)
-							queries = append(queries, getMetricAndLabels(query)...)
-						}
-					}
-				}
-			}
-		}
-	}
+	queries := getQueryInformation(dashboardData)
 
 	config, err := f.ToRESTConfig()
 	if err != nil {
@@ -122,10 +108,10 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 		}
 	}
 	if len(unknownMetrics) > 0 {
-		fmt.Print("List of unknown metrics:\n", strings.Join(unknownMetrics, "\n"))
+		fmt.Printf("List of unknown metrics:\n%s\n", strings.Join(unknownMetrics, "\n"))
 	}
 	if len(unknownLabels) > 0 {
-		fmt.Print("List of unknown labels:\n", strings.Join(unknownLabels, "\n"))
+		fmt.Printf("List of unknown labels:\n%s", strings.Join(unknownLabels, "\n"))
 	}
 	if len(unknownMetrics) == 0 && len(unknownLabels) == 0 {
 		fmt.Println("All metrics found")
@@ -200,4 +186,23 @@ func getPromClient(localPort string) v1.API {
 
 	// Create a new Prometheus API client
 	return v1.NewAPI(client)
+}
+
+func getQueryInformation(dashboardData map[string]interface{}) []queryInformation {
+	var queries []queryInformation
+	if panels, ok := dashboardData["panels"].([]interface{}); ok {
+		for _, panel := range panels {
+			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
+				for _, target := range targets {
+					if expr, ok := target.(map[string]interface{})["expr"]; ok {
+						if expr != "" {
+							query := expr.(string)
+							queries = append(queries, getMetricAndLabels(query)...)
+						}
+					}
+				}
+			}
+		}
+	}
+	return queries
 }
