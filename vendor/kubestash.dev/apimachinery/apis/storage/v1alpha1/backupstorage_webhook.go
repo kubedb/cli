@@ -26,6 +26,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -58,53 +59,53 @@ func (r *BackupStorage) Default() {
 var _ webhook.Validator = &BackupStorage{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupStorage) ValidateCreate() error {
+func (r *BackupStorage) ValidateCreate() (admission.Warnings, error) {
 	backupstoragelog.Info("validate create", "name", r.Name)
 
 	c := apis.GetRuntimeClient()
 
 	if r.Spec.Default {
 		if err := r.validateSingleDefaultBackupStorageInSameNamespace(context.Background(), c); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
 	if err := r.validateUsagePolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateUniqueDirectory(context.Background(), c)
+	return nil, r.validateUniqueDirectory(context.Background(), c)
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupStorage) ValidateUpdate(old runtime.Object) error {
+func (r *BackupStorage) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	backupstoragelog.Info("validate update", "name", r.Name)
 
 	c := apis.GetRuntimeClient()
 
 	if r.Spec.Default {
 		if err := r.validateSingleDefaultBackupStorageInSameNamespace(context.Background(), c); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
 	if err := r.validateUsagePolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := r.validateUpdateStorage(old.(*BackupStorage)); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateUniqueDirectory(context.Background(), c)
+	return nil, r.validateUniqueDirectory(context.Background(), c)
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupStorage) ValidateDelete() error {
+func (r *BackupStorage) ValidateDelete() (admission.Warnings, error) {
 	backupstoragelog.Info("validate delete", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
-	return nil
+	return nil, nil
 }
 
 func (r *BackupStorage) setDefaultUsagePolicy() {

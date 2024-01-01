@@ -30,6 +30,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -62,33 +63,33 @@ func (r *BackupBlueprint) Default() {
 var _ webhook.Validator = &BackupBlueprint{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupBlueprint) ValidateCreate() error {
+func (r *BackupBlueprint) ValidateCreate() (admission.Warnings, error) {
 	backupblueprintlog.Info("validate create", "name", r.Name)
 
 	if err := r.validateUsagePolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateBackendsAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
+	return nil, r.validateBackendsAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupBlueprint) ValidateUpdate(old runtime.Object) error {
+func (r *BackupBlueprint) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	backupblueprintlog.Info("validate update", "name", r.Name)
 
 	if err := r.validateUsagePolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateBackendsAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
+	return nil, r.validateBackendsAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupBlueprint) ValidateDelete() error {
+func (r *BackupBlueprint) ValidateDelete() (admission.Warnings, error) {
 	backupblueprintlog.Info("validate delete", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
-	return nil
+	return nil, nil
 }
 
 func (r *BackupBlueprint) setDefaultUsagePolicy() {

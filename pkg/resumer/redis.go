@@ -23,9 +23,9 @@ import (
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util"
 
-	"gomodules.xyz/wait"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/rest"
 	condutil "kmodules.xyz/client-go/conditions"
 	scs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
@@ -80,8 +80,8 @@ func (e *RedisResumer) Resume(name, namespace string) (bool, error) {
 			return false, err
 		}
 	}
-	return backupConfigFound, wait.PollImmediate(ResumeInterval, ResumeTimeout, func() (done bool, err error) {
-		db, err = e.dbClient.Redises(namespace).Get(context.TODO(), name, metav1.GetOptions{})
+	return backupConfigFound, wait.PollUntilContextTimeout(context.Background(), ResumeInterval, ResumeTimeout, true, func(ctx context.Context) (done bool, err error) {
+		db, err = e.dbClient.Redises(namespace).Get(ctx, name, metav1.GetOptions{})
 		if err != nil {
 			return false, err
 		}

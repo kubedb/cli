@@ -168,10 +168,10 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 	}
 	tlsSecret := &core.Secret{}
 
-	err = wait.PollImmediate(300*time.Millisecond, 60*time.Minute, func() (done bool, err error) {
+	err = wait.PollUntilContextTimeout(context.Background(), 300*time.Millisecond, 60*time.Minute, true, func(ctx context.Context) (done bool, err error) {
 		sercretName := opts.DB.GetCertSecretName(api.MySQLClientCert) + fmt.Sprintf("-%s", userName)
 
-		tlsSecret, err = opts.Client.CoreV1().Secrets(ns).Get(context.TODO(), sercretName, metav1.GetOptions{})
+		tlsSecret, err = opts.Client.CoreV1().Secrets(ns).Get(ctx, sercretName, metav1.GetOptions{})
 		if kerr.IsNotFound(err) {
 			return false, nil
 		} else if err != nil {

@@ -118,11 +118,23 @@ const (
 )
 
 // GetPodStatus returns pod status like kubectl
-// Adapted from: https://github.com/kubernetes/kubernetes/blob/v1.25.3/pkg/printers/internalversion/printers.go#L755C1-L901C2
+// Adapted from: https://github.com/kubernetes/kubernetes/blob/735804dc812ce647f8c130dced45b5ba4079b76e/pkg/printers/internalversion/printers.go#L825
 func GetPodStatus(pod *core.Pod) string {
 	reason := string(pod.Status.Phase)
 	if pod.Status.Reason != "" {
 		reason = pod.Status.Reason
+	}
+
+	// If the Pod carries {type:PodScheduled, reason:WaitingForGates}, set reason to 'SchedulingGated'.
+	for _, condition := range pod.Status.Conditions {
+		if condition.Type == core.PodScheduled && condition.Reason == core.PodReasonSchedulingGated {
+			reason = core.PodReasonSchedulingGated
+		}
+	}
+
+	initContainers := make(map[string]*core.Container)
+	for i := range pod.Spec.InitContainers {
+		initContainers[pod.Spec.InitContainers[i].Name] = &pod.Spec.InitContainers[i]
 	}
 
 	initializing := false
@@ -130,6 +142,9 @@ func GetPodStatus(pod *core.Pod) string {
 		container := pod.Status.InitContainerStatuses[i]
 		switch {
 		case container.State.Terminated != nil && container.State.Terminated.ExitCode == 0:
+			continue
+		case isRestartableInitContainer(initContainers[container.Name]) &&
+			container.Started != nil && *container.Started:
 			continue
 		case container.State.Terminated != nil:
 			// initialization is failed
@@ -152,7 +167,8 @@ func GetPodStatus(pod *core.Pod) string {
 		}
 		break
 	}
-	if !initializing {
+
+	if !initializing || isPodInitializedConditionTrue(&pod.Status) {
 		hasRunning := false
 		for i := len(pod.Status.ContainerStatuses) - 1; i >= 0; i-- {
 			container := pod.Status.ContainerStatuses[i]
@@ -198,6 +214,14 @@ func hasPodReadyCondition(conditions []core.PodCondition) bool {
 		}
 	}
 	return false
+}
+
+func isRestartableInitContainer(initContainer *core.Container) bool {
+	if initContainer.RestartPolicy == nil {
+		return false
+	}
+
+	return *initContainer.RestartPolicy == core.ContainerRestartPolicyAlways
 }
 
 func isPodInitializedConditionTrue(status *core.PodStatus) bool {

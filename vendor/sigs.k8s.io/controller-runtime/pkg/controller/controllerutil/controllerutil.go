@@ -27,7 +27,8 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 )
@@ -76,8 +77,8 @@ func SetControllerReference(owner, controlled metav1.Object, scheme *runtime.Sch
 		Kind:               gvk.Kind,
 		Name:               owner.GetName(),
 		UID:                owner.GetUID(),
-		BlockOwnerDeletion: pointer.BoolPtr(true),
-		Controller:         pointer.BoolPtr(true),
+		BlockOwnerDeletion: ptr.To(true),
+		Controller:         ptr.To(true),
 	}
 
 	// Return early with an error if the object is already controlled.
@@ -117,6 +118,84 @@ func SetOwnerReference(owner, object metav1.Object, scheme *runtime.Scheme) erro
 
 	// Update owner references and return.
 	upsertOwnerRef(ref, object)
+	return nil
+}
+
+// RemoveOwnerReference is a helper method to make sure the given object removes an owner reference to the object provided.
+// This allows you to remove the owner to establish a new owner of the object in a subsequent call.
+func RemoveOwnerReference(owner, object metav1.Object, scheme *runtime.Scheme) error {
+	owners := object.GetOwnerReferences()
+	length := len(owners)
+	if length < 1 {
+		return fmt.Errorf("%T does not have any owner references", object)
+	}
+	ro, ok := owner.(runtime.Object)
+	if !ok {
+		return fmt.Errorf("%T is not a runtime.Object, cannot call RemoveOwnerReference", owner)
+	}
+	gvk, err := apiutil.GVKForObject(ro, scheme)
+	if err != nil {
+		return err
+	}
+
+	index := indexOwnerRef(owners, metav1.OwnerReference{
+		APIVersion: gvk.GroupVersion().String(),
+		Name:       owner.GetName(),
+		Kind:       gvk.Kind,
+	})
+	if index == -1 {
+		return fmt.Errorf("%T does not have an owner reference for %T", object, owner)
+	}
+
+	owners = append(owners[:index], owners[index+1:]...)
+	object.SetOwnerReferences(owners)
+	return nil
+}
+
+// HasControllerReference returns true if the object
+// has an owner ref with controller equal to true
+func HasControllerReference(object metav1.Object) bool {
+	owners := object.GetOwnerReferences()
+	for _, owner := range owners {
+		isTrue := owner.Controller
+		if owner.Controller != nil && *isTrue {
+			return true
+		}
+	}
+	return false
+}
+
+// RemoveControllerReference removes an owner reference where the controller
+// equals true
+func RemoveControllerReference(owner, object metav1.Object, scheme *runtime.Scheme) error {
+	if ok := HasControllerReference(object); !ok {
+		return fmt.Errorf("%T does not have a owner reference with controller equals true", object)
+	}
+	ro, ok := owner.(runtime.Object)
+	if !ok {
+		return fmt.Errorf("%T is not a runtime.Object, cannot call RemoveControllerReference", owner)
+	}
+	gvk, err := apiutil.GVKForObject(ro, scheme)
+	if err != nil {
+		return err
+	}
+	ownerRefs := object.GetOwnerReferences()
+	index := indexOwnerRef(ownerRefs, metav1.OwnerReference{
+		APIVersion: gvk.GroupVersion().String(),
+		Name:       owner.GetName(),
+		Kind:       gvk.Kind,
+	})
+
+	if index == -1 {
+		return fmt.Errorf("%T does not have an controller reference for %T", object, owner)
+	}
+
+	if ownerRefs[index].Controller == nil || !*ownerRefs[index].Controller {
+		return fmt.Errorf("%T owner is not the controller reference for %T", owner, object)
+	}
+
+	ownerRefs = append(ownerRefs[:index], ownerRefs[index+1:]...)
+	object.SetOwnerReferences(ownerRefs)
 	return nil
 }
 
@@ -165,7 +244,6 @@ func referSameObject(a, b metav1.OwnerReference) bool {
 	if err != nil {
 		return false
 	}
-
 	return aGV.Group == bGV.Group && a.Kind == b.Kind && a.Name == b.Name
 }
 
@@ -207,7 +285,7 @@ func CreateOrUpdate(ctx context.Context, c client.Client, obj client.Object, f M
 		return OperationResultCreated, nil
 	}
 
-	existing := obj.DeepCopyObject() //nolint
+	existing := obj.DeepCopyObject()
 	if err := mutate(f, key, obj); err != nil {
 		return OperationResultNone, err
 	}
@@ -365,15 +443,18 @@ func AddFinalizer(o client.Object, finalizer string) (finalizersUpdated bool) {
 // It returns an indication of whether it updated the object's list of finalizers.
 func RemoveFinalizer(o client.Object, finalizer string) (finalizersUpdated bool) {
 	f := o.GetFinalizers()
-	for i := 0; i < len(f); i++ {
+	length := len(f)
+
+	index := 0
+	for i := 0; i < length; i++ {
 		if f[i] == finalizer {
-			f = append(f[:i], f[i+1:]...)
-			i--
-			finalizersUpdated = true
+			continue
 		}
+		f[index] = f[i]
+		index++
 	}
-	o.SetFinalizers(f)
-	return
+	o.SetFinalizers(f[:index])
+	return length != index
 }
 
 // ContainsFinalizer checks an Object that the provided finalizer is present.
@@ -386,9 +467,3 @@ func ContainsFinalizer(o client.Object, finalizer string) bool {
 	}
 	return false
 }
-
-// Object allows functions to work indistinctly with any resource that
-// implements both Object interfaces.
-//
-// Deprecated: Use client.Object instead.
-type Object = client.Object

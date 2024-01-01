@@ -27,6 +27,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -97,18 +98,18 @@ func (in *ElasticsearchAutoscaler) setOpsReqOptsDefaults() {
 var _ webhook.Validator = &ElasticsearchAutoscaler{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (in *ElasticsearchAutoscaler) ValidateCreate() error {
+func (in *ElasticsearchAutoscaler) ValidateCreate() (admission.Warnings, error) {
 	esLog.Info("validate create", "name", in.Name)
-	return in.validate()
+	return nil, in.validate()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (in *ElasticsearchAutoscaler) ValidateUpdate(old runtime.Object) error {
-	return in.validate()
+func (in *ElasticsearchAutoscaler) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
+	return nil, in.validate()
 }
 
-func (_ ElasticsearchAutoscaler) ValidateDelete() error {
-	return nil
+func (_ ElasticsearchAutoscaler) ValidateDelete() (admission.Warnings, error) {
+	return nil, nil
 }
 
 func (in *ElasticsearchAutoscaler) validate() error {

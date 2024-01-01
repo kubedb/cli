@@ -28,6 +28,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -57,19 +58,19 @@ func (k *Kafka) Default() {
 var _ webhook.Validator = &Kafka{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (k *Kafka) ValidateCreate() error {
+func (k *Kafka) ValidateCreate() (admission.Warnings, error) {
 	kafkalog.Info("validate create", "name", k.Name)
-	return k.ValidateCreateOrUpdate()
+	return nil, k.ValidateCreateOrUpdate()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (k *Kafka) ValidateUpdate(old runtime.Object) error {
+func (k *Kafka) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	kafkalog.Info("validate update", "name", k.Name)
-	return k.ValidateCreateOrUpdate()
+	return nil, k.ValidateCreateOrUpdate()
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (k *Kafka) ValidateDelete() error {
+func (k *Kafka) ValidateDelete() (admission.Warnings, error) {
 	kafkalog.Info("validate delete", "name", k.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
@@ -78,9 +79,9 @@ func (k *Kafka) ValidateDelete() error {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
 			k.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
-		return apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "Kafka"}, k.Name, allErr)
+		return nil, apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "Kafka"}, k.Name, allErr)
 	}
-	return nil
+	return nil, nil
 }
 
 func (k *Kafka) ValidateCreateOrUpdate() error {

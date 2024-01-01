@@ -41,8 +41,8 @@ const (
 // +kubebuilder:resource:categories="prometheus-operator",shortName="amcfg"
 // +kubebuilder:storageversion
 
-// AlertmanagerConfig defines a namespaced AlertmanagerConfig to be aggregated
-// across multiple namespaces configuring one Alertmanager cluster.
+// AlertmanagerConfig configures the Prometheus Alertmanager,
+// specifying how alerts should be grouped, inhibited and notified to external systems.
 type AlertmanagerConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -65,7 +65,7 @@ type AlertmanagerConfigList struct {
 // By definition, the Alertmanager configuration only applies to alerts for which
 // the `namespace` label is equal to the namespace of the AlertmanagerConfig resource.
 type AlertmanagerConfigSpec struct {
-	// The Alertmanager route definition for alerts matching the resource’s
+	// The Alertmanager route definition for alerts matching the resource's
 	// namespace. If present, it will be added to the generated Alertmanager
 	// configuration as a first-level route.
 	// +optional
@@ -74,7 +74,7 @@ type AlertmanagerConfigSpec struct {
 	// +optional
 	Receivers []Receiver `json:"receivers"`
 	// List of inhibition rules. The rules will only apply to alerts matching
-	// the resource’s namespace.
+	// the resource's namespace.
 	// +optional
 	InhibitRules []InhibitRule `json:"inhibitRules,omitempty"`
 	// List of MuteTimeInterval specifying when the routes should be muted.
@@ -108,7 +108,7 @@ type Route struct {
 	// Example: "4h"
 	// +optional
 	RepeatInterval string `json:"repeatInterval,omitempty"`
-	// List of matchers that the alert’s labels should match. For the first
+	// List of matchers that the alert's labels should match. For the first
 	// level route, the operator removes any existing equality and regexp
 	// matcher on the `namespace` label and adds a `namespace: <object
 	// namespace>` matcher.
@@ -131,6 +131,9 @@ type Route struct {
 	// MuteTimeIntervals is a list of MuteTimeInterval names that will mute this route when matched,
 	// +optional
 	MuteTimeIntervals []string `json:"muteTimeIntervals,omitempty"`
+	// ActiveTimeIntervals is a list of MuteTimeInterval names when this route should be active.
+	// +optional
+	ActiveTimeIntervals []string `json:"activeTimeIntervals,omitempty"`
 }
 
 // ChildRoutes extracts the child routes.
@@ -155,6 +158,9 @@ type Receiver struct {
 	OpsGenieConfigs []OpsGenieConfig `json:"opsgenieConfigs,omitempty"`
 	// List of PagerDuty configurations.
 	PagerDutyConfigs []PagerDutyConfig `json:"pagerdutyConfigs,omitempty"`
+	// List of Discord configurations.
+	// +optional
+	DiscordConfigs []DiscordConfig `json:"discordConfigs,omitempty"`
 	// List of Slack configurations.
 	SlackConfigs []SlackConfig `json:"slackConfigs,omitempty"`
 	// List of webhook configurations.
@@ -171,6 +177,11 @@ type Receiver struct {
 	SNSConfigs []SNSConfig `json:"snsConfigs,omitempty"`
 	// List of Telegram configurations.
 	TelegramConfigs []TelegramConfig `json:"telegramConfigs,omitempty"`
+	// List of Webex configurations.
+	WebexConfigs []WebexConfig `json:"webexConfigs,omitempty"`
+	// List of MSTeams configurations.
+	// It requires Alertmanager >= 0.26.0.
+	MSTeamsConfigs []MSTeamsConfig `json:"msteamsConfigs,omitempty"`
 }
 
 // PagerDutyConfig configures notifications via PagerDuty.
@@ -251,6 +262,32 @@ type PagerDutyLinkConfig struct {
 	// Text that describes the purpose of the link, and can be used as the link's text.
 	// +optional
 	Text string `json:"alt,omitempty"`
+}
+
+// DiscordConfig configures notifications via Discord.
+// See https://prometheus.io/docs/alerting/latest/configuration/#discord_config
+type DiscordConfig struct {
+	// Whether or not to notify about resolved alerts.
+	// +optional
+	SendResolved *bool `json:"sendResolved,omitempty"`
+
+	// The secret's key that contains the Discord webhook URL.
+	// The secret needs to be in the same namespace as the AlertmanagerConfig
+	// object and accessible by the Prometheus Operator.
+	// +required
+	APIURL v1.SecretKeySelector `json:"apiURL"`
+
+	// The template of the message's title.
+	// +optional
+	Title *string `json:"title,omitempty"`
+
+	// The template of the message's body.
+	// +optional
+	Message *string `json:"message,omitempty"`
+
+	// HTTP client configuration.
+	// +optional
+	HTTPConfig *HTTPConfig `json:"httpConfig,omitempty"`
 }
 
 // SlackConfig configures notifications via Slack.
@@ -568,6 +605,33 @@ type HTTPConfig struct {
 	FollowRedirects *bool `json:"followRedirects,omitempty"`
 }
 
+// WebexConfig configures notification via Cisco Webex
+// See https://prometheus.io/docs/alerting/latest/configuration/#webex_config
+type WebexConfig struct {
+	// Whether to notify about resolved alerts.
+	// +optional
+	SendResolved *bool `json:"sendResolved,omitempty"`
+
+	// The Webex Teams API URL i.e. https://webexapis.com/v1/messages
+	// Provide if different from the default API URL.
+	// +optional
+	APIURL *URL `json:"apiURL,omitempty"`
+
+	// The HTTP client's configuration.
+	// You must supply the bot token via the `httpConfig.authorization` field.
+	// +optional
+	HTTPConfig *HTTPConfig `json:"httpConfig,omitempty"`
+
+	// Message template
+	// +optional
+	Message *string `json:"message,omitempty"`
+
+	// ID of the Webex Teams room where to send the messages.
+	// +kubebuilder:validation:MinLength=1
+	// +required
+	RoomID string `json:"roomID"`
+}
+
 // WeChatConfig configures notifications via WeChat.
 // See https://prometheus.io/docs/alerting/latest/configuration/#wechat_config
 type WeChatConfig struct {
@@ -638,10 +702,10 @@ type EmailConfig struct {
 	Headers []KeyValue `json:"headers,omitempty"`
 	// The HTML body of the email notification.
 	// +optional
-	HTML string `json:"html,omitempty"`
+	HTML *string `json:"html,omitempty"`
 	// The text body of the email notification.
 	// +optional
-	Text string `json:"text,omitempty"`
+	Text *string `json:"text,omitempty"`
 	// The SMTP TLS requirement.
 	// Note that Go does not support unencrypted connections to remote SMTP endpoints.
 	// +optional
@@ -694,16 +758,28 @@ type PushoverConfig struct {
 	// Whether or not to notify about resolved alerts.
 	// +optional
 	SendResolved *bool `json:"sendResolved,omitempty"`
-	// The secret's key that contains the recipient user’s user key.
+	// The secret's key that contains the recipient user's user key.
 	// The secret needs to be in the same namespace as the AlertmanagerConfig
 	// object and accessible by the Prometheus Operator.
-	// +kubebuilder:validation:Required
+	// Either `userKey` or `userKeyFile` is required.
+	// +optional
 	UserKey *v1.SecretKeySelector `json:"userKey,omitempty"`
-	// The secret's key that contains the registered application’s API token, see https://pushover.net/apps.
+	// The user key file that contains the recipient user's user key.
+	// Either `userKey` or `userKeyFile` is required.
+	// It requires Alertmanager >= v0.26.0.
+	// +optional
+	UserKeyFile *string `json:"userKeyFile,omitempty"`
+	// The secret's key that contains the registered application's API token, see https://pushover.net/apps.
 	// The secret needs to be in the same namespace as the AlertmanagerConfig
 	// object and accessible by the Prometheus Operator.
-	// +kubebuilder:validation:Required
+	// Either `token` or `tokenFile` is required.
+	// +optional
 	Token *v1.SecretKeySelector `json:"token,omitempty"`
+	// The token file that contains the registered application's API token, see https://pushover.net/apps.
+	// Either `token` or `tokenFile` is required.
+	// It requires Alertmanager >= v0.26.0.
+	// +optional
+	TokenFile *string `json:"tokenFile,omitempty"`
 	// Notification title.
 	// +optional
 	Title string `json:"title,omitempty"`
@@ -716,6 +792,9 @@ type PushoverConfig struct {
 	// A title for supplementary URL, otherwise just the URL is shown
 	// +optional
 	URLTitle string `json:"urlTitle,omitempty"`
+	// The name of a device to send the notification to
+	// +optional
+	Device *string `json:"device,omitempty"`
 	// The name of one of the sounds supported by device clients to override the user's default sound choice
 	// +optional
 	Sound string `json:"sound,omitempty"`
@@ -789,11 +868,23 @@ type TelegramConfig struct {
 	// If not specified, default API URL will be used.
 	// +optional
 	APIURL string `json:"apiURL,omitempty"`
-	// Telegram bot token
+	// Telegram bot token. It is mutually exclusive with `botTokenFile`.
 	// The secret needs to be in the same namespace as the AlertmanagerConfig
 	// object and accessible by the Prometheus Operator.
+	//
+	// Either `botToken` or `botTokenFile` is required.
+	//
+	//+optional
 	BotToken *v1.SecretKeySelector `json:"botToken,omitempty"`
+	// File to read the Telegram bot token from. It is mutually exclusive with `botToken`.
+	// Either `botToken` or `botTokenFile` is required.
+	//
+	// It requires Alertmanager >= v0.26.0.
+	//
+	// +optional
+	BotTokenFile *string `json:"botTokenFile,omitempty"`
 	// The Telegram chat ID.
+	// +required
 	ChatID int64 `json:"chatID,omitempty"`
 	// Message template
 	// +optional
@@ -810,16 +901,36 @@ type TelegramConfig struct {
 	HTTPConfig *HTTPConfig `json:"httpConfig,omitempty"`
 }
 
+// MSTeamsConfig configures notifications via Microsoft Teams.
+// It requires Alertmanager >= 0.26.0.
+type MSTeamsConfig struct {
+	// Whether to notify about resolved alerts.
+	// +optional
+	SendResolved *bool `json:"sendResolved,omitempty"`
+	// MSTeams webhook URL.
+	// +kubebuilder:validation:Required
+	WebhookURL v1.SecretKeySelector `json:"webhookUrl"`
+	// Message title template.
+	// +optional
+	Title *string `json:"title,omitempty"`
+	// Message body template.
+	// +optional
+	Text *string `json:"text,omitempty"`
+	// HTTP client configuration.
+	// +optional
+	HTTPConfig *HTTPConfig `json:"httpConfig,omitempty"`
+}
+
 // InhibitRule defines an inhibition rule that allows to mute alerts when other
 // alerts are already firing.
 // See https://prometheus.io/docs/alerting/latest/configuration/#inhibit_rule
 type InhibitRule struct {
 	// Matchers that have to be fulfilled in the alerts to be muted. The
-	// operator enforces that the alert matches the resource’s namespace.
+	// operator enforces that the alert matches the resource's namespace.
 	TargetMatch []Matcher `json:"targetMatch,omitempty"`
 	// Matchers for which one or more alerts have to exist for the inhibition
 	// to take effect. The operator enforces that the alert matches the
-	// resource’s namespace.
+	// resource's namespace.
 	SourceMatch []Matcher `json:"sourceMatch,omitempty"`
 	// Labels that must have an equal value in the source and target alert for
 	// the inhibition to take effect.
@@ -1072,3 +1183,7 @@ var monthsInv = map[int]Month{
 	11: November,
 	12: December,
 }
+
+// URL represents a valid URL
+// +kubebuilder:validation:Pattern=`^https?://.+$`
+type URL string
