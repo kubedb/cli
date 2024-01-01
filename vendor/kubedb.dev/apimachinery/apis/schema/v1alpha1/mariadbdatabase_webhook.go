@@ -26,6 +26,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -64,23 +65,23 @@ func (r *MariaDBDatabase) Default() {
 var _ webhook.Validator = &MariaDBDatabase{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *MariaDBDatabase) ValidateCreate() error {
+func (r *MariaDBDatabase) ValidateCreate() (admission.Warnings, error) {
 	mariadbdatabaselog.Info("validate create", "name", r.Name)
 	var allErrs field.ErrorList
 	if err := r.ValidateMariaDBDatabase(); err != nil {
 		allErrs = append(allErrs, field.Invalid(field.NewPath(""), r.Name, err.Error()))
 	}
 	if len(allErrs) == 0 {
-		return nil
+		return nil, nil
 	}
-	return apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MariaDBDatabase"}, r.Name, allErrs)
+	return nil, apierrors.NewInvalid(schema.GroupKind{Group: "schema.kubedb.com", Kind: "MariaDBDatabase"}, r.Name, allErrs)
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *MariaDBDatabase) ValidateUpdate(old runtime.Object) error {
+func (r *MariaDBDatabase) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	mariadbdatabaselog.Info("validate update", "name", r.Name)
 	oldobj := old.(*MariaDBDatabase)
-	return ValidateMariaDBDatabaseUpdate(r, oldobj)
+	return nil, ValidateMariaDBDatabaseUpdate(r, oldobj)
 }
 
 func ValidateMariaDBDatabaseUpdate(newobj *MariaDBDatabase, oldobj *MariaDBDatabase) error {
@@ -126,12 +127,12 @@ func ValidateMariaDBDatabaseUpdate(newobj *MariaDBDatabase, oldobj *MariaDBDatab
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *MariaDBDatabase) ValidateDelete() error {
+func (r *MariaDBDatabase) ValidateDelete() (admission.Warnings, error) {
 	mariadbdatabaselog.Info("validate delete", "name", r.Name)
 	if r.Spec.DeletionPolicy == DeletionPolicyDoNotDelete {
-		return field.Invalid(field.NewPath("spec").Child("terminationPolicy"), r.Name, `cannot delete object when terminationPolicy is set to "DoNotDelete"`)
+		return nil, field.Invalid(field.NewPath("spec").Child("terminationPolicy"), r.Name, `cannot delete object when terminationPolicy is set to "DoNotDelete"`)
 	}
-	return nil
+	return nil, nil
 }
 
 func (in *MariaDBDatabase) ValidateMariaDBDatabase() error {

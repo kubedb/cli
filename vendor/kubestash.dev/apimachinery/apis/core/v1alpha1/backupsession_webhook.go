@@ -23,6 +23,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -42,29 +43,29 @@ func (r *BackupSession) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &BackupSession{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupSession) ValidateCreate() error {
+func (r *BackupSession) ValidateCreate() (admission.Warnings, error) {
 	backupsessionlog.Info("validate create", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object creation.
-	return nil
+	return nil, nil
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupSession) ValidateUpdate(old runtime.Object) error {
+func (r *BackupSession) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	backupsessionlog.Info("validate update", "name", r.Name)
 
 	oldBS := old.(*BackupSession)
 	if !reflect.DeepEqual(oldBS.Spec, r.Spec) {
-		return fmt.Errorf("spec can not be updated")
+		return nil, fmt.Errorf("spec can not be updated")
 	}
 
-	return nil
+	return nil, nil
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *BackupSession) ValidateDelete() error {
+func (r *BackupSession) ValidateDelete() (admission.Warnings, error) {
 	backupsessionlog.Info("validate delete", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
-	return nil
+	return nil, nil
 }

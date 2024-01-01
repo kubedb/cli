@@ -224,7 +224,7 @@ func describeService(service *core.Service, endpoints *core.Endpoints, w describ
 		if sp.NodePort != 0 {
 			w.Write(LEVEL_1, "NodePort:\t%s\t%d/%s\n", name, sp.NodePort, sp.Protocol)
 		}
-		w.Write(LEVEL_1, "Endpoints:\t%s\n", formatEndpoints(endpoints, sets.NewString(sp.Name)))
+		w.Write(LEVEL_1, "Endpoints:\t%s\n", formatEndpoints(endpoints, sets.New[string](sp.Name)))
 	}
 }
 
@@ -238,7 +238,7 @@ func describeSecret(secret *core.Secret, prefix string, w describe.PrefixWriter)
 	}
 	w.Write(LEVEL_1, "Name:\t%s\n", secret.Name)
 	printLabelsMultiline(LEVEL_1, w, "Labels", secret.Labels)
-	skipAnnotations := sets.NewString(meta_util.LastAppliedConfigAnnotation)
+	skipAnnotations := sets.New[string](meta_util.LastAppliedConfigAnnotation)
 	printAnnotationsMultilineWithFilter(LEVEL_1, w, "Annotations", secret.Annotations, skipAnnotations)
 
 	w.Write(LEVEL_1, "Type:\t%s\n", secret.Type)
@@ -590,11 +590,11 @@ var maxAnnotationLen = 200
 
 // printLabelsMultiline prints multiple labels with a proper alignment.
 func printLabelsMultiline(level int, w describe.PrefixWriter, title string, labels map[string]string) {
-	printLabelsMultilineWithIndent(level, w, "", title, "\t", labels, sets.NewString())
+	printLabelsMultilineWithIndent(level, w, "", title, "\t", labels, sets.New[string]())
 }
 
 // printLabelsMultiline prints multiple labels with a user-defined alignment.
-func printLabelsMultilineWithIndent(level int, w describe.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.String) {
+func printLabelsMultilineWithIndent(level int, w describe.PrefixWriter, initialIndent, title, innerIndent string, labels map[string]string, skip sets.Set[string]) {
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
 	if len(labels) == 0 {
@@ -643,7 +643,7 @@ func tabbedString(f func(io.Writer) error) (string, error) {
 // printAnnotationsMultilineWithFilter prints filtered multiple annotations with a proper alignment.
 //
 //nolint:unparam
-func printAnnotationsMultilineWithFilter(level int, w describe.PrefixWriter, title string, annotations map[string]string, skip sets.String) {
+func printAnnotationsMultilineWithFilter(level int, w describe.PrefixWriter, title string, annotations map[string]string, skip sets.Set[string]) {
 	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, skip)
 }
 
@@ -651,12 +651,12 @@ func printAnnotationsMultilineWithFilter(level int, w describe.PrefixWriter, tit
 //
 //nolint:unparam
 func printAnnotationsMultiline(level int, w describe.PrefixWriter, title string, annotations map[string]string) {
-	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, sets.NewString())
+	printAnnotationsMultilineWithIndent(level, w, "", title, "\t", annotations, sets.New[string]())
 }
 
 // printAnnotationsMultilineWithIndent prints multiple annotations with a user-defined alignment.
 // If annotation string is too long, we omit chars more than 200 length.
-func printAnnotationsMultilineWithIndent(level int, w describe.PrefixWriter, initialIndent, title, innerIndent string, annotations map[string]string, skip sets.String) {
+func printAnnotationsMultilineWithIndent(level int, w describe.PrefixWriter, initialIndent, title, innerIndent string, annotations map[string]string, skip sets.Set[string]) {
 	w.Write(level, "%s%s:%s", initialIndent, title, innerIndent)
 
 	if len(annotations) == 0 {

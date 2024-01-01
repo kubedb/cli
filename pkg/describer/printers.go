@@ -30,7 +30,7 @@ import (
 )
 
 // Pass ports=nil for all ports.
-func formatEndpoints(endpoints *core.Endpoints, ports sets.String) string {
+func formatEndpoints(endpoints *core.Endpoints, ports sets.Set[string]) string {
 	if len(endpoints.Subsets) == 0 {
 		return "<none>"
 	}

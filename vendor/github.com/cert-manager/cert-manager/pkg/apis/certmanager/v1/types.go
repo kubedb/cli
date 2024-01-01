@@ -16,8 +16,22 @@ limitations under the License.
 
 package v1
 
-// Common annotation keys added to resources.
 const (
+
+	// Common label keys added to resources
+	// Label key that indicates that a resource is of interest to
+	// cert-manager controller By default this is set on
+	// certificate.spec.secretName secret as well as on the temporary
+	// private key Secret. If using SecretsFilteredCaching feature, you
+	// might want to set this (with a value of 'true') to any other Secrets
+	// that cert-manager controller needs to read, such as issuer
+	// credentials Secrets.
+	// fao = 'for attention of'
+	// See https://github.com/cert-manager/cert-manager/blob/master/design/20221205-memory-management.md#risks-and-mitigations
+	PartOfCertManagerControllerLabelKey = "controller.cert-manager.io/fao"
+
+	// Common annotation keys added to resources
+
 	// Annotation key for DNS subjectAltNames.
 	AltNamesAnnotationKey = "cert-manager.io/alt-names"
 
@@ -35,6 +49,33 @@ const (
 
 	// Annotation key for certificate renewBefore.
 	RenewBeforeAnnotationKey = "cert-manager.io/renew-before"
+
+	// Annotation key for emails subjectAltNames.
+	EmailsAnnotationKey = "cert-manager.io/email-sans"
+
+	// Annotation key for subject organization.
+	SubjectOrganizationsAnnotationKey = "cert-manager.io/subject-organizations"
+
+	// Annotation key for subject organizational units.
+	SubjectOrganizationalUnitsAnnotationKey = "cert-manager.io/subject-organizationalunits"
+
+	// Annotation key for subject organizational units.
+	SubjectCountriesAnnotationKey = "cert-manager.io/subject-countries"
+
+	// Annotation key for subject provinces.
+	SubjectProvincesAnnotationKey = "cert-manager.io/subject-provinces"
+
+	// Annotation key for subject localities.
+	SubjectLocalitiesAnnotationKey = "cert-manager.io/subject-localities"
+
+	// Annotation key for subject provinces.
+	SubjectStreetAddressesAnnotationKey = "cert-manager.io/subject-streetaddresses"
+
+	// Annotation key for subject postal codes.
+	SubjectPostalCodesAnnotationKey = "cert-manager.io/subject-postalcodes"
+
+	// Annotation key for subject serial number.
+	SubjectSerialNumberAnnotationKey = "cert-manager.io/subject-serialnumber"
 
 	// Annotation key for certificate key usages.
 	UsagesAnnotationKey = "cert-manager.io/usages"
@@ -176,8 +217,10 @@ const (
 )
 
 // KeyUsage specifies valid usage contexts for keys.
-// See: https://tools.ietf.org/html/rfc5280#section-4.2.1.3
-//      https://tools.ietf.org/html/rfc5280#section-4.2.1.12
+// See:
+// https://tools.ietf.org/html/rfc5280#section-4.2.1.3
+// https://tools.ietf.org/html/rfc5280#section-4.2.1.12
+//
 // Valid KeyUsage values are as follows:
 // "signing",
 // "digital signature",
@@ -229,6 +272,21 @@ const (
 	UsageOCSPSigning       KeyUsage = "ocsp signing"
 	UsageMicrosoftSGC      KeyUsage = "microsoft sgc"
 	UsageNetscapeSGC       KeyUsage = "netscape sgc"
+)
+
+// Keystore specific secret keys
+const (
+	// PKCS12SecretKey is the name of the data entry in the Secret resource
+	// used to store the p12 file.
+	PKCS12SecretKey = "keystore.p12"
+	// Data Entry Name in the Secret resource for PKCS12 containing Certificate Authority
+	PKCS12TruststoreKey = "truststore.p12"
+
+	// JKSSecretKey is the name of the data entry in the Secret resource
+	// used to store the jks file.
+	JKSSecretKey = "keystore.jks"
+	// Data Entry Name in the Secret resource for JKS containing Certificate Authority
+	JKSTruststoreKey = "truststore.jks"
 )
 
 // DefaultKeyUsages contains the default list of key usages

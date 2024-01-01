@@ -26,6 +26,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -74,19 +75,19 @@ func (in *RedisSentinelAutoscaler) SetDefaults() {
 var _ webhook.Validator = &RedisSentinelAutoscaler{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (in *RedisSentinelAutoscaler) ValidateCreate() error {
+func (in *RedisSentinelAutoscaler) ValidateCreate() (admission.Warnings, error) {
 	rsLog.Info("validate create", "name", in.Name)
-	return in.validate()
+	return nil, in.validate()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (in *RedisSentinelAutoscaler) ValidateUpdate(old runtime.Object) error {
+func (in *RedisSentinelAutoscaler) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	rsLog.Info("validate create", "name", in.Name)
-	return in.validate()
+	return nil, in.validate()
 }
 
-func (_ RedisSentinelAutoscaler) ValidateDelete() error {
-	return nil
+func (_ RedisSentinelAutoscaler) ValidateDelete() (admission.Warnings, error) {
+	return nil, nil
 }
 
 func (in *RedisSentinelAutoscaler) validate() error {

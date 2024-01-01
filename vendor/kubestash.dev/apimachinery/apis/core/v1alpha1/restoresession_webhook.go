@@ -28,6 +28,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -47,33 +48,33 @@ func (r *RestoreSession) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &RestoreSession{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *RestoreSession) ValidateCreate() error {
+func (r *RestoreSession) ValidateCreate() (admission.Warnings, error) {
 	restoresessionlog.Info("validate create", "name", r.Name)
 
 	if err := r.ValidateDataSource(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateHookTemplatesAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
+	return nil, r.validateHookTemplatesAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *RestoreSession) ValidateUpdate(old runtime.Object) error {
+func (r *RestoreSession) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	restoresessionlog.Info("validate update", "name", r.Name)
 
 	if err := r.ValidateDataSource(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateHookTemplatesAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
+	return nil, r.validateHookTemplatesAgainstUsagePolicy(context.Background(), apis.GetRuntimeClient())
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *RestoreSession) ValidateDelete() error {
+func (r *RestoreSession) ValidateDelete() (admission.Warnings, error) {
 	restoresessionlog.Info("validate delete", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
-	return nil
+	return nil, nil
 }
 
 func (r *RestoreSession) ValidateDataSource() error {

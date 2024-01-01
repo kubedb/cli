@@ -36,6 +36,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 var forbiddenEnvVars = []string{
@@ -142,25 +143,23 @@ func (ed *ElasticsearchDashboard) Default() {
 var _ webhook.Validator = &ElasticsearchDashboard{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (ed *ElasticsearchDashboard) ValidateCreate() error {
+func (ed *ElasticsearchDashboard) ValidateCreate() (admission.Warnings, error) {
 	edLog.Info("validate create", "name", ed.Name)
-	err := ed.Validate()
-	return err
+	return nil, ed.Validate()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (ed *ElasticsearchDashboard) ValidateUpdate(old runtime.Object) error {
+func (ed *ElasticsearchDashboard) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	// Skip validation, if UPDATE operation is called after deletion.
 	// Case: Removing Finalizer
 	if ed.DeletionTimestamp != nil {
-		return nil
+		return nil, nil
 	}
-	err := ed.Validate()
-	return err
+	return nil, ed.Validate()
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (ed *ElasticsearchDashboard) ValidateDelete() error {
+func (ed *ElasticsearchDashboard) ValidateDelete() (admission.Warnings, error) {
 	edLog.Info("validate delete", "name", ed.Name)
 
 	var allErr field.ErrorList
@@ -171,10 +170,10 @@ func (ed *ElasticsearchDashboard) ValidateDelete() error {
 	}
 
 	if len(allErr) == 0 {
-		return nil
+		return nil, nil
 	}
 
-	return apierrors.NewInvalid(
+	return nil, apierrors.NewInvalid(
 		schema.GroupKind{Group: "dashboard.kubedb.com", Kind: "ElasticsearchDashboard"},
 		ed.Name, allErr)
 }

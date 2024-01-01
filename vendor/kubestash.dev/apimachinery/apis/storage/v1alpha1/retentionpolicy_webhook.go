@@ -26,6 +26,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -77,45 +78,45 @@ func (r *RetentionPolicy) setDefaultFailedSnapshots() {
 var _ webhook.Validator = &RetentionPolicy{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *RetentionPolicy) ValidateCreate() error {
+func (r *RetentionPolicy) ValidateCreate() (admission.Warnings, error) {
 	retentionpolicylog.Info("validate create", "name", r.Name)
 
 	c := apis.GetRuntimeClient()
 
 	if err := r.validateMaxRetentionPeriodFormat(); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := r.validateProvidedPolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := r.validateUsagePolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateSingleDefaultRetentionPolicyInSameNamespace(context.Background(), c)
+	return nil, r.validateSingleDefaultRetentionPolicyInSameNamespace(context.Background(), c)
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *RetentionPolicy) ValidateUpdate(old runtime.Object) error {
+func (r *RetentionPolicy) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	retentionpolicylog.Info("validate update", "name", r.Name)
 
 	c := apis.GetRuntimeClient()
 
 	if err := r.validateMaxRetentionPeriodFormat(); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := r.validateProvidedPolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := r.validateUsagePolicy(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return r.validateSingleDefaultRetentionPolicyInSameNamespace(context.Background(), c)
+	return nil, r.validateSingleDefaultRetentionPolicyInSameNamespace(context.Background(), c)
 }
 
 func (r *RetentionPolicy) validateMaxRetentionPeriodFormat() error {
@@ -173,9 +174,9 @@ func (r *RetentionPolicy) validateUsagePolicy() error {
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *RetentionPolicy) ValidateDelete() error {
+func (r *RetentionPolicy) ValidateDelete() (admission.Warnings, error) {
 	retentionpolicylog.Info("validate delete", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
-	return nil
+	return nil, nil
 }

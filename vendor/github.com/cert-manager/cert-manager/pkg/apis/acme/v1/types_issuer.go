@@ -19,7 +19,7 @@ package v1
 import (
 	corev1 "k8s.io/api/core/v1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
-	gwapi "sigs.k8s.io/gateway-api/apis/v1alpha2"
+	gwapi "sigs.k8s.io/gateway-api/apis/v1beta1"
 
 	cmmeta "github.com/cert-manager/cert-manager/pkg/apis/meta/v1"
 )
@@ -52,14 +52,25 @@ type ACMEIssuer struct {
 	// chains that has a certificate with this value as its issuer's CN
 	// +optional
 	// +kubebuilder:validation:MaxLength=64
-	PreferredChain string `json:"preferredChain"`
+	PreferredChain string `json:"preferredChain,omitempty"`
 
-	// Enables or disables validation of the ACME server TLS certificate.
-	// If true, requests to the ACME server will not have their TLS certificate
-	// validated (i.e. insecure connections will be allowed).
+	// Base64-encoded bundle of PEM CAs which can be used to validate the certificate
+	// chain presented by the ACME server.
+	// Mutually exclusive with SkipTLSVerify; prefer using CABundle to prevent various
+	// kinds of security vulnerabilities.
+	// If CABundle and SkipTLSVerify are unset, the system certificate bundle inside
+	// the container is used to validate the TLS connection.
+	// +optional
+	CABundle []byte `json:"caBundle,omitempty"`
+
+	// INSECURE: Enables or disables validation of the ACME server TLS certificate.
+	// If true, requests to the ACME server will not have the TLS certificate chain
+	// validated.
+	// Mutually exclusive with CABundle; prefer using CABundle to prevent various
+	// kinds of security vulnerabilities.
 	// Only enable this option in development environments.
-	// The cert-manager system installed roots will be used to verify connections
-	// to the ACME server if this is false.
+	// If CABundle and SkipTLSVerify are unset, the system certificate bundle inside
+	// the container is used to validate the TLS connection.
 	// Defaults to false.
 	// +optional
 	SkipTLSVerify bool `json:"skipTLSVerify,omitempty"`
@@ -222,9 +233,17 @@ type ACMEChallengeSolverHTTP01Ingress struct {
 	// +optional
 	ServiceType corev1.ServiceType `json:"serviceType,omitempty"`
 
-	// The ingress class to use when creating Ingress resources to solve ACME
-	// challenges that use this challenge solver.
-	// Only one of 'class' or 'name' may be specified.
+	// This field configures the field `ingressClassName` on the created Ingress
+	// resources used to solve ACME challenges that use this challenge solver.
+	// This is the recommended way of configuring the ingress class. Only one of
+	// `class`, `name` or `ingressClassName` may be specified.
+	// +optional
+	IngressClassName *string `json:"ingressClassName,omitempty"`
+
+	// This field configures the annotation `kubernetes.io/ingress.class` when
+	// creating Ingress resources to solve ACME challenges that use this
+	// challenge solver. Only one of `class`, `name` or `ingressClassName` may
+	// be specified.
 	// +optional
 	Class *string `json:"class,omitempty"`
 
@@ -232,7 +251,8 @@ type ACMEChallengeSolverHTTP01Ingress struct {
 	// routes inserted into it in order to solve HTTP01 challenges.
 	// This is typically used in conjunction with ingress controllers like
 	// ingress-gce, which maintains a 1:1 mapping between external IPs and
-	// ingress resources.
+	// ingress resources. Only one of `class`, `name` or `ingressClassName` may
+	// be specified.
 	// +optional
 	Name string `json:"name,omitempty"`
 
@@ -263,8 +283,8 @@ type ACMEChallengeSolverHTTP01GatewayHTTPRoute struct {
 	// When solving an HTTP-01 challenge, cert-manager creates an HTTPRoute.
 	// cert-manager needs to know which parentRefs should be used when creating
 	// the HTTPRoute. Usually, the parentRef references a Gateway. See:
-	// https://gateway-api.sigs.k8s.io/v1alpha2/api-types/httproute/#attaching-to-gateways
-	ParentRefs []gwapi.ParentRef `json:"parentRefs,omitempty"`
+	// https://gateway-api.sigs.k8s.io/api-types/httproute/#attaching-to-gateways
+	ParentRefs []gwapi.ParentReference `json:"parentRefs,omitempty"`
 }
 
 type ACMEChallengeSolverHTTP01IngressPodTemplate struct {
@@ -276,8 +296,7 @@ type ACMEChallengeSolverHTTP01IngressPodTemplate struct {
 	ACMEChallengeSolverHTTP01IngressPodObjectMeta `json:"metadata"`
 
 	// PodSpec defines overrides for the HTTP01 challenge solver pod.
-	// Only the 'priorityClassName', 'nodeSelector', 'affinity',
-	// 'serviceAccountName' and 'tolerations' fields are supported currently.
+	// Check ACMEChallengeSolverHTTP01IngressPodSpec to find out currently supported fields.
 	// All other fields will be ignored.
 	// +optional
 	Spec ACMEChallengeSolverHTTP01IngressPodSpec `json:"spec"`
@@ -315,6 +334,10 @@ type ACMEChallengeSolverHTTP01IngressPodSpec struct {
 	// If specified, the pod's service account
 	// +optional
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
+
+	// If specified, the pod's imagePullSecrets
+	// +optional
+	ImagePullSecrets []corev1.LocalObjectReference `json:"imagePullSecrets,omitempty" patchStrategy:"merge" patchMergeKey:"name"`
 }
 
 type ACMEChallengeSolverHTTP01IngressTemplate struct {
@@ -618,4 +641,10 @@ type ACMEIssuerStatus struct {
 	// associated with the  Issuer
 	// +optional
 	LastRegisteredEmail string `json:"lastRegisteredEmail,omitempty"`
+
+	// LastPrivateKeyHash is a hash of the private key associated with the latest
+	// registered ACME account, in order to track changes made to registered account
+	// associated with the Issuer
+	// +optional
+	LastPrivateKeyHash string `json:"lastPrivateKeyHash,omitempty"`
 }

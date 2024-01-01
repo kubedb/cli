@@ -26,6 +26,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -50,13 +51,13 @@ func (in *MongoDBDatabase) Default() {
 var _ webhook.Validator = &MongoDBDatabase{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (in *MongoDBDatabase) ValidateCreate() error {
+func (in *MongoDBDatabase) ValidateCreate() (admission.Warnings, error) {
 	mongodbdatabaselog.Info("validate create", "name", in.Name)
-	return in.ValidateMongoDBDatabase()
+	return nil, in.ValidateMongoDBDatabase()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (in *MongoDBDatabase) ValidateUpdate(old runtime.Object) error {
+func (in *MongoDBDatabase) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	mongodbdatabaselog.Info("validate update", "name", in.Name)
 	var allErrs field.ErrorList
 	path := field.NewPath("spec")
@@ -65,7 +66,7 @@ func (in *MongoDBDatabase) ValidateUpdate(old runtime.Object) error {
 	// if phase is 'Current', do not give permission to change the DatabaseConfig.Name
 	if oldDb.Status.Phase == DatabaseSchemaPhaseCurrent && oldDb.Spec.Database.Config.Name != in.Spec.Database.Config.Name {
 		allErrs = append(allErrs, field.Invalid(path.Child("database").Child("config"), in.Name, MongoDBValidateDatabaseNameChangeError))
-		return apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
+		return nil, apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
 	}
 
 	// If Initialized==true, Do not give permission to unset it
@@ -75,7 +76,7 @@ func (in *MongoDBDatabase) ValidateUpdate(old runtime.Object) error {
 		// user updated the Schema-yaml with Spec.Init.Initialized = false
 		if in.Spec.Init == nil || (in.Spec.Init != nil && !in.Spec.Init.Initialized) {
 			allErrs = append(allErrs, field.Invalid(path.Child("init").Child("initialized"), in.Name, MongoDBValidateInitializedUnsetError))
-			return apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
+			return nil, apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
 		}
 	}
 
@@ -87,9 +88,9 @@ func (in *MongoDBDatabase) ValidateUpdate(old runtime.Object) error {
 		allErrs = append(allErrs, field.Invalid(path.Child("vaultRef"), in.Name, MongoDBValidateVaultRefChangeError))
 	}
 	if len(allErrs) > 0 {
-		return apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
+		return nil, apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
 	}
-	return in.ValidateMongoDBDatabase()
+	return nil, in.ValidateMongoDBDatabase()
 }
 
 const (
@@ -104,15 +105,15 @@ const (
 )
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (in *MongoDBDatabase) ValidateDelete() error {
+func (in *MongoDBDatabase) ValidateDelete() (admission.Warnings, error) {
 	mongodbdatabaselog.Info("validate delete", "name", in.Name)
 	if in.Spec.DeletionPolicy == DeletionPolicyDoNotDelete {
 		var allErrs field.ErrorList
 		path := field.NewPath("spec").Child("deletionPolicy")
 		allErrs = append(allErrs, field.Invalid(path, in.Name, MongoDBValidateDeletionPolicyError))
-		return apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
+		return nil, apierrors.NewInvalid(in.GroupVersionKind().GroupKind(), in.Name, allErrs)
 	}
-	return nil
+	return nil, nil
 }
 
 func (in *MongoDBDatabase) ValidateMongoDBDatabase() error {

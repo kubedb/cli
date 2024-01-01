@@ -26,6 +26,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -78,19 +79,19 @@ func (in *PostgresAutoscaler) SetDefaults() {
 var _ webhook.Validator = &PostgresAutoscaler{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (in *PostgresAutoscaler) ValidateCreate() error {
+func (in *PostgresAutoscaler) ValidateCreate() (admission.Warnings, error) {
 	pgLog.Info("validate create", "name", in.Name)
-	return in.validate()
+	return nil, in.validate()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (in *PostgresAutoscaler) ValidateUpdate(old runtime.Object) error {
+func (in *PostgresAutoscaler) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	pgLog.Info("validate create", "name", in.Name)
-	return in.validate()
+	return nil, in.validate()
 }
 
-func (_ PostgresAutoscaler) ValidateDelete() error {
-	return nil
+func (_ PostgresAutoscaler) ValidateDelete() (admission.Warnings, error) {
+	return nil, nil
 }
 
 func (in *PostgresAutoscaler) validate() error {
