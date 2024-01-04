@@ -82,7 +82,7 @@ func PatchElasticsearchObject(ctx context.Context, c cs.KubedbV1alpha2Interface,
 
 func TryUpdateElasticsearch(ctx context.Context, c cs.KubedbV1alpha2Interface, meta metav1.ObjectMeta, transform func(*api.Elasticsearch) *api.Elasticsearch, opts metav1.UpdateOptions) (result *api.Elasticsearch, err error) {
 	attempt := 0
-	err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
+	err = wait.PollUntilContextTimeout(ctx, kutil.RetryInterval, kutil.RetryTimeout, true, func(ctx context.Context) (bool, error) {
 		attempt++
 		cur, e2 := c.Elasticsearches(meta.Namespace).Get(ctx, meta.Name, metav1.GetOptions{})
 		if kerr.IsNotFound(e2) {
@@ -128,7 +128,7 @@ func UpdateElasticsearchStatus(
 	if err != nil {
 		return nil, err
 	}
-	err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
+	err = wait.PollUntilContextTimeout(ctx, kutil.RetryInterval, kutil.RetryTimeout, true, func(ctx context.Context) (bool, error) {
 		attempt++
 		var e2 error
 		result, e2 = c.Elasticsearches(meta.Namespace).UpdateStatus(ctx, apply(cur), opts)

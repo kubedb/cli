@@ -24,10 +24,10 @@ require (
 	k8s.io/klog/v2 v2.110.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.29.4
+	kmodules.xyz/client-go v0.29.5
 	kmodules.xyz/custom-resources v0.29.0
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.40.1-0.20240101000103-032b27211164
+	kubedb.dev/apimachinery v0.40.1-0.20240104031132-a1d475ceb73e
 	kubedb.dev/db-client-go v0.0.8
 	sigs.k8s.io/controller-runtime v0.16.3
 	sigs.k8s.io/yaml v1.4.0
@@ -135,8 +135,8 @@ require (
 	kmodules.xyz/objectstore-api v0.29.0 // indirect
 	kmodules.xyz/offshoot-api v0.29.0 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.18.1 // indirect
-	kubeops.dev/sidekick v0.0.5-0.20231225131722-1b7b3d4fc5bc // indirect
+	kmodules.xyz/resource-metadata v0.18.2-0.20240101021508-7630737cb0e6 // indirect
+	kubeops.dev/sidekick v0.0.5-0.20231225214445-a15c70833046 // indirect
 	kubestash.dev/apimachinery v0.3.1-0.20231231034418-cc46ddfd674a // indirect
 	sigs.k8s.io/gateway-api v0.8.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
