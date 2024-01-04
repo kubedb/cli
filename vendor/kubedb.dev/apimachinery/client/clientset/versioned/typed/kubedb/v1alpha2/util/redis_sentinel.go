@@ -82,7 +82,7 @@ func PatchRedisSentinelObject(ctx context.Context, c cs.KubedbV1alpha2Interface,
 
 func TryUpdateRedisSentinel(ctx context.Context, c cs.KubedbV1alpha2Interface, meta metav1.ObjectMeta, transform func(sentinel *api.RedisSentinel) *api.RedisSentinel, opts metav1.UpdateOptions) (result *api.RedisSentinel, err error) {
 	attempt := 0
-	err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
+	err = wait.PollUntilContextTimeout(ctx, kutil.RetryInterval, kutil.RetryTimeout, true, func(ctx context.Context) (bool, error) {
 		attempt++
 		cur, e2 := c.RedisSentinels(meta.Namespace).Get(ctx, meta.Name, metav1.GetOptions{})
 		if kerr.IsNotFound(e2) {
@@ -128,7 +128,7 @@ func UpdateRedisSentinelStatus(
 	if err != nil {
 		return nil, err
 	}
-	err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
+	err = wait.PollUntilContextTimeout(ctx, kutil.RetryInterval, kutil.RetryTimeout, true, func(ctx context.Context) (bool, error) {
 		attempt++
 		var e2 error
 		result, e2 = c.RedisSentinels(meta.Namespace).UpdateStatus(ctx, apply(cur), opts)

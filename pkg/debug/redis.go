@@ -145,9 +145,17 @@ func (opts *redisOpts) collectOperatorLogs() error {
 		return err
 	}
 	for _, pod := range pods.Items {
-		err = opts.writeLogs(pod.Name, pod.Namespace, operatorContainerName)
-		if err != nil {
-			return err
+		isOperatorPod := false
+		for _, container := range pod.Spec.Containers {
+			if container.Name == operatorContainerName {
+				isOperatorPod = true
+			}
+		}
+		if isOperatorPod {
+			err = opts.writeLogs(pod.Name, pod.Namespace, operatorContainerName)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
