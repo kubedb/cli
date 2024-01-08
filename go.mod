@@ -24,10 +24,10 @@ require (
 	k8s.io/klog/v2 v2.110.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.29.6-0.20240106073345-92f92b4d6985
+	kmodules.xyz/client-go v0.29.6
 	kmodules.xyz/custom-resources v0.29.0
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.40.1-0.20240106103518-87c402a1ae51
+	kubedb.dev/apimachinery v0.41.0-beta.0
 	kubedb.dev/db-client-go v0.0.8
 	sigs.k8s.io/controller-runtime v0.16.3
 	sigs.k8s.io/yaml v1.4.0
