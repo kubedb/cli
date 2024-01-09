@@ -18,19 +18,14 @@ package dashboard
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
 	"kubedb.dev/cli/pkg/lib"
 
-	"github.com/prometheus/client_golang/api"
-	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/common/model"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
@@ -43,6 +38,10 @@ type PromSvc struct {
 	Name      string
 	Namespace string
 	Port      int
+}
+type unknownLabel struct {
+	metric    string
+	labelName string
 }
 
 func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
@@ -72,7 +71,8 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 
 	promClient := getPromClient(strconv.Itoa(tunnel.Local))
 
-	var unknownMetrics, unknownLabels []string
+	var unknownMetrics []string
+	var unknownLabels []unknownLabel
 
 	for _, query := range queries {
 		metricName := query.metric
@@ -100,7 +100,10 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 				}
 
 				if !labelExists {
-					unknownLabels = uniqueAppend(unknownLabels, fmt.Sprintf(`label: "%s" metric: "%s"`, labelKey, metricName))
+					unknownLabels = uniqueAppend(unknownLabels, unknownLabel{
+						metric:    metricName,
+						labelName: labelKey,
+					})
 				}
 			} else {
 				unknownMetrics = uniqueAppend(unknownMetrics, metricName)
@@ -111,37 +114,33 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 		fmt.Printf("List of unknown metrics:\n%s\n", strings.Join(unknownMetrics, "\n"))
 	}
 	if len(unknownLabels) > 0 {
-		fmt.Printf("List of unknown labels:\n%s", strings.Join(unknownLabels, "\n"))
+		fmt.Println("List of unknown labels:")
+		for _, unknown := range unknownLabels {
+			fmt.Printf(`Metric: "%s" Label: "%s"\n`, unknown.metric, unknown.labelName)
+		}
 	}
 	if len(unknownMetrics) == 0 && len(unknownLabels) == 0 {
 		fmt.Println("All metrics found")
 	}
 }
 
-func getURL(branch, database, dashboard string) string {
-	return fmt.Sprintf("https://raw.githubusercontent.com/appscode/grafana-dashboards/%s/%s/%s.json", branch, database, dashboard)
-}
-
-func getDashboard(url string) map[string]interface{} {
-	var dashboardData map[string]interface{}
-	response, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
+func getQueryInformation(dashboardData map[string]interface{}) []queryInformation {
+	var queries []queryInformation
+	if panels, ok := dashboardData["panels"].([]interface{}); ok {
+		for _, panel := range panels {
+			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
+				for _, target := range targets {
+					if expr, ok := target.(map[string]interface{})["expr"]; ok {
+						if expr != "" {
+							query := expr.(string)
+							queries = append(queries, getMetricAndLabels(query)...)
+						}
+					}
+				}
+			}
+		}
 	}
-	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		log.Fatalf("Error fetching url. status : %s", response.Status)
-	}
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Fatal("Error reading JSON file: ", err)
-	}
-
-	err = json.Unmarshal(body, &dashboardData)
-	if err != nil {
-		log.Fatal("Error unmarshalling JSON data:", err)
-	}
-	return dashboardData
+	return queries
 }
 
 // Steps:
@@ -169,39 +168,6 @@ func getMetricAndLabels(query string) []queryInformation {
 				labelNames: labelNames,
 			})
 			i = closingPosition
-		}
-	}
-	return queries
-}
-
-func getPromClient(localPort string) v1.API {
-	prometheusURL := fmt.Sprintf("http://localhost:%s/", localPort)
-
-	client, err := api.NewClient(api.Config{
-		Address: prometheusURL,
-	})
-	if err != nil {
-		log.Fatal("Error creating Prometheus client:", err)
-	}
-
-	// Create a new Prometheus API client
-	return v1.NewAPI(client)
-}
-
-func getQueryInformation(dashboardData map[string]interface{}) []queryInformation {
-	var queries []queryInformation
-	if panels, ok := dashboardData["panels"].([]interface{}); ok {
-		for _, panel := range panels {
-			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
-				for _, target := range targets {
-					if expr, ok := target.(map[string]interface{})["expr"]; ok {
-						if expr != "" {
-							query := expr.(string)
-							queries = append(queries, getMetricAndLabels(query)...)
-						}
-					}
-				}
-			}
 		}
 	}
 	return queries

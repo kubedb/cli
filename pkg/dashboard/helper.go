@@ -17,75 +17,57 @@ limitations under the License.
 package dashboard
 
 import (
-	"regexp"
-	"strings"
-	"unicode"
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+
+	"github.com/prometheus/client_golang/api"
+	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
 )
 
-func excludeQuotedSubstrings(input string) string {
-	// Define the regular expression pattern to match string inside double quotation
-	re := regexp.MustCompile(`"[^"]*"`)
-
-	// Replace all quoted substring with an empty string
-	result := re.ReplaceAllString(input, "")
-
-	return result
+func getURL(branch, database, dashboard string) string {
+	return fmt.Sprintf("https://raw.githubusercontent.com/appscode/grafana-dashboards/%s/%s/%s.json", branch, database, dashboard)
 }
 
-func excludeNonAlphanumericUnderscore(input string) string {
-	// Define the regular expression pattern to match non-alphanumeric characters except underscore
-	pattern := `[^a-zA-Z0-9_]`
-	re := regexp.MustCompile(pattern)
-
-	// Replace non-alphanumeric or underscore characters with an empty string
-	result := re.ReplaceAllString(input, "")
-
-	return result
-}
-
-// Labels may contain ASCII letters, numbers, as well as underscores. They must match the regex [a-zA-Z_][a-zA-Z0-9_]*
-// So we need to split the selector string by comma. then extract label name with the help of the regex format
-// Ref: https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels
-func getLabelNames(labelSelector string) []string {
-	var labelNames []string
-	unQuoted := excludeQuotedSubstrings(labelSelector)
-	commaSeparated := strings.Split(unQuoted, ",")
-	for _, s := range commaSeparated {
-		labelName := excludeNonAlphanumericUnderscore(s)
-		if labelName != "" {
-			labelNames = append(labelNames, labelName)
-		}
+func getDashboard(url string) map[string]interface{} {
+	var dashboardData map[string]interface{}
+	response, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
 	}
-	return labelNames
-}
-
-// Finding valid bracket sequence from startPosition
-func substringInsideLabelSelector(query string, startPosition int) (string, int) {
-	balance := 0
-	closingPosition := startPosition
-	for i := startPosition; i < len(query); i++ {
-		if query[i] == '{' {
-			balance++
-		}
-		if query[i] == '}' {
-			balance--
-		}
-		if balance == 0 {
-			closingPosition = i
-			break
-		}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		log.Fatalf("Error fetching url. status : %s", response.Status)
 	}
-	return query[startPosition+1 : closingPosition], closingPosition
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal("Error reading JSON file: ", err)
+	}
+
+	err = json.Unmarshal(body, &dashboardData)
+	if err != nil {
+		log.Fatal("Error unmarshalling JSON data:", err)
+	}
+	return dashboardData
 }
 
-// Metric names may contain ASCII letters, digits, underscores, and colons. It must match the regex [a-zA-Z_:][a-zA-Z0-9_:]*
-// So we can use this if the character is in a metric name
-// Ref: https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels
-func matchMetricRegex(char rune) bool {
-	return unicode.IsLetter(char) || unicode.IsDigit(char) || char == '_' || char == ':'
+func getPromClient(localPort string) v1.API {
+	prometheusURL := fmt.Sprintf("http://localhost:%s/", localPort)
+
+	client, err := api.NewClient(api.Config{
+		Address: prometheusURL,
+	})
+	if err != nil {
+		log.Fatal("Error creating Prometheus client:", err)
+	}
+
+	// Create a new Prometheus API client
+	return v1.NewAPI(client)
 }
 
-func uniqueAppend(slice []string, valueToAdd string) []string {
+func uniqueAppend[T comparable](slice []T, valueToAdd T) []T {
 	for _, existingValue := range slice {
 		if existingValue == valueToAdd {
 			return slice

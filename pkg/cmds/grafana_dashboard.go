@@ -26,7 +26,7 @@ import (
 )
 
 var dashboardLong = templates.LongDesc(`
-		Check availability in prometheus server of metrics used in a grafana dashboard.
+		Check availability of metrics in prometheus server used in a grafana dashboard.
     `)
 
 var dashboardExample = templates.Examples(`

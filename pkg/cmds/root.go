@@ -114,7 +114,7 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 		{
-			Message: "Check availability of a grafana dashboard",
+			Message: "Check availability of metrics",
 			Commands: []*cobra.Command{
 				NewCmdDashboard(f),
 			},
