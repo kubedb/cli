@@ -22,45 +22,61 @@ import (
 	"unicode"
 )
 
-func excludeQuotedSubstrings(input string) string {
-	// Define the regular expression pattern to match string inside double quotation
-	re := regexp.MustCompile(`"[^"]*"`)
-
-	// Replace all quoted substring with an empty string
-	result := re.ReplaceAllString(input, "")
-
-	return result
-}
-
-func excludeNonAlphanumericUnderscore(input string) string {
-	// Define the regular expression pattern to match non-alphanumeric characters except underscore
-	pattern := `[^a-zA-Z0-9_]`
-	re := regexp.MustCompile(pattern)
-
-	// Replace non-alphanumeric or underscore characters with an empty string
-	result := re.ReplaceAllString(input, "")
-
-	return result
-}
-
-// Labels may contain ASCII letters, numbers, as well as underscores. They must match the regex [a-zA-Z_][a-zA-Z0-9_]*
-// So we need to split the selector string by comma. then extract label name with the help of the regex format
-// Ref: https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels
-func getLabelNames(labelSelector string) []string {
-	var labelNames []string
-	unQuoted := excludeQuotedSubstrings(labelSelector)
-	commaSeparated := strings.Split(unQuoted, ",")
-	for _, s := range commaSeparated {
-		labelName := excludeNonAlphanumericUnderscore(s)
-		if labelName != "" {
-			labelNames = append(labelNames, labelName)
+func parseAllExpressions(dashboardData map[string]interface{}) []queryInformation {
+	var queries []queryInformation
+	if panels, ok := dashboardData["panels"].([]interface{}); ok {
+		for _, panel := range panels {
+			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
+				for _, target := range targets {
+					if expr, ok := target.(map[string]interface{})["expr"]; ok {
+						if expr != "" {
+							query := expr.(string)
+							queries = append(queries, parseSingleExpression(query)...)
+						}
+					}
+				}
+			}
 		}
 	}
-	return labelNames
+	return queries
+}
+
+// Steps:
+// - if current character is '{'
+//   - extract metric name by matching metric regex
+//   - get label selector substring inside { }
+//   - get label name from this substring by matching label regex
+//   - move i to its closing bracket position.
+func parseSingleExpression(query string) []queryInformation {
+	var queries []queryInformation
+	for i := 0; i < len(query); i++ {
+		if query[i] == '{' {
+			j := i
+			for {
+				if j-1 < 0 || (!matchMetricRegex(rune(query[j-1]))) {
+					break
+				}
+				j--
+			}
+			metric := query[j:i]
+			fullLabelString, closingPosition := getFullLabelString(query, i)
+			labelNames := parseLabelNames(fullLabelString)
+			queries = append(queries, queryInformation{
+				metric:     metric,
+				labelNames: labelNames,
+			})
+			i = closingPosition
+		}
+	}
+	return queries
+}
+
+func matchMetricRegex(char rune) bool { // Must match the regex [a-zA-Z_:][a-zA-Z0-9_:]*
+	return unicode.IsLetter(char) || unicode.IsDigit(char) || char == '_' || char == ':'
 }
 
 // Finding valid bracket sequence from startPosition
-func substringInsideLabelSelector(query string, startPosition int) (string, int) {
+func getFullLabelString(query string, startPosition int) (string, int) {
 	balance := 0
 	closingPosition := startPosition
 	for i := startPosition; i < len(query); i++ {
@@ -78,9 +94,35 @@ func substringInsideLabelSelector(query string, startPosition int) (string, int)
 	return query[startPosition+1 : closingPosition], closingPosition
 }
 
-// Metric names may contain ASCII letters, digits, underscores, and colons. It must match the regex [a-zA-Z_:][a-zA-Z0-9_:]*
-// So we can use this if the character is in a metric name
+// Labels may contain ASCII letters, numbers, as well as underscores. They must match the regex [a-zA-Z_][a-zA-Z0-9_]*
+// So we need to split the selector string by comma. then extract label name with the help of the regex format
 // Ref: https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels
-func matchMetricRegex(char rune) bool {
-	return unicode.IsLetter(char) || unicode.IsDigit(char) || char == '_' || char == ':'
+func parseLabelNames(fullLabelString string) []string {
+	// Define the regular expression pattern to match string inside double quotation
+	// Replace all quoted substring with an empty string
+	excludeQuotedSubstrings := func(input string) string {
+		re := regexp.MustCompile(`"[^"]*"`)
+		result := re.ReplaceAllString(input, "")
+		return result
+	}
+
+	// Define the regular expression pattern to match non-alphanumeric characters except underscore
+	// Replace non-alphanumeric or underscore characters with an empty string
+	excludeNonAlphanumericUnderscore := func(input string) string {
+		pattern := `[^a-zA-Z0-9_]`
+		re := regexp.MustCompile(pattern)
+		result := re.ReplaceAllString(input, "")
+		return result
+	}
+
+	var labelNames []string
+	unQuoted := excludeQuotedSubstrings(fullLabelString)
+	commaSeparated := strings.Split(unQuoted, ",")
+	for _, s := range commaSeparated {
+		labelName := excludeNonAlphanumericUnderscore(s)
+		if labelName != "" {
+			labelNames = append(labelNames, labelName)
+		}
+	}
+	return labelNames
 }

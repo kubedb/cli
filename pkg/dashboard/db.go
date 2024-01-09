@@ -56,7 +56,7 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 
 	dashboardData := getDashboard(url)
 
-	queries := getQueryInformation(dashboardData)
+	queries := parseAllExpressions(dashboardData)
 
 	config, err := f.ToRESTConfig()
 	if err != nil {
@@ -122,53 +122,4 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 	if len(unknownMetrics) == 0 && len(unknownLabels) == 0 {
 		fmt.Println("All metrics found")
 	}
-}
-
-func getQueryInformation(dashboardData map[string]interface{}) []queryInformation {
-	var queries []queryInformation
-	if panels, ok := dashboardData["panels"].([]interface{}); ok {
-		for _, panel := range panels {
-			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
-				for _, target := range targets {
-					if expr, ok := target.(map[string]interface{})["expr"]; ok {
-						if expr != "" {
-							query := expr.(string)
-							queries = append(queries, getMetricAndLabels(query)...)
-						}
-					}
-				}
-			}
-		}
-	}
-	return queries
-}
-
-// Steps:
-// - if current character is '{'
-//   - extract metric name by matching metric regex
-//   - get label selector substring inside { }
-//   - get label name from this substring by matching label regex
-//   - move i to its closing bracket position.
-func getMetricAndLabels(query string) []queryInformation {
-	var queries []queryInformation
-	for i := 0; i < len(query); i++ {
-		if query[i] == '{' {
-			j := i
-			for {
-				if j-1 < 0 || (!matchMetricRegex(rune(query[j-1]))) {
-					break
-				}
-				j--
-			}
-			metric := query[j:i]
-			labelSelector, closingPosition := substringInsideLabelSelector(query, i)
-			labelNames := getLabelNames(labelSelector)
-			queries = append(queries, queryInformation{
-				metric:     metric,
-				labelNames: labelNames,
-			})
-			i = closingPosition
-		}
-	}
-	return queries
 }
