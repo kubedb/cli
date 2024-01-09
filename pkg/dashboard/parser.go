@@ -17,21 +17,26 @@ limitations under the License.
 package dashboard
 
 import (
+	"log"
 	"regexp"
 	"strings"
 	"unicode"
 )
 
-func parseAllExpressions(dashboardData map[string]interface{}) []queryInformation {
-	var queries []queryInformation
+func parseAllExpressions(dashboardData map[string]interface{}) []queryOpts {
+	var queries []queryOpts
 	if panels, ok := dashboardData["panels"].([]interface{}); ok {
 		for _, panel := range panels {
 			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
+				title, ok := panel.(map[string]interface{})["title"].(string)
+				if !ok {
+					log.Fatal("panel's title found empty")
+				}
 				for _, target := range targets {
 					if expr, ok := target.(map[string]interface{})["expr"]; ok {
 						if expr != "" {
 							query := expr.(string)
-							queries = append(queries, parseSingleExpression(query)...)
+							queries = append(queries, parseSingleExpression(query, title)...)
 						}
 					}
 				}
@@ -47,8 +52,8 @@ func parseAllExpressions(dashboardData map[string]interface{}) []queryInformatio
 //   - get label selector substring inside { }
 //   - get label name from this substring by matching label regex
 //   - move i to its closing bracket position.
-func parseSingleExpression(query string) []queryInformation {
-	var queries []queryInformation
+func parseSingleExpression(query, title string) []queryOpts {
+	var queries []queryOpts
 	for i := 0; i < len(query); i++ {
 		if query[i] == '{' {
 			j := i
@@ -61,9 +66,10 @@ func parseSingleExpression(query string) []queryInformation {
 			metric := query[j:i]
 			fullLabelString, closingPosition := getFullLabelString(query, i)
 			labelNames := parseLabelNames(fullLabelString)
-			queries = append(queries, queryInformation{
+			queries = append(queries, queryOpts{
 				metric:     metric,
 				labelNames: labelNames,
+				panelTitle: title,
 			})
 			i = closingPosition
 		}

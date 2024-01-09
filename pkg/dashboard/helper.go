@@ -67,7 +67,7 @@ func getPromClient(localPort string) v1.API {
 	return v1.NewAPI(client)
 }
 
-func uniqueAppend[T comparable](slice []T, valueToAdd T) []T {
+func uniqueAppend(slice []string, valueToAdd string) []string {
 	for _, existingValue := range slice {
 		if existingValue == valueToAdd {
 			return slice

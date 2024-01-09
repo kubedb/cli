@@ -30,18 +30,19 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-type queryInformation struct {
+type queryOpts struct {
 	metric     string
+	panelTitle string
 	labelNames []string
+}
+type missingOpts struct {
+	labelName  []string
+	panelTitle []string
 }
 type PromSvc struct {
 	Name      string
 	Namespace string
 	Port      int
-}
-type unknownLabel struct {
-	metric    string
-	labelName string
 }
 
 func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
@@ -71,22 +72,22 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 
 	promClient := getPromClient(strconv.Itoa(tunnel.Local))
 
-	var unknownMetrics []string
-	var unknownLabels []unknownLabel
+	// var unknown []missingOpts
+	unknown := make(map[string]*missingOpts)
 
 	for _, query := range queries {
 		metricName := query.metric
-		for _, labelKey := range query.labelNames {
+		endTime := time.Now()
 
-			endTime := time.Now()
+		result, _, err := promClient.Query(context.TODO(), metricName, endTime)
+		if err != nil {
+			log.Fatal("Error querying Prometheus:", err, " metric: ", metricName)
+		}
 
-			result, _, err := promClient.Query(context.TODO(), metricName, endTime)
-			if err != nil {
-				log.Fatal("Error querying Prometheus:", err, " metric: ", metricName)
-			}
+		matrix := result.(model.Vector)
 
-			matrix := result.(model.Vector)
-			if len(matrix) > 0 {
+		if len(matrix) > 0 {
+			for _, labelKey := range query.labelNames {
 				// Check if the label exists for any result in the matrix
 				labelExists := false
 
@@ -100,26 +101,31 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 				}
 
 				if !labelExists {
-					unknownLabels = uniqueAppend(unknownLabels, unknownLabel{
-						metric:    metricName,
-						labelName: labelKey,
-					})
+					if unknown[metricName] == nil {
+						unknown[metricName] = &missingOpts{labelName: []string{}, panelTitle: []string{}}
+					}
+					unknown[metricName].labelName = uniqueAppend(unknown[metricName].labelName, labelKey)
+					unknown[metricName].panelTitle = uniqueAppend(unknown[metricName].panelTitle, query.panelTitle)
 				}
-			} else {
-				unknownMetrics = uniqueAppend(unknownMetrics, metricName)
 			}
+		} else {
+			if unknown[metricName] == nil {
+				unknown[metricName] = &missingOpts{labelName: []string{}, panelTitle: []string{}}
+			}
+			unknown[metricName].panelTitle = uniqueAppend(unknown[metricName].panelTitle, query.panelTitle)
 		}
 	}
-	if len(unknownMetrics) > 0 {
-		fmt.Printf("List of unknown metrics:\n%s\n", strings.Join(unknownMetrics, "\n"))
-	}
-	if len(unknownLabels) > 0 {
-		fmt.Println("List of unknown labels:")
-		for _, unknown := range unknownLabels {
-			fmt.Printf(`Metric: "%s" Label: "%s"\n`, unknown.metric, unknown.labelName)
+	if len(unknown) > 0 {
+		fmt.Println("Missing Information:")
+		for metric, opts := range unknown {
+			fmt.Println("---------------------------------------------------")
+			fmt.Printf("Metric: %s \n", metric)
+			if len(opts.labelName) > 0 {
+				fmt.Printf("Missing Lables: %s \n", strings.Join(opts.labelName, ", "))
+			}
+			fmt.Printf("Effected Panel: %s \n", strings.Join(opts.panelTitle, ", "))
 		}
-	}
-	if len(unknownMetrics) == 0 && len(unknownLabels) == 0 {
+	} else {
 		fmt.Println("All metrics found")
 	}
 }
