@@ -273,10 +273,6 @@ func (b *BackupConfiguration) validateSessions(ctx context.Context, c client.Cli
 		}
 	}
 
-	if err := b.validateUniqueRepo(); err != nil {
-		return err
-	}
-
 	if err := b.validateUniqueRepoDir(ctx, c); err != nil {
 		return err
 	}
@@ -362,21 +358,6 @@ func (b *BackupConfiguration) validateRepositories(ctx context.Context, c client
 		}
 	}
 
-	return nil
-}
-
-func (b *BackupConfiguration) validateUniqueRepo() error {
-	mapRepoToBackend := make(map[string]map[string]string)
-	for _, session := range b.Spec.Sessions {
-		for _, repo := range session.Repositories {
-			if repoInfo, ok := mapRepoToBackend[repo.Name]; ok && repoInfo[repo.Backend] == repo.Name {
-				return fmt.Errorf("repository %q can not be used from multiple sessions. Please choose a different repository", repo.Name)
-			}
-			mapRepoToBackend[repo.Name] = map[string]string{
-				repo.Backend: repo.Name,
-			}
-		}
-	}
 	return nil
 }
 

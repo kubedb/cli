@@ -199,19 +199,19 @@ func (r *BackupStorage) isPointToSameDir(bs BackupStorage) bool {
 			return true
 		}
 		return false
-	case ProviderB2:
-		if r.Spec.Storage.B2.Bucket == bs.Spec.Storage.B2.Bucket &&
-			r.Spec.Storage.B2.Prefix == bs.Spec.Storage.B2.Prefix {
-			return true
-		}
-		return false
-	case ProviderSwift:
-		// TODO: check for account
-		if r.Spec.Storage.Swift.Container == bs.Spec.Storage.Swift.Container &&
-			r.Spec.Storage.Swift.Prefix == bs.Spec.Storage.Swift.Prefix {
-			return true
-		}
-		return false
+	//case ProviderB2:
+	//	if r.Spec.Storage.B2.Bucket == bs.Spec.Storage.B2.Bucket &&
+	//		r.Spec.Storage.B2.Prefix == bs.Spec.Storage.B2.Prefix {
+	//		return true
+	//	}
+	//	return false
+	//case ProviderSwift:
+	//	// TODO: check for account
+	//	if r.Spec.Storage.Swift.Container == bs.Spec.Storage.Swift.Container &&
+	//		r.Spec.Storage.Swift.Prefix == bs.Spec.Storage.Swift.Prefix {
+	//		return true
+	//	}
+	//	return false
 	default:
 		return false
 	}

@@ -130,13 +130,11 @@ const (
 )
 
 const (
-	ComponentPod             = "pod"
-	ComponentDeployment      = "deployment"
-	ComponentPVC             = "pvc"
-	ComponentDump            = "dump"
-	ComponentWal             = "wal"
-	ComponentManifests       = "manifests"
-	ComponentVolumeSnapshots = "volumesnapshots"
+	ComponentPod            = "pod"
+	ComponentDump           = "dump"
+	ComponentWal            = "wal"
+	ComponentManifest       = "manifest"
+	ComponentVolumeSnapshot = "volumesnapshot"
 )
 
 const (

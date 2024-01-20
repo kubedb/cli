@@ -1338,7 +1338,6 @@ func (in *RestoreSessionSpec) DeepCopyInto(out *RestoreSessionSpec) {
 		*out = new(metav1.Duration)
 		**out = **in
 	}
-	in.RuntimeSettings.DeepCopyInto(&out.RuntimeSettings)
 	if in.ManifestOptions != nil {
 		in, out := &in.ManifestOptions, &out.ManifestOptions
 		*out = new(ManifestRestoreOptions)
