@@ -19,7 +19,6 @@ package v1alpha1
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
-	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 const (
@@ -68,10 +67,6 @@ type RestoreSessionSpec struct {
 	// If the session execution does not finish within this time period, KubeStash will consider this session as a failure.
 	// +optional
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
-
-	// RuntimeSettings allow to specify Resources, NodeSelector, Affinity, Toleration, ReadinessProbe etc.
-	// +optional
-	RuntimeSettings ofst.RuntimeSettings `json:"runtimeSettings,omitempty"`
 
 	// ManifestOptions provide options to select particular manifest object to restore
 	// +optional

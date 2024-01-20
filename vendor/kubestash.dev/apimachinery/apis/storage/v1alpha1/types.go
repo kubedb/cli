@@ -36,9 +36,9 @@ const (
 	ProviderS3    StorageProvider = "s3"
 	ProviderGCS   StorageProvider = "gcs"
 	ProviderAzure StorageProvider = "azure"
-	ProviderSwift StorageProvider = "swift"
-	ProviderB2    StorageProvider = "b2"
-	ProviderRest  StorageProvider = "rest"
+	//ProviderSwift StorageProvider = "swift"
+	//ProviderB2    StorageProvider = "b2"
+	//ProviderRest  StorageProvider = "rest"
 )
 
 type Backend struct {
@@ -61,17 +61,19 @@ type Backend struct {
 	// +optional
 	Azure *AzureSpec `json:"azure,omitempty"`
 
-	// Swift specifies the storage information for Swift container
-	// +optional
-	Swift *SwiftSpec `json:"swift,omitempty"`
+	/*
+		// Swift specifies the storage information for Swift container
+		// +optional
+		Swift *SwiftSpec `json:"swift,omitempty"`
 
-	// B2 specifies the storage information for B2 bucket
-	// +optional
-	B2 *B2Spec `json:"b2,omitempty"`
+		// B2 specifies the storage information for B2 bucket
+		// +optional
+		B2 *B2Spec `json:"b2,omitempty"`
 
-	// Rest specifies the storage information for rest storage server
-	// +optional
-	Rest *RestServerSpec `json:"rest,omitempty"`
+		// Rest specifies the storage information for rest storage server
+		// +optional
+		Rest *RestServerSpec `json:"rest,omitempty"`
+	*/
 }
 
 type LocalSpec struct {
@@ -102,9 +104,9 @@ type S3Spec struct {
 	// +optional
 	Region string `json:"region,omitempty"`
 
-	// Secret specifies the name of the Secret that contains the access credential for this storage.
+	// SecretName specifies the name of the Secret that contains the access credential for this storage.
 	// +optional
-	Secret string `json:"secret,omitempty"`
+	SecretName string `json:"secretName,omitempty"`
 }
 
 type GCSSpec struct {
@@ -118,9 +120,9 @@ type GCSSpec struct {
 	// +optional
 	MaxConnections int64 `json:"maxConnections,omitempty"`
 
-	// Secret specifies the name of the Secret that contains the access credential for this storage.
+	// SecretName specifies the name of the Secret that contains the access credential for this storage.
 	// +optional
-	Secret string `json:"secret,omitempty"`
+	SecretName string `json:"secretName,omitempty"`
 }
 
 type AzureSpec struct {
@@ -137,11 +139,12 @@ type AzureSpec struct {
 	// +optional
 	MaxConnections int64 `json:"maxConnections,omitempty"`
 
-	// Secret specifies the name of the Secret that contains the access credential for this storage.
+	// SecretName specifies the name of the Secret that contains the access credential for this storage.
 	// +optional
-	Secret string `json:"secret,omitempty"`
+	SecretName string `json:"secretName,omitempty"`
 }
 
+/*
 type SwiftSpec struct {
 	// Container specifies the name of the Swift container that will be used as storage backend.
 	Container string `json:"container,omitempty"`
@@ -151,7 +154,7 @@ type SwiftSpec struct {
 
 	// Secret specifies the name of the Secret that contains the access credential for this storage.
 	// +optional
-	Secret string `json:"secret,omitempty"`
+	SecretName string `json:"secretName,omitempty"`
 }
 
 type B2Spec struct {
@@ -167,7 +170,7 @@ type B2Spec struct {
 
 	// Secret specifies the name of the Secret that contains the access credential for this storage.
 	// +optional
-	Secret string `json:"secret,omitempty"`
+	SecretName string `json:"secretName,omitempty"`
 }
 
 type RestServerSpec struct {
@@ -176,5 +179,6 @@ type RestServerSpec struct {
 
 	// Secret specifies the name of the Secret that contains the access credential for this storage.
 	// +optional
-	Secret string `json:"secret,omitempty"`
+	SecretName string `json:"secretName,omitempty"`
 }
+*/
