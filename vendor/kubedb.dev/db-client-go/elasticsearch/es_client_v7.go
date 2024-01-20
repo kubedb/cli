@@ -155,14 +155,14 @@ func (es *ESClientV7) SyncCredentialFromSecret(secret *core.Secret) error {
 
 	res, err := req.Do(context.Background(), es.client.Transport)
 	if err != nil {
-		klog.Errorf("failed to send change password request for", username)
+		klog.Errorf("failed to send change password request, reason: %s", username)
 		return err
 	}
 
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close auth response body", err)
+			klog.Errorf("failed to close auth response body, reason: %s", err)
 		}
 	}(res.Body)
 
@@ -210,14 +210,14 @@ func (es *ESClientV7) GetClusterWriteStatus(ctx context.Context, db *api.Elastic
 		return errors.Wrap(err3, "Failed to perform write request")
 	}
 	if res.IsError() {
-		return errors.New(fmt.Sprintf("Failed to get response from write request with error statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get response from write request with error statuscode %d", res.StatusCode)
 	}
 
 	defer func(res *esapi.Response) {
 		if res != nil {
 			err3 = res.Body.Close()
 			if err3 != nil {
-				klog.Errorf("Failed to close write request response body", err3)
+				klog.Errorf("Failed to close write request response body, reason: %s", err3)
 			}
 		}
 	}(res)
@@ -256,7 +256,7 @@ func (es *ESClientV7) GetClusterReadStatus(ctx context.Context, db *api.Elastics
 		if res != nil {
 			err = res.Body.Close()
 			if err != nil {
-				klog.Errorf("failed to close read request response body", err)
+				klog.Errorf("failed to close read request response body, reason: %s", err)
 			}
 		}
 	}(res)
@@ -265,7 +265,7 @@ func (es *ESClientV7) GetClusterReadStatus(ctx context.Context, db *api.Elastics
 		return kutil.ErrNotFound
 	}
 	if res.IsError() {
-		return errors.New(fmt.Sprintf("Failed to get response from write request with error statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get response from write request with error statuscode %d", res.StatusCode)
 	}
 
 	return nil
@@ -290,7 +290,7 @@ func (es *ESClientV7) GetTotalDiskUsage(ctx context.Context) (string, error) {
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body from Disk Usage Request", err)
+			klog.Errorf("failed to close response body from Disk Usage Request, reason: %s", err)
 		}
 	}(res.Body)
 
@@ -311,17 +311,17 @@ func (es *ESClientV7) GetDBUserRole(ctx context.Context) (error, bool) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body from GetDBUserRole", err)
+			klog.Errorf("failed to close response body from GetDBUserRole, reason: %s", err)
 		}
 	}(res.Body)
 
 	if err != nil {
-		klog.Errorf("failed to get existing DB user role", err)
+		klog.Errorf("failed to get existing DB user role, reason: %s", err)
 		return err, false
 	}
 	if res.IsError() {
-		err = errors.New(fmt.Sprintf("fetching DB user role failed with error status code %d", res.StatusCode))
-		klog.Errorf("Failed to fetch DB user role", err)
+		err = fmt.Errorf("fetching DB user role failed with error status code %d", res.StatusCode)
+		klog.Errorf("Failed to fetch DB user role, reason: %s", err)
 		return nil, false
 	}
 
@@ -353,7 +353,7 @@ func (es *ESClientV7) CreateDBUserRole(ctx context.Context) error {
 
 	userRoleReqJSON, err := json.Marshal(userRoleReqStruct)
 	if err != nil {
-		klog.Errorf("Failed to parse rollRequest body to JSOn", err)
+		klog.Errorf("Failed to parse rollRequest body to json, reason: %s", err)
 		return err
 	}
 	body := bytes.NewReader(userRoleReqJSON)
@@ -366,17 +366,17 @@ func (es *ESClientV7) CreateDBUserRole(ctx context.Context) error {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body from EnsureDBUserRole function", err)
+			klog.Errorf("failed to close response body from EnsureDBUserRole function, reason: %s", err)
 		}
 	}(res.Body)
 	if err != nil {
-		klog.Errorf("Failed to perform request to create DB user role", err)
+		klog.Errorf("Failed to perform request to create DB user role, reason: %s", err)
 		return err
 	}
 
 	if res.IsError() {
-		err = errors.New(fmt.Sprintf("DB user role creation failed with error status code %d", res.StatusCode))
-		klog.Errorf("Failed to create DB user role", err)
+		err = fmt.Errorf("DB user role creation failed with error status code %d", res.StatusCode)
+		klog.Errorf("Failed to create DB user role, reason: %s", err)
 		return err
 	}
 	return nil
@@ -388,18 +388,18 @@ func (es *ESClientV7) IndexExistsOrNot(index string) error {
 	}
 	res, err := req.Do(context.Background(), es.client)
 	if err != nil {
-		klog.Errorf(fmt.Sprintf("failed to get response while checking either index exists or not %v", err))
+		klog.Errorf("failed to get response while checking either index exists or not %v", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for checking the existence of index", err)
+			klog.Errorf("failed to close response body for checking the existence of index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to get index with statuscode %d", res.StatusCode))
+		klog.Errorf("failed to get index with statuscode %d", res.StatusCode)
 		return errors.New("index does not exist")
 	}
 	return nil
@@ -414,18 +414,18 @@ func (es *ESClientV7) CreateIndex(index string) error {
 
 	res, err := req.Do(context.Background(), es.client)
 	if err != nil {
-		klog.Errorf("failed to apply create index request ", err)
+		klog.Errorf("failed to apply create index request, reason: %s", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for creating index", err)
+			klog.Errorf("failed to close response body for creating index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("creating index failed with statuscode %d", res.StatusCode))
+		klog.Errorf("creating index failed with statuscode %d", res.StatusCode)
 		return errors.New("failed to create index")
 	}
 
@@ -439,18 +439,18 @@ func (es *ESClientV7) DeleteIndex(index string) error {
 
 	res, err := req.Do(context.Background(), es.client)
 	if err != nil {
-		klog.Errorf("failed to apply delete index request", err)
+		klog.Errorf("failed to apply delete index request, reason: %s", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for deleting index", err)
+			klog.Errorf("failed to close response body for deleting index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to delete index with status code %d", res.StatusCode))
+		klog.Errorf("failed to delete index with status code %d", res.StatusCode)
 		return errors.New("failed to delete index")
 	}
 
@@ -469,12 +469,12 @@ func (es *ESClientV7) CountData(index string) (int, error) {
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for counting data", err)
+			klog.Errorf("failed to close response body for counting data, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to count number of documents in index with statuscode %d", res.StatusCode))
+		klog.Errorf("failed to count number of documents in index with statuscode %d", res.StatusCode)
 		return 0, errors.New("failed to count number of documents")
 	}
 
@@ -509,18 +509,18 @@ func (es *ESClientV7) PutData(index, id string, data map[string]interface{}) err
 
 	res, err := req.Do(context.Background(), es.client)
 	if err != nil {
-		klog.Errorf("failed to put data in the index", err)
+		klog.Errorf("failed to put data in the index, reason: %s", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for putting data in the index", err)
+			klog.Errorf("failed to close response body for putting data in the index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to put data in an index with statuscode %d", res.StatusCode))
+		klog.Errorf("failed to put data in an index with statuscode %d", res.StatusCode)
 		return errors.New("failed to put data in an index")
 	}
 	return nil

@@ -67,9 +67,6 @@ func (in *ProxySQLAutoscaler) setOpsReqOptsDefaults() {
 	}
 }
 
-func (in *ProxySQLAutoscaler) SetDefaults() {
-}
-
 // +kubebuilder:webhook:path=/validate-schema-kubedb-com-v1alpha1-proxysqlautoscaler,mutating=false,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=proxysqlautoscalers,verbs=create;update;delete,versions=v1alpha1,name=vproxysqlautoscaler.kb.io,admissionReviewVersions={v1,v1beta1}
 
 var _ webhook.Validator = &ProxySQLAutoscaler{}
@@ -94,9 +91,5 @@ func (in *ProxySQLAutoscaler) validate() error {
 	if in.Spec.ProxyRef == nil {
 		return errors.New("proxyRef can't be empty")
 	}
-	return nil
-}
-
-func (in *ProxySQLAutoscaler) ValidateFields() error {
 	return nil
 }

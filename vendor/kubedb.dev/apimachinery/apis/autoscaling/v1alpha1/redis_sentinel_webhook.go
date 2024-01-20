@@ -67,9 +67,6 @@ func (in *RedisSentinelAutoscaler) setOpsReqOptsDefaults() {
 	}
 }
 
-func (in *RedisSentinelAutoscaler) SetDefaults() {
-}
-
 // +kubebuilder:webhook:path=/validate-schema-kubedb-com-v1alpha1-redissentinelautoscaler,mutating=false,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=redissentinelautoscalers,verbs=create;update;delete,versions=v1alpha1,name=vredissentinelautoscaler.kb.io,admissionReviewVersions={v1,v1beta1}
 
 var _ webhook.Validator = &RedisSentinelAutoscaler{}
@@ -94,9 +91,5 @@ func (in *RedisSentinelAutoscaler) validate() error {
 	if in.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	return nil
-}
-
-func (in *RedisSentinelAutoscaler) ValidateFields() error {
 	return nil
 }

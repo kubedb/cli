@@ -148,14 +148,14 @@ func (es *ESClientV6) GetClusterWriteStatus(ctx context.Context, db *api.Elastic
 		return errors.Wrap(err3, "Failed to perform write request")
 	}
 	if res.IsError() {
-		return errors.New(fmt.Sprintf("Failed to get response from write request with error statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get response from write request with error statuscode %d", res.StatusCode)
 	}
 
 	defer func(res *esapi.Response) {
 		if res != nil {
 			err3 = res.Body.Close()
 			if err3 != nil {
-				klog.Errorf("Failed to close write request response body", err3)
+				klog.Errorf("Failed to close write request response body, reason: %s", err3)
 			}
 		}
 	}(res)
@@ -194,7 +194,7 @@ func (es *ESClientV6) GetClusterReadStatus(ctx context.Context, db *api.Elastics
 		if res != nil {
 			err = res.Body.Close()
 			if err != nil {
-				klog.Errorf("failed to close read request response body", err)
+				klog.Errorf("failed to close read request response body, reason: %s", err)
 			}
 		}
 	}(res)
@@ -203,7 +203,7 @@ func (es *ESClientV6) GetClusterReadStatus(ctx context.Context, db *api.Elastics
 		return kutil.ErrNotFound
 	}
 	if res.IsError() {
-		return errors.New(fmt.Sprintf("Failed to get response from write request with error statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get response from write request with error statuscode %d", res.StatusCode)
 	}
 
 	return nil

@@ -71,9 +71,6 @@ func (in *PostgresAutoscaler) setOpsReqOptsDefaults() {
 	}
 }
 
-func (in *PostgresAutoscaler) SetDefaults() {
-}
-
 // +kubebuilder:webhook:path=/validate-schema-kubedb-com-v1alpha1-postgresautoscaler,mutating=false,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=postgresautoscalers,verbs=create;update;delete,versions=v1alpha1,name=vpostgresautoscaler.kb.io,admissionReviewVersions={v1,v1beta1}
 
 var _ webhook.Validator = &PostgresAutoscaler{}
@@ -98,9 +95,5 @@ func (in *PostgresAutoscaler) validate() error {
 	if in.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	return nil
-}
-
-func (in *PostgresAutoscaler) ValidateFields() error {
 	return nil
 }

@@ -100,7 +100,3 @@ func (in *MySQLAutoscaler) validate() error {
 	}
 	return nil
 }
-
-func (in *MySQLAutoscaler) ValidateFields() error {
-	return nil
-}

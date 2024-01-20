@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/cert-manager/cert-manager v1.13.3
 	github.com/fatih/camelcase v1.0.0
-	github.com/go-sql-driver/mysql v1.6.0
+	github.com/go-sql-driver/mysql v1.7.0
 	github.com/prometheus/client_golang v1.18.0
 	github.com/prometheus/common v0.45.0
 	github.com/spf13/cobra v1.7.0
@@ -27,8 +27,8 @@ require (
 	kmodules.xyz/client-go v0.29.6
 	kmodules.xyz/custom-resources v0.29.0
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.41.0-beta.0
-	kubedb.dev/db-client-go v0.0.8
+	kubedb.dev/apimachinery v0.41.0-beta.0.0.20240119173518-f85d14100011
+	kubedb.dev/db-client-go v0.0.9-0.20240119051334-7f4d5847462a
 	sigs.k8s.io/controller-runtime v0.16.3
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.32.1-0.20231225221320-6f5a8df2ab6e

@@ -18,9 +18,15 @@ limitations under the License.
 
 package v1alpha1
 
+type DruidVersionExpansion interface{}
+
 type ElasticsearchVersionExpansion interface{}
 
 type EtcdVersionExpansion interface{}
+
+type FerretDBVersionExpansion interface{}
+
+type KafkaConnectorVersionExpansion interface{}
 
 type KafkaVersionExpansion interface{}
 
@@ -36,8 +42,18 @@ type PerconaXtraDBVersionExpansion interface{}
 
 type PgBouncerVersionExpansion interface{}
 
+type PgpoolVersionExpansion interface{}
+
 type PostgresVersionExpansion interface{}
 
 type ProxySQLVersionExpansion interface{}
 
+type RabbitMQVersionExpansion interface{}
+
 type RedisVersionExpansion interface{}
+
+type SinglestoreVersionExpansion interface{}
+
+type SolrVersionExpansion interface{}
+
+type ZooKeeperVersionExpansion interface{}

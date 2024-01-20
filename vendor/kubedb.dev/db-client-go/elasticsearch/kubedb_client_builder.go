@@ -27,7 +27,7 @@ import (
 	"time"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
-	"kubedb.dev/apimachinery/apis/dashboard/v1alpha1"
+	"kubedb.dev/apimachinery/apis/elasticsearch/v1alpha1"
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 
 	"github.com/Masterminds/semver/v3"
@@ -90,7 +90,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 	var esVersion catalog.ElasticsearchVersion
 	err := o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.Version}, &esVersion)
 	if err != nil {
-		return nil, errors.Errorf("Failed to get elasticsearchVersion with %s", err.Error())
+		return nil, errors.Errorf("Failed to get elasticsearchVersion with %s", err)
 	}
 
 	var authSecret core.Secret
@@ -98,7 +98,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 	if !o.db.Spec.DisableSecurity && o.db.Spec.AuthSecret != nil {
 		err = o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.AuthSecret.Name}, &authSecret)
 		if err != nil {
-			return nil, errors.Errorf("Failed to get auth secret with %s", err.Error())
+			return nil, errors.Errorf("Failed to get auth secret with %s", err)
 		}
 
 		if value, ok := authSecret.Data[core.BasicAuthUsernameKey]; ok {
@@ -145,7 +145,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				},
 			})
 			if err != nil {
-				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err.Error())
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
 				return nil, err
 			}
 			// do a manual health check to test client
@@ -158,7 +158,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			defer func(Body io.ReadCloser) {
 				err := Body.Close()
 				if err != nil {
-					klog.Errorf("failed to close response body", err)
+					klog.Errorf("failed to close response body, reason: %s", err)
 				}
 			}(res.Body)
 
@@ -193,7 +193,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				},
 			})
 			if err != nil {
-				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err.Error())
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
 				return nil, err
 			}
 			res, err := esapi.PingRequest{}.Do(o.ctx, esClient.Transport)
@@ -204,7 +204,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			defer func(Body io.ReadCloser) {
 				err = Body.Close()
 				if err != nil {
-					klog.Errorf("failed to close response body", err)
+					klog.Errorf("failed to close response body, reason: %s", err)
 				}
 			}(res.Body)
 
@@ -240,7 +240,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				},
 			})
 			if err != nil {
-				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err.Error())
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
 				return nil, err
 			}
 
@@ -252,7 +252,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			defer func(Body io.ReadCloser) {
 				err = Body.Close()
 				if err != nil {
-					klog.Errorf("failed to close response body", err)
+					klog.Errorf("failed to close response body, reason: %s", err)
 				}
 			}(res.Body)
 
@@ -289,7 +289,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				},
 			})
 			if err != nil {
-				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err.Error())
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
 				return nil, err
 			}
 
@@ -301,7 +301,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			defer func(Body io.ReadCloser) {
 				err = Body.Close()
 				if err != nil {
-					klog.Errorf("failed to close response body", err)
+					klog.Errorf("failed to close response body, reason: %s", err)
 				}
 			}(res.Body)
 
@@ -339,7 +339,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				},
 			})
 			if err != nil {
-				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err.Error())
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
 				return nil, err
 			}
 
@@ -351,7 +351,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			defer func(Body io.ReadCloser) {
 				err = Body.Close()
 				if err != nil {
-					klog.Errorf("failed to close response body", err)
+					klog.Errorf("failed to close response body, reason: %s", err)
 				}
 			}(res.Body)
 
@@ -384,7 +384,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				},
 			})
 			if err != nil {
-				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err.Error())
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
 				return nil, err
 			}
 
@@ -396,7 +396,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			defer func(Body io.ReadCloser) {
 				err = Body.Close()
 				if err != nil {
-					klog.Errorf("failed to close response body", err)
+					klog.Errorf("failed to close response body, reason: %s", err)
 				}
 			}(res.Body)
 
@@ -426,7 +426,7 @@ func (o *KubeDBClientBuilder) getDefaultTLSConfig() (*tls.Config, error) {
 
 		crt, err = tls.X509KeyPair(certSecret.Data[core.TLSCertKey], certSecret.Data[core.TLSPrivateKeyKey])
 		if err != nil {
-			klog.Errorf("failed to create certificate for TLS config", err)
+			klog.Errorf("failed to create certificate for TLS config, reason: %s", err)
 			return nil, err
 		}
 

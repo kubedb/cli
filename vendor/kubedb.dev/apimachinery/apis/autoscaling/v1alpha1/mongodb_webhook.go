@@ -17,12 +17,15 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
 	"errors"
+	"fmt"
 
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -50,6 +53,16 @@ func (in *MongoDBAutoscaler) Default() {
 }
 
 func (in *MongoDBAutoscaler) setDefaults() {
+	var db dbapi.MongoDB
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name:      in.Spec.DatabaseRef.Name,
+		Namespace: in.Namespace,
+	}, &db)
+	if err != nil {
+		_ = fmt.Errorf("can't get MongoDB %s/%s \n", in.Namespace, in.Spec.DatabaseRef.Name)
+		return
+	}
+
 	in.setOpsReqOptsDefaults()
 
 	if in.Spec.Storage != nil {
@@ -68,6 +81,14 @@ func (in *MongoDBAutoscaler) setDefaults() {
 		setDefaultComputeValues(in.Spec.Compute.Mongos)
 		setDefaultComputeValues(in.Spec.Compute.Arbiter)
 		setDefaultComputeValues(in.Spec.Compute.Hidden)
+
+		setInMemoryDefaults(in.Spec.Compute.Standalone, db.Spec.StorageEngine)
+		setInMemoryDefaults(in.Spec.Compute.ReplicaSet, db.Spec.StorageEngine)
+		setInMemoryDefaults(in.Spec.Compute.Shard, db.Spec.StorageEngine)
+		setInMemoryDefaults(in.Spec.Compute.ConfigServer, db.Spec.StorageEngine)
+		setInMemoryDefaults(in.Spec.Compute.Mongos, db.Spec.StorageEngine)
+		// no need for Defaulting the Arbiter & Hidden PodResources.
+		// As arbiter is not a data-node.  And hidden doesn't have the impact of storageEngine (it can't be InMemory).
 	}
 }
 
@@ -79,18 +100,6 @@ func (in *MongoDBAutoscaler) setOpsReqOptsDefaults() {
 	// OplogMaxLagSeconds & ObjectsCountDiffPercentage are defaults to 0
 	if in.Spec.OpsRequestOptions.Apply == "" {
 		in.Spec.OpsRequestOptions.Apply = opsapi.ApplyOptionIfReady
-	}
-}
-
-func (in *MongoDBAutoscaler) SetDefaults(db *dbapi.MongoDB) {
-	if in.Spec.Compute != nil {
-		setInMemoryDefaults(in.Spec.Compute.Standalone, db.Spec.StorageEngine)
-		setInMemoryDefaults(in.Spec.Compute.ReplicaSet, db.Spec.StorageEngine)
-		setInMemoryDefaults(in.Spec.Compute.Shard, db.Spec.StorageEngine)
-		setInMemoryDefaults(in.Spec.Compute.ConfigServer, db.Spec.StorageEngine)
-		setInMemoryDefaults(in.Spec.Compute.Mongos, db.Spec.StorageEngine)
-		// no need for Defaulting the Arbiter & Hidden PodResources.
-		// As arbiter is not a data-node.  And hidden doesn't have the impact of storageEngine (it can't be InMemory).
 	}
 }
 
@@ -118,10 +127,16 @@ func (in *MongoDBAutoscaler) validate() error {
 	if in.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	return nil
-}
+	var mg dbapi.MongoDB
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name:      in.Spec.DatabaseRef.Name,
+		Namespace: in.Namespace,
+	}, &mg)
+	if err != nil {
+		_ = fmt.Errorf("can't get MongoDB %s/%s \n", in.Namespace, in.Spec.DatabaseRef.Name)
+		return err
+	}
 
-func (in *MongoDBAutoscaler) ValidateFields(mg *dbapi.MongoDB) error {
 	if in.Spec.Compute != nil {
 		cm := in.Spec.Compute
 		if mg.Spec.ShardTopology != nil {
@@ -200,5 +215,6 @@ func (in *MongoDBAutoscaler) ValidateFields(mg *dbapi.MongoDB) error {
 			}
 		}
 	}
+
 	return nil
 }

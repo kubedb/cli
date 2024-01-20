@@ -17,11 +17,14 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"sync"
+
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type NodeTopology struct {
@@ -152,4 +155,15 @@ type AutoscalerPhase string
 type StatusAccessor interface {
 	GetStatus() AutoscalerStatus
 	SetStatus(_ AutoscalerStatus)
+}
+
+var (
+	once          sync.Once
+	DefaultClient client.Client
+)
+
+func SetDefaultClient(kc client.Client) {
+	once.Do(func() {
+		DefaultClient = kc
+	})
 }

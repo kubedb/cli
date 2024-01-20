@@ -321,6 +321,34 @@ const (
 	MariaDBMetricsExporterConfigPath     = "/etc/mysql/config/exporter"
 	MariaDBDataVolumeName                = "data"
 
+	// =========================== SingleStore Constants ============================
+	SinglestoreDatabasePortName       = "db"
+	SinglestorePrimaryServicePortName = "primary"
+	SinglestoreDatabasePort           = 3306
+	SinglestoreRootUserName           = "ROOT_USERNAME"
+	SinglestoreRootPassword           = "ROOT_PASSWORD"
+	SinglestoreRootUser               = "root"
+	DatabasePodMaster                 = "Master"
+	DatabasePodAggregator             = "Aggregator"
+	DatabasePodLeaf                   = "Leaf"
+	StatefulSetTypeMasterAggregator   = "master-aggregator"
+	StatefulSetTypeLeaf               = "leaf"
+	SinglestoreDatabaseHealth         = "singlestore_health"
+	SinglestoreTableHealth            = "singlestore_health_table"
+
+	SinglestoreCoordinatorContainerName = "singlestore-coordinator"
+	SinglestoreContainerName            = "singlestore"
+	SinglestoreInitContainerName        = "singlestore-init"
+
+	SinglestoreVolumeNameUserInitScript      = "initial-script"
+	SinglestoreVolumeMountPathUserInitScript = "/docker-entrypoint-initdb.d"
+	SinglestoreVolumeNameCustomConfig        = "custom-config"
+	SinglestoreVolumeMountPathCustomConfig   = "/config"
+	SinglestoreVolmeNameInitScript           = "init-scripts"
+	SinglestoreVolumeMountPathInitScript     = "/scripts"
+	SinglestoreVolumeNameData                = "data"
+	SinglestoreVolumeMountPathData           = "/var/lib/memsql"
+
 	// =========================== PostgreSQL Constants ============================
 	PostgresDatabasePortName          = "db"
 	PostgresPrimaryServicePortName    = "primary"
@@ -459,6 +487,60 @@ const (
 	PgBouncerAdminUsername                  = "pgbouncer"
 	PgBouncerDefaultPoolMode                = "session"
 	PgBouncerDefaultIgnoreStartupParameters = "empty"
+
+	// =========================== Pgpool Constants ============================
+	EnvPostgresUsername               = "POSTGRES_USERNAME"
+	EnvPgpoolPcpUser                  = "PGPOOL_PCP_USER"
+	EnvPgpoolPcpPassword              = "PGPOOL_PCP_PASSWORD"
+	EnvPgpoolPasswordEncryptionMethod = "PGPOOL_PASSWORD_ENCRYPTION_METHOD"
+	EnvEnablePoolPasswd               = "PGPOOL_ENABLE_POOL_PASSWD"
+	EnvSkipPasswdEncryption           = "PGPOOL_SKIP_PASSWORD_ENCRYPTION"
+	ConfigSecretMountPath             = "/config"
+	ConfigVolumeName                  = "pgpool-config"
+	ContainerName                     = "pgpool"
+	PgpoolAuthUsername                = "pcp"
+	SyncPeriod                        = 10
+	// ========================================== ZooKeeper Constants =================================================//
+
+	KubeDBZooKeeperRoleName         = "kubedb:zookeeper-version-reader"
+	KubeDBZooKeeperRoleBindingName  = "kubedb:zookeeper-version-reader"
+	ZooKeeperClientPortName         = "client"
+	ZooKeeperClientPort             = 2181
+	ZooKeeperQuorumPortName         = "quorum"
+	ZooKeeperQuorumPort             = 2888
+	ZooKeeperLeaderElectionPortName = "leader-election"
+	ZooKeeperLeaderElectionPort     = 3888
+	ZooKeeperMetricsPortName        = "metrics"
+	ZooKeeperMetricsPort            = 7000
+	ZooKeeperAdminServerPortName    = "admin-server"
+	ZooKeeperAdminServerPort        = 8080
+	ZooKeeperNode                   = "/kubedb_health_checker_node"
+	ZooKeeperData                   = "kubedb_health_checker_data"
+	ZooKeeperConfigVolumeName       = "zookeeper-config"
+	ZooKeeperConfigVolumePath       = "/conf"
+	ZooKeeperDataVolumeName         = "data"
+	ZooKeeperDataVolumePath         = "/data"
+	ZooKeeperScriptVolumeName       = "script-vol"
+	ZooKeeperScriptVolumePath       = "/scripts"
+	ZooKeeperContainerName          = ResourceSingularZooKeeper
+	ZooKeeperInitContainerName      = ResourceSingularZooKeeper + "-init"
+
+	ZooKeeperConfigFileName               = "zoo.cfg"
+	ZooKeeperLog4jPropertiesFileName      = "log4j.properties"
+	ZooKeeperLog4jQuietPropertiesFileName = "log4j-quiet.properties"
+
+	EnvZooKeeperDomain          = "DOMAIN"
+	EnvZooKeeperQuorumPort      = "QUORUM_PORT"
+	EnvZooKeeperLeaderPort      = "LEADER_PORT"
+	EnvZooKeeperClientHost      = "CLIENT_HOST"
+	EnvZooKeeperClientPort      = "CLIENT_PORT"
+	EnvZooKeeperAdminServerHost = "ADMIN_SERVER_HOST"
+	EnvZooKeeperAdminServerPort = "ADMIN_SERVER_PORT"
+	EnvZooKeeperClusterName     = "CLUSTER_NAME"
+	EnvZooKeeperClusterSize     = "CLUSTER_SIZE"
+	EnvZooKeeperUser            = "ZK_USER"
+	EnvZooKeeperPassword        = "ZK_PASSWORD"
+	ZooKeeperSuperUsername      = "super"
 )
 
 // List of possible condition types for a KubeDB object
@@ -652,6 +734,318 @@ const (
 	KafkaAdminTopicConfigProvider = "com.linkedin.kafka.cruisecontrol.config.KafkaAdminTopicConfigProvider"
 	KafkaCCMetricReporter         = "com.linkedin.kafka.cruisecontrol.metricsreporter.CruiseControlMetricsReporter"
 	KafkaJMXMetricReporter        = "org.apache.kafka.common.metrics.JmxReporter"
+
+	// =========================== Solr Constants ============================
+	ResourceCodeSolr      = "sl"
+	ResourceKindSolr      = "Solr"
+	ResourceSingularSolr  = "solr"
+	ResourcePluralSolr    = "solrs"
+	SolrPortName          = "http"
+	SolrRestPort          = 8983
+	SolrSecretKey         = "solr.xml"
+	SolrContainerName     = "solr"
+	SolrInitContainerName = "init-solr"
+	SolrAdmin             = "admin"
+	SecurityJSON          = "security.json"
+
+	SolrVolumeDefaultConfig = "default-config"
+	SolrVolumeCustomConfig  = "custom-config"
+	SolrVolumeAuthConfig    = "auth-config"
+	SolrVolumeData          = "data"
+	SolrVolumeConfig        = "slconfig"
+
+	DistLibs              = "/opt/solr/dist"
+	ContribLibs           = "/opt/solr/contrib/%s/lib"
+	SysPropLibPlaceholder = "${solr.sharedLib:}"
+	SolrHomeDir           = "/var/solr"
+	SolrDataDir           = "/var/solr/data"
+	SolrTempConfigDir     = "/temp-config"
+	SolrCustomConfigDir   = "/custom-config"
+	SolrSecurityConfigDir = "/var/security"
+
+	SolrCloudHostKey                       = "host"
+	SolrCloudHostValue                     = ""
+	SolrCloudHostPortKey                   = "hostPort"
+	SolrCloudHostPortValue                 = 80
+	SolrCloudHostContextKey                = "hostContext"
+	SolrCloudHostContextValue              = "solr"
+	SolrCloudGenericCoreNodeNamesKey       = "genericCoreNodeNames"
+	SolrCloudGenericCoreNodeNamesValue     = true
+	SolrCloudZKClientTimeoutKey            = "zkClientTimeout"
+	SolrCloudZKClientTimeoutValue          = 30000
+	SolrCloudDistribUpdateSoTimeoutKey     = "distribUpdateSoTimeout"
+	SolrCloudDistribUpdateSoTimeoutValue   = 600000
+	SolrCloudDistribUpdateConnTimeoutKey   = "distribUpdateConnTimeout"
+	SolrCloudDistribUpdateConnTimeoutValue = 60000
+	SolrCloudZKCredentialProviderKey       = "zkCredentialsProvider"
+	SolrCloudZKCredentialProviderValue     = "org.apache.solr.common.cloud.DefaultZkCredentialsProvider"
+	SolrCloudZKAclProviderKey              = "zkACLProvider"
+	SolrCloudZKAclProviderValue            = "org.apache.solr.common.cloud.DefaultZkACLProvider"
+
+	ShardHandlerFactorySocketTimeoutKey   = "socketTimeout"
+	ShardHandlerFactorySocketTimeoutValue = 600000
+	ShardHandlerFactoryConnTimeoutKey     = "connTimeout"
+	ShardHandlerFactoryConnTimeoutValue   = 60000
+
+	SolrKeysMaxBooleanClausesKey   = "maxBooleanClauses"
+	SolrKeysMaxBooleanClausesValue = "solr.max.booleanClauses"
+	SolrKeysSharedLibKey           = "sharedLib"
+	SolrKeysShardLibValue          = "solr.sharedLib"
+	SolrKeysHostPortKey            = "hostPort"
+	SolrKeysHostPortValue          = "solr.port.advertise"
+	SolrKeysAllowPathsKey          = "allowPaths"
+	SolrKeysAllowPathsValue        = "solr.allowPaths"
+
+	SolrConfMaxBooleanClausesKey   = "maxBooleanClauses"
+	SolrConfMaxBooleanClausesValue = 1024
+	SolrConfAllowPathsKey          = "allowPaths"
+	SolrConfAllowPathsValue        = ""
+	SolrConfSolrCloudKey           = "solrcloud"
+	SolrConfShardHandlerFactoryKey = "shardHandlerFactory"
+)
+
+// =========================== Druid Constants ============================
+const (
+	DruidConfigDirCommon              = "/opt/druid/conf/druid/cluster/_common"
+	DruidConfigDirCoordinatorOverlord = "/opt/druid/conf/druid/cluster/master/coordinator-overlord"
+	DruidConfigDirHistoricals         = "/opt/druid/conf/druid/cluster/data/historical"
+	DruidConfigDirMiddleManagers      = "/opt/druid/conf/druid/cluster/data/middleManager"
+	DruidConfigDirBrokers             = "/opt/druid/conf/druid/cluster/query/broker"
+	DruidConfigDirRouters             = "/opt/druid/conf/druid/cluster/query/router"
+	DruidCConfigDirMySQLMetadata      = "/opt/druid/extensions/mysql-metadata-storage"
+
+	DruidVolumeOperatorConfig = "operator-config-volume"
+	DruidVolumeMainConfig     = "main-config-volume"
+	DruidVolumeCustomConfig   = "custom-config"
+
+	DruidOperatorConfigDir = "/tmp/config/operator-config"
+	DruidMainConfigDir     = "/opt/druid/conf"
+	DruidCustomConfigDir   = "/tmp/config/custom-config"
+
+	DruidVolumeConfigCommon           = "common-config-volume"
+	DruidVolumeConfigNodes            = "nodetype-config-volume"
+	DruidConfigFileNameCommon         = "common.runtime.properties"
+	DruidConfigFileNameJVM            = "jvm.config"
+	DruidVolumeConfigFileNodes        = "runtime.properties"
+	DruidConfigFileNameCoordinators   = "coordinators.properties"
+	DruidConfigFileNameHistoricals    = "historicals.properties"
+	DruidConfigFileNameMiddleManagers = "middleManagers.properties"
+	DruidConfigFileNameBrokers        = "brokers.properties"
+	DruidConfigFileNameRouters        = "routers.properties"
+	DruidVolumeMySQLMetadataStorage   = "mysql-metadata-storage"
+
+	DruidMainContainer = "druid"
+	DruidInitContainer = "init-druid"
+	DruidUserAdmin     = "admin"
+
+	EnvDruidAdminPassword          = "DRUID_ADMIN_PASSWORD"
+	EnvDruidMetdataStoragePassword = "DRUID_METADATA_STORAGE_PASSWORD"
+	EnvDruidZKServicePassword      = "DRUID_ZK_SERVICE_PASSWORD"
+	EnvDruidCoordinatorAsOverlord  = "DRUID_COORDINATOR_AS_OVERLORD"
+
+	// Common Runtime Configurations Properties
+	// ZooKeeperSpec
+	DruidZKServiceHost              = "druid.zk.service.host"
+	DruidZKPathsBase                = "druid.zk.paths.base"
+	DruidZKServiceCompress          = "druid.zk.service.compress"
+	DruidZKServiceUserKey           = "druid.zk.service.user"
+	DruidZKServicePasswordKey       = "druid.zk.service.pwd"
+	DruidZKServicePasswordEnvConfig = "{\"type\": \"environment\", \"variable\": \"DRUID_ZK_SERVICE_PASSWORD\"}"
+
+	// Metadata Storage
+	DruidMetadataStorageTypeKey                    = "druid.metadata.storage.type"
+	DruidMetadataStorageConnectorConnectURI        = "druid.metadata.storage.connector.connectURI"
+	DruidMetadataStorageConnectURIPrefixMySQL      = "jdbc:mysql://"
+	DruidMetadataStorageConnectURIPrefixPostgreSQL = "jdbc:postgresql://"
+	DruidMetadataStorageConnectorUser              = "druid.metadata.storage.connector.user"
+	DruidMetadataStorageConnectorPassword          = "druid.metadata.storage.connector.password"
+	DruidMetadataStorageConnectorPasswordEnvConfig = "{\"type\": \"environment\", \"variable\": \"DRUID_METADATA_STORAGE_PASSWORD\"}"
+	DruidMetadataStorageCreateTables               = "druid.metadata.storage.connector.createTables"
+
+	// Deep Storage
+	DruidDeepStorageTypeKey      = "druid.storage.type"
+	DruidDeepStorageTypeS3       = "s3"
+	DruidDeepStorageBaseKey      = "druid.storage.baseKey"
+	DruidDeepStorageBucket       = "druid.storage.bucket"
+	DruidS3AccessKey             = "druid.s3.accessKey"
+	DruidS3SecretKey             = "druid.s3.secretKey"
+	DruidS3EndpointSigningRegion = "druid.s3.endpoint.signingRegion"
+	DruidS3EnablePathStyleAccess = "druid.s3.enablePathStyleAccess"
+	DruidS3EndpointURL           = "druid.s3.endpoint.url"
+
+	// Indexing service logs
+	DruidIndexerLogsType           = "druid.indexer.logs.type"
+	DruidIndexerLogsS3Bucket       = "druid.indexer.logs.s3Bucket"
+	DruidIndexerLogsS3Prefix       = "druid.indexer.logs.s3Prefix"
+	DruidEnableLookupSyncOnStartup = "druid.lookup.enableLookupSyncOnStartup"
+
+	// Authentication
+	DruidAuthAuthenticationChain                             = "druid.auth.authenticatorChain"
+	DruidAuthAuthenticationChainValueBasic                   = "[\"basic\"]"
+	DruidAuthAuthenticatorBasicType                          = "druid.auth.authenticator.basic.type"
+	DruidAuthAuthenticatorBasicTypeValue                     = "basic"
+	DruidAuthAuthenticatorBasicInitialAdminPassword          = "druid.auth.authenticator.basic.initialAdminPassword"
+	DruidAuthAuthenticatorBasicInitialAdminPasswordEnvConfig = "{\"type\": \"environment\", \"variable\": \"DRUID_ADMIN_PASSWORD\"}"
+	DruidAuthAuthenticatorBasicInitialInternalClientPassword = "druid.auth.authenticator.basic.initialInternalClientPassword"
+	DruidAuthAuthenticatorBasicCredentialsValidatorType      = "druid.auth.authenticator.basic.credentialsValidator.type"
+	DruidAuthAuthenticatorBasicSkipOnFailure                 = "druid.auth.authenticator.basic.skipOnFailure"
+	DruidAuthAuthenticatorBasicAuthorizerName                = "druid.auth.authenticator.basic.authorizerName"
+
+	// Escalator
+	DruidAuthEscalatorType                   = "druid.escalator.type"
+	DruidAuthEscalatorInternalClientUsername = "druid.escalator.internalClientUsername"
+	DruidAuthEscalatorInternalClientPassword = "druid.escalator.internalClientPassword"
+	DruidAuthEscalatorAuthorizerName         = "druid.escalator.authorizerName"
+	DruidAuthAuthorizers                     = "druid.auth.authorizers"
+	DruidAuthAuthorizerBasicType             = "druid.auth.authorizer.basic.type"
+
+	// Extension Load List
+	DruidExtensionLoadListKey               = "druid.extensions.loadList"
+	DruidExtensionLoadList                  = "[\"druid-avro-extensions\", \"druid-s3-extensions\", \"druid-hdfs-storage\", \"druid-kafka-indexing-service\", \"druid-datasketches\", \"mysql-metadata-storage\", \"druid-basic-security\", \"druid-multi-stage-query\"]"
+	DruidExtensionAvro                      = "druid-avro-extensions"
+	DruidExtensionS3                        = "druid-s3-extensions"
+	DruidExtensionHDFS                      = "druid-hdfs-storage"
+	DruidExtensionGoogle                    = "druid-google-extensions"
+	DruidExtensionAzure                     = "druid-azure-extensions"
+	DruidExtensionKafkaIndexingService      = "druid-kafka-indexing-service"
+	DruidExtensionDataSketches              = "druid-datasketches"
+	DruidExtensionKubernetes                = "druid-kubernetes-extensions"
+	DruidExtensionMySQLMetadataStorage      = "mysql-metadata-storage"
+	DruidExtensionPostgreSQLMetadataStorage = "postgresql-metadata-storage"
+	DruidExtensionBasicSecurity             = "druid-basic-security"
+	DruidExtensionMultiStageQuery           = "druid-multi-stage-query"
+
+	DruidService = "druid.service"
+
+	/// Coordinators Configurations
+	DruidCoordinatorStartDelay                = "druid.coordinator.startDelay"
+	DruidCoordinatorPeriod                    = "druid.coordinator.period"
+	DruidIndexerQueueStartDelay               = "druid.indexer.queue.startDelay"
+	DruidManagerSegmentsPollDuration          = "druid.manager.segments.pollDuration"
+	DruidCoordinatorKillAuditLogOn            = "druid.coordinator.kill.audit.on"
+	DruidMillisToWaitBeforeDeleting           = "millisToWaitBeforeDeleting"
+	DruidCoordinatorAsOverlord                = "druid.coordinator.asOverlord.enabled"
+	DruidCoordinatorAsOverlordOverlordService = "druid.coordinator.asOverlord.overlordService"
+
+	/// Overlords Configurations
+	DruidServiceNameOverlords            = "druid/overlord"
+	DruidIndexerStorageType              = "druid.indexer.storage.type"
+	DruidIndexerAuditLogEnabled          = "druid.indexer.auditLog.enabled"
+	DruidIndexerLogsKillEnables          = "druid.indexer.logs.kill.enabled"
+	DruidIndexerLogsKillDurationToRetain = "druid.indexer.logs.kill.durationToRetain"
+	DruidIndexerLogsKillInitialDelay     = "druid.indexer.logs.kill.initialDelay"
+	DruidIndexerLogsKillDelay            = "druid.indexer.logs.kill.delay"
+
+	/// Historicals Configurations
+	// Properties
+	DruidProcessingNumOfThreads = "druid.processing.numThreads"
+
+	// Segment Cache
+	DruidHistoricalsSegmentCacheLocations              = "druid.segmentCache.locations"
+	DruidHistoricalsSegmentCacheDropSegmentDelayMillis = "druid.segmentCache.dropSegmentDelayMillis"
+	DruidHistoricalsSegmentCacheDir                    = "/druid/data/segments"
+	DruidVolumeHistoricalsSegmentCache                 = "segment-cache"
+
+	// Query Cache
+	DruidHistoricalCacheUseCache      = "druid.historical.cache.useCache"
+	DruidHistoricalCachePopulateCache = "druid.historical.cache.populateCache"
+	DruidCacheSizeInBytes             = "druid.cache.sizeInBytes"
+
+	// Values
+	DruidSegmentCacheLocationsDefaultValue = "[{\"path\":\"/druid/data/segments\",\"maxSize\":10737418240}]"
+
+	/// MiddleManagers Configurations
+	// Properties
+	DruidWorkerCapacity                                    = "druid.worker.capacity"
+	DruidIndexerTaskBaseTaskDir                            = "druid.indexer.task.baseTaskDir"
+	DruidWorkerTaskBaseTaskDirKey                          = "druid.worker.task.baseTaskDir"
+	DruidWorkerTaskBaseTaskDir                             = "/var/druid/task"
+	DruidWorkerBaseTaskDirSize                             = "druid.worker.baseTaskDirSize"
+	DruidIndexerForkPropertyDruidProcessingBufferSizeBytes = "druid.indexer.fork.property.druid.processing.buffer.sizeBytes"
+	DruidMiddleManagersVolumeBaseTaskDir                   = "base-task-dir"
+	DruidVolumeMiddleManagersBaseTaskDir                   = "base-task-dir"
+
+	// Values
+	DruidIndexerTaskBaseTaskDirValue = "/druid/data/baseTaskDir"
+
+	/// Brokers Configurations
+	DruidBrokerHTTPNumOfConnections = "druid.broker.http.numConnections"
+	DruidSQLEnable                  = "druid.sql.enable"
+
+	/// Routers Configurations
+	DruidRouterHTTPNumOfConnections = "druid.router.http.numConnections"
+	DruidRouterHTTPNumOfMaxThreads  = "druid.router.http.numMaxThreads"
+
+	// Common Nodes Configurations
+	// Properties
+	DruidPlaintextPort               = "druid.plaintextPort"
+	DruidProcessingBufferSizeBytes   = "druid.processing.buffer.sizeBytes"
+	DruidProcessingNumOfMergeBuffers = "druid.processing.numMergeBuffers"
+	DruidServerHTTPNumOfThreads      = "druid.server.http.numThreads"
+
+	// Health Check
+	DruidHealthDataZero = "0"
+	DruidHealthDataOne  = "1"
+)
+
+type DruidMetadataStorageType string
+
+const (
+	DruidMetadataStorageMySQL      DruidMetadataStorageType = "MySQL"
+	DruidMetadataStoragePostgreSQL DruidMetadataStorageType = "PostgreSQL"
+)
+
+type DruidDeepStorageType string
+
+const (
+	DruidDeepStorageS3     DruidDeepStorageType = "s3"
+	DruidDeepStorageGoogle DruidDeepStorageType = "google"
+	DruidDeepStorageAzure  DruidDeepStorageType = "azure"
+	DruidDeepStorageHDFS   DruidDeepStorageType = "hdfs"
+)
+
+const (
+	RabbitMQAMQPPort          = 5672
+	RabbitMQPeerDiscoveryPort = 4369
+	RabbitMQManagementUIPort  = 15672
+	RabbitMQInterNodePort     = 25672
+
+	RabbitMQVolumeData         = "data"
+	RabbitMQVolumeConfig       = "rabbitmqconfig"
+	RabbitMQVolumeTempConfig   = "temp-config"
+	RabbitMQVolumeCustomConfig = "custom-config"
+
+	RabbitMQDataDir       = "/var/lib/rabbitmq/mnesia"
+	RabbitMQPluginsDir    = "/etc/rabbitmq/"
+	RabbitMQCertDir       = "/var/private/ssl"
+	RabbitMQConfigDir     = "/config/"
+	RabbitMQTempConfigDir = "/tmp/config/"
+)
+
+// =========================== FerretDB Constants ============================
+const (
+
+	// envs
+	EnvFerretDBUser     = "FERRETDB_PG_USER"
+	EnvFerretDBPassword = "FERRETDB_PG_PASSWORD"
+	EnvFerretDBHandler  = "FERRETDB_HANDLER"
+	EnvFerretDBPgURL    = "FERRETDB_POSTGRESQL_URL"
+	EnvFerretDBTLSPort  = "FERRETDB_LISTEN_TLS"
+	EnvFerretDBCAPath   = "FERRETDB_LISTEN_TLS_CA_FILE"
+	EnvFerretDBCertPath = "FERRETDB_LISTEN_TLS_CERT_FILE"
+	EnvFerretDBKeyPath  = "FERRETDB_LISTEN_TLS_KEY_FILE"
+
+	FerretDBContainerName = "ferretdb"
+	FerretDBMainImage     = "ghcr.io/ferretdb/ferretdb"
+	FerretDBUser          = "postgres"
+
+	FerretDBServerPath = "/etc/certs/server"
+
+	FerretDBDefaultPort = 27017
+	FerretDBMetricsPort = 8080
+	FerretDBTLSPort     = 27018
+
+	FerretDBMetricsPath = "/debug/metrics"
 )
 
 // Resource kind related constants

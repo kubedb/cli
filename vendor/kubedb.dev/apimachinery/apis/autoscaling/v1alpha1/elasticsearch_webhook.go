@@ -17,12 +17,15 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
 	"errors"
+	"fmt"
 
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -116,10 +119,17 @@ func (in *ElasticsearchAutoscaler) validate() error {
 	if in.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	return nil
-}
 
-func (in *ElasticsearchAutoscaler) ValidateFields(es *dbapi.Elasticsearch) error {
+	var es dbapi.Elasticsearch
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name:      in.Spec.DatabaseRef.Name,
+		Namespace: in.Namespace,
+	}, &es)
+	if err != nil {
+		_ = fmt.Errorf("can't get Elasticsearch %s/%s \n", in.Namespace, in.Spec.DatabaseRef.Name)
+		return err
+	}
+
 	if in.Spec.Compute != nil {
 		cm := in.Spec.Compute
 		if es.Spec.Topology != nil {

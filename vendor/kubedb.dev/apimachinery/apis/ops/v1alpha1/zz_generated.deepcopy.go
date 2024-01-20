@@ -2423,6 +2423,11 @@ func (in *OpsRequestStatus) DeepCopyInto(out *OpsRequestStatus) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.PausedBackups != nil {
+		in, out := &in.PausedBackups, &out.PausedBackups
+		*out = make([]apiv1.TypedObjectReference, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 

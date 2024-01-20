@@ -34,6 +34,9 @@ type OpsRequestStatus struct {
 	// Conditions applied to the request, such as approval or denial.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
+	// PausedBackups represents the list of backups that have been paused.
+	// +optional
+	PausedBackups []kmapi.TypedObjectReference `json:"pausedBackups,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=Pending;Progressing;Successful;WaitingForApproval;Failed;Approved;Denied;Skipped

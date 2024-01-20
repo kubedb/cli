@@ -26,7 +26,8 @@ import (
 	autoscalingv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/autoscaling/v1alpha1"
 	catalogv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/config/v1alpha1"
-	dashboardv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/dashboard/v1alpha1"
+	elasticsearchv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/elasticsearch/v1alpha1"
+	kafkav1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kafka/v1alpha1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	kubedbv1alpha2 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	opsv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
@@ -45,7 +46,8 @@ type Interface interface {
 	AutoscalingV1alpha1() autoscalingv1alpha1.AutoscalingV1alpha1Interface
 	CatalogV1alpha1() catalogv1alpha1.CatalogV1alpha1Interface
 	ConfigV1alpha1() configv1alpha1.ConfigV1alpha1Interface
-	DashboardV1alpha1() dashboardv1alpha1.DashboardV1alpha1Interface
+	ElasticsearchV1alpha1() elasticsearchv1alpha1.ElasticsearchV1alpha1Interface
+	KafkaV1alpha1() kafkav1alpha1.KafkaV1alpha1Interface
 	KubedbV1alpha1() kubedbv1alpha1.KubedbV1alpha1Interface
 	KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface
 	OpsV1alpha1() opsv1alpha1.OpsV1alpha1Interface
@@ -57,17 +59,18 @@ type Interface interface {
 // Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	archiverV1alpha1    *archiverv1alpha1.ArchiverV1alpha1Client
-	autoscalingV1alpha1 *autoscalingv1alpha1.AutoscalingV1alpha1Client
-	catalogV1alpha1     *catalogv1alpha1.CatalogV1alpha1Client
-	configV1alpha1      *configv1alpha1.ConfigV1alpha1Client
-	dashboardV1alpha1   *dashboardv1alpha1.DashboardV1alpha1Client
-	kubedbV1alpha1      *kubedbv1alpha1.KubedbV1alpha1Client
-	kubedbV1alpha2      *kubedbv1alpha2.KubedbV1alpha2Client
-	opsV1alpha1         *opsv1alpha1.OpsV1alpha1Client
-	postgresV1alpha1    *postgresv1alpha1.PostgresV1alpha1Client
-	schemaV1alpha1      *schemav1alpha1.SchemaV1alpha1Client
-	uiV1alpha1          *uiv1alpha1.UiV1alpha1Client
+	archiverV1alpha1      *archiverv1alpha1.ArchiverV1alpha1Client
+	autoscalingV1alpha1   *autoscalingv1alpha1.AutoscalingV1alpha1Client
+	catalogV1alpha1       *catalogv1alpha1.CatalogV1alpha1Client
+	configV1alpha1        *configv1alpha1.ConfigV1alpha1Client
+	elasticsearchV1alpha1 *elasticsearchv1alpha1.ElasticsearchV1alpha1Client
+	kafkaV1alpha1         *kafkav1alpha1.KafkaV1alpha1Client
+	kubedbV1alpha1        *kubedbv1alpha1.KubedbV1alpha1Client
+	kubedbV1alpha2        *kubedbv1alpha2.KubedbV1alpha2Client
+	opsV1alpha1           *opsv1alpha1.OpsV1alpha1Client
+	postgresV1alpha1      *postgresv1alpha1.PostgresV1alpha1Client
+	schemaV1alpha1        *schemav1alpha1.SchemaV1alpha1Client
+	uiV1alpha1            *uiv1alpha1.UiV1alpha1Client
 }
 
 // ArchiverV1alpha1 retrieves the ArchiverV1alpha1Client
@@ -90,9 +93,14 @@ func (c *Clientset) ConfigV1alpha1() configv1alpha1.ConfigV1alpha1Interface {
 	return c.configV1alpha1
 }
 
-// DashboardV1alpha1 retrieves the DashboardV1alpha1Client
-func (c *Clientset) DashboardV1alpha1() dashboardv1alpha1.DashboardV1alpha1Interface {
-	return c.dashboardV1alpha1
+// ElasticsearchV1alpha1 retrieves the ElasticsearchV1alpha1Client
+func (c *Clientset) ElasticsearchV1alpha1() elasticsearchv1alpha1.ElasticsearchV1alpha1Interface {
+	return c.elasticsearchV1alpha1
+}
+
+// KafkaV1alpha1 retrieves the KafkaV1alpha1Client
+func (c *Clientset) KafkaV1alpha1() kafkav1alpha1.KafkaV1alpha1Interface {
+	return c.kafkaV1alpha1
 }
 
 // KubedbV1alpha1 retrieves the KubedbV1alpha1Client
@@ -185,7 +193,11 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 	if err != nil {
 		return nil, err
 	}
-	cs.dashboardV1alpha1, err = dashboardv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.elasticsearchV1alpha1, err = elasticsearchv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
+	cs.kafkaV1alpha1, err = kafkav1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +250,8 @@ func New(c rest.Interface) *Clientset {
 	cs.autoscalingV1alpha1 = autoscalingv1alpha1.New(c)
 	cs.catalogV1alpha1 = catalogv1alpha1.New(c)
 	cs.configV1alpha1 = configv1alpha1.New(c)
-	cs.dashboardV1alpha1 = dashboardv1alpha1.New(c)
+	cs.elasticsearchV1alpha1 = elasticsearchv1alpha1.New(c)
+	cs.kafkaV1alpha1 = kafkav1alpha1.New(c)
 	cs.kubedbV1alpha1 = kubedbv1alpha1.New(c)
 	cs.kubedbV1alpha2 = kubedbv1alpha2.New(c)
 	cs.opsV1alpha1 = opsv1alpha1.New(c)

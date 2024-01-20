@@ -17,14 +17,19 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"context"
 	"errors"
+
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 
 	errors2 "github.com/pkg/errors"
 	"gomodules.xyz/pointer"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation/field"
+	ofst "kmodules.xyz/offshoot-api/api/v2"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -122,7 +127,7 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 				k.Name,
 				"doesn't support spec.storage when spec.topology is set"))
 		}
-		if k.Spec.PodTemplate.Spec.Resources.Size() != 0 {
+		if k.Spec.PodTemplate.Spec.Containers[0].Resources.Size() != 0 {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate").Child("spec").Child("resources"),
 				k.Name,
 				"doesn't support spec.podTemplate.spec.resources when spec.topology is set"))
@@ -141,7 +146,7 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 		}
 
 		// validate that multiple nodes don't have same suffixes
-		err := validateNodeSuffix(k.Spec.Topology)
+		err := k.validateNodeSuffix(k.Spec.Topology)
 		if err != nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology"),
 				k.Name,
@@ -149,7 +154,7 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 		}
 
 		// validate that node replicas are not 0 or negative
-		err = validateNodeReplicas(k.Spec.Topology)
+		err = k.validateNodeReplicas(k.Spec.Topology)
 		if err != nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology"),
 				k.Name,
@@ -164,21 +169,21 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 		}
 	}
 
-	err := validateVersion(k)
+	err := k.validateVersion(k)
 	if err != nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("version"),
 			k.Name,
 			err.Error()))
 	}
 
-	err = validateVolumes(k)
+	err = k.validateVolumes(k)
 	if err != nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate").Child("spec").Child("volumes"),
 			k.Name,
 			err.Error()))
 	}
 
-	err = validateVolumesMountPaths(k)
+	err = k.validateVolumesMountPaths(&k.Spec.PodTemplate)
 	if err != nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate").Child("spec").Child("volumeMounts"),
 			k.Name,
@@ -203,26 +208,16 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 	return apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "Kafka"}, k.Name, allErr)
 }
 
-var availableVersions = []string{
-	"3.3.0",
-	"3.3.2",
-	"3.4.0",
-	"3.4.1",
-	"3.5.1",
-	"3.6.0",
-}
-
-func validateVersion(db *Kafka) error {
-	version := db.Spec.Version
-	for _, v := range availableVersions {
-		if v == version {
-			return nil
-		}
+func (k *Kafka) validateVersion(db *Kafka) error {
+	kfVersion := &catalog.KafkaVersion{}
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: db.Spec.Version}, kfVersion)
+	if err != nil {
+		return errors.New("version not supported")
 	}
-	return errors.New("version not supported")
+	return nil
 }
 
-func validateNodeSuffix(topology *KafkaClusterTopology) error {
+func (k *Kafka) validateNodeSuffix(topology *KafkaClusterTopology) error {
 	tMap := topology.ToMap()
 	names := make(map[string]bool)
 	for _, value := range tMap {
@@ -234,7 +229,7 @@ func validateNodeSuffix(topology *KafkaClusterTopology) error {
 	return nil
 }
 
-func validateNodeReplicas(topology *KafkaClusterTopology) error {
+func (k *Kafka) validateNodeReplicas(topology *KafkaClusterTopology) error {
 	tMap := topology.ToMap()
 	for key, node := range tMap {
 		if pointer.Int32(node.Replicas) <= 0 {
@@ -244,18 +239,18 @@ func validateNodeReplicas(topology *KafkaClusterTopology) error {
 	return nil
 }
 
-var reservedVolumes = []string{
+var kafkaReservedVolumes = []string{
 	KafkaVolumeData,
 	KafkaVolumeConfig,
 	KafkaVolumeTempConfig,
 }
 
-func validateVolumes(db *Kafka) error {
+func (k *Kafka) validateVolumes(db *Kafka) error {
 	if db.Spec.PodTemplate.Spec.Volumes == nil {
 		return nil
 	}
-	rsv := make([]string, len(reservedVolumes))
-	copy(rsv, reservedVolumes)
+	rsv := make([]string, len(kafkaReservedVolumes))
+	copy(rsv, kafkaReservedVolumes)
 	if db.Spec.TLS != nil && db.Spec.TLS.Certificates != nil {
 		for _, c := range db.Spec.TLS.Certificates {
 			rsv = append(rsv, db.CertSecretVolumeName(KafkaCertificateAlias(c.Alias)))
@@ -272,7 +267,7 @@ func validateVolumes(db *Kafka) error {
 	return nil
 }
 
-var reservedVolumeMountPaths = []string{
+var kafkaReservedVolumeMountPaths = []string{
 	KafkaConfigDir,
 	KafkaTempConfigDir,
 	KafkaDataDir,
@@ -280,18 +275,41 @@ var reservedVolumeMountPaths = []string{
 	KafkaCertDir,
 }
 
-func validateVolumesMountPaths(db *Kafka) error {
-	if db.Spec.PodTemplate.Spec.VolumeMounts == nil {
+func (k *Kafka) validateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {
+	if podTemplate == nil {
 		return nil
 	}
-	rPaths := reservedVolumeMountPaths
-	volumeMountPaths := db.Spec.PodTemplate.Spec.VolumeMounts
-	for _, rvm := range rPaths {
-		for _, ugv := range volumeMountPaths {
-			if ugv.Name == rvm {
-				return errors.New("Cannot use a reserve volume name: " + rvm)
+	if podTemplate.Spec.Containers == nil {
+		return nil
+	}
+
+	for _, rvmp := range kafkaReservedVolumeMountPaths {
+		containerList := podTemplate.Spec.Containers
+		for i := range containerList {
+			mountPathList := containerList[i].VolumeMounts
+			for j := range mountPathList {
+				if mountPathList[j].MountPath == rvmp {
+					return errors.New("Can't use a reserve volume mount path name: " + rvmp)
+				}
 			}
 		}
 	}
+
+	if podTemplate.Spec.InitContainers == nil {
+		return nil
+	}
+
+	for _, rvmp := range kafkaReservedVolumeMountPaths {
+		containerList := podTemplate.Spec.InitContainers
+		for i := range containerList {
+			mountPathList := containerList[i].VolumeMounts
+			for j := range mountPathList {
+				if mountPathList[j].MountPath == rvmp {
+					return errors.New("Can't use a reserve volume mount path name: " + rvmp)
+				}
+			}
+		}
+	}
+
 	return nil
 }

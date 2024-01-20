@@ -155,14 +155,14 @@ func (os *OSClientV2) GetClusterWriteStatus(ctx context.Context, db *api.Elastic
 		return errors.Wrap(err3, "Failed to perform write request")
 	}
 	if res.IsError() {
-		return errors.New(fmt.Sprintf("Failed to get response from write request with error statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get response from write request with error statuscode %d", res.StatusCode)
 	}
 
 	defer func(res *osv2api.Response) {
 		if res != nil {
 			err3 = res.Body.Close()
 			if err3 != nil {
-				klog.Errorf("Failed to close write request response body", err3)
+				klog.Errorf("Failed to close write request response body, reason: %s", err3)
 			}
 		}
 	}(res)
@@ -201,7 +201,7 @@ func (os *OSClientV2) GetClusterReadStatus(ctx context.Context, db *api.Elastics
 		if res != nil {
 			err = res.Body.Close()
 			if err != nil {
-				klog.Errorf("failed to close read request response body", err)
+				klog.Errorf("failed to close read request response body, reason: %s", err)
 			}
 		}
 	}(res)
@@ -210,7 +210,7 @@ func (os *OSClientV2) GetClusterReadStatus(ctx context.Context, db *api.Elastics
 		return kutil.ErrNotFound
 	}
 	if res.IsError() {
-		return errors.New(fmt.Sprintf("Failed to get response from read request with error statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get response from read request with error statuscode %d", res.StatusCode)
 	}
 
 	return nil
@@ -235,7 +235,7 @@ func (os *OSClientV2) GetTotalDiskUsage(ctx context.Context) (string, error) {
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body from Disk Usage Request", err)
+			klog.Errorf("failed to close response body from Disk Usage Request, reason: %s", err)
 		}
 	}(res.Body)
 
@@ -266,19 +266,19 @@ func (os *OSClientV2) IndexExistsOrNot(index string) error {
 	}
 	res, err := req.Do(context.Background(), os.client)
 	if err != nil {
-		klog.Errorf(fmt.Sprintf("failed to get response while checking either index exists or not %v", err))
+		klog.Errorf("failed to get response while checking either index exists or not %v", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for checking the existence of index", err)
+			klog.Errorf("failed to close response body for checking the existence of index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
 		klog.Errorf("index does not exist")
-		return errors.New(fmt.Sprintf("failed to get index with statuscode %d", res.StatusCode))
+		return fmt.Errorf("failed to get index with statuscode %d", res.StatusCode)
 	}
 	return nil
 }
@@ -292,18 +292,18 @@ func (os *OSClientV2) CreateIndex(index string) error {
 
 	res, err := req.Do(context.Background(), os.client)
 	if err != nil {
-		klog.Errorf("failed to apply create index request ", err)
+		klog.Errorf("failed to apply create index request, reason: %s", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for creating index", err)
+			klog.Errorf("failed to close response body for creating index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("creating index failed with statuscode %d", res.StatusCode))
+		klog.Errorf("creating index failed with statuscode %d", res.StatusCode)
 		return errors.New("failed to create index")
 	}
 
@@ -317,18 +317,18 @@ func (os *OSClientV2) DeleteIndex(index string) error {
 
 	res, err := req.Do(context.Background(), os.client)
 	if err != nil {
-		klog.Errorf("failed to apply delete index request", err)
+		klog.Errorf("failed to apply delete index request, reason: %s", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for deleting index", err)
+			klog.Errorf("failed to close response body for deleting index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to delete index with status code %d", res.StatusCode))
+		klog.Errorf("failed to delete index with status code %d", res.StatusCode)
 		return errors.New("failed to delete index")
 	}
 
@@ -347,12 +347,12 @@ func (os *OSClientV2) CountData(index string) (int, error) {
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for counting data", err)
+			klog.Errorf("failed to close response body for counting data, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to count number of documents in index with statuscode %d", res.StatusCode))
+		klog.Errorf("failed to count number of documents in index with statuscode %d", res.StatusCode)
 		return 0, errors.New("failed to count number of documents in index")
 	}
 
@@ -388,18 +388,18 @@ func (os *OSClientV2) PutData(index, id string, data map[string]interface{}) err
 
 	res, err := req.Do(context.Background(), os.client)
 	if err != nil {
-		klog.Errorf("failed to put data in the index", err)
+		klog.Errorf("failed to put data in the index, reason: %s", err)
 		return err
 	}
 	defer func(Body io.ReadCloser) {
 		err = Body.Close()
 		if err != nil {
-			klog.Errorf("failed to close response body for putting data in the index", err)
+			klog.Errorf("failed to close response body for putting data in the index, reason: %s", err)
 		}
 	}(res.Body)
 
 	if res.IsError() {
-		klog.Errorf(fmt.Sprintf("failed to put data in an index with statuscode %d", res.StatusCode))
+		klog.Errorf("failed to put data in an index with statuscode %d", res.StatusCode)
 		return errors.New("failed to put data in an index")
 	}
 	return nil

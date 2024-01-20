@@ -77,7 +77,7 @@ type MongoDBVersionSpec struct {
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 	// SecurityContext is for the additional config for the DB container
 	// +optional
-	SecurityContext SecurityContext `json:"securityContext"`
+	SecurityContext MongoDBSecurityContext `json:"securityContext"`
 	// Archiver defines the walg & kube-stash-addon related specifications
 	Archiver ArchiverSpec `json:"archiver,omitempty"`
 }
@@ -100,6 +100,15 @@ type MongoDBVersionInitContainer struct {
 // MongoDBVersionPodSecurityPolicy is the MongoDB pod security policies
 type MongoDBVersionPodSecurityPolicy struct {
 	DatabasePolicyName string `json:"databasePolicyName"`
+}
+
+// MongoDBSecurityContext provides additional securityContext settings for the MongoDBSecurityContext Image
+type MongoDBSecurityContext struct {
+	// RunAsUser is default UID for the DB container.
+	RunAsUser *int64 `json:"runAsUser,omitempty"`
+
+	// RunAsGroup is default GID for the DB container.
+	RunAsGroup *int64 `json:"runAsGroup,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

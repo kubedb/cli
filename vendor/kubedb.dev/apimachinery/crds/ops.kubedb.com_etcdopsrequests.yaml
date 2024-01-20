@@ -223,6 +223,21 @@ spec:
               observedGeneration:
                 format: int64
                 type: integer
+              pausedBackups:
+                items:
+                  properties:
+                    apiGroup:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
               phase:
                 enum:
                 - Pending
