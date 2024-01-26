@@ -1,0 +1,29 @@
+package connection
+
+import (
+	"k8s.io/klog/v2"
+	cmdutil "k8s.io/kubectl/pkg/cmd/util"
+	"log"
+)
+
+// kubectl dba monitor check-connection mongodb -n demo sample_mg -> all connection check and report
+
+type PromSvc struct {
+	Name      string
+	Namespace string
+	Port      int
+}
+
+func Run(f cmdutil.Factory, args []string, prom PromSvc) {
+	if len(args) < 2 {
+		log.Fatal("Enter database and specific database name as argument")
+	}
+
+	database := args[0]
+	databaseName := args[1]
+	namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		klog.Error(err, "failed to get current namespace")
+	}
+
+}
