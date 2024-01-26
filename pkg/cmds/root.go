@@ -113,6 +113,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 				NewCmdGenApb(f),
 			},
 		},
+		{
+			Message: "Check availability of metrics",
+			Commands: []*cobra.Command{
+				NewCmdDashboard(f),
+			},
+		},
 	}
 
 	filters := []string{"options"}
