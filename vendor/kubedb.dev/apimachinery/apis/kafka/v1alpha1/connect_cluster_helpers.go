@@ -180,6 +180,17 @@ func (k *ConnectCluster) ConfigSecretName() string {
 	return meta_util.NameWithSuffix(k.OffshootName(), "config")
 }
 
+func (k *ConnectCluster) GetPersistentSecrets() []string {
+	var secrets []string
+	if k.Spec.AuthSecret != nil {
+		secrets = append(secrets, k.Spec.AuthSecret.Name)
+	}
+	if k.Spec.KeystoreCredSecret != nil {
+		secrets = append(secrets, k.Spec.KeystoreCredSecret.Name)
+	}
+	return secrets
+}
+
 func (k *ConnectCluster) KafkaClientCredentialsSecretName() string {
 	return meta_util.NameWithSuffix(k.Name, "kafka-client-cred")
 }

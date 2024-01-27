@@ -126,9 +126,9 @@ func (p *Pgpool) ValidateCreateOrUpdate() field.ErrorList {
 				"`spec.replica` must be greater than 0",
 			))
 		}
-		if *p.Spec.Replicas > 3 {
+		if *p.Spec.Replicas > 9 {
 			errorList = append(errorList, field.Required(field.NewPath("spec").Child("replicas"),
-				"`spec.replica` must be less than 4",
+				"`spec.replica` must be less than 10",
 			))
 		}
 	}

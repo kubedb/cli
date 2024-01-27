@@ -17,9 +17,11 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"context"
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
@@ -28,10 +30,15 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
+	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
@@ -153,7 +160,7 @@ func (f *FerretDB) SetDefaults() {
 	}
 
 	if f.Spec.TerminationPolicy == "" {
-		f.Spec.TerminationPolicy = TerminationPolicyDelete
+		f.Spec.TerminationPolicy = TerminationPolicyWipeOut
 	}
 
 	if f.Spec.SSLMode == "" {
@@ -168,6 +175,14 @@ func (f *FerretDB) SetDefaults() {
 		f.Spec.PodTemplate = &ofst.PodTemplateSpec{}
 	}
 
+	var frVersion catalog.FerretDBVersion
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name: f.Spec.Version,
+	}, &frVersion)
+	if err != nil {
+		klog.Errorf("can't get the FerretDB version object %s for %s \n", err.Error(), f.Spec.Version)
+		return
+	}
 	dbContainer := coreutil.GetContainerByName(f.Spec.PodTemplate.Spec.Containers, FerretDBContainerName)
 	if dbContainer == nil {
 		dbContainer = &core.Container{
@@ -178,6 +193,11 @@ func (f *FerretDB) SetDefaults() {
 	if structs.IsZero(dbContainer.Resources) {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
 	}
+	if dbContainer.SecurityContext == nil {
+		dbContainer.SecurityContext = &core.SecurityContext{}
+	}
+	f.setDefaultContainerSecurityContext(&frVersion, dbContainer.SecurityContext)
+	f.setDefaultPodTemplateSecurityContext(&frVersion, f.Spec.PodTemplate)
 
 	if f.Spec.Backend.LinkedDB == "" {
 		if f.Spec.Backend.ExternallyManaged {
@@ -186,10 +206,21 @@ func (f *FerretDB) SetDefaults() {
 			f.Spec.Backend.LinkedDB = "ferretdb"
 		}
 	}
-	if f.Spec.Monitor != nil && f.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-		// 56790 is default port for Prometheus operator.
-		f.Spec.Monitor.Prometheus.Exporter.Port = 56790
+	if f.Spec.AuthSecret == nil {
+		f.Spec.AuthSecret = &SecretReference{
+			ExternallyManaged: f.Spec.Backend.ExternallyManaged,
+		}
 	}
+	f.Spec.Monitor.SetDefaults()
+	if f.Spec.Monitor != nil && f.Spec.Monitor.Prometheus != nil {
+		if f.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			f.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = frVersion.Spec.SecurityContext.RunAsUser
+		}
+		if f.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			f.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = frVersion.Spec.SecurityContext.RunAsUser
+		}
+	}
+
 	defaultVersion := "13.13"
 	if !f.Spec.Backend.ExternallyManaged && f.Spec.Backend.Postgres == nil {
 		f.Spec.Backend.Postgres = &PostgresRef{
@@ -198,6 +229,41 @@ func (f *FerretDB) SetDefaults() {
 	}
 	f.SetTLSDefaults()
 	f.SetHealthCheckerDefaults()
+}
+
+func (f *FerretDB) setDefaultPodTemplateSecurityContext(frVersion *catalog.FerretDBVersion, podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = frVersion.Spec.SecurityContext.RunAsUser
+	}
+}
+
+func (f *FerretDB) setDefaultContainerSecurityContext(frVersion *catalog.FerretDBVersion, sc *core.SecurityContext) {
+	if sc.AllowPrivilegeEscalation == nil {
+		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.RunAsUser == nil {
+		sc.RunAsUser = frVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = frVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
 }
 
 func (f *FerretDB) SetTLSDefaults() {
@@ -287,4 +353,10 @@ func (f *FerretDB) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]s
 
 func (f *FerretDB) StatsServiceLabels() map[string]string {
 	return f.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+}
+
+func (f *FerretDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	return checkReplicas(lister.StatefulSets(f.Namespace), labels.SelectorFromSet(f.OffshootLabels()), expectedItems)
 }

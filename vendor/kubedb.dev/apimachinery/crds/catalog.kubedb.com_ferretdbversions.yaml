@@ -16,7 +16,7 @@ spec:
     listKind: FerretDBVersionList
     plural: ferretdbversions
     shortNames:
-    - drversion
+    - frversion
     singular: ferretdbversion
   scope: Cluster
   versions:

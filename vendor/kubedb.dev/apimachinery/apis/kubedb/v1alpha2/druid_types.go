@@ -59,10 +59,6 @@ type DruidSpec struct {
 	// Version of Druid to be deployed.
 	Version string `json:"version"`
 
-	// Number of instances to deploy for a Druid database
-	// +optional
-	Replicas *int32 `json:"replicas,omitempty"`
-
 	// Druid topology for node specification
 	// +optional
 	Topology *DruidClusterTopology `json:"topology,omitempty"`
@@ -96,14 +92,14 @@ type DruidSpec struct {
 	//TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// MetadataStorage contains information for Druid to connect to external dependency metadata storage
-	// +optional
-	MetadataStorage *MetadataStorage `json:"metadataStorage,omitempty"`
+	MetadataStorage *MetadataStorage `json:"metadataStorage"`
 
 	// DeepStorage contains specification for druid to connect to the deep storage
 	DeepStorage *DeepStorageSpec `json:"deepStorage"`
 
 	// ZooKeeper contains information for Druid to connect to external dependency metadata storage
-	ZooKeeper *ZooKeeperRef `json:"zooKeeper"`
+	// +optional
+	ZooKeeper *ZooKeeperRef `json:"zooKeeper,omitempty"`
 
 	// PodTemplate is an optional configuration
 	// +optional
@@ -171,11 +167,16 @@ type DruidNode struct {
 
 type MetadataStorage struct {
 	// Name of the appbinding of metadata storage
-	Name string `json:"name"`
+	// +optional
+	Name *string `json:"name,omitempty"`
 
 	// Namespace of the appbinding of metadata storage
 	// +optional
-	Namespace string `json:"namespace,omitempty"`
+	Namespace *string `json:"namespace,omitempty"`
+
+	// If not KubeDB managed, then specify type of the metadata storage
+	// +optional
+	Type *string `json:"type,omitempty"`
 
 	// If Druid has the permission to create new tables
 	// +optional
@@ -189,20 +190,22 @@ type DeepStorageSpec struct {
 
 	// deepStorage.configSecret should contain the necessary data
 	// to connect to the deep storage
+	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret"`
 }
 
 type ZooKeeperRef struct {
 	// Name of the appbinding of zookeeper
-	Name *string `json:"name"`
+	// +optional
+	Name *string `json:"name,omitempty"`
 
 	// Namespace of the appbinding of zookeeper
 	// +optional
-	Namespace string `json:"namespace"`
+	Namespace string `json:"namespace,omitempty"`
 
 	// Base ZooKeeperSpec path
 	// +optional
-	PathsBase string `json:"pathsBase"`
+	PathsBase string `json:"pathsBase,omitempty"`
 }
 
 // DruidStatus defines the observed state of Druid

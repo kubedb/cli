@@ -102,14 +102,20 @@ func (r *RabbitMQ) ValidateCreateOrUpdate() error {
 			"number of replicas can not be 0 or less"))
 	}
 
-	err := r.ValidateVersion(r)
-	if err != nil {
+	if r.Spec.Version == "" {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("version"),
 			r.Name,
-			err.Error()))
+			"spec.version' is missing"))
+	} else {
+		err := r.ValidateVersion(r)
+		if err != nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("version"),
+				r.Name,
+				err.Error()))
+		}
 	}
 
-	err = r.validateVolumes(r)
+	err := r.validateVolumes(r)
 	if err != nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate").Child("spec").Child("volumes"),
 			r.Name,
@@ -133,6 +139,12 @@ func (r *RabbitMQ) ValidateCreateOrUpdate() error {
 				r.Name,
 				"StorageType should be either durable or ephemeral"))
 		}
+	}
+
+	if r.Spec.ConfigSecret != nil && r.Spec.ConfigSecret.Name == "" {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("configSecret").Child("name"),
+			r.Name,
+			"ConfigSecret Name can not be empty"))
 	}
 
 	if len(allErr) == 0 {

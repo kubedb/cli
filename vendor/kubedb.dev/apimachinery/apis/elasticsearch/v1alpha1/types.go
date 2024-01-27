@@ -91,9 +91,9 @@ const (
 type DashboardVolumeName string
 
 const (
-	DashboardVolumeCustomConfig            DashboardVolumeName = "elasticsearch-custom-config"
-	DashboardVolumeOperatorGeneratedConfig DashboardVolumeName = "elasticsearch-temp-config"
-	DashboardVolumeConfig                  DashboardVolumeName = "elasticsearch-config"
+	DashboardVolumeCustomConfig            DashboardVolumeName = "dashboard-custom-config"
+	DashboardVolumeOperatorGeneratedConfig DashboardVolumeName = "dashboard-temp-config"
+	DashboardVolumeConfig                  DashboardVolumeName = "dashboard-config"
 	DashboardVolumeServerTLS               DashboardVolumeName = "server-tls"
 	DashboardVolumeDatabaseClient          DashboardVolumeName = "database-client"
 )

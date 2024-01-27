@@ -57,7 +57,8 @@ type FerretDBSpec struct {
 	// Number of instances to deploy for a FerretDB database.
 	Replicas *int32 `json:"replicas,omitempty"`
 
-	// Database authentication secret
+	// Database authentication secret.
+	// If authSecret is nil, authSecret.externallyManaged will set to backend.externallyManaged
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
@@ -131,7 +132,7 @@ type Backend struct {
 	// A DB inside backend specifically made for ferretdb
 	// +optional
 	LinkedDB          string `json:"linkedDB,omitempty"`
-	ExternallyManaged bool   `json:"externallyManaged,omitempty"`
+	ExternallyManaged bool   `json:"externallyManaged"`
 }
 
 type PostgresRef struct {
@@ -143,16 +144,16 @@ type PostgresRef struct {
 	Service *PostgresServiceRef `json:"service,omitempty"`
 	// Which versions pg will be used as backend of ferretdb
 	// +optional
-	Version *string `json:"version"`
+	Version *string `json:"version,omitempty"`
 }
 
 type PostgresServiceRef struct {
-	Name      string `json:"name"`
-	Namespace string `json:"namespace"`
+	Name      *string `json:"name"`
+	Namespace *string `json:"namespace"`
 	// PgPort is used because the service referred to the
 	// pg pod can have any port between 1 and 65535, inclusive
 	// but targetPort is fixed to 5432
-	PgPort string `json:"pgPort"`
+	PgPort *string `json:"pgPort"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

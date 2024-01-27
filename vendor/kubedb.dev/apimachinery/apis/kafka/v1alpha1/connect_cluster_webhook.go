@@ -78,7 +78,7 @@ func (k *ConnectCluster) ValidateUpdate(old runtime.Object) (admission.Warnings,
 	if len(allErr) == 0 {
 		return nil, nil
 	}
-	return nil, apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "Kafka"}, k.Name, allErr)
+	return nil, apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "ConnectCluster"}, k.Name, allErr)
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
@@ -109,6 +109,12 @@ func (k *ConnectCluster) ValidateCreateOrUpdate() field.ErrorList {
 				k.Name,
 				".spec.tls must be nil, if .spec.enableSSL is disabled"))
 		}
+	}
+
+	if k.Spec.TerminationPolicy == api.TerminationPolicyHalt {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
+			k.Name,
+			"TerminationPolicyHalt is not supported for ConnectCluster"))
 	}
 
 	// number of replicas can not be 0 or less

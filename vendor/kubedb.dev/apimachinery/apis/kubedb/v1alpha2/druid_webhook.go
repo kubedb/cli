@@ -17,11 +17,15 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"context"
 	"errors"
+
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -78,10 +82,6 @@ func (d *Druid) ValidateDelete() (admission.Warnings, error) {
 	return nil, nil
 }
 
-var druidAvailableVersions = []string{
-	"25.0.0",
-}
-
 var druidReservedVolumes = []string{
 	DruidVolumeOperatorConfig,
 	DruidVolumeMainConfig,
@@ -102,7 +102,7 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 	if d.Spec.Version == "" {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("version"),
 			d.Name,
-			"spec.version' is missing"))
+			"spec.version is missing"))
 	} else {
 		err := druidValidateVersion(d)
 		if err != nil {
@@ -127,31 +127,27 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 	if d.Spec.DeepStorage == nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deepStorage"),
 			d.Name,
-			"spec.deepStorage' is missing"))
+			"spec.deepStorage is missing"))
 	} else {
 		if d.Spec.DeepStorage.Type == nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deepStorage").Child("type"),
 				d.Name,
-				"spec.deepStorage.type' is missing"))
-		}
-		if d.Spec.DeepStorage.ConfigSecret == nil {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deepStorage").Child("configSecret"),
-				d.Name,
-				"spec.deepStorage.configSecret' is missing"))
+				"spec.deepStorage.type is missing"))
 		}
 	}
 
-	if d.Spec.ZooKeeper == nil {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("zooKeeper"),
+	if d.Spec.MetadataStorage == nil {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage"),
 			d.Name,
-			"spec.zooKeeper' is missing"))
+			"spec.metadataStorage is missing"))
 	} else {
-		if d.Spec.ZooKeeper.Name == nil {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("zooKeeper").Child("name"),
+		if d.Spec.MetadataStorage.Name == nil && d.Spec.MetadataStorage.Type == nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage").Child("name"),
 				d.Name,
-				"spec.zooKeeper.name' is missing"))
+				"spec.metadataStorage.type and spec.metadataStorage.name both can not be empty simultaneously"))
 		}
 	}
+
 	if d.Spec.Topology == nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology"),
 			d.Name,
@@ -236,7 +232,7 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 		if d.Spec.Topology.Brokers == nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology").Child("brokers").Child("replicas"),
 				d.Name,
-				"spec.topology.brokers.replicas' can not be empty"))
+				"spec.topology.brokers.replicas can not be empty"))
 		} else {
 			if *d.Spec.Topology.Brokers.Replicas <= 0 {
 				allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology").Child("brokers").Child("replicas"),
@@ -306,13 +302,14 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 }
 
 func druidValidateVersion(d *Druid) error {
-	version := d.Spec.Version
-	for _, v := range druidAvailableVersions {
-		if v == version {
-			return nil
-		}
+	var druidVersion catalog.DruidVersion
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name: d.Spec.Version,
+	}, &druidVersion)
+	if err != nil {
+		return errors.New("version not supported")
 	}
-	return errors.New("version not supported")
+	return nil
 }
 
 func druidValidateVolumes(podTemplate *ofst.PodTemplateSpec, nodeType DruidNodeRoleType) error {

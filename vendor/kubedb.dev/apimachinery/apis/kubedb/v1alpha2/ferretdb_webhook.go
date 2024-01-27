@@ -122,6 +122,7 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 		}
 	}
 
+	// Storage related
 	if f.Spec.StorageType == "" {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("storageType"),
 			f.Name,
@@ -137,27 +138,28 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 			f.Name,
 			`'spec.storageType' is set to Ephemeral, so 'spec.storage' needs to be empty`))
 	}
+	if !f.Spec.Backend.ExternallyManaged && f.Spec.StorageType == StorageTypeDurable && f.Spec.Storage == nil {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("storage"),
+			f.Name,
+			`'spec.storage' is missing for durable storage type when postgres is internally managed`))
+	}
 
+	// Auth secret related
 	if f.Spec.AuthSecret != nil && f.Spec.AuthSecret.ExternallyManaged != f.Spec.Backend.ExternallyManaged {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("authSecret"),
 			f.Name,
-			`when 'spec.backend' is internally manager, 'spec.authSecret' can't be externally managed and vice versa`))
+			`when 'spec.backend' is internally managed, 'spec.authSecret' can't be externally managed and vice versa`))
 	}
-
 	if f.Spec.AuthSecret != nil && f.Spec.AuthSecret.ExternallyManaged && f.Spec.AuthSecret.Name == "" {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("authSecret"),
 			f.Name,
-			`for externallyManaged auth secret, user must configure "spec.authSecret.name"`))
+			`'spec.authSecret.name' needs to specify when auth secret is externally managed`))
 	}
+
 	if f.Spec.StorageType == StorageTypeEphemeral && f.Spec.TerminationPolicy == TerminationPolicyHalt {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("storageType"),
 			f.Name,
 			`'spec.terminationPolicy: Halt' can not be used for 'Ephemeral' storage`))
-	}
-	if f.Spec.TerminationPolicy == "" {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
-			f.Name,
-			`'spec.terminationPolicy' is missing`))
 	}
 	if f.Spec.TerminationPolicy == TerminationPolicyHalt || f.Spec.TerminationPolicy == TerminationPolicyDelete {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
@@ -165,17 +167,18 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 			`'spec.terminationPolicy' value 'Halt' or 'Delete' is not supported yet for FerretDB`))
 	}
 
+	// Backend related
 	if f.Spec.Backend.ExternallyManaged {
 		if f.Spec.Backend.Postgres == nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
 				f.Name,
 				`'spec.postgres' is missing when backend is externally managed`))
 		}
-	}
-	if f.Spec.SSLMode == SSLModeAllowSSL || f.Spec.SSLMode == SSLModePreferSSL {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("sslMode"),
-			f.Name,
-			`'spec.sslMode' value 'allowSSL' or 'preferSSL' is not supported yet for FerretDB`))
+		if f.Spec.Backend.Postgres != nil && f.Spec.Backend.Postgres.URL == nil && f.Spec.Backend.Postgres.Service == nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
+				f.Name,
+				`Have to provide 'backend.postgres.url' or 'backend.postgres.service' when backend is externally managed`))
+		}
 	}
 	if !f.Spec.Backend.ExternallyManaged && f.Spec.Backend.Postgres != nil && f.Spec.Backend.Postgres.Version != nil {
 		err := f.validatePostgresVersion()
@@ -184,6 +187,12 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 				f.Name,
 				err.Error()))
 		}
+	}
+
+	if f.Spec.SSLMode == SSLModeAllowSSL || f.Spec.SSLMode == SSLModePreferSSL {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("sslMode"),
+			f.Name,
+			`'spec.sslMode' value 'allowSSL' or 'preferSSL' is not supported yet for FerretDB`))
 	}
 
 	return allErr

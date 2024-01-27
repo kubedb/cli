@@ -87,11 +87,10 @@ func (z *ZooKeeper) ValidateDelete() (admission.Warnings, error) {
 
 func (z *ZooKeeper) ValidateCreateOrUpdate() (admission.Warnings, error) {
 	var allErr field.ErrorList
-	// number of replicas can not be less than 3
-	if z.Spec.Replicas != nil && *z.Spec.Replicas < 3 {
+	if z.Spec.Replicas != nil && *z.Spec.Replicas == 2 {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("replicas"),
 			z.Name,
-			"number of replicas can not be less  than 3"))
+			"zookeeper ensemble should have 3 or more replicas"))
 	}
 
 	err := z.validateVersion()
