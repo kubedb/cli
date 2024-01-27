@@ -31,7 +31,9 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -222,6 +224,17 @@ func (k *Kafka) ConfigSecretName(role KafkaNodeRoleType) string {
 	return meta_util.NameWithSuffix(k.OffshootName(), "config")
 }
 
+func (k *Kafka) GetPersistentSecrets() []string {
+	var secrets []string
+	if k.Spec.AuthSecret != nil {
+		secrets = append(secrets, k.Spec.AuthSecret.Name)
+	}
+	if k.Spec.KeystoreCredSecret != nil {
+		secrets = append(secrets, k.Spec.KeystoreCredSecret.Name)
+	}
+	return secrets
+}
+
 func (k *Kafka) CruiseControlConfigSecretName() string {
 	return meta_util.NameWithSuffix(k.OffshootName(), "cruise-control-config")
 }
@@ -307,8 +320,13 @@ func (k *Kafka) SetDefaults() {
 	}
 
 	k.Spec.Monitor.SetDefaults()
-	if k.Spec.Monitor != nil && k.Spec.Monitor.Prometheus != nil && k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = kfVersion.Spec.SecurityContext.RunAsUser
+	if k.Spec.Monitor != nil && k.Spec.Monitor.Prometheus != nil {
+		if k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = kfVersion.Spec.SecurityContext.RunAsUser
+		}
+		if k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			k.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = kfVersion.Spec.SecurityContext.RunAsUser
+		}
 	}
 
 	if k.Spec.Topology != nil {
@@ -441,4 +459,13 @@ func (k *Kafka) GetConnectionScheme() string {
 
 func (k *Kafka) GetCruiseControlClientID() string {
 	return meta_util.NameWithSuffix(k.Name, "cruise-control")
+}
+
+func (k *Kafka) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	if k.Spec.Topology != nil {
+		expectedItems = 2
+	}
+	return checkReplicas(lister.StatefulSets(k.Namespace), labels.SelectorFromSet(k.OffshootLabels()), expectedItems)
 }

@@ -28,7 +28,9 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -380,4 +382,13 @@ func (s *Singlestore) SetTLSDefaults() {
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
 func (s *Singlestore) CertificateName(alias SinglestoreCertificateAlias) string {
 	return metautil.NameWithSuffix(s.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+func (s *Singlestore) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	if s.Spec.Topology != nil {
+		expectedItems = 2
+	}
+	return checkReplicas(lister.StatefulSets(s.Namespace), labels.SelectorFromSet(s.OffshootLabels()), expectedItems)
 }

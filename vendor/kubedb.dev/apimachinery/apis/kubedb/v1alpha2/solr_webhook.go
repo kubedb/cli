@@ -158,6 +158,11 @@ func (s *Solr) ValidateCreateOrUpdate() field.ErrorList {
 	}
 
 	if s.Spec.Topology == nil {
+		if s.Spec.Replicas != nil && *s.Spec.Replicas <= 0 {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("replicas"),
+				s.Name,
+				"number of replicas can not be less be 0 or less"))
+		}
 		err := solrValidateVolumes(&s.Spec.PodTemplate)
 		if err != nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate").Child("spec").Child("volumes"),
@@ -176,11 +181,6 @@ func (s *Solr) ValidateCreateOrUpdate() field.ErrorList {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology").Child("data"),
 				s.Name,
 				".spec.topology.data can't be empty in cluster mode"))
-			if s.Spec.Replicas != nil && *s.Spec.Replicas <= 0 {
-				allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("replicas"),
-					s.Name,
-					"number of replicas can not be less be 0 or less"))
-			}
 		}
 		if s.Spec.Topology.Data.Replicas != nil && *s.Spec.Topology.Data.Replicas <= 0 {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology").Child("data").Child("replicas"),

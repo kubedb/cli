@@ -33,9 +33,6 @@ spec:
     - jsonPath: .status.phase
       name: Phase
       type: string
-    - jsonPath: .status.verificationStatus
-      name: Verification-Status
-      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date

@@ -231,12 +231,17 @@ func (p *PerconaXtraDB) SetDefaults(pVersion *v1alpha1.PerconaXtraDBVersion, top
 	// Otherwise, We will get write permission denied.
 	p.setDefaultContainerSecurityContext(pVersion, &p.Spec.PodTemplate)
 
-	p.Spec.Monitor.SetDefaults()
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 	p.SetTLSDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
-	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil && p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pVersion.Spec.SecurityContext.RunAsUser
+	p.Spec.Monitor.SetDefaults()
+	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil {
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = pVersion.Spec.SecurityContext.RunAsUser
+		}
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = pVersion.Spec.SecurityContext.RunAsUser
+		}
 	}
 }
 

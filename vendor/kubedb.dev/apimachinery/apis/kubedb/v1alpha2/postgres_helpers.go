@@ -262,13 +262,19 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 	// Otherwise, We will get write permission denied.
 	p.Spec.PodTemplate.Spec.SecurityContext.FSGroup = p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup
 	p.SetArbiterDefault()
-	p.Spec.Monitor.SetDefaults()
 	p.SetTLSDefaults()
 	p.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
-	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil && p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = postgresVersion.Spec.SecurityContext.RunAsUser
+
+	p.Spec.Monitor.SetDefaults()
+	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil {
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = postgresVersion.Spec.SecurityContext.RunAsUser
+		}
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = postgresVersion.Spec.SecurityContext.RunAsUser
+		}
 	}
 }
 

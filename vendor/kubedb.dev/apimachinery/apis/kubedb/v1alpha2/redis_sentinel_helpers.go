@@ -199,8 +199,13 @@ func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion, topology *
 	rs.setDefaultAffinity(&rs.Spec.PodTemplate, rs.OffshootSelectors(), topology)
 
 	rs.Spec.Monitor.SetDefaults()
-	if rs.Spec.Monitor != nil && rs.Spec.Monitor.Prometheus != nil && rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = rdVersion.Spec.SecurityContext.RunAsUser
+	if rs.Spec.Monitor != nil && rs.Spec.Monitor.Prometheus != nil {
+		if rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = rdVersion.Spec.SecurityContext.RunAsUser
+		}
+		if rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = rdVersion.Spec.SecurityContext.RunAsUser
+		}
 	}
 	rs.SetTLSDefaults()
 	rs.SetHealthCheckerDefaults()

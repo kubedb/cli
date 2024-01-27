@@ -56,6 +56,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&GaleraArbitratorConfiguration{},
 		&MongoDBConfiguration{},
+		&SinglestoreConfiguration{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

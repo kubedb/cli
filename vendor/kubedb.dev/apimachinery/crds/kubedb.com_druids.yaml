@@ -64,7 +64,6 @@ spec:
                   type:
                     type: string
                 required:
-                - configSecret
                 - type
                 type: object
               disableSecurity:
@@ -100,8 +99,8 @@ spec:
                     type: string
                   namespace:
                     type: string
-                required:
-                - name
+                  type:
+                    type: string
                 type: object
               podTemplate:
                 properties:
@@ -3456,9 +3455,6 @@ spec:
                         type: array
                     type: object
                 type: object
-              replicas:
-                format: int32
-                type: integer
               serviceTemplates:
                 items:
                   properties:
@@ -24361,13 +24357,11 @@ spec:
                     type: string
                   pathsBase:
                     type: string
-                required:
-                - name
                 type: object
             required:
             - deepStorage
+            - metadataStorage
             - version
-            - zooKeeper
             type: object
           status:
             properties:

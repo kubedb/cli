@@ -17,21 +17,32 @@ limitations under the License.
 package v1alpha2
 
 import (
+	"context"
 	"fmt"
 	"path/filepath"
 	"strings"
 
+	"kubedb.dev/apimachinery/apis"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/types"
+	appslister "k8s.io/client-go/listers/apps/v1"
+	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
+	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
 func (r *RabbitMQ) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -60,6 +71,20 @@ func (r *RabbitMQ) GetConnectionScheme() string {
 		scheme = "https"
 	}
 	return scheme
+}
+
+func (r *RabbitMQ) GetAuthSecretName() string {
+	if r.Spec.AuthSecret != nil && r.Spec.AuthSecret.Name != "" {
+		return r.Spec.AuthSecret.Name
+	}
+	return r.DefaultUserCredSecretName("admin")
+}
+
+func (r *RabbitMQ) GetPersistentSecrets() []string {
+	var secrets []string
+	secrets = append(secrets, r.GetAuthSecretName())
+	secrets = append(secrets, r.DefaultErlangCookieSecretName())
+	return secrets
 }
 
 func (r *RabbitMQ) ResourceShortCode() string {
@@ -128,6 +153,10 @@ func (r *RabbitMQ) OffshootLabels() map[string]string {
 func (r *RabbitMQ) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := GetServiceTemplate(r.Spec.ServiceTemplates, alias)
 	return r.offshootLabels(meta_util.OverwriteKeys(r.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+func (r *RabbitMQ) Finalizer() string {
+	return fmt.Sprintf("%s/%s", kubedb.GroupName, apis.Finalizer)
 }
 
 type RabbitmqStatsService struct {
@@ -245,6 +274,116 @@ func (r *RabbitMQ) PVCName(alias string) string {
 	return meta_util.NameWithSuffix(r.Name, alias)
 }
 
+func (r *RabbitMQ) SetDefaults() {
+	if r.Spec.Replicas == nil {
+		r.Spec.Replicas = pointer.Int32P(1)
+	}
+
+	if r.Spec.TerminationPolicy == "" {
+		r.Spec.TerminationPolicy = TerminationPolicyDelete
+	}
+
+	if r.Spec.StorageType == "" {
+		r.Spec.StorageType = StorageTypeDurable
+	}
+
+	var rmVersion catalog.RabbitMQVersion
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name: r.Spec.Version,
+	}, &rmVersion)
+	if err != nil {
+		klog.Errorf("can't get the rabbitmq version object %s for %s \n", err.Error(), r.Spec.Version)
+		return
+	}
+
+	r.setDefaultContainerSecurityContext(&rmVersion, &r.Spec.PodTemplate)
+	r.SetHealthCheckerDefaults()
+}
+
+func (r *RabbitMQ) setDefaultContainerSecurityContext(rmVersion *catalog.RabbitMQVersion, podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = rmVersion.Spec.SecurityContext.RunAsUser
+	}
+
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, RabbitMQContainerName)
+	if container == nil {
+		container = &core.Container{
+			Name: RabbitMQContainerName,
+		}
+		podTemplate.Spec.Containers = append(podTemplate.Spec.Containers, *container)
+	}
+	if container.SecurityContext == nil {
+		container.SecurityContext = &core.SecurityContext{}
+	}
+	r.assignDefaultContainerSecurityContext(rmVersion, container.SecurityContext)
+
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, RabbitMQInitContainerName)
+	if initContainer == nil {
+		initContainer = &core.Container{
+			Name: RabbitMQInitContainerName,
+		}
+		podTemplate.Spec.InitContainers = append(podTemplate.Spec.InitContainers, *initContainer)
+	}
+	if initContainer.SecurityContext == nil {
+		initContainer.SecurityContext = &core.SecurityContext{}
+	}
+	r.assignDefaultInitContainerSecurityContext(rmVersion, initContainer.SecurityContext)
+}
+
+func (r *RabbitMQ) assignDefaultInitContainerSecurityContext(rmVersion *catalog.RabbitMQVersion, rc *core.SecurityContext) {
+	if rc.AllowPrivilegeEscalation == nil {
+		rc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if rc.Capabilities == nil {
+		rc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if rc.RunAsNonRoot == nil {
+		rc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if rc.RunAsUser == nil {
+		rc.RunAsUser = rmVersion.Spec.SecurityContext.RunAsUser
+	}
+	if rc.SeccompProfile == nil {
+		rc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+}
+
+func (r *RabbitMQ) assignDefaultContainerSecurityContext(rmVersion *catalog.RabbitMQVersion, rc *core.SecurityContext) {
+	if rc.AllowPrivilegeEscalation == nil {
+		rc.AllowPrivilegeEscalation = pointer.BoolP(false)
+	}
+	if rc.Capabilities == nil {
+		rc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if rc.RunAsNonRoot == nil {
+		rc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if rc.RunAsUser == nil {
+		rc.RunAsUser = rmVersion.Spec.SecurityContext.RunAsUser
+	}
+	if rc.SeccompProfile == nil {
+		rc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+}
+
+func (r *RabbitMQ) SetTLSDefaults() {
+	if r.Spec.TLS == nil || r.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(RabbitmqServerCert), r.CertificateName(RabbitmqServerCert))
+	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(RabbitmqClientCert), r.CertificateName(RabbitmqClientCert))
+}
+
 func (r *RabbitMQ) SetHealthCheckerDefaults() {
 	if r.Spec.HealthChecker.PeriodSeconds == nil {
 		r.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
@@ -257,22 +396,8 @@ func (r *RabbitMQ) SetHealthCheckerDefaults() {
 	}
 }
 
-func (r *RabbitMQ) SetDefaults() {
-	if r.Spec.TerminationPolicy == "" {
-		r.Spec.TerminationPolicy = TerminationPolicyDelete
-	}
-
-	if r.Spec.StorageType == "" {
-		r.Spec.StorageType = StorageTypeDurable
-	}
-
-	r.SetHealthCheckerDefaults()
-}
-
-func (r *RabbitMQ) SetTLSDefaults() {
-	if r.Spec.TLS == nil || r.Spec.TLS.IssuerRef == nil {
-		return
-	}
-	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(RabbitmqServerCert), r.CertificateName(RabbitmqServerCert))
-	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(RabbitmqClientCert), r.CertificateName(RabbitmqClientCert))
+func (r *RabbitMQ) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	return checkReplicas(lister.StatefulSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }

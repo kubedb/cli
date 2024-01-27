@@ -241,8 +241,13 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion, topology *core_util
 	r.setDefaultAffinity(&r.Spec.PodTemplate, labels, topology)
 
 	r.Spec.Monitor.SetDefaults()
-	if r.Spec.Monitor != nil && r.Spec.Monitor.Prometheus != nil && r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = rdVersion.Spec.SecurityContext.RunAsUser
+	if r.Spec.Monitor != nil && r.Spec.Monitor.Prometheus != nil {
+		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = rdVersion.Spec.SecurityContext.RunAsUser
+		}
+		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = rdVersion.Spec.SecurityContext.RunAsUser
+		}
 	}
 	r.SetTLSDefaults()
 	r.SetHealthCheckerDefaults()

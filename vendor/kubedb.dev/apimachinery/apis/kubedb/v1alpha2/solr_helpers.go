@@ -28,6 +28,8 @@ import (
 	"gomodules.xyz/pointer"
 	v1 "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	appslister "k8s.io/client-go/listers/apps/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -345,4 +347,13 @@ func (s *Solr) GetPersistentSecrets() []string {
 	}
 
 	return secrets
+}
+
+func (s *Solr) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
+	// Desire number of statefulSets
+	expectedItems := 1
+	if s.Spec.Topology != nil {
+		expectedItems = 3
+	}
+	return checkReplicas(lister.StatefulSets(s.Namespace), labels.SelectorFromSet(s.OffshootLabels()), expectedItems)
 }

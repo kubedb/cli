@@ -43,7 +43,6 @@ const (
 // +kubebuilder:printcolumn:name="Snapshot-Time",type="string",JSONPath=".status.snapshotTime"
 // +kubebuilder:printcolumn:name="Deletion-Policy",type="string",JSONPath=".spec.deletionPolicy"
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
-// +kubebuilder:printcolumn:name="Verification-Status",type="string",JSONPath=".status.verificationStatus"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // Snapshot represents the state of a backup run to a particular Repository.

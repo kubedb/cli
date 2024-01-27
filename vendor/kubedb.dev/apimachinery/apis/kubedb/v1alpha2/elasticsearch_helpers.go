@@ -639,8 +639,13 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 
 func (e *Elasticsearch) SetMetricsExporterDefaults(esVersion *catalog.ElasticsearchVersion) {
 	e.Spec.Monitor.SetDefaults()
-	if e.Spec.Monitor != nil && e.Spec.Monitor.Prometheus != nil && e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
-		e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = esVersion.Spec.SecurityContext.RunAsUser
+	if e.Spec.Monitor != nil && e.Spec.Monitor.Prometheus != nil {
+		if e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = esVersion.Spec.SecurityContext.RunAsUser
+		}
+		if e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			e.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = esVersion.Spec.SecurityContext.RunAsUser
+		}
 	}
 }
 
