@@ -1,6 +1,6 @@
 module kubedb.dev/cli
 
-go 1.21.5
+go 1.21.6
 
 require (
 	github.com/Masterminds/semver/v3 v3.2.1
@@ -68,6 +68,7 @@ require (
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
+	github.com/google/pprof v0.0.0-20221118152302-e6195bd50e26 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
@@ -147,7 +148,7 @@ require (
 
 replace github.com/Masterminds/sprig/v3 => github.com/gomodules/sprig/v3 v3.2.3-0.20220405051441-0a8a99bac1b8
 
-replace sigs.k8s.io/controller-runtime => github.com/kmodules/controller-runtime v0.16.1-0.20240104120228-ef547cbd1b75
+replace sigs.k8s.io/controller-runtime => github.com/kmodules/controller-runtime v0.16.1-0.20240107070718-8ff0ffb613fb
 
 replace github.com/imdario/mergo => github.com/imdario/mergo v0.3.6
 
