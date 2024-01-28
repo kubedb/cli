@@ -1484,7 +1484,7 @@ kmodules.xyz/prober/api/v1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.41.0-rc.0.0.20240128093058-c5efabadb939
+# kubedb.dev/apimachinery v0.41.0-rc.1
 ## explicit; go 1.21.5
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1534,13 +1534,13 @@ kubedb.dev/db-client-go/redis
 ## explicit; go 1.21.5
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
-# kubestash.dev/apimachinery v0.4.0-rc.1
+# kubestash.dev/apimachinery v0.4.0-rc.2
 ## explicit; go 1.21.5
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1
 kubestash.dev/apimachinery/apis/storage/v1alpha1
 kubestash.dev/apimachinery/crds
-# sigs.k8s.io/controller-runtime v0.16.3 => github.com/kmodules/controller-runtime v0.16.1-0.20240128092212-43c4e15c56b1
+# sigs.k8s.io/controller-runtime v0.17.0 => github.com/kmodules/controller-runtime v0.16.1-0.20240128092212-43c4e15c56b1
 ## explicit; go 1.21
 sigs.k8s.io/controller-runtime
 sigs.k8s.io/controller-runtime/pkg/builder
