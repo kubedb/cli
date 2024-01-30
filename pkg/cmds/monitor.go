@@ -70,6 +70,7 @@ func NewCmdMonitor(f cmdutil.Factory) *cobra.Command {
 var alertLong = templates.LongDesc(`
 		Get the prometheus alerts for a specific database in just one command
     `)
+
 var alertExample = templates.Examples(`
 	    kubectl dba monitor get-alerts mongodb -n demo sample-mongodb --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring
 		
@@ -107,8 +108,9 @@ var dashboardLong = templates.LongDesc(`
     `)
 
 var dashboardExample = templates.Examples(`
-		# Check availability of mongodb-summary-dashboard grafana dashboard of mongodb
-		kubectl dba monitor dashboard mongodb mongodb-summary-dashboard
+		# Check availability of mongodb-summary-dashboard grafana dashboard of postgres
+		kubectl-dba monitor dashboard [DATABASE] [DASHBOARD_NAME]
+		kubectl-dba dashboard postgres postgres_databases_dashboard --branch=metric --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid dashboards include:
     		* elasticsearch
@@ -142,21 +144,32 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 // check-connection
-// TODO
 var connectionLong = templates.LongDesc(`
-		
-    `)
+		Check connection status for different targets of prometheus server for specific DB.
+`)
 
-// TODO
 var connectionExample = templates.Examples(`
-# kubectl dba monitor check-connection mongodb -n demo sample_mg -> all connection check and report
+		Check connection status for different targets of prometheus server of a mongodb.
+		kubectl-dba monitor check-connection [DATABASE] [DATABASENAME] -n [NAMESPACE]
+		kubectl dba monitor check-connection mongodb -n demo sample_mg
+
+ 		Valid resource types include:
+    		* elasticsearch
+			* mongodb
+			* mariadb
+			* mysql
+			* postgres
+			* redis
+			* kafka
+			* perconaxtradb
+			* proxysql
 `)
 
 func ConnectionCMD(f cmdutil.Factory) *cobra.Command {
 	var prom connection.PromSvc
 	cmd := &cobra.Command{
 		Use:     "check-connection",
-		Short:   i18n.T("Check connection status of prometheus target with server"),
+		Short:   i18n.T("Check connection status of prometheus targets with server"),
 		Long:    connectionLong,
 		Example: connectionExample,
 		Run: func(cmd *cobra.Command, args []string) {
