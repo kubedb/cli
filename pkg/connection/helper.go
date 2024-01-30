@@ -78,9 +78,8 @@ func getDBMetrics(database, name string, queries map[string]*metrics) map[string
 			labelValue: labelValue,
 		}
 	case "proxysql":
-		/// TODO : NOT WORKING
 		queries[database] = &metrics{
-			metric:     "mysql_up",
+			metric:     "proxysql_uptime_seconds_total",
 			label:      label,
 			labelValue: labelValue,
 		}
