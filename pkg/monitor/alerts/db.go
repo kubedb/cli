@@ -57,7 +57,7 @@ func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 		_ = fmt.Errorf("failed to get current namespace")
 	}
 
-	opts, err := newDBOpts(f, dbName, namespace, monitor.ConvertedResource(resource))
+	opts, err := newDBOpts(f, dbName, namespace, monitor.ConvertedResourceToPlural(resource))
 	if err != nil {
 		log.Fatalln(err)
 	}

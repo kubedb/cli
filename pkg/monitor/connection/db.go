@@ -42,7 +42,7 @@ func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 		log.Fatal("Enter database and specific database name as argument")
 	}
 
-	database := monitor.ConvertedResource(args[0])
+	database := monitor.ConvertedResourceToSingular(args[0])
 	databaseName := args[1]
 	namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
 	if err != nil {

@@ -23,7 +23,7 @@ import (
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 )
 
-func ConvertedResource(resource string) string {
+func ConvertedResourceToPlural(resource string) string {
 	// standardizing the resource name
 	res := strings.ToLower(resource)
 	switch res {
@@ -45,6 +45,34 @@ func ConvertedResource(resource string) string {
 		res = api.ResourcePluralProxySQL
 	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
 		res = api.ResourcePluralRedis
+	default:
+		log.Fatalf("%s is not a valid resource type \n", resource)
+	}
+	return res
+}
+
+func ConvertedResourceToSingular(resource string) string {
+	// standardizing the resource name
+	res := strings.ToLower(resource)
+	switch res {
+	case api.ResourceCodeElasticsearch, api.ResourcePluralElasticsearch, api.ResourceSingularElasticsearch:
+		res = api.ResourceSingularElasticsearch
+	case api.ResourceCodeKafka, api.ResourcePluralKafka, api.ResourceSingularKafka:
+		res = api.ResourceSingularKafka
+	case api.ResourceCodeMariaDB, api.ResourcePluralMariaDB, api.ResourceSingularMariaDB:
+		res = api.ResourceSingularMariaDB
+	case api.ResourceCodeMongoDB, api.ResourcePluralMongoDB, api.ResourceSingularMongoDB:
+		res = api.ResourceSingularMongoDB
+	case api.ResourceCodeMySQL, api.ResourcePluralMySQL, api.ResourceSingularMySQL:
+		res = api.ResourceSingularMySQL
+	case api.ResourceCodePerconaXtraDB, api.ResourcePluralPerconaXtraDB, api.ResourceSingularPerconaXtraDB:
+		res = api.ResourceSingularPerconaXtraDB
+	case api.ResourceCodePostgres, api.ResourcePluralPostgres, api.ResourceSingularPostgres:
+		res = api.ResourceSingularPostgres
+	case api.ResourceCodeProxySQL, api.ResourcePluralProxySQL, api.ResourceSingularProxySQL:
+		res = api.ResourceSingularProxySQL
+	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
+		res = api.ResourceSingularRedis
 	default:
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}

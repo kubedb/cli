@@ -46,57 +46,57 @@ func getDBMetrics(database, name string, queries map[string]*metrics) map[string
 	label := "service"
 	labelValue := fmt.Sprintf("%s-stats", name)
 	switch database {
-	case api.ResourcePluralMongoDB:
-		queries[database] = &metrics{
-			metric:     "mongodb_up",
-			label:      label,
-			labelValue: labelValue,
-		}
-	case api.ResourcePluralPostgres:
-		queries[database] = &metrics{
-			metric:     "pg_up",
-			label:      label,
-			labelValue: labelValue,
-		}
-	case api.ResourcePluralMySQL:
-		queries[database] = &metrics{
-			metric:     "mysql_up",
-			label:      label,
-			labelValue: labelValue,
-		}
-	case api.ResourcePluralRedis:
-		queries[database] = &metrics{
-			metric:     "redis_up",
-			label:      label,
-			labelValue: labelValue,
-		}
-	case api.ResourcePluralMariaDB:
-		queries[database] = &metrics{
-			metric:     "mysql_up",
-			label:      label,
-			labelValue: labelValue,
-		}
-	case api.ResourcePluralProxySQL:
-		queries[database] = &metrics{
-			metric:     "proxysql_uptime_seconds_total",
-			label:      label,
-			labelValue: labelValue,
-		}
-	case api.ResourcePluralElasticsearch:
+	case api.ResourceSingularElasticsearch:
 		queries[database] = &metrics{
 			metric:     "elasticsearch_clusterinfo_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourcePluralPerconaXtraDB:
+	case api.ResourceSingularKafka:
+		queries[database] = &metrics{
+			metric:     "kafka_controller_kafkacontroller_activebrokercount",
+			label:      label,
+			labelValue: labelValue,
+		}
+	case api.ResourceSingularMariaDB:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourcePluralKafka:
+	case api.ResourceSingularMongoDB:
 		queries[database] = &metrics{
-			metric:     "kafka_controller_kafkacontroller_activebrokercount",
+			metric:     "mongodb_up",
+			label:      label,
+			labelValue: labelValue,
+		}
+	case api.ResourceSingularMySQL:
+		queries[database] = &metrics{
+			metric:     "mysql_up",
+			label:      label,
+			labelValue: labelValue,
+		}
+	case api.ResourceSingularPerconaXtraDB:
+		queries[database] = &metrics{
+			metric:     "mysql_up",
+			label:      label,
+			labelValue: labelValue,
+		}
+	case api.ResourceSingularPostgres:
+		queries[database] = &metrics{
+			metric:     "pg_up",
+			label:      label,
+			labelValue: labelValue,
+		}
+	case api.ResourceSingularProxySQL:
+		queries[database] = &metrics{
+			metric:     "proxysql_uptime_seconds_total",
+			label:      label,
+			labelValue: labelValue,
+		}
+	case api.ResourceSingularRedis:
+		queries[database] = &metrics{
+			metric:     "redis_up",
 			label:      label,
 			labelValue: labelValue,
 		}
