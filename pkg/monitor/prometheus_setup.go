@@ -40,7 +40,6 @@ func GetPromClientAndTunnel(config *rest.Config, prom PromSvc) (promv1.API, *por
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer tunnel.Close()
 
 	promClient := getPromClient(strconv.Itoa(tunnel.Local))
 	return promClient, tunnel

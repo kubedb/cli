@@ -17,7 +17,7 @@ limitations under the License.
 package monitor
 
 import (
-	"fmt"
+	"log"
 	"strings"
 )
 
@@ -44,7 +44,7 @@ func ConvertedResource(resource string) string {
 	case "rd", "redis", "redises":
 		res = "redis"
 	default:
-		fmt.Printf("%s is not a valid resource type \n", resource)
+		log.Fatalf("%s is not a valid resource type \n", resource)
 	}
 	return res
 }

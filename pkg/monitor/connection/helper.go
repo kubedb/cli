@@ -19,8 +19,6 @@ package connection
 import (
 	"fmt"
 	"log"
-
-	"kubedb.dev/cli/pkg/monitor"
 )
 
 const (
@@ -45,7 +43,6 @@ func getIdenticalMetrics(database, databaseName string) map[string]*metrics {
 func getDBMetrics(database, name string, queries map[string]*metrics) map[string]*metrics {
 	label := "service"
 	labelValue := fmt.Sprintf("%s-stats", name)
-	database = monitor.ConvertedResource(database)
 	switch database {
 	case "mongodb":
 		queries[database] = &metrics{
