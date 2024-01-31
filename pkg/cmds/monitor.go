@@ -37,18 +37,15 @@ var monitorLong = templates.LongDesc(`
 var monitorExample = templates.Examples(`
 
 		# Check triggered alerts for a specific database
-		kubectl dba monitor get-alerts [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
-		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+		kubectl dba monitor get-alerts [DATABASE] [DATABASE_NAME] -n [NAMESPACE] 
 
 		# Check availability of grafana dashboard of a database
-		kubectl dba monitor dashboard [DATABASE] [DASHBOARD_NAME] \ 
-		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+		kubectl dba monitor dashboard [DATABASE] [DASHBOARD_NAME] 
 
 		# Check connection status of target with prometheus server for a specific database
-		kubectl dba monitor check-connection [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
- 		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+		kubectl dba monitor check-connection [DATABASE] [DATABASE_NAME] -n [NAMESPACE] 
 
-		# Flags
+		# Common Flags
 		--prom-svc-name : name of the prometheus service
 		--prom-svc-namespace : namespace of the prometheus service
 		--prom-svc-port : port of the prometheus service
@@ -93,14 +90,14 @@ var alertExample = templates.Examples(`
 		
  		Valid resource types include:
     		* elasticsearch
-			* mongodb
-			* mariadb
-			* mysql
-			* postgres
-			* redis
 			* kafka
+			* mariadb
+			* mongodb
+			* mysql
 			* perconaxtradb
+			* postgres
 			* proxysql
+			* redis
 `)
 
 func AlertCMD(f cmdutil.Factory) *cobra.Command {
@@ -133,14 +130,14 @@ var dashboardExample = templates.Examples(`
 
  		Valid dashboards include:
     		* elasticsearch
-			* mongodb
-			* mariadb
-			* mysql
-			* postgres
-			* redis
 			* kafka
+			* mariadb
+			* mongodb
+			* mysql
 			* perconaxtradb
+			* postgres
 			* proxysql
+			* redis
 `)
 
 func DashboardCMD(f cmdutil.Factory) *cobra.Command {
@@ -176,14 +173,14 @@ var connectionExample = templates.Examples(`
 
  		Valid resource types include:
     		* elasticsearch
-			* mongodb
-			* mariadb
-			* mysql
-			* postgres
-			* redis
 			* kafka
+			* mariadb
+			* mongodb
+			* mysql
 			* perconaxtradb
+			* postgres
 			* proxysql
+			* redis
 `)
 
 func ConnectionCMD(f cmdutil.Factory) *cobra.Command {
