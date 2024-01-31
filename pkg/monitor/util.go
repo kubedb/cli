@@ -19,30 +19,32 @@ package monitor
 import (
 	"log"
 	"strings"
+
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 )
 
 func ConvertedResource(resource string) string {
 	// standardizing the resource name
 	res := strings.ToLower(resource)
 	switch res {
-	case "es", "elasticsearch", "elasticsearches":
-		res = "elasticsearch"
-	case "kf", "kafka", "kafkas":
-		res = "kafka"
-	case "md", "mariadb", "mariadbs":
-		res = "mariadb"
-	case "mg", "mongodb", "mongodbs":
-		res = "mongodb"
-	case "my", "mysql", "mysqls":
-		res = "mysqls"
-	case "px", "perconaxtradb", "perconaxtradbs":
-		res = "perconaxtradb"
-	case "pg", "postgres", "postgreses":
-		res = "postgres"
-	case "prx", "proxysql", "proxysqls":
-		res = "proxysql"
-	case "rd", "redis", "redises":
-		res = "redis"
+	case api.ResourceCodeElasticsearch, api.ResourcePluralElasticsearch, api.ResourceSingularElasticsearch:
+		res = api.ResourcePluralElasticsearch
+	case api.ResourceCodeMongoDB, api.ResourcePluralMongoDB, api.ResourceSingularMongoDB:
+		res = api.ResourcePluralMongoDB
+	case api.ResourceCodePostgres, api.ResourcePluralPostgres, api.ResourceSingularPostgres:
+		res = api.ResourcePluralPostgres
+	case api.ResourceCodeMySQL, api.ResourcePluralMySQL, api.ResourceSingularMySQL:
+		res = api.ResourcePluralMySQL
+	case api.ResourceCodeKafka, api.ResourcePluralKafka, api.ResourceSingularKafka:
+		res = api.ResourcePluralKafka
+	case api.ResourceCodeProxySQL, api.ResourcePluralProxySQL, api.ResourceSingularProxySQL:
+		res = api.ResourcePluralProxySQL
+	case api.ResourceCodePerconaXtraDB, api.ResourcePluralPerconaXtraDB, api.ResourceSingularPerconaXtraDB:
+		res = api.ResourcePluralPerconaXtraDB
+	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
+		res = api.ResourcePluralRedis
+	case api.ResourceCodeMariaDB, api.ResourcePluralMariaDB, api.ResourceSingularMariaDB:
+		res = api.ResourcePluralMariaDB
 	default:
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}

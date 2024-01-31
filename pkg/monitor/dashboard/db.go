@@ -45,7 +45,7 @@ func Run(f cmdutil.Factory, args []string, branch string, prom monitor.PromSvc) 
 		log.Fatal("Enter database and grafana dashboard name as argument")
 	}
 
-	database := args[0]
+	database := monitor.ConvertedResource(args[0])
 	dashboard := args[1]
 
 	url := getURL(branch, database, dashboard)

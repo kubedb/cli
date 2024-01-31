@@ -19,6 +19,8 @@ package connection
 import (
 	"fmt"
 	"log"
+
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 )
 
 const (
@@ -44,55 +46,55 @@ func getDBMetrics(database, name string, queries map[string]*metrics) map[string
 	label := "service"
 	labelValue := fmt.Sprintf("%s-stats", name)
 	switch database {
-	case "mongodb":
+	case api.ResourcePluralMongoDB:
 		queries[database] = &metrics{
 			metric:     "mongodb_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "postgres":
+	case api.ResourcePluralPostgres:
 		queries[database] = &metrics{
 			metric:     "pg_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "mysql":
+	case api.ResourcePluralMySQL:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "redis":
+	case api.ResourcePluralRedis:
 		queries[database] = &metrics{
 			metric:     "redis_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "mariadb":
+	case api.ResourcePluralMariaDB:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "proxysql":
+	case api.ResourcePluralProxySQL:
 		queries[database] = &metrics{
 			metric:     "proxysql_uptime_seconds_total",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "elasticsearch":
+	case api.ResourcePluralElasticsearch:
 		queries[database] = &metrics{
 			metric:     "elasticsearch_clusterinfo_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "perconaxtradb":
+	case api.ResourcePluralPerconaXtraDB:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case "kafka":
+	case api.ResourcePluralKafka:
 		queries[database] = &metrics{
 			metric:     "kafka_controller_kafkacontroller_activebrokercount",
 			label:      label,

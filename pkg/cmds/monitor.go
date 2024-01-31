@@ -28,6 +28,8 @@ import (
 	"k8s.io/kubectl/pkg/util/templates"
 )
 
+var prom monitor.PromSvc
+
 var monitorLong = templates.LongDesc(`
 		All monitoring related commands from AppsCode.
     `)
@@ -35,30 +37,39 @@ var monitorLong = templates.LongDesc(`
 var monitorExample = templates.Examples(`
 
 		# Check triggered alerts for a specific database
-		kubectl dba monitor get-alerts mongodb -n demo sample-mongodb --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring
+		kubectl dba monitor get-alerts [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
+		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
-		# Check availability of mongodb-summary-dashboard grafana dashboard of mongodb
-		kubectl dba monitor dashboard mongodb mongodb-summary-dashboard
+		# Check availability of grafana dashboard of a database
+		kubectl dba monitor dashboard [DATABASE] [DASHBOARD_NAME] \ 
+		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
-		# Check connection status of target with prometheus server
-		kubectl dba monitor check-connection mongodb
+		# Check connection status of target with prometheus server for a specific database
+		kubectl dba monitor check-connection [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
+ 		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
- 		Valid sub command include:
-    		* get-alerts
-			* dashboard
-			* check-connection
+		# Flags
+		--prom-svc-name : name of the prometheus service
+		--prom-svc-namespace : namespace of the prometheus service
+		--prom-svc-port : port of the prometheus service
+
 `)
 
 func NewCmdMonitor(f cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                   "monitor",
-		Short:                 i18n.T("get-alerts,grafana dashboard check and target connection check for monitoring"),
-		Long:                  monitorLong,
-		Example:               monitorExample,
-		Run:                   func(cmd *cobra.Command, args []string) {},
+		Use:     "monitor",
+		Short:   i18n.T("Monitoring related commands for a database"),
+		Long:    monitorLong,
+		Example: monitorExample,
+		Run: func(cmd *cobra.Command, args []string) {
+		},
 		DisableFlagsInUseLine: true,
 		DisableAutoGenTag:     true,
 	}
+
+	cmd.PersistentFlags().StringVarP(&prom.Name, "prom-svc-name", "", "", "name of the prometheus service")
+	cmd.PersistentFlags().StringVarP(&prom.Namespace, "prom-svc-namespace", "", "", "namespace of the prometheus service")
+	cmd.PersistentFlags().IntVarP(&prom.Port, "prom-svc-port", "", 9090, "port of the prometheus service")
 
 	cmd.AddCommand(DashboardCMD(f))
 	cmd.AddCommand(AlertCMD(f))
@@ -73,7 +84,12 @@ var alertLong = templates.LongDesc(`
     `)
 
 var alertExample = templates.Examples(`
-	    kubectl dba monitor get-alerts mongodb -n demo sample-mongodb --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring
+		kubectl dba monitor get-alerts [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
+		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+
+		# Get triggered alert for a specific mongodb
+	    kubectl dba monitor get-alerts mongodb sample-mongodb -n demo \
+ 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 		
  		Valid resource types include:
     		* elasticsearch
@@ -82,10 +98,12 @@ var alertExample = templates.Examples(`
 			* mysql
 			* postgres
 			* redis
+			* kafka
+			* perconaxtradb
+			* proxysql
 `)
 
 func AlertCMD(f cmdutil.Factory) *cobra.Command {
-	var prom monitor.PromSvc
 	cmd := &cobra.Command{
 		Use:     "get-alerts",
 		Short:   i18n.T("Alerts associated with a database"),
@@ -97,9 +115,6 @@ func AlertCMD(f cmdutil.Factory) *cobra.Command {
 		DisableFlagsInUseLine: true,
 		DisableAutoGenTag:     true,
 	}
-	cmd.Flags().StringVarP(&prom.Name, "prom-svc-name", "", "", "name of the prometheus service")
-	cmd.Flags().StringVarP(&prom.Namespace, "prom-svc-namespace", "", "", "namespace of the prometheus service")
-	cmd.Flags().IntVarP(&prom.Port, "prom-svc-port", "", 9090, "port of the prometheus service")
 	return cmd
 }
 
@@ -109,9 +124,12 @@ var dashboardLong = templates.LongDesc(`
     `)
 
 var dashboardExample = templates.Examples(`
-		# Check availability of mongodb-summary-dashboard grafana dashboard of postgres
-		kubectl-dba monitor dashboard [DATABASE] [DASHBOARD_NAME]
-		kubectl-dba dashboard postgres postgres_databases_dashboard --branch=metric --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
+		kubectl dba monitor dashboard [DATABASE] [DASHBOARD_NAME] \
+		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+
+		# Check availability of a postgres grafana dashboard
+		kubectl-dba monitor dashboard postgres postgres_databases_dashboard \
+		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid dashboards include:
     		* elasticsearch
@@ -120,11 +138,13 @@ var dashboardExample = templates.Examples(`
 			* mysql
 			* postgres
 			* redis
+			* kafka
+			* perconaxtradb
+			* proxysql
 `)
 
 func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	var branch string
-	var prom monitor.PromSvc
 	cmd := &cobra.Command{
 		Use:   "dashboard",
 		Short: i18n.T("Check availability of a grafana dashboard"),
@@ -138,21 +158,21 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 	cmd.Flags().StringVarP(&branch, "branch", "b", "master", "branch name of the github repo")
-	cmd.Flags().StringVarP(&prom.Name, "prom-svc-name", "", "", "name of the prometheus service")
-	cmd.Flags().StringVarP(&prom.Namespace, "prom-svc-namespace", "", "", "namespace of the prometheus service")
-	cmd.Flags().IntVarP(&prom.Port, "prom-svc-port", "", 9090, "port of the prometheus service")
 	return cmd
 }
 
 // check-connection
 var connectionLong = templates.LongDesc(`
-		Check connection status for different targets of prometheus server for specific DB.
+		Check connection status for different targets with prometheus server for specific DB.
 `)
 
 var connectionExample = templates.Examples(`
-		Check connection status for different targets of prometheus server of a mongodb.
-		kubectl-dba monitor check-connection [DATABASE] [DATABASENAME] -n [NAMESPACE]
-		kubectl dba monitor check-connection mongodb -n demo sample_mg
+		kubectl dba monitor check-connection [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
+		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+
+		# Check connection status for different targets with prometheus server for a specific postgres database 
+		kubectl dba monitor check-connection mongodb sample_mg -n demo \
+		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid resource types include:
     		* elasticsearch
@@ -167,7 +187,6 @@ var connectionExample = templates.Examples(`
 `)
 
 func ConnectionCMD(f cmdutil.Factory) *cobra.Command {
-	var prom monitor.PromSvc
 	cmd := &cobra.Command{
 		Use:     "check-connection",
 		Short:   i18n.T("Check connection status of prometheus targets with server"),
@@ -179,8 +198,5 @@ func ConnectionCMD(f cmdutil.Factory) *cobra.Command {
 		DisableFlagsInUseLine: true,
 		DisableAutoGenTag:     true,
 	}
-	cmd.Flags().StringVarP(&prom.Name, "prom-svc-name", "", "", "name of the prometheus service")
-	cmd.Flags().StringVarP(&prom.Namespace, "prom-svc-namespace", "", "", "namespace of the prometheus service")
-	cmd.Flags().IntVarP(&prom.Port, "prom-svc-port", "", 9090, "port of the prometheus service")
 	return cmd
 }

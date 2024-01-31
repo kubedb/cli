@@ -53,7 +53,6 @@ func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Port forwarding cluster prometheus service for that grafana dashboard's prom datasource.
 
 	promClient, tunnel := monitor.GetPromClientAndTunnel(config, prom)
 	defer tunnel.Close()

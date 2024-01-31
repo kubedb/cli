@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 	"time"
 
 	"kubedb.dev/cli/pkg/monitor"
@@ -62,7 +61,7 @@ func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 		_ = fmt.Errorf("failed to get current namespace")
 	}
 
-	opts, err := newDBOpts(f, dbName, namespace, convertedResource(resource))
+	opts, err := newDBOpts(f, dbName, namespace, monitor.ConvertedResource(resource))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -74,28 +73,6 @@ func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-}
-
-func convertedResource(resource string) string {
-	// standardizing the resource name
-	res := strings.ToLower(resource)
-	switch res {
-	case "es", "elasticsearch", "elasticsearches":
-		res = "elasticsearches"
-	case "md", "mariadb", "mariadbs":
-		res = "mariadbs"
-	case "mg", "mongodb", "mongodbs":
-		res = "mongodbs"
-	case "my", "mysql", "mysqls":
-		res = "mysqls"
-	case "pg", "postgres", "postgreses":
-		res = "postgreses"
-	case "rd", "redis", "redises":
-		res = "redises"
-	default:
-		fmt.Printf("%s is not a valid resource type \n", resource)
-	}
-	return res
 }
 
 func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, error) {
