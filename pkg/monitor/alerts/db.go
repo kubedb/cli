@@ -20,10 +20,11 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 	"time"
 
-	promapi "github.com/prometheus/client_golang/api"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/cli/pkg/monitor"
+
 	promv1 "github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/common/model"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,12 +38,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type PromSvc struct {
-	Name      string
-	Namespace string
-	Port      int
-}
-
 type dbOpts struct {
 	db         client.Object
 	config     *rest.Config
@@ -50,12 +45,7 @@ type dbOpts struct {
 	resource   string
 }
 
-const (
-	kubeDBGroup   = "kubedb.com"
-	kubeDBVersion = "v1alpha2"
-)
-
-func Run(f cmdutil.Factory, args []string, prom PromSvc) {
+func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 	if len(args) < 2 {
 		log.Fatal("Enter db object's name as an argument")
 	}
@@ -67,41 +57,18 @@ func Run(f cmdutil.Factory, args []string, prom PromSvc) {
 		_ = fmt.Errorf("failed to get current namespace")
 	}
 
-	opts, err := newDBOpts(f, dbName, namespace, convertedResource(resource))
+	opts, err := newDBOpts(f, dbName, namespace, monitor.ConvertedResourceToPlural(resource))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	p, err := opts.ForwardPort("services", prom)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	err = opts.work(p)
-	if err != nil {
-		log.Fatalln(err)
-	}
-}
+	promClient, tunnel := monitor.GetPromClientAndTunnel(opts.config, prom)
+	defer tunnel.Close()
 
-func convertedResource(resource string) string {
-	// standardizing the resource name
-	res := strings.ToLower(resource)
-	switch res {
-	case "es", "elasticsearch", "elasticsearches":
-		res = "elasticsearches"
-	case "md", "mariadb", "mariadbs":
-		res = "mariadbs"
-	case "mg", "mongodb", "mongodbs":
-		res = "mongodbs"
-	case "my", "mysql", "mysqls":
-		res = "mysqls"
-	case "pg", "postgres", "postgreses":
-		res = "postgreses"
-	case "rd", "redis", "redises":
-		res = "redises"
-	default:
-		fmt.Printf("%s is not a valid resource type \n", resource)
+	err = opts.work(promClient)
+	if err != nil {
+		log.Fatalln(err)
 	}
-	return res
 }
 
 func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, error) {
@@ -115,7 +82,8 @@ func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, 
 		return nil, err
 	}
 
-	dbRes := schema.GroupVersionResource{Group: kubeDBGroup, Version: kubeDBVersion, Resource: resource}
+	gvk := api.SchemeGroupVersion
+	dbRes := schema.GroupVersionResource{Group: gvk.Group, Version: gvk.Version, Resource: resource}
 	db, err := dc.Resource(dbRes).Namespace(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
@@ -135,7 +103,7 @@ func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, 
 	return opts, nil
 }
 
-func (opts *dbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tunnel, error) {
+func (opts *dbOpts) ForwardPort(resource string, prom monitor.PromSvc) (*portforward.Tunnel, error) {
 	tunnel := portforward.NewTunnel(portforward.TunnelOptions{
 		Client:    opts.kubeClient.CoreV1().RESTClient(),
 		Config:    opts.config,
@@ -151,15 +119,7 @@ func (opts *dbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tun
 	return tunnel, nil
 }
 
-func (opts *dbOpts) work(p *portforward.Tunnel) error {
-	pc, err := promapi.NewClient(promapi.Config{
-		Address: fmt.Sprintf("http://localhost:%d", p.Local),
-	})
-	if err != nil {
-		return err
-	}
-
-	promAPI := promv1.NewAPI(pc)
+func (opts *dbOpts) work(promAPI promv1.API) error {
 	alertQuery := fmt.Sprintf("ALERTS{alertstate=\"firing\",k8s_group=\"kubedb.com\",k8s_resource=\"%s\",app=\"%s\",app_namespace=\"%s\"}",
 		opts.resource, opts.db.GetName(), opts.db.GetNamespace())
 	result, warnings, err := promAPI.QueryRange(context.TODO(), alertQuery, promv1.Range{

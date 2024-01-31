@@ -148,12 +148,15 @@ type PostgresRef struct {
 }
 
 type PostgresServiceRef struct {
-	Name      *string `json:"name"`
-	Namespace *string `json:"namespace"`
+	// +optional
+	Name string `json:"name,omitempty"`
+	// +optional
+	Namespace string `json:"namespace,omitempty"`
 	// PgPort is used because the service referred to the
 	// pg pod can have any port between 1 and 65535, inclusive
 	// but targetPort is fixed to 5432
-	PgPort *string `json:"pgPort"`
+	// +optional
+	PgPort int32 `json:"pgPort,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -20,11 +20,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
 	"time"
 
-	"kubedb.dev/cli/pkg/lib"
+	"kubedb.dev/cli/pkg/monitor"
 
 	"github.com/prometheus/common/model"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
@@ -35,22 +34,18 @@ type queryOpts struct {
 	panelTitle string
 	labelNames []string
 }
+
 type missingOpts struct {
 	labelName  []string
 	panelTitle []string
 }
-type PromSvc struct {
-	Name      string
-	Namespace string
-	Port      int
-}
 
-func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
+func Run(f cmdutil.Factory, args []string, branch string, prom monitor.PromSvc) {
 	if len(args) < 2 {
 		log.Fatal("Enter database and grafana dashboard name as argument")
 	}
 
-	database := args[0]
+	database := monitor.ConvertedResourceToSingular(args[0])
 	dashboard := args[1]
 
 	url := getURL(branch, database, dashboard)
@@ -64,13 +59,8 @@ func Run(f cmdutil.Factory, args []string, branch string, prom PromSvc) {
 		log.Fatal(err)
 	}
 	// Port forwarding cluster prometheus service for that grafana dashboard's prom datasource.
-	tunnel, err := lib.TunnelToDBService(config, prom.Name, prom.Namespace, prom.Port)
-	if err != nil {
-		log.Fatal(err)
-	}
+	promClient, tunnel := monitor.GetPromClientAndTunnel(config, prom)
 	defer tunnel.Close()
-
-	promClient := getPromClient(strconv.Itoa(tunnel.Local))
 
 	// var unknown []missingOpts
 	unknown := make(map[string]*missingOpts)

@@ -27,7 +27,7 @@ require (
 	kmodules.xyz/client-go v0.29.6
 	kmodules.xyz/custom-resources v0.29.1
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.41.0-rc.1
+	kubedb.dev/apimachinery v0.41.0-rc.1.0.20240131123101-c711b3abb2a0
 	kubedb.dev/db-client-go v0.0.9
 	sigs.k8s.io/controller-runtime v0.17.0
 	sigs.k8s.io/yaml v1.4.0

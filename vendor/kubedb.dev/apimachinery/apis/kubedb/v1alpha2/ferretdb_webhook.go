@@ -156,6 +156,7 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 			`'spec.authSecret.name' needs to specify when auth secret is externally managed`))
 	}
 
+	// Termination policy related
 	if f.Spec.StorageType == StorageTypeEphemeral && f.Spec.TerminationPolicy == TerminationPolicyHalt {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("storageType"),
 			f.Name,
@@ -173,22 +174,26 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
 				f.Name,
 				`'spec.postgres' is missing when backend is externally managed`))
+		} else {
+			if f.Spec.Backend.Postgres.URL == nil {
+				err := f.validateServiceRef(f.Spec.Backend.Postgres.Service)
+				allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
+					f.Name,
+					err.Error()))
+			}
 		}
-		if f.Spec.Backend.Postgres != nil && f.Spec.Backend.Postgres.URL == nil && f.Spec.Backend.Postgres.Service == nil {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
-				f.Name,
-				`Have to provide 'backend.postgres.url' or 'backend.postgres.service' when backend is externally managed`))
-		}
-	}
-	if !f.Spec.Backend.ExternallyManaged && f.Spec.Backend.Postgres != nil && f.Spec.Backend.Postgres.Version != nil {
-		err := f.validatePostgresVersion()
-		if err != nil {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
-				f.Name,
-				err.Error()))
+	} else {
+		if f.Spec.Backend.Postgres != nil && f.Spec.Backend.Postgres.Version != nil {
+			err := f.validatePostgresVersion()
+			if err != nil {
+				allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
+					f.Name,
+					err.Error()))
+			}
 		}
 	}
 
+	// TLS related
 	if f.Spec.SSLMode == SSLModeAllowSSL || f.Spec.SSLMode == SSLModePreferSSL {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("sslMode"),
 			f.Name,
@@ -236,6 +241,17 @@ func (f *FerretDB) validatePostgresVersion() error {
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: *f.Spec.Backend.Postgres.Version}, &pgVersion)
 	if err != nil {
 		return errors.New("postgres version not supported in KubeDB")
+	}
+	return nil
+}
+
+func (f *FerretDB) validateServiceRef(ref *PostgresServiceRef) error {
+	if ref == nil {
+		return errors.New(`have to provide 'backend.postgres.url' or 'backend.postgres.service' when backend is externally managed`)
+	}
+	// port needs to be 0 < x < 65536
+	if ref.Namespace == "" || ref.Name == "" || ref.PgPort <= 0 || ref.PgPort >= 65536 {
+		return errors.New("pg service reference name, namespace and port(0<x<65536) needs to specify properly")
 	}
 	return nil
 }

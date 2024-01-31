@@ -90,12 +90,6 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 		{
-			Message: "Get Alerts for specific database",
-			Commands: []*cobra.Command{
-				NewCmdAlert(f),
-			},
-		},
-		{
 			Message: "Insert and Verify data in Database",
 			Commands: []*cobra.Command{
 				NewCmdData(f),
@@ -114,9 +108,9 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 		{
-			Message: "Check availability of metrics",
+			Message: "Metric related CMDs",
 			Commands: []*cobra.Command{
-				NewCmdDashboard(f),
+				NewCmdMonitor(f),
 			},
 		},
 	}
