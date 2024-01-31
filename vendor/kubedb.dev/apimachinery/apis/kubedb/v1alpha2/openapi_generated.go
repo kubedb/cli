@@ -28351,12 +28351,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresServiceRef(ref common.Refe
 					"pgPort": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PgPort is used because the service referred to the pg pod can have any port between 1 and 65535, inclusive but targetPort is fixed to 5432",
-							Type:        []string{"string"},
-							Format:      "",
+							Type:        []string{"integer"},
+							Format:      "int32",
 						},
 					},
 				},
-				Required: []string{"name", "namespace", "pgPort"},
 			},
 		},
 	}

@@ -222,9 +222,15 @@ func (f *FerretDB) SetDefaults() {
 	}
 
 	defaultVersion := "13.13"
-	if !f.Spec.Backend.ExternallyManaged && f.Spec.Backend.Postgres == nil {
-		f.Spec.Backend.Postgres = &PostgresRef{
-			Version: &defaultVersion,
+	if !f.Spec.Backend.ExternallyManaged {
+		if f.Spec.Backend.Postgres == nil {
+			f.Spec.Backend.Postgres = &PostgresRef{
+				Version: &defaultVersion,
+			}
+		} else {
+			if f.Spec.Backend.Postgres.Version == nil {
+				f.Spec.Backend.Postgres.Version = &defaultVersion
+			}
 		}
 	}
 	f.SetTLSDefaults()

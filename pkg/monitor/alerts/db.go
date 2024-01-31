@@ -22,6 +22,7 @@ import (
 	"log"
 	"time"
 
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"kubedb.dev/cli/pkg/monitor"
 
 	promv1 "github.com/prometheus/client_golang/api/prometheus/v1"
@@ -43,11 +44,6 @@ type dbOpts struct {
 	kubeClient *kubernetes.Clientset
 	resource   string
 }
-
-const (
-	kubeDBGroup   = "kubedb.com"
-	kubeDBVersion = "v1alpha2"
-)
 
 func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 	if len(args) < 2 {
@@ -86,7 +82,8 @@ func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, 
 		return nil, err
 	}
 
-	dbRes := schema.GroupVersionResource{Group: kubeDBGroup, Version: kubeDBVersion, Resource: resource}
+	gvk := api.SchemeGroupVersion
+	dbRes := schema.GroupVersionResource{Group: gvk.Group, Version: gvk.Version, Resource: resource}
 	db, err := dc.Resource(dbRes).Namespace(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
