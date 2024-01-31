@@ -20,10 +20,9 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strconv"
 	"time"
 
-	"kubedb.dev/cli/pkg/lib"
+	"kubedb.dev/cli/pkg/monitor"
 
 	"github.com/prometheus/common/model"
 	"k8s.io/klog/v2"
@@ -32,18 +31,13 @@ import (
 
 // kubectl dba monitor check-connection mongodb -n demo sample_mg -> all connection check and report
 
-type PromSvc struct {
-	Name      string
-	Namespace string
-	Port      int
-}
 type metrics struct {
 	metric     string
 	label      string
 	labelValue string
 }
 
-func Run(f cmdutil.Factory, args []string, prom PromSvc) {
+func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 	if len(args) < 2 {
 		log.Fatal("Enter database and specific database name as argument")
 	}
@@ -60,13 +54,9 @@ func Run(f cmdutil.Factory, args []string, prom PromSvc) {
 		log.Fatal(err)
 	}
 	// Port forwarding cluster prometheus service for that grafana dashboard's prom datasource.
-	tunnel, err := lib.TunnelToDBService(config, prom.Name, prom.Namespace, prom.Port)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer tunnel.Close()
 
-	promClient := getPromClient(strconv.Itoa(tunnel.Local))
+	promClient, tunnel := monitor.GetPromClientAndTunnel(config, prom)
+	defer tunnel.Close()
 
 	queries := getIdenticalMetrics(database, databaseName)
 	var notFound []string

@@ -22,9 +22,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-
-	"github.com/prometheus/client_golang/api"
-	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
 )
 
 func getURL(branch, database, dashboard string) string {
@@ -51,20 +48,6 @@ func getDashboard(url string) map[string]interface{} {
 		log.Fatal("Error unmarshalling JSON data:", err)
 	}
 	return dashboardData
-}
-
-func getPromClient(localPort string) v1.API {
-	prometheusURL := fmt.Sprintf("http://localhost:%s/", localPort)
-
-	client, err := api.NewClient(api.Config{
-		Address: prometheusURL,
-	})
-	if err != nil {
-		log.Fatal("Error creating Prometheus client:", err)
-	}
-
-	// Create a new Prometheus API client
-	return v1.NewAPI(client)
 }
 
 func uniqueAppend(slice []string, valueToAdd string) []string {

@@ -17,9 +17,10 @@ limitations under the License.
 package cmds
 
 import (
-	"kubedb.dev/cli/pkg/alerts"
-	"kubedb.dev/cli/pkg/connection"
-	"kubedb.dev/cli/pkg/dashboard"
+	"kubedb.dev/cli/pkg/monitor"
+	"kubedb.dev/cli/pkg/monitor/alerts"
+	"kubedb.dev/cli/pkg/monitor/connection"
+	"kubedb.dev/cli/pkg/monitor/dashboard"
 
 	"github.com/spf13/cobra"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
@@ -84,7 +85,7 @@ var alertExample = templates.Examples(`
 `)
 
 func AlertCMD(f cmdutil.Factory) *cobra.Command {
-	var prom alerts.PromSvc
+	var prom monitor.PromSvc
 	cmd := &cobra.Command{
 		Use:     "get-alerts",
 		Short:   i18n.T("Alerts associated with a database"),
@@ -123,7 +124,7 @@ var dashboardExample = templates.Examples(`
 
 func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	var branch string
-	var prom dashboard.PromSvc
+	var prom monitor.PromSvc
 	cmd := &cobra.Command{
 		Use:   "dashboard",
 		Short: i18n.T("Check availability of a grafana dashboard"),
@@ -166,7 +167,7 @@ var connectionExample = templates.Examples(`
 `)
 
 func ConnectionCMD(f cmdutil.Factory) *cobra.Command {
-	var prom connection.PromSvc
+	var prom monitor.PromSvc
 	cmd := &cobra.Command{
 		Use:     "check-connection",
 		Short:   i18n.T("Check connection status of prometheus targets with server"),

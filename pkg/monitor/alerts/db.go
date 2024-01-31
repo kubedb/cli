@@ -23,7 +23,8 @@ import (
 	"strings"
 	"time"
 
-	promapi "github.com/prometheus/client_golang/api"
+	"kubedb.dev/cli/pkg/monitor"
+
 	promv1 "github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/common/model"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,12 +38,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type PromSvc struct {
-	Name      string
-	Namespace string
-	Port      int
-}
-
 type dbOpts struct {
 	db         client.Object
 	config     *rest.Config
@@ -55,7 +50,7 @@ const (
 	kubeDBVersion = "v1alpha2"
 )
 
-func Run(f cmdutil.Factory, args []string, prom PromSvc) {
+func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 	if len(args) < 2 {
 		log.Fatal("Enter db object's name as an argument")
 	}
@@ -72,11 +67,10 @@ func Run(f cmdutil.Factory, args []string, prom PromSvc) {
 		log.Fatalln(err)
 	}
 
-	p, err := opts.ForwardPort("services", prom)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	err = opts.work(p)
+	promClient, tunnel := monitor.GetPromClientAndTunnel(opts.config, prom)
+	defer tunnel.Close()
+
+	err = opts.work(promClient)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -135,7 +129,7 @@ func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, 
 	return opts, nil
 }
 
-func (opts *dbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tunnel, error) {
+func (opts *dbOpts) ForwardPort(resource string, prom monitor.PromSvc) (*portforward.Tunnel, error) {
 	tunnel := portforward.NewTunnel(portforward.TunnelOptions{
 		Client:    opts.kubeClient.CoreV1().RESTClient(),
 		Config:    opts.config,
@@ -151,15 +145,7 @@ func (opts *dbOpts) ForwardPort(resource string, prom PromSvc) (*portforward.Tun
 	return tunnel, nil
 }
 
-func (opts *dbOpts) work(p *portforward.Tunnel) error {
-	pc, err := promapi.NewClient(promapi.Config{
-		Address: fmt.Sprintf("http://localhost:%d", p.Local),
-	})
-	if err != nil {
-		return err
-	}
-
-	promAPI := promv1.NewAPI(pc)
+func (opts *dbOpts) work(promAPI promv1.API) error {
 	alertQuery := fmt.Sprintf("ALERTS{alertstate=\"firing\",k8s_group=\"kubedb.com\",k8s_resource=\"%s\",app=\"%s\",app_namespace=\"%s\"}",
 		opts.resource, opts.db.GetName(), opts.db.GetNamespace())
 	result, warnings, err := promAPI.QueryRange(context.TODO(), alertQuery, promv1.Range{

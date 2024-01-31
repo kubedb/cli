@@ -20,8 +20,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/prometheus/client_golang/api"
-	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
+	"kubedb.dev/cli/pkg/monitor"
 )
 
 const (
@@ -46,6 +45,7 @@ func getIdenticalMetrics(database, databaseName string) map[string]*metrics {
 func getDBMetrics(database, name string, queries map[string]*metrics) map[string]*metrics {
 	label := "service"
 	labelValue := fmt.Sprintf("%s-stats", name)
+	database = monitor.ConvertedResource(database)
 	switch database {
 	case "mongodb":
 		queries[database] = &metrics{
@@ -112,18 +112,4 @@ func getDBMetrics(database, name string, queries map[string]*metrics) map[string
 		labelValue: name,
 	}
 	return queries
-}
-
-func getPromClient(localPort string) v1.API {
-	prometheusURL := fmt.Sprintf("http://localhost:%s/", localPort)
-
-	client, err := api.NewClient(api.Config{
-		Address: prometheusURL,
-	})
-	if err != nil {
-		log.Fatal("Error creating Prometheus client:", err)
-	}
-
-	// Create a new Prometheus API client
-	return v1.NewAPI(client)
 }
