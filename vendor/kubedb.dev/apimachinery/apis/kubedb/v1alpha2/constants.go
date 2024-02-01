@@ -1137,9 +1137,20 @@ var (
 		},
 	}
 
-	// DefaultResourcesElasticSearch must be used for elasticsearch
+	// DefaultResourcesCPUIntensive is for MongoDB versions >= 6
+	DefaultResourcesCPUIntensive = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".800"),
+			core.ResourceMemory: resource.MustParse("1024Mi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("1024Mi"),
+		},
+	}
+
+	// DefaultResourcesMemoryIntensive must be used for elasticsearch
 	// to avoid OOMKILLED while deploying ES V8
-	DefaultResourcesElasticSearch = core.ResourceRequirements{
+	DefaultResourcesMemoryIntensive = core.ResourceRequirements{
 		Requests: core.ResourceList{
 			core.ResourceCPU:    resource.MustParse(".500"),
 			core.ResourceMemory: resource.MustParse("1.5Gi"),

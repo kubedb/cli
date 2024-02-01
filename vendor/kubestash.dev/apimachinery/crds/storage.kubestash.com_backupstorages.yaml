@@ -4488,6 +4488,16 @@ spec:
                         description: Endpoint specifies the URL of the S3 or S3 compatible
                           storage bucket.
                         type: string
+                      insecureTLS:
+                        description: InsecureTLS controls whether a client should
+                          skip TLS certificate verification. Setting this field to
+                          true disables verification, which might be necessary in
+                          cases where the server uses self-signed certificates or
+                          certificates from an untrusted CA. Use this option with
+                          caution, as it can expose the client to man-in-the-middle
+                          attacks and other security risks. Only use it when absolutely
+                          necessary.
+                        type: boolean
                       prefix:
                         description: Prefix specifies a directory inside the bucket/container
                           where the data for this backend will be stored.
