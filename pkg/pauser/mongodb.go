@@ -31,13 +31,14 @@ import (
 )
 
 type MongoDBPauser struct {
-	dbClient    cs.KubedbV1alpha2Interface
-	stashClient scs.StashV1beta1Interface
-	onlyDb      bool
-	onlyBackup  bool
+	dbClient     cs.KubedbV1alpha2Interface
+	stashClient  scs.StashV1beta1Interface
+	onlyDb       bool
+	onlyBackup   bool
+	onlyArchiver bool
 }
 
-func NewMongoDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*MongoDBPauser, error) {
+func NewMongoDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*MongoDBPauser, error) {
 	dbClient, err := cs.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
@@ -49,10 +50,11 @@ func NewMongoDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*Mong
 	}
 
 	return &MongoDBPauser{
-		dbClient:    dbClient,
-		stashClient: stashClient,
-		onlyDb:      onlyDb,
-		onlyBackup:  onlyBackup,
+		dbClient:     dbClient,
+		stashClient:  stashClient,
+		onlyDb:       onlyDb,
+		onlyBackup:   onlyBackup,
+		onlyArchiver: onlyArchiver,
 	}, nil
 }
 
@@ -62,7 +64,15 @@ func (e *MongoDBPauser) Pause(name, namespace string) (bool, error) {
 		return false, nil
 	}
 
-	pauseAll := !(e.onlyBackup || e.onlyDb)
+	pauseAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
+	if e.onlyArchiver || pauseAll {
+		if err := PauseMongoDBArchiver(true, db.Spec.Archiver.Ref.Name, db.Spec.Archiver.Ref.Namespace); err != nil {
+			return false, err
+		}
+		if e.onlyArchiver {
+			return false, nil
+		}
+	}
 
 	if e.onlyDb || pauseAll {
 		_, err = dbutil.UpdateMongoDBStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MongoDBStatus) (types.UID, *api.MongoDBStatus) {

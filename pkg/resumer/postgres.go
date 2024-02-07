@@ -22,6 +22,7 @@ import (
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util"
+	pautil "kubedb.dev/cli/pkg/pauser"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -32,13 +33,14 @@ import (
 )
 
 type PostgresResumer struct {
-	dbClient    cs.KubedbV1alpha2Interface
-	stashClient scs.StashV1beta1Interface
-	onlyDb      bool
-	onlyBackup  bool
+	dbClient     cs.KubedbV1alpha2Interface
+	stashClient  scs.StashV1beta1Interface
+	onlyDb       bool
+	onlyBackup   bool
+	onlyArchiver bool
 }
 
-func NewPostgresResumer(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*PostgresResumer, error) {
+func NewPostgresResumer(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*PostgresResumer, error) {
 	dbClient, err := cs.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
@@ -49,10 +51,11 @@ func NewPostgresResumer(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*Po
 	}
 
 	return &PostgresResumer{
-		dbClient:    dbClient,
-		stashClient: stashClient,
-		onlyDb:      onlyDb,
-		onlyBackup:  onlyBackup,
+		dbClient:     dbClient,
+		stashClient:  stashClient,
+		onlyDb:       onlyDb,
+		onlyBackup:   onlyBackup,
+		onlyArchiver: onlyArchiver,
 	}, nil
 }
 
@@ -61,7 +64,16 @@ func (e *PostgresResumer) Resume(name, namespace string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	resumeAll := !(e.onlyBackup || e.onlyDb)
+	resumeAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
+
+	if e.onlyArchiver || resumeAll {
+		if err := pautil.PausePostgresArchiver(false, db.Spec.Archiver.Ref.Name, db.Spec.Archiver.Ref.Namespace); err != nil {
+			return false, err
+		}
+		if e.onlyArchiver {
+			return false, nil
+		}
+	}
 
 	if e.onlyDb || resumeAll {
 		_, err = dbutil.UpdatePostgresStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.PostgresStatus) (types.UID, *api.PostgresStatus) {

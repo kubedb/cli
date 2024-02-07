@@ -74,8 +74,9 @@ type ResumeOptions struct {
 
 	genericclioptions.IOStreams
 
-	onlyDb     bool
-	onlyBackup bool
+	onlyDb       bool
+	onlyBackup   bool
+	onlyArchiver bool
 }
 
 func NewCmdResume(parent string, f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
@@ -105,6 +106,7 @@ func NewCmdResume(parent string, f cmdutil.Factory, streams genericclioptions.IO
 	cmd.Flags().BoolVar(&o.AllNamespaces, "all-namespaces", o.AllNamespaces, "If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even if specified with --namespace.")
 	cmd.Flags().BoolVar(&o.onlyDb, "only-db", false, "If provided, only the database is resumed.")
 	cmd.Flags().BoolVar(&o.onlyBackup, "only-backupconfig", false, "If provided, only the backupconfiguration for the database is resumed.")
+	cmd.Flags().BoolVar(&o.onlyArchiver, "only-archiver", false, "If provided, only the archiver for the database is resumed.")
 
 	return cmd
 }
@@ -164,7 +166,7 @@ func (o *ResumeOptions) Run() error {
 
 	errs := sets.NewString()
 	for _, info := range infos {
-		rsr, err := resumer.NewResumer(o.Factory, info.Mapping, o.onlyDb, o.onlyBackup)
+		rsr, err := resumer.NewResumer(o.Factory, info.Mapping, o.onlyDb, o.onlyBackup, o.onlyArchiver)
 		if err != nil {
 			if errs.Has(err.Error()) {
 				continue
@@ -182,13 +184,16 @@ func (o *ResumeOptions) Run() error {
 			errs.Insert(err.Error())
 		}
 
-		resumeAll := !(o.onlyBackup || o.onlyDb)
+		resumeAll := !(o.onlyBackup || o.onlyDb || o.onlyArchiver)
 
 		if o.onlyDb || resumeAll {
 			fmt.Fprintf(o.Out, "Successfully resumed %s/%s.\n", info.Namespace, info.Name)
 		}
 		if (o.onlyBackup || resumeAll) && backupConfigFound {
 			fmt.Fprintf(o.Out, "Successfully resumed backupconfigurations of %s/%s.\n", info.Namespace, info.Name)
+		}
+		if o.onlyArchiver || resumeAll {
+			fmt.Fprintf(o.Out, "Successfully resumed archiver of db %s/%s.\n", info.Namespace, info.Name)
 		}
 	}
 	return utilerrors.NewAggregate(allErrs)

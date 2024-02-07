@@ -740,6 +740,9 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
+# github.com/google/go-containerregistry v0.17.0
+## explicit; go 1.18
+github.com/google/go-containerregistry/pkg/name
 # github.com/google/gofuzz v1.2.0
 ## explicit; go 1.12
 github.com/google/gofuzz
@@ -826,6 +829,9 @@ github.com/onsi/gomega/matchers/support/goraph/edge
 github.com/onsi/gomega/matchers/support/goraph/node
 github.com/onsi/gomega/matchers/support/goraph/util
 github.com/onsi/gomega/types
+# github.com/opencontainers/go-digest v1.0.0
+## explicit; go 1.13
+github.com/opencontainers/go-digest
 # github.com/opensearch-project/opensearch-go v1.1.0
 ## explicit; go 1.11
 github.com/opensearch-project/opensearch-go
@@ -1465,6 +1471,8 @@ kmodules.xyz/client-go/api/v1
 kmodules.xyz/client-go/apiextensions
 kmodules.xyz/client-go/apiextensions/v1
 kmodules.xyz/client-go/apps/v1
+kmodules.xyz/client-go/client
+kmodules.xyz/client-go/client/apiutil
 kmodules.xyz/client-go/conditions
 kmodules.xyz/client-go/core/v1
 kmodules.xyz/client-go/discovery
