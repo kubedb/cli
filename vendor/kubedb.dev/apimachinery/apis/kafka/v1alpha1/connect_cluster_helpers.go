@@ -259,7 +259,7 @@ func (k *ConnectCluster) SetDefaults() {
 	k.setDefaultInitContainerSecurityContext(&k.Spec.PodTemplate)
 
 	dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, ConnectClusterContainerName)
-	if dbContainer != nil {
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, api.DefaultResources)
 	}
 

@@ -21171,6 +21171,12 @@ func schema_kmodulesxyz_objectstore_api_api_v1_S3Spec(ref common.ReferenceCallba
 							Format: "",
 						},
 					},
+					"insecureTLS": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"boolean"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"endpoint", "bucket"},
 			},
@@ -26158,12 +26164,14 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_StorageAutoscalerSpec(ref com
 					},
 					"expansionMode": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ExpansionMode can be `Online` or `Offline` Default VolumeExpansionMode is `Online`",
+							Description: "ExpansionMode can be `Online` or `Offline`",
+							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
 				},
+				Required: []string{"expansionMode"},
 			},
 		},
 	}

@@ -296,16 +296,7 @@ func (p *Postgres) setDefaultInitContainerSecurityContext(podTemplate *ofst.PodT
 		container = &core.Container{
 			Name:            PostgresInitContainerName,
 			SecurityContext: &core.SecurityContext{},
-			Resources: core.ResourceRequirements{
-				Limits: core.ResourceList{
-					core.ResourceCPU:    resource.MustParse(".200"),
-					core.ResourceMemory: resource.MustParse("128Mi"),
-				},
-				Requests: core.ResourceList{
-					core.ResourceCPU:    resource.MustParse(".200"),
-					core.ResourceMemory: resource.MustParse("128Mi"),
-				},
-			},
+			Resources:       DefaultInitContainerResource,
 		}
 	} else if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
@@ -337,36 +328,7 @@ func (p *Postgres) setDefaultContainerSecurityContext(podTemplate *ofst.PodTempl
 	if podTemplate.Spec.SecurityContext.FSGroup == nil {
 		podTemplate.Spec.SecurityContext.FSGroup = pgVersion.Spec.SecurityContext.RunAsUser
 	}
-	p.setDefaultCapabilitiesForPostgres(podTemplate.Spec.ContainerSecurityContext)
 	p.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext, pgVersion)
-}
-
-func (p *Postgres) setDefaultCapabilitiesForPostgres(sc *core.SecurityContext) {
-	if sc.Capabilities == nil {
-		sc.Capabilities = &core.Capabilities{
-			Add: []core.Capability{IPS_LOCK, SYS_RESOURCE},
-		}
-	} else {
-		newCapabilities := &core.Capabilities{}
-		caps := []core.Capability{IPS_LOCK, SYS_RESOURCE}
-		if sc.Capabilities.Add == nil {
-			newCapabilities.Add = caps
-		} else {
-			newCapabilities.Add = sc.Capabilities.Add
-			for i := range caps {
-				found := false
-				for _, capability := range sc.Capabilities.Add {
-					if caps[i] == capability {
-						found = true
-					}
-				}
-				if !found {
-					newCapabilities.Add = append(newCapabilities.Add, caps[i])
-				}
-			}
-		}
-		sc.Capabilities = newCapabilities
-	}
 }
 
 func (p *Postgres) assignDefaultContainerSecurityContext(sc *core.SecurityContext, pgVersion *catalog.PostgresVersion) {
@@ -374,7 +336,9 @@ func (p *Postgres) assignDefaultContainerSecurityContext(sc *core.SecurityContex
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
 	if sc.Capabilities == nil {
-		sc.Capabilities = &core.Capabilities{}
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
 	}
 	if sc.RunAsNonRoot == nil {
 		sc.RunAsNonRoot = pointer.BoolP(true)

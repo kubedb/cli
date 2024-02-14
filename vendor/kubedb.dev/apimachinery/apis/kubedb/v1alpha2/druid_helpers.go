@@ -22,6 +22,7 @@ import (
 	"strconv"
 	"strings"
 
+	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
@@ -334,6 +335,7 @@ func (d *Druid) SetDefaults() {
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Coordinators.PodTemplate)
 				d.setDefaultInitContainerSecurityContext(&druidVersion, &d.Spec.Topology.Coordinators.PodTemplate)
+				d.setCoordinatorsDefaultContainerResourceLimits(&d.Spec.Topology.Coordinators.PodTemplate)
 			}
 		}
 		if d.Spec.Topology.Overlords != nil {
@@ -346,6 +348,7 @@ func (d *Druid) SetDefaults() {
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Overlords.PodTemplate)
 				d.setDefaultInitContainerSecurityContext(&druidVersion, &d.Spec.Topology.Overlords.PodTemplate)
+				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Overlords.PodTemplate)
 			}
 		}
 		if d.Spec.Topology.MiddleManagers != nil {
@@ -358,6 +361,7 @@ func (d *Druid) SetDefaults() {
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.MiddleManagers.PodTemplate)
 				d.setDefaultInitContainerSecurityContext(&druidVersion, &d.Spec.Topology.MiddleManagers.PodTemplate)
+				d.setDefaultContainerResourceLimits(&d.Spec.Topology.MiddleManagers.PodTemplate)
 			}
 		}
 		if d.Spec.Topology.Historicals != nil {
@@ -370,6 +374,7 @@ func (d *Druid) SetDefaults() {
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Historicals.PodTemplate)
 				d.setDefaultInitContainerSecurityContext(&druidVersion, &d.Spec.Topology.Historicals.PodTemplate)
+				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Historicals.PodTemplate)
 			}
 		}
 		if d.Spec.Topology.Brokers != nil {
@@ -382,6 +387,7 @@ func (d *Druid) SetDefaults() {
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Brokers.PodTemplate)
 				d.setDefaultInitContainerSecurityContext(&druidVersion, &d.Spec.Topology.Brokers.PodTemplate)
+				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Brokers.PodTemplate)
 
 			}
 		}
@@ -395,6 +401,7 @@ func (d *Druid) SetDefaults() {
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Routers.PodTemplate)
 				d.setDefaultInitContainerSecurityContext(&druidVersion, &d.Spec.Topology.Routers.PodTemplate)
+				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Routers.PodTemplate)
 			}
 		}
 	}
@@ -406,10 +413,10 @@ func (d *Druid) SetDefaults() {
 }
 
 func (d *Druid) setDefaultInitContainerSecurityContext(druidVersion *catalog.DruidVersion, podTemplate *ofst.PodTemplateSpec) {
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, DruidInitContainer)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, DruidInitContainerName)
 	if initContainer == nil {
 		initContainer = &v1.Container{
-			Name: DruidInitContainer,
+			Name: DruidInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
@@ -420,10 +427,10 @@ func (d *Druid) setDefaultInitContainerSecurityContext(druidVersion *catalog.Dru
 }
 
 func (d *Druid) setDefaultContainerSecurityContext(druidVersion *catalog.DruidVersion, podTemplate *ofst.PodTemplateSpec) {
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, DruidMainContainer)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, DruidContainerName)
 	if container == nil {
 		container = &v1.Container{
-			Name: DruidMainContainer,
+			Name: DruidContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -450,6 +457,20 @@ func (d *Druid) assignDefaultContainerSecurityContext(druidVersion *catalog.Drui
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+}
+
+func (d *Druid) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, DruidContainerName)
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+	}
+}
+
+func (d *Druid) setCoordinatorsDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, DruidContainerName)
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResourcesMemoryIntensive)
 	}
 }
 
