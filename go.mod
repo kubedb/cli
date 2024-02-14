@@ -24,14 +24,14 @@ require (
 	k8s.io/klog/v2 v2.110.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.29.6
+	kmodules.xyz/client-go v0.29.8
 	kmodules.xyz/custom-resources v0.29.1
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.41.0
-	kubedb.dev/db-client-go v0.0.10
+	kubedb.dev/apimachinery v0.42.0
+	kubedb.dev/db-client-go v0.0.11
 	sigs.k8s.io/controller-runtime v0.17.0
 	sigs.k8s.io/yaml v1.4.0
-	stash.appscode.dev/apimachinery v0.32.1-0.20231225221320-6f5a8df2ab6e
+	stash.appscode.dev/apimachinery v0.33.0
 )
 
 require (
@@ -77,7 +77,8 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kubernetes-csi/external-snapshotter/client/v4 v4.2.0 // indirect
+	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
+	github.com/kubernetes-csi/external-snapshotter/client/v7 v7.0.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
@@ -106,6 +107,7 @@ require (
 	github.com/xlab/treeprint v1.2.0 // indirect
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
+	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.starlark.net v0.0.0-20230525235612-a134d8f9ddca // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/net v0.19.0 // indirect
@@ -133,12 +135,12 @@ require (
 	k8s.io/metrics v0.29.0 // indirect
 	k8s.io/utils v0.0.0-20231127182322-b307cd553661 // indirect
 	kmodules.xyz/apiversion v0.2.0 // indirect
-	kmodules.xyz/objectstore-api v0.29.0 // indirect
+	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.29.0 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
 	kmodules.xyz/resource-metadata v0.18.2-0.20240105072614-e92a8a48d400 // indirect
-	kubeops.dev/sidekick v0.0.5-0.20231225214445-a15c70833046 // indirect
-	kubestash.dev/apimachinery v0.4.0 // indirect
+	kubeops.dev/sidekick v0.0.5 // indirect
+	kubestash.dev/apimachinery v0.5.0 // indirect
 	sigs.k8s.io/gateway-api v0.8.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.13.5-0.20230601165947-6ce0bf390ce3 // indirect

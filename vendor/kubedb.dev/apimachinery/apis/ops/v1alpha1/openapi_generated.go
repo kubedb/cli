@@ -21229,6 +21229,12 @@ func schema_kmodulesxyz_objectstore_api_api_v1_S3Spec(ref common.ReferenceCallba
 							Format: "",
 						},
 					},
+					"insecureTLS": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"boolean"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"endpoint", "bucket"},
 			},
@@ -23347,8 +23353,9 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref 
 				Properties: map[string]spec.Schema{
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"node": {
@@ -23416,6 +23423,7 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref 
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -24098,8 +24106,9 @@ func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref common.R
 				Properties: map[string]spec.Schema{
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"node": {
@@ -24121,6 +24130,7 @@ func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref common.R
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -24553,11 +24563,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBVolumeExpansionSpec(ref common
 					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -25343,8 +25355,9 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBVolumeExpansionSpec(ref common
 				Properties: map[string]spec.Schema{
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"standalone": {
@@ -25373,6 +25386,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBVolumeExpansionSpec(ref common
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -25834,11 +25848,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLVolumeExpansionSpec(ref common.R
 					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -26288,11 +26304,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBVolumeExpansionSpec(ref 
 					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -27041,11 +27059,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresVolumeExpansionSpec(ref commo
 					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -28002,8 +28022,9 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVolumeExpansionSpec(ref 
 				Properties: map[string]spec.Schema{
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"redissentinel": {
@@ -28012,6 +28033,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVolumeExpansionSpec(ref 
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{
@@ -28138,8 +28160,9 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisVolumeExpansionSpec(ref common.R
 				Properties: map[string]spec.Schema{
 					"mode": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"redis": {
@@ -28148,6 +28171,7 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisVolumeExpansionSpec(ref common.R
 						},
 					},
 				},
+				Required: []string{"mode"},
 			},
 		},
 		Dependencies: []string{

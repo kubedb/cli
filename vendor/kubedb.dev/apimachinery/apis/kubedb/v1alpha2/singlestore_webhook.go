@@ -97,20 +97,6 @@ func (s *Singlestore) ValidateDelete() (admission.Warnings, error) {
 func (s *Singlestore) ValidateCreateOrUpdate() field.ErrorList {
 	var allErr field.ErrorList
 
-	if s.Spec.EnableSSL {
-		if s.Spec.TLS == nil {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("enableSSL"),
-				s.Name,
-				".spec.tls can't be nil, if .spec.enableSSL is true"))
-		}
-	} else {
-		if s.Spec.TLS != nil {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("enableSSL"),
-				s.Name,
-				".spec.tls must be nil, if .spec.enableSSL is disabled"))
-		}
-	}
-
 	if s.Spec.Version == "" {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("version"),
 			s.Name,

@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
-	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,10 +29,6 @@ func setDefaultStorageValues(storageSpec *StorageAutoscalerSpec) {
 	}
 	if storageSpec.Trigger == "" {
 		storageSpec.Trigger = AutoscalerTriggerOff
-	}
-	if storageSpec.ExpansionMode == nil {
-		mode := opsapi.VolumeExpansionModeOnline
-		storageSpec.ExpansionMode = &mode
 	}
 	if storageSpec.ScalingThreshold == 0 {
 		storageSpec.ScalingThreshold = DefaultStorageScalingThreshold

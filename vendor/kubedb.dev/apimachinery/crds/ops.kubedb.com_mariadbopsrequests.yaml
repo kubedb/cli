@@ -340,6 +340,8 @@ spec:
                     - Offline
                     - Online
                     type: string
+                required:
+                - mode
                 type: object
             required:
             - databaseRef

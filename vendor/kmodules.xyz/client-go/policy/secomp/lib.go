@@ -37,7 +37,7 @@ func init() {
 			panic(err)
 		}
 		kc := kubernetes.NewForConfigOrDie(cfg)
-		yes, err := discovery.CheckAPIVersion(kc.Discovery(), ">= 1.27")
+		yes, err := discovery.CheckAPIVersion(kc.Discovery(), ">= 1.25")
 		if err != nil {
 			panic(err)
 		}

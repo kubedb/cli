@@ -116,8 +116,7 @@ type StorageAutoscalerSpec struct {
 	ScalingThreshold int32 `json:"scalingThreshold,omitempty"`
 
 	// ExpansionMode can be `Online` or `Offline`
-	// Default VolumeExpansionMode is `Online`
-	ExpansionMode *opsapi.VolumeExpansionMode `json:"expansionMode,omitempty"`
+	ExpansionMode opsapi.VolumeExpansionMode `json:"expansionMode"`
 }
 
 // AutoscalerStatus describes the runtime state of the autoscaler.

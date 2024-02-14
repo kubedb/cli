@@ -20,6 +20,7 @@ import (
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
@@ -104,6 +105,10 @@ type RabbitMQSpec struct {
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
 	Halted bool `json:"halted,omitempty"`
+
+	// Monitor is used monitor database instance
+	// +optional
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional

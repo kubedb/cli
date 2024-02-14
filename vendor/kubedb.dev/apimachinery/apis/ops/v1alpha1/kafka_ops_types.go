@@ -118,8 +118,7 @@ type KafkaVerticalScalingSpec struct {
 
 // KafkaVolumeExpansionSpec is the spec for Kafka volume expansion
 type KafkaVolumeExpansionSpec struct {
-	// +kubebuilder:default="Online"
-	Mode *VolumeExpansionMode `json:"mode,omitempty"`
+	Mode VolumeExpansionMode `json:"mode"`
 	// volume specification for combined nodes
 	Node *resource.Quantity `json:"node,omitempty"`
 	// volume specification for broker
