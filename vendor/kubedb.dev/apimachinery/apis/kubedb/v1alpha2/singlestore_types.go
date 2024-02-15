@@ -70,9 +70,6 @@ type SinglestoreSpec struct {
 	// Storage to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
-	// To enable ssl for http layer
-	EnableSSL bool `json:"enableSSL,omitempty"`
-
 	// Init is used to initialize database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`

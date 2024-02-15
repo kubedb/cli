@@ -210,6 +210,11 @@ spec:
                             description: VolumeSnapshotName represents the name of
                               created volumeSnapshot.
                             type: string
+                          volumeSnapshotTime:
+                            description: VolumeSnapshotTime indicates the timestamp
+                              at which the volumeSnapshot was created.
+                            format: date-time
+                            type: string
                         type: object
                       type: array
                     walSegments:

@@ -60,6 +60,9 @@ type ZooKeeperSpec struct {
 	// +optional
 	Replicas *int32 `json:"replicas"`
 
+	// +kubebuilder:default=8080
+	AdminServerPort int32 `json:"adminServerPort"`
+
 	// Storage to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 

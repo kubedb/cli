@@ -331,7 +331,7 @@ const (
 	DatabasePodMaster                 = "Master"
 	DatabasePodAggregator             = "Aggregator"
 	DatabasePodLeaf                   = "Leaf"
-	StatefulSetTypeMasterAggregator   = "master-aggregator"
+	StatefulSetTypeAggregator         = "aggregator"
 	StatefulSetTypeLeaf               = "leaf"
 	SinglestoreDatabaseHealth         = "singlestore_health"
 	SinglestoreTableHealth            = "singlestore_health_table"
@@ -437,17 +437,20 @@ const (
 	// =========================== Redis Constants ============================
 	RedisConfigKey = "redis.conf" // RedisConfigKey is going to create for the customize redis configuration
 	// DefaultConfigKey is going to create for the default redis configuration
-	RedisContainerName          = ResourceSingularRedis
-	RedisSentinelContainerName  = "redissentinel"
-	DefaultConfigKey            = "default.conf"
-	RedisShardKey               = RedisKey + "/shard"
-	RedisDatabasePortName       = "db"
-	RedisPrimaryServicePortName = "primary"
-	RedisDatabasePort           = 6379
-	RedisSentinelPort           = 26379
-	RedisGossipPortName         = "gossip"
-	RedisGossipPort             = 16379
-	RedisSentinelPortName       = "sentinel"
+	RedisContainerName             = ResourceSingularRedis
+	RedisSentinelContainerName     = "redissentinel"
+	DefaultConfigKey               = "default.conf"
+	RedisShardKey                  = RedisKey + "/shard"
+	RedisDatabasePortName          = "db"
+	RedisPrimaryServicePortName    = "primary"
+	RedisDatabasePort              = 6379
+	RedisSentinelPort              = 26379
+	RedisGossipPortName            = "gossip"
+	RedisGossipPort                = 16379
+	RedisSentinelPortName          = "sentinel"
+	RedisInitContainerName         = "redis-init"
+	RedisCoordinatorContainerName  = "rd-coordinator"
+	RedisSentinelInitContainerName = "sentinel-init"
 
 	RedisScriptVolumeName      = "script-vol"
 	RedisScriptVolumePath      = "/scripts"
@@ -460,6 +463,8 @@ const (
 	RedisSentinelTLSVolumePath = "/sentinel-certs"
 	RedisConfigVolumeName      = "redis-config"
 	RedisConfigVolumePath      = "/usr/local/etc/redis/"
+	RedisInitVolumeName        = "init-volume"
+	RedisInitVolumePath        = "/init"
 
 	RedisNodeFlagMaster = "master"
 	RedisNodeFlagNoAddr = "noaddr"
@@ -468,8 +473,11 @@ const (
 	RedisKeyFileSecretSuffix = "key"
 	RedisPEMSecretSuffix     = "pem"
 	RedisRootUsername        = "default"
-	EnvRedisUser             = "USERNAME"
-	EnvRedisPassword         = "REDISCLI_AUTH"
+
+	EnvRedisUser              = "USERNAME"
+	EnvRedisPassword          = "REDISCLI_AUTH"
+	EnvRedisMode              = "REDIS_MODE"
+	EnvRedisMajorRedisVersion = "MAJOR_REDIS_VERSION"
 
 	// =========================== PgBouncer Constants ============================
 	PgBouncerUpstreamServerCA               = "upstream-server-ca.crt"
@@ -495,9 +503,9 @@ const (
 	EnvPgpoolPasswordEncryptionMethod = "PGPOOL_PASSWORD_ENCRYPTION_METHOD"
 	EnvEnablePoolPasswd               = "PGPOOL_ENABLE_POOL_PASSWD"
 	EnvSkipPasswdEncryption           = "PGPOOL_SKIP_PASSWORD_ENCRYPTION"
-	ConfigSecretMountPath             = "/config"
-	ConfigVolumeName                  = "pgpool-config"
-	ContainerName                     = "pgpool"
+	PgpoolConfigSecretMountPath       = "/config"
+	PgpoolConfigVolumeName            = "pgpool-config"
+	PgpoolContainerName               = "pgpool"
 	PgpoolAuthUsername                = "pcp"
 	SyncPeriod                        = 10
 	// ========================================== ZooKeeper Constants =================================================//
@@ -540,7 +548,12 @@ const (
 	EnvZooKeeperClusterSize     = "CLUSTER_SIZE"
 	EnvZooKeeperUser            = "ZK_USER"
 	EnvZooKeeperPassword        = "ZK_PASSWORD"
-	ZooKeeperSuperUsername      = "super"
+	EnvZooKeeperJaasFilePath    = "ZK_JAAS_FILE_PATH"
+	EnvZooKeeperJVMFLags        = "JVMFLAGS"
+
+	ZooKeeperSuperUsername       = "super"
+	ZooKeeperSASLAuthLoginConfig = "-Djava.security.auth.login.config"
+	ZooKeeperJaasFilePath        = "/data/jaas.conf"
 )
 
 // List of possible condition types for a KubeDB object
@@ -834,9 +847,9 @@ const (
 	DruidConfigFileNameRouters        = "routers.properties"
 	DruidVolumeMySQLMetadataStorage   = "mysql-metadata-storage"
 
-	DruidMainContainer = "druid"
-	DruidInitContainer = "init-druid"
-	DruidUserAdmin     = "admin"
+	DruidContainerName     = "druid"
+	DruidInitContainerName = "init-druid"
+	DruidUserAdmin         = "admin"
 
 	EnvDruidAdminPassword          = "DRUID_ADMIN_PASSWORD"
 	EnvDruidMetdataStoragePassword = "DRUID_METADATA_STORAGE_PASSWORD"
@@ -1008,6 +1021,7 @@ const (
 	RabbitMQAMQPPort          = 5672
 	RabbitMQPeerDiscoveryPort = 4369
 	RabbitMQManagementUIPort  = 15672
+	RabbitMQExporterPort      = 15692
 	RabbitMQInterNodePort     = 25672
 
 	RabbitMQVolumeData         = "data"

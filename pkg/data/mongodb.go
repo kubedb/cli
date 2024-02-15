@@ -355,7 +355,7 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 		if err != nil {
 			return nil, err
 		}
-		mgCommand = append(mgCommand, c)
+		mgCommand = append(mgCommand, c...)
 	} else {
 		mgCommand = append(mgCommand,
 			KubeDBDatabaseName, "--quiet",
@@ -413,7 +413,7 @@ func (opts *mongoDBOpts) handleTLS() ([]interface{}, error) {
 	}
 
 	mgCommand := []interface{}{
-		"mongo", KubeDBDatabaseName, "--quiet",
+		KubeDBDatabaseName, "--quiet",
 		"--tls",
 		fmt.Sprintf("--tlsCAFile=%v", mgCAFile),
 		fmt.Sprintf("--tlsCertificateKeyFile=%v", mgPEMFile),

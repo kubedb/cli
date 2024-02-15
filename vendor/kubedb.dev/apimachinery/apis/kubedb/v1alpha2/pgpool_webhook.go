@@ -206,7 +206,7 @@ func PgpoolValidateVersion(p *Pgpool) error {
 }
 
 var PgpoolReservedVolumes = []string{
-	ConfigVolumeName,
+	PgpoolConfigVolumeName,
 }
 
 func PgpoolValidateVolumes(p *Pgpool) error {
@@ -231,7 +231,7 @@ var PgpoolForbiddenEnvVars = []string{
 
 func PgpoolGetMainContainerEnvs(p *Pgpool) []core.EnvVar {
 	for _, container := range p.Spec.PodTemplate.Spec.Containers {
-		if container.Name == ContainerName {
+		if container.Name == PgpoolContainerName {
 			return container.Env
 		}
 	}
@@ -277,5 +277,5 @@ func PgpoolValidateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {
 }
 
 var PgpoolReservedVolumesMountPaths = []string{
-	ConfigSecretMountPath,
+	PgpoolConfigSecretMountPath,
 }

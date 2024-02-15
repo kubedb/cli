@@ -219,6 +219,7 @@ func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
 			s.Spec.Topology.Data.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 			s.setDefaultContainerSecurityContext(slVersion, &s.Spec.Topology.Data.PodTemplate)
 			s.setDefaultInitContainerSecurityContext(slVersion, &s.Spec.Topology.Data.PodTemplate)
+			s.setDefaultContainerResourceLimits(&s.Spec.Topology.Data.PodTemplate)
 		}
 
 		if s.Spec.Topology.Overseer != nil {
@@ -235,6 +236,7 @@ func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
 			s.Spec.Topology.Overseer.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 			s.setDefaultContainerSecurityContext(slVersion, &s.Spec.Topology.Overseer.PodTemplate)
 			s.setDefaultInitContainerSecurityContext(slVersion, &s.Spec.Topology.Overseer.PodTemplate)
+			s.setDefaultContainerResourceLimits(&s.Spec.Topology.Overseer.PodTemplate)
 		}
 
 		if s.Spec.Topology.Coordinator != nil {
@@ -251,6 +253,7 @@ func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
 			s.Spec.Topology.Coordinator.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 			s.setDefaultContainerSecurityContext(slVersion, &s.Spec.Topology.Coordinator.PodTemplate)
 			s.setDefaultInitContainerSecurityContext(slVersion, &s.Spec.Topology.Coordinator.PodTemplate)
+			s.setDefaultContainerResourceLimits(&s.Spec.Topology.Coordinator.PodTemplate)
 		}
 	} else {
 
@@ -264,8 +267,8 @@ func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
 
 		s.Spec.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 		s.setDefaultContainerSecurityContext(slVersion, &s.Spec.PodTemplate)
-
 		s.setDefaultInitContainerSecurityContext(slVersion, &s.Spec.PodTemplate)
+		s.setDefaultContainerResourceLimits(&s.Spec.PodTemplate)
 	}
 }
 
@@ -294,7 +297,6 @@ func (s *Solr) setDefaultContainerSecurityContext(slVersion *catalog.SolrVersion
 	if container.SecurityContext == nil {
 		container.SecurityContext = &v1.SecurityContext{}
 	}
-	apis.SetDefaultResourceLimits(&container.Resources, DefaultResources)
 	s.assignDefaultContainerSecurityContext(slVersion, container.SecurityContext)
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 }
@@ -316,6 +318,18 @@ func (s *Solr) assignDefaultContainerSecurityContext(slVersion *catalog.SolrVers
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+}
+
+func (s *Solr) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, SolrContainerName)
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+	}
+
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, SolrInitContainerName)
+	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
 	}
 }
 

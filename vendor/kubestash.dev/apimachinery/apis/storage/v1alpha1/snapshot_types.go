@@ -245,6 +245,9 @@ type VolumeSnapshotterStats struct {
 	// VolumeSnapshotName represents the name of created volumeSnapshot.
 	// +optional
 	VolumeSnapshotName string `json:"volumeSnapshotName,omitempty"`
+
+	// VolumeSnapshotTime indicates the timestamp at which the volumeSnapshot was created.
+	VolumeSnapshotTime *metav1.Time `json:"volumeSnapshotTime,omitempty"`
 }
 
 // WalSegment specifies the "WalG" driver specific information

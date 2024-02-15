@@ -103,8 +103,8 @@ type PerconaXtraDBVerticalScalingSpec struct {
 
 // PerconaXtraDBVolumeExpansionSpec is the spec for PerconaXtraDB volume expansion
 type PerconaXtraDBVolumeExpansionSpec struct {
-	PerconaXtraDB *resource.Quantity   `json:"perconaxtradb,omitempty"`
-	Mode          *VolumeExpansionMode `json:"mode,omitempty"`
+	PerconaXtraDB *resource.Quantity  `json:"perconaxtradb,omitempty"`
+	Mode          VolumeExpansionMode `json:"mode"`
 }
 
 type PerconaXtraDBCustomConfigurationSpec struct {

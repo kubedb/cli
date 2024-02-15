@@ -103,9 +103,8 @@ type RedisSentinelVerticalScalingSpec struct {
 
 // RedisSentinelVolumeExpansionSpec is the spec for RedisSentinel volume expansion
 type RedisSentinelVolumeExpansionSpec struct {
-	// +kubebuilder:default="Online"
-	Mode          *VolumeExpansionMode `json:"mode,omitempty"`
-	RedisSentinel *resource.Quantity   `json:"redissentinel,omitempty"`
+	Mode          VolumeExpansionMode `json:"mode"`
+	RedisSentinel *resource.Quantity  `json:"redissentinel,omitempty"`
 }
 
 type RedisSentinelCustomConfigurationSpec struct {

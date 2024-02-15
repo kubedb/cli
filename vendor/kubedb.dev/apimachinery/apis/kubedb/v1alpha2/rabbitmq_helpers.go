@@ -156,7 +156,7 @@ func (r *RabbitMQ) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]s
 }
 
 func (r *RabbitMQ) Finalizer() string {
-	return fmt.Sprintf("%s/%s", kubedb.GroupName, apis.Finalizer)
+	return fmt.Sprintf("%s/%s", apis.Finalizer, r.ResourceSingular())
 }
 
 type RabbitmqStatsService struct {
@@ -297,6 +297,12 @@ func (r *RabbitMQ) SetDefaults() {
 	}
 
 	r.setDefaultContainerSecurityContext(&rmVersion, &r.Spec.PodTemplate)
+
+	dbContainer := coreutil.GetContainerByName(r.Spec.PodTemplate.Spec.Containers, RabbitMQContainerName)
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+	}
+
 	r.SetHealthCheckerDefaults()
 }
 

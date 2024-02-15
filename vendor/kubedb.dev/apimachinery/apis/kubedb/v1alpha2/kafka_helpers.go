@@ -337,7 +337,10 @@ func (k *Kafka) SetDefaults() {
 			if k.Spec.Topology.Controller.Replicas == nil {
 				k.Spec.Topology.Controller.Replicas = pointer.Int32P(1)
 			}
-			apis.SetDefaultResourceLimits(&k.Spec.Topology.Controller.Resources, DefaultResources)
+
+			if k.Spec.Topology.Controller.Resources.Requests == nil && k.Spec.Topology.Controller.Resources.Limits == nil {
+				apis.SetDefaultResourceLimits(&k.Spec.Topology.Controller.Resources, DefaultResources)
+			}
 		}
 
 		if k.Spec.Topology.Broker != nil {
@@ -347,11 +350,13 @@ func (k *Kafka) SetDefaults() {
 			if k.Spec.Topology.Broker.Replicas == nil {
 				k.Spec.Topology.Broker.Replicas = pointer.Int32P(1)
 			}
-			apis.SetDefaultResourceLimits(&k.Spec.Topology.Broker.Resources, DefaultResources)
+			if k.Spec.Topology.Broker.Resources.Requests == nil && k.Spec.Topology.Broker.Resources.Limits == nil {
+				apis.SetDefaultResourceLimits(&k.Spec.Topology.Broker.Resources, DefaultResources)
+			}
 		}
 	} else {
 		dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, KafkaContainerName)
-		if dbContainer != nil {
+		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
 		}
 		if k.Spec.Replicas == nil {

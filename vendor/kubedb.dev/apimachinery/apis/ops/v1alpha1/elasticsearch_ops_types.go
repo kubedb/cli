@@ -135,8 +135,7 @@ type ElasticsearchVerticalScalingSpec struct {
 
 // ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion
 type ElasticsearchVolumeExpansionSpec struct {
-	// +kubebuilder:default="Online"
-	Mode *VolumeExpansionMode `json:"mode,omitempty"`
+	Mode VolumeExpansionMode `json:"mode"`
 	// volume specification for combined nodes
 	Node *resource.Quantity `json:"node,omitempty"`
 	// volume specification for master nodes

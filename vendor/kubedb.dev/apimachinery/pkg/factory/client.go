@@ -21,7 +21,7 @@ import (
 	kubedbscheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	cmscheme "github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/scheme"
-	snapshotapi "github.com/kubernetes-csi/external-snapshotter/client/v4/apis/volumesnapshot/v1"
+	vsapi "github.com/kubernetes-csi/external-snapshotter/client/v7/apis/volumesnapshot/v1"
 	promscheme "github.com/prometheus-operator/prometheus-operator/pkg/client/versioned/scheme"
 	crdscheme "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -91,7 +91,7 @@ func NewUncachedClient(cfg *rest.Config) (client.Client, error) {
 		return nil, err
 	}
 
-	if err := snapshotapi.AddToScheme(scheme); err != nil {
+	if err := vsapi.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 
