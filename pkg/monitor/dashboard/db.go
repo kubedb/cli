@@ -40,17 +40,24 @@ type missingOpts struct {
 	panelTitle []string
 }
 
-func Run(f cmdutil.Factory, args []string, branch string, prom monitor.PromSvc) {
-	if len(args) < 2 {
-		log.Fatal("Enter database and grafana dashboard name as argument")
+func Run(f cmdutil.Factory, args []string, branch, file, mode string, prom monitor.PromSvc) {
+	if len(args) < 1 {
+		log.Fatal("Enter database type as argument")
 	}
 
 	database := monitor.ConvertedResourceToSingular(args[0])
-	dashboard := args[1]
 
-	url := getURL(branch, database, dashboard)
-
-	dashboardData := getDashboard(url)
+	var dashboardData map[string]interface{}
+	if file == "" {
+		if len(args) < 2 {
+			log.Fatal("Enter dashboard name as second argument")
+		}
+		dashboard := args[1]
+		url := getURL(branch, database, dashboard)
+		dashboardData = getDashboardFromURL(url)
+	} else {
+		dashboardData = getDashboardFromFile(file)
+	}
 
 	queries := parseAllExpressions(dashboardData)
 
@@ -105,6 +112,7 @@ func Run(f cmdutil.Factory, args []string, branch string, prom monitor.PromSvc) 
 			unknown[metricName].panelTitle = uniqueAppend(unknown[metricName].panelTitle, query.panelTitle)
 		}
 	}
+	unknown = ignoreModeSpecificExpressions(unknown, database, mode)
 	if len(unknown) > 0 {
 		fmt.Println("Missing Information:")
 		for metric, opts := range unknown {

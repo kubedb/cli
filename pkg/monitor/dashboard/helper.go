@@ -22,13 +22,16 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 )
 
 func getURL(branch, database, dashboard string) string {
 	return fmt.Sprintf("https://raw.githubusercontent.com/appscode/grafana-dashboards/%s/%s/%s.json", branch, database, dashboard)
 }
 
-func getDashboard(url string) map[string]interface{} {
+func getDashboardFromURL(url string) map[string]interface{} {
 	var dashboardData map[string]interface{}
 	response, err := http.Get(url)
 	if err != nil {
@@ -50,6 +53,19 @@ func getDashboard(url string) map[string]interface{} {
 	return dashboardData
 }
 
+func getDashboardFromFile(file string) map[string]interface{} {
+	body, err := os.ReadFile(file)
+	if err != nil {
+		log.Fatal("Error on ReadFile:", err)
+	}
+	var dashboardData map[string]interface{}
+	err = json.Unmarshal(body, &dashboardData)
+	if err != nil {
+		log.Fatal("Error unmarshalling JSON data:", err)
+	}
+	return dashboardData
+}
+
 func uniqueAppend(slice []string, valueToAdd string) []string {
 	for _, existingValue := range slice {
 		if existingValue == valueToAdd {
@@ -57,4 +73,11 @@ func uniqueAppend(slice []string, valueToAdd string) []string {
 		}
 	}
 	return append(slice, valueToAdd)
+}
+
+func ignoreModeSpecificExpressions(unknown map[string]*missingOpts, database, mode string) map[string]*missingOpts {
+	if database == api.ResourceSingularMongoDB {
+		return ignoreMongoDBModeSpecificExpressions(unknown, mode)
+	}
+	return unknown
 }
