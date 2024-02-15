@@ -39,6 +39,12 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
+const (
+	mdCaFile   = "/etc/mysql/certs/client/ca.crt"
+	mdCertFile = "/etc/mysql/certs/client/tls.crt"
+	mdKeyFile  = "/etc/mysql/certs/client/tls.key"
+)
+
 func InsertMariaDBDataCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName string
@@ -317,7 +323,7 @@ func (opts *mariadbOpts) getShellCommand(command string) (string, error) {
 	containerName := "mariadb"
 
 	if db.Spec.TLS != nil {
-		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", myCaFile, myCertFile, myKeyFile, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", mdCaFile, mdCertFile, mdKeyFile, api.ResourceSingularMySQL, command)
 	} else {
 		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, api.ResourceSingularMySQL, command)
 	}
