@@ -82,7 +82,7 @@ var alertLong = templates.LongDesc(`
 
 var alertExample = templates.Examples(`
 		kubectl dba monitor get-alerts [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
-		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+		--prom-svc-name=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
 		# Get triggered alert for a specific mongodb
 	    kubectl dba monitor get-alerts mongodb sample-mongodb -n demo \
@@ -121,11 +121,13 @@ var dashboardLong = templates.LongDesc(`
     `)
 
 var dashboardExample = templates.Examples(`
-		kubectl dba monitor dashboard [DATABASE] [DASHBOARD_NAME] \
-		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+		kubectl dba monitor dashboard [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
+		[DASHBOARD_NAME] --file=[FILE_CONTAINING_DASHBOARD_JSON] \
+		--prom-svc-name=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
 		# Check availability of a postgres grafana dashboard
-		kubectl-dba monitor dashboard postgres postgres_databases_dashboard \
+		kubectl-dba monitor dashboard postgres pg15 -n demo \
+		--file=/home/arnob/yamls/summary.json \
 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid dashboards include:
@@ -141,20 +143,24 @@ var dashboardExample = templates.Examples(`
 `)
 
 func DashboardCMD(f cmdutil.Factory) *cobra.Command {
-	var branch string
+	var (
+		branch string
+		file   string
+	)
 	cmd := &cobra.Command{
 		Use:   "dashboard",
 		Short: i18n.T("Check availability of a grafana dashboard"),
 		Long:  dashboardLong,
 
 		Run: func(cmd *cobra.Command, args []string) {
-			dashboard.Run(f, args, branch, prom)
+			dashboard.Run(f, args, branch, file, prom)
 		},
 		Example:               dashboardExample,
 		DisableFlagsInUseLine: true,
 		DisableAutoGenTag:     true,
 	}
 	cmd.Flags().StringVarP(&branch, "branch", "b", "master", "branch name of the github repo")
+	cmd.Flags().StringVarP(&file, "file", "f", "", "absolute or relative path of the file containing dashboard")
 	return cmd
 }
 
@@ -165,7 +171,7 @@ var connectionLong = templates.LongDesc(`
 
 var connectionExample = templates.Examples(`
 		kubectl dba monitor check-connection [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
-		--prom-svc=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
+		--prom-svc-name=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
 		# Check connection status for different targets with prometheus server for a specific postgres database 
 		kubectl dba monitor check-connection mongodb sample_mg -n demo \

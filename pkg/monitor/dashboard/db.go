@@ -40,17 +40,36 @@ type missingOpts struct {
 	panelTitle []string
 }
 
-func Run(f cmdutil.Factory, args []string, branch string, prom monitor.PromSvc) {
+func Run(f cmdutil.Factory, args []string, branch, file string, prom monitor.PromSvc) {
 	if len(args) < 2 {
-		log.Fatal("Enter database and grafana dashboard name as argument")
+		log.Fatal("Enter db object's name as an argument")
+	}
+	database := monitor.ConvertedResourceToPlural(args[0])
+	dbName := args[1]
+	namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
+	if err != nil {
+		_ = fmt.Errorf("failed to get current namespace")
+		return
 	}
 
-	database := monitor.ConvertedResourceToSingular(args[0])
-	dashboard := args[1]
+	db, err := getDB(f, database, namespace, dbName)
+	if err != nil {
+		fmt.Printf("failed to get %s database %s/%s. error %s \n", database, namespace, dbName, err.Error())
+		return
+	}
 
-	url := getURL(branch, database, dashboard)
-
-	dashboardData := getDashboard(url)
+	database = monitor.ConvertedResourceToSingular(database)
+	var dashboardData map[string]interface{}
+	if file == "" {
+		if len(args) < 3 {
+			log.Fatal("Enter dashboard name as third argument")
+		}
+		dashboard := args[2]
+		url := getURL(branch, database, dashboard)
+		dashboardData = getDashboardFromURL(url)
+	} else {
+		dashboardData = getDashboardFromFile(file)
+	}
 
 	queries := parseAllExpressions(dashboardData)
 
@@ -105,6 +124,7 @@ func Run(f cmdutil.Factory, args []string, branch string, prom monitor.PromSvc) 
 			unknown[metricName].panelTitle = uniqueAppend(unknown[metricName].panelTitle, query.panelTitle)
 		}
 	}
+	unknown = ignoreModeSpecificExpressions(unknown, database, db)
 	if len(unknown) > 0 {
 		fmt.Println("Missing Information:")
 		for metric, opts := range unknown {
