@@ -16,7 +16,11 @@ limitations under the License.
 
 package dashboard
 
-func ignoreMongoDBModeSpecificExpressions(unknown map[string]*missingOpts, mode string) map[string]*missingOpts {
+import (
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+)
+
+func ignoreMongoDBModeSpecificExpressions(unknown map[string]*missingOpts, db *unstructured.Unstructured) map[string]*missingOpts {
 	shared := []string{
 		"kubedb_com_mongodb_shard_shards",
 		"kubedb_com_mongodb_shard_replicas",
@@ -37,11 +41,25 @@ func ignoreMongoDBModeSpecificExpressions(unknown map[string]*missingOpts, mode 
 		return false
 	}
 
+	isShardTopologySet := func(db *unstructured.Unstructured) bool {
+		spec, found, err := unstructured.NestedMap(db.Object, "spec")
+		if err != nil || !found {
+			return false
+		}
+
+		shardTopology, found, err := unstructured.NestedMap(spec, "shardTopology")
+		if err != nil || !found {
+			return false
+		}
+		return len(shardTopology) > 0
+	}
+
+	sharded := isShardTopologySet(db)
 	ret := make(map[string]*missingOpts)
 	for s, o := range unknown {
-		if has(shared, s) && mode != "sharded" {
+		if has(shared, s) && !sharded {
 			continue
-		} else if has(general, s) && mode == "sharded" {
+		} else if has(general, s) && sharded {
 			continue
 		}
 		ret[s] = o

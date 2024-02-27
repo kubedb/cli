@@ -25,7 +25,7 @@ import (
 
 const (
 	cAdvisorMetric     = "container_cpu_usage_seconds_total"
-	kubeletMetric      = "kubelet_active_pods"
+	kubeletMetric      = "kubelet_running_pods"
 	ksmMetric          = "kube_pod_status_phase"
 	nodeExporterMetric = "node_cpu_seconds_total"
 )

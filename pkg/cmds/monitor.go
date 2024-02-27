@@ -121,12 +121,12 @@ var dashboardLong = templates.LongDesc(`
     `)
 
 var dashboardExample = templates.Examples(`
-		kubectl dba monitor dashboard [DATABASE] [DASHBOARD_NAME] \
-		--file=[FILE_CONTAINING_DASHBOARD_JSON] \
+		kubectl dba monitor dashboard [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
+		[DASHBOARD_NAME] --file=[FILE_CONTAINING_DASHBOARD_JSON] \
 		--prom-svc-name=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
 		# Check availability of a postgres grafana dashboard
-		kubectl-dba monitor dashboard postgres postgres_databases_dashboard \
+		kubectl-dba monitor dashboard postgres pg15 -n demo \
 		--file=/home/arnob/yamls/summary.json \
 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
@@ -146,7 +146,6 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		branch string
 		file   string
-		mode   string
 	)
 	cmd := &cobra.Command{
 		Use:   "dashboard",
@@ -154,7 +153,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		Long:  dashboardLong,
 
 		Run: func(cmd *cobra.Command, args []string) {
-			dashboard.Run(f, args, branch, file, mode, prom)
+			dashboard.Run(f, args, branch, file, prom)
 		},
 		Example:               dashboardExample,
 		DisableFlagsInUseLine: true,
@@ -162,7 +161,6 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&branch, "branch", "b", "master", "branch name of the github repo")
 	cmd.Flags().StringVarP(&file, "file", "f", "", "absolute or relative path of the file containing dashboard")
-	cmd.Flags().StringVarP(&mode, "mode", "m", "standalone", "database mode. example: standalone, replicaset, sharded")
 	return cmd
 }
 

@@ -17,6 +17,7 @@ limitations under the License.
 package dashboard
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -25,7 +26,29 @@ import (
 	"os"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/dynamic"
+	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
+
+func getDB(f cmdutil.Factory, resource, ns, name string) (*unstructured.Unstructured, error) {
+	config, err := f.ToRESTConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	dc, err := dynamic.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	gvk := api.SchemeGroupVersion
+	dbRes := schema.GroupVersionResource{Group: gvk.Group, Version: gvk.Version, Resource: resource}
+	return dc.Resource(dbRes).Namespace(ns).Get(context.TODO(), name, metav1.GetOptions{})
+}
 
 func getURL(branch, database, dashboard string) string {
 	return fmt.Sprintf("https://raw.githubusercontent.com/appscode/grafana-dashboards/%s/%s/%s.json", branch, database, dashboard)
@@ -75,9 +98,12 @@ func uniqueAppend(slice []string, valueToAdd string) []string {
 	return append(slice, valueToAdd)
 }
 
-func ignoreModeSpecificExpressions(unknown map[string]*missingOpts, database, mode string) map[string]*missingOpts {
+func ignoreModeSpecificExpressions(unknown map[string]*missingOpts, database string, db *unstructured.Unstructured) map[string]*missingOpts {
 	if database == api.ResourceSingularMongoDB {
-		return ignoreMongoDBModeSpecificExpressions(unknown, mode)
+		return ignoreMongoDBModeSpecificExpressions(unknown, db)
+	}
+	if database == api.ResourceSingularElasticsearch {
+		return ignoreElasticsearchModeSpecificExpressions(unknown, db)
 	}
 	return unknown
 }
