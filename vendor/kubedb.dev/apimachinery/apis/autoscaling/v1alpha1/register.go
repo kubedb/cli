@@ -58,6 +58,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ElasticsearchAutoscalerList{},
 		&EtcdAutoscaler{},
 		&EtcdAutoscalerList{},
+		&KafkaAutoscaler{},
+		&KafkaAutoscalerList{},
 		&MariaDBAutoscaler{},
 		&MariaDBAutoscalerList{},
 		&MemcachedAutoscaler{},

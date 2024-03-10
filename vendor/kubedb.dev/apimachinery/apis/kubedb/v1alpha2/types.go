@@ -231,3 +231,22 @@ type ArchiverRecovery struct {
 	// FullDBRepository means db restore + manifest restore
 	FullDBRepository *kmapi.ObjectReference `json:"fullDBRepository,omitempty"`
 }
+
+type Gateway struct {
+	Name      string `json:"name"`
+	Namespace string `json:"namespace"`
+	// +optional
+	IP string `json:"ip,omitempty"`
+	// +optional
+	Hostname string `json:"hostname,omitempty"`
+	// Services is an optional configuration for services used to expose database
+	// +optional
+	Services []NamedServiceStatus `json:"services,omitempty"`
+}
+
+type NamedServiceStatus struct {
+	// Alias represents the identifier of the service.
+	Alias ServiceAlias `json:"alias"`
+
+	Ports []ofst.ServicePort `json:"ports"`
+}

@@ -31,6 +31,7 @@ type AutoscalingV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	ElasticsearchAutoscalersGetter
 	EtcdAutoscalersGetter
+	KafkaAutoscalersGetter
 	MariaDBAutoscalersGetter
 	MemcachedAutoscalersGetter
 	MongoDBAutoscalersGetter
@@ -54,6 +55,10 @@ func (c *AutoscalingV1alpha1Client) ElasticsearchAutoscalers(namespace string) E
 
 func (c *AutoscalingV1alpha1Client) EtcdAutoscalers(namespace string) EtcdAutoscalerInterface {
 	return newEtcdAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) KafkaAutoscalers(namespace string) KafkaAutoscalerInterface {
+	return newKafkaAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) MariaDBAutoscalers(namespace string) MariaDBAutoscalerInterface {

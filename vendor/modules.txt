@@ -1442,7 +1442,7 @@ kmodules.xyz/apiversion
 # kmodules.xyz/cert-manager-util v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/cert-manager-util/certmanager/v1
-# kmodules.xyz/client-go v0.29.8
+# kmodules.xyz/client-go v0.29.12
 ## explicit; go 1.21.5
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -1485,12 +1485,12 @@ kmodules.xyz/offshoot-api/api/v2
 # kmodules.xyz/prober v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.18.2-0.20240105072614-e92a8a48d400
+# kmodules.xyz/resource-metadata v0.18.2-0.20240219094915-0a7ba5704897
 ## explicit; go 1.21.5
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.42.0
+# kubedb.dev/apimachinery v0.43.0-rc.0
 ## explicit; go 1.21.5
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1532,7 +1532,7 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/validator
-# kubedb.dev/db-client-go v0.0.11
+# kubedb.dev/db-client-go v0.0.12
 ## explicit; go 1.21.6
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis

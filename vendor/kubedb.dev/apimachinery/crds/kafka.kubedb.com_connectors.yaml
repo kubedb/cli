@@ -100,9 +100,13 @@ spec:
               phase:
                 enum:
                 - Pending
+                - Unassigned
                 - Running
                 - Paused
+                - Failed
+                - Restarting
                 - Stopped
+                - Destroyed
                 - Unknown
                 type: string
             type: object

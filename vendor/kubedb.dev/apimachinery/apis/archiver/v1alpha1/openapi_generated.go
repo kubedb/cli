@@ -460,6 +460,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions":            schema_apimachinery_apis_archiver_v1alpha1_FullBackupOptions(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference":       schema_apimachinery_apis_archiver_v1alpha1_GenericSecretReference(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions":        schema_apimachinery_apis_archiver_v1alpha1_ManifestBackupOptions(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiver":              schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiver(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverList":          schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverList(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverSpec":          schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverSpec(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverStatus":        schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverStatus(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MongoDBArchiver":              schema_apimachinery_apis_archiver_v1alpha1_MongoDBArchiver(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MongoDBArchiverList":          schema_apimachinery_apis_archiver_v1alpha1_MongoDBArchiverList(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MongoDBArchiverSpec":          schema_apimachinery_apis_archiver_v1alpha1_MongoDBArchiverSpec(ref),
@@ -22835,6 +22839,201 @@ func schema_apimachinery_apis_archiver_v1alpha1_ManifestBackupOptions(ref common
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.SchedulerOptions", "kubestash.dev/apimachinery/apis/core/v1alpha1.RetryConfig"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiver(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverSpec", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiverStatus"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiver"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.MariaDBArchiver"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MariaDBArchiverSpec defines the desired state of MariaDBArchiver",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databases": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Databases define which MariaDB databases are allowed to consume this archiver",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"),
+						},
+					},
+					"pause": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pause defines if the backup process should be paused or not",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"retentionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetentionPolicy refers to a RetentionPolicy CR which defines how to cleanup the old Snapshots",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"fullBackup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FullBackup defines the session configuration for the full backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions"),
+						},
+					},
+					"walBackup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "WalBackup defines the sidekick configuration for the wal backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions"),
+						},
+					},
+					"manifestBackup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ManifestBackup defines the session configuration for the manifest backup This options will eventually go to the manifest-backup job's yaml",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions"),
+						},
+					},
+					"encryptionSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EncryptionSecret refers to the Secret containing the encryption key used to encode backed-up data.",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"backupStorage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "BackupStorage holds the storage information for storing backup data",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage"),
+						},
+					},
+					"deletionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DeletionPolicy defines the DeletionPolicy for the backup repository",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"databases"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MariaDBArchiverStatus defines the observed state of MariaDBArchiver",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRefs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the information of all the databases managed by this archiver",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ArchiverDatabaseRef"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ArchiverDatabaseRef"},
 	}
 }
 

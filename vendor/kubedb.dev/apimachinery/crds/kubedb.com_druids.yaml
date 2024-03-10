@@ -62,6 +62,11 @@ spec:
                     type: object
                     x-kubernetes-map-type: atomic
                   type:
+                    enum:
+                    - s3
+                    - google
+                    - azure
+                    - hdfs
                     type: string
                 required:
                 - type
@@ -100,7 +105,12 @@ spec:
                   namespace:
                     type: string
                   type:
+                    enum:
+                    - MySQL
+                    - PostgreSQL
                     type: string
+                required:
+                - name
                 type: object
               podTemplate:
                 properties:
@@ -24349,7 +24359,7 @@ spec:
                 type: object
               version:
                 type: string
-              zooKeeper:
+              zookeeperRef:
                 properties:
                   name:
                     type: string
@@ -24357,6 +24367,8 @@ spec:
                     type: string
                   pathsBase:
                     type: string
+                required:
+                - name
                 type: object
             required:
             - deepStorage
@@ -24390,6 +24402,49 @@ spec:
                   - type
                   type: object
                 type: array
+              gateway:
+                properties:
+                  hostname:
+                    type: string
+                  ip:
+                    type: string
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                  services:
+                    items:
+                      properties:
+                        alias:
+                          enum:
+                          - primary
+                          - standby
+                          - stats
+                          type: string
+                        ports:
+                          items:
+                            properties:
+                              name:
+                                type: string
+                              nodePort:
+                                format: int32
+                                type: integer
+                              port:
+                                format: int32
+                                type: integer
+                            required:
+                            - port
+                            type: object
+                          type: array
+                      required:
+                      - alias
+                      - ports
+                      type: object
+                    type: array
+                required:
+                - name
+                - namespace
+                type: object
               observedGeneration:
                 format: int64
                 type: integer
