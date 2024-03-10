@@ -25,6 +25,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -36,6 +37,7 @@ import (
 	core_util "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
@@ -156,6 +158,51 @@ func (p *Pgpool) GetNameSpacedName() string {
 	return p.Namespace + "/" + p.Name
 }
 
+type PgpoolStatsService struct {
+	*Pgpool
+}
+
+func (p PgpoolStatsService) GetNamespace() string {
+	return p.Pgpool.GetNamespace()
+}
+
+func (p PgpoolStatsService) ServiceName() string {
+	return p.OffshootName() + "-stats"
+}
+
+func (p PgpoolStatsService) ServiceMonitorName() string {
+	return p.ServiceName()
+}
+
+func (p PgpoolStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return p.OffshootLabels()
+}
+
+func (p PgpoolStatsService) Path() string {
+	return DefaultStatsPath
+}
+
+func (p PgpoolStatsService) Scheme() string {
+	return ""
+}
+
+func (p PgpoolStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (p Pgpool) StatsService() mona.StatsAccessor {
+	return &PgpoolStatsService{&p}
+}
+
+func (p Pgpool) StatsServiceLabels() map[string]string {
+	return p.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+}
+
+func (p *Pgpool) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(p.Spec.ServiceTemplates, alias)
+	return p.offshootLabels(meta_util.OverwriteKeys(p.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
 func (p *Pgpool) SetSecurityContext(ppVersion *catalog.PgpoolVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
@@ -232,6 +279,22 @@ func (p *Pgpool) SetDefaults() {
 	if err != nil {
 		klog.Errorf("can't get the pgpool version object %s for %s \n", err.Error(), p.Spec.Version)
 		return
+	}
+
+	if p.Spec.Monitor != nil {
+		if p.Spec.Monitor.Prometheus == nil {
+			p.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
+		}
+		if p.Spec.Monitor.Prometheus.Exporter.Port == 0 {
+			p.Spec.Monitor.Prometheus.Exporter.Port = PgpoolMonitoringDefaultServicePort
+		}
+		p.Spec.Monitor.SetDefaults()
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = ppVersion.Spec.SecurityContext.RunAsUser
+		}
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser
+		}
 	}
 
 	p.SetHealthCheckerDefaults()

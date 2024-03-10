@@ -80,15 +80,19 @@ type ConnectorStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Pending;Running;Paused;Stopped;Unknown
+// +kubebuilder:validation:Enum=Pending;Unassigned;Running;Paused;Failed;Restarting;Stopped;Destroyed;Unknown
 type ConnectorPhase string
 
 const (
-	ConnectorPhasePending ConnectorPhase = "Pending"
-	ConnectorPhaseRunning ConnectorPhase = "Running"
-	ConnectorPhasePaused  ConnectorPhase = "Paused"
-	ConnectorPhaseStopped ConnectorPhase = "Stopped"
-	ConnectorPhaseUnknown ConnectorPhase = "Unknown"
+	ConnectorPhasePending    ConnectorPhase = "Pending"
+	ConnectorPhaseUnassigned ConnectorPhase = "Unassigned"
+	ConnectorPhaseRunning    ConnectorPhase = "Running"
+	ConnectorPhasePaused     ConnectorPhase = "Paused"
+	ConnectorPhaseFailed     ConnectorPhase = "Failed"
+	ConnectorPhaseRestarting ConnectorPhase = "Restarting"
+	ConnectorPhaseStopped    ConnectorPhase = "Stopped"
+	ConnectorPhaseDestroyed  ConnectorPhase = "Destroyed"
+	ConnectorPhaseUnknown    ConnectorPhase = "Unknown"
 )
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -168,7 +168,7 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 			`'spec.terminationPolicy' value 'Halt' or 'Delete' is not supported yet for FerretDB`))
 	}
 
-	// Backend related
+	// FerretDBBackend related
 	if f.Spec.Backend.ExternallyManaged {
 		if f.Spec.Backend.Postgres == nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),

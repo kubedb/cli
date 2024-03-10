@@ -54,10 +54,12 @@ func (p *PgpoolVersion) ResourcePlural() string {
 
 func (p *PgpoolVersion) ValidateSpecs() error {
 	if p.Spec.Version == "" ||
-		p.Spec.Pgpool.Image == "" {
+		p.Spec.Pgpool.Image == "" ||
+		p.Spec.Exporter.Image == "" {
 		return fmt.Errorf(`atleast one of the following specs is not set for pgpoolVersion "%v":
 spec.version,
-spec.pgpool.image,`, p.Name)
+spec.pgpool.image,
+spec.exporter.image`, p.Name)
 	}
 	return nil
 }

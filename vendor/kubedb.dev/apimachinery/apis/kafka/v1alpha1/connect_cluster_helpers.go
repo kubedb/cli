@@ -309,17 +309,20 @@ func (k *ConnectCluster) setDefaultInitContainerSecurityContext(podTemplate *ofs
 		}
 
 		initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, strings.ToLower(connectorVersion.Spec.Type))
-
 		if initContainer == nil {
 			initContainer = &core.Container{
 				Name: strings.ToLower(connectorVersion.Spec.Type),
 			}
-			podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
+		}
+
+		if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
+			apis.SetDefaultResourceLimits(&initContainer.Resources, api.DefaultInitContainerResource)
 		}
 		if initContainer.SecurityContext == nil {
 			initContainer.SecurityContext = &core.SecurityContext{}
 		}
 		k.assignDefaultInitContainerSecurityContext(connectorVersion, initContainer.SecurityContext)
+		podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 	}
 }
 
@@ -339,12 +342,12 @@ func (k *ConnectCluster) setDefaultContainerSecurityContext(kfVersion *catalog.K
 		container = &core.Container{
 			Name: ConnectClusterContainerName,
 		}
-		podTemplate.Spec.Containers = append(podTemplate.Spec.Containers, *container)
 	}
 	if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
 	}
 	k.assignDefaultContainerSecurityContext(kfVersion, container.SecurityContext)
+	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 }
 
 func (k *ConnectCluster) assignDefaultInitContainerSecurityContext(connectorVersion *catalog.KafkaConnectorVersion, sc *core.SecurityContext) {

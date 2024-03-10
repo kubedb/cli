@@ -22,6 +22,8 @@ type ElasticsearchAutoscalerExpansion interface{}
 
 type EtcdAutoscalerExpansion interface{}
 
+type KafkaAutoscalerExpansion interface{}
+
 type MariaDBAutoscalerExpansion interface{}
 
 type MemcachedAutoscalerExpansion interface{}

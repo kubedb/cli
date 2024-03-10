@@ -52,13 +52,16 @@ type PgpoolVersion struct {
 type PgpoolVersionSpec struct {
 	// Version
 	Version string `json:"version"`
-	// Database Image
-	Pgpool PgpoolVersionDatabase `json:"pgpool"`
+
+	// Pgpool Image
+	Pgpool PgpoolVersionPgpool `json:"pgpool"`
+
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
-	// PSP names
-	// +optional
-	PodSecurityPolicies PgpoolVersionPodSecurityPolicy `json:"podSecurityPolicies"`
+
+	// Exporter Image
+	Exporter PgpoolVersionExporter `json:"exporter,omitempty"`
+
 	// SecurityContext is for the additional config for pgpool DB container
 	// +optional
 	SecurityContext PgpoolSecurityContext `json:"securityContext"`
@@ -69,8 +72,13 @@ type PgpoolVersionPodSecurityPolicy struct {
 	DatabasePolicyName string `json:"databasePolicyName"`
 }
 
+// PgpoolVersionExporter is the image for the Pgpool exporter
+type PgpoolVersionExporter struct {
+	Image string `json:"image"`
+}
+
 // PgpoolVersionDatabase is the Pgpool Database image
-type PgpoolVersionDatabase struct {
+type PgpoolVersionPgpool struct {
 	Image string `json:"image"`
 }
 

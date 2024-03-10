@@ -37,3 +37,7 @@ func (_ PostgresArchiver) CustomResourceDefinition() *apiextensions.CustomResour
 func (_ MySQLArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQLArchiver))
 }
+
+func (_ MariaDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDBArchiver))
+}

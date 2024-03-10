@@ -25,6 +25,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -33,10 +34,12 @@ import (
 	appslister "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
+	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
-	ofst "kmodules.xyz/offshoot-api/api/v1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
 func (z *ZooKeeper) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -170,8 +173,6 @@ func (z *ZooKeeper) SetDefaults() {
 	if z.Spec.TerminationPolicy == "" {
 		z.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
-
-	apis.SetDefaultResourceLimits(&z.Spec.PodTemplate.Spec.Resources, DefaultResources)
 	if z.Spec.Replicas == nil {
 		z.Spec.Replicas = pointer.Int32P(1)
 	}
@@ -193,15 +194,31 @@ func (z *ZooKeeper) SetDefaults() {
 
 	z.setDefaultContainerSecurityContext(&zkVersion, &z.Spec.PodTemplate)
 
+	dbContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.Containers, ZooKeeperContainerName)
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+	}
+
+	initContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.InitContainers, ZooKeeperInitContainerName)
+	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
+	}
+
 	z.SetHealthCheckerDefaults()
+	if z.Spec.Monitor != nil {
+		if z.Spec.Monitor.Prometheus == nil {
+			z.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
+		}
+		if z.Spec.Monitor.Prometheus != nil && z.Spec.Monitor.Prometheus.Exporter.Port == 0 {
+			z.Spec.Monitor.Prometheus.Exporter.Port = ZooKeeperMetricsPort
+		}
+		z.Spec.Monitor.SetDefaults()
+	}
 }
 
 func (z *ZooKeeper) setDefaultContainerSecurityContext(zkVersion *catalog.ZooKeeperVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
-	}
-	if podTemplate.Spec.ContainerSecurityContext == nil {
-		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
 	}
 	if podTemplate.Spec.SecurityContext == nil {
 		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
@@ -209,7 +226,33 @@ func (z *ZooKeeper) setDefaultContainerSecurityContext(zkVersion *catalog.ZooKee
 	if podTemplate.Spec.SecurityContext.FSGroup == nil {
 		podTemplate.Spec.SecurityContext.FSGroup = zkVersion.Spec.SecurityContext.RunAsUser
 	}
-	z.assignDefaultContainerSecurityContext(zkVersion, podTemplate.Spec.ContainerSecurityContext)
+
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, ZooKeeperContainerName)
+	if container == nil {
+		container = &core.Container{
+			Name: ZooKeeperContainerName,
+		}
+	}
+	if container.SecurityContext == nil {
+		container.SecurityContext = &core.SecurityContext{}
+	}
+
+	z.assignDefaultContainerSecurityContext(zkVersion, container.SecurityContext)
+
+	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
+
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, ZooKeeperInitContainerName)
+	if initContainer == nil {
+		initContainer = &core.Container{
+			Name: ZooKeeperInitContainerName,
+		}
+	}
+	if initContainer.SecurityContext == nil {
+		initContainer.SecurityContext = &core.SecurityContext{}
+	}
+	z.assignDefaultContainerSecurityContext(zkVersion, initContainer.SecurityContext)
+
+	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 }
 
 func (z *ZooKeeper) assignDefaultContainerSecurityContext(zkVersion *catalog.ZooKeeperVersion, sc *core.SecurityContext) {
@@ -233,6 +276,46 @@ func (z *ZooKeeper) assignDefaultContainerSecurityContext(zkVersion *catalog.Zoo
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
 	}
+}
+
+type zookeeperStatsService struct {
+	*ZooKeeper
+}
+
+func (z zookeeperStatsService) GetNamespace() string {
+	return z.ZooKeeper.GetNamespace()
+}
+
+func (z zookeeperStatsService) ServiceName() string {
+	return z.OffshootName() + "-stats"
+}
+
+func (z zookeeperStatsService) ServiceMonitorName() string {
+	return z.ServiceName()
+}
+
+func (z zookeeperStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return z.OffshootLabels()
+}
+
+func (z zookeeperStatsService) Path() string {
+	return DefaultStatsPath
+}
+
+func (z zookeeperStatsService) Scheme() string {
+	return ""
+}
+
+func (z zookeeperStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (z *ZooKeeper) StatsService() mona.StatsAccessor {
+	return &zookeeperStatsService{z}
+}
+
+func (z *ZooKeeper) StatsServiceLabels() map[string]string {
+	return z.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
 type ZooKeeperApp struct {

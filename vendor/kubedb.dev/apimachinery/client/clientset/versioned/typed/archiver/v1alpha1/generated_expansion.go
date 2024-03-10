@@ -18,6 +18,8 @@ limitations under the License.
 
 package v1alpha1
 
+type MariaDBArchiverExpansion interface{}
+
 type MongoDBArchiverExpansion interface{}
 
 type MySQLArchiverExpansion interface{}

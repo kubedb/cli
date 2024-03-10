@@ -47,19 +47,19 @@ spec:
             properties:
               deprecated:
                 type: boolean
-              pgpool:
+              exporter:
                 properties:
                   image:
                     type: string
                 required:
                 - image
                 type: object
-              podSecurityPolicies:
+              pgpool:
                 properties:
-                  databasePolicyName:
+                  image:
                     type: string
                 required:
-                - databasePolicyName
+                - image
                 type: object
               securityContext:
                 properties:

@@ -69,7 +69,8 @@ type SolrSpec struct {
 	// Storage to specify how storage shall be used
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
-	ZookeeperRef *core.LocalObjectReference `json:"zookeeperRef"`
+	// 	// ZooKeeper contains information for Solr to store configurations for collections
+	ZookeeperRef *kmapi.ObjectReference `json:"zookeeperRef,omitempty"`
 
 	// +optional
 	SolrModules []string `json:"solrModules,omitempty"`
@@ -94,6 +95,12 @@ type SolrSpec struct {
 
 	// +optional
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
+
+	// +optional
+	ZookeeperDigestSecret *core.LocalObjectReference `json:"zookeeperDigestSecret,omitempty"`
+
+	// +optional
+	ZookeeperDigestReadonlySecret *core.LocalObjectReference `json:"zookeeperDigestReadonlySecret,omitempty"`
 
 	// +optional
 	AuthConfigSecret *core.LocalObjectReference `json:"authConfigSecret,omitempty"`
@@ -165,6 +172,8 @@ type SolrStatus struct {
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
+	// +optional
+	Gateway *Gateway `json:"gateway,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=overseer;data;coordinator;combined

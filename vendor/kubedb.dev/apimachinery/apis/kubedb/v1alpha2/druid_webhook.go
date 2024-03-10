@@ -129,7 +129,7 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 			d.Name,
 			"spec.deepStorage is missing"))
 	} else {
-		if d.Spec.DeepStorage.Type == nil {
+		if d.Spec.DeepStorage.Type == "" {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deepStorage").Child("type"),
 				d.Name,
 				"spec.deepStorage.type is missing"))
@@ -141,7 +141,7 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 			d.Name,
 			"spec.metadataStorage is missing"))
 	} else {
-		if d.Spec.MetadataStorage.Name == nil && d.Spec.MetadataStorage.Type == nil {
+		if d.Spec.MetadataStorage.Name == "" && d.Spec.MetadataStorage.Type == "" {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage").Child("name"),
 				d.Name,
 				"spec.metadataStorage.type and spec.metadataStorage.name both can not be empty simultaneously"))

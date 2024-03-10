@@ -548,8 +548,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgBouncerVersionSpec":                       schema_apimachinery_apis_catalog_v1alpha1_PgBouncerVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolSecurityContext":                      schema_apimachinery_apis_catalog_v1alpha1_PgpoolSecurityContext(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersion":                              schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersion(ref),
-		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionDatabase":                      schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionDatabase(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionExporter":                      schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionExporter(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionList":                          schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionList(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionPgpool":                        schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionPgpool(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionPodSecurityPolicy":             schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionSpec":                          schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresSecurityContext":                    schema_apimachinery_apis_catalog_v1alpha1_PostgresSecurityContext(ref),
@@ -24523,12 +24524,19 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext"),
 						},
 					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver defines the walg & stash-addon related specifications",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -26117,11 +26125,11 @@ func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersion(ref common.Referenc
 	}
 }
 
-func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionDatabase(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionExporter(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "PgpoolVersionDatabase is the Pgpool Database image",
+				Description: "PgpoolVersionExporter is the image for the Pgpool exporter",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"image": {
@@ -26187,6 +26195,27 @@ func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionList(ref common.Refe
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionPgpool(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PgpoolVersionDatabase is the Pgpool Database image",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionPodSecurityPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -26225,9 +26254,9 @@ func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionSpec(ref common.Refe
 					},
 					"pgpool": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Database Image",
+							Description: "Pgpool Image",
 							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionDatabase"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionPgpool"),
 						},
 					},
 					"deprecated": {
@@ -26236,11 +26265,11 @@ func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionSpec(ref common.Refe
 							Format: "",
 						},
 					},
-					"podSecurityPolicies": {
+					"exporter": {
 						SchemaProps: spec.SchemaProps{
-							Description: "PSP names",
+							Description: "Exporter Image",
 							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionPodSecurityPolicy"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionExporter"),
 						},
 					},
 					"securityContext": {
@@ -26255,7 +26284,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_PgpoolVersionSpec(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionPodSecurityPolicy"},
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PgpoolVersionPgpool"},
 	}
 }
 
