@@ -40,7 +40,7 @@ type missingOpts struct {
 	panelTitle []string
 }
 
-func Run(f cmdutil.Factory, args []string, branch, file string, prom monitor.PromSvc) {
+func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monitor.PromSvc) {
 	if len(args) < 2 {
 		log.Fatal("Enter db object's name as an argument")
 	}
@@ -61,13 +61,15 @@ func Run(f cmdutil.Factory, args []string, branch, file string, prom monitor.Pro
 	database = monitor.ConvertedResourceToSingular(database)
 	var dashboardData map[string]interface{}
 	if file == "" {
-		if len(args) < 3 {
-			log.Fatal("Enter dashboard name as third argument")
+		if url == "" { // fetch from appscode/grafana-dashboard repo
+			if len(args) < 3 {
+				log.Fatal("Enter dashboard name as third argument")
+			}
+			dashboard := args[2]
+			url = getURL(branch, database, dashboard)
 		}
-		dashboard := args[2]
-		url := getURL(branch, database, dashboard)
 		dashboardData = getDashboardFromURL(url)
-	} else {
+	} else { // the file is local
 		dashboardData = getDashboardFromFile(file)
 	}
 

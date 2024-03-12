@@ -122,7 +122,7 @@ var dashboardLong = templates.LongDesc(`
 
 var dashboardExample = templates.Examples(`
 		kubectl dba monitor dashboard [DATABASE] [DATABASE_NAME] -n [NAMESPACE] \
-		[DASHBOARD_NAME] --file=[FILE_CONTAINING_DASHBOARD_JSON] \
+		[DASHBOARD_NAME] --file=[FILE_CONTAINING_DASHBOARD_JSON] --file=[FILE_CONTAINING_REMOTE_URL] \  <- these are ORed
 		--prom-svc-name=[PROM_SVC_NAME] --prom-svc-namespace=[PROM_SVC_NS] --prom-svc-port=[PROM_SVC_PORT]
 
 		# Check availability of a postgres grafana dashboard
@@ -140,12 +140,18 @@ var dashboardExample = templates.Examples(`
 			* postgres
 			* proxysql
 			* redis
+		
+		If --file is given, that is the local file. absolute or relative path both accepted.
+		If --url is given, that is the remote file. You have to specify the full raw url.
+		If just the dashboard name is given, then that will be searched in our dashboard repo. To be exact if mongodb-summary-dashboard specified only, The cli will look for the json in
+		https://raw.githubusercontent.com/appscode/grafana-dashboards/master/mongodb/mongodb-summary-dashboard.json
 `)
 
 func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		branch string
 		file   string
+		url    string
 	)
 	cmd := &cobra.Command{
 		Use:   "dashboard",
@@ -153,7 +159,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		Long:  dashboardLong,
 
 		Run: func(cmd *cobra.Command, args []string) {
-			dashboard.Run(f, args, branch, file, prom)
+			dashboard.Run(f, args, branch, file, url, prom)
 		},
 		Example:               dashboardExample,
 		DisableFlagsInUseLine: true,
@@ -161,6 +167,8 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&branch, "branch", "b", "master", "branch name of the github repo")
 	cmd.Flags().StringVarP(&file, "file", "f", "", "absolute or relative path of the file containing dashboard")
+	cmd.Flags().StringVarP(&url, "url", "u", "", "url of the raw file containing dashboard. "+
+		"For example: https://raw.githubusercontent.com/appscode/grafana-dashboards/master/mongodb/mongodb-summary-dashboard.json")
 	return cmd
 }
 
