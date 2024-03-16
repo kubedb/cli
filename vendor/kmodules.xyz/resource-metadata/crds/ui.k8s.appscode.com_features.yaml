@@ -184,6 +184,53 @@ spec:
               values:
                 description: Values holds the values for this Helm release.
                 x-kubernetes-preserve-unknown-fields: true
+              valuesFrom:
+                description: ValuesFrom holds references to resources containing Helm
+                  values for this HelmRelease, and information about how they should
+                  be merged.
+                items:
+                  description: 'copied from: https://github.com/fluxcd/helm-controller/blob/v0.37.4/api/v2beta2/reference_types.go#L45-L80
+                    ValuesReference contains a reference to a resource containing
+                    Helm values, and optionally the key they can be found at.'
+                  properties:
+                    kind:
+                      description: Kind of the values referent, valid values are ('Secret',
+                        'ConfigMap').
+                      enum:
+                      - Secret
+                      - ConfigMap
+                      type: string
+                    name:
+                      description: Name of the values referent. Should reside in the
+                        same namespace as the referring resource.
+                      maxLength: 253
+                      minLength: 1
+                      type: string
+                    optional:
+                      description: Optional marks this ValuesReference as optional.
+                        When set, a not found error for the values reference is ignored,
+                        but any ValuesKey, TargetPath or transient error will still
+                        result in a reconciliation failure.
+                      type: boolean
+                    targetPath:
+                      description: TargetPath is the YAML dot notation path the value
+                        should be merged at. When set, the ValuesKey is expected to
+                        be a single flat value. Defaults to 'None', which results
+                        in the values getting merged at the root.
+                      maxLength: 250
+                      pattern: ^([a-zA-Z0-9_\-.\\\/]|\[[0-9]{1,5}\])+$
+                      type: string
+                    valuesKey:
+                      description: ValuesKey is the data key where the values.yaml
+                        or a specific value can be found at. Defaults to 'values.yaml'.
+                      maxLength: 253
+                      pattern: ^[\-._a-zA-Z0-9]+$
+                      type: string
+                  required:
+                  - kind
+                  - name
+                  type: object
+                type: array
             required:
             - description
             - featureSet

@@ -27,6 +27,8 @@ import (
 	appslister "k8s.io/client-go/listers/apps/v1"
 	apps_util "kmodules.xyz/client-go/apps/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
+	petsetutil "kubeops.dev/petset/client/clientset/versioned/typed/apps/v1"
+	pslister "kubeops.dev/petset/client/listers/apps/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -41,6 +43,20 @@ func checkReplicas(lister appslister.StatefulSetNamespaceLister, selector labels
 
 	// return isReplicasReady, message, error
 	ready, msg := apps_util.StatefulSetsAreReady(items)
+	return ready, msg, nil
+}
+
+func checkReplicasOfPetSet(lister pslister.PetSetNamespaceLister, selector labels.Selector, expectedItems int) (bool, string, error) {
+	items, err := lister.List(selector)
+	if err != nil {
+		return false, "", err
+	}
+	if len(items) < expectedItems {
+		return false, fmt.Sprintf("All PetSets are not available. Desire number of PetSet: %d, Available: %d", expectedItems, len(items)), nil
+	}
+
+	// return isReplicasReady, message, error
+	ready, msg := petsetutil.PetSetsAreReady(items)
 	return ready, msg, nil
 }
 
@@ -85,6 +101,33 @@ func GetDatabasePods(db metav1.Object, stsLister appslister.StatefulSetLister, p
 
 			// Check if the StatefulSet is controlled by the database
 			if metav1.IsControlledBy(sts, db) {
+				dbPods = append(dbPods, pods[i])
+			}
+		}
+	}
+
+	return dbPods, nil
+}
+
+func GetDatabasePodsByPetSetLister(db metav1.Object, psLister pslister.PetSetLister, pods []core.Pod) ([]core.Pod, error) {
+	var dbPods []core.Pod
+
+	for i := range pods {
+		owner := metav1.GetControllerOf(&pods[i])
+		if owner == nil {
+			continue
+		}
+
+		// If the Pod is not control by a PetSet, then it is not a KubeDB database Pod
+		if owner.Kind == ResourceKindPetSet {
+			// Find the controlling PetSet
+			ps, err := psLister.PetSets(db.GetNamespace()).Get(owner.Name)
+			if err != nil {
+				return nil, err
+			}
+
+			// Check if the StatefulSet is controlled by the database
+			if metav1.IsControlledBy(ps, db) {
 				dbPods = append(dbPods, pods[i])
 			}
 		}

@@ -1,0 +1,110 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: placementpolicies.apps.k8s.appscode.com
+spec:
+  group: apps.k8s.appscode.com
+  names:
+    kind: PlacementPolicy
+    listKind: PlacementPolicyList
+    plural: placementpolicies
+    singular: placementpolicy
+  scope: Cluster
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: "PlacementPolicy represents a set of pods with consistent identities.
+          Identities are defined as: - Network: A single stable DNS and hostname.
+          - Storage: As many VolumeClaims as requested. \n The PlacementPolicy guarantees
+          that a given network identity will always map to the same storage identity."
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the desired identities of pods in this set.
+            properties:
+              affinity:
+                description: If specified, the pod's scheduling constraints
+                properties:
+                  nodeAffinity:
+                    description: Describes node affinity scheduling rules for the
+                      pod.
+                    items:
+                      properties:
+                        domains:
+                          items:
+                            properties:
+                              replicas:
+                                type: string
+                              values:
+                                items:
+                                  type: string
+                                type: array
+                            required:
+                            - replicas
+                            - values
+                            type: object
+                          type: array
+                        topologyKey:
+                          type: string
+                        weight:
+                          default: 50
+                          description: Weight associated with matching the corresponding
+                            nodeSelectorTerm, in the range 1-100.
+                          format: int32
+                          type: integer
+                        whenUnsatisfiable:
+                          default: DoNotSchedule
+                          type: string
+                      required:
+                      - domains
+                      - topologyKey
+                      - weight
+                      - whenUnsatisfiable
+                      type: object
+                    type: array
+                type: object
+              nodeSpreadConstraint:
+                properties:
+                  maxSkew:
+                    default: 1
+                    format: int32
+                    type: integer
+                  whenUnsatisfiable:
+                    default: DoNotSchedule
+                    type: string
+                required:
+                - maxSkew
+                - whenUnsatisfiable
+                type: object
+              zoneSpreadConstraint:
+                properties:
+                  maxSkew:
+                    default: 1
+                    format: int32
+                    type: integer
+                  whenUnsatisfiable:
+                    default: DoNotSchedule
+                    type: string
+                required:
+                - maxSkew
+                - whenUnsatisfiable
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true

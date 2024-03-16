@@ -106,6 +106,11 @@ type PgpoolSpec struct {
 	// TerminationPolicy controls the delete operation for Pgpool
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+
+	// PodPlacementPolicy is the reference of the podPlacementPolicy
+	// +kubebuilder:default={name: "default"}
+	// +optional
+	PodPlacementPolicy *core.LocalObjectReference `json:"podPlacementPolicy,omitempty"`
 }
 
 // PgpoolStatus defines the observed state of Pgpool

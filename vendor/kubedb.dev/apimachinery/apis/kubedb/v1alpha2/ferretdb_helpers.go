@@ -32,7 +32,6 @@ import (
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
-	appslister "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -42,6 +41,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
 func (f *FerretDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -95,6 +95,10 @@ func (f *FerretDB) PodControllerLabels(podControllerLabels map[string]string, ex
 
 func (f *FerretDB) OffshootLabels() map[string]string {
 	return f.offshootLabels(f.OffshootSelectors(), nil)
+}
+
+func (r *FerretDB) PetSetName() string {
+	return r.OffshootName()
 }
 
 func (f *FerretDB) offshootLabels(selector, override map[string]string) map[string]string {
@@ -361,8 +365,8 @@ func (f *FerretDB) StatsServiceLabels() map[string]string {
 	return f.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
 }
 
-func (f *FerretDB) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
-	// Desire number of statefulSets
+func (f *FerretDB) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {
+	// Desire number of petSets
 	expectedItems := 1
-	return checkReplicas(lister.StatefulSets(f.Namespace), labels.SelectorFromSet(f.OffshootLabels()), expectedItems)
+	return checkReplicasOfPetSet(lister.PetSets(f.Namespace), labels.SelectorFromSet(f.OffshootLabels()), expectedItems)
 }

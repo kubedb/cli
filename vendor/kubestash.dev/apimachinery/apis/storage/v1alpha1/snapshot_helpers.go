@@ -86,14 +86,25 @@ func (s *Snapshot) GetIntegrity() *bool {
 		return nil
 	}
 
-	result := true
+	result, hasResticComp := true, false
 	for _, component := range s.Status.Components {
-		if component.Integrity == nil {
+		if component.ResticStats != nil &&
+			component.Integrity == nil {
 			return nil
 		}
+
+		if component.Integrity == nil {
+			continue
+		}
+
+		hasResticComp = true
 		result = result && *component.Integrity
 	}
-	return &result
+
+	if hasResticComp {
+		return &result
+	}
+	return nil
 }
 
 func (s *Snapshot) GetTotalBackupSizeInBytes() (uint64, error) {
@@ -129,9 +140,15 @@ func (s *Snapshot) GetSize() string {
 	}
 
 	var totalSizeInByte uint64
+	hasResticComp := false
 	for _, component := range s.Status.Components {
-		if component.Size == "" {
+		if component.ResticStats != nil &&
+			component.Size == "" {
 			return ""
+		}
+
+		if component.Size == "" {
+			continue
 		}
 
 		sizeWithUnit := strings.Split(component.Size, " ")
@@ -143,9 +160,14 @@ func (s *Snapshot) GetSize() string {
 		if err != nil {
 			return ""
 		}
+		hasResticComp = true
 		totalSizeInByte += sizeInByte
 	}
-	return FormatBytes(totalSizeInByte)
+	if hasResticComp {
+		return FormatBytes(totalSizeInByte)
+	}
+
+	return ""
 }
 
 func GenerateSnapshotName(repoName, backupSession string) string {

@@ -55,16 +55,6 @@ func ClusterManagerValues() []ClusterManager {
 	}
 }
 
-var _ClusterManagerMap = map[ClusterManager]string{
-	ClusterManagerACE:                         _ClusterManagerName[0:3],
-	ClusterManagerOCMHub:                      _ClusterManagerName[3:9],
-	ClusterManagerOCMMulticlusterControlplane: _ClusterManagerName[9:36],
-	ClusterManagerOCMSpoke:                    _ClusterManagerName[36:44],
-	ClusterManagerOpenShift:                   _ClusterManagerName[44:53],
-	ClusterManagerRancher:                     _ClusterManagerName[53:60],
-	ClusterManagerVirtualCluster:              _ClusterManagerName[60:74],
-}
-
 var _ClusterManagerValue = map[string]ClusterManager{
 	_ClusterManagerName[0:3]:   ClusterManagerACE,
 	_ClusterManagerName[3:9]:   ClusterManagerOCMHub,

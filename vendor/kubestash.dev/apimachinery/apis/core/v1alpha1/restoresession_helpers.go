@@ -174,3 +174,10 @@ func (rs *RestoreSession) checkFailureInComponents() (bool, string) {
 
 	return false, ""
 }
+
+func (rs *RestoreSession) GetDataSourceNamespace() string {
+	if rs.Spec.DataSource.Namespace == "" {
+		return rs.Namespace
+	}
+	return rs.Spec.DataSource.Namespace
+}

@@ -164,6 +164,28 @@ type PostgresSpec struct {
 	// Arbiter controls spec for arbiter pods
 	// +optional
 	Arbiter *ArbiterSpec `json:"arbiter,omitempty"`
+
+	// +optional
+	Replication *PostgresReplication `json:"replication,omitempty"`
+}
+
+type WALLimitPolicy string
+
+const (
+	WALKeepSize     WALLimitPolicy = "WALKeepSize"
+	ReplicationSlot WALLimitPolicy = "ReplicationSlot"
+	WALKeepSegment  WALLimitPolicy = "WALKeepSegment"
+)
+
+type PostgresReplication struct {
+	WALLimitPolicy WALLimitPolicy `json:"walLimitPolicy"`
+
+	// +optional
+	WalKeepSizeInMegaBytes *int32 `json:"walKeepSize,omitempty"`
+	// +optional
+	WalKeepSegment *int32 `json:"walKeepSegment,omitempty"`
+	// +optional
+	MaxSlotWALKeepSizeInMegaBytes *int32 `json:"maxSlotWALKeepSize,omitempty"`
 }
 
 type ArbiterSpec struct {

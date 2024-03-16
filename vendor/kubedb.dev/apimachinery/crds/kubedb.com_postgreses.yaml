@@ -4027,6 +4027,22 @@ spec:
               replicas:
                 format: int32
                 type: integer
+              replication:
+                properties:
+                  maxSlotWALKeepSize:
+                    format: int32
+                    type: integer
+                  walKeepSegment:
+                    format: int32
+                    type: integer
+                  walKeepSize:
+                    format: int32
+                    type: integer
+                  walLimitPolicy:
+                    type: string
+                required:
+                - walLimitPolicy
+                type: object
               serviceTemplates:
                 items:
                   properties:
@@ -4389,6 +4405,24 @@ spec:
                       required:
                       - alias
                       - ports
+                      type: object
+                    type: array
+                  ui:
+                    items:
+                      properties:
+                        alias:
+                          type: string
+                        helmRelease:
+                          properties:
+                            name:
+                              type: string
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        url:
+                          type: string
+                      required:
+                      - alias
+                      - url
                       type: object
                     type: array
                 required:
