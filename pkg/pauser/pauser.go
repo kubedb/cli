@@ -29,7 +29,7 @@ type Pauser interface {
 	Pause(string, string) (bool, error) // returns true if backupconfiguration is paused
 }
 
-func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping, onlyDb, onlyBackup bool) (Pauser, error) {
+func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping, onlyDb, onlyBackup, onlyArchiver bool) (Pauser, error) {
 	clientConfig, err := restClientGetter.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -42,13 +42,13 @@ func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *met
 	case api.ResourceKindElasticsearch:
 		return NewElasticsearchPauser(clientConfig, onlyDb, onlyBackup)
 	case api.ResourceKindMongoDB:
-		return NewMongoDBPauser(clientConfig, onlyDb, onlyBackup)
+		return NewMongoDBPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindMySQL:
-		return NewMySQLPauser(clientConfig, onlyDb, onlyBackup)
+		return NewMySQLPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindMariaDB:
 		return NewMariaDBPauser(clientConfig, onlyDb, onlyBackup)
 	case api.ResourceKindPostgres:
-		return NewPostgresPauser(clientConfig, onlyDb, onlyBackup)
+		return NewPostgresPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindRedis:
 		return NewRedisPauser(clientConfig, onlyDb, onlyBackup)
 	default:

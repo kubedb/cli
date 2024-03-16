@@ -29,7 +29,7 @@ type Resumer interface {
 	Resume(string, string) (bool, error) // returns true if backupconfiguration is resumed
 }
 
-func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping, onlyDb, onlyBackup bool) (Resumer, error) {
+func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *meta.RESTMapping, onlyDb, onlyBackup, onlyArchiver bool) (Resumer, error) {
 	clientConfig, err := restClientGetter.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -42,13 +42,13 @@ func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *me
 	case api.ResourceKindElasticsearch:
 		return NewElasticsearchResumer(clientConfig, onlyDb, onlyBackup)
 	case api.ResourceKindMongoDB:
-		return NewMongoDBResumer(clientConfig, onlyDb, onlyBackup)
+		return NewMongoDBResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindMySQL:
-		return NewMySQLResumer(clientConfig, onlyDb, onlyBackup)
+		return NewMySQLResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindMariaDB:
 		return NewMariaDBResumer(clientConfig, onlyDb, onlyBackup)
 	case api.ResourceKindPostgres:
-		return NewPostgresResumer(clientConfig, onlyDb, onlyBackup)
+		return NewPostgresResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindRedis:
 		return NewRedisResumer(clientConfig, onlyDb, onlyBackup)
 	default:

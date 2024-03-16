@@ -323,9 +323,9 @@ func (opts *mariadbOpts) getShellCommand(command string) (string, error) {
 	containerName := "mariadb"
 
 	if db.Spec.TLS != nil {
-		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", mdCaFile, mdCertFile, mdKeyFile, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mariadb -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", mdCaFile, mdCertFile, mdKeyFile, api.ResourceSingularMySQL, command)
 	} else {
-		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mariadb -u%s -p'%s' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, api.ResourceSingularMySQL, command)
 	}
 
 	return cmd, err
