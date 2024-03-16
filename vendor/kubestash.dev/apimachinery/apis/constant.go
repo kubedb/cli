@@ -23,6 +23,7 @@ const (
 	KubeStashApp              = "kubestash.com/app"
 	KubeStashCleanupFinalizer = "kubestash.com/cleanup"
 	KubeDBGroupName           = "kubedb.com"
+	ElasticsearchGroupName    = "elasticsearch.kubedb.com"
 )
 
 const (
@@ -135,6 +136,7 @@ const (
 	ComponentWal            = "wal"
 	ComponentManifest       = "manifest"
 	ComponentVolumeSnapshot = "volumesnapshot"
+	ComponentDashboard      = "dashboard"
 )
 
 const (

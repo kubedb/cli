@@ -12585,6 +12585,10 @@ spec:
                     required:
                     - name
                     type: object
+                  namespace:
+                    description: Namespace specifies the namespace of the DataSource
+                      (i.e. Repository, Snapshot).
+                    type: string
                   pitr:
                     description: PITR stands for Point-In-Time Recovery. You can provide
                       a target time instead of specifying a particular Snapshot. Stash

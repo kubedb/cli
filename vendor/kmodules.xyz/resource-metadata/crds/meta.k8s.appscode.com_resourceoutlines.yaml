@@ -362,6 +362,12 @@ spec:
                   properties:
                     name:
                       type: string
+                    requiredFeatureSets:
+                      additionalProperties:
+                        items:
+                          type: string
+                        type: array
+                      type: object
                     sections:
                       items:
                         properties:
@@ -1130,6 +1136,12 @@ spec:
                             type: object
                           name:
                             type: string
+                          requiredFeatureSets:
+                            additionalProperties:
+                              items:
+                                type: string
+                              type: array
+                            type: object
                         type: object
                       type: array
                   required:

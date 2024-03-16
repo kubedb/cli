@@ -1238,6 +1238,14 @@ spec:
                         type: object
                     type: object
                 type: object
+              podPlacementPolicy:
+                default:
+                  name: default
+                properties:
+                  name:
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
               podTemplate:
                 properties:
                   controller:
@@ -4866,6 +4874,14 @@ spec:
                 properties:
                   aggregator:
                     properties:
+                      podPlacementPolicy:
+                        default:
+                          name: default
+                        properties:
+                          name:
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       podTemplate:
                         properties:
                           controller:
@@ -8312,6 +8328,14 @@ spec:
                     type: object
                   leaf:
                     properties:
+                      podPlacementPolicy:
+                        default:
+                          name: default
+                        properties:
+                          name:
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
                       podTemplate:
                         properties:
                           controller:
@@ -11826,6 +11850,24 @@ spec:
                       required:
                       - alias
                       - ports
+                      type: object
+                    type: array
+                  ui:
+                    items:
+                      properties:
+                        alias:
+                          type: string
+                        helmRelease:
+                          properties:
+                            name:
+                              type: string
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        url:
+                          type: string
+                      required:
+                      - alias
+                      - url
                       type: object
                     type: array
                 required:

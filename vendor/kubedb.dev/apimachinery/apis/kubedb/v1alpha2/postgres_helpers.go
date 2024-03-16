@@ -26,6 +26,8 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"github.com/Masterminds/semver/v3"
+	"github.com/pkg/errors"
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
@@ -261,6 +263,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 	// So that /var/pv directory have the group permission for the RunAsGroup user GID.
 	// Otherwise, We will get write permission denied.
 	p.Spec.PodTemplate.Spec.SecurityContext.FSGroup = p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup
+	p.SetDefaultReplicationMode(postgresVersion)
 	p.SetArbiterDefault()
 	p.SetTLSDefaults()
 	p.SetHealthCheckerDefaults()
@@ -275,6 +278,39 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
 			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = postgresVersion.Spec.SecurityContext.RunAsUser
 		}
+	}
+}
+
+func getMajorPgVersion(postgresVersion *catalog.PostgresVersion) (uint64, error) {
+	ver, err := semver.NewVersion(postgresVersion.Spec.Version)
+	if err != nil {
+		return 0, errors.Wrap(err, "Failed to get postgres major.")
+	}
+	return ver.Major(), nil
+}
+
+// SetDefaultReplicationMode set the default replication mode.
+// Replication slot will be prioritized if no WalLimitPolicy is mentioned
+func (p *Postgres) SetDefaultReplicationMode(postgresVersion *catalog.PostgresVersion) {
+	majorVersion, _ := getMajorPgVersion(postgresVersion)
+	if p.Spec.Replication == nil {
+		p.Spec.Replication = &PostgresReplication{}
+	}
+	if p.Spec.Replication.WALLimitPolicy == "" {
+		if majorVersion <= uint64(12) {
+			p.Spec.Replication.WALLimitPolicy = WALKeepSegment
+		} else {
+			p.Spec.Replication.WALLimitPolicy = WALKeepSize
+		}
+	}
+	if p.Spec.Replication.WALLimitPolicy == WALKeepSegment && p.Spec.Replication.WalKeepSegment == nil {
+		p.Spec.Replication.WalKeepSegment = pointer.Int32P(64)
+	}
+	if p.Spec.Replication.WALLimitPolicy == WALKeepSize && p.Spec.Replication.WalKeepSizeInMegaBytes == nil {
+		p.Spec.Replication.WalKeepSizeInMegaBytes = pointer.Int32P(1024)
+	}
+	if p.Spec.Replication.WALLimitPolicy == ReplicationSlot && p.Spec.Replication.MaxSlotWALKeepSizeInMegaBytes == nil {
+		p.Spec.Replication.MaxSlotWALKeepSizeInMegaBytes = pointer.Int32P(-1)
 	}
 }
 

@@ -5867,6 +5867,24 @@ spec:
                       - ports
                       type: object
                     type: array
+                  ui:
+                    items:
+                      properties:
+                        alias:
+                          type: string
+                        helmRelease:
+                          properties:
+                            name:
+                              type: string
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        url:
+                          type: string
+                      required:
+                      - alias
+                      - url
+                      type: object
+                    type: array
                 required:
                 - name
                 - namespace

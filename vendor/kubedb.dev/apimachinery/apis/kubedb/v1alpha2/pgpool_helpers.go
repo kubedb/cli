@@ -31,7 +31,6 @@ import (
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
-	appslister "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -39,6 +38,7 @@ import (
 	"kmodules.xyz/client-go/policy/secomp"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
 func (p *Pgpool) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -122,7 +122,7 @@ func (p *Pgpool) OffshootSelectors(extraSelectors ...map[string]string) map[stri
 	return meta_util.OverwriteKeys(selector, extraSelectors...)
 }
 
-func (p *Pgpool) StatefulSetName() string {
+func (p *Pgpool) PetSetName() string {
 	return p.OffshootName()
 }
 
@@ -311,8 +311,8 @@ func (p *Pgpool) GetPersistentSecrets() []string {
 	return secrets
 }
 
-func (p *Pgpool) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
-	// Desire number of statefulSets
+func (p *Pgpool) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {
+	// Desire number of petSets
 	expectedItems := 1
-	return checkReplicas(lister.StatefulSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
+	return checkReplicasOfPetSet(lister.PetSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
 }

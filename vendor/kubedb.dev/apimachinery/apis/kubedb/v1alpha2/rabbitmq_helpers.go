@@ -33,7 +33,6 @@ import (
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
-	appslister "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -43,6 +42,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
 func (r *RabbitMQ) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -207,7 +207,7 @@ func (r *RabbitMQ) PodLabels(extraLabels ...map[string]string) map[string]string
 	return r.offshootLabels(meta_util.OverwriteKeys(r.OffshootSelectors(), extraLabels...), r.Spec.PodTemplate.Labels)
 }
 
-func (r *RabbitMQ) StatefulSetName() string {
+func (r *RabbitMQ) PetSetName() string {
 	return r.OffshootName()
 }
 
@@ -411,8 +411,8 @@ func (r *RabbitMQ) SetHealthCheckerDefaults() {
 	}
 }
 
-func (r *RabbitMQ) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, string, error) {
-	// Desire number of statefulSets
+func (r *RabbitMQ) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {
+	// Desire number of petSets
 	expectedItems := 1
-	return checkReplicas(lister.StatefulSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
+	return checkReplicasOfPetSet(lister.PetSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }
