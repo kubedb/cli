@@ -74,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&PostgresOpsRequestList{},
 		&ProxySQLOpsRequest{},
 		&ProxySQLOpsRequestList{},
+		&RabbitMQOpsRequest{},
+		&RabbitMQOpsRequestList{},
 		&RedisOpsRequest{},
 		&RedisOpsRequestList{},
 		&RedisSentinelOpsRequest{},

@@ -34,6 +34,7 @@ type KubedbV1alpha2Interface interface {
 	EtcdsGetter
 	FerretDBsGetter
 	KafkasGetter
+	MSSQLServersGetter
 	MariaDBsGetter
 	MemcachedsGetter
 	MongoDBsGetter
@@ -74,6 +75,10 @@ func (c *KubedbV1alpha2Client) FerretDBs(namespace string) FerretDBInterface {
 
 func (c *KubedbV1alpha2Client) Kafkas(namespace string) KafkaInterface {
 	return newKafkas(c, namespace)
+}
+
+func (c *KubedbV1alpha2Client) MSSQLServers(namespace string) MSSQLServerInterface {
+	return newMSSQLServers(c, namespace)
 }
 
 func (c *KubedbV1alpha2Client) MariaDBs(namespace string) MariaDBInterface {

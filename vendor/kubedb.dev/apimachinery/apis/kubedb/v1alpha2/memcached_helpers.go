@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/crds"
 
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
+	"gomodules.xyz/pointer"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
@@ -125,6 +126,10 @@ type memcachedStatsService struct {
 	*Memcached
 }
 
+func (m Memcached) Address() string {
+	return fmt.Sprintf("%s.%s.svc:11211", m.ServiceName(), m.Namespace)
+}
+
 func (m memcachedStatsService) GetNamespace() string {
 	return m.Memcached.GetNamespace()
 }
@@ -170,13 +175,25 @@ func (m *Memcached) SetDefaults() {
 	if m.Spec.TerminationPolicy == "" {
 		m.Spec.TerminationPolicy = TerminationPolicyDelete
 	}
-
 	if m.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
 	}
 
 	m.Spec.Monitor.SetDefaults()
+	m.SetHealthCheckerDefaults()
 	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
+}
+
+func (m *Memcached) SetHealthCheckerDefaults() {
+	if m.Spec.HealthChecker.PeriodSeconds == nil {
+		m.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthChecker.TimeoutSeconds == nil {
+		m.Spec.HealthChecker.TimeoutSeconds = pointer.Int32P(10)
+	}
+	if m.Spec.HealthChecker.FailureThreshold == nil {
+		m.Spec.HealthChecker.FailureThreshold = pointer.Int32P(10)
+	}
 }
 
 func (m *MemcachedSpec) GetPersistentSecrets() []string {

@@ -215,6 +215,7 @@ var sdbReservedVolumes = []string{
 	SinglestoreVolumeNameCustomConfig,
 	SinglestoreVolmeNameInitScript,
 	SinglestoreVolumeNameData,
+	SinglestoreVolumeNameTLS,
 }
 
 var sdbReservedVolumesMountPaths = []string{
@@ -222,6 +223,7 @@ var sdbReservedVolumesMountPaths = []string{
 	SinglestoreVolumeMountPathInitScript,
 	SinglestoreVolumeMountPathCustomConfig,
 	SinglestoreVolumeMountPathUserInitScript,
+	SinglestoreVolumeMountPathTLS,
 }
 
 func sdbValidateVersion(s *Singlestore) error {

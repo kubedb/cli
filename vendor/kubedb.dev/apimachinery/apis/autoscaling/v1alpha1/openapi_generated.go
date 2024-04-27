@@ -440,6 +440,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/objectstore-api/api/v1.SwiftSpec":                                             schema_kmodulesxyz_objectstore_api_api_v1_SwiftSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings":                                 schema_kmodulesxyz_offshoot_api_api_v1_ContainerRuntimeSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.EphemeralVolumeSource":                                    schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref),
+		"kmodules.xyz/offshoot-api/api/v1.GatewayPort":                                              schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref),
 		"kmodules.xyz/offshoot-api/api/v1.IONiceSettings":                                           schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.NiceSettings":                                             schema_kmodulesxyz_offshoot_api_api_v1_NiceSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ObjectMeta":                                               schema_kmodulesxyz_offshoot_api_api_v1_ObjectMeta(ref),
@@ -531,6 +532,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLAutoscalerSpec":                  schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLComputeAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ProxySQLOpsRequestOptions":               schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLOpsRequestOptions(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscaler":                      schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQAutoscaler(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscalerList":                  schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQAutoscalerList(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscalerSpec":                  schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQComputeAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQComputeAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQOpsRequestOptions":               schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQOpsRequestOptions(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQStorageAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RecommendedContainerResources":           schema_apimachinery_apis_autoscaling_v1alpha1_RecommendedContainerResources(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RecommendedPodResources":                 schema_apimachinery_apis_autoscaling_v1alpha1_RecommendedPodResources(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisAutoscaler":                         schema_apimachinery_apis_autoscaling_v1alpha1_RedisAutoscaler(ref),
@@ -21328,6 +21335,49 @@ func schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref common.Ref
 	}
 }
 
+func schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GatewayPort contains information on Gateway service's port.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The name of this port within the gateway service.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The port that will be exposed by the gateway service.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"backendServicePort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of the port to access the backend service.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"nodePort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The port on each node on which this gateway service is exposed when type is NodePort or LoadBalancer.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+				Required: []string{"port"},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -25848,6 +25898,220 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ProxySQLOpsRequestOptions(ref
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQAutoscaler(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the behavior of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscalerSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Current information about the autoscaler.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQAutoscalerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RabbitMQAutoscalerList is a list of RabbitMQAutoscaler objects.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata is the standard list metadata.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "items is the list of rabbitmq database autoscaler objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscaler"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQAutoscaler"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RabbitMQAutoscalerSpec is the specification of the behavior of the autoscaler.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "This field will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQOpsRequestOptions"),
+						},
+					},
+					"compute": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQComputeAutoscalerSpec"),
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQStorageAutoscalerSpec"),
+						},
+					},
+				},
+				Required: []string{"databaseRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RabbitMQStorageAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQComputeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"nodeTopology": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
+						},
+					},
+					"rabbitmq": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"readinessCriteria": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the Readiness Criteria",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RabbitMQReplicaReadinessCriteria"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RabbitMQReplicaReadinessCriteria"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_RabbitMQStorageAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"rabbitmq": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"},
 	}
 }
 

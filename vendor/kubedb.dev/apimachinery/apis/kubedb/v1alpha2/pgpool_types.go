@@ -111,6 +111,17 @@ type PgpoolSpec struct {
 	// +kubebuilder:default={name: "default"}
 	// +optional
 	PodPlacementPolicy *core.LocalObjectReference `json:"podPlacementPolicy,omitempty"`
+
+	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
+	SSLMode PgpoolSSLMode `json:"sslMode,omitempty"`
+
+	// ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
+	// +kubebuilder:default=md5
+	ClientAuthMode PgpoolClientAuthMode `json:"clientAuthMode,omitempty"`
+
+	// TLS contains tls configurations for client and server.
+	// +optional
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 }
 
 // PgpoolStatus defines the observed state of Pgpool
@@ -148,3 +159,65 @@ type PgpoolList struct {
 	meta.ListMeta `json:"metadata,omitempty"`
 	Items         []Pgpool `json:"items"`
 }
+
+// +kubebuilder:validation:Enum=server;client;metrics-exporter
+type PgpoolCertificateAlias string
+
+const (
+	PgpoolServerCert          PgpoolCertificateAlias = "server"
+	PgpoolClientCert          PgpoolCertificateAlias = "client"
+	PgpoolMetricsExporterCert PgpoolCertificateAlias = "metrics-exporter"
+)
+
+// ref: https://www.postgresql.org/docs/13/libpq-ssl.html
+// +kubebuilder:validation:Enum=disable;allow;prefer;require;verify-ca;verify-full
+type PgpoolSSLMode string
+
+const (
+	// PgpoolSSLModeDisable represents `disable` sslMode. It ensures that the server does not use TLS/SSL.
+	PgpoolSSLModeDisable PgpoolSSLMode = "disable"
+
+	// PgpoolSSLModeAllow represents `allow` sslMode. 	I don't care about security,
+	// but I will pay the overhead of encryption if the server insists on it.
+	PgpoolSSLModeAllow PgpoolSSLMode = "allow"
+
+	// PgpoolSSLModePrefer represents `preferSSL` sslMode.
+	// I don't care about encryption, but I wish to pay the overhead of encryption if the server supports it.
+	PgpoolSSLModePrefer PgpoolSSLMode = "prefer"
+
+	// PgpoolSSLModeRequire represents `requiteSSL` sslmode. I want my data to be encrypted, and I accept the overhead.
+	// I trust that the network will make sure I always connect to the server I want.
+	PgpoolSSLModeRequire PgpoolSSLMode = "require"
+
+	// PgpoolSSLModeVerifyCA represents `verify-ca` sslmode. I want my data encrypted, and I accept the overhead.
+	// I want to be sure that I connect to a server that I trust.
+	PgpoolSSLModeVerifyCA PgpoolSSLMode = "verify-ca"
+
+	// PgpoolSSLModeVerifyFull represents `verify-full` sslmode. I want my data encrypted, and I accept the overhead.
+	// I want to be sure that I connect to a server I trust, and that it's the one I specify.
+	PgpoolSSLModeVerifyFull PgpoolSSLMode = "verify-full"
+)
+
+// PgpoolClientAuthMode represents the ClientAuthMode of Pgpool clusters ( replicaset )
+// ref: https://www.postgresql.org/docs/12/auth-methods.html
+// +kubebuilder:validation:Enum=md5;scram;cert
+type PgpoolClientAuthMode string
+
+const (
+	// PgpoolClientAuthModeMD5 uses a custom less secure challenge-response mechanism.
+	// It prevents password sniffing and avoids storing passwords on the server in plain text but provides no protection
+	// if an attacker manages to steal the password hash from the server.
+	// Also, the MD5 hash algorithm is nowadays no longer considered secure against determined attacks
+	PgpoolClientAuthModeMD5 PgpoolClientAuthMode = "md5"
+
+	// PgpoolClientAuthModeScram performs SCRAM-SHA-256 authentication, as described in RFC 7677.
+	// It is a challenge-response scheme that prevents password sniffing on untrusted connections
+	// and supports storing passwords on the server in a cryptographically hashed form that is thought to be secure.
+	// This is the most secure of the currently provided methods, but it is not supported by older client libraries.
+	PgpoolClientAuthModeScram PgpoolClientAuthMode = "scram"
+
+	// PgpoolClientAuthModeCert represents `cert clientcert=1` auth mode where client need to provide cert and private key for authentication.
+	// When server is config with this auth method. Client can't connect with pgpool server with password. They need
+	// to Send the client cert and client key certificate for authentication.
+	PgpoolClientAuthModeCert PgpoolClientAuthMode = "cert"
+)

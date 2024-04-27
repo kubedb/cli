@@ -440,6 +440,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/objectstore-api/api/v1.SwiftSpec":                               schema_kmodulesxyz_objectstore_api_api_v1_SwiftSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings":                   schema_kmodulesxyz_offshoot_api_api_v1_ContainerRuntimeSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.EphemeralVolumeSource":                      schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref),
+		"kmodules.xyz/offshoot-api/api/v1.GatewayPort":                                schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref),
 		"kmodules.xyz/offshoot-api/api/v1.IONiceSettings":                             schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.NiceSettings":                               schema_kmodulesxyz_offshoot_api_api_v1_NiceSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ObjectMeta":                                 schema_kmodulesxyz_offshoot_api_api_v1_ObjectMeta(ref),
@@ -496,6 +497,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Gateway":                        schema_apimachinery_apis_kubedb_v1alpha2_Gateway(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.GitRepo":                        schema_apimachinery_apis_kubedb_v1alpha2_GitRepo(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec":                       schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication":         schema_apimachinery_apis_kubedb_v1alpha2_InternalAuthentication(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Kafka":                          schema_apimachinery_apis_kubedb_v1alpha2_Kafka(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaApp":                       schema_apimachinery_apis_kubedb_v1alpha2_KafkaApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaBrokerCapacity":            schema_apimachinery_apis_kubedb_v1alpha2_KafkaBrokerCapacity(ref),
@@ -506,6 +508,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaSpec":                      schema_apimachinery_apis_kubedb_v1alpha2_KafkaSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaStatus":                    schema_apimachinery_apis_kubedb_v1alpha2_KafkaStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KernelSettings":                 schema_apimachinery_apis_kubedb_v1alpha2_KernelSettings(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLAvailabilityGroupSpec":     schema_apimachinery_apis_kubedb_v1alpha2_MSSQLAvailabilityGroupSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLLeaderElectionConfig":      schema_apimachinery_apis_kubedb_v1alpha2_MSSQLLeaderElectionConfig(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer":                    schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServer(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerApp":                 schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerApp(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerList":                schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerSpec":                schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerStatus":              schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerStatus(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLTopology":                  schema_apimachinery_apis_kubedb_v1alpha2_MSSQLTopology(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDB":                        schema_apimachinery_apis_kubedb_v1alpha2_MariaDB(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBList":                    schema_apimachinery_apis_kubedb_v1alpha2_MariaDBList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBSpec":                    schema_apimachinery_apis_kubedb_v1alpha2_MariaDBSpec(ref),
@@ -21418,6 +21428,49 @@ func schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref common.Ref
 	}
 }
 
+func schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GatewayPort contains information on Gateway service's port.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The name of this port within the gateway service.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The port that will be exposed by the gateway service.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"backendServicePort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of the port to access the backend service.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"nodePort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The port on each node on which this gateway service is exposed when type is NodePort or LoadBalancer.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+				Required: []string{"port"},
+			},
+		},
+	}
+}
+
 func schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -25142,6 +25195,28 @@ func schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref common.ReferenceCallb
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_InternalAuthentication(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "InternalAuthentication provides different way of endpoint authentication",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"endpointCert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EndpointCert is used for endpoint authentication of MSSql Server",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
+						},
+					},
+				},
+				Required: []string{"endpointCert"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.TLSConfig"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_Kafka(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -25661,6 +25736,396 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KernelSettings(ref common.Referenc
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLAvailabilityGroupSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLAvailabilityGroupSpec defines the availability group spec for MSSQLServer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databases": {
+						SchemaProps: spec.SchemaProps{
+							Description: "AvailabilityDatabases is an array of databases to be included in the availability group",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLLeaderElectionConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLLeaderElectionConfig contains essential attributes of leader election.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"period": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Period between Node.Tick invocations",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"electionTick": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ElectionTick is the number of Node.Tick invocations that must pass between\n\telections. That is, if a follower does not receive any message from the\n leader of current term before ElectionTick has elapsed, it will become\n\tcandidate and start an election. ElectionTick must be greater than\n HeartbeatTick. We suggest ElectionTick = 10 * HeartbeatTick to avoid\n unnecessary leader switching. default value is 10.",
+							Default:     10,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"heartbeatTick": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HeartbeatTick is the number of Node.Tick invocations that must pass between heartbeats. That is, a leader sends heartbeat messages to maintain its leadership every HeartbeatTick ticks. default value is 1.",
+							Default:     1,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"transferLeadershipInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TransferLeadershipInterval retry interval for transfer leadership to the healthiest node",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"transferLeadershipTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TransferLeadershipTimeout retry timeout for transfer leadership to the healthiest node",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServer(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerStatus"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerApp(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"MSSQLServer": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer"),
+						},
+					},
+				},
+				Required: []string{"MSSQLServer"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerList contains a list of MSSQLServer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerSpec defines the desired state of MSSQLServer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Version of MSSQLServer to be deployed.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of instances to deploy for a MSSQLServer database. In case of MSSQLServer Availability Group.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MSSQLServer cluster topology",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLTopology"),
+						},
+					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable (default) or ephemeral",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Storage spec to specify how storage shall be used.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"authSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Database authentication secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"internalAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InternalAuth is used to authenticate endpoint",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication"),
+						},
+					},
+					"init": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Init is used to initialize database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"),
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
+						},
+					},
+					"serviceTemplates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"halted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"terminationPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TerminationPolicy controls the delete operation for database",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Coordinator defines attributes of the coordinator container",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec"),
+						},
+					},
+					"leaderElection": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Leader election configuration",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLLeaderElectionConfig"),
+						},
+					},
+					"healthChecker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
+						},
+					},
+					"podPlacementPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodPlacementPolicy is the reference of the podPlacementPolicy",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+				Required: []string{"version"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerStatus defines the observed state of MSSQLServer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLTopology(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If set to - \"AvailabilityGroup\", MSSQLAvailabilityGroupSpec is required and MSSQLServer servers will start an Availability Group",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"availabilityGroup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "AvailabilityGroup info for MSSQLServer",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLAvailabilityGroupSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLAvailabilityGroupSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_MariaDB(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -26162,12 +26627,19 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MemcachedSpec(ref common.Reference
 							Format:      "",
 						},
 					},
+					"healthChecker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -27467,7 +27939,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_NamedServiceStatus(ref common.Refe
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.ServicePort"),
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.GatewayPort"),
 									},
 								},
 							},
@@ -27478,7 +27950,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_NamedServiceStatus(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/offshoot-api/api/v1.ServicePort"},
+			"kmodules.xyz/offshoot-api/api/v1.GatewayPort"},
 	}
 }
 
@@ -27541,6 +28013,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_NamedURL(ref common.ReferenceCallb
 							Format:      "",
 						},
 					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/offshoot-api/api/v1.GatewayPort"),
+						},
+					},
 					"helmRelease": {
 						SchemaProps: spec.SchemaProps{
 							Description: "HelmRelease is the name of the helm release used to deploy this ui The name format is typically <alias>-<db-name>",
@@ -27552,7 +28030,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_NamedURL(ref common.ReferenceCallb
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v1.GatewayPort"},
 	}
 }
 
@@ -28327,12 +28805,32 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PgpoolSpec(ref common.ReferenceCal
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"sslMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clientAuthMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TLS contains tls configurations for client and server.",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
+						},
+					},
 				},
 				Required: []string{"version", "postgresRef"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgpoolConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgpoolConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 

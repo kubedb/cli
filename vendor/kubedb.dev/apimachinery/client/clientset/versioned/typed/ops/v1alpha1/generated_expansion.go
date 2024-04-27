@@ -40,6 +40,8 @@ type PostgresOpsRequestExpansion interface{}
 
 type ProxySQLOpsRequestExpansion interface{}
 
+type RabbitMQOpsRequestExpansion interface{}
+
 type RedisOpsRequestExpansion interface{}
 
 type RedisSentinelOpsRequestExpansion interface{}

@@ -95,11 +95,6 @@ func (in *PodSpec) DeepCopyInto(out *PodSpec) {
 		*out = make([]corev1.LocalObjectReference, len(*in))
 		copy(*out, *in)
 	}
-	if in.Affinity != nil {
-		in, out := &in.Affinity, &out.Affinity
-		*out = new(corev1.Affinity)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.Tolerations != nil {
 		in, out := &in.Tolerations, &out.Tolerations
 		*out = make([]corev1.Toleration, len(*in))
@@ -149,13 +144,6 @@ func (in *PodSpec) DeepCopyInto(out *PodSpec) {
 		*out = make(corev1.ResourceList, len(*in))
 		for key, val := range *in {
 			(*out)[key] = val.DeepCopy()
-		}
-	}
-	if in.TopologySpreadConstraints != nil {
-		in, out := &in.TopologySpreadConstraints, &out.TopologySpreadConstraints
-		*out = make([]corev1.TopologySpreadConstraint, len(*in))
-		for i := range *in {
-			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.SetHostnameAsFQDN != nil {

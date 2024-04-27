@@ -118,7 +118,36 @@ func (s singlestoreStatsService) Scheme() string {
 }
 
 func (s singlestoreStatsService) TLSConfig() *promapi.TLSConfig {
-	return nil
+	if s.Spec.TLS == nil {
+		return nil
+	}
+	return &promapi.TLSConfig{
+		SafeTLSConfig: promapi.SafeTLSConfig{
+			CA: promapi.SecretOrConfigMap{
+				Secret: &core.SecretKeySelector{
+					LocalObjectReference: core.LocalObjectReference{
+						Name: s.GetCertSecretName(SinglestoreClientCert),
+					},
+					Key: CACert,
+				},
+			},
+			Cert: promapi.SecretOrConfigMap{
+				Secret: &core.SecretKeySelector{
+					LocalObjectReference: core.LocalObjectReference{
+						Name: s.GetCertSecretName(SinglestoreClientCert),
+					},
+					Key: core.TLSCertKey,
+				},
+			},
+			KeySecret: &core.SecretKeySelector{
+				LocalObjectReference: core.LocalObjectReference{
+					Name: s.GetCertSecretName(SinglestoreClientCert),
+				},
+				Key: core.TLSPrivateKeyKey,
+			},
+			InsecureSkipVerify: false,
+		},
+	}
 }
 
 func (s Singlestore) StatsService() mona.StatsAccessor {
@@ -249,6 +278,23 @@ func (s *Singlestore) SetHealthCheckerDefaults() {
 	if s.Spec.HealthChecker.FailureThreshold == nil {
 		s.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
 	}
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (s *Singlestore) CertificateName(alias SinglestoreCertificateAlias) string {
+	return metautil.NameWithSuffix(s.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any
+// otherwise returns default certificate secret name for the given alias.
+func (s *Singlestore) GetCertSecretName(alias SinglestoreCertificateAlias) string {
+	if s.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(s.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return s.CertificateName(alias)
 }
 
 func (s *Singlestore) GetAuthSecretName() string {
@@ -459,11 +505,6 @@ func (s *Singlestore) SetTLSDefaults() {
 	}
 	s.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(s.Spec.TLS.Certificates, string(SinglestoreServerCert), s.CertificateName(SinglestoreServerCert))
 	s.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(s.Spec.TLS.Certificates, string(SinglestoreClientCert), s.CertificateName(SinglestoreClientCert))
-}
-
-// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
-func (s *Singlestore) CertificateName(alias SinglestoreCertificateAlias) string {
-	return metautil.NameWithSuffix(s.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
 func (s *Singlestore) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {

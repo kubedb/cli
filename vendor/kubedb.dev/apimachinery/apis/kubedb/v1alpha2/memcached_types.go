@@ -102,6 +102,11 @@ type MemcachedSpec struct {
 	// TerminationPolicy controls the delete operation for database
 	// +optional
 	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+
+	// HealthChecker defines attributes of the health checker
+	// +optional
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
 }
 
 // +kubebuilder:validation:Enum=server;metrics-exporter
