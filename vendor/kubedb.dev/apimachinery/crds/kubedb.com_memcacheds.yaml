@@ -805,6 +805,27 @@ spec:
                 type: object
               halted:
                 type: boolean
+              healthChecker:
+                default:
+                  failureThreshold: 1
+                  periodSeconds: 10
+                  timeoutSeconds: 10
+                properties:
+                  disableWriteCheck:
+                    type: boolean
+                  failureThreshold:
+                    default: 1
+                    format: int32
+                    type: integer
+                  periodSeconds:
+                    default: 10
+                    format: int32
+                    type: integer
+                  timeoutSeconds:
+                    default: 10
+                    format: int32
+                    type: integer
+                type: object
               monitor:
                 properties:
                   agent:
@@ -3712,6 +3733,9 @@ spec:
                         ports:
                           items:
                             properties:
+                              backendServicePort:
+                                format: int32
+                                type: integer
                               name:
                                 type: string
                               nodePort:
@@ -3740,6 +3764,22 @@ spec:
                               type: string
                           type: object
                           x-kubernetes-map-type: atomic
+                        port:
+                          properties:
+                            backendServicePort:
+                              format: int32
+                              type: integer
+                            name:
+                              type: string
+                            nodePort:
+                              format: int32
+                              type: integer
+                            port:
+                              format: int32
+                              type: integer
+                          required:
+                          - port
+                          type: object
                         url:
                           type: string
                       required:

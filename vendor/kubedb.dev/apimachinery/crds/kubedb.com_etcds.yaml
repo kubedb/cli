@@ -3936,6 +3936,9 @@ spec:
                         ports:
                           items:
                             properties:
+                              backendServicePort:
+                                format: int32
+                                type: integer
                               name:
                                 type: string
                               nodePort:
@@ -3964,6 +3967,22 @@ spec:
                               type: string
                           type: object
                           x-kubernetes-map-type: atomic
+                        port:
+                          properties:
+                            backendServicePort:
+                              format: int32
+                              type: integer
+                            name:
+                              type: string
+                            nodePort:
+                              format: int32
+                              type: integer
+                            port:
+                              format: int32
+                              type: integer
+                          required:
+                          - port
+                          type: object
                         url:
                           type: string
                       required:

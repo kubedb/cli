@@ -16,6 +16,13 @@ limitations under the License.
 
 package elasticsearch
 
+import "github.com/go-resty/resty/v2"
+
 type Client struct {
 	ESClient
+}
+
+type ESRestyClient struct {
+	Client *resty.Client
+	Config *Config
 }

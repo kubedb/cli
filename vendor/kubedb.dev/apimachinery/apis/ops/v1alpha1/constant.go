@@ -117,6 +117,17 @@ const (
 	UpdateStatefulSetsFailed    = "UpdateStatefulSetsFailed"
 	ReadyStatefulSets           = "ReadyStatefulSets"
 	DeleteStatefulSets          = "DeleteStatefulSets"
+	OrphanStatefulSetPods       = "OrphanStatefulSetPods"
+)
+
+// PetSets
+const (
+	UpdatePetSets          = "UpdatePetSets"
+	UpdatePetSetsSucceeded = "UpdatePetSetsSucceeded"
+	UpdatePetSetsFailed    = "UpdatePetSetsFailed"
+	ReadyPetSets           = "ReadyPetSets"
+	DeletePetSets          = "DeletePetSets"
+	OrphanPetSetPods       = "OrphanPetSetPods"
 )
 
 // Stash
@@ -129,7 +140,6 @@ const (
 
 // Elasticsearch Constant
 const (
-	OrphanStatefulSetPods     = "OrphanStatefulSetPods"
 	PrepareCustomConfig       = "PrepareCustomConfig"
 	PrepareSecureCustomConfig = "PrepareSecureCustomConfig"
 	ReconfigureSecurityAdmin  = "ReconfigureSecurityAdmin"
@@ -173,6 +183,11 @@ const (
 	UpdateBrokerNodePVCs     = "UpdateBrokerNodePVCs"
 	UpdateControllerNodePVCs = "UpdateControllerNodePVCs"
 	UpdateCombinedNodePVCs   = "UpdateCombinedNodePVCs"
+)
+
+// RabbitMQ Constants
+const (
+	UpdateNodePVCs = "UpdateNodePVCs"
 )
 
 // MongoDB Constants

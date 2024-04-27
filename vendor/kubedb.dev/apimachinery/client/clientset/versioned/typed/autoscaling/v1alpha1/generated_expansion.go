@@ -40,6 +40,8 @@ type PostgresAutoscalerExpansion interface{}
 
 type ProxySQLAutoscalerExpansion interface{}
 
+type RabbitMQAutoscalerExpansion interface{}
+
 type RedisAutoscalerExpansion interface{}
 
 type RedisSentinelAutoscalerExpansion interface{}

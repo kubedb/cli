@@ -31,6 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -120,6 +121,48 @@ func (p *Pgpool) ValidateCreateOrUpdate() field.ErrorList {
 		))
 	}
 
+	apb := appcat.AppBinding{}
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+		Name:      p.Spec.PostgresRef.Name,
+		Namespace: p.Spec.PostgresRef.Namespace,
+	}, &apb)
+	if err != nil {
+		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("postgresRef"),
+			p.Name,
+			err.Error(),
+		))
+	}
+
+	backendSSL, err := p.IsBackendTLSEnabled()
+	if err != nil {
+		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("postgresRef"),
+			p.Name,
+			err.Error(),
+		))
+	}
+
+	if p.Spec.TLS == nil && backendSSL {
+		errorList = append(errorList, field.Required(field.NewPath("spec").Child("tls"),
+			"`spec.tls` must be set because backend postgres is tls enabled",
+		))
+	}
+
+	if p.Spec.TLS == nil {
+		if p.Spec.SSLMode != "disable" {
+			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("sslMode"),
+				p.Name,
+				"Tls is not enabled, enable it to use this sslMode",
+			))
+		}
+
+		if p.Spec.ClientAuthMode == "cert" {
+			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("clientAuthMode"),
+				p.Name,
+				"Tls is not enabled, enable it to use this clientAuthMode",
+			))
+		}
+	}
+
 	if p.Spec.Replicas != nil {
 		if *p.Spec.Replicas <= 0 {
 			errorList = append(errorList, field.Required(field.NewPath("spec").Child("replicas"),
@@ -207,6 +250,7 @@ func PgpoolValidateVersion(p *Pgpool) error {
 
 var PgpoolReservedVolumes = []string{
 	PgpoolConfigVolumeName,
+	PgpoolTlsVolumeName,
 }
 
 func PgpoolValidateVolumes(p *Pgpool) error {
@@ -278,4 +322,5 @@ func PgpoolValidateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {
 
 var PgpoolReservedVolumesMountPaths = []string{
 	PgpoolConfigSecretMountPath,
+	PgpoolTlsVolumeMountPath,
 }

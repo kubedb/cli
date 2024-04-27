@@ -127,7 +127,7 @@ const (
 	MemcachedDatabasePortName       = "db"
 	MemcachedPrimaryServicePortName = "primary"
 	MemcachedDatabasePort           = 11211
-
+	MemcachedShardKey               = MemcachedKey + "/shard"
 	// =========================== MongoDB Constants ============================
 
 	MongoDBDatabasePortName       = "db"
@@ -231,9 +231,10 @@ const (
 	MySQLRouterTLSDirectoryPath        = "/etc/mysql/certs"
 	MySQLReplicationUser               = "repl"
 
-	MySQLComponentKey    = MySQLKey + "/component"
-	MySQLComponentDB     = "database"
-	MySQLComponentRouter = "router"
+	MySQLComponentKey     = MySQLKey + "/component"
+	MySQLComponentDB      = "database"
+	MySQLComponentRouter  = "router"
+	MySQLCustomConfigFile = "my-inline.cnf"
 
 	// mysql volume and volume Mounts
 
@@ -325,19 +326,22 @@ const (
 	SinglestoreDatabasePortName       = "db"
 	SinglestorePrimaryServicePortName = "primary"
 	SinglestoreStudioPortName         = "studio"
-	SinglestoreDatabasePort           = 3306
-	SinglestoreStudioPort             = 8081
-	SinglestoreExporterPort           = 9104
-	SinglestoreRootUserName           = "ROOT_USERNAME"
-	SinglestoreRootPassword           = "ROOT_PASSWORD"
-	SinglestoreRootUser               = "root"
-	DatabasePodMaster                 = "Master"
-	DatabasePodAggregator             = "Aggregator"
-	DatabasePodLeaf                   = "Leaf"
-	PetSetTypeAggregator              = "aggregator"
-	PetSetTypeLeaf                    = "leaf"
-	SinglestoreDatabaseHealth         = "singlestore_health"
-	SinglestoreTableHealth            = "singlestore_health_table"
+
+	SinglestoreDatabasePort = 3306
+	SinglestoreStudioPort   = 8081
+	SinglestoreExporterPort = 9104
+
+	SinglestoreRootUserName = "ROOT_USERNAME"
+	SinglestoreRootPassword = "ROOT_PASSWORD"
+	SinglestoreRootUser     = "root"
+	DatabasePodMaster       = "Master"
+	DatabasePodAggregator   = "Aggregator"
+	DatabasePodLeaf         = "Leaf"
+	PetSetTypeAggregator    = "aggregator"
+	PetSetTypeLeaf          = "leaf"
+
+	SinglestoreDatabaseHealth = "singlestore_health"
+	SinglestoreTableHealth    = "singlestore_health_table"
 
 	SinglestoreCoordinatorContainerName = "singlestore-coordinator"
 	SinglestoreContainerName            = "singlestore"
@@ -351,6 +355,56 @@ const (
 	SinglestoreVolumeMountPathInitScript     = "/scripts"
 	SinglestoreVolumeNameData                = "data"
 	SinglestoreVolumeMountPathData           = "/var/lib/memsql"
+	SinglestoreVolumeNameTLS                 = "tls-volume"
+	SinglestoreVolumeMountPathTLS            = "/etc/memsql/certs"
+
+	SinglestoreTLSConfigCustom     = "custom"
+	SinglestoreTLSConfigSkipVerify = "skip-verify"
+	SinglestoreTLSConfigTrue       = "true"
+	SinglestoreTLSConfigFalse      = "false"
+	SinglestoreTLSConfigPreferred  = "preferred"
+
+	// =========================== MSSQLServer Constants ============================
+	MSSQLSAUser                  = "sa"
+	MSSQLEndpointCertsSecretName = "endpoint-cert"
+	MSSQLDbmLoginSecretName      = "dbm-login-secret"
+	MSSQLMasterKeySecretName     = "master-key-secret"
+
+	AGPrimaryReplicaReadyCondition = "AGPrimaryReplicaReady"
+
+	MSSQLDatabasePodPrimary       = "primary"
+	MSSQLDatabasePodSecondary     = "secondary"
+	MSSQLSecondaryServiceAlias    = "secondary"
+	MSSQLSecondaryServicePortName = "secondary"
+
+	// port related
+	MSSQLDatabasePortName              = "db"
+	MSSQLPrimaryServicePortName        = "primary"
+	MSSQLDatabasePort                  = 1433
+	MSSQLDatabaseMirroringEndpointPort = 5022
+	MSSQLCoordinatorPort               = 2381
+	// environment variables
+	EnvAcceptEula        = "ACCEPT_EULA"
+	EnvMSSQLEnableHADR   = "MSSQL_ENABLE_HADR"
+	EnvMSSQLAgentEnabled = "MSSQL_AGENT_ENABLED"
+	EnvMSSQLSAUsername   = "MSSQL_SA_USERNAME"
+	EnvMSSQLSAPassword   = "MSSQL_SA_PASSWORD"
+	// container related
+	MSSQLContainerName            = "mssql"
+	MSSQLCoordinatorContainerName = "mssql-coordinator"
+	MSSQLInitContainerName        = "mssql-init"
+	// volume related
+	MSSQLVolumeNameData              = "data"
+	MSSQLVolumeMountPathData         = "/var/opt/mssql"
+	MSSQLVolumeNameInitScript        = "init-scripts"
+	MSSQLVolumeMountPathInitScript   = "/scripts"
+	MSSQLVolumeNameEndpointCert      = "endpoint-cert"
+	MSSQLVolumeMountPathEndpointCert = "/var/opt/mssql/endpoint-cert"
+	MSSQLVolumeNameCerts             = "certs"
+	MSSQLVolumeMountPathCerts        = "/var/opt/mssql/certs"
+	// tls related
+	MSSQLInternalTLSCrt = "tls.crt"
+	MSSQLInternalTLSKey = "tls.key"
 
 	// =========================== PostgreSQL Constants ============================
 	PostgresDatabasePortName          = "db"
@@ -389,6 +443,7 @@ const (
 	PostgresSharedScriptsDir         = "/scripts"
 	PostgresSharedTlsVolumeName      = "certs"
 	PostgresSharedTlsVolumeMountPath = "/tls/certs"
+	PostgresCustomConfigFile         = "user.conf"
 
 	PostgresKeyFileSecretSuffix = "key"
 	PostgresPEMSecretSuffix     = "pem"
@@ -516,10 +571,16 @@ const (
 	EnvPgpoolService                   = "PGPOOL_SERVICE"
 	EnvPgpoolServicePort               = "PGPOOL_SERVICE_PORT"
 	EnvPgpoolSSLMode                   = "SSLMODE"
+	EnvPgpoolExporterConnectionString  = "DATA_SOURCE_NAME"
 	PgpoolDefaultSSLMode               = "disable"
 	PgpoolExporterContainerName        = "exporter"
 	PgpoolAuthUsername                 = "pcp"
 	SyncPeriod                         = 10
+	PgpoolTlsVolumeName                = "certs"
+	PgpoolTlsVolumeMountPath           = "/config/tls"
+	PgpoolExporterTlsVolumeName        = "exporter-certs"
+	PgpoolExporterTlsVolumeMountPath   = "/tls/certs"
+	PgpoolRootUser                     = "postgres"
 	// ========================================== ZooKeeper Constants =================================================//
 
 	KubeDBZooKeeperRoleName         = "kubedb:zookeeper-version-reader"
@@ -767,6 +828,7 @@ const (
 	ResourcePluralSolr    = "solrs"
 	SolrPortName          = "http"
 	SolrRestPort          = 8983
+	SolrExporterPort      = 9854
 	SolrSecretKey         = "solr.xml"
 	SolrContainerName     = "solr"
 	SolrInitContainerName = "init-solr"
@@ -880,6 +942,7 @@ const (
 	DruidPortMiddleManagers = 8091
 	DruidPortBrokers        = 8082
 	DruidPortRouters        = 8888
+	DruidExporterPort       = 9104
 
 	// Common Runtime Configurations Properties
 	// ZooKeeperSpec
@@ -959,8 +1022,9 @@ const (
 	DruidEmitter                                = "druid.emitter"
 	DruidEmitterPrometheus                      = "prometheus"
 	DruidEmitterPrometheusPortKey               = "druid.emitter.prometheus.port"
-	DruidEmitterPrometheusPortVal               = 8080
+	DruidEmitterPrometheusPortVal               = 9104
 	DruidMonitoringMonitorsKey                  = "druid.monitoring.monitors"
+	DruidEmitterPrometheusDimensionMapPath      = "druid.emitter.prometheus.dimensionMapPath"
 	DruidEmitterPrometheusStrategy              = "druid.emitter.prometheus.strategy"
 	DruidMetricsJVMMonitor                      = "org.apache.druid.java.util.metrics.JvmMonitor"
 	DruidMetricsServiceStatusMonitor            = "org.apache.druid.server.metrics.ServiceStatusMonitor"
@@ -1068,43 +1132,48 @@ const (
 	RabbitMQPluginsVolName    = "rabbitmq-plugins"
 	RabbitMQTempConfigVolName = "temp-config"
 
-	RabbitMQContainerName          = "rabbitmq"
-	RabbitMQInitContainerName      = "rabbitmq-init"
-	RabbitMQManagementPlugin       = "rabbitmq_management"
-	RabbitMQPeerdiscoveryPlugin    = "rabbitmq_peer_discovery_k8s"
-	RabbitMQLoopBackUserKey        = "loopback_users"
-	RabbitMQLoopBackUserVal        = "none"
-	RabbitMQDefaultTCPListenerKey  = "listeners.tcp.default"
-	RabbitMQDefaultTCPListenerVal  = "5672"
-	RabbitMQQueueMasterLocatorKey  = "queue_master_locator"
-	RabbitMQQueueMasterLocatorVal  = "min-masters"
-	RabbitMQDiskFreeLimitKey       = "disk_free_limit.absolute"
-	RabbitMQDiskFreeLimitVal       = "2GB"
-	RabbitMQPartitionHandingKey    = "cluster_partition_handling"
-	RabbitMQPartitionHandingVal    = "pause_minority"
-	RabbitMQPeerDiscoveryKey       = "cluster_formation.peer_discovery_backend"
-	RabbitMQPeerDiscoveryVal       = "rabbit_peer_discovery_k8s"
-	RabbitMQK8sHostKey             = "cluster_formation.k8s.host"
-	RabbitMQK8sHostVal             = "kubernetes.default.svc.cluster.local"
-	RabbitMQK8sAddressTypeKey      = "cluster_formation.k8s.address_type"
-	RabbitMQK8sAddressTypeVal      = "hostname"
-	RabbitMQNodeCleanupWarningKey  = "cluster_formation.node_cleanup.only_log_warning"
-	RabbitMQNodeCleanupWarningVal  = "true"
-	RabbitMQLogFileLevelKey        = "log.file.level"
-	RabbitMQLogFileLevelVal        = "info"
-	RabbitMQLogConsoleKey          = "log.console"
-	RabbitMQLogConsoleVal          = "true"
-	RabbitMQLogConsoleLevelKey     = "log.console.level"
-	RabbitMQLogConsoleLevelVal     = "info"
-	RabbitMQDefaultUserKey         = "default_user"
-	RabbitMQDefaultUserVal         = "$(RABBITMQ_DEFAULT_USER)"
-	RabbitMQDefaultPasswordKey     = "default_pass"
-	RabbitMQDefaultPasswordVal     = "$(RABBITMQ_DEFAULT_PASS)"
-	RabbitMQClusterNameKey         = "cluster_name"
-	RabbitMQK8sSvcNameKey          = "cluster_formation.k8s.service_name"
-	RabbitMQConfigFileName         = "rabbitmq.conf"
-	RabbitMQEnabledPluginsFileName = "enabled_plugins"
-	RabbitMQHealthCheckerQueueName = "kubedb-system"
+	RabbitMQContainerName              = "rabbitmq"
+	RabbitMQInitContainerName          = "rabbitmq-init"
+	RabbitMQManagementPlugin           = "rabbitmq_management"
+	RabbitMQPeerdiscoveryPlugin        = "rabbitmq_peer_discovery_k8s"
+	RabbitMQFederationPlugin           = "rabbitmq_federation"
+	RabbitMQFederationManagementPlugin = "rabbitmq_federation_management"
+	RabbitMQShovelPlugin               = "rabbitmq_shovel"
+	RabbitMQShovelManagementPlugin     = "rabbitmq_shovel_management"
+	RabbitMQWebDispatchPlugin          = "rabbitmq_web_dispatch"
+	RabbitMQLoopBackUserKey            = "loopback_users"
+	RabbitMQLoopBackUserVal            = "none"
+	RabbitMQDefaultTCPListenerKey      = "listeners.tcp.default"
+	RabbitMQDefaultTCPListenerVal      = "5672"
+	RabbitMQQueueMasterLocatorKey      = "queue_master_locator"
+	RabbitMQQueueMasterLocatorVal      = "min-masters"
+	RabbitMQDiskFreeLimitKey           = "disk_free_limit.absolute"
+	RabbitMQDiskFreeLimitVal           = "2GB"
+	RabbitMQPartitionHandingKey        = "cluster_partition_handling"
+	RabbitMQPartitionHandingVal        = "pause_minority"
+	RabbitMQPeerDiscoveryKey           = "cluster_formation.peer_discovery_backend"
+	RabbitMQPeerDiscoveryVal           = "rabbit_peer_discovery_k8s"
+	RabbitMQK8sHostKey                 = "cluster_formation.k8s.host"
+	RabbitMQK8sHostVal                 = "kubernetes.default.svc.cluster.local"
+	RabbitMQK8sAddressTypeKey          = "cluster_formation.k8s.address_type"
+	RabbitMQK8sAddressTypeVal          = "hostname"
+	RabbitMQNodeCleanupWarningKey      = "cluster_formation.node_cleanup.only_log_warning"
+	RabbitMQNodeCleanupWarningVal      = "true"
+	RabbitMQLogFileLevelKey            = "log.file.level"
+	RabbitMQLogFileLevelVal            = "info"
+	RabbitMQLogConsoleKey              = "log.console"
+	RabbitMQLogConsoleVal              = "true"
+	RabbitMQLogConsoleLevelKey         = "log.console.level"
+	RabbitMQLogConsoleLevelVal         = "info"
+	RabbitMQDefaultUserKey             = "default_user"
+	RabbitMQDefaultUserVal             = "$(RABBITMQ_DEFAULT_USER)"
+	RabbitMQDefaultPasswordKey         = "default_pass"
+	RabbitMQDefaultPasswordVal         = "$(RABBITMQ_DEFAULT_PASS)"
+	RabbitMQClusterNameKey             = "cluster_name"
+	RabbitMQK8sSvcNameKey              = "cluster_formation.k8s.service_name"
+	RabbitMQConfigFileName             = "rabbitmq.conf"
+	RabbitMQEnabledPluginsFileName     = "enabled_plugins"
+	RabbitMQHealthCheckerQueueName     = "kubedb-system"
 )
 
 // =========================== FerretDB Constants ============================
@@ -1222,6 +1291,17 @@ var (
 		},
 		Limits: core.ResourceList{
 			core.ResourceMemory: resource.MustParse("2Gi"),
+		},
+	}
+
+	// DefaultResourcesMemoryIntensive must be used for Druid MiddleManagers
+	DefaultResourcesMemoryIntensiveDruid = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceMemory: resource.MustParse("2.5Gi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("2.5Gi"),
 		},
 	}
 )

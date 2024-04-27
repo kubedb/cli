@@ -320,6 +320,16 @@ func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
 		s.setDefaultContainerSecurityContext(slVersion, &s.Spec.PodTemplate)
 		s.setDefaultContainerResourceLimits(&s.Spec.PodTemplate)
 	}
+
+	if s.Spec.Monitor != nil {
+		if s.Spec.Monitor.Prometheus == nil {
+			s.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
+		}
+		if s.Spec.Monitor.Prometheus != nil && s.Spec.Monitor.Prometheus.Exporter.Port == 0 {
+			s.Spec.Monitor.Prometheus.Exporter.Port = SolrExporterPort
+		}
+		s.Spec.Monitor.SetDefaults()
+	}
 }
 
 func (s *Solr) setDefaultContainerSecurityContext(slVersion *catalog.SolrVersion, podTemplate *ofst.PodTemplateSpec) {

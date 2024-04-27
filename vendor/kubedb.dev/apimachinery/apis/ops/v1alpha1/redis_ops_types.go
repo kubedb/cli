@@ -21,7 +21,6 @@ import (
 	core "k8s.io/api/core/v1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 const (
@@ -139,11 +138,8 @@ type RedisVolumeExpansionSpec struct {
 }
 
 type RedisCustomConfigurationSpec struct {
-	// PodTemplate is an optional configuration for pods used to expose database
-	// +optional
-	PodTemplate        ofst.PodTemplateSpec       `json:"podTemplate,omitempty"`
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
-	InlineConfig       string                     `json:"inlineConfig,omitempty"`
+	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
 }
 
