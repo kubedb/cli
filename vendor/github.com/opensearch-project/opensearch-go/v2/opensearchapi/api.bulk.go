@@ -55,7 +55,7 @@ type Bulk func(body io.Reader, o ...func(*BulkRequest)) (*Response, error)
 // BulkRequest configures the Bulk API request.
 //
 type BulkRequest struct {
-	Index        string
+	Index string
 
 	Body io.Reader
 
@@ -63,7 +63,7 @@ type BulkRequest struct {
 	Refresh             string
 	RequireAlias        *bool
 	Routing             string
-	Source              []string
+	Source              interface{}
 	SourceExcludes      []string
 	SourceIncludes      []string
 	Timeout             time.Duration
@@ -116,8 +116,12 @@ func (r BulkRequest) Do(ctx context.Context, transport Transport) (*Response, er
 		params["routing"] = r.Routing
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -249,7 +253,7 @@ func (f Bulk) WithRouting(v string) func(*BulkRequest) {
 
 // WithSource - true or false to return the _source field or not, or default list of fields to return, can be overridden on each sub-request.
 //
-func (f Bulk) WithSource(v ...string) func(*BulkRequest) {
+func (f Bulk) WithSource(v interface{}) func(*BulkRequest) {
 	return func(r *BulkRequest) {
 		r.Source = v
 	}

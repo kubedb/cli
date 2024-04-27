@@ -56,7 +56,7 @@ type DeleteByQuery func(index []string, body io.Reader, o ...func(*DeleteByQuery
 // DeleteByQueryRequest configures the Delete By Query API request.
 //
 type DeleteByQueryRequest struct {
-	Index        []string
+	Index []string
 
 	Body io.Reader
 
@@ -84,7 +84,7 @@ type DeleteByQueryRequest struct {
 	Size                *int
 	Slices              interface{}
 	Sort                []string
-	Source              []string
+	Source              interface{}
 	SourceExcludes      []string
 	SourceIncludes      []string
 	Stats               []string
@@ -219,8 +219,12 @@ func (r DeleteByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 		params["sort"] = strings.Join(r.Sort, ",")
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -520,7 +524,7 @@ func (f DeleteByQuery) WithSort(v ...string) func(*DeleteByQueryRequest) {
 
 // WithSource - true or false to return the _source field or not, or a list of fields to return.
 //
-func (f DeleteByQuery) WithSource(v ...string) func(*DeleteByQueryRequest) {
+func (f DeleteByQuery) WithSource(v interface{}) func(*DeleteByQueryRequest) {
 	return func(r *DeleteByQueryRequest) {
 		r.Source = v
 	}

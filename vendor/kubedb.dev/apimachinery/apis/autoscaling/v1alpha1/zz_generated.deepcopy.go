@@ -415,62 +415,62 @@ func (in *ElasticsearchStorageAutoscalerSpec) DeepCopyInto(out *ElasticsearchSto
 	if in.Node != nil {
 		in, out := &in.Node, &out.Node
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Master != nil {
 		in, out := &in.Master, &out.Master
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Ingest != nil {
 		in, out := &in.Ingest, &out.Ingest
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Data != nil {
 		in, out := &in.Data, &out.Data
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.DataContent != nil {
 		in, out := &in.DataContent, &out.DataContent
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.DataHot != nil {
 		in, out := &in.DataHot, &out.DataHot
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.DataWarm != nil {
 		in, out := &in.DataWarm, &out.DataWarm
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.DataCold != nil {
 		in, out := &in.DataCold, &out.DataCold
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.DataFrozen != nil {
 		in, out := &in.DataFrozen, &out.DataFrozen
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.ML != nil {
 		in, out := &in.ML, &out.ML
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Transform != nil {
 		in, out := &in.Transform, &out.Transform
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Coordinating != nil {
 		in, out := &in.Coordinating, &out.Coordinating
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -835,17 +835,17 @@ func (in *KafkaStorageAutoscalerSpec) DeepCopyInto(out *KafkaStorageAutoscalerSp
 	if in.Node != nil {
 		in, out := &in.Node, &out.Node
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Broker != nil {
 		in, out := &in.Broker, &out.Broker
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Controller != nil {
 		in, out := &in.Controller, &out.Controller
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -1015,7 +1015,7 @@ func (in *MariaDBStorageAutoscalerSpec) DeepCopyInto(out *MariaDBStorageAutoscal
 	if in.MariaDB != nil {
 		in, out := &in.MariaDB, &out.MariaDB
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -1383,27 +1383,27 @@ func (in *MongoDBStorageAutoscalerSpec) DeepCopyInto(out *MongoDBStorageAutoscal
 	if in.Standalone != nil {
 		in, out := &in.Standalone, &out.Standalone
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.ReplicaSet != nil {
 		in, out := &in.ReplicaSet, &out.ReplicaSet
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.ConfigServer != nil {
 		in, out := &in.ConfigServer, &out.ConfigServer
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Shard != nil {
 		in, out := &in.Shard, &out.Shard
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Hidden != nil {
 		in, out := &in.Hidden, &out.Hidden
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -1573,7 +1573,7 @@ func (in *MySQLStorageAutoscalerSpec) DeepCopyInto(out *MySQLStorageAutoscalerSp
 	if in.MySQL != nil {
 		in, out := &in.MySQL, &out.MySQL
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -1769,7 +1769,7 @@ func (in *PerconaXtraDBStorageAutoscalerSpec) DeepCopyInto(out *PerconaXtraDBSto
 	if in.PerconaXtraDB != nil {
 		in, out := &in.PerconaXtraDB, &out.PerconaXtraDB
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -2151,7 +2151,7 @@ func (in *PostgresStorageAutoscalerSpec) DeepCopyInto(out *PostgresStorageAutosc
 	if in.Postgres != nil {
 		in, out := &in.Postgres, &out.Postgres
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -2460,7 +2460,7 @@ func (in *RabbitMQStorageAutoscalerSpec) DeepCopyInto(out *RabbitMQStorageAutosc
 	if in.RabbitMQ != nil {
 		in, out := &in.RabbitMQ, &out.RabbitMQ
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -2841,17 +2841,17 @@ func (in *RedisStorageAutoscalerSpec) DeepCopyInto(out *RedisStorageAutoscalerSp
 	if in.Standalone != nil {
 		in, out := &in.Standalone, &out.Standalone
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Cluster != nil {
 		in, out := &in.Cluster, &out.Cluster
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.Sentinel != nil {
 		in, out := &in.Sentinel, &out.Sentinel
 		*out = new(StorageAutoscalerSpec)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -2869,6 +2869,22 @@ func (in *RedisStorageAutoscalerSpec) DeepCopy() *RedisStorageAutoscalerSpec {
 // DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
 func (in *StorageAutoscalerSpec) DeepCopyInto(out *StorageAutoscalerSpec) {
 	*out = *in
+	if in.UsageThreshold != nil {
+		in, out := &in.UsageThreshold, &out.UsageThreshold
+		*out = new(int32)
+		**out = **in
+	}
+	if in.ScalingThreshold != nil {
+		in, out := &in.ScalingThreshold, &out.ScalingThreshold
+		*out = new(int32)
+		**out = **in
+	}
+	if in.ScalingRules != nil {
+		in, out := &in.ScalingRules, &out.ScalingRules
+		*out = make([]StorageScalingRule, len(*in))
+		copy(*out, *in)
+	}
+	out.UpperBound = in.UpperBound.DeepCopy()
 	return
 }
 
@@ -2878,6 +2894,22 @@ func (in *StorageAutoscalerSpec) DeepCopy() *StorageAutoscalerSpec {
 		return nil
 	}
 	out := new(StorageAutoscalerSpec)
+	in.DeepCopyInto(out)
+	return out
+}
+
+// DeepCopyInto is an autogenerated deepcopy function, copying the receiver, writing into out. in must be non-nil.
+func (in *StorageScalingRule) DeepCopyInto(out *StorageScalingRule) {
+	*out = *in
+	return
+}
+
+// DeepCopy is an autogenerated deepcopy function, copying the receiver, creating a new StorageScalingRule.
+func (in *StorageScalingRule) DeepCopy() *StorageScalingRule {
+	if in == nil {
+		return nil
+	}
+	out := new(StorageScalingRule)
 	in.DeepCopyInto(out)
 	return out
 }

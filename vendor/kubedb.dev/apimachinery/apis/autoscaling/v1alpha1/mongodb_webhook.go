@@ -190,6 +190,14 @@ func (in *MongoDBAutoscaler) validate() error {
 			if st.Standalone != nil {
 				return errors.New("Spec.Storage.Standalone is invalid for sharded mongoDB")
 			}
+
+			if err = validateScalingRules(st.ConfigServer); err != nil {
+				return err
+			}
+			if err = validateScalingRules(st.Shard); err != nil {
+				return err
+			}
+
 		} else if mg.Spec.ReplicaSet != nil {
 			if st.Standalone != nil {
 				return errors.New("Spec.Storage.Standalone is invalid for replicaSet mongoDB")
@@ -199,6 +207,10 @@ func (in *MongoDBAutoscaler) validate() error {
 			}
 			if st.ConfigServer != nil {
 				return errors.New("Spec.Storage.ConfigServer is invalid for replicaSet mongoDB")
+			}
+
+			if err = validateScalingRules(st.ReplicaSet); err != nil {
+				return err
 			}
 		} else {
 			if st.ReplicaSet != nil {
@@ -212,6 +224,16 @@ func (in *MongoDBAutoscaler) validate() error {
 			}
 			if st.Hidden != nil {
 				return errors.New("Spec.Storage.Hidden is invalid for Standalone mongoDB")
+			}
+
+			if err = validateScalingRules(st.Standalone); err != nil {
+				return err
+			}
+		}
+
+		if mg.Spec.Hidden != nil {
+			if err = validateScalingRules(st.Hidden); err != nil {
+				return err
 			}
 		}
 	}

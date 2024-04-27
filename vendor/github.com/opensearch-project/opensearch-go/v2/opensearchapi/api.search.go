@@ -56,7 +56,7 @@ type Search func(o ...func(*SearchRequest)) (*Response, error)
 // SearchRequest configures the Search API request.
 //
 type SearchRequest struct {
-	Index        []string
+	Index []string
 
 	Body io.Reader
 
@@ -88,7 +88,7 @@ type SearchRequest struct {
 	SeqNoPrimaryTerm           *bool
 	Size                       *int
 	Sort                       []string
-	Source                     []string
+	Source                     interface{}
 	SourceExcludes             []string
 	SourceIncludes             []string
 	Stats                      []string
@@ -247,8 +247,12 @@ func (r SearchRequest) Do(ctx context.Context, transport Transport) (*Response, 
 		params["sort"] = strings.Join(r.Sort, ",")
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -620,7 +624,7 @@ func (f Search) WithSort(v ...string) func(*SearchRequest) {
 
 // WithSource - true or false to return the _source field or not, or a list of fields to return.
 //
-func (f Search) WithSource(v ...string) func(*SearchRequest) {
+func (f Search) WithSource(v interface{}) func(*SearchRequest) {
 	return func(r *SearchRequest) {
 		r.Source = v
 	}

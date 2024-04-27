@@ -66,6 +66,42 @@ lint:  ## Run lint on the package
 		cd "internal/build/" && go mod tidy && go mod download && go vet ./...; \
 	}
 
+package := "prettier"
+lint.markdown:
+	@printf "\033[2m→ Checking node installed...\033[0m\n"
+	if type node > /dev/null 2>&1 && which node > /dev/null 2>&1 ; then \
+		node -v; \
+		echo -e "\033[33m Node is installed, continue...\033[0m\n"; \
+	else \
+		echo -e "\033[31m Please install node\033[0m\n"; \
+		exit 1; \
+	fi
+	@printf "\033[2m→ Checking npm installed...\033[0m\n"
+	if type npm > /dev/null 2>&1 && which npm > /dev/null 2>&1 ; then \
+		npm -v; \
+		echo -e "\033[33m NPM is installed, continue...\033[0m\n"; \
+	else \
+		echo -e "\033[31m Please install npm\033[0m\n"; \
+		exit 1; \
+	fi
+	@printf "\033[2m→ Checking $(package) installed...\033[0m\n"
+	if [ `npm list -g | grep -c $(package)` -eq 0 -o ! -d node_module ]; then \
+		echo -e "\033[33m Installing $(package)...\033[0m"; \
+		npm install -g $(package) --no-shrinkwrap; \
+	fi
+	@printf "\033[2m→ Running markdown lint...\033[0m\n"
+	if npx $(package) --prose-wrap never --check **/*.md; [[ $$? -ne 0 ]]; then \
+		echo -e "\033[32m→ Found invalid files. Want to auto-format invalid files? (y/n) \033[0m"; \
+		read RESP; \
+		if [[ $$RESP = "y" || $$RESP = "Y" ]]; then \
+		  echo -e "\033[33m Formatting...\033[0m"; \
+		  npx $(package) --prose-wrap never --write **/*.md; \
+		  echo -e "\033[34m \nAll invalid files are formatted\033[0m"; \
+		else \
+		  echo -e "\033[33m Unfortunately you are cancelled auto fixing. But we will definitely fix it in the pipeline\033[0m"; \
+		fi \
+	fi
+
 
 backport: ## Backport one or more commits from main into version branches
 ifeq ($(origin commits), undefined)
@@ -157,7 +193,6 @@ cluster.build:
 
 cluster.start:
 	docker-compose --project-directory .ci/opensearch up -d ;
-	sleep 20;
 
 cluster.stop:
 	docker-compose --project-directory .ci/opensearch down ;
@@ -196,3 +231,4 @@ help:  ## Display help
 
 .DEFAULT_GOAL := help
 .PHONY: help backport cluster cluster.clean coverage  godoc lint release test test-bench test-integ test-unit linters linters.install
+.SILENT: lint.markdown
