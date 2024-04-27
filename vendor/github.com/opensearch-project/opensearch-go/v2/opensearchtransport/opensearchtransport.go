@@ -75,13 +75,11 @@ func init() {
 }
 
 // Interface defines the interface for HTTP client.
-//
 type Interface interface {
 	Perform(*http.Request) (*http.Response, error)
 }
 
 // Config represents the configuration of HTTP client.
-//
 type Config struct {
 	URLs     []*url.URL
 	Username string
@@ -113,7 +111,6 @@ type Config struct {
 }
 
 // Client represents the HTTP client.
-//
 type Client struct {
 	sync.Mutex
 
@@ -146,7 +143,6 @@ type Client struct {
 // New creates new transport client.
 //
 // http.DefaultTransport will be used if no transport is passed in the configuration.
-//
 func New(cfg Config) (*Client, error) {
 	if cfg.Transport == nil {
 		cfg.Transport = http.DefaultTransport
@@ -235,7 +231,6 @@ func New(cfg Config) (*Client, error) {
 }
 
 // Perform executes the request and returns a response or error.
-//
 func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 	var (
 		res *http.Response
@@ -407,14 +402,20 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 			time.Sleep(c.retryBackoff(i + 1))
 		}
 	}
+	// Read, close and replace the http reponse body to close the connection
+	if res != nil && res.Body != nil {
+		body, err := io.ReadAll(res.Body)
+		res.Body.Close()
+		if err == nil {
+			res.Body = io.NopCloser(bytes.NewReader(body))
+		}
+	}
 
 	// TODO(karmi): Wrap error
 	return res, err
 }
 
 // URLs returns a list of transport URLs.
-//
-//
 func (c *Client) URLs() []*url.URL {
 	return c.pool.URLs()
 }

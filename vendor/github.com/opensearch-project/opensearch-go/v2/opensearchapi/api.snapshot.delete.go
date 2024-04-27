@@ -34,7 +34,7 @@ import (
 )
 
 func newSnapshotDeleteFunc(t Transport) SnapshotDelete {
-	return func(repository string, snapshot string, o ...func(*SnapshotDeleteRequest)) (*Response, error) {
+	return func(repository string, snapshot []string, o ...func(*SnapshotDeleteRequest)) (*Response, error) {
 		var r = SnapshotDeleteRequest{Repository: repository, Snapshot: snapshot}
 		for _, f := range o {
 			f(&r)
@@ -48,13 +48,13 @@ func newSnapshotDeleteFunc(t Transport) SnapshotDelete {
 // SnapshotDelete deletes a snapshot.
 //
 //
-type SnapshotDelete func(repository string, snapshot string, o ...func(*SnapshotDeleteRequest)) (*Response, error)
+type SnapshotDelete func(repository string, snapshot []string, o ...func(*SnapshotDeleteRequest)) (*Response, error)
 
 // SnapshotDeleteRequest configures the Snapshot Delete API request.
 //
 type SnapshotDeleteRequest struct {
 	Repository string
-	Snapshot   string
+	Snapshot   []string
 
 	MasterTimeout         time.Duration
 	ClusterManagerTimeout time.Duration
@@ -80,13 +80,13 @@ func (r SnapshotDeleteRequest) Do(ctx context.Context, transport Transport) (*Re
 
 	method = "DELETE"
 
-	path.Grow(1 + len("_snapshot") + 1 + len(r.Repository) + 1 + len(r.Snapshot))
+	path.Grow(1 + len("_snapshot") + 1 + len(r.Repository) + 1 + len(strings.Join(r.Snapshot, ",")))
 	path.WriteString("/")
 	path.WriteString("_snapshot")
 	path.WriteString("/")
 	path.WriteString(r.Repository)
 	path.WriteString("/")
-	path.WriteString(r.Snapshot)
+	path.WriteString(strings.Join(r.Snapshot, ","))
 
 	params = make(map[string]string)
 

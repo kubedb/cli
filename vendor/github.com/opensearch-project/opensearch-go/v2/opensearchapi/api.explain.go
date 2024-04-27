@@ -54,8 +54,8 @@ type Explain func(index string, id string, o ...func(*ExplainRequest)) (*Respons
 // ExplainRequest configures the Explain API request.
 //
 type ExplainRequest struct {
-	Index        string
-	DocumentID   string
+	Index      string
+	DocumentID string
 
 	Body io.Reader
 
@@ -67,7 +67,7 @@ type ExplainRequest struct {
 	Preference      string
 	Query           string
 	Routing         string
-	Source          []string
+	Source          interface{}
 	SourceExcludes  []string
 	SourceIncludes  []string
 	StoredFields    []string
@@ -135,8 +135,12 @@ func (r ExplainRequest) Do(ctx context.Context, transport Transport) (*Response,
 		params["routing"] = r.Routing
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -296,7 +300,7 @@ func (f Explain) WithRouting(v string) func(*ExplainRequest) {
 
 // WithSource - true or false to return the _source field or not, or a list of fields to return.
 //
-func (f Explain) WithSource(v ...string) func(*ExplainRequest) {
+func (f Explain) WithSource(v interface{}) func(*ExplainRequest) {
 	return func(r *ExplainRequest) {
 		r.Source = v
 	}

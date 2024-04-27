@@ -552,9 +552,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisSentinelOpsRequestOptions":          schema_apimachinery_apis_autoscaling_v1alpha1_RedisSentinelOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.RedisStorageAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_RedisStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec":                   schema_apimachinery_apis_autoscaling_v1alpha1_StorageAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageScalingRule":                      schema_apimachinery_apis_autoscaling_v1alpha1_StorageScalingRule(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.VPAStatus":                               schema_apimachinery_apis_autoscaling_v1alpha1_VPAStatus(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.VerticalPodAutopilotCondition":           schema_apimachinery_apis_autoscaling_v1alpha1_VerticalPodAutopilotCondition(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.VerticalPodAutopilotRecommenderSelector": schema_apimachinery_apis_autoscaling_v1alpha1_VerticalPodAutopilotRecommenderSelector(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.quantity":                                schema_apimachinery_apis_autoscaling_v1alpha1_quantity(ref),
 	}
 }
 
@@ -26660,6 +26662,26 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_StorageAutoscalerSpec(ref com
 							Format:      "int32",
 						},
 					},
+					"scalingRules": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ScalingRules are to support more dynamic ScalingThreshold For example, Upto certain Size (GB) increase in %, after that increase in absolute value.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageScalingRule"),
+									},
+								},
+							},
+						},
+					},
+					"upperBound": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Set a max size limit for volume increase",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
 					"expansionMode": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ExpansionMode can be `Online` or `Offline`",
@@ -26670,6 +26692,36 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_StorageAutoscalerSpec(ref com
 					},
 				},
 				Required: []string{"expansionMode"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageScalingRule"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_StorageScalingRule(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StorageScalingRule format:\n  - appliesUpto: 500GB\n    threshold: 30pc\n  - appliesUpto: 1000GB\n    threshold: 20pc\n  - appliesUpto: \"\"\n    threshold: 50GB\n\nNote that, `pc` & `%` both is supported",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"appliesUpto": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"threshold": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"appliesUpto", "threshold"},
 			},
 		},
 	}
@@ -26794,5 +26846,39 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_VerticalPodAutopilotRecommend
 				Required: []string{"name"},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_quantity(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"InString": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"InQuantity": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"Threshold": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"InString", "InQuantity", "Threshold"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }

@@ -1,15 +1,15 @@
 - [User Guide](#user-guide)
 	- [Example](#example)
 	- [Amazon OpenSearch Service](#amazon-opensearch-service)
-			- [AWS SDK V1](#aws-sdk-v1)
-			- [AWS SDK V2](#aws-sdk-v2)
+		- [AWS SDK v1](#aws-sdk-v1)
+		- [AWS SDK v2](#aws-sdk-v2)
+	- [Guides by Topic](#guides-by-topic)
 
 # User Guide
 
 ## Example
 
-In the example below, we create a client, an index with non-default settings, insert a document to the index,
-search for the document, delete the document and finally delete the index.
+In the example below, we create a client, an index with non-default settings, insert a document to the index, search for the document, delete the document and finally delete the index.
 
 ```go
 package main
@@ -140,28 +140,19 @@ func main() {
 
 ## Amazon OpenSearch Service
 
-Before starting, we strongly recommend reading the full AWS documentation regarding using IAM credentials to sign
-requests to OpenSearch APIs.
-See [Identity and Access Management in Amazon OpenSearch Service.](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)
+Before starting, we strongly recommend reading the full AWS documentation regarding using IAM credentials to sign requests to OpenSearch APIs. See [Identity and Access Management in Amazon OpenSearch Service.](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)
 
-> Even if you configure a completely open resource-based access policy, all requests to the OpenSearch Service
-> configuration API must be signed. If your policies specify IAM users or roles, requests to the OpenSearch APIs also
-> must
-> be signed using AWS Signature Version 4.
+> Even if you configure a completely open resource-based access policy, all requests to the OpenSearch Service configuration API must be signed. If your policies specify IAM users or roles, requests to the OpenSearch APIs also must be signed using AWS Signature Version 4.
 >
-See [Managed Domains signing-service requests.](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html#managedomains-signing-service-requests)
+> See [Managed Domains signing-service requests.](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html#managedomains-signing-service-requests)
 
-Depending on the version of AWS SDK used, import the v1 or v2 request signer from `signer/aws` or `signer/awsv2`
-respectively.
-Both signers are equivalent in their functionality, they provide AWS Signature Version 4 (SigV4).
+Depending on the version of AWS SDK used, import the v1 or v2 request signer from `signer/aws` or `signer/awsv2` respectively. Both signers are equivalent in their functionality, they provide AWS Signature Version 4 (SigV4).
 
-To read more about SigV4
-see [Signature Version 4 signing process](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
+To read more about SigV4 see [Signature Version 4 signing process](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
 
-Here are some Go samples that show how to sign each OpenSearch request and automatically search for AWS credentials from
-the ~/.aws folder or environment variables:
+Here are some Go samples that show how to sign each OpenSearch request and automatically search for AWS credentials from the ~/.aws folder or environment variables:
 
-#### AWS SDK V1
+### AWS SDK v1
 
 ```go
 package main
@@ -184,44 +175,47 @@ func main() {
 
 	// Create an AWS request Signer and load AWS configuration using default config folder or env vars.
 	// See https://docs.aws.amazon.com/opensearch-service/latest/developerguide/request-signing.html#request-signing-go
-	signer, err := requestsigner.NewSigner(session.Options{SharedConfigState: session.SharedConfigEnable})
+	signer, err := requestsigner.NewSignerWithService(
+		session.Options{SharedConfigState: session.SharedConfigEnable},
+		requestsigner.OpenSearchService, // Use requestsigner.OpenSearchServerless for Amazon OpenSearch Serverless.
+	)
 	if err != nil {
-		log.Fatal(err) // Do not log.fatal in a production ready app.
+		log.Fatalf("failed to create signer: %v", err) // Do not log.fatal in a production ready app.
 	}
 
-	// Create an opensearch client and use the request-signer
+	// Create an opensearch client and use the request-signer.
 	client, err := opensearch.NewClient(opensearch.Config{
 		Addresses: []string{endpoint},
 		Signer:    signer,
 	})
 	if err != nil {
-		log.Fatal("client creation err", err)
+		log.Fatalf("failed to create new opensearch client: %v", err)
 	}
 
 	ping := opensearchapi.PingRequest{}
 
 	resp, err := ping.Do(ctx, client)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to ping: %v", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.IsError() {
-		log.Println("ping response status ", resp.Status())
+		log.Printf("ping response status: %q", resp.Status())
 
 		respBody, err := io.ReadAll(resp.Body)
 		if err != nil {
-			log.Fatal("response body read err", err)
+			log.Fatalf("failed to read response body body: %v", err)
 		}
 
-		log.Fatal("ping resp body", respBody)
+		log.Fatalf("ping resp body: %s", respBody)
 	}
 
 	log.Println("PING OK")
 }
 ```
 
-#### AWS SDK V2
+### AWS SDK v2
 
 Use the AWS SDK v2 for Go to authenticate with Amazon OpenSearch service.
 
@@ -231,6 +225,7 @@ package main
 import (
 	"context"
 	"log"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -251,25 +246,25 @@ func main() {
 		),
 	)
 	if err != nil {
-		log.Fatal(err) // Do not log.fatal in a production ready app.
+		log.Fatalf("failed to load aws configuraiton: %v", err) // Do not log.fatal in a production ready app.
 	}
 
 	// Create an AWS request Signer and load AWS configuration using default config folder or env vars.
-	signer, err := requestsigner.NewSignerWithService(awsCfg, "es") // "aoss" for Amazon OpenSearch Serverless
+	signer, err := requestsigner.NewSignerWithService(awsCfg, "es") // Use "aoss" for Amazon OpenSearch Serverless
 	if err != nil {
-		log.Fatal(err) // Do not log.fatal in a production ready app.
+		log.Fatalf("failed to create signer: %v", err)
 	}
 
-	// Create an opensearch client and use the request-signer
+	// Create an opensearch client and use the request-signer.
 	client, err := opensearch.NewClient(opensearch.Config{
 		Addresses: []string{endpoint},
 		Signer:    signer,
 	})
 	if err != nil {
-		log.Fatal("client creation err", err)
+		log.Fatalf("failed to create new opensearch client: %v", err)
 	}
 
-	indexName = "go-test-index"
+	indexName := "go-test-index"
 
 	// Define index mapping.
 	mapping := strings.NewReader(`{
@@ -279,7 +274,7 @@ func main() {
 	        }
 	      }
 	 }`)
-    
+
 	// Create an index with non-default settings.
 	createIndex := opensearchapi.IndicesCreateRequest{
 		Index: indexName,
@@ -287,11 +282,9 @@ func main() {
 	}
 	createIndexResponse, err := createIndex.Do(context.Background(), client)
 	if err != nil {
-		log.Println("Error ", err.Error())
-		log.Println("failed to create index ", err)
-		log.Fatal("create response body read err", err)
+		log.Fatalf("failed to create index: %v", err)
 	}
-	log.Println(createIndexResponse)
+	log.Printf("created index: %#v", createIndexResponse)
 
 	// Delete previously created index.
 	deleteIndex := opensearchapi.IndicesDeleteRequest{
@@ -300,10 +293,9 @@ func main() {
 
 	deleteIndexResponse, err := deleteIndex.Do(context.Background(), client)
 	if err != nil {
-		log.Println("failed to delete index ", err)
-		log.Fatal("delete index response body read err", err)
+		log.Fatalf("failed to delete index: %v", err)
 	}
-	log.Println("deleting index", deleteIndexResponse)
+	log.Printf("deleted index: %#v", deleteIndexResponse)
 }
 
 func getCredentialProvider(accessKey, secretAccessKey, token string) aws.CredentialsProviderFunc {
@@ -318,3 +310,13 @@ func getCredentialProvider(accessKey, secretAccessKey, token string) aws.Credent
 }
 
 ```
+
+## Guides by Topic
+
+- [Index Lifecycle](guides/index_lifecycle.md)
+- [Document Lifecycle](guides/document_lifecycle.md)
+- [Search](guides/search.md)
+- [Bulk](guides/bulk.md)
+- [Advanced Index Actions](guides/advanced_index_actions.md)
+- [Index Templates](guides/index_template.md)
+- [Data Streams](guides/data_streams.md)

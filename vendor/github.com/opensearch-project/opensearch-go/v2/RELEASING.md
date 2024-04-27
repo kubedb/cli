@@ -15,9 +15,9 @@ This document explains the release strategy for artifacts in this organization.
 
 Given the current major release of 1.0, projects in this organization maintain the following active branches.
 
-* **main**: The next _major_ release. This is the branch where all merges take place and code moves fast.
-* **1.x**: The next _minor_ release. Once a change is merged into `main`, decide whether to backport it to `1.x`.
-* **1.0**: The _current_ release. In between minor releases, only hotfixes (e.g. security) are backported to `1.0`.
+- **main**: The next _major_ release. This is the branch where all merges take place and code moves fast.
+- **1.x**: The next _minor_ release. Once a change is merged into `main`, decide whether to backport it to `1.x`.
+- **1.0**: The _current_ release. In between minor releases, only hotfixes (e.g. security) are backported to `1.0`.
 
 Label PRs with the next major version label (e.g. `2.0.0`) and merge changes into `main`. Label PRs that you believe need to be backported as `1.x` and `1.0`. Backport PRs by checking out the versioned branch, cherry-pick changes and open a PR against each target backport branch.
 

@@ -17,7 +17,7 @@ OpenSearch is a community project that is built and maintained by people just li
 
 1. **When in doubt, open an issue** - For almost any type of contribution, the first step is opening an issue. Even if you think you already know what the solution is, writing down a description of the problem you're trying to solve will help everyone get context when they review your pull request. If it's truly a trivial change (e.g. spelling error), you can skip this step -- but as the subject says, when it doubt, [open an issue](https://github.com/opensearch-project/opensearch-go/issues/new/choose).
 
-2. **Only submit your own work**  (or work you have sufficient rights to submit) - Please make sure that any code or documentation you submit is your work or you have the rights to submit. We respect the intellectual property rights of others, and as part of contributing, we'll ask you to sign your contribution with a "Developer Certificate of Origin" (DCO) that states you have the rights to submit this work and you understand we'll use your contribution. There's more information about this topic in the [DCO section](#developer-certificate-of-origin).
+2. **Only submit your own work** (or work you have sufficient rights to submit) - Please make sure that any code or documentation you submit is your work or you have the rights to submit. We respect the intellectual property rights of others, and as part of contributing, we'll ask you to sign your contribution with a "Developer Certificate of Origin" (DCO) that states you have the rights to submit this work and you understand we'll use your contribution. There's more information about this topic in the [DCO section](#developer-certificate-of-origin).
 
 ## Ways to Contribute
 
@@ -34,7 +34,6 @@ If you've upgraded to the latest version and you can't find it in our open issue
 ### Feature Requests
 
 If you've thought of a way that OpenSearch could be better, we want to hear about it. We track feature requests using GitHub, so please feel free to open an issue which describes the feature you would like to see, why you need it, and how it should work.
-
 
 ### Contributing Code
 
@@ -75,7 +74,7 @@ By making a contribution to this project, I certify that:
     sign-off) is maintained indefinitely and may be redistributed
     consistent with this project or the open source license(s)
     involved.
- ```
+```
 
 We require that every contribution to OpenSearch is signed with a Developer Certificate of Origin. Additionally, please use your real name. We do not accept anonymous contributors nor those utilizing pseudonyms.
 
@@ -93,12 +92,12 @@ OpenSearch-go maintains a version specific changelog by enforcing a change to th
 
 The changes are curated by version, with the changes to the main branch added chronologically to the `Unreleased` version. Each version has corresponding sections which list out the category of the change - `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
 
-
 ### Adding Changes
 
 As a contributor, you must ensure that every pull request has its changes listed out within the corresponding version and appropriate section of the [CHANGELOG](CHANGELOG.md) file.
 
 Adding in the change is a two step process -
+
 1. Add your changes to the corresponding section within the CHANGELOG file with dummy pull request information, publish the PR.
 
 2. Update the entry for your change in [`CHANGELOG.md`](CHANGELOG.md) and make sure that you reference the pull request there.

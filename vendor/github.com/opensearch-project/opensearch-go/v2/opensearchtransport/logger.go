@@ -248,8 +248,12 @@ func (l *CurlLogger) LogRoundTrip(req *http.Request, res *http.Response, err err
 		}
 	}
 
-	b.WriteString(" 'http://localhost:9200")
-	b.WriteString(req.URL.Path)
+	// If by some oddity we end up with a nil req.URL, we handle it gracefully.
+	if req.URL == nil {
+		b.WriteString(" '")
+	} else {
+		b.WriteString(fmt.Sprintf(" '%s://%s%s", req.URL.Scheme, req.URL.Host, req.URL.Path))
+	}
 	b.WriteString("?pretty")
 	if query != "" {
 		fmt.Fprintf(&b, "&%s", query)

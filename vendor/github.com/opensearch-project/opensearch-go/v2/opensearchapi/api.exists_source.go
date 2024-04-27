@@ -53,14 +53,14 @@ type ExistsSource func(index string, id string, o ...func(*ExistsSourceRequest))
 // ExistsSourceRequest configures the Exists Source API request.
 //
 type ExistsSourceRequest struct {
-	Index        string
-	DocumentID   string
+	Index      string
+	DocumentID string
 
 	Preference     string
 	Realtime       *bool
 	Refresh        *bool
 	Routing        string
-	Source         []string
+	Source         interface{}
 	SourceExcludes []string
 	SourceIncludes []string
 	Version        *int
@@ -113,8 +113,12 @@ func (r ExistsSourceRequest) Do(ctx context.Context, transport Transport) (*Resp
 		params["routing"] = r.Routing
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -234,7 +238,7 @@ func (f ExistsSource) WithRouting(v string) func(*ExistsSourceRequest) {
 
 // WithSource - true or false to return the _source field or not, or a list of fields to return.
 //
-func (f ExistsSource) WithSource(v ...string) func(*ExistsSourceRequest) {
+func (f ExistsSource) WithSource(v interface{}) func(*ExistsSourceRequest) {
 	return func(r *ExistsSourceRequest) {
 		r.Source = v
 	}

@@ -22,6 +22,7 @@ import (
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -109,14 +110,35 @@ type StorageAutoscalerSpec struct {
 
 	// If PVC usage percentage is less than the UsageThreshold,
 	// we don't need to scale it. The Default is 80%
-	UsageThreshold int32 `json:"usageThreshold,omitempty"`
+	UsageThreshold *int32 `json:"usageThreshold,omitempty"`
 
 	// If PVC usage percentage >= UsageThreshold,
 	// we need to scale that by ScalingThreshold percentage. The Default is 50%
-	ScalingThreshold int32 `json:"scalingThreshold,omitempty"`
+	ScalingThreshold *int32 `json:"scalingThreshold,omitempty"`
+
+	// ScalingRules are to support more dynamic ScalingThreshold
+	// For example, Upto certain Size (GB) increase in %, after that increase in absolute value.
+	ScalingRules []StorageScalingRule `json:"scalingRules,omitempty"`
+
+	// Set a max size limit for volume increase
+	UpperBound resource.Quantity `json:"upperBound,omitempty"`
 
 	// ExpansionMode can be `Online` or `Offline`
 	ExpansionMode opsapi.VolumeExpansionMode `json:"expansionMode"`
+}
+
+// StorageScalingRule format:
+//   - appliesUpto: 500GB
+//     threshold: 30pc
+//   - appliesUpto: 1000GB
+//     threshold: 20pc
+//   - appliesUpto: ""
+//     threshold: 50GB
+//
+// Note that, `pc` & `%` both is supported
+type StorageScalingRule struct {
+	AppliesUpto string `json:"appliesUpto"`
+	Threshold   string `json:"threshold"`
 }
 
 // AutoscalerStatus describes the runtime state of the autoscaler.

@@ -57,7 +57,7 @@ type UpdateByQuery func(index []string, o ...func(*UpdateByQueryRequest)) (*Resp
 // UpdateByQueryRequest configures the Update By Query API request.
 //
 type UpdateByQueryRequest struct {
-	Index        []string
+	Index []string
 
 	Body io.Reader
 
@@ -86,7 +86,7 @@ type UpdateByQueryRequest struct {
 	Size                *int
 	Slices              interface{}
 	Sort                []string
-	Source              []string
+	Source              interface{}
 	SourceExcludes      []string
 	SourceIncludes      []string
 	Stats               []string
@@ -226,8 +226,12 @@ func (r UpdateByQueryRequest) Do(ctx context.Context, transport Transport) (*Res
 		params["sort"] = strings.Join(r.Sort, ",")
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -547,7 +551,7 @@ func (f UpdateByQuery) WithSort(v ...string) func(*UpdateByQueryRequest) {
 
 // WithSource - true or false to return the _source field or not, or a list of fields to return.
 //
-func (f UpdateByQuery) WithSource(v ...string) func(*UpdateByQueryRequest) {
+func (f UpdateByQuery) WithSource(v interface{}) func(*UpdateByQueryRequest) {
 	return func(r *UpdateByQueryRequest) {
 		r.Source = v
 	}

@@ -55,8 +55,8 @@ type Update func(index string, id string, body io.Reader, o ...func(*UpdateReque
 // UpdateRequest configures the Update API request.
 //
 type UpdateRequest struct {
-	Index        string
-	DocumentID   string
+	Index      string
+	DocumentID string
 
 	Body io.Reader
 
@@ -67,7 +67,7 @@ type UpdateRequest struct {
 	RequireAlias        *bool
 	RetryOnConflict     *int
 	Routing             string
-	Source              []string
+	Source              interface{}
 	SourceExcludes      []string
 	SourceIncludes      []string
 	Timeout             time.Duration
@@ -132,8 +132,12 @@ func (r UpdateRequest) Do(ctx context.Context, transport Transport) (*Response, 
 		params["routing"] = r.Routing
 	}
 
-	if len(r.Source) > 0 {
-		params["_source"] = strings.Join(r.Source, ",")
+	if source, ok := r.Source.(bool); ok {
+		params["_source"] = strconv.FormatBool(source)
+	} else if source, ok := r.Source.(string); ok && source != "" {
+		params["_source"] = source
+	} else if sources, ok := r.Source.([]string); ok && len(sources) > 0 {
+		params["_source"] = strings.Join(sources, ",")
 	}
 
 	if len(r.SourceExcludes) > 0 {
@@ -281,7 +285,7 @@ func (f Update) WithRouting(v string) func(*UpdateRequest) {
 
 // WithSource - true or false to return the _source field or not, or a list of fields to return.
 //
-func (f Update) WithSource(v ...string) func(*UpdateRequest) {
+func (f Update) WithSource(v interface{}) func(*UpdateRequest) {
 	return func(r *UpdateRequest) {
 		r.Source = v
 	}
