@@ -183,6 +183,7 @@ func (o *PauseOptions) Run() error {
 			}
 			allErrs = append(allErrs, err)
 			errs.Insert(err.Error())
+			continue
 		}
 		pauseAll := !(o.onlyBackup || o.onlyDb || o.onlyArchiver)
 

@@ -19,6 +19,7 @@ package pauser
 import (
 	"context"
 
+	coreapi "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util"
@@ -26,18 +27,22 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
+	kmc "kmodules.xyz/client-go/client"
 	condutil "kmodules.xyz/client-go/conditions"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	scs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
 )
 
 type MariaDBPauser struct {
-	dbClient    cs.KubedbV1alpha2Interface
-	stashClient scs.StashV1beta1Interface
-	onlyDb      bool
-	onlyBackup  bool
+	dbClient       cs.KubedbV1alpha2Interface
+	stashClient    scs.StashV1beta1Interface
+	uncachedClient client.Client
+	onlyDb         bool
+	onlyBackup     bool
+	onlyArchiver   bool
 }
 
-func NewMariaDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*MariaDBPauser, error) {
+func NewMariaDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*MariaDBPauser, error) {
 	dbClient, err := cs.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
@@ -48,11 +53,18 @@ func NewMariaDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup bool) (*Mari
 		return nil, err
 	}
 
+	uncachedClient, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
+	if err != nil {
+		return nil, err
+	}
+
 	return &MariaDBPauser{
-		dbClient:    dbClient,
-		stashClient: stashClient,
-		onlyDb:      onlyDb,
-		onlyBackup:  onlyBackup,
+		dbClient:       dbClient,
+		stashClient:    stashClient,
+		uncachedClient: uncachedClient,
+		onlyDb:         onlyDb,
+		onlyBackup:     onlyBackup,
+		onlyArchiver:   onlyArchiver,
 	}, nil
 }
 
@@ -62,7 +74,15 @@ func (e *MariaDBPauser) Pause(name, namespace string) (bool, error) {
 		return false, nil
 	}
 
-	pauseAll := !(e.onlyBackup || e.onlyDb)
+	pauseAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
+	if e.onlyArchiver || pauseAll {
+		if err := PauseOrResumeMariaDBArchiver(e.uncachedClient, true, db.Spec.Archiver.Ref); err != nil {
+			return false, err
+		}
+		if e.onlyArchiver {
+			return false, nil
+		}
+	}
 
 	if e.onlyDb || pauseAll {
 		_, err = dbutil.UpdateMariaDBStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MariaDBStatus) (types.UID, *api.MariaDBStatus) {

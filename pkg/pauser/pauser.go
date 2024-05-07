@@ -46,7 +46,7 @@ func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *met
 	case api.ResourceKindMySQL:
 		return NewMySQLPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindMariaDB:
-		return NewMariaDBPauser(clientConfig, onlyDb, onlyBackup)
+		return NewMariaDBPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindPostgres:
 		return NewPostgresPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindRedis:

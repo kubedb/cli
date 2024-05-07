@@ -46,7 +46,7 @@ func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *me
 	case api.ResourceKindMySQL:
 		return NewMySQLResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindMariaDB:
-		return NewMariaDBResumer(clientConfig, onlyDb, onlyBackup)
+		return NewMariaDBResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindPostgres:
 		return NewPostgresResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
 	case api.ResourceKindRedis:

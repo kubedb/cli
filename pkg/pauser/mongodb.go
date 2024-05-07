@@ -19,6 +19,7 @@ package pauser
 import (
 	"context"
 
+	coreapi "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util"
@@ -26,16 +27,19 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
+	kmc "kmodules.xyz/client-go/client"
 	condutil "kmodules.xyz/client-go/conditions"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	scs "stash.appscode.dev/apimachinery/client/clientset/versioned/typed/stash/v1beta1"
 )
 
 type MongoDBPauser struct {
-	dbClient     cs.KubedbV1alpha2Interface
-	stashClient  scs.StashV1beta1Interface
-	onlyDb       bool
-	onlyBackup   bool
-	onlyArchiver bool
+	dbClient       cs.KubedbV1alpha2Interface
+	stashClient    scs.StashV1beta1Interface
+	uncachedClient client.Client
+	onlyDb         bool
+	onlyBackup     bool
+	onlyArchiver   bool
 }
 
 func NewMongoDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*MongoDBPauser, error) {
@@ -49,12 +53,18 @@ func NewMongoDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchive
 		return nil, err
 	}
 
+	uncachedClient, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
+	if err != nil {
+		return nil, err
+	}
+
 	return &MongoDBPauser{
-		dbClient:     dbClient,
-		stashClient:  stashClient,
-		onlyDb:       onlyDb,
-		onlyBackup:   onlyBackup,
-		onlyArchiver: onlyArchiver,
+		dbClient:       dbClient,
+		stashClient:    stashClient,
+		uncachedClient: uncachedClient,
+		onlyDb:         onlyDb,
+		onlyBackup:     onlyBackup,
+		onlyArchiver:   onlyArchiver,
 	}, nil
 }
 
@@ -66,7 +76,7 @@ func (e *MongoDBPauser) Pause(name, namespace string) (bool, error) {
 
 	pauseAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
 	if e.onlyArchiver || pauseAll {
-		if err := PauseMongoDBArchiver(true, db.Spec.Archiver.Ref.Name, db.Spec.Archiver.Ref.Namespace); err != nil {
+		if err := PauseOrResumeMongoDBArchiver(e.uncachedClient, true, db.Spec.Archiver.Ref); err != nil {
 			return false, err
 		}
 		if e.onlyArchiver {
