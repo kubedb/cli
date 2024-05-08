@@ -34,12 +34,12 @@ import (
 )
 
 type MariaDBPauser struct {
-	dbClient       cs.KubedbV1alpha2Interface
-	stashClient    scs.StashV1beta1Interface
-	uncachedClient client.Client
-	onlyDb         bool
-	onlyBackup     bool
-	onlyArchiver   bool
+	dbClient     cs.KubedbV1alpha2Interface
+	stashClient  scs.StashV1beta1Interface
+	kc           client.Client
+	onlyDb       bool
+	onlyBackup   bool
+	onlyArchiver bool
 }
 
 func NewMariaDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*MariaDBPauser, error) {
@@ -53,18 +53,18 @@ func NewMariaDBPauser(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchive
 		return nil, err
 	}
 
-	uncachedClient, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
+	kc, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
 	if err != nil {
 		return nil, err
 	}
 
 	return &MariaDBPauser{
-		dbClient:       dbClient,
-		stashClient:    stashClient,
-		uncachedClient: uncachedClient,
-		onlyDb:         onlyDb,
-		onlyBackup:     onlyBackup,
-		onlyArchiver:   onlyArchiver,
+		dbClient:     dbClient,
+		stashClient:  stashClient,
+		kc:           kc,
+		onlyDb:       onlyDb,
+		onlyBackup:   onlyBackup,
+		onlyArchiver: onlyArchiver,
 	}, nil
 }
 
@@ -76,7 +76,7 @@ func (e *MariaDBPauser) Pause(name, namespace string) (bool, error) {
 
 	pauseAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
 	if e.onlyArchiver || pauseAll {
-		if err := PauseOrResumeMariaDBArchiver(e.uncachedClient, true, db.Spec.Archiver.Ref); err != nil {
+		if err := PauseOrResumeMariaDBArchiver(e.kc, true, db.Spec.Archiver.Ref); err != nil {
 			return false, err
 		}
 		if e.onlyArchiver {

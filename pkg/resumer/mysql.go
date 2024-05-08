@@ -36,12 +36,12 @@ import (
 )
 
 type MySQLResumer struct {
-	dbClient       cs.KubedbV1alpha2Interface
-	stashClient    scs.StashV1beta1Interface
-	uncachedClient client.Client
-	onlyDb         bool
-	onlyBackup     bool
-	onlyArchiver   bool
+	dbClient     cs.KubedbV1alpha2Interface
+	stashClient  scs.StashV1beta1Interface
+	kc           client.Client
+	onlyDb       bool
+	onlyBackup   bool
+	onlyArchiver bool
 }
 
 func NewMySQLResumer(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*MySQLResumer, error) {
@@ -53,17 +53,17 @@ func NewMySQLResumer(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver
 	if err != nil {
 		return nil, err
 	}
-	uncachedClient, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
+	kc, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
 	if err != nil {
 		return nil, err
 	}
 	return &MySQLResumer{
-		dbClient:       dbClient,
-		stashClient:    stashClient,
-		uncachedClient: uncachedClient,
-		onlyDb:         onlyDb,
-		onlyBackup:     onlyBackup,
-		onlyArchiver:   onlyArchiver,
+		dbClient:     dbClient,
+		stashClient:  stashClient,
+		kc:           kc,
+		onlyDb:       onlyDb,
+		onlyBackup:   onlyBackup,
+		onlyArchiver: onlyArchiver,
 	}, nil
 }
 
@@ -76,7 +76,7 @@ func (e *MySQLResumer) Resume(name, namespace string) (bool, error) {
 	resumeAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
 
 	if e.onlyArchiver || resumeAll {
-		if err := pautil.PauseOrResumeMySQLArchiver(e.uncachedClient, false, db.Spec.Archiver.Ref); err != nil {
+		if err := pautil.PauseOrResumeMySQLArchiver(e.kc, false, db.Spec.Archiver.Ref); err != nil {
 			return false, err
 		}
 		if e.onlyArchiver {

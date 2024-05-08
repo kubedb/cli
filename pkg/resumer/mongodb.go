@@ -36,12 +36,12 @@ import (
 )
 
 type MongoDBResumer struct {
-	dbClient       cs.KubedbV1alpha2Interface
-	stashClient    scs.StashV1beta1Interface
-	uncachedClient client.Client
-	onlyDb         bool
-	onlyBackup     bool
-	onlyArchiver   bool
+	dbClient     cs.KubedbV1alpha2Interface
+	stashClient  scs.StashV1beta1Interface
+	kc           client.Client
+	onlyDb       bool
+	onlyBackup   bool
+	onlyArchiver bool
 }
 
 func NewMongoDBResumer(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiver bool) (*MongoDBResumer, error) {
@@ -54,18 +54,18 @@ func NewMongoDBResumer(clientConfig *rest.Config, onlyDb, onlyBackup, onlyArchiv
 		return nil, err
 	}
 
-	uncachedClient, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
+	kc, err := kmc.NewUncachedClient(clientConfig, coreapi.AddToScheme)
 	if err != nil {
 		return nil, err
 	}
 
 	return &MongoDBResumer{
-		dbClient:       dbClient,
-		stashClient:    stashClient,
-		uncachedClient: uncachedClient,
-		onlyDb:         onlyDb,
-		onlyBackup:     onlyBackup,
-		onlyArchiver:   onlyArchiver,
+		dbClient:     dbClient,
+		stashClient:  stashClient,
+		kc:           kc,
+		onlyDb:       onlyDb,
+		onlyBackup:   onlyBackup,
+		onlyArchiver: onlyArchiver,
 	}, nil
 }
 
@@ -77,7 +77,7 @@ func (e *MongoDBResumer) Resume(name, namespace string) (bool, error) {
 	resumeAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
 
 	if e.onlyArchiver || resumeAll {
-		if err := pautil.PauseOrResumeMongoDBArchiver(e.uncachedClient, false, db.Spec.Archiver.Ref); err != nil {
+		if err := pautil.PauseOrResumeMongoDBArchiver(e.kc, false, db.Spec.Archiver.Ref); err != nil {
 			return false, err
 		}
 		if e.onlyArchiver {
