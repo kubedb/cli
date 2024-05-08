@@ -53,6 +53,5 @@ func PauseBackupConfiguration(stashClient scs.StashV1beta1Interface, dbMeta meta
 			return false, err
 		}
 	}
-
 	return dbBackupConfig != nil, nil
 }
