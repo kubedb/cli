@@ -104,5 +104,6 @@ func Run(f cmdutil.Factory, args []string, prom monitor.PromSvc) {
 		for _, target := range notFound {
 			fmt.Printf("%s monitoring connection not found for %s : %s/%s\n", target, database, namespace, databaseName)
 		}
+		log.Fatalf("connection not established properly for %s: %s/%s", database, namespace, databaseName)
 	}
 }
