@@ -137,6 +137,7 @@ func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monito
 			}
 			fmt.Printf("Effected Panel: %s \n", strings.Join(opts.panelTitle, ", "))
 		}
+		log.Fatalf("Mission information found in dashboard in Database %s: %s/%s\n", database, namespace, dbName)
 	} else {
 		fmt.Println("All metrics found")
 	}
