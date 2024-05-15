@@ -49,6 +49,8 @@ spec:
                 description: Chart specifies the chart information that will be used
                   by the FluxCD to install the respective feature
                 properties:
+                  createNamespace:
+                    type: boolean
                   name:
                     description: Name specifies the name of the chart
                     type: string
@@ -72,6 +74,15 @@ spec:
                     required:
                     - name
                     type: object
+                  valuesFiles:
+                    description: Alternative list of values files to use as the chart
+                      values (values.yaml is not included by default), expected to
+                      be a relative path in the SourceRef. Values files are merged
+                      in the order of this list with the last file overriding the
+                      first. Ignored when omitted.
+                    items:
+                      type: string
+                    type: array
                   version:
                     description: Version specifies the version of the chart.
                     type: string
