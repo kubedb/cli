@@ -21,12 +21,18 @@ import (
 	"strings"
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	kapi "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 )
 
 func ConvertedResourceToPlural(resource string) string {
 	// standardizing the resource name
 	res := strings.ToLower(resource)
 	switch res {
+	case kapi.ResourceCodeConnectCluster, kapi.ResourcePluralConnectCluster, kapi.ResourceSingularConnectCluster:
+		res = kapi.ResourcePluralConnectCluster
+	case api.ResourceCodeDruid, api.ResourcePluralDruid, api.ResourceSingularDruid:
+		res = api.ResourcePluralDruid
 	case api.ResourceCodeElasticsearch, api.ResourcePluralElasticsearch, api.ResourceSingularElasticsearch:
 		res = api.ResourcePluralElasticsearch
 	case api.ResourceCodeKafka, api.ResourcePluralKafka, api.ResourceSingularKafka:
@@ -39,12 +45,22 @@ func ConvertedResourceToPlural(resource string) string {
 		res = api.ResourcePluralMySQL
 	case api.ResourceCodePerconaXtraDB, api.ResourcePluralPerconaXtraDB, api.ResourceSingularPerconaXtraDB:
 		res = api.ResourcePluralPerconaXtraDB
+	case api.ResourceCodePgpool, api.ResourcePluralPgpool, api.ResourceSingularPgpool:
+		res = api.ResourcePluralPgpool
 	case api.ResourceCodePostgres, api.ResourcePluralPostgres, api.ResourceSingularPostgres:
 		res = api.ResourcePluralPostgres
 	case api.ResourceCodeProxySQL, api.ResourcePluralProxySQL, api.ResourceSingularProxySQL:
 		res = api.ResourcePluralProxySQL
+	case api.ResourceCodeRabbitmq, api.ResourcePluralRabbitmq, api.ResourceSingularRabbitmq:
+		res = api.ResourcePluralRabbitmq
 	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
 		res = api.ResourcePluralRedis
+	case api.ResourceCodeSinglestore, api.ResourcePluralSinglestore, api.ResourceSingularSinglestore:
+		res = api.ResourcePluralSinglestore
+	case api.ResourceCodeSolr, api.ResourcePluralSolr, api.ResourceSingularSolr:
+		res = api.ResourcePluralSolr
+	case api.ResourceCodeZooKeeper, api.ResourcePluralZooKeeper, api.ResourceSingularZooKeeper:
+		res = api.ResourcePluralZooKeeper
 	default:
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}
@@ -55,6 +71,10 @@ func ConvertedResourceToSingular(resource string) string {
 	// standardizing the resource name
 	res := strings.ToLower(resource)
 	switch res {
+	case kapi.ResourceCodeConnectCluster, kapi.ResourcePluralConnectCluster, kapi.ResourceSingularConnectCluster:
+		res = kapi.ResourceSingularConnectCluster
+	case api.ResourceCodeDruid, api.ResourcePluralDruid, api.ResourceSingularDruid:
+		res = api.ResourceSingularDruid
 	case api.ResourceCodeElasticsearch, api.ResourcePluralElasticsearch, api.ResourceSingularElasticsearch:
 		res = api.ResourceSingularElasticsearch
 	case api.ResourceCodeKafka, api.ResourcePluralKafka, api.ResourceSingularKafka:
@@ -67,12 +87,22 @@ func ConvertedResourceToSingular(resource string) string {
 		res = api.ResourceSingularMySQL
 	case api.ResourceCodePerconaXtraDB, api.ResourcePluralPerconaXtraDB, api.ResourceSingularPerconaXtraDB:
 		res = api.ResourceSingularPerconaXtraDB
+	case api.ResourceCodePgpool, api.ResourcePluralPgpool, api.ResourceSingularPgpool:
+		res = api.ResourceSingularPgpool
 	case api.ResourceCodePostgres, api.ResourcePluralPostgres, api.ResourceSingularPostgres:
 		res = api.ResourceSingularPostgres
 	case api.ResourceCodeProxySQL, api.ResourcePluralProxySQL, api.ResourceSingularProxySQL:
 		res = api.ResourceSingularProxySQL
+	case api.ResourceCodeRabbitmq, api.ResourcePluralRabbitmq, api.ResourceSingularRabbitmq:
+		res = api.ResourceSingularRabbitmq
 	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
 		res = api.ResourceSingularRedis
+	case api.ResourceCodeSinglestore, api.ResourcePluralSinglestore, api.ResourceSingularSinglestore:
+		res = api.ResourceSingularSinglestore
+	case api.ResourceCodeSolr, api.ResourcePluralSolr, api.ResourceSingularSolr:
+		res = api.ResourceSingularSolr
+	case api.ResourceCodeZooKeeper, api.ResourcePluralZooKeeper, api.ResourceSingularZooKeeper:
+		res = api.ResourceSingularZooKeeper
 	default:
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}

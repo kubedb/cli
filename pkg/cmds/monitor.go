@@ -89,15 +89,22 @@ var alertExample = templates.Examples(`
  		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 		
  		Valid resource types include:
+			* connectcluster
+			* druid
     		* elasticsearch
 			* kafka
 			* mariadb
 			* mongodb
 			* mysql
 			* perconaxtradb
+			* pgpool
 			* postgres
 			* proxysql
+			* rabbitmq
 			* redis
+			* singlestore
+			* solr
+			* zookeeper
 `)
 
 func AlertCMD(f cmdutil.Factory) *cobra.Command {
@@ -131,15 +138,22 @@ var dashboardExample = templates.Examples(`
 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid dashboards include:
+			* connectcluster
+			* druid
     		* elasticsearch
 			* kafka
 			* mariadb
 			* mongodb
 			* mysql
 			* perconaxtradb
+			* pgpool
 			* postgres
 			* proxysql
+			* rabbitmq
 			* redis
+			* singlestore
+			* solr
+			* zookeeper
 		
 		If --file is given, that is the local file. absolute or relative path both accepted.
 		If --url is given, that is the remote file. You have to specify the full raw url.
@@ -186,15 +200,22 @@ var connectionExample = templates.Examples(`
 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid resource types include:
+			* connectcluster
+			* druid
     		* elasticsearch
 			* kafka
 			* mariadb
 			* mongodb
 			* mysql
 			* perconaxtradb
+			* pgpool
 			* postgres
 			* proxysql
+			* rabbitmq
 			* redis
+			* singlestore
+			* solr
+			* zookeeper
 `)
 
 func ConnectionCMD(f cmdutil.Factory) *cobra.Command {
