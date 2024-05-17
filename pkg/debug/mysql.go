@@ -25,6 +25,7 @@ import (
 
 	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
+	scs "stash.appscode.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
@@ -37,9 +38,10 @@ import (
 )
 
 type mysqlOpts struct {
-	db        *api.MySQL
-	dbClient  *cs.Clientset
-	podClient *kubernetes.Clientset
+	db          *api.MySQL
+	dbClient    *cs.Clientset
+	stashClient *scs.Clientset
+	podClient   *kubernetes.Clientset
 
 	operatorNamespace string
 	dir               string
@@ -107,6 +109,11 @@ func newMysqlOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*mys
 		return nil, err
 	}
 
+	stashClient, err := scs.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
 	podClient, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return nil, err
@@ -131,6 +138,7 @@ func newMysqlOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*mys
 	opts := &mysqlOpts{
 		db:                db,
 		dbClient:          dbClient,
+		stashClient:       stashClient,
 		podClient:         podClient,
 		operatorNamespace: operatorNS,
 		dir:               dir,
@@ -255,6 +263,25 @@ func (opts *mysqlOpts) collectOtherYamls() error {
 	for _, sc := range scalers.Items {
 		if sc.Spec.DatabaseRef.Name == opts.db.Name {
 			err = writeYaml(&sc, scalerYamlDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	if isStashCRDAvailable()
+	configs, err := opts.stashClient.StashV1beta1().BackupConfigurations(opts.db.Namespace).List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		return err
+	}
+	bcYamlDir := path.Join(opts.dir, yamlsDir, "backupconfigs")
+	err = os.MkdirAll(bcYamlDir, dirPerm)
+	if err != nil {
+		return err
+	}
+	for _, bc := range configs.Items {
+		if isBackupTargetMatched(bc.Spec.Target.Ref, opts.db.ObjectMeta) {
+			err = writeYaml(&bc, bcYamlDir)
 			if err != nil {
 				return err
 			}
