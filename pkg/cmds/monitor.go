@@ -166,7 +166,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		branch string
 		file   string
 		url    string
-		nonDB  bool
+		isDB   bool
 	)
 	cmd := &cobra.Command{
 		Use:   "dashboard",
@@ -174,7 +174,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		Long:  dashboardLong,
 
 		Run: func(cmd *cobra.Command, args []string) {
-			dashboard.Run(f, args, branch, file, url, prom, nonDB)
+			dashboard.Run(f, args, branch, file, url, prom, isDB)
 		},
 		Example:               dashboardExample,
 		DisableFlagsInUseLine: true,
@@ -184,7 +184,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&file, "file", "f", "", "absolute or relative path of the file containing dashboard")
 	cmd.Flags().StringVarP(&url, "url", "u", "", "url of the raw file containing dashboard. "+
 		"For example: https://raw.githubusercontent.com/appscode/grafana-dashboards/master/mongodb/mongodb-summary-dashboard.json")
-	cmd.Flags().BoolVarP(&nonDB, "nondb", "o", false, "for non db object's. just provide the url")
+	cmd.Flags().BoolVarP(&isDB, "isdb", "o", true, "for non db object's. just provide the url")
 	return cmd
 }
 
