@@ -41,7 +41,7 @@ type missingOpts struct {
 	panelTitle []string
 }
 
-func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monitor.PromSvc, nonDB bool) {
+func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monitor.PromSvc, isDB bool) {
 	var (
 		db        *unstructured.Unstructured
 		database  string
@@ -49,7 +49,7 @@ func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monito
 		dbName    string
 		err       error
 	)
-	if !nonDB {
+	if isDB {
 		if len(args) < 2 {
 			log.Fatal("Enter db object's name as an argument")
 		}
@@ -147,10 +147,10 @@ func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monito
 			}
 			fmt.Printf("Effected Panel: %s \n", strings.Join(opts.panelTitle, ", "))
 		}
-		if !nonDB {
-			log.Fatalf("Mission information found in dashboard in Database %s: %s/%s\n", database, namespace, dbName)
+		if isDB {
+			log.Fatalf("Information missing for database %s: %s/%s\n", database, namespace, dbName)
 		} else {
-			log.Fatalf("Mission information found")
+			log.Fatalf("Information missing")
 		}
 	} else {
 		fmt.Println("All metrics found")
