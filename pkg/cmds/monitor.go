@@ -184,7 +184,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&file, "file", "f", "", "absolute or relative path of the file containing dashboard")
 	cmd.Flags().StringVarP(&url, "url", "u", "", "url of the raw file containing dashboard. "+
 		"For example: https://raw.githubusercontent.com/appscode/grafana-dashboards/master/mongodb/mongodb-summary-dashboard.json")
-	cmd.Flags().BoolVarP(&isDB, "isdb", "o", true, "for non db object's. just provide the url")
+	cmd.Flags().BoolVarP(&isDB, "isdb", "d", true, "for non db object's. just provide the url")
 	return cmd
 }
 
