@@ -78,7 +78,7 @@ func (z *ZooKeeper) ValidateDelete() (admission.Warnings, error) {
 	zookeeperlog.Info("validate delete", "name", z.Name)
 
 	var allErr field.ErrorList
-	if z.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+	if z.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
 			z.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))

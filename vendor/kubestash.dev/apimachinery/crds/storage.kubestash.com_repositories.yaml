@@ -99,7 +99,7 @@ spec:
                 description: EncryptionSecret refers to the Secret containing the
                   encryption key which will be used to encode/decode the backed up
                   data. You can refer to a Secret of a different namespace. If you
-                  don't provide the namespace field, Stash will look for the Secret
+                  don't provide the namespace field, KubeStash will look for the Secret
                   in the same namespace as the BackupConfiguration / BackupBatch.
                 properties:
                   name:
@@ -118,8 +118,8 @@ spec:
                 type: string
               paused:
                 description: Paused specifies whether the Repository is paused or
-                  not. If the Repository is paused, Stash will not process any further
-                  event for the Repository.
+                  not. If the Repository is paused, KubeStash will not process any
+                  further event for the Repository.
                 type: boolean
               storageRef:
                 description: StorageRef refers to the BackupStorage CR which contain

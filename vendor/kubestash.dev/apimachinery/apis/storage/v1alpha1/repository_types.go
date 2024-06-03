@@ -75,11 +75,11 @@ type RepositorySpec struct {
 
 	// EncryptionSecret refers to the Secret containing the encryption key which will be used to encode/decode the backed up data.
 	// You can refer to a Secret of a different namespace.
-	// If you don't provide the namespace field, Stash will look for the Secret in the same namespace as the BackupConfiguration / BackupBatch.
+	// If you don't provide the namespace field, KubeStash will look for the Secret in the same namespace as the BackupConfiguration / BackupBatch.
 	EncryptionSecret *kmapi.ObjectReference `json:"encryptionSecret,omitempty"`
 
 	// Paused specifies whether the Repository is paused or not. If the Repository is paused,
-	// Stash will not process any further event for the Repository.
+	// KubeStash will not process any further event for the Repository.
 	// +optional
 	Paused bool `json:"paused,omitempty"`
 }

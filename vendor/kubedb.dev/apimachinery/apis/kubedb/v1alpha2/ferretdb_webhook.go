@@ -90,7 +90,7 @@ func (f *FerretDB) ValidateDelete() (admission.Warnings, error) {
 	ferretdblog.Info("validate delete", "name", f.Name)
 
 	var allErr field.ErrorList
-	if f.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+	if f.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			f.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
@@ -157,12 +157,12 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 	}
 
 	// Termination policy related
-	if f.Spec.StorageType == StorageTypeEphemeral && f.Spec.TerminationPolicy == TerminationPolicyHalt {
+	if f.Spec.StorageType == StorageTypeEphemeral && f.Spec.DeletionPolicy == TerminationPolicyHalt {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("storageType"),
 			f.Name,
 			`'spec.terminationPolicy: Halt' can not be used for 'Ephemeral' storage`))
 	}
-	if f.Spec.TerminationPolicy == TerminationPolicyHalt || f.Spec.TerminationPolicy == TerminationPolicyDelete {
+	if f.Spec.DeletionPolicy == TerminationPolicyHalt || f.Spec.DeletionPolicy == TerminationPolicyDelete {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			f.Name,
 			`'spec.terminationPolicy' value 'Halt' or 'Delete' is not supported yet for FerretDB`))
@@ -177,9 +177,11 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 		} else {
 			if f.Spec.Backend.Postgres.URL == nil {
 				err := f.validateServiceRef(f.Spec.Backend.Postgres.Service)
-				allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
-					f.Name,
-					err.Error()))
+				if err != nil {
+					allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("backend"),
+						f.Name,
+						err.Error()))
+				}
 			}
 		}
 	} else {

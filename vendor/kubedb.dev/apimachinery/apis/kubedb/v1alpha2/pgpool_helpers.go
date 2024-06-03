@@ -48,6 +48,22 @@ func (p *Pgpool) CustomResourceDefinition() *apiextensions.CustomResourceDefinit
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPgpool))
 }
 
+type pgpoolApp struct {
+	*Pgpool
+}
+
+func (p *pgpoolApp) Name() string {
+	return p.Pgpool.Name
+}
+
+func (p *pgpoolApp) Type() appcat.AppType {
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularPgpool))
+}
+
+func (p *Pgpool) AppBindingMeta() appcat.AppBindingMeta {
+	return &pgpoolApp{p}
+}
+
 func (p *Pgpool) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", p.ResourcePlural(), kubedb.GroupName)
 }
@@ -331,8 +347,8 @@ func (p *Pgpool) SetDefaults() {
 	if p.Spec.Replicas == nil {
 		p.Spec.Replicas = pointer.Int32P(1)
 	}
-	if p.Spec.TerminationPolicy == "" {
-		p.Spec.TerminationPolicy = TerminationPolicyDelete
+	if p.Spec.DeletionPolicy == "" {
+		p.Spec.DeletionPolicy = TerminationPolicyDelete
 	}
 	if p.Spec.PodTemplate == nil {
 		p.Spec.PodTemplate = &ofst.PodTemplateSpec{}

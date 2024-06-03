@@ -299,8 +299,8 @@ func (k *Kafka) SetHealthCheckerDefaults() {
 }
 
 func (k *Kafka) SetDefaults() {
-	if k.Spec.TerminationPolicy == "" {
-		k.Spec.TerminationPolicy = TerminationPolicyDelete
+	if k.Spec.DeletionPolicy == "" {
+		k.Spec.DeletionPolicy = TerminationPolicyDelete
 	}
 
 	if k.Spec.StorageType == "" {

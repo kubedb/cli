@@ -54,6 +54,8 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
+		&DruidAutoscaler{},
+		&DruidAutoscalerList{},
 		&ElasticsearchAutoscaler{},
 		&ElasticsearchAutoscalerList{},
 		&EtcdAutoscaler{},
@@ -70,6 +72,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MySQLAutoscalerList{},
 		&PerconaXtraDBAutoscaler{},
 		&PerconaXtraDBAutoscalerList{},
+		&PgpoolAutoscaler{},
+		&PgpoolAutoscalerList{},
 		&PostgresAutoscaler{},
 		&PostgresAutoscalerList{},
 		&ProxySQLAutoscaler{},
@@ -80,6 +84,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&RedisAutoscalerList{},
 		&RedisSentinelAutoscaler{},
 		&RedisSentinelAutoscalerList{},
+		&SinglestoreAutoscaler{},
+		&SinglestoreAutoscalerList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

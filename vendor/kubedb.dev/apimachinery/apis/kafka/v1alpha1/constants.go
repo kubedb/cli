@@ -94,3 +94,20 @@ const (
 	KafkaClientKeystoreLocation        = "/var/private/kafka-client-ssl/client.keystore.jks"
 	KafkaClientTruststoreLocation      = "/var/private/kafka-client-ssl/client.truststore.jks"
 )
+
+// SchemaRegistry constants
+
+const (
+	SchemaRegistryPrimaryPortName = "primary"
+	SchemaRegistryPortName        = "registry"
+	ApicurioRegistryRESTPort      = 8080
+	SchemaRegistryContainerName   = "schema-registry"
+	SchemaRegistryConfigFileName  = "application.properties"
+
+	SchemaRegistryStorageBackendTypeMemory = "mem"
+	SchemaRegistryStorageBackendTypeKafka  = "kafkasql"
+	SchemaRegistryStorageBackendTypeSQL    = "sql"
+
+	SchemaRegistryOperatorVolumeConfig = "registry-operator-config"
+	SchemaRegistryOperatorConfigPath   = "/deployments/config"
+)

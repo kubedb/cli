@@ -60,7 +60,7 @@ type BackupSessionSpec struct {
 	Session string `json:"session,omitempty"`
 
 	// RetryLeft specifies number of retry attempts left for the session.
-	// If this set to non-zero, Stash will create a new BackupSession if the current one fails.
+	// If this set to non-zero, KubeStash will create a new BackupSession if the current one fails.
 	// +optional
 	RetryLeft int32 `json:"retryLeft,omitempty"`
 }
@@ -101,7 +101,7 @@ type BackupSessionStatus struct {
 	// +optional
 	Retried *bool `json:"retried,omitempty"`
 
-	// NextRetry specifies the time when Stash should retry the current failed backup.
+	// NextRetry specifies the time when KubeStash should retry the current failed backup.
 	// This field will exist only if the `retryConfig` has been set in the respective backup invoker.
 	// +optional
 	NextRetry *metav1.Time `json:"nextRetry,omitempty"`

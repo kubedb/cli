@@ -93,7 +93,7 @@ const (
 
 	KeyBlueprintName      = BackupBlueprintKey + "/name"
 	KeyBlueprintNamespace = BackupBlueprintKey + "/namespace"
-	KeyBlueprintSessions  = BackupBlueprintKey + "/sessions"
+	KeyBlueprintSessions  = BackupBlueprintKey + "/session-names"
 )
 
 // RBAC related

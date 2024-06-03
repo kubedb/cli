@@ -48,7 +48,7 @@ type RetentionPolicy struct {
 // RetentionPolicySpec defines the policy of cleaning old Snapshots
 type RetentionPolicySpec struct {
 	// MaxRetentionPeriod specifies a duration up to which the old Snapshots should be kept.
-	// Stash will remove all the Snapshots that are older than the MaxRetentionPeriod.
+	// KubeStash will remove all the Snapshots that are older than the MaxRetentionPeriod.
 	// For example, MaxRetentionPeriod of `30d` will keep only the Snapshots of last 30 days.
 	// Sample duration format:
 	// - years: 	2y
@@ -115,7 +115,7 @@ type SuccessfulSnapshotsKeepPolicy struct {
 // FailedSnapshotsKeepPolicy specifies the policy for keeping failed Snapshots
 type FailedSnapshotsKeepPolicy struct {
 	// Last specifies how many last failed Snapshots should be kept.
-	// By default, Stash will keep only the last 1 failed Snapshot.
+	// By default, KubeStash will keep only the last 1 failed Snapshot.
 	// +kubebuilder:default=1
 	// +optional
 	Last *int32 `json:"last,omitempty"`

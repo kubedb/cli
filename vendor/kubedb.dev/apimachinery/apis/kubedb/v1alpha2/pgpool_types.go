@@ -32,9 +32,6 @@ const (
 	ResourcePluralPgpool   = "pgpools"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // Pgpool is the Schema for the pgpools API
 // +genclient
 // +k8s:openapi-gen=true
@@ -56,9 +53,6 @@ type Pgpool struct {
 
 // PgpoolSpec defines the desired state of Pgpool
 type PgpoolSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	// SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the
 	// Pgpool server . Password changes are also synced in pgpool when it is enabled.
 	// +optional
@@ -103,14 +97,9 @@ type PgpoolSpec struct {
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
-	// TerminationPolicy controls the delete operation for Pgpool
+	// DeletionPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
-
-	// PodPlacementPolicy is the reference of the podPlacementPolicy
-	// +kubebuilder:default={name: "default"}
-	// +optional
-	PodPlacementPolicy *core.LocalObjectReference `json:"podPlacementPolicy,omitempty"`
+	DeletionPolicy TerminationPolicy `json:"deletionPolicy,omitempty"`
 
 	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
 	SSLMode PgpoolSSLMode `json:"sslMode,omitempty"`
@@ -126,9 +115,6 @@ type PgpoolSpec struct {
 
 // PgpoolStatus defines the observed state of Pgpool
 type PgpoolStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	// Specifies the current phase of the database
 	// +optional
 	Phase DatabasePhase `json:"phase,omitempty"`

@@ -38,6 +38,9 @@ func setDefaultStorageValues(storageSpec *StorageAutoscalerSpec) {
 	if storageSpec.Trigger == "" {
 		storageSpec.Trigger = AutoscalerTriggerOff
 	}
+	if storageSpec.UsageThreshold == nil {
+		storageSpec.UsageThreshold = ptr.To[int32](DefaultStorageUsageThreshold)
+	}
 	if storageSpec.ScalingThreshold == nil {
 		storageSpec.ScalingThreshold = ptr.To[int32](DefaultStorageScalingThreshold)
 	}
@@ -52,8 +55,13 @@ type quantity struct {
 
 // sort them by the appliesUpto value. The items with empty threshold
 func setDefaultScalingRules(storageSpec *StorageAutoscalerSpec) {
-	if storageSpec.UsageThreshold == nil {
-		storageSpec.UsageThreshold = ptr.To[int32](DefaultStorageUsageThreshold)
+	if storageSpec.ScalingRules == nil {
+		storageSpec.ScalingRules = []StorageScalingRule{
+			{
+				AppliesUpto: "",
+				Threshold:   fmt.Sprintf("%spc", strconv.Itoa(int(*storageSpec.ScalingThreshold))),
+			},
+		}
 	}
 	var quantities []quantity
 	var zeroQuantityThresholds []string

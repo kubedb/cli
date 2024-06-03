@@ -70,11 +70,11 @@ spec:
                         retentionPolicy:
                           description: RetentionPolicy refers to a RetentionPolicy
                             CRs which defines how to cleanup the old Snapshots. This
-                            field is optional. If you don't provide this field, Stash
+                            field is optional. If you don't provide this field, KubeStash
                             will use the default RetentionPolicy for the namespace.
                             If there is no default RetentionPolicy for the namespace,
-                            then Stash will find a RetentionPolicy from other namespaces
-                            that is allowed to use from the current namespace.
+                            then KubeStash will find a RetentionPolicy from other
+                            namespaces that is allowed to use from the current namespace.
                           properties:
                             name:
                               description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
@@ -14920,18 +14920,6 @@ spec:
                                 type: object
                               type: array
                           type: object
-                        failurePolicy:
-                          default: Fail
-                          description: 'FailurePolicy specifies what to do if the
-                            backup fail. Valid values are: - "Fail": Stash should
-                            mark the backup as failed if any component fail to complete
-                            its backup. This is the default behavior. - "Retry": Stash
-                            will retry to backup the failed component according to
-                            the `retryConfig`.'
-                          enum:
-                          - Fail
-                          - Retry
-                          type: string
                         hooks:
                           description: Hooks specifies the backup hooks that should
                             be executed before and/or after the backup.
@@ -14947,12 +14935,12 @@ spec:
                                     default: Always
                                     description: 'ExecutionPolicy specifies when to
                                       execute the hook. Valid values are: - "Always":
-                                      Stash will execute this hook no matter the backup/restore
-                                      failed. This is the default execution policy.
-                                      - "OnSuccess": Stash will execute this hook
-                                      only if the backup/restore has succeeded. -
-                                      "OnFailure": Stash will execute this hook only
-                                      if the backup/restore has failed.'
+                                      KubeStash will execute this hook no matter the
+                                      backup/restore failed. This is the default execution
+                                      policy. - "OnSuccess": KubeStash will execute
+                                      this hook only if the backup/restore has succeeded.
+                                      - "OnFailure": KubeStash will execute this hook
+                                      only if the backup/restore has failed.'
                                     enum:
                                     - Always
                                     - OnSuccess
@@ -14978,8 +14966,8 @@ spec:
                                     type: object
                                   maxRetry:
                                     description: MaxRetry specifies how many times
-                                      Stash should retry the hook execution in case
-                                      of failure. The default value of this field
+                                      KubeStash should retry the hook execution in
+                                      case of failure. The default value of this field
                                       is 0 which means no retry.
                                     format: int32
                                     minimum: 0
@@ -21078,12 +21066,12 @@ spec:
                                     default: Always
                                     description: 'ExecutionPolicy specifies when to
                                       execute the hook. Valid values are: - "Always":
-                                      Stash will execute this hook no matter the backup/restore
-                                      failed. This is the default execution policy.
-                                      - "OnSuccess": Stash will execute this hook
-                                      only if the backup/restore has succeeded. -
-                                      "OnFailure": Stash will execute this hook only
-                                      if the backup/restore has failed.'
+                                      KubeStash will execute this hook no matter the
+                                      backup/restore failed. This is the default execution
+                                      policy. - "OnSuccess": KubeStash will execute
+                                      this hook only if the backup/restore has succeeded.
+                                      - "OnFailure": KubeStash will execute this hook
+                                      only if the backup/restore has failed.'
                                     enum:
                                     - Always
                                     - OnSuccess
@@ -21109,8 +21097,8 @@ spec:
                                     type: object
                                   maxRetry:
                                     description: MaxRetry specifies how many times
-                                      Stash should retry the hook execution in case
-                                      of failure. The default value of this field
+                                      KubeStash should retry the hook execution in
+                                      case of failure. The default value of this field
                                       is 0 which means no retry.
                                     format: int32
                                     minimum: 0
@@ -27204,12 +27192,12 @@ spec:
                           type: string
                         repositories:
                           description: Repositories specifies a list of repository
-                            information where the backed up data will be stored. Stash
+                            information where the backed up data will be stored. KubeStash
                             will create the respective Repository CRs using this information.
                           items:
                             description: RepositoryInfo specifies information about
                               the repository where the backed up data will be stored.
-                              Stash will create the respective Repository CR from
+                              KubeStash will create the respective Repository CR from
                               this information.
                             properties:
                               backend:
@@ -27235,8 +27223,8 @@ spec:
                                   containing the encryption key which will be used
                                   to encode/decode the backed up dta. You can refer
                                   to a Secret of a different namespace. If you don't
-                                  provide the namespace field, Stash will look for
-                                  the Secret in the same namespace as the BackupConfiguration
+                                  provide the namespace field, KubeStash will look
+                                  for the Secret in the same namespace as the BackupConfiguration
                                   / BackupBatch.
                                 properties:
                                   name:
@@ -27261,14 +27249,14 @@ spec:
                           properties:
                             delay:
                               description: 'The amount of time to wait before next
-                                retry. If you don''t specify this field, Stash will
-                                retry immediately. Format: 30s, 2m, 1h etc.'
+                                retry. If you don''t specify this field, KubeStash
+                                will retry immediately. Format: 30s, 2m, 1h etc.'
                               type: string
                             maxRetry:
                               default: 1
                               description: MaxRetry specifies the maximum number of
-                                times Stash should retry the backup/restore process.
-                                By default, Stash will retry only 1 time.
+                                times KubeStash should retry the backup/restore process.
+                                By default, KubeStash will retry only 1 time.
                               format: int32
                               minimum: 1
                               type: integer
@@ -35364,89 +35352,16 @@ spec:
                         sessionHistoryLimit:
                           default: 1
                           description: SessionHistoryLimit specifies how many backup
-                            Jobs and associate resources Stash should keep for debugging
-                            purpose. The default value is 1.
+                            Jobs and associate resources KubeStash should keep for
+                            debugging purpose. The default value is 1.
                           format: int32
                           type: integer
                         timeout:
                           description: Timeout specifies the maximum duration of backup.
                             BackupSession will be considered Failed if backup does
-                            not complete within this time limit. By default, Stash
+                            not complete within this time limit. By default, KubeStash
                             don't set any timeout for backup.
                           type: string
-                        verificationStrategies:
-                          description: VerificationStrategies specifies a list of
-                            backup verification configurations
-                          items:
-                            description: VerificationStrategy specifies a strategy
-                              to verify the backed up data.
-                            properties:
-                              name:
-                                description: Name indicate the name of this strategy
-                                type: string
-                              onFailure:
-                                description: OnFailure specifies what to do if the
-                                  verification fail.
-                                enum:
-                                - Fail
-                                - Retry
-                                type: string
-                              params:
-                                description: Params specifies the parameters that
-                                  will be used by the verifier
-                                type: object
-                                x-kubernetes-preserve-unknown-fields: true
-                              repository:
-                                description: Repository specifies the name of the
-                                  repository which data will be verified
-                                type: string
-                              retryConfig:
-                                description: RetryConfig specifies the behavior of
-                                  the retry mechanism in case of a verification failure
-                                properties:
-                                  delay:
-                                    description: 'The amount of time to wait before
-                                      next retry. If you don''t specify this field,
-                                      Stash will retry immediately. Format: 30s, 2m,
-                                      1h etc.'
-                                    type: string
-                                  maxRetry:
-                                    default: 1
-                                    description: MaxRetry specifies the maximum number
-                                      of times Stash should retry the backup/restore
-                                      process. By default, Stash will retry only 1
-                                      time.
-                                    format: int32
-                                    minimum: 1
-                                    type: integer
-                                type: object
-                              verifier:
-                                description: Verifier refers to the BackupVerification
-                                  CR that defines how to verify this particular data
-                                properties:
-                                  apiGroup:
-                                    type: string
-                                  kind:
-                                    type: string
-                                  name:
-                                    description: 'Name of the referent. More info:
-                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                                    type: string
-                                  namespace:
-                                    description: 'Namespace of the referent. More
-                                      info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
-                                    type: string
-                                required:
-                                - name
-                                type: object
-                              verifyEvery:
-                                description: VerifyEvery specifies the frequency of
-                                  backup verification
-                                format: int32
-                                minimum: 1
-                                type: integer
-                            type: object
-                          type: array
                       type: object
                     type: array
                 type: object

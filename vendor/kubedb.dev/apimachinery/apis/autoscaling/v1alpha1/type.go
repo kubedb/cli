@@ -121,7 +121,7 @@ type StorageAutoscalerSpec struct {
 	ScalingRules []StorageScalingRule `json:"scalingRules,omitempty"`
 
 	// Set a max size limit for volume increase
-	UpperBound resource.Quantity `json:"upperBound,omitempty"`
+	UpperBound *resource.Quantity `json:"upperBound,omitempty"`
 
 	// ExpansionMode can be `Online` or `Offline`
 	ExpansionMode opsapi.VolumeExpansionMode `json:"expansionMode"`

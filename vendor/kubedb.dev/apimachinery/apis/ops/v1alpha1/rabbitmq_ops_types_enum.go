@@ -12,20 +12,32 @@ import (
 )
 
 const (
+	// RabbitMQOpsRequestTypeUpdateVersion is a RabbitMQOpsRequestType of type UpdateVersion.
+	RabbitMQOpsRequestTypeUpdateVersion RabbitMQOpsRequestType = "UpdateVersion"
+	// RabbitMQOpsRequestTypeHorizontalScaling is a RabbitMQOpsRequestType of type HorizontalScaling.
+	RabbitMQOpsRequestTypeHorizontalScaling RabbitMQOpsRequestType = "HorizontalScaling"
 	// RabbitMQOpsRequestTypeVerticalScaling is a RabbitMQOpsRequestType of type VerticalScaling.
 	RabbitMQOpsRequestTypeVerticalScaling RabbitMQOpsRequestType = "VerticalScaling"
 	// RabbitMQOpsRequestTypeVolumeExpansion is a RabbitMQOpsRequestType of type VolumeExpansion.
 	RabbitMQOpsRequestTypeVolumeExpansion RabbitMQOpsRequestType = "VolumeExpansion"
 	// RabbitMQOpsRequestTypeRestart is a RabbitMQOpsRequestType of type Restart.
 	RabbitMQOpsRequestTypeRestart RabbitMQOpsRequestType = "Restart"
+	// RabbitMQOpsRequestTypeReconfigure is a RabbitMQOpsRequestType of type Reconfigure.
+	RabbitMQOpsRequestTypeReconfigure RabbitMQOpsRequestType = "Reconfigure"
+	// RabbitMQOpsRequestTypeReconfigureTLS is a RabbitMQOpsRequestType of type ReconfigureTLS.
+	RabbitMQOpsRequestTypeReconfigureTLS RabbitMQOpsRequestType = "ReconfigureTLS"
 )
 
 var ErrInvalidRabbitMQOpsRequestType = fmt.Errorf("not a valid RabbitMQOpsRequestType, try [%s]", strings.Join(_RabbitMQOpsRequestTypeNames, ", "))
 
 var _RabbitMQOpsRequestTypeNames = []string{
+	string(RabbitMQOpsRequestTypeUpdateVersion),
+	string(RabbitMQOpsRequestTypeHorizontalScaling),
 	string(RabbitMQOpsRequestTypeVerticalScaling),
 	string(RabbitMQOpsRequestTypeVolumeExpansion),
 	string(RabbitMQOpsRequestTypeRestart),
+	string(RabbitMQOpsRequestTypeReconfigure),
+	string(RabbitMQOpsRequestTypeReconfigureTLS),
 }
 
 // RabbitMQOpsRequestTypeNames returns a list of possible string values of RabbitMQOpsRequestType.
@@ -38,9 +50,13 @@ func RabbitMQOpsRequestTypeNames() []string {
 // RabbitMQOpsRequestTypeValues returns a list of the values for RabbitMQOpsRequestType
 func RabbitMQOpsRequestTypeValues() []RabbitMQOpsRequestType {
 	return []RabbitMQOpsRequestType{
+		RabbitMQOpsRequestTypeUpdateVersion,
+		RabbitMQOpsRequestTypeHorizontalScaling,
 		RabbitMQOpsRequestTypeVerticalScaling,
 		RabbitMQOpsRequestTypeVolumeExpansion,
 		RabbitMQOpsRequestTypeRestart,
+		RabbitMQOpsRequestTypeReconfigure,
+		RabbitMQOpsRequestTypeReconfigureTLS,
 	}
 }
 
@@ -57,9 +73,13 @@ func (x RabbitMQOpsRequestType) IsValid() bool {
 }
 
 var _RabbitMQOpsRequestTypeValue = map[string]RabbitMQOpsRequestType{
-	"VerticalScaling": RabbitMQOpsRequestTypeVerticalScaling,
-	"VolumeExpansion": RabbitMQOpsRequestTypeVolumeExpansion,
-	"Restart":         RabbitMQOpsRequestTypeRestart,
+	"UpdateVersion":     RabbitMQOpsRequestTypeUpdateVersion,
+	"HorizontalScaling": RabbitMQOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   RabbitMQOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":   RabbitMQOpsRequestTypeVolumeExpansion,
+	"Restart":           RabbitMQOpsRequestTypeRestart,
+	"Reconfigure":       RabbitMQOpsRequestTypeReconfigure,
+	"ReconfigureTLS":    RabbitMQOpsRequestTypeReconfigureTLS,
 }
 
 // ParseRabbitMQOpsRequestType attempts to convert a string to a RabbitMQOpsRequestType.

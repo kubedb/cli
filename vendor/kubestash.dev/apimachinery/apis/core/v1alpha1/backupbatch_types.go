@@ -49,8 +49,8 @@ type BackupBatchSpec struct {
 	// The respective BackupStorages can be in a different namespace than the BackupBatch.
 	// However, it must be allowed by the `usagePolicy` of the BackupStorage to refer from this namespace.
 	//
-	// This field is optional, if you don't provide any backend here, Stash will use the default BackupStorage for the namespace.
-	// If a default BackupStorage does not exist in the same namespace, then Stash will look for a default BackupStorage
+	// This field is optional, if you don't provide any backend here, KubeStash will use the default BackupStorage for the namespace.
+	// If a default BackupStorage does not exist in the same namespace, then KubeStash will look for a default BackupStorage
 	// in other namespaces that allows using it from the BackupBatch namespace.
 	// +optional
 	Backends []BackendReference `json:"backends,omitempty"`
@@ -62,7 +62,7 @@ type BackupBatchSpec struct {
 	Sessions []BatchSession `json:"sessions,omitempty"`
 
 	// Paused indicates that the BackupBatch has been paused from taking backup. Default value is 'false'.
-	// If you set `paused` field to `true`, Stash will suspend the respective backup triggering CronJob and
+	// If you set `paused` field to `true`, KubeStash will suspend the respective backup triggering CronJob and
 	// skip processing any further events for this BackupBatch.
 	// +optional
 	Paused bool `json:"paused,omitempty"`
@@ -95,7 +95,7 @@ type TargetBackupSpec struct {
 	Addon *AddonInfo `json:"addon,omitempty"`
 
 	// Repositories specifies a list of repository information where the backed up data will be stored.
-	// Stash will create the respective Repository CRs using this information.
+	// KubeStash will create the respective Repository CRs using this information.
 	Repositories []RepositoryInfo `json:"repositories,omitempty"`
 }
 

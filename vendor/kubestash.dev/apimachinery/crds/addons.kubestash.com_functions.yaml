@@ -55,6 +55,13 @@ spec:
                 items:
                   type: string
                 type: array
+              availableVersions:
+                description: 'AvailableVersions is the list of available addon versions
+                  This is needed for the KubeStash resolver, if Image has some variables
+                  in it. For example, `image: ghcr.io/kubedb/mongodb-restic-plugin:v0.7.0_${DB_VERSION}`'
+                items:
+                  type: string
+                type: array
               command:
                 description: 'Entrypoint array. Not executed within a shell. The docker
                   image''s ENTRYPOINT is used if this is not provided. Variable references

@@ -18,6 +18,8 @@ limitations under the License.
 
 package v1alpha1
 
+type ClickHouseVersionExpansion interface{}
+
 type DruidVersionExpansion interface{}
 
 type ElasticsearchVersionExpansion interface{}
@@ -53,6 +55,8 @@ type ProxySQLVersionExpansion interface{}
 type RabbitMQVersionExpansion interface{}
 
 type RedisVersionExpansion interface{}
+
+type SchemaRegistryVersionExpansion interface{}
 
 type SinglestoreVersionExpansion interface{}
 

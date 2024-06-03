@@ -139,7 +139,7 @@ type RestoreDataSource struct {
 	Snapshot string `json:"snapshot,omitempty"`
 
 	// PITR stands for Point-In-Time Recovery. You can provide a target time instead of specifying a particular Snapshot.
-	// Stash will automatically find the latest Snapshot that satisfies the targeted time and restore it.
+	// KubeStash will automatically find the latest Snapshot that satisfies the targeted time and restore it.
 	// +optional
 	PITR *PITR `json:"pitr,omitempty"`
 
@@ -150,7 +150,7 @@ type RestoreDataSource struct {
 
 	// EncryptionSecret refers to the Secret containing the encryption key which will be used to encode/decode the backed up data.
 	// You can refer to a Secret of a different namespace.
-	// If you don't provide the namespace field, Stash will look for the Secret in the same namespace as the RestoreSession.
+	// If you don't provide the namespace field, KubeStash will look for the Secret in the same namespace as the RestoreSession.
 	// +optional
 	EncryptionSecret *kmapi.ObjectReference `json:"encryptionSecret,omitempty"`
 }
@@ -161,7 +161,7 @@ type PITR struct {
 	TargetTime *metav1.Time `json:"targetTime,omitempty"`
 
 	// Exclusive specifies whether to exclude the Snapshot that falls in the exact time specified
-	// in the `targetTime` field. By default, Stash will select the Snapshot that fall in the exact time.
+	// in the `targetTime` field. By default, KubeStash will select the Snapshot that fall in the exact time.
 	// +optional
 	Exclusive bool `json:"exclusive,omitempty"`
 }

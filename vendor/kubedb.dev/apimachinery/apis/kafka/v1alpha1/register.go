@@ -58,6 +58,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ConnectClusterList{},
 		&Connector{},
 		&ConnectorList{},
+		&SchemaRegistry{},
+		&SchemaRegistryList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

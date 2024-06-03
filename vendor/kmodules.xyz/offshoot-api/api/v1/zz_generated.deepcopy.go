@@ -497,6 +497,11 @@ func (in *PodSpec) DeepCopyInto(out *PodSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.PodPlacementPolicy != nil {
+		in, out := &in.PodPlacementPolicy, &out.PodPlacementPolicy
+		*out = new(corev1.LocalObjectReference)
+		**out = **in
+	}
 	return
 }
 

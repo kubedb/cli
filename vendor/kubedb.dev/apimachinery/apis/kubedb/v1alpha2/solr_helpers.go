@@ -231,8 +231,8 @@ func (s *Solr) PVCName(alias string) string {
 }
 
 func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
-	if s.Spec.TerminationPolicy == "" {
-		s.Spec.TerminationPolicy = TerminationPolicyDelete
+	if s.Spec.DeletionPolicy == "" {
+		s.Spec.DeletionPolicy = TerminationPolicyDelete
 	}
 
 	if s.Spec.StorageType == "" {

@@ -29,6 +29,7 @@ import (
 
 type OpsV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	DruidOpsRequestsGetter
 	ElasticsearchOpsRequestsGetter
 	EtcdOpsRequestsGetter
 	KafkaOpsRequestsGetter
@@ -38,16 +39,22 @@ type OpsV1alpha1Interface interface {
 	MySQLOpsRequestsGetter
 	PerconaXtraDBOpsRequestsGetter
 	PgBouncerOpsRequestsGetter
+	PgpoolOpsRequestsGetter
 	PostgresOpsRequestsGetter
 	ProxySQLOpsRequestsGetter
 	RabbitMQOpsRequestsGetter
 	RedisOpsRequestsGetter
 	RedisSentinelOpsRequestsGetter
+	SinglestoreOpsRequestsGetter
 }
 
 // OpsV1alpha1Client is used to interact with features provided by the ops.kubedb.com group.
 type OpsV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *OpsV1alpha1Client) DruidOpsRequests(namespace string) DruidOpsRequestInterface {
+	return newDruidOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) ElasticsearchOpsRequests(namespace string) ElasticsearchOpsRequestInterface {
@@ -86,6 +93,10 @@ func (c *OpsV1alpha1Client) PgBouncerOpsRequests(namespace string) PgBouncerOpsR
 	return newPgBouncerOpsRequests(c, namespace)
 }
 
+func (c *OpsV1alpha1Client) PgpoolOpsRequests(namespace string) PgpoolOpsRequestInterface {
+	return newPgpoolOpsRequests(c, namespace)
+}
+
 func (c *OpsV1alpha1Client) PostgresOpsRequests(namespace string) PostgresOpsRequestInterface {
 	return newPostgresOpsRequests(c, namespace)
 }
@@ -104,6 +115,10 @@ func (c *OpsV1alpha1Client) RedisOpsRequests(namespace string) RedisOpsRequestIn
 
 func (c *OpsV1alpha1Client) RedisSentinelOpsRequests(namespace string) RedisSentinelOpsRequestInterface {
 	return newRedisSentinelOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) SinglestoreOpsRequests(namespace string) SinglestoreOpsRequestInterface {
+	return newSinglestoreOpsRequests(c, namespace)
 }
 
 // NewForConfig creates a new OpsV1alpha1Client for the given config.

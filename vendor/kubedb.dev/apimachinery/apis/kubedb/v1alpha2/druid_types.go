@@ -54,18 +54,12 @@ type Druid struct {
 
 // DruidSpec defines the desired state of Druid
 type DruidSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	// Version of Druid to be deployed.
 	Version string `json:"version"`
 
 	// Druid topology for node specification
 	// +optional
 	Topology *DruidClusterTopology `json:"topology,omitempty"`
-
-	// StorageType can be durable (default) or ephemeral.
-	StorageType StorageType `json:"storageType,omitempty"`
 
 	// disable security. It disables authentication security of user.
 	// If unset, default is false
@@ -95,10 +89,6 @@ type DruidSpec struct {
 	// +optional
 	ZookeeperRef *ZookeeperRef `json:"zookeeperRef,omitempty"`
 
-	// PodTemplate is an optional configuration
-	// +optional
-	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
-
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
 	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
@@ -111,9 +101,9 @@ type DruidSpec struct {
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
-	// TerminationPolicy controls the delete operation for database
+	// DeletionPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+	DeletionPolicy TerminationPolicy `json:"deletionPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional
@@ -122,21 +112,22 @@ type DruidSpec struct {
 }
 
 type DruidClusterTopology struct {
-	Coordinators *DruidNode `json:"coordinators"`
+	Coordinators *DruidNode `json:"coordinators,omitempty"`
 	// +optional
 	Overlords *DruidNode `json:"overlords,omitempty"`
 
-	MiddleManagers *DruidNode `json:"middleManagers"`
+	MiddleManagers *DruidDataNode `json:"middleManagers,omitempty"`
 
-	Historicals *DruidNode `json:"historicals"`
+	Historicals *DruidDataNode `json:"historicals,omitempty"`
 
-	Brokers *DruidNode `json:"brokers"`
+	Brokers *DruidNode `json:"brokers,omitempty"`
 	// +optional
 	Routers *DruidNode `json:"routers,omitempty"`
 }
 
 type DruidNode struct {
-	// Replicas represents number of replica for the specific type of node
+	// Replicas represents number of replicas for the specific type of node
+	// +kubebuilder:default=1
 	// +optional
 	Replicas *int32 `json:"replicas,omitempty"`
 
@@ -144,28 +135,24 @@ type DruidNode struct {
 	// +optional
 	Suffix string `json:"suffix,omitempty"`
 
-	// Storage to specify how storage shall be used.
-	// +optional
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
-
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+}
 
-	// NodeSelector is a selector which must be true for the pod to fit on a node.
-	// Selector which must match a node's labels for the pod to be scheduled on that node.
-	// More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
-	// +optional
-	// +mapType=atomic
-	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
-	// If specified, the pod's tolerations.
-	// +optional
-	Tolerations []core.Toleration `json:"tolerations,omitempty"`
+type DruidDataNode struct {
+	// DruidDataNode has all the characteristics of DruidNode
+	DruidNode `json:",inline"`
 
-	// PodPlacementPolicy is the reference of the podPlacementPolicy
-	// +kubebuilder:default={name: "default"}
-	// +optional
-	PodPlacementPolicy *core.LocalObjectReference `json:"podPlacementPolicy,omitempty"`
+	// StorageType specifies if the storage
+	// of this node is durable (default) or ephemeral.
+	StorageType StorageType `json:"storageType,omitempty"`
+
+	// Storage to specify how storage shall be used.
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// EphemeralStorage spec to specify the configuration of ephemeral storage type.
+	EphemeralStorage *core.EmptyDirVolumeSource `json:"ephemeralStorage,omitempty"`
 }
 
 type MetadataStorage struct {
@@ -205,8 +192,6 @@ type ZookeeperRef struct {
 
 // DruidStatus defines the observed state of Druid
 type DruidStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 	// Specifies the current phase of the database
 	// +optional
 	Phase DruidPhase `json:"phase,omitempty"`

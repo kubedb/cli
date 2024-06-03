@@ -32,6 +32,7 @@ func convertRouteTo(in *Route) (*v1alpha1.Route, error) {
 
 	out := &v1alpha1.Route{
 		Receiver:            in.Receiver,
+		Continue:            in.Continue,
 		GroupBy:             in.GroupBy,
 		GroupWait:           in.GroupWait,
 		GroupInterval:       in.GroupInterval,
@@ -455,6 +456,7 @@ func convertMSTeamsConfigTo(in MSTeamsConfig) v1alpha1.MSTeamsConfig {
 		WebhookURL:   in.WebhookURL,
 		Title:        in.Title,
 		Text:         in.Text,
+		Summary:      in.Summary,
 		HTTPConfig:   convertHTTPConfigTo(in.HTTPConfig),
 	}
 }

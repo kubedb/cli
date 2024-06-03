@@ -21,3 +21,5 @@ package v1alpha1
 type ConnectClusterExpansion interface{}
 
 type ConnectorExpansion interface{}
+
+type SchemaRegistryExpansion interface{}

@@ -68,6 +68,8 @@ type MemcachedOpsRequestSpec struct {
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
@@ -92,13 +94,18 @@ type MemcachedHorizontalScalingSpec struct{}
 
 // MemcachedVerticalScalingSpec is the spec for Memcached vertical scaling
 type MemcachedVerticalScalingSpec struct {
+	Memcached         *PodResources                      `json:"memcached,omitempty"`
 	ReadinessCriteria *MemcachedReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
 }
 
 // MemcachedVolumeExpansionSpec is the spec for Memcached volume expansion
 type MemcachedVolumeExpansionSpec struct{}
 
-type MemcachedCustomConfigurationSpec struct{}
+type MemcachedCustomConfigurationSpec struct {
+	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
+	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
+	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
+}
 
 type MemcachedCustomConfiguration struct {
 	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
