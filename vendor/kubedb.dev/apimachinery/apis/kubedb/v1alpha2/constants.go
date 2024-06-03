@@ -31,7 +31,8 @@ const (
 
 	KubeDBOrganization = "kubedb"
 
-	LabelRole = kubedb.GroupName + "/role"
+	LabelRole   = kubedb.GroupName + "/role"
+	LabelPetSet = kubedb.GroupName + "/petset"
 
 	ReplicationModeDetectorContainerName = "replication-mode-detector"
 	DatabasePodPrimary                   = "primary"
@@ -124,10 +125,13 @@ const (
 	ElasticsearchMinHeapSize = 128 * 1024 * 1024
 
 	// =========================== Memcached Constants ============================
+	MemcachedConfigKey              = "memcached.conf" // MemcachedConfigKey is going to create for the customize redis configuration
 	MemcachedDatabasePortName       = "db"
 	MemcachedPrimaryServicePortName = "primary"
 	MemcachedDatabasePort           = 11211
 	MemcachedShardKey               = MemcachedKey + "/shard"
+	MemcachedContainerName          = ResourceSingularMemcached
+	MemcachedConfigVolumePath       = "/etc/memcached/"
 	// =========================== MongoDB Constants ============================
 
 	MongoDBDatabasePortName       = "db"
@@ -339,6 +343,7 @@ const (
 	DatabasePodLeaf         = "Leaf"
 	PetSetTypeAggregator    = "aggregator"
 	PetSetTypeLeaf          = "leaf"
+	PetSetTypeStandalone    = "standalone"
 
 	SinglestoreDatabaseHealth = "singlestore_health"
 	SinglestoreTableHealth    = "singlestore_health_table"
@@ -350,7 +355,7 @@ const (
 	SinglestoreVolumeNameUserInitScript      = "initial-script"
 	SinglestoreVolumeMountPathUserInitScript = "/docker-entrypoint-initdb.d"
 	SinglestoreVolumeNameCustomConfig        = "custom-config"
-	SinglestoreVolumeMountPathCustomConfig   = "/config"
+	SinglestoreVolumeMountPathCustomConfig   = "/etc/memsql/conf.d"
 	SinglestoreVolmeNameInitScript           = "init-scripts"
 	SinglestoreVolumeMountPathInitScript     = "/scripts"
 	SinglestoreVolumeNameData                = "data"
@@ -365,10 +370,7 @@ const (
 	SinglestoreTLSConfigPreferred  = "preferred"
 
 	// =========================== MSSQLServer Constants ============================
-	MSSQLSAUser                  = "sa"
-	MSSQLEndpointCertsSecretName = "endpoint-cert"
-	MSSQLDbmLoginSecretName      = "dbm-login-secret"
-	MSSQLMasterKeySecretName     = "master-key-secret"
+	MSSQLSAUser = "sa"
 
 	AGPrimaryReplicaReadyCondition = "AGPrimaryReplicaReady"
 
@@ -383,25 +385,35 @@ const (
 	MSSQLDatabasePort                  = 1433
 	MSSQLDatabaseMirroringEndpointPort = 5022
 	MSSQLCoordinatorPort               = 2381
+
 	// environment variables
 	EnvAcceptEula        = "ACCEPT_EULA"
 	EnvMSSQLEnableHADR   = "MSSQL_ENABLE_HADR"
 	EnvMSSQLAgentEnabled = "MSSQL_AGENT_ENABLED"
 	EnvMSSQLSAUsername   = "MSSQL_SA_USERNAME"
 	EnvMSSQLSAPassword   = "MSSQL_SA_PASSWORD"
+
 	// container related
 	MSSQLContainerName            = "mssql"
 	MSSQLCoordinatorContainerName = "mssql-coordinator"
 	MSSQLInitContainerName        = "mssql-init"
+
 	// volume related
-	MSSQLVolumeNameData              = "data"
-	MSSQLVolumeMountPathData         = "/var/opt/mssql"
-	MSSQLVolumeNameInitScript        = "init-scripts"
-	MSSQLVolumeMountPathInitScript   = "/scripts"
-	MSSQLVolumeNameEndpointCert      = "endpoint-cert"
-	MSSQLVolumeMountPathEndpointCert = "/var/opt/mssql/endpoint-cert"
-	MSSQLVolumeNameCerts             = "certs"
-	MSSQLVolumeMountPathCerts        = "/var/opt/mssql/certs"
+	MSSQLVolumeNameData                        = "data"
+	MSSQLVolumeMountPathData                   = "/var/opt/mssql"
+	MSSQLVolumeNameInitScript                  = "init-scripts"
+	MSSQLVolumeMountPathInitScript             = "/scripts"
+	MSSQLVolumeNameEndpointCert                = "endpoint-cert"
+	MSSQLVolumeMountPathEndpointCert           = "/var/opt/mssql/endpoint-cert"
+	MSSQLVolumeNameCerts                       = "certs"
+	MSSQLVolumeMountPathCerts                  = "/var/opt/mssql/certs"
+	MSSQLVolumeNameTLS                         = "tls"
+	MSSQLVolumeMountPathTLS                    = "/var/opt/mssql/tls"
+	MSSQLVolumeNameSecurityCACertificates      = "security-ca-certificates"
+	MSSQLVolumeMountPathSecurityCACertificates = "/var/opt/mssql/security/ca-certificates"
+	MSSQLVolumeNameCACerts                     = "cacerts"
+	MSSQLVolumeMountPathCACerts                = "/etc/ssl/certs"
+
 	// tls related
 	MSSQLInternalTLSCrt = "tls.crt"
 	MSSQLInternalTLSKey = "tls.key"
@@ -553,6 +565,7 @@ const (
 	PgBouncerAdminUsername                  = "pgbouncer"
 	PgBouncerDefaultPoolMode                = "session"
 	PgBouncerDefaultIgnoreStartupParameters = "empty"
+	BackendSecretResourceVersion            = "backend-secret-resource-version"
 
 	// =========================== Pgpool Constants ============================
 	EnvPostgresUsername                = "POSTGRES_USERNAME"
@@ -566,6 +579,7 @@ const (
 	PgpoolContainerName                = "pgpool"
 	PgpoolDefaultServicePort           = 9999
 	PgpoolMonitoringDefaultServicePort = 9719
+	PgpoolPcpPort                      = 9595
 	PgpoolExporterDatabase             = "postgres"
 	EnvPgpoolExporterDatabase          = "POSTGRES_DATABASE"
 	EnvPgpoolService                   = "PGPOOL_SERVICE"
@@ -581,6 +595,10 @@ const (
 	PgpoolExporterTlsVolumeName        = "exporter-certs"
 	PgpoolExporterTlsVolumeMountPath   = "/tls/certs"
 	PgpoolRootUser                     = "postgres"
+	PgpoolPrimaryServicePortName       = "primary"
+	PgpoolDatabasePortName             = "db"
+	PgpoolPcpPortName                  = "pcp"
+	PgpoolCustomConfigFile             = "pgpool.conf"
 	// ========================================== ZooKeeper Constants =================================================//
 
 	KubeDBZooKeeperRoleName         = "kubedb:zookeeper-version-reader"
@@ -769,6 +787,9 @@ const (
 	KafkaKeystorePassword    = "ssl.keystore.password"
 	KafkaTruststorePassword  = "ssl.truststore.password"
 	KafkaKeyPassword         = "ssl.key.password"
+	KafkaTruststoreType      = "ssl.truststore.type"
+	KafkaKeystoreType        = "ssl.keystore.type"
+	KafkaTruststoreTypeJKS   = "JKS"
 	KafkaKeystoreDefaultPass = "changeit"
 
 	KafkaMetricReporters       = "metric.reporters"
@@ -1144,7 +1165,9 @@ const (
 	RabbitMQLoopBackUserKey            = "loopback_users"
 	RabbitMQLoopBackUserVal            = "none"
 	RabbitMQDefaultTCPListenerKey      = "listeners.tcp.default"
+	RabbitMQDefaultSSLListenerKey      = "listeners.ssl.default"
 	RabbitMQDefaultTCPListenerVal      = "5672"
+	RabbitMQDefaultTLSListenerVal      = "5671"
 	RabbitMQQueueMasterLocatorKey      = "queue_master_locator"
 	RabbitMQQueueMasterLocatorVal      = "min-masters"
 	RabbitMQDiskFreeLimitKey           = "disk_free_limit.absolute"
@@ -1171,6 +1194,11 @@ const (
 	RabbitMQDefaultPasswordVal         = "$(RABBITMQ_DEFAULT_PASS)"
 	RabbitMQClusterNameKey             = "cluster_name"
 	RabbitMQK8sSvcNameKey              = "cluster_formation.k8s.service_name"
+	RabbitMQSSLOptionsCAKey            = "ssl_options.cacertfile"
+	RabbitMQSSLOptionsCertKey          = "ssl_options.certfile"
+	RabbitMQSSLOptionsPrivateKey       = "ssl_options.keyfile"
+	RabbitMQSSLOptionsVerifyKey        = "ssl_options.verify"
+	RabbitMQSSLOptionsFailIfNoPeerKey  = "ssl_options.fail_if_no_peer_cert"
 	RabbitMQConfigFileName             = "rabbitmq.conf"
 	RabbitMQEnabledPluginsFileName     = "enabled_plugins"
 	RabbitMQHealthCheckerQueueName     = "kubedb-system"
@@ -1200,6 +1228,47 @@ const (
 	FerretDBTLSPort     = 27018
 
 	FerretDBMetricsPath = "/debug/metrics"
+)
+
+// =========================== ClickHouse Constants ============================
+
+const (
+	ClickHouseKeeperPort  = 9181
+	ClickHouseDefaultHTTP = 8123
+	ClickHouseDefaultTLS  = 8443
+	ClickHouseNativeTCP   = 9000
+	ClickHouseNativeTLS   = 9440
+	ClickhousePromethues  = 9363
+
+	ClickHouseVolumeData         = "data"
+	ClickHouseDataDir            = "/var/lib/clickhouse"
+	ClickHouseConfigVolName      = "clickhouse-config"
+	ClickHouseConfigDir          = "/etc/clickhouse-server/config.d"
+	ClickHouseDefaultStorageSize = "2Gi"
+
+	ClickHouseClusterConfigVolName = "cluster-config"
+	ClickHouseClusterConfigDir     = "/etc/clickhouse-server/conf.d"
+
+	ClickHouseTempClusterConfigVolName = "temp-cluster-config"
+
+	ClickHouseContainerName     = "clickhouse"
+	ClickHouseInitContainerName = "clickhouse-init"
+
+	ClickHouseClusterConfigFile = "cluster-config.yaml"
+	ClickHouseTempConfigDir     = "/ch-tmp/config"
+	ClickHouseTempDir           = "/ch-tmp"
+
+	ClickHouseUserConfigDir  = "/etc/clickhouse-server/user.d"
+	ClickHouseMacrosFileName = "macros.yaml"
+
+	ClickHouseStandalone = "standalone"
+	ClickHouseCluster    = "cluster"
+
+	ClickHouseHealthCheckerDatabase = "kubedb_system_db"
+	ClickHouseHealthCheckerTable    = "kubedb_system_table"
+
+	ClickHouseServerConfigFile = "server-config.yaml"
+	ClickHouseKeeperFileConfig = "keeper-config.yaml"
 )
 
 // Resource kind related constants

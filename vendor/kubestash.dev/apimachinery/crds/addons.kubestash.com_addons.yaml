@@ -25,11 +25,11 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Addon specifies the backup and restore capabilities for a particular
-          resource. For example, MySQL addon specifies the backup and restore capabilities
-          of MySQL database where Postgres addon specifies backup and restore capabilities
-          for PostgreSQL database. An Addon CR defines the backup and restore tasks
-          that can be performed by this addon.
+        description: Addon specifies the backup and restore capabilities for a specific
+          type of target. For example, MySQL addon specifies the backup and restore
+          capabilities of MySQL database where Postgres addon specifies backup and
+          restore capabilities for PostgreSQL database. An Addon CR defines these
+          capabilities as tasks for backup and restore.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -74,13 +74,13 @@ spec:
                         execute the task. For example, it can be a Job, a sidecar
                         container, an ephemeral container, or a Job that creates additional
                         Jobs/Pods for executing the backup/restore logic. Valid values
-                        are: - "Job": Stash will create a Job to execute the backup/restore
-                        task. - "Sidecar": Stash will inject a sidecar container into
-                        the application to execute the backup/restore task. - "EphemeralContainer":
-                        Stash will attach an ephemeral container to the respective
-                        Pods to execute the backup/restore task. - "MultiLevelJob":
-                        Stash will create a Job that will create additional Jobs/Pods
-                        to execute the backup/restore task.'
+                        are: - "Job": KubeStash will create a Job to execute the backup/restore
+                        task. - "Sidecar": KubeStash will inject a sidecar container
+                        into the application to execute the backup/restore task. -
+                        "EphemeralContainer": KubeStash will attach an ephemeral container
+                        to the respective Pods to execute the backup/restore task.
+                        - "MultiLevelJob": KubeStash will create a Job that will create
+                        additional Jobs/Pods to execute the backup/restore task.'
                       enum:
                       - Job
                       - Sidecar
@@ -121,52 +121,6 @@ spec:
                             type: string
                         type: object
                       type: array
-                    passThroughMounts:
-                      description: PassThroughMounts specifies a list of volume mount
-                        for the VolumeTemplates that should be mounted on second level
-                        Jobs/Pods created by the first level executor Job. If the
-                        volume needs to be mounted on both first level and second
-                        level Jobs/Pods, then specify the mount in both VolumeMounts
-                        and PassThroughMounts section. If the volume type is VolumeClaimTemplate,
-                        then the first level job is responsible for creating the volume.
-                      items:
-                        description: VolumeMount describes a mounting of a Volume
-                          within a container.
-                        properties:
-                          mountPath:
-                            description: Path within the container at which the volume
-                              should be mounted.  Must not contain ':'.
-                            type: string
-                          mountPropagation:
-                            description: mountPropagation determines how mounts are
-                              propagated from the host to container and the other
-                              way around. When not set, MountPropagationNone is used.
-                              This field is beta in 1.10.
-                            type: string
-                          name:
-                            description: This must match the Name of a Volume.
-                            type: string
-                          readOnly:
-                            description: Mounted read-only if true, read-write otherwise
-                              (false or unspecified). Defaults to false.
-                            type: boolean
-                          subPath:
-                            description: Path within the volume from which the container's
-                              volume should be mounted. Defaults to "" (volume's root).
-                            type: string
-                          subPathExpr:
-                            description: Expanded path within the volume from which
-                              the container's volume should be mounted. Behaves similarly
-                              to SubPath but environment variable references $(VAR_NAME)
-                              are expanded using the container's environment. Defaults
-                              to "" (volume's root). SubPathExpr and SubPath are mutually
-                              exclusive.
-                            type: string
-                        required:
-                        - mountPath
-                        - name
-                        type: object
-                      type: array
                     singleton:
                       description: Singleton specifies whether this task will be executed
                         on a single job or across multiple jobs.
@@ -175,8 +129,8 @@ spec:
                       description: VolumeMounts specifies the mount path of the volumes
                         specified in the VolumeTemplate section. These volumes will
                         be mounted directly on the Job/Container created/injected
-                        by Stash operator. If the volume type is VolumeClaimTemplate,
-                        then Stash operator is responsible for creating the volume.
+                        by KubeStash operator. If the volume type is VolumeClaimTemplate,
+                        then KubeStash operator is responsible for creating the volume.
                       items:
                         description: VolumeMount describes a mounting of a Volume
                           within a container.
@@ -2591,13 +2545,13 @@ spec:
                         execute the task. For example, it can be a Job, a sidecar
                         container, an ephemeral container, or a Job that creates additional
                         Jobs/Pods for executing the backup/restore logic. Valid values
-                        are: - "Job": Stash will create a Job to execute the backup/restore
-                        task. - "Sidecar": Stash will inject a sidecar container into
-                        the application to execute the backup/restore task. - "EphemeralContainer":
-                        Stash will attach an ephemeral container to the respective
-                        Pods to execute the backup/restore task. - "MultiLevelJob":
-                        Stash will create a Job that will create additional Jobs/Pods
-                        to execute the backup/restore task.'
+                        are: - "Job": KubeStash will create a Job to execute the backup/restore
+                        task. - "Sidecar": KubeStash will inject a sidecar container
+                        into the application to execute the backup/restore task. -
+                        "EphemeralContainer": KubeStash will attach an ephemeral container
+                        to the respective Pods to execute the backup/restore task.
+                        - "MultiLevelJob": KubeStash will create a Job that will create
+                        additional Jobs/Pods to execute the backup/restore task.'
                       enum:
                       - Job
                       - Sidecar
@@ -2638,52 +2592,6 @@ spec:
                             type: string
                         type: object
                       type: array
-                    passThroughMounts:
-                      description: PassThroughMounts specifies a list of volume mount
-                        for the VolumeTemplates that should be mounted on second level
-                        Jobs/Pods created by the first level executor Job. If the
-                        volume needs to be mounted on both first level and second
-                        level Jobs/Pods, then specify the mount in both VolumeMounts
-                        and PassThroughMounts section. If the volume type is VolumeClaimTemplate,
-                        then the first level job is responsible for creating the volume.
-                      items:
-                        description: VolumeMount describes a mounting of a Volume
-                          within a container.
-                        properties:
-                          mountPath:
-                            description: Path within the container at which the volume
-                              should be mounted.  Must not contain ':'.
-                            type: string
-                          mountPropagation:
-                            description: mountPropagation determines how mounts are
-                              propagated from the host to container and the other
-                              way around. When not set, MountPropagationNone is used.
-                              This field is beta in 1.10.
-                            type: string
-                          name:
-                            description: This must match the Name of a Volume.
-                            type: string
-                          readOnly:
-                            description: Mounted read-only if true, read-write otherwise
-                              (false or unspecified). Defaults to false.
-                            type: boolean
-                          subPath:
-                            description: Path within the volume from which the container's
-                              volume should be mounted. Defaults to "" (volume's root).
-                            type: string
-                          subPathExpr:
-                            description: Expanded path within the volume from which
-                              the container's volume should be mounted. Behaves similarly
-                              to SubPath but environment variable references $(VAR_NAME)
-                              are expanded using the container's environment. Defaults
-                              to "" (volume's root). SubPathExpr and SubPath are mutually
-                              exclusive.
-                            type: string
-                        required:
-                        - mountPath
-                        - name
-                        type: object
-                      type: array
                     singleton:
                       description: Singleton specifies whether this task will be executed
                         on a single job or across multiple jobs.
@@ -2692,8 +2600,8 @@ spec:
                       description: VolumeMounts specifies the mount path of the volumes
                         specified in the VolumeTemplate section. These volumes will
                         be mounted directly on the Job/Container created/injected
-                        by Stash operator. If the volume type is VolumeClaimTemplate,
-                        then Stash operator is responsible for creating the volume.
+                        by KubeStash operator. If the volume type is VolumeClaimTemplate,
+                        then KubeStash operator is responsible for creating the volume.
                       items:
                         description: VolumeMount describes a mounting of a Volume
                           within a container.

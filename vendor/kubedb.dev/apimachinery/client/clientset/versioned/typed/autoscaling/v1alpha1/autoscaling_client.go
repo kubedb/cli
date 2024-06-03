@@ -29,6 +29,7 @@ import (
 
 type AutoscalingV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	DruidAutoscalersGetter
 	ElasticsearchAutoscalersGetter
 	EtcdAutoscalersGetter
 	KafkaAutoscalersGetter
@@ -38,16 +39,22 @@ type AutoscalingV1alpha1Interface interface {
 	MySQLAutoscalersGetter
 	PerconaXtraDBAutoscalersGetter
 	PgBouncerAutoscalersGetter
+	PgpoolAutoscalersGetter
 	PostgresAutoscalersGetter
 	ProxySQLAutoscalersGetter
 	RabbitMQAutoscalersGetter
 	RedisAutoscalersGetter
 	RedisSentinelAutoscalersGetter
+	SinglestoreAutoscalersGetter
 }
 
 // AutoscalingV1alpha1Client is used to interact with features provided by the autoscaling.kubedb.com group.
 type AutoscalingV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *AutoscalingV1alpha1Client) DruidAutoscalers(namespace string) DruidAutoscalerInterface {
+	return newDruidAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) ElasticsearchAutoscalers(namespace string) ElasticsearchAutoscalerInterface {
@@ -86,6 +93,10 @@ func (c *AutoscalingV1alpha1Client) PgBouncerAutoscalers(namespace string) PgBou
 	return newPgBouncerAutoscalers(c, namespace)
 }
 
+func (c *AutoscalingV1alpha1Client) PgpoolAutoscalers(namespace string) PgpoolAutoscalerInterface {
+	return newPgpoolAutoscalers(c, namespace)
+}
+
 func (c *AutoscalingV1alpha1Client) PostgresAutoscalers(namespace string) PostgresAutoscalerInterface {
 	return newPostgresAutoscalers(c, namespace)
 }
@@ -104,6 +115,10 @@ func (c *AutoscalingV1alpha1Client) RedisAutoscalers(namespace string) RedisAuto
 
 func (c *AutoscalingV1alpha1Client) RedisSentinelAutoscalers(namespace string) RedisSentinelAutoscalerInterface {
 	return newRedisSentinelAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) SinglestoreAutoscalers(namespace string) SinglestoreAutoscalerInterface {
+	return newSinglestoreAutoscalers(c, namespace)
 }
 
 // NewForConfig creates a new AutoscalingV1alpha1Client for the given config.

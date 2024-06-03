@@ -22,7 +22,6 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/utils/ptr"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
@@ -67,14 +66,14 @@ func (obj *PetSet) Default() {
 		if obj.Spec.UpdateStrategy.RollingUpdate.Partition == nil {
 			obj.Spec.UpdateStrategy.RollingUpdate.Partition = ptr.To[int32](0)
 		}
-		if utilfeature.DefaultFeatureGate.Enabled(features.MaxUnavailablePetSet) {
+		if features.DefaultFeatureGate.Enabled(features.MaxUnavailablePetSet) {
 			if obj.Spec.UpdateStrategy.RollingUpdate.MaxUnavailable == nil {
 				obj.Spec.UpdateStrategy.RollingUpdate.MaxUnavailable = ptr.To(intstr.FromInt32(1))
 			}
 		}
 	}
 
-	if utilfeature.DefaultFeatureGate.Enabled(features.PetSetAutoDeletePVC) {
+	if features.DefaultFeatureGate.Enabled(features.PetSetAutoDeletePVC) {
 		if obj.Spec.PersistentVolumeClaimRetentionPolicy == nil {
 			obj.Spec.PersistentVolumeClaimRetentionPolicy = &appsv1.StatefulSetPersistentVolumeClaimRetentionPolicy{}
 		}

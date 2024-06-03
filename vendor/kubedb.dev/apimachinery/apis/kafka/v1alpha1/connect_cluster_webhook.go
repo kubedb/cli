@@ -86,7 +86,7 @@ func (k *ConnectCluster) ValidateDelete() (admission.Warnings, error) {
 	connectClusterLog.Info("validate delete", "name", k.Name)
 
 	var allErr field.ErrorList
-	if k.Spec.TerminationPolicy == api.TerminationPolicyDoNotTerminate {
+	if k.Spec.DeletionPolicy == api.TerminationPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			k.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
@@ -111,7 +111,7 @@ func (k *ConnectCluster) ValidateCreateOrUpdate() field.ErrorList {
 		}
 	}
 
-	if k.Spec.TerminationPolicy == api.TerminationPolicyHalt {
+	if k.Spec.DeletionPolicy == api.TerminationPolicyHalt {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			k.Name,
 			"TerminationPolicyHalt is not supported for ConnectCluster"))

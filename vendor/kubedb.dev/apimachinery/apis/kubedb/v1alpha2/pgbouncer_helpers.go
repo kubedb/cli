@@ -63,8 +63,10 @@ func (p PgBouncer) OffshootLabels() map[string]string {
 	return p.offshootLabels(p.OffshootSelectors(), nil)
 }
 
-func (p PgBouncer) PodLabels() map[string]string {
-	return p.offshootLabels(p.OffshootSelectors(), p.Spec.PodTemplate.Labels)
+func (p PgBouncer) PodLabels(backendSecretRV string) map[string]string {
+	podLabels := p.offshootLabels(p.OffshootSelectors(), p.Spec.PodTemplate.Labels)
+	podLabels[BackendSecretResourceVersion] = backendSecretRV
+	return podLabels
 }
 
 func (p PgBouncer) PodControllerLabels() map[string]string {

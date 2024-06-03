@@ -75,6 +75,35 @@ type PrometheusRuleExcludeConfig struct {
 	RuleName string `json:"ruleName"`
 }
 
+type ProxyConfig struct {
+	// `proxyURL` defines the HTTP proxy server to use.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +kubebuilder:validation:Pattern:="^http(s)?://.+$"
+	// +optional
+	ProxyURL *string `json:"proxyUrl,omitempty"`
+	// `noProxy` is a comma-separated string that can contain IPs, CIDR notation, domain names
+	// that should be excluded from proxying. IP and domain names can
+	// contain port numbers.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +optional
+	NoProxy *string `json:"noProxy,omitempty"`
+	// Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).
+	// If unset, Prometheus uses its default value.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +optional
+	ProxyFromEnvironment *bool `json:"proxyFromEnvironment,omitempty"`
+	// ProxyConnectHeader optionally specifies headers to send to
+	// proxies during CONNECT requests.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +optional
+	// +mapType:=atomic
+	ProxyConnectHeader map[string][]v1.SecretKeySelector `json:"proxyConnectHeader,omitempty"`
+}
+
 // ObjectReference references a PodMonitor, ServiceMonitor, Probe or PrometheusRule object.
 type ObjectReference struct {
 	// Group of the referent. When not specified, it defaults to `monitoring.coreos.com`
@@ -366,10 +395,10 @@ type Endpoint struct {
 	// It takes precedence over `targetPort`.
 	Port string `json:"port,omitempty"`
 
-	// Name or number of the target port of the `Pod` object behind the Service, the
-	// port must be specified with container port property.
+	// Name or number of the target port of the `Pod` object behind the
+	// Service. The port must be specified with the container's port property.
 	//
-	// Deprecated: use `port` instead.
+	// +optional
 	TargetPort *intstr.IntOrString `json:"targetPort,omitempty"`
 
 	// HTTP path from which to scrape for metrics.
@@ -468,7 +497,7 @@ type Endpoint struct {
 	// samples before ingestion.
 	//
 	// +optional
-	MetricRelabelConfigs []*RelabelConfig `json:"metricRelabelings,omitempty"`
+	MetricRelabelConfigs []RelabelConfig `json:"metricRelabelings,omitempty"`
 
 	// `relabelings` configures the relabeling rules to apply the target's
 	// metadata labels.
@@ -480,7 +509,7 @@ type Endpoint struct {
 	// More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
 	//
 	// +optional
-	RelabelConfigs []*RelabelConfig `json:"relabelings,omitempty"`
+	RelabelConfigs []RelabelConfig `json:"relabelings,omitempty"`
 
 	// `proxyURL` configures the HTTP Proxy URL (e.g.
 	// "http://proxyserver:2195") to go through when scraping the target.
@@ -627,14 +656,20 @@ func (c *SecretOrConfigMap) String() string {
 type SafeTLSConfig struct {
 	// Certificate authority used when verifying server certificates.
 	CA SecretOrConfigMap `json:"ca,omitempty"`
+
 	// Client certificate to present when doing client-authentication.
 	Cert SecretOrConfigMap `json:"cert,omitempty"`
+
 	// Secret containing the client key file for the targets.
 	KeySecret *v1.SecretKeySelector `json:"keySecret,omitempty"`
+
 	// Used to verify the hostname for the targets.
-	ServerName string `json:"serverName,omitempty"`
+	//+optional
+	ServerName *string `json:"serverName,omitempty"`
+
 	// Disable target certificate validation.
-	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty"`
+	//+optional
+	InsecureSkipVerify *bool `json:"insecureSkipVerify,omitempty"`
 }
 
 // Validate semantically validates the given SafeTLSConfig.
@@ -739,3 +774,13 @@ type Argument struct {
 	// Argument value, e.g. 30s. Can be empty for name-only arguments (e.g. --storage.tsdb.no-lockfile)
 	Value string `json:"value,omitempty"`
 }
+
+// The valid options for Role.
+const (
+	RoleNode          = "node"
+	RolePod           = "pod"
+	RoleService       = "service"
+	RoleEndpoint      = "endpoints"
+	RoleEndpointSlice = "endpointslice"
+	RoleIngress       = "ingress"
+)

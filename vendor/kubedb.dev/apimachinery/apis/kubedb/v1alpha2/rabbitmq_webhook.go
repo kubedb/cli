@@ -70,7 +70,7 @@ func (r *RabbitMQ) ValidateDelete() (admission.Warnings, error) {
 	rabbitmqlog.Info("validate delete", "name", r.Name)
 
 	var allErr field.ErrorList
-	if r.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+	if r.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
 			r.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))

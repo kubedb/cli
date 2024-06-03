@@ -90,7 +90,7 @@ func (s *Solr) ValidateDelete() (admission.Warnings, error) {
 	solrlog.Info("validate delete", "name", s.Name)
 
 	var allErr field.ErrorList
-	if s.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+	if s.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			s.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))

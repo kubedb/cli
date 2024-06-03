@@ -71,9 +71,8 @@ type PgBouncerSpec struct {
 	// +optional
 	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
-	// Databases to proxy by connection pooling.
-	// +optional
-	Databases []Databases `json:"databases,omitempty"`
+	// Database to proxy by connection pooling.
+	Database Database `json:"database,omitempty"`
 
 	// ConnectionPoolConfig defines Connection pool configuration.
 	// +optional
@@ -117,11 +116,15 @@ const (
 	PgBouncerMetricsExporterCert PgBouncerCertificateAlias = "metrics-exporter"
 )
 
-type Databases struct {
-	// Alias to uniquely identify a target database running inside a specific Postgres instance.
-	Alias string `json:"alias"`
+type Database struct {
+	// SyncUsers is a boolean type and when enabled, operator fetches users of backend server from externally managed
+	// secrets to the PgBouncer server. Secrets updation or deletion are also synced in pgBouncer when it is enabled.
+	// +optional
+	SyncUsers bool `json:"syncUsers,omitempty"`
+
 	// DatabaseRef specifies the database appbinding reference in any namespace.
 	DatabaseRef appcat.AppReference `json:"databaseRef"`
+
 	// DatabaseName is the name of the target database inside a Postgres instance.
 	DatabaseName string `json:"databaseName"`
 }

@@ -2344,12 +2344,12 @@ spec:
                     type: object
                   type:
                     description: 'Type indicate the types of entity that will execute
-                      the hook. Valid values are: - "Function": Stash will create
+                      the hook. Valid values are: - "Function": KubeStash will create
                       a job with the provided information in `function` section. The
-                      job will execute the hook. - "Pod": Stash will select the pod
-                      that matches the selector provided in `pod` section. This pod(s)
-                      will execute the hook. - "Operator": Stash operator itself will
-                      execute the hook.'
+                      job will execute the hook. - "Pod": KubeStash will select the
+                      pod that matches the selector provided in `pod` section. This
+                      pod(s) will execute the hook. - "Operator": KubeStash operator
+                      itself will execute the hook.'
                     enum:
                     - Function
                     - Pod

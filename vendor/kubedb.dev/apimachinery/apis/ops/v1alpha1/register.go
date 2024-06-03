@@ -54,6 +54,8 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
+		&DruidOpsRequest{},
+		&DruidOpsRequestList{},
 		&ElasticsearchOpsRequest{},
 		&ElasticsearchOpsRequestList{},
 		&EtcdOpsRequest{},
@@ -72,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&PerconaXtraDBOpsRequestList{},
 		&PostgresOpsRequest{},
 		&PostgresOpsRequestList{},
+		&PgpoolOpsRequest{},
+		&PgpoolOpsRequestList{},
 		&ProxySQLOpsRequest{},
 		&ProxySQLOpsRequestList{},
 		&RabbitMQOpsRequest{},
@@ -80,6 +84,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&RedisOpsRequestList{},
 		&RedisSentinelOpsRequest{},
 		&RedisSentinelOpsRequestList{},
+		&SinglestoreOpsRequest{},
+		&SinglestoreOpsRequestList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

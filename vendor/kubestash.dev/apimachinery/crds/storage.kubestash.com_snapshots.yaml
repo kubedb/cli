@@ -42,7 +42,7 @@ spec:
         description: Snapshot represents the state of a backup run to a particular
           Repository. Multiple components of the same target may be backed up in the
           same Snapshot. This is a namespaced CRD. It should be in the same namespace
-          as the respective Repository. Stash operator is responsible for creating
+          as the respective Repository. KubeStash operator is responsible for creating
           Snapshot CR. Snapshot is not supposed to be created/edited by the end user.
         properties:
           apiVersion:
@@ -98,8 +98,8 @@ spec:
                 type: string
               paused:
                 description: Paused specifies whether the Snapshot is paused or not.
-                  If the Snapshot is paused, Stash will not process any further event
-                  for the Snapshot.
+                  If the Snapshot is paused, KubeStash will not process any further
+                  event for the Snapshot.
                 type: boolean
               repository:
                 description: Repository specifies the name of the Repository where

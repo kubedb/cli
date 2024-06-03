@@ -79,9 +79,9 @@ type HookTemplateSpec struct {
 type HookExecutor struct {
 	// Type indicate the types of entity that will execute the hook.
 	// Valid values are:
-	// - "Function": Stash will create a job with the provided information in `function` section. The job will execute the hook.
-	// - "Pod": Stash will select the pod that matches the selector provided in `pod` section. This pod(s) will execute the hook.
-	// - "Operator": Stash operator itself will execute the hook.
+	// - "Function": KubeStash will create a job with the provided information in `function` section. The job will execute the hook.
+	// - "Pod": KubeStash will select the pod that matches the selector provided in `pod` section. This pod(s) will execute the hook.
+	// - "Operator": KubeStash operator itself will execute the hook.
 	Type HookExecutorType `json:"type,omitempty"`
 
 	// Function specifies the function information which will be used to create the hook executor job.

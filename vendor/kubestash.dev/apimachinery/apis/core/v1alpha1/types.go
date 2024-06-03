@@ -104,7 +104,7 @@ type HookInfo struct {
 	// +optional
 	Params *runtime.RawExtension `json:"params,omitempty"`
 
-	// MaxRetry specifies how many times Stash should retry the hook execution in case of failure.
+	// MaxRetry specifies how many times KubeStash should retry the hook execution in case of failure.
 	// The default value of this field is 0 which means no retry.
 	// +kubebuilder:validation:Minimum=0
 	// +optional
@@ -118,9 +118,9 @@ type HookInfo struct {
 
 	// ExecutionPolicy specifies when to execute the hook.
 	// Valid values are:
-	// - "Always": Stash will execute this hook no matter the backup/restore failed. This is the default execution policy.
-	// - "OnSuccess": Stash will execute this hook only if the backup/restore has succeeded.
-	// - "OnFailure": Stash will execute this hook only if the backup/restore has failed.
+	// - "Always": KubeStash will execute this hook no matter the backup/restore failed. This is the default execution policy.
+	// - "OnSuccess": KubeStash will execute this hook only if the backup/restore has succeeded.
+	// - "OnFailure": KubeStash will execute this hook only if the backup/restore has failed.
 	// +kubebuilder:default=Always
 	// +optional
 	ExecutionPolicy HookExecutionPolicy `json:"executionPolicy,omitempty"`
@@ -204,13 +204,13 @@ const (
 
 // RetryConfig specifies the behavior of retry
 type RetryConfig struct {
-	// MaxRetry specifies the maximum number of times Stash should retry the backup/restore process.
-	// By default, Stash will retry only 1 time.
+	// MaxRetry specifies the maximum number of times KubeStash should retry the backup/restore process.
+	// By default, KubeStash will retry only 1 time.
 	// +kubebuilder:default=1
 	// +kubebuilder:validation:Minimum=1
 	MaxRetry int32 `json:"maxRetry,omitempty"`
 
-	// The amount of time to wait before next retry. If you don't specify this field, Stash will retry immediately.
+	// The amount of time to wait before next retry. If you don't specify this field, KubeStash will retry immediately.
 	// Format: 30s, 2m, 1h etc.
 	// +optional
 	Delay metav1.Duration `json:"delay,omitempty"`

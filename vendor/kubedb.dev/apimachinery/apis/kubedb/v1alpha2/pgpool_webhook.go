@@ -48,8 +48,6 @@ func (p *Pgpool) SetupWebhookWithManager(mgr ctrl.Manager) error {
 		Complete()
 }
 
-// TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-
 //+kubebuilder:webhook:path=/mutate-kubedb-com-v1alpha2-pgpool,mutating=true,failurePolicy=fail,sideEffects=None,groups=kubedb.com,resources=pgpools,verbs=create;update,versions=v1alpha2,name=mpgpool.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Defaulter = &Pgpool{}
@@ -91,7 +89,7 @@ func (p *Pgpool) ValidateDelete() (admission.Warnings, error) {
 	pgpoollog.Info("validate delete", "name", p.Name)
 
 	var errorList field.ErrorList
-	if p.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+	if p.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
 		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			p.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
@@ -119,6 +117,36 @@ func (p *Pgpool) ValidateCreateOrUpdate() field.ErrorList {
 		errorList = append(errorList, field.Required(field.NewPath("spec").Child("postgresRef"),
 			"`spec.postgresRef` is missing",
 		))
+	}
+
+	if p.Spec.ConfigSecret != nil && (p.Spec.InitConfiguration != nil && p.Spec.InitConfiguration.PgpoolConfig != nil) {
+		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("configSecret"),
+			p.Name,
+			"use either `spec.configSecret` or `spec.initConfig`"))
+		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("initConfig"),
+			p.Name,
+			"use either `spec.configSecret` or `spec.initConfig`"))
+	}
+
+	if p.Spec.ConfigSecret != nil {
+		secret := core.Secret{}
+		err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+			Name:      p.Spec.ConfigSecret.Name,
+			Namespace: p.Namespace,
+		}, &secret)
+		if err != nil {
+			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("configSecret"),
+				p.Name,
+				err.Error(),
+			))
+		}
+		_, ok := secret.Data[PgpoolCustomConfigFile]
+		if !ok {
+			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("configSecret"),
+				p.Name,
+				fmt.Sprintf("`%v` is missing", PgpoolCustomConfigFile),
+			))
+		}
 	}
 
 	apb := appcat.AppBinding{}

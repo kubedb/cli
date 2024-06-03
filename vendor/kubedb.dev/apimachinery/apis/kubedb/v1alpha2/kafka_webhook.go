@@ -80,7 +80,7 @@ func (k *Kafka) ValidateDelete() (admission.Warnings, error) {
 
 	// TODO(user): fill in your validation logic upon object deletion.
 	var allErr field.ErrorList
-	if k.Spec.TerminationPolicy == TerminationPolicyDoNotTerminate {
+	if k.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
 			k.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))

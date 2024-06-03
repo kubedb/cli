@@ -22,6 +22,12 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
+const (
+	ResourceKindSidekick = "Sidekick"
+	ResourceSidekick     = "sidekick"
+	ResourceSidekicks    = "sidekicks"
+)
+
 // FromNamespaces specifies namespace from which Consumers may be attached to a
 // database instance.
 //

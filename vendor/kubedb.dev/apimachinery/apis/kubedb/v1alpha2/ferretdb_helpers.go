@@ -163,8 +163,8 @@ func (f *FerretDB) SetDefaults() {
 		f.Spec.StorageType = StorageTypeDurable
 	}
 
-	if f.Spec.TerminationPolicy == "" {
-		f.Spec.TerminationPolicy = TerminationPolicyWipeOut
+	if f.Spec.DeletionPolicy == "" {
+		f.Spec.DeletionPolicy = TerminationPolicyWipeOut
 	}
 
 	if f.Spec.SSLMode == "" {
