@@ -29,8 +29,8 @@ require (
 	kmodules.xyz/client-go v0.30.1
 	kmodules.xyz/custom-resources v0.29.1
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.45.2-0.20240603193403-f64ef77856a3
-	kubedb.dev/db-client-go v0.0.15
+	kubedb.dev/apimachinery v0.46.0
+	kubedb.dev/db-client-go v0.1.0
 	sigs.k8s.io/controller-runtime v0.18.3
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.34.0
@@ -146,7 +146,7 @@ require (
 	kmodules.xyz/resource-metadata v0.18.6 // indirect
 	kubeops.dev/petset v0.0.6 // indirect
 	kubeops.dev/sidekick v0.0.7 // indirect
-	kubestash.dev/apimachinery v0.8.0 // indirect
+	kubestash.dev/apimachinery v0.9.0 // indirect
 	sigs.k8s.io/gateway-api v1.0.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.13.5-0.20230601165947-6ce0bf390ce3 // indirect
