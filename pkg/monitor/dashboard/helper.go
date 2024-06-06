@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	kapi "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
 	"log"
 	"net/http"
 	"os"
@@ -43,6 +44,12 @@ func getDB(f cmdutil.Factory, resource, ns, name string) (*unstructured.Unstruct
 	dc, err := dynamic.NewForConfig(config)
 	if err != nil {
 		return nil, err
+	}
+
+	if resource == kapi.ResourcePluralConnectCluster {
+		kGvk := kapi.SchemeGroupVersion
+		kRes := schema.GroupVersionResource{Group: kGvk.Group, Version: kGvk.Version, Resource: resource}
+		return dc.Resource(kRes).Namespace(ns).Get(context.TODO(), name, metav1.GetOptions{})
 	}
 
 	gvk := api.SchemeGroupVersion
