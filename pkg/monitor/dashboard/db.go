@@ -140,6 +140,9 @@ func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monito
 	if len(unknown) > 0 {
 		fmt.Println("Missing Information:")
 		for metric, opts := range unknown {
+			if metric == "container_memory_swap" {
+				continue
+			}
 			fmt.Println("---------------------------------------------------")
 			fmt.Printf("Metric: %s \n", metric)
 			if len(opts.labelName) > 0 {
