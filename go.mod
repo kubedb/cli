@@ -2,6 +2,8 @@ module kubedb.dev/cli
 
 go 1.22.1
 
+toolchain go1.22.5
+
 require (
 	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/cert-manager/cert-manager v1.15.1
