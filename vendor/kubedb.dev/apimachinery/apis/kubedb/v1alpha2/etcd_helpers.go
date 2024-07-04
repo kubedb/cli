@@ -74,7 +74,7 @@ func (e Etcd) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string
 }
 
 func (e Etcd) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, e.Labels, override))
 }
 
@@ -166,7 +166,7 @@ func (e Etcd) StatsService() mona.StatsAccessor {
 }
 
 func (e Etcd) StatsServiceLabels() map[string]string {
-	return e.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return e.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (e *Etcd) SetDefaults() {
@@ -186,7 +186,7 @@ func (e *Etcd) SetDefaults() {
 	}
 
 	e.Spec.Monitor.SetDefaults()
-	apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 }
 
 func (e *EtcdSpec) GetPersistentSecrets() []string {

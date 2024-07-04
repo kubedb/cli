@@ -20,7 +20,7 @@ import (
 	"log"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 )
 
 func ConvertedResourceToPlural(resource string) string {

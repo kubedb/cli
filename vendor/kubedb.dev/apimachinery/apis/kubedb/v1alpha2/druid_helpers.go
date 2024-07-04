@@ -37,6 +37,8 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
+	"k8s.io/utils/ptr"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -45,6 +47,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (d *Druid) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -109,7 +112,7 @@ func (d *Druid) OffShootSelectors(extraSelectors ...map[string]string) map[strin
 }
 
 func (d *Druid) offShootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, d.Labels, override))
 }
 
@@ -155,7 +158,7 @@ func (ks DruidStatsService) ServiceMonitorAdditionalLabels() map[string]string {
 }
 
 func (ks DruidStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (ks DruidStatsService) Scheme() string {
@@ -167,7 +170,7 @@ func (d *Druid) StatsService() mona.StatsAccessor {
 }
 
 func (d *Druid) StatsServiceLabels() map[string]string {
-	return d.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return d.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (d *Druid) ConfigSecretName() string {
@@ -233,18 +236,18 @@ func (d *Druid) DruidNodeRoleStringSingular(nodeRole DruidNodeRoleType) string {
 
 func (d *Druid) DruidNodeContainerPort(nodeRole DruidNodeRoleType) int32 {
 	if nodeRole == DruidNodeRoleCoordinators {
-		return DruidPortCoordinators
+		return kubedb.DruidPortCoordinators
 	} else if nodeRole == DruidNodeRoleOverlords {
-		return DruidPortOverlords
+		return kubedb.DruidPortOverlords
 	} else if nodeRole == DruidNodeRoleMiddleManagers {
-		return DruidPortMiddleManagers
+		return kubedb.DruidPortMiddleManagers
 	} else if nodeRole == DruidNodeRoleHistoricals {
-		return DruidPortHistoricals
+		return kubedb.DruidPortHistoricals
 	} else if nodeRole == DruidNodeRoleBrokers {
-		return DruidPortBrokers
+		return kubedb.DruidPortBrokers
 	}
 	// Routers
-	return DruidPortRouters
+	return kubedb.DruidPortRouters
 }
 
 func (d *Druid) SetHealthCheckerDefaults() {
@@ -287,10 +290,10 @@ func (d *Druid) GetMetadataStorageConnectURI(appbinding *appcat.AppBinding, meta
 	var url string
 	if metadataStorageType == DruidMetadataStorageMySQL {
 		url = *appbinding.Spec.ClientConfig.URL
-		url = DruidMetadataStorageConnectURIPrefixMySQL + url[4:len(url)-2] + "/" + ResourceSingularDruid
+		url = kubedb.DruidMetadataStorageConnectURIPrefixMySQL + url[4:len(url)-2] + "/" + ResourceSingularDruid
 	} else if metadataStorageType == DruidMetadataStoragePostgreSQL {
 		url = appbinding.Spec.ClientConfig.Service.Name + ":" + strconv.Itoa(int(appbinding.Spec.ClientConfig.Service.Port))
-		url = DruidMetadataStorageConnectURIPrefixPostgreSQL + url + "/" + ResourceSingularDruid
+		url = kubedb.DruidMetadataStorageConnectURIPrefixPostgreSQL + url + "/" + ResourceSingularDruid
 	}
 	return url
 }
@@ -313,8 +316,10 @@ func (d *Druid) AddDruidExtensionLoadList(druidExtensionLoadList string, extensi
 func (d *Druid) GetMetadataStorageType(metadataStorage string) DruidMetadataStorageType {
 	if metadataStorage == string(DruidMetadataStorageMySQL) || metadataStorage == strings.ToLower(string(DruidMetadataStorageMySQL)) {
 		return DruidMetadataStorageMySQL
-	} else {
+	} else if metadataStorage == string(DruidMetadataStoragePostgreSQL) || metadataStorage == strings.ToLower(string(DruidMetadataStoragePostgreSQL)) {
 		return DruidMetadataStoragePostgreSQL
+	} else {
+		panic(fmt.Sprintf("Unknown metadata storage type: %s", metadataStorage))
 	}
 }
 
@@ -333,7 +338,7 @@ func (d *Druid) GetDruidSegmentCacheConfig() string {
 		storageSize = "1g"
 	}
 
-	segmentCache := fmt.Sprintf("[{\"path\":\"%s\",\"maxSize\":\"%s\"}]", DruidHistoricalsSegmentCacheDir, storageSize)
+	segmentCache := fmt.Sprintf("[{\"path\":\"%s\",\"maxSize\":\"%s\"}]", kubedb.DruidHistoricalsSegmentCacheDir, storageSize)
 	return segmentCache
 }
 
@@ -364,7 +369,7 @@ func (d Druid) OffshootLabels() map[string]string {
 }
 
 func (e Druid) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, e.Labels, override))
 }
 
@@ -380,7 +385,7 @@ func (d *Druid) SetDefaults() {
 	if !*d.Spec.DisableSecurity {
 		if d.Spec.AuthSecret == nil {
 			d.Spec.AuthSecret = &v1.LocalObjectReference{
-				Name: d.DefaultUserCredSecretName(DruidUserAdmin),
+				Name: d.DefaultUserCredSecretName(kubedb.DruidUserAdmin),
 			}
 		}
 	}
@@ -441,7 +446,7 @@ func (d *Druid) SetDefaults() {
 				d.Spec.Topology.MiddleManagers.StorageType = StorageTypeDurable
 			}
 			if d.Spec.Topology.MiddleManagers.Storage == nil && d.Spec.Topology.MiddleManagers.StorageType == StorageTypeDurable {
-				d.Spec.Topology.MiddleManagers.Storage = d.getDefaultPVC()
+				d.Spec.Topology.MiddleManagers.Storage = d.GetDefaultPVC()
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.MiddleManagers.PodTemplate.Spec.SecurityContext == nil {
@@ -463,7 +468,7 @@ func (d *Druid) SetDefaults() {
 				d.Spec.Topology.Historicals.StorageType = StorageTypeDurable
 			}
 			if d.Spec.Topology.Historicals.Storage == nil && d.Spec.Topology.Historicals.StorageType == StorageTypeDurable {
-				d.Spec.Topology.Historicals.Storage = d.getDefaultPVC()
+				d.Spec.Topology.Historicals.Storage = d.GetDefaultPVC()
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.Historicals.PodTemplate.Spec.SecurityContext == nil {
@@ -504,24 +509,87 @@ func (d *Druid) SetDefaults() {
 			}
 		}
 	}
-	if d.Spec.MetadataStorage != nil {
-		if d.Spec.MetadataStorage.Name != "" && d.Spec.MetadataStorage.Namespace == "" {
-			d.Spec.MetadataStorage.Namespace = d.Namespace
+
+	if d.Spec.MetadataStorage == nil {
+		d.Spec.MetadataStorage = &MetadataStorage{}
+	}
+	if !d.Spec.MetadataStorage.ExternallyManaged {
+		if d.Spec.MetadataStorage.ObjectReference == nil {
+			d.Spec.MetadataStorage.ObjectReference = &kmapi.ObjectReference{}
+		}
+		d.Spec.MetadataStorage.Name = d.GetMetadataStorageName()
+	}
+	if d.Spec.MetadataStorage.Namespace == "" {
+		d.Spec.MetadataStorage.Namespace = d.Namespace
+	}
+	if d.Spec.MetadataStorage.LinkedDB == "" {
+		d.Spec.MetadataStorage.LinkedDB = "druid"
+	}
+	if d.Spec.MetadataStorage.CreateTables == nil {
+		d.Spec.MetadataStorage.CreateTables = ptr.To(true)
+	}
+
+	if d.Spec.MetadataStorage.Type == "" {
+		if d.Spec.MetadataStorage.ExternallyManaged {
+			appBinding, err := d.GetAppBinding(d.Spec.MetadataStorage.Name, d.Spec.MetadataStorage.Namespace)
+			if err != nil {
+				return
+			}
+			d.Spec.MetadataStorage.Type = d.GetMetadataStorageType(appBinding.Spec.AppRef.Kind)
+		} else {
+			d.Spec.MetadataStorage.Type = DruidMetadataStorageMySQL
 		}
 	}
+	if !d.Spec.MetadataStorage.ExternallyManaged {
+		if d.Spec.MetadataStorage.ObjectReference == nil {
+			d.Spec.MetadataStorage.ObjectReference = &kmapi.ObjectReference{}
+		}
+		d.Spec.MetadataStorage.Name = d.GetMetadataStorageName()
+	}
+
+	if d.Spec.MetadataStorage.Version == nil {
+		var defaultVersion string
+		if d.Spec.MetadataStorage.Type == DruidMetadataStorageMySQL {
+			defaultVersion = "8.0.35"
+		} else {
+			defaultVersion = "13.13"
+		}
+		d.Spec.MetadataStorage.Version = &defaultVersion
+	}
+
+	if d.Spec.ZookeeperRef == nil {
+		d.Spec.ZookeeperRef = &ZookeeperRef{}
+	}
+	if !d.Spec.ZookeeperRef.ExternallyManaged {
+		if d.Spec.ZookeeperRef.ObjectReference == nil {
+			d.Spec.ZookeeperRef.ObjectReference = &kmapi.ObjectReference{}
+		}
+		if d.Spec.ZookeeperRef.Name == "" {
+			d.Spec.ZookeeperRef.Name = d.GetZooKeeperName()
+		}
+		if d.Spec.ZookeeperRef.Namespace == "" {
+			d.Spec.ZookeeperRef.Namespace = d.Namespace
+		}
+		defaultVersion := "3.7.2"
+		d.Spec.ZookeeperRef.Version = &defaultVersion
+	}
+
 	if d.Spec.Monitor != nil {
 		if d.Spec.Monitor.Prometheus == nil {
 			d.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
 		}
 		if d.Spec.Monitor.Prometheus != nil && d.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-			d.Spec.Monitor.Prometheus.Exporter.Port = DruidExporterPort
+			d.Spec.Monitor.Prometheus.Exporter.Port = kubedb.DruidExporterPort
 		}
 		d.Spec.Monitor.SetDefaults()
 	}
 }
 
-func (d *Druid) getDefaultPVC() *core.PersistentVolumeClaimSpec {
+func (d *Druid) GetDefaultPVC() *core.PersistentVolumeClaimSpec {
 	return &core.PersistentVolumeClaimSpec{
+		AccessModes: []core.PersistentVolumeAccessMode{
+			core.ReadWriteOnce,
+		},
 		Resources: core.VolumeResourceRequirements{
 			Requests: core.ResourceList{
 				core.ResourceStorage: resource.MustParse("1Gi"),
@@ -531,10 +599,10 @@ func (d *Druid) getDefaultPVC() *core.PersistentVolumeClaimSpec {
 }
 
 func (d *Druid) setDefaultContainerSecurityContext(druidVersion *catalog.DruidVersion, podTemplate *ofst.PodTemplateSpec) {
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, DruidContainerName)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.DruidContainerName)
 	if container == nil {
 		container = &v1.Container{
-			Name: DruidContainerName,
+			Name: kubedb.DruidContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -543,10 +611,10 @@ func (d *Druid) setDefaultContainerSecurityContext(druidVersion *catalog.DruidVe
 	d.assignDefaultContainerSecurityContext(druidVersion, container.SecurityContext)
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, DruidInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.DruidInitContainerName)
 	if initContainer == nil {
 		initContainer = &v1.Container{
-			Name: DruidInitContainerName,
+			Name: kubedb.DruidInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
@@ -577,18 +645,18 @@ func (d *Druid) assignDefaultContainerSecurityContext(druidVersion *catalog.Drui
 }
 
 func (d *Druid) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec, nodeRole DruidNodeRoleType) {
-	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, DruidContainerName)
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.DruidContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
 		if nodeRole == DruidNodeRoleMiddleManagers {
-			apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResourcesMemoryIntensiveDruid)
+			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensiveDruid)
 		} else {
-			apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 		}
 	}
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, DruidInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.DruidInitContainerName)
 	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
+		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 }
 
@@ -617,4 +685,31 @@ func (d *Druid) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, er
 		expectedItems++
 	}
 	return checkReplicasOfPetSet(lister.PetSets(d.Namespace), labels.SelectorFromSet(d.OffshootLabels()), expectedItems)
+}
+
+func (d *Druid) GetAppBinding(name string, namespace string) (*appcat.AppBinding, error) {
+	appbinding := &appcat.AppBinding{}
+	appbinding.Namespace = namespace
+	appbinding.Name = name
+
+	if err := DefaultClient.Get(context.TODO(), client.ObjectKeyFromObject(appbinding), appbinding); err != nil {
+		klog.Error(err, fmt.Sprintf("failed to get appbinding for metadata storage %s/%s", name, namespace))
+		return nil, err
+	}
+	return appbinding, nil
+}
+
+func (d *Druid) GetMetadataStorageName() string {
+	if d.Spec.MetadataStorage.Type == DruidMetadataStoragePostgreSQL {
+		return d.OffShootName() + "-pg-metadata"
+	}
+	return d.OffShootName() + "-mysql-metadata"
+}
+
+func (d *Druid) GetZooKeeperName() string {
+	return d.OffShootName() + "-zk"
+}
+
+func (d *Druid) GetInitConfigMapName() string {
+	return d.OffShootName() + "-init-script"
 }

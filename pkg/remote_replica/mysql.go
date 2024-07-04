@@ -23,7 +23,7 @@ import (
 	"os"
 	"time"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/cli/pkg/common"
 
 	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"

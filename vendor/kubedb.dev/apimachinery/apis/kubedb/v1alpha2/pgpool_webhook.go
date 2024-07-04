@@ -21,6 +21,7 @@ import (
 	"fmt"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	"kubedb.dev/apimachinery/apis/kubedb"
 
 	"github.com/pkg/errors"
 	"gomodules.xyz/x/arrays"
@@ -140,11 +141,11 @@ func (p *Pgpool) ValidateCreateOrUpdate() field.ErrorList {
 				err.Error(),
 			))
 		}
-		_, ok := secret.Data[PgpoolCustomConfigFile]
+		_, ok := secret.Data[kubedb.PgpoolCustomConfigFile]
 		if !ok {
 			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("configSecret"),
 				p.Name,
-				fmt.Sprintf("`%v` is missing", PgpoolCustomConfigFile),
+				fmt.Sprintf("`%v` is missing", kubedb.PgpoolCustomConfigFile),
 			))
 		}
 	}
@@ -277,8 +278,8 @@ func PgpoolValidateVersion(p *Pgpool) error {
 }
 
 var PgpoolReservedVolumes = []string{
-	PgpoolConfigVolumeName,
-	PgpoolTlsVolumeName,
+	kubedb.PgpoolConfigVolumeName,
+	kubedb.PgpoolTlsVolumeName,
 }
 
 func PgpoolValidateVolumes(p *Pgpool) error {
@@ -297,13 +298,13 @@ func PgpoolValidateVolumes(p *Pgpool) error {
 }
 
 var PgpoolForbiddenEnvVars = []string{
-	EnvPostgresUsername, EnvPostgresPassword, EnvPgpoolPcpUser, EnvPgpoolPcpPassword,
-	EnvPgpoolPasswordEncryptionMethod, EnvEnablePoolPasswd, EnvSkipPasswdEncryption,
+	kubedb.EnvPostgresUsername, kubedb.EnvPostgresPassword, kubedb.EnvPgpoolPcpUser, kubedb.EnvPgpoolPcpPassword,
+	kubedb.EnvPgpoolPasswordEncryptionMethod, kubedb.EnvEnablePoolPasswd, kubedb.EnvSkipPasswdEncryption,
 }
 
 func PgpoolGetMainContainerEnvs(p *Pgpool) []core.EnvVar {
 	for _, container := range p.Spec.PodTemplate.Spec.Containers {
-		if container.Name == PgpoolContainerName {
+		if container.Name == kubedb.PgpoolContainerName {
 			return container.Env
 		}
 	}
@@ -349,6 +350,6 @@ func PgpoolValidateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {
 }
 
 var PgpoolReservedVolumesMountPaths = []string{
-	PgpoolConfigSecretMountPath,
-	PgpoolTlsVolumeMountPath,
+	kubedb.PgpoolConfigSecretMountPath,
+	kubedb.PgpoolTlsVolumeMountPath,
 }

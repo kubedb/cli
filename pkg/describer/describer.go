@@ -26,8 +26,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	"kubedb.dev/cli/pkg/events"
 
 	appsv1 "k8s.io/api/apps/v1"

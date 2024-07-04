@@ -23,7 +23,7 @@ import (
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/kubedb"
-	"kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/crds"
 
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -179,8 +179,8 @@ func (ed *ElasticsearchDashboard) CertificateFilePath(configDir string, alias El
 }
 
 func (ed *ElasticsearchDashboard) GetServicePort(alias ServiceAlias) int32 {
-	reqAlias := v1alpha2.ServiceAlias(alias)
-	svcTemplate := v1alpha2.GetServiceTemplate(ed.Spec.ServiceTemplates, reqAlias)
+	reqAlias := dbapi.ServiceAlias(alias)
+	svcTemplate := dbapi.GetServiceTemplate(ed.Spec.ServiceTemplates, reqAlias)
 	return svcTemplate.Spec.Ports[0].Port
 }
 

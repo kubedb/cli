@@ -23,7 +23,8 @@ import (
 	"os"
 	"strconv"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -62,7 +63,7 @@ func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MemcachedDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, kubedb.MemcachedDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -102,7 +103,7 @@ func newMemcachedOpts(f cmdutil.Factory, dbName, namespace string) (*memcachedOp
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().Memcacheds(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().Memcacheds(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

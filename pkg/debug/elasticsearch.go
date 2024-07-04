@@ -23,7 +23,7 @@ import (
 	"os"
 	"path"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/spf13/cobra"
@@ -112,7 +112,7 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace, operatorNS strin
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().Elasticsearches(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().Elasticsearches(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

@@ -57,9 +57,17 @@ spec:
                 type: object
               cluster:
                 properties:
+                  apiEndpoint:
+                    type: string
+                  caBundle:
+                    type: string
                   displayName:
                     type: string
                   name:
+                    type: string
+                  ownerID:
+                    type: string
+                  ownerType:
                     type: string
                   provider:
                     enum:

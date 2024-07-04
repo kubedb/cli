@@ -78,19 +78,19 @@ func (e Elasticsearch) NodeRoleSpecificLabelKey(roleType ElasticsearchNodeRoleTy
 }
 
 func (e Elasticsearch) MasterSelectors() map[string]string {
-	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeMaster): ElasticsearchNodeRoleSet})
+	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeMaster): kubedb.ElasticsearchNodeRoleSet})
 }
 
 func (e Elasticsearch) DataSelectors() map[string]string {
-	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeData): ElasticsearchNodeRoleSet})
+	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeData): kubedb.ElasticsearchNodeRoleSet})
 }
 
 func (e Elasticsearch) IngestSelectors() map[string]string {
-	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeIngest): ElasticsearchNodeRoleSet})
+	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(ElasticsearchNodeRoleTypeIngest): kubedb.ElasticsearchNodeRoleSet})
 }
 
 func (e Elasticsearch) NodeRoleSpecificSelectors(roleType ElasticsearchNodeRoleType) map[string]string {
-	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(roleType): ElasticsearchNodeRoleSet})
+	return e.OffshootSelectors(map[string]string{e.NodeRoleSpecificLabelKey(roleType): kubedb.ElasticsearchNodeRoleSet})
 }
 
 func (e Elasticsearch) OffshootLabels() map[string]string {
@@ -111,7 +111,7 @@ func (e Elasticsearch) ServiceLabels(alias ServiceAlias, extraLabels ...map[stri
 }
 
 func (e Elasticsearch) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, e.Labels, override))
 }
 
@@ -223,7 +223,7 @@ func (e *Elasticsearch) GetConnectionScheme() string {
 }
 
 func (e *Elasticsearch) GetConnectionURL() string {
-	return fmt.Sprintf("%v://%s.%s:%d", e.GetConnectionScheme(), e.OffshootName(), e.Namespace, ElasticsearchRestPort)
+	return fmt.Sprintf("%v://%s.%s:%d", e.GetConnectionScheme(), e.OffshootName(), e.Namespace, kubedb.ElasticsearchRestPort)
 }
 
 func (e *Elasticsearch) CombinedStatefulSetName() string {
@@ -368,7 +368,7 @@ func (e elasticsearchStatsService) ServiceMonitorAdditionalLabels() map[string]s
 }
 
 func (e elasticsearchStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (e elasticsearchStatsService) Scheme() string {
@@ -384,7 +384,7 @@ func (e Elasticsearch) StatsService() mona.StatsAccessor {
 }
 
 func (e Elasticsearch) StatsServiceLabels() map[string]string {
-	return e.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return e.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (e Elasticsearch) setContainerSecurityContextDefaults(esVersion *catalog.ElasticsearchVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -450,7 +450,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		if e.Spec.Topology.Ingest.Suffix == "" {
 			e.Spec.Topology.Ingest.Suffix = string(ElasticsearchNodeRoleTypeIngest)
 		}
-		apis.SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, DefaultResourcesMemoryIntensive)
+		apis.SetDefaultResourceLimits(&e.Spec.Topology.Ingest.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		if e.Spec.Topology.Ingest.Replicas == nil {
 			e.Spec.Topology.Ingest.Replicas = pointer.Int32P(1)
 		}
@@ -463,7 +463,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		if e.Spec.Topology.Master.Suffix == "" {
 			e.Spec.Topology.Master.Suffix = string(ElasticsearchNodeRoleTypeMaster)
 		}
-		apis.SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, DefaultResourcesMemoryIntensive)
+		apis.SetDefaultResourceLimits(&e.Spec.Topology.Master.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		if e.Spec.Topology.Master.Replicas == nil {
 			e.Spec.Topology.Master.Replicas = pointer.Int32P(1)
 		}
@@ -478,7 +478,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.Data.Suffix == "" {
 				e.Spec.Topology.Data.Suffix = string(ElasticsearchNodeRoleTypeData)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.Data.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.Data.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.Data.Replicas == nil {
 				e.Spec.Topology.Data.Replicas = pointer.Int32P(1)
 			}
@@ -493,7 +493,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataHot.Suffix == "" {
 				e.Spec.Topology.DataHot.Suffix = string(ElasticsearchNodeRoleTypeDataHot)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataHot.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataHot.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.DataHot.Replicas == nil {
 				e.Spec.Topology.DataHot.Replicas = pointer.Int32P(1)
 			}
@@ -508,7 +508,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataWarm.Suffix == "" {
 				e.Spec.Topology.DataWarm.Suffix = string(ElasticsearchNodeRoleTypeDataWarm)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataWarm.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataWarm.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.DataWarm.Replicas == nil {
 				e.Spec.Topology.DataWarm.Replicas = pointer.Int32P(1)
 			}
@@ -523,7 +523,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataCold.Suffix == "" {
 				e.Spec.Topology.DataCold.Suffix = string(ElasticsearchNodeRoleTypeDataCold)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataCold.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataCold.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.DataCold.Replicas == nil {
 				e.Spec.Topology.DataCold.Replicas = pointer.Int32P(1)
 			}
@@ -538,7 +538,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataFrozen.Suffix == "" {
 				e.Spec.Topology.DataFrozen.Suffix = string(ElasticsearchNodeRoleTypeDataFrozen)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataFrozen.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataFrozen.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.DataFrozen.Replicas == nil {
 				e.Spec.Topology.DataFrozen.Replicas = pointer.Int32P(1)
 			}
@@ -553,7 +553,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.DataContent.Suffix == "" {
 				e.Spec.Topology.DataContent.Suffix = string(ElasticsearchNodeRoleTypeDataContent)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataContent.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.DataContent.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.DataContent.Replicas == nil {
 				e.Spec.Topology.DataContent.Replicas = pointer.Int32P(1)
 			}
@@ -568,7 +568,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.ML.Suffix == "" {
 				e.Spec.Topology.ML.Suffix = string(ElasticsearchNodeRoleTypeML)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.ML.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.ML.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.ML.Replicas == nil {
 				e.Spec.Topology.ML.Replicas = pointer.Int32P(1)
 			}
@@ -583,7 +583,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 			if e.Spec.Topology.Transform.Suffix == "" {
 				e.Spec.Topology.Transform.Suffix = string(ElasticsearchNodeRoleTypeTransform)
 			}
-			apis.SetDefaultResourceLimits(&e.Spec.Topology.Transform.Resources, DefaultResourcesMemoryIntensive)
+			apis.SetDefaultResourceLimits(&e.Spec.Topology.Transform.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			if e.Spec.Topology.Transform.Replicas == nil {
 				e.Spec.Topology.Transform.Replicas = pointer.Int32P(1)
 			}
@@ -593,7 +593,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 		}
 
 	} else {
-		apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, DefaultResourcesMemoryIntensive)
+		apis.SetDefaultResourceLimits(&e.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		if e.Spec.Replicas == nil {
 			e.Spec.Replicas = pointer.Int32P(1)
 		}
@@ -793,19 +793,19 @@ func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalo
 				// 	V7        = "SGS_READALL_AND_MONITOR"
 				//	V6        = "sg_readall_and_monitor"
 				if strings.HasPrefix(esVersion.Spec.Version, "6.") {
-					monitorRole = ElasticsearchSearchGuardReadallMonitorRoleV6
+					monitorRole = kubedb.ElasticsearchSearchGuardReadallMonitorRoleV6
 					// Delete unsupported role, if any
-					delete(rolesMapping, string(ElasticsearchSearchGuardReadallMonitorRoleV7))
+					delete(rolesMapping, string(kubedb.ElasticsearchSearchGuardReadallMonitorRoleV7))
 				} else {
-					monitorRole = ElasticsearchSearchGuardReadallMonitorRoleV7
+					monitorRole = kubedb.ElasticsearchSearchGuardReadallMonitorRoleV7
 					// Delete unsupported role, if any
 					// Required during upgrade process, from v6 --> v7
-					delete(rolesMapping, string(ElasticsearchSearchGuardReadallMonitorRoleV6))
+					delete(rolesMapping, string(kubedb.ElasticsearchSearchGuardReadallMonitorRoleV6))
 				}
 			} else if esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenDistro {
-				monitorRole = ElasticsearchOpendistroReadallMonitorRole
+				monitorRole = kubedb.ElasticsearchOpendistroReadallMonitorRole
 			} else {
-				monitorRole = ElasticsearchOpenSearchReadallMonitorRole
+				monitorRole = kubedb.ElasticsearchOpenSearchReadallMonitorRole
 			}
 
 			// Create rolesMapping if not exists.
@@ -925,7 +925,7 @@ func (e *Elasticsearch) SetTLSDefaults(esVersion *catalog.ElasticsearchVersion) 
 		// the organizations[] isn't empty.
 		if tlsConfig.Certificates[id].Subject == nil {
 			tlsConfig.Certificates[id].Subject = &kmapi.X509Subject{
-				Organizations: []string{KubeDBOrganization},
+				Organizations: []string{kubedb.KubeDBOrganization},
 			}
 		}
 	}

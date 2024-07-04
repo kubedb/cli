@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -63,7 +63,7 @@ type ConnectorSpec struct {
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	DeletionPolicy api.TerminationPolicy `json:"deletionPolicy,omitempty"`
+	DeletionPolicy dbapi.DeletionPolicy `json:"deletionPolicy,omitempty"`
 }
 
 // ConnectorStatus defines the observed state of connectors

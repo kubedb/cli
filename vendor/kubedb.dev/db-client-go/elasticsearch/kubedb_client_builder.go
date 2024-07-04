@@ -29,7 +29,8 @@ import (
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/elasticsearch/v1alpha1"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"github.com/Masterminds/semver/v3"
 	esv5 "github.com/elastic/go-elasticsearch/v5"
@@ -50,13 +51,13 @@ import (
 
 type KubeDBClientBuilder struct {
 	kc      client.Client
-	db      *api.Elasticsearch
+	db      *dbapi.Elasticsearch
 	url     string
 	podName string
 	ctx     context.Context
 }
 
-func NewKubeDBClientBuilder(kc client.Client, db *api.Elasticsearch) *KubeDBClientBuilder {
+func NewKubeDBClientBuilder(kc client.Client, db *dbapi.Elasticsearch) *KubeDBClientBuilder {
 	return &KubeDBClientBuilder{
 		kc: kc,
 		db: db,
@@ -506,7 +507,7 @@ func (o *KubeDBClientBuilder) getDefaultTLSConfig() (*tls.Config, error) {
 
 	if o.db.Spec.EnableSSL {
 		var certSecret core.Secret
-		err := o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.GetCertSecretName(api.ElasticsearchClientCert)}, &certSecret)
+		err := o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.GetCertSecretName(dbapi.ElasticsearchClientCert)}, &certSecret)
 		if err != nil {
 			klog.Errorf("Failed to get client-cert for tls configurations")
 			return nil, err
@@ -539,5 +540,5 @@ func (o *KubeDBClientBuilder) getDefaultTLSConfig() (*tls.Config, error) {
 }
 
 func (o *KubeDBClientBuilder) ServiceURL() string {
-	return fmt.Sprintf("%v://%s.%s.svc:%d", o.db.GetConnectionScheme(), o.db.ServiceName(), o.db.GetNamespace(), api.ElasticsearchRestPort)
+	return fmt.Sprintf("%v://%s.%s.svc:%d", o.db.GetConnectionScheme(), o.db.ServiceName(), o.db.GetNamespace(), kubedb.ElasticsearchRestPort)
 }

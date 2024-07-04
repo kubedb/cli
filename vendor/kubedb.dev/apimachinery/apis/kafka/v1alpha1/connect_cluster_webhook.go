@@ -21,7 +21,7 @@ import (
 	"strings"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"github.com/pkg/errors"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -86,7 +86,7 @@ func (k *ConnectCluster) ValidateDelete() (admission.Warnings, error) {
 	connectClusterLog.Info("validate delete", "name", k.Name)
 
 	var allErr field.ErrorList
-	if k.Spec.DeletionPolicy == api.TerminationPolicyDoNotTerminate {
+	if k.Spec.DeletionPolicy == dbapi.DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			k.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
@@ -111,10 +111,10 @@ func (k *ConnectCluster) ValidateCreateOrUpdate() field.ErrorList {
 		}
 	}
 
-	if k.Spec.DeletionPolicy == api.TerminationPolicyHalt {
+	if k.Spec.DeletionPolicy == dbapi.DeletionPolicyHalt {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			k.Name,
-			"TerminationPolicyHalt is not supported for ConnectCluster"))
+			"DeletionPolicyHalt is not supported for ConnectCluster"))
 	}
 
 	// number of replicas can not be 0 or less

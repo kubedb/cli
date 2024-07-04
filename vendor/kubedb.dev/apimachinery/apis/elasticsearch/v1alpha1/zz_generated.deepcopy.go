@@ -22,7 +22,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	v1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -116,7 +116,7 @@ func (in *ElasticsearchDashboardSpec) DeepCopyInto(out *ElasticsearchDashboardSp
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	if in.ServiceTemplates != nil {
 		in, out := &in.ServiceTemplates, &out.ServiceTemplates
-		*out = make([]v1alpha2.NamedServiceTemplateSpec, len(*in))
+		*out = make([]kubedbv1.NamedServiceTemplateSpec, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}

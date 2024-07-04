@@ -194,10 +194,13 @@ type Component struct {
 	// +optional
 	ResticStats []ResticStats `json:"resticStats,omitempty"`
 
+	// WalGStats specifies the "WalG" driver specific information
+	// +optional
+	WalGStats WalGStats `json:"walGStats,omitempty"`
+
 	// VolumeSnapshotterStats specifies the "VolumeSnapshotter" driver specific information
 	// +optional
 	VolumeSnapshotterStats []VolumeSnapshotterStats `json:"volumeSnapshotterStats,omitempty"`
-
 	// WalSegments specifies a list of wall segment for individual component
 	WalSegments []WalSegment `json:"walSegments,omitempty"`
 }
@@ -248,6 +251,24 @@ type VolumeSnapshotterStats struct {
 
 	// VolumeSnapshotTime indicates the timestamp at which the volumeSnapshot was created.
 	VolumeSnapshotTime *metav1.Time `json:"volumeSnapshotTime,omitempty"`
+}
+
+// WalGStats specifies the information specific to the "WalG" driver.
+type WalGStats struct {
+	// Id represents the WalG snapshot ID.
+	Id string `json:"id,omitempty"`
+
+	// Databases represents the list of target backup databases.
+	// +optional
+	Databases []string `json:"databases,omitempty"`
+
+	// StartTime represents the WalG backup start time.
+	// +optional
+	StartTime *metav1.Time `json:"startTime,omitempty"`
+
+	// StopTime represents the WalG backup stop time.
+	// +optional
+	StopTime *metav1.Time `json:"stopTime,omitempty"`
 }
 
 // WalSegment specifies the "WalG" driver specific information

@@ -24,7 +24,7 @@ import (
 	"net/http"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"github.com/opensearch-project/opensearch-go"
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
@@ -120,7 +120,7 @@ func (os *OSClientV1) ClusterStatus() (string, error) {
 	return "", errors.New("status is missing")
 }
 
-func (os *OSClientV1) GetClusterWriteStatus(ctx context.Context, db *api.Elasticsearch) error {
+func (os *OSClientV1) GetClusterWriteStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
 	// Build the request index & request body
 	// send the db specs as body
 	indexBody := WriteRequestIndexBody{
@@ -186,7 +186,7 @@ func (os *OSClientV1) GetClusterWriteStatus(ctx context.Context, db *api.Elastic
 	return errors.New("Failed to parse key `errors` in response from write request")
 }
 
-func (os *OSClientV1) GetClusterReadStatus(ctx context.Context, db *api.Elasticsearch) error {
+func (os *OSClientV1) GetClusterReadStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
 	// Perform a read request in writeRequestIndex/writeRequestID (kubedb-system/info) API
 	// Handle error specifically if index has not been created yet
 	res, err := opensearchapi.GetRequest{

@@ -20,7 +20,7 @@ import (
 	"context"
 	"encoding/json"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	esv5 "github.com/elastic/go-elasticsearch/v5"
 	"github.com/pkg/errors"
@@ -77,11 +77,11 @@ func (es *ESClientV5) SyncCredentialFromSecret(secret *core.Secret) error {
 	return nil
 }
 
-func (es *ESClientV5) GetClusterWriteStatus(ctx context.Context, db *api.Elasticsearch) error {
+func (es *ESClientV5) GetClusterWriteStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
 	return nil
 }
 
-func (es *ESClientV5) GetClusterReadStatus(ctx context.Context, db *api.Elasticsearch) error {
+func (es *ESClientV5) GetClusterReadStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
 	return nil
 }
 

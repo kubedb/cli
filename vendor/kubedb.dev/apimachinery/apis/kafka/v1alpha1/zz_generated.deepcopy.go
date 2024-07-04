@@ -22,7 +22,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	corev1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -127,12 +127,12 @@ func (in *ConnectClusterSpec) DeepCopyInto(out *ConnectClusterSpec) {
 	}
 	if in.AuthSecret != nil {
 		in, out := &in.AuthSecret, &out.AuthSecret
-		*out = new(v1alpha2.SecretReference)
+		*out = new(kubedbv1.SecretReference)
 		**out = **in
 	}
 	if in.KeystoreCredSecret != nil {
 		in, out := &in.KeystoreCredSecret, &out.KeystoreCredSecret
-		*out = new(v1alpha2.SecretReference)
+		*out = new(kubedbv1.SecretReference)
 		**out = **in
 	}
 	if in.TLS != nil {
@@ -153,7 +153,7 @@ func (in *ConnectClusterSpec) DeepCopyInto(out *ConnectClusterSpec) {
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	if in.ServiceTemplates != nil {
 		in, out := &in.ServiceTemplates, &out.ServiceTemplates
-		*out = make([]v1alpha2.NamedServiceTemplateSpec, len(*in))
+		*out = make([]kubedbv1.NamedServiceTemplateSpec, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -408,7 +408,7 @@ func (in *SchemaRegistrySpec) DeepCopyInto(out *SchemaRegistrySpec) {
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	if in.ServiceTemplates != nil {
 		in, out := &in.ServiceTemplates, &out.ServiceTemplates
-		*out = make([]v1alpha2.NamedServiceTemplateSpec, len(*in))
+		*out = make([]kubedbv1.NamedServiceTemplateSpec, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}

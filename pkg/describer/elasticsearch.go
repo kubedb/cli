@@ -20,9 +20,10 @@ import (
 	"context"
 	"io"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
@@ -40,7 +41,7 @@ import (
 
 type ElasticsearchDescriber struct {
 	client kubernetes.Interface
-	kubedb cs.KubedbV1alpha2Interface
+	kubedb cs.KubedbV1Interface
 	stash  stash.Interface
 	appcat appcat_cs.Interface
 }
@@ -80,9 +81,9 @@ func (d *ElasticsearchDescriber) describeElasticsearch(item *api.Elasticsearch, 
 
 		describeStorage(item.Spec.StorageType, item.Spec.Storage, w)
 
-		w.Write(LEVEL_0, "Paused:\t%v\n", condutil.IsConditionTrue(item.Status.Conditions, api.DatabasePaused))
+		w.Write(LEVEL_0, "Paused:\t%v\n", condutil.IsConditionTrue(item.Status.Conditions, kubedb.DatabasePaused))
 		w.Write(LEVEL_0, "Halted:\t%v\n", item.Spec.Halted)
-		w.Write(LEVEL_0, "Termination Policy:\t%v\n", item.Spec.TerminationPolicy)
+		w.Write(LEVEL_0, "Termination Policy:\t%v\n", item.Spec.DeletionPolicy)
 
 		showWorkload(d.client, item.Namespace, selector, w)
 

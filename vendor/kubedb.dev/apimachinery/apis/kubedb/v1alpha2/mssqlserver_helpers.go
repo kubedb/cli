@@ -98,7 +98,7 @@ func (m *MSSQLServer) DefaultUserCredSecretName(username string) string {
 }
 
 func (m *MSSQLServer) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[metautil.ComponentLabelKey] = ComponentDatabase
+	selector[metautil.ComponentLabelKey] = kubedb.ComponentDatabase
 	return metautil.FilterKeys(kubedb.GroupName, selector, metautil.OverwriteKeys(nil, m.Labels, override))
 }
 
@@ -348,10 +348,10 @@ func (m *MSSQLServer) setDefaultContainerSecurityContext(mssqlVersion *catalog.M
 		podTemplate.Spec.SecurityContext.FSGroup = mssqlVersion.Spec.SecurityContext.RunAsUser
 	}
 
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, MSSQLContainerName)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.MSSQLContainerName)
 	if container == nil {
 		container = &core.Container{
-			Name: MSSQLContainerName,
+			Name: kubedb.MSSQLContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -362,10 +362,10 @@ func (m *MSSQLServer) setDefaultContainerSecurityContext(mssqlVersion *catalog.M
 
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, MSSQLInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.MSSQLInitContainerName)
 	if initContainer == nil {
 		initContainer = &core.Container{
-			Name: MSSQLInitContainerName,
+			Name: kubedb.MSSQLInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
@@ -375,10 +375,10 @@ func (m *MSSQLServer) setDefaultContainerSecurityContext(mssqlVersion *catalog.M
 	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 
 	if m.IsAvailabilityGroup() {
-		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, MSSQLCoordinatorContainerName)
+		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.MSSQLCoordinatorContainerName)
 		if coordinatorContainer == nil {
 			coordinatorContainer = &core.Container{
-				Name: MSSQLCoordinatorContainerName,
+				Name: kubedb.MSSQLCoordinatorContainerName,
 			}
 		}
 		if coordinatorContainer.SecurityContext == nil {
@@ -420,20 +420,20 @@ func (m *MSSQLServer) assignDefaultContainerSecurityContext(mssqlVersion *catalo
 }
 
 func (m *MSSQLServer) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
-	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, MSSQLContainerName)
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.MSSQLContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResourcesMemoryIntensive)
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 	}
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, MSSQLInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.MSSQLInitContainerName)
 	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
+		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 
 	if m.IsAvailabilityGroup() {
-		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, MSSQLCoordinatorContainerName)
+		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.MSSQLCoordinatorContainerName)
 		if coordinatorContainer != nil && (coordinatorContainer.Resources.Requests == nil && coordinatorContainer.Resources.Limits == nil) {
-			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, CoordinatorDefaultResources)
+			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
 		}
 	}
 }
@@ -446,7 +446,7 @@ func (m *MSSQLServer) SetTLSDefaults() {
 	}
 
 	// Server-cert
-	defaultServerOrg := []string{KubeDBOrganization}
+	defaultServerOrg := []string{kubedb.KubeDBOrganization}
 	defaultServerOrgUnit := []string{string(MSSQLServerServerCert)}
 	_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MSSQLServerServerCert))
 	if cert != nil && cert.Subject != nil {
@@ -468,7 +468,7 @@ func (m *MSSQLServer) SetTLSDefaults() {
 	})
 
 	// Client-cert
-	defaultClientOrg := []string{KubeDBOrganization}
+	defaultClientOrg := []string{kubedb.KubeDBOrganization}
 	defaultClientOrgUnit := []string{string(MSSQLServerClientCert)}
 	_, cert = kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MSSQLServerClientCert))
 	if cert != nil && cert.Subject != nil {
@@ -495,7 +495,7 @@ func (m *MSSQLServer) SetTLSDefaultsForInternalAuth() {
 	}
 
 	// Endpoint-cert
-	defaultServerOrg := []string{KubeDBOrganization}
+	defaultServerOrg := []string{kubedb.KubeDBOrganization}
 	defaultServerOrgUnit := []string{string(MSSQLServerEndpointCert)}
 	_, cert := kmapi.GetCertificate(m.Spec.InternalAuth.EndpointCert.Certificates, string(MSSQLServerEndpointCert))
 	if cert != nil && cert.Subject != nil {

@@ -26,6 +26,7 @@ const (
 	HostingProviderAzure        HostingProvider = "Azure"
 	HostingProviderDigitalOcean HostingProvider = "DigitalOcean"
 	HostingProviderGoogleCloud  HostingProvider = "GoogleCloud"
+	HostingProviderExoscale     HostingProvider = "Exoscale"
 	HostingProviderLinode       HostingProvider = "Linode"
 	HostingProviderPacket       HostingProvider = "Packet"
 	HostingProviderScaleway     HostingProvider = "Scaleway"
@@ -37,6 +38,8 @@ const (
 )
 
 const (
+	AceInfoConfigMapName = "ace-info"
+
 	ClusterNameKey         string = "cluster.appscode.com/name"
 	ClusterDisplayNameKey  string = "cluster.appscode.com/display-name"
 	ClusterProviderNameKey string = "cluster.appscode.com/provider"
@@ -47,6 +50,10 @@ type ClusterMetadata struct {
 	Name        string          `json:"name,omitempty" protobuf:"bytes,2,opt,name=name"`
 	DisplayName string          `json:"displayName,omitempty" protobuf:"bytes,3,opt,name=displayName"`
 	Provider    HostingProvider `json:"provider,omitempty" protobuf:"bytes,4,opt,name=provider,casttype=HostingProvider"`
+	OwnerID     string          `json:"ownerID,omitempty"`
+	OwnerType   string          `json:"ownerType,omitempty"`
+	APIEndpoint string          `json:"apiEndpoint,omitempty"`
+	CABundle    string          `json:"caBundle,omitempty"`
 }
 
 /*

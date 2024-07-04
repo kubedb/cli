@@ -20,9 +20,10 @@ import (
 	"context"
 
 	coreapi "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
-	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2/util"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
+	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1/util"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -34,7 +35,7 @@ import (
 )
 
 type MySQLPauser struct {
-	dbClient     cs.KubedbV1alpha2Interface
+	dbClient     cs.KubedbV1Interface
 	stashClient  scs.StashV1beta1Interface
 	kc           client.Client
 	onlyDb       bool
@@ -85,7 +86,7 @@ func (e *MySQLPauser) Pause(name string, namespace string) (bool, error) {
 	if e.onlyDb || pauseAll {
 		_, err = dbutil.UpdateMySQLStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MySQLStatus) (types.UID, *api.MySQLStatus) {
 			status.Conditions = condutil.SetCondition(status.Conditions, condutil.NewCondition(
-				api.DatabasePaused,
+				kubedb.DatabasePaused,
 				"Paused by KubeDB CLI tool",
 				db.Generation,
 			))

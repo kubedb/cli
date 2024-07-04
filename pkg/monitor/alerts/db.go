@@ -22,7 +22,7 @@ import (
 	"log"
 	"time"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/cli/pkg/monitor"
 
 	promv1 "github.com/prometheus/client_golang/api/prometheus/v1"

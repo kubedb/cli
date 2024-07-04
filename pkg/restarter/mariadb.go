@@ -20,9 +20,9 @@ import (
 	"context"
 	"fmt"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/apis/ops/v1alpha1"
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	ops "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
 
 	"gomodules.xyz/x/crypto/rand"
@@ -32,7 +32,7 @@ import (
 )
 
 type MariaDBRestarter struct {
-	dbClient  cs.KubedbV1alpha2Interface
+	dbClient  cs.KubedbV1Interface
 	opsClient ops.OpsV1alpha1Interface
 }
 

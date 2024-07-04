@@ -92,7 +92,7 @@ func (c *ClickHouse) OffshootClusterLabels(petSetName string) map[string]string 
 }
 
 func (c *ClickHouse) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, c.Labels, override))
 }
 
@@ -238,9 +238,9 @@ func (c *ClickHouse) SetDefaults() {
 				cluster.PodTemplate = &ofst.PodTemplateSpec{}
 			}
 
-			dbContainer := coreutil.GetContainerByName(cluster.PodTemplate.Spec.Containers, ClickHouseContainerName)
+			dbContainer := coreutil.GetContainerByName(cluster.PodTemplate.Spec.Containers, kubedb.ClickHouseContainerName)
 			if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-				apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 			}
 			c.setDefaultContainerSecurityContext(&chVersion, cluster.PodTemplate)
 			clusters[index] = cluster
@@ -261,9 +261,9 @@ func (c *ClickHouse) SetDefaults() {
 			c.Spec.PodTemplate = &ofst.PodTemplateSpec{}
 		}
 		c.setDefaultContainerSecurityContext(&chVersion, c.Spec.PodTemplate)
-		dbContainer := coreutil.GetContainerByName(c.Spec.PodTemplate.Spec.Containers, ClickHouseContainerName)
+		dbContainer := coreutil.GetContainerByName(c.Spec.PodTemplate.Spec.Containers, kubedb.ClickHouseContainerName)
 		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-			apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 		}
 		c.SetHealthCheckerDefaults()
 	}
@@ -280,10 +280,10 @@ func (r *ClickHouse) setDefaultContainerSecurityContext(chVersion *catalog.Click
 		podTemplate.Spec.SecurityContext.FSGroup = chVersion.Spec.SecurityContext.RunAsUser
 	}
 
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, ClickHouseContainerName)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.ClickHouseContainerName)
 	if container == nil {
 		container = &core.Container{
-			Name: ClickHouseContainerName,
+			Name: kubedb.ClickHouseContainerName,
 		}
 		podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 	}
@@ -292,10 +292,10 @@ func (r *ClickHouse) setDefaultContainerSecurityContext(chVersion *catalog.Click
 	}
 	r.assignDefaultContainerSecurityContext(chVersion, container.SecurityContext)
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, ClickHouseInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ClickHouseInitContainerName)
 	if initContainer == nil {
 		initContainer = &core.Container{
-			Name: ClickHouseInitContainerName,
+			Name: kubedb.ClickHouseInitContainerName,
 		}
 		podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 	}

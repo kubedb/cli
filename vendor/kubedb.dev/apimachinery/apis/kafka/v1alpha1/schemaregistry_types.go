@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -71,11 +71,11 @@ type SchemaRegistrySpec struct {
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []api.NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+	ServiceTemplates []dbapi.NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	DeletionPolicy api.TerminationPolicy `json:"deletionPolicy,omitempty"`
+	DeletionPolicy dbapi.DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional

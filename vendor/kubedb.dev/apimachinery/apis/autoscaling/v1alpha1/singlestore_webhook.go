@@ -21,7 +21,7 @@ import (
 	"errors"
 	"fmt"
 
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -43,7 +43,7 @@ func (s *SinglestoreAutoscaler) Default() {
 }
 
 func (s *SinglestoreAutoscaler) setDefaults() {
-	var db dbapi.Singlestore
+	var db olddbapi.Singlestore
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      s.Spec.DatabaseRef.Name,
 		Namespace: s.Namespace,
@@ -107,7 +107,7 @@ func (s *SinglestoreAutoscaler) validate() error {
 	if s.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	var sdb dbapi.Singlestore
+	var sdb olddbapi.Singlestore
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      s.Spec.DatabaseRef.Name,
 		Namespace: s.Namespace,

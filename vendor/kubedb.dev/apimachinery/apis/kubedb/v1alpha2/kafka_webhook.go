@@ -21,6 +21,7 @@ import (
 	"errors"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	"kubedb.dev/apimachinery/apis/kubedb"
 
 	errors2 "github.com/pkg/errors"
 	"gomodules.xyz/pointer"
@@ -240,9 +241,9 @@ func (k *Kafka) validateNodeReplicas(topology *KafkaClusterTopology) error {
 }
 
 var kafkaReservedVolumes = []string{
-	KafkaVolumeData,
-	KafkaVolumeConfig,
-	KafkaVolumeTempConfig,
+	kubedb.KafkaVolumeData,
+	kubedb.KafkaVolumeConfig,
+	kubedb.KafkaVolumeTempConfig,
 }
 
 func (k *Kafka) validateVolumes(db *Kafka) error {
@@ -268,11 +269,11 @@ func (k *Kafka) validateVolumes(db *Kafka) error {
 }
 
 var kafkaReservedVolumeMountPaths = []string{
-	KafkaConfigDir,
-	KafkaTempConfigDir,
-	KafkaDataDir,
-	KafkaMetaDataDir,
-	KafkaCertDir,
+	kubedb.KafkaConfigDir,
+	kubedb.KafkaTempConfigDir,
+	kubedb.KafkaDataDir,
+	kubedb.KafkaMetaDataDir,
+	kubedb.KafkaCertDir,
 }
 
 func (k *Kafka) validateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {

@@ -39,6 +39,8 @@ spec:
             type: object
           spec:
             properties:
+              description:
+                type: string
               nodeGroups:
                 items:
                   properties:
@@ -50,24 +52,122 @@ spec:
                         pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                         x-kubernetes-int-or-string: true
                       description: 'Allocatable represents the total resources of
-                        a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity'
+                        a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
+                        Deprecated: Use resources instead.'
+                      type: object
+                    cost:
+                      description: Cost is the cost of the running an ondeamd machine
+                        for a month
+                      properties:
+                        price:
+                          type: string
+                        unit:
+                          type: string
+                      required:
+                      - price
+                      - unit
+                      type: object
+                    resources:
+                      description: Resources represents the requested and limited
+                        resources of a machine type.
+                      properties:
+                        claims:
+                          description: "Claims lists the names of resources, defined
+                            in spec.resourceClaims, that are used by this container.
+                            \n This is an alpha field and requires enabling the DynamicResourceAllocation
+                            feature gate. \n This field is immutable. It can only
+                            be set for containers."
+                          items:
+                            description: ResourceClaim references one entry in PodSpec.ResourceClaims.
+                            properties:
+                              name:
+                                description: Name must match the name of one entry
+                                  in pod.spec.resourceClaims of the Pod where this
+                                  field is used. It makes that resource available
+                                  inside a container.
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          type: array
+                          x-kubernetes-list-map-keys:
+                          - name
+                          x-kubernetes-list-type: map
+                        limits:
+                          additionalProperties:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                          description: 'Limits describes the maximum amount of compute
+                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          type: object
+                        requests:
+                          additionalProperties:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                          description: 'Requests describes the minimum amount of compute
+                            resources required. If Requests is omitted for a container,
+                            it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. Requests
+                            cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          type: object
                       type: object
                     topologyValue:
                       type: string
                   required:
-                  - allocatable
                   - topologyValue
                   type: object
                 type: array
               nodeSelectionPolicy:
-                enum:
-                - LabelSelector
-                - Taint
                 type: string
+              requirements:
+                description: Requirements are layered with GetLabels and applied to
+                  every node.
+                items:
+                  description: A node selector requirement is a selector that contains
+                    values, a key, and an operator that relates the key and values.
+                  properties:
+                    key:
+                      description: The label key that the selector applies to.
+                      type: string
+                    operator:
+                      description: Represents a key's relationship to a set of values.
+                        Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and
+                        Lt.
+                      type: string
+                    values:
+                      description: An array of string values. If the operator is In
+                        or NotIn, the values array must be non-empty. If the operator
+                        is Exists or DoesNotExist, the values array must be empty.
+                        If the operator is Gt or Lt, the values array must have a
+                        single element, which will be interpreted as an integer. This
+                        array is replaced during a strategic merge patch.
+                      items:
+                        type: string
+                      type: array
+                      x-kubernetes-list-type: atomic
+                  required:
+                  - key
+                  - operator
+                  type: object
+                maxItems: 30
+                type: array
+                x-kubernetes-validations:
+                - message: requirements with operator 'In' must have a value defined
+                  rule: 'self.all(x, x.operator == ''In'' ? x.values.size() != 0 :
+                    true)'
+                - message: requirements operator 'Gt' or 'Lt' must have a single positive
+                    integer value
+                  rule: 'self.all(x, (x.operator == ''Gt'' || x.operator == ''Lt'')
+                    ? (x.values.size() == 1 && int(x.values[0]) >= 0) : true)'
               topologyKey:
                 type: string
             required:
-            - nodeSelectionPolicy
             - topologyKey
             type: object
         type: object

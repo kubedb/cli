@@ -25,7 +25,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -126,7 +127,7 @@ Examples:
 				log.Fatal("use --file or --command to execute supported commands to a redis object's pods")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.RedisDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, kubedb.RedisDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
@@ -185,7 +186,7 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string, keys, args []stri
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().Redises(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().Redises(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

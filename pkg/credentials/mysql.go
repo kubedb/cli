@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 
-	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
+	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -29,7 +29,7 @@ import (
 
 type MySQLShowCred struct {
 	client   kubernetes.Interface
-	dbClient cs.KubedbV1alpha2Interface
+	dbClient cs.KubedbV1Interface
 }
 
 func NewMySQLShowCred(clientConfig *rest.Config) (*MySQLShowCred, error) {

@@ -295,6 +295,11 @@ spec:
                       type: string
                   type: object
                 type: array
+              totalSnapshots:
+                description: TotalSnapshots specifies the total number of snapshots
+                  created for this backupSession.
+                format: int32
+                type: integer
               verifications:
                 description: Verifications specifies the backup verification status
                 items:

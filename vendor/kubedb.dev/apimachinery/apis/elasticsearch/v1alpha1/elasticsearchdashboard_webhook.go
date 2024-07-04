@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	amv "kubedb.dev/apimachinery/pkg/validator"
 
 	"gomodules.xyz/pointer"
@@ -115,8 +115,8 @@ func (ed *ElasticsearchDashboard) Default() {
 	edLog.Info(".PodTemplate.Spec.Resources have been set to default")
 
 	if len(ed.Spec.TerminationPolicy) == 0 {
-		ed.Spec.TerminationPolicy = api.TerminationPolicyWipeOut
-		edLog.Info(".Spec.TerminationPolicy have been set to TerminationPolicyWipeOut")
+		ed.Spec.TerminationPolicy = dbapi.DeletionPolicyWipeOut
+		edLog.Info(".Spec.DeletionPolicy have been set to DeletionPolicyWipeOut")
 	}
 
 	ed.setDefaultContainerSecurityContext(&ed.Spec.PodTemplate)
@@ -164,7 +164,7 @@ func (ed *ElasticsearchDashboard) ValidateDelete() (admission.Warnings, error) {
 
 	var allErr field.ErrorList
 
-	if ed.Spec.TerminationPolicy == api.TerminationPolicyDoNotTerminate {
+	if ed.Spec.TerminationPolicy == dbapi.DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationpolicy"), ed.Name,
 			fmt.Sprintf("ElasticsearchDashboard %s/%s can't be deleted. Change .spec.terminationpolicy", ed.Namespace, ed.Name)))
 	}

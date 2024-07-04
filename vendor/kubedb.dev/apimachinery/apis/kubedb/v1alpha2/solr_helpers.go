@@ -45,7 +45,7 @@ type SolrApp struct {
 }
 
 func (s *Solr) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
-	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralSolr))
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(kubedb.ResourcePluralSolr))
 }
 
 func (s *Solr) PetSetName(suffix string) string {
@@ -62,7 +62,7 @@ func (s *Solr) Owner() *meta.OwnerReference {
 }
 
 func (s *Solr) ResourceKind() string {
-	return ResourceKindSolr
+	return kubedb.ResourceKindSolr
 }
 
 func (s *Solr) GoverningServiceName() string {
@@ -92,7 +92,7 @@ func (s *Solr) SolrSecretName(suffix string) string {
 }
 
 func (s *Solr) SolrSecretKey() string {
-	return SolrSecretKey
+	return kubedb.SolrSecretKey
 }
 
 func (s *Solr) Merge(opt map[string]string) map[string]string {
@@ -140,7 +140,7 @@ func (s *Solr) OffshootLabels() map[string]string {
 }
 
 func (s *Solr) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, s.Labels, override))
 }
 
@@ -158,7 +158,7 @@ func (s *Solr) ResourceFQN() string {
 }
 
 func (s *Solr) ResourcePlural() string {
-	return ResourcePluralSolr
+	return kubedb.ResourcePluralSolr
 }
 
 func (s SolrApp) Name() string {
@@ -166,7 +166,7 @@ func (s SolrApp) Name() string {
 }
 
 func (s SolrApp) Type() appcat.AppType {
-	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularSolr))
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, kubedb.ResourceSingularSolr))
 }
 
 func (s *Solr) AppBindingMeta() appcat.AppBindingMeta {
@@ -207,7 +207,7 @@ func (s solrStatsService) ServiceMonitorAdditionalLabels() map[string]string {
 }
 
 func (s solrStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (s solrStatsService) Scheme() string {
@@ -223,7 +223,7 @@ func (s *Solr) StatsService() mona.StatsAccessor {
 }
 
 func (s *Solr) StatsServiceLabels() map[string]string {
-	return s.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return s.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (s *Solr) PVCName(alias string) string {
@@ -326,17 +326,17 @@ func (s *Solr) SetDefaults(slVersion *catalog.SolrVersion) {
 			s.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
 		}
 		if s.Spec.Monitor.Prometheus != nil && s.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-			s.Spec.Monitor.Prometheus.Exporter.Port = SolrExporterPort
+			s.Spec.Monitor.Prometheus.Exporter.Port = kubedb.SolrExporterPort
 		}
 		s.Spec.Monitor.SetDefaults()
 	}
 }
 
 func (s *Solr) setDefaultContainerSecurityContext(slVersion *catalog.SolrVersion, podTemplate *ofst.PodTemplateSpec) {
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, SolrInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.SolrInitContainerName)
 	if initContainer == nil {
 		initContainer = &v1.Container{
-			Name: SolrInitContainerName,
+			Name: kubedb.SolrInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
@@ -344,10 +344,10 @@ func (s *Solr) setDefaultContainerSecurityContext(slVersion *catalog.SolrVersion
 	}
 	s.assignDefaultContainerSecurityContext(slVersion, initContainer.SecurityContext)
 	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, SolrContainerName)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SolrContainerName)
 	if container == nil {
 		container = &v1.Container{
-			Name: SolrContainerName,
+			Name: kubedb.SolrContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -378,14 +378,14 @@ func (s *Solr) assignDefaultContainerSecurityContext(slVersion *catalog.SolrVers
 }
 
 func (s *Solr) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
-	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, SolrContainerName)
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SolrContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResourcesCoreAndMemoryIntensiveSolr)
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesCoreAndMemoryIntensiveSolr)
 	}
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, SolrInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.SolrInitContainerName)
 	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
+		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 }
 

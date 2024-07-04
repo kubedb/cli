@@ -21,7 +21,7 @@ import (
 	"errors"
 	"fmt"
 
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -43,7 +43,7 @@ func (d *DruidAutoscaler) Default() {
 }
 
 func (d *DruidAutoscaler) setDefaults() {
-	var db dbapi.Druid
+	var db olddbapi.Druid
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      d.Spec.DatabaseRef.Name,
 		Namespace: d.Namespace,
@@ -124,7 +124,7 @@ func (d *DruidAutoscaler) validate() error {
 	if d.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	var dr dbapi.Druid
+	var dr olddbapi.Druid
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      d.Spec.DatabaseRef.Name,
 		Namespace: d.Namespace,

@@ -103,7 +103,7 @@ func (m MongoDB) ShardCommonNodeName() string {
 	if m.Spec.ShardTopology == nil {
 		return ""
 	}
-	shardName := fmt.Sprintf("%v-%v", m.OffshootName(), NodeTypeShard)
+	shardName := fmt.Sprintf("%v-%v", m.OffshootName(), kubedb.NodeTypeShard)
 	return m.Spec.ShardTopology.Shard.Prefix + shardName
 }
 
@@ -111,7 +111,7 @@ func (m MongoDB) ConfigSvrNodeName() string {
 	if m.Spec.ShardTopology == nil {
 		return ""
 	}
-	configsvrName := fmt.Sprintf("%v-%v", m.OffshootName(), NodeTypeConfig)
+	configsvrName := fmt.Sprintf("%v-%v", m.OffshootName(), kubedb.NodeTypeConfig)
 	return m.Spec.ShardTopology.ConfigServer.Prefix + configsvrName
 }
 
@@ -119,7 +119,7 @@ func (m MongoDB) MongosNodeName() string {
 	if m.Spec.ShardTopology == nil {
 		return ""
 	}
-	mongosName := fmt.Sprintf("%v-%v", m.OffshootName(), NodeTypeMongos)
+	mongosName := fmt.Sprintf("%v-%v", m.OffshootName(), kubedb.NodeTypeMongos)
 	return m.Spec.ShardTopology.Mongos.Prefix + mongosName
 }
 
@@ -151,28 +151,28 @@ func (m MongoDB) ArbiterNodeName() string {
 	if m.Spec.ReplicaSet == nil || m.Spec.Arbiter == nil {
 		return ""
 	}
-	return fmt.Sprintf("%v-%v", m.OffshootName(), NodeTypeArbiter)
+	return fmt.Sprintf("%v-%v", m.OffshootName(), kubedb.NodeTypeArbiter)
 }
 
 func (m MongoDB) HiddenNodeName() string {
 	if m.Spec.ReplicaSet == nil || m.Spec.Hidden == nil {
 		return ""
 	}
-	return fmt.Sprintf("%v-%v", m.OffshootName(), NodeTypeHidden)
+	return fmt.Sprintf("%v-%v", m.OffshootName(), kubedb.NodeTypeHidden)
 }
 
 func (m MongoDB) ArbiterShardNodeName(nodeNum int32) string {
 	if m.Spec.ShardTopology == nil || m.Spec.Arbiter == nil {
 		return ""
 	}
-	return fmt.Sprintf("%v-%v", m.ShardNodeName(nodeNum), NodeTypeArbiter)
+	return fmt.Sprintf("%v-%v", m.ShardNodeName(nodeNum), kubedb.NodeTypeArbiter)
 }
 
 func (m MongoDB) HiddenShardNodeName(nodeNum int32) string {
 	if m.Spec.ShardTopology == nil || m.Spec.Hidden == nil {
 		return ""
 	}
-	return fmt.Sprintf("%v-%v", m.ShardNodeName(nodeNum), NodeTypeHidden)
+	return fmt.Sprintf("%v-%v", m.ShardNodeName(nodeNum), kubedb.NodeTypeHidden)
 }
 
 func (m MongoDB) OffshootSelectors() map[string]string {
@@ -185,7 +185,7 @@ func (m MongoDB) OffshootSelectors() map[string]string {
 
 func (m MongoDB) OffshootSelectorsWhenOthers() map[string]string {
 	return meta_util.OverwriteKeys(m.OffshootSelectors(), map[string]string{
-		MongoDBTypeLabelKey: NodeTypeReplica,
+		MongoDBTypeLabelKey: kubedb.NodeTypeReplica,
 	})
 }
 
@@ -197,7 +197,7 @@ func (m MongoDB) ShardSelectors(nodeNum int32) map[string]string {
 
 func (m MongoDB) ShardSelectorsWhenOthers(nodeNum int32) map[string]string {
 	return meta_util.OverwriteKeys(m.ShardSelectors(nodeNum), map[string]string{
-		MongoDBTypeLabelKey: NodeTypeShard,
+		MongoDBTypeLabelKey: kubedb.NodeTypeShard,
 	})
 }
 
@@ -215,25 +215,25 @@ func (m MongoDB) MongosSelectors() map[string]string {
 
 func (m MongoDB) ArbiterSelectors() map[string]string {
 	return meta_util.OverwriteKeys(m.OffshootSelectors(), map[string]string{
-		MongoDBTypeLabelKey: NodeTypeArbiter,
+		MongoDBTypeLabelKey: kubedb.NodeTypeArbiter,
 	})
 }
 
 func (m MongoDB) HiddenNodeSelectors() map[string]string {
 	return meta_util.OverwriteKeys(m.OffshootSelectors(), map[string]string{
-		MongoDBTypeLabelKey: NodeTypeHidden,
+		MongoDBTypeLabelKey: kubedb.NodeTypeHidden,
 	})
 }
 
 func (m MongoDB) ArbiterShardSelectors(nodeNum int32) map[string]string {
 	return meta_util.OverwriteKeys(m.ShardSelectors(nodeNum), map[string]string{
-		MongoDBTypeLabelKey: NodeTypeArbiter,
+		MongoDBTypeLabelKey: kubedb.NodeTypeArbiter,
 	})
 }
 
 func (m MongoDB) HiddenNodeShardSelectors(nodeNum int32) map[string]string {
 	return meta_util.OverwriteKeys(m.ShardSelectors(nodeNum), map[string]string{
-		MongoDBTypeLabelKey: NodeTypeHidden,
+		MongoDBTypeLabelKey: kubedb.NodeTypeHidden,
 	})
 }
 
@@ -259,7 +259,7 @@ func (m MongoDB) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]str
 }
 
 func (m MongoDB) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
@@ -296,25 +296,25 @@ func (m MongoDB) HiddenNodeShardLabels(nodeNum int32) map[string]string {
 }
 
 func (m MongoDB) GetCorrespondingReplicaStsName(arbStsName string) string {
-	if !strings.HasSuffix(arbStsName, "-"+NodeTypeArbiter) {
-		panic(fmt.Sprintf("%s does not have -%s as suffix", arbStsName, NodeTypeArbiter))
+	if !strings.HasSuffix(arbStsName, "-"+kubedb.NodeTypeArbiter) {
+		panic(fmt.Sprintf("%s does not have -%s as suffix", arbStsName, kubedb.NodeTypeArbiter))
 	}
 	return arbStsName[:strings.LastIndex(arbStsName, "-")]
 }
 
 func (m MongoDB) GetCorrespondingReplicaStsNameFromHidden(hiddenStsName string) string {
-	if !strings.HasSuffix(hiddenStsName, "-"+NodeTypeHidden) {
-		panic(fmt.Sprintf("%s does not have -%s as suffix", hiddenStsName, NodeTypeHidden))
+	if !strings.HasSuffix(hiddenStsName, "-"+kubedb.NodeTypeHidden) {
+		panic(fmt.Sprintf("%s does not have -%s as suffix", hiddenStsName, kubedb.NodeTypeHidden))
 	}
 	return hiddenStsName[:strings.LastIndex(hiddenStsName, "-")]
 }
 
 func (m MongoDB) GetCorrespondingArbiterStsName(replStsName string) string {
-	return replStsName + "-" + NodeTypeArbiter
+	return replStsName + "-" + kubedb.NodeTypeArbiter
 }
 
 func (m MongoDB) GetCorrespondingHiddenStsName(replStsName string) string {
-	return replStsName + "-" + NodeTypeHidden
+	return replStsName + "-" + kubedb.NodeTypeHidden
 }
 
 func (m MongoDB) GetShardNumber(shardName string) int {
@@ -374,10 +374,10 @@ func (m MongoDB) GoverningServiceName(name string) string {
 	if name == "" {
 		panic(fmt.Sprintf("StatefulSet name is missing for MongoDB %s/%s", m.Namespace, m.Name))
 	}
-	if strings.HasSuffix(name, "-"+NodeTypeArbiter) {
+	if strings.HasSuffix(name, "-"+kubedb.NodeTypeArbiter) {
 		name = m.GetCorrespondingReplicaStsName(name)
 	}
-	if strings.HasSuffix(name, "-"+NodeTypeHidden) {
+	if strings.HasSuffix(name, "-"+kubedb.NodeTypeHidden) {
 		name = m.GetCorrespondingReplicaStsNameFromHidden(name)
 	}
 	return name + "-pods"
@@ -409,12 +409,12 @@ func (m MongoDB) Hosts() []string {
 	hosts := m.HostsOnlyCoreMembers()
 	if m.Spec.ReplicaSet != nil {
 		if m.Spec.Arbiter != nil {
-			s := fmt.Sprintf("%v-0.%v.%v.svc:%v", m.ArbiterNodeName(), m.GoverningServiceName(m.OffshootName()), m.Namespace, MongoDBDatabasePort)
+			s := fmt.Sprintf("%v-0.%v.%v.svc:%v", m.ArbiterNodeName(), m.GoverningServiceName(m.OffshootName()), m.Namespace, kubedb.MongoDBDatabasePort)
 			hosts = append(hosts, s)
 		}
 		if m.Spec.Hidden != nil {
 			for i := int32(0); i < m.Spec.Hidden.Replicas; i++ {
-				s := fmt.Sprintf("%v-%v.%v.%v.svc:%v", m.HiddenNodeName(), i, m.GoverningServiceName(m.OffshootName()), m.Namespace, MongoDBDatabasePort)
+				s := fmt.Sprintf("%v-%v.%v.%v.svc:%v", m.HiddenNodeName(), i, m.GoverningServiceName(m.OffshootName()), m.Namespace, kubedb.MongoDBDatabasePort)
 				hosts = append(hosts, s)
 			}
 		}
@@ -423,11 +423,11 @@ func (m MongoDB) Hosts() []string {
 }
 
 func (m MongoDB) HostsOnlyCoreMembers() []string {
-	hosts := []string{fmt.Sprintf("%v-0.%v.%v.svc:%v", m.Name, m.GoverningServiceName(m.OffshootName()), m.Namespace, MongoDBDatabasePort)}
+	hosts := []string{fmt.Sprintf("%v-0.%v.%v.svc:%v", m.Name, m.GoverningServiceName(m.OffshootName()), m.Namespace, kubedb.MongoDBDatabasePort)}
 	if m.Spec.ReplicaSet != nil {
 		hosts = make([]string, *m.Spec.Replicas)
 		for i := 0; i < int(pointer.Int32(m.Spec.Replicas)); i++ {
-			hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.Name, i, m.GoverningServiceName(m.OffshootName()), m.Namespace, MongoDBDatabasePort)
+			hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.Name, i, m.GoverningServiceName(m.OffshootName()), m.Namespace, kubedb.MongoDBDatabasePort)
 		}
 	}
 	return hosts
@@ -455,12 +455,12 @@ func (m MongoDB) ShardHosts(nodeNum int32) []string {
 	}
 	hosts := m.ShardHostsOnlyCoreMembers(nodeNum)
 	if m.Spec.Arbiter != nil {
-		s := fmt.Sprintf("%v-0.%v.%v.svc:%v", m.ArbiterShardNodeName(nodeNum), m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBDatabasePort)
+		s := fmt.Sprintf("%v-0.%v.%v.svc:%v", m.ArbiterShardNodeName(nodeNum), m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, kubedb.MongoDBDatabasePort)
 		hosts = append(hosts, s)
 	}
 	if m.Spec.Hidden != nil {
 		for i := int32(0); i < m.Spec.Hidden.Replicas; i++ {
-			s := fmt.Sprintf("%v-%v.%v.%v.svc:%v", m.HiddenShardNodeName(nodeNum), i, m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBDatabasePort)
+			s := fmt.Sprintf("%v-%v.%v.%v.svc:%v", m.HiddenShardNodeName(nodeNum), i, m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, kubedb.MongoDBDatabasePort)
 			hosts = append(hosts, s)
 		}
 	}
@@ -473,7 +473,7 @@ func (m MongoDB) ShardHostsOnlyCoreMembers(nodeNum int32) []string {
 	}
 	hosts := make([]string, m.Spec.ShardTopology.Shard.Replicas)
 	for i := 0; i < int(m.Spec.ShardTopology.Shard.Replicas); i++ {
-		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ShardNodeName(nodeNum), i, m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, MongoDBDatabasePort)
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ShardNodeName(nodeNum), i, m.GoverningServiceName(m.ShardNodeName(nodeNum)), m.Namespace, kubedb.MongoDBDatabasePort)
 	}
 	return hosts
 }
@@ -495,7 +495,7 @@ func (m MongoDB) ConfigSvrHosts() []string {
 
 	hosts := make([]string, m.Spec.ShardTopology.ConfigServer.Replicas)
 	for i := 0; i < int(m.Spec.ShardTopology.ConfigServer.Replicas); i++ {
-		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ConfigSvrNodeName(), i, m.GoverningServiceName(m.ConfigSvrNodeName()), m.Namespace, MongoDBDatabasePort)
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.ConfigSvrNodeName(), i, m.GoverningServiceName(m.ConfigSvrNodeName()), m.Namespace, kubedb.MongoDBDatabasePort)
 	}
 	return hosts
 }
@@ -507,22 +507,22 @@ func (m MongoDB) MongosHosts() []string {
 
 	hosts := make([]string, m.Spec.ShardTopology.Mongos.Replicas)
 	for i := 0; i < int(m.Spec.ShardTopology.Mongos.Replicas); i++ {
-		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.MongosNodeName(), i, m.GoverningServiceName(m.MongosNodeName()), m.Namespace, MongoDBDatabasePort)
+		hosts[i] = fmt.Sprintf("%v-%d.%v.%v.svc:%v", m.MongosNodeName(), i, m.GoverningServiceName(m.MongosNodeName()), m.Namespace, kubedb.MongoDBDatabasePort)
 	}
 	return hosts
 }
 
 func (m *MongoDB) GetURL(stsName string) string {
 	if m.Spec.ShardTopology != nil {
-		if strings.HasSuffix(stsName, NodeTypeConfig) {
+		if strings.HasSuffix(stsName, kubedb.NodeTypeConfig) {
 			return strings.Join(m.ConfigSvrHosts(), ",")
 		}
-		if strings.HasSuffix(stsName, NodeTypeMongos) {
+		if strings.HasSuffix(stsName, kubedb.NodeTypeMongos) {
 			return strings.Join(m.MongosHosts(), ",")
 		}
 		shardStr := func() string {
-			idx := strings.LastIndex(stsName, NodeTypeShard)
-			return stsName[idx+len(NodeTypeShard):]
+			idx := strings.LastIndex(stsName, kubedb.NodeTypeShard)
+			return stsName[idx+len(kubedb.NodeTypeShard):]
 		}()
 		shardNum := func() int32 {
 			num := int32(0)
@@ -532,7 +532,7 @@ func (m *MongoDB) GetURL(stsName string) string {
 			return num
 		}()
 		// if stsName="shard12", shardStr will be "12", & shardNum will be 12
-		if strings.HasSuffix(stsName, NodeTypeShard+shardStr) {
+		if strings.HasSuffix(stsName, kubedb.NodeTypeShard+shardStr) {
 			return strings.Join(m.ShardHosts(shardNum), ",")
 		}
 	}
@@ -576,7 +576,7 @@ func (m mongoDBStatsService) ServiceMonitorAdditionalLabels() map[string]string 
 }
 
 func (m mongoDBStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (m mongoDBStatsService) Scheme() string {
@@ -592,7 +592,7 @@ func (m MongoDB) StatsService() mona.StatsAccessor {
 }
 
 func (m MongoDB) StatsServiceLabels() map[string]string {
-	return m.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return m.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 // StorageType = Durable
@@ -633,9 +633,9 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		}
 	}
 
-	defaultResource := DefaultResources
+	defaultResource := kubedb.DefaultResources
 	if m.isVersion6OrLater(mgVersion) {
-		defaultResource = DefaultResourcesCPUIntensive
+		defaultResource = kubedb.DefaultResourcesCPUIntensive
 	}
 
 	if m.Spec.ShardTopology != nil {
@@ -812,7 +812,7 @@ func (m *MongoDB) SetTLSDefaults() {
 	// attributes in the client certificate must differ from the server certificates.
 	// ref: https://docs.mongodb.com/manual/tutorial/configure-x509-client-authentication/#client-x-509-certificate
 
-	defaultServerOrg := []string{KubeDBOrganization}
+	defaultServerOrg := []string{kubedb.KubeDBOrganization}
 	defaultServerOrgUnit := []string{string(MongoDBServerCert)}
 
 	_, cert := kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBServerCert))
@@ -848,7 +848,7 @@ func (m *MongoDB) SetTLSDefaults() {
 	}
 
 	// Client-cert
-	defaultClientOrg := []string{KubeDBOrganization}
+	defaultClientOrg := []string{kubedb.KubeDBOrganization}
 	defaultClientOrgUnit := []string{string(MongoDBClientCert)}
 	_, cert = kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBClientCert))
 	if cert != nil && cert.Subject != nil {
@@ -869,7 +869,7 @@ func (m *MongoDB) SetTLSDefaults() {
 	})
 
 	// Metrics-exporter-cert
-	defaultExporterOrg := []string{KubeDBOrganization}
+	defaultExporterOrg := []string{kubedb.KubeDBOrganization}
 	defaultExporterOrgUnit := []string{string(MongoDBMetricsExporterCert)}
 	_, cert = kmapi.GetCertificate(m.Spec.TLS.Certificates, string(MongoDBMetricsExporterCert))
 	if cert != nil && cert.Subject != nil {

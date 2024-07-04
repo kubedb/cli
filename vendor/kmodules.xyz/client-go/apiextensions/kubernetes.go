@@ -98,7 +98,7 @@ func transform(crd *CustomResourceDefinition, preserveConversion bool) func(in *
 		conversion := in.Spec.Conversion
 		in.Spec = crd.V1.Spec
 		// preserve conversion
-		if preserveConversion && in.Spec.Conversion == nil && conversion != nil {
+		if preserveConversion && crd.V1.Spec.Conversion == nil && conversion != nil {
 			in.Spec.Conversion = conversion
 		}
 		return in

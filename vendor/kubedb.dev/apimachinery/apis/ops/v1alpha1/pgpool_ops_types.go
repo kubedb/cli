@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -54,10 +56,16 @@ type PgpoolOpsRequestSpec struct {
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.
 	Type PgpoolOpsRequestType `json:"type"`
+	// Specifies information necessary for upgrading pgpool
+	UpdateVersion *PgpoolUpdateVersionSpec `json:"updateVersion,omitempty"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *PgpoolHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *PgpoolVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for custom configuration of Pgpool
 	Configuration *PgpoolCustomConfigurationSpec `json:"configuration,omitempty"`
+	// Specifies information necessary for configuring TLS
+	TLS *PgpoolTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
@@ -67,9 +75,33 @@ type PgpoolOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=VerticalScaling;Reconfigure;Restart
-// ENUM(VerticalScaling, Restart, Reconfigure)
+type PgpoolTLSSpec struct {
+	TLSSpec `json:",inline,omitempty"`
+
+	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
+	// +optional
+	SSLMode v1alpha2.PgpoolSSLMode `json:"sslMode,omitempty"`
+
+	// ClientAuthMode for both standalone and clusters. (default will be md5. [md5;scram;cert])
+	// +optional
+	ClientAuthMode v1alpha2.PgpoolClientAuthMode `json:"clientAuthMode,omitempty"`
+}
+
+// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Reconfigure;Restart;HorizontalScaling;ReconfigureTLS
+// ENUM(UpdateVersion, Restart, Reconfigure, VerticalScaling, HorizontalScaling, ReconfigureTLS)
 type PgpoolOpsRequestType string
+
+// PgpoolUpdateVersionSpec contains the update version information of a pgpool cluster
+type PgpoolUpdateVersionSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion string `json:"targetVersion,omitempty"`
+}
+
+// PgpoolHorizontalScalingSpec contains the horizontal scaling information of a Pgpool cluster
+type PgpoolHorizontalScalingSpec struct {
+	// Number of node
+	Node *int32 `json:"node,omitempty"`
+}
 
 // PgpoolVerticalScalingSpec contains the vertical scaling information of a Pgpool cluster
 type PgpoolVerticalScalingSpec struct {

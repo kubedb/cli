@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -31,7 +31,7 @@ const (
 type PgBouncerInsightSpec struct {
 	Version        string                `json:"version"`
 	Status         string                `json:"status"`
-	SSLMode        api.SSLMode           `json:"sslMode,omitempty"`
+	SSLMode        dbapi.SSLMode         `json:"sslMode,omitempty"`
 	MaxConnections *int32                `json:"maxConnections,omitempty"`
 	PodInsights    []PgBouncerPodInsight `json:"podInsights,omitempty"`
 }
@@ -71,8 +71,8 @@ type PgBouncerInsight struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   PgBouncerInsightSpec `json:"spec,omitempty"`
-	Status api.PgBouncerStatus  `json:"status,omitempty"`
+	Spec   PgBouncerInsightSpec  `json:"spec,omitempty"`
+	Status dbapi.PgBouncerStatus `json:"status,omitempty"`
 }
 
 // PgBouncerInsightList contains a list of PgBouncerInsight

@@ -275,9 +275,6 @@ spec:
                   redissentinel:
                     properties:
                       nodeSelectionPolicy:
-                        enum:
-                        - LabelSelector
-                        - Taint
                         type: string
                       resources:
                         properties:

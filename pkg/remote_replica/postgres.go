@@ -25,7 +25,7 @@ import (
 	"strings"
 	"time"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/cli/pkg/common"
 
 	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
@@ -401,7 +401,10 @@ func userPrompt(yes bool) error {
 		return nil
 	}
 	var inp string
-	fmt.Scan(&inp)
+	_, err := fmt.Scan(&inp)
+	if err != nil {
+		return err
+	}
 	inp = strings.ToLower(inp)
 	if inp != "y" {
 		return errors.New("aborting commands")

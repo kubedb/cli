@@ -21,7 +21,8 @@ import (
 	"fmt"
 	"log"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/apimachinery/pkg/factory"
 	"kubedb.dev/cli/pkg/lib"
@@ -79,7 +80,7 @@ func InsertElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal("couldn't create config, error: ", err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(config, dbName, namespace, api.ElasticsearchRestPort)
+			tunnel, err := lib.TunnelToDBService(config, dbName, namespace, kubedb.ElasticsearchRestPort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -136,7 +137,7 @@ func VerifyElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			tunnel, err := lib.TunnelToDBService(config, dbName, namespace, api.ElasticsearchRestPort)
+			tunnel, err := lib.TunnelToDBService(config, dbName, namespace, kubedb.ElasticsearchRestPort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -190,7 +191,7 @@ func DropElasticsearchDataCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			tunnel, err := lib.TunnelToDBService(config, dbName, namespace, api.ElasticsearchRestPort)
+			tunnel, err := lib.TunnelToDBService(config, dbName, namespace, kubedb.ElasticsearchRestPort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -222,7 +223,7 @@ func newElasticsearchOpts(config *rest.Config, dbName, namespace string, tunnel 
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().Elasticsearches(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().Elasticsearches(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

@@ -616,6 +616,11 @@ func (in *BackupSessionStatus) DeepCopyInto(out *BackupSessionStatus) {
 		in, out := &in.Deadline, &out.Deadline
 		*out = (*in).DeepCopy()
 	}
+	if in.TotalSnapshots != nil {
+		in, out := &in.TotalSnapshots, &out.TotalSnapshots
+		*out = new(int32)
+		**out = **in
+	}
 	if in.Snapshots != nil {
 		in, out := &in.Snapshots, &out.Snapshots
 		*out = make([]SnapshotStatus, len(*in))

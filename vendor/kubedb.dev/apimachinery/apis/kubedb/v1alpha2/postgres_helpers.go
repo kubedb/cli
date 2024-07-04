@@ -85,7 +85,7 @@ func (p Postgres) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]st
 }
 
 func (p Postgres) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, p.Labels, override))
 }
 
@@ -165,7 +165,7 @@ func (p postgresStatsService) ServiceMonitorAdditionalLabels() map[string]string
 }
 
 func (p postgresStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (p postgresStatsService) Scheme() string {
@@ -181,7 +181,7 @@ func (p Postgres) StatsService() mona.StatsAccessor {
 }
 
 func (p Postgres) StatsServiceLabels() map[string]string {
-	return p.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return p.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topology *core_util.Topology) {
@@ -221,7 +221,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 	if p.Spec.LeaderElection.TransferLeadershipTimeout == nil {
 		p.Spec.LeaderElection.TransferLeadershipTimeout = &metav1.Duration{Duration: 60 * time.Second}
 	}
-	apis.SetDefaultResourceLimits(&p.Spec.Coordinator.Resources, CoordinatorDefaultResources)
+	apis.SetDefaultResourceLimits(&p.Spec.Coordinator.Resources, kubedb.CoordinatorDefaultResources)
 
 	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
@@ -267,7 +267,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 	p.SetArbiterDefault()
 	p.SetTLSDefaults()
 	p.SetHealthCheckerDefaults()
-	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 
 	p.Spec.Monitor.SetDefaults()
@@ -320,19 +320,19 @@ func (p *Postgres) SetArbiterDefault() {
 			Resources: core.ResourceRequirements{},
 		}
 	}
-	apis.SetDefaultResourceLimits(&p.Spec.Arbiter.Resources, DefaultArbiter(false))
+	apis.SetDefaultResourceLimits(&p.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
 }
 
 func (p *Postgres) setDefaultInitContainerSecurityContext(podTemplate *ofst.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
 	if podTemplate == nil {
 		return
 	}
-	container := core_util.GetContainerByName(p.Spec.PodTemplate.Spec.InitContainers, PostgresInitContainerName)
+	container := core_util.GetContainerByName(p.Spec.PodTemplate.Spec.InitContainers, kubedb.PostgresInitContainerName)
 	if container == nil {
 		container = &core.Container{
-			Name:            PostgresInitContainerName,
+			Name:            kubedb.PostgresInitContainerName,
 			SecurityContext: &core.SecurityContext{},
-			Resources:       DefaultInitContainerResource,
+			Resources:       kubedb.DefaultInitContainerResource,
 		}
 	} else if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
@@ -494,9 +494,9 @@ func GetSharedBufferSizeForPostgres(resource *resource.Quantity) string {
 	// It's going to through and error that the value is going to cross the limit.
 
 	sharedBuffer := fmt.Sprintf("%skB", strconv.FormatInt(ret, 10))
-	if ret > SharedBuffersGbAsKiloByte {
+	if ret > kubedb.SharedBuffersGbAsKiloByte {
 		// convert the ret as MB devide by SharedBuffersMbAsByte
-		ret /= SharedBuffersMbAsKiloByte
+		ret /= kubedb.SharedBuffersMbAsKiloByte
 		sharedBuffer = fmt.Sprintf("%sMB", strconv.FormatInt(ret, 10))
 	}
 

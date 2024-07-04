@@ -23,7 +23,8 @@ import (
 	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kafka"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/crds"
 
 	"gomodules.xyz/pointer"
@@ -104,7 +105,7 @@ func (k *SchemaRegistry) OffshootLabels() map[string]string {
 }
 
 // GetServiceTemplate returns a pointer to the desired serviceTemplate referred by "aliaS". Otherwise, it returns nil.
-func (k *SchemaRegistry) GetServiceTemplate(templates []api.NamedServiceTemplateSpec, alias api.ServiceAlias) ofst.ServiceTemplateSpec {
+func (k *SchemaRegistry) GetServiceTemplate(templates []dbapi.NamedServiceTemplateSpec, alias dbapi.ServiceAlias) ofst.ServiceTemplateSpec {
 	for i := range templates {
 		c := templates[i]
 		if c.Alias == alias {
@@ -114,7 +115,7 @@ func (k *SchemaRegistry) GetServiceTemplate(templates []api.NamedServiceTemplate
 	return ofst.ServiceTemplateSpec{}
 }
 
-func (k *SchemaRegistry) ServiceLabels(alias api.ServiceAlias, extraLabels ...map[string]string) map[string]string {
+func (k *SchemaRegistry) ServiceLabels(alias dbapi.ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := k.GetServiceTemplate(k.Spec.ServiceTemplates, alias)
 	return k.offshootLabels(meta_util.OverwriteKeys(k.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
 }
@@ -198,7 +199,7 @@ func (k *SchemaRegistry) SetHealthCheckerDefaults() {
 
 func (k *SchemaRegistry) SetDefaults() {
 	if k.Spec.DeletionPolicy == "" {
-		k.Spec.DeletionPolicy = api.TerminationPolicyDelete
+		k.Spec.DeletionPolicy = dbapi.DeletionPolicyDelete
 	}
 
 	if k.Spec.Replicas == nil {
@@ -216,7 +217,7 @@ func (k *SchemaRegistry) SetDefaults() {
 
 	dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, SchemaRegistryContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&dbContainer.Resources, api.DefaultResources)
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 
 	k.SetHealthCheckerDefaults()
