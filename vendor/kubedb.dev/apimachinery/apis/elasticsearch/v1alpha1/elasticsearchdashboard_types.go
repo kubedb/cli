@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -58,7 +58,7 @@ type ElasticsearchDashboardSpec struct {
 
 	// ServiceTemplates is an optional configuration for services used to expose Dashboard
 	// +optional
-	ServiceTemplates []api.NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+	ServiceTemplates []dbapi.NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// TLS contains tls configurations
 	// +optional
@@ -66,7 +66,7 @@ type ElasticsearchDashboardSpec struct {
 
 	// TerminationPolicy controls the delete operation for Dashboard
 	// +optional
-	TerminationPolicy api.TerminationPolicy `json:"terminationPolicy,omitempty"`
+	TerminationPolicy dbapi.DeletionPolicy `json:"terminationPolicy,omitempty"`
 }
 
 // ElasticsearchDashboardStatus defines the observed state of ElasticsearchDashboard

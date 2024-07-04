@@ -85,7 +85,7 @@ func (r Redis) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]strin
 }
 
 func (r Redis) offshootLabels(selector, overrides map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, r.Labels, overrides))
 }
 
@@ -145,7 +145,7 @@ func (r Redis) StatefulSetNameWithShard(i int) string {
 }
 
 func (r Redis) Address() string {
-	return fmt.Sprintf("%v.%v.svc:%d", r.Name, r.Namespace, RedisDatabasePort)
+	return fmt.Sprintf("%v.%v.svc:%d", r.Name, r.Namespace, kubedb.RedisDatabasePort)
 }
 
 type redisApp struct {
@@ -185,7 +185,7 @@ func (p redisStatsService) ServiceMonitorAdditionalLabels() map[string]string {
 }
 
 func (r redisStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (r redisStatsService) Scheme() string {
@@ -201,7 +201,7 @@ func (r Redis) StatsService() mona.StatsAccessor {
 }
 
 func (r Redis) StatsServiceLabels() map[string]string {
-	return r.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return r.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion, topology *core_util.Topology) {
@@ -236,7 +236,7 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion, topology *core_util
 
 	labels := r.OffshootSelectors()
 	if r.Spec.Mode == RedisModeCluster {
-		labels[RedisShardKey] = r.ShardNodeTemplate()
+		labels[kubedb.RedisShardKey] = r.ShardNodeTemplate()
 	}
 	r.setDefaultAffinity(&r.Spec.PodTemplate, labels, topology)
 
@@ -251,7 +251,7 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion, topology *core_util
 	}
 	r.SetTLSDefaults()
 	r.SetHealthCheckerDefaults()
-	apis.SetDefaultResourceLimits(&r.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&r.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 }
 
 func (r *Redis) SetHealthCheckerDefaults() {

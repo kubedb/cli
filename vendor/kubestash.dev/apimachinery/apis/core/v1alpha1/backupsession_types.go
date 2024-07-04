@@ -80,6 +80,10 @@ type BackupSessionStatus struct {
 	// +optional
 	Deadline *metav1.Time `json:"sessionDeadline,omitempty"`
 
+	// TotalSnapshots specifies the total number of snapshots created for this backupSession.
+	// +optional
+	TotalSnapshots *int32 `json:"totalSnapshots,omitempty"`
+
 	// Snapshots specifies the Snapshots status
 	// +optional
 	Snapshots []SnapshotStatus `json:"snapshots,omitempty"`
@@ -212,6 +216,11 @@ const (
 	TypeBackupExecutorEnsured               = "BackupExecutorEnsured"
 	ReasonSuccessfullyEnsuredBackupExecutor = "SuccessfullyEnsuredBackupExecutor"
 	ReasonFailedToEnsureBackupExecutor      = "FailedToEnsureBackupExecutor"
+
+	// TypeRetentionPolicyExecutorEnsured indicates whether the Backup Executor is ensured or not.
+	TypeRetentionPolicyExecutorEnsured               = "RetentionPolicyExecutorEnsured"
+	ReasonSuccessfullyEnsuredRetentionPolicyExecutor = "SuccessfullyEnsuredRetentionPolicyExecutor"
+	ReasonFailedToEnsureRetentionPolicyExecutor      = "FailedToEnsureRetentionPolicyExecutor"
 
 	// TypeSnapshotsEnsured indicates whether Snapshots are ensured for each Repository or not
 	TypeSnapshotsEnsured               = "SnapshotsEnsured"

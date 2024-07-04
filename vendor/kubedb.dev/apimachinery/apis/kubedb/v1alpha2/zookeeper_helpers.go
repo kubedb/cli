@@ -104,7 +104,7 @@ func (z *ZooKeeper) GoverningServiceName() string {
 }
 
 func (z *ZooKeeper) Address() string {
-	return fmt.Sprintf("%v.%v.svc:%d", z.ServiceName(), z.Namespace, ZooKeeperClientPort)
+	return fmt.Sprintf("%v.%v.svc:%d", z.ServiceName(), z.Namespace, kubedb.ZooKeeperClientPort)
 }
 
 func (z *ZooKeeper) OffshootSelectors(extraSelectors ...map[string]string) map[string]string {
@@ -117,7 +117,7 @@ func (z *ZooKeeper) OffshootSelectors(extraSelectors ...map[string]string) map[s
 }
 
 func (z *ZooKeeper) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, z.Labels, override))
 }
 
@@ -194,14 +194,14 @@ func (z *ZooKeeper) SetDefaults() {
 
 	z.setDefaultContainerSecurityContext(&zkVersion, &z.Spec.PodTemplate)
 
-	dbContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.Containers, ZooKeeperContainerName)
+	dbContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.Containers, kubedb.ZooKeeperContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResources)
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 
-	initContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.InitContainers, ZooKeeperInitContainerName)
+	initContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.InitContainers, kubedb.ZooKeeperInitContainerName)
 	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
+		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 
 	z.SetHealthCheckerDefaults()
@@ -210,7 +210,7 @@ func (z *ZooKeeper) SetDefaults() {
 			z.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
 		}
 		if z.Spec.Monitor.Prometheus != nil && z.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-			z.Spec.Monitor.Prometheus.Exporter.Port = ZooKeeperMetricsPort
+			z.Spec.Monitor.Prometheus.Exporter.Port = kubedb.ZooKeeperMetricsPort
 		}
 		z.Spec.Monitor.SetDefaults()
 	}
@@ -227,10 +227,10 @@ func (z *ZooKeeper) setDefaultContainerSecurityContext(zkVersion *catalog.ZooKee
 		podTemplate.Spec.SecurityContext.FSGroup = zkVersion.Spec.SecurityContext.RunAsUser
 	}
 
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, ZooKeeperContainerName)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.ZooKeeperContainerName)
 	if container == nil {
 		container = &core.Container{
-			Name: ZooKeeperContainerName,
+			Name: kubedb.ZooKeeperContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -241,10 +241,10 @@ func (z *ZooKeeper) setDefaultContainerSecurityContext(zkVersion *catalog.ZooKee
 
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, ZooKeeperInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ZooKeeperInitContainerName)
 	if initContainer == nil {
 		initContainer = &core.Container{
-			Name: ZooKeeperInitContainerName,
+			Name: kubedb.ZooKeeperInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
@@ -299,7 +299,7 @@ func (z zookeeperStatsService) ServiceMonitorAdditionalLabels() map[string]strin
 }
 
 func (z zookeeperStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (z zookeeperStatsService) Scheme() string {
@@ -315,7 +315,7 @@ func (z *ZooKeeper) StatsService() mona.StatsAccessor {
 }
 
 func (z *ZooKeeper) StatsServiceLabels() map[string]string {
-	return z.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return z.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 type ZooKeeperApp struct {

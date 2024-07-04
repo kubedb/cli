@@ -80,7 +80,7 @@ func (rs RedisSentinel) ServiceLabels(alias ServiceAlias, extraLabels ...map[str
 }
 
 func (rs RedisSentinel) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(rs.Labels, override))
 }
 
@@ -116,7 +116,7 @@ func (rs RedisSentinel) GoverningServiceName() string {
 }
 
 func (r RedisSentinel) Address() string {
-	return fmt.Sprintf("%v.%v.svc:%d", r.Name, r.Namespace, RedisSentinelPort)
+	return fmt.Sprintf("%v.%v.svc:%d", r.Name, r.Namespace, kubedb.RedisSentinelPort)
 }
 
 func (rs RedisSentinel) ConfigSecretName() string {
@@ -160,7 +160,7 @@ func (rs redisSentinelStatsService) ServiceMonitorAdditionalLabels() map[string]
 }
 
 func (rs redisSentinelStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (r redisSentinelStatsService) Scheme() string {
@@ -176,7 +176,7 @@ func (rs RedisSentinel) StatsService() mona.StatsAccessor {
 }
 
 func (rs RedisSentinel) StatsServiceLabels() map[string]string {
-	return rs.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return rs.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion, topology *core_util.Topology) {
@@ -209,7 +209,7 @@ func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion, topology *
 	}
 	rs.SetTLSDefaults()
 	rs.SetHealthCheckerDefaults()
-	apis.SetDefaultResourceLimits(&rs.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&rs.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 }
 
 func (rs *RedisSentinel) SetHealthCheckerDefaults() {

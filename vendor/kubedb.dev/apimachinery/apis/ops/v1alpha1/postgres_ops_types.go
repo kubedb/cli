@@ -18,7 +18,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	apis "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -55,11 +55,11 @@ type PostgresTLSSpec struct {
 
 	// SSLMode for both standalone and clusters. [disable;allow;prefer;require;verify-ca;verify-full]
 	// +optional
-	SSLMode apis.PostgresSSLMode `json:"sslMode,omitempty"`
+	SSLMode dbapi.PostgresSSLMode `json:"sslMode,omitempty"`
 
 	// ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
 	// +optional
-	ClientAuthMode apis.PostgresClientAuthMode `json:"clientAuthMode,omitempty"`
+	ClientAuthMode dbapi.PostgresClientAuthMode `json:"clientAuthMode,omitempty"`
 }
 
 // PostgresOpsRequestSpec is the spec for PostgresOpsRequest

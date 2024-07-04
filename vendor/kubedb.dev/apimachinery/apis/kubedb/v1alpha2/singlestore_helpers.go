@@ -111,7 +111,7 @@ func (s singlestoreStatsService) ServiceMonitorAdditionalLabels() map[string]str
 }
 
 func (s singlestoreStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (s singlestoreStatsService) Scheme() string {
@@ -129,7 +129,7 @@ func (s singlestoreStatsService) TLSConfig() *promapi.TLSConfig {
 					LocalObjectReference: core.LocalObjectReference{
 						Name: s.GetCertSecretName(SinglestoreClientCert),
 					},
-					Key: CACert,
+					Key: kubedb.CACert,
 				},
 			},
 			Cert: promapi.SecretOrConfigMap{
@@ -156,7 +156,7 @@ func (s Singlestore) StatsService() mona.StatsAccessor {
 }
 
 func (s Singlestore) StatsServiceLabels() map[string]string {
-	return s.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return s.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (s *Singlestore) OffshootName() string {
@@ -184,7 +184,7 @@ func (s *Singlestore) DefaultUserCredSecretName(username string) string {
 }
 
 func (s *Singlestore) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[metautil.ComponentLabelKey] = ComponentDatabase
+	selector[metautil.ComponentLabelKey] = kubedb.ComponentDatabase
 	return metautil.FilterKeys(kubedb.GroupName, selector, metautil.OverwriteKeys(nil, s.Labels, override))
 }
 
@@ -224,7 +224,7 @@ func (s *Singlestore) AggregatorPetSet() string {
 	if s.Spec.Topology.Aggregator.Suffix != "" {
 		ps = metautil.NameWithSuffix(ps, s.Spec.Topology.Aggregator.Suffix)
 	}
-	return metautil.NameWithSuffix(ps, PetSetTypeAggregator)
+	return metautil.NameWithSuffix(ps, kubedb.PetSetTypeAggregator)
 }
 
 func (s *Singlestore) LeafPetSet() string {
@@ -232,7 +232,7 @@ func (s *Singlestore) LeafPetSet() string {
 	if s.Spec.Topology.Leaf.Suffix != "" {
 		ps = metautil.NameWithSuffix(ps, s.Spec.Topology.Leaf.Suffix)
 	}
-	return metautil.NameWithSuffix(ps, PetSetTypeLeaf)
+	return metautil.NameWithSuffix(ps, kubedb.PetSetTypeLeaf)
 }
 
 func (s *Singlestore) PodLabels(podTemplate *ofst.PodTemplateSpec, extraLabels ...map[string]string) map[string]string {
@@ -374,7 +374,7 @@ func (s *Singlestore) SetDefaults() {
 			s.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
 		}
 		if s.Spec.Monitor.Prometheus != nil && s.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-			s.Spec.Monitor.Prometheus.Exporter.Port = SinglestoreExporterPort
+			s.Spec.Monitor.Prometheus.Exporter.Port = kubedb.SinglestoreExporterPort
 		}
 		s.Spec.Monitor.SetDefaults()
 	}
@@ -398,10 +398,10 @@ func (s *Singlestore) setDefaultContainerSecurityContext(sdbVersion *catalog.Sin
 		podTemplate.Spec.SecurityContext.FSGroup = sdbVersion.Spec.SecurityContext.RunAsUser
 	}
 
-	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, SinglestoreContainerName)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SinglestoreContainerName)
 	if container == nil {
 		container = &core.Container{
-			Name: SinglestoreContainerName,
+			Name: kubedb.SinglestoreContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -411,10 +411,10 @@ func (s *Singlestore) setDefaultContainerSecurityContext(sdbVersion *catalog.Sin
 
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, SinglestoreInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.SinglestoreInitContainerName)
 	if initContainer == nil {
 		initContainer = &core.Container{
-			Name: SinglestoreInitContainerName,
+			Name: kubedb.SinglestoreInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
@@ -424,10 +424,10 @@ func (s *Singlestore) setDefaultContainerSecurityContext(sdbVersion *catalog.Sin
 	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 
 	if s.IsClustering() {
-		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, SinglestoreCoordinatorContainerName)
+		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SinglestoreCoordinatorContainerName)
 		if coordinatorContainer == nil {
 			coordinatorContainer = &core.Container{
-				Name: SinglestoreCoordinatorContainerName,
+				Name: kubedb.SinglestoreCoordinatorContainerName,
 			}
 		}
 		if coordinatorContainer.SecurityContext == nil {
@@ -485,20 +485,20 @@ func (s *Singlestore) assignDefaultContainerSecurityContext(sdbVersion *catalog.
 }
 
 func (s *Singlestore) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
-	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, SinglestoreContainerName)
+	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SinglestoreContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&dbContainer.Resources, DefaultResourcesMemoryIntensiveSDB)
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensiveSDB)
 	}
 
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, SinglestoreInitContainerName)
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.SinglestoreInitContainerName)
 	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&initContainer.Resources, DefaultInitContainerResource)
+		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 
 	if s.IsClustering() {
-		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, SinglestoreCoordinatorContainerName)
+		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SinglestoreCoordinatorContainerName)
 		if coordinatorContainer != nil && (coordinatorContainer.Resources.Requests == nil && coordinatorContainer.Resources.Limits == nil) {
-			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, CoordinatorDefaultResources)
+			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
 		}
 	}
 }

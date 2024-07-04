@@ -81,7 +81,7 @@ func (p PerconaXtraDB) ServiceLabels(alias ServiceAlias, extraLabels ...map[stri
 }
 
 func (p PerconaXtraDB) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, p.Labels, override))
 }
 
@@ -183,7 +183,7 @@ func (p perconaXtraDBStatsService) ServiceMonitorAdditionalLabels() map[string]s
 }
 
 func (p perconaXtraDBStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (p perconaXtraDBStatsService) Scheme() string {
@@ -199,7 +199,7 @@ func (p PerconaXtraDB) StatsService() mona.StatsAccessor {
 }
 
 func (p PerconaXtraDB) StatsServiceLabels() map[string]string {
-	return p.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return p.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (p PerconaXtraDB) PrimaryServiceDNS() string {
@@ -212,7 +212,7 @@ func (p *PerconaXtraDB) SetDefaults(pVersion *v1alpha1.PerconaXtraDBVersion, top
 	}
 
 	if p.Spec.Replicas == nil {
-		p.Spec.Replicas = pointer.Int32P(PerconaXtraDBDefaultClusterSize)
+		p.Spec.Replicas = pointer.Int32P(kubedb.PerconaXtraDBDefaultClusterSize)
 	}
 
 	if p.Spec.StorageType == "" {
@@ -233,7 +233,7 @@ func (p *PerconaXtraDB) SetDefaults(pVersion *v1alpha1.PerconaXtraDBVersion, top
 
 	p.setDefaultAffinity(&p.Spec.PodTemplate, p.OffshootSelectors(), topology)
 	p.SetTLSDefaults()
-	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&p.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 	p.Spec.Monitor.SetDefaults()
 	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil {
 		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
@@ -388,7 +388,7 @@ func (p *PerconaXtraDB) ReplicasAreReady(lister appslister.StatefulSetLister) (b
 }
 
 func (p *PerconaXtraDB) CertMountPath(alias PerconaXtraDBCertificateAlias) string {
-	return filepath.Join(PerconaXtraDBCertMountPath, string(alias))
+	return filepath.Join(kubedb.PerconaXtraDBCertMountPath, string(alias))
 }
 
 func (p *PerconaXtraDB) CertFilePath(certAlias PerconaXtraDBCertificateAlias, certFileName string) string {

@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"log"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 )
 
 const (

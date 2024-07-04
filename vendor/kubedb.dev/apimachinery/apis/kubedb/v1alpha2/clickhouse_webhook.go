@@ -22,6 +22,7 @@ import (
 	"fmt"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	"kubedb.dev/apimachinery/apis/kubedb"
 
 	core "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -244,7 +245,7 @@ func (r *ClickHouse) ValidateVersion(db *ClickHouse) error {
 }
 
 var clickhouseReservedVolumes = []string{
-	ClickHouseVolumeData,
+	kubedb.ClickHouseVolumeData,
 }
 
 func (r *ClickHouse) validateVolumes(podTemplate *ofst.PodTemplateSpec) error {
@@ -265,7 +266,7 @@ func (r *ClickHouse) validateVolumes(podTemplate *ofst.PodTemplateSpec) error {
 }
 
 var clickhouseReservedVolumeMountPaths = []string{
-	ClickHouseDataDir,
+	kubedb.ClickHouseDataDir,
 }
 
 func (r *ClickHouse) validateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {

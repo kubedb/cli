@@ -22,7 +22,8 @@ import (
 	"log"
 	"os"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -84,7 +85,7 @@ Example curl commands:
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.ElasticsearchRestPort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, kubedb.ElasticsearchRestPort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -127,7 +128,7 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace string) (*elastic
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().Elasticsearches(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().Elasticsearches(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

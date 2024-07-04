@@ -12,20 +12,29 @@ import (
 )
 
 const (
-	// PgpoolOpsRequestTypeVerticalScaling is a PgpoolOpsRequestType of type VerticalScaling.
-	PgpoolOpsRequestTypeVerticalScaling PgpoolOpsRequestType = "VerticalScaling"
+	// PgpoolOpsRequestTypeUpdateVersion is a PgpoolOpsRequestType of type UpdateVersion.
+	PgpoolOpsRequestTypeUpdateVersion PgpoolOpsRequestType = "UpdateVersion"
 	// PgpoolOpsRequestTypeRestart is a PgpoolOpsRequestType of type Restart.
 	PgpoolOpsRequestTypeRestart PgpoolOpsRequestType = "Restart"
 	// PgpoolOpsRequestTypeReconfigure is a PgpoolOpsRequestType of type Reconfigure.
 	PgpoolOpsRequestTypeReconfigure PgpoolOpsRequestType = "Reconfigure"
+	// PgpoolOpsRequestTypeVerticalScaling is a PgpoolOpsRequestType of type VerticalScaling.
+	PgpoolOpsRequestTypeVerticalScaling PgpoolOpsRequestType = "VerticalScaling"
+	// PgpoolOpsRequestTypeHorizontalScaling is a PgpoolOpsRequestType of type HorizontalScaling.
+	PgpoolOpsRequestTypeHorizontalScaling PgpoolOpsRequestType = "HorizontalScaling"
+	// PgpoolOpsRequestTypeReconfigureTLS is a PgpoolOpsRequestType of type ReconfigureTLS.
+	PgpoolOpsRequestTypeReconfigureTLS PgpoolOpsRequestType = "ReconfigureTLS"
 )
 
 var ErrInvalidPgpoolOpsRequestType = fmt.Errorf("not a valid PgpoolOpsRequestType, try [%s]", strings.Join(_PgpoolOpsRequestTypeNames, ", "))
 
 var _PgpoolOpsRequestTypeNames = []string{
-	string(PgpoolOpsRequestTypeVerticalScaling),
+	string(PgpoolOpsRequestTypeUpdateVersion),
 	string(PgpoolOpsRequestTypeRestart),
 	string(PgpoolOpsRequestTypeReconfigure),
+	string(PgpoolOpsRequestTypeVerticalScaling),
+	string(PgpoolOpsRequestTypeHorizontalScaling),
+	string(PgpoolOpsRequestTypeReconfigureTLS),
 }
 
 // PgpoolOpsRequestTypeNames returns a list of possible string values of PgpoolOpsRequestType.
@@ -38,9 +47,12 @@ func PgpoolOpsRequestTypeNames() []string {
 // PgpoolOpsRequestTypeValues returns a list of the values for PgpoolOpsRequestType
 func PgpoolOpsRequestTypeValues() []PgpoolOpsRequestType {
 	return []PgpoolOpsRequestType{
-		PgpoolOpsRequestTypeVerticalScaling,
+		PgpoolOpsRequestTypeUpdateVersion,
 		PgpoolOpsRequestTypeRestart,
 		PgpoolOpsRequestTypeReconfigure,
+		PgpoolOpsRequestTypeVerticalScaling,
+		PgpoolOpsRequestTypeHorizontalScaling,
+		PgpoolOpsRequestTypeReconfigureTLS,
 	}
 }
 
@@ -57,9 +69,12 @@ func (x PgpoolOpsRequestType) IsValid() bool {
 }
 
 var _PgpoolOpsRequestTypeValue = map[string]PgpoolOpsRequestType{
-	"VerticalScaling": PgpoolOpsRequestTypeVerticalScaling,
-	"Restart":         PgpoolOpsRequestTypeRestart,
-	"Reconfigure":     PgpoolOpsRequestTypeReconfigure,
+	"UpdateVersion":     PgpoolOpsRequestTypeUpdateVersion,
+	"Restart":           PgpoolOpsRequestTypeRestart,
+	"Reconfigure":       PgpoolOpsRequestTypeReconfigure,
+	"VerticalScaling":   PgpoolOpsRequestTypeVerticalScaling,
+	"HorizontalScaling": PgpoolOpsRequestTypeHorizontalScaling,
+	"ReconfigureTLS":    PgpoolOpsRequestTypeReconfigureTLS,
 }
 
 // ParsePgpoolOpsRequestType attempts to convert a string to a PgpoolOpsRequestType.

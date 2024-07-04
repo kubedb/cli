@@ -21,7 +21,7 @@ import (
 	"errors"
 	"fmt"
 
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -43,7 +43,7 @@ func (r *PgpoolAutoscaler) Default() {
 }
 
 func (r *PgpoolAutoscaler) setDefaults() {
-	var db dbapi.Pgpool
+	var db olddbapi.Pgpool
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      r.Spec.DatabaseRef.Name,
 		Namespace: r.Namespace,
@@ -93,7 +93,7 @@ func (r *PgpoolAutoscaler) validate() error {
 	if r.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	var pp dbapi.Pgpool
+	var pp olddbapi.Pgpool
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      r.Spec.DatabaseRef.Name,
 		Namespace: r.Namespace,

@@ -104,6 +104,7 @@ const (
 	KubeStashBackendJobClusterRole         = "kubestash-backend-job"
 	KubeStashStorageInitializerClusterRole = "kubestash-storage-initializer-job"
 	KubeStashPopulatorJobClusterRole       = "kubestash-populator-job"
+	KubeStashRetentionPolicyJobClusterRole = "kubestash-retention-policy-job"
 )
 
 // Reconciliation related

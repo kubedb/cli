@@ -23,7 +23,7 @@ import (
 	"strings"
 	"unicode"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"github.com/fatih/camelcase"
 	"golang.org/x/text/cases"

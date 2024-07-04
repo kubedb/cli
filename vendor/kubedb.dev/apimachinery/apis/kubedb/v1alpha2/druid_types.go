@@ -80,7 +80,8 @@ type DruidSpec struct {
 	//TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// MetadataStorage contains information for Druid to connect to external dependency metadata storage
-	MetadataStorage *MetadataStorage `json:"metadataStorage"`
+	// +optional
+	MetadataStorage *MetadataStorage `json:"metadataStorage,omitempty"`
 
 	// DeepStorage contains specification for druid to connect to the deep storage
 	DeepStorage *DeepStorageSpec `json:"deepStorage"`
@@ -156,7 +157,7 @@ type DruidDataNode struct {
 }
 
 type MetadataStorage struct {
-	// Name of the appbinding of zookeeper
+	// Name and namespace of the appbinding of metadata storage
 	// +optional
 	*kmapi.ObjectReference `json:",omitempty"`
 
@@ -167,6 +168,16 @@ type MetadataStorage struct {
 	// If Druid has the permission to create new tables
 	// +optional
 	CreateTables *bool `json:"createTables,omitempty"`
+
+	// +optional
+	LinkedDB string `json:"linkedDB,omitempty"`
+
+	// +optional
+	ExternallyManaged bool `json:"externallyManaged,omitempty"`
+
+	// Version of the MySQL/PG used
+	// +optional
+	Version *string `json:"version,omitempty"`
 }
 
 type DeepStorageSpec struct {
@@ -181,13 +192,20 @@ type DeepStorageSpec struct {
 }
 
 type ZookeeperRef struct {
-	// Name of the appbinding of zookeeper
+	// Name and namespace of appbinding of zookeeper
 	// +optional
 	*kmapi.ObjectReference `json:",omitempty"`
 
 	// Base ZooKeeperSpec path
 	// +optional
 	PathsBase string `json:"pathsBase,omitempty"`
+
+	// +optional
+	ExternallyManaged bool `json:"externallyManaged,omitempty"`
+
+	// Version of the ZK used
+	// +optional
+	Version *string `json:"version,omitempty"`
 }
 
 // DruidStatus defines the observed state of Druid

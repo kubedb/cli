@@ -19,7 +19,7 @@ package elasticsearch
 import (
 	"context"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	core "k8s.io/api/core/v1"
 )
@@ -86,8 +86,8 @@ type ESClient interface {
 	CreateIndex(index string) error
 	DeleteIndex(index string) error
 	GetIndicesInfo() ([]interface{}, error)
-	GetClusterWriteStatus(ctx context.Context, db *api.Elasticsearch) error
-	GetClusterReadStatus(ctx context.Context, db *api.Elasticsearch) error
+	GetClusterWriteStatus(ctx context.Context, db *dbapi.Elasticsearch) error
+	GetClusterReadStatus(ctx context.Context, db *dbapi.Elasticsearch) error
 	GetTotalDiskUsage(ctx context.Context) (string, error)
 	GetDBUserRole(ctx context.Context) (error, bool)
 	IndexExistsOrNot(index string) error

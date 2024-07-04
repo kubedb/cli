@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 
-	kdm "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/crds"
 	"kubedb.dev/apimachinery/pkg/double_optin"
 
@@ -56,27 +56,27 @@ func GetPostgresSchemaFinalizerString() string {
 }
 
 func GetPostgresInitVolumeNameForPod(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-vol")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-vol")
 }
 
 func GetPostgresInitJobContainerName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres)
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres)
 }
 
 func GetPostgresSchemaJobName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-job")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-job")
 }
 
-func GetPostgresHostName(db *kdm.Postgres) string {
+func GetPostgresHostName(db *dbapi.Postgres) string {
 	return fmt.Sprintf("%v.%v.svc", db.ServiceName(), db.Namespace)
 }
 
 func GetPostgresSchemaSecretEngineName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-engine")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-engine")
 }
 
 func GetPostgresSchemaRoleName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-role")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-role")
 }
 
 func GetPostgresSchemaCreationStatements(pgSchema *PostgresDatabase) []string {
@@ -95,19 +95,19 @@ func GetPostgresSchemaRevocationStatements(pgSchema *PostgresDatabase) []string 
 }
 
 func GetPostgresSchemaRoleSecretAccessName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-req")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-req")
 }
 
 func GetPostgresSchemaAppBinding(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-appbdng")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-appbdng")
 }
 
 func GetPostgresSchemaRestoreSessionName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-restore")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-restore")
 }
 
 func GetPostgresSchemaSecretName(pgSchema *PostgresDatabase) string {
-	return kmeta.NameWithSuffix(pgSchema.Name, kdm.ResourceSingularPostgres+"-secret")
+	return kmeta.NameWithSuffix(pgSchema.Name, dbapi.ResourceSingularPostgres+"-secret")
 }
 
 func (in *PostgresDatabase) CheckDoubleOptIn(ctx context.Context, client client.Client) (bool, error) {
@@ -122,7 +122,7 @@ func (in *PostgresDatabase) CheckDoubleOptIn(ctx context.Context, client client.
 	}
 
 	// Get the database server
-	var pg kdm.Postgres
+	var pg dbapi.Postgres
 	err = client.Get(ctx, types.NamespacedName{
 		Namespace: schema.Spec.Database.ServerRef.Namespace,
 		Name:      schema.Spec.Database.ServerRef.Name,

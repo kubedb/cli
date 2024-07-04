@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -53,8 +53,8 @@ type MariaDBInsight struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   MariaDBInsightSpec `json:"spec,omitempty"`
-	Status api.MariaDBStatus  `json:"status,omitempty"`
+	Spec   MariaDBInsightSpec  `json:"spec,omitempty"`
+	Status dbapi.MariaDBStatus `json:"status,omitempty"`
 }
 
 // MariaDBInsightList contains a list of MariaDBInsight

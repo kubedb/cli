@@ -76,7 +76,7 @@ func (m MariaDB) PodControllerLabels() map[string]string {
 }
 
 func (m MariaDB) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
@@ -169,7 +169,7 @@ func (m mariadbStatsService) ServiceMonitorAdditionalLabels() map[string]string 
 }
 
 func (m mariadbStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (m mariadbStatsService) Scheme() string {
@@ -185,7 +185,7 @@ func (m MariaDB) StatsService() mona.StatsAccessor {
 }
 
 func (m MariaDB) StatsServiceLabels() map[string]string {
-	return m.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return m.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (m MariaDB) PrimaryServiceDNS() string {
@@ -222,7 +222,7 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion, topology *core
 	m.setDefaultAffinity(&m.Spec.PodTemplate, m.OffshootSelectors(), topology)
 	m.SetTLSDefaults()
 	m.SetHealthCheckerDefaults()
-	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 
 	m.Spec.Monitor.SetDefaults()
 	if m.Spec.Monitor != nil && m.Spec.Monitor.Prometheus != nil {
@@ -375,7 +375,7 @@ func (m *MariaDB) InlineConfigSecretName() string {
 }
 
 func (m *MariaDB) CertMountPath(alias MariaDBCertificateAlias) string {
-	return filepath.Join(PerconaXtraDBCertMountPath, string(alias))
+	return filepath.Join(kubedb.PerconaXtraDBCertMountPath, string(alias))
 }
 
 func (m *MariaDB) CertFilePath(certAlias MariaDBCertificateAlias, certFileName string) string {

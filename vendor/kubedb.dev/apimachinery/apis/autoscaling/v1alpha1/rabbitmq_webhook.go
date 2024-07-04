@@ -21,7 +21,7 @@ import (
 	"errors"
 	"fmt"
 
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -43,7 +43,7 @@ func (r *RabbitMQAutoscaler) Default() {
 }
 
 func (r *RabbitMQAutoscaler) setDefaults() {
-	var db dbapi.RabbitMQ
+	var db olddbapi.RabbitMQ
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      r.Spec.DatabaseRef.Name,
 		Namespace: r.Namespace,
@@ -97,7 +97,7 @@ func (r *RabbitMQAutoscaler) validate() error {
 	if r.Spec.DatabaseRef == nil {
 		return errors.New("databaseRef can't be empty")
 	}
-	var kf dbapi.RabbitMQ
+	var kf olddbapi.RabbitMQ
 	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
 		Name:      r.Spec.DatabaseRef.Name,
 		Namespace: r.Namespace,

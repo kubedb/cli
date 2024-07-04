@@ -23,7 +23,7 @@ import (
 	"net/http"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	esv6 "github.com/elastic/go-elasticsearch/v6"
 	"github.com/elastic/go-elasticsearch/v6/esapi"
@@ -113,7 +113,7 @@ func (es *ESClientV6) SyncCredentialFromSecret(secret *core.Secret) error {
 	return nil
 }
 
-func (es *ESClientV6) GetClusterWriteStatus(ctx context.Context, db *api.Elasticsearch) error {
+func (es *ESClientV6) GetClusterWriteStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
 	// Build the request index & request body
 	// send the db specs as body
 	indexBody := WriteRequestIndexBody{
@@ -179,7 +179,7 @@ func (es *ESClientV6) GetClusterWriteStatus(ctx context.Context, db *api.Elastic
 	return errors.New("Failed to parse key `errors` in response from write request")
 }
 
-func (es *ESClientV6) GetClusterReadStatus(ctx context.Context, db *api.Elasticsearch) error {
+func (es *ESClientV6) GetClusterReadStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
 	// Perform a read request in writeRequestIndex/writeRequestID (kubedb-system/info) API
 	// Handle error specifically if index has not been created yet
 	res, err := esapi.GetRequest{

@@ -23,7 +23,8 @@ import (
 	"os"
 	"path/filepath"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -64,7 +65,7 @@ func MySQLConnectCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, kubedb.MySQLDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't create tunnel, error: ", err)
 			}
@@ -124,7 +125,7 @@ Examples:
 				log.Fatal("use --file or --command to execute supported commands to a mysql object")
 			}
 
-			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, api.MySQLDatabasePort)
+			tunnel, err := lib.TunnelToDBService(opts.config, dbName, namespace, kubedb.MySQLDatabasePort)
 			if err != nil {
 				log.Fatal("couldn't creat tunnel, error: ", err)
 			}
@@ -181,7 +182,7 @@ func newmysqlOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().MySQLs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().MySQLs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

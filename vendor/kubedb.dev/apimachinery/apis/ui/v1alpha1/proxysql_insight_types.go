@@ -14,7 +14,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -61,8 +61,8 @@ type ProxySQLInsight struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   ProxySQLInsightSpec `json:"spec,omitempty"`
-	Status api.ProxySQLStatus  `json:"status,omitempty"`
+	Spec   ProxySQLInsightSpec  `json:"spec,omitempty"`
+	Status dbapi.ProxySQLStatus `json:"status,omitempty"`
 }
 
 // ProxySQLInsightList contains a list of ProxySQLInsight

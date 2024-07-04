@@ -19795,6 +19795,30 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCal
 							Format: "",
 						},
 					},
+					"ownerID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"ownerType": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"apiEndpoint": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"caBundle": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"uid"},
 			},
@@ -23844,14 +23868,14 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsight(ref common.Refere
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ElasticsearchStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsightSpec"},
 	}
 }
 
@@ -24446,14 +24470,14 @@ func schema_apimachinery_apis_ui_v1alpha1_MariaDBInsight(ref common.ReferenceCal
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MariaDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightSpec"},
 	}
 }
 
@@ -25049,14 +25073,14 @@ func schema_apimachinery_apis_ui_v1alpha1_MongoDBInsight(ref common.ReferenceCal
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.MongoDBStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoDBStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MongoDBInsightSpec"},
 	}
 }
 
@@ -25559,14 +25583,14 @@ func schema_apimachinery_apis_ui_v1alpha1_MySQLInsight(ref common.ReferenceCallb
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.MySQLStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MySQLStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.MySQLStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.MySQLInsightSpec"},
 	}
 }
 
@@ -27563,14 +27587,14 @@ func schema_apimachinery_apis_ui_v1alpha1_PgBouncerInsight(ref common.ReferenceC
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgBouncerStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.PgBouncerStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PgBouncerStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PgBouncerInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.PgBouncerStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PgBouncerInsightSpec"},
 	}
 }
 
@@ -28544,14 +28568,14 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresInsight(ref common.ReferenceCa
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresInsightSpec"},
 	}
 }
 
@@ -29242,14 +29266,14 @@ func schema_apimachinery_apis_ui_v1alpha1_ProxySQLInsight(ref common.ReferenceCa
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLInsightSpec"},
 	}
 }
 
@@ -29827,14 +29851,14 @@ func schema_apimachinery_apis_ui_v1alpha1_RedisInsight(ref common.ReferenceCallb
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisStatus"),
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.RedisStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightSpec"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisStatus", "kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightSpec"},
 	}
 }
 

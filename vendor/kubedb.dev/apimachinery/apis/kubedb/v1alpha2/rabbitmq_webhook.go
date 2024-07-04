@@ -21,6 +21,7 @@ import (
 	"errors"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	"kubedb.dev/apimachinery/apis/kubedb"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -163,9 +164,9 @@ func (r *RabbitMQ) ValidateVersion(db *RabbitMQ) error {
 }
 
 var rabbitmqReservedVolumes = []string{
-	RabbitMQVolumeData,
-	RabbitMQVolumeConfig,
-	RabbitMQVolumeTempConfig,
+	kubedb.RabbitMQVolumeData,
+	kubedb.RabbitMQVolumeConfig,
+	kubedb.RabbitMQVolumeTempConfig,
 }
 
 func (r *RabbitMQ) validateVolumes(db *RabbitMQ) error {
@@ -191,11 +192,11 @@ func (r *RabbitMQ) validateVolumes(db *RabbitMQ) error {
 }
 
 var rabbitmqReservedVolumeMountPaths = []string{
-	RabbitMQConfigDir,
-	RabbitMQTempConfigDir,
-	RabbitMQDataDir,
-	RabbitMQPluginsDir,
-	RabbitMQCertDir,
+	kubedb.RabbitMQConfigDir,
+	kubedb.RabbitMQTempConfigDir,
+	kubedb.RabbitMQDataDir,
+	kubedb.RabbitMQPluginsDir,
+	kubedb.RabbitMQCertDir,
 }
 
 func (r *RabbitMQ) validateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {

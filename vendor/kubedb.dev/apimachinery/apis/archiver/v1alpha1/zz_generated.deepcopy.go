@@ -22,7 +22,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -244,7 +244,7 @@ func (in *MariaDBArchiverSpec) DeepCopyInto(out *MariaDBArchiverSpec) {
 	*out = *in
 	if in.Databases != nil {
 		in, out := &in.Databases, &out.Databases
-		*out = new(v1alpha2.AllowedConsumers)
+		*out = new(kubedbv1.AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RetentionPolicy != nil {
@@ -382,7 +382,7 @@ func (in *MongoDBArchiverSpec) DeepCopyInto(out *MongoDBArchiverSpec) {
 	*out = *in
 	if in.Databases != nil {
 		in, out := &in.Databases, &out.Databases
-		*out = new(v1alpha2.AllowedConsumers)
+		*out = new(kubedbv1.AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RetentionPolicy != nil {
@@ -520,7 +520,7 @@ func (in *MySQLArchiverSpec) DeepCopyInto(out *MySQLArchiverSpec) {
 	*out = *in
 	if in.Databases != nil {
 		in, out := &in.Databases, &out.Databases
-		*out = new(v1alpha2.AllowedConsumers)
+		*out = new(kubedbv1.AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RetentionPolicy != nil {
@@ -658,7 +658,7 @@ func (in *PostgresArchiverSpec) DeepCopyInto(out *PostgresArchiverSpec) {
 	*out = *in
 	if in.Databases != nil {
 		in, out := &in.Databases, &out.Databases
-		*out = new(v1alpha2.AllowedConsumers)
+		*out = new(kubedbv1.AllowedConsumers)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.RetentionPolicy != nil {

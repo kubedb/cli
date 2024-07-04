@@ -132,7 +132,7 @@ func (p *Pgpool) OffshootLabels() map[string]string {
 }
 
 func (p *Pgpool) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentConnectionPooler
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentConnectionPooler
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, p.Labels, override))
 }
 
@@ -202,7 +202,7 @@ func (p PgpoolStatsService) ServiceMonitorAdditionalLabels() map[string]string {
 }
 
 func (p PgpoolStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (p PgpoolStatsService) Scheme() string {
@@ -218,7 +218,7 @@ func (p Pgpool) StatsService() mona.StatsAccessor {
 }
 
 func (p Pgpool) StatsServiceLabels() map[string]string {
-	return p.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return p.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (p *Pgpool) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
@@ -297,10 +297,10 @@ func (p *Pgpool) SetSecurityContext(ppVersion *catalog.PgpoolVersion, podTemplat
 		podTemplate.Spec.SecurityContext.FSGroup = ppVersion.Spec.SecurityContext.RunAsUser
 	}
 
-	container := core_util.GetContainerByName(podTemplate.Spec.Containers, PgpoolContainerName)
+	container := core_util.GetContainerByName(podTemplate.Spec.Containers, kubedb.PgpoolContainerName)
 	if container == nil {
 		container = &core.Container{
-			Name: PgpoolContainerName,
+			Name: kubedb.PgpoolContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
@@ -334,9 +334,9 @@ func (p *Pgpool) assignContainerSecurityContext(ppVersion *catalog.PgpoolVersion
 }
 
 func (p *Pgpool) setContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
-	ppContainer := core_util.GetContainerByName(podTemplate.Spec.Containers, PgpoolContainerName)
+	ppContainer := core_util.GetContainerByName(podTemplate.Spec.Containers, kubedb.PgpoolContainerName)
 	if ppContainer != nil && (ppContainer.Resources.Requests == nil && ppContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&ppContainer.Resources, DefaultResources)
+		apis.SetDefaultResourceLimits(&ppContainer.Resources, kubedb.DefaultResources)
 	}
 }
 
@@ -379,7 +379,7 @@ func (p *Pgpool) SetDefaults() {
 			p.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
 		}
 		if p.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-			p.Spec.Monitor.Prometheus.Exporter.Port = PgpoolMonitoringDefaultServicePort
+			p.Spec.Monitor.Prometheus.Exporter.Port = kubedb.PgpoolMonitoringDefaultServicePort
 		}
 		p.Spec.Monitor.SetDefaults()
 		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {

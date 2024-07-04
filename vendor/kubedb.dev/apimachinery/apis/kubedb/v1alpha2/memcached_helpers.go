@@ -79,7 +79,7 @@ func (m Memcached) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]s
 }
 
 func (m Memcached) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = ComponentDatabase
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
@@ -160,7 +160,7 @@ func (m memcachedStatsService) ServiceMonitorAdditionalLabels() map[string]strin
 }
 
 func (m memcachedStatsService) Path() string {
-	return DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (m memcachedStatsService) Scheme() string {
@@ -176,7 +176,7 @@ func (m Memcached) StatsService() mona.StatsAccessor {
 }
 
 func (m Memcached) StatsServiceLabels() map[string]string {
-	return m.ServiceLabels(StatsServiceAlias, map[string]string{LabelRole: RoleStats})
+	return m.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (m *Memcached) SetDefaults(mcVersion *catalog.MemcachedVersion) {
@@ -195,7 +195,7 @@ func (m *Memcached) SetDefaults(mcVersion *catalog.MemcachedVersion) {
 
 	m.Spec.Monitor.SetDefaults()
 	m.SetHealthCheckerDefaults()
-	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, DefaultResources)
+	apis.SetDefaultResourceLimits(&m.Spec.PodTemplate.Spec.Resources, kubedb.DefaultResources)
 }
 
 func (m *Memcached) SetHealthCheckerDefaults() {

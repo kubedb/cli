@@ -241,8 +241,8 @@ const (
 )
 
 // PgBouncerClientAuthMode represents the ClientAuthMode of PgBouncer clusters ( replicaset )
-// We are allowing md5, scram, cert as ClientAuthMode
-// +kubebuilder:validation:Enum=md5;scram;cert;
+// We are allowing md5, scram-sha-256, cert as ClientAuthMode
+// +kubebuilder:validation:Enum=md5;scram-sha-256;cert;
 type PgBouncerClientAuthMode string
 
 const (
@@ -256,7 +256,7 @@ const (
 	// It is a challenge-response scheme that prevents password sniffing on untrusted connections
 	// and supports storing passwords on the server in a cryptographically hashed form that is thought to be secure.
 	// This is the most secure of the currently provided methods, but it is not supported by older client libraries.
-	PgBouncerClientAuthModeScram PgBouncerClientAuthMode = "scram"
+	PgBouncerClientAuthModeScram PgBouncerClientAuthMode = "scram-sha-256"
 
 	// ClientAuthModeCert represents `cert clientcert=1` auth mode where client need to provide cert and private key for authentication.
 	// When server is config with this auth method. Client can't connect with pgbouncer server with password. They need

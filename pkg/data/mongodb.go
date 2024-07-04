@@ -27,7 +27,7 @@ import (
 	"strconv"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/Masterminds/semver/v3"
@@ -213,7 +213,7 @@ func newMongoDBOpts(f cmdutil.Factory, dbName, namespace string) (*mongoDBOpts, 
 		return nil, err
 	}
 
-	db, err := dbClient.KubedbV1alpha2().MongoDBs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
+	db, err := dbClient.KubedbV1().MongoDBs(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}

@@ -58,7 +58,8 @@ type FerretDBSpec struct {
 	Replicas *int32 `json:"replicas,omitempty"`
 
 	// Database authentication secret.
-	// If authSecret is nil, authSecret.externallyManaged will set to backend.externallyManaged
+	// Use this only when backend is internally managed.
+	// For externally managed backend, we will get the authSecret from AppBinding
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
@@ -121,36 +122,16 @@ type FerretDBStatus struct {
 }
 
 type FerretDBBackend struct {
+	// PostgresRef refers to the AppBinding of the backend Postgres server
 	// +optional
-	Postgres *PostgresRef `json:"postgres,omitempty"`
+	PostgresRef *kmapi.ObjectReference `json:"postgresRef,omitempty"`
+	// Which versions pg will be used as backend of ferretdb. default 13.13 when backend internally managed
+	// +optional
+	Version *string `json:"version,omitempty"`
 	// A DB inside backend specifically made for ferretdb
 	// +optional
 	LinkedDB          string `json:"linkedDB,omitempty"`
 	ExternallyManaged bool   `json:"externallyManaged"`
-}
-
-type PostgresRef struct {
-	// Postgres URL address
-	// +optional
-	URL *string `json:"url,omitempty"`
-	// Service information for Postgres
-	// +optional
-	Service *PostgresServiceRef `json:"service,omitempty"`
-	// Which versions pg will be used as backend of ferretdb
-	// +optional
-	Version *string `json:"version,omitempty"`
-}
-
-type PostgresServiceRef struct {
-	// +optional
-	Name string `json:"name,omitempty"`
-	// +optional
-	Namespace string `json:"namespace,omitempty"`
-	// PgPort is used because the service referred to the
-	// pg pod can have any port between 1 and 65535, inclusive
-	// but targetPort is fixed to 5432
-	// +optional
-	PgPort int32 `json:"pgPort,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client
