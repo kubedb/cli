@@ -27,7 +27,7 @@ import (
 	"strconv"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/Masterminds/semver/v3"
@@ -187,7 +187,7 @@ func DropMongoDBDataCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type mongoDBOpts struct {
-	db       *api.MongoDB
+	db       *dbapi.MongoDB
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
 
@@ -218,7 +218,7 @@ func newMongoDBOpts(f cmdutil.Factory, dbName, namespace string) (*mongoDBOpts, 
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("mongodb %s/%s is not ready", namespace, dbName)
 	}
 
@@ -384,7 +384,7 @@ func (opts *mongoDBOpts) handleTLS() ([]interface{}, error) {
 		return strings.TrimSpace(user), nil
 	}
 
-	secretName := db.GetCertSecretName(api.MongoDBClientCert, "")
+	secretName := db.GetCertSecretName(dbapi.MongoDBClientCert, "")
 	certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err

@@ -25,7 +25,7 @@ import (
 	"strings"
 	"time"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/cli/pkg/common"
 
 	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
@@ -158,14 +158,14 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 
 func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
 	var buffer []byte
-	_, err := ensureClientCert(opts, apb, opts.DB, api.PostgresClientCert, userName)
+	_, err := ensureClientCert(opts, apb, opts.DB, dbapi.PostgresClientCert, userName)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to ensure client cert %v", err)
 	}
 	tlsSecret := &core.Secret{}
 
 	err = wait.PollUntilContextTimeout(context.Background(), 300*time.Millisecond, 60*time.Minute, true, func(ctx context.Context) (done bool, err error) {
-		sercretName := opts.DB.GetCertSecretName(api.PostgresClientCert) + fmt.Sprintf("-%s", userName)
+		sercretName := opts.DB.GetCertSecretName(dbapi.PostgresClientCert) + fmt.Sprintf("-%s", userName)
 
 		tlsSecret, err = opts.Client.CoreV1().Secrets(ns).Get(ctx, sercretName, metav1.GetOptions{})
 		if kerr.IsNotFound(err) {
@@ -275,7 +275,7 @@ func generateUser(opts *common.PostgresOpts, name string, password string) error
 	return nil
 }
 
-func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgres *api.Postgres, alias api.PostgresCertificateAlias, username string) (kutil.VerbType, error) {
+func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgres *dbapi.Postgres, alias dbapi.PostgresCertificateAlias, username string) (kutil.VerbType, error) {
 	var duration, renewBefore *metav1.Duration
 	var subject *cm_api.X509Subject
 	var dnsNames, ipAddresses, uriSANs, emailSANs []string

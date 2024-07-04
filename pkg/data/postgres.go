@@ -25,7 +25,7 @@ import (
 	"strconv"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/spf13/cobra"
@@ -46,7 +46,7 @@ const (
 )
 
 type postgresOpts struct {
-	db       *api.Postgres
+	db       *dbapi.Postgres
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -76,7 +76,7 @@ func newPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*postgresOpts
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("postgres %s/%s is not ready", namespace, dbName)
 	}
 
@@ -296,7 +296,7 @@ func (opts *postgresOpts) getShellCommand(command string) string {
 
 	cmd := ""
 	if db.Spec.TLS != nil {
-		if db.Spec.ClientAuthMode == api.ClientAuthModeCert {
+		if db.Spec.ClientAuthMode == dbapi.ClientAuthModeCert {
 			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGSSLCERT='%s' PGSSLKEY='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, pgCertFile, pgKeyFile, opts.pass, opts.username, command)
 		} else {
 			cmd = fmt.Sprintf("kubectl exec -n %s %s -c postgres -- env PGSSLMODE='%s' PGSSLROOTCERT='%s' PGPASSWORD='%s' psql -d postgres -U %s -c '%s'", db.Namespace, svcName, db.Spec.SSLMode, pgCaFile, opts.pass, opts.username, command)

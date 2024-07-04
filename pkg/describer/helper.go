@@ -23,7 +23,7 @@ import (
 	"strings"
 	"unicode"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"github.com/fatih/camelcase"
 	"golang.org/x/text/cases"
@@ -39,11 +39,11 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
 
-func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w describe.PrefixWriter) {
-	if st == api.StorageTypeEphemeral {
-		w.Write(LEVEL_0, "StorageType:\t%s\n", api.StorageTypeEphemeral)
+func describeStorage(st dbapi.StorageType, pvcSpec *core.PersistentVolumeClaimSpec, w describe.PrefixWriter) {
+	if st == dbapi.StorageTypeEphemeral {
+		w.Write(LEVEL_0, "StorageType:\t%s\n", dbapi.StorageTypeEphemeral)
 	} else {
-		w.Write(LEVEL_0, "StorageType:\t%s\n", api.StorageTypeDurable)
+		w.Write(LEVEL_0, "StorageType:\t%s\n", dbapi.StorageTypeDurable)
 	}
 	if pvcSpec == nil {
 		w.Write(LEVEL_0, "No volumes.\n")
@@ -63,7 +63,7 @@ func describeStorage(st api.StorageType, pvcSpec *core.PersistentVolumeClaimSpec
 	}
 }
 
-func describeInitialization(init *api.InitSpec, w describe.PrefixWriter) {
+func describeInitialization(init *dbapi.InitSpec, w describe.PrefixWriter) {
 	if init == nil {
 		return
 	}
@@ -242,7 +242,7 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 	}
 }
 
-func showSecret(client kubernetes.Interface, namespace string, secrets map[string]*api.SecretReference, w describe.PrefixWriter) {
+func showSecret(client kubernetes.Interface, namespace string, secrets map[string]*dbapi.SecretReference, w describe.PrefixWriter) {
 	sc := client.CoreV1().Secrets(namespace)
 
 	for key, sv := range secrets {

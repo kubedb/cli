@@ -24,7 +24,7 @@ import (
 	"path/filepath"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -159,7 +159,7 @@ Examples:
 }
 
 type mongodbOpts struct {
-	db       *api.MongoDB
+	db       *dbapi.MongoDB
 	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
@@ -190,7 +190,7 @@ func newMongodbOpts(f cmdutil.Factory, dbName, namespace string) (*mongodbOpts, 
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("mongodb %s/%s is not ready", namespace, dbName)
 	}
 
@@ -233,7 +233,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.GetCertSecretName(api.MongoDBClientCert, "")
+		secretName := db.GetCertSecretName(dbapi.MongoDBClientCert, "")
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err

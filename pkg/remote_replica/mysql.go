@@ -23,7 +23,7 @@ import (
 	"os"
 	"time"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/cli/pkg/common"
 
 	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
@@ -162,14 +162,14 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 
 func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts *common.MySQLOpts) ([]byte, string, error) {
 	var buffer []byte
-	_, err := ensureMySQLClientCert(opts, apb, opts.DB, api.MySQLClientCert, userName)
+	_, err := ensureMySQLClientCert(opts, apb, opts.DB, dbapi.MySQLClientCert, userName)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to ensure client cert %v", err)
 	}
 	tlsSecret := &core.Secret{}
 
 	err = wait.PollUntilContextTimeout(context.Background(), 300*time.Millisecond, 60*time.Minute, true, func(ctx context.Context) (done bool, err error) {
-		sercretName := opts.DB.GetCertSecretName(api.MySQLClientCert) + fmt.Sprintf("-%s", userName)
+		sercretName := opts.DB.GetCertSecretName(dbapi.MySQLClientCert) + fmt.Sprintf("-%s", userName)
 
 		tlsSecret, err = opts.Client.CoreV1().Secrets(ns).Get(ctx, sercretName, metav1.GetOptions{})
 		if kerr.IsNotFound(err) {
@@ -264,7 +264,7 @@ func generateMySQLUser(opts *common.MySQLOpts, name string, password string) err
 	return nil
 }
 
-func ensureMySQLClientCert(opts *common.MySQLOpts, apb *appApi.AppBinding, mysql *api.MySQL, alias api.MySQLCertificateAlias, username string) (kutil.VerbType, error) {
+func ensureMySQLClientCert(opts *common.MySQLOpts, apb *appApi.AppBinding, mysql *dbapi.MySQL, alias dbapi.MySQLCertificateAlias, username string) (kutil.VerbType, error) {
 	var duration, renewBefore *metav1.Duration
 	var subject *cm_api.X509Subject
 	var dnsNames, ipAddresses, uriSANs, emailSANs []string

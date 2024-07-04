@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"log"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 )
 
 const (
@@ -46,55 +46,55 @@ func getDBMetrics(database, name string, queries map[string]*metrics) map[string
 	label := "service"
 	labelValue := fmt.Sprintf("%s-stats", name)
 	switch database {
-	case api.ResourceSingularElasticsearch:
+	case dbapi.ResourceSingularElasticsearch:
 		queries[database] = &metrics{
 			metric:     "elasticsearch_clusterinfo_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularKafka:
+	case dbapi.ResourceSingularKafka:
 		queries[database] = &metrics{
 			metric:     "kafka_controller_kafkacontroller_activebrokercount",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularMariaDB:
+	case dbapi.ResourceSingularMariaDB:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularMongoDB:
+	case dbapi.ResourceSingularMongoDB:
 		queries[database] = &metrics{
 			metric:     "mongodb_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularMySQL:
+	case dbapi.ResourceSingularMySQL:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularPerconaXtraDB:
+	case dbapi.ResourceSingularPerconaXtraDB:
 		queries[database] = &metrics{
 			metric:     "mysql_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularPostgres:
+	case dbapi.ResourceSingularPostgres:
 		queries[database] = &metrics{
 			metric:     "pg_up",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularProxySQL:
+	case dbapi.ResourceSingularProxySQL:
 		queries[database] = &metrics{
 			metric:     "proxysql_uptime_seconds_total",
 			label:      label,
 			labelValue: labelValue,
 		}
-	case api.ResourceSingularRedis:
+	case dbapi.ResourceSingularRedis:
 		queries[database] = &metrics{
 			metric:     "redis_up",
 			label:      label,

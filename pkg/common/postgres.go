@@ -21,7 +21,7 @@ import (
 	"context"
 	"fmt"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	cm "github.com/cert-manager/cert-manager/pkg/client/clientset/versioned"
@@ -34,7 +34,7 @@ import (
 )
 
 type PostgresOpts struct {
-	DB                *api.Postgres
+	DB                *dbapi.Postgres
 	DBImage           string
 	Config            *rest.Config
 	Client            *kubernetes.Clientset
@@ -77,7 +77,7 @@ func NewPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*PostgresOpts
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("postgres %s/%s is not ready", namespace, dbName)
 	}
 

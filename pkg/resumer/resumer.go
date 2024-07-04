@@ -19,7 +19,7 @@ package resumer
 import (
 	"errors"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -39,17 +39,17 @@ func NewResumer(restClientGetter genericclioptions.RESTClientGetter, mapping *me
 	}
 
 	switch mapping.GroupVersionKind.Kind {
-	case api.ResourceKindElasticsearch:
+	case dbapi.ResourceKindElasticsearch:
 		return NewElasticsearchResumer(clientConfig, onlyDb, onlyBackup)
-	case api.ResourceKindMongoDB:
+	case dbapi.ResourceKindMongoDB:
 		return NewMongoDBResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindMySQL:
+	case dbapi.ResourceKindMySQL:
 		return NewMySQLResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindMariaDB:
+	case dbapi.ResourceKindMariaDB:
 		return NewMariaDBResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindPostgres:
+	case dbapi.ResourceKindPostgres:
 		return NewPostgresResumer(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindRedis:
+	case dbapi.ResourceKindRedis:
 		return NewRedisResumer(clientConfig, onlyDb, onlyBackup)
 	default:
 		return nil, errors.New("unknown object kind")
