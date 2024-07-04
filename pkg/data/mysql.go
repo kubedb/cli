@@ -26,7 +26,7 @@ import (
 	"strconv"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -258,7 +258,7 @@ func (opts *mysqlOpts) dropDataExecCmd() error {
 }
 
 type mysqlOpts struct {
-	db        *api.MySQL
+	db        *dbapi.MySQL
 	dbImage   string
 	config    *rest.Config
 	client    *kubernetes.Clientset
@@ -288,7 +288,7 @@ func newMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("mysql %s/%s is not ready", namespace, dbName)
 	}
 
@@ -323,15 +323,15 @@ func (opts *mysqlOpts) getShellCommand(command string) (string, error) {
 	containerName := "mysql"
 
 	if db.Spec.TLS != nil {
-		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", myCaFile, myCertFile, myKeyFile, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' --host=%s --port=%s --ssl-ca='%v' --ssl-cert='%v' --ssl-key='%v' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, "127.0.0.1", "3306", myCaFile, myCertFile, myKeyFile, dbapi.ResourceSingularMySQL, command)
 	} else {
-		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, api.ResourceSingularMySQL, command)
+		cmd = fmt.Sprintf("kubectl exec -n %s svc/%s -c %s -- mysql -u%s -p'%s' %s -e \"%s\"", db.Namespace, db.OffshootName(), containerName, user, password, dbapi.ResourceSingularMySQL, command)
 	}
 
 	return cmd, err
 }
 
-func (opts *mysqlOpts) GetMySQLAuthCredentials(db *api.MySQL) (string, string, error) {
+func (opts *mysqlOpts) GetMySQLAuthCredentials(db *dbapi.MySQL) (string, string, error) {
 	if db.Spec.AuthSecret == nil {
 		return "", "", errors.New("no database secret")
 	}

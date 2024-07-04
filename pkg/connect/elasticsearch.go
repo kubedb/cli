@@ -23,7 +23,7 @@ import (
 	"os"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -103,7 +103,7 @@ Example curl commands:
 }
 
 type elasticsearchOpts struct {
-	db       *api.Elasticsearch
+	db       *dbapi.Elasticsearch
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -133,7 +133,7 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace string) (*elastic
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("elasticsearch %s/%s is not ready", namespace, dbName)
 	}
 
@@ -165,7 +165,7 @@ func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags,
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
 	if db.Spec.EnableSSL {
-		secretName := db.CertificateName(api.ElasticsearchAdminCert)
+		secretName := db.CertificateName(dbapi.ElasticsearchAdminCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err

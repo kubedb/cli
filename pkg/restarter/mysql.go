@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/apis/ops/v1alpha1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	ops "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
@@ -59,7 +59,7 @@ func (e *MySQLRestarter) Restart(name, namespace string) (string, error) {
 		return "", err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return "", fmt.Errorf("can't restart a database which is not in Ready state")
 	}
 

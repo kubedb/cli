@@ -21,7 +21,7 @@ import (
 	"io"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 
@@ -65,7 +65,7 @@ func (d *MemcachedDescriber) Describe(namespace, name string, describerSettings 
 	return d.describeMemcached(item, selector, events)
 }
 
-func (d *MemcachedDescriber) describeMemcached(item *api.Memcached, selector labels.Selector, events *core.EventList) (string, error) {
+func (d *MemcachedDescriber) describeMemcached(item *dbapi.Memcached, selector labels.Selector, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
 		w := describe.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)

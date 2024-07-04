@@ -19,7 +19,7 @@ package pauser
 import (
 	"errors"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -39,17 +39,17 @@ func NewPauser(restClientGetter genericclioptions.RESTClientGetter, mapping *met
 	}
 
 	switch mapping.GroupVersionKind.Kind {
-	case api.ResourceKindElasticsearch:
+	case dbapi.ResourceKindElasticsearch:
 		return NewElasticsearchPauser(clientConfig, onlyDb, onlyBackup)
-	case api.ResourceKindMongoDB:
+	case dbapi.ResourceKindMongoDB:
 		return NewMongoDBPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindMySQL:
+	case dbapi.ResourceKindMySQL:
 		return NewMySQLPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindMariaDB:
+	case dbapi.ResourceKindMariaDB:
 		return NewMariaDBPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindPostgres:
+	case dbapi.ResourceKindPostgres:
 		return NewPostgresPauser(clientConfig, onlyDb, onlyBackup, onlyArchiver)
-	case api.ResourceKindRedis:
+	case dbapi.ResourceKindRedis:
 		return NewRedisPauser(clientConfig, onlyDb, onlyBackup)
 	default:
 		return nil, errors.New("unknown kind")

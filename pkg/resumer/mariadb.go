@@ -21,7 +21,7 @@ import (
 
 	coreapi "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1/util"
 	pautil "kubedb.dev/cli/pkg/pauser"
@@ -86,7 +86,7 @@ func (e *MariaDBResumer) Resume(name, namespace string) (bool, error) {
 	}
 
 	if e.onlyDb || resumeAll {
-		_, err = dbutil.UpdateMariaDBStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MariaDBStatus) (types.UID, *api.MariaDBStatus) {
+		_, err = dbutil.UpdateMariaDBStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *dbapi.MariaDBStatus) (types.UID, *dbapi.MariaDBStatus) {
 			status.Conditions = condutil.RemoveCondition(status.Conditions, kubedb.DatabasePaused)
 			return db.UID, status
 		}, metav1.UpdateOptions{})

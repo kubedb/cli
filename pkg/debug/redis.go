@@ -23,7 +23,7 @@ import (
 	"os"
 	"path"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	"github.com/spf13/cobra"
@@ -37,7 +37,7 @@ import (
 )
 
 type redisOpts struct {
-	db        *api.Redis
+	db        *dbapi.Redis
 	dbClient  *cs.Clientset
 	podClient *kubernetes.Clientset
 

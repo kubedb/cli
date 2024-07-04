@@ -21,7 +21,7 @@ import (
 	"io"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 
@@ -65,7 +65,7 @@ func (d *RedisDescriber) Describe(namespace, name string, describerSettings desc
 	return d.describeRedis(item, selector, events)
 }
 
-func (d *RedisDescriber) describeRedis(item *api.Redis, selector labels.Selector, events *core.EventList) (string, error) {
+func (d *RedisDescriber) describeRedis(item *dbapi.Redis, selector labels.Selector, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
 		w := describe.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)

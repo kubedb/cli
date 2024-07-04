@@ -26,7 +26,7 @@ import (
 	"strconv"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/data/redisutil"
 	_ "kubedb.dev/db-client-go/redis"
@@ -40,7 +40,7 @@ import (
 )
 
 type redisOpts struct {
-	db       *api.Redis
+	db       *dbapi.Redis
 	dbClient *cs.Clientset
 
 	errWriter *bytes.Buffer
@@ -128,7 +128,7 @@ func InsertRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 func (opts *redisOpts) insertDataInDatabase(rows int) error {
-	if opts.db.Spec.Mode == api.RedisModeCluster {
+	if opts.db.Spec.Mode == dbapi.RedisModeCluster {
 		return opts.insertDataInRedisCluster(rows)
 	}
 
@@ -222,7 +222,7 @@ func VerifyRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 func (opts *redisOpts) verifyRedisData(rows int) error {
-	if opts.db.Spec.Mode == api.RedisModeCluster {
+	if opts.db.Spec.Mode == dbapi.RedisModeCluster {
 		return opts.verifyDataInRedisCluster(rows)
 	}
 	redisCommand := []interface{}{
@@ -310,7 +310,7 @@ func DropRedisDataCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 func (opts *redisOpts) dropRedisData() error {
-	if opts.db.Spec.Mode == api.RedisModeCluster {
+	if opts.db.Spec.Mode == dbapi.RedisModeCluster {
 		return opts.dropRedisClusterData()
 	}
 	redisCommand := []interface{}{
@@ -365,7 +365,7 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, erro
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("redis %s/%s is not ready", namespace, dbName)
 	}
 

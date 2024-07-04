@@ -21,7 +21,7 @@ import (
 
 	coreapi "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1/util"
 
@@ -84,7 +84,7 @@ func (e *MySQLPauser) Pause(name string, namespace string) (bool, error) {
 		}
 	}
 	if e.onlyDb || pauseAll {
-		_, err = dbutil.UpdateMySQLStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.MySQLStatus) (types.UID, *api.MySQLStatus) {
+		_, err = dbutil.UpdateMySQLStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *dbapi.MySQLStatus) (types.UID, *dbapi.MySQLStatus) {
 			status.Conditions = condutil.SetCondition(status.Conditions, condutil.NewCondition(
 				kubedb.DatabasePaused,
 				"Paused by KubeDB CLI tool",

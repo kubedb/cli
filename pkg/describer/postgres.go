@@ -21,7 +21,7 @@ import (
 	"io"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 
@@ -65,7 +65,7 @@ func (d *PostgresDescriber) Describe(namespace, name string, describerSettings d
 	return d.describePostgres(item, selector, events)
 }
 
-func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels.Selector, events *core.EventList) (string, error) {
+func (d *PostgresDescriber) describePostgres(item *dbapi.Postgres, selector labels.Selector, events *core.EventList) (string, error) {
 	return tabbedString(func(out io.Writer) error {
 		w := describe.NewPrefixWriter(out)
 		w.Write(LEVEL_0, "Name:\t%s\n", item.Name)
@@ -87,7 +87,7 @@ func (d *PostgresDescriber) describePostgres(item *api.Postgres, selector labels
 
 		showWorkload(d.client, item.Namespace, selector, w)
 
-		secrets := make(map[string]*api.SecretReference)
+		secrets := make(map[string]*dbapi.SecretReference)
 		if item.Spec.AuthSecret != nil {
 			secrets["Auth"] = item.Spec.AuthSecret
 		}

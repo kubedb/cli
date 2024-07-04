@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -40,17 +40,17 @@ func NewRestarter(restClientGetter genericclioptions.RESTClientGetter, mapping *
 	}
 
 	switch mapping.GroupVersionKind.Kind {
-	case api.ResourceKindElasticsearch:
+	case dbapi.ResourceKindElasticsearch:
 		return NewElasticsearchRestarter(clientConfig)
-	case api.ResourceKindMongoDB:
+	case dbapi.ResourceKindMongoDB:
 		return NewMongoDBRestarter(clientConfig)
-	case api.ResourceKindMySQL:
+	case dbapi.ResourceKindMySQL:
 		return NewMySQLRestarter(clientConfig)
-	case api.ResourceKindRedis:
+	case dbapi.ResourceKindRedis:
 		return NewRedisRestarter(clientConfig)
-	case api.ResourceKindMariaDB:
+	case dbapi.ResourceKindMariaDB:
 		return NewMariaDBRestarter(clientConfig)
-	case api.ResourceKindPostgres:
+	case dbapi.ResourceKindPostgres:
 		return NewPostgresRestarter(clientConfig)
 	default:
 		return nil, fmt.Errorf("unsupporterd kind %s", mapping.GroupVersionKind.Kind)

@@ -24,7 +24,7 @@ import (
 	"path/filepath"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -154,7 +154,7 @@ Examples:
 }
 
 type mariadbOpts struct {
-	db       *api.MariaDB
+	db       *dbapi.MariaDB
 	dbImage  string
 	config   *rest.Config
 	client   *kubernetes.Clientset
@@ -185,7 +185,7 @@ func newmariadbOpts(f cmdutil.Factory, dbName, namespace string) (*mariadbOpts, 
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("mariadb %s/%s is not ready", namespace, dbName)
 	}
 
@@ -228,7 +228,7 @@ func (opts *mariadbOpts) getDockerShellCommand(localPort int, dockerFlags, mysql
 	}
 
 	if db.Spec.TLS != nil {
-		secretName := db.CertificateName(api.MariaDBClientCert)
+		secretName := db.CertificateName(dbapi.MariaDBClientCert)
 		certSecret, err := opts.client.CoreV1().Secrets(db.Namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
 		if err != nil {
 			return nil, err

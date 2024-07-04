@@ -22,7 +22,7 @@ import (
 	"log"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/apimachinery/pkg/factory"
 	"kubedb.dev/cli/pkg/lib"
@@ -43,7 +43,7 @@ const (
 )
 
 type elasticsearchOpts struct {
-	db       *api.Elasticsearch
+	db       *dbapi.Elasticsearch
 	client   *kubernetes.Clientset
 	esClient *es_clientgo.Client
 	username string
@@ -228,7 +228,7 @@ func newElasticsearchOpts(config *rest.Config, dbName, namespace string, tunnel 
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("elasticsearch %s/%s is not ready", namespace, dbName)
 	}
 

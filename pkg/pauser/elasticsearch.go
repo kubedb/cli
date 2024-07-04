@@ -20,7 +20,7 @@ import (
 	"context"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	dbutil "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1/util"
 
@@ -66,7 +66,7 @@ func (e *ElasticsearchPauser) Pause(name, namespace string) (bool, error) {
 	pauseAll := !(e.onlyBackup || e.onlyDb)
 
 	if e.onlyDb || pauseAll {
-		_, err = dbutil.UpdateElasticsearchStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *api.ElasticsearchStatus) (types.UID, *api.ElasticsearchStatus) {
+		_, err = dbutil.UpdateElasticsearchStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *dbapi.ElasticsearchStatus) (types.UID, *dbapi.ElasticsearchStatus) {
 			status.Conditions = condutil.SetCondition(status.Conditions, condutil.NewCondition(
 				kubedb.DatabasePaused,
 				"Paused by KubeDB CLI tool",
