@@ -59,6 +59,8 @@ type DruidVersionSpec struct {
 	// SecurityContext is for the additional security information for the Druid container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // DruidVersionDatabase is the Druid Database image

@@ -39,6 +39,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
+	ofst_util "kmodules.xyz/offshoot-api/util"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
@@ -712,22 +713,26 @@ func (m *MongoDB) setPodTemplateDefaultValues(podTemplate *ofstv2.PodTemplateSpe
 		defaultResource = kubedb.DefaultResourcesCPUIntensive
 	}
 
-	container := EnsureInitContainerExists(podTemplate, kubedb.MongoDBInitInstallContainerName)
-	m.setContainerDefaultValues(container, mgVersion, defaultResource, isArbiter...)
+	container := ofst_util.EnsureInitContainerExists(podTemplate, kubedb.MongoDBInitInstallContainerName)
+	m.setContainerDefaultValues(container, mgVersion, kubedb.DefaultInitContainerResource, isArbiter...)
 
-	container = EnsureContainerExists(podTemplate, kubedb.MongoDBContainerName)
+	container = ofst_util.EnsureContainerExists(podTemplate, kubedb.MongoDBContainerName)
 	m.setContainerDefaultValues(container, mgVersion, defaultResource, isArbiter...)
 
 	if moodDetectorNeeded {
-		container = EnsureContainerExists(podTemplate, kubedb.ReplicationModeDetectorContainerName)
-		m.setContainerDefaultValues(container, mgVersion, defaultResource, isArbiter...)
+		container = ofst_util.EnsureContainerExists(podTemplate, kubedb.ReplicationModeDetectorContainerName)
+		m.setContainerDefaultValues(container, mgVersion, kubedb.CoordinatorDefaultResources, isArbiter...)
 	}
 }
 
 func (m *MongoDB) setContainerDefaultValues(container *core.Container, mgVersion *v1alpha1.MongoDBVersion,
 	defaultResource core.ResourceRequirements, isArbiter ...bool,
 ) {
-	m.setContainerDefaultResources(container, defaultResource)
+	if len(isArbiter) > 0 && isArbiter[0] {
+		m.setContainerDefaultResources(container, kubedb.DefaultArbiter(true))
+	} else {
+		m.setContainerDefaultResources(container, defaultResource)
+	}
 	if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
 	}

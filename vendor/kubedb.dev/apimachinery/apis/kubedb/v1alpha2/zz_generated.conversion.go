@@ -194,16 +194,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
-	if err := s.AddGeneratedConversionFunc((*Gateway)(nil), (*v1.Gateway)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_Gateway_To_v1_Gateway(a.(*Gateway), b.(*v1.Gateway), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1.Gateway)(nil), (*Gateway)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1_Gateway_To_v1alpha2_Gateway(a.(*v1.Gateway), b.(*Gateway), scope)
-	}); err != nil {
-		return err
-	}
 	if err := s.AddGeneratedConversionFunc((*GitRepo)(nil), (*v1.GitRepo)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha2_GitRepo_To_v1_GitRepo(a.(*GitRepo), b.(*v1.GitRepo), scope)
 	}); err != nil {
@@ -494,11 +484,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
-	if err := s.AddGeneratedConversionFunc((*MySQLRouterSpec)(nil), (*v1.MySQLRouterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_MySQLRouterSpec_To_v1_MySQLRouterSpec(a.(*MySQLRouterSpec), b.(*v1.MySQLRouterSpec), scope)
-	}); err != nil {
-		return err
-	}
 	if err := s.AddGeneratedConversionFunc((*v1.MySQLRouterSpec)(nil), (*MySQLRouterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1_MySQLRouterSpec_To_v1alpha2_MySQLRouterSpec(a.(*v1.MySQLRouterSpec), b.(*MySQLRouterSpec), scope)
 	}); err != nil {
@@ -534,16 +519,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
-	if err := s.AddGeneratedConversionFunc((*NamedServiceStatus)(nil), (*v1.NamedServiceStatus)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_NamedServiceStatus_To_v1_NamedServiceStatus(a.(*NamedServiceStatus), b.(*v1.NamedServiceStatus), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1.NamedServiceStatus)(nil), (*NamedServiceStatus)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1_NamedServiceStatus_To_v1alpha2_NamedServiceStatus(a.(*v1.NamedServiceStatus), b.(*NamedServiceStatus), scope)
-	}); err != nil {
-		return err
-	}
 	if err := s.AddGeneratedConversionFunc((*NamedServiceTemplateSpec)(nil), (*v1.NamedServiceTemplateSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha2_NamedServiceTemplateSpec_To_v1_NamedServiceTemplateSpec(a.(*NamedServiceTemplateSpec), b.(*v1.NamedServiceTemplateSpec), scope)
 	}); err != nil {
@@ -551,16 +526,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}
 	if err := s.AddGeneratedConversionFunc((*v1.NamedServiceTemplateSpec)(nil), (*NamedServiceTemplateSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1_NamedServiceTemplateSpec_To_v1alpha2_NamedServiceTemplateSpec(a.(*v1.NamedServiceTemplateSpec), b.(*NamedServiceTemplateSpec), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*NamedURL)(nil), (*v1.NamedURL)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_NamedURL_To_v1_NamedURL(a.(*NamedURL), b.(*v1.NamedURL), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1.NamedURL)(nil), (*NamedURL)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1_NamedURL_To_v1alpha2_NamedURL(a.(*v1.NamedURL), b.(*NamedURL), scope)
 	}); err != nil {
 		return err
 	}
@@ -731,16 +696,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}
 	if err := s.AddGeneratedConversionFunc((*v1.Redis)(nil), (*Redis)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1_Redis_To_v1alpha2_Redis(a.(*v1.Redis), b.(*Redis), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*RedisClusterSpec)(nil), (*v1.RedisClusterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(a.(*RedisClusterSpec), b.(*v1.RedisClusterSpec), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1.RedisClusterSpec)(nil), (*RedisClusterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(a.(*v1.RedisClusterSpec), b.(*RedisClusterSpec), scope)
 	}); err != nil {
 		return err
 	}
@@ -934,6 +889,11 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
+	if err := s.AddConversionFunc((*v1.RedisClusterSpec)(nil), (*RedisClusterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(a.(*v1.RedisClusterSpec), b.(*RedisClusterSpec), scope)
+	}); err != nil {
+		return err
+	}
 	if err := s.AddConversionFunc((*v1.RedisSentinelSpec)(nil), (*RedisSentinelSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1_RedisSentinelSpec_To_v1alpha2_RedisSentinelSpec(a.(*v1.RedisSentinelSpec), b.(*RedisSentinelSpec), scope)
 	}); err != nil {
@@ -994,6 +954,11 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
+	if err := s.AddConversionFunc((*MySQLRouterSpec)(nil), (*v1.MySQLRouterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha2_MySQLRouterSpec_To_v1_MySQLRouterSpec(a.(*MySQLRouterSpec), b.(*v1.MySQLRouterSpec), scope)
+	}); err != nil {
+		return err
+	}
 	if err := s.AddConversionFunc((*MySQLSpec)(nil), (*v1.MySQLSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha2_MySQLSpec_To_v1_MySQLSpec(a.(*MySQLSpec), b.(*v1.MySQLSpec), scope)
 	}); err != nil {
@@ -1016,6 +981,11 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}
 	if err := s.AddConversionFunc((*ProxySQLSpec)(nil), (*v1.ProxySQLSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha2_ProxySQLSpec_To_v1_ProxySQLSpec(a.(*ProxySQLSpec), b.(*v1.ProxySQLSpec), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddConversionFunc((*RedisClusterSpec)(nil), (*v1.RedisClusterSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(a.(*RedisClusterSpec), b.(*v1.RedisClusterSpec), scope)
 	}); err != nil {
 		return err
 	}
@@ -1662,7 +1632,6 @@ func autoConvert_v1alpha2_ElasticsearchStatus_To_v1_ElasticsearchStatus(in *Elas
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -1676,7 +1645,6 @@ func autoConvert_v1_ElasticsearchStatus_To_v1alpha2_ElasticsearchStatus(in *v1.E
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -1727,36 +1695,6 @@ func autoConvert_v1_ElasticsearchUserSpec_To_v1alpha2_ElasticsearchUserSpec(in *
 // Convert_v1_ElasticsearchUserSpec_To_v1alpha2_ElasticsearchUserSpec is an autogenerated conversion function.
 func Convert_v1_ElasticsearchUserSpec_To_v1alpha2_ElasticsearchUserSpec(in *v1.ElasticsearchUserSpec, out *ElasticsearchUserSpec, s conversion.Scope) error {
 	return autoConvert_v1_ElasticsearchUserSpec_To_v1alpha2_ElasticsearchUserSpec(in, out, s)
-}
-
-func autoConvert_v1alpha2_Gateway_To_v1_Gateway(in *Gateway, out *v1.Gateway, s conversion.Scope) error {
-	out.Name = in.Name
-	out.Namespace = in.Namespace
-	out.IP = in.IP
-	out.Hostname = in.Hostname
-	out.Services = *(*[]v1.NamedServiceStatus)(unsafe.Pointer(&in.Services))
-	out.UI = *(*[]v1.NamedURL)(unsafe.Pointer(&in.UI))
-	return nil
-}
-
-// Convert_v1alpha2_Gateway_To_v1_Gateway is an autogenerated conversion function.
-func Convert_v1alpha2_Gateway_To_v1_Gateway(in *Gateway, out *v1.Gateway, s conversion.Scope) error {
-	return autoConvert_v1alpha2_Gateway_To_v1_Gateway(in, out, s)
-}
-
-func autoConvert_v1_Gateway_To_v1alpha2_Gateway(in *v1.Gateway, out *Gateway, s conversion.Scope) error {
-	out.Name = in.Name
-	out.Namespace = in.Namespace
-	out.IP = in.IP
-	out.Hostname = in.Hostname
-	out.Services = *(*[]NamedServiceStatus)(unsafe.Pointer(&in.Services))
-	out.UI = *(*[]NamedURL)(unsafe.Pointer(&in.UI))
-	return nil
-}
-
-// Convert_v1_Gateway_To_v1alpha2_Gateway is an autogenerated conversion function.
-func Convert_v1_Gateway_To_v1alpha2_Gateway(in *v1.Gateway, out *Gateway, s conversion.Scope) error {
-	return autoConvert_v1_Gateway_To_v1alpha2_Gateway(in, out, s)
 }
 
 func autoConvert_v1alpha2_GitRepo_To_v1_GitRepo(in *GitRepo, out *v1.GitRepo, s conversion.Scope) error {
@@ -2119,7 +2057,6 @@ func autoConvert_v1alpha2_KafkaStatus_To_v1_KafkaStatus(in *KafkaStatus, out *v1
 	out.Phase = v1.DatabasePhase(in.Phase)
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2132,7 +2069,6 @@ func autoConvert_v1_KafkaStatus_To_v1alpha2_KafkaStatus(in *v1.KafkaStatus, out 
 	out.Phase = KafkaPhase(in.Phase)
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2299,7 +2235,6 @@ func autoConvert_v1alpha2_MariaDBStatus_To_v1_MariaDBStatus(in *MariaDBStatus, o
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2313,7 +2248,6 @@ func autoConvert_v1_MariaDBStatus_To_v1alpha2_MariaDBStatus(in *v1.MariaDBStatus
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2434,7 +2368,6 @@ func autoConvert_v1alpha2_MemcachedStatus_To_v1_MemcachedStatus(in *MemcachedSta
 	out.Phase = v1.DatabasePhase(in.Phase)
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2447,7 +2380,6 @@ func autoConvert_v1_MemcachedStatus_To_v1alpha2_MemcachedStatus(in *v1.Memcached
 	out.Phase = DatabasePhase(in.Phase)
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2830,7 +2762,6 @@ func autoConvert_v1alpha2_MongoDBStatus_To_v1_MongoDBStatus(in *MongoDBStatus, o
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -2844,7 +2775,6 @@ func autoConvert_v1_MongoDBStatus_To_v1alpha2_MongoDBStatus(in *v1.MongoDBStatus
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3005,11 +2935,6 @@ func autoConvert_v1alpha2_MySQLRouterSpec_To_v1_MySQLRouterSpec(in *MySQLRouterS
 	return nil
 }
 
-// Convert_v1alpha2_MySQLRouterSpec_To_v1_MySQLRouterSpec is an autogenerated conversion function.
-func Convert_v1alpha2_MySQLRouterSpec_To_v1_MySQLRouterSpec(in *MySQLRouterSpec, out *v1.MySQLRouterSpec, s conversion.Scope) error {
-	return autoConvert_v1alpha2_MySQLRouterSpec_To_v1_MySQLRouterSpec(in, out, s)
-}
-
 func autoConvert_v1_MySQLRouterSpec_To_v1alpha2_MySQLRouterSpec(in *v1.MySQLRouterSpec, out *MySQLRouterSpec, s conversion.Scope) error {
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	if in.PodTemplate != nil {
@@ -3109,7 +3034,6 @@ func autoConvert_v1alpha2_MySQLStatus_To_v1_MySQLStatus(in *MySQLStatus, out *v1
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3123,7 +3047,6 @@ func autoConvert_v1_MySQLStatus_To_v1alpha2_MySQLStatus(in *v1.MySQLStatus, out 
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3220,28 +3143,6 @@ func Convert_v1_MySQLUser_To_v1alpha2_MySQLUser(in *v1.MySQLUser, out *MySQLUser
 	return autoConvert_v1_MySQLUser_To_v1alpha2_MySQLUser(in, out, s)
 }
 
-func autoConvert_v1alpha2_NamedServiceStatus_To_v1_NamedServiceStatus(in *NamedServiceStatus, out *v1.NamedServiceStatus, s conversion.Scope) error {
-	out.Alias = v1.ServiceAlias(in.Alias)
-	out.Ports = *(*[]apiv1.GatewayPort)(unsafe.Pointer(&in.Ports))
-	return nil
-}
-
-// Convert_v1alpha2_NamedServiceStatus_To_v1_NamedServiceStatus is an autogenerated conversion function.
-func Convert_v1alpha2_NamedServiceStatus_To_v1_NamedServiceStatus(in *NamedServiceStatus, out *v1.NamedServiceStatus, s conversion.Scope) error {
-	return autoConvert_v1alpha2_NamedServiceStatus_To_v1_NamedServiceStatus(in, out, s)
-}
-
-func autoConvert_v1_NamedServiceStatus_To_v1alpha2_NamedServiceStatus(in *v1.NamedServiceStatus, out *NamedServiceStatus, s conversion.Scope) error {
-	out.Alias = ServiceAlias(in.Alias)
-	out.Ports = *(*[]apiv1.GatewayPort)(unsafe.Pointer(&in.Ports))
-	return nil
-}
-
-// Convert_v1_NamedServiceStatus_To_v1alpha2_NamedServiceStatus is an autogenerated conversion function.
-func Convert_v1_NamedServiceStatus_To_v1alpha2_NamedServiceStatus(in *v1.NamedServiceStatus, out *NamedServiceStatus, s conversion.Scope) error {
-	return autoConvert_v1_NamedServiceStatus_To_v1alpha2_NamedServiceStatus(in, out, s)
-}
-
 func autoConvert_v1alpha2_NamedServiceTemplateSpec_To_v1_NamedServiceTemplateSpec(in *NamedServiceTemplateSpec, out *v1.NamedServiceTemplateSpec, s conversion.Scope) error {
 	out.Alias = v1.ServiceAlias(in.Alias)
 	out.ServiceTemplateSpec = in.ServiceTemplateSpec
@@ -3262,32 +3163,6 @@ func autoConvert_v1_NamedServiceTemplateSpec_To_v1alpha2_NamedServiceTemplateSpe
 // Convert_v1_NamedServiceTemplateSpec_To_v1alpha2_NamedServiceTemplateSpec is an autogenerated conversion function.
 func Convert_v1_NamedServiceTemplateSpec_To_v1alpha2_NamedServiceTemplateSpec(in *v1.NamedServiceTemplateSpec, out *NamedServiceTemplateSpec, s conversion.Scope) error {
 	return autoConvert_v1_NamedServiceTemplateSpec_To_v1alpha2_NamedServiceTemplateSpec(in, out, s)
-}
-
-func autoConvert_v1alpha2_NamedURL_To_v1_NamedURL(in *NamedURL, out *v1.NamedURL, s conversion.Scope) error {
-	out.Alias = in.Alias
-	out.URL = in.URL
-	out.Port = in.Port
-	out.HelmRelease = (*corev1.LocalObjectReference)(unsafe.Pointer(in.HelmRelease))
-	return nil
-}
-
-// Convert_v1alpha2_NamedURL_To_v1_NamedURL is an autogenerated conversion function.
-func Convert_v1alpha2_NamedURL_To_v1_NamedURL(in *NamedURL, out *v1.NamedURL, s conversion.Scope) error {
-	return autoConvert_v1alpha2_NamedURL_To_v1_NamedURL(in, out, s)
-}
-
-func autoConvert_v1_NamedURL_To_v1alpha2_NamedURL(in *v1.NamedURL, out *NamedURL, s conversion.Scope) error {
-	out.Alias = in.Alias
-	out.URL = in.URL
-	out.Port = in.Port
-	out.HelmRelease = (*corev1.LocalObjectReference)(unsafe.Pointer(in.HelmRelease))
-	return nil
-}
-
-// Convert_v1_NamedURL_To_v1alpha2_NamedURL is an autogenerated conversion function.
-func Convert_v1_NamedURL_To_v1alpha2_NamedURL(in *v1.NamedURL, out *NamedURL, s conversion.Scope) error {
-	return autoConvert_v1_NamedURL_To_v1alpha2_NamedURL(in, out, s)
 }
 
 func autoConvert_v1alpha2_PerconaXtraDB_To_v1_PerconaXtraDB(in *PerconaXtraDB, out *v1.PerconaXtraDB, s conversion.Scope) error {
@@ -3422,7 +3297,6 @@ func autoConvert_v1alpha2_PerconaXtraDBStatus_To_v1_PerconaXtraDBStatus(in *Perc
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3436,7 +3310,6 @@ func autoConvert_v1_PerconaXtraDBStatus_To_v1alpha2_PerconaXtraDBStatus(in *v1.P
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3571,7 +3444,6 @@ func autoConvert_v1alpha2_PgBouncerStatus_To_v1_PgBouncerStatus(in *PgBouncerSta
 	out.Phase = v1.DatabasePhase(in.Phase)
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3584,7 +3456,6 @@ func autoConvert_v1_PgBouncerStatus_To_v1alpha2_PgBouncerStatus(in *v1.PgBouncer
 	out.Phase = DatabasePhase(in.Phase)
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3805,7 +3676,6 @@ func autoConvert_v1alpha2_PostgresStatus_To_v1_PostgresStatus(in *PostgresStatus
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3819,7 +3689,6 @@ func autoConvert_v1_PostgresStatus_To_v1alpha2_PostgresStatus(in *v1.PostgresSta
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3977,7 +3846,6 @@ func autoConvert_v1alpha2_ProxySQLStatus_To_v1_ProxySQLStatus(in *ProxySQLStatus
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -3991,7 +3859,6 @@ func autoConvert_v1_ProxySQLStatus_To_v1alpha2_ProxySQLStatus(in *v1.ProxySQLSta
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -4059,25 +3926,15 @@ func Convert_v1_Redis_To_v1alpha2_Redis(in *v1.Redis, out *Redis, s conversion.S
 }
 
 func autoConvert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(in *RedisClusterSpec, out *v1.RedisClusterSpec, s conversion.Scope) error {
-	out.Master = (*int32)(unsafe.Pointer(in.Master))
+	// WARNING: in.Master requires manual conversion: does not exist in peer-type
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	return nil
-}
-
-// Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec is an autogenerated conversion function.
-func Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(in *RedisClusterSpec, out *v1.RedisClusterSpec, s conversion.Scope) error {
-	return autoConvert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(in, out, s)
 }
 
 func autoConvert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(in *v1.RedisClusterSpec, out *RedisClusterSpec, s conversion.Scope) error {
-	out.Master = (*int32)(unsafe.Pointer(in.Master))
+	// WARNING: in.Shards requires manual conversion: does not exist in peer-type
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	return nil
-}
-
-// Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec is an autogenerated conversion function.
-func Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(in *v1.RedisClusterSpec, out *RedisClusterSpec, s conversion.Scope) error {
-	return autoConvert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(in, out, s)
 }
 
 func autoConvert_v1alpha2_RedisList_To_v1_RedisList(in *RedisList, out *v1.RedisList, s conversion.Scope) error {
@@ -4296,7 +4153,15 @@ func autoConvert_v1alpha2_RedisSpec_To_v1_RedisSpec(in *RedisSpec, out *v1.Redis
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	out.Mode = v1.RedisMode(in.Mode)
 	out.SentinelRef = (*v1.RedisSentinelRef)(unsafe.Pointer(in.SentinelRef))
-	out.Cluster = (*v1.RedisClusterSpec)(unsafe.Pointer(in.Cluster))
+	if in.Cluster != nil {
+		in, out := &in.Cluster, &out.Cluster
+		*out = new(v1.RedisClusterSpec)
+		if err := Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(*in, *out, s); err != nil {
+			return err
+		}
+	} else {
+		out.Cluster = nil
+	}
 	out.StorageType = v1.StorageType(in.StorageType)
 	out.Storage = (*corev1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.AuthSecret = (*v1.SecretReference)(unsafe.Pointer(in.AuthSecret))
@@ -4325,7 +4190,15 @@ func autoConvert_v1_RedisSpec_To_v1alpha2_RedisSpec(in *v1.RedisSpec, out *Redis
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	out.Mode = RedisMode(in.Mode)
 	out.SentinelRef = (*RedisSentinelRef)(unsafe.Pointer(in.SentinelRef))
-	out.Cluster = (*RedisClusterSpec)(unsafe.Pointer(in.Cluster))
+	if in.Cluster != nil {
+		in, out := &in.Cluster, &out.Cluster
+		*out = new(RedisClusterSpec)
+		if err := Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(*in, *out, s); err != nil {
+			return err
+		}
+	} else {
+		out.Cluster = nil
+	}
 	out.StorageType = StorageType(in.StorageType)
 	out.Storage = (*corev1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.AuthSecret = (*SecretReference)(unsafe.Pointer(in.AuthSecret))
@@ -4350,7 +4223,6 @@ func autoConvert_v1alpha2_RedisStatus_To_v1_RedisStatus(in *RedisStatus, out *v1
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*v1.Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*v1.Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 
@@ -4364,7 +4236,6 @@ func autoConvert_v1_RedisStatus_To_v1alpha2_RedisStatus(in *v1.RedisStatus, out 
 	out.ObservedGeneration = in.ObservedGeneration
 	out.Conditions = *(*[]clientgoapiv1.Condition)(unsafe.Pointer(&in.Conditions))
 	out.AuthSecret = (*Age)(unsafe.Pointer(in.AuthSecret))
-	out.Gateway = (*Gateway)(unsafe.Pointer(in.Gateway))
 	return nil
 }
 

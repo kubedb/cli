@@ -61,6 +61,8 @@ type RabbitMQVersionSpec struct {
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // RabbitMQVersionDatabase is the RabbitMQ Database image

@@ -45,7 +45,7 @@ type SolrApp struct {
 }
 
 func (s *Solr) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
-	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(kubedb.ResourcePluralSolr))
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralSolr))
 }
 
 func (s *Solr) PetSetName(suffix string) string {
@@ -62,7 +62,7 @@ func (s *Solr) Owner() *meta.OwnerReference {
 }
 
 func (s *Solr) ResourceKind() string {
-	return kubedb.ResourceKindSolr
+	return ResourceKindSolr
 }
 
 func (s *Solr) GoverningServiceName() string {
@@ -158,7 +158,7 @@ func (s *Solr) ResourceFQN() string {
 }
 
 func (s *Solr) ResourcePlural() string {
-	return kubedb.ResourcePluralSolr
+	return ResourcePluralSolr
 }
 
 func (s SolrApp) Name() string {
@@ -166,7 +166,7 @@ func (s SolrApp) Name() string {
 }
 
 func (s SolrApp) Type() appcat.AppType {
-	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, kubedb.ResourceSingularSolr))
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularSolr))
 }
 
 func (s *Solr) AppBindingMeta() appcat.AppBindingMeta {

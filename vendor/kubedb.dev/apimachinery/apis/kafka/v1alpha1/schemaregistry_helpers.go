@@ -168,7 +168,7 @@ func (k *SchemaRegistry) PodLabels(extraLabels ...map[string]string) map[string]
 	return k.offshootLabels(meta_util.OverwriteKeys(k.OffshootSelectors(), extraLabels...), k.Spec.PodTemplate.Labels)
 }
 
-func (k *SchemaRegistry) StatefulSetName() string {
+func (k *SchemaRegistry) PetSetName() string {
 	return k.OffshootName()
 }
 

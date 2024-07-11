@@ -38,8 +38,6 @@ func (r *MariaDBDatabase) SetupWebhookWithManager(mgr manager.Manager) error {
 		Complete()
 }
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-
 //+kubebuilder:webhook:path=/mutate-schema-kubedb-com-v1alpha1-mariadbdatabase,mutating=true,failurePolicy=fail,sideEffects=None,groups=schema.kubedb.com,resources=mariadbdatabases,verbs=create;update,versions=v1alpha1,name=mmariadbdatabase.kb.io,admissionReviewVersions={v1,v1beta1}
 
 var _ webhook.Defaulter = &MariaDBDatabase{}

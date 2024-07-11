@@ -41,6 +41,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
+	ofst_util "kmodules.xyz/offshoot-api/util"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
@@ -332,7 +333,7 @@ func (p *Postgres) setInitContainerDefaults(podTemplate *ofstv2.PodTemplateSpec,
 	if podTemplate == nil {
 		return
 	}
-	container := EnsureInitContainerExists(podTemplate, kubedb.PostgresInitContainerName)
+	container := ofst_util.EnsureInitContainerExists(podTemplate, kubedb.PostgresInitContainerName)
 	p.setContainerDefaultSecurityContext(container, pgVersion)
 	p.setContainerDefaultResources(container, *kubedb.DefaultInitContainerResource.DeepCopy())
 }
@@ -341,7 +342,7 @@ func (p *Postgres) setPostgresContainerDefaults(podTemplate *ofstv2.PodTemplateS
 	if podTemplate == nil {
 		return
 	}
-	container := EnsureContainerExists(podTemplate, kubedb.PostgresContainerName)
+	container := ofst_util.EnsureContainerExists(podTemplate, kubedb.PostgresContainerName)
 	p.setContainerDefaultSecurityContext(container, pgVersion)
 	p.setContainerDefaultResources(container, *kubedb.DefaultResources.DeepCopy())
 }
@@ -350,7 +351,7 @@ func (p *Postgres) setCoordinatorContainerDefaults(podTemplate *ofstv2.PodTempla
 	if podTemplate == nil {
 		return
 	}
-	container := EnsureContainerExists(podTemplate, kubedb.PostgresCoordinatorContainerName)
+	container := ofst_util.EnsureContainerExists(podTemplate, kubedb.PostgresCoordinatorContainerName)
 	p.setContainerDefaultSecurityContext(container, pgVersion)
 	p.setContainerDefaultResources(container, *kubedb.CoordinatorDefaultResources.DeepCopy())
 }

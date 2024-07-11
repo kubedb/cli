@@ -173,7 +173,7 @@ func (k *ConnectCluster) PodLabels(extraLabels ...map[string]string) map[string]
 	return k.offshootLabels(meta_util.OverwriteKeys(k.OffshootSelectors(), extraLabels...), k.Spec.PodTemplate.Labels)
 }
 
-func (k *ConnectCluster) StatefulSetName() string {
+func (k *ConnectCluster) PetSetName() string {
 	return k.OffshootName()
 }
 

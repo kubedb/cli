@@ -150,10 +150,10 @@ const (
 )
 
 type RedisClusterSpec struct {
-	// Number of master nodes. It must be >= 3. If not specified, defaults to 3.
-	Master *int32 `json:"master,omitempty"`
+	// Number of shards. It must be >= 3. If not specified, defaults to 3.
+	Shards *int32 `json:"shards,omitempty"`
 
-	// Number of replica(s) per master node. If not specified, defaults to 1.
+	// Number of replica(s) per shard. If not specified, defaults to 2.
 	Replicas *int32 `json:"replicas,omitempty"`
 }
 
@@ -178,8 +178,6 @@ type RedisStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 	// +optional
 	AuthSecret *Age `json:"authSecret,omitempty"`
-	// +optional
-	Gateway *Gateway `json:"gateway,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

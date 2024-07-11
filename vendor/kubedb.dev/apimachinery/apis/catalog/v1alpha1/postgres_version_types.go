@@ -80,6 +80,8 @@ type PostgresVersionSpec struct {
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 	// Archiver defines the walg & kube-stash-addon related specifications
 	Archiver ArchiverSpec `json:"archiver,omitempty"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // PostgresVersionInitContainer is the Postgres init container image

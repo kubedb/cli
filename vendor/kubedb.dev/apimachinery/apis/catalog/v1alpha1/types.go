@@ -16,6 +16,10 @@ limitations under the License.
 
 package v1alpha1
 
+import (
+	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+)
+
 // ReplicationModeDetector is the image for the MySQL replication mode detector
 type ReplicationModeDetector struct {
 	Image string `json:"image"`
@@ -75,4 +79,17 @@ type GitSyncer struct {
 // SecurityContext is for the additional config for the DB container
 type SecurityContext struct {
 	RunAsUser *int64 `json:"runAsUser,omitempty"`
+}
+
+type ChartInfo struct {
+	// Name specifies the name of the chart
+	Name string `json:"name"`
+	// Version specifies the version of the chart.
+	Version string `json:"version,omitempty"`
+	// Disable installing this chart
+	// +optional
+	Disable bool `json:"disable,omitempty"`
+	// Values holds the values for this Helm release.
+	// +optional
+	Values *apiextensionsv1.JSON `json:"values,omitempty"`
 }

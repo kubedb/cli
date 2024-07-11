@@ -73,10 +73,10 @@ spec:
                 x-kubernetes-map-type: atomic
               horizontalScaling:
                 properties:
-                  master:
+                  replicas:
                     format: int32
                     type: integer
-                  replicas:
+                  shards:
                     format: int32
                     type: integer
                 type: object

@@ -218,11 +218,11 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) {
 		if r.Spec.Cluster == nil {
 			r.Spec.Cluster = &RedisClusterSpec{}
 		}
-		if r.Spec.Cluster.Master == nil {
-			r.Spec.Cluster.Master = pointer.Int32P(3)
+		if r.Spec.Cluster.Shards == nil {
+			r.Spec.Cluster.Shards = pointer.Int32P(3)
 		}
 		if r.Spec.Cluster.Replicas == nil {
-			r.Spec.Cluster.Replicas = pointer.Int32P(1)
+			r.Spec.Cluster.Replicas = pointer.Int32P(2)
 		}
 	}
 	if r.Spec.StorageType == "" {
@@ -410,7 +410,7 @@ func (r *Redis) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, er
 	// Desire number of statefulSets
 	expectedItems := 1
 	if r.Spec.Cluster != nil {
-		expectedItems = int(pointer.Int32(r.Spec.Cluster.Master))
+		expectedItems = int(pointer.Int32(r.Spec.Cluster.Shards))
 	}
 	return checkReplicas(lister.PetSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }

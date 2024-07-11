@@ -118,9 +118,9 @@ type RedisUpdateVersionSpec struct {
 }
 
 type RedisHorizontalScalingSpec struct {
-	// Number of Masters in the cluster
-	Master *int32 `json:"master,omitempty"`
-	// specifies the number of replica for the master
+	// Number of shards in the cluster
+	Shards *int32 `json:"shards,omitempty"`
+	// specifies the number of replica of the shards
 	Replicas *int32 `json:"replicas,omitempty"`
 }
 
