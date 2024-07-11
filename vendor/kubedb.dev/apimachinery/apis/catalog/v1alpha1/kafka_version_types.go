@@ -72,6 +72,8 @@ type KafkaVersionSpec struct {
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // KafkaVersionDatabase is the Kafka Database image

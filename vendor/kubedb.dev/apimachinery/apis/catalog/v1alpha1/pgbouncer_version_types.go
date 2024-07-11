@@ -63,6 +63,8 @@ type PgBouncerVersionSpec struct {
 	SecurityContext PgBouncerSecurityContext `json:"securityContext"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // PgBouncerVersionInitContainer is the PgBouncer init container image

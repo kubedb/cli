@@ -316,7 +316,8 @@ func (d *Druid) AddDruidExtensionLoadList(druidExtensionLoadList string, extensi
 func (d *Druid) GetMetadataStorageType(metadataStorage string) DruidMetadataStorageType {
 	if metadataStorage == string(DruidMetadataStorageMySQL) || metadataStorage == strings.ToLower(string(DruidMetadataStorageMySQL)) {
 		return DruidMetadataStorageMySQL
-	} else if metadataStorage == string(DruidMetadataStoragePostgreSQL) || metadataStorage == strings.ToLower(string(DruidMetadataStoragePostgreSQL)) {
+	} else if metadataStorage == string(DruidMetadataStoragePostgreSQL) || metadataStorage == strings.ToLower(string(DruidMetadataStoragePostgreSQL)) ||
+		metadataStorage == kubedb.DruidMetadataStorageTypePostgres || metadataStorage == strings.ToLower(string(kubedb.DruidMetadataStorageTypePostgres)) {
 		return DruidMetadataStoragePostgreSQL
 	} else {
 		panic(fmt.Sprintf("Unknown metadata storage type: %s", metadataStorage))

@@ -360,12 +360,14 @@ func (k *Kafka) SetDefaults() {
 			}
 		}
 	} else {
+		if k.Spec.Replicas == nil {
+			k.Spec.Replicas = pointer.Int32P(1)
+		}
+		k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.PodTemplate)
+
 		dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
 		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
-		}
-		if k.Spec.Replicas == nil {
-			k.Spec.Replicas = pointer.Int32P(1)
 		}
 	}
 

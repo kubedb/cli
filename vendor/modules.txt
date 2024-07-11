@@ -1402,7 +1402,7 @@ k8s.io/kube-aggregator/pkg/apis/apiregistration
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1beta1
 k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme
-# k8s.io/kube-openapi v0.0.0-20240620174524-b456828f718b
+# k8s.io/kube-openapi v0.0.0-20240703190633-0aa61b46e8c2
 ## explicit; go 1.20
 k8s.io/kube-openapi/pkg/cached
 k8s.io/kube-openapi/pkg/common
@@ -1491,20 +1491,21 @@ kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.29.1
 ## explicit; go 1.21
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.29.4
+# kmodules.xyz/offshoot-api v0.30.0
 ## explicit; go 1.22.0
 kmodules.xyz/offshoot-api/api/v1
 kmodules.xyz/offshoot-api/api/v1/conversion
 kmodules.xyz/offshoot-api/api/v2
+kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.18.9
+# kmodules.xyz/resource-metadata v0.18.10
 ## explicit; go 1.22.1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.47.0-rc.0
+# kubedb.dev/apimachinery v0.47.0-rc.1
 ## explicit; go 1.22.1
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1548,7 +1549,7 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/validator
-# kubedb.dev/db-client-go v0.2.0-rc.0
+# kubedb.dev/db-client-go v0.2.0-rc.1
 ## explicit; go 1.22.1
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis

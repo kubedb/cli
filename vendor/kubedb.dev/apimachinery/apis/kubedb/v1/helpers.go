@@ -26,9 +26,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
-	core_util "kmodules.xyz/client-go/core/v1"
 	ofstv1 "kmodules.xyz/offshoot-api/api/v1"
-	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
 	petsetutil "kubeops.dev/petset/client/clientset/versioned/typed/apps/v1"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -122,41 +120,6 @@ func GetDatabasePodsByPetSetLister(db metav1.Object, psLister pslister.PetSetLis
 	}
 
 	return dbPods, nil
-}
-
-// EnsureContainerExists ensures that given container either exits by default else
-// it creates the container and insert it to the podtemplate
-func EnsureContainerExists(podTemplate *ofstv2.PodTemplateSpec, containerName string) *core.Container {
-	container := core_util.GetContainerByName(podTemplate.Spec.Containers, containerName)
-	if container == nil {
-		container = &core.Container{
-			Name: containerName,
-		}
-	}
-	podTemplate.Spec.Containers = core_util.UpsertContainer(podTemplate.Spec.Containers, *container)
-	for i := range podTemplate.Spec.Containers {
-		if podTemplate.Spec.Containers[i].Name == containerName {
-			container = &podTemplate.Spec.Containers[i]
-		}
-	}
-	return container
-}
-
-// it creates the container and insert it to the podtemplate
-func EnsureInitContainerExists(podTemplate *ofstv2.PodTemplateSpec, containerName string) *core.Container {
-	container := core_util.GetContainerByName(podTemplate.Spec.InitContainers, containerName)
-	if container == nil {
-		container = &core.Container{
-			Name: containerName,
-		}
-	}
-	podTemplate.Spec.InitContainers = core_util.UpsertContainer(podTemplate.Spec.InitContainers, *container)
-	for i := range podTemplate.Spec.InitContainers {
-		if podTemplate.Spec.InitContainers[i].Name == containerName {
-			container = &podTemplate.Spec.InitContainers[i]
-		}
-	}
-	return container
 }
 
 // Upsert elements to string slice

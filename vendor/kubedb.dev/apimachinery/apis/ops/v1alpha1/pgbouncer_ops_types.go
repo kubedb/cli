@@ -66,13 +66,15 @@ type PgBouncerOpsRequestSpec struct {
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;Restart;Reconfigure;ReconfigureTLS
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, Restart, Reconfigure, ReconfigureTLS)
+// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling
+// ENUM(HorizontalScaling, VerticalScaling)
 type PgBouncerOpsRequestType string
 
 // PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
@@ -86,11 +88,14 @@ type PgBouncerUpdateVersionSpec struct {
 }
 
 // HorizontalScaling is the spec for PgBouncer horizontal scaling
-type PgBouncerHorizontalScalingSpec struct{}
+type PgBouncerHorizontalScalingSpec struct {
+	Replicas *int32 `json:"replicas,omitempty"`
+}
 
 // PgBouncerVerticalScalingSpec is the spec for PgBouncer vertical scaling
 type PgBouncerVerticalScalingSpec struct {
-	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
+	PgBouncer *PodResources       `json:"pgbouncer,omitempty"`
+	Exporter  *ContainerResources `json:"exporter,omitempty"`
 }
 
 type PgBouncerCustomConfigurationSpec struct{}

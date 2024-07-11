@@ -75,6 +75,8 @@ type RedisVersionSpec struct {
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // RedisVersionInitContainer is the Redis init container image

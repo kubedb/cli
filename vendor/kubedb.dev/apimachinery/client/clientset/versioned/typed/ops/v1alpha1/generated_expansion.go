@@ -51,3 +51,5 @@ type RedisOpsRequestExpansion interface{}
 type RedisSentinelOpsRequestExpansion interface{}
 
 type SinglestoreOpsRequestExpansion interface{}
+
+type SolrOpsRequestExpansion interface{}

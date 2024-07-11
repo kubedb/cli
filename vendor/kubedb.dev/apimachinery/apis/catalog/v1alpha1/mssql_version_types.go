@@ -68,6 +68,8 @@ type MSSQLServerVersionSpec struct {
 	SecurityContext SecurityContext `json:"securityContext"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // MSSQLServerDatabase is the MSSQLServer Database image

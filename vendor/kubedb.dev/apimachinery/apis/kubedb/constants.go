@@ -856,10 +856,6 @@ const (
 	KafkaJMXMetricReporter        = "org.apache.kafka.common.metrics.JmxReporter"
 
 	// =========================== Solr Constants ============================
-	ResourceCodeSolr      = "sl"
-	ResourceKindSolr      = "Solr"
-	ResourceSingularSolr  = "solr"
-	ResourcePluralSolr    = "solrs"
 	SolrPortName          = "http"
 	SolrRestPort          = 8983
 	SolrExporterPort      = 9854
@@ -981,6 +977,8 @@ const (
 	DruidPortBrokers        = 8082
 	DruidPortRouters        = 8888
 	DruidExporterPort       = 9104
+
+	DruidMetadataStorageTypePostgres = "Postgres"
 
 	// Common Runtime Configurations Properties
 	// ZooKeeper

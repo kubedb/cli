@@ -61,6 +61,8 @@ type MemcachedVersionSpec struct {
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // MemcachedVersionDatabase is the Memcached Database image

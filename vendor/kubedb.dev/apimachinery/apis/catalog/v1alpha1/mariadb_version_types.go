@@ -78,6 +78,8 @@ type MariaDBVersionSpec struct {
 	SecurityContext SecurityContext `json:"securityContext"`
 	// Archiver defines the walg & stash-addon related specifications
 	Archiver ArchiverSpec `json:"archiver,omitempty"`
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // MariaDBVersionDatabase is the mariadb image

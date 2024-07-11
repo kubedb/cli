@@ -76,6 +76,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&PostgresOpsRequestList{},
 		&PgpoolOpsRequest{},
 		&PgpoolOpsRequestList{},
+		&PgBouncerOpsRequest{},
+		&PgBouncerOpsRequestList{},
 		&ProxySQLOpsRequest{},
 		&ProxySQLOpsRequestList{},
 		&RabbitMQOpsRequest{},
@@ -86,6 +88,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&RedisSentinelOpsRequestList{},
 		&SinglestoreOpsRequest{},
 		&SinglestoreOpsRequestList{},
+		&SolrOpsRequest{},
+		&SolrOpsRequestList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

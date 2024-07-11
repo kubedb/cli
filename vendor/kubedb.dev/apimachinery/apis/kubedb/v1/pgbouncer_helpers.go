@@ -36,6 +36,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
+	ofst_util "kmodules.xyz/offshoot-api/util"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
@@ -237,7 +238,7 @@ func (p *PgBouncer) setPgBouncerContainerDefaults(podTemplate *ofstv2.PodTemplat
 	if podTemplate == nil {
 		return
 	}
-	container := EnsureContainerExists(podTemplate, kubedb.PgBouncerContainerName)
+	container := ofst_util.EnsureContainerExists(podTemplate, kubedb.PgBouncerContainerName)
 	p.setContainerDefaultResources(container, *kubedb.DefaultResources.DeepCopy())
 }
 

@@ -27,9 +27,6 @@ const (
 	ResourcePluralClickHouseVersion   = "clickhouseversions"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // ClickHouseVersion defines a ClickHouse database version.
 
 // +genclient
@@ -69,6 +66,9 @@ type ClickHouseVersionSpec struct {
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // ClickHouseVersionDatabase is the ClickHouse Database image

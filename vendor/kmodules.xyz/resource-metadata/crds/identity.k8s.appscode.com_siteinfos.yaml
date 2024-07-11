@@ -125,8 +125,58 @@ spec:
                     description: 'Capacity represents the total resources of a node.
                       More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity'
                     type: object
+                  controlPlane:
+                    properties:
+                      allocatable:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: Allocatable represents the resources of a node
+                          that are available for scheduling. Defaults to Capacity.
+                        type: object
+                      capacity:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Capacity represents the total resources of a
+                          node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity'
+                        type: object
+                      count:
+                        type: integer
+                    type: object
                   count:
                     type: integer
+                  workers:
+                    properties:
+                      allocatable:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: Allocatable represents the resources of a node
+                          that are available for scheduling. Defaults to Capacity.
+                        type: object
+                      capacity:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Capacity represents the total resources of a
+                          node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity'
+                        type: object
+                      count:
+                        type: integer
+                    type: object
                 type: object
               version:
                 description: 'Info contains versioning information. TODO: Add []string

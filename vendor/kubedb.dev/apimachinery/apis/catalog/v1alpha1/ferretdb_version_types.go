@@ -62,6 +62,9 @@ type FerretDBVersionSpec struct {
 	// SecurityContext is for the additional security information for the FerretDB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+
+	// +optional
+	UI []ChartInfo `json:"ui,omitempty"`
 }
 
 // FerretDBVersionDatabase is the FerretDB Database image
