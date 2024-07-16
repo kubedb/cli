@@ -21,7 +21,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	kapi "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
 	"log"
 	"net/http"
 	"os"
