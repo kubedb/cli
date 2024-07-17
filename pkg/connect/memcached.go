@@ -24,7 +24,7 @@ import (
 	"strconv"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -81,7 +81,7 @@ func MemcachedConnectCMD(f cmdutil.Factory) *cobra.Command {
 }
 
 type memcachedOpts struct {
-	db       *api.Memcached
+	db       *dbapi.Memcached
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -108,7 +108,7 @@ func newMemcachedOpts(f cmdutil.Factory, dbName, namespace string) (*memcachedOp
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("memcached %s/%s is not ready", namespace, dbName)
 	}
 

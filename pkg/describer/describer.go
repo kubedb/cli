@@ -26,7 +26,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	"kubedb.dev/cli/pkg/events"
 
@@ -101,12 +101,12 @@ func describerMap(clientConfig *rest.Config) (map[schema.GroupKind]describe.Reso
 	}
 
 	m := map[schema.GroupKind]describe.ResourceDescriber{
-		api.Kind(api.ResourceKindElasticsearch): &ElasticsearchDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
-		api.Kind(api.ResourceKindMemcached):     &MemcachedDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
-		api.Kind(api.ResourceKindMongoDB):       &MongoDBDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
-		api.Kind(api.ResourceKindMySQL):         &MySQLDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
-		api.Kind(api.ResourceKindPostgres):      &PostgresDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
-		api.Kind(api.ResourceKindRedis):         &RedisDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		dbapi.Kind(dbapi.ResourceKindElasticsearch): &ElasticsearchDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		dbapi.Kind(dbapi.ResourceKindMemcached):     &MemcachedDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		dbapi.Kind(dbapi.ResourceKindMongoDB):       &MongoDBDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		dbapi.Kind(dbapi.ResourceKindMySQL):         &MySQLDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		dbapi.Kind(dbapi.ResourceKindPostgres):      &PostgresDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
+		dbapi.Kind(dbapi.ResourceKindRedis):         &RedisDescriber{client: c, kubedb: k, stash: s, appcat: appcat},
 	}
 
 	return m, nil

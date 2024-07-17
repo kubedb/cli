@@ -21,7 +21,7 @@ import (
 	"context"
 	"fmt"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	cm "github.com/cert-manager/cert-manager/pkg/client/clientset/versioned"
@@ -34,7 +34,7 @@ import (
 )
 
 type MySQLOpts struct {
-	DB                *api.MySQL
+	DB                *dbapi.MySQL
 	DBImage           string
 	Config            *rest.Config
 	Client            *kubernetes.Clientset
@@ -75,7 +75,7 @@ func NewMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*MySQLOpts, erro
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("MySQL %s/%s is not ready", namespace, dbName)
 	}
 

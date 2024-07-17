@@ -26,7 +26,7 @@ import (
 	"strings"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 	"kubedb.dev/cli/pkg/lib"
 
@@ -159,7 +159,7 @@ Examples:
 }
 
 type redisOpts struct {
-	db       *api.Redis
+	db       *dbapi.Redis
 	config   *rest.Config
 	client   *kubernetes.Clientset
 	dbClient *cs.Clientset
@@ -191,7 +191,7 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string, keys, args []stri
 		return nil, err
 	}
 
-	if db.Status.Phase != api.DatabasePhaseReady {
+	if db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("redis %s/%s is not ready", namespace, dbName)
 	}
 

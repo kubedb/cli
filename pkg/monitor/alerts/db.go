@@ -22,7 +22,7 @@ import (
 	"log"
 	"time"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/cli/pkg/monitor"
 
 	promv1 "github.com/prometheus/client_golang/api/prometheus/v1"
@@ -82,7 +82,7 @@ func newDBOpts(f cmdutil.Factory, dbName, namespace, resource string) (*dbOpts, 
 		return nil, err
 	}
 
-	gvk := api.SchemeGroupVersion
+	gvk := dbapi.SchemeGroupVersion
 	dbRes := schema.GroupVersionResource{Group: gvk.Group, Version: gvk.Version, Resource: resource}
 	db, err := dc.Resource(dbRes).Namespace(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {

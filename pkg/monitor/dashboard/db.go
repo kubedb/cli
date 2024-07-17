@@ -26,6 +26,7 @@ import (
 	"kubedb.dev/cli/pkg/monitor"
 
 	"github.com/prometheus/common/model"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
@@ -40,25 +41,34 @@ type missingOpts struct {
 	panelTitle []string
 }
 
-func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monitor.PromSvc) {
-	if len(args) < 2 {
-		log.Fatal("Enter db object's name as an argument")
-	}
-	database := monitor.ConvertedResourceToPlural(args[0])
-	dbName := args[1]
-	namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-	if err != nil {
-		_ = fmt.Errorf("failed to get current namespace")
-		return
-	}
+func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monitor.PromSvc, isDB bool) {
+	var (
+		db        *unstructured.Unstructured
+		database  string
+		namespace string
+		dbName    string
+		err       error
+	)
+	if isDB {
+		if len(args) < 2 {
+			log.Fatal("Enter db object's name as an argument")
+		}
+		database = monitor.ConvertedResourceToPlural(args[0])
+		dbName = args[1]
+		namespace, _, err = f.ToRawKubeConfigLoader().Namespace()
+		if err != nil {
+			_ = fmt.Errorf("failed to get current namespace")
+			return
+		}
 
-	db, err := getDB(f, database, namespace, dbName)
-	if err != nil {
-		fmt.Printf("failed to get %s database %s/%s. error %s \n", database, namespace, dbName, err.Error())
-		return
-	}
+		db, err = getDB(f, database, namespace, dbName)
+		if err != nil {
+			fmt.Printf("failed to get %s database %s/%s. error %s \n", database, namespace, dbName, err.Error())
+			return
+		}
 
-	database = monitor.ConvertedResourceToSingular(database)
+		database = monitor.ConvertedResourceToSingular(database)
+	}
 	var dashboardData map[string]interface{}
 	if file == "" {
 		if url == "" { // fetch from appscode/grafana-dashboard repo
@@ -136,6 +146,11 @@ func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monito
 				fmt.Printf("Missing Lables: %s \n", strings.Join(opts.labelName, ", "))
 			}
 			fmt.Printf("Effected Panel: %s \n", strings.Join(opts.panelTitle, ", "))
+		}
+		if isDB {
+			log.Fatalf("Information missing for database %s: %s/%s\n", database, namespace, dbName)
+		} else {
+			log.Fatalf("Information missing")
 		}
 	} else {
 		fmt.Println("All metrics found")

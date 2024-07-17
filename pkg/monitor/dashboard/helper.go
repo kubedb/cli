@@ -25,7 +25,8 @@ import (
 	"net/http"
 	"os"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	kapi "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -45,7 +46,13 @@ func getDB(f cmdutil.Factory, resource, ns, name string) (*unstructured.Unstruct
 		return nil, err
 	}
 
-	gvk := api.SchemeGroupVersion
+	if resource == kapi.ResourcePluralConnectCluster {
+		kGvk := kapi.SchemeGroupVersion
+		kRes := schema.GroupVersionResource{Group: kGvk.Group, Version: kGvk.Version, Resource: resource}
+		return dc.Resource(kRes).Namespace(ns).Get(context.TODO(), name, metav1.GetOptions{})
+	}
+
+	gvk := dbapi.SchemeGroupVersion
 	dbRes := schema.GroupVersionResource{Group: gvk.Group, Version: gvk.Version, Resource: resource}
 	return dc.Resource(dbRes).Namespace(ns).Get(context.TODO(), name, metav1.GetOptions{})
 }
@@ -99,10 +106,10 @@ func uniqueAppend(slice []string, valueToAdd string) []string {
 }
 
 func ignoreModeSpecificExpressions(unknown map[string]*missingOpts, database string, db *unstructured.Unstructured) map[string]*missingOpts {
-	if database == api.ResourceSingularMongoDB {
+	if database == dbapi.ResourceSingularMongoDB {
 		return ignoreMongoDBModeSpecificExpressions(unknown, db)
 	}
-	if database == api.ResourceSingularElasticsearch {
+	if database == dbapi.ResourceSingularElasticsearch {
 		return ignoreElasticsearchModeSpecificExpressions(unknown, db)
 	}
 	return unknown

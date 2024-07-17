@@ -89,15 +89,22 @@ var alertExample = templates.Examples(`
  		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 		
  		Valid resource types include:
+			* connectcluster
+			* druid
     		* elasticsearch
 			* kafka
 			* mariadb
 			* mongodb
 			* mysql
 			* perconaxtradb
+			* pgpool
 			* postgres
 			* proxysql
+			* rabbitmq
 			* redis
+			* singlestore
+			* solr
+			* zookeeper
 `)
 
 func AlertCMD(f cmdutil.Factory) *cobra.Command {
@@ -131,15 +138,22 @@ var dashboardExample = templates.Examples(`
 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid dashboards include:
+			* connectcluster
+			* druid
     		* elasticsearch
 			* kafka
 			* mariadb
 			* mongodb
 			* mysql
 			* perconaxtradb
+			* pgpool
 			* postgres
 			* proxysql
+			* rabbitmq
 			* redis
+			* singlestore
+			* solr
+			* zookeeper
 		
 		If --file is given, that is the local file. absolute or relative path both accepted.
 		If --url is given, that is the remote file. You have to specify the full raw url.
@@ -152,6 +166,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		branch string
 		file   string
 		url    string
+		isDB   bool
 	)
 	cmd := &cobra.Command{
 		Use:   "dashboard",
@@ -159,7 +174,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 		Long:  dashboardLong,
 
 		Run: func(cmd *cobra.Command, args []string) {
-			dashboard.Run(f, args, branch, file, url, prom)
+			dashboard.Run(f, args, branch, file, url, prom, isDB)
 		},
 		Example:               dashboardExample,
 		DisableFlagsInUseLine: true,
@@ -169,6 +184,7 @@ func DashboardCMD(f cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVarP(&file, "file", "f", "", "absolute or relative path of the file containing dashboard")
 	cmd.Flags().StringVarP(&url, "url", "u", "", "url of the raw file containing dashboard. "+
 		"For example: https://raw.githubusercontent.com/appscode/grafana-dashboards/master/mongodb/mongodb-summary-dashboard.json")
+	cmd.Flags().BoolVarP(&isDB, "isdb", "d", true, "for non db object's. just provide the url")
 	return cmd
 }
 
@@ -186,15 +202,22 @@ var connectionExample = templates.Examples(`
 		--prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
 
  		Valid resource types include:
+			* connectcluster
+			* druid
     		* elasticsearch
 			* kafka
 			* mariadb
 			* mongodb
 			* mysql
 			* perconaxtradb
+			* pgpool
 			* postgres
 			* proxysql
+			* rabbitmq
 			* redis
+			* singlestore
+			* solr
+			* zookeeper
 `)
 
 func ConnectionCMD(f cmdutil.Factory) *cobra.Command {

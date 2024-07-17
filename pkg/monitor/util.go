@@ -20,31 +20,47 @@ import (
 	"log"
 	"strings"
 
-	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+	kapi "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 )
 
 func ConvertedResourceToPlural(resource string) string {
 	// standardizing the resource name
 	res := strings.ToLower(resource)
 	switch res {
-	case api.ResourceCodeElasticsearch, api.ResourcePluralElasticsearch, api.ResourceSingularElasticsearch:
-		res = api.ResourcePluralElasticsearch
-	case api.ResourceCodeKafka, api.ResourcePluralKafka, api.ResourceSingularKafka:
-		res = api.ResourcePluralKafka
-	case api.ResourceCodeMariaDB, api.ResourcePluralMariaDB, api.ResourceSingularMariaDB:
-		res = api.ResourcePluralMariaDB
-	case api.ResourceCodeMongoDB, api.ResourcePluralMongoDB, api.ResourceSingularMongoDB:
-		res = api.ResourcePluralMongoDB
-	case api.ResourceCodeMySQL, api.ResourcePluralMySQL, api.ResourceSingularMySQL:
-		res = api.ResourcePluralMySQL
-	case api.ResourceCodePerconaXtraDB, api.ResourcePluralPerconaXtraDB, api.ResourceSingularPerconaXtraDB:
-		res = api.ResourcePluralPerconaXtraDB
-	case api.ResourceCodePostgres, api.ResourcePluralPostgres, api.ResourceSingularPostgres:
-		res = api.ResourcePluralPostgres
-	case api.ResourceCodeProxySQL, api.ResourcePluralProxySQL, api.ResourceSingularProxySQL:
-		res = api.ResourcePluralProxySQL
-	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
-		res = api.ResourcePluralRedis
+	case kapi.ResourceCodeConnectCluster, kapi.ResourcePluralConnectCluster, kapi.ResourceSingularConnectCluster:
+		res = kapi.ResourcePluralConnectCluster
+	case olddbapi.ResourceCodeDruid, olddbapi.ResourcePluralDruid, olddbapi.ResourceSingularDruid:
+		res = olddbapi.ResourcePluralDruid
+	case dbapi.ResourceCodeElasticsearch, dbapi.ResourcePluralElasticsearch, dbapi.ResourceSingularElasticsearch:
+		res = dbapi.ResourcePluralElasticsearch
+	case dbapi.ResourceCodeKafka, dbapi.ResourcePluralKafka, dbapi.ResourceSingularKafka:
+		res = dbapi.ResourcePluralKafka
+	case dbapi.ResourceCodeMariaDB, dbapi.ResourcePluralMariaDB, dbapi.ResourceSingularMariaDB:
+		res = dbapi.ResourcePluralMariaDB
+	case dbapi.ResourceCodeMongoDB, dbapi.ResourcePluralMongoDB, dbapi.ResourceSingularMongoDB:
+		res = dbapi.ResourcePluralMongoDB
+	case dbapi.ResourceCodeMySQL, dbapi.ResourcePluralMySQL, dbapi.ResourceSingularMySQL:
+		res = dbapi.ResourcePluralMySQL
+	case dbapi.ResourceCodePerconaXtraDB, dbapi.ResourcePluralPerconaXtraDB, dbapi.ResourceSingularPerconaXtraDB:
+		res = dbapi.ResourcePluralPerconaXtraDB
+	case olddbapi.ResourceCodePgpool, olddbapi.ResourcePluralPgpool, olddbapi.ResourceSingularPgpool:
+		res = olddbapi.ResourcePluralPgpool
+	case dbapi.ResourceCodePostgres, dbapi.ResourcePluralPostgres, dbapi.ResourceSingularPostgres:
+		res = dbapi.ResourcePluralPostgres
+	case dbapi.ResourceCodeProxySQL, dbapi.ResourcePluralProxySQL, dbapi.ResourceSingularProxySQL:
+		res = dbapi.ResourcePluralProxySQL
+	case olddbapi.ResourceCodeRabbitmq, olddbapi.ResourcePluralRabbitmq, olddbapi.ResourceSingularRabbitmq:
+		res = olddbapi.ResourcePluralRabbitmq
+	case dbapi.ResourceCodeRedis, dbapi.ResourcePluralRedis, dbapi.ResourceSingularRedis:
+		res = dbapi.ResourcePluralRedis
+	case olddbapi.ResourceCodeSinglestore, olddbapi.ResourcePluralSinglestore, olddbapi.ResourceSingularSinglestore:
+		res = olddbapi.ResourcePluralSinglestore
+	case olddbapi.ResourceCodeSolr, olddbapi.ResourcePluralSolr, olddbapi.ResourceSingularSolr:
+		res = olddbapi.ResourcePluralSolr
+	case olddbapi.ResourceCodeZooKeeper, olddbapi.ResourcePluralZooKeeper, olddbapi.ResourceSingularZooKeeper:
+		res = olddbapi.ResourcePluralZooKeeper
 	default:
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}
@@ -55,24 +71,38 @@ func ConvertedResourceToSingular(resource string) string {
 	// standardizing the resource name
 	res := strings.ToLower(resource)
 	switch res {
-	case api.ResourceCodeElasticsearch, api.ResourcePluralElasticsearch, api.ResourceSingularElasticsearch:
-		res = api.ResourceSingularElasticsearch
-	case api.ResourceCodeKafka, api.ResourcePluralKafka, api.ResourceSingularKafka:
-		res = api.ResourceSingularKafka
-	case api.ResourceCodeMariaDB, api.ResourcePluralMariaDB, api.ResourceSingularMariaDB:
-		res = api.ResourceSingularMariaDB
-	case api.ResourceCodeMongoDB, api.ResourcePluralMongoDB, api.ResourceSingularMongoDB:
-		res = api.ResourceSingularMongoDB
-	case api.ResourceCodeMySQL, api.ResourcePluralMySQL, api.ResourceSingularMySQL:
-		res = api.ResourceSingularMySQL
-	case api.ResourceCodePerconaXtraDB, api.ResourcePluralPerconaXtraDB, api.ResourceSingularPerconaXtraDB:
-		res = api.ResourceSingularPerconaXtraDB
-	case api.ResourceCodePostgres, api.ResourcePluralPostgres, api.ResourceSingularPostgres:
-		res = api.ResourceSingularPostgres
-	case api.ResourceCodeProxySQL, api.ResourcePluralProxySQL, api.ResourceSingularProxySQL:
-		res = api.ResourceSingularProxySQL
-	case api.ResourceCodeRedis, api.ResourcePluralRedis, api.ResourceSingularRedis:
-		res = api.ResourceSingularRedis
+	case kapi.ResourceCodeConnectCluster, kapi.ResourcePluralConnectCluster, kapi.ResourceSingularConnectCluster:
+		res = kapi.ResourceSingularConnectCluster
+	case olddbapi.ResourceCodeDruid, olddbapi.ResourcePluralDruid, olddbapi.ResourceSingularDruid:
+		res = olddbapi.ResourceSingularDruid
+	case dbapi.ResourceCodeElasticsearch, dbapi.ResourcePluralElasticsearch, dbapi.ResourceSingularElasticsearch:
+		res = dbapi.ResourceSingularElasticsearch
+	case dbapi.ResourceCodeKafka, dbapi.ResourcePluralKafka, dbapi.ResourceSingularKafka:
+		res = dbapi.ResourceSingularKafka
+	case dbapi.ResourceCodeMariaDB, dbapi.ResourcePluralMariaDB, dbapi.ResourceSingularMariaDB:
+		res = dbapi.ResourceSingularMariaDB
+	case dbapi.ResourceCodeMongoDB, dbapi.ResourcePluralMongoDB, dbapi.ResourceSingularMongoDB:
+		res = dbapi.ResourceSingularMongoDB
+	case dbapi.ResourceCodeMySQL, dbapi.ResourcePluralMySQL, dbapi.ResourceSingularMySQL:
+		res = dbapi.ResourceSingularMySQL
+	case dbapi.ResourceCodePerconaXtraDB, dbapi.ResourcePluralPerconaXtraDB, dbapi.ResourceSingularPerconaXtraDB:
+		res = dbapi.ResourceSingularPerconaXtraDB
+	case olddbapi.ResourceCodePgpool, olddbapi.ResourcePluralPgpool, olddbapi.ResourceSingularPgpool:
+		res = olddbapi.ResourceSingularPgpool
+	case dbapi.ResourceCodePostgres, dbapi.ResourcePluralPostgres, dbapi.ResourceSingularPostgres:
+		res = dbapi.ResourceSingularPostgres
+	case dbapi.ResourceCodeProxySQL, dbapi.ResourcePluralProxySQL, dbapi.ResourceSingularProxySQL:
+		res = dbapi.ResourceSingularProxySQL
+	case olddbapi.ResourceCodeRabbitmq, olddbapi.ResourcePluralRabbitmq, olddbapi.ResourceSingularRabbitmq:
+		res = olddbapi.ResourceSingularRabbitmq
+	case dbapi.ResourceCodeRedis, dbapi.ResourcePluralRedis, dbapi.ResourceSingularRedis:
+		res = dbapi.ResourceSingularRedis
+	case olddbapi.ResourceCodeSinglestore, olddbapi.ResourcePluralSinglestore, olddbapi.ResourceSingularSinglestore:
+		res = olddbapi.ResourceSingularSinglestore
+	case olddbapi.ResourceCodeSolr, olddbapi.ResourcePluralSolr, olddbapi.ResourceSingularSolr:
+		res = olddbapi.ResourceSingularSolr
+	case olddbapi.ResourceCodeZooKeeper, olddbapi.ResourcePluralZooKeeper, olddbapi.ResourceSingularZooKeeper:
+		res = olddbapi.ResourceSingularZooKeeper
 	default:
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}
