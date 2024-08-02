@@ -12,6 +12,14 @@ import (
 )
 
 const (
+	// SolrOpsRequestTypeUpdateVersion is a SolrOpsRequestType of type UpdateVersion.
+	SolrOpsRequestTypeUpdateVersion SolrOpsRequestType = "UpdateVersion"
+	// SolrOpsRequestTypeVerticalScaling is a SolrOpsRequestType of type VerticalScaling.
+	SolrOpsRequestTypeVerticalScaling SolrOpsRequestType = "VerticalScaling"
+	// SolrOpsRequestTypeVolumeExpansion is a SolrOpsRequestType of type VolumeExpansion.
+	SolrOpsRequestTypeVolumeExpansion SolrOpsRequestType = "VolumeExpansion"
+	// SolrOpsRequestTypeReconfigure is a SolrOpsRequestType of type Reconfigure.
+	SolrOpsRequestTypeReconfigure SolrOpsRequestType = "Reconfigure"
 	// SolrOpsRequestTypeRestart is a SolrOpsRequestType of type Restart.
 	SolrOpsRequestTypeRestart SolrOpsRequestType = "Restart"
 )
@@ -19,6 +27,10 @@ const (
 var ErrInvalidSolrOpsRequestType = fmt.Errorf("not a valid SolrOpsRequestType, try [%s]", strings.Join(_SolrOpsRequestTypeNames, ", "))
 
 var _SolrOpsRequestTypeNames = []string{
+	string(SolrOpsRequestTypeUpdateVersion),
+	string(SolrOpsRequestTypeVerticalScaling),
+	string(SolrOpsRequestTypeVolumeExpansion),
+	string(SolrOpsRequestTypeReconfigure),
 	string(SolrOpsRequestTypeRestart),
 }
 
@@ -32,6 +44,10 @@ func SolrOpsRequestTypeNames() []string {
 // SolrOpsRequestTypeValues returns a list of the values for SolrOpsRequestType
 func SolrOpsRequestTypeValues() []SolrOpsRequestType {
 	return []SolrOpsRequestType{
+		SolrOpsRequestTypeUpdateVersion,
+		SolrOpsRequestTypeVerticalScaling,
+		SolrOpsRequestTypeVolumeExpansion,
+		SolrOpsRequestTypeReconfigure,
 		SolrOpsRequestTypeRestart,
 	}
 }
@@ -49,7 +65,11 @@ func (x SolrOpsRequestType) IsValid() bool {
 }
 
 var _SolrOpsRequestTypeValue = map[string]SolrOpsRequestType{
-	"Restart": SolrOpsRequestTypeRestart,
+	"UpdateVersion":   SolrOpsRequestTypeUpdateVersion,
+	"VerticalScaling": SolrOpsRequestTypeVerticalScaling,
+	"VolumeExpansion": SolrOpsRequestTypeVolumeExpansion,
+	"Reconfigure":     SolrOpsRequestTypeReconfigure,
+	"Restart":         SolrOpsRequestTypeRestart,
 }
 
 // ParseSolrOpsRequestType attempts to convert a string to a SolrOpsRequestType.

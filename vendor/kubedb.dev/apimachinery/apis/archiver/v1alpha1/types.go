@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	api "kubedb.dev/apimachinery/apis/kubedb/v1"
+
 	batch "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -25,6 +27,15 @@ import (
 	"kubestash.dev/apimachinery/apis"
 	stashcoreapi "kubestash.dev/apimachinery/apis/core/v1alpha1"
 )
+
+type Accessor interface {
+	GetObjectMeta() metav1.ObjectMeta
+	GetConsumers() *api.AllowedConsumers
+}
+
+type ListAccessor interface {
+	GetItems() []Accessor
+}
 
 type FullBackupOptions struct {
 	// +kubebuilder:default:=VolumeSnapshotter

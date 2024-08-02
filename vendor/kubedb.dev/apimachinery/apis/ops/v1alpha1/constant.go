@@ -169,6 +169,8 @@ const (
 	VolumeExpansionMLNode           = "VolumeExpansionMLNode"
 	VolumeExpansionTransformNode    = "VolumeExpansionTransformNode"
 	VolumeExpansionCoordinatingNode = "VolumeExpansionCoordinatingNode"
+	VolumeExpansionOverseerNode     = "VolumeExpansionOverseerNode"
+	VolumeExpansionCoordinatorNode  = "VolumeExpansionCoordinatorNode"
 )
 
 // Kafka Constants

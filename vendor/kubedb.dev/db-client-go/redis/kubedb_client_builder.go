@@ -40,10 +40,11 @@ const (
 )
 
 type KubeDBClientBuilder struct {
-	kc      client.Client
-	db      *dbapi.Redis
-	podName string
-	url     string
+	kc       client.Client
+	db       *dbapi.Redis
+	podName  string
+	url      string
+	database int
 }
 
 func NewKubeDBClientBuilder(kc client.Client, db *dbapi.Redis) *KubeDBClientBuilder {
@@ -63,6 +64,11 @@ func (o *KubeDBClientBuilder) WithURL(url string) *KubeDBClientBuilder {
 	return o
 }
 
+func (o *KubeDBClientBuilder) WithDatabase(database int) *KubeDBClientBuilder {
+	o.database = database
+	return o
+}
+
 func (o *KubeDBClientBuilder) GetRedisClient(ctx context.Context) (*Client, error) {
 	var err error
 	if o.podName != "" {
@@ -76,6 +82,7 @@ func (o *KubeDBClientBuilder) GetRedisClient(ctx context.Context) (*Client, erro
 		ConnMaxIdleTime: DefaultConnMaxIdleTime,
 		PoolSize:        DefaultPoolSize,
 		Addr:            o.url,
+		DB:              o.database,
 	}
 	if !o.db.Spec.DisableAuth {
 		rdOpts.Password, err = o.getClientPassword(ctx)

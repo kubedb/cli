@@ -95,7 +95,7 @@ func (s *SinglestoreAutoscaler) ValidateCreate() (admission.Warnings, error) {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (s *SinglestoreAutoscaler) ValidateUpdate(oldObj runtime.Object) (admission.Warnings, error) {
-	kafkaLog.Info("validate create", "name", s.Name)
+	kafkaLog.Info("validate update", "name", s.Name)
 	return nil, s.validate()
 }
 

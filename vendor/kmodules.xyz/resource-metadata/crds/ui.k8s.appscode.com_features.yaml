@@ -158,6 +158,8 @@ spec:
                           type: string
                         kind:
                           type: string
+                        optional:
+                          type: string
                         selector:
                           additionalProperties:
                             type: string

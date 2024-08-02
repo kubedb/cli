@@ -85,7 +85,7 @@ func (r *RabbitMQAutoscaler) ValidateCreate() (admission.Warnings, error) {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *RabbitMQAutoscaler) ValidateUpdate(oldObj runtime.Object) (admission.Warnings, error) {
-	rabbitLog.Info("validate create", "name", r.Name)
+	rabbitLog.Info("validate update", "name", r.Name)
 	return nil, r.validate()
 }
 

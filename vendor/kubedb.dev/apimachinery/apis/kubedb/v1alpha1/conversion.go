@@ -280,7 +280,7 @@ func Convert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(in *EtcdSpec, out *v1alpha2.
 		})
 	}
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.DeletionPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -304,7 +304,7 @@ func Convert_v1alpha2_EtcdSpec_To_v1alpha1_EtcdSpec(in *v1alpha2.EtcdSpec, out *
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
 	// WARNING: in.Halted requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = TerminationPolicy(in.DeletionPolicy)
 	return nil
 }
 

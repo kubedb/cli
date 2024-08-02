@@ -30,7 +30,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/klog/v2"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -49,14 +48,7 @@ func (s *Solr) Default() {
 	}
 	solrlog.Info("default", "name", s.Name)
 
-	slVersion := catalog.SolrVersion{}
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: s.Spec.Version}, &slVersion)
-	if err != nil {
-		klog.Errorf("Version does not exist.")
-		return
-	}
-
-	s.SetDefaults(&slVersion)
+	s.SetDefaults()
 }
 
 var _ webhook.Validator = &Solr{}

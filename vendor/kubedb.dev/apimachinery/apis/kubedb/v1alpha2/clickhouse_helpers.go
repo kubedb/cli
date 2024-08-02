@@ -30,6 +30,7 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
@@ -38,6 +39,7 @@ import (
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
 type ClickhouseApp struct {
@@ -269,7 +271,7 @@ func (c *ClickHouse) SetDefaults() {
 	}
 }
 
-func (r *ClickHouse) setDefaultContainerSecurityContext(chVersion *catalog.ClickHouseVersion, podTemplate *ofst.PodTemplateSpec) {
+func (c *ClickHouse) setDefaultContainerSecurityContext(chVersion *catalog.ClickHouseVersion, podTemplate *ofst.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
@@ -290,7 +292,7 @@ func (r *ClickHouse) setDefaultContainerSecurityContext(chVersion *catalog.Click
 	if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
 	}
-	r.assignDefaultContainerSecurityContext(chVersion, container.SecurityContext)
+	c.assignDefaultContainerSecurityContext(chVersion, container.SecurityContext)
 
 	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ClickHouseInitContainerName)
 	if initContainer == nil {
@@ -302,10 +304,10 @@ func (r *ClickHouse) setDefaultContainerSecurityContext(chVersion *catalog.Click
 	if initContainer.SecurityContext == nil {
 		initContainer.SecurityContext = &core.SecurityContext{}
 	}
-	r.assignDefaultContainerSecurityContext(chVersion, initContainer.SecurityContext)
+	c.assignDefaultContainerSecurityContext(chVersion, initContainer.SecurityContext)
 }
 
-func (r *ClickHouse) assignDefaultContainerSecurityContext(chVersion *catalog.ClickHouseVersion, rc *core.SecurityContext) {
+func (c *ClickHouse) assignDefaultContainerSecurityContext(chVersion *catalog.ClickHouseVersion, rc *core.SecurityContext) {
 	if rc.AllowPrivilegeEscalation == nil {
 		rc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -323,4 +325,17 @@ func (r *ClickHouse) assignDefaultContainerSecurityContext(chVersion *catalog.Cl
 	if rc.SeccompProfile == nil {
 		rc.SeccompProfile = secomp.DefaultSeccompProfile()
 	}
+}
+
+func (c *ClickHouse) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {
+	// Desire number of petSets
+	expectedItems := 0
+	if c.Spec.ClusterTopology != nil {
+		for _, cluster := range c.Spec.ClusterTopology.Cluster {
+			expectedItems += int(*cluster.Shards)
+		}
+	} else {
+		expectedItems += 1
+	}
+	return checkReplicasOfPetSet(lister.PetSets(c.Namespace), labels.SelectorFromSet(c.OffshootLabels()), expectedItems)
 }

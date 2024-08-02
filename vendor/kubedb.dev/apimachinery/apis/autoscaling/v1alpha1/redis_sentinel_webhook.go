@@ -79,7 +79,7 @@ func (in *RedisSentinelAutoscaler) ValidateCreate() (admission.Warnings, error) 
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (in *RedisSentinelAutoscaler) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
-	rsLog.Info("validate create", "name", in.Name)
+	rsLog.Info("validate update", "name", in.Name)
 	return nil, in.validate()
 }
 

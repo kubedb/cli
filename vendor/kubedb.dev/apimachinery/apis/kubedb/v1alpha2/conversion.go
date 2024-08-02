@@ -662,11 +662,13 @@ func Convert_v1alpha2_RedisSpec_To_v1_RedisSpec(in *RedisSpec, out *v1.RedisSpec
 		return err
 	}
 
-	if out.Cluster == nil {
-		out.Cluster = &v1.RedisClusterSpec{}
-	}
-	if err := Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(in.Cluster, out.Cluster, s); err != nil {
-		return err
+	if in.Mode == RedisModeCluster {
+		if out.Cluster == nil {
+			out.Cluster = &v1.RedisClusterSpec{}
+		}
+		if err := Convert_v1alpha2_RedisClusterSpec_To_v1_RedisClusterSpec(in.Cluster, out.Cluster, s); err != nil {
+			return err
+		}
 	}
 
 	out.Version = in.Version
@@ -730,11 +732,13 @@ func Convert_v1_RedisSpec_To_v1alpha2_RedisSpec(in *v1.RedisSpec, out *RedisSpec
 		return err
 	}
 
-	if out.Cluster == nil {
-		out.Cluster = &RedisClusterSpec{}
-	}
-	if err := Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(in.Cluster, out.Cluster, s); err != nil {
-		return err
+	if in.Mode == v1.RedisModeCluster {
+		if out.Cluster == nil {
+			out.Cluster = &RedisClusterSpec{}
+		}
+		if err := Convert_v1_RedisClusterSpec_To_v1alpha2_RedisClusterSpec(in.Cluster, out.Cluster, s); err != nil {
+			return err
+		}
 	}
 
 	out.Version = in.Version

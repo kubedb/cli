@@ -24,6 +24,8 @@ type ElasticsearchOpsRequestExpansion interface{}
 
 type EtcdOpsRequestExpansion interface{}
 
+type FerretDBOpsRequestExpansion interface{}
+
 type KafkaOpsRequestExpansion interface{}
 
 type MariaDBOpsRequestExpansion interface{}

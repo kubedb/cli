@@ -60,7 +60,7 @@ type PgpoolAutoscaler struct {
 type PgpoolAutoscalerSpec struct {
 	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
-	// This field will be used to control the behaviour of ops-manager
+	// OpsRequestOptions will be used to control the behaviour of ops-manager
 	OpsRequestOptions *PgpoolOpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *PgpoolComputeAutoscalerSpec `json:"compute,omitempty"`

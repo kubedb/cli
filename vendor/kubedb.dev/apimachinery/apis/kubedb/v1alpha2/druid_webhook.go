@@ -126,16 +126,26 @@ func (d *Druid) validateCreateOrUpdate() field.ErrorList {
 		}
 	}
 
-	if d.Spec.MetadataStorage == nil {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage"),
+	if d.Spec.MetadataStorage.Name == "" {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage").Child("name"),
 			d.Name,
-			"spec.metadataStorage is missing"))
-	} else {
-		if d.Spec.MetadataStorage.ExternallyManaged && d.Spec.MetadataStorage.Name == "" {
-			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage").Child("name"),
-				d.Name,
-				"spec.metadataStorage.name can not be empty when d.Spec.MetadataStorage.ExternallyManaged is true"))
-		}
+			"spec.metadataStorage.name can not be empty"))
+	}
+	if d.Spec.MetadataStorage.Namespace == "" {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("metadataStorage").Child("namespace"),
+			d.Name,
+			"spec.metadataStorage.namespace can not be empty"))
+	}
+
+	if d.Spec.ZookeeperRef.Name == "" {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("zookeeperRef").Child("name"),
+			d.Name,
+			"spec.zookeeperRef.name can not be empty"))
+	}
+	if d.Spec.ZookeeperRef.Namespace == "" {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("zookeeperRef").Child("namespace"),
+			d.Name,
+			"spec.zookeeperRef.namespace can not be empty"))
 	}
 
 	if d.Spec.Topology == nil {
