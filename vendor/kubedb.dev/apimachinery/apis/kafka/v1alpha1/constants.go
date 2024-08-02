@@ -111,3 +111,33 @@ const (
 	SchemaRegistryOperatorVolumeConfig = "registry-operator-config"
 	SchemaRegistryOperatorConfigPath   = "/deployments/config"
 )
+
+// RestProxy constants
+
+const (
+	RestProxyPrimaryPortName      = "primary"
+	RestProxyPortName             = "restproxy"
+	RestProxyRESTPort             = 8082
+	RestProxyContainerName        = "rest-proxy"
+	RestProxyOperatorVolumeConfig = "rest-proxy-operator-config"
+	RestProxyOperatorConfigPath   = "/opt/karapace/config"
+
+	RestProxyKarapaceLogLevel          = "log_level"
+	RestProxyKarapaceLogLevelWarning   = "WARNING"
+	RestProxyKarapaceLogLevelInfo      = "INFO"
+	RestProxyKarapaceLogLevelDebug     = "DEBUG"
+	RestProxyKarapaceHostName          = "host"
+	RestProxyKarapacePortName          = "port"
+	RestProxyKafkaBootstrapURI         = "bootstrap_uri"
+	RestProxyKafkaSecurityProtocolName = "security_protocol"
+	RestProxyKafkaSASLMechanismName    = "sasl_mechanism"
+	RestProxyKafkaSASLUsername         = "sasl_plain_username"
+	RestProxyKafkaSASLPassword         = "sasl_plain_password"
+	RestProxyKafkaSSLCAFile            = "ssl_cafile"
+	RestProxyKafkaSSLCertFile          = "ssl_certfile"
+	RestProxyKafkaSSLKeyFile           = "ssl_keyfile"
+	RestProxyKafkaSSLCAFilePath        = "/var/private/kafka-client-ssl/ca.crt"
+	RestProxyKafkaSSLCertFilePath      = "/var/private/kafka-client-ssl/tls.crt"
+	RestProxyKafkaSSLKeyFilePath       = "/var/private/kafka-client-ssl/tls.key"
+	RestProxyConfigFileName            = "rest.config.json"
+)

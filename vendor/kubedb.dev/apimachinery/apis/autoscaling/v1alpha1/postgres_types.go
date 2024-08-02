@@ -62,7 +62,7 @@ type PostgresAutoscaler struct {
 type PostgresAutoscalerSpec struct {
 	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
-	// This field will be used to control the behaviour of ops-manager
+	// OpsRequestOptions will be used to control the behaviour of ops-manager
 	OpsRequestOptions *PostgresOpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *PostgresComputeAutoscalerSpec `json:"compute,omitempty"`

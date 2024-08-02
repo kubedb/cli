@@ -667,6 +667,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.memcachedStatsService":                         schema_apimachinery_apis_kubedb_v1alpha2_memcachedStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mongoDBApp":                                    schema_apimachinery_apis_kubedb_v1alpha2_mongoDBApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mongoDBStatsService":                           schema_apimachinery_apis_kubedb_v1alpha2_mongoDBStatsService(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mssqlserverStatsService":                       schema_apimachinery_apis_kubedb_v1alpha2_mssqlserverStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mysqlApp":                                      schema_apimachinery_apis_kubedb_v1alpha2_mysqlApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.mysqlStatsService":                             schema_apimachinery_apis_kubedb_v1alpha2_mysqlStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.perconaXtraDBApp":                              schema_apimachinery_apis_kubedb_v1alpha2_perconaXtraDBApp(ref),
@@ -27409,9 +27410,9 @@ func schema_apimachinery_apis_kubedb_v1alpha2_EtcdSpec(ref common.ReferenceCallb
 							Format:      "",
 						},
 					},
-					"terminationPolicy": {
+					"deletionPolicy": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TerminationPolicy controls the delete operation for database",
+							Description: "DeletionPolicy controls the delete operation for database",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -28752,12 +28753,24 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerSpec(ref common.Referen
 							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
 						},
 					},
+					"monitor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Monitor is used monitor database instance",
+							Ref:         ref("kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec"),
+						},
+					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver controls database backup using Archiver CR",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SQLServerTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SQLServerTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -34835,6 +34848,26 @@ func schema_apimachinery_apis_kubedb_v1alpha2_mongoDBStatsService(ref common.Ref
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MongoDB"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_mssqlserverStatsService(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"MSSQLServer": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer"),
+						},
+					},
+				},
+				Required: []string{"MSSQLServer"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServer"},
 	}
 }
 

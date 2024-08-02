@@ -22,4 +22,6 @@ type ConnectClusterExpansion interface{}
 
 type ConnectorExpansion interface{}
 
+type RestProxyExpansion interface{}
+
 type SchemaRegistryExpansion interface{}

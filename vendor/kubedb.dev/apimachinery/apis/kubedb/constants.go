@@ -689,6 +689,10 @@ const (
 	DatabaseWriteAccess = "DatabaseWriteAccess"
 	// check dependencies are ready
 	DatabaseDependencyReady = "DatabaseDependencyReady"
+	// update config secret for backup in solr
+	PatchConfigSecretUpdateForBackup = "PatchConfigSecretUpdatesForBackup"
+	// sync db to update configuration
+	SyncDatabaseForConfigurationUpdate = "SyncDatabaseForConfigurationUpdate"
 
 	// Condition reasons
 	DataRestoreStartedByExternalInitializer    = "DataRestoreStartedByExternalInitializer"
@@ -923,6 +927,15 @@ const (
 	SolrConfAllowPathsValue        = ""
 	SolrConfSolrCloudKey           = "solrcloud"
 	SolrConfShardHandlerFactoryKey = "shardHandlerFactory"
+
+	ProxyDeploymentName = "s3proxy"
+	ProxyServiceName    = "proxy-svc"
+	ProxySecretName     = "proxy-env"
+	ProxyImage          = "andrewgaul/s3proxy"
+	ProxyPortName       = "http"
+	ProxyPortNumber     = 80
+	ProxyContainerName  = "proxy"
+	ProxyLabelsApp      = "app"
 )
 
 // =========================== Druid Constants ============================

@@ -31,6 +31,7 @@ type KafkaV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	ConnectClustersGetter
 	ConnectorsGetter
+	RestProxiesGetter
 	SchemaRegistriesGetter
 }
 
@@ -45,6 +46,10 @@ func (c *KafkaV1alpha1Client) ConnectClusters(namespace string) ConnectClusterIn
 
 func (c *KafkaV1alpha1Client) Connectors(namespace string) ConnectorInterface {
 	return newConnectors(c, namespace)
+}
+
+func (c *KafkaV1alpha1Client) RestProxies(namespace string) RestProxyInterface {
+	return newRestProxies(c, namespace)
 }
 
 func (c *KafkaV1alpha1Client) SchemaRegistries(namespace string) SchemaRegistryInterface {

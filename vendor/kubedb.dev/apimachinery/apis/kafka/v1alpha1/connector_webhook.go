@@ -64,9 +64,9 @@ func (k *Connector) ValidateDelete() (admission.Warnings, error) {
 
 	var allErr field.ErrorList
 	if k.Spec.DeletionPolicy == dbapi.DeletionPolicyDoNotTerminate {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deletionPolicy"),
 			k.Name,
-			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
+			"Can not delete as deletionPolicy is set to \"DoNotTerminate\""))
 		return nil, apierrors.NewInvalid(schema.GroupKind{Group: "kafka.kubedb.com", Kind: "Connector"}, k.Name, allErr)
 	}
 	return nil, nil
@@ -75,7 +75,7 @@ func (k *Connector) ValidateDelete() (admission.Warnings, error) {
 func (k *Connector) ValidateCreateOrUpdate() error {
 	var allErr field.ErrorList
 	if k.Spec.DeletionPolicy == dbapi.DeletionPolicyHalt {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deletionPolicy"),
 			k.Name,
 			"DeletionPolicyHalt isn't supported for Connector"))
 	}

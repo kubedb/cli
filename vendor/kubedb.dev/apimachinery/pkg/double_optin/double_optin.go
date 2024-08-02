@@ -24,28 +24,25 @@ import (
 	"k8s.io/klog/v2"
 )
 
-// CheckIfDoubleOptInPossible is the intended function to be called from operator
-// It checks if the namespace, where SchemaDatabase or Archiver is applied, is allowed.
-// It also checks the labels of schemaDatabase OR archiver, to decide if that is allowed or not.
-//
-// Here, clientMeta is the ObjectMeta of SchemaDatabase or Archiver
-// & clientNSMeta is the ObjectMeta of the namespace where they belong.
-func CheckIfDoubleOptInPossible(clientMeta metav1.ObjectMeta, clientNSMeta metav1.ObjectMeta, dbNSMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
+// CheckIfDoubleOptInPossible is the intended function to be called from operators.
+// In Archiver - DB connection, DB is the requester, Archiver is the allower
+// In Schema - DB connection, Schema is the requester, DB is the allower
+func CheckIfDoubleOptInPossible(requesterMeta, requesterNSMeta, allowerNSMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
 	if consumers == nil {
 		return false, nil
 	}
-	matchNamespace, err := IsInAllowedNamespaces(clientNSMeta, dbNSMeta, consumers)
+	matchNamespace, err := IsInAllowedNamespaces(requesterNSMeta, allowerNSMeta, consumers)
 	if err != nil {
 		return false, err
 	}
-	matchLabels, err := IsMatchByLabels(clientMeta, consumers)
+	matchLabels, err := IsMatchByLabels(requesterMeta, consumers)
 	if err != nil {
 		return false, err
 	}
 	return matchNamespace && matchLabels, nil
 }
 
-func IsInAllowedNamespaces(clientNSMeta metav1.ObjectMeta, dbNSMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
+func IsInAllowedNamespaces(requesterNSMeta, allowerNSMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
 	if consumers.Namespaces == nil || consumers.Namespaces.From == nil {
 		return false, nil
 	}
@@ -54,14 +51,14 @@ func IsInAllowedNamespaces(clientNSMeta metav1.ObjectMeta, dbNSMeta metav1.Objec
 		return true, nil
 	}
 	if *consumers.Namespaces.From == dbapi.NamespacesFromSame {
-		return clientNSMeta.GetName() == dbNSMeta.GetName(), nil
+		return requesterNSMeta.GetName() == allowerNSMeta.GetName(), nil
 	}
 	if *consumers.Namespaces.From == dbapi.NamespacesFromSelector {
 		if consumers.Namespaces.Selector == nil {
 			// this says, Select namespace from the Selector, but the Namespace.Selector field is nil. So, no way to select namespace here.
 			return false, nil
 		}
-		ret, err := selectorMatches(consumers.Namespaces.Selector, clientNSMeta.GetLabels())
+		ret, err := selectorMatches(consumers.Namespaces.Selector, requesterNSMeta.GetLabels())
 		if err != nil {
 			return false, err
 		}
@@ -70,9 +67,9 @@ func IsInAllowedNamespaces(clientNSMeta metav1.ObjectMeta, dbNSMeta metav1.Objec
 	return false, nil
 }
 
-func IsMatchByLabels(clientMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
+func IsMatchByLabels(requesterMeta metav1.ObjectMeta, consumers *dbapi.AllowedConsumers) (bool, error) {
 	if consumers.Selector != nil {
-		ret, err := selectorMatches(consumers.Selector, clientMeta.Labels)
+		ret, err := selectorMatches(consumers.Selector, requesterMeta.Labels)
 		if err != nil {
 			return false, err
 		}

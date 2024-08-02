@@ -83,7 +83,7 @@ func (in *PostgresAutoscaler) ValidateCreate() (admission.Warnings, error) {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (in *PostgresAutoscaler) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
-	pgLog.Info("validate create", "name", in.Name)
+	pgLog.Info("validate update", "name", in.Name)
 	return nil, in.validate()
 }
 

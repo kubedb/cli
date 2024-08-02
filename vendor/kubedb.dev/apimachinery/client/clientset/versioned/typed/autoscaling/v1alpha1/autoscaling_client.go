@@ -29,10 +29,13 @@ import (
 
 type AutoscalingV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	ClickHouseAutoscalersGetter
 	DruidAutoscalersGetter
 	ElasticsearchAutoscalersGetter
 	EtcdAutoscalersGetter
+	FerretDBAutoscalersGetter
 	KafkaAutoscalersGetter
+	MSSQLServerAutoscalersGetter
 	MariaDBAutoscalersGetter
 	MemcachedAutoscalersGetter
 	MongoDBAutoscalersGetter
@@ -46,11 +49,17 @@ type AutoscalingV1alpha1Interface interface {
 	RedisAutoscalersGetter
 	RedisSentinelAutoscalersGetter
 	SinglestoreAutoscalersGetter
+	SolrAutoscalersGetter
+	ZooKeeperAutoscalersGetter
 }
 
 // AutoscalingV1alpha1Client is used to interact with features provided by the autoscaling.kubedb.com group.
 type AutoscalingV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *AutoscalingV1alpha1Client) ClickHouseAutoscalers(namespace string) ClickHouseAutoscalerInterface {
+	return newClickHouseAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) DruidAutoscalers(namespace string) DruidAutoscalerInterface {
@@ -65,8 +74,16 @@ func (c *AutoscalingV1alpha1Client) EtcdAutoscalers(namespace string) EtcdAutosc
 	return newEtcdAutoscalers(c, namespace)
 }
 
+func (c *AutoscalingV1alpha1Client) FerretDBAutoscalers(namespace string) FerretDBAutoscalerInterface {
+	return newFerretDBAutoscalers(c, namespace)
+}
+
 func (c *AutoscalingV1alpha1Client) KafkaAutoscalers(namespace string) KafkaAutoscalerInterface {
 	return newKafkaAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) MSSQLServerAutoscalers(namespace string) MSSQLServerAutoscalerInterface {
+	return newMSSQLServerAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) MariaDBAutoscalers(namespace string) MariaDBAutoscalerInterface {
@@ -119,6 +136,14 @@ func (c *AutoscalingV1alpha1Client) RedisSentinelAutoscalers(namespace string) R
 
 func (c *AutoscalingV1alpha1Client) SinglestoreAutoscalers(namespace string) SinglestoreAutoscalerInterface {
 	return newSinglestoreAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) SolrAutoscalers(namespace string) SolrAutoscalerInterface {
+	return newSolrAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) ZooKeeperAutoscalers(namespace string) ZooKeeperAutoscalerInterface {
+	return newZooKeeperAutoscalers(c, namespace)
 }
 
 // NewForConfig creates a new AutoscalingV1alpha1Client for the given config.

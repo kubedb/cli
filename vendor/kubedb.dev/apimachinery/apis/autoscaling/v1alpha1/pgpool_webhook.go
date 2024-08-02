@@ -81,7 +81,7 @@ func (r *PgpoolAutoscaler) ValidateCreate() (admission.Warnings, error) {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *PgpoolAutoscaler) ValidateUpdate(oldObj runtime.Object) (admission.Warnings, error) {
-	pgpoolLog.Info("validate create", "name", r.Name)
+	pgpoolLog.Info("validate update", "name", r.Name)
 	return nil, r.validate()
 }
 

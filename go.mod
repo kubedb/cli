@@ -29,8 +29,8 @@ require (
 	kmodules.xyz/client-go v0.30.9
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.47.0-rc.1
-	kubedb.dev/db-client-go v0.2.0-rc.1
+	kubedb.dev/apimachinery v0.47.0-rc.2
+	kubedb.dev/db-client-go v0.2.0-rc.2
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.34.0
@@ -115,11 +115,11 @@ require (
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.starlark.net v0.0.0-20230525235612-a134d8f9ddca // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
-	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/oauth2 v0.21.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/term v0.21.0 // indirect
+	golang.org/x/sys v0.22.0 // indirect
+	golang.org/x/term v0.22.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
@@ -142,7 +142,7 @@ require (
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.30.0 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.18.10 // indirect
+	kmodules.xyz/resource-metadata v0.18.11-0.20240801195527-995886d0c0e5 // indirect
 	kubeops.dev/petset v0.0.6 // indirect
 	kubeops.dev/sidekick v0.0.7 // indirect
 	kubestash.dev/apimachinery v0.10.0 // indirect

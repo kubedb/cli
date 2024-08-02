@@ -79,7 +79,7 @@ func (in *ProxySQLAutoscaler) ValidateCreate() (admission.Warnings, error) {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (in *ProxySQLAutoscaler) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
-	proxyLog.Info("validate create", "name", in.Name)
+	proxyLog.Info("validate update", "name", in.Name)
 	return nil, in.validate()
 }
 

@@ -32,6 +32,7 @@ type OpsV1alpha1Interface interface {
 	DruidOpsRequestsGetter
 	ElasticsearchOpsRequestsGetter
 	EtcdOpsRequestsGetter
+	FerretDBOpsRequestsGetter
 	KafkaOpsRequestsGetter
 	MariaDBOpsRequestsGetter
 	MemcachedOpsRequestsGetter
@@ -64,6 +65,10 @@ func (c *OpsV1alpha1Client) ElasticsearchOpsRequests(namespace string) Elasticse
 
 func (c *OpsV1alpha1Client) EtcdOpsRequests(namespace string) EtcdOpsRequestInterface {
 	return newEtcdOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) FerretDBOpsRequests(namespace string) FerretDBOpsRequestInterface {
+	return newFerretDBOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) KafkaOpsRequests(namespace string) KafkaOpsRequestInterface {
