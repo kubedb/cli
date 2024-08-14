@@ -88,7 +88,7 @@ func (_ ProxySQLAutoscaler) ValidateDelete() (admission.Warnings, error) {
 }
 
 func (in *ProxySQLAutoscaler) validate() error {
-	if in.Spec.ProxyRef == nil {
+	if in.Spec.DatabaseRef == nil {
 		return errors.New("proxyRef can't be empty")
 	}
 	return nil

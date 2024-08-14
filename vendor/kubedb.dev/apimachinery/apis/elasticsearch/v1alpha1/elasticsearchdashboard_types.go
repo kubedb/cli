@@ -88,7 +88,7 @@ type ElasticsearchDashboardStatus struct {
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:shortName=ed,scope=Namespaced
+// +kubebuilder:resource:path=elasticsearchdashboards,singular=elasticsearchdashboard,shortName=ed,categories={esstore,kubedb,appscode}
 // +kubebuilder:subresource:status
 // +kubebuilder:subresource:scale:specpath=.spec.replicas,statuspath=.status.replicas
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".apiVersion"

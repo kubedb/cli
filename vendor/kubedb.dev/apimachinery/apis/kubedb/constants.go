@@ -1178,11 +1178,22 @@ const (
 )
 
 const (
-	RabbitMQAMQPPort          = 5672
-	RabbitMQPeerDiscoveryPort = 4369
-	RabbitMQManagementUIPort  = 15672
-	RabbitMQExporterPort      = 15692
-	RabbitMQInterNodePort     = 25672
+	RabbitMQAMQPPort                = 5672
+	RabbitMQAMQPSPort               = 5671
+	RabbitMQMQTTPort                = 1883
+	RabbitMQMQTTPortWithSSL         = 8883
+	RabbitMQSTOMPPort               = 61613
+	RabbitMQSTOMPPortWithSSL        = 61614
+	RabbitMQWebSTOMPPort            = 15674
+	RabbitMQWebSTOMPPortWithSSL     = 15673
+	RabbitMQWebMQTTPort             = 15675
+	RabbitMQWebMQTTPortWithSSL      = 15676
+	RabbitMQExporterPort            = 15692
+	RabbitMQExporterPortWithSSL     = 15691
+	RabbitMQManagementUIPort        = 15672
+	RabbitMQManagementUIPortWithSSL = 15671
+	RabbitMQInterNodePort           = 25672
+	RabbitMQPeerDiscoveryPort       = 4369
 
 	RabbitMQVolumeData         = "data"
 	RabbitMQVolumeConfig       = "rabbitmqconfig"
@@ -1209,10 +1220,16 @@ const (
 	RabbitMQShovelPlugin               = "rabbitmq_shovel"
 	RabbitMQShovelManagementPlugin     = "rabbitmq_shovel_management"
 	RabbitMQWebDispatchPlugin          = "rabbitmq_web_dispatch"
+	RabbitMQMQTTPlugin                 = "rabbitmq_mqtt"
+	RabbitMQWebMQTTPlugin              = "rabbitmq_stomp"
+	RabbitMQSTOMPPlugin                = "rabbitmq_web_mqtt"
+	RabbitMQWebSTOMPPlugin             = "rabbitmq_web_stomp"
+	RabbitMQPrometheusPlugin           = "rabbitmq_prometheus"
 	RabbitMQLoopBackUserKey            = "loopback_users"
 	RabbitMQLoopBackUserVal            = "none"
 	RabbitMQDefaultTCPListenerKey      = "listeners.tcp.default"
 	RabbitMQDefaultSSLListenerKey      = "listeners.ssl.default"
+	RabbitMQDefaultSSLListener1Key     = "listeners.ssl.1"
 	RabbitMQDefaultTCPListenerVal      = "5672"
 	RabbitMQDefaultTLSListenerVal      = "5671"
 	RabbitMQQueueMasterLocatorKey      = "queue_master_locator"
@@ -1246,9 +1263,16 @@ const (
 	RabbitMQSSLOptionsPrivateKey       = "ssl_options.keyfile"
 	RabbitMQSSLOptionsVerifyKey        = "ssl_options.verify"
 	RabbitMQSSLOptionsFailIfNoPeerKey  = "ssl_options.fail_if_no_peer_cert"
-	RabbitMQConfigFileName             = "rabbitmq.conf"
-	RabbitMQEnabledPluginsFileName     = "enabled_plugins"
-	RabbitMQHealthCheckerQueueName     = "kubedb-system"
+	RabbitMQSSLPortKey                 = "ssl.port"
+
+	RabbitMQSSLCAKey               = "ssl.cacertfile"
+	RabbitMQSSLCertKey             = "ssl.certfile"
+	RabbitMQSSLPrivateKey          = "ssl.keyfile"
+	RabbitMQSSLVerifyKey           = "ssl.verify"
+	RabbitMQSSLFailIfNoPeerKey     = "ssl.fail_if_no_peer_cert"
+	RabbitMQConfigFileName         = "rabbitmq.conf"
+	RabbitMQEnabledPluginsFileName = "enabled_plugins"
+	RabbitMQHealthCheckerQueueName = "kubedb-system"
 )
 
 // =========================== FerretDB Constants ============================

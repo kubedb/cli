@@ -8,6 +8,11 @@ metadata:
 spec:
   group: kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: Solr
     listKind: SolrList
     plural: solrs
@@ -3370,6 +3375,7 @@ spec:
                       - primary
                       - standby
                       - stats
+                      - dashboard
                       type: string
                     metadata:
                       properties:

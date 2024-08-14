@@ -8,6 +8,11 @@ metadata:
 spec:
   group: kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: ZooKeeper
     listKind: ZooKeeperList
     plural: zookeepers
@@ -3369,6 +3374,7 @@ spec:
                       - primary
                       - standby
                       - stats
+                      - dashboard
                       type: string
                     metadata:
                       properties:

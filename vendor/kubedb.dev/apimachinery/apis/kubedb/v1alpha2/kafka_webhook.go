@@ -170,6 +170,12 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 		}
 	}
 
+	if k.Spec.Halted && k.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("halted"),
+			k.Name,
+			`can't halt if deletionPolicy is set to "DoNotTerminate"`))
+	}
+
 	err := k.validateVersion(k)
 	if err != nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("version"),
@@ -200,6 +206,11 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("storageType"),
 				k.Name,
 				"StorageType should be either durable or ephemeral"))
+		}
+		if k.Spec.StorageType == StorageTypeEphemeral && k.Spec.DeletionPolicy == TerminationPolicyHalt {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deletionPolicy"),
+				k.Name,
+				`'spec.deletionPolicy: Halt' can not be used for 'Ephemeral' storage`))
 		}
 	}
 

@@ -40,7 +40,7 @@ const (
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
-// +kubebuilder:resource:shortName=kf,scope=Namespaced
+// +kubebuilder:resource:path=kafkas,singular=kafka,shortName=kf,categories={datastore,kubedb,appscode,all}
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".apiVersion"
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
@@ -92,6 +92,10 @@ type KafkaSpec struct {
 	// Keystore encryption secret
 	// +optional
 	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`
+
+	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
+	// +optional
+	Halted bool `json:"halted,omitempty"`
 
 	// TLS contains tls configurations
 	// +optional

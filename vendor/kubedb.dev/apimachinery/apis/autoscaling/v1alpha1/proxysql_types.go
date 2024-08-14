@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=proxysqlautoscalers,singular=proxysqlautoscaler,shortName=prxscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=proxysqlautoscalers,singular=proxysqlautoscaler,shortName=prxscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type ProxySQLAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`
@@ -60,7 +60,7 @@ type ProxySQLAutoscaler struct {
 
 // ProxySQLAutoscalerSpec is the specification of the behavior of the autoscaler.
 type ProxySQLAutoscalerSpec struct {
-	ProxyRef *core.LocalObjectReference `json:"proxyRef"`
+	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
 	// This field will be used to control the behaviour of ops-manager
 	OpsRequestOptions *ProxySQLOpsRequestOptions `json:"opsRequestOptions,omitempty"`

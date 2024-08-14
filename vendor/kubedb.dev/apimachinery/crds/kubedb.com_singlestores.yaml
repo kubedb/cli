@@ -8,6 +8,11 @@ metadata:
 spec:
   group: kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: Singlestore
     listKind: SinglestoreList
     plural: singlestores
@@ -4375,6 +4380,7 @@ spec:
                       - primary
                       - standby
                       - stats
+                      - dashboard
                       type: string
                     metadata:
                       properties:

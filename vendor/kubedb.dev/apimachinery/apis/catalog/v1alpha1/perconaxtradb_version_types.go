@@ -37,7 +37,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=perconaxtradbversions,singular=perconaxtradbversion,scope=Cluster,shortName=pxversion,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=perconaxtradbversions,singular=perconaxtradbversion,scope=Cluster,shortName=pxversion,categories={catalog,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="DB_IMAGE",type="string",JSONPath=".spec.db.image"
 // +kubebuilder:printcolumn:name="Deprecated",type="boolean",JSONPath=".spec.deprecated"

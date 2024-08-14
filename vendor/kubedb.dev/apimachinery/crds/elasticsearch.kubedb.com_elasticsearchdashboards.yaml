@@ -8,6 +8,10 @@ metadata:
 spec:
   group: elasticsearch.kubedb.com
   names:
+    categories:
+    - esstore
+    - kubedb
+    - appscode
     kind: ElasticsearchDashboard
     listKind: ElasticsearchDashboardList
     plural: elasticsearchdashboards

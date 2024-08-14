@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=kafkaautoscalers,singular=kafkaautoscaler,shortName=kfscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=kafkaautoscalers,singular=kafkaautoscaler,shortName=kfscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type KafkaAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`

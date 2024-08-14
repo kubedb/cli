@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=druidautoscalers,singular=druidautoscaler,shortName=drscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=druidautoscalers,singular=druidautoscaler,shortName=drscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type DruidAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`

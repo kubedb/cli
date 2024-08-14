@@ -9,10 +9,9 @@ spec:
   group: schema.kubedb.com
   names:
     categories:
-    - datastore
+    - schema
     - kubedb
     - appscode
-    - all
     kind: PostgresDatabase
     listKind: PostgresDatabaseList
     plural: postgresdatabases

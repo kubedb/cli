@@ -37,7 +37,7 @@ const (
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-// +kubebuilder:resource:shortName=fr,scope=Namespaced
+// +kubebuilder:resource:path=ferretdbs,singular=ferretdb,shortName=fr,categories={datastore,kubedb,appscode,all}
 // +kubebuilder:printcolumn:name="Namespace",type="string",JSONPath=".metadata.namespace"
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"

@@ -1001,7 +1001,7 @@ func Convert_v1alpha2_PgBouncerSpec_To_v1_PgBouncerSpec(in *PgBouncerSpec, out *
 	out.Monitor = (*monitoringagentapiapiv1.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.SSLMode = v1.PgBouncerSSLMode(in.SSLMode)
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
-	out.DeletionPolicy = v1.PgBouncerDeletionPolicy(in.TerminationPolicy)
+	out.DeletionPolicy = v1.DeletionPolicy(in.TerminationPolicy)
 	out.HealthChecker = in.HealthChecker
 	return nil
 }

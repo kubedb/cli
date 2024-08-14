@@ -8,6 +8,10 @@ metadata:
 spec:
   group: kafka.kubedb.com
   names:
+    categories:
+    - kfstore
+    - kubedb
+    - appscode
     kind: ConnectCluster
     listKind: ConnectClusterList
     plural: connectclusters

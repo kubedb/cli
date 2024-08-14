@@ -624,7 +624,11 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 	}
 
 	if m.Spec.SSLMode == "" {
-		m.Spec.SSLMode = SSLModeDisabled
+		if m.Spec.TLS != nil {
+			m.Spec.SSLMode = SSLModeRequireSSL
+		} else {
+			m.Spec.SSLMode = SSLModeDisabled
+		}
 	}
 
 	if (m.Spec.ReplicaSet != nil || m.Spec.ShardTopology != nil) && m.Spec.ClusterAuthMode == "" {
