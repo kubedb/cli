@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"kubedb.dev/apimachinery/apis"
@@ -128,8 +129,8 @@ func (r *RabbitMQ) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(r.ServiceName(), "pods")
 }
 
-func (r *RabbitMQ) StandbyServiceName() string {
-	return meta_util.NameWithPrefix(r.ServiceName(), kubedb.KafkaStandbyServiceSuffix)
+func (r *RabbitMQ) DashboardServiceName() string {
+	return meta_util.NameWithSuffix(r.ServiceName(), "dashboard")
 }
 
 func (r *RabbitMQ) offshootLabels(selector, override map[string]string) map[string]string {
@@ -411,6 +412,10 @@ func (r *RabbitMQ) SetHealthCheckerDefaults() {
 	if r.Spec.HealthChecker.FailureThreshold == nil {
 		r.Spec.HealthChecker.FailureThreshold = pointer.Int32P(3)
 	}
+}
+
+func (r *RabbitMQ) IsProtocolDisabled(protocol RabbitMQProtocol) bool {
+	return slices.Contains(r.Spec.DisabledProtocols, protocol)
 }
 
 func (r *RabbitMQ) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {

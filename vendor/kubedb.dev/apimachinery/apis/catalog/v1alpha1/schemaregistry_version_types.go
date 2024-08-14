@@ -36,7 +36,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=schemaregistryversions,singular=schemaregistryversion,scope=Cluster,shortName=ksrversion,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=schemaregistryversions,singular=schemaregistryversion,scope=Cluster,shortName=ksrversion,categories={catalog,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Distribution",type="string",JSONPath=".spec.distribution"
 // +kubebuilder:printcolumn:name="REGISTRY_IMAGE",type="string",JSONPath=".spec.registry.image"

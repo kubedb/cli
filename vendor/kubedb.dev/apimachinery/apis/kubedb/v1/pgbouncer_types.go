@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=pgbouncers,singular=pgbouncer,shortName=pb,categories={proxy,kubedb,appscode,all}
+// +kubebuilder:resource:path=pgbouncers,singular=pgbouncer,shortName=pb,categories={datastore,kubedb,appscode,all}
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
@@ -100,12 +100,16 @@ type PgBouncerSpec struct {
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	DeletionPolicy PgBouncerDeletionPolicy `json:"deletionPolicy,omitempty"`
+	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
+
+	// Indicates that the database is halted and all offshoot Kubernetes resources are deleted.
+	// +optional
+	Halted bool `json:"halted,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;archiver;metrics-exporter
@@ -261,16 +265,4 @@ const (
 	// When server is config with this auth method. Client can't connect with pgbouncer server with password. They need
 	// to Send the client cert and client key certificate for authentication.
 	PgBouncerClientAuthModeCert PgBouncerClientAuthMode = "cert"
-)
-
-// +kubebuilder:validation:Enum=Delete;WipeOut;DoNotTerminate
-type PgBouncerDeletionPolicy string
-
-const (
-	// Deletes database pods, service, pvcs but leave the stash backup data intact.
-	PgBouncerDeletionPolicyDelete PgBouncerDeletionPolicy = "Delete"
-	// Deletes database pods, service, pvcs and stash backup data.
-	PgBouncerDeletionPolicyWipeOut PgBouncerDeletionPolicy = "WipeOut"
-	// Rejects attempt to delete database using ValidationWebhook.
-	PgBouncerDeletionPolicyDoNotTerminate PgBouncerDeletionPolicy = "DoNotTerminate"
 )

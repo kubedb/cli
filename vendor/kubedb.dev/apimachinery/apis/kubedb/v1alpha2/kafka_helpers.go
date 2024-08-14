@@ -299,6 +299,14 @@ func (k *Kafka) SetHealthCheckerDefaults() {
 }
 
 func (k *Kafka) SetDefaults() {
+	if k.Spec.Halted {
+		if k.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+			klog.Errorf(`Can't halt, since deletion policy is 'DoNotTerminate'`)
+			return
+		}
+		k.Spec.DeletionPolicy = TerminationPolicyHalt
+	}
+
 	if k.Spec.DeletionPolicy == "" {
 		k.Spec.DeletionPolicy = TerminationPolicyDelete
 	}

@@ -8,6 +8,11 @@ metadata:
 spec:
   group: kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: Kafka
     listKind: KafkaList
     plural: kafkas
@@ -3186,6 +3191,8 @@ spec:
               disableSecurity:
                 type: boolean
               enableSSL:
+                type: boolean
+              halted:
                 type: boolean
               healthChecker:
                 default:
@@ -16294,6 +16301,8 @@ spec:
                 type: boolean
               enableSSL:
                 type: boolean
+              halted:
+                type: boolean
               healthChecker:
                 default:
                   failureThreshold: 3
@@ -19600,6 +19609,7 @@ spec:
                       - primary
                       - standby
                       - stats
+                      - dashboard
                       type: string
                     metadata:
                       properties:

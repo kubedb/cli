@@ -72,7 +72,7 @@ type Param struct {
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=postgresdatabases,singular=postgresdatabase,shortName=pgschema,categories={datastore,kubedb,appscode,all}
+// +kubebuilder:resource:path=postgresdatabases,singular=postgresdatabase,shortName=pgschema,categories={schema,kubedb,appscode}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="DB_SERVER",type="string",JSONPath=".spec.database.serverRef.name"
 // +kubebuilder:printcolumn:name="DB_NAME",type="string",JSONPath=".spec.database.config.name"

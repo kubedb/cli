@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=elasticsearchautoscalers,singular=elasticsearchautoscaler,shortName=esscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=elasticsearchautoscalers,singular=elasticsearchautoscaler,shortName=esscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type ElasticsearchAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`

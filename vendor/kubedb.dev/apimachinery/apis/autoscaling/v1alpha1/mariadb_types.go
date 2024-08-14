@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=mariadbautoscalers,singular=mariadbautoscaler,shortName=mdscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=mariadbautoscalers,singular=mariadbautoscaler,shortName=mdscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type MariaDBAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`

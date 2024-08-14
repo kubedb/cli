@@ -8,6 +8,11 @@ metadata:
 spec:
   group: kubedb.com
   names:
+    categories:
+    - datastore
+    - kubedb
+    - appscode
+    - all
     kind: FerretDB
     listKind: FerretDBList
     plural: ferretdbs
@@ -3376,6 +3381,7 @@ spec:
                       - primary
                       - standby
                       - stats
+                      - dashboard
                       type: string
                     metadata:
                       properties:

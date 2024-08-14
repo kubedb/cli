@@ -9,7 +9,7 @@ spec:
   group: kubedb.com
   names:
     categories:
-    - proxy
+    - datastore
     - kubedb
     - appscode
     - all
@@ -147,10 +147,13 @@ spec:
                 type: object
               deletionPolicy:
                 enum:
+                - Halt
                 - Delete
                 - WipeOut
                 - DoNotTerminate
                 type: string
+              halted:
+                type: boolean
               healthChecker:
                 default:
                   failureThreshold: 1
@@ -3790,6 +3793,8 @@ spec:
                 - databaseName
                 - databaseRef
                 type: object
+              halted:
+                type: boolean
               healthChecker:
                 default:
                   failureThreshold: 1
@@ -6655,6 +6660,7 @@ spec:
                       - primary
                       - standby
                       - stats
+                      - dashboard
                       type: string
                     metadata:
                       properties:
@@ -6728,6 +6734,7 @@ spec:
                 type: string
               terminationPolicy:
                 enum:
+                - Halt
                 - Delete
                 - WipeOut
                 - DoNotTerminate

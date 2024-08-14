@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=zookeeperautoscalers,singular=zookeeperautoscaler,shortName=zkscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=zookeeperautoscalers,singular=zookeeperautoscaler,shortName=zkscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type ZooKeeperAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`

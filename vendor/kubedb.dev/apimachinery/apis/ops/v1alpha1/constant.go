@@ -187,6 +187,14 @@ const (
 	UpdateCombinedNodePVCs   = "UpdateCombinedNodePVCs"
 )
 
+// Singlestore Constants
+const (
+	ScaleUpAggregator   = "ScaleUpAggregator"
+	ScaleDownAggregator = "ScaleDownAggregator"
+	ScaleUpLeaf         = "ScaleUpLeaf"
+	ScaleDownLeaf       = "ScaleDownLeaf"
+)
+
 // RabbitMQ Constants
 const (
 	UpdateNodePVCs = "UpdateNodePVCs"

@@ -9,10 +9,9 @@ spec:
   group: postgres.kubedb.com
   names:
     categories:
-    - datastore
+    - pgstore
     - kubedb
     - appscode
-    - all
     kind: Subscriber
     listKind: SubscriberList
     plural: subscribers

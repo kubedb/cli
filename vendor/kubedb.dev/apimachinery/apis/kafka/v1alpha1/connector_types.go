@@ -39,7 +39,7 @@ const (
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-// +kubebuilder:resource:shortName=kc,scope=Namespaced
+// +kubebuilder:resource:path=connectors,singular=connector,shortName=kc,categories={kfstore,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".apiVersion"
 // +kubebuilder:printcolumn:name="ConnectCluster",type="string",JSONPath=".spec.connectClusterRef.name"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"

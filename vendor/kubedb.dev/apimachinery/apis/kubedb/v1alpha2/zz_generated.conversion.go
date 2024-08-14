@@ -2004,6 +2004,7 @@ func autoConvert_v1alpha2_KafkaSpec_To_v1_KafkaSpec(in *KafkaSpec, out *v1.Kafka
 	out.AuthSecret = (*v1.SecretReference)(unsafe.Pointer(in.AuthSecret))
 	out.ConfigSecret = (*corev1.LocalObjectReference)(unsafe.Pointer(in.ConfigSecret))
 	out.KeystoreCredSecret = (*v1.SecretReference)(unsafe.Pointer(in.KeystoreCredSecret))
+	out.Halted = in.Halted
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
 	out.PodTemplate = in.PodTemplate
 	out.ServiceTemplates = *(*[]v1.NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
@@ -2038,6 +2039,7 @@ func autoConvert_v1_KafkaSpec_To_v1alpha2_KafkaSpec(in *v1.KafkaSpec, out *Kafka
 	out.AuthSecret = (*SecretReference)(unsafe.Pointer(in.AuthSecret))
 	out.ConfigSecret = (*corev1.LocalObjectReference)(unsafe.Pointer(in.ConfigSecret))
 	out.KeystoreCredSecret = (*SecretReference)(unsafe.Pointer(in.KeystoreCredSecret))
+	out.Halted = in.Halted
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
 	out.PodTemplate = in.PodTemplate
 	out.ServiceTemplates = *(*[]NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))

@@ -9,7 +9,7 @@ spec:
   group: catalog.kubedb.com
   names:
     categories:
-    - datastore
+    - catalog
     - kubedb
     - appscode
     kind: KafkaConnectorVersion

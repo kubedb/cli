@@ -37,7 +37,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=redissentinelopsrequests,singular=redissentinelopsrequest,shortName=rdsops,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=redissentinelopsrequests,singular=redissentinelopsrequest,shortName=rdsops,categories={ops,kubedb,appscode}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.type"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"

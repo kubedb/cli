@@ -36,7 +36,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=pgbouncerversions,singular=pgbouncerversion,scope=Cluster,shortName=pbversion,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=pgbouncerversions,singular=pgbouncerversion,scope=Cluster,shortName=pbversion,categories={catalog,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="PGBOUNCER_IMAGE",type="string",JSONPath=".spec.pgBouncer.image"
 // +kubebuilder:printcolumn:name="Deprecated",type="boolean",JSONPath=".spec.deprecated"

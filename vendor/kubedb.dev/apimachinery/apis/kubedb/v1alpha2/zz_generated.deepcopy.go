@@ -4340,6 +4340,11 @@ func (in *RabbitMQSpec) DeepCopyInto(out *RabbitMQSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.DisabledProtocols != nil {
+		in, out := &in.DisabledProtocols, &out.DisabledProtocols
+		*out = make([]RabbitMQProtocol, len(*in))
+		copy(*out, *in)
+	}
 	if in.Monitor != nil {
 		in, out := &in.Monitor, &out.Monitor
 		*out = new(monitoringagentapiapiv1.AgentSpec)

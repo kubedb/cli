@@ -29,8 +29,8 @@ require (
 	kmodules.xyz/client-go v0.30.9
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.47.0-rc.2
-	kubedb.dev/db-client-go v0.2.0-rc.2
+	kubedb.dev/apimachinery v0.47.0-rc.3
+	kubedb.dev/db-client-go v0.2.0-rc.3
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.34.0

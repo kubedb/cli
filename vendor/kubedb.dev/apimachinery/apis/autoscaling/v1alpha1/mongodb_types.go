@@ -39,7 +39,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=mongodbautoscalers,singular=mongodbautoscaler,shortName=mgscaler,categories={datastore,kubedb,appscode}
+// +kubebuilder:resource:path=mongodbautoscalers,singular=mongodbautoscaler,shortName=mgscaler,categories={autoscaler,kubedb,appscode}
 // +kubebuilder:subresource:status
 type MongoDBAutoscaler struct {
 	metav1.TypeMeta `json:",inline"`

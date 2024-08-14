@@ -29,11 +29,13 @@ import (
 
 type OpsV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	ClickHouseOpsRequestsGetter
 	DruidOpsRequestsGetter
 	ElasticsearchOpsRequestsGetter
 	EtcdOpsRequestsGetter
 	FerretDBOpsRequestsGetter
 	KafkaOpsRequestsGetter
+	MSSQLServerOpsRequestsGetter
 	MariaDBOpsRequestsGetter
 	MemcachedOpsRequestsGetter
 	MongoDBOpsRequestsGetter
@@ -48,11 +50,16 @@ type OpsV1alpha1Interface interface {
 	RedisSentinelOpsRequestsGetter
 	SinglestoreOpsRequestsGetter
 	SolrOpsRequestsGetter
+	ZooKeeperOpsRequestsGetter
 }
 
 // OpsV1alpha1Client is used to interact with features provided by the ops.kubedb.com group.
 type OpsV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *OpsV1alpha1Client) ClickHouseOpsRequests(namespace string) ClickHouseOpsRequestInterface {
+	return newClickHouseOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) DruidOpsRequests(namespace string) DruidOpsRequestInterface {
@@ -73,6 +80,10 @@ func (c *OpsV1alpha1Client) FerretDBOpsRequests(namespace string) FerretDBOpsReq
 
 func (c *OpsV1alpha1Client) KafkaOpsRequests(namespace string) KafkaOpsRequestInterface {
 	return newKafkaOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) MSSQLServerOpsRequests(namespace string) MSSQLServerOpsRequestInterface {
+	return newMSSQLServerOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) MariaDBOpsRequests(namespace string) MariaDBOpsRequestInterface {
@@ -129,6 +140,10 @@ func (c *OpsV1alpha1Client) SinglestoreOpsRequests(namespace string) Singlestore
 
 func (c *OpsV1alpha1Client) SolrOpsRequests(namespace string) SolrOpsRequestInterface {
 	return newSolrOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) ZooKeeperOpsRequests(namespace string) ZooKeeperOpsRequestInterface {
+	return newZooKeeperOpsRequests(c, namespace)
 }
 
 // NewForConfig creates a new OpsV1alpha1Client for the given config.
