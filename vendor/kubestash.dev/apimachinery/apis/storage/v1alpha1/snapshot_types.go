@@ -196,7 +196,7 @@ type Component struct {
 
 	// WalGStats specifies the "WalG" driver specific information
 	// +optional
-	WalGStats WalGStats `json:"walGStats,omitempty"`
+	WalGStats *WalGStats `json:"walGStats,omitempty"`
 
 	// VolumeSnapshotterStats specifies the "VolumeSnapshotter" driver specific information
 	// +optional

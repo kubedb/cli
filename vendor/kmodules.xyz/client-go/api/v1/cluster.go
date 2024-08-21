@@ -16,7 +16,13 @@ limitations under the License.
 
 package v1
 
-import "strings"
+import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+	"strings"
+)
 
 // +kubebuilder:validation:Enum=Aws;Azure;DigitalOcean;GoogleCloud;Linode;Packet;Scaleway;Vultr;BareMetal;KIND;Generic;Private
 type HostingProvider string
@@ -54,6 +60,13 @@ type ClusterMetadata struct {
 	OwnerType   string          `json:"ownerType,omitempty"`
 	APIEndpoint string          `json:"apiEndpoint,omitempty"`
 	CABundle    string          `json:"caBundle,omitempty"`
+}
+
+func (md ClusterMetadata) State() string {
+	hasher := hmac.New(sha256.New, []byte(md.UID))
+	state := fmt.Sprintf("%s,%s", md.APIEndpoint, md.OwnerID)
+	hasher.Write([]byte(state))
+	return base64.URLEncoding.EncodeToString(hasher.Sum(nil))
 }
 
 /*

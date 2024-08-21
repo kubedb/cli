@@ -416,6 +416,9 @@ func (b *BackupConfiguration) validateRepoDirExistence(ctx context.Context, c cl
 }
 
 func storageRefMatched(b1, b2 *kmapi.ObjectReference) bool {
+	if b1 == nil || b2 == nil {
+		return false
+	}
 	return b1.Name == b2.Name && b1.Namespace == b2.Namespace
 }
 
