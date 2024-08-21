@@ -24072,10 +24072,27 @@ spec:
                         description: DBName specifies the new name of the DB yaml
                           after restore
                         type: string
-                      issuerRefName:
-                        description: IssuerRefName specifies new name of the IssuerRef
-                          after restore
-                        type: string
+                      tlsIssuerRef:
+                        description: TLSIssuerRef specifies the name of the IssuerRef
+                          used for TLS configurations for both client and server
+                        properties:
+                          apiGroup:
+                            description: APIGroup is the group for the resource being
+                              referenced. If APIGroup is not specified, the specified
+                              Kind must be in the core API group. For any other third-party
+                              types, APIGroup is required.
+                            type: string
+                          kind:
+                            description: Kind is the type of resource being referenced
+                            type: string
+                          name:
+                            description: Name is the name of resource being referenced
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
                     type: object
                   mongoDB:
                     description: MongoDB specifies the options for selecting particular
@@ -24105,10 +24122,90 @@ spec:
                         description: DBName specifies the new name of the DB yaml
                           after restore
                         type: string
-                      issuerRefName:
-                        description: IssuerRefName specifies new name of the IssuerRef
+                      tlsIssuerRef:
+                        description: TLSIssuerRef specifies the name of the IssuerRef
+                          used for TLS configurations for both client and server
+                        properties:
+                          apiGroup:
+                            description: APIGroup is the group for the resource being
+                              referenced. If APIGroup is not specified, the specified
+                              Kind must be in the core API group. For any other third-party
+                              types, APIGroup is required.
+                            type: string
+                          kind:
+                            description: Kind is the type of resource being referenced
+                            type: string
+                          name:
+                            description: Name is the name of resource being referenced
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
+                  msSQLServer:
+                    description: MSSQLServer specifies the options for selecting particular
+                      MSSQLServer components to restore in manifest restore
+                    properties:
+                      authSecret:
+                        description: AuthSecret specifies whether to restore the AuthSecret
+                          manifest or not
+                        type: boolean
+                      authSecretName:
+                        description: AuthSecretName specifies new name of the AuthSecret
+                          yaml after restore
+                        type: string
+                      db:
+                        description: DB specifies whether to restore the DB manifest
+                          or not
+                        type: boolean
+                      dbName:
+                        description: DBName specifies the new name of the DB yaml
                           after restore
                         type: string
+                      internalAuthIssuerRef:
+                        description: InternalAuthIssuerRef specifies the name of the
+                          IssuerRef used for endpoint authentication.
+                        properties:
+                          apiGroup:
+                            description: APIGroup is the group for the resource being
+                              referenced. If APIGroup is not specified, the specified
+                              Kind must be in the core API group. For any other third-party
+                              types, APIGroup is required.
+                            type: string
+                          kind:
+                            description: Kind is the type of resource being referenced
+                            type: string
+                          name:
+                            description: Name is the name of resource being referenced
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      tlsIssuerRef:
+                        description: TLSIssuerRef specifies the name of the IssuerRef
+                          used for TLS configurations for both client and server.
+                        properties:
+                          apiGroup:
+                            description: APIGroup is the group for the resource being
+                              referenced. If APIGroup is not specified, the specified
+                              Kind must be in the core API group. For any other third-party
+                              types, APIGroup is required.
+                            type: string
+                          kind:
+                            description: Kind is the type of resource being referenced
+                            type: string
+                          name:
+                            description: Name is the name of resource being referenced
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
                     type: object
                   mySQL:
                     description: MySQL specifies the options for selecting particular
@@ -24138,10 +24235,27 @@ spec:
                         description: DBName specifies the new name of the DB yaml
                           after restore
                         type: string
-                      issuerRefName:
-                        description: IssuerRefName specifies new name of the IssuerRef
-                          after restore
-                        type: string
+                      tlsIssuerRef:
+                        description: TLSIssuerRef specifies the name of the IssuerRef
+                          used for TLS configurations for both client and server
+                        properties:
+                          apiGroup:
+                            description: APIGroup is the group for the resource being
+                              referenced. If APIGroup is not specified, the specified
+                              Kind must be in the core API group. For any other third-party
+                              types, APIGroup is required.
+                            type: string
+                          kind:
+                            description: Kind is the type of resource being referenced
+                            type: string
+                          name:
+                            description: Name is the name of resource being referenced
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
                     type: object
                   postgres:
                     description: Postgres specifies the options for selecting particular
@@ -24171,10 +24285,27 @@ spec:
                         description: DBName specifies the new name of the DB yaml
                           after restore
                         type: string
-                      issuerRefName:
-                        description: IssuerRefName specifies new name of the IssuerRef
-                          after restore
-                        type: string
+                      tlsIssuerRef:
+                        description: TLSIssuerRef specifies the name of the IssuerRef
+                          used for TLS configurations for both client and server
+                        properties:
+                          apiGroup:
+                            description: APIGroup is the group for the resource being
+                              referenced. If APIGroup is not specified, the specified
+                              Kind must be in the core API group. For any other third-party
+                              types, APIGroup is required.
+                            type: string
+                          kind:
+                            description: Kind is the type of resource being referenced
+                            type: string
+                          name:
+                            description: Name is the name of resource being referenced
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
                     type: object
                   restoreNamespace:
                     description: RestoreNamespace specifies the Namespace where the

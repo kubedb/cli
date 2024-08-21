@@ -17,6 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
@@ -93,6 +94,36 @@ type ManifestRestoreOptions struct {
 	// MariaDB specifies the options for selecting particular MariaDB components to restore in manifest restore
 	// +optional
 	MariaDB *KubeDBManifestOptions `json:"mariaDB,omitempty"`
+
+	// MSSQLServer specifies the options for selecting particular MSSQLServer components to restore in manifest restore
+	// +optional
+	MSSQLServer *MSSQLServerManifestOptions `json:"msSQLServer,omitempty"`
+}
+
+type MSSQLServerManifestOptions struct {
+	// DB specifies whether to restore the DB manifest or not
+	// +optional
+	DB bool `json:"db,omitempty"`
+
+	// DBName specifies the new name of the DB yaml after restore
+	// +optional
+	DBName string `json:"dbName,omitempty"`
+
+	// AuthSecret specifies whether to restore the AuthSecret manifest or not
+	// +optional
+	AuthSecret bool `json:"authSecret,omitempty"`
+
+	// AuthSecretName specifies new name of the AuthSecret yaml after restore
+	// +optional
+	AuthSecretName string `json:"authSecretName,omitempty"`
+
+	// InternalAuthIssuerRef specifies the name of the IssuerRef used for endpoint authentication.
+	// +optional
+	InternalAuthIssuerRef *core.TypedLocalObjectReference `json:"internalAuthIssuerRef,omitempty"`
+
+	// TLSIssuerRef specifies the name of the IssuerRef used for TLS configurations for both client and server.
+	// +optional
+	TLSIssuerRef *core.TypedLocalObjectReference `json:"tlsIssuerRef,omitempty"`
 }
 
 type KubeDBManifestOptions struct {
@@ -120,9 +151,9 @@ type KubeDBManifestOptions struct {
 	// +optional
 	ConfigSecretName string `json:"configSecretName,omitempty"`
 
-	// IssuerRefName specifies new name of the IssuerRef after restore
+	// TLSIssuerRef specifies the name of the IssuerRef used for TLS configurations for both client and server
 	// +optional
-	IssuerRefName string `json:"issuerRefName,omitempty"`
+	TLSIssuerRef *core.TypedLocalObjectReference `json:"tlsIssuerRef,omitempty"`
 }
 
 // RestoreDataSource specifies the information about the data that will be restored

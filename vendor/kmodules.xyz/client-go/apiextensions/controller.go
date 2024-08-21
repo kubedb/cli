@@ -38,11 +38,13 @@ type setupGroup struct {
 	fn  SetupFn
 }
 
+type crdParamKey struct{}
+
 var (
 	setupFns  = make(map[schema.GroupKind]setupGroup)
 	testFns   = make(map[schema.GroupKind]TestFn)
 	setupDone = map[schema.GroupKind]bool{}
-	CRDParam  = struct{}{}
+	CRDParam  = crdParamKey{}
 	mu        sync.Mutex
 )
 

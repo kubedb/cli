@@ -26,11 +26,11 @@ require (
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.30.9
+	kmodules.xyz/client-go v0.30.13
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.47.0-rc.3
-	kubedb.dev/db-client-go v0.2.0-rc.3
+	kubedb.dev/apimachinery v0.47.0
+	kubedb.dev/db-client-go v0.2.0
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.34.0
@@ -101,7 +101,7 @@ require (
 	github.com/opensearch-project/opensearch-go/v2 v2.3.0 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.75.1 // indirect
+	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.75.2 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/client v0.75.1 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/procfs v0.15.0 // indirect
@@ -142,10 +142,10 @@ require (
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.30.0 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.18.11-0.20240801195527-995886d0c0e5 // indirect
+	kmodules.xyz/resource-metadata v0.18.12 // indirect
 	kubeops.dev/petset v0.0.6 // indirect
 	kubeops.dev/sidekick v0.0.7 // indirect
-	kubestash.dev/apimachinery v0.10.0 // indirect
+	kubestash.dev/apimachinery v0.11.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.13.5-0.20230601165947-6ce0bf390ce3 // indirect
