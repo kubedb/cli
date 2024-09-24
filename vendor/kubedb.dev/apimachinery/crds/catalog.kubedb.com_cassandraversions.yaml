@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
-  name: memcachedversions.catalog.kubedb.com
+  name: cassandraversions.catalog.kubedb.com
 spec:
   group: catalog.kubedb.com
   names:
@@ -12,12 +12,12 @@ spec:
     - catalog
     - kubedb
     - appscode
-    kind: MemcachedVersion
-    listKind: MemcachedVersionList
-    plural: memcachedversions
+    kind: CassandraVersion
+    listKind: CassandraVersionList
+    plural: cassandraversions
     shortNames:
-    - mcversion
-    singular: memcachedversion
+    - casversion
+    singular: cassandraversion
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -52,21 +52,12 @@ spec:
                 required:
                 - image
                 type: object
-              deprecated:
-                type: boolean
-              exporter:
+              initContainer:
                 properties:
                   image:
                     type: string
                 required:
                 - image
-                type: object
-              podSecurityPolicies:
-                properties:
-                  databasePolicyName:
-                    type: string
-                required:
-                - databasePolicyName
                 type: object
               securityContext:
                 properties:
@@ -89,24 +80,14 @@ spec:
                   - name
                   type: object
                 type: array
-              updateConstraints:
-                properties:
-                  allowlist:
-                    items:
-                      type: string
-                    type: array
-                  denylist:
-                    items:
-                      type: string
-                    type: array
-                type: object
               version:
                 type: string
             required:
             - db
-            - exporter
-            - podSecurityPolicies
+            - initContainer
             - version
+            type: object
+          status:
             type: object
         type: object
     served: true

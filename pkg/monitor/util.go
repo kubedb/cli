@@ -41,6 +41,8 @@ func ConvertedResourceToPlural(resource string) string {
 		res = dbapi.ResourcePluralMariaDB
 	case dbapi.ResourceCodeMongoDB, dbapi.ResourcePluralMongoDB, dbapi.ResourceSingularMongoDB:
 		res = dbapi.ResourcePluralMongoDB
+	case olddbapi.ResourceCodeMSSQLServer, olddbapi.ResourcePluralMSSQLServer, olddbapi.ResourceSingularMSSQLServer:
+		res = olddbapi.ResourcePluralMSSQLServer
 	case dbapi.ResourceCodeMySQL, dbapi.ResourcePluralMySQL, dbapi.ResourceSingularMySQL:
 		res = dbapi.ResourcePluralMySQL
 	case dbapi.ResourceCodePerconaXtraDB, dbapi.ResourcePluralPerconaXtraDB, dbapi.ResourceSingularPerconaXtraDB:
@@ -83,6 +85,8 @@ func ConvertedResourceToSingular(resource string) string {
 		res = dbapi.ResourceSingularMariaDB
 	case dbapi.ResourceCodeMongoDB, dbapi.ResourcePluralMongoDB, dbapi.ResourceSingularMongoDB:
 		res = dbapi.ResourceSingularMongoDB
+	case olddbapi.ResourceCodeMSSQLServer, olddbapi.ResourcePluralMSSQLServer, olddbapi.ResourceSingularMSSQLServer:
+		res = olddbapi.ResourceSingularMSSQLServer
 	case dbapi.ResourceCodeMySQL, dbapi.ResourcePluralMySQL, dbapi.ResourceSingularMySQL:
 		res = dbapi.ResourceSingularMySQL
 	case dbapi.ResourceCodePerconaXtraDB, dbapi.ResourcePluralPerconaXtraDB, dbapi.ResourceSingularPerconaXtraDB:
@@ -107,4 +111,18 @@ func ConvertedResourceToSingular(resource string) string {
 		log.Fatalf("%s is not a valid resource type \n", resource)
 	}
 	return res
+}
+
+func IsOldAPI(resource string) bool {
+	oldDBApi := []string{
+		olddbapi.ResourcePluralDruid, olddbapi.ResourcePluralSinglestore, olddbapi.ResourcePluralRabbitmq, olddbapi.ResourcePluralPgpool,
+		olddbapi.ResourcePluralMSSQLServer, olddbapi.ResourcePluralSolr, olddbapi.ResourcePluralCassandra, olddbapi.ResourcePluralClickHouse,
+		olddbapi.ResourcePluralFerretDB, olddbapi.ResourcePluralZooKeeper,
+	}
+	for _, api := range oldDBApi {
+		if resource == api {
+			return true
+		}
+	}
+	return false
 }

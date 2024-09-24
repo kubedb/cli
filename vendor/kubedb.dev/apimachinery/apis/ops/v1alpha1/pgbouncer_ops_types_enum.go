@@ -16,6 +16,8 @@ const (
 	PgBouncerOpsRequestTypeHorizontalScaling PgBouncerOpsRequestType = "HorizontalScaling"
 	// PgBouncerOpsRequestTypeVerticalScaling is a PgBouncerOpsRequestType of type VerticalScaling.
 	PgBouncerOpsRequestTypeVerticalScaling PgBouncerOpsRequestType = "VerticalScaling"
+	// PgBouncerOpsRequestTypeUpdateVersion is a PgBouncerOpsRequestType of type UpdateVersion.
+	PgBouncerOpsRequestTypeUpdateVersion PgBouncerOpsRequestType = "UpdateVersion"
 )
 
 var ErrInvalidPgBouncerOpsRequestType = fmt.Errorf("not a valid PgBouncerOpsRequestType, try [%s]", strings.Join(_PgBouncerOpsRequestTypeNames, ", "))
@@ -23,6 +25,7 @@ var ErrInvalidPgBouncerOpsRequestType = fmt.Errorf("not a valid PgBouncerOpsRequ
 var _PgBouncerOpsRequestTypeNames = []string{
 	string(PgBouncerOpsRequestTypeHorizontalScaling),
 	string(PgBouncerOpsRequestTypeVerticalScaling),
+	string(PgBouncerOpsRequestTypeUpdateVersion),
 }
 
 // PgBouncerOpsRequestTypeNames returns a list of possible string values of PgBouncerOpsRequestType.
@@ -37,6 +40,7 @@ func PgBouncerOpsRequestTypeValues() []PgBouncerOpsRequestType {
 	return []PgBouncerOpsRequestType{
 		PgBouncerOpsRequestTypeHorizontalScaling,
 		PgBouncerOpsRequestTypeVerticalScaling,
+		PgBouncerOpsRequestTypeUpdateVersion,
 	}
 }
 
@@ -55,6 +59,7 @@ func (x PgBouncerOpsRequestType) IsValid() bool {
 var _PgBouncerOpsRequestTypeValue = map[string]PgBouncerOpsRequestType{
 	"HorizontalScaling": PgBouncerOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   PgBouncerOpsRequestTypeVerticalScaling,
+	"UpdateVersion":     PgBouncerOpsRequestTypeUpdateVersion,
 }
 
 // ParsePgBouncerOpsRequestType attempts to convert a string to a PgBouncerOpsRequestType.

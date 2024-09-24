@@ -27,50 +27,50 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (r *ZooKeeperOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (z *ZooKeeperOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralZooKeeperOpsRequest))
 }
 
 var _ apis.ResourceInfo = &ZooKeeperOpsRequest{}
 
-func (r *ZooKeeperOpsRequest) ResourceFQN() string {
+func (z *ZooKeeperOpsRequest) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", ResourcePluralZooKeeperOpsRequest, ops.GroupName)
 }
 
-func (r *ZooKeeperOpsRequest) ResourceShortCode() string {
+func (z *ZooKeeperOpsRequest) ResourceShortCode() string {
 	return ResourceCodeZooKeeperOpsRequest
 }
 
-func (r *ZooKeeperOpsRequest) ResourceKind() string {
+func (z *ZooKeeperOpsRequest) ResourceKind() string {
 	return ResourceKindZooKeeperOpsRequest
 }
 
-func (r *ZooKeeperOpsRequest) ResourceSingular() string {
+func (z *ZooKeeperOpsRequest) ResourceSingular() string {
 	return ResourceSingularZooKeeperOpsRequest
 }
 
-func (r *ZooKeeperOpsRequest) ResourcePlural() string {
+func (z *ZooKeeperOpsRequest) ResourcePlural() string {
 	return ResourcePluralZooKeeperOpsRequest
 }
 
 var _ Accessor = &ZooKeeperOpsRequest{}
 
-func (r *ZooKeeperOpsRequest) GetObjectMeta() metav1.ObjectMeta {
-	return r.ObjectMeta
+func (z *ZooKeeperOpsRequest) GetObjectMeta() metav1.ObjectMeta {
+	return z.ObjectMeta
 }
 
-func (r *ZooKeeperOpsRequest) GetDBRefName() string {
-	return r.Spec.DatabaseRef.Name
+func (z *ZooKeeperOpsRequest) GetDBRefName() string {
+	return z.Spec.DatabaseRef.Name
 }
 
-func (r *ZooKeeperOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (z *ZooKeeperOpsRequest) GetRequestType() any {
+	return z.Spec.Type
 }
 
-func (r *ZooKeeperOpsRequest) GetStatus() OpsRequestStatus {
-	return r.Status
+func (z *ZooKeeperOpsRequest) GetStatus() OpsRequestStatus {
+	return z.Status
 }
 
-func (r *ZooKeeperOpsRequest) SetStatus(s OpsRequestStatus) {
-	r.Status = s
+func (z *ZooKeeperOpsRequest) SetStatus(st OpsRequestStatus) {
+	z.Status = st
 }

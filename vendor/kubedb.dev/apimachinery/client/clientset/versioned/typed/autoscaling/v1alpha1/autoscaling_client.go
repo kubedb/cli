@@ -29,6 +29,7 @@ import (
 
 type AutoscalingV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	CassandraAutoscalersGetter
 	ClickHouseAutoscalersGetter
 	DruidAutoscalersGetter
 	ElasticsearchAutoscalersGetter
@@ -56,6 +57,10 @@ type AutoscalingV1alpha1Interface interface {
 // AutoscalingV1alpha1Client is used to interact with features provided by the autoscaling.kubedb.com group.
 type AutoscalingV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *AutoscalingV1alpha1Client) CassandraAutoscalers(namespace string) CassandraAutoscalerInterface {
+	return newCassandraAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) ClickHouseAutoscalers(namespace string) ClickHouseAutoscalerInterface {
