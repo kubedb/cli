@@ -493,6 +493,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver":                                      schema_apimachinery_apis_kubedb_v1alpha2_Archiver(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ArchiverRecovery":                              schema_apimachinery_apis_kubedb_v1alpha2_ArchiverRecovery(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec":                                   schema_apimachinery_apis_kubedb_v1alpha2_AutoOpsSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra":                                     schema_apimachinery_apis_kubedb_v1alpha2_Cassandra(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraApp":                                  schema_apimachinery_apis_kubedb_v1alpha2_CassandraApp(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraList":                                 schema_apimachinery_apis_kubedb_v1alpha2_CassandraList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraSpec":                                 schema_apimachinery_apis_kubedb_v1alpha2_CassandraSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraStatus":                               schema_apimachinery_apis_kubedb_v1alpha2_CassandraStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouse":                                    schema_apimachinery_apis_kubedb_v1alpha2_ClickHouse(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperConfig":                        schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperNode":                          schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperNode(ref),
@@ -619,6 +624,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQStatus":                                schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitmqApp":                                   schema_apimachinery_apis_kubedb_v1alpha2_RabbitmqApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitmqStatsService":                          schema_apimachinery_apis_kubedb_v1alpha2_RabbitmqStatsService(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RackSpec":                                      schema_apimachinery_apis_kubedb_v1alpha2_RackSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RecoveryTarget":                                schema_apimachinery_apis_kubedb_v1alpha2_RecoveryTarget(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Redis":                                         schema_apimachinery_apis_kubedb_v1alpha2_Redis(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RedisClusterSpec":                              schema_apimachinery_apis_kubedb_v1alpha2_RedisClusterSpec(ref),
@@ -650,6 +656,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SolrStatus":                                    schema_apimachinery_apis_kubedb_v1alpha2_SolrStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SystemUserSecretsSpec":                         schema_apimachinery_apis_kubedb_v1alpha2_SystemUserSecretsSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.TLSPolicy":                                     schema_apimachinery_apis_kubedb_v1alpha2_TLSPolicy(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Topology":                                      schema_apimachinery_apis_kubedb_v1alpha2_Topology(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZooKeeper":                                     schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeper(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZooKeeperApp":                                  schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZooKeeperList":                                 schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperList(ref),
@@ -25473,6 +25480,267 @@ func schema_apimachinery_apis_kubedb_v1alpha2_AutoOpsSpec(ref common.ReferenceCa
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_Cassandra(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraStatus"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_CassandraApp(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Cassandra": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra"),
+						},
+					},
+				},
+				Required: []string{"Cassandra"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_CassandraList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "CassandraList contains a list of Cassandra",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_CassandraSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "CassandraSpec defines the desired state of Cassandra",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Version of Cassandra to be deployed.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of replicas for  Cassandra database.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Cassandra Topology for Racks",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Topology"),
+						},
+					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable (default) or ephemeral",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Storage to specify how storage shall be used.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"disableSecurity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "disable security. It disables authentication security of user. If unset, default is false",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"authSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Database authentication secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e. config.properties). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
+						},
+					},
+					"serviceTemplates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"deletionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DeletionPolicy controls the delete operation for database",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"healthChecker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
+						},
+					},
+				},
+				Required: []string{"version"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Topology"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_CassandraStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "CassandraStatus defines the observed state of Cassandra",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouse(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -32616,6 +32884,53 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RabbitmqStatsService(ref common.Re
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_RackSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "rack Name",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of replica for each shard to deploy for a rack.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Storage to specify how storage shall be used.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable (default) or ephemeral",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_RecoveryTarget(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -34364,6 +34679,34 @@ func schema_apimachinery_apis_kubedb_v1alpha2_TLSPolicy(ref common.ReferenceCall
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MemberSecret"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_Topology(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"rack": {
+						SchemaProps: spec.SchemaProps{
+							Description: "cassandra rack structure",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RackSpec"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RackSpec"},
 	}
 }
 

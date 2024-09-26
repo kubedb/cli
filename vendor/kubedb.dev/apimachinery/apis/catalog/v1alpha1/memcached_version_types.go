@@ -58,6 +58,8 @@ type MemcachedVersionSpec struct {
 	Deprecated bool `json:"deprecated,omitempty"`
 	// PSP names
 	PodSecurityPolicies MemcachedVersionPodSecurityPolicy `json:"podSecurityPolicies"`
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`

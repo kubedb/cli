@@ -55,7 +55,7 @@ type PgBouncerOpsRequestSpec struct {
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type PgBouncerOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PgBouncer
-	UpdateVersion *PgBouncerUpdateVersionSpec `json:"UpdateVersion,omitempty"`
+	UpdateVersion *PgBouncerUpdateVersionSpec `json:"updateVersion,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *PgBouncerHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -73,18 +73,13 @@ type PgBouncerOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling
-// ENUM(HorizontalScaling, VerticalScaling)
+// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion
+// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion)
 type PgBouncerOpsRequestType string
-
-// PgBouncerReplicaReadinessCriteria is the criteria for checking readiness of a PgBouncer pod
-// after updating, horizontal scaling etc.
-type PgBouncerReplicaReadinessCriteria struct{}
 
 type PgBouncerUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
-	TargetVersion     string                             `json:"targetVersion,omitempty"`
-	ReadinessCriteria *PgBouncerReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
+	TargetVersion string `json:"targetVersion,omitempty"`
 }
 
 // HorizontalScaling is the spec for PgBouncer horizontal scaling

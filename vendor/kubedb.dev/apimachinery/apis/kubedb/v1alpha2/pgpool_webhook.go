@@ -129,51 +129,32 @@ func (p *Pgpool) ValidateCreateOrUpdate() field.ErrorList {
 			"use either `spec.configSecret` or `spec.initConfig`"))
 	}
 
-	if p.Spec.ConfigSecret != nil {
-		secret := core.Secret{}
+	if p.ObjectMeta.DeletionTimestamp == nil {
+		apb := appcat.AppBinding{}
 		err := DefaultClient.Get(context.TODO(), types.NamespacedName{
-			Name:      p.Spec.ConfigSecret.Name,
-			Namespace: p.Namespace,
-		}, &secret)
+			Name:      p.Spec.PostgresRef.Name,
+			Namespace: p.Spec.PostgresRef.Namespace,
+		}, &apb)
 		if err != nil {
-			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("configSecret"),
+			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("postgresRef"),
 				p.Name,
 				err.Error(),
 			))
 		}
-		_, ok := secret.Data[kubedb.PgpoolCustomConfigFile]
-		if !ok {
-			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("configSecret"),
+
+		backendSSL, err := p.IsBackendTLSEnabled()
+		if err != nil {
+			errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("postgresRef"),
 				p.Name,
-				fmt.Sprintf("`%v` is missing", kubedb.PgpoolCustomConfigFile),
+				err.Error(),
 			))
 		}
-	}
 
-	apb := appcat.AppBinding{}
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
-		Name:      p.Spec.PostgresRef.Name,
-		Namespace: p.Spec.PostgresRef.Namespace,
-	}, &apb)
-	if err != nil {
-		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("postgresRef"),
-			p.Name,
-			err.Error(),
-		))
-	}
-
-	backendSSL, err := p.IsBackendTLSEnabled()
-	if err != nil {
-		errorList = append(errorList, field.Invalid(field.NewPath("spec").Child("postgresRef"),
-			p.Name,
-			err.Error(),
-		))
-	}
-
-	if p.Spec.TLS == nil && backendSSL {
-		errorList = append(errorList, field.Required(field.NewPath("spec").Child("tls"),
-			"`spec.tls` must be set because backend postgres is tls enabled",
-		))
+		if p.Spec.TLS == nil && backendSSL {
+			errorList = append(errorList, field.Required(field.NewPath("spec").Child("tls"),
+				"`spec.tls` must be set because backend postgres is tls enabled",
+			))
+		}
 	}
 
 	if p.Spec.TLS == nil {

@@ -377,6 +377,16 @@ func (m *MSSQLServer) SetDefaults() {
 	m.SetHealthCheckerDefaults()
 
 	m.setDefaultContainerResourceLimits(m.Spec.PodTemplate)
+
+	m.Spec.Monitor.SetDefaults()
+	if m.Spec.Monitor != nil && m.Spec.Monitor.Prometheus != nil {
+		if m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = mssqlVersion.Spec.SecurityContext.RunAsUser
+		}
+		if m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = mssqlVersion.Spec.SecurityContext.RunAsUser
+		}
+	}
 }
 
 func (m *MSSQLServer) setDefaultContainerSecurityContext(mssqlVersion *catalog.MSSQLServerVersion, podTemplate *ofst.PodTemplateSpec) {

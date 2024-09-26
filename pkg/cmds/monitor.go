@@ -95,6 +95,7 @@ var alertExample = templates.Examples(`
 			* kafka
 			* mariadb
 			* mongodb
+			* mssql
 			* mysql
 			* perconaxtradb
 			* pgpool
@@ -144,6 +145,7 @@ var dashboardExample = templates.Examples(`
 			* kafka
 			* mariadb
 			* mongodb
+			* mssql
 			* mysql
 			* perconaxtradb
 			* pgpool
@@ -208,6 +210,7 @@ var connectionExample = templates.Examples(`
 			* kafka
 			* mariadb
 			* mongodb
+			* mssql
 			* mysql
 			* perconaxtradb
 			* pgpool

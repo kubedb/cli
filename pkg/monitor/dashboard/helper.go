@@ -27,6 +27,8 @@ import (
 
 	kapi "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/cli/pkg/monitor"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -53,6 +55,10 @@ func getDB(f cmdutil.Factory, resource, ns, name string) (*unstructured.Unstruct
 	}
 
 	gvk := dbapi.SchemeGroupVersion
+	if monitor.IsOldAPI(resource) {
+		gvk = olddbapi.SchemeGroupVersion
+	}
+
 	dbRes := schema.GroupVersionResource{Group: gvk.Group, Version: gvk.Version, Resource: resource}
 	return dc.Resource(dbRes).Namespace(ns).Get(context.TODO(), name, metav1.GetOptions{})
 }

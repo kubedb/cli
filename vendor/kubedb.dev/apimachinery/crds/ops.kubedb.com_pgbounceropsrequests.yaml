@@ -42,13 +42,6 @@ spec:
             type: object
           spec:
             properties:
-              UpdateVersion:
-                properties:
-                  readinessCriteria:
-                    type: object
-                  targetVersion:
-                    type: string
-                type: object
               apply:
                 default: IfReady
                 enum:
@@ -183,7 +176,13 @@ spec:
                 enum:
                 - HorizontalScaling
                 - VerticalScaling
+                - UpdateVersion
                 type: string
+              updateVersion:
+                properties:
+                  targetVersion:
+                    type: string
+                type: object
               verticalScaling:
                 properties:
                   exporter:

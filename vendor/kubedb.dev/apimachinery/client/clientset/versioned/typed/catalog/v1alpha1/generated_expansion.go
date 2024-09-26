@@ -18,6 +18,8 @@ limitations under the License.
 
 package v1alpha1
 
+type CassandraVersionExpansion interface{}
+
 type ClickHouseVersionExpansion interface{}
 
 type DruidVersionExpansion interface{}

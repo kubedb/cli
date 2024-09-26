@@ -12,14 +12,29 @@ import (
 )
 
 const (
+	// ZooKeeperOpsRequestTypeUpdateVersion is a ZooKeeperOpsRequestType of type UpdateVersion.
+	ZooKeeperOpsRequestTypeUpdateVersion ZooKeeperOpsRequestType = "UpdateVersion"
+	// ZooKeeperOpsRequestTypeHorizontalScaling is a ZooKeeperOpsRequestType of type HorizontalScaling.
+	ZooKeeperOpsRequestTypeHorizontalScaling ZooKeeperOpsRequestType = "HorizontalScaling"
+	// ZooKeeperOpsRequestTypeVerticalScaling is a ZooKeeperOpsRequestType of type VerticalScaling.
+	ZooKeeperOpsRequestTypeVerticalScaling ZooKeeperOpsRequestType = "VerticalScaling"
+	// ZooKeeperOpsRequestTypeVolumeExpansion is a ZooKeeperOpsRequestType of type VolumeExpansion.
+	ZooKeeperOpsRequestTypeVolumeExpansion ZooKeeperOpsRequestType = "VolumeExpansion"
 	// ZooKeeperOpsRequestTypeRestart is a ZooKeeperOpsRequestType of type Restart.
 	ZooKeeperOpsRequestTypeRestart ZooKeeperOpsRequestType = "Restart"
+	// ZooKeeperOpsRequestTypeReconfigure is a ZooKeeperOpsRequestType of type Reconfigure.
+	ZooKeeperOpsRequestTypeReconfigure ZooKeeperOpsRequestType = "Reconfigure"
 )
 
 var ErrInvalidZooKeeperOpsRequestType = fmt.Errorf("not a valid ZooKeeperOpsRequestType, try [%s]", strings.Join(_ZooKeeperOpsRequestTypeNames, ", "))
 
 var _ZooKeeperOpsRequestTypeNames = []string{
+	string(ZooKeeperOpsRequestTypeUpdateVersion),
+	string(ZooKeeperOpsRequestTypeHorizontalScaling),
+	string(ZooKeeperOpsRequestTypeVerticalScaling),
+	string(ZooKeeperOpsRequestTypeVolumeExpansion),
 	string(ZooKeeperOpsRequestTypeRestart),
+	string(ZooKeeperOpsRequestTypeReconfigure),
 }
 
 // ZooKeeperOpsRequestTypeNames returns a list of possible string values of ZooKeeperOpsRequestType.
@@ -32,7 +47,12 @@ func ZooKeeperOpsRequestTypeNames() []string {
 // ZooKeeperOpsRequestTypeValues returns a list of the values for ZooKeeperOpsRequestType
 func ZooKeeperOpsRequestTypeValues() []ZooKeeperOpsRequestType {
 	return []ZooKeeperOpsRequestType{
+		ZooKeeperOpsRequestTypeUpdateVersion,
+		ZooKeeperOpsRequestTypeHorizontalScaling,
+		ZooKeeperOpsRequestTypeVerticalScaling,
+		ZooKeeperOpsRequestTypeVolumeExpansion,
 		ZooKeeperOpsRequestTypeRestart,
+		ZooKeeperOpsRequestTypeReconfigure,
 	}
 }
 
@@ -49,7 +69,12 @@ func (x ZooKeeperOpsRequestType) IsValid() bool {
 }
 
 var _ZooKeeperOpsRequestTypeValue = map[string]ZooKeeperOpsRequestType{
-	"Restart": ZooKeeperOpsRequestTypeRestart,
+	"UpdateVersion":     ZooKeeperOpsRequestTypeUpdateVersion,
+	"HorizontalScaling": ZooKeeperOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   ZooKeeperOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":   ZooKeeperOpsRequestTypeVolumeExpansion,
+	"Restart":           ZooKeeperOpsRequestTypeRestart,
+	"Reconfigure":       ZooKeeperOpsRequestTypeReconfigure,
 }
 
 // ParseZooKeeperOpsRequestType attempts to convert a string to a ZooKeeperOpsRequestType.
