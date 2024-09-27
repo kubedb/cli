@@ -83,6 +83,9 @@ type SolrSpec struct {
 	// To enable ssl for http layer
 	EnableSSL bool `json:"enableSSL,omitempty"`
 
+	// Client auth need or want
+	ClientAuthSSL string `json:"clientAuthSSL,omitempty"`
+
 	// TLS contains tls configurations for client and server.
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
@@ -94,6 +97,9 @@ type SolrSpec struct {
 
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// +optional
+	KeystoreSecret *core.LocalObjectReference `json:"keystoreSecret,omitempty"`
 
 	// +optional
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
@@ -175,6 +181,17 @@ const (
 	SolrNodeRoleData        SolrNodeRoleType = "data"
 	SolrNodeRoleCoordinator SolrNodeRoleType = "coordinator"
 	SolrNodeRoleSet                          = "set"
+)
+
+// +kubebuilder:validation:Enum=ca;transport;http;client;server
+type SolrCertificateAlias string
+
+const (
+	SolrCACert        SolrCertificateAlias = "ca"
+	SolrTransportCert SolrCertificateAlias = "transport"
+	SolrHTTPCert      SolrCertificateAlias = "http"
+	SolrClientCert    SolrCertificateAlias = "client"
+	SolrServerCert    SolrCertificateAlias = "server"
 )
 
 //+kubebuilder:object:root=true

@@ -63,6 +63,9 @@ type ClickHouseVersionSpec struct {
 	// Database Image
 	InitContainer ClickHouseInitContainer `json:"initContainer"`
 
+	// ClickHouse Keeper Image
+	ClickHouseKeeper ClickHouseKeeperContainer `json:"clickHouseKeeper"`
+
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
@@ -78,6 +81,11 @@ type ClickHouseVersionDatabase struct {
 
 // ClickHouseInitContainer is the ClickHouse init Container image
 type ClickHouseInitContainer struct {
+	Image string `json:"image"`
+}
+
+// ClickHouseKeeperContainer is the ClickHouse keeper Container image
+type ClickHouseKeeperContainer struct {
 	Image string `json:"image"`
 }
 

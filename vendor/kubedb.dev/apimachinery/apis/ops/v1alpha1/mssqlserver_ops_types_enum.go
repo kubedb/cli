@@ -12,14 +12,32 @@ import (
 )
 
 const (
+	// MSSQLServerOpsRequestTypeUpdateVersion is a MSSQLServerOpsRequestType of type UpdateVersion.
+	MSSQLServerOpsRequestTypeUpdateVersion MSSQLServerOpsRequestType = "UpdateVersion"
+	// MSSQLServerOpsRequestTypeHorizontalScaling is a MSSQLServerOpsRequestType of type HorizontalScaling.
+	MSSQLServerOpsRequestTypeHorizontalScaling MSSQLServerOpsRequestType = "HorizontalScaling"
+	// MSSQLServerOpsRequestTypeVerticalScaling is a MSSQLServerOpsRequestType of type VerticalScaling.
+	MSSQLServerOpsRequestTypeVerticalScaling MSSQLServerOpsRequestType = "VerticalScaling"
+	// MSSQLServerOpsRequestTypeVolumeExpansion is a MSSQLServerOpsRequestType of type VolumeExpansion.
+	MSSQLServerOpsRequestTypeVolumeExpansion MSSQLServerOpsRequestType = "VolumeExpansion"
 	// MSSQLServerOpsRequestTypeRestart is a MSSQLServerOpsRequestType of type Restart.
 	MSSQLServerOpsRequestTypeRestart MSSQLServerOpsRequestType = "Restart"
+	// MSSQLServerOpsRequestTypeReconfigure is a MSSQLServerOpsRequestType of type Reconfigure.
+	MSSQLServerOpsRequestTypeReconfigure MSSQLServerOpsRequestType = "Reconfigure"
+	// MSSQLServerOpsRequestTypeReconfigureTLS is a MSSQLServerOpsRequestType of type ReconfigureTLS.
+	MSSQLServerOpsRequestTypeReconfigureTLS MSSQLServerOpsRequestType = "ReconfigureTLS"
 )
 
 var ErrInvalidMSSQLServerOpsRequestType = fmt.Errorf("not a valid MSSQLServerOpsRequestType, try [%s]", strings.Join(_MSSQLServerOpsRequestTypeNames, ", "))
 
 var _MSSQLServerOpsRequestTypeNames = []string{
+	string(MSSQLServerOpsRequestTypeUpdateVersion),
+	string(MSSQLServerOpsRequestTypeHorizontalScaling),
+	string(MSSQLServerOpsRequestTypeVerticalScaling),
+	string(MSSQLServerOpsRequestTypeVolumeExpansion),
 	string(MSSQLServerOpsRequestTypeRestart),
+	string(MSSQLServerOpsRequestTypeReconfigure),
+	string(MSSQLServerOpsRequestTypeReconfigureTLS),
 }
 
 // MSSQLServerOpsRequestTypeNames returns a list of possible string values of MSSQLServerOpsRequestType.
@@ -32,7 +50,13 @@ func MSSQLServerOpsRequestTypeNames() []string {
 // MSSQLServerOpsRequestTypeValues returns a list of the values for MSSQLServerOpsRequestType
 func MSSQLServerOpsRequestTypeValues() []MSSQLServerOpsRequestType {
 	return []MSSQLServerOpsRequestType{
+		MSSQLServerOpsRequestTypeUpdateVersion,
+		MSSQLServerOpsRequestTypeHorizontalScaling,
+		MSSQLServerOpsRequestTypeVerticalScaling,
+		MSSQLServerOpsRequestTypeVolumeExpansion,
 		MSSQLServerOpsRequestTypeRestart,
+		MSSQLServerOpsRequestTypeReconfigure,
+		MSSQLServerOpsRequestTypeReconfigureTLS,
 	}
 }
 
@@ -49,7 +73,13 @@ func (x MSSQLServerOpsRequestType) IsValid() bool {
 }
 
 var _MSSQLServerOpsRequestTypeValue = map[string]MSSQLServerOpsRequestType{
-	"Restart": MSSQLServerOpsRequestTypeRestart,
+	"UpdateVersion":     MSSQLServerOpsRequestTypeUpdateVersion,
+	"HorizontalScaling": MSSQLServerOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   MSSQLServerOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":   MSSQLServerOpsRequestTypeVolumeExpansion,
+	"Restart":           MSSQLServerOpsRequestTypeRestart,
+	"Reconfigure":       MSSQLServerOpsRequestTypeReconfigure,
+	"ReconfigureTLS":    MSSQLServerOpsRequestTypeReconfigureTLS,
 }
 
 // ParseMSSQLServerOpsRequestType attempts to convert a string to a MSSQLServerOpsRequestType.

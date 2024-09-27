@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -34,6 +35,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -227,6 +229,14 @@ func (s solrStatsService) TLSConfig() *promapi.TLSConfig {
 	return nil
 }
 
+func (s *Solr) SetTLSDefaults() {
+	if s.Spec.TLS == nil || s.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	s.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(s.Spec.TLS.Certificates, string(SolrServerCert), s.CertificateName(SolrServerCert))
+	s.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(s.Spec.TLS.Certificates, string(SolrClientCert), s.CertificateName(SolrClientCert))
+}
+
 func (s *Solr) StatsService() mona.StatsAccessor {
 	return &solrStatsService{s}
 }
@@ -244,6 +254,10 @@ func (s *Solr) SetDefaults() {
 		s.Spec.DeletionPolicy = TerminationPolicyDelete
 	}
 
+	if s.Spec.ClientAuthSSL != "need" && s.Spec.ClientAuthSSL != "want" {
+		s.Spec.ClientAuthSSL = ""
+	}
+
 	if s.Spec.StorageType == "" {
 		s.Spec.StorageType = StorageTypeDurable
 	}
@@ -251,6 +265,12 @@ func (s *Solr) SetDefaults() {
 	if s.Spec.AuthSecret == nil {
 		s.Spec.AuthSecret = &v1.LocalObjectReference{
 			Name: s.SolrSecretName("admin-cred"),
+		}
+	}
+
+	if s.Spec.KeystoreSecret == nil {
+		s.Spec.KeystoreSecret = &v1.LocalObjectReference{
+			Name: s.SolrSecretName("keystore-cred"),
 		}
 	}
 
@@ -348,6 +368,8 @@ func (s *Solr) SetDefaults() {
 		}
 		s.Spec.Monitor.SetDefaults()
 	}
+
+	s.SetTLSDefaults()
 }
 
 func (s *Solr) setDefaultContainerSecurityContext(slVersion *catalog.SolrVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -452,4 +474,37 @@ func (s *Solr) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, err
 		expectedItems = 3
 	}
 	return checkReplicasOfPetSet(lister.PetSets(s.Namespace), labels.SelectorFromSet(s.OffshootLabels()), expectedItems)
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (s *Solr) CertificateName(alias SolrCertificateAlias) string {
+	return meta_util.NameWithSuffix(s.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// ClientCertificateCN returns the CN for a client certificate
+func (s *Solr) ClientCertificateCN(alias SolrCertificateAlias) string {
+	return fmt.Sprintf("%s-%s", s.Name, string(alias))
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any,
+// otherwise returns default certificate secret name for the given alias.
+func (s *Solr) GetCertSecretName(alias SolrCertificateAlias) string {
+	if s.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(s.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return s.CertificateName(alias)
+}
+
+// CertSecretVolumeName returns the CertSecretVolumeName
+// Values will be like: client-certs, server-certs etc.
+func (s *Solr) CertSecretVolumeName(alias SolrCertificateAlias) string {
+	return string(alias) + "-certs"
+}
+
+// CertSecretVolumeMountPath returns the CertSecretVolumeMountPath
+func (s *Solr) CertSecretVolumeMountPath(configDir string, cert string) string {
+	return filepath.Join(configDir, cert)
 }

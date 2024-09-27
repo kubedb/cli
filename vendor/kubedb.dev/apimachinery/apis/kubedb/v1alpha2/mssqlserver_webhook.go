@@ -192,6 +192,7 @@ func (m *MSSQLServer) ValidateCreateOrUpdate() field.ErrorList {
 // reserved volume and volumes mounts for mssql
 var mssqlReservedVolumes = []string{
 	kubedb.MSSQLVolumeNameData,
+	kubedb.MSSQLVolumeNameConfig,
 	kubedb.MSSQLVolumeNameInitScript,
 	kubedb.MSSQLVolumeNameEndpointCert,
 	kubedb.MSSQLVolumeNameCerts,
@@ -202,6 +203,7 @@ var mssqlReservedVolumes = []string{
 
 var mssqlReservedVolumesMountPaths = []string{
 	kubedb.MSSQLVolumeMountPathData,
+	kubedb.MSSQLVolumeMountPathConfig,
 	kubedb.MSSQLVolumeMountPathInitScript,
 	kubedb.MSSQLVolumeMountPathEndpointCert,
 	kubedb.MSSQLVolumeMountPathCerts,

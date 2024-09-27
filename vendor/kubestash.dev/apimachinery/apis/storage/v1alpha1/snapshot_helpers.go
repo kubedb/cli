@@ -34,7 +34,8 @@ func (_ Snapshot) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 
 func (s *Snapshot) CalculatePhase() SnapshotPhase {
 	if cutil.IsConditionFalse(s.Status.Conditions, TypeSnapshotMetadataUploaded) ||
-		cutil.IsConditionFalse(s.Status.Conditions, TypeRecentSnapshotListUpdated) {
+		cutil.IsConditionFalse(s.Status.Conditions, TypeRecentSnapshotListUpdated) ||
+		cutil.IsConditionTrue(s.Status.Conditions, TypeBackupIncomplete) {
 		return SnapshotFailed
 	}
 	if s.GetComponentsPhase() == SnapshotPending {

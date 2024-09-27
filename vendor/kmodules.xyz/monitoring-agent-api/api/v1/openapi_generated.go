@@ -363,6 +363,12 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusContext(ref common
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"hubUID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"clusterUID": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",

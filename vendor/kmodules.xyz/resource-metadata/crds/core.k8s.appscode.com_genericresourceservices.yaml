@@ -222,6 +222,125 @@ spec:
                     required:
                     - usage
                     type: object
+                  gateway:
+                    properties:
+                      hostname:
+                        type: string
+                      ip:
+                        type: string
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                      services:
+                        description: Services is an optional configuration for services
+                          used to expose database
+                        items:
+                          properties:
+                            alias:
+                              description: Alias represents the identifier of the
+                                service.
+                              type: string
+                            ports:
+                              items:
+                                description: GatewayPort contains information on Gateway
+                                  service's port.
+                                properties:
+                                  backendServicePort:
+                                    description: Number of the port to access the
+                                      backend service.
+                                    format: int32
+                                    type: integer
+                                  name:
+                                    description: The name of this port within the
+                                      gateway service.
+                                    type: string
+                                  nodePort:
+                                    description: The port on each node on which this
+                                      gateway service is exposed when type is NodePort
+                                      or LoadBalancer.
+                                    format: int32
+                                    type: integer
+                                  port:
+                                    description: The port that will be exposed by
+                                      the gateway service.
+                                    format: int32
+                                    type: integer
+                                required:
+                                - port
+                                type: object
+                              type: array
+                          required:
+                          - alias
+                          - ports
+                          type: object
+                        type: array
+                      ui:
+                        description: UI is an optional list of database web uis
+                        items:
+                          properties:
+                            alias:
+                              description: Alias represents the identifier of the
+                                service. This should match the db ui chart name
+                              type: string
+                            helmRelease:
+                              description: HelmRelease is the name of the helm release
+                                used to deploy this ui The name format is typically
+                                <alias>-<db-name>
+                              properties:
+                                name:
+                                  default: ""
+                                  description: 'Name of the referent. This field is
+                                    effectively required, but due to backwards compatibility
+                                    is allowed to be empty. Instances of this type
+                                    with an empty value here are almost certainly
+                                    wrong. TODO: Add other useful fields. apiVersion,
+                                    kind, uid? More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    TODO: Drop `kubebuilder:default` when controller-gen
+                                    doesn''t need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.'
+                                  type: string
+                              type: object
+                              x-kubernetes-map-type: atomic
+                            port:
+                              description: GatewayPort contains information on Gateway
+                                service's port.
+                              properties:
+                                backendServicePort:
+                                  description: Number of the port to access the backend
+                                    service.
+                                  format: int32
+                                  type: integer
+                                name:
+                                  description: The name of this port within the gateway
+                                    service.
+                                  type: string
+                                nodePort:
+                                  description: The port on each node on which this
+                                    gateway service is exposed when type is NodePort
+                                    or LoadBalancer.
+                                  format: int32
+                                  type: integer
+                                port:
+                                  description: The port that will be exposed by the
+                                    gateway service.
+                                  format: int32
+                                  type: integer
+                              required:
+                              - port
+                              type: object
+                            url:
+                              description: URL of the database ui
+                              type: string
+                          required:
+                          - alias
+                          - port
+                          - url
+                          type: object
+                        type: array
+                    required:
+                    - name
+                    - namespace
+                    type: object
                   monitoring:
                     properties:
                       refs:

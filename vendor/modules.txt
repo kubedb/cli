@@ -9,8 +9,8 @@ github.com/Azure/go-ansiterm/winterm
 # github.com/MakeNowJust/heredoc v1.0.0
 ## explicit; go 1.12
 github.com/MakeNowJust/heredoc
-# github.com/Masterminds/semver/v3 v3.2.1
-## explicit; go 1.18
+# github.com/Masterminds/semver/v3 v3.3.0
+## explicit; go 1.21
 github.com/Masterminds/semver/v3
 # github.com/beorn7/perks v1.0.1
 ## explicit; go 1.11
@@ -42,7 +42,10 @@ github.com/chai2010/gettext-go/po
 # github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0
 ## explicit
 github.com/codegangsta/inject
-# github.com/cpuguy83/go-md2man/v2 v2.0.3
+# github.com/coreos/go-semver v0.3.1
+## explicit; go 1.8
+github.com/coreos/go-semver/semver
+# github.com/cpuguy83/go-md2man/v2 v2.0.4
 ## explicit; go 1.11
 github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/cyphar/filepath-securejoin v0.2.4
@@ -859,7 +862,7 @@ github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring
 github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1
 github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1alpha1
 github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1beta1
-# github.com/prometheus-operator/prometheus-operator/pkg/client v0.75.1
+# github.com/prometheus-operator/prometheus-operator/pkg/client v0.75.2
 ## explicit; go 1.22.0
 github.com/prometheus-operator/prometheus-operator/pkg/client/versioned/scheme
 # github.com/prometheus/client_golang v1.18.0
@@ -899,7 +902,7 @@ github.com/russross/blackfriday/v2
 # github.com/sergi/go-diff v1.2.0
 ## explicit; go 1.12
 github.com/sergi/go-diff/diffmatchpatch
-# github.com/spf13/cobra v1.8.0
+# github.com/spf13/cobra v1.8.1
 ## explicit; go 1.15
 github.com/spf13/cobra
 github.com/spf13/cobra/doc
@@ -930,7 +933,7 @@ go.starlark.net/syntax
 # golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 ## explicit; go 1.20
 golang.org/x/exp/maps
-# golang.org/x/net v0.27.0
+# golang.org/x/net v0.29.0
 ## explicit; go 1.18
 golang.org/x/net/html
 golang.org/x/net/html/atom
@@ -943,22 +946,22 @@ golang.org/x/net/internal/socks
 golang.org/x/net/proxy
 golang.org/x/net/publicsuffix
 golang.org/x/net/websocket
-# golang.org/x/oauth2 v0.21.0
+# golang.org/x/oauth2 v0.22.0
 ## explicit; go 1.18
 golang.org/x/oauth2
 golang.org/x/oauth2/internal
-# golang.org/x/sync v0.7.0
+# golang.org/x/sync v0.8.0
 ## explicit; go 1.18
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.22.0
+# golang.org/x/sys v0.25.0
 ## explicit; go 1.18
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.22.0
+# golang.org/x/term v0.24.0
 ## explicit; go 1.18
 golang.org/x/term
-# golang.org/x/text v0.16.0
+# golang.org/x/text v0.18.0
 ## explicit; go 1.18
 golang.org/x/text/cases
 golang.org/x/text/encoding
@@ -1064,6 +1067,9 @@ google.golang.org/protobuf/types/gofeaturespb
 google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
+# gopkg.in/evanphx/json-patch.v4 v4.12.0
+## explicit
+gopkg.in/evanphx/json-patch.v4
 # gopkg.in/inf.v0 v0.9.1
 ## explicit
 gopkg.in/inf.v0
@@ -1205,7 +1211,7 @@ k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/third_party/forked/golang/json
 k8s.io/apimachinery/third_party/forked/golang/netutil
 k8s.io/apimachinery/third_party/forked/golang/reflect
-# k8s.io/cli-runtime v0.30.1
+# k8s.io/cli-runtime v0.30.2
 ## explicit; go 1.22.0
 k8s.io/cli-runtime/pkg/genericclioptions
 k8s.io/cli-runtime/pkg/genericiooptions
@@ -1458,7 +1464,7 @@ kmodules.xyz/apiversion
 # kmodules.xyz/cert-manager-util v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/cert-manager-util/certmanager/v1
-# kmodules.xyz/client-go v0.30.13
+# kmodules.xyz/client-go v0.30.17
 ## explicit; go 1.22.0
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -1485,13 +1491,13 @@ kmodules.xyz/custom-resources/client/clientset/versioned/scheme
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/appcatalog/v1alpha1
 kmodules.xyz/custom-resources/client/clientset/versioned/typed/metrics/v1alpha1
 kmodules.xyz/custom-resources/crds
-# kmodules.xyz/monitoring-agent-api v0.29.0
-## explicit; go 1.21.5
+# kmodules.xyz/monitoring-agent-api v0.30.1
+## explicit; go 1.22.0
 kmodules.xyz/monitoring-agent-api/api/v1
 # kmodules.xyz/objectstore-api v0.29.1
 ## explicit; go 1.21
 kmodules.xyz/objectstore-api/api/v1
-# kmodules.xyz/offshoot-api v0.30.0
+# kmodules.xyz/offshoot-api v0.30.1
 ## explicit; go 1.22.0
 kmodules.xyz/offshoot-api/api/v1
 kmodules.xyz/offshoot-api/api/v1/conversion
@@ -1500,12 +1506,12 @@ kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.18.12
+# kmodules.xyz/resource-metadata v0.18.15
 ## explicit; go 1.22.1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.47.1-0.20240924060721-639cafff01a9
+# kubedb.dev/apimachinery v0.48.0
 ## explicit; go 1.22.1
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1549,24 +1555,24 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/validator
-# kubedb.dev/db-client-go v0.2.1-0.20240920141523-e11cb0a2303e
+# kubedb.dev/db-client-go v0.3.0
 ## explicit; go 1.22.1
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
-# kubeops.dev/petset v0.0.6
-## explicit; go 1.22.0
+# kubeops.dev/petset v0.0.7
+## explicit; go 1.22.1
 kubeops.dev/petset/apis/apps/v1
 kubeops.dev/petset/client/clientset/versioned/scheme
 kubeops.dev/petset/client/clientset/versioned/typed/apps/v1
 kubeops.dev/petset/client/listers/apps/v1
 kubeops.dev/petset/crds
 kubeops.dev/petset/pkg/features
-# kubeops.dev/sidekick v0.0.7
-## explicit; go 1.21.5
+# kubeops.dev/sidekick v0.0.8
+## explicit; go 1.22.1
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.12.0
+# kubestash.dev/apimachinery v0.13.0
 ## explicit; go 1.22.0
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1
@@ -1622,8 +1628,8 @@ sigs.k8s.io/gateway-api/apis/v1
 ## explicit; go 1.18
 sigs.k8s.io/json
 sigs.k8s.io/json/internal/golang/encoding/json
-# sigs.k8s.io/kustomize/api v0.13.5-0.20230601165947-6ce0bf390ce3
-## explicit; go 1.19
+# sigs.k8s.io/kustomize/api v0.17.2
+## explicit; go 1.21
 sigs.k8s.io/kustomize/api/filters/annotations
 sigs.k8s.io/kustomize/api/filters/fieldspec
 sigs.k8s.io/kustomize/api/filters/filtersutil
@@ -1643,12 +1649,14 @@ sigs.k8s.io/kustomize/api/filters/suffix
 sigs.k8s.io/kustomize/api/filters/valueadd
 sigs.k8s.io/kustomize/api/hasher
 sigs.k8s.io/kustomize/api/ifc
-sigs.k8s.io/kustomize/api/image
 sigs.k8s.io/kustomize/api/internal/accumulator
 sigs.k8s.io/kustomize/api/internal/builtins
 sigs.k8s.io/kustomize/api/internal/generators
 sigs.k8s.io/kustomize/api/internal/git
+sigs.k8s.io/kustomize/api/internal/image
+sigs.k8s.io/kustomize/api/internal/konfig/builtinpluginconsts
 sigs.k8s.io/kustomize/api/internal/kusterr
+sigs.k8s.io/kustomize/api/internal/loader
 sigs.k8s.io/kustomize/api/internal/plugins/builtinconfig
 sigs.k8s.io/kustomize/api/internal/plugins/builtinhelpers
 sigs.k8s.io/kustomize/api/internal/plugins/execplugin
@@ -1659,17 +1667,15 @@ sigs.k8s.io/kustomize/api/internal/target
 sigs.k8s.io/kustomize/api/internal/utils
 sigs.k8s.io/kustomize/api/internal/validate
 sigs.k8s.io/kustomize/api/konfig
-sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts
 sigs.k8s.io/kustomize/api/krusty
 sigs.k8s.io/kustomize/api/kv
-sigs.k8s.io/kustomize/api/loader
 sigs.k8s.io/kustomize/api/provenance
 sigs.k8s.io/kustomize/api/provider
 sigs.k8s.io/kustomize/api/resmap
 sigs.k8s.io/kustomize/api/resource
 sigs.k8s.io/kustomize/api/types
-# sigs.k8s.io/kustomize/kyaml v0.14.3-0.20230601165947-6ce0bf390ce3
-## explicit; go 1.19
+# sigs.k8s.io/kustomize/kyaml v0.17.1
+## explicit; go 1.21
 sigs.k8s.io/kustomize/kyaml/comments
 sigs.k8s.io/kustomize/kyaml/errors
 sigs.k8s.io/kustomize/kyaml/ext
@@ -1679,7 +1685,6 @@ sigs.k8s.io/kustomize/kyaml/fn/runtime/container
 sigs.k8s.io/kustomize/kyaml/fn/runtime/exec
 sigs.k8s.io/kustomize/kyaml/fn/runtime/runtimeutil
 sigs.k8s.io/kustomize/kyaml/fn/runtime/starlark
-sigs.k8s.io/kustomize/kyaml/internal/forked/github.com/go-yaml/yaml
 sigs.k8s.io/kustomize/kyaml/internal/forked/github.com/qri-io/starlib/util
 sigs.k8s.io/kustomize/kyaml/kio
 sigs.k8s.io/kustomize/kyaml/kio/filters
@@ -1716,7 +1721,8 @@ sigs.k8s.io/structured-merge-diff/v4/value
 ## explicit; go 1.12
 sigs.k8s.io/yaml
 sigs.k8s.io/yaml/goyaml.v2
-# stash.appscode.dev/apimachinery v0.35.0
+sigs.k8s.io/yaml/goyaml.v3
+# stash.appscode.dev/apimachinery v0.36.0
 ## explicit; go 1.22.0
 stash.appscode.dev/apimachinery/apis
 stash.appscode.dev/apimachinery/apis/repositories

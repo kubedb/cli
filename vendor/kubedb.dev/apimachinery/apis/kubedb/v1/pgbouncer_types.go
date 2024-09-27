@@ -73,7 +73,7 @@ type PgBouncerSpec struct {
 	PodTemplate ofstv2.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// Database to proxy by connection pooling.
-	Database Database `json:"database,omitempty"`
+	Database Database `json:"database"`
 
 	// ConnectionPoolConfig defines Connection pool configuration.
 	// +optional
@@ -136,54 +136,42 @@ type Database struct {
 
 type ConnectionPoolConfig struct {
 	// Port is the port number on which PgBouncer listens to clients. Default: 5432.
-	// +kubebuilder:default=5432
 	// +optional
 	Port *int32 `json:"port,omitempty"`
 	// PoolMode is the pooling mechanism type. Default: session.
-	// +kubebuilder:default="session"
 	// +optional
 	PoolMode string `json:"poolMode,omitempty"`
 	// MaxClientConnections is the maximum number of allowed client connections. Default: 100.
-	// +kubebuilder:default=100
 	// +optional
 	MaxClientConnections *int64 `json:"maxClientConnections,omitempty"`
 	// DefaultPoolSize specifies how many server connections to allow per user/database pair. Default: 20.
-	// +kubebuilder:default=20
 	// +optional
 	DefaultPoolSize *int64 `json:"defaultPoolSize,omitempty"`
 	// MinPoolSize is used to add more server connections to pool if below this number. Default: 0 (disabled).
-	// +kubebuilder:default=0
 	// +optional
 	MinPoolSize *int64 `json:"minPoolSize,omitempty"`
 	// ReservePoolSize specifies how many additional connections to allow to a pool. 0 disables. Default: 0 (disabled).
-	// +kubebuilder:default=0
 	// +optional
 	ReservePoolSize *int64 `json:"reservePoolSize,omitempty"`
 	// ReservePoolTimeoutSeconds is the number of seconds in which if a client has not been serviced,
 	// pgbouncer enables use of additional connections from reserve pool. 0 disables. Default: 5.0.
-	// +kubebuilder:default=5
 	// +optional
 	ReservePoolTimeoutSeconds *int64 `json:"reservePoolTimeoutSeconds,omitempty"`
 	// MaxDBConnections is the maximum number of connections allowed per-database. Default: 0 (unlimited).
-	// +kubebuilder:default=0
 	// +optional
 	MaxDBConnections *int64 `json:"maxDBConnections,omitempty"`
 	// MaxUserConnections is the maximum number of users allowed per-database. Default: 0 (unlimited).
-	// +kubebuilder:default=0
 	// +optional
 	MaxUserConnections *int64 `json:"maxUserConnections,omitempty"`
 	// StatsPeriodSeconds sets how often the averages shown in various SHOW commands are updated
 	// and how often aggregated statistics are written to the log. Default: 60
-	// +kubebuilder:default=60
 	// +optional
 	StatsPeriodSeconds *int64 `json:"statsPeriodSeconds,omitempty"`
 	// AuthType specifies how to authenticate users. Default: md5 (md5+plain text).
-	// +kubebuilder:default=md5
 	// +optional
 	AuthType PgBouncerClientAuthMode `json:"authType,omitempty"`
 	// IgnoreStartupParameters specifies comma-separated startup parameters that
 	// pgbouncer knows are handled by admin and it can ignore them. Default: empty
-	// +kubebuilder:default="empty"
 	// +optional
 	IgnoreStartupParameters string `json:"ignoreStartupParameters,omitempty"`
 	// AdminUsers specifies an array of users who can act as PgBouncer administrators.

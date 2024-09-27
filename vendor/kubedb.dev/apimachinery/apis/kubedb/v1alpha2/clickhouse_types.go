@@ -20,6 +20,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
@@ -77,6 +78,11 @@ type ClickHouseSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
+	// ConfigSecret is an optional field to provide custom configuration file for database (i.e config.properties).
+	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	// +optional
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
@@ -84,6 +90,14 @@ type ClickHouseSpec struct {
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
 	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+
+	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
+	// +optional
+	Halted bool `json:"halted,omitempty"`
+
+	// Monitor is used monitor database instance
+	// +optional
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
@@ -100,7 +114,7 @@ type ClusterTopology struct {
 	Cluster []ClusterSpec `json:"cluster,omitempty"`
 
 	// ClickHouse Keeper server name
-	ClickHouseKeeper *ClickHouseKeeperConfig `json:"clickHouseKeeper,omitempty"`
+	ClickHouseKeeper *ClickHouseKeeper `json:"clickHouseKeeper,omitempty"`
 }
 
 type ClusterSpec struct {
@@ -125,8 +139,28 @@ type ClusterSpec struct {
 	StorageType StorageType `json:"storageType,omitempty"`
 }
 
-type ClickHouseKeeperConfig struct {
-	Node ClickHouseKeeperNode `json:"node,omitempty"`
+type ClickHouseKeeper struct {
+	ExternallyManaged bool `json:"externallyManaged,omitempty"`
+
+	Node *ClickHouseKeeperNode `json:"node,omitempty"`
+
+	Spec *ClickHouseKeeperSpec `json:"spec,omitempty"`
+}
+
+type ClickHouseKeeperSpec struct {
+	// Number of replica for each shard to deploy for a cluster.
+	// +optional
+	Replicas *int32 `json:"replicas,omitempty"`
+
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+
+	// Storage to specify how storage shall be used.
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// StorageType can be durable (default) or ephemeral
+	StorageType StorageType `json:"storageType,omitempty"`
 }
 
 // ClickHouseKeeperNode defines item of nodes section of .spec.clusterTopology.
@@ -134,7 +168,7 @@ type ClickHouseKeeperNode struct {
 	Host string `json:"host,omitempty"`
 
 	// +optional
-	Port int32 `json:"port,omitempty"`
+	Port *int32 `json:"port,omitempty"`
 }
 
 // ClickHouseStatus defines the observed state of ClickHouse

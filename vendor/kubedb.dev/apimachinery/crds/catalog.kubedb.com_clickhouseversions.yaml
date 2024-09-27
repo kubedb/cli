@@ -45,6 +45,13 @@ spec:
             type: object
           spec:
             properties:
+              clickHouseKeeper:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               db:
                 properties:
                   image:
@@ -83,6 +90,7 @@ spec:
               version:
                 type: string
             required:
+            - clickHouseKeeper
             - db
             - initContainer
             - version

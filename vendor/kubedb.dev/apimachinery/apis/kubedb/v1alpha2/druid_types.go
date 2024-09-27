@@ -70,6 +70,10 @@ type DruidSpec struct {
 	// +optional
 	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
 
+	// Init is used to initialize database
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
+
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e. config.properties).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	// +optional

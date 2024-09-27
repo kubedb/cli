@@ -5,14 +5,14 @@ go 1.22.1
 toolchain go1.22.5
 
 require (
-	github.com/Masterminds/semver/v3 v3.2.1
+	github.com/Masterminds/semver/v3 v3.3.0
 	github.com/cert-manager/cert-manager v1.15.1
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/prometheus/common v0.46.0
-	github.com/spf13/cobra v1.8.0
-	golang.org/x/text v0.16.0
+	github.com/spf13/cobra v1.8.1
+	golang.org/x/text v0.18.0
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/logs v0.0.7
 	gomodules.xyz/pointer v0.1.0
@@ -20,20 +20,20 @@ require (
 	gomodules.xyz/x v0.0.17
 	k8s.io/api v0.30.2
 	k8s.io/apimachinery v0.30.2
-	k8s.io/cli-runtime v0.30.1
+	k8s.io/cli-runtime v0.30.2
 	k8s.io/client-go v0.30.2
 	k8s.io/component-base v0.30.2
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.30.13
+	kmodules.xyz/client-go v0.30.17
 	kmodules.xyz/custom-resources v0.30.0
-	kmodules.xyz/monitoring-agent-api v0.29.0
-	kubedb.dev/apimachinery v0.47.1-0.20240924060721-639cafff01a9
-	kubedb.dev/db-client-go v0.2.1-0.20240920141523-e11cb0a2303e
+	kmodules.xyz/monitoring-agent-api v0.30.1
+	kubedb.dev/apimachinery v0.48.0
+	kubedb.dev/db-client-go v0.3.0
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
-	stash.appscode.dev/apimachinery v0.35.0
+	stash.appscode.dev/apimachinery v0.36.0
 )
 
 require (
@@ -45,7 +45,8 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chai2010/gettext-go v1.0.2 // indirect
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.3 // indirect
+	github.com/coreos/go-semver v0.3.1 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
 	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
@@ -102,7 +103,7 @@ require (
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.75.2 // indirect
-	github.com/prometheus-operator/prometheus-operator/pkg/client v0.75.1 // indirect
+	github.com/prometheus-operator/prometheus-operator/pkg/client v0.75.2 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/procfs v0.15.0 // indirect
 	github.com/redis/go-redis/v9 v9.5.1 // indirect
@@ -115,11 +116,11 @@ require (
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.starlark.net v0.0.0-20230525235612-a134d8f9ddca // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
-	golang.org/x/net v0.27.0 // indirect
-	golang.org/x/oauth2 v0.21.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
-	golang.org/x/term v0.22.0 // indirect
+	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/oauth2 v0.22.0 // indirect
+	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/term v0.24.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
@@ -130,6 +131,7 @@ require (
 	gomodules.xyz/sets v0.2.1 // indirect
 	gomodules.xyz/wait v0.2.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
+	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -140,16 +142,16 @@ require (
 	k8s.io/utils v0.0.0-20240502163921-fe8a2dddb1d0 // indirect
 	kmodules.xyz/apiversion v0.2.0 // indirect
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
-	kmodules.xyz/offshoot-api v0.30.0 // indirect
+	kmodules.xyz/offshoot-api v0.30.1 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.18.12 // indirect
-	kubeops.dev/petset v0.0.6 // indirect
-	kubeops.dev/sidekick v0.0.7 // indirect
-	kubestash.dev/apimachinery v0.12.0 // indirect
+	kmodules.xyz/resource-metadata v0.18.15 // indirect
+	kubeops.dev/petset v0.0.7 // indirect
+	kubeops.dev/sidekick v0.0.8 // indirect
+	kubestash.dev/apimachinery v0.13.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
-	sigs.k8s.io/kustomize/api v0.13.5-0.20230601165947-6ce0bf390ce3 // indirect
-	sigs.k8s.io/kustomize/kyaml v0.14.3-0.20230601165947-6ce0bf390ce3 // indirect
+	sigs.k8s.io/kustomize/api v0.17.2 // indirect
+	sigs.k8s.io/kustomize/kyaml v0.17.1 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.1 // indirect
 )
 

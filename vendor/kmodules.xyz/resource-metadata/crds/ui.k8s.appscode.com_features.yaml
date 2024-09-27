@@ -94,6 +94,9 @@ spec:
                 description: Description specifies a short description of the service
                   this feature provides.
                 type: string
+              disabled:
+                description: Disabled specify whether this feature set is disabled.
+                type: boolean
               featureBlock:
                 description: FeatureBlock specifies the ui block name of this feature.
                 type: string
