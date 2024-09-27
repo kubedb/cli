@@ -25,6 +25,7 @@ import (
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 
+	"github.com/coreos/go-semver/semver"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -141,6 +142,13 @@ func (s *Solr) ValidateCreateOrUpdate() field.ErrorList {
 				s.Name,
 				err.Error()))
 		}
+	}
+
+	version := semver.New(s.Spec.Version)
+	if version.Major == 8 && s.Spec.Topology != nil {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("enableSSL"),
+			s.Name,
+			".spec.topology not supported for version 8"))
 	}
 
 	err := solrValidateModules(s)

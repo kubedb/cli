@@ -56,6 +56,12 @@ spec:
             description: BackupSessionSpec specifies the information related to the
               respective backup invoker and session.
             properties:
+              backupTimeout:
+                description: BackupTimeout specifies the maximum duration of backup.
+                  Backup will be considered Failed if backup tasks do not complete
+                  within this time limit. By default, KubeStash don't set any timeout
+                  for backup.
+                type: string
               invoker:
                 description: Invoker points to the respective BackupConfiguration
                   or BackupBatch which is responsible for triggering this backup.
@@ -91,6 +97,11 @@ spec:
           status:
             description: BackupSessionStatus defines the observed state of BackupSession
             properties:
+              backupDeadline:
+                description: BackupDeadline specifies the deadline of backup. Backup
+                  will be considered Failed if it does not complete within this deadline
+                format: date-time
+                type: string
               conditions:
                 description: Conditions represents list of conditions regarding this
                   BackupSession
@@ -249,12 +260,6 @@ spec:
                   not. This field will exist only if the `retryConfig` has been set
                   in the respective backup invoker.
                 type: boolean
-              sessionDeadline:
-                description: Deadline specifies the deadline of backup. BackupSession
-                  will be considered Failed if backup does not complete within this
-                  deadline
-                format: date-time
-                type: string
               snapshots:
                 description: Snapshots specifies the Snapshots status
                 items:

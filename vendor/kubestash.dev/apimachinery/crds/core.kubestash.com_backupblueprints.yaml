@@ -15716,6 +15716,12 @@ spec:
                                 type: object
                               type: array
                           type: object
+                        backupTimeout:
+                          description: BackupTimeout specifies the maximum duration
+                            of backup. Backup will be considered Failed if backup
+                            tasks do not complete within this time limit. By default,
+                            KubeStash don't set any timeout for backup.
+                          type: string
                         hooks:
                           description: Hooks specifies the backup hooks that should
                             be executed before and/or after the backup.
@@ -37239,12 +37245,6 @@ spec:
                             debugging purpose. The default value is 1.
                           format: int32
                           type: integer
-                        timeout:
-                          description: Timeout specifies the maximum duration of backup.
-                            BackupSession will be considered Failed if backup does
-                            not complete within this time limit. By default, KubeStash
-                            don't set any timeout for backup.
-                          type: string
                       type: object
                     type: array
                 type: object

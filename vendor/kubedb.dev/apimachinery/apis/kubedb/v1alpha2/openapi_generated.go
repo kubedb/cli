@@ -410,6 +410,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/client-go/api/v1.CAPIClusterInfo":                                              schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                                        schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                                              schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterInfo":                                                  schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                                              schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                                    schema_kmodulesxyz_client_go_api_v1_Condition(ref),
 		"kmodules.xyz/client-go/api/v1.HealthCheckSpec":                                              schema_kmodulesxyz_client_go_api_v1_HealthCheckSpec(ref),
@@ -471,8 +472,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/objectstore-api/api/v1.SwiftSpec":                                              schema_kmodulesxyz_objectstore_api_api_v1_SwiftSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings":                                  schema_kmodulesxyz_offshoot_api_api_v1_ContainerRuntimeSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.EphemeralVolumeSource":                                     schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref),
+		"kmodules.xyz/offshoot-api/api/v1.Gateway":                                                   schema_kmodulesxyz_offshoot_api_api_v1_Gateway(ref),
 		"kmodules.xyz/offshoot-api/api/v1.GatewayPort":                                               schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref),
 		"kmodules.xyz/offshoot-api/api/v1.IONiceSettings":                                            schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref),
+		"kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus":                                        schema_kmodulesxyz_offshoot_api_api_v1_NamedServiceStatus(ref),
+		"kmodules.xyz/offshoot-api/api/v1.NamedURL":                                                  schema_kmodulesxyz_offshoot_api_api_v1_NamedURL(ref),
 		"kmodules.xyz/offshoot-api/api/v1.NiceSettings":                                              schema_kmodulesxyz_offshoot_api_api_v1_NiceSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ObjectMeta":                                                schema_kmodulesxyz_offshoot_api_api_v1_ObjectMeta(ref),
 		"kmodules.xyz/offshoot-api/api/v1.PartialObjectMeta":                                         schema_kmodulesxyz_offshoot_api_api_v1_PartialObjectMeta(ref),
@@ -499,10 +503,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraSpec":                                 schema_apimachinery_apis_kubedb_v1alpha2_CassandraSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraStatus":                               schema_apimachinery_apis_kubedb_v1alpha2_CassandraStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouse":                                    schema_apimachinery_apis_kubedb_v1alpha2_ClickHouse(ref),
-		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperConfig":                        schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperConfig(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeper":                              schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeper(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperNode":                          schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperNode(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperSpec":                          schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseList":                                schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseSpec":                                schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseStatsService":                        schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseStatus":                              schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickhouseApp":                                 schema_apimachinery_apis_kubedb_v1alpha2_ClickhouseApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClusterSpec":                                   schema_apimachinery_apis_kubedb_v1alpha2_ClusterSpec(ref),
@@ -21187,23 +21193,27 @@ func schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref common.ReferenceCal
 				Properties: map[string]spec.Schema{
 					"provider": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"namespace": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"clusterName": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"provider", "namespace", "clusterName"},
 			},
 		},
 	}
@@ -21346,6 +21356,56 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.TypedLocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.CertificatePrivateKey", "kmodules.xyz/client-go/api/v1.X509Subject"},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ClusterInfo used in ace-installer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"uid": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"clusterManagers": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"capi": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
+						},
+					},
+				},
+				Required: []string{"uid", "name", "clusterManagers"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.CAPIClusterInfo"},
 	}
 }
 
@@ -22980,6 +23040,12 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusContext(ref common
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"hubUID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"clusterUID": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
@@ -23848,6 +23914,75 @@ func schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref common.Ref
 	}
 }
 
+func schema_kmodulesxyz_offshoot_api_api_v1_Gateway(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"ip": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"hostname": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"services": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Services is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus"),
+									},
+								},
+							},
+						},
+					},
+					"ui": {
+						SchemaProps: spec.SchemaProps{
+							Description: "UI is an optional list of database web uis",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedURL"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"name", "namespace"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus", "kmodules.xyz/offshoot-api/api/v1.NamedURL"},
+	}
+}
+
 func schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -23913,6 +24048,85 @@ func schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref common.ReferenceC
 				},
 			},
 		},
+	}
+}
+
+func schema_kmodulesxyz_offshoot_api_api_v1_NamedServiceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ports": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.GatewayPort"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"alias", "ports"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.GatewayPort"},
+	}
+}
+
+func schema_kmodulesxyz_offshoot_api_api_v1_NamedURL(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service. This should match the db ui chart name",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of the database ui",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/offshoot-api/api/v1.GatewayPort"),
+						},
+					},
+					"helmRelease": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HelmRelease is the name of the helm release used to deploy this ui The name format is typically <alias>-<db-name>",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+				Required: []string{"alias", "url", "port"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v1.GatewayPort"},
 	}
 }
 
@@ -25787,23 +26001,33 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouse(ref common.ReferenceCal
 	}
 }
 
-func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeper(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"externallyManaged": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"boolean"},
+							Format: "",
+						},
+					},
 					"node": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperNode"),
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperNode"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperNode"},
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperNode", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperSpec"},
 	}
 }
 
@@ -25829,6 +26053,46 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperNode(ref common.Re
 				},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeperSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of replica for each shard to deploy for a cluster.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Storage to specify how storage shall be used.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable (default) or ephemeral",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
 	}
 }
 
@@ -25935,6 +26199,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseSpec(ref common.Referenc
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
 						},
 					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e config.properties). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -25953,6 +26223,19 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseSpec(ref common.Referenc
 									},
 								},
 							},
+						},
+					},
+					"halted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"monitor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Monitor is used monitor database instance",
+							Ref:         ref("kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec"),
 						},
 					},
 					"deletionPolicy": {
@@ -25974,7 +26257,27 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseSpec(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseStatsService(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"ClickHouse": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouse"),
+						},
+					},
+				},
+				Required: []string{"ClickHouse"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouse"},
 	}
 }
 
@@ -26118,14 +26421,14 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ClusterTopology(ref common.Referen
 					"clickHouseKeeper": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ClickHouse Keeper server name",
-							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperConfig"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeper"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeperConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClusterSpec"},
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeper", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClusterSpec"},
 	}
 }
 
@@ -26629,6 +26932,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_DruidSpec(ref common.ReferenceCall
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"init": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Init is used to initialize database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"),
+						},
+					},
 					"configSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e. config.properties). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
@@ -26699,7 +27008,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_DruidSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DeepStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DruidClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetadataStorage", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZookeeperRef"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DeepStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DruidClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetadataStorage", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZookeeperRef"},
 	}
 }
 
@@ -28956,6 +29265,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerSpec(ref common.Referen
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
 						},
 					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e mssql.conf). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
 					"internalAuth": {
 						SchemaProps: spec.SchemaProps{
 							Description: "InternalAuth is used to authenticate endpoint",
@@ -29045,7 +29360,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerSpec(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SQLServerTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InternalAuthentication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SQLServerTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -34500,6 +34815,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_SolrSpec(ref common.ReferenceCallb
 							Format:      "",
 						},
 					},
+					"clientAuthSSL": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Client auth need or want",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"tls": {
 						SchemaProps: spec.SchemaProps{
 							Description: "TLS contains tls configurations for client and server.",
@@ -34514,6 +34836,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_SolrSpec(ref common.ReferenceCallb
 						},
 					},
 					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"keystoreSecret": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},

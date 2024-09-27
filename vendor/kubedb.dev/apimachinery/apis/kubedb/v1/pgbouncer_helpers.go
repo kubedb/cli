@@ -17,7 +17,9 @@ limitations under the License.
 package v1
 
 import (
+	"context"
 	"fmt"
+	"strconv"
 
 	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
@@ -29,6 +31,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/types"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -127,8 +130,19 @@ func (p PgBouncer) GetBackendSecretName() string {
 	return meta_util.NameWithSuffix(p.OffshootName(), "backend")
 }
 
-func (p PgBouncer) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(p.ServiceName(), "config")
+func (p PgBouncer) IsPgBouncerFinalConfigSecretExist() bool {
+	secret, err := p.GetPgBouncerFinalConfigSecret()
+	return (secret != nil && err == nil)
+}
+
+func (p PgBouncer) GetPgBouncerFinalConfigSecret() (*core.Secret, error) {
+	var secret core.Secret
+	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: p.PgBouncerFinalConfigSecretName(), Namespace: p.GetNamespace()}, &secret)
+	return &secret, err
+}
+
+func (p PgBouncer) PgBouncerFinalConfigSecretName() string {
+	return meta_util.NameWithSuffix(p.ServiceName(), "final-config")
 }
 
 type pgbouncerApp struct {
@@ -199,8 +213,6 @@ func (p *PgBouncer) SetDefaults(pgBouncerVersion *catalog.PgBouncerVersion, uses
 	if p.Spec.DeletionPolicy == "" {
 		p.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
-
-	p.setConnectionPoolConfigDefaults()
 
 	if p.Spec.TLS != nil {
 		if p.Spec.SSLMode == "" {
@@ -273,7 +285,7 @@ func (p *PgBouncer) GetPersistentSecrets() []string {
 	var secrets []string
 	secrets = append(secrets, p.GetAuthSecretName())
 	secrets = append(secrets, p.GetBackendSecretName())
-	secrets = append(secrets, p.ConfigSecretName())
+	secrets = append(secrets, p.PgBouncerFinalConfigSecretName())
 
 	return secrets
 }
@@ -305,48 +317,6 @@ func (p *PgBouncer) SetHealthCheckerDefaults() {
 	}
 	if p.Spec.HealthChecker.FailureThreshold == nil {
 		p.Spec.HealthChecker.FailureThreshold = pointer.Int32P(1)
-	}
-}
-
-func (p *PgBouncer) setConnectionPoolConfigDefaults() {
-	if p.Spec.ConnectionPool == nil {
-		p.Spec.ConnectionPool = &ConnectionPoolConfig{}
-	}
-	if p.Spec.ConnectionPool.Port == nil {
-		p.Spec.ConnectionPool.Port = pointer.Int32P(5432)
-	}
-	if p.Spec.ConnectionPool.PoolMode == "" {
-		p.Spec.ConnectionPool.PoolMode = kubedb.PgBouncerDefaultPoolMode
-	}
-	if p.Spec.ConnectionPool.MaxClientConnections == nil {
-		p.Spec.ConnectionPool.MaxClientConnections = pointer.Int64P(100)
-	}
-	if p.Spec.ConnectionPool.DefaultPoolSize == nil {
-		p.Spec.ConnectionPool.DefaultPoolSize = pointer.Int64P(20)
-	}
-	if p.Spec.ConnectionPool.MinPoolSize == nil {
-		p.Spec.ConnectionPool.MinPoolSize = pointer.Int64P(0)
-	}
-	if p.Spec.ConnectionPool.ReservePoolSize == nil {
-		p.Spec.ConnectionPool.ReservePoolSize = pointer.Int64P(0)
-	}
-	if p.Spec.ConnectionPool.ReservePoolTimeoutSeconds == nil {
-		p.Spec.ConnectionPool.ReservePoolTimeoutSeconds = pointer.Int64P(5)
-	}
-	if p.Spec.ConnectionPool.MaxDBConnections == nil {
-		p.Spec.ConnectionPool.MaxDBConnections = pointer.Int64P(0)
-	}
-	if p.Spec.ConnectionPool.MaxUserConnections == nil {
-		p.Spec.ConnectionPool.MaxUserConnections = pointer.Int64P(0)
-	}
-	if p.Spec.ConnectionPool.StatsPeriodSeconds == nil {
-		p.Spec.ConnectionPool.StatsPeriodSeconds = pointer.Int64P(60)
-	}
-	if p.Spec.ConnectionPool.AuthType == "" {
-		p.Spec.ConnectionPool.AuthType = PgBouncerClientAuthModeMD5
-	}
-	if p.Spec.ConnectionPool.IgnoreStartupParameters == "" {
-		p.Spec.ConnectionPool.IgnoreStartupParameters = kubedb.PgBouncerDefaultIgnoreStartupParameters
 	}
 }
 
@@ -404,4 +374,33 @@ func (p *PgBouncer) SetSecurityContext(pgBouncerVersion *catalog.PgBouncerVersio
 	if isPgbouncerContainerPresent == nil {
 		core_util.UpsertContainer(p.Spec.PodTemplate.Spec.Containers, *container)
 	}
+}
+
+func PgBouncerConfigSections() *[]string {
+	sections := []string{
+		kubedb.PgBouncerConfigSectionDatabases, kubedb.PgBouncerConfigSectionPeers,
+		kubedb.PgBouncerConfigSectionPgbouncer, kubedb.PgBouncerConfigSectionUsers,
+	}
+	return &sections
+}
+
+func PgBouncerDefaultConfig() string {
+	defaultConfig := "[pgbouncer]\n" +
+		"\n" +
+		"listen_port = " + strconv.Itoa(kubedb.PgBouncerDatabasePort) + "\n" +
+		"pool_mode = " + kubedb.PgBouncerDefaultPoolMode + "\n" +
+		"max_client_conn = 100\n" +
+		"default_pool_size = 20\n" +
+		"min_pool_size = 1\n" +
+		"reserve_pool_size = 1\n" +
+		"reserve_pool_timeout = 5\n" +
+		"max_db_connections = 1\n" +
+		"max_user_connections = 2\n" +
+		"stats_period = 60\n" +
+		"auth_type = " + string(PgBouncerClientAuthModeMD5) + "\n" +
+		"ignore_startup_parameters = " + "extra_float_digits, " + kubedb.PgBouncerDefaultIgnoreStartupParameters + "\n" +
+		"logfile = /tmp/pgbouncer.log\n" +
+		"pidfile = /tmp/pgbouncer.pid\n" +
+		"listen_addr = *"
+	return defaultConfig
 }

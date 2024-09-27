@@ -63,6 +63,11 @@ type BackupSessionSpec struct {
 	// If this set to non-zero, KubeStash will create a new BackupSession if the current one fails.
 	// +optional
 	RetryLeft int32 `json:"retryLeft,omitempty"`
+
+	// BackupTimeout specifies the maximum duration of backup. Backup will be considered Failed
+	// if backup tasks do not complete within this time limit. By default, KubeStash don't set any timeout for backup.
+	// +optional
+	BackupTimeout *metav1.Duration `json:"backupTimeout,omitempty"`
 }
 
 // BackupSessionStatus defines the observed state of BackupSession
@@ -75,10 +80,10 @@ type BackupSessionStatus struct {
 	// +optional
 	Duration string `json:"duration,omitempty"`
 
-	// Deadline specifies the deadline of backup. BackupSession will be
-	// considered Failed if backup does not complete within this deadline
+	// BackupDeadline specifies the deadline of backup. Backup will be
+	// considered Failed if it does not complete within this deadline
 	// +optional
-	Deadline *metav1.Time `json:"sessionDeadline,omitempty"`
+	BackupDeadline *metav1.Time `json:"backupDeadline,omitempty"`
 
 	// TotalSnapshots specifies the total number of snapshots created for this backupSession.
 	// +optional
@@ -226,6 +231,10 @@ const (
 	TypeSnapshotsEnsured               = "SnapshotsEnsured"
 	ReasonSuccessfullyEnsuredSnapshots = "SuccessfullyEnsuredSnapshots"
 	ReasonFailedToEnsureSnapshots      = "FailedToEnsureSnapshots"
+
+	// TypeSnapshotCleanupIncomplete indicates whether Snapshot cleanup incomplete or not
+	TypeSnapshotCleanupIncomplete                   = "SnapshotCleanupIncomplete"
+	ReasonSnapshotCleanupTerminatedBeforeCompletion = "SnapshotCleanupTerminatedBeforeCompletion"
 )
 
 //+kubebuilder:object:root=true

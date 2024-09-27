@@ -217,9 +217,6 @@ type RetryConfig struct {
 }
 
 const (
-	TypeDeadlineExceeded                 = "DeadlineExceeded"
-	ReasonFailedToCompleteWithinDeadline = "FailedToCompleteWithinDeadline"
-
 	// TypeMetricsPushed indicates whether Metrics are pushed or not
 	TypeMetricsPushed               = "MetricsPushed"
 	ReasonSuccessfullyPushedMetrics = "SuccessfullyPushedMetrics"

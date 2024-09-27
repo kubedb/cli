@@ -20,6 +20,8 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis"
+	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	"kubedb.dev/apimachinery/apis/kubedb"
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	amv "kubedb.dev/apimachinery/pkg/validator"
 
@@ -29,9 +31,9 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	kmapi "kmodules.xyz/client-go/api/v1"
+	coreutil "kmodules.xyz/client-go/core/v1"
 	"kmodules.xyz/client-go/policy/secomp"
-	ofst "kmodules.xyz/offshoot-api/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v2"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -72,17 +74,44 @@ func (ed *ElasticsearchDashboard) SetupWebhookWithManager(mgr manager.Manager) e
 
 var _ webhook.Defaulter = &ElasticsearchDashboard{}
 
-func (ed *ElasticsearchDashboard) setDefaultContainerSecurityContext(podTemplate *ofst.PodTemplateSpec) {
-	if podTemplate == nil {
-		return
+func (ed *ElasticsearchDashboard) setDefaultContainerSecurityContext(esVersion catalog.ElasticsearchVersion, podTemplate *ofst.PodTemplateSpec) {
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ElasticsearchInitConfigMergerContainerName)
+	if initContainer == nil {
+		initContainer = &core.Container{
+			Name: kubedb.ElasticsearchInitConfigMergerContainerName,
+		}
 	}
-	if podTemplate.Spec.ContainerSecurityContext == nil {
-		podTemplate.Spec.ContainerSecurityContext = &core.SecurityContext{}
+	if initContainer.SecurityContext == nil {
+		initContainer.SecurityContext = &core.SecurityContext{}
 	}
-	ed.assignDefaultContainerSecurityContext(podTemplate.Spec.ContainerSecurityContext)
+	ed.assignDefaultContainerSecurityContext(esVersion, initContainer.SecurityContext)
+	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.ElasticsearchContainerName)
+	if container == nil {
+		container = &core.Container{
+			Name: kubedb.ElasticsearchContainerName,
+		}
+	}
+	if container.SecurityContext == nil {
+		container.SecurityContext = &core.SecurityContext{}
+	}
+	ed.assignDefaultContainerSecurityContext(esVersion, container.SecurityContext)
+	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 }
 
-func (ed *ElasticsearchDashboard) assignDefaultContainerSecurityContext(sc *core.SecurityContext) {
+func (ed *ElasticsearchDashboard) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
+	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.ElasticsearchContainerName)
+	if container != nil && (container.Resources.Requests == nil && container.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&container.Resources, kubedb.DefaultResources)
+	}
+
+	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ElasticsearchInitConfigMergerContainerName)
+	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
+	}
+}
+
+func (ed *ElasticsearchDashboard) assignDefaultContainerSecurityContext(esVersion catalog.ElasticsearchVersion, sc *core.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
@@ -92,10 +121,10 @@ func (ed *ElasticsearchDashboard) assignDefaultContainerSecurityContext(sc *core
 		}
 	}
 	if sc.RunAsNonRoot == nil {
-		sc.RunAsNonRoot = pointer.BoolP(true)
+		sc.RunAsNonRoot = pointer.BoolP(esVersion.Spec.SecurityContext.RunAsAnyNonRoot)
 	}
 	if sc.RunAsUser == nil {
-		sc.RunAsUser = pointer.Int64P(1000)
+		sc.RunAsUser = esVersion.Spec.SecurityContext.RunAsUser
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
@@ -104,36 +133,7 @@ func (ed *ElasticsearchDashboard) assignDefaultContainerSecurityContext(sc *core
 
 // Default implements webhook.Defaulter so a webhook will be registered for the type
 func (ed *ElasticsearchDashboard) Default() {
-	if ed.Spec.Replicas == nil {
-		ed.Spec.Replicas = pointer.Int32P(1)
-		edLog.Info(".Spec.Replicas have been set to default")
-	}
-
-	apis.SetDefaultResourceLimits(&ed.Spec.PodTemplate.Spec.Resources, DashboardsDefaultResources)
-	edLog.Info(".PodTemplate.Spec.Resources have been set to default")
-
-	if len(ed.Spec.TerminationPolicy) == 0 {
-		ed.Spec.TerminationPolicy = dbapi.DeletionPolicyWipeOut
-		edLog.Info(".Spec.DeletionPolicy have been set to DeletionPolicyWipeOut")
-	}
-
-	ed.setDefaultContainerSecurityContext(&ed.Spec.PodTemplate)
-
-	if ed.Spec.EnableSSL {
-		if ed.Spec.TLS == nil {
-			ed.Spec.TLS = &kmapi.TLSConfig{}
-		}
-		if ed.Spec.TLS.IssuerRef == nil {
-			ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
-				Alias:      string(ElasticsearchDashboardCACert),
-				SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardCACert),
-			})
-		}
-		ed.Spec.TLS.Certificates = kmapi.SetMissingSpecForCertificate(ed.Spec.TLS.Certificates, kmapi.CertificateSpec{
-			Alias:      string(ElasticsearchDashboardServerCert),
-			SecretName: ed.DefaultCertificateSecretName(ElasticsearchDashboardServerCert),
-		})
-	}
+	ed.SetDefaults()
 }
 
 // +kubebuilder:webhook:path=/validate-elasticsearch-kubedb-com-v1alpha1-elasticsearchelasticsearch,mutating=false,failurePolicy=fail,sideEffects=None,groups=elasticsearch.kubedb.com,resources=elasticsearchelasticsearchs,verbs=create;update;delete,versions=v1alpha1,name=velasticsearchelasticsearch.kb.io,admissionReviewVersions={v1,v1beta1}
@@ -162,7 +162,7 @@ func (ed *ElasticsearchDashboard) ValidateDelete() (admission.Warnings, error) {
 
 	var allErr field.ErrorList
 
-	if ed.Spec.TerminationPolicy == dbapi.DeletionPolicyDoNotTerminate {
+	if ed.Spec.DeletionPolicy == dbapi.DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationpolicy"), ed.Name,
 			fmt.Sprintf("ElasticsearchDashboard %s/%s can't be deleted. Change .spec.terminationpolicy", ed.Namespace, ed.Name)))
 	}
@@ -195,9 +195,16 @@ func (ed *ElasticsearchDashboard) Validate() error {
 	// env variables needs to be validated
 	// so that variables provided in config secret
 	// and credential env may not be overwritten
-	if err := amv.ValidateEnvVar(ed.Spec.PodTemplate.Spec.Env, forbiddenEnvVars, ResourceKindElasticsearchDashboard); err != nil {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podtemplate").Child("spec").Child("env"), ed.Name,
-			"Invalid spec.podtemplate.spec.env , avoid using the forbidden env variables"))
+	container := coreutil.GetContainerByName(ed.Spec.PodTemplate.Spec.Containers, kubedb.ElasticsearchContainerName)
+	if err := amv.ValidateEnvVar(container.Env, forbiddenEnvVars, ResourceKindElasticsearchDashboard); err != nil {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podtemplate").Child("spec").Child("containers").Child("env"), ed.Name,
+			"Invalid spec.podtemplate.spec.containers[i].env , avoid using the forbidden env variables"))
+	}
+
+	initContainer := coreutil.GetContainerByName(ed.Spec.PodTemplate.Spec.InitContainers, kubedb.ElasticsearchInitConfigMergerContainerName)
+	if err := amv.ValidateEnvVar(initContainer.Env, forbiddenEnvVars, ResourceKindElasticsearchDashboard); err != nil {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podtemplate").Child("spec").Child("initContainers").Child("env"), ed.Name,
+			"Invalid spec.podtemplate.spec.initContainers[i].env , avoid using the forbidden env variables"))
 	}
 
 	if len(allErr) == 0 {

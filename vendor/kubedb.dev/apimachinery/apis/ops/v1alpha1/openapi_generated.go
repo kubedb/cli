@@ -410,6 +410,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/client-go/api/v1.CAPIClusterInfo":                                              schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                                        schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                                              schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterInfo":                                                  schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                                              schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                                    schema_kmodulesxyz_client_go_api_v1_Condition(ref),
 		"kmodules.xyz/client-go/api/v1.HealthCheckSpec":                                              schema_kmodulesxyz_client_go_api_v1_HealthCheckSpec(ref),
@@ -471,8 +472,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/objectstore-api/api/v1.SwiftSpec":                                              schema_kmodulesxyz_objectstore_api_api_v1_SwiftSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings":                                  schema_kmodulesxyz_offshoot_api_api_v1_ContainerRuntimeSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.EphemeralVolumeSource":                                     schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref),
+		"kmodules.xyz/offshoot-api/api/v1.Gateway":                                                   schema_kmodulesxyz_offshoot_api_api_v1_Gateway(ref),
 		"kmodules.xyz/offshoot-api/api/v1.GatewayPort":                                               schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref),
 		"kmodules.xyz/offshoot-api/api/v1.IONiceSettings":                                            schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref),
+		"kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus":                                        schema_kmodulesxyz_offshoot_api_api_v1_NamedServiceStatus(ref),
+		"kmodules.xyz/offshoot-api/api/v1.NamedURL":                                                  schema_kmodulesxyz_offshoot_api_api_v1_NamedURL(ref),
 		"kmodules.xyz/offshoot-api/api/v1.NiceSettings":                                              schema_kmodulesxyz_offshoot_api_api_v1_NiceSettings(ref),
 		"kmodules.xyz/offshoot-api/api/v1.ObjectMeta":                                                schema_kmodulesxyz_offshoot_api_api_v1_ObjectMeta(ref),
 		"kmodules.xyz/offshoot-api/api/v1.PartialObjectMeta":                                         schema_kmodulesxyz_offshoot_api_api_v1_PartialObjectMeta(ref),
@@ -537,9 +541,15 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaUpdateVersionSpec":                           schema_apimachinery_apis_ops_v1alpha1_KafkaUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVerticalScalingSpec":                         schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaVolumeExpansionSpec":                         schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerCustomConfigurationSpec":               schema_apimachinery_apis_ops_v1alpha1_MSSQLServerCustomConfigurationSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerHorizontalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_MSSQLServerHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerOpsRequest":                            schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerOpsRequestList":                        schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerOpsRequestSpec":                        schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_MSSQLServerReplicaReadinessCriteria(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_MSSQLServerUpdateVersionSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVerticalScalingSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfiguration":                       schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfigurationSpec":                   schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec":                     schema_apimachinery_apis_ops_v1alpha1_MariaDBHorizontalScalingSpec(ref),
@@ -674,6 +684,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SinglestoreVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_SinglestoreVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SinglestoreVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_SinglestoreVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrCustomConfigurationSpec":                      schema_apimachinery_apis_ops_v1alpha1_SolrCustomConfigurationSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrHorizontalScalingSpec":                        schema_apimachinery_apis_ops_v1alpha1_SolrHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrOpsRequest":                                   schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrOpsRequestList":                               schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrOpsRequestSpec":                               schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequestSpec(ref),
@@ -21184,23 +21195,27 @@ func schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref common.ReferenceCal
 				Properties: map[string]spec.Schema{
 					"provider": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"namespace": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"clusterName": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 				},
+				Required: []string{"provider", "namespace", "clusterName"},
 			},
 		},
 	}
@@ -21343,6 +21358,56 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.TypedLocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.CertificatePrivateKey", "kmodules.xyz/client-go/api/v1.X509Subject"},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ClusterInfo used in ace-installer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"uid": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"clusterManagers": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"capi": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
+						},
+					},
+				},
+				Required: []string{"uid", "name", "clusterManagers"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.CAPIClusterInfo"},
 	}
 }
 
@@ -22977,6 +23042,12 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_PrometheusContext(ref common
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"hubUID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"clusterUID": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
@@ -23845,6 +23916,75 @@ func schema_kmodulesxyz_offshoot_api_api_v1_EphemeralVolumeSource(ref common.Ref
 	}
 }
 
+func schema_kmodulesxyz_offshoot_api_api_v1_Gateway(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"ip": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"hostname": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"services": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Services is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus"),
+									},
+								},
+							},
+						},
+					},
+					"ui": {
+						SchemaProps: spec.SchemaProps{
+							Description: "UI is an optional list of database web uis",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedURL"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"name", "namespace"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus", "kmodules.xyz/offshoot-api/api/v1.NamedURL"},
+	}
+}
+
 func schema_kmodulesxyz_offshoot_api_api_v1_GatewayPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -23910,6 +24050,85 @@ func schema_kmodulesxyz_offshoot_api_api_v1_IONiceSettings(ref common.ReferenceC
 				},
 			},
 		},
+	}
+}
+
+func schema_kmodulesxyz_offshoot_api_api_v1_NamedServiceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ports": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.GatewayPort"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"alias", "ports"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.GatewayPort"},
+	}
+}
+
+func schema_kmodulesxyz_offshoot_api_api_v1_NamedURL(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service. This should match the db ui chart name",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of the database ui",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/offshoot-api/api/v1.GatewayPort"),
+						},
+					},
+					"helmRelease": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HelmRelease is the name of the helm release used to deploy this ui The name format is typically <alias>-<db-name>",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+				Required: []string{"alias", "url", "port"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v1.GatewayPort"},
 	}
 }
 
@@ -27326,6 +27545,67 @@ func schema_apimachinery_apis_ops_v1alpha1_KafkaVolumeExpansionSpec(ref common.R
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerCustomConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerCustomConfigurationSpec is the spec for Reconfiguring the MSSQLServer",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"applyConfig": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"removeCustomConfig": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"boolean"},
+							Format: "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerHorizontalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerHorizontalScalingSpec contains the horizontal scaling information of a MSSQLServer cluster",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of Replicas of MSSQLServer Availability Group",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -27443,6 +27723,42 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestSpec(ref common.
 							Format:      "",
 						},
 					},
+					"updateVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for upgrading MSSQL",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec"),
+						},
+					},
+					"horizontalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for horizontal scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerHorizontalScalingSpec"),
+						},
+					},
+					"verticalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for vertical scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec"),
+						},
+					},
+					"volumeExpansion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for volume expansion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec"),
+						},
+					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for custom configuration of MSSQLServer",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerCustomConfigurationSpec"),
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for configuring TLS",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"),
+						},
+					},
 					"restart": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for restarting database",
@@ -27467,7 +27783,97 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestSpec(ref common.
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerReplicaReadinessCriteria(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerReplicaReadinessCriteria is the criteria for checking readiness of a MSSQLServer pod after updating, horizontal scaling etc.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerUpdateVersionSpec contains the update version information of a MSSQLServer cluster",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"targetVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the target version name from catalog",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVerticalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerVerticalScalingSpec contains the vertical scaling information of a MSSQLServer cluster",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mssqlserver": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"exporter": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVolumeExpansionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MSSQLServerVolumeExpansionSpec is the spec for MSSQLServer volume expansion",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mssqlserver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volume specification for Postgres",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"mode"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
@@ -29700,12 +30106,12 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerCustomConfiguration(ref comm
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"configMap": {
+					"configSecret": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
-					"data": {
+					"applyConfig": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"object"},
 							AdditionalProperties: &spec.SchemaOrBool{
@@ -29720,7 +30126,7 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerCustomConfiguration(ref comm
 							},
 						},
 					},
-					"remove": {
+					"removeCustomConfig": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"boolean"},
 							Format: "",
@@ -29739,8 +30145,18 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerCustomConfigurationSpec(ref 
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"pgbouncer": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerCustomConfiguration"),
+						},
+					},
+				},
+				Required: []string{"pgbouncer"},
 			},
 		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.PgBouncerCustomConfiguration"},
 	}
 }
 
@@ -32682,6 +33098,46 @@ func schema_apimachinery_apis_ops_v1alpha1_SolrCustomConfigurationSpec(ref commo
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_SolrHorizontalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"node": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of combined (i.e. overseer, data, coordinator) node",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"overseer": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of master nodes",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of ingest nodes",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"data": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of data nodes",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -32781,7 +33237,7 @@ func schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequestSpec(ref common.Referen
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "DruidOpsRequestSpec is the spec for DruidOpsRequest",
+				Description: "SolrOpsRequestSpec is the spec for SolrOpsRequest",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"databaseRef": {
@@ -32803,6 +33259,12 @@ func schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequestSpec(ref common.Referen
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for upgrading Solr",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrUpdateVersionSpec"),
+						},
+					},
+					"horizontalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for horizontal scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrHorizontalScalingSpec"),
 						},
 					},
 					"verticalScaling": {
@@ -32829,6 +33291,12 @@ func schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequestSpec(ref common.Referen
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrCustomConfigurationSpec"),
 						},
 					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for configuring TLS",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"),
+						},
+					},
 					"timeout": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
@@ -32847,7 +33315,7 @@ func schema_apimachinery_apis_ops_v1alpha1_SolrOpsRequestSpec(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrVolumeExpansionSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.SolrVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 

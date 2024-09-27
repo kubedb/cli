@@ -73,8 +73,8 @@ type PgBouncerOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion
-// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion)
+// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion;Reconfigure
+// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion, Reconfigure)
 type PgBouncerOpsRequestType string
 
 type PgBouncerUpdateVersionSpec struct {
@@ -93,12 +93,14 @@ type PgBouncerVerticalScalingSpec struct {
 	Exporter  *ContainerResources `json:"exporter,omitempty"`
 }
 
-type PgBouncerCustomConfigurationSpec struct{}
+type PgBouncerCustomConfigurationSpec struct {
+	PgBouncer *PgBouncerCustomConfiguration `json:"pgbouncer"`
+}
 
 type PgBouncerCustomConfiguration struct {
-	ConfigMap *core.LocalObjectReference `json:"configMap,omitempty"`
-	Data      map[string]string          `json:"data,omitempty"`
-	Remove    bool                       `json:"remove,omitempty"`
+	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
+	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
+	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

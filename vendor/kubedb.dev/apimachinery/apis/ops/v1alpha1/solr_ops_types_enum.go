@@ -14,6 +14,8 @@ import (
 const (
 	// SolrOpsRequestTypeUpdateVersion is a SolrOpsRequestType of type UpdateVersion.
 	SolrOpsRequestTypeUpdateVersion SolrOpsRequestType = "UpdateVersion"
+	// SolrOpsRequestTypeHorizontalScaling is a SolrOpsRequestType of type HorizontalScaling.
+	SolrOpsRequestTypeHorizontalScaling SolrOpsRequestType = "HorizontalScaling"
 	// SolrOpsRequestTypeVerticalScaling is a SolrOpsRequestType of type VerticalScaling.
 	SolrOpsRequestTypeVerticalScaling SolrOpsRequestType = "VerticalScaling"
 	// SolrOpsRequestTypeVolumeExpansion is a SolrOpsRequestType of type VolumeExpansion.
@@ -22,16 +24,20 @@ const (
 	SolrOpsRequestTypeReconfigure SolrOpsRequestType = "Reconfigure"
 	// SolrOpsRequestTypeRestart is a SolrOpsRequestType of type Restart.
 	SolrOpsRequestTypeRestart SolrOpsRequestType = "Restart"
+	// SolrOpsRequestTypeReconfigureTLS is a SolrOpsRequestType of type ReconfigureTLS.
+	SolrOpsRequestTypeReconfigureTLS SolrOpsRequestType = "ReconfigureTLS"
 )
 
 var ErrInvalidSolrOpsRequestType = fmt.Errorf("not a valid SolrOpsRequestType, try [%s]", strings.Join(_SolrOpsRequestTypeNames, ", "))
 
 var _SolrOpsRequestTypeNames = []string{
 	string(SolrOpsRequestTypeUpdateVersion),
+	string(SolrOpsRequestTypeHorizontalScaling),
 	string(SolrOpsRequestTypeVerticalScaling),
 	string(SolrOpsRequestTypeVolumeExpansion),
 	string(SolrOpsRequestTypeReconfigure),
 	string(SolrOpsRequestTypeRestart),
+	string(SolrOpsRequestTypeReconfigureTLS),
 }
 
 // SolrOpsRequestTypeNames returns a list of possible string values of SolrOpsRequestType.
@@ -45,10 +51,12 @@ func SolrOpsRequestTypeNames() []string {
 func SolrOpsRequestTypeValues() []SolrOpsRequestType {
 	return []SolrOpsRequestType{
 		SolrOpsRequestTypeUpdateVersion,
+		SolrOpsRequestTypeHorizontalScaling,
 		SolrOpsRequestTypeVerticalScaling,
 		SolrOpsRequestTypeVolumeExpansion,
 		SolrOpsRequestTypeReconfigure,
 		SolrOpsRequestTypeRestart,
+		SolrOpsRequestTypeReconfigureTLS,
 	}
 }
 
@@ -65,11 +73,13 @@ func (x SolrOpsRequestType) IsValid() bool {
 }
 
 var _SolrOpsRequestTypeValue = map[string]SolrOpsRequestType{
-	"UpdateVersion":   SolrOpsRequestTypeUpdateVersion,
-	"VerticalScaling": SolrOpsRequestTypeVerticalScaling,
-	"VolumeExpansion": SolrOpsRequestTypeVolumeExpansion,
-	"Reconfigure":     SolrOpsRequestTypeReconfigure,
-	"Restart":         SolrOpsRequestTypeRestart,
+	"UpdateVersion":     SolrOpsRequestTypeUpdateVersion,
+	"HorizontalScaling": SolrOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   SolrOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":   SolrOpsRequestTypeVolumeExpansion,
+	"Reconfigure":       SolrOpsRequestTypeReconfigure,
+	"Restart":           SolrOpsRequestTypeRestart,
+	"ReconfigureTLS":    SolrOpsRequestTypeReconfigureTLS,
 }
 
 // ParseSolrOpsRequestType attempts to convert a string to a SolrOpsRequestType.

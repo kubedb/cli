@@ -68,6 +68,13 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              configSecret:
+                properties:
+                  name:
+                    default: ""
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
               coordinator:
                 properties:
                   resources:

@@ -72,52 +72,40 @@ spec:
               connectionPool:
                 properties:
                   authType:
-                    default: md5
                     enum:
                     - md5
                     - scram-sha-256
                     - cert
                     type: string
                   defaultPoolSize:
-                    default: 20
                     format: int64
                     type: integer
                   ignoreStartupParameters:
-                    default: empty
                     type: string
                   maxClientConnections:
-                    default: 100
                     format: int64
                     type: integer
                   maxDBConnections:
-                    default: 0
                     format: int64
                     type: integer
                   maxUserConnections:
-                    default: 0
                     format: int64
                     type: integer
                   minPoolSize:
-                    default: 0
                     format: int64
                     type: integer
                   poolMode:
-                    default: session
                     type: string
                   port:
-                    default: 5432
                     format: int32
                     type: integer
                   reservePoolSize:
-                    default: 0
                     format: int64
                     type: integer
                   reservePoolTimeoutSeconds:
-                    default: 5
                     format: int64
                     type: integer
                   statsPeriodSeconds:
-                    default: 60
                     format: int64
                     type: integer
                 type: object
@@ -3626,6 +3614,7 @@ spec:
               version:
                 type: string
             required:
+            - database
             - version
             type: object
           status:

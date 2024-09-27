@@ -209,6 +209,13 @@ func (k *ConnectCluster) CertificateName(alias ConnectClusterCertificateAlias) s
 	return meta_util.NameWithSuffix(k.Name, fmt.Sprintf("%s-connect-cert", string(alias)))
 }
 
+func (k *ConnectCluster) GetAuthSecretName() string {
+	if k.Spec.AuthSecret != nil && k.Spec.AuthSecret.Name != "" {
+		return k.Spec.AuthSecret.Name
+	}
+	return k.DefaultUserCredSecretName("admin")
+}
+
 // GetCertSecretName returns the secret name for a certificate alias if any,
 // otherwise returns default certificate secret name for the given alias.
 func (k *ConnectCluster) GetCertSecretName(alias ConnectClusterCertificateAlias) string {

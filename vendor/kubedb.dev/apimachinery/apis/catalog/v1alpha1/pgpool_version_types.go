@@ -59,6 +59,9 @@ type PgpoolVersionSpec struct {
 	// Exporter Image
 	Exporter PgpoolVersionExporter `json:"exporter,omitempty"`
 
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+
 	// SecurityContext is for the additional config for pgpool DB container
 	// +optional
 	SecurityContext PgpoolSecurityContext `json:"securityContext"`

@@ -132,10 +132,10 @@ type SessionConfig struct {
 	// +optional
 	RetryConfig *RetryConfig `json:"retryConfig,omitempty"`
 
-	// Timeout specifies the maximum duration of backup. BackupSession will be considered Failed
-	// if backup does not complete within this time limit. By default, KubeStash don't set any timeout for backup.
+	// BackupTimeout specifies the maximum duration of backup. Backup will be considered Failed
+	// if backup tasks do not complete within this time limit. By default, KubeStash don't set any timeout for backup.
 	// +optional
-	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	BackupTimeout *metav1.Duration `json:"backupTimeout,omitempty"`
 
 	// SessionHistoryLimit specifies how many backup Jobs and associate resources KubeStash should keep for debugging purpose.
 	// The default value is 1.

@@ -110,6 +110,13 @@ const (
 	RestartPodsFailed    = "RestartPodsFailed"
 )
 
+// Reload
+const (
+	ReloadPods          = "ReloadPods"
+	ReloadPodsSucceeded = "ReloadPodsSucceeded"
+	ReloadPodsFailed    = "ReloadPodsFailed"
+)
+
 // StatefulSets
 const (
 	UpdateStatefulSets          = "UpdateStatefulSets"
@@ -156,6 +163,8 @@ const (
 	HorizontalScaleCoordinatingNode = "HorizontalScaleCoordinatingNode"
 	HorizontalScaleIngestNode       = "HorizontalScaleIngestNode"
 	HorizontalScaleCombinedNode     = "HorizontalScaleCombinedNode"
+	HorizontalScaleOverseerNode     = "HorizontalScaleOverseerNode"
+	HorizontalScaleCoordinatorNode  = "HorizontalScaleCoordinatorNode"
 
 	VolumeExpansionCombinedNode     = "VolumeExpansionCombinedNode"
 	VolumeExpansionMasterNode       = "VolumeExpansionMasterNode"
@@ -308,4 +317,10 @@ const (
 const (
 	UpdateAggregatorNodePVCs = "UpdateAggregatorNodePVCs"
 	UpdateLeafNodePVCs       = "UpdateLeafNodePVCs"
+)
+
+// PgBouncer Constants
+const (
+	UpdatePgBouncerBackendSecret = "UpdateBackendSecret"
+	ConfigSecretDelete           = "ConfigSecretDeleted"
 )

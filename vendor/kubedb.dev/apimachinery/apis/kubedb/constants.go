@@ -373,18 +373,19 @@ const (
 	SinglestoreTLSConfigPreferred  = "preferred"
 
 	// =========================== MSSQLServer Constants ============================
-	MSSQLSAUser = "sa"
+	MSSQLSAUser    = "sa"
+	MSSQLConfigKey = "mssql.conf"
 
 	AGPrimaryReplicaReadyCondition = "AGPrimaryReplicaReady"
 
-	MSSQLDatabasePodPrimary       = "primary"
-	MSSQLDatabasePodSecondary     = "secondary"
-	MSSQLSecondaryServiceAlias    = "secondary"
-	MSSQLSecondaryServicePortName = "secondary"
+	MSSQLDatabasePodPrimary    = "primary"
+	MSSQLDatabasePodSecondary  = "secondary"
+	MSSQLSecondaryServiceAlias = "secondary"
 
 	// port related
 	MSSQLDatabasePortName              = "db"
 	MSSQLPrimaryServicePortName        = "primary"
+	MSSQLSecondaryServicePortName      = "secondary"
 	MSSQLDatabasePort                  = 1433
 	MSSQLDatabaseMirroringEndpointPort = 5022
 	MSSQLCoordinatorPort               = 2381
@@ -404,6 +405,8 @@ const (
 	// volume related
 	MSSQLVolumeNameData                        = "data"
 	MSSQLVolumeMountPathData                   = "/var/opt/mssql"
+	MSSQLVolumeNameConfig                      = "config"
+	MSSQLVolumeMountPathConfig                 = "/var/opt/mssql/mssql.conf"
 	MSSQLVolumeNameInitScript                  = "init-scripts"
 	MSSQLVolumeMountPathInitScript             = "/scripts"
 	MSSQLVolumeNameEndpointCert                = "endpoint-cert"
@@ -576,6 +579,10 @@ const (
 	PgBouncerConfigMountPath                = "/etc/config"
 	PgBouncerSecretMountPath                = "/var/run/pgbouncer/secret"
 	PgBouncerServingCertMountPath           = "/var/run/pgbouncer/tls/serving"
+	PgBouncerConfigSectionDatabases         = "databases"
+	PgBouncerConfigSectionPeers             = "peers"
+	PgBouncerConfigSectionPgbouncer         = "pgbouncer"
+	PgBouncerConfigSectionUsers             = "users"
 
 	// =========================== Pgpool Constants ============================
 	EnvPostgresUsername                = "POSTGRES_USERNAME"
@@ -783,8 +790,6 @@ const (
 	KafkaClientID                          = "client.id"
 	KafkaDataDirName                       = "log.dirs"
 	KafkaMetadataDirName                   = "metadata.log.dir"
-	KafkaKeystorePasswordKey               = "keystore_password"
-	KafkaTruststorePasswordKey             = "truststore_password"
 	KafkaServerKeystoreKey                 = "server.keystore.jks"
 	KafkaServerTruststoreKey               = "server.truststore.jks"
 	KafkaSecurityProtocol                  = "security.protocol"
@@ -798,16 +803,18 @@ const (
 	KafkaPartitionMetricsWindowNum         = "num.partition.metrics.windows"
 	KafkaSampleStoreTopicReplicationFactor = "sample.store.topic.replication.factor"
 
-	KafkaEndpointVerifyAlgo  = "ssl.endpoint.identification.algorithm"
-	KafkaKeystoreLocation    = "ssl.keystore.location"
-	KafkaTruststoreLocation  = "ssl.truststore.location"
-	KafkaKeystorePassword    = "ssl.keystore.password"
-	KafkaTruststorePassword  = "ssl.truststore.password"
-	KafkaKeyPassword         = "ssl.key.password"
-	KafkaTruststoreType      = "ssl.truststore.type"
-	KafkaKeystoreType        = "ssl.keystore.type"
-	KafkaTruststoreTypeJKS   = "JKS"
-	KafkaKeystoreDefaultPass = "changeit"
+	KafkaEndpointVerifyAlgo     = "ssl.endpoint.identification.algorithm"
+	KafkaKeystoreLocation       = "ssl.keystore.location"
+	KafkaTruststoreLocation     = "ssl.truststore.location"
+	KafkaKeystorePassword       = "ssl.keystore.password"
+	KafkaTruststorePassword     = "ssl.truststore.password"
+	KafkaKeyPassword            = "ssl.key.password"
+	KafkaTruststoreType         = "ssl.truststore.type"
+	KafkaKeystoreType           = "ssl.keystore.type"
+	KafkaSSLClientAuthKey       = "ssl.client.auth"
+	KafkaSSLClientAuthRequired  = "required"
+	KafkaSSLClientAuthRequested = "requested"
+	KafkaTruststoreTypeJKS      = "JKS"
 
 	KafkaMetricReporters       = "metric.reporters"
 	KafkaAutoCreateTopicEnable = "auto.create.topics.enable"
@@ -818,9 +825,14 @@ const (
 	KafkaSASLInterBrokerProtocol     = "sasl.mechanism.inter.broker.protocol"
 	KafkaSASLPLAINConfigKey          = "listener.name.SASL_PLAINTEXT.plain.sasl.jaas.config"
 	KafkaSASLSSLConfigKey            = "listener.name.SASL_SSL.plain.sasl.jaas.config"
+	KafkaAuthorizerClassName         = "authorizer.class.name"
+	KafkaSuperUsers                  = "super.users"
+	KafkaStandardAuthorizerClass     = "org.apache.kafka.metadata.authorizer.StandardAuthorizer"
 	KafkaSASLJAASConfig              = "sasl.jaas.config"
 	KafkaServiceName                 = "serviceName"
 	KafkaSASLPlainMechanism          = "PLAIN"
+	KafkaSASLScramSHA256Mechanism    = "SCRAM-SHA-256"
+	KafkaSASLScramSHA512Mechanism    = "SCRAM-SHA-512"
 
 	KafkaCCMetricSamplerClass            = "metric.sampler.class"
 	KafkaCCCapacityConfig                = "capacity.config.file"
@@ -847,8 +859,9 @@ const (
 	KafkaVolumeTempConfig   = "temp-config"
 	KafkaVolumeCustomConfig = "custom-config"
 
-	EnvKafkaUser     = "KAFKA_USER"
-	EnvKafkaPassword = "KAFKA_PASSWORD"
+	EnvKafkaUser      = "KAFKA_USER"
+	EnvKafkaPassword  = "KAFKA_PASSWORD"
+	EnvKafkaClusterID = "KAFKA_CLUSTER_ID"
 
 	KafkaListenerPLAINTEXTProtocol = "PLAINTEXT"
 	KafkaListenerSASLProtocol      = "SASL_PLAINTEXT"
@@ -927,6 +940,11 @@ const (
 	SolrConfAllowPathsValue        = ""
 	SolrConfSolrCloudKey           = "solrcloud"
 	SolrConfShardHandlerFactoryKey = "shardHandlerFactory"
+	SolrJavaMem                    = "-Xms3g -Xmx3g"
+	SolrKeystorePassKey            = "keystore-secret"
+	SolrServerKeystorePath         = "/var/solr/etc/keystore.p12"
+	SolrServerTruststorePath       = "/var/solr/etc/truststore.p12"
+	SolrTLSMountPath               = "/var/solr/etc"
 
 	ProxyDeploymentName = "s3proxy"
 	ProxyServiceName    = "proxy-svc"
@@ -1313,36 +1331,73 @@ const (
 	ClickHouseNativeTCP   = 9000
 	ClickHouseNativeTLS   = 9440
 	ClickhousePromethues  = 9363
+	ClickHouseRaftPort    = 9234
 
-	ClickHouseVolumeData         = "data"
-	ClickHouseDataDir            = "/var/lib/clickhouse"
-	ClickHouseConfigVolName      = "clickhouse-config"
-	ClickHouseConfigDir          = "/etc/clickhouse-server/config.d"
+	ComponentCoOrdinator = "co-ordinator"
+
+	ClickHousePromethusEndpoint           = "/metrics"
+	ClickHouseDataDir                     = "/var/lib/clickhouse"
+	ClickHouseKeeperDataDir               = "/var/lib/clickhouse_keeper"
+	ClickHouseConfigDir                   = "/etc/clickhouse-server/config.d"
+	ClickHouseKeeperConfigDir             = "/etc/clickhouse-keeper"
+	ClickHouseCommonConfigDir             = "/etc/clickhouse-server/conf.d"
+	ClickHouseTempConfigDir               = "/ch-tmp"
+	ClickHouseInternalKeeperTempConfigDir = "/keeper"
+	ClickHouseTempDir                     = "/ch-tmp"
+	ClickHouseKeeperTempDir               = "/ch-tmp"
+	ClickHouseKeeperConfigPath            = "/etc/clickhouse-keeper"
+	ClickHouseUserConfigDir               = "/etc/clickhouse-server/user.d"
+	ClickHouseLogPath                     = "/var/log/clickhouse-server/clickhouse-server.log"
+	ClickHouseErrorLogPath                = "/var/log/clickhouse-server/clickhouse-server.err.log"
+
+	// keeper
+	ClickHouseKeeperDataPath     = "/var/lib/clickhouse_keeper"
+	ClickHouseKeeperLogPath      = "/var/lib/clickhouse_keeper/coordination/logs"
+	ClickHouseKeeperSnapshotPath = "/var/lib/clickhouse_keeper/coordination/snapshots"
+
+	ClickHouseInternalKeeperDataPath     = "/var/lib/clickhouse/coordination/log"
+	ClickHouseInternalKeeperSnapshotPath = "/var/lib/clickhouse/coordination/snapshots"
+	ClickHOuseKeeeprConfigFileVolumeDir  = "/tmp/clickhouse-keeper"
+
+	ClickHouseVolumeData  = "data"
+	ClickHouseDefaultUser = "default"
+
+	ClickHouseConfigVolumeName               = "clickhouse-config"
+	ClickHouseKeeperConfigVolumeName         = "clickhouse-keeper-config"
+	ClickHouseInternalKeeperConfigVolumeName = "clickhouse-internal-keeper-config"
+
 	ClickHouseDefaultStorageSize = "2Gi"
 
 	ClickHouseClusterConfigVolName = "cluster-config"
-	ClickHouseClusterConfigDir     = "/etc/clickhouse-server/conf.d"
 
-	ClickHouseTempClusterConfigVolName = "temp-cluster-config"
+	ClickHouseClusterTempConfigVolName = "temp-cluster-config"
 
 	ClickHouseContainerName     = "clickhouse"
 	ClickHouseInitContainerName = "clickhouse-init"
 
 	ClickHouseClusterConfigFile = "cluster-config.yaml"
-	ClickHouseTempConfigDir     = "/ch-tmp/config"
-	ClickHouseTempDir           = "/ch-tmp"
 
-	ClickHouseUserConfigDir  = "/etc/clickhouse-server/user.d"
 	ClickHouseMacrosFileName = "macros.yaml"
 
 	ClickHouseStandalone = "standalone"
 	ClickHouseCluster    = "cluster"
 
-	ClickHouseHealthCheckerDatabase = "kubedb_system_db"
-	ClickHouseHealthCheckerTable    = "kubedb_system_table"
+	ClickHouseHealthCheckerDatabase = "kubedb_system"
+	ClickHouseHealthCheckerTable    = "kubedb_write_check"
 
-	ClickHouseServerConfigFile = "server-config.yaml"
-	ClickHouseKeeperFileConfig = "keeper-config.yaml"
+	ClickHouseServerConfigFile   = "server-config.yaml"
+	ClickHouseKeeperFileConfig   = "keeper_config.yaml"
+	ClickHouseVolumeCustomConfig = "custom-config"
+
+	// keeper
+	ClickHouseKeeperContainerName        = "clickhouse-keeper"
+	ClickHouseKeeeprConfigFileName       = "keeper_config.xml"
+	ClickHOuseKeeeprConfigFileVolumeName = "keeper-config"
+	ClickHouseKeeperInitContainerName    = "clickhouse-keeper-init"
+	ClickHouseKeeperConfig               = "etc-clickhouse-keeper"
+	ClickHouseInternalServerListFile     = "server_list.yaml"
+	ClickHouseKeeperServerIdNo           = "serverid"
+	ClickHouseKeeperServerID             = "KEEPERID"
 )
 
 // =========================== Cassandra Constants ============================
@@ -1439,6 +1494,16 @@ var (
 			core.ResourceMemory: resource.MustParse("1024Mi"),
 		},
 	}
+	// ref: https://clickhouse.com/docs/en/guides/sizing-and-hardware-recommendations#what-should-cpu-utilization-be
+	ClickHouseDefaultResources = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse("1"),
+			core.ResourceMemory: resource.MustParse("4Gi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("4Gi"),
+		},
+	}
 	// CoordinatorDefaultResources must be used for raft backed coordinators to avoid unintended leader switches
 	CoordinatorDefaultResources = core.ResourceRequirements{
 		Requests: core.ResourceList{
@@ -1481,6 +1546,17 @@ var (
 		},
 		Limits: core.ResourceList{
 			core.ResourceMemory: resource.MustParse("1.5Gi"),
+		},
+	}
+
+	// DefaultResourcesMemoryIntensiveMSSQLServer must be used for Microsoft SQL Server
+	DefaultResourcesMemoryIntensiveMSSQLServer = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceMemory: resource.MustParse("1.5Gi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("4Gi"),
 		},
 	}
 

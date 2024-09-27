@@ -96,6 +96,8 @@ spec:
             description: Status is filled in by the server and indicates whether the
               request is allowed or not
             properties:
+              allNamespaces:
+                type: boolean
               namespaces:
                 items:
                   type: string
@@ -106,6 +108,8 @@ spec:
                     type: string
                   type: array
                 type: object
+            required:
+            - allNamespaces
             type: object
         required:
         - spec

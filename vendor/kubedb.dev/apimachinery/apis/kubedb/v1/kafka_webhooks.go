@@ -25,11 +25,13 @@ import (
 
 	errors2 "github.com/pkg/errors"
 	"gomodules.xyz/pointer"
+	core "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation/field"
+	core_util "kmodules.xyz/client-go/core/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -142,8 +144,16 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 				"number of replicas can not be 0 or less"))
 		}
 
+		// validate that broker and controller have same cluster id
+		err := k.validateClusterID(k.Spec.Topology)
+		if err != nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology"),
+				k.Name,
+				err.Error()))
+		}
+
 		// validate that multiple nodes don't have same suffixes
-		err := k.validateNodeSuffix(k.Spec.Topology)
+		err = k.validateNodeSuffix(k.Spec.Topology)
 		if err != nil {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("topology"),
 				k.Name,
@@ -216,6 +226,25 @@ func (k *Kafka) validateVersion(db *Kafka) error {
 		return errors.New("version not supported")
 	}
 	return nil
+}
+
+func (k *Kafka) validateClusterID(topology *KafkaClusterTopology) error {
+	brokerContainer := core_util.GetContainerByName(topology.Broker.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
+	controllerContainer := core_util.GetContainerByName(topology.Controller.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
+	var brokerClusterID, controllerClusterID *core.EnvVar
+	if brokerContainer != nil {
+		brokerClusterID = core_util.GetEnvByName(brokerContainer.Env, kubedb.EnvKafkaClusterID)
+	}
+	if controllerContainer != nil {
+		controllerClusterID = core_util.GetEnvByName(controllerContainer.Env, kubedb.EnvKafkaClusterID)
+	}
+	if brokerClusterID == nil && controllerClusterID == nil {
+		return nil
+	}
+	if brokerClusterID != nil && controllerClusterID != nil && brokerClusterID.Value == controllerClusterID.Value {
+		return nil
+	}
+	return errors.New("broker and controller env: KAFKA_CLUSTER_ID must have same cluster id")
 }
 
 func (k *Kafka) validateNodeSuffix(topology *KafkaClusterTopology) error {

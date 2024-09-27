@@ -27,6 +27,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"github.com/google/uuid"
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
@@ -42,6 +43,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	ofst_util "kmodules.xyz/offshoot-api/util"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
@@ -225,6 +227,13 @@ func (k *Kafka) ConfigSecretName(role KafkaNodeRoleType) string {
 	return meta_util.NameWithSuffix(k.OffshootName(), "config")
 }
 
+func (k *Kafka) GetAuthSecretName() string {
+	if k.Spec.AuthSecret != nil && k.Spec.AuthSecret.Name != "" {
+		return k.Spec.AuthSecret.Name
+	}
+	return k.DefaultUserCredSecretName("admin")
+}
+
 func (k *Kafka) GetPersistentSecrets() []string {
 	var secrets []string
 	if k.Spec.AuthSecret != nil {
@@ -378,6 +387,7 @@ func (k *Kafka) SetDefaults() {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 		}
 	}
+	k.SetDefaultEnvs()
 
 	if k.Spec.EnableSSL {
 		k.SetTLSDefaults()
@@ -429,6 +439,31 @@ func (k *Kafka) assignDefaultContainerSecurityContext(kfVersion *catalog.KafkaVe
 	}
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
+}
+
+func (k *Kafka) SetDefaultEnvs() {
+	clusterID := k.GenerateClusterID()
+	if k.Spec.Topology != nil {
+		if k.Spec.Topology.Controller != nil {
+			k.setClusterIDEnv(&k.Spec.Topology.Controller.PodTemplate, clusterID)
+		}
+		if k.Spec.Topology.Broker != nil {
+			k.setClusterIDEnv(&k.Spec.Topology.Broker.PodTemplate, clusterID)
+		}
+	} else {
+		k.setClusterIDEnv(&k.Spec.PodTemplate, clusterID)
+	}
+}
+
+func (k *Kafka) setClusterIDEnv(podTemplate *ofst.PodTemplateSpec, clusterID string) {
+	container := ofst_util.EnsureContainerExists(podTemplate, kubedb.KafkaContainerName)
+	env := coreutil.GetEnvByName(container.Env, kubedb.EnvKafkaClusterID)
+	if env == nil {
+		container.Env = coreutil.UpsertEnvVars(container.Env, core.EnvVar{
+			Name:  kubedb.EnvKafkaClusterID,
+			Value: clusterID,
+		})
 	}
 }
 
@@ -488,4 +523,27 @@ func (k *Kafka) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, er
 		expectedItems = 2
 	}
 	return checkReplicas(lister.PetSets(k.Namespace), labels.SelectorFromSet(k.OffshootLabels()), expectedItems)
+}
+
+// GenerateClusterID Kafka uses Leach-Salz UUIDs for cluster ID. It requires 16 bytes of base64 encoded RFC 4122 version 1 UUID.
+// Here, the generated uuid is 32 bytes hexadecimal string and have 5 hyphen separated parts: 8-4-4-4-12
+// part 3 contains version number, part 4 is a randomly generated clock sequence and
+// part 5 is node field that contains MAC address of the host machine
+// These 3 parts will be used as cluster ID
+// ref: https://kafka.apache.org/31/javadoc/org/apache/kafka/common/Uuid.html
+// ref: https://go-recipes.dev/how-to-generate-uuids-with-go-be3988e771a6
+func (k *Kafka) GenerateClusterID() string {
+	clusterUUID, _ := uuid.NewUUID()
+	slicedUUID := strings.Split(clusterUUID.String(), "-")
+	trimmedUUID := slicedUUID[2:]
+	generatedUUID := strings.Join(trimmedUUID, "-")
+	return generatedUUID[:len(generatedUUID)-1] + "w"
+}
+
+func (k *Kafka) KafkaSaslListenerProtocolConfigKey(protocol string, mechanism string) string {
+	return fmt.Sprintf("listener.name.%s.%s.sasl.jaas.config", strings.ToLower(protocol), strings.ToLower(mechanism))
+}
+
+func (k *Kafka) KafkaEnabledSASLMechanismsKey(protocol string) string {
+	return fmt.Sprintf("listener.name.%s.sasl.enabled.mechanisms", strings.ToLower(protocol))
 }

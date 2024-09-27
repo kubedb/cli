@@ -126,6 +126,7 @@ func (in *ElasticsearchDashboardSpec) DeepCopyInto(out *ElasticsearchDashboardSp
 		*out = new(apiv1.TLSConfig)
 		(*in).DeepCopyInto(*out)
 	}
+	in.HealthChecker.DeepCopyInto(&out.HealthChecker)
 	return
 }
 
