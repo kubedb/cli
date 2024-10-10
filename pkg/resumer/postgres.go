@@ -77,7 +77,7 @@ func (e *PostgresResumer) Resume(name, namespace string) (bool, error) {
 	}
 	resumeAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
 
-	if e.onlyArchiver || resumeAll {
+	if (e.onlyArchiver || resumeAll) && db.Spec.Archiver != nil {
 		if err := pautil.PauseOrResumePostgresArchiver(e.kc, false, db.Spec.Archiver.Ref); err != nil {
 			return false, err
 		}

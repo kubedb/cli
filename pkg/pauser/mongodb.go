@@ -76,7 +76,7 @@ func (e *MongoDBPauser) Pause(name, namespace string) (bool, error) {
 	}
 
 	pauseAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
-	if e.onlyArchiver || pauseAll {
+	if (e.onlyArchiver || pauseAll) && db.Spec.Archiver != nil {
 		if err := PauseOrResumeMongoDBArchiver(e.kc, true, db.Spec.Archiver.Ref); err != nil {
 			return false, err
 		}
