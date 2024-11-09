@@ -64,7 +64,7 @@ func (p *PgBouncerOpsRequest) GetObjectMeta() metav1.ObjectMeta {
 }
 
 func (p *PgBouncerOpsRequest) GetDBRefName() string {
-	return p.Spec.ServerRef.Name
+	return p.Spec.DatabaseRef.Name
 }
 
 func (p *PgBouncerOpsRequest) GetRequestType() any {

@@ -24,6 +24,8 @@ const (
 	ProxySQLOpsRequestTypeReconfigure ProxySQLOpsRequestType = "Reconfigure"
 	// ProxySQLOpsRequestTypeReconfigureTLS is a ProxySQLOpsRequestType of type ReconfigureTLS.
 	ProxySQLOpsRequestTypeReconfigureTLS ProxySQLOpsRequestType = "ReconfigureTLS"
+	// ProxySQLOpsRequestTypeRotateAuth is a ProxySQLOpsRequestType of type RotateAuth.
+	ProxySQLOpsRequestTypeRotateAuth ProxySQLOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidProxySQLOpsRequestType = fmt.Errorf("not a valid ProxySQLOpsRequestType, try [%s]", strings.Join(_ProxySQLOpsRequestTypeNames, ", "))
@@ -35,6 +37,7 @@ var _ProxySQLOpsRequestTypeNames = []string{
 	string(ProxySQLOpsRequestTypeRestart),
 	string(ProxySQLOpsRequestTypeReconfigure),
 	string(ProxySQLOpsRequestTypeReconfigureTLS),
+	string(ProxySQLOpsRequestTypeRotateAuth),
 }
 
 // ProxySQLOpsRequestTypeNames returns a list of possible string values of ProxySQLOpsRequestType.
@@ -53,6 +56,7 @@ func ProxySQLOpsRequestTypeValues() []ProxySQLOpsRequestType {
 		ProxySQLOpsRequestTypeRestart,
 		ProxySQLOpsRequestTypeReconfigure,
 		ProxySQLOpsRequestTypeReconfigureTLS,
+		ProxySQLOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -75,6 +79,7 @@ var _ProxySQLOpsRequestTypeValue = map[string]ProxySQLOpsRequestType{
 	"Restart":           ProxySQLOpsRequestTypeRestart,
 	"Reconfigure":       ProxySQLOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    ProxySQLOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        ProxySQLOpsRequestTypeRotateAuth,
 }
 
 // ParseProxySQLOpsRequestType attempts to convert a string to a ProxySQLOpsRequestType.

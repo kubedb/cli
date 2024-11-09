@@ -34,6 +34,138 @@ spec:
             properties:
               compute:
                 properties:
+                  coordinator:
+                    properties:
+                      containerControlledValues:
+                        enum:
+                        - RequestsAndLimits
+                        - RequestsOnly
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      inMemoryStorage:
+                        properties:
+                          scalingFactorPercentage:
+                            format: int32
+                            type: integer
+                          usageThresholdPercentage:
+                            format: int32
+                            type: integer
+                        type: object
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        type: string
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                      trigger:
+                        type: string
+                    type: object
+                  data:
+                    properties:
+                      containerControlledValues:
+                        enum:
+                        - RequestsAndLimits
+                        - RequestsOnly
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      inMemoryStorage:
+                        properties:
+                          scalingFactorPercentage:
+                            format: int32
+                            type: integer
+                          usageThresholdPercentage:
+                            format: int32
+                            type: integer
+                        type: object
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        type: string
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                      trigger:
+                        type: string
+                    type: object
+                  node:
+                    properties:
+                      containerControlledValues:
+                        enum:
+                        - RequestsAndLimits
+                        - RequestsOnly
+                        type: string
+                      controlledResources:
+                        items:
+                          type: string
+                        type: array
+                      inMemoryStorage:
+                        properties:
+                          scalingFactorPercentage:
+                            format: int32
+                            type: integer
+                          usageThresholdPercentage:
+                            format: int32
+                            type: integer
+                        type: object
+                      maxAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      minAllowed:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      podLifeTimeThreshold:
+                        type: string
+                      resourceDiffPercentage:
+                        format: int32
+                        type: integer
+                      trigger:
+                        type: string
+                    type: object
                   nodeTopology:
                     properties:
                       name:
@@ -47,7 +179,7 @@ spec:
                         format: int32
                         type: integer
                     type: object
-                  solr:
+                  overseer:
                     properties:
                       containerControlledValues:
                         enum:
@@ -112,7 +244,128 @@ spec:
                 type: object
               storage:
                 properties:
-                  solr:
+                  coordinator:
+                    properties:
+                      expansionMode:
+                        enum:
+                        - Offline
+                        - Online
+                        type: string
+                      scalingRules:
+                        items:
+                          properties:
+                            appliesUpto:
+                              type: string
+                            threshold:
+                              type: string
+                          required:
+                          - appliesUpto
+                          - threshold
+                          type: object
+                        type: array
+                      scalingThreshold:
+                        format: int32
+                        type: integer
+                      trigger:
+                        type: string
+                      upperBound:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      usageThreshold:
+                        format: int32
+                        type: integer
+                    required:
+                    - expansionMode
+                    type: object
+                  data:
+                    properties:
+                      expansionMode:
+                        enum:
+                        - Offline
+                        - Online
+                        type: string
+                      scalingRules:
+                        items:
+                          properties:
+                            appliesUpto:
+                              type: string
+                            threshold:
+                              type: string
+                          required:
+                          - appliesUpto
+                          - threshold
+                          type: object
+                        type: array
+                      scalingThreshold:
+                        format: int32
+                        type: integer
+                      trigger:
+                        type: string
+                      upperBound:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      usageThreshold:
+                        format: int32
+                        type: integer
+                    required:
+                    - expansionMode
+                    type: object
+                  node:
+                    properties:
+                      expansionMode:
+                        enum:
+                        - Offline
+                        - Online
+                        type: string
+                      scalingRules:
+                        items:
+                          properties:
+                            appliesUpto:
+                              type: string
+                            threshold:
+                              type: string
+                          required:
+                          - appliesUpto
+                          - threshold
+                          type: object
+                        type: array
+                      scalingThreshold:
+                        format: int32
+                        type: integer
+                      trigger:
+                        type: string
+                      upperBound:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      usageThreshold:
+                        format: int32
+                        type: integer
+                    required:
+                    - expansionMode
+                    type: object
+                  nodeTopology:
+                    properties:
+                      name:
+                        type: string
+                      scaleDownDiffPercentage:
+                        default: 25
+                        format: int32
+                        type: integer
+                      scaleUpDiffPercentage:
+                        default: 15
+                        format: int32
+                        type: integer
+                    type: object
+                  overseer:
                     properties:
                       expansionMode:
                         enum:

@@ -123,18 +123,39 @@ const (
 	ElasticsearchMinHeapSize = 128 * 1024 * 1024
 
 	// =========================== Memcached Constants ============================
-	MemcachedConfigKey              = "memcached.conf" // MemcachedConfigKey is going to create for the customize redis configuration
+
+	MemcachedConfigKey              = "memcached.conf" // MemcachedConfigKey is going to create for the customize memcached configuration
+	MemcachedDefaultKey             = "default.conf"   //
 	MemcachedDatabasePortName       = "db"
 	MemcachedPrimaryServicePortName = "primary"
 	MemcachedDatabasePort           = 11211
-	MemcachedShardKey               = MemcachedKey + "/shard"
 	MemcachedContainerName          = "memcached"
+	MemcachedExporterContainerName  = "exporter"
 
 	MemcachedConfigVolumeName = "memcached-config"
-	MemcachedConfigVolumePath = "/etc/memcached/"
+	MemcachedConfigVolumePath = "/usr/config/"
 
 	MemcachedDataVolumeName = "data"
-	MemcachedDataVolumePath = "/data"
+	MemcachedDataVolumePath = "/usr/data/"
+
+	MemcachedAuthVolumeName = "auth"
+	MemcachedAuthVolumePath = "/usr/auth/"
+
+	MemcachedExporterAuthVolumeName = "exporter-auth"
+	MemcachedExporterAuthVolumePath = "/auth/"
+
+	MemcachedExporterTLSVolumeName = "exporter-tls"
+	MemcachedExporterTLSVolumePath = "/certs/"
+
+	MemcachedTLSVolumeName = "tls"
+	MemcachedTLSVolumePath = "/usr/certs/"
+
+	MemcachedHealthKey   = "kubedb_memcached_health_key"
+	MemcachedHealthValue = "kubedb_memcached_health_value"
+
+	MemcachedUserName = "user"
+	MemcachedPassword = "pass"
+
 	// =========================== MongoDB Constants ============================
 
 	MongoDBDatabasePortName       = "db"
@@ -389,6 +410,7 @@ const (
 	MSSQLDatabasePort                  = 1433
 	MSSQLDatabaseMirroringEndpointPort = 5022
 	MSSQLCoordinatorPort               = 2381
+	MSSQLMonitoringDefaultServicePort  = 9399
 
 	// environment variables
 	EnvAcceptEula        = "ACCEPT_EULA"
@@ -396,6 +418,7 @@ const (
 	EnvMSSQLAgentEnabled = "MSSQL_AGENT_ENABLED"
 	EnvMSSQLSAUsername   = "MSSQL_SA_USERNAME"
 	EnvMSSQLSAPassword   = "MSSQL_SA_PASSWORD"
+	EnvMSSQLVersion      = "VERSION"
 
 	// container related
 	MSSQLContainerName            = "mssql"
@@ -629,21 +652,41 @@ const (
 	ZooKeeperMetricsPortName        = "metrics"
 	ZooKeeperMetricsPort            = 7000
 	ZooKeeperAdminServerPortName    = "admin-server"
+	ZooKeeperSecureClientPortName   = "secure-client"
 	ZooKeeperAdminServerPort        = 8080
+	ZooKeeperSecureClientPort       = 2182
 	ZooKeeperNode                   = "/kubedb_health_checker_node"
 	ZooKeeperData                   = "kubedb_health_checker_data"
 	ZooKeeperConfigVolumeName       = "zookeeper-config"
 	ZooKeeperConfigVolumePath       = "/conf"
+	ZooKeeperVolumeTempConfig       = "temp-config"
 	ZooKeeperDataVolumeName         = "data"
 	ZooKeeperDataVolumePath         = "/data"
 	ZooKeeperScriptVolumeName       = "script-vol"
 	ZooKeeperScriptVolumePath       = "/scripts"
 	ZooKeeperContainerName          = "zookeeper"
+	ZooKeeperUserAdmin              = "admin"
 	ZooKeeperInitContainerName      = "zookeeper" + "-init"
 
 	ZooKeeperConfigFileName               = "zoo.cfg"
 	ZooKeeperLog4jPropertiesFileName      = "log4j.properties"
 	ZooKeeperLog4jQuietPropertiesFileName = "log4j-quiet.properties"
+
+	ZooKeeperCertDir       = "/var/private/ssl"
+	ZooKeeperKeyStoreDir   = "/var/private/ssl/server.keystore.jks"
+	ZooKeeperTrustStoreDir = "/var/private/ssl/server.truststore.jks"
+
+	ZooKeeperKeystoreKey           = "keystore.jks"
+	ZooKeeperTruststoreKey         = "truststore.jks"
+	ZooKeeperServerKeystoreKey     = "server.keystore.jks"
+	ZooKeeperServerTruststoreKey   = "server.truststore.jks"
+	ZooKeeperKeyPassword           = "ssl.key.password"
+	ZooKeeperKeystorePasswordKey   = "ssl.quorum.keyStore.password"
+	ZooKeeperTruststorePasswordKey = "ssl.quorum.trustStore.password"
+	ZooKeeperKeystoreLocationKey   = "ssl.quorum.keyStore.location"
+	ZooKeeperTruststoreLocationKey = "ssl.quorum.trustStore.location"
+
+	ZooKeeperSSLPropertiesFileName = "ssl.properties"
 
 	EnvZooKeeperDomain          = "DOMAIN"
 	EnvZooKeeperQuorumPort      = "QUORUM_PORT"
@@ -966,15 +1009,16 @@ const (
 	DruidConfigDirRouters             = "/opt/druid/conf/druid/cluster/query/router"
 	DruidCConfigDirMySQLMetadata      = "/opt/druid/extensions/mysql-metadata-storage"
 
-	DruidVolumeOperatorConfig = "operator-config-volume"
-	DruidVolumeMainConfig     = "main-config-volume"
-	DruidVolumeCustomConfig   = "custom-config"
-	DruidMetadataTLSVolume    = "metadata-tls-volume"
+	DruidVolumeOperatorConfig  = "operator-config-volume"
+	DruidVolumeMainConfig      = "main-config-volume"
+	DruidVolumeCustomConfig    = "custom-config"
+	DruidMetadataTLSVolume     = "metadata-tls-volume"
+	DruidMetadataTLSTempVolume = "metadata-tls-volume-temp"
 
-	DruidOperatorConfigDir    = "/tmp/config/operator-config"
-	DruidMainConfigDir        = "/opt/druid/conf"
-	DruidCustomConfigDir      = "/tmp/config/custom-config"
-	DruidMetadataTLSConfigDir = "/tmp/metadata-tls"
+	DruidOperatorConfigDir        = "/tmp/config/operator-config"
+	DruidMainConfigDir            = "/opt/druid/conf"
+	DruidCustomConfigDir          = "/tmp/config/custom-config"
+	DruidMetadataTLSTempConfigDir = "/tmp/metadata-tls"
 
 	DruidVolumeCommonConfig          = "common-config-volume"
 	DruidCommonConfigFile            = "common.runtime.properties"
@@ -1000,14 +1044,23 @@ const (
 	EnvDruidCoordinatorAsOverlord  = "DRUID_COORDINATOR_AS_OVERLORD"
 	EnvDruidMetadataTLSEnable      = "DRUID_METADATA_TLS_ENABLE"
 	EnvDruidMetadataStorageType    = "DRUID_METADATA_STORAGE_TYPE"
+	EnvDruidKeyStorePassword       = "DRUID_KEY_STORE_PASSWORD"
 
-	DruidPortCoordinators   = 8081
-	DruidPortOverlords      = 8090
-	DruidPortHistoricals    = 8083
-	DruidPortMiddleManagers = 8091
-	DruidPortBrokers        = 8082
-	DruidPortRouters        = 8888
-	DruidExporterPort       = 9104
+	DruidPlainTextPortCoordinators   = 8081
+	DruidPlainTextPortOverlords      = 8090
+	DruidPlainTextPortHistoricals    = 8083
+	DruidPlainTextPortMiddleManagers = 8091
+	DruidPlainTextPortBrokers        = 8082
+	DruidPlainTextPortRouters        = 8888
+
+	DruidTLSPortCoordinators   = 8281
+	DruidTLSPortOverlords      = 8290
+	DruidTLSPortHistoricals    = 8283
+	DruidTLSPortMiddleManagers = 8291
+	DruidTLSPortBrokers        = 8282
+	DruidTLSPortRouters        = 9088
+
+	DruidExporterPort = 9104
 
 	DruidMetadataStorageTypePostgres = "Postgres"
 
@@ -1030,24 +1083,49 @@ const (
 	DruidMetadataStorageConnectorPasswordEnvConfig = "{\"type\": \"environment\", \"variable\": \"DRUID_METADATA_STORAGE_PASSWORD\"}"
 	DruidMetadataStorageCreateTables               = "druid.metadata.storage.connector.createTables"
 
+	// Druid TLS
+	DruidKeystorePasswordKey   = "keystore_password"
+	DruidTrustStorePasswordKey = "truststore_password"
+	DruidKeystoreSecretKey     = "keystore-cred"
+
+	DruidEnablePlaintextPort      = "druid.enablePlaintextPort"
+	DruidEnableTLSPort            = "druid.enableTlsPort"
+	DruidKeyStorePath             = "druid.server.https.keyStorePath"
+	DruidKeyStoreType             = "druid.server.https.keyStoreType"
+	DruidCertAlias                = "druid.server.https.certAlias"
+	DruidKeyStorePassword         = "druid.server.https.keyStorePassword"
+	DruidRequireClientCertificate = "druid.server.https.requireClientCertificate"
+	DruidTrustStoreType           = "druid.server.https.trustStoreType"
+
+	DruidTrustStorePassword      = "druid.client.https.trustStorePassword"
+	DruidTrustStorePath          = "druid.client.https.trustStorePath"
+	DruidClientTrustStoreType    = "druid.client.https.trustStoreType"
+	DruidClientValidateHostNames = "druid.client.https.validateHostnames"
+
+	DruidKeyStoreTypeJKS           = "jks"
+	DruidKeyStorePasswordEnvConfig = "{\"type\": \"environment\", \"variable\": \"DRUID_KEY_STORE_PASSWORD\"}"
+
+	DruidValueTrue  = "true"
+	DruidValueFalse = "false"
+
+	DruidCertDir            = "/opt/druid/ssl"
+	DruidCertMetadataSubDir = "metadata"
+
 	// MySQL TLS
 	DruidMetadataMySQLUseSSL                          = "druid.metadata.mysql.ssl.useSSL"
 	DruidMetadataMySQLClientCertKeyStoreURL           = "druid.metadata.mysql.ssl.clientCertificateKeyStoreUrl"
-	DruidMetadataMySQLClientCertKeyStorePath          = "/opt/druid/conf/tls/metadatakeystore.jks"
 	DruidMetadataMySQLClientCertKeyStoreType          = "druid.metadata.mysql.ssl.clientCertificateKeyStoreType"
 	DruidMetadataMySQLClientCertKeyStoreTypeJKS       = "JKS"
 	DruidMetadataMySQLClientCertKeyStorePassword      = "druid.metadata.mysql.ssl.clientCertificateKeyStorePassword"
 	DruidMetadataMySQLClientCertKeyStorePasswordValue = "password"
 
 	// Postgres TLS
-	DruidMetadataPostgresUseSSL    = "druid.metadata.postgres.ssl.useSSL"
-	DruidMetadataPGUseSSLMode      = "druid.metadata.postgres.ssl.sslMode"
-	DruidMetadataPGSSLCert         = "druid.metadata.postgres.ssl.sslCert"
-	DruidMetadataPGSSLCertPath     = "/opt/druid/conf/tls/tls.crt"
-	DruidMetadataPGSSLKey          = "druid.metadata.postgres.ssl.sslKey"
-	DruidMetadataPGSSLKeyPath      = "/opt/druid/conf/tls/tls.key"
-	DruidMetadataPGSSLRootCert     = "druid.metadata.postgres.ssl.sslRootCert"
-	DruidMetadataPGSSLRootCertPath = "/opt/druid/conf/tls/ca.cert"
+	DruidMetadataPostgresUseSSL         = "druid.metadata.postgres.ssl.useSSL"
+	DruidMetadataPGUseSSLMode           = "druid.metadata.postgres.ssl.sslMode"
+	DruidMetadataPGUseSSLModeVerifyFull = "verify-full"
+	DruidMetadataPGSSLCert              = "druid.metadata.postgres.ssl.sslCert"
+	DruidMetadataPGSSLKey               = "druid.metadata.postgres.ssl.sslKey"
+	DruidMetadataPGSSLRootCert          = "druid.metadata.postgres.ssl.sslRootCert"
 
 	// Deep Storage
 	DruidDeepStorageTypeKey      = "druid.storage.type"
@@ -1102,6 +1180,7 @@ const (
 	DruidExtensionBasicSecurity             = "druid-basic-security"
 	DruidExtensionMultiStageQuery           = "druid-multi-stage-query"
 	DruidExtensionPrometheusEmitter         = "prometheus-emitter"
+	DruidExtensionSSLContext                = "simple-client-sslcontext"
 	DruidService                            = "druid.service"
 
 	// Monitoring Configurations
@@ -1121,6 +1200,9 @@ const (
 	DruidMonitoringQueryCountStatsMonitor       = "org.apache.druid.server.metrics.QueryCountStatsMonitor"
 	DruidMonitoringTaskCountStatsMonitor        = "org.apache.druid.server.metrics.TaskCountStatsMonitor"
 	DruidMonitoringSysMonitor                   = "org.apache.druid.java.util.metrics.SysMonitor"
+
+	DruidDimensionMapDir                = "/opt/druid/conf/metrics.json"
+	DruidEmitterPrometheusStrategyValue = "exporter"
 
 	/// Coordinators Configurations
 	DruidCoordinatorStartDelay                = "druid.coordinator.startDelay"
@@ -1297,14 +1379,15 @@ const (
 const (
 
 	// envs
-	EnvFerretDBUser     = "FERRETDB_PG_USER"
-	EnvFerretDBPassword = "FERRETDB_PG_PASSWORD"
-	EnvFerretDBHandler  = "FERRETDB_HANDLER"
-	EnvFerretDBPgURL    = "FERRETDB_POSTGRESQL_URL"
-	EnvFerretDBTLSPort  = "FERRETDB_LISTEN_TLS"
-	EnvFerretDBCAPath   = "FERRETDB_LISTEN_TLS_CA_FILE"
-	EnvFerretDBCertPath = "FERRETDB_LISTEN_TLS_CERT_FILE"
-	EnvFerretDBKeyPath  = "FERRETDB_LISTEN_TLS_KEY_FILE"
+	EnvFerretDBUser      = "FERRETDB_PG_USER"
+	EnvFerretDBPassword  = "FERRETDB_PG_PASSWORD"
+	EnvFerretDBHandler   = "FERRETDB_HANDLER"
+	EnvFerretDBPgURL     = "FERRETDB_POSTGRESQL_URL"
+	EnvFerretDBTLSPort   = "FERRETDB_LISTEN_TLS"
+	EnvFerretDBCAPath    = "FERRETDB_LISTEN_TLS_CA_FILE"
+	EnvFerretDBCertPath  = "FERRETDB_LISTEN_TLS_CERT_FILE"
+	EnvFerretDBKeyPath   = "FERRETDB_LISTEN_TLS_KEY_FILE"
+	EnvFerretDBDebugAddr = "FERRETDB_DEBUG_ADDR"
 
 	FerretDBContainerName = "ferretdb"
 	FerretDBMainImage     = "ghcr.io/ferretdb/ferretdb"
@@ -1315,7 +1398,7 @@ const (
 	FerretDBExternalClientPath = "/etc/certs/ext"
 
 	FerretDBDefaultPort = 27017
-	FerretDBMetricsPort = 8080
+	FerretDBMetricsPort = 56790
 	FerretDBTLSPort     = 27018
 
 	FerretDBMetricsPath     = "/debug/metrics"
@@ -1407,15 +1490,17 @@ const (
 	CassandraInterNodePort    = 7000
 	CassandraInterNodeSslPort = 7001
 	CassandraJmxPort          = 7199
+	CassandraExporterPort     = 8080
 
 	CassandraNativeTcpPortName    = "cql"
 	CassandraInterNodePortName    = "internode"
 	CassandraInterNodeSslPortName = "internode-ssl"
 	CassandraJmxPortName          = "jmx"
+	CassandraExporterPortName     = "exporter"
 
-	CassandraUserAdmin         = "admin"
-	CassandraStandaloneSeed    = "cassandra-sample-0.cassandra-sample-pods.default.svc.cluster.local"
-	CassandraAuthCommand       = "/usr/local/bin/docker-entrypoint.sh cassandra  -f & /tmp/sc/cassandra-auth.sh"
+	CassandraUserAdmin = "admin"
+
+	CassandraAuthCommand       = "/tmp/sc/cassandra-auth.sh"
 	CassandraMetadataName      = "metadata.name"
 	CassandraMetadataNamespace = "metadata.namespace"
 	CassandraStatusPodIP       = "status.podIP"
@@ -1574,7 +1659,7 @@ var (
 	// DefaultResourcesMemoryIntensiveSDB must be used for Singlestore when enabled monitoring or version >= 8.5.x
 	DefaultResourcesMemoryIntensiveSDB = core.ResourceRequirements{
 		Requests: core.ResourceList{
-			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceCPU:    resource.MustParse(".600"),
 			core.ResourceMemory: resource.MustParse("2Gi"),
 		},
 		Limits: core.ResourceList{

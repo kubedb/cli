@@ -195,7 +195,7 @@ func (c *ClickHouse) GetAuthSecretName() string {
 	if c.Spec.AuthSecret != nil && c.Spec.AuthSecret.Name != "" {
 		return c.Spec.AuthSecret.Name
 	}
-	return c.DefaultUserCredSecretName("admin")
+	return meta_util.NameWithSuffix(c.OffshootName(), "auth")
 }
 
 func (r *ClickHouse) ConfigSecretName() string {
@@ -491,7 +491,7 @@ func (c *ClickHouse) ReplicasAreReady(lister pslister.PetSetLister) (bool, strin
 		for _, cluster := range c.Spec.ClusterTopology.Cluster {
 			expectedItems += int(*cluster.Shards)
 		}
-		if !c.Spec.ClusterTopology.ClickHouseKeeper.ExternallyManaged {
+		if c.Spec.ClusterTopology.ClickHouseKeeper != nil && !c.Spec.ClusterTopology.ClickHouseKeeper.ExternallyManaged {
 			if c.Spec.ClusterTopology.ClickHouseKeeper.Spec.Replicas != nil {
 				expectedItems += 1
 			}

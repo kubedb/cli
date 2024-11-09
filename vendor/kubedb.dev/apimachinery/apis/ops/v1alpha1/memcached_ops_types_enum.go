@@ -26,6 +26,8 @@ const (
 	MemcachedOpsRequestTypeReconfigure MemcachedOpsRequestType = "Reconfigure"
 	// MemcachedOpsRequestTypeReconfigureTLS is a MemcachedOpsRequestType of type ReconfigureTLS.
 	MemcachedOpsRequestTypeReconfigureTLS MemcachedOpsRequestType = "ReconfigureTLS"
+	// MemcachedOpsRequestTypeRotateAuth is a MemcachedOpsRequestType of type RotateAuth.
+	MemcachedOpsRequestTypeRotateAuth MemcachedOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidMemcachedOpsRequestType = fmt.Errorf("not a valid MemcachedOpsRequestType, try [%s]", strings.Join(_MemcachedOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _MemcachedOpsRequestTypeNames = []string{
 	string(MemcachedOpsRequestTypeRestart),
 	string(MemcachedOpsRequestTypeReconfigure),
 	string(MemcachedOpsRequestTypeReconfigureTLS),
+	string(MemcachedOpsRequestTypeRotateAuth),
 }
 
 // MemcachedOpsRequestTypeNames returns a list of possible string values of MemcachedOpsRequestType.
@@ -57,6 +60,7 @@ func MemcachedOpsRequestTypeValues() []MemcachedOpsRequestType {
 		MemcachedOpsRequestTypeRestart,
 		MemcachedOpsRequestTypeReconfigure,
 		MemcachedOpsRequestTypeReconfigureTLS,
+		MemcachedOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _MemcachedOpsRequestTypeValue = map[string]MemcachedOpsRequestType{
 	"Restart":           MemcachedOpsRequestTypeRestart,
 	"Reconfigure":       MemcachedOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    MemcachedOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        MemcachedOpsRequestTypeRotateAuth,
 }
 
 // ParseMemcachedOpsRequestType attempts to convert a string to a MemcachedOpsRequestType.

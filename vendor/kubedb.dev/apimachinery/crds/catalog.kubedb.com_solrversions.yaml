@@ -67,6 +67,17 @@ spec:
                     format: int64
                     type: integer
                 type: object
+              updateConstraints:
+                properties:
+                  allowlist:
+                    items:
+                      type: string
+                    type: array
+                  denylist:
+                    items:
+                      type: string
+                    type: array
+                type: object
               version:
                 type: string
             required:

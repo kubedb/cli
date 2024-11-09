@@ -92,6 +92,12 @@ type TLSSpec struct {
 	Remove bool `json:"remove,omitempty"`
 }
 
+type AuthSpec struct {
+	// SecretRef holds the new authSecret
+	// If it is given, ops-manager will use this. Otherwise, will generate random password
+	SecretRef *core.LocalObjectReference `json:"secretRef,omitempty"`
+}
+
 // +kubebuilder:validation:Enum=IfReady;Always
 type ApplyOption string
 

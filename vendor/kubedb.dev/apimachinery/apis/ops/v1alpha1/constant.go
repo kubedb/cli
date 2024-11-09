@@ -101,6 +101,12 @@ const (
 	IssueCertificatesFailed    = "IssueCertificatesFailed"
 )
 
+// RotateAuth
+const (
+	RotateAuth       = "RotateAuth"
+	UpdateCredential = "UpdateCredential"
+)
+
 // Restart
 const (
 	Restart              = "Restart"
@@ -309,8 +315,24 @@ const (
 
 // Druid Constants
 const (
+	ScaleUpCoordinators   = "ScaleUpCoordinators"
+	ScaleUpOverlords      = "ScaleUpOverlords"
+	ScaleUpBrokers        = "ScaleUpBrokers"
+	ScaleUpHistoricals    = "ScaleUpHistoricals"
+	ScaleUpMiddleManagers = "ScaleUpMiddleManagers"
+	ScaleUpRouters        = "ScaleUpRouters"
+
+	ScaleDownCoordinators   = "ScaleDownCoordinators"
+	ScaleDownOverlords      = "ScaleDownOverlords"
+	ScaleDownBrokers        = "ScaleDownBrokers"
+	ScaleDownHistoricals    = "ScaleDownHistoricals"
+	ScaleDownMiddleManagers = "ScaleDownMiddleManagers"
+	ScaleDownRouters        = "ScaleDownRouters"
+
 	UpdateMiddleManagersNodePVCs = "UpdateMiddleManagersNodePVCs"
 	UpdateHistoricalsNodePVCs    = "UpdateHistoricalsNodePVCs"
+
+	UpdateCredentialDynamically = "UpdateCredentialDynamically"
 )
 
 // SingleStore Constants

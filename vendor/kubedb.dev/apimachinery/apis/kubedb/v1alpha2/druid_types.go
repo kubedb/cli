@@ -64,11 +64,11 @@ type DruidSpec struct {
 	// disable security. It disables authentication security of user.
 	// If unset, default is false
 	// +optional
-	DisableSecurity *bool `json:"disableSecurity,omitempty"`
+	DisableSecurity bool `json:"disableSecurity,omitempty"`
 
 	// Database authentication secret
 	// +optional
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
+	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
 	// Init is used to initialize database
 	// +optional
@@ -79,9 +79,16 @@ type DruidSpec struct {
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
-	//// TLS contains tls configurations
-	//// +optional
-	//TLS *kmapi.TLSConfig `json:"tls,omitempty"`
+	// To enable ssl for http layer
+	EnableSSL bool `json:"enableSSL,omitempty"`
+
+	// Keystore encryption secret
+	// +optional
+	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`
+
+	// TLS contains tls configurations
+	// +optional
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// MetadataStorage contains information for Druid to connect to external dependency metadata storage
 	// +optional
@@ -273,4 +280,12 @@ const (
 	DruidDeepStorageGoogle DruidDeepStorageType = "google"
 	DruidDeepStorageAzure  DruidDeepStorageType = "azure"
 	DruidDeepStorageHDFS   DruidDeepStorageType = "hdfs"
+)
+
+// +kubebuilder:validation:Enum=server;client
+type DruidCertificateAlias string
+
+const (
+	DruidServerCert DruidCertificateAlias = "server"
+	DruidClientCert DruidCertificateAlias = "client"
 )

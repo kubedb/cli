@@ -21188,7 +21188,7 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 					},
 					"renewBefore": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Certificate renew before expiration duration",
+							Description: "Certificate renew before expiration duration\n\nDeprecated use `ReconfigureTLS` type OpsRequest instead.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -21304,8 +21304,7 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref common.ReferenceCallbac
 					},
 					"capi": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
+							Ref: ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
 						},
 					},
 				},
@@ -21367,6 +21366,18 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCal
 						},
 					},
 					"caBundle": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"managerID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"hubClusterID": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
@@ -25573,6 +25584,12 @@ func schema_apimachinery_apis_kubedb_v1_ArchiverRecovery(ref common.ReferenceCal
 							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
 						},
 					},
+					"replicationStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"recoveryTimestamp"},
 			},
@@ -27463,6 +27480,19 @@ func schema_apimachinery_apis_kubedb_v1_MemcachedSpec(ref common.ReferenceCallba
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"authSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Database Authentication Secret If specified, this will be used for authentication otherwise default secret will be used.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"),
+						},
+					},
+					"disableAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If disable Auth true then don't create any auth secret",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 					"dataVolume": {
 						SchemaProps: spec.SchemaProps{
 							Description: "DataVolume is an optional field to add one volume to each memcached pod.  The volume will be made available under /data and owned by the memcached user.\n\nWhile not mandated by the API and not configured automatically, the intended purpose is to use that volume for memcached's persistent memory support (https://memcached.org/blog/persistent-memory/) by adding the memory-file and memory-limit options to the config (https://github.com/memcached/memcached/wiki/WarmRestart).\n\nFor that purpose, a CSI inline volume provided by PMEM-CSI can be used, in which case each pod will get its own, empty volume. Warm restarts are not supported.\n\nFor testing, an empty dir can be used instead.",
@@ -27522,7 +27552,7 @@ func schema_apimachinery_apis_kubedb_v1_MemcachedSpec(ref common.ReferenceCallba
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -30964,6 +30994,18 @@ func schema_apimachinery_apis_kubedb_v1_SecretReference(ref common.ReferenceCall
 							Format:      "",
 						},
 					},
+					"rotateAfter": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Recommendation engine will generate RotateAuth opsReq using this field",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"activeFrom": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ActiveFrom holds the RFC3339 time. The referred authSecret is in-use from this timestamp.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
 					"externallyManaged": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"boolean"},
@@ -30973,6 +31015,8 @@ func schema_apimachinery_apis_kubedb_v1_SecretReference(ref common.ReferenceCall
 				},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 

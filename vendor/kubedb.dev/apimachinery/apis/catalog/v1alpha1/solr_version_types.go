@@ -59,6 +59,8 @@ type SolrVersionSpec struct {
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
 	// SecurityContext is for the additional security information for the Solr container
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
 }

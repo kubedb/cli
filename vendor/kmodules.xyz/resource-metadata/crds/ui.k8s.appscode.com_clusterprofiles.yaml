@@ -4,15 +4,15 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
-  name: clusteridentitys.identity.k8s.appscode.com
+  name: clusterprofiles.ui.k8s.appscode.com
 spec:
-  group: identity.k8s.appscode.com
+  group: ui.k8s.appscode.com
   names:
-    kind: ClusterIdentity
-    listKind: ClusterIdentityList
-    plural: clusteridentitys
-    singular: clusteridentity
-  scope: Namespaced
+    kind: ClusterProfile
+    listKind: ClusterProfileList
+    plural: clusterprofiles
+    singular: clusterprofile
+  scope: Cluster
   versions:
   - additionalPrinterColumns:
     - jsonPath: .status.phase
@@ -37,38 +37,24 @@ spec:
             type: string
           metadata:
             type: object
-          status:
+          spec:
+            description: ClusterProfileSpec defines the desired state of ClusterProfile
             properties:
-              apiEndpoint:
-                type: string
-              caBundle:
-                type: string
-              displayName:
-                type: string
-              name:
-                type: string
-              ownerID:
-                type: string
-              ownerType:
+              description:
                 type: string
               provider:
-                enum:
-                - AKS
-                - DigitalOcean
-                - EKS
-                - Exoscale
-                - Generic
-                - GKE
-                - Linode
-                - Packet
-                - Rancher
-                - Scaleway
-                - Vultr
                 type: string
-              uid:
+              requiredFeatureSets:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
+                type: object
+              title:
                 type: string
             required:
-            - uid
+            - description
+            - title
             type: object
         type: object
     served: true

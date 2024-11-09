@@ -26,6 +26,8 @@ const (
 	MySQLOpsRequestTypeReconfigure MySQLOpsRequestType = "Reconfigure"
 	// MySQLOpsRequestTypeReconfigureTLS is a MySQLOpsRequestType of type ReconfigureTLS.
 	MySQLOpsRequestTypeReconfigureTLS MySQLOpsRequestType = "ReconfigureTLS"
+	// MySQLOpsRequestTypeRotateAuth is a MySQLOpsRequestType of type RotateAuth.
+	MySQLOpsRequestTypeRotateAuth MySQLOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidMySQLOpsRequestType = fmt.Errorf("not a valid MySQLOpsRequestType, try [%s]", strings.Join(_MySQLOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _MySQLOpsRequestTypeNames = []string{
 	string(MySQLOpsRequestTypeRestart),
 	string(MySQLOpsRequestTypeReconfigure),
 	string(MySQLOpsRequestTypeReconfigureTLS),
+	string(MySQLOpsRequestTypeRotateAuth),
 }
 
 // MySQLOpsRequestTypeNames returns a list of possible string values of MySQLOpsRequestType.
@@ -57,6 +60,7 @@ func MySQLOpsRequestTypeValues() []MySQLOpsRequestType {
 		MySQLOpsRequestTypeRestart,
 		MySQLOpsRequestTypeReconfigure,
 		MySQLOpsRequestTypeReconfigureTLS,
+		MySQLOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _MySQLOpsRequestTypeValue = map[string]MySQLOpsRequestType{
 	"Restart":           MySQLOpsRequestTypeRestart,
 	"Reconfigure":       MySQLOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    MySQLOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        MySQLOpsRequestTypeRotateAuth,
 }
 
 // ParseMySQLOpsRequestType attempts to convert a string to a MySQLOpsRequestType.

@@ -128,12 +128,12 @@ func (in *ConnectClusterSpec) DeepCopyInto(out *ConnectClusterSpec) {
 	if in.AuthSecret != nil {
 		in, out := &in.AuthSecret, &out.AuthSecret
 		*out = new(kubedbv1.SecretReference)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.KeystoreCredSecret != nil {
 		in, out := &in.KeystoreCredSecret, &out.KeystoreCredSecret
 		*out = new(kubedbv1.SecretReference)
-		**out = **in
+		(*in).DeepCopyInto(*out)
 	}
 	if in.TLS != nil {
 		in, out := &in.TLS, &out.TLS

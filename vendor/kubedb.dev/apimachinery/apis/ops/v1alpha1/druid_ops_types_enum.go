@@ -12,20 +12,35 @@ import (
 )
 
 const (
+	// DruidOpsRequestTypeUpdateVersion is a DruidOpsRequestType of type UpdateVersion.
+	DruidOpsRequestTypeUpdateVersion DruidOpsRequestType = "UpdateVersion"
+	// DruidOpsRequestTypeHorizontalScaling is a DruidOpsRequestType of type HorizontalScaling.
+	DruidOpsRequestTypeHorizontalScaling DruidOpsRequestType = "HorizontalScaling"
 	// DruidOpsRequestTypeVerticalScaling is a DruidOpsRequestType of type VerticalScaling.
 	DruidOpsRequestTypeVerticalScaling DruidOpsRequestType = "VerticalScaling"
 	// DruidOpsRequestTypeVolumeExpansion is a DruidOpsRequestType of type VolumeExpansion.
 	DruidOpsRequestTypeVolumeExpansion DruidOpsRequestType = "VolumeExpansion"
 	// DruidOpsRequestTypeRestart is a DruidOpsRequestType of type Restart.
 	DruidOpsRequestTypeRestart DruidOpsRequestType = "Restart"
+	// DruidOpsRequestTypeReconfigure is a DruidOpsRequestType of type Reconfigure.
+	DruidOpsRequestTypeReconfigure DruidOpsRequestType = "Reconfigure"
+	// DruidOpsRequestTypeReconfigureTLS is a DruidOpsRequestType of type ReconfigureTLS.
+	DruidOpsRequestTypeReconfigureTLS DruidOpsRequestType = "ReconfigureTLS"
+	// DruidOpsRequestTypeRotateAuth is a DruidOpsRequestType of type RotateAuth.
+	DruidOpsRequestTypeRotateAuth DruidOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidDruidOpsRequestType = fmt.Errorf("not a valid DruidOpsRequestType, try [%s]", strings.Join(_DruidOpsRequestTypeNames, ", "))
 
 var _DruidOpsRequestTypeNames = []string{
+	string(DruidOpsRequestTypeUpdateVersion),
+	string(DruidOpsRequestTypeHorizontalScaling),
 	string(DruidOpsRequestTypeVerticalScaling),
 	string(DruidOpsRequestTypeVolumeExpansion),
 	string(DruidOpsRequestTypeRestart),
+	string(DruidOpsRequestTypeReconfigure),
+	string(DruidOpsRequestTypeReconfigureTLS),
+	string(DruidOpsRequestTypeRotateAuth),
 }
 
 // DruidOpsRequestTypeNames returns a list of possible string values of DruidOpsRequestType.
@@ -38,9 +53,14 @@ func DruidOpsRequestTypeNames() []string {
 // DruidOpsRequestTypeValues returns a list of the values for DruidOpsRequestType
 func DruidOpsRequestTypeValues() []DruidOpsRequestType {
 	return []DruidOpsRequestType{
+		DruidOpsRequestTypeUpdateVersion,
+		DruidOpsRequestTypeHorizontalScaling,
 		DruidOpsRequestTypeVerticalScaling,
 		DruidOpsRequestTypeVolumeExpansion,
 		DruidOpsRequestTypeRestart,
+		DruidOpsRequestTypeReconfigure,
+		DruidOpsRequestTypeReconfigureTLS,
+		DruidOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -57,9 +77,14 @@ func (x DruidOpsRequestType) IsValid() bool {
 }
 
 var _DruidOpsRequestTypeValue = map[string]DruidOpsRequestType{
-	"VerticalScaling": DruidOpsRequestTypeVerticalScaling,
-	"VolumeExpansion": DruidOpsRequestTypeVolumeExpansion,
-	"Restart":         DruidOpsRequestTypeRestart,
+	"UpdateVersion":     DruidOpsRequestTypeUpdateVersion,
+	"HorizontalScaling": DruidOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   DruidOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":   DruidOpsRequestTypeVolumeExpansion,
+	"Restart":           DruidOpsRequestTypeRestart,
+	"Reconfigure":       DruidOpsRequestTypeReconfigure,
+	"ReconfigureTLS":    DruidOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        DruidOpsRequestTypeRotateAuth,
 }
 
 // ParseDruidOpsRequestType attempts to convert a string to a DruidOpsRequestType.

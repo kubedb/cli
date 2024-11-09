@@ -26,6 +26,8 @@ const (
 	MSSQLServerOpsRequestTypeReconfigure MSSQLServerOpsRequestType = "Reconfigure"
 	// MSSQLServerOpsRequestTypeReconfigureTLS is a MSSQLServerOpsRequestType of type ReconfigureTLS.
 	MSSQLServerOpsRequestTypeReconfigureTLS MSSQLServerOpsRequestType = "ReconfigureTLS"
+	// MSSQLServerOpsRequestTypeRotateAuth is a MSSQLServerOpsRequestType of type RotateAuth.
+	MSSQLServerOpsRequestTypeRotateAuth MSSQLServerOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidMSSQLServerOpsRequestType = fmt.Errorf("not a valid MSSQLServerOpsRequestType, try [%s]", strings.Join(_MSSQLServerOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _MSSQLServerOpsRequestTypeNames = []string{
 	string(MSSQLServerOpsRequestTypeRestart),
 	string(MSSQLServerOpsRequestTypeReconfigure),
 	string(MSSQLServerOpsRequestTypeReconfigureTLS),
+	string(MSSQLServerOpsRequestTypeRotateAuth),
 }
 
 // MSSQLServerOpsRequestTypeNames returns a list of possible string values of MSSQLServerOpsRequestType.
@@ -57,6 +60,7 @@ func MSSQLServerOpsRequestTypeValues() []MSSQLServerOpsRequestType {
 		MSSQLServerOpsRequestTypeRestart,
 		MSSQLServerOpsRequestTypeReconfigure,
 		MSSQLServerOpsRequestTypeReconfigureTLS,
+		MSSQLServerOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _MSSQLServerOpsRequestTypeValue = map[string]MSSQLServerOpsRequestType{
 	"Restart":           MSSQLServerOpsRequestTypeRestart,
 	"Reconfigure":       MSSQLServerOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    MSSQLServerOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        MSSQLServerOpsRequestTypeRotateAuth,
 }
 
 // ParseMSSQLServerOpsRequestType attempts to convert a string to a MSSQLServerOpsRequestType.

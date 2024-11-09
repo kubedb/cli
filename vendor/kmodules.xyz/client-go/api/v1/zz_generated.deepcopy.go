@@ -127,7 +127,11 @@ func (in *ClusterInfo) DeepCopyInto(out *ClusterInfo) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
-	out.CAPI = in.CAPI
+	if in.CAPI != nil {
+		in, out := &in.CAPI, &out.CAPI
+		*out = new(CAPIClusterInfo)
+		**out = **in
+	}
 	return
 }
 
